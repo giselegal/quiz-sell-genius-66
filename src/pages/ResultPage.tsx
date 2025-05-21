@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -86,6 +85,14 @@ const ResultPage: React.FC<ResultPageProps> = () => {
         <p className="text-brand-text mt-4">
           {results.description}
         </p>
+        <div className="text-center mb-8">
+          <div className="max-w-md mx-auto mb-6">
+            <div className="text-sm text-[#8F7A6A] text-center mb-2">
+              Seu estilo predominante
+            </div>
+            <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
+          </div>
+        </div>
       </motion.div>
 
       <motion.div
