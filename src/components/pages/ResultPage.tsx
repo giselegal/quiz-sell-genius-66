@@ -127,11 +127,8 @@ const ResultPage: React.FC = () => {
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
               <div className="max-w-md mx-auto mb-6">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-[#8F7A6A]">
-                    Seu estilo predominante
-                  </span>
-                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+                <div className="text-sm text-[#8F7A6A] text-center mb-2">
+                  Seu estilo predominante
                 </div>
                 <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
               </div>
