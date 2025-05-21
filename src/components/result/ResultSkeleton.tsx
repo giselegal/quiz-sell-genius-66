@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { StyleResult } from '@/types/quiz';
 import { styleConfig } from '@/config/styleConfig';
-import OptimizedImage from '@/components/ui/OptimizedImage';
+import OptimizedImage from '@/components/ui/optimized-image';
 
 interface ResultSkeletonProps {
   primaryStyle?: StyleResult;
