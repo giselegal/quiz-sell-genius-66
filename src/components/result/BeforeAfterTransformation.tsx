@@ -83,38 +83,60 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   if (isLoading) {
     return (
       <div className="my-6 sm:my-8 md:my-10">
-        {/* Título acima das imagens */}
-        <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-4 text-center">TESTE - Descubra o poder da imagem intencional</h3>
-        <Card className="relative overflow-hidden p-6 max-w-3xl mx-auto flex flex-col gap-8 items-center">
-          {/* 'Resultados Reais' centralizado */}
-          <div className="flex flex-col items-center w-full">
-            <div className="relative w-full min-h-[220px] bg-[#f8f5f0] rounded-lg animate-pulse max-w-[320px] mx-auto">
-              <span className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1 rounded-full shadow">Resultados Reais</span>
+        {/* Título com decoração */}
+        <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-6 text-center relative inline-block mx-auto w-full">
+          Descubra o poder da imagem intencional
+          <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-0.5 bg-[#B89B7A]/30"></span>
+        </h3>
+        
+        {/* Card principal com skeleton */}
+        <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-all duration-300 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 md:p-6">
+            {/* Coluna da imagem com skeleton */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-full max-w-sm mx-auto">
+                <div className="w-full aspect-[4/5] bg-[#f8f5f0] rounded-lg animate-pulse"></div>
+                <span className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm">
+                  Resultados Reais
+                </span>
+              </div>
+              
+              {/* Indicadores de slides */}
+              <div className="flex justify-center space-x-3 mt-4">
+                {transformations.map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`w-2.5 h-2.5 rounded-full ${idx === 0 ? 'bg-[#B89B7A]' : 'bg-gray-300'}`}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-          {/* Coluna de texto e CTA */}
-          <div className="flex flex-col justify-center w-full md:pl-6 max-w-xl mx-auto">
-            <p className="text-gray-700 mb-4 text-base md:text-lg text-center">Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.</p>
-            <ul className="mb-6 space-y-2">
-              <li className="flex items-start gap-2 text-[#aa6b5d] text-base"><span className="mt-1"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aa6b5d"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>Looks com intenção e identidade</li>
-              <li className="flex items-start gap-2 text-[#aa6b5d] text-base"><span className="mt-1"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aa6b5d"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>Cores, modelagens e tecidos a seu favor</li>
-              <li className="flex items-start gap-2 text-[#aa6b5d] text-base"><span className="mt-1"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aa6b5d"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>Imagem alinhada aos seus objetivos</li>
-              <li className="flex items-start gap-2 text-[#aa6b5d] text-base"><span className="mt-1"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aa6b5d"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>Guarda-roupa funcional, sem compras por impulso</li>
-            </ul>
-            <Button
-              className="w-full md:w-auto py-4 px-8 rounded-md shadow-md transition-colors btn-cta-green font-semibold text-lg mb-2"
-              style={{
-                background: "linear-gradient(to right, #4CAF50, #45a049)",
-                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-              }}
-              disabled
-            >
-              <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className="w-5 h-5 transition-transform duration-300" />
-                Quero Meu Guia de Estilo
-              </span>
-            </Button>
-            <p className="text-xs text-[#aa6b5d] text-center mt-1">Oferta por tempo limitado</p>
+            
+            {/* Coluna de conteúdo com skeletons */}
+            <div className="flex flex-col justify-center">
+              <div className="h-7 bg-[#f8f5f0] rounded animate-pulse mb-4 w-3/4 mx-auto md:mx-0"></div>
+              
+              <div className="h-16 bg-[#f8f5f0] rounded animate-pulse mb-5"></div>
+              
+              {/* Lista de benefícios com skeletons */}
+              <div className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10">
+                <ul className="space-y-3.5">
+                  {Array(4).fill(0).map((_, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 justify-center md:justify-start">
+                      <div className="min-w-[22px] h-[22px] bg-[#f8f5f0] rounded-full animate-pulse"></div>
+                      <div className="h-5 bg-[#f8f5f0] rounded animate-pulse w-3/4"></div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              {/* CTA skeleton */}
+              <div className="flex flex-col items-center md:items-start">
+                <div className="w-full max-w-[280px] h-12 bg-[#f8f5f0] rounded animate-pulse mb-2"></div>
+                <div className="h-3 w-32 bg-[#f8f5f0] rounded animate-pulse mb-4"></div>
+                <div className="w-full max-w-[280px] h-[60px] bg-[#f8f5f0] rounded animate-pulse"></div>
+              </div>
+            </div>
           </div>
         </Card>
       </div>
@@ -124,65 +146,168 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   // Ajuste: prioriza o carregamento da imagem ativa
   return (
     <div className="my-6 sm:my-8 md:my-10">
-      {/* Título acima das imagens */}
-      <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-4 text-center">TESTE - Descubra o poder da imagem intencional</h3>
-      <Card className="relative overflow-hidden p-6 max-w-3xl mx-auto flex flex-col gap-8 items-center">
-        {/* 'Resultados Reais' centralizado */}
-        <div className="flex flex-col items-center w-full">
-          <div className="relative w-full max-w-[320px] mx-auto">
-            <OptimizedImage
-              src={activeTransformation.image}
-              alt={activeTransformation.name}
-              width={activeTransformation.width}
-              height={activeTransformation.height}
-              className="w-full h-auto rounded-lg shadow-md"
-              onLoad={() => setImageLoaded(true)}
-              priority={true}
-            />
-            <span className="absolute top-2 right-2 z-10 text-xs text-gray-700 bg-white/80 px-2 py-0.5 rounded">{activeTransformation.name}</span>
-            <span className="absolute top-[25%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1 rounded-full shadow">Resultados Reais</span>
-            {/* Navegação */}
-            <button
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-[#B89B7A]/20 transition"
-              onClick={() => setActiveIndex((activeIndex - 1 + transformations.length) % transformations.length)}
-              aria-label="Anterior"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-[#B89B7A]/20 transition"
-              onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
-              aria-label="Próxima"
-            >
-              <ChevronRight size={20} />
-            </button>
+      {/* Título com decoração */}
+      <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-6 text-center relative inline-block mx-auto w-full">
+        Descubra o poder da imagem intencional
+        <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-0.5 bg-[#B89B7A]/30"></span>
+      </h3>
+      
+      {/* Card principal com grid responsivo */}
+      <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-all duration-300 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 md:p-6">
+          {/* Coluna da imagem */}
+          <div className="flex flex-col items-center">
+            <div className="relative w-full max-w-sm mx-auto">
+              <OptimizedImage
+                src={activeTransformation.image}
+                alt={`Transformação de ${activeTransformation.name}`}
+                width={activeTransformation.width}
+                height={activeTransformation.height}
+                className="w-full h-auto rounded-lg shadow-md"
+                onLoad={() => setImageLoaded(true)}
+                priority={true}
+              />
+              
+              {/* Nome da pessoa */}
+              <span className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm text-[#432818] text-xs font-medium px-3 py-1 rounded-full shadow-sm">
+                {activeTransformation.name}
+              </span>
+              
+              {/* Selo 'Resultados Reais' */}
+              <span className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm">
+                Resultados Reais
+              </span>
+              
+              {/* Navegação */}
+              {transformations.length > 1 && (
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
+                  <button
+                    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
+                    onClick={() => setActiveIndex((activeIndex - 1 + transformations.length) % transformations.length)}
+                    aria-label="Anterior"
+                  >
+                    <ChevronLeft size={22} className="text-[#432818]" />
+                  </button>
+                  <button
+                    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
+                    onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
+                    aria-label="Próxima"
+                  >
+                    <ChevronRight size={22} className="text-[#432818]" />
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            {/* Indicadores de slides */}
+            {transformations.length > 1 && (
+              <div className="flex justify-center space-x-3 mt-4">
+                {transformations.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveIndex(idx)}
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                      idx === activeIndex 
+                        ? 'bg-[#B89B7A] scale-110' 
+                        : 'bg-gray-300 hover:bg-[#B89B7A]/50'
+                    }`}
+                    aria-label={`Ver transformação ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-        {/* Coluna de texto e CTA */}
-        <div className="flex flex-col justify-center w-full md:pl-6 max-w-xl mx-auto">
-          <p className="text-gray-700 mb-4 text-base md:text-lg text-center">Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.</p>
-          <ul className="mb-6 space-y-2">
-            <li className="flex items-start gap-2 text-[#aa6b5d] text-base"><span className="mt-1"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aa6b5d"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>Looks com intenção e identidade</li>
-            <li className="flex items-start gap-2 text-[#aa6b5d] text-base"><span className="mt-1"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aa6b5d"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>Cores, modelagens e tecidos a seu favor</li>
-            <li className="flex items-start gap-2 text-[#aa6b5d] text-base"><span className="mt-1"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aa6b5d"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>Imagem alinhada aos seus objetivos</li>
-            <li className="flex items-start gap-2 text-[#aa6b5d] text-base"><span className="mt-1"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aa6b5d"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></span>Guarda-roupa funcional, sem compras por impulso</li>
-          </ul>
-          <Button
-            onClick={handleCTAClick}
-            onMouseEnter={() => setIsButtonHovered(true)}
-            onMouseLeave={() => setIsButtonHovered(false)}
-            className="w-full md:w-auto py-4 px-8 rounded-md shadow-md transition-colors btn-cta-green font-semibold text-lg mb-2"
-            style={{
-              background: "linear-gradient(to right, #4CAF50, #45a049)",
-              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-            }}
-          >
-            <span className="flex items-center justify-center gap-2">
-              <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-              Quero Meu Guia de Estilo
-            </span>
-          </Button>
-          <p className="text-xs text-[#aa6b5d] text-center mt-1">Oferta por tempo limitado</p>
+          
+          {/* Coluna de conteúdo */}
+          <div className="flex flex-col justify-center">
+            <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
+              Transformação Visual com Propósito
+            </h4>
+            
+            <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
+              Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.
+            </p>
+            
+            {/* Lista de benefícios */}
+            <div className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10 hover:border-[#B89B7A]/20 transition-all duration-300 hover:shadow-sm">
+              <ul className="space-y-3.5 text-center md:text-left">
+                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
+                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
+                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <span className="group-hover:text-[#432818] transition-colors">Looks com intenção e identidade</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
+                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
+                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <span className="group-hover:text-[#432818] transition-colors">Cores, modelagens e tecidos a seu favor</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
+                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
+                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <span className="group-hover:text-[#432818] transition-colors">Imagem alinhada aos seus objetivos</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
+                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
+                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <span className="group-hover:text-[#432818] transition-colors">Guarda-roupa funcional, sem compras por impulso</span>
+                </li>
+              </ul>
+            </div>
+            
+            {/* CTA e informações */}
+            <div className="flex flex-col items-center md:items-start">
+              <Button
+                onClick={handleCTAClick ? handleCTAClick : () => {
+                  trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
+                  window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+                }}
+                onMouseEnter={() => setIsButtonHovered(true)}
+                onMouseLeave={() => setIsButtonHovered(false)}
+                className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#45a049] focus:ring-offset-2"
+                style={{
+                  background: "linear-gradient(to right, #4CAF50, #45a049)",
+                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                  Quero Meu Guia de Estilo
+                </span>
+              </Button>
+              
+              <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4">
+                Oferta por tempo limitado
+              </p>
+            
+              {/* Métodos de pagamento */}
+              <div className="w-full max-w-[280px] mx-auto md:mx-0 transition-transform duration-300 hover:scale-[1.02]">
+                <img
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+                  alt="Métodos de pagamento"
+                  className="w-full rounded-lg shadow-sm"
+                  loading="lazy"
+                  width="400"
+                  height="100"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </Card>
     </div>
