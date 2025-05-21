@@ -196,6 +196,25 @@ export const preloadCriticalImages = (
   // Converter para array se for string única
   const sections = Array.isArray(section) ? section : [section];
   
+  // Configurações para questões estratégicas - ajustamos a qualidade e 
+  // timeout para otimizar durante as questões que não pontuam
+  if (sections.includes('strategic')) {
+    options = {
+      quality: 80, // Reduzido para economizar largura de banda
+      timeout: 5000, // Maior timeout para permitir carregamento em background
+      ...options
+    };
+  }
+  
+  // Configurações específicas para resultados - prioridade máxima e qualidade
+  if (sections.includes('results')) {
+    options = {
+      quality: 85,
+      timeout: 3000,
+      ...options
+    };
+  }
+  
   // Tentar cada método de carregamento em ordem de prioridade
   return preloadBySection(sections, options);
 };
@@ -248,14 +267,25 @@ const preloadBySection = async (
 /**
  * Obtém URL para imagem de baixa qualidade para carregamento progressivo
  * @param url URL da imagem original
+ * @param options Opções adicionais de customização
  * @returns URL para imagem de baixa qualidade
  */
-export const getLowQualityImage = (url: string): string => {
+export const getLowQualityImage = (url: string, options: { width?: number, quality?: number } = {}): string => {
   if (!url) return '';
   
+  const { 
+    width = 35,   // Aumentado de 30 para 35 para melhor percepção visual
+    quality = 25  // Aumentado de 20 para 25 para melhor equilíbrio qualidade/tamanho
+  } = options;
+  
+  // Para imagens grandes (como banners), aumentamos proporcionalmente a largura do placeholder
+  // para evitar desfoque excessivo
+  const isLargeImage = url.includes('banner') || url.includes('cover') || url.includes('hero');
+  const placeholderWidth = isLargeImage ? width * 1.5 : width;
+  
   return optimizeCloudinaryUrl(url, {
-    quality: 20,
-    width: 30,
+    quality,
+    width: placeholderWidth,
     format: 'auto',
     crop: 'limit'
   });

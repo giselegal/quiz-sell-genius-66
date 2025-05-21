@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { StyleResult } from '@/types/quiz';
 import { styleConfig } from '@/config/styleConfig';
@@ -11,11 +11,39 @@ interface ResultSkeletonProps {
 
 const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
   const mainImageSrc = primaryStyle && styleConfig[primaryStyle.category]?.image;
+  const [progressPercentage, setProgressPercentage] = useState(10);
+  const [preloadStartTime] = useState(Date.now());
   
   // Constantes para garantir proporções consistentes em todos os breakpoints
   const IMAGE_ASPECT_RATIO = 4/5; // Proporção altura/largura (4:5)
   const BASE_WIDTH = 256; // w-64 em pixels
   const BASE_HEIGHT = Math.round(BASE_WIDTH / IMAGE_ASPECT_RATIO);
+
+  // Simulação do progresso de carregamento baseado no tempo decorrido
+  // e no pré-carregamento que já foi feito durante as questões estratégicas
+  useEffect(() => {
+    // Verifica se houve pré-carregamento durante questões estratégicas
+    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
+    // Início com 10% ou 50% dependendo se houve pré-carregamento
+    const startPercentage = hasPreloadedResults ? 50 : 10;
+    setProgressPercentage(startPercentage);
+    
+    // Progresso simulado que avança mais rápido se houve pré-carregamento
+    const interval = setInterval(() => {
+      setProgressPercentage(prev => {
+        // Simulação de progresso que desacelera próximo a 90%
+        const increment = prev < 30 ? 10 : prev < 60 ? 5 : prev < 80 ? 2 : 1;
+        const newValue = Math.min(90, prev + increment);
+        return newValue;
+      });
+    }, hasPreloadedResults ? 200 : 350); // Mais rápido se pré-carregado
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Calcular tempo decorrido desde o início do carregamento
+  const elapsedTimeMs = Date.now() - preloadStartTime;
+  const elapsedSeconds = Math.floor(elapsedTimeMs / 1000);
 
   return (
     <div className="min-h-screen bg-[#fffaf7] p-4 md:p-6" aria-busy="true" role="status">
@@ -27,6 +55,24 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
             <div className="w-full max-w-xs sm:max-w-md h-6 sm:h-8 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md" />
           </div>
         </Card>
+        
+        {/* Indicador de progresso - mostra o pré-carregamento em andamento */}
+        <div className="mb-4 sm:mb-6">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-sm text-[#8F7A6A]">Carregando resultado personalizado</span>
+            <span className="text-sm text-[#8F7A6A]">{progressPercentage}%</span>
+          </div>
+          <div className="h-2 bg-[#F3E8E6] rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-300 ease-out" 
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+          <div className="flex justify-between mt-1 text-xs text-[#8F7A6A]/70">
+            <span>Tempo decorrido: {elapsedSeconds}s</span>
+            <span>Otimizando imagens...</span>
+          </div>
+        </div>
         
         {/* Main content skeleton */}
         <Card className="p-4 sm:p-6 mb-6 sm:mb-10 bg-white relative overflow-hidden">

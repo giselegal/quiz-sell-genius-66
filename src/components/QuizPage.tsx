@@ -213,6 +213,14 @@ const QuizPage: React.FC = () => {
     try {
       const results = submitQuizIfComplete();
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+      
+      // Registra que as imagens da página de resultados foram pré-carregadas
+      // durante as questões estratégicas, para otimizar o carregamento da página
+      localStorage.setItem('preloadedResults', 'true');
+      
+      // Registra o timestamp de quando o quiz foi finalizado
+      localStorage.setItem('quizCompletedAt', Date.now().toString());
+      
       if (results?.primaryStyle) {
         trackResultView(results.primaryStyle.category);
       }

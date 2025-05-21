@@ -131,6 +131,36 @@ export const useQuizLogic = () => {
         [questionId]: selectedOptions
       };
       localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers)); // Salvar imediatamente
+      
+      // Aproveitar questões estratégicas para pré-carregar imagens da página de resultados
+      // Isso melhora significativamente o tempo de carregamento dos resultados
+      const strategicQuestionsProgress = Object.keys(newAnswers).length;
+      
+      // A cada resposta estratégica, carregamos um novo conjunto de imagens da página de resultados
+      // Isso distribui a carga de rede durante as questões que não pontuam
+      if (strategicQuestionsProgress === 1) {
+        // Na primeira questão estratégica, iniciamos o preload das imagens principais de resultado
+        preloadCriticalImages(['results'], { 
+          quality: 80, 
+          batchSize: 2 
+        });
+        console.log('[Otimização] Iniciando pré-carregamento das imagens principais de resultado');
+      } else if (strategicQuestionsProgress === 2) {
+        // Na segunda questão, carregamos imagens de transformação
+        preloadCriticalImages(['transformation'], { 
+          quality: 75, 
+          batchSize: 2 
+        });
+        console.log('[Otimização] Pré-carregando imagens de transformação');
+      } else if (strategicQuestionsProgress >= 3) {
+        // Na terceira ou posterior, começamos a carregar imagens de bônus e depoimentos
+        preloadCriticalImages(['bonus', 'testimonials'], { 
+          quality: 75,
+          batchSize: 2 
+        });
+        console.log('[Otimização] Pré-carregando imagens de bônus e depoimentos');
+      }
+      
       return newAnswers;
     });
   }, []);

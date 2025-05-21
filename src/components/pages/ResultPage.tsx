@@ -21,6 +21,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
 import FloatingCTA from '@/components/result/FloatingCTA';
 import ResourcePreloader from '@/components/result/ResourcePreloader';
+import PerformanceMonitor from '@/components/result/PerformanceMonitor';
 
 // Seções carregadas via lazy
 const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
@@ -105,6 +106,9 @@ const ResultPage: React.FC = () => {
     }}>
       {/* Componente de pré-carregamento de recursos */}
       <ResourcePreloader />
+      
+      {/* Monitor de desempenho (componente invisível) */}
+      <PerformanceMonitor />
       
       {/* CTA flutuante para melhorar conversão */}
       <FloatingCTA onClickCTA={handleCTAClick} />
