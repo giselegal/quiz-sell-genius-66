@@ -59,40 +59,31 @@ const ResourcePreloader: React.FC = () => {
       document.head.appendChild(dnsPrefetch);
     });
     
+    // Adicionar preload de imagens críticas ao head
+    criticalImages.forEach((imgSrc, index) => {
+      const preloadLink = document.createElement('link');
+      preloadLink.rel = 'preload';
+      preloadLink.as = 'image';
+      preloadLink.href = `${imgSrc}?q=80&f=auto&w=32`; // Versão pequena para preload
+      preloadLink.type = 'image/webp';
+      document.head.appendChild(preloadLink);
+    });
+    
     return () => {
       // Limpar links de preconnect quando componente desmontar
-      document.querySelectorAll('link[rel="preconnect"], link[rel="dns-prefetch"]').forEach(el => {
-        if (IMAGE_CDNS.some(cdn => el.getAttribute('href')?.includes(cdn))) {
+      document.querySelectorAll('link[rel="preconnect"], link[rel="dns-prefetch"], link[rel="preload"][as="image"]').forEach(el => {
+        const href = el.getAttribute('href');
+        if (href && (
+          IMAGE_CDNS.some(cdn => href.includes(cdn)) || 
+          criticalImages.some(img => href.includes(img.split('?')[0]))
+        )) {
           el.remove();
         }
       });
     };
   }, []);
   
-  return (
-    <Head>
-      {/* Preload de imagens críticas */}
-      {criticalImages.map((imgSrc, index) => (
-        <link 
-          key={`preload-${index}`}
-          rel="preload" 
-          as="image" 
-          href={`${imgSrc}?q=80&f=auto&w=32`} // Versão pequena para preload
-          type="image/webp"
-        />
-      ))}
-      
-      {/* Preconnect para CDNs */}
-      {IMAGE_CDNS.map((cdn, index) => (
-        <link 
-          key={`cdn-${index}`}
-          rel="preconnect" 
-          href={cdn} 
-          crossOrigin="anonymous" 
-        />
-      ))}
-    </Head>
-  );
+  return null; // Este componente não renderiza nada visualmente, apenas manipula o DOM
 };
 
 export default ResourcePreloader;
