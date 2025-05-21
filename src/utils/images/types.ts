@@ -1,4 +1,3 @@
-
 export interface ImageAnalysis {
   url: string;
   element: HTMLImageElement;
@@ -57,4 +56,8 @@ export interface PreloadOptions {
   categories?: string[];
   limit?: number;
   timeout?: number;
+  format?: string;
+  onProgress?: (loaded: number, total: number) => void;
+  onComplete?: () => void;
+  batchSize?: number;
 }
