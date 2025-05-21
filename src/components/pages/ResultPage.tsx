@@ -151,7 +151,7 @@ const ResultPage: React.FC = () => {
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
-                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
+                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" />
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
                   <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
@@ -160,7 +160,7 @@ const ResultPage: React.FC = () => {
             </div>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
               <div className="mt-8 max-w-[540px] mx-auto relative">
-                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" width="540" height="auto" />
+                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
                 {/* Elegant badge */}
                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                   Exclusivo
