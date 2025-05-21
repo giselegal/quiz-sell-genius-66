@@ -35,28 +35,8 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
             <div className="w-full h-6 sm:h-8 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md relative z-10" />
             <div className="flex flex-col items-center w-full">
               <div className="flex justify-center w-full">
-                {mainImageSrc ? (
-                  <OptimizedImage
-                    src={mainImageSrc}
-                    alt={`Estilo ${primaryStyle?.category}`}
-                    width={BASE_WIDTH}
-                    height={BASE_HEIGHT}
-                    className="w-full max-w-xs sm:max-w-sm md:max-w-md aspect-[4/5] object-cover rounded-md shadow-sm opacity-50 mx-auto"
-                    priority={true}
-                  />
-                ) : (
-                  <div className="w-full max-w-xs sm:max-w-sm md:max-w-md aspect-[4/5] flex items-center justify-center bg-gray-100/50 rounded-md shadow-sm mx-auto">
-                    <OptimizedImage
-                      src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-                      alt="Carregando..."
-                      width={140}
-                      height={70}
-                      className="opacity-75 max-w-[70%]"
-                      objectFit="contain"
-                      priority={true}
-                    />
-                  </div>
-                )}
+                {/* Placeholder de imagem para o skeleton principal, evitando carregamento de imagens pesadas */}
+                <div className="w-full max-w-xs sm:max-w-sm md:max-w-md aspect-[4/5] bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mx-auto" />
               </div>
             </div>
           </div>
