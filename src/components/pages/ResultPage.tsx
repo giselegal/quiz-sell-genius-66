@@ -64,6 +64,55 @@ const ResultPage: React.FC = () => {
       const img = new Image();
       img.src = src;
     });
+
+    // Carregar imagens logo que o componente montar
+    if (primaryStyle) {
+      const { category } = primaryStyle;
+      const { image, guideImage } = styleConfig[category];
+      
+      // Preconnect com o CDN das imagens (Cloudinary)
+      const preconnectLink = document.createElement('link');
+      preconnectLink.rel = 'preconnect';
+      preconnectLink.href = 'https://res.cloudinary.com';
+      preconnectLink.crossOrigin = 'anonymous';
+      document.head.appendChild(preconnectLink);
+
+      // Definir tamanhos otimizados
+      const imageWidth = 238;
+      const guideWidth = 540;
+
+      // Preload das imagens críticas
+      const styleImgUrl = `${image}?q=80&f=auto&w=${imageWidth}`;
+      const guideImgUrl = `${guideImage}?q=80&f=auto&w=${guideWidth}`;
+
+      // Criar preloads no head
+      [styleImgUrl, guideImgUrl].forEach(url => {
+        const preload = document.createElement('link');
+        preload.rel = 'preload';
+        preload.as = 'image';
+        preload.href = url;
+        preload.type = 'image/webp';
+        document.head.appendChild(preload);
+      });
+
+      // Criar objetos de imagem para monitorar o carregamento
+      const styleImg = new Image();
+      styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
+      styleImg.onerror = () => setImagesLoaded(prev => ({ ...prev, style: true })); // Mesmo com erro, remove o skeleton
+      styleImg.src = styleImgUrl;
+
+      const guideImg = new Image();
+      guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
+      guideImg.onerror = () => setImagesLoaded(prev => ({ ...prev, guide: true })); // Mesmo com erro, remove o skeleton
+      guideImg.src = guideImgUrl;
+
+      // Definir timeout de segurança para remover o skeleton após 3 segundos
+      const safetyTimeout = setTimeout(() => {
+        completeLoading();
+      }, 3000);
+
+      return () => clearTimeout(safetyTimeout);
+    }
   }, [primaryStyle, globalStyles.logo]);
   
   useEffect(() => {
@@ -128,7 +177,7 @@ const ResultPage: React.FC = () => {
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
                   <img 
-                    src={`${image}?q=auto:best&f=auto&w=238`} 
+                    src={`${image}?q=80&f=auto&w=238`} 
                     alt={`Estilo ${category}`} 
                     width={238} 
                     height={298} 
@@ -145,7 +194,7 @@ const ResultPage: React.FC = () => {
             </div>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
               <div className="mt-8 max-w-[540px] mx-auto relative">
-                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} />
+                <img src={`${guideImage}?q=80&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} />
                 {/* Elegant badge */}
                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                   Exclusivo
