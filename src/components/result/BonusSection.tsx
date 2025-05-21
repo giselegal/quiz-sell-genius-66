@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Gift, Star } from 'lucide-react';
 import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
+import { motion } from 'framer-motion';
 
 const BonusSection: React.FC = () => {
   // Criar imagem otimizada de alta qualidade
@@ -29,7 +29,13 @@ const BonusSection: React.FC = () => {
 
       <div className="max-w-4xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow transform-3d hover:scale-[1.01] border-0">
+          {/* Animated cards entrada */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow transform-3d hover:scale-[1.01] border-0"
+          >
             <div className="flex justify-center mb-4">
               <picture>
                 {/* Várias resoluções de imagem para responder a diferentes tamanhos de tela */}
@@ -67,9 +73,14 @@ const BonusSection: React.FC = () => {
               </div>
               <span className="ml-2 text-xs text-[#3a3a3a]">Edição Premium</span>
             </div>
-          </div>
+          </motion.div>
           
-          <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow transform-3d hover:scale-[1.01] border-0">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow transform-3d hover:scale-[1.01] border-0"
+          >
             <div className="flex justify-center mb-4">
               <picture>
                 {/* Várias resoluções de imagem para responder a diferentes tamanhos de tela */}
@@ -86,10 +97,10 @@ const BonusSection: React.FC = () => {
                 <img 
                   src={bonus2ImageUrl} 
                   alt="Bônus: Visagismo Facial" 
-                  className="w-full max-w-[300px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
+                  className="w-full max-w-[350px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
                   loading="lazy"
-                  width="300"
-                  height="420"
+                  width="350"
+                  height="490"
                 />
               </picture>
             </div>
@@ -107,7 +118,7 @@ const BonusSection: React.FC = () => {
               </div>
               <span className="ml-2 text-xs text-[#3a3a3a]">Edição Premium</span>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
