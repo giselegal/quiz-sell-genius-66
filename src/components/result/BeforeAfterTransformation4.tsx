@@ -136,7 +136,6 @@ const useImagePreloader = (images: string[], initialIndex = 0) => {
     if (images.length > 0) {
       preloadImagesByUrls([images[initialIndex]], {
         quality: 90,
-        batchSize: 1,
       });
       
       // Marcar como carregada após um tempo
@@ -159,7 +158,6 @@ const useImagePreloader = (images: string[], initialIndex = 0) => {
       
       preloadImagesByUrls([nextImageUrl], { 
         quality: 80, 
-        batchSize: 1 
       });
       
       // Marcar como carregada após um tempo
