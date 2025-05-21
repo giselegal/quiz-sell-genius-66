@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { preloadImagesByUrls } from '@/utils/imageManager';
-import Head from 'next/head';
 
 // Lista de CDNs de imagens usados no aplicativo
 const IMAGE_CDNS = [
