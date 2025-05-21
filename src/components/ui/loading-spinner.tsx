@@ -1,5 +1,5 @@
-
 import React from 'react';
+import './loading-spinner.css';
 
 interface LoadingSpinnerProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -34,10 +34,9 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   return (
     <div className={`flex justify-center items-center ${className}`} role="status" aria-label="Loading">
       <div
-        className={`${sizeClass} ${thicknessClass} rounded-full`}
+        className={`${sizeClass} ${thicknessClass} rounded-full elegant-spinner`}
         style={{
           borderColor: `${color} transparent transparent transparent`,
-          animation: 'spin 1s linear infinite',
           willChange: 'transform',
           transform: 'translateZ(0)',  // Força aceleração por hardware
           backfaceVisibility: 'hidden' // Evita problemas de renderização
