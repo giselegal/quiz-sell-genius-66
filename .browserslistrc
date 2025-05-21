@@ -1,0 +1,22 @@
+# Configuração de navegadores-alvo moderna
+# Isso reduz a necessidade de polyfills e transpilação pesada do JavaScript
+# Resultando em bundles menores e mais eficientes
+
+# Navegadores modernos (> 0.5% de uso global)
+> 0.5%
+
+# Versões atuais e anteriores de navegadores significativos
+last 2 Chrome versions
+last 2 Firefox versions
+last 2 Safari versions
+last 2 Edge versions 
+
+# Navegadores que não estão mortos (atualizados nos últimos 24 meses)
+not dead
+
+# Excluir explicitamente navegadores antigos
+not IE 11
+not op_mini all
+
+# Navegadores com suporte a módulos ES
+supports es6-module
