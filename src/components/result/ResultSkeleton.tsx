@@ -24,13 +24,6 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
         <Card className="p-4 sm:p-6 mb-4 sm:mb-6 bg-white relative overflow-hidden" aria-busy="true" role="status">
           <div className="flex flex-col items-center gap-4 sm:gap-5">
             <LoadingSpinner size="md" color="#aa6b5d" className="mb-2" />
-            <div className="w-36 sm:w-48 h-16 sm:h-20 relative flex justify-center items-center">
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
-              <div className="flex justify-center w-full">
-                {/* Logo removido para acelerar o carregamento do skeleton */}
-                <div className="h-12 sm:h-16 w-36 sm:w-48 bg-gray-100 animate-pulse rounded-md mx-auto" />
-              </div>
-            </div>
             <div className="w-full max-w-xs sm:max-w-md h-6 sm:h-8 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md" />
           </div>
         </Card>
