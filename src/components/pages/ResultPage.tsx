@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -9,12 +9,6 @@ import { ShoppingCart, CheckCircle, ArrowDown, Lock, ChevronLeft, ChevronRight }
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
-import MotivationSection from '@/components/result/MotivationSection';
-import MentorSection from '@/components/result/MentorSection';
-import GuaranteeSection from '@/components/result/GuaranteeSection';
-import Testimonials from '@/components/quiz-result/sales/Testimonials';
-import BonusSection from '@/components/result/BonusSection';
-import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation4';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
@@ -23,6 +17,15 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+
+// Seções carregadas via lazy
+const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
+const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
+const BonusSection = lazy(() => import('@/components/result/BonusSection'));
+const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
+const GuaranteeSection = lazy(() => import('@/components/result/GuaranteeSection'));
+const MentorSection = lazy(() => import('@/components/result/MentorSection'));
 
 const ResultPage: React.FC = () => {
   const {
@@ -168,70 +171,49 @@ const ResultPage: React.FC = () => {
         </Card>
 
         {/* INTEREST: Before/After Transformation Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
-          <BeforeAfterTransformation />
-        </AnimatedWrapper>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={700}>
+            <BeforeAfterTransformation handleCTAClick={handleCTAClick} />
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* INTEREST: Motivation Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-          <MotivationSection />
-        </AnimatedWrapper>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={800}>
+            <MotivationSection />
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* INTEREST: Bonus Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
-          <BonusSection />
-        </AnimatedWrapper>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={850}>
+            <BonusSection />
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* DESIRE: Testimonials */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
-          <Testimonials />
-        </AnimatedWrapper>
-
-        {/* DESIRE: Featured CTA (Green) */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
-          <div className="text-center my-10">
-            <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
-              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
-                Descubra Como Aplicar Seu Estilo na Prática
-              </h3>
-              <div className="flex justify-center">
-                <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
-              </div>
-            </div>
-            
-            <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
-              background: "linear-gradient(to right, #4CAF50, #45a049)",
-              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-            }}>
-              <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                Quero meu Guia de Estilo Agora
-              </span>
-            </Button>
-            
-            <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
-              <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
-                
-                
-              </p>
-            </div>
-            
-            <SecurePurchaseElement />
-          </div>
-        </AnimatedWrapper>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={900}>
+            <Testimonials />
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* DESIRE: Guarantee Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
-          <GuaranteeSection />
-        </AnimatedWrapper>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1000}>
+            <GuaranteeSection />
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* DESIRE: Mentor and Trust Elements */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
-          <MentorSection />
-        </AnimatedWrapper>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1050}>
+            <MentorSection />
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* ACTION: Final Value Proposition and CTA */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1100}>
           <div className="text-center mt-10">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
               Vista-se de Você — na Prática
