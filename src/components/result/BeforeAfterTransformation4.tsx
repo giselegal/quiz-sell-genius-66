@@ -185,16 +185,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   const activeTransformation = transformations[activeIndex];
   const isImageLoaded = loadedImages[activeTransformation.image];
 
-  // Efeito para desativar o estado de carregamento inicial após um tempo
+  // Desativa skeleton assim que a imagem atual estiver carregada
   useEffect(() => {
-    const fallbackLoadingTimer = setTimeout(() => {
-      if (isLoading) {
-        setIsLoading(false);
-      }
-    }, 1500);
-
-    return () => clearTimeout(fallbackLoadingTimer);
-  }, []);
+    if (loadedImages[transformations[activeIndex].image]) {
+      setIsLoading(false);
+    }
+  }, [loadedImages, activeIndex]);
 
   // Efeito para pré-carregar a próxima imagem quando o índice ativo muda
   useEffect(() => {
@@ -212,15 +208,9 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
       <div className="my-8 sm:my-10 md:my-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Título com decoração */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-8"
-          >
-            <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] inline-block relative">
+          <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] inline-block">
               Descubra o poder da imagem intencional
-              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-0.5 bg-[#B89B7A]/30"></span>
             </h3>
           </motion.div>
           
@@ -284,15 +274,9 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     <div className="my-8 sm:my-10 md:my-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Título com decoração */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] inline-block relative">
+        <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d]">
             Descubra o poder da imagem intencional
-            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-0.5 bg-[#B89B7A]/30"></span>
           </h3>
         </motion.div>
         
