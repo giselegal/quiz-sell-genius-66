@@ -97,10 +97,10 @@ const BonusSection: React.FC = () => {
                 <img 
                   src={bonus2ImageUrl} 
                   alt="Bônus: Visagismo Facial" 
-                  className="w-full max-w-[350px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
+                  className="w-full max-w-[400px] md:max-w-[450px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
                   loading="lazy"
-                  width="350"
-                  height="490"
+                  width="400"
+                  height="560"
                 />
               </picture>
             </div>
