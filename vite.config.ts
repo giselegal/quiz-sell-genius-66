@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
   base: './',
   
   server: {
-    host: "::",
+    host: '0.0.0.0',
     port: 8080,
     // Configurações CORS e mime-types para desenvolvimento
     headers: {
