@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
-import OptimizedImage from '@/components/ui/OptimizedImage';
+import OptimizedImage from '@/components/ui/optimized-image';
 import { preloadImagesByUrls } from '@/utils/imageManager';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import { motion, AnimatePresence } from 'framer-motion';
