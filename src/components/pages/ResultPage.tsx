@@ -18,6 +18,9 @@ import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import ProgressiveImage from '@/components/ui/progressive-image';
+import FloatingCTA from '@/components/result/FloatingCTA';
+import ResourcePreloader from '@/components/result/ResourcePreloader';
 
 // Seções carregadas via lazy
 const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
@@ -58,61 +61,18 @@ const ResultPage: React.FC = () => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
 
-    // Pré-carregar logo apenas
-    const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
-    criticalImages.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
+    // Pré-carregar logo e imagens críticas diretamente via ResourcePreloader
+    
+    // O preload agora é feito de forma centralizada com ResourcePreloader
+    // Não precisamos mais de preload manual aqui
+    
+    // Definir timeout de segurança para remover o skeleton após 2.5 segundos (reduzido)
+    const safetyTimeout = setTimeout(() => {
+      setImagesLoaded({ style: true, guide: true });
+      completeLoading();
+    }, 2500);
 
-    // Carregar imagens logo que o componente montar
-    if (primaryStyle) {
-      const { category } = primaryStyle;
-      const { image, guideImage } = styleConfig[category];
-      
-      // Preconnect com o CDN das imagens (Cloudinary)
-      const preconnectLink = document.createElement('link');
-      preconnectLink.rel = 'preconnect';
-      preconnectLink.href = 'https://res.cloudinary.com';
-      preconnectLink.crossOrigin = 'anonymous';
-      document.head.appendChild(preconnectLink);
-
-      // Definir tamanhos otimizados
-      const imageWidth = 238;
-      const guideWidth = 540;
-
-      // Preload das imagens críticas
-      const styleImgUrl = `${image}?q=80&f=auto&w=${imageWidth}`;
-      const guideImgUrl = `${guideImage}?q=80&f=auto&w=${guideWidth}`;
-
-      // Criar preloads no head
-      [styleImgUrl, guideImgUrl].forEach(url => {
-        const preload = document.createElement('link');
-        preload.rel = 'preload';
-        preload.as = 'image';
-        preload.href = url;
-        preload.type = 'image/webp';
-        document.head.appendChild(preload);
-      });
-
-      // Criar objetos de imagem para monitorar o carregamento
-      const styleImg = new Image();
-      styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
-      styleImg.onerror = () => setImagesLoaded(prev => ({ ...prev, style: true })); // Mesmo com erro, remove o skeleton
-      styleImg.src = styleImgUrl;
-
-      const guideImg = new Image();
-      guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
-      guideImg.onerror = () => setImagesLoaded(prev => ({ ...prev, guide: true })); // Mesmo com erro, remove o skeleton
-      guideImg.src = guideImgUrl;
-
-      // Definir timeout de segurança para remover o skeleton após 3 segundos
-      const safetyTimeout = setTimeout(() => {
-        completeLoading();
-      }, 3000);
-
-      return () => clearTimeout(safetyTimeout);
-    }
+    return () => clearTimeout(safetyTimeout);
   }, [primaryStyle, globalStyles.logo]);
   
   useEffect(() => {
@@ -143,6 +103,12 @@ const ResultPage: React.FC = () => {
       color: globalStyles.textColor || '#432818',
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
+      {/* Componente de pré-carregamento de recursos */}
+      <ResourcePreloader />
+      
+      {/* CTA flutuante para melhorar conversão */}
+      <FloatingCTA onClickCTA={handleCTAClick} />
+      
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
@@ -176,8 +142,8 @@ const ResultPage: React.FC = () => {
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
-                  <img 
-                    src={`${image}?q=80&f=auto&w=238`} 
+                  <ProgressiveImage 
+                    src={`${image}?q=85&f=auto&w=238`} 
                     alt={`Estilo ${category}`} 
                     width={238} 
                     height={298} 
@@ -194,7 +160,13 @@ const ResultPage: React.FC = () => {
             </div>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
               <div className="mt-8 max-w-[540px] mx-auto relative">
-                <img src={`${guideImage}?q=80&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} />
+                <ProgressiveImage 
+                  src={`${guideImage}?q=85&f=auto&w=540`} 
+                  alt={`Guia de Estilo ${category}`} 
+                  loading="lazy" 
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                  onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
+                />
                 {/* Elegant badge */}
                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                   Exclusivo
