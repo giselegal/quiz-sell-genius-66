@@ -73,6 +73,12 @@ const ResultPage: React.FC = () => {
       image,
       guideImage
     } = styleConfig[category];
+    // Preload da imagem principal para LCP mais rápido
+    const linkPreload = document.createElement('link');
+    linkPreload.rel = 'preload';
+    linkPreload.href = `${image}?q=auto:best&f=auto&w=238`;
+    linkPreload.as = 'image';
+    document.head.appendChild(linkPreload);
     const styleImg = new Image();
     styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
     styleImg.onload = () => setImagesLoaded(prev => ({
@@ -85,6 +91,22 @@ const ResultPage: React.FC = () => {
       ...prev,
       guide: true
     }));
+
+    // Preconnect to CDN for faster handshake
+    const preconnectLink = document.createElement('link');
+    preconnectLink.rel = 'preconnect';
+    preconnectLink.href = new URL(image).origin;
+    document.head.appendChild(preconnectLink);
+
+    // Preload LCP images
+    ['image', 'guideImage'].forEach(key => {
+      const url = `${(key === 'image' ? image : guideImage)}?q=auto:best&f=auto&w=${key === 'image' ? 238 : 540}`;
+      const preload = document.createElement('link');
+      preload.rel = 'preload';
+      preload.as = 'image';
+      preload.href = url;
+      document.head.appendChild(preload);
+    });
   }, [primaryStyle, globalStyles.logo]);
   
   useEffect(() => {
@@ -148,7 +170,15 @@ const ResultPage: React.FC = () => {
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
-                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" />
+                  <img 
+                    src={`${image}?q=auto:best&f=auto&w=238`} 
+                    alt={`Estilo ${category}`} 
+                    width={238} 
+                    height={298} 
+                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                    loading="eager" 
+                    fetchPriority="high" 
+                  />
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
                   <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
