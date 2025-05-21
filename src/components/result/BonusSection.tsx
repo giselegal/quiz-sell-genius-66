@@ -23,7 +23,7 @@ const BonusSection: React.FC = () => {
         Bônus Exclusivos para Você
       </h2>
       <p className="text-center text-[#3a3a3a] mb-6 max-w-md mx-auto">
-        Além do guia principal, você receberá estes recursos complementares
+        Além do guia principal, você receberá estas ferramentas complementares para potencializar sua jornada de transformação:
       </p>
       <div className="elegant-divider w-32 mx-auto mt-0 mb-6"></div>
 
@@ -97,10 +97,10 @@ const BonusSection: React.FC = () => {
                 <img 
                   src={bonus2ImageUrl} 
                   alt="Bônus: Visagismo Facial" 
-                  className="w-full max-w-[400px] md:max-w-[450px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
+                  className="w-full max-w-[80vw] sm:max-w-[60vw] md:max-w-[450px] h-auto rounded-lg shadow-sm hover:scale-105 transition-transform duration-300" 
                   loading="lazy"
-                  width="400"
-                  height="560"
+                  width="350"
+                  height="490"
                 />
               </picture>
             </div>

@@ -234,7 +234,7 @@ const ResultPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
+              <div className="bg-white text-left p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
                 <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
