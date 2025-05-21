@@ -58,54 +58,11 @@ const ResultPage: React.FC = () => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
 
-    // Pré-carregar imagens críticas primeiro
+    // Pré-carregar logo apenas
     const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
     criticalImages.forEach(src => {
       const img = new Image();
       img.src = src;
-    });
-
-    // Depois carregar as imagens específicas do estilo
-    const {
-      category
-    } = primaryStyle;
-    const {
-      image,
-      guideImage
-    } = styleConfig[category];
-    // Preload da imagem principal para LCP mais rápido
-    const linkPreload = document.createElement('link');
-    linkPreload.rel = 'preload';
-    linkPreload.href = `${image}?q=auto:best&f=auto&w=238`;
-    linkPreload.as = 'image';
-    document.head.appendChild(linkPreload);
-    const styleImg = new Image();
-    styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
-    styleImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      style: true
-    }));
-    const guideImg = new Image();
-    guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
-    guideImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      guide: true
-    }));
-
-    // Preconnect to CDN for faster handshake
-    const preconnectLink = document.createElement('link');
-    preconnectLink.rel = 'preconnect';
-    preconnectLink.href = new URL(image).origin;
-    document.head.appendChild(preconnectLink);
-
-    // Preload LCP images
-    ['image', 'guideImage'].forEach(key => {
-      const url = `${(key === 'image' ? image : guideImage)}?q=auto:best&f=auto&w=${key === 'image' ? 238 : 540}`;
-      const preload = document.createElement('link');
-      preload.rel = 'preload';
-      preload.as = 'image';
-      preload.href = url;
-      document.head.appendChild(preload);
     });
   }, [primaryStyle, globalStyles.logo]);
   
@@ -178,6 +135,7 @@ const ResultPage: React.FC = () => {
                     className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
                     loading="eager" 
                     fetchPriority="high" 
+                    onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
                   />
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
@@ -187,7 +145,7 @@ const ResultPage: React.FC = () => {
             </div>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
               <div className="mt-8 max-w-[540px] mx-auto relative">
-                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" />
+                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} />
                 {/* Elegant badge */}
                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                   Exclusivo
