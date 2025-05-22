@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { QuizQuestion } from './QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -13,6 +12,7 @@ interface QuizContentProps {
   currentStrategicQuestionIndex: number;
   currentQuestion: any;
   currentAnswers: string[];
+  strategicAnswers: Record<string, string[]>; // NOVO
   handleAnswerSubmit: (response: UserResponse) => void;
   handleNextClick: () => void;
   handlePrevious: () => void;
@@ -26,6 +26,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   currentStrategicQuestionIndex,
   currentQuestion,
   currentAnswers,
+  strategicAnswers, // Recebe as respostas estratégicas
   handleAnswerSubmit,
   handleNextClick,
   handlePrevious,
@@ -53,12 +54,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={showingStrategicQuestions ? currentAnswers.reduce((acc, optionId) => {
-              if (currentQuestion?.id) {
-                acc[currentQuestion.id] = [optionId];
-              }
-              return acc;
-            }, {}) : {}}
+            answers={strategicAnswers} // Passa o objeto global
             onAnswer={handleAnswerSubmit}
             onNextClick={handleNextClick}
           />

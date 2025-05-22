@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -13,7 +12,10 @@ interface QuizContentProps {
   currentStrategicQuestionIndex: number;
   currentQuestion: any;
   currentAnswers: string[];
+  strategicAnswers?: Record<string, string[]>; // Torna opcional para compatibilidade
   handleAnswerSubmit: (response: UserResponse) => void;
+  handleNextClick: () => void;
+  handlePrevious: () => void;
 }
 
 export const QuizContent: React.FC<QuizContentProps> = ({

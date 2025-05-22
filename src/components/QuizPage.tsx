@@ -421,13 +421,16 @@ const QuizPage: React.FC = () => {
                         totalQuestions={totalQuestions}
                         showingStrategicQuestions={showingStrategicQuestions}
                         currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-                        currentQuestion={actualCurrentQuestionData} 
+                        currentQuestion={actualCurrentQuestionData}
                         currentAnswers={showingStrategicQuestions && actualCurrentQuestionData.id ? strategicAnswers[actualCurrentQuestionData.id] || [] : currentAnswers}
+                        strategicAnswers={strategicAnswers} // NOVO: passa o objeto global
                         handleAnswerSubmit={
                           showingStrategicQuestions && actualCurrentQuestionData
                             ? recordStrategicAnswer
                             : handleAnswerSubmitInternal
                         }
+                        handleNextClick={handleNextClickInternal}
+                        handlePrevious={handlePrevious}
                       />
                       {renderQuizNavigation()} 
                     </motion.div>
