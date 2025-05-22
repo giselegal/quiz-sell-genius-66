@@ -41,7 +41,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       onClick={handleClick}
       className={cn(
         "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer bg-white",
-        isImageOption && isSelected && "shadow-2xl transform scale-[1.04]",
+        isImageOption && isSelected && "shadow-2xl",
         isImageOption && !isSelected && !isDisabled && "hover:shadow-lg",
         // Nunca borda para imagem
         !isImageOption && isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.01]",
@@ -54,12 +54,14 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
     >
       {type !== 'text' && option.imageUrl && (
         <div className={cn("w-full flex-1 flex items-stretch min-h-[220px] p-0 relative")}> 
+          <div className="w-full h-[12px]" /> {/* respiro superior */}
           <img 
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
               "w-full h-[260px] object-cover rounded-t-lg z-20 transition-all duration-200",
-              isSelected && "opacity-95 shadow-2xl transform scale-[1.04] z-30"
+              isSelected ? "scale-[1.04] shadow-2xl" : "",
+              "mx-auto"
             )}
             style={{ maxHeight: '260px', minHeight: '180px' }}
             onError={(e) => {
@@ -67,6 +69,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
               target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
             }}
           />
+          <div className="w-full h-[8px]" /> {/* respiro inferior */}
           {/* Texto sobreposto na base da imagem, com fundo translúcido */}
           <div className={cn(
             "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-20",
