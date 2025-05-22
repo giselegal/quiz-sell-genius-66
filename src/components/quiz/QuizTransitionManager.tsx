@@ -2,6 +2,7 @@ import React from 'react';
 import { MainTransition } from './MainTransition';
 import QuizFinalTransition from '../QuizFinalTransition';
 import { UserResponse } from '@/types/quiz';
+import { Spinner } from '../ui/spinner'; // Importing the Spinner component
 
 interface QuizTransitionManagerProps {
   showingTransition: boolean;
@@ -38,8 +39,8 @@ const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
             {/* ...existing counter logic / JSX... */}
           </div>
         )}
-
         {/* Spinner ou mensagem continuam aparecendo normalmente */}
+        <Spinner /> {/* Componente de spinner para indicar carregamento */}
         <Spinner /> {/* ou componente existente */}
       </div>
     );
