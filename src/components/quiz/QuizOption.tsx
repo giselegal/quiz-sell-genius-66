@@ -55,16 +55,16 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           forStrategic && isSelected && "ring-2 ring-[#B89B7A]/60 animate-pulse-border shadow-2xl"
         )}> 
           <div className="w-full h-[12px]" /> {/* respiro superior */}
-          <div className="relative w-full flex items-end justify-center" style={{ minHeight: '180px' }}>
+          <div className="relative w-full flex items-end justify-center" style={{ minHeight: '220px' }}>
             <img 
               src={option.imageUrl} 
               alt={option.text}
               className={cn(
-                "w-full h-[220px] sm:h-[260px] object-contain rounded-t-lg z-20 transition-all duration-200",
-                isSelected ? "scale-[1.07] shadow-2xl -translate-y-2" : "",
+                "w-full h-[260px] sm:h-[320px] object-contain rounded-t-lg z-20 transition-all duration-200",
+                isSelected ? "scale-[1.10] shadow-2xl -translate-y-2" : "",
                 "mx-auto"
               )}
-              style={{ maxHeight: '260px', minHeight: '140px', background: '#f8f5f0' }}
+              style={{ maxHeight: '340px', minHeight: '180px' }}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
