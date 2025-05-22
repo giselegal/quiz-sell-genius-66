@@ -14,8 +14,6 @@ interface QuizQuestionProps {
   currentAnswers: string[];
   autoAdvance?: boolean;
   hideTitle?: boolean;
-  onNextClick?: () => void;
-  onPreviousClick?: () => void;
   showQuestionImage?: boolean;
   isStrategicQuestion?: boolean; // Nova prop
 }
@@ -26,32 +24,18 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   currentAnswers,
   autoAdvance = false,
   hideTitle = false,
-  onNextClick,
-  onPreviousClick,
   showQuestionImage = false,
-  isStrategicQuestion = false // Padrão para false
+  isStrategicQuestion = false
 }) => {
   const isMobile = useIsMobile();
-  // const isStrategicQuestion = question.id.startsWith('strategic'); // Removido para usar a prop
   const hasImageOptions = question.type !== 'text';
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
-  const [isButtonActive, setIsButtonActive] = useState(false); // Novo estado para efeito visual
 
   useEffect(() => {
     scrollToQuestion(question.id);
   }, [question.id, scrollToQuestion]);
 
-  // Efeito para o botão de questões estratégicas
-  useEffect(() => {
-    if (isStrategicQuestion) {
-      const isActive = currentAnswers.length > 0;
-      if (isActive !== isButtonActive) { // Apenas atualiza se o estado mudar
-        setIsButtonActive(isActive);
-      }
-    }
-  }, [currentAnswers, isStrategicQuestion, isButtonActive]); // Adicionado isButtonActive às dependências
-  
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
     
@@ -67,19 +51,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       }
     }
     
-    onAnswer({ // Movido onAnswer para fora do bloco condicional de auto-avanço
+    onAnswer({ 
       questionId: question.id,
       selectedOptions: newSelectedOptions
     });
-
-    const shouldAutoAdvance = 
-      !isStrategicQuestion &&
-      autoAdvance && 
-      newSelectedOptions.length === question.multiSelect;
-    
-    if (shouldAutoAdvance && onNextClick) {
-      onNextClick();
-    }
   };
   
   const getGridColumns = () => {
@@ -140,30 +115,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             isDisabled={!currentAnswers.includes(option.id) && 
               !isStrategicQuestion && 
               currentAnswers.length >= question.multiSelect}
-            isStrategicOption={isStrategicQuestion} // Passar para QuizOption
+            isStrategicOption={isStrategicQuestion}
           />
         ))}
       </div>
-      
-      {/* Botão Continuar para Questões Estratégicas */}
-      {isStrategicQuestion && onNextClick && (
-        <div className="mt-8 text-center">
-          <Button 
-            onClick={onNextClick}
-            disabled={currentAnswers.length === 0}
-            className={cn(
-              "text-lg py-3 px-6 rounded-lg shadow-md font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-opacity-50",
-              "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none",
-              isButtonActive && !(currentAnswers.length === 0) // Aplicar efeito apenas se ativo e não desabilitado
-                ? "bg-brand-primary hover:bg-brand-primary/90 transform hover:scale-105 focus:ring-brand-primary hover:shadow-lg" 
-                : "bg-brand-primary", // Estilo base quando não está no efeito "ativo" mas pode estar habilitado
-              currentAnswers.length === 0 && "bg-gray-300 hover:bg-gray-300" // Estilo para desabilitado
-            )}
-          >
-            Avançar <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
