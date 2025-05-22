@@ -24,6 +24,12 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
     ? (strategicAnswers[currentQuestion.id] || []) 
     : [];
 
+  // Sempre mostrar a introdução ao entrar no componente
+  React.useEffect(() => {
+    setShowIntro(true);
+    setCurrentQuestionIndex(0);
+  }, []);
+
   const handleQuestionAnswer = (response: UserResponse) => {
     try {
       console.log('Strategic Question Answered:', response);
