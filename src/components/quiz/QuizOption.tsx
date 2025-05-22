@@ -28,34 +28,27 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
 
   const isImageOption = type !== 'text' && option.imageUrl;
 
-  let optionClasses = "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer bg-white";
-
-  if (isDisabled) {
-    optionClasses = cn(optionClasses, "border border-gray-200 opacity-75 cursor-not-allowed");
-  } else if (isSelected) {
-    if (isImageOption) {
-      optionClasses = cn(optionClasses, "shadow-xl transform scale-[1.02]"); // Imagem selecionada: Efeito 3D
-    } else {
-      optionClasses = cn(optionClasses, "border-2 border-[#B89B7A] shadow-lg transform scale-[1.01]"); // Texto selecionado: Borda dourada forte
-    }
-  } else { // Não selecionado e não desabilitado
-    if (isImageOption) {
-      optionClasses = cn(optionClasses, "border border-transparent hover:border-[#B89B7A]/60 hover:shadow-md"); // Imagem não selecionada
-    } else {
-      optionClasses = cn(optionClasses, "border border-[#B89B7A]/40 hover:border-[#B89B7A]/80 hover:shadow-sm"); // Texto não selecionado
-    }
-  }
-
-  if (type === 'text') {
-    optionClasses = cn(optionClasses, "p-4");
-  } else {
-    optionClasses = cn(optionClasses, "flex flex-col");
-  }
-
   return (
     <div
       onClick={handleClick}
-      className={optionClasses}
+      className={cn(
+        "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer bg-white",
+        // Base para todos os não desabilitados
+        !isDisabled && (isImageOption ? "hover:shadow-md" : "hover:border-[#B89B7A]/80 hover:shadow-sm"),
+
+        // Estilos quando SELECIONADO
+        isSelected && isImageOption && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.02]", // Imagem selecionada: Borda dourada forte + 3D
+        isSelected && !isImageOption && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.01]", // Texto selecionado: Borda dourada forte + sombra
+
+        // Estilos quando NÃO SELECIONADO e NÃO DESABILITADO
+        !isSelected && !isDisabled && isImageOption && "border border-transparent", // Imagem não selecionada: Borda transparente
+        !isSelected && !isDisabled && !isImageOption && "border border-[#B89B7A]/40", // Texto não selecionado: Borda dourada sutil
+        
+        // Estilos quando DESABILITADO
+        isDisabled && "border border-gray-200 opacity-75 cursor-not-allowed",
+        
+        type === 'text' ? "p-4" : "flex flex-col"
+      )}
     >
       {type !== 'text' && option.imageUrl && (
         <div className="w-full">
@@ -77,7 +70,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       
       <div className={cn(
         "flex-1 p-3 text-[#432818]",
-        type !== 'text' && option.imageUrl ? "border-t border-[#B89B7A]/10 text-sm" : ""
+        type !== 'text' && option.imageUrl ? "border-t border-[#B89B7A]/10 text-[10px]" : ""
       )}>
         <p>{option.text}</p>
       </div>
