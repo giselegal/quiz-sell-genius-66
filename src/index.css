@@ -161,18 +161,22 @@ img:hover, .hover-scale:hover {
   /* Questões só com texto – aumentar fonte */
   .text-only-question .question-text,
   .text-only-question .options {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
   }
 
   /* Questões Estratégicas – títulos e opções maiores e destacados */
   .strategic-question .question-title,
-  .strategic-question .options {
-    font-size: 1.3rem;
+  .strategic-question .options,
+  .strategic-question-title {
+    font-size: 1.4rem;
     font-weight: 600;
   }
 
   /* Destaque de termos estratégicos */
   .highlight-strategic {
     background-color: hsl(var(--accent) / 0.3);
+    padding: 0.1em 0.2em;
+    border-radius: 0.2em;
+    font-weight: 600;
   }
 }

@@ -148,11 +148,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium py-1 px-2 mt-auto text-[#432818] relative", 
-                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-sm"
+                isMobile ? "text-[0.8rem]" : "text-[0.7rem] sm:text-sm",
+                isStrategicOption && "text-[0.95rem] sm:text-base" // Maior para opções estratégicas
               )
             : cn(
                 "leading-relaxed text-[#432818]",
-                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base"
+                isMobile ? "text-[0.9rem]" : "text-sm sm:text-base",
+                isStrategicOption && "text-[1.1rem] sm:text-lg",  // Maior para opções estratégicas texto
+                !isStrategicOption && ".text-only-question & " && "text-[1rem] sm:text-lg" // Maior para opções só texto
               )
         )}>
           {highlightStrategicWords(option.text)}
