@@ -217,7 +217,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   disabled={!nome.trim()}
                   className={cn(
                     "w-full rounded-lg py-3 text-white font-semibold transition-all duration-300 ease-in-out relative overflow-hidden group",
-                    "bg-[#B89B7A] hover:bg-[#A1835D] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
+                    "bg-[#432818] hover:bg-[#A1835D] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
                     "disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500",
                     "text-base sm:text-lg", // Fonte base, sm:text-lg para telas maiores
                     "h-12 sm:h-14" // Altura ajustada para mobile e desktop
