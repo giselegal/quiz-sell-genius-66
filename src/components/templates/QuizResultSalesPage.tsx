@@ -138,16 +138,12 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
               </p>
               <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
                 <h2 className="font-medium text-[#aa6b5d] mb-2">Seu estilo predominante:</h2>
-                <div className="flex items-center">
-                  <div className="w-16 h-16 rounded-full bg-[#aa6b5d] flex items-center justify-center text-white text-2xl font-bold">
+                <div className="flex flex-col items-start">
+                  <h3 className="font-playfair text-xl mb-2">{primaryStyle.category}</h3>
+                  <div className="w-16 h-16 rounded-full bg-[#aa6b5d] flex items-center justify-center text-white text-2xl font-bold mb-2">
                     {primaryStyle.percentage}%
                   </div>
-                  <div className="ml-4">
-                    <h3 className="font-playfair text-xl">{primaryStyle.category}</h3>
-                    <p className="text-sm text-[#3a3a3a]/80">
-                      {getStyleDescription(primaryStyle.category)}
-                    </p>
-                  </div>
+                  <p className="text-sm text-[#3a3a3a]/80">{getStyleDescription(primaryStyle.category)}</p>
                 </div>
               </div>
               {secondaryStyles.length > 0 && (
