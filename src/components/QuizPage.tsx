@@ -216,7 +216,6 @@ const QuizPage: React.FC = () => {
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
       
       // Registra que as imagens da página de resultados foram pré-carregadas
-      // durante as questões estratégicas, para otimizar o carregamento da página
       localStorage.setItem('preloadedResults', 'true');
       
       // Registra o timestamp de quando o quiz foi finalizado
@@ -225,8 +224,11 @@ const QuizPage: React.FC = () => {
       if (results?.primaryStyle) {
         trackResultView(results.primaryStyle.category);
       }
-      // Usar navegação do React Router em vez de atualização direta
-      navigate('/resultado');
+      
+      // Adiciona um pequeno delay para garantir que a animação de transição seja concluída
+      setTimeout(() => {
+        navigate('/resultado');
+      }, 800); // Tempo suficiente para completar a animação
     } catch (error) {
       toast({
         title: "Erro ao mostrar resultado",
@@ -240,12 +242,10 @@ const QuizPage: React.FC = () => {
     if (!showingStrategicQuestions) {
       const currentNormalSelectedCount = currentAnswers?.length || 0;
       const canActuallyProceed = currentNormalSelectedCount === calculatedRequiredOptions;
-
       if (!canActuallyProceed) {
         return; 
       }
     }
-
     if (!isLastQuestion) {
       handleNext(); 
     } else {
@@ -268,28 +268,26 @@ const QuizPage: React.FC = () => {
     totalQuestions,
     strategicQuestions.length
   ]);
-  
+
   const currentQuestionTypeForNav = showingStrategicQuestions ? 'strategic' : 'normal';
   
   let finalSelectedCountForNav: number;
   let actualCanProceed: boolean; 
   let visualCanProceedButton: boolean;
-
   if (showingStrategicQuestions) {
     const strategicQuestionId = actualCurrentQuestionData?.id;
     const currentStrategicSelectedCount = strategicQuestionId ? (strategicAnswers[strategicQuestionId]?.length || 0) : 0;
     finalSelectedCountForNav = currentStrategicSelectedCount;
     actualCanProceed = currentStrategicSelectedCount >= calculatedRequiredOptions;
-    visualCanProceedButton = actualCanProceed; 
-  } else { 
+    visualCanProceedButton = actualCanProceed;
+  } else {
     const currentNormalSelectedCount = currentAnswers?.length || 0;
     finalSelectedCountForNav = currentNormalSelectedCount;
     actualCanProceed = currentNormalSelectedCount === calculatedRequiredOptions;
-
     if (calculatedRequiredOptions >= 3) {
-         visualCanProceedButton = currentNormalSelectedCount >= 3;
+      visualCanProceedButton = currentNormalSelectedCount >= 3;
     } else {
-        visualCanProceedButton = currentNormalSelectedCount >= calculatedRequiredOptions;
+      visualCanProceedButton = currentNormalSelectedCount >= calculatedRequiredOptions;
     }
   }
 
@@ -302,7 +300,7 @@ const QuizPage: React.FC = () => {
               questionId: actualCurrentQuestionData.id,
               selectedOptions: strategicAnswers[actualCurrentQuestionData.id] || []
             })
-          : handleNextClickInternal 
+          : handleNextClickInternal
       }
       onPrevious={
         showingStrategicQuestions
@@ -317,6 +315,27 @@ const QuizPage: React.FC = () => {
       }
     />
   );
+
+  // Adicionar este useEffect para pré-carregar recursos da página de resultados
+  useEffect(() => {
+    if (showingFinalTransition) {
+      // Pré-carregar qualquer imagem ou recurso específico da página de resultados
+      // que ainda não tenha sido carregado durante o quiz
+      const resultImages = [
+        '/assets/results/background.jpg',
+        '/assets/results/share-icon.svg',
+        // Adicione outros recursos necessários
+      ];
+      
+      preloadImages(resultImages.map((src, i) => ({ 
+        src, 
+        id: `result-resource-${i}`,
+        category: 'results',
+        alt: `Recurso de resultado ${i}`,
+        preloadPriority: 10 // Alta prioridade para os recursos da página de resultados
+      })), { quality: 100 });
+    }
+  }, [showingFinalTransition]);
 
   return (
     <LoadingManager isLoading={!pageIsReady}>
@@ -335,16 +354,18 @@ const QuizPage: React.FC = () => {
                 aria-valuemax={100}
               ></div>
             </div>
-            
             <QuizContainer>
               <AnimatePresence mode="wait">
                 {showingTransition || showingFinalTransition ? (
                   <motion.div
                     key="transition"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ 
+                      duration: 0.6,
+                      ease: "easeInOut" 
+                    }}
                   >
                     <QuizTransitionManager
                       showingTransition={showingTransition}
@@ -352,15 +373,17 @@ const QuizPage: React.FC = () => {
                       handleStrategicAnswer={handleStrategicAnswerInternal} 
                       strategicAnswers={strategicAnswers}
                       handleShowResult={handleShowResult}
-                      hideCounter={true} // Adiciona esta propriedade para esconder a contagem
+                      hideCounter={true}
+                      transitionMessage="Preparando seus resultados..."
+                      showLoadingIndicator={true} // Adicionar indicador visual se o componente suportar
                     />
                   </motion.div>
                 ) : (
                   actualCurrentQuestionData && ( 
                     <motion.div
                       key={actualCurrentQuestionData.id || 'content'} 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                      initial={{ opacity: 0 }} 
+                      animate={{ opacity: 1 }} 
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.3 }}
                     >
