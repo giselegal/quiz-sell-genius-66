@@ -31,40 +31,37 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
   const isImageOption = type !== 'text' && option.imageUrl;
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 640;
 
-  // Forçar re-render visual correto para seleção em questões estratégicas
-  // Se for questão estratégica, sempre use a prop isStrategicQuestion para aplicar o efeito de seleção
-
-  // Se for imagem e está selecionada, sempre aplica o efeito 3D, independente do device
-  // (corrige casos onde o mobile não detecta corretamente ou o contexto é estratégico)
   return (
     <div
       onClick={handleClick}
       className={cn(
         "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer bg-white",
-        isImageOption && isSelected && "shadow-2xl transform scale-[1.04]",
+        // Efeitos para opções com imagem
+        isImageOption && isSelected && !forStrategic && "shadow-2xl", // Sombra no container para pop-out
+        isImageOption && isSelected && forStrategic && "shadow-2xl animate-enhanced-pulse", // Sombra e pulso no container para estratégico
         isImageOption && !isSelected && !isDisabled && "hover:shadow-lg",
-        // Nunca borda para imagem
-        !isImageOption && isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.01]",
-        !isImageOption && isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl animate-pulse-border ring-2 ring-[#B89B7A]/60",
-        !isImageOption && !isSelected && !isDisabled && "border border-[#B89B7A]/40",
+
+        // Efeitos para opções apenas de texto
+        !isImageOption && isSelected && !forStrategic && "shadow-xl transform scale-[1.01] border border-[#B89B7A]/40", // Mantém borda original, adiciona sombra e escala
+        !isImageOption && isSelected && forStrategic && "shadow-2xl shadow-[#FFD700]/30 animate-enhanced-pulse transform scale-[1.01] border border-[#B89B7A]/40", // Mantém borda original, adiciona sombra estratégica, pulso e escala
+        !isImageOption && !isSelected && !isDisabled && "border border-[#B89B7A]/40 hover:shadow-md", // Borda original e sombra no hover
+
         isDisabled && "border border-gray-200 opacity-75 cursor-not-allowed",
         type === 'text' ? "p-4" : "flex flex-col"
       )}
-      style={{ boxShadow: !isImageOption && isSelected && forStrategic ? '0 0 0 4px #B89B7A33, 0 4px 24px #B89B7A22' : undefined }}
     >
       {type !== 'text' && option.imageUrl && (
         <div className={cn(
-          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2",
-          forStrategic && isSelected && "animate-enhanced-pulse shadow-2xl",
-          !forStrategic && isSelected && "shadow-2xl"
+          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2"
+          // Classes de container para imagem estratégica movidas para o div principal
         )}>
           <img
             src={option.imageUrl}
             alt={option.text}
             className={cn(
-              "w-full h-[260px] object-cover rounded-t-lg z-10 transition-all duration-200",
-              isSelected && !forStrategic && "scale-[1.04] shadow-2xl",
-              !isSelected && "hover:scale-[1.02] hover:shadow-lg"
+              "w-full h-[260px] object-cover rounded-t-lg transition-all duration-200",
+              isSelected && "scale-[1.04] shadow-2xl z-45", // Efeito pop-out com z-index aumentado
+              !isSelected && "hover:scale-[1.02] hover:shadow-lg z-10" // z-index normal
             )}
             style={{ maxHeight: '260px', minHeight: '180px' }}
             onError={(e) => {
@@ -74,8 +71,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           />
           {/* Texto sobreposto na base da imagem, com fundo translúcido e z-40 para garantir visibilidade */}
           <div className={cn(
-            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-40",
-            isSelected && "opacity-70"
+            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-40"
+            // Removido: isSelected && "opacity-70" para manter visibilidade do texto
           )}>
             <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">
               {option.text}
@@ -92,9 +89,11 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {(!option.imageUrl || type === 'text') && (
         <div className={cn(
           "flex-1 p-3 text-[#432818] relative bg-white transition-shadow duration-200",
-          isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl shadow-[#B89B7A]/20 scale-[1.01]",
-          isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl shadow-[#FFD700]/30 animate-enhanced-pulse ring-4 ring-[#FFD700] scale-[1.01]",
-          !isSelected && "border border-[#B89B7A]/40"
+          // Classes de seleção para texto-apenas já estão no container principal (div)
+          // As classes abaixo são para o conteúdo interno, se necessário, mas a borda e sombra principal estão no pai.
+          // isSelected && !forStrategic && "shadow-xl shadow-[#B89B7A]/20 scale-[1.01]", // Removido daqui, já tratado no pai
+          // isSelected && forStrategic && "shadow-2xl shadow-[#FFD700]/30 animate-enhanced-pulse ring-4 ring-[#FFD700] scale-[1.01]", // Removido daqui
+          // !isSelected && "border border-[#B89B7A]/40" // Removido daqui, borda padrão no pai
         )}>
           <span className="block w-full text-base sm:text-lg font-semibold text-[#432818] text-center break-words leading-tight z-30 relative">
             {option.text}
