@@ -130,3 +130,5 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
 };
 
 export default StrategicQuestions;
+
+// Preciso ver o conteúdo deste arquivo para encontrar o botão "Avançar"

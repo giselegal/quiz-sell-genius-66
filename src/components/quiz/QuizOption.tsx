@@ -87,34 +87,30 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         </div>
       )}
 
-      {/* Check pequeno e elegante para opções normais */}
-      {isSelected && !forStrategic && (
+      {/* Check pequeno e elegante para TODAS as opções selecionadas */}
+      {isSelected && (
         <div 
-          className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-white shadow-sm border border-white bg-[#B89B7A]"
+          className={cn(
+            "absolute top-1.5 right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-white shadow-sm border border-white",
+            forStrategic ? "bg-[#B89B7A] ring-2 ring-[#B89B7A]/50" : "bg-[#B89B7A]"
+          )}
           style={{ zIndex: 100 }}
         >
           <Check className="w-2.5 h-2.5" />
         </div>
       )}
 
-      {/* Abordagem COMPLETAMENTE DIFERENTE para questões estratégicas */}
+      {/* Indicador adicional APENAS para questões estratégicas */}
       {forStrategic && (
         <div 
           className={cn(
-            "absolute top-0 right-0 left-0 bottom-0 rounded-lg",
+            "absolute inset-0 rounded-lg pointer-events-none",
             isSelected 
               ? "border-2 border-[#B89B7A] bg-[#B89B7A]/10" 
               : "border border-dashed border-[#B89B7A]/30"
           )}
           style={{ zIndex: 20 }}
-        >
-          {/* Indicador de seleção para questões estratégicas */}
-          {isSelected && (
-            <div className="absolute top-0 right-0 w-auto h-auto py-1 px-2 bg-[#B89B7A] rounded-bl-md text-white text-xs font-medium">
-              Selecionado
-            </div>
-          )}
-        </div>
+        />
       )}
 
       {/* Remover todos os outros elementos de estilo para questões estratégicas */}
