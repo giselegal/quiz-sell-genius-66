@@ -111,26 +111,30 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
               <QuizQuestion
                 key={`strategic-${currentQuestionIndex}`}
                 question={strategicQuestions[currentQuestionIndex]}
-                onAnswer={(response) => {
-                  // Autoavança ao selecionar uma opção
-                  if (response.selectedOptions.length > 0) {
-                    setTimeout(() => {
-                      if (currentQuestionIndex < strategicQuestions.length - 1) {
-                        setCurrentQuestionIndex(prev => prev + 1);
-                      } else {
-                        // Última questão estratégica: notifica o parent
-                        onAnswer({
-                          questionId: strategicQuestions[currentQuestionIndex].id,
-                          selectedOptions: response.selectedOptions,
-                        });
-                      }
-                    }, 350);
+                onAnswer={handleQuestionAnswer}
+                currentAnswers={currentAnswersForQuestion}
+                autoAdvance={false}
+                hideTitle={true}
+                onNextClick={() => {
+                  // Só avança se uma opção estiver selecionada
+                  if (currentAnswersForQuestion.length > 0) {
+                    if (currentQuestionIndex < strategicQuestions.length - 1) {
+                      setCurrentQuestionIndex(prev => prev + 1);
+                    } else {
+                      // Última questão estratégica: notifica o parent
+                      onAnswer({
+                        questionId: strategicQuestions[currentQuestionIndex].id,
+                        selectedOptions: currentAnswersForQuestion,
+                      });
+                    }
                   }
                 }}
-                currentAnswers={currentAnswersForQuestion}
-                autoAdvance={true}
-                hideTitle={true}
-                onNextClick={undefined} // Remove o botão das questões estratégicas
+                onPreviousClick={() => {
+                  if (currentQuestionIndex > 0) {
+                    setCurrentQuestionIndex(prev => prev - 1);
+                  }
+                }}
+                isStrategicQuestion={true}
               />
             </div>
           </Card>
