@@ -179,4 +179,42 @@ img:hover, .hover-scale:hover {
     border-radius: 0.2em;
     font-weight: 600;
   }
+  
+  /* Media queries para dispositivos móveis */
+  @media (max-width: 640px) {
+    /* Questões só com texto em mobile - aumentar fonte */
+    .text-only-question .question-text,
+    .text-only-question .options {
+      font-size: 1.4rem;
+    }
+    
+    /* Questões Estratégicas em mobile - títulos e opções maiores */
+    .strategic-question .question-title,
+    .strategic-question .options,
+    .strategic-question-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    /* Destaque mais pronunciado em mobile */
+    .highlight-strategic {
+      background-color: hsl(var(--accent) / 0.4);
+      padding: 0.15em 0.25em;
+    }
+  }
+  
+  /* Dispositivos móveis muito pequenos */
+  @media (max-width: 375px) {
+    /* Ajuste para telas muito pequenas */
+    .text-only-question .question-text,
+    .text-only-question .options {
+      font-size: 1.25rem;
+    }
+    
+    .strategic-question .question-title,
+    .strategic-question .options,
+    .strategic-question-title {
+      font-size: 1.35rem;
+    }
+  }
 }
