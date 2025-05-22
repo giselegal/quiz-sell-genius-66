@@ -4,6 +4,7 @@ import { QuizOption as QuizOptionType } from '@/types/quiz';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import { QuizOptionImage } from './QuizOptionImage';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Check } from 'lucide-react';
 
 interface QuizOptionProps {
   option: QuizOptionType;
@@ -138,15 +139,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             isSelected ? "block" : "hidden"
           )}
         >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-2 w-2 text-white" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-          </svg>
+          <Check className="h-3 w-3 text-white" />
         </div>
       </div>
     </div>
