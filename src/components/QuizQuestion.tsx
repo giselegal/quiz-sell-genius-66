@@ -125,6 +125,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               !currentAnswers.includes(option.id) && 
               currentAnswers.length >= question.multiSelect
             }
+            forStrategic={isStrategicQuestion} // NOVO: ativa efeito especial
           />
         ))}
       </div>

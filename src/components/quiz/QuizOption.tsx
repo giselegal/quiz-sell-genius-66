@@ -10,6 +10,7 @@ interface QuizOptionProps {
   type: string;
   questionId: string;
   isDisabled?: boolean;
+  forStrategic?: boolean; // NOVO: indica se é questão estratégica
 }
 
 export const QuizOption: React.FC<QuizOptionProps> = ({
@@ -18,7 +19,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
   onSelect,
   type,
   questionId,
-  isDisabled = false
+  isDisabled = false,
+  forStrategic = false // NOVO
 }) => {
   const handleClick = () => {
     if (!isDisabled) {
@@ -42,11 +44,13 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         isImageOption && isSelected && "shadow-2xl transform scale-[1.04]",
         isImageOption && !isSelected && !isDisabled && "hover:shadow-lg",
         // Nunca borda para imagem
-        !isImageOption && isSelected && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.01]",
+        !isImageOption && isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.01]",
+        !isImageOption && isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl animate-pulse-border ring-2 ring-[#B89B7A]/60",
         !isImageOption && !isSelected && !isDisabled && "border border-[#B89B7A]/40",
         isDisabled && "border border-gray-200 opacity-75 cursor-not-allowed",
         type === 'text' ? "p-4" : "flex flex-col"
       )}
+      style={{ boxShadow: !isImageOption && isSelected && forStrategic ? '0 0 0 4px #B89B7A33, 0 4px 24px #B89B7A22' : undefined }}
     >
       {type !== 'text' && option.imageUrl && (
         <div className={cn("w-full flex-1 flex items-stretch min-h-[220px] p-0 relative")}> 
@@ -80,10 +84,10 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {/* Para opções de texto puro, mantém layout anterior mas ativa só sombra na seleção */}
       {(!option.imageUrl || type === 'text') && (
         <div className={cn(
-          "flex-1 p-3 text-[#432818] border border-[#B89B7A]/40 relative bg-white",
-          isSelected && "shadow-xl transform scale-[1.01]",
-          // Remove borda externa duplicada
-          // Não adiciona nenhuma borda extra no container externo
+          "flex-1 p-3 text-[#432818] relative bg-white",
+          isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.01]",
+          isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl animate-pulse-border ring-2 ring-[#B89B7A]/60",
+          !isSelected && "border border-[#B89B7A]/40"
         )}>
           <p>{option.text}</p>
           {isSelected && (
