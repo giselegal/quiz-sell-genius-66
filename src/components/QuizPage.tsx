@@ -122,14 +122,34 @@ const QuizPage: React.FC = () => {
   // NOVA FUNÇÃO: Apenas registra a resposta estratégica sem avançar
   const recordStrategicAnswer = useCallback((response: UserResponse) => {
     try {
+      // Garantimos que apenas uma opção seja selecionada para questões estratégicas
+      // Se houver várias opções, usamos apenas a última selecionada
+      const finalOptions = response.selectedOptions.length > 0 
+        ? [response.selectedOptions[response.selectedOptions.length - 1]] 
+        : [];
+      
+      // Se não há seleção e já existe uma resposta anterior, mantemos a anterior
+      // Isso impede que o usuário desmarque uma opção estratégica
+      if (finalOptions.length === 0) {
+        const previousAnswer = strategicAnswers[response.questionId];
+        if (previousAnswer && previousAnswer.length > 0) {
+          return; // Mantém a seleção anterior, não permite desmarcar
+        }
+      }
+      
+      // Atualiza o estado com a seleção única
       setStrategicAnswers(prev => ({
         ...prev,
-        [response.questionId]: response.selectedOptions
+        [response.questionId]: finalOptions
       }));
-      saveStrategicAnswer(response.questionId, response.selectedOptions); // de useQuizLogic
+      
+      // Salva a resposta estratégica usando o hook useQuizLogic
+      saveStrategicAnswer(response.questionId, finalOptions);
+      
+      // Rastreia a resposta para analytics
       trackQuizAnswer(
         response.questionId, 
-        response.selectedOptions,
+        finalOptions,
         currentStrategicQuestionIndex + totalQuestions,
         totalQuestions + strategicQuestions.length
       );

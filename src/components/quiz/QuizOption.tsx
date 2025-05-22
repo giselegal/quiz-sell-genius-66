@@ -38,8 +38,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         if (type === 'text') {
           optionRef.current.style.borderColor = '#b29670';
           optionRef.current.style.boxShadow = isStrategicOption 
-            ? '0 6px 12px rgba(178, 150, 112, 0.35)' // Sombra mais pronunciada para estratégicas
+            ? '0 6px 12px rgba(178, 150, 112, 0.4)' // Sombra mais pronunciada para estratégicas
             : '0 4px 8px rgba(178, 150, 112, 0.25)';
+          
+          if (isStrategicOption) {
+            // Destacar mais as opções estratégicas selecionadas
+            optionRef.current.style.backgroundColor = '#faf6f1';
+            optionRef.current.style.transform = 'translateY(-2px)';
+          }
         } 
         // Para opções de imagem - sem borda, apenas sombra
         else {
@@ -52,6 +58,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         if (type === 'text') {
           optionRef.current.style.borderColor = '#B89B7A';
           optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+          
+          if (isStrategicOption) {
+            // Resetar estilo para opções estratégicas não selecionadas
+            optionRef.current.style.backgroundColor = '#FEFEFE';
+            optionRef.current.style.transform = 'translateY(0)';
+          }
         } else {
           optionRef.current.style.borderColor = 'transparent';
           optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
@@ -63,7 +75,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   // Manipulador de clique customizado com debounce
   const handleClick = () => {
     if (!isDisabled) {
-      // Se já está selecionado e é uma questão estratégica, não permitir desmarcar
+      // Se já está selecionado e é uma questão estratégica, não permitimos desmarcar
       if (isSelected && isStrategicOption) {
         return; // Impede desmarcar a opção em questões estratégicas
       }
@@ -72,14 +84,22 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       if (optionRef.current) {
         if (type === 'text') {
           optionRef.current.style.borderColor = isSelected ? '#B89B7A' : '#b29670';
+          
+          // Efeito visual adicional para opções estratégicas
+          if (isStrategicOption && !isSelected) {
+            optionRef.current.style.backgroundColor = '#faf6f1';
+            optionRef.current.style.transform = 'translateY(-2px)';
+          }
         }
+        
         // Aplicar sombra correspondente ao estado
         optionRef.current.style.boxShadow = isSelected 
           ? '0 2px 4px rgba(0, 0, 0, 0.05)' 
           : (isStrategicOption 
-              ? (type === 'text' ? '0 6px 12px rgba(178, 150, 112, 0.35)' : '0 15px 30px rgba(0, 0, 0, 0.25)') 
+              ? (type === 'text' ? '0 6px 12px rgba(178, 150, 112, 0.4)' : '0 15px 30px rgba(0, 0, 0, 0.25)') 
               : (type === 'text' ? '0 4px 8px rgba(178, 150, 112, 0.25)' : '0 12px 24px rgba(0, 0, 0, 0.2)'));
       }
+      
       // Chamar onSelect com um pequeno atraso para evitar flash
       setTimeout(() => {
         onSelect(option.id);
@@ -91,7 +111,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
     <div 
       className={cn(
         "relative h-full",
-        isDisabled && "opacity-50 cursor-not-allowed"
+        isDisabled && isStrategicOption ? "opacity-45 cursor-not-allowed transition-opacity duration-300" : 
+        (isDisabled ? "opacity-50 cursor-not-allowed" : "")
       )}
       onClick={handleClick}
     >
@@ -140,9 +161,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
           isStrategicOption ? (
-            <div className="absolute -top-0.5 -right-0.5 h-6 w-6 bg-[#b29670] rounded-full flex items-center justify-center shadow-md">
+            <div className="absolute -top-1 -right-1 h-7 w-7 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
               <Check
-                className="h-4 w-4 text-white"
+                className="h-5 w-5 text-white"
                 strokeWidth={3}
               />
             </div>
