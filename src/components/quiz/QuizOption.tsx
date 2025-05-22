@@ -130,10 +130,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer", 
           
           // Para opções estratégicas, adicionamos estilo mais elaborado
-          isStrategicOption && type === 'text' && "p-4 sm:p-5 md:p-6 border-2 !px-4 sm:!px-6", // Reduzido padding para mobile
+          isStrategicOption && type === 'text' && "p-5 sm:p-6 md:p-6 border-2 !px-6 sm:!px-6", // Reduzido padding para desktop
           
           // Para opções estratégicas de imagem, ajuste para melhor visualização
-          isStrategicOption && type !== 'text' && "pb-2 w-full",
+          isStrategicOption && type !== 'text' && "pb-3 w-full",
           
           // Para opções normais de imagem, aumentar largura
           type !== 'text' && "w-full",
@@ -172,7 +172,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 "leading-relaxed text-[#432818]",
                 // Ajustes para proporcionalidade em mobile e desktop
                 isMobile 
-                  ? (isStrategicOption ? "text-[1.1rem] font-medium !leading-tight" : "text-[1rem] !leading-snug") 
+                  ? (isStrategicOption ? "text-[1.25rem] font-medium !leading-tight" : "text-[1rem] !leading-snug") 
                   : (isStrategicOption ? "text-base sm:text-lg font-medium" : "text-sm sm:text-base")
               )
         )}>
@@ -180,15 +180,15 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         </p>            {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
           isStrategicOption ? (
-            <div className="absolute -top-2 -right-2 h-6 w-6 sm:h-7 sm:w-7 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
+            <div className="absolute -top-2 -right-2 h-7 w-7 sm:h-8 sm:w-8 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
               <Check
-                className="h-4 w-4 sm:h-5 sm:w-5 text-white"
+                className="h-5 w-5 sm:h-5 sm:w-5 text-white"
                 strokeWidth={3}
               />
             </div>
           ) : (
             <Check
-              className="absolute -top-0.5 -right-0.5 h-3 w-3 text-[#b29670]"
+              className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670]"
               strokeWidth={3}
             />
           )

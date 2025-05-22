@@ -76,15 +76,15 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
   
   return (
-    <div className={cn("w-full max-w-[99%] md:max-w-3xl lg:max-w-4xl mx-auto pb-4 relative", // Reduzido padding bottom para melhor proporção
+    <div className={cn("w-full max-w-[99%] md:max-w-3xl lg:max-w-4xl mx-auto pb-5 relative", // Reduzido ainda mais o tamanho para desktop
       isMobile && "px-0.5", // Padding mínimo para não tocar nas bordas da tela
-      isStrategicQuestion && "max-w-[97%] md:max-w-2xl lg:max-w-2xl py-4 bg-gradient-to-b from-[#fffbf7] to-[#fff] border border-[#B89B7A]/20 rounded-xl shadow-sm" // Container mais leve para questões estratégicas em mobile
+      isStrategicQuestion && "max-w-[99%] md:max-w-2xl lg:max-w-2xl py-5 bg-gradient-to-b from-[#fffbf7] to-[#fff] border border-[#B89B7A]/20 rounded-xl shadow-md" // Container menor e mais leve para questões estratégicas
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
           {isStrategicQuestion && (
-            <div className="text-center mb-2">
-              <span className="inline-block px-3 py-1 bg-[#B89B7A] text-white text-xs font-medium rounded-full shadow-sm">
+            <div className="text-center mb-3">
+              <span className="inline-block px-4 py-1.5 bg-[#B89B7A] text-white text-sm font-medium rounded-full shadow-sm">
                 ⭐ Questão Especial
               </span>
             </div>
@@ -93,9 +93,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             "font-playfair text-center mb-5 px-1 sm:px-3 pt-3 text-brand-coffee font-semibold tracking-normal", 
             // Ajustados para melhor proporcionalidade em desktop e mais leves
             isStrategicQuestion 
-              ? (isMobile ? "text-[1.2rem] leading-tight" : "text-xl sm:text-2xl md:text-2xl")
+              ? (isMobile ? "text-[1.4rem] leading-tight" : "text-xl sm:text-2xl md:text-2xl")
               : (isMobile ? "text-[1rem] leading-snug" : "text-lg sm:text-xl md:text-xl"),
-            isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line bg-[#f9f4ef] py-3 px-2 sm:px-3 rounded-lg shadow-sm border border-[#B89B7A]/20" // Visual mais leve
+            isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line bg-[#f9f4ef] py-4 px-2 sm:px-3 rounded-lg shadow-sm border border-[#B89B7A]/20" // Visual mais leve
           )}>
             {highlightStrategicWords(question.title)}
           </h2>
