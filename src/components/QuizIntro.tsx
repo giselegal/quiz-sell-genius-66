@@ -199,61 +199,52 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                       nome ? 'shadow-lg' : ''
                     )}
                     autoFocus
-                    aria-required="true"
-                    autoComplete="off"
-                    inputMode="text"
-                    maxLength={32}
+                    aria-label="Seu nome"
+                    required
                   />
-                  {/* Label flutuante sem ícone */}
                   <label
                     htmlFor="name"
                     className={cn(
-                      'absolute left-3 top-2.5 text-[#B89B7A] text-base font-semibold pointer-events-none transition-all duration-200',
-                      nome ? 'text-xs -top-3 left-2 bg-white/80 px-1 rounded shadow-sm' : 'text-base top-3'
+                      "absolute left-3 transition-all duration-200 ease-in-out pointer-events-none text-[#6B7280]",
+                      nome ? "top-1.5 text-xs" : "top-1/2 -translate-y-1/2 text-base"
                     )}
                   >
-                    Nome
+                    Seu nome
                   </label>
                 </div>
                 <button
                   type="submit"
+                  disabled={!nome.trim()}
                   className={cn(
-                    'w-full py-3 px-4 text-lg font-extrabold rounded-xl shadow-xl transition-all flex items-center justify-center gap-2',
-                    'bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#A1835D] text-white hover:from-[#A1835D] hover:to-[#B89B7A] active:from-[#947645] active:to-[#B89B7A] hover:scale-[1.04]',
-                    'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
-                    nome.trim() === '' && 'opacity-50 cursor-not-allowed',
-                    'relative overflow-hidden'
+                    "w-full rounded-lg py-3 text-white font-semibold transition-all duration-300 ease-in-out relative overflow-hidden group",
+                    "bg-[#B89B7A] hover:bg-[#A1835D] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
+                    "disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500",
+                    "text-base sm:text-lg", // Fonte base, sm:text-lg para telas maiores
+                    "h-12 sm:h-14" // Altura ajustada para mobile e desktop
                   )}
-                  disabled={nome.trim() === ''}
-                  style={{ letterSpacing: '0.02em', minHeight: 48, fontSize: '1.05rem' }}
+                  style={{
+                    boxShadow: nome.trim() ? '0 4px 14px 0 rgba(184, 155, 122, 0.39)' : 'none',
+                  }}
                 >
-                  {/* Efeito de brilho discreto na lateral */}
-                  <span className="absolute right-0 top-0 h-full w-1/4 pointer-events-none">
-                    <span className="block h-full w-full bg-gradient-to-l from-white/60 to-transparent blur-[2px] opacity-60 animate-[shine_2.2s_ease-in-out_infinite]" />
-                  </span>
-                  <span className="block w-full text-center sm:text-lg text-base font-extrabold">
-                    Quero Descobrir meu Estilo Agora!
-                  </span>
+                  <span className="relative z-10">Descobrir meu Estilo</span>
+                  {/* Efeito de brilho lateral mais discreto */}
+                  <span
+                    className={cn(
+                      "absolute top-0 right-0 h-full w-0 bg-white/20 transform -skew-x-12 transition-all duration-500 ease-in-out",
+                      "group-hover:w-1/3 group-focus:w-1/3"
+                    )}
+                  />
                 </button>
-                <p className="text-xs text-center text-[#B89B7A] pt-1">
-                  Ao clicar, você concorda com nossa{' '}
-                  <a 
-                    href="#" 
-                    className="underline hover:text-[#A1835D] focus:outline-none focus:ring-1 focus:ring-[#B89B7A] rounded transition-colors"
-                  >
-                    política de privacidade
-                  </a>
-                </p>
               </form>
             </div>
           </section>
+          {/* Rodapé com informações adicionais */}
+          <footer className="w-full px-2 mt-6 text-center mx-auto">
+            <p className="text-xs text-[#B89B7A] font-medium drop-shadow-sm">
+              © {new Date().getFullYear()} Gisele Galvão - Todos os direitos reservados
+            </p>
+          </footer>
         </div>
-        {/* Rodapé */}
-        <footer className="w-full px-2 mt-6 text-center mx-auto">
-          <p className="text-xs text-[#B89B7A] font-medium drop-shadow-sm">
-            © {new Date().getFullYear()} Gisele Galvão - Todos os direitos reservados
-          </p>
-        </footer>
       </div>
       {/* Animações utilitárias */}
       <style>{`

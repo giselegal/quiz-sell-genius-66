@@ -60,7 +60,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             alt={option.text}
             className={cn(
               "w-full h-[260px] object-cover rounded-t-lg transition-all duration-200",
-              isSelected && "scale-[1.04] shadow-2xl z-45", // Efeito pop-out com z-index aumentado
+              isSelected && "scale-[1.04] shadow-2xl z-50", // Efeito pop-out com z-index aumentado para 50
               !isSelected && "hover:scale-[1.02] hover:shadow-lg z-10" // z-index normal
             )}
             style={{ maxHeight: '260px', minHeight: '180px' }}
@@ -79,7 +79,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             </span>
           </div>
           {isSelected && (
-            <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-50">
+            <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-60"> {/* z-index do checkmark aumentado para 60 */}
               <Check className="w-2.5 h-2.5" />
             </div>
           )}
