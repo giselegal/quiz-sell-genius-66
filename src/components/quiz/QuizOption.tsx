@@ -80,8 +80,10 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {/* Para opções de texto puro, mantém layout anterior mas ativa só sombra na seleção */}
       {(!option.imageUrl || type === 'text') && (
         <div className={cn(
-          "flex-1 p-3 text-[#432818] border border-[#B89B7A]/40",
-          isSelected && "shadow-xl transform scale-[1.01]"
+          "flex-1 p-3 text-[#432818] border border-[#B89B7A]/40 relative bg-white",
+          isSelected && "shadow-xl transform scale-[1.01]",
+          // Remove borda externa duplicada
+          // Não adiciona nenhuma borda extra no container externo
         )}>
           <p>{option.text}</p>
           {isSelected && (
