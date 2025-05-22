@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
@@ -405,7 +404,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
           </p>
           <Button 
             onClick={handleBuyNow}
-            className="bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 px-8 rounded-md text-lg transition-colors duration-300"
+            className="bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 px-8 rounded-md text-lg leading-none md:leading-normal transition-colors duration-300"
           >
             <Star className="w-5 h-5 mr-2" />
             Quero Transformar Meu Estilo
