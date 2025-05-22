@@ -25,7 +25,7 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
     // Verifica se houve pré-carregamento durante questões estratégicas
     const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
     // Início com 10% ou 50% dependendo se houve pré-carregamento
-    const startPercentage = hasPreloadedResults ? 50 : 10;
+    const startPercentage = hasPreloadedResults ? 70 : 10;
     setProgressPercentage(startPercentage);
     
     // Progresso simulado que avança mais rápido se houve pré-carregamento
@@ -36,7 +36,7 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
         const newValue = Math.min(90, prev + increment);
         return newValue;
       });
-    }, hasPreloadedResults ? 200 : 350); // Mais rápido se pré-carregado
+    }, hasPreloadedResults ? 80 : 350); // Mais rápido se pré-carregado
     
     return () => clearInterval(interval);
   }, []);

@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -15,9 +14,11 @@ import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } f
 import { preloadImages } from '@/utils/imageManager';
 import LoadingManager from './quiz/LoadingManager';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
+  const navigate = useNavigate();
   
   const [showIntro, setShowIntro] = useState(true); // Add state for showing intro
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
@@ -224,7 +225,8 @@ const QuizPage: React.FC = () => {
       if (results?.primaryStyle) {
         trackResultView(results.primaryStyle.category);
       }
-      window.location.href = '/resultado';
+      // Usar navegação do React Router em vez de atualização direta
+      navigate('/resultado');
     } catch (error) {
       toast({
         title: "Erro ao mostrar resultado",
@@ -232,7 +234,7 @@ const QuizPage: React.FC = () => {
         variant: "destructive",
       });
     }
-  }, [strategicAnswers, submitQuizIfComplete]);
+  }, [strategicAnswers, submitQuizIfComplete, navigate]);
 
   const handleNextClickInternal = useCallback(() => {
     if (!showingStrategicQuestions) {

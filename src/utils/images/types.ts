@@ -57,4 +57,6 @@ export interface PreloadOptions {
   categories?: string[];
   limit?: number;
   timeout?: number;
+  batchSize?: number;
+  format?: string;
 }
