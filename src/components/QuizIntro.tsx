@@ -195,8 +195,8 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     value={nome}
                     onChange={(e) => setNome(e.target.value)}
                     className={cn(
-                      'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#A1835D] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
-                      nome ? 'ring-2 ring-[#B89B7A] shadow-lg' : ''
+                      'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
+                      nome ? 'shadow-lg' : ''
                     )}
                     autoFocus
                     aria-required="true"
@@ -204,7 +204,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     inputMode="text"
                     maxLength={32}
                   />
-                  {/* Label flutuante */}
+                  {/* Label flutuante sem ícone */}
                   <label
                     htmlFor="name"
                     className={cn(
@@ -212,26 +212,21 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                       nome ? 'text-xs -top-3 left-2 bg-white/80 px-1 rounded shadow-sm' : 'text-base top-3'
                     )}
                   >
-                    <span className="inline-flex items-center gap-1">
-                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" className="inline-block text-[#B89B7A]"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5Z" fill="currentColor"/></svg>
-                      Nome
-                    </span>
+                    Nome
                   </label>
                 </div>
                 <button
                   type="submit"
                   className={cn(
-                    'w-full py-3 px-4 text-base font-bold rounded-lg shadow-lg transition-all flex items-center justify-center gap-2',
-                    'bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#A1835D] text-white hover:from-[#A1835D] hover:to-[#B89B7A] active:from-[#947645] active:to-[#B89B7A] hover:scale-[1.03]',
+                    'w-full py-3 px-4 text-lg font-extrabold rounded-xl shadow-xl transition-all flex items-center justify-center gap-2',
+                    'bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#A1835D] text-white hover:from-[#A1835D] hover:to-[#B89B7A] active:from-[#947645] active:to-[#B89B7A] hover:scale-[1.04] animate-enhanced-pulse',
                     'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
                     nome.trim() === '' && 'opacity-50 cursor-not-allowed'
                   )}
                   disabled={nome.trim() === ''}
+                  style={{ letterSpacing: '0.02em', minHeight: 56 }}
                 >
-                  <span className="flex items-center gap-2">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" className="inline-block"><path d="M12 4v16m8-8H4" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    Quero Descobrir meu Estilo Agora!
-                  </span>
+                  Quero Descobrir meu Estilo Agora!
                 </button>
                 <p className="text-xs text-center text-[#B89B7A] pt-1">
                   Ao clicar, você concorda com nossa{' '}
