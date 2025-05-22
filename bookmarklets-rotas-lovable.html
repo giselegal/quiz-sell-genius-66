@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookmarklets para Acesso às Rotas</title>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: #432818;
+      background-color: #fffaf7;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    h1, h2, h3 {
+      color: #B89B7A;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(184, 155, 122, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(184, 155, 122, 0.2);
+    }
+    
+    .bookmarklet {
+      display: inline-block;
+      padding: 0.75rem 1rem;
+      background-color: #B89B7A;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+    
+    .instructions {
+      font-size: 0.85rem;
+      background-color: #f6f6f6;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1.5rem;
+    }
+    
+    .bookmarklet-group {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Bookmarklets para Acesso às Rotas</h1>
+    
+    <p>Arraste os links abaixo para sua barra de favoritos para acessar rapidamente as rotas do Quiz Sell Genius.</p>
+    
+    <div class="bookmarklet-group">
+      <h2>Acesso Rápido</h2>
+      <a href="javascript:(function(){const e=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev'),o=e?window.location.origin:'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com';localStorage.setItem('userRole','admin');localStorage.setItem('userName','Admin');localStorage.setItem('adminTimestamp',Date.now().toString());const t=[{id:'1',name:'Página Inicial',path:'/'},{id:'2',name:'Página de Resultados (Funil A)',path:'/resultado'},{id:'3',name:'Página de Venda (Funil B)',path:'/quiz-descubra-seu-estilo'},{id:'4',name:'Painel Admin',path:'/admin'},{id:'5',name:'Analytics',path:'/admin/analytics'},{id:'6',name:'Testes A/B',path:'/admin/ab-test'},{id:'7',name:'Editor',path:'/admin/editor'},{id:'8',name:'Configurações',path:'/admin/settings'},{id:'9',name:'Seletor de Rotas',path:'/acesso-rotas-lovable.html'}];let a='Selecione a rota desejada:\n\n';t.forEach(e=>{a+=`${e.id}. ${e.name}\n`});const i=prompt(a);if(!i)return;const n=t.find(e=>e.id===i);if(!n)return void alert('Opção inválida!');const l=o+n.path;e?window.location.href=l:window.open(l,'_blank')})();" class="bookmarklet">📍 Acesso Rotas Lovable</a>
+      
+      <h3>Acesso Direto às Principais Rotas</h3>
+      <a href="javascript:(function(){const e=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev'),a=e?window.location.origin:'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com';localStorage.setItem('userRole','admin');localStorage.setItem('userName','Admin');e?window.location.href=a+'/':window.open(a+'/','_blank')})();" class="bookmarklet">🏠 Página Inicial</a><br>
+      
+      <a href="javascript:(function(){const e=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev'),a=e?window.location.origin:'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com';localStorage.setItem('userRole','admin');localStorage.setItem('userName','Admin');e?window.location.href=a+'/resultado':window.open(a+'/resultado','_blank')})();" class="bookmarklet">📊 Página de Resultados (Funil A)</a><br>
+      
+      <a href="javascript:(function(){const e=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev'),a=e?window.location.origin:'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com';localStorage.setItem('userRole','admin');localStorage.setItem('userName','Admin');e?window.location.href=a+'/quiz-descubra-seu-estilo':window.open(a+'/quiz-descubra-seu-estilo','_blank')})();" class="bookmarklet">💰 Página de Venda (Funil B)</a>
+    </div>
+    
+    <div class="bookmarklet-group">
+      <h2>Acesso às Ferramentas Admin</h2>
+      <a href="javascript:(function(){const e=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev'),a=e?window.location.origin:'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com';localStorage.setItem('userRole','admin');localStorage.setItem('userName','Admin');e?window.location.href=a+'/admin':window.open(a+'/admin','_blank')})();" class="bookmarklet">⚙️ Painel Admin</a><br>
+      
+      <a href="javascript:(function(){const e=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev'),a=e?window.location.origin:'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com';localStorage.setItem('userRole','admin');localStorage.setItem('userName','Admin');e?window.location.href=a+'/admin/analytics':window.open(a+'/admin/analytics','_blank')})();" class="bookmarklet">📈 Analytics</a><br>
+      
+      <a href="javascript:(function(){const e=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev'),a=e?window.location.origin:'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com';localStorage.setItem('userRole','admin');localStorage.setItem('userName','Admin');e?window.location.href=a+'/admin/ab-test':window.open(a+'/admin/ab-test','_blank')})();" class="bookmarklet">🧪 Testes A/B</a>
+    </div>
+    
+    <div class="instructions">
+      <h3>Como usar:</h3>
+      <ol>
+        <li>Arraste qualquer um dos links acima para sua barra de favoritos.</li>
+        <li>Clique no favorito quando quiser acessar a rota correspondente.</li>
+        <li>Se você não estiver no ambiente lovable.dev, uma nova aba será aberta.</li>
+        <li>O acesso administrativo será configurado automaticamente.</li>
+      </ol>
+    </div>
+  </div>
+</body>
+</html>
