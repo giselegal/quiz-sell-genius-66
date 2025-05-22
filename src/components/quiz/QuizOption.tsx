@@ -51,19 +51,19 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
     >
       {type !== 'text' && option.imageUrl && (
         <div className={cn(
-          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative",
-          // O container NÃO se move nem escala!
+          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative justify-center",
           forStrategic && isSelected ? "ring-4 ring-[#FFD700] animate-pulse-border shadow-[0_0_0_6px_rgba(255,215,0,0.25),0_8px_32px_rgba(184,155,122,0.18)]" : ""
         )}> 
           <div className="w-full h-[16px]" /> {/* respiro superior */}
-          <div className="relative w-full flex items-end justify-center" style={{ minHeight: '240px' }}>
+          <div className="relative w-full flex items-end justify-center" style={{ minHeight: '240px', height: 'auto' }}>
             <img 
               src={option.imageUrl} 
               alt={option.text}
               className={cn(
-                "w-full max-w-[340px] h-[220px] sm:h-[320px] object-contain rounded-t-lg z-20 transition-all duration-200",
+                "block object-contain rounded-t-lg z-20 transition-all duration-200",
                 isSelected ? "scale-[1.10] shadow-2xl -translate-y-2" : "",
-                "mx-auto"
+                "mx-auto",
+                "max-h-[340px] min-h-[180px] w-full sm:w-[380px] md:w-[420px] lg:w-[480px]"
               )}
               style={{ maxHeight: '340px', minHeight: '180px', width: '100%' }}
               onError={(e) => {
