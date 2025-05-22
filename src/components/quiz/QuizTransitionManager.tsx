@@ -2,7 +2,7 @@ import React from 'react';
 import { MainTransition } from './MainTransition';
 import QuizFinalTransition from '../QuizFinalTransition';
 import { UserResponse } from '@/types/quiz';
-import { Spinner } from '../ui/spinner'; // Importing the Spinner component
+import { Spinner } from '@/components/ui/spinner'; // Importing the Spinner component
 
 interface QuizTransitionManagerProps {
   showingTransition: boolean;
