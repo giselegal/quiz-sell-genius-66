@@ -50,15 +50,17 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       )}
     >
       {type !== 'text' && option.imageUrl && (
-        <div className={cn("w-full flex-1 flex items-stretch", isMobile && "min-h-[220px]")}> 
+        <div className={cn("w-full flex-1 flex items-stretch", isMobile && "min-h-[220px] p-0")}> 
           <img 
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
-              "w-full h-full object-contain rounded-t-lg",
+              isMobile
+                ? "w-full h-[260px] object-cover rounded-t-lg"
+                : "w-full h-full object-contain rounded-t-lg",
               isSelected && isMobile && "opacity-95"
             )}
-            style={isMobile ? { height: '220px', maxHeight: '260px' } : {}} 
+            style={isMobile ? { maxHeight: '260px', minHeight: '180px' } : {}} 
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
