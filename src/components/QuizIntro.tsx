@@ -135,14 +135,20 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
             </div>
             {/* Título principal */}
             <h1
-              className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818] drop-shadow-md"
+              className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818] drop-shadow-md animate-text-shimmer"
               style={{
                 fontFamily: 'Playfair Display, serif',
                 fontWeight: 400,
               }}
             >
-              <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com{' '}
-              <span className="text-[#B89B7A]">Você</span>.
+              <span className="text-[#B89B7A] relative">
+                Chega
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent opacity-50" />
+              </span> de um guarda-roupa lotado e da sensação de que nada combina com{' '}
+              <span className="text-[#B89B7A] relative">
+                Você
+                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent opacity-50" />
+              </span>.
             </h1>
           </header>
           <section className="w-full space-y-6 md:space-y-8">
@@ -174,9 +180,12 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
               </div>
             </div>
             {/* Texto descritivo */}
-            <p className="text-base text-center leading-relaxed px-2 sm:text-lg text-[#6B5C4B] font-medium">
+            <p className="text-base text-center leading-relaxed px-2 sm:text-lg text-[#6B5C4B] font-medium animate-fade-in-delayed">
               Em poucos minutos, descubra seu{' '}
-              <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span>{' '}
+              <span className="font-semibold text-[#B89B7A] relative">
+                Estilo Predominante
+                <div className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-[#B89B7A]/30 rounded" />
+              </span>{' '}
               — e aprenda a montar looks que realmente refletem sua{' '}
               <span className="font-semibold text-[#432818]">essência</span>, com praticidade e{' '}
               <span className="font-semibold text-[#432818]">confiança</span>.
@@ -217,17 +226,19 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   disabled={!nome.trim()}
                   className={cn(
                     "w-full rounded-lg py-3 text-white font-semibold transition-all duration-300 ease-in-out relative overflow-hidden group",
-                    "bg-[#432818] hover:bg-[#A1835D] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
+                    "bg-gradient-to-r from-[#432818] to-[#5a3a24] hover:from-[#A1835D] hover:to-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
                     "disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500",
-                    "text-base sm:text-lg", // Fonte base, sm:text-lg para telas maiores
-                    "h-12 sm:h-14" // Altura ajustada para mobile e desktop
+                    "text-base sm:text-lg",
+                    "h-12 sm:h-14",
+                    "shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                   )}
                   style={{
-                    boxShadow: nome.trim() ? '0 4px 14px 0 rgba(184, 155, 122, 0.39)' : 'none',
+                    boxShadow: nome.trim() ? '0 8px 25px 0 rgba(184, 155, 122, 0.4)' : 'none',
                   }}
                 >
-                  <span className="relative z-10">Descobrir meu Estilo</span>
-                  {/* Efeito de brilho lateral mais discreto */}
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    ✨ Descobrir meu Estilo
+                  </span>
                   <span
                     className={cn(
                       "absolute top-0 right-0 h-full w-0 bg-white/20 transform -skew-x-12 transition-all duration-500 ease-in-out",
@@ -253,17 +264,29 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
           100% { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in-up { animation: fade-in-up 0.8s cubic-bezier(.4,1.2,.4,1) both; }
+        
+        @keyframes fade-in-delayed {
+          0% { opacity: 0; transform: translateY(16px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-delayed { animation: fade-in-delayed 1s cubic-bezier(.4,1.2,.4,1) 0.3s both; }
+        
+        @keyframes text-shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        .animate-text-shimmer {
+          background: linear-gradient(90deg, transparent, rgba(184, 155, 122, 0.3), transparent);
+          background-size: 200% 100%;
+          animation: text-shimmer 3s ease-in-out infinite;
+        }
+        
         @keyframes intro-bg {
           0% { opacity: 0; }
           100% { opacity: 1; }
         }
         .animate-intro-bg { animation: intro-bg 1.2s cubic-bezier(.4,1.2,.4,1) both; background: radial-gradient(ellipse 80% 60% at 50% 0%, #e7dac2cc 0%, #fffaf400 100%); }
-        @keyframes shine {
-          0% { transform: translateX(100%); opacity: 0; }
-          10% { opacity: 0.7; }
-          50% { transform: translateX(-10%); opacity: 0.7; }
-          100% { transform: translateX(-120%); opacity: 0; }
-        }
+        
         @media (max-width: 640px) {
           button[type=submit] {
             font-size: 0.98rem !important;
