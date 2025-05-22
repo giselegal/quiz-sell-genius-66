@@ -115,7 +115,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                 currentAnswers={currentAnswersForQuestion}
                 autoAdvance={true}
                 hideTitle={true}
-                onNextClick={handleNextClick}
+                onNextClick={undefined} // Remove o botão das questões estratégicas
               />
             </div>
           </Card>
