@@ -37,73 +37,48 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         // Para opções de texto - manter borda amarela
         if (type === 'text') {
           optionRef.current.style.borderColor = '#b29670';
-          optionRef.current.style.boxShadow = isStrategicOption 
-            ? '0 10px 20px rgba(178, 150, 112, 0.6)' // Sombra mais pronunciada para estratégicas
-            : '0 4px 8px rgba(178, 150, 112, 0.25)';
+          optionRef.current.style.boxShadow = '0 4px 8px rgba(178, 150, 112, 0.25)';
           
-          if (isStrategicOption) {
-            // Destacar mais as opções estratégicas selecionadas
-            optionRef.current.style.backgroundColor = '#faf6f1';
-            optionRef.current.style.transform = 'translateY(-4px)'; // Efeito de elevação aumentado
-            // Adicionar borda inferior extra para enfatizar seleção
-            optionRef.current.style.borderBottom = '4px solid #b29670';
-          }
+          // Leve destaque para opções selecionadas
+          optionRef.current.style.backgroundColor = '#faf6f1';
+          optionRef.current.style.transform = 'translateY(-2px)'; 
         } 
         // Para opções de imagem - sem borda, apenas sombra
         else {
           optionRef.current.style.borderColor = 'transparent';
-          optionRef.current.style.boxShadow = isStrategicOption 
-            ? '0 18px 35px rgba(0, 0, 0, 0.30)' // Sombra mais pronunciada para estratégicas
-            : '0 12px 24px rgba(0, 0, 0, 0.2)';
+          optionRef.current.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.2)';
         }
       } else {
         if (type === 'text') {
-          optionRef.current.style.borderColor = isStrategicOption ? '#B89B7A' : '#E0D5C5';
-          optionRef.current.style.boxShadow = isStrategicOption 
-            ? '0 4px 8px rgba(0, 0, 0, 0.1)' 
-            : '0 2px 4px rgba(0, 0, 0, 0.05)';
+          optionRef.current.style.borderColor = '#E0D5C5';
+          optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
           
-          if (isStrategicOption) {
-            // Resetar estilo para opções estratégicas não selecionadas
-            optionRef.current.style.backgroundColor = '#FEFEFE';
-            optionRef.current.style.transform = 'translateY(0)';
-          }
+          // Resetar estilo para opções não selecionadas
+          optionRef.current.style.backgroundColor = '#FEFEFE';
+          optionRef.current.style.transform = 'translateY(0)';
         } else {
           optionRef.current.style.borderColor = 'transparent';
-          optionRef.current.style.boxShadow = isStrategicOption 
-            ? '0 6px 12px rgba(0, 0, 0, 0.15)' 
-            : '0 2px 4px rgba(0, 0, 0, 0.05)';
+          optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
         }
       }
     }
-  }, [isSelected, type, isStrategicOption]);
+  }, [isSelected, type]);
   
   // Manipulador de clique customizado com debounce
   const handleClick = () => {
     if (!isDisabled) {
-      // Se já está selecionado e é uma questão estratégica, não permitimos desmarcar
-      if (isSelected && isStrategicOption) {
-        return; // Impede desmarcar a opção em questões estratégicas
-      }
-      
       // Aplicar mudança visual imediatamente para feedback instantâneo
       if (optionRef.current) {
         if (type === 'text') {
           optionRef.current.style.borderColor = isSelected ? '#B89B7A' : '#b29670';
-          
-          // Efeito visual adicional para opções estratégicas
-          if (isStrategicOption && !isSelected) {
-            optionRef.current.style.backgroundColor = '#faf6f1';
-            optionRef.current.style.transform = 'translateY(-2px)';
-          }
+          optionRef.current.style.backgroundColor = '#faf6f1';
+          optionRef.current.style.transform = 'translateY(-2px)';
         }
         
         // Aplicar sombra correspondente ao estado
         optionRef.current.style.boxShadow = isSelected 
           ? '0 2px 4px rgba(0, 0, 0, 0.05)' 
-          : (isStrategicOption 
-              ? (type === 'text' ? '0 6px 12px rgba(178, 150, 112, 0.4)' : '0 15px 30px rgba(0, 0, 0, 0.25)') 
-              : (type === 'text' ? '0 4px 8px rgba(178, 150, 112, 0.25)' : '0 12px 24px rgba(0, 0, 0, 0.2)'));
+          : (type === 'text' ? '0 4px 8px rgba(178, 150, 112, 0.25)' : '0 12px 24px rgba(0, 0, 0, 0.2)');
       }
       
       // Chamar onSelect com um pequeno atraso para evitar flash
@@ -129,10 +104,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "relative h-full flex flex-col rounded-lg overflow-hidden w-full", // Largura total
           "cursor-pointer", 
           
-          // Para opções estratégicas, adicionamos estilo mais elaborado
-          isStrategicOption && type === 'text' && "p-5 sm:p-6 md:p-6 border-2 !px-6 sm:!px-6", // Reduzido padding para desktop
+          // Para opções estratégicas, mantemos estilo similar às normais para não diferenciar
+          isStrategicOption && type === 'text' && "p-4 sm:p-5 md:p-6 border !px-6 sm:!px-6", 
           
-          // Para opções estratégicas de imagem, ajuste para melhor visualização
+          // Para opções estratégicas de imagem, estilo similar às normais
           isStrategicOption && type !== 'text' && "pb-3 w-full",
           
           // Para opções normais de imagem, aumentar largura
@@ -172,31 +147,19 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 "leading-relaxed text-[#432818]",
                 // Ajustes para proporcionalidade em mobile e desktop
                 isMobile 
-                  ? (isStrategicOption ? "text-[1.25rem] font-medium !leading-tight" : "text-[1rem] !leading-snug") 
+                  ? (isStrategicOption ? "text-[1.1rem] font-medium !leading-tight" : "text-[1rem] !leading-snug") 
                   : (isStrategicOption ? "text-base sm:text-lg font-medium" : "text-sm sm:text-base")
               )
         )}>
           {highlightStrategicWords(option.text)}
         </p>            {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
-          isStrategicOption ? (
-            <div className="absolute -top-2 -right-2 h-7 w-7 sm:h-8 sm:w-8 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
-              <Check
-                className="h-5 w-5 sm:h-5 sm:w-5 text-white"
-                strokeWidth={3}
-              />
-            </div>
-          ) : (
+          <div className="absolute -top-2 -right-2 h-7 w-7 sm:h-8 sm:w-8 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
             <Check
-              className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670]"
+              className="h-5 w-5 sm:h-5 sm:w-5 text-white"
               strokeWidth={3}
             />
-          )
-        )}
-        
-        {/* Indicador visual adicional para questões estratégicas */}
-        {isStrategicOption && !isSelected && (
-          <div className="absolute -top-1 -right-1 h-5 w-5 bg-[#f9f4ef] border-2 border-[#b29670] rounded-full"></div>
+          </div>
         )}
       </div>
     </div>
