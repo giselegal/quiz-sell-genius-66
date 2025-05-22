@@ -158,4 +158,22 @@ img:hover, .hover-scale:hover {
   .font-playfair {
     font-family: 'Playfair Display', serif;
   }
+
+  /* Questões só com texto – aumentar fonte */
+  .text-only-question .question-text,
+  .text-only-question .options {
+    font-size: 1.25rem;
+  }
+
+  /* Questões Estratégicas – títulos e opções maiores e destacados */
+  .strategic-question .question-title,
+  .strategic-question .options {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  /* Destaque de termos estratégicos */
+  .highlight-strategic {
+    background-color: hsl(var(--accent) / 0.3);
+  }
 }
