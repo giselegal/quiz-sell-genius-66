@@ -45,16 +45,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     let newSelectedOptions: string[];
     
     if (currentAnswers.includes(optionId)) {
-      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
-      if (isStrategicQuestion) {
-        return; // Não permite desmarcar a opção em questões estratégicas
-      }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
-      if (isStrategicQuestion) {
-        // Para questões estratégicas, substituímos qualquer seleção anterior
-        newSelectedOptions = [optionId];
-      } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
+      if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
         newSelectedOptions = [...currentAnswers, optionId];
@@ -87,7 +80,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             {highlightStrategicWords(question.title)}
           </h2>
           
-          {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
+          {question.imageUrl && !imageError && showQuestionImage && (
             <div className="w-full mb-6">
               <img 
                 src={question.imageUrl} 
