@@ -87,82 +87,37 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         </div>
       )}
 
-      {/* SOLUÇÃO EXTREMA: Check garantido visível */}
-      {isSelected && (
-        <>
-          {/* Check com estilo inline forçado */}
-          <div 
-            className="absolute top-1 right-1 rounded-full flex items-center justify-center"
-            style={{ 
-              zIndex: 99999,
-              width: '24px',
-              height: '24px',
-              backgroundColor: forStrategic ? '#B89B7A' : '#B89B7A',
-              border: '2px solid white',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-              position: 'absolute',
-              pointerEvents: 'none',
-              transform: 'scale(1.2)'
-            }}
-          >
-            {/* Check icon com tamanho fixo */}
-            <svg 
-              width="16" 
-              height="16" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="white" 
-              strokeWidth="3"
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-              style={{
-                minWidth: '16px',
-                minHeight: '16px'
-              }}
-            >
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-          
-          {/* Check de backup em caso do primeiro falhar */}
-          <span
-            style={{
-              position: 'absolute',
-              top: '6px',
-              right: '8px',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '14px',
-              zIndex: 999999,
-              textShadow: '0 0 3px black'
-            }}
-          >
-            ✓
-          </span>
-        </>
+      {/* Voltar para um check simples e elegante */}
+      {isSelected && !forStrategic && (
+        <div 
+          className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-md border border-white bg-[#B89B7A]"
+          style={{ zIndex: 100 }}
+        >
+          <Check className="w-3 h-3" />
+        </div>
       )}
 
-      {/* Remover tag "Estratégico" que polui o layout */}
-      
-      {/* Efeito de seleção MUITO ÓBVIO para questões estratégicas */}
-      {forStrategic && isSelected && (
+      {/* Abordagem COMPLETAMENTE DIFERENTE para questões estratégicas */}
+      {forStrategic && (
         <div 
-          className="absolute inset-0 rounded-lg pointer-events-none" 
-          style={{
-            zIndex: 40,
-            border: "3px solid #B89B7A",
-            backgroundColor: "rgba(184, 155, 122, 0.15)"
-          }}
-        />
+          className={cn(
+            "absolute top-0 right-0 left-0 bottom-0 rounded-lg",
+            isSelected 
+              ? "border-2 border-[#B89B7A] bg-[#B89B7A]/10" 
+              : "border border-dashed border-[#B89B7A]/30"
+          )}
+          style={{ zIndex: 20 }}
+        >
+          {/* Indicador de seleção para questões estratégicas */}
+          {isSelected && (
+            <div className="absolute top-0 right-0 w-auto h-auto py-1 px-2 bg-[#B89B7A] rounded-bl-md text-white text-xs font-medium">
+              Selecionado
+            </div>
+          )}
+        </div>
       )}
 
-      {/* Indicador sutil de questão estratégica (sem seleção) */}
-      {forStrategic && !isSelected && (
-        <div 
-          className="absolute inset-0 rounded-lg border border-dashed border-[#B89B7A]/40 pointer-events-none"
-          style={{ zIndex: 40 }}
-        />
-      )}
+      {/* Remover todos os outros elementos de estilo para questões estratégicas */}
     </div>
   );
 };
