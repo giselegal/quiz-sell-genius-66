@@ -69,9 +69,6 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   
   const getGridColumns = () => {
     if (question.type === 'text') {
-      if (isStrategicQuestion) {
-        return "grid-cols-1 gap-4 px-2";
-      }
       return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
     }
     return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
@@ -79,17 +76,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   
   return (
     <div className={cn("w-full pb-4 relative", 
-      isMobile && "px-2", 
-      isStrategicQuestion && "strategic-question",
-      question.type === 'text' && !isStrategicQuestion && "text-only-question"
+      isMobile && "px-2" 
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
           <h2 className={cn(
             "font-playfair text-center mb-6 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-            isMobile ? "text-lg" : "text-xl sm:text-2xl",
-            isStrategicQuestion && "text-[#432818] mb-6 font-bold",
-            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl"
+            isMobile ? "text-lg" : "text-xl sm:text-2xl"
           )}>
             {highlightStrategicWords(question.title)}
           </h2>
@@ -113,8 +106,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       <div className={cn(
         "grid h-full",
         getGridColumns(),
-        hasImageOptions && "mb-4 relative",
-        isStrategicQuestion && "gap-4"
+        hasImageOptions && "mb-4 relative"
       )}>
         {question.options.map(option => (
           <QuizOption 
@@ -125,11 +117,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             type={question.type}
             questionId={question.id}
             isDisabled={
-              (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
-              (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                currentAnswers.length >= question.multiSelect)
+              !currentAnswers.includes(option.id) && 
+              currentAnswers.length >= question.multiSelect
             }
-            isStrategicOption={isStrategicQuestion}
           />
         ))}
       </div>

@@ -39,7 +39,7 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
         'span', 
         { 
           key: index, 
-          className: 'text-[#B89B7A] font-bold'
+          className: 'text-[#B89B7A]'  // Apenas mudar a cor, sem tornar negrito
         }, 
         part + (index < parts.length - 1 ? ' ' : '')
       );
