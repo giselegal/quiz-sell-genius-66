@@ -380,6 +380,22 @@ const QuizPage: React.FC = () => {
     };
   }, [showingFinalTransition, navigate]);
 
+  // ------------------------------------------------------------------
+  // Início automático das questões estratégicas após a transição
+  // ------------------------------------------------------------------
+  useEffect(() => {
+    if (showingTransition) {
+      const timer = setTimeout(() => {
+        setShowingStrategicQuestions(true); // exibe questões estratégicas
+        setCurrentStrategicQuestionIndex(0); // garante início da sequência
+        setShowingTransition(false);        // encerra tela de transição
+      }, 600); // mesmo tempo da animação (0.6 s)
+
+      return () => clearTimeout(timer);
+    }
+  }, [showingTransition]);
+  // ------------------------------------------------------------------
+
   return (
     <LoadingManager isLoading={!pageIsReady}>
       <div className="relative">
