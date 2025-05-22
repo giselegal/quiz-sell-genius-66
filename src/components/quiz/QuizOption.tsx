@@ -49,12 +49,12 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       )}
     >
       {type !== 'text' && option.imageUrl && (
-        <div className={cn("w-full flex-1 flex items-stretch min-h-[220px] p-0")}> 
+        <div className={cn("w-full flex-1 flex items-stretch min-h-[220px] p-0 relative")}> 
           <img 
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
-              "w-full h-[260px] object-cover rounded-t-lg",
+              "w-full h-[260px] object-cover rounded-t-lg z-10",
               isSelected && "opacity-95"
             )}
             style={{ maxHeight: '260px', minHeight: '180px' }}
@@ -63,14 +63,18 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
               target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
             }}
           />
+          {/* Texto sobreposto na base da imagem, com fundo translúcido */}
+          <div className="absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg z-20 flex items-center justify-center">
+            <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">{option.text}</span>
+          </div>
         </div>
       )}
-      <div className={cn(
-        "flex-1 p-3 text-[#432818]",
-        type !== 'text' && option.imageUrl ? "border-t border-[#B89B7A]/10 text-[10px]" : ""
-      )}>
-        <p>{option.text}</p>
-      </div>
+      {/* Para opções de texto puro, mantém layout anterior */}
+      {(!option.imageUrl || type === 'text') && (
+        <div className="flex-1 p-3 text-[#432818]">
+          <p>{option.text}</p>
+        </div>
+      )}
       {isSelected && (
         <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm">
           <Check className="w-3 h-3" />
