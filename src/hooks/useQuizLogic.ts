@@ -128,6 +128,15 @@ export const useQuizLogic = () => {
     // Garantir que sempre haja apenas uma opção selecionada para questões estratégicas
     const finalOptions = selectedOptions.length > 1 ? [selectedOptions[selectedOptions.length - 1]] : selectedOptions;
     
+    // Se já existe uma resposta estratégica para esta questão e o array está vazio, mantém a seleção anterior
+    // para garantir que sempre haja uma opção selecionada
+    if (finalOptions.length === 0) {
+      const previousAnswer = strategicAnswers[questionId];
+      if (previousAnswer && previousAnswer.length > 0) {
+        return; // Não permite desmarcar a única opção selecionada
+      }
+    }
+    
     setStrategicAnswers(prev => {
       const newAnswers = {
         ...prev,

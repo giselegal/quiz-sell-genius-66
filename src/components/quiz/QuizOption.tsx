@@ -63,6 +63,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   // Manipulador de clique customizado com debounce
   const handleClick = () => {
     if (!isDisabled) {
+      // Se já está selecionado e é uma questão estratégica, não permitir desmarcar
+      if (isSelected && isStrategicOption) {
+        return; // Impede desmarcar a opção em questões estratégicas
+      }
+      
       // Aplicar mudança visual imediatamente para feedback instantâneo
       if (optionRef.current) {
         if (type === 'text') {
@@ -135,9 +140,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
           isStrategicOption ? (
-            <div className="absolute -top-0.5 -right-0.5 h-5 w-5 bg-[#b29670] rounded-full flex items-center justify-center">
+            <div className="absolute -top-0.5 -right-0.5 h-6 w-6 bg-[#b29670] rounded-full flex items-center justify-center shadow-md">
               <Check
-                className="h-3 w-3 text-white"
+                className="h-4 w-4 text-white"
                 strokeWidth={3}
               />
             </div>

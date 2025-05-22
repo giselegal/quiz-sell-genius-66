@@ -41,8 +41,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     
     if (currentAnswers.includes(optionId)) {
       // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
-      if (isStrategicQuestion && currentAnswers.length === 1) {
-        return; // Não permite desmarcar a única opção em questões estratégicas
+      if (isStrategicQuestion) {
+        return; // Não permite desmarcar a opção em questões estratégicas
       }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
@@ -117,9 +117,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             onSelect={handleOptionSelect}
             type={question.type}
             questionId={question.id}
-            isDisabled={!currentAnswers.includes(option.id) && 
-              !isStrategicQuestion && 
-              currentAnswers.length >= question.multiSelect}
+            isDisabled={
+              (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
+              (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
+                currentAnswers.length >= question.multiSelect)
+            }
             isStrategicOption={isStrategicQuestion}
           />
         ))}
