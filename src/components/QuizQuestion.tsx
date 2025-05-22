@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
@@ -62,9 +61,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   
   const getGridColumns = () => {
     if (question.type === 'text') {
-      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
+      // Reduzido px-2 para px-1 no mobile para opções de texto
+      return isMobile ? "grid-cols-1 gap-3 px-1" : "grid-cols-1 gap-4 px-4";
     }
-    return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
+    // Removido px-0.5 no mobile para opções de imagem
+    return isMobile ? "grid-cols-2 gap-1" : "grid-cols-2 gap-3 px-2";
   };
   
   return (

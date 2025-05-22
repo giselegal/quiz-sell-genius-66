@@ -97,8 +97,9 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
 
   return (
     <AnimatedWrapper key={mountKey}>
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden border border-[#B89B7A]/20">
-        <div className="p-6 md:p-8">
+      {/* Aumentado o padding horizontal de p-6 para p-2 sm:p-4 md:p-6 e removido max-w-3xl para permitir mais largura em telas menores */}
+      <div className="mx-auto bg-white rounded-xl shadow-md overflow-hidden border border-[#B89B7A]/20">
+        <div className="p-2 sm:p-4 md:p-6">
           <div className="mb-6">
             <div className="w-full h-1 bg-[#B89B7A]/20 rounded-full overflow-hidden mb-2">
               <div 
