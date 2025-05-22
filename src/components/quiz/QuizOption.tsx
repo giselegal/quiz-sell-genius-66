@@ -130,7 +130,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer", 
           
           // Para opções estratégicas, adicionamos estilo mais elaborado
-          isStrategicOption && type === 'text' && "p-5 sm:p-7 border-2 !px-7", // Padding aumentado para melhor legibilidade
+          isStrategicOption && type === 'text' && "p-5 sm:p-6 md:p-6 border-2 !px-6 sm:!px-6", // Reduzido padding para desktop
           
           // Para opções estratégicas de imagem, ajuste para melhor visualização
           isStrategicOption && type !== 'text' && "pb-3 w-full",
@@ -138,8 +138,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           // Para opções normais de imagem, aumentar largura
           type !== 'text' && "w-full",
           
-          // Para opções de texto - manter borda e aumentar padding horizontal
-          !isStrategicOption && type === 'text' && "p-4 sm:p-5 !px-6 border",
+          // Para opções de texto - manter borda e ajustar padding horizontal para desktop
+          !isStrategicOption && type === 'text' && "p-4 sm:p-4 md:p-5 !px-6 sm:!px-5 border",
           
           // Para opções de imagem - SEM borda na coluna
           type !== 'text' && "border-0",
@@ -166,23 +166,23 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium py-2 px-2 mt-auto text-[#432818] relative", 
-                isMobile ? "text-[0.95rem]" : "text-base sm:text-lg" // Tamanho original para opções de imagem
+                isMobile ? "text-[0.95rem]" : "text-base" // Tamanho ajustado para opções de imagem
               )
             : cn(
                 "leading-relaxed text-[#432818]",
-                // Força tamanhos maiores para garantir legibilidade em mobile
+                // Ajustes para proporcionalidade em desktop
                 isMobile 
                   ? (isStrategicOption ? "text-[1.25rem] font-medium !leading-tight" : "text-[1.1rem] !leading-snug") 
-                  : (isStrategicOption ? "text-lg sm:text-xl font-medium" : "text-base sm:text-lg")
+                  : (isStrategicOption ? "text-base sm:text-lg font-medium" : "text-sm sm:text-base")
               )
         )}>
           {highlightStrategicWords(option.text)}
         </p>            {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
           isStrategicOption ? (
-            <div className="absolute -top-2 -right-2 h-9 w-9 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
+            <div className="absolute -top-2 -right-2 h-7 w-7 sm:h-8 sm:w-8 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
               <Check
-                className="h-6 w-6 text-white"
+                className="h-5 w-5 sm:h-5 sm:w-5 text-white"
                 strokeWidth={3}
               />
             </div>
