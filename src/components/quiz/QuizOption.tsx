@@ -55,17 +55,17 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           // Efeito especial de seleção para questões estratégicas
           forStrategic && isSelected ? "ring-4 ring-[#FFD700] animate-pulse-border shadow-[0_0_0_6px_rgba(255,215,0,0.25),0_8px_32px_rgba(184,155,122,0.18)]" : ""
         )}> 
-          <div className="w-full h-[12px]" /> {/* respiro superior */}
-          <div className="relative w-full flex items-end justify-center" style={{ minHeight: '220px' }}>
+          <div className="w-full h-[16px]" /> {/* respiro superior */}
+          <div className="relative w-full flex items-end justify-center" style={{ minHeight: '240px' }}>
             <img 
               src={option.imageUrl} 
               alt={option.text}
               className={cn(
-                "w-full h-[260px] sm:h-[320px] object-contain rounded-t-lg z-20 transition-all duration-200",
+                "w-full max-w-[340px] h-[220px] sm:h-[320px] object-contain rounded-t-lg z-20 transition-all duration-200",
                 isSelected ? "scale-[1.10] shadow-2xl -translate-y-2" : "",
                 "mx-auto"
               )}
-              style={{ maxHeight: '340px', minHeight: '180px' }}
+              style={{ maxHeight: '340px', minHeight: '180px', width: '100%' }}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
@@ -73,10 +73,10 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             />
             {/* Texto sempre sobreposto, centralizado, nunca atrás da imagem */}
             <div className={cn(
-              "absolute bottom-0 left-0 w-full px-2 py-1 flex items-center justify-center z-30 bg-white/85 rounded-b-lg",
+              "absolute bottom-0 left-0 w-full px-3 py-2 flex items-center justify-center z-30 bg-white/90 rounded-b-lg",
               isSelected && "backdrop-blur-sm"
             )}>
-              <span className="text-xs sm:text-sm text-[#432818] text-center font-medium leading-tight line-clamp-2 drop-shadow-sm">
+              <span className="text-sm sm:text-base text-[#432818] text-center font-medium leading-tight line-clamp-2 drop-shadow-sm whitespace-normal break-words w-full">
                 {option.text}
               </span>
             </div>
@@ -86,7 +86,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
               </div>
             )}
           </div>
-          <div className="w-full h-[8px]" /> {/* respiro inferior */}
+          <div className="w-full h-[12px]" /> {/* respiro inferior */}
         </div>
       )}
       {/* Para opções de texto puro, só a moldura interna */}
