@@ -130,10 +130,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "cursor-pointer", 
           
           // Para opções estratégicas, adicionamos estilo mais elaborado
-          isStrategicOption && type === 'text' && "p-5 sm:p-6 md:p-6 border-2 !px-6 sm:!px-6", // Reduzido padding para desktop
+          isStrategicOption && type === 'text' && "p-4 sm:p-5 md:p-6 border-2 !px-4 sm:!px-6", // Reduzido padding para mobile
           
           // Para opções estratégicas de imagem, ajuste para melhor visualização
-          isStrategicOption && type !== 'text' && "pb-3 w-full",
+          isStrategicOption && type !== 'text' && "pb-2 w-full",
           
           // Para opções normais de imagem, aumentar largura
           type !== 'text' && "w-full",
@@ -166,13 +166,13 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium py-2 px-2 mt-auto text-[#432818] relative", 
-                isMobile ? "text-[0.95rem]" : "text-base" // Tamanho ajustado para opções de imagem
+                isMobile ? "text-[0.85rem]" : "text-base" // Reduzido ainda mais o tamanho da fonte em mobile para opções de imagem
               )
             : cn(
                 "leading-relaxed text-[#432818]",
-                // Ajustes para proporcionalidade em desktop
+                // Ajustes para proporcionalidade em mobile e desktop
                 isMobile 
-                  ? (isStrategicOption ? "text-[1.25rem] font-medium !leading-tight" : "text-[1.1rem] !leading-snug") 
+                  ? (isStrategicOption ? "text-[1.1rem] font-medium !leading-tight" : "text-[1rem] !leading-snug") 
                   : (isStrategicOption ? "text-base sm:text-lg font-medium" : "text-sm sm:text-base")
               )
         )}>

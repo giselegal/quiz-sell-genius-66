@@ -71,31 +71,31 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     }
     // Para opções com imagens, utilizamos gaps menores em desktop para melhor proporcionalidade
     return isMobile
-      ? "grid-cols-2 gap-3 px-0" // Aumentado gap entre colunas em mobile
+      ? "grid-cols-2 gap-2 px-0" // Reduzido gap entre colunas em mobile para acomodar melhor as opções
       : "grid-cols-2 gap-4 px-0 sm:px-1 md:px-2"; // Reduzido gap entre colunas em desktop
   };
   
   return (
-    <div className={cn("w-full max-w-[99%] md:max-w-4xl lg:max-w-5xl mx-auto pb-5 relative", // Reduzido o tamanho para desktop
+    <div className={cn("w-full max-w-[99%] md:max-w-3xl lg:max-w-4xl mx-auto pb-4 relative", // Reduzido padding bottom para melhor proporção
       isMobile && "px-0.5", // Padding mínimo para não tocar nas bordas da tela
-      isStrategicQuestion && "max-w-[99%] md:max-w-2xl lg:max-w-3xl py-6 bg-gradient-to-b from-[#fffbf7] to-[#fff] border border-[#B89B7A]/30 rounded-xl shadow-lg" // Reduzido tamanho para questões estratégicas no desktop
+      isStrategicQuestion && "max-w-[97%] md:max-w-2xl lg:max-w-2xl py-4 bg-gradient-to-b from-[#fffbf7] to-[#fff] border border-[#B89B7A]/20 rounded-xl shadow-sm" // Container mais leve para questões estratégicas em mobile
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
           {isStrategicQuestion && (
-            <div className="text-center mb-4">
-              <span className="inline-block px-5 py-2 bg-[#B89B7A] text-white text-base font-bold rounded-full shadow-sm">
+            <div className="text-center mb-2">
+              <span className="inline-block px-3 py-1 bg-[#B89B7A] text-white text-xs font-medium rounded-full shadow-sm">
                 ⭐ Questão Especial
               </span>
             </div>
           )}
           <h2 className={cn(
             "font-playfair text-center mb-5 px-1 sm:px-3 pt-3 text-brand-coffee font-semibold tracking-normal", 
-            // Ajustados para melhor proporcionalidade em desktop
+            // Ajustados para melhor proporcionalidade em desktop e mais leves
             isStrategicQuestion 
-              ? (isMobile ? "text-[1.55rem] leading-tight" : "text-2xl sm:text-3xl md:text-3xl")
-              : (isMobile ? "text-xl leading-snug" : "text-xl sm:text-2xl md:text-2xl"),
-            isStrategicQuestion && "text-[#432818] mb-8 font-bold whitespace-pre-line bg-[#f9f4ef] py-5 px-2 sm:px-4 rounded-lg shadow-md border border-[#B89B7A]/30" // Destaque visual aprimorado
+              ? (isMobile ? "text-[1.2rem] leading-tight" : "text-xl sm:text-2xl md:text-2xl")
+              : (isMobile ? "text-[1rem] leading-snug" : "text-lg sm:text-xl md:text-xl"),
+            isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line bg-[#f9f4ef] py-3 px-2 sm:px-3 rounded-lg shadow-sm border border-[#B89B7A]/20" // Visual mais leve
           )}>
             {highlightStrategicWords(question.title)}
           </h2>

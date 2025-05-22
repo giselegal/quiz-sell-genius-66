@@ -61,7 +61,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   return (
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
-      isMobile ? "max-w-full" : "md:mx-auto", // Ocupar toda a largura disponível dentro da coluna
+      isMobile ? "max-w-[95%] mx-auto" : "md:mx-auto", // Reduzido proporcionalmente no mobile também
       !isMobile && "md:max-w-[90%]" // Reduzido para melhor proporcionalidade em desktop
     )}>
       <AspectRatio 
