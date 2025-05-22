@@ -87,13 +87,13 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         </div>
       )}
 
-      {/* Voltar para um check simples e elegante */}
+      {/* Check pequeno e elegante para opções normais */}
       {isSelected && !forStrategic && (
         <div 
-          className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-md border border-white bg-[#B89B7A]"
+          className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-white shadow-sm border border-white bg-[#B89B7A]"
           style={{ zIndex: 100 }}
         >
-          <Check className="w-3 h-3" />
+          <Check className="w-2.5 h-2.5" />
         </div>
       )}
 
