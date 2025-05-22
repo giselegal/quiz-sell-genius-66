@@ -195,7 +195,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     value={nome}
                     onChange={(e) => setNome(e.target.value)}
                     className={cn(
-                      'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
+                      'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border border-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
                       nome ? 'shadow-lg' : ''
                     )}
                     autoFocus
@@ -219,14 +219,21 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   type="submit"
                   className={cn(
                     'w-full py-3 px-4 text-lg font-extrabold rounded-xl shadow-xl transition-all flex items-center justify-center gap-2',
-                    'bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#A1835D] text-white hover:from-[#A1835D] hover:to-[#B89B7A] active:from-[#947645] active:to-[#B89B7A] hover:scale-[1.04] animate-enhanced-pulse',
+                    'bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#A1835D] text-white hover:from-[#A1835D] hover:to-[#B89B7A] active:from-[#947645] active:to-[#B89B7A] hover:scale-[1.04]',
                     'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
-                    nome.trim() === '' && 'opacity-50 cursor-not-allowed'
+                    nome.trim() === '' && 'opacity-50 cursor-not-allowed',
+                    'relative overflow-hidden'
                   )}
                   disabled={nome.trim() === ''}
-                  style={{ letterSpacing: '0.02em', minHeight: 56 }}
+                  style={{ letterSpacing: '0.02em', minHeight: 48, fontSize: '1.05rem' }}
                 >
-                  Quero Descobrir meu Estilo Agora!
+                  {/* Efeito de brilho discreto na lateral */}
+                  <span className="absolute right-0 top-0 h-full w-1/4 pointer-events-none">
+                    <span className="block h-full w-full bg-gradient-to-l from-white/60 to-transparent blur-[2px] opacity-60 animate-[shine_2.2s_ease-in-out_infinite]" />
+                  </span>
+                  <span className="block w-full text-center sm:text-lg text-base font-extrabold">
+                    Quero Descobrir meu Estilo Agora!
+                  </span>
                 </button>
                 <p className="text-xs text-center text-[#B89B7A] pt-1">
                   Ao clicar, você concorda com nossa{' '}
@@ -260,6 +267,18 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
           100% { opacity: 1; }
         }
         .animate-intro-bg { animation: intro-bg 1.2s cubic-bezier(.4,1.2,.4,1) both; background: radial-gradient(ellipse 80% 60% at 50% 0%, #e7dac2cc 0%, #fffaf400 100%); }
+        @keyframes shine {
+          0% { transform: translateX(100%); opacity: 0; }
+          10% { opacity: 0.7; }
+          50% { transform: translateX(-10%); opacity: 0.7; }
+          100% { transform: translateX(-120%); opacity: 0; }
+        }
+        @media (max-width: 640px) {
+          button[type=submit] {
+            font-size: 0.98rem !important;
+            min-height: 44px !important;
+          }
+        }
       `}</style>
     </main>
   );
