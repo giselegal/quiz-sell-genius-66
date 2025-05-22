@@ -105,11 +105,16 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         <div 
           className={cn(
             "absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-xl border-2 border-white",
-            forStrategic ? "bg-[#FFD700] pulse-element" : "bg-[#B89B7A]"
+            forStrategic ? "bg-[#FFD700]" : "bg-[#B89B7A]"
           )}
           style={{ 
             zIndex: 9999,
-            pointerEvents: "none" // Importante: não bloqueia cliques
+            pointerEvents: "none",
+            // Aplicar animação diretamente via inline style para questões estratégicas
+            ...(forStrategic ? {
+              animation: "2s infinite alternate both running strategic-pulse, 1.5s infinite alternate both running strategic-glow",
+              boxShadow: "0 0 8px 2px rgba(255, 215, 0, 0.6)"
+            } : {})
           }}
           data-strategic={forStrategic ? `${questionId}-${option.id}` : ""}
         >
@@ -117,34 +122,51 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         </div>
       )}
 
-      {/* Definições CSS com várias abordagens de animação para garantir compatibilidade */}
+      {/* Definir animações em style global para garantir que sejam carregadas */}
       <style jsx global>{`
-        @keyframes pulse-animation {
-          0%, 100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
-          }
-          50% {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
-          }
+        /* Animação de pulsação mais intensa e visível */
+        @keyframes strategic-pulse {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.3); }
         }
-
-        @keyframes glow-animation {
-          0%, 100% {
-            box-shadow: 0 0 5px 2px rgba(255, 215, 0, 0.5);
-          }
-          50% {
-            box-shadow: 0 0 20px 4px rgba(255, 215, 0, 0.3);
-          }
+        
+        /* Animação de brilho dourado intensificada */
+        @keyframes strategic-glow {
+          0% { box-shadow: 0 0 4px 2px rgba(255, 215, 0, 0.6); }
+          100% { box-shadow: 0 0 16px 4px rgba(255, 215, 0, 0.8); }
         }
-
-        .animate-enhanced-pulse,
-        .strategic-element,
-        .pulse-element {
-          animation: pulse-animation 2s infinite ease-in-out, glow-animation 2s infinite ease-in-out;
+        
+        /* Estilos para o container principal quando for estratégico */
+        div[data-strategic]:not([data-strategic=""]) {
+          box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.3) !important;
+          animation: container-pulse 3s infinite alternate ease-in-out !important;
+        }
+        
+        /* Animação suave para o container */
+        @keyframes container-pulse {
+          0% { box-shadow: 0 0 15px 2px rgba(255, 215, 0, 0.2); }
+          100% { box-shadow: 0 0 25px 8px rgba(255, 215, 0, 0.4); }
         }
       `}</style>
+      
+      {/* Adicionar um script para forçar reflow e garantir que as animações funcionem */}
+      {forStrategic && isSelected && (
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              // Forçar repaint para garantir que as animações sejam aplicadas
+              setTimeout(() => {
+                const strategicElements = document.querySelectorAll('[data-strategic="${questionId}-${option.id}"]');
+                strategicElements.forEach(el => {
+                  el.style.animationName = 'none';
+                  void el.offsetWidth; // Trigger reflow
+                  el.style.animationName = '';
+                });
+              }, 50);
+            })();
+          `
+        }} />
+      )}
     </div>
   );
 };
