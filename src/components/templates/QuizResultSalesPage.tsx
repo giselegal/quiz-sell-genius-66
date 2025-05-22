@@ -20,7 +20,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { ShoppingCart, Heart, Award, CheckCircle, Star } from 'lucide-react';
+import { ShoppingCart, Heart, Award, CheckCircle, Star, XCircle } from 'lucide-react';
 
 // Helper function to get style descriptions
 const getStyleDescription = (styleType: string): string => {
@@ -215,6 +215,53 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
             </div>
           </div>
         </section>
+
+        {/* Seção Antes e Depois */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-playfair text-[#aa6b5d] text-center mb-6">
+            Quando você não conhece seu estilo...
+          </h2>
+          <ul className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+            <li className="flex items-start gap-3">
+              <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
+              <span>Compra peças por impulso que não combinam entre si</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
+              <span>Sente que tem um guarda-roupa cheio, mas "nada para vestir"</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
+              <span>Investe em tendências que não valorizam sua imagem</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
+              <span>Tem dificuldade em criar uma imagem coerente e autêntica</span>
+            </li>
+          </ul>
+          <h2 className="text-3xl font-playfair text-[#B89B7A] text-center mt-12 mb-6">
+            Quando você domina seu estilo...
+          </h2>
+          <ul className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+            <li className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>Economiza tempo e dinheiro em compras conscientes</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>Projeta a imagem que realmente representa você</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>Aumenta sua confiança em qualquer ambiente</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
+              <span>Cria looks harmoniosos com menos peças</span>
+            </li>
+          </ul>
+        </section>
+        {/* Seção Antes e Depois */}
 
         {/* Offer Card */}
         <Card className="p-6 md:p-8 border-[#aa6b5d]/20 mb-16">
