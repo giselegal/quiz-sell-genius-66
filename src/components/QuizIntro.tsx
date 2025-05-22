@@ -85,11 +85,15 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
   // Renderizar diretamente o conteúdo principal sem estados de carregamento
   return (
     <main
-      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-[#fffaf4] to-[#f8f5f0] py-8 relative overflow-x-hidden"
+      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-[#fffaf4] to-[#f8f5f0] py-8 sm:py-12 md:py-16 relative overflow-x-hidden"
       data-section="intro"
     >
-      {/* Animação de entrada para o card principal */}
+      {/* Elementos decorativos de fundo para elegância adicional */}
       <div className="absolute inset-0 pointer-events-none select-none animate-intro-bg z-0" />
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-[#b89b7a15] to-transparent pointer-events-none" />
+      <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-[#b89b7a08] blur-3xl" />
+      <div className="absolute -bottom-10 -left-10 w-64 h-64 rounded-full bg-[#b89b7a08] blur-3xl" />
+      
       {/* Skip link para acessibilidade */}
       <a 
         href="#quiz-form" 
@@ -97,11 +101,15 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
       >
         Pular para o formulário
       </a>
-      {/* Card glassmorphism central */}
+      
+      {/* Card glassmorphism central com layout refinado */}
       <div className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 mx-auto relative z-10 animate-fade-in-up">
-        <div className="backdrop-blur-xl bg-white/70 border border-[#e7dac2] rounded-2xl shadow-2xl p-6 md:p-10 flex flex-col gap-8">
+        <div className="backdrop-blur-xl bg-white/80 border border-[#e7dac2] rounded-2xl shadow-xl p-6 md:p-10 flex flex-col gap-8 relative overflow-hidden">
+          {/* Elemento decorativo sutil */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent opacity-50" />
+          
           <header className="w-full space-y-8">
-            {/* Logo centralizado */}
+            {/* Logo centralizado com refinamentos */}
             <div className="flex flex-col items-center space-y-2">
               <div className="relative">
                 <picture>
@@ -109,7 +117,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   <img
                     src={STATIC_LOGO_IMAGE_URLS.png}
                     alt="Logo Gisele Galvão"
-                    className="h-auto mx-auto drop-shadow-lg"
+                    className="h-auto mx-auto drop-shadow-lg transform hover:scale-[1.02] transition-transform duration-300"
                     width={120}
                     height={50}
                     loading="eager"
@@ -122,9 +130,9 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     }}
                   />
                 </picture>
-                {/* Barra dourada */}
+                {/* Barra dourada refinada */}
                 <div
-                  className="h-[3px] bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#B89B7A] rounded-full mt-1.5 shadow"
+                  className="h-[3px] bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#B89B7A] rounded-full mt-1.5 shadow-sm"
                   style={{
                     width: '300px',
                     maxWidth: '90%',
@@ -133,12 +141,14 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 />
               </div>
             </div>
-            {/* Título principal */}
+            
+            {/* Título principal com tipografia refinada */}
             <h1
-              className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818] drop-shadow-md animate-text-shimmer"
+              className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818] drop-shadow-sm animate-text-shimmer"
               style={{
                 fontFamily: 'Playfair Display, serif',
                 fontWeight: 400,
+                letterSpacing: '-0.01em'
               }}
             >
               <span className="text-[#B89B7A] relative">
@@ -151,11 +161,12 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
               </span>.
             </h1>
           </header>
-          <section className="w-full space-y-6 md:space-y-8">
-            {/* Imagem principal */}
+          
+          <section className="w-full space-y-7 md:space-y-9">
+            {/* Imagem principal com sombra refinada */}
             <div className="mt-2 w-full mx-auto">
               <div
-                className="w-full overflow-hidden rounded-xl shadow-lg border border-[#e7dac2] bg-[#f8f5f0]/80"
+                className="w-full overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-[#e7dac2] bg-[#f8f5f0]/80"
                 style={{ aspectRatio: '1.47', maxHeight: '204px' }}
               >
                 <div className="relative w-full h-full">
@@ -165,7 +176,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     <img
                       src={STATIC_INTRO_IMAGE_URLS.png}
                       alt="Descubra seu estilo predominante e transforme seu guarda-roupa"
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain transform hover:scale-[1.01] transition-transform duration-500"
                       width={300}
                       height={204}
                       loading="eager"
@@ -174,12 +185,13 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                       id="lcp-image"
                     />
                   </picture>
-                  {/* Overlay dourado sutil */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#b89b7a22] to-transparent pointer-events-none" />
+                  {/* Overlay dourado refinado */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#b89b7a15] to-transparent pointer-events-none" />
                 </div>
               </div>
             </div>
-            {/* Texto descritivo */}
+            
+            {/* Texto descritivo com melhor espaçamento */}
             <p className="text-base text-center leading-relaxed px-2 sm:text-lg text-[#6B5C4B] font-medium animate-fade-in-delayed">
               Em poucos minutos, descubra seu{' '}
               <span className="font-semibold text-[#B89B7A] relative">
@@ -190,14 +202,15 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
               <span className="font-semibold text-[#432818]">essência</span>, com praticidade e{' '}
               <span className="font-semibold text-[#432818]">confiança</span>.
             </p>
-            {/* Formulário */}
-            <div id="quiz-form" className="mt-8">
+            
+            {/* Formulário com design refinado */}
+            <div id="quiz-form" className="mt-10">
               <form
                 onSubmit={handleSubmit}
                 className="w-full space-y-6"
                 autoComplete="off"
               >
-                <div className="relative">
+                <div className="relative group">
                   <Input
                     id="name"
                     placeholder=" "
@@ -205,7 +218,8 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     onChange={(e) => setNome(e.target.value)}
                     className={cn(
                       'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border border-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
-                      nome ? 'shadow-lg' : ''
+                      'group-hover:border-[#B89B7A]/50',
+                      nome ? 'shadow-lg' : 'shadow-sm hover:shadow'
                     )}
                     autoFocus
                     aria-label="Seu nome"
@@ -215,12 +229,15 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     htmlFor="name"
                     className={cn(
                       "absolute left-3 transition-all duration-200 ease-in-out pointer-events-none text-[#6B7280]",
+                      "group-hover:text-[#B89B7A]",
                       nome ? "top-1.5 text-xs" : "top-1/2 -translate-y-1/2 text-base"
                     )}
                   >
                     Seu nome
                   </label>
                 </div>
+                
+                {/* Botão com design refinado */}
                 <button
                   type="submit"
                   disabled={!nome.trim()}
@@ -228,9 +245,9 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     "w-full rounded-lg py-3 text-white font-semibold transition-all duration-300 ease-in-out relative overflow-hidden group",
                     "bg-[#B89B7A] hover:bg-[#A1835D] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
                     "disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500",
-                    "text-base sm:text-lg",
+                    "text-base sm:text-lg tracking-wide",
                     "h-12 sm:h-14",
-                    "shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                    "shadow-lg hover:shadow-xl transform hover:scale-[1.01] active:scale-[0.99]"
                   )}
                   style={{
                     boxShadow: nome.trim() ? '0 8px 25px 0 rgba(184, 155, 122, 0.4)' : 'none',
@@ -247,48 +264,53 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
               </form>
             </div>
           </section>
-          {/* Rodapé com informações adicionais */}
-          <footer className="w-full px-2 mt-6 text-center mx-auto">
-            <p className="text-xs text-[#B89B7A] font-medium drop-shadow-sm">
-              © {new Date().getFullYear()} Gisele Galvão - Todos os direitos reservados
+          
+          {/* Rodapé com design refinado */}
+          <footer className="w-full px-2 mt-4 text-center mx-auto">
+            <p className="text-xs text-[#B89B7A] font-medium">
+              © {new Date().getFullYear()} Gisele Galvão — Todos os direitos reservados
             </p>
           </footer>
         </div>
       </div>
-      {/* Animações utilitárias */}
+      
+      {/* Animações utilitárias refinadas */}
       <style>{`
         @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(32px); }
+          0% { opacity: 0; transform: translateY(28px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in-up { animation: fade-in-up 0.8s cubic-bezier(.4,1.2,.4,1) both; }
+        .animate-fade-in-up { animation: fade-in-up 0.8s cubic-bezier(.3,1.1,.4,1) both; }
         
         @keyframes fade-in-delayed {
           0% { opacity: 0; transform: translateY(16px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in-delayed { animation: fade-in-delayed 1s cubic-bezier(.4,1.2,.4,1) 0.3s both; }
+        .animate-fade-in-delayed { animation: fade-in-delayed 1s cubic-bezier(.3,1.1,.4,1) 0.3s both; }
         
         @keyframes text-shimmer {
           0% { background-position: -200% center; }
           100% { background-position: 200% center; }
         }
         .animate-text-shimmer {
-          background: linear-gradient(90deg, transparent, rgba(184, 155, 122, 0.3), transparent);
+          background: linear-gradient(90deg, transparent, rgba(184, 155, 122, 0.2), transparent);
           background-size: 200% 100%;
-          animation: text-shimmer 3s ease-in-out infinite;
+          animation: text-shimmer 4s ease-in-out infinite;
         }
         
         @keyframes intro-bg {
           0% { opacity: 0; }
           100% { opacity: 1; }
         }
-        .animate-intro-bg { animation: intro-bg 1.2s cubic-bezier(.4,1.2,.4,1) both; background: radial-gradient(ellipse 80% 60% at 50% 0%, #e7dac2cc 0%, #fffaf400 100%); }
+        .animate-intro-bg { 
+          animation: intro-bg 1.2s cubic-bezier(.4,1.2,.4,1) both; 
+          background: radial-gradient(ellipse 80% 60% at 50% 0%, #e7dac2aa 0%, #fffaf400 100%); 
+        }
         
         @media (max-width: 640px) {
           button[type=submit] {
             font-size: 0.98rem !important;
-            min-height: 44px !important;
+            min-height: 46px !important;
           }
         }
       `}</style>
