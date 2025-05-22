@@ -213,11 +213,11 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 <div className="relative group">
                   <Input
                     id="name"
-                    placeholder=" "
+                    placeholder=""
                     value={nome}
                     onChange={(e) => setNome(e.target.value)}
                     className={cn(
-                      'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border border-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
+                      'w-full p-3 pt-6 pb-2 bg-[#FEFEFE]/90 rounded-lg border border-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
                       'group-hover:border-[#B89B7A]/50',
                       nome ? 'shadow-lg' : 'shadow-sm hover:shadow'
                     )}
@@ -228,9 +228,10 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   <label
                     htmlFor="name"
                     className={cn(
-                      "absolute left-3 transition-all duration-200 ease-in-out pointer-events-none text-[#6B7280]",
+                      "absolute transition-all duration-200 ease-in-out pointer-events-none text-[#6B7280]",
                       "group-hover:text-[#B89B7A]",
-                      nome ? "top-1.5 text-xs" : "top-1/2 -translate-y-1/2 text-base"
+                      // Sempre posicionar o label no topo quando o campo estiver em foco ou preenchido
+                      "left-3 top-2 text-xs"
                     )}
                   >
                     Seu nome
@@ -243,8 +244,10 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   disabled={!nome.trim()}
                   className={cn(
                     "w-full rounded-lg py-3 text-white font-semibold transition-all duration-300 ease-in-out relative overflow-hidden group",
-                    "bg-[#B89B7A] hover:bg-[#A1835D] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
-                    "disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500",
+                    // Usar as cores da identidade visual
+                    nome.trim() 
+                      ? "bg-[#B89B7A] hover:bg-[#A1835D] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]"
+                      : "bg-[#B89B7A]/40 cursor-not-allowed",
                     "text-base sm:text-lg tracking-wide",
                     "h-12 sm:h-14",
                     "shadow-lg hover:shadow-xl transform hover:scale-[1.01] active:scale-[0.99]"

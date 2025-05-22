@@ -105,53 +105,54 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         <div 
           className={cn(
             "absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-xl border border-white",
-            forStrategic 
-              ? "bg-[#B89B7A] ring-4 ring-[#B89B7A]/30 animate-strategic-pulse" 
-              : "bg-[#B89B7A]"
+            forStrategic ? "bg-[#B89B7A]" : "bg-[#B89B7A]"
           )}
           style={{ 
             zIndex: 9999,
             pointerEvents: "none",
+            ...(forStrategic && isSelected ? {
+              // Aplicar diretamente ao elemento via inline style (maior prioridade)
+              boxShadow: "0 0 0 4px rgba(184, 155, 122, 0.5), 0 0 15px rgba(184, 155, 122, 0.7)",
+              transform: "scale(1.2)",
+            } : {})
           }}
         >
-          <Check className={cn(
-            "w-3 h-3 stroke-2",
-            forStrategic && "animate-bounce-subtle"
-          )} />
+          <Check className="w-3 h-3 stroke-2" />
         </div>
       )}
 
-      {/* Overlay sutil para questões estratégicas */}
+      {/* SOLUÇÃO DEFINITIVA: Tag "Estratégico" explícita - apenas para questões estratégicas */}
       {forStrategic && (
         <div 
-          className={cn(
-            "absolute inset-0 pointer-events-none rounded-lg transition-all duration-300",
-            isSelected 
-              ? "border border-[#B89B7A] bg-[#B89B7A]/5" 
-              : "border border-dashed border-[#B89B7A]/40 hover:border-[#B89B7A]/60"
-          )}
-          style={{ zIndex: 30 }}
+          className="absolute top-2 left-2 px-2 py-1 bg-[#B89B7A] text-white text-xs font-bold rounded-md shadow-md"
+          style={{ 
+            zIndex: 100,
+            opacity: isSelected ? 1 : 0.7,
+            transform: isSelected ? "scale(1.05)" : "scale(1)"
+          }}
+        >
+          Estratégico
+        </div>
+      )}
+
+      {/* Borda pulsante para questões estratégicas selecionadas */}
+      {forStrategic && isSelected && (
+        <div 
+          className="absolute inset-0 rounded-lg pointer-events-none" 
+          style={{
+            zIndex: 40,
+            border: "2px solid #B89B7A",
+            animation: "border-pulse 2s infinite ease-in-out",
+            backgroundColor: "rgba(184, 155, 122, 0.08)"
+          }}
         />
       )}
 
-      {/* Definições CSS simplificadas para as animações */}
-      <style jsx global>{`
-        @keyframes strategic-pulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(184, 155, 122, 0.6); }
-          50% { box-shadow: 0 0 0 8px rgba(184, 155, 122, 0); }
-        }
-        
-        .animate-strategic-pulse {
-          animation: strategic-pulse 2s infinite ease-out;
-        }
-        
-        @keyframes bounce-subtle {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.2); }
-        }
-        
-        .animate-bounce-subtle {
-          animation: bounce-subtle 2s infinite ease-in-out;
+      {/* Estilos simplificados inline com !important para garantir aplicação */}
+      <style jsx>{`
+        @keyframes border-pulse {
+          0%, 100% { border-color: rgba(184, 155, 122, 0.3); }
+          50% { border-color: rgba(184, 155, 122, 0.9); }
         }
       `}</style>
       
