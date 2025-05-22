@@ -63,7 +63,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
-              "w-full object-cover rounded-t-lg",
+              "w-full object-contain rounded-t-lg", // Alterado de object-cover para object-contain
               isSelected && "opacity-95"
             )}
             style={{ height: '180px' }}
