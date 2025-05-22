@@ -232,16 +232,12 @@ const PricingSection: React.FC<PricingSectionProps> = ({
             transition={{ duration: 0.5, delay: 1.3 }}
             whileHover={{ scale: 1.02 }}
           >
-            <Button 
-              className="w-full text-white py-6 rounded-md text-base transition-all duration-300 shadow-lg"
+            <Button
+              className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 px-8 rounded-md text-lg leading-none md:leading-normal transition-colors duration-300 shadow-lg"
               onClick={handlePurchase}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
               disabled={isLoading}
-              style={{
-                background: "linear-gradient(to right, #B89B7A, #aa6b5d)",
-                boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)"
-              }}
             >
               <AnimatePresence mode="wait">
                 {isLoading ? (
