@@ -22,8 +22,18 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
   isDisabled = false,
   forStrategic = false // NOVO
 }) => {
+  // DEBUG: Log detalhado para todas as opções
+  console.log(`[QuizOption] Question ${questionId}, Option ${option.id}:`, {
+    isSelected,
+    forStrategic,
+    type,
+    hasImage: !!option.imageUrl,
+    optionText: option.text
+  });
+
   const handleClick = () => {
     if (!isDisabled) {
+      console.log(`[QuizOption] Clicking option ${option.id} in question ${questionId}`);
       onSelect(option.id);
     }
   };
@@ -79,8 +89,11 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             </span>
           </div>
           {isSelected && (
-            <div className="absolute top-[2px] right-[2px] w-3.5 h-3.5 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-60"> {/* Posicionado na extremidade e menor */}
-              <Check className="w-2 h-2" /> {/* Ícone Check menor */}
+            <div className={cn(
+              "absolute top-[2px] right-[2px] w-3.5 h-3.5 rounded-full flex items-center justify-center text-white shadow-sm z-60",
+              forStrategic ? "bg-[#FFD700] animate-enhanced-pulse" : "bg-[#B89B7A]"
+            )}>
+              <Check className="w-2 h-2" />
             </div>
           )}
         </div>
@@ -94,8 +107,11 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             {option.text}
           </span>
           {isSelected && (
-            <div className="absolute top-[2px] right-[2px] w-3.5 h-3.5 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-60"> {/* Posicionado na extremidade e menor */}
-              <Check className="w-2 h-2" /> {/* Ícone Check menor */}
+            <div className={cn(
+              "absolute top-[2px] right-[2px] w-3.5 h-3.5 rounded-full flex items-center justify-center text-white shadow-sm z-60",
+              forStrategic ? "bg-[#FFD700] animate-enhanced-pulse" : "bg-[#B89B7A]"
+            )}>
+              <Check className="w-2 h-2" />
             </div>
           )}
         </div>
