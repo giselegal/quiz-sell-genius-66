@@ -1,7 +1,7 @@
 /**
  * Inicializa o Pixel do Facebook
  */
-import { getPixelId, getCurrentFunnelConfig, getFacebookToken, getCtaUrl, getUtmCampaign, trackFunnelEvent } from '@/services/pixelManager';
+import { getPixelId, getCurrentFunnelConfig, getFacebookToken, getCtaUrl, getUtmCampaign, trackFunnelEvent, getCurrentFunnel } from '@/services/pixelManager';
 
 export const initFacebookPixel = () => {
   if (typeof window === 'undefined') return;
@@ -34,6 +34,13 @@ export const initFacebookPixel = () => {
     // Registra adicionalmente o funil atual para análises
     const funnelConfig = getCurrentFunnelConfig();
     console.log('Funil atual:', funnelConfig.funnelName, '(', funnelConfig.utmCampaign, ')');
+
+    // Registra evento de inicialização para análise
+    logAnalyticsEvent('pixel_initialized', {
+      pixel_id: pixelId,
+      funnel: funnelConfig.funnelName,
+      path: window.location.pathname
+    });
 
   } catch (error) {
     console.error('Erro ao inicializar o Facebook Pixel:', error);
@@ -145,11 +152,15 @@ export const addUtmParamsToEvent = (eventData: Record<string, any> = {}): Record
  */
 export const trackQuizStart = (userName?: string, userEmail?: string) => {
   if (window.fbq) {
+    const funnelConfig = getCurrentFunnelConfig();
     const eventData = addUtmParamsToEvent({
       username: userName || 'Anônimo',
       user_email: userEmail || '',
-      funnel: getCurrentFunnelConfig().funnelName
+      funnel: funnelConfig.funnelName,
+      funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
+      utm_campaign: funnelConfig.utmCampaign
     });
+    
     window.fbq('trackCustom', 'QuizStart', eventData);
     
     // Adicionar tracking específico para análises de funil
@@ -159,6 +170,15 @@ export const trackQuizStart = (userName?: string, userEmail?: string) => {
     });
     
     console.log('QuizStart tracked with UTM data');
+    
+    // Log para análise interna
+    logAnalyticsEvent('quiz_start', {
+      username: userName,
+      has_email: !!userEmail,
+      funnel: funnelConfig.funnelName,
+      funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
+      utm_campaign: funnelConfig.utmCampaign
+    });
   }
   
   // Track in Google Analytics, if available
@@ -212,11 +232,24 @@ export const trackQuizComplete = () => {
   const duration = startTime ? (endTime - parseInt(startTime, 10)) / 1000 : 0; // em segundos
   
   if (window.fbq) {
+    const funnelConfig = getCurrentFunnelConfig();
     const eventData = addUtmParamsToEvent({
-      quiz_duration: duration
+      quiz_duration: duration,
+      funnel: funnelConfig.funnelName,
+      funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
+      utm_campaign: funnelConfig.utmCampaign
     });
+    
     window.fbq('trackCustom', 'QuizComplete', eventData);
     console.log('QuizComplete tracked');
+    
+    // Log para análise interna
+    logAnalyticsEvent('quiz_complete', {
+      quiz_duration: duration,
+      funnel: funnelConfig.funnelName,
+      funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
+      utm_campaign: funnelConfig.utmCampaign
+    });
   }
   
   // Track in Google Analytics, if available
@@ -234,11 +267,24 @@ export const trackQuizComplete = () => {
  */
 export const trackResultView = (styleCategory: string) => {
   if (window.fbq) {
+    const funnelConfig = getCurrentFunnelConfig();
     const eventData = addUtmParamsToEvent({
-      style_category: styleCategory
+      style_category: styleCategory,
+      funnel: funnelConfig.funnelName,
+      funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
+      utm_campaign: funnelConfig.utmCampaign
     });
+    
     window.fbq('trackCustom', 'ResultView', eventData);
     console.log('ResultView tracked with UTM data for style:', styleCategory);
+    
+    // Log para análise interna
+    logAnalyticsEvent('result_view', {
+      style_category: styleCategory,
+      funnel: funnelConfig.funnelName,
+      funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
+      utm_campaign: funnelConfig.utmCampaign
+    });
   }
   
   // Track in Google Analytics, if available
@@ -294,12 +340,15 @@ export const trackButtonClick = (
  */
 export const trackSaleConversion = (value: number, productName?: string) => {
   if (window.fbq) {
+    const funnelConfig = getCurrentFunnelConfig();
     const eventData = addUtmParamsToEvent({
       value: value,
       currency: 'BRL',
       content_name: productName || 'Guia de Estilo',
       content_type: 'product',
-      funnel: getCurrentFunnelConfig().funnelName
+      funnel: funnelConfig.funnelName,
+      funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
+      utm_campaign: funnelConfig.utmCampaign
     });
     
     // Standard Purchase event
@@ -312,10 +361,20 @@ export const trackSaleConversion = (value: number, productName?: string) => {
     });
     
     console.log(`Sale conversion tracked: ${value} BRL for ${productName || 'Guia de Estilo'}`);
+    
+    // Log para análise interna
+    logAnalyticsEvent('sale', {
+      value: value,
+      product_name: productName || 'Guia de Estilo',
+      funnel: funnelConfig.funnelName,
+      funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
+      utm_campaign: funnelConfig.utmCampaign
+    });
   }
   
   // Track in Google Analytics, if available
   if (window.gtag) {
+    const funnelConfig = getCurrentFunnelConfig();
     window.gtag('event', 'purchase', {
       transaction_id: 'T_' + Date.now(),
       value: value,
@@ -323,7 +382,7 @@ export const trackSaleConversion = (value: number, productName?: string) => {
       items: [{
         name: productName || 'Guia de Estilo',
         price: value,
-        funnel: getCurrentFunnelConfig().funnelName
+        funnel: funnelConfig.funnelName
       }]
     });
   }
@@ -368,6 +427,43 @@ export const testFacebookPixel = () => {
     return true;
   } else {
     console.error('Facebook Pixel not initialized');
+    return false;
+  }
+};
+
+/**
+ * Registra evento no sistema de analytics interno
+ * @param type Tipo do evento
+ * @param data Dados adicionais do evento
+ */
+export const logAnalyticsEvent = (type: string, data: Record<string, any> = {}) => {
+  try {
+    // Buscar eventos existentes
+    const eventsJson = localStorage.getItem('analytics_events');
+    const events = eventsJson ? JSON.parse(eventsJson) : [];
+    
+    // Adicionar novo evento com timestamp
+    events.push({
+      type,
+      timestamp: new Date().toISOString(),
+      ...data,
+      url: window.location.href,
+      path: window.location.pathname,
+      funnel: getCurrentFunnel(),
+      utm_source: localStorage.getItem('utm_source') || undefined,
+      utm_medium: localStorage.getItem('utm_medium') || undefined,
+      utm_campaign: localStorage.getItem('utm_campaign') || undefined
+    });
+    
+    // Limitar o número de eventos armazenados (máximo 10000)
+    const trimmedEvents = events.slice(-10000);
+    
+    // Salvar eventos no localStorage
+    localStorage.setItem('analytics_events', JSON.stringify(trimmedEvents));
+    
+    return true;
+  } catch (error) {
+    console.error('Error logging analytics event:', error);
     return false;
   }
 };
