@@ -15,6 +15,7 @@ import { preloadImages } from '@/utils/imageManager';
 import LoadingManager from './quiz/LoadingManager';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { MainTransition } from './quiz/MainTransition'; // Importar MainTransition
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
@@ -294,6 +295,11 @@ const QuizPage: React.FC = () => {
     strategicQuestions.length
   ]);
 
+  const handleProceedToStrategic = () => {
+    setShowingTransition(false);
+    setShowingStrategicQuestions(true);
+  };
+
   const currentQuestionTypeForNav = showingStrategicQuestions ? 'strategic' : 'normal';
   
   let finalSelectedCountForNav: number;
@@ -399,9 +405,22 @@ const QuizPage: React.FC = () => {
             </div>
             <QuizContainer>
               <AnimatePresence mode="wait">
-                {showingTransition || showingFinalTransition ? (
+                {showingTransition ? (
                   <motion.div
-                    key="transition"
+                    key="main-transition" // Chave única para MainTransition
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ 
+                      duration: 0.6,
+                      ease: "easeInOut" 
+                    }}
+                  >
+                    <MainTransition onProceedToStrategicQuestions={handleProceedToStrategic} />
+                  </motion.div>
+                ) : showingFinalTransition ? (
+                  <motion.div
+                    key="final-transition" // Chave para a transição final
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
@@ -411,10 +430,10 @@ const QuizPage: React.FC = () => {
                     }}
                   >
                     <QuizTransitionManager
-                      showingTransition={showingTransition}
+                      showingTransition={false} // Não é mais a transição principal
                       showingFinalTransition={showingFinalTransition}
-                      handleStrategicAnswer={handleStrategicAnswerInternal} 
-                      strategicAnswers={strategicAnswers}
+                      // handleStrategicAnswer={handleStrategicAnswerInternal} // Removido, pois QuizPage lida com isso
+                      // strategicAnswers={strategicAnswers} // Removido
                       handleShowResult={handleShowResult}
                       hideCounter={true}
                     />

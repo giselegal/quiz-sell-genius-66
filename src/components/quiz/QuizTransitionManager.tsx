@@ -1,52 +1,49 @@
 import React from 'react';
-import { MainTransition } from './MainTransition';
+// import { MainTransition } from './MainTransition'; // Removido, não é mais usado aqui
 import QuizFinalTransition from '../QuizFinalTransition';
-import { UserResponse } from '@/types/quiz';
-import { Spinner } from '@/components/ui/spinner'; // Importing the Spinner component
+// import { UserResponse } from '@/types/quiz'; // Removido
+// import { Spinner } from '@/components/ui/spinner'; // Removido se não for usado em QuizFinalTransition
 
 interface QuizTransitionManagerProps {
-  showingTransition: boolean;
+  // showingTransition: boolean; // Removido
   showingFinalTransition: boolean;
-  handleStrategicAnswer: (response: UserResponse) => void;
-  strategicAnswers: Record<string, string[]>;
+  // handleStrategicAnswer: (response: UserResponse) => void; // Removido
+  // strategicAnswers: Record<string, string[]>; // Removido
   handleShowResult: () => void;
-  hideCounter?: boolean;           // <-- nova prop
+  // hideCounter?: boolean; // Removido, pois MainTransition não está mais aqui
 }
 
 const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
-  showingTransition,
+  // showingTransition, // Removido
   showingFinalTransition,
-  handleStrategicAnswer,
-  strategicAnswers,
+  // handleStrategicAnswer, // Removido
+  // strategicAnswers, // Removido
   handleShowResult,
-  hideCounter = false,            // <-- valor default
+  // hideCounter = false, // Removido
 }) => {
   if (showingFinalTransition) {
     return <QuizFinalTransition onShowResult={handleShowResult} />;
   }
 
-  if (showingTransition) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <MainTransition
-          onAnswer={handleStrategicAnswer}
-          strategicAnswers={strategicAnswers}
-        />
+  // if (showingTransition) { // Lógica removida, MainTransition é renderizada diretamente em QuizPage
+  //   return (
+  //     <div className="flex flex-col items-center justify-center h-full">
+  //       <MainTransition
+  //         onAnswer={handleStrategicAnswer} // Isso estava incorreto, MainTransition não deveria ter onAnswer
+  //         strategicAnswers={strategicAnswers}
+  //       />
+  //       {!hideCounter && (
+  //         <div>
+  //           {/* ...existing counter logic / JSX... */}
+  //         </div>
+  //       )}
+  //       <Spinner /> 
+  //       <Spinner /> 
+  //     </div>
+  //   );
+  // }
 
-        {/* Remover/ocultar contador numérico */}
-        {!hideCounter && (
-          <div /* id="transition-counter" ou classe que existia */>
-            {/* ...existing counter logic / JSX... */}
-          </div>
-        )}
-        {/* Spinner ou mensagem continuam aparecendo normalmente */}
-        <Spinner /> {/* Componente de spinner para indicar carregamento */}
-        <Spinner /> {/* ou componente existente */}
-      </div>
-    );
-  }
-
-  return null;
+  return null; // Se não for a transição final, não renderiza nada daqui
 };
 
 export { QuizTransitionManager };
