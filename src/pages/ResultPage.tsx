@@ -137,7 +137,10 @@ const ResultPage: React.FC<ResultPageProps> = () => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl w-full mt-8"
       >
-        <Button className="w-full" onClick={handleRestartQuiz}>
+        <Button 
+          className="w-full bg-[#B89B7A] hover:bg-[#a0845c] text-white" 
+          onClick={handleRestartQuiz}
+        >
           Fazer o Quiz Novamente
         </Button>
       </motion.div>
