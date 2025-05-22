@@ -291,16 +291,12 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                   </p>
                 </div>
               </div>
+              <div className="text-center md:text-right mb-4">
+                <p className="text-sm text-[#432818]">Parcelamento: 5x de R$ 8,83*</p>
+                <p className="text-sm text-[#432818]">ou R$ 39,90 à vista</p>
+              </div>
             </div>
           </div>
-
-          <Button 
-            onClick={handleBuyNow}
-            className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
-          >
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            Quero meu Guia + Bônus por R$39,00
-          </Button>
         </Card>
 
         {/* Bonus Carousel */}
