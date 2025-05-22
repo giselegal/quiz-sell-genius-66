@@ -10,7 +10,7 @@ interface QuizOptionProps {
   type: string;
   questionId: string;
   isDisabled?: boolean;
-  forStrategic?: boolean; // NOVO: indica se é questão estratégica
+  forStrategic?: boolean;
 }
 
 export const QuizOption: React.FC<QuizOptionProps> = ({
@@ -20,26 +20,15 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
   type,
   questionId,
   isDisabled = false,
-  forStrategic = false // NOVO
+  forStrategic = false
 }) => {
-  // DEBUG: Log detalhado para todas as opções
-  console.log(`[QuizOption] Question ${questionId}, Option ${option.id}:`, {
-    isSelected,
-    forStrategic,
-    type,
-    hasImage: !!option.imageUrl,
-    optionText: option.text
-  });
-
   const handleClick = () => {
     if (!isDisabled) {
-      console.log(`[QuizOption] Clicking option ${option.id} in question ${questionId}`);
       onSelect(option.id);
     }
   };
 
   const isImageOption = type !== 'text' && option.imageUrl;
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 640;
 
   return (
     <div
@@ -47,31 +36,41 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       className={cn(
         "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer bg-white",
         // Efeitos para opções com imagem
-        isImageOption && isSelected && !forStrategic && "shadow-2xl", // Sombra no container para pop-out
-        isImageOption && isSelected && forStrategic && "shadow-2xl animate-enhanced-pulse", // Sombra e pulso no container para estratégico
+        isImageOption && isSelected && !forStrategic && "shadow-2xl",
+        isImageOption && isSelected && forStrategic && "shadow-2xl animate-enhanced-pulse",
         isImageOption && !isSelected && !isDisabled && "hover:shadow-lg",
 
         // Efeitos para opções apenas de texto
-        !isImageOption && isSelected && !forStrategic && "shadow-xl transform scale-[1.01] border border-[#B89B7A]/40", // Mantém borda original, adiciona sombra e escala
-        !isImageOption && isSelected && forStrategic && "shadow-2xl shadow-[#FFD700]/30 animate-enhanced-pulse transform scale-[1.01] border border-[#B89B7A]/40", // Mantém borda original, adiciona sombra estratégica, pulso e escala
-        !isImageOption && !isSelected && !isDisabled && "border border-[#B89B7A]/40 hover:shadow-md", // Borda original e sombra no hover
+        !isImageOption && isSelected && !forStrategic && "shadow-xl transform scale-[1.01] border border-[#B89B7A]/40",
+        !isImageOption && isSelected && forStrategic && "shadow-2xl shadow-[#FFD700]/30 animate-enhanced-pulse transform scale-[1.01] border border-[#B89B7A]/40",
+        !isImageOption && !isSelected && !isDisabled && "border border-[#B89B7A]/40 hover:shadow-md",
 
         isDisabled && "border border-gray-200 opacity-75 cursor-not-allowed",
         type === 'text' ? "p-4" : "flex flex-col"
       )}
     >
+      {/* Check único DEVE vir PRIMEIRO - posicionado sobre tudo */}
+      {isSelected && (
+        <div 
+          className={cn(
+            "absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-xl border-2 border-white",
+            forStrategic ? "bg-[#FFD700] animate-enhanced-pulse" : "bg-[#B89B7A]"
+          )}
+          style={{ zIndex: 9999 }}
+        >
+          <Check className="w-3 h-3 stroke-2" />
+        </div>
+      )}
+
       {type !== 'text' && option.imageUrl && (
-        <div className={cn(
-          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2" // Removido z-10 daqui
-          // Classes de container para imagem estratégica movidas para o div principal
-        )}>
+        <div className="w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2">
           <img
             src={option.imageUrl}
             alt={option.text}
             className={cn(
               "w-full h-[260px] object-cover rounded-t-lg transition-all duration-200",
-              isSelected && "scale-[1.04] shadow-2xl z-50", // Efeito pop-out com z-index aumentado para 50
-              !isSelected && "hover:scale-[1.02] hover:shadow-lg z-10" // z-index normal
+              isSelected && "scale-[1.04] shadow-2xl",
+              !isSelected && "hover:scale-[1.02] hover:shadow-lg"
             )}
             style={{ maxHeight: '260px', minHeight: '180px' }}
             onError={(e) => {
@@ -79,41 +78,19 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
               target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
             }}
           />
-          {/* Texto sobreposto na base da imagem, com fundo translúcido e z-40 para garantir visibilidade */}
-          <div className={cn(
-            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-40"
-            // Removido: isSelected && "opacity-70" para manter visibilidade do texto
-          )}>
+          <div className="absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200">
             <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">
               {option.text}
             </span>
           </div>
-          {isSelected && (
-            <div className={cn(
-              "absolute top-[2px] right-[2px] w-3.5 h-3.5 rounded-full flex items-center justify-center text-white shadow-sm z-60",
-              forStrategic ? "bg-[#FFD700] animate-enhanced-pulse" : "bg-[#B89B7A]"
-            )}>
-              <Check className="w-2 h-2" />
-            </div>
-          )}
         </div>
       )}
-      {/* Para opções de texto puro, mantém layout anterior mas ativa só sombra na seleção */}
+
       {(!option.imageUrl || type === 'text') && (
-        <div className={cn(
-          "flex-1 p-3 text-[#432818] relative bg-white transition-shadow duration-200 z-10" // Adicionado z-10
-        )}>
-          <span className="block w-full text-base sm:text-lg font-semibold text-[#432818] text-center break-words leading-tight z-30 relative">
+        <div className="flex-1 p-3 text-[#432818] relative bg-white transition-shadow duration-200">
+          <span className="block w-full text-base sm:text-lg font-semibold text-[#432818] text-center break-words leading-tight">
             {option.text}
           </span>
-          {isSelected && (
-            <div className={cn(
-              "absolute top-[2px] right-[2px] w-3.5 h-3.5 rounded-full flex items-center justify-center text-white shadow-sm z-60",
-              forStrategic ? "bg-[#FFD700] animate-enhanced-pulse" : "bg-[#B89B7A]"
-            )}>
-              <Check className="w-2 h-2" />
-            </div>
-          )}
         </div>
       )}
     </div>
