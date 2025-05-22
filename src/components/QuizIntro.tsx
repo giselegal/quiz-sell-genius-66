@@ -198,7 +198,6 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                       'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
                       nome ? 'shadow-lg' : ''
                     )}
-                    style={{ borderColor: '#B89B7A', boxShadow: 'none' }}
                     autoFocus
                     aria-required="true"
                     autoComplete="off"
@@ -219,16 +218,13 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 <button
                   type="submit"
                   className={cn(
-                    'w-full py-3 px-4 text-base sm:text-lg font-bold rounded-lg shadow-md transition-all flex items-center justify-center',
-                    'bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#A1835D] text-white',
-                    'hover:from-[#A1835D] hover:to-[#B89B7A] active:from-[#947645] active:to-[#B89B7A]',
+                    'w-full py-3 px-4 text-lg font-extrabold rounded-xl shadow-xl transition-all flex items-center justify-center gap-2',
+                    'bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#A1835D] text-white hover:from-[#A1835D] hover:to-[#B89B7A] active:from-[#947645] active:to-[#B89B7A] hover:scale-[1.04] animate-enhanced-pulse',
                     'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
-                    'duration-200',
-                    nome.trim() === '' && 'opacity-50 cursor-not-allowed',
-                    'sm:py-3.5 sm:text-lg md:py-4 md:text-xl'
+                    nome.trim() === '' && 'opacity-50 cursor-not-allowed'
                   )}
                   disabled={nome.trim() === ''}
-                  style={{ letterSpacing: '0.01em', minHeight: 48 }}
+                  style={{ letterSpacing: '0.02em', minHeight: 56 }}
                 >
                   Quero Descobrir meu Estilo Agora!
                 </button>
