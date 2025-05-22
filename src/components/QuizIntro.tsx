@@ -236,9 +236,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                     boxShadow: nome.trim() ? '0 8px 25px 0 rgba(184, 155, 122, 0.4)' : 'none',
                   }}
                 >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    ✨ Descobrir meu Estilo
-                  </span>
+                  <span className="relative z-10">Descobrir meu Estilo</span>
                   <span
                     className={cn(
                       "absolute top-0 right-0 h-full w-0 bg-white/20 transform -skew-x-12 transition-all duration-500 ease-in-out",
