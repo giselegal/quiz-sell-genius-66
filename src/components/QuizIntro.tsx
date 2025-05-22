@@ -85,9 +85,11 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
   // Renderizar diretamente o conteúdo principal sem estados de carregamento
   return (
     <main
-      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-white to-gray-50 py-8"
+      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-[#fffaf4] to-[#f8f5f0] py-8 relative overflow-x-hidden"
       data-section="intro"
     >
+      {/* Animação de entrada para o card principal */}
+      <div className="absolute inset-0 pointer-events-none select-none animate-intro-bg z-0" />
       {/* Skip link para acessibilidade */}
       <a 
         href="#quiz-form" 
@@ -95,167 +97,175 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
       >
         Pular para o formulário
       </a>
-      
-      <header className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-8 mx-auto">
-        {/* Logo centralizado - renderização imediata */}
-        <div className="flex flex-col items-center space-y-2">
-          <div className="relative">
-            <picture>
-              <source srcSet={STATIC_LOGO_IMAGE_URLS.webp} type="image/webp" />
-              <img
-                src={STATIC_LOGO_IMAGE_URLS.png}
-                alt="Logo Gisele Galvão"
-                className="h-auto mx-auto"
-                width={120}
-                height={50}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                style={{
-                  objectFit: 'contain',
-                  maxWidth: '100%',
-                  aspectRatio: '120 / 50',
-                }}
-              />
-            </picture>
-            {/* Barra dourada */}
-            <div
-              className="h-[3px] bg-[#B89B7A] rounded-full mt-1.5"
+      {/* Card glassmorphism central */}
+      <div className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 mx-auto relative z-10 animate-fade-in-up">
+        <div className="backdrop-blur-xl bg-white/70 border border-[#e7dac2] rounded-2xl shadow-2xl p-6 md:p-10 flex flex-col gap-8">
+          <header className="w-full space-y-8">
+            {/* Logo centralizado */}
+            <div className="flex flex-col items-center space-y-2">
+              <div className="relative">
+                <picture>
+                  <source srcSet={STATIC_LOGO_IMAGE_URLS.webp} type="image/webp" />
+                  <img
+                    src={STATIC_LOGO_IMAGE_URLS.png}
+                    alt="Logo Gisele Galvão"
+                    className="h-auto mx-auto drop-shadow-lg"
+                    width={120}
+                    height={50}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    style={{
+                      objectFit: 'contain',
+                      maxWidth: '100%',
+                      aspectRatio: '120 / 50',
+                    }}
+                  />
+                </picture>
+                {/* Barra dourada */}
+                <div
+                  className="h-[3px] bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#B89B7A] rounded-full mt-1.5 shadow"
+                  style={{
+                    width: '300px',
+                    maxWidth: '90%',
+                    margin: '0 auto',
+                  }}
+                />
+              </div>
+            </div>
+            {/* Título principal */}
+            <h1
+              className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818] drop-shadow-md"
               style={{
-                width: '300px',
-                maxWidth: '90%',
-                margin: '0 auto',
+                fontFamily: 'Playfair Display, serif',
+                fontWeight: 400,
               }}
-            />
-          </div>
-        </div>
-
-        {/* Título principal com a fonte Playfair Display */}
-        <h1
-          className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818]"
-          style={{
-            fontFamily: '"Playfair Display", serif',
-            fontWeight: 400,
-          }}
-        >
-          <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com{' '}
-          <span className="text-[#B89B7A]">Você</span>.
-        </h1>
-      </header>
-
-      <section className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 md:space-y-8 mx-auto">
-        {/* Imagem principal - renderização imediata e LCP */}
-        <div className="mt-2 w-full max-w-xs sm:max-w-md md:max-w-lg mx-auto">
-          <div
-            className="w-full overflow-hidden rounded-lg shadow-sm"
-            style={{ aspectRatio: '1.47', maxHeight: '204px' }}
-          >
-            <div className="relative w-full h-full bg-[#F8F5F0]">
-              <picture>
-                <source
-                  srcSet={STATIC_INTRO_IMAGE_URLS.avif}
-                  type="image/avif"
-                />
-                <source
-                  srcSet={STATIC_INTRO_IMAGE_URLS.webp}
-                  type="image/webp"
-                />
-                <img
-                  src={STATIC_INTRO_IMAGE_URLS.png}
-                  alt="Descubra seu estilo predominante e transforme seu guarda-roupa"
-                  className="w-full h-full object-contain"
-                  width={300}
-                  height={204}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                  id="lcp-image"
-                />
-              </picture>
-            </div>
-          </div>
-        </div>
-
-        {/* Texto descritivo */}
-        <p className="text-sm text-center leading-relaxed px-2 sm:text-base text-gray-600">
-          Em poucos minutos, descubra seu{' '}
-          <span className="font-semibold text-[#B89B7A]">
-            Estilo Predominante
-          </span>{' '}
-          — e aprenda a montar looks que realmente refletem sua{' '}
-          <span className="font-semibold text-[#432818]">
-            essência
-          </span>, com
-          praticidade e{' '}
-          <span className="font-semibold text-[#432818]">
-            confiança
-          </span>.
-        </p>
-
-        {/* Formulário - renderização imediata */}
-        <div id="quiz-form" className="mt-8">
-          <form
-            onSubmit={handleSubmit}
-            className="w-full space-y-6"
-            autoComplete="off"
-          >
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-xs font-semibold text-[#432818] mb-1.5"
-              >
-                NOME
-              </label>
-              <Input
-                id="name"
-                placeholder="Digite seu nome"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                className="w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 border-[#B89B7A] focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-[#A1835D] focus-visible:ring-2 focus-visible:ring-[#A1835D] focus:ring-offset-2 focus-visible:ring-offset-2 focus:ring-offset-[#FEFEFE] focus-visible:ring-offset-[#FEFEFE]"
-                autoFocus
-                aria-required="true"
-                autoComplete="off"
-                inputMode="text"
-                maxLength={32}
-              />
-            </div>
-            
-            <button
-              type="submit"
-              className={cn(
-                'w-full py-2 px-3 text-sm font-semibold rounded-md shadow-md transition-colors',
-                'bg-[#B89B7A] text-white hover:bg-[#A1835D] active:bg-[#947645] hover:shadow-lg',
-                'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
-                'sm:py-3 sm:px-4 sm:text-base',
-                'md:py-3.5 md:text-lg',
-                nome.trim() === '' && 'opacity-50 cursor-not-allowed'
-              )}
-              disabled={nome.trim() === ''}
             >
-              <span className="flex items-center justify-center gap-2">
-                Quero Descobrir meu Estilo Agora!
-              </span>
-            </button>
-
-            <p className="text-xs text-center text-gray-500 pt-1">
-              Ao clicar, você concorda com nossa{' '}
-              <a 
-                href="#" 
-                className="text-[#B89B7A] hover:text-[#A1835D] underline focus:outline-none focus:ring-1 focus:ring-[#B89B7A] rounded"
+              <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com{' '}
+              <span className="text-[#B89B7A]">Você</span>.
+            </h1>
+          </header>
+          <section className="w-full space-y-6 md:space-y-8">
+            {/* Imagem principal */}
+            <div className="mt-2 w-full mx-auto">
+              <div
+                className="w-full overflow-hidden rounded-xl shadow-lg border border-[#e7dac2] bg-[#f8f5f0]/80"
+                style={{ aspectRatio: '1.47', maxHeight: '204px' }}
               >
-                política de privacidade
-              </a>
+                <div className="relative w-full h-full">
+                  <picture>
+                    <source srcSet={STATIC_INTRO_IMAGE_URLS.avif} type="image/avif" />
+                    <source srcSet={STATIC_INTRO_IMAGE_URLS.webp} type="image/webp" />
+                    <img
+                      src={STATIC_INTRO_IMAGE_URLS.png}
+                      alt="Descubra seu estilo predominante e transforme seu guarda-roupa"
+                      className="w-full h-full object-contain"
+                      width={300}
+                      height={204}
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
+                      id="lcp-image"
+                    />
+                  </picture>
+                  {/* Overlay dourado sutil */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#b89b7a22] to-transparent pointer-events-none" />
+                </div>
+              </div>
+            </div>
+            {/* Texto descritivo */}
+            <p className="text-base text-center leading-relaxed px-2 sm:text-lg text-[#6B5C4B] font-medium">
+              Em poucos minutos, descubra seu{' '}
+              <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span>{' '}
+              — e aprenda a montar looks que realmente refletem sua{' '}
+              <span className="font-semibold text-[#432818]">essência</span>, com praticidade e{' '}
+              <span className="font-semibold text-[#432818]">confiança</span>.
             </p>
-          </form>
+            {/* Formulário */}
+            <div id="quiz-form" className="mt-8">
+              <form
+                onSubmit={handleSubmit}
+                className="w-full space-y-6"
+                autoComplete="off"
+              >
+                <div className="relative">
+                  <Input
+                    id="name"
+                    placeholder=" "
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    className={cn(
+                      'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#A1835D] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
+                      nome ? 'ring-2 ring-[#B89B7A] shadow-lg' : ''
+                    )}
+                    autoFocus
+                    aria-required="true"
+                    autoComplete="off"
+                    inputMode="text"
+                    maxLength={32}
+                  />
+                  {/* Label flutuante */}
+                  <label
+                    htmlFor="name"
+                    className={cn(
+                      'absolute left-3 top-2.5 text-[#B89B7A] text-base font-semibold pointer-events-none transition-all duration-200',
+                      nome ? 'text-xs -top-3 left-2 bg-white/80 px-1 rounded shadow-sm' : 'text-base top-3'
+                    )}
+                  >
+                    <span className="inline-flex items-center gap-1">
+                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" className="inline-block text-[#B89B7A]"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5Z" fill="currentColor"/></svg>
+                      Nome
+                    </span>
+                  </label>
+                </div>
+                <button
+                  type="submit"
+                  className={cn(
+                    'w-full py-3 px-4 text-base font-bold rounded-lg shadow-lg transition-all flex items-center justify-center gap-2',
+                    'bg-gradient-to-r from-[#B89B7A] via-[#e7dac2] to-[#A1835D] text-white hover:from-[#A1835D] hover:to-[#B89B7A] active:from-[#947645] active:to-[#B89B7A] hover:scale-[1.03]',
+                    'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
+                    nome.trim() === '' && 'opacity-50 cursor-not-allowed'
+                  )}
+                  disabled={nome.trim() === ''}
+                >
+                  <span className="flex items-center gap-2">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" className="inline-block"><path d="M12 4v16m8-8H4" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    Quero Descobrir meu Estilo Agora!
+                  </span>
+                </button>
+                <p className="text-xs text-center text-[#B89B7A] pt-1">
+                  Ao clicar, você concorda com nossa{' '}
+                  <a 
+                    href="#" 
+                    className="underline hover:text-[#A1835D] focus:outline-none focus:ring-1 focus:ring-[#B89B7A] rounded transition-colors"
+                  >
+                    política de privacidade
+                  </a>
+                </p>
+              </form>
+            </div>
+          </section>
         </div>
-      </section>
-      
-      {/* Rodapé */}
-      <footer className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 mt-auto pt-6 text-center mx-auto">
-        <p className="text-xs text-gray-500">
-          © {new Date().getFullYear()} Gisele Galvão - Todos os direitos reservados
-        </p>
-      </footer>
+        {/* Rodapé */}
+        <footer className="w-full px-2 mt-6 text-center mx-auto">
+          <p className="text-xs text-[#B89B7A] font-medium drop-shadow-sm">
+            © {new Date().getFullYear()} Gisele Galvão - Todos os direitos reservados
+          </p>
+        </footer>
+      </div>
+      {/* Animações utilitárias */}
+      <style>{`
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(32px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fade-in-up 0.8s cubic-bezier(.4,1.2,.4,1) both; }
+        @keyframes intro-bg {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        .animate-intro-bg { animation: intro-bg 1.2s cubic-bezier(.4,1.2,.4,1) both; background: radial-gradient(ellipse 80% 60% at 50% 0%, #e7dac2cc 0%, #fffaf400 100%); }
+      `}</style>
     </main>
   );
 };
