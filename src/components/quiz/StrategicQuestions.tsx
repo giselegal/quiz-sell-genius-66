@@ -4,6 +4,8 @@ import { UserResponse } from '@/types/quiz';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { preloadCriticalImages, preloadImagesByUrls } from '@/utils/imageManager';
+import OptimizedImage from '../ui/OptimizedImage';
+import { getAllImages } from '@/data/imageBank'; // Importar para acessar o banco de imagens
 
 // Imagens críticas da página de resultados a serem pré-carregadas
 const RESULT_CRITICAL_IMAGES = [
@@ -17,13 +19,12 @@ interface StrategicQuestionsProps {
   currentQuestionIndex: number;
   answers: Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
-  onNextClick?: () => void;
 }
 
 export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   currentQuestionIndex,
   answers,
-  onAnswer,
+  onAnswer
 }) => {
   const [mountKey, setMountKey] = useState(Date.now());
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
@@ -90,45 +91,19 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   }, [currentQuestionIndex]);
 
   if (currentQuestionIndex >= strategicQuestions.length) return null;
-  
-  const currentQuestion = strategicQuestions[currentQuestionIndex];
-  const currentAnswers = answers[currentQuestion?.id] || [];
-  const canProceed = currentAnswers.length > 0;
 
   return (
     <AnimatedWrapper key={mountKey}>
-      {/* Aumentado o padding horizontal de p-6 para p-2 sm:p-4 md:p-6 e removido max-w-3xl para permitir mais largura em telas menores */}
-      <div className="mx-auto bg-white rounded-xl shadow-md overflow-hidden border border-[#B89B7A]/20">
-        <div className="p-2 sm:p-4 md:p-6">
-          <div className="mb-6">
-            <div className="w-full h-1 bg-[#B89B7A]/20 rounded-full overflow-hidden mb-2">
-              <div 
-                className="h-full bg-[#B89B7A]" 
-                style={{ 
-                  width: `${((currentQuestionIndex + 1) / strategicQuestions.length) * 100}%` 
-                }}
-              ></div>
-            </div>
-            <div className="text-xs text-[#432818]/60 text-center">
-              Pergunta {currentQuestionIndex + 1} de {strategicQuestions.length}
-            </div>
-          </div>
-          
-          <QuizQuestion
-            key={currentQuestion?.id}
-            question={currentQuestion}
-            onAnswer={onAnswer}
-            currentAnswers={currentAnswers}
-            autoAdvance={false}
-            showQuestionImage={true}
-            isStrategicQuestion={true}
-          />
-        </div>
-      </div>
+      <QuizQuestion
+        question={strategicQuestions[currentQuestionIndex]}
+        onAnswer={onAnswer}
+        currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
+        autoAdvance={false}
+        showQuestionImage={true}
+        isStrategicQuestion={true}
+      />
     </AnimatedWrapper>
   );
 };
 
 export default StrategicQuestions;
-
-// Preciso ver o conteúdo deste arquivo para encontrar o botão "Avançar"

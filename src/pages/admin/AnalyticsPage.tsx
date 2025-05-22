@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, Suspense } from 'react';
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
 import { AnalyticsLoadingState } from '@/components/analytics/LoadingState';
@@ -12,7 +13,6 @@ import { toast } from '@/components/ui/use-toast';
 // Lazy loaded tab components for better performance
 const OverviewTab = React.lazy(() => import('@/components/analytics/tabs/OverviewTab').then(module => ({ default: module.OverviewTab })));
 const FunnelTab = React.lazy(() => import('@/components/analytics/tabs/FunnelTab').then(module => ({ default: module.FunnelTab })));
-const FunnelComparisonTab = React.lazy(() => import('@/components/analytics/tabs/FunnelComparisonTab').then(module => ({ default: module.FunnelComparisonTab })));
 const UsersTab = React.lazy(() => import('@/components/analytics/tabs/UsersTab').then(module => ({ default: module.UsersTab })));
 const ProgressTab = React.lazy(() => import('@/components/analytics/tabs/ProgressTab').then(module => ({ default: module.ProgressTab })));
 const DataTab = React.lazy(() => import('@/components/analytics/tabs/DataTab').then(module => ({ default: module.DataTab })));
@@ -54,26 +54,9 @@ const AnalyticsPage: React.FC = () => {
         ? filteredEvents.filter(event => selectedEvents.includes(event.type))
         : filteredEvents;
       
-      // Group events by funnel
-      const funnel1Events = filteredByType.filter(event => 
-        event.funnel === 'quiz_isca' || (!event.funnel && event.utm_campaign?.includes('Por Fora'))
-      );
-      
-      const funnel2Events = filteredByType.filter(event => 
-        event.funnel === 'quiz_embutido' || (!event.funnel && event.utm_campaign?.includes('Por Dentro'))
-      );
-      
-      // Calculate metrics for each funnel
-      const funnel1Metrics = calculateFunnelMetrics(funnel1Events);
-      const funnel2Metrics = calculateFunnelMetrics(funnel2Events);
-      
       setAnalyticsData({ 
         events: filteredByType,
-        metrics: {
-          ...metrics,
-          funnel1: funnel1Metrics,
-          funnel2: funnel2Metrics
-        },
+        metrics,
         timeRange,
         selectedEvents,
         compactView,
@@ -92,25 +75,6 @@ const AnalyticsPage: React.FC = () => {
       completeLoading();
     }
   }, [timeRange, selectedEvents, compactView, setLoading, completeLoading]);
-
-  // Helper function to calculate metrics for a specific funnel
-  const calculateFunnelMetrics = (events: any[]) => {
-    return {
-      totalStarts: events.filter(e => e.type === 'quiz_start').length,
-      totalCompletes: events.filter(e => e.type === 'quiz_complete').length,
-      totalResultViews: events.filter(e => e.type === 'result_view').length,
-      totalLeads: events.filter(e => e.type === 'lead_generated').length,
-      totalSales: events.filter(e => e.type === 'sale' || e.type === 'purchase').length,
-      salesRate: calculateSalesRate(events)
-    };
-  };
-
-  // Helper function to calculate sales rate for a group of events
-  const calculateSalesRate = (events: any[]) => {
-    const results = events.filter(e => e.type === 'result_view').length;
-    const sales = events.filter(e => e.type === 'sale' || e.type === 'purchase').length;
-    return results > 0 ? (sales / results) * 100 : 0;
-  };
 
   const handleRefresh = () => {
     setLoading(true);
@@ -237,12 +201,6 @@ const AnalyticsPage: React.FC = () => {
             Funil de Conversão
           </TabsTrigger>
           <TabsTrigger 
-            value="funnel-comparison"
-            className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
-          >
-            Comparação de Funis
-          </TabsTrigger>
-          <TabsTrigger 
             value="users"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
@@ -281,10 +239,6 @@ const AnalyticsPage: React.FC = () => {
           
           <TabsContent value="funnel" className="mt-6">
             <FunnelTab analyticsData={{...analyticsData, compactView}} loading={!metricsCalculated} />
-          </TabsContent>
-          
-          <TabsContent value="funnel-comparison" className="mt-6">
-            <FunnelComparisonTab analyticsData={analyticsData} loading={!metricsCalculated} />
           </TabsContent>
           
           <TabsContent value="users" className="mt-6">

@@ -187,12 +187,12 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
               
               {selectionIndicator === 'checkbox' && (
                 <div className={cn(
-                  "absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center",
+                  "absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center",
                   isSelected 
                     ? "bg-[#B89B7A] text-white shadow-sm" 
                     : "border-2 border-[#B89B7A] bg-white/80"
                 )}>
-                  {isSelected && <Check className="w-3 h-3" />}
+                  {isSelected && <Check className="w-4 h-4" />}
                 </div>
               )}
               

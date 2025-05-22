@@ -27,7 +27,7 @@ const QuizFinalTransition: React.FC<QuizFinalTransitionProps> = ({ onShowResult 
             variant="default"
             size="lg"
             onClick={onShowResult}
-            className="bg-[#B89B7A] text-white hover:bg-[#a08968] transition-colors"
+            className="bg-[#B89B7A] text-white"
           >
             Vamos ao resultado?
           </Button>

@@ -6,7 +6,7 @@ export const styleExperienceQuestions: QuizQuestion[] = [
     title: 'Como você aprende melhor sobre estilo e moda?',
     type: 'text',
     multiSelect: 1,
-    // A questão 13 (strategic-3) não deve ter imagem
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334748/ChatGPT_Image_4_de_mai._de_2025_01_40_38_qtv4xy.png',
     options: [
       {
         id: 'strategic-3-1',
@@ -35,7 +35,7 @@ export const styleExperienceQuestions: QuizQuestion[] = [
     title: 'O que você mais valoriza em um guia de estilo?',
     type: 'text',
     multiSelect: 1,
-    // A questão 14 (strategic-4) não deve ter imagem
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp',
     options: [
       {
         id: 'strategic-4-1',

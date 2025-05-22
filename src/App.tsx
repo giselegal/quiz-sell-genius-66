@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -11,7 +10,6 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import CriticalCSSLoader from './components/CriticalCSSLoader';
 import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
 import LovableRoutes from './lovable-routes';
-import { fixMainRoutes } from './utils/fixMainRoutes';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -65,7 +63,7 @@ const App = () => {
   const lowPerformance = isLowPerformanceDevice();
   const isLovableEnv = isRunningInLovable();
 
-  // Inicializar analytics e corrigir rotas na montagem do componente
+  // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
       // Inicializar Facebook Pixel
@@ -74,29 +72,19 @@ const App = () => {
       // Capturar UTM parameters para analytics de marketing
       captureUTMParameters();
       
-      // Ativar correção de rotas principais
-      fixMainRoutes();
-      
       console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
-      console.log('✅ Main routes activated');
     } catch (error) {
-      console.error('Erro ao inicializar aplicativo:', error);
+      console.error('Erro ao inicializar analytics:', error);
     }
   }, [lowPerformance]);
 
-  // Reinicializar Facebook Pixel e correção de rotas em mudanças de rota
+  // Reinicializar Facebook Pixel em mudanças de rota
   useEffect(() => {    
     // Função para lidar com mudanças de rota
     const handleRouteChange = () => {
-      if (typeof window !== 'undefined') {
-        // Corrigir rotas em cada mudança
-        fixMainRoutes();
-        
-        // Rastrear visualização de página
-        if (window.fbq) {
-          window.fbq('track', 'PageView');
-          console.log('PageView tracked on route change');
-        }
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'PageView');
+        console.log('PageView tracked on route change');
       }
     };
     
@@ -123,10 +111,7 @@ const App = () => {
             ) : (
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
-                  {/* Agora a rota principal direciona diretamente para o QuizPage */}
-                  <Route path="/" element={<QuizPage />} />
-                  {/* HomePage também direciona para o QuizPage para unificação */}
-                  <Route path="/home" element={<QuizPage />} />
+                  <Route path="/" element={<HomePage />} />
                   <Route path="/quiz" element={<QuizPage />} />
                   <Route path="/resultado" element={<ResultPage />} />
                   <Route path="/prototipo" element={<ResultPagePrototype />} />

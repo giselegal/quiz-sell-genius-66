@@ -15,9 +15,7 @@ interface QuizQuestionProps {
   autoAdvance?: boolean;
   hideTitle?: boolean;
   showQuestionImage?: boolean;
-  isStrategicQuestion?: boolean;
-  onNextClick?: () => void;
-  onPreviousClick?: () => void;
+  isStrategicQuestion?: boolean; // Nova prop
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -27,9 +25,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   autoAdvance = false,
   hideTitle = false,
   showQuestionImage = false,
-  isStrategicQuestion = false,
-  onNextClick,
-  onPreviousClick
+  isStrategicQuestion = false
 }) => {
   const isMobile = useIsMobile();
   const hasImageOptions = question.type !== 'text';
@@ -42,28 +38,19 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
-
-    // Se for questão estratégica, só permite uma seleção e não permite desmarcar
-    if (isStrategicQuestion) {
-      if (currentAnswers.includes(optionId)) {
-        // Não permite desmarcar (mantém a seleção)
-        newSelectedOptions = currentAnswers;
-      } else {
-        // Sempre só uma opção
-        newSelectedOptions = [optionId];
-      }
+    
+    if (currentAnswers.includes(optionId)) {
+      newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
-      if (currentAnswers.includes(optionId)) {
-        newSelectedOptions = currentAnswers.filter(id => id !== optionId);
+      if (isStrategicQuestion) {
+        newSelectedOptions = [optionId];
+      } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
+        newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
-        if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
-          newSelectedOptions = [...currentAnswers.slice(1), optionId];
-        } else {
-          newSelectedOptions = [...currentAnswers, optionId];
-        }
+        newSelectedOptions = [...currentAnswers, optionId];
       }
     }
-
+    
     onAnswer({ 
       questionId: question.id,
       selectedOptions: newSelectedOptions
@@ -72,32 +59,35 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   
   const getGridColumns = () => {
     if (question.type === 'text') {
-      // Reduzido px-2 para px-1 no mobile para opções de texto
-      return isMobile ? "grid-cols-1 gap-3 px-1" : "grid-cols-1 gap-4 px-4";
+      if (isStrategicQuestion) {
+        return "grid-cols-1 gap-3 px-2";
+      }
+      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
     }
-    // Removido px-0.5 no mobile para opções de imagem
-    return isMobile ? "grid-cols-2 gap-1" : "grid-cols-2 gap-3 px-2";
+    return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
   };
   
   return (
-    <div className={cn("w-full pb-4 relative", 
-      isMobile && "px-2" 
+    <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
+      isMobile && "px-2", 
+      isStrategicQuestion && "max-w-3xl"
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
           <h2 className={cn(
-            "font-playfair text-center mb-6 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-            isMobile ? "text-lg" : "text-xl sm:text-2xl"
+            "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
+            isMobile ? "text-base" : "text-base sm:text-xl",
+            isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
           )}>
             {highlightStrategicWords(question.title)}
           </h2>
           
-          {question.imageUrl && !imageError && showQuestionImage && (
+          {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
             <div className="w-full mb-6">
               <img 
                 src={question.imageUrl} 
                 alt="Question visual" 
-                className="w-full max-w-md mx-auto rounded-lg shadow-sm object-cover h-48 sm:h-64" 
+                className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
                 onError={() => {
                   console.error(`Failed to load image: ${question.imageUrl}`);
                   setImageError(true);
@@ -111,7 +101,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       <div className={cn(
         "grid h-full",
         getGridColumns(),
-        hasImageOptions && "mb-4 relative"
+        hasImageOptions && "mb-4 relative",
+        isStrategicQuestion && "gap-4"
       )}>
         {question.options.map(option => (
           <QuizOption 
@@ -121,11 +112,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             onSelect={handleOptionSelect}
             type={question.type}
             questionId={question.id}
-            isDisabled={
-              !currentAnswers.includes(option.id) && 
-              currentAnswers.length >= question.multiSelect
-            }
-            forStrategic={isStrategicQuestion} // NOVO: ativa efeito especial
+            isDisabled={!currentAnswers.includes(option.id) && 
+              !isStrategicQuestion && 
+              currentAnswers.length >= question.multiSelect}
+            isStrategicOption={isStrategicQuestion}
           />
         ))}
       </div>
@@ -134,3 +124,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
+
