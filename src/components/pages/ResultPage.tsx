@@ -299,7 +299,7 @@ const ResultPage: React.FC = () => {
                     <p className="text-4xl font-bold gold-text">R$ 39,00</p>
                   </div>
                   <div className="text-center md:text-left space-y-1">
-                    <p className="text-sm text-[#432818]">Parcelamento: 5x de R$ 8,83*</p>
+                    <p className="text-sm text-[#432818]">Por Apenas: 5x de R$ 8,83*</p>
                     <p className="text-sm text-[#432818]">ou R$ 39,90 à vista</p>
                   </div>
                 </div>

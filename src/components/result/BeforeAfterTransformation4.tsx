@@ -366,7 +366,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   transition={{ duration: 0.4, delay: 0.3 }}
                   className="text-lg font-medium text-[#432818] md:hidden text-center mb-4"
                 >
-                  Transformação Visual com Propósito
+                  O Poder de Vestir-se de Você!
                 </motion.h4>
                 
                 {/* Título desktop */}
