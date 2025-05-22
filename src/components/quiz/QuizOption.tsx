@@ -93,6 +93,25 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           </span>
         </div>
       )}
+
+      {/* Definição da animação enhanced-pulse */}
+      <style jsx>{`
+        @keyframes enhanced-pulse {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(179, 137, 49, 0.7);
+          }
+          50% {
+            opacity: 0.9;
+            transform: scale(1.02);
+            box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+          }
+        }
+        .animate-enhanced-pulse {
+          animation: enhanced-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+      `}</style>
     </div>
   );
 };
