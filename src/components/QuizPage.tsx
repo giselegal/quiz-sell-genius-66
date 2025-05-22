@@ -119,13 +119,14 @@ const QuizPage: React.FC = () => {
     setShowingStrategicQuestions(true);
   };
 
-  const handleStrategicAnswerInternal = useCallback((response: UserResponse) => {
+  // NOVA FUNÇÃO: Apenas registra a resposta estratégica sem avançar
+  const recordStrategicAnswer = useCallback((response: UserResponse) => {
     try {
       setStrategicAnswers(prev => ({
         ...prev,
         [response.questionId]: response.selectedOptions
       }));
-      saveStrategicAnswer(response.questionId, response.selectedOptions);
+      saveStrategicAnswer(response.questionId, response.selectedOptions); // de useQuizLogic
       trackQuizAnswer(
         response.questionId, 
         response.selectedOptions,
@@ -139,60 +140,60 @@ const QuizPage: React.FC = () => {
                        currentStrategicQuestionIndex + totalQuestions,
                        totalQuestions + strategicQuestions.length);
       }
-      if (currentStrategicQuestionIndex === strategicQuestions.length - 1) {
-        // Não chama setShowingFinalTransition aqui diretamente.
-        // O botão "Ver Resultado" em QuizNavigation fará isso.
-        // Apenas registra a resposta.
-        // setShowingFinalTransition(true); // Removido
-        trackQuizComplete(); // Mantém o rastreamento de conclusão do quiz (parte estratégica)
-      } else {
-        const nextIndex = currentStrategicQuestionIndex + 1;
-        if (nextIndex < strategicQuestions.length) {
-          const nextQuestionData = strategicQuestions[nextIndex];
-          if (nextQuestionData.imageUrl) {
-            preloadImages([{ 
-              src: nextQuestionData.imageUrl, 
-              id: `strategic-${nextIndex}`,
-              category: 'strategic',
-              alt: `Question ${nextIndex}`,
-              preloadPriority: 5 
-            }], { quality: 90 });
-          }
-          const optionImages = nextQuestionData.options
-            .map(option => option.imageUrl)
-            .filter(Boolean) as string[];
-          if (optionImages.length > 0) {
-            preloadImages(optionImages.map((src, i) => ({ 
-              src, 
-              id: `strategic-${nextIndex}-option-${i}`,
-              category: 'strategic',
-              alt: `Option ${i}`,
-              preloadPriority: 4
-            })), { quality: 85, batchSize: 3 });
-          }
-          if (nextIndex + 1 < strategicQuestions.length) {
-            const nextNextQuestion = strategicQuestions[nextIndex + 1];
-            if (nextNextQuestion.imageUrl) {
-              preloadImages([{ 
-                src: nextNextQuestion.imageUrl,
-                id: `strategic-${nextIndex+1}`,
-                category: 'strategic',
-                alt: `Question ${nextIndex+1}`,
-                preloadPriority: 2
-              }], { quality: 85 });
-            }
-          }
-        }
-        setCurrentStrategicQuestionIndex(prev => prev + 1);
-      }
+      // Não avança o índice aqui
     } catch (error) {
       toast({
-        title: "Erro no processamento da resposta estratégica",
+        title: "Erro ao registrar resposta estratégica",
         description: "Não foi possível processar sua resposta. Por favor, tente novamente.",
         variant: "destructive",
       });
     }
   }, [currentStrategicQuestionIndex, saveStrategicAnswer, totalQuestions, strategicQuestions.length]);
+
+  // NOVA FUNÇÃO: Avança para a próxima questão estratégica e pré-carrega
+  const goToNextStrategicQuestion = useCallback(() => {
+    if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
+      const nextIndex = currentStrategicQuestionIndex + 1;
+      if (nextIndex < strategicQuestions.length) {
+        const nextQuestionData = strategicQuestions[nextIndex];
+        if (nextQuestionData.imageUrl) {
+          preloadImages([{ 
+            src: nextQuestionData.imageUrl, 
+            id: `strategic-${nextIndex}`,
+            category: 'strategic',
+            alt: `Question ${nextIndex}`,
+            preloadPriority: 5 
+          }], { quality: 90 });
+        }
+        const optionImages = nextQuestionData.options
+          .map(option => option.imageUrl)
+          .filter(Boolean) as string[];
+        if (optionImages.length > 0) {
+          preloadImages(optionImages.map((src, i) => ({ 
+            src, 
+            id: `strategic-${nextIndex}-option-${i}`,
+            category: 'strategic',
+            alt: `Option ${i}`,
+            preloadPriority: 4
+          })), { quality: 85, batchSize: 3 });
+        }
+        if (nextIndex + 1 < strategicQuestions.length) {
+          const nextNextQuestion = strategicQuestions[nextIndex + 1];
+          if (nextNextQuestion.imageUrl) {
+            preloadImages([{ 
+              src: nextNextQuestion.imageUrl,
+              id: `strategic-${nextIndex+1}`,
+              category: 'strategic',
+              alt: `Question ${nextIndex+1}`,
+              preloadPriority: 2
+            }], { quality: 85 });
+          }
+        }
+      }
+      setCurrentStrategicQuestionIndex(prev => prev + 1);
+    }
+    // Se for a última, a lógica de "Ver Resultado" em QuizNavigation.onNext cuidará disso.
+  }, [currentStrategicQuestionIndex, strategicQuestions, totalQuestions /* Adicionado totalQuestions se usado em preload */]);
 
   const handleAnswerSubmitInternal = useCallback((response: UserResponse) => {
     try {
@@ -291,11 +292,6 @@ const QuizPage: React.FC = () => {
           totalQuestions + strategicQuestions.length
         );
       }
-    } else { // Lógica para questões estratégicas agora é tratada por onNext em QuizNavigation
-      // Se é a última questão estratégica, o botão "Ver Resultado" em QuizNavigation chamará handleShowResult via onNext.
-      // Se não for a última, handleStrategicAnswerInternal já avança o índice.
-      // Esta função (handleNextClickInternal) não deve ser chamada diretamente para avançar questões estratégicas.
-      // A chamada onNext de QuizNavigation para questões estratégicas deve ser handleStrategicAnswerInternal ou uma nova função que chame handleShowResult.
     }
   }, [
     showingStrategicQuestions, 
@@ -305,9 +301,7 @@ const QuizPage: React.FC = () => {
     handleNext, 
     calculateResults, 
     totalQuestions,
-    strategicQuestions.length,
-    // handleStrategicAnswerInternal, // Removido das dependências diretas aqui
-    // handleShowResult // Removido das dependências diretas aqui
+    strategicQuestions.length
   ]);
 
   const currentQuestionTypeForNav = showingStrategicQuestions ? 'strategic' : 'normal';
@@ -338,13 +332,14 @@ const QuizPage: React.FC = () => {
       onNext={
         showingStrategicQuestions && actualCurrentQuestionData
           ? (currentStrategicQuestionIndex === strategicQuestions.length - 1 
-              ? () => { setShowingFinalTransition(true); handleShowResult(); } // Última estratégica: mostra transição final e resultado
-              : () => handleStrategicAnswerInternal({ // Não é a última estratégica: processa resposta e avança
-                  questionId: actualCurrentQuestionData.id,
-                  selectedOptions: strategicAnswers[actualCurrentQuestionData.id] || []
-                })
+              ? () => { 
+                  setShowingFinalTransition(true); 
+                  trackQuizComplete(); // Rastreia a conclusão final do quiz aqui
+                  handleShowResult(); 
+                }
+              : goToNextStrategicQuestion // Chama a nova função para avançar
             )
-          : handleNextClickInternal // Questões normais
+          : handleNextClickInternal
       }
       onPrevious={
         showingStrategicQuestions
@@ -467,10 +462,13 @@ const QuizPage: React.FC = () => {
                         currentStrategicQuestionIndex={currentStrategicQuestionIndex}
                         currentQuestion={actualCurrentQuestionData} 
                         currentAnswers={showingStrategicQuestions && actualCurrentQuestionData.id ? strategicAnswers[actualCurrentQuestionData.id] || [] : currentAnswers}
-                        handleAnswerSubmit={showingStrategicQuestions ? handleStrategicAnswerInternal : handleAnswerSubmitInternal}
-                        // As props handleNextClick e handlePrevious foram removidas intencionalmente de QuizContent
+                        handleAnswerSubmit={
+                          showingStrategicQuestions && actualCurrentQuestionData
+                            ? recordStrategicAnswer // Alterado para a nova função
+                            : handleAnswerSubmitInternal
+                        }
                       />
-                      {renderQuizNavigation()}
+                      {renderQuizNavigation()} 
                     </motion.div>
                   )
                 )}

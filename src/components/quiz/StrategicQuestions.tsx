@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -20,30 +19,22 @@ interface StrategicQuestionsProps {
   currentQuestionIndex: number;
   answers: Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
-  onNextClick?: () => void;
 }
 
 export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   currentQuestionIndex,
   answers,
-  onAnswer,
-  onNextClick
+  onAnswer
 }) => {
   const [mountKey, setMountKey] = useState(Date.now());
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
   const resultImagesPreloadStarted = useRef<boolean>(false);
-  const preloadTimestamps = useRef<{[key: string]: number}>({});
   
-  // Preload strategic images on first render and start
-  // progressive preloading of result images
   useEffect(() => {
     if (!imagesPreloaded) {
       // Preload da questão estratégica atual
       preloadCriticalImages(["strategic"]);
       setImagesPreloaded(true);
-      
-      // Iniciar o timestamp para medir desempenho
-      preloadTimestamps.current.start = Date.now();
     }
     
     // Pré-carregamento progressivo das imagens de resultado
@@ -59,17 +50,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
         // Inicia o preload da categoria principal de resultado
         preloadCriticalImages(['results'], {
           quality: 80,
-          batchSize: 2,
-          // Callback para monitorar progresso do carregamento
-          onProgress: (loaded, total) => {
-            console.log(`[Otimização] Progresso preload resultados: ${loaded}/${total}`);
-          },
-          onComplete: () => {
-            // Registrar quando o preload completar para análise de desempenho
-            preloadTimestamps.current.resultsComplete = Date.now();
-            const timeElapsed = preloadTimestamps.current.resultsComplete - preloadTimestamps.current.start;
-            console.log(`[Otimização] Preload de imagens de resultado concluído em ${timeElapsed}ms`);
-          }
+          batchSize: 2
         });
       }, 500); // Pequeno delay para não competir com recursos iniciais
     }
@@ -118,7 +99,6 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
         onAnswer={onAnswer}
         currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
         autoAdvance={false}
-        onNextClick={onNextClick} 
         showQuestionImage={true}
         isStrategicQuestion={true}
       />

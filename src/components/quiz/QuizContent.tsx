@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -14,8 +13,6 @@ interface QuizContentProps {
   currentQuestion: any;
   currentAnswers: string[];
   handleAnswerSubmit: (response: UserResponse) => void;
-  handleNextClick: () => void;
-  handlePrevious: () => void;
 }
 
 export const QuizContent: React.FC<QuizContentProps> = ({
@@ -27,8 +24,6 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   currentQuestion,
   currentAnswers,
   handleAnswerSubmit,
-  handleNextClick,
-  handlePrevious,
 }) => {
   // Get user name from localStorage if not provided in props
   const userName = user?.userName || localStorage.getItem('userName') || '';
@@ -55,16 +50,13 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             currentQuestionIndex={currentStrategicQuestionIndex}
             answers={{}}
             onAnswer={handleAnswerSubmit}
-            onNextClick={handleNextClick}
           />
         ) : (
           <QuizQuestion
             question={currentQuestion}
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
-            onNextClick={handleNextClick}
             showQuestionImage={true}
-            onPreviousClick={handlePrevious}
             autoAdvance={true}
           />
         )}
