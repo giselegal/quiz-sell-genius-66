@@ -40,9 +40,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     let newSelectedOptions: string[];
     
     if (currentAnswers.includes(optionId)) {
+      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
+      if (isStrategicQuestion) {
+        return; // Não permite desmarcar a opção em questões estratégicas
+      }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
       if (isStrategicQuestion) {
+        // Para questões estratégicas, substituímos qualquer seleção anterior
         newSelectedOptions = [optionId];
       } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
@@ -70,14 +75,17 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   return (
     <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
       isMobile && "px-2", 
-      isStrategicQuestion && "max-w-3xl"
+      isStrategicQuestion && "max-w-3xl strategic-question",
+      question.type === 'text' && !isStrategicQuestion && "text-only-question"
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
           <h2 className={cn(
             "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
             isMobile ? "text-base" : "text-base sm:text-xl",
-            isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
+            isStrategicQuestion && "strategic-question-title text-[#432818] mb-6 font-bold whitespace-pre-line",
+            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl", // Texto maior para questões estratégicas em mobile
+            question.type === 'text' && !isStrategicQuestion && ".text-only-question & " && "text-[1.15rem] sm:text-xl" // Texto maior para títulos em questões só texto
           )}>
             {highlightStrategicWords(question.title)}
           </h2>
@@ -112,9 +120,11 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             onSelect={handleOptionSelect}
             type={question.type}
             questionId={question.id}
-            isDisabled={!currentAnswers.includes(option.id) && 
-              !isStrategicQuestion && 
-              currentAnswers.length >= question.multiSelect}
+            isDisabled={
+              (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
+              (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
+                currentAnswers.length >= question.multiSelect)
+            }
             isStrategicOption={isStrategicQuestion}
           />
         ))}

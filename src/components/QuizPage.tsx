@@ -122,14 +122,34 @@ const QuizPage: React.FC = () => {
   // NOVA FUNÇÃO: Apenas registra a resposta estratégica sem avançar
   const recordStrategicAnswer = useCallback((response: UserResponse) => {
     try {
+      // Garantimos que apenas uma opção seja selecionada para questões estratégicas
+      // Se houver várias opções, usamos apenas a última selecionada
+      const finalOptions = response.selectedOptions.length > 0 
+        ? [response.selectedOptions[response.selectedOptions.length - 1]] 
+        : [];
+      
+      // Se não há seleção e já existe uma resposta anterior, mantemos a anterior
+      // Isso impede que o usuário desmarque uma opção estratégica
+      if (finalOptions.length === 0) {
+        const previousAnswer = strategicAnswers[response.questionId];
+        if (previousAnswer && previousAnswer.length > 0) {
+          return; // Mantém a seleção anterior, não permite desmarcar
+        }
+      }
+      
+      // Atualiza o estado com a seleção única
       setStrategicAnswers(prev => ({
         ...prev,
-        [response.questionId]: response.selectedOptions
+        [response.questionId]: finalOptions
       }));
-      saveStrategicAnswer(response.questionId, response.selectedOptions); // de useQuizLogic
+      
+      // Salva a resposta estratégica usando o hook useQuizLogic
+      saveStrategicAnswer(response.questionId, finalOptions);
+      
+      // Rastreia a resposta para analytics
       trackQuizAnswer(
         response.questionId, 
-        response.selectedOptions,
+        finalOptions,
         currentStrategicQuestionIndex + totalQuestions,
         totalQuestions + strategicQuestions.length
       );
@@ -155,8 +175,11 @@ const QuizPage: React.FC = () => {
     if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
       const nextIndex = currentStrategicQuestionIndex + 1;
       if (nextIndex < strategicQuestions.length) {
+        // Verifica se a próxima questão é de tipo estratégico-3 ou abaixo, que podem ter imagens
         const nextQuestionData = strategicQuestions[nextIndex];
-        if (nextQuestionData.imageUrl) {
+        // Verifica se a questão tem imageUrl e se não é uma das questões strategic-3, strategic-4 ou strategic-5
+        if (nextQuestionData.imageUrl && 
+            !['strategic-3', 'strategic-4', 'strategic-5'].includes(nextQuestionData.id)) {
           preloadImages([{ 
             src: nextQuestionData.imageUrl, 
             id: `strategic-${nextIndex}`,
@@ -165,6 +188,8 @@ const QuizPage: React.FC = () => {
             preloadPriority: 5 
           }], { quality: 90 });
         }
+        
+        // Opções de imagem para questões anteriores a strategic-3
         const optionImages = nextQuestionData.options
           .map(option => option.imageUrl)
           .filter(Boolean) as string[];
@@ -177,23 +202,11 @@ const QuizPage: React.FC = () => {
             preloadPriority: 4
           })), { quality: 85, batchSize: 3 });
         }
-        if (nextIndex + 1 < strategicQuestions.length) {
-          const nextNextQuestion = strategicQuestions[nextIndex + 1];
-          if (nextNextQuestion.imageUrl) {
-            preloadImages([{ 
-              src: nextNextQuestion.imageUrl,
-              id: `strategic-${nextIndex+1}`,
-              category: 'strategic',
-              alt: `Question ${nextIndex+1}`,
-              preloadPriority: 2
-            }], { quality: 85 });
-          }
-        }
       }
       setCurrentStrategicQuestionIndex(prev => prev + 1);
     }
     // Se for a última, a lógica de "Ver Resultado" em QuizNavigation.onNext cuidará disso.
-  }, [currentStrategicQuestionIndex, strategicQuestions, totalQuestions /* Adicionado totalQuestions se usado em preload */]);
+  }, [currentStrategicQuestionIndex, strategicQuestions]);
 
   const handleAnswerSubmitInternal = useCallback((response: UserResponse) => {
     try {
@@ -235,32 +248,10 @@ const QuizPage: React.FC = () => {
         trackResultView(results.primaryStyle.category);
       }
       
-      // Define uma flag para garantir que a navegação ocorra
-      let navigationOccurred = false;
+      // Navegação para a página de resultados ocorre ao clicar no botão "Vamos ao resultado?"
+      // Sem timers para avanço automático
+      navigate('/resultado');
       
-      // Adiciona um pequeno delay para garantir que a animação de transição seja concluída
-      const navigationTimer = setTimeout(() => {
-        if (!navigationOccurred) {
-          navigationOccurred = true;
-          navigate('/resultado');
-        }
-      }, 800); // Tempo suficiente para completar a animação
-      
-      // Adiciona um fallback caso a navegação não ocorra dentro de um tempo máximo
-      const fallbackTimer = setTimeout(() => {
-        if (!navigationOccurred) {
-          console.warn('Navegação com timeout normal falhou, usando fallback');
-          navigationOccurred = true;
-          clearTimeout(navigationTimer);
-          navigate('/resultado');
-        }
-      }, 3000); // Tempo máximo que o usuário deve ficar na tela de transição
-      
-      return () => {
-        // Limpa os timers em caso de desmontagem do componente
-        clearTimeout(navigationTimer);
-        clearTimeout(fallbackTimer);
-      };
     } catch (error) {
       console.error('Erro ao navegar para a página de resultados:', error);
       toast({
@@ -376,24 +367,6 @@ const QuizPage: React.FC = () => {
     }
   }, [showingFinalTransition]);
 
-  // Adicione este useEffect para garantir que o usuário não fique preso na tela de transição
-  useEffect(() => {
-    let maxTransitionTimer: NodeJS.Timeout | null = null;
-    
-    if (showingFinalTransition) {
-      maxTransitionTimer = setTimeout(() => {
-        console.warn('Tempo máximo de transição atingido, forçando navegação');
-        navigate('/resultado');
-      }, 5000); // Tempo máximo absoluto na tela de transição
-    }
-    
-    return () => {
-      if (maxTransitionTimer) {
-        clearTimeout(maxTransitionTimer);
-      }
-    };
-  }, [showingFinalTransition, navigate]);
-
   return (
     <LoadingManager isLoading={!pageIsReady}>
       <div className="relative">
@@ -415,27 +388,21 @@ const QuizPage: React.FC = () => {
               <AnimatePresence mode="wait">
                 {showingTransition ? (
                   <motion.div
-                    key="main-transition" // Chave única para MainTransition
+                    key="main-transition"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    transition={{ 
-                      duration: 0.6,
-                      ease: "easeInOut" 
-                    }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
                   >
                     <MainTransition onProceedToStrategicQuestions={handleProceedToStrategic} />
                   </motion.div>
                 ) : showingFinalTransition ? (
                   <motion.div
-                    key="final-transition" // Chave para a transição final
+                    key="final-transition"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    transition={{ 
-                      duration: 0.6,
-                      ease: "easeInOut" 
-                    }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
                   >
                     <QuizTransitionManager
                       showingFinalTransition={showingFinalTransition}
@@ -449,10 +416,7 @@ const QuizPage: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }} 
                       animate={{ opacity: 1, y: 0 }} 
                       exit={{ opacity: 0, y: -20 }}
-                      transition={{ 
-                        duration: 0.5,
-                        ease: "easeOut" 
-                      }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                       <QuizContent
                         user={user}
@@ -464,7 +428,7 @@ const QuizPage: React.FC = () => {
                         currentAnswers={showingStrategicQuestions && actualCurrentQuestionData.id ? strategicAnswers[actualCurrentQuestionData.id] || [] : currentAnswers}
                         handleAnswerSubmit={
                           showingStrategicQuestions && actualCurrentQuestionData
-                            ? recordStrategicAnswer // Alterado para a nova função
+                            ? recordStrategicAnswer
                             : handleAnswerSubmitInternal
                         }
                       />

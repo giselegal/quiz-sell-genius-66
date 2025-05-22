@@ -19,7 +19,6 @@ import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
-import FloatingCTA from '@/components/result/FloatingCTA';
 import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
 
@@ -117,9 +116,6 @@ const ResultPage: React.FC = () => {
       
       {/* Monitor de desempenho (componente invisível) */}
       <PerformanceMonitor />
-      
-      {/* CTA flutuante para melhorar conversão */}
-      <FloatingCTA onClickCTA={handleCTAClick} />
       
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
@@ -297,10 +293,14 @@ const ResultPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-                  <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-                  <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-                  <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+                <div className="bg-[#f9f4ef] p-6 rounded-lg space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
+                  <div className="text-center md:text-left space-y-1">
+                    <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por Apenas</p>
+                    <p className="text-4xl font-bold text-[#aa6b5d]">5x de R$ 8,83</p>
+                  </div>
+                  <div className="text-center md:text-left">
+                    <p className="text-sm text-[#432818]">Ou R$ 39,90 à vista</p>
+                  </div>
                 </div>
               </div>
             </div>

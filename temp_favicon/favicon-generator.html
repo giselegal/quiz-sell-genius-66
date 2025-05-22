@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favicon Generator</title>
+</head>
+<body>
+    <canvas id="favicon16" width="16" height="16"></canvas>
+    <canvas id="favicon32" width="32" height="32"></canvas>
+    <canvas id="favicon64" width="64" height="64"></canvas>
+    <script>
+        // Função para desenhar o ícone em cada canvas
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            
+            // Cor de fundo (dourado claro da marca)
+            ctx.fillStyle = '#B89B7A';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Texto "G" no centro
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = `bold ${Math.floor(size * 0.7)}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('G', size/2, size/2 + size*0.05);
+            
+            return canvas.toDataURL('image/png');
+        }
+        
+        // Gerar favicons
+        const favicon16 = drawIcon(document.getElementById('favicon16'), 16);
+        const favicon32 = drawIcon(document.getElementById('favicon32'), 32);
+        const favicon64 = drawIcon(document.getElementById('favicon64'), 64);
+        
+        // Exibir os resultados para download
+        document.body.innerHTML += `
+            <div>
+                <h3>16x16:</h3>
+                <img src="${favicon16}" alt="Favicon 16x16">
+                <p>Data URL (copie e salve como arquivo PNG): <textarea rows="5" cols="50">${favicon16}</textarea></p>
+            </div>
+            <div>
+                <h3>32x32:</h3>
+                <img src="${favicon32}" alt="Favicon 32x32">
+                <p>Data URL (copie e salve como arquivo PNG): <textarea rows="5" cols="50">${favicon32}</textarea></p>
+            </div>
+            <div>
+                <h3>64x64 (para favicon.ico):</h3>
+                <img src="${favicon64}" alt="Favicon 64x64">
+                <p>Data URL (copie e salve como arquivo PNG): <textarea rows="5" cols="50">${favicon64}</textarea></p>
+            </div>
+        `;
+    </script>
+</body>
+</html>

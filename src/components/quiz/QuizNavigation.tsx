@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '../ui/button';
-import { ChevronLeft, ChevronRight, CheckCircle, AlertTriangle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, AlertTriangle } from 'lucide-react';
 
 interface QuizNavigationProps {
   canProceed: boolean;
@@ -111,7 +111,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
             aria-disabled={!canProceed}
           >
             {nextButtonText}
-            {isLastQuestion ? <CheckCircle className="ml-2 h-5 w-5" /> : <ChevronRight className="ml-2 h-5 w-5" />}
+            {isLastQuestion ? <Check className="ml-2 h-5 w-5" /> : <ChevronRight className="ml-2 h-5 w-5" />}
           </Button>
         </div>
       </div>

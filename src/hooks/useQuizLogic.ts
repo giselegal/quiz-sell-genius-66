@@ -125,10 +125,23 @@ export const useQuizLogic = () => {
   }, [nextQuestion, nextNextQuestion]);
 
   const handleStrategicAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
+    // Para questões estratégicas, garantimos que SEMPRE haja apenas UMA opção selecionada
+    // Se houver múltiplas, usamos apenas a última selecionada
+    const finalOptions = selectedOptions.length > 0 ? [selectedOptions[selectedOptions.length - 1]] : selectedOptions;
+    
+    // Não permitimos que o usuário desmarque uma opção em questões estratégicas
+    // Se o array estiver vazio e já tiver uma seleção anterior, mantemos a seleção anterior
+    if (finalOptions.length === 0) {
+      const previousAnswer = strategicAnswers[questionId];
+      if (previousAnswer && previousAnswer.length > 0) {
+        return; // Mantém a seleção anterior, não permite desmarcar
+      }
+    }
+    
     setStrategicAnswers(prev => {
       const newAnswers = {
         ...prev,
-        [questionId]: selectedOptions
+        [questionId]: finalOptions
       };
       localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers)); // Salvar imediatamente
       

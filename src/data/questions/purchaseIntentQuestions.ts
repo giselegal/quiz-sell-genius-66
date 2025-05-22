@@ -6,7 +6,7 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
     title: 'Você já considerou investir em algum guia ou consultoria de estilo no passado?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
+    // A questão 15 (strategic-5) não deve ter imagem
     options: [
       {
         id: 'strategic-5-1',
