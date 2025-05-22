@@ -52,7 +52,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
     >
       {type !== 'text' && option.imageUrl && (
         <div className={cn(
-          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2 z-10" // Adicionado z-10
+          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2" // Removido z-10 daqui
           // Classes de container para imagem estratégica movidas para o div principal
         )}>
           <img
