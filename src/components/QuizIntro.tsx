@@ -198,6 +198,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                       'w-full p-3 bg-[#FEFEFE]/90 rounded-lg border-2 border-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 text-lg font-semibold text-[#432818] transition-all',
                       nome ? 'shadow-lg' : ''
                     )}
+                    style={{ borderColor: '#B89B7A', boxShadow: 'none' }}
                     autoFocus
                     aria-required="true"
                     autoComplete="off"

@@ -52,27 +52,29 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {type !== 'text' && option.imageUrl && (
         <div className={cn("w-full flex-1 flex items-stretch min-h-[220px] p-0 relative")}> 
           <div className="w-full h-[12px]" /> {/* respiro superior */}
-          <div className="relative w-full flex items-end justify-center" style={{ minHeight: '180px' }}>
+          <div className="relative w-full flex items-end justify-center" style={{ minHeight: '180px', paddingLeft: 8, paddingRight: 8 }}>
             <img 
               src={option.imageUrl} 
               alt={option.text}
               className={cn(
-                "w-full h-[260px] object-cover rounded-t-lg z-30 transition-all duration-200",
+                "w-full h-[220px] sm:h-[260px] object-contain rounded-t-lg z-20 transition-all duration-200",
                 isSelected ? "scale-[1.07] shadow-2xl -translate-y-2" : "",
                 "mx-auto"
               )}
-              style={{ maxHeight: '260px', minHeight: '180px', position: 'relative' }}
+              style={{ maxHeight: '260px', minHeight: '140px', background: '#f8f5f0' }}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
               }}
             />
-            {/* Texto sobreposto na base da imagem, com fundo translúcido, z-10 para ficar atrás da imagem */}
+            {/* Texto sempre sobreposto, centralizado, nunca atrás da imagem */}
             <div className={cn(
-              "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-10",
-              isSelected && "opacity-70"
+              "absolute bottom-0 left-0 w-full px-2 py-1 flex items-center justify-center z-30",
+              isSelected ? "bg-white/90 rounded-b-lg" : "bg-white/80 rounded-b-lg"
             )}>
-              <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">{option.text}</span>
+              <span className="text-xs sm:text-sm text-[#432818] text-center font-medium leading-tight line-clamp-2 drop-shadow-sm">
+                {option.text}
+              </span>
             </div>
             {isSelected && (
               <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-40">
