@@ -73,9 +73,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     return '';
   }, [canProceed, currentQuestionType]);
 
-  const nextButtonText = isLastQuestion
-    ? 'Ver Resultado'
-    : 'Avançar'; // Simplificado, sempre "Avançar" ou "Ver Resultado"
+  const nextButtonText = 'Avançar';
 
   return (
     <div className="mt-6 w-full px-4 md:px-0">

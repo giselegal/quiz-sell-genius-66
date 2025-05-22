@@ -36,7 +36,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
               variant="default" 
               size="lg"
               onClick={onProceedToStrategicQuestions}
-              className="bg-[#B89B7A] text-white"
+              className="bg-[#B89B7A] text-white hover:bg-[#a0845c] focus:ring-2 focus:ring-[#B89B7A]"
             >
               Continuar
             </Button>
