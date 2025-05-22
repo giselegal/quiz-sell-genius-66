@@ -112,7 +112,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                 key={`strategic-${currentQuestionIndex}`}
                 question={strategicQuestions[currentQuestionIndex]}
                 onAnswer={(response) => {
-                  handleQuestionAnswer(response);
+                  // Autoavança ao selecionar uma opção
                   if (response.selectedOptions.length > 0) {
                     setTimeout(() => {
                       if (currentQuestionIndex < strategicQuestions.length - 1) {
@@ -124,13 +124,13 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
                           selectedOptions: response.selectedOptions,
                         });
                       }
-                    }, 350); // Delay para UX suave
+                    }, 350);
                   }
                 }}
                 currentAnswers={currentAnswersForQuestion}
                 autoAdvance={true}
                 hideTitle={true}
-                onNextClick={undefined}
+                onNextClick={undefined} // Remove o botão das questões estratégicas
               />
             </div>
           </Card>
