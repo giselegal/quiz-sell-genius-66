@@ -19,7 +19,6 @@ import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
-import FloatingCTA from '@/components/result/FloatingCTA';
 import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
 
@@ -117,9 +116,6 @@ const ResultPage: React.FC = () => {
       
       {/* Monitor de desempenho (componente invisível) */}
       <PerformanceMonitor />
-      
-      {/* CTA flutuante para melhorar conversão */}
-      <FloatingCTA onClickCTA={handleCTAClick} />
       
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
