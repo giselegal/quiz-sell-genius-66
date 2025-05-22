@@ -152,7 +152,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             onClick={onNextClick}
             disabled={currentAnswers.length === 0}
             className={cn(
-              "text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-opacity-50",
+              "text-lg py-3 px-6 rounded-lg shadow-md font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-opacity-50",
               "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none",
               isButtonActive && !(currentAnswers.length === 0) // Aplicar efeito apenas se ativo e não desabilitado
                 ? "bg-brand-primary hover:bg-brand-primary/90 transform hover:scale-105 focus:ring-brand-primary hover:shadow-lg" 
@@ -160,7 +160,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               currentAnswers.length === 0 && "bg-gray-300 hover:bg-gray-300" // Estilo para desabilitado
             )}
           >
-            Continuar <ArrowRight className="ml-2 h-5 w-5" />
+            Avançar <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
       )}
