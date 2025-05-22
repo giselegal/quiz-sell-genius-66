@@ -333,9 +333,9 @@ const QuizPage: React.FC = () => {
         showingStrategicQuestions && actualCurrentQuestionData
           ? (currentStrategicQuestionIndex === strategicQuestions.length - 1 
               ? () => { 
-                  setShowingFinalTransition(true); 
+                  setShowingFinalTransition(true);  
                   trackQuizComplete(); // Rastreia a conclusão final do quiz aqui
-                  handleShowResult(); 
+                  // Manual progression to results will be triggered by button click
                 }
               : goToNextStrategicQuestion // Chama a nova função para avançar
             )
