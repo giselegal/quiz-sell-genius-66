@@ -352,6 +352,7 @@ const QuizPage: React.FC = () => {
                       handleStrategicAnswer={handleStrategicAnswerInternal} 
                       strategicAnswers={strategicAnswers}
                       handleShowResult={handleShowResult}
+                      hideCounter={true} // Adiciona esta propriedade para esconder a contagem
                     />
                   </motion.div>
                 ) : (
