@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MainTransition } from './MainTransition';
 import QuizFinalTransition from '../QuizFinalTransition';
@@ -10,6 +9,7 @@ interface QuizTransitionManagerProps {
   handleStrategicAnswer: (response: UserResponse) => void;
   strategicAnswers: Record<string, string[]>;
   handleShowResult: () => void;
+  hideCounter?: boolean;           // <-- nova prop
 }
 
 const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
@@ -18,6 +18,7 @@ const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
   handleStrategicAnswer,
   strategicAnswers,
   handleShowResult,
+  hideCounter = false,            // <-- valor default
 }) => {
   if (showingFinalTransition) {
     return <QuizFinalTransition onShowResult={handleShowResult} />;
@@ -25,10 +26,22 @@ const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
 
   if (showingTransition) {
     return (
-      <MainTransition
-        onAnswer={handleStrategicAnswer}
-        strategicAnswers={strategicAnswers}
-      />
+      <div className="flex flex-col items-center justify-center h-full">
+        <MainTransition
+          onAnswer={handleStrategicAnswer}
+          strategicAnswers={strategicAnswers}
+        />
+
+        {/* Remover/ocultar contador numérico */}
+        {!hideCounter && (
+          <div /* id="transition-counter" ou classe que existia */>
+            {/* ...existing counter logic / JSX... */}
+          </div>
+        )}
+
+        {/* Spinner ou mensagem continuam aparecendo normalmente */}
+        <Spinner /> {/* ou componente existente */}
+      </div>
     );
   }
 
