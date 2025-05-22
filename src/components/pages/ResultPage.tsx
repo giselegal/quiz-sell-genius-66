@@ -141,6 +141,9 @@ const ResultPage: React.FC = () => {
                   className="h-3 bg-[#F3E8E6] rounded-full overflow-hidden" 
                   indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-500 ease-in-out"
                 />
+                <div className="text-right text-sm text-[#8F7A6A] mt-1">
+                  {primaryStyle.percentage}%
+                </div>
               </div>
             </div>
 

@@ -41,10 +41,7 @@ export const QuizHeader: React.FC<QuizHeaderProps> = ({
       />
       
       {/* Ajustado padding: pt-6 para pt-4, pb-4 para pb-2 */}
-      <AnimatedWrapper className="flex justify-between items-center pt-4 pb-2 px-4 w-full">
-        <h1 className="text-base font-playfair text-[#432818]">
-          Olá, {userName || 'Visitante'}!
-        </h1>
+      <AnimatedWrapper className="flex justify-center items-center pt-4 pb-2 px-4 w-full">
         <div className="text-sm text-[#1A1818]/60">
           {currentStep} de {totalSteps}
         </div>
