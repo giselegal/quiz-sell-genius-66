@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -62,8 +61,8 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   return (
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
-      "md:mx-auto", // Center on desktop
-      !isMobile && "md:max-w-[40%]" // Reduced from 50% to 40% on desktop
+      isMobile ? "max-w-full" : "md:mx-auto", // Ocupar toda a largura disponível dentro da coluna
+      !isMobile && "md:max-w-[96%]" // Largura máxima em desktop
     )}>
       <AspectRatio 
         ratio={imageUrl.includes('sapatos') ? 1 : 3/4} 

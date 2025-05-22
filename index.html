@@ -28,36 +28,40 @@
   <link rel="dns-prefetch" href="https://res.cloudinary.com" />
   <link rel="dns-prefetch" href="https://connect.facebook.net" />
 
-  <!-- Preload Playfair Display woff2 direto do Google Fonts para garantir swap e performance -->
+  <!-- Preload apenas dos pesos 400 e 700 da Playfair Display com font-display: swap -->
   <link rel="preload" as="font" href="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYh2I.woff2" type="font/woff2" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="font" href="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd3vUDds.woff2" type="font/woff2" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap&text=ChegadumroltnsçãqVê" rel="stylesheet" />
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
-  <!-- Favicon padrão 16x16 -->
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
-  <!-- Ícone do Windows Tile -->
-  <meta name="msapplication-TileColor" content="#ffffff" />
-  <meta name="theme-color" content="#ffffff" />
-  <!-- fallback -->
-  <link rel="shortcut icon" href="/favicons/favicon-16x16.png" type="image/png" />
-  <link rel="manifest" href="/manifest.json">
-  <meta name="msapplication-TileColor" content="#ffffff">
+  <style>
+    /* Garantir font-display: swap para textos críticos */
+    @font-face {
+      font-family: 'Playfair Display';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/playfairdisplay/v30/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYh2I.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: 'Playfair Display';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd3vUDds.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+  </style>
+
+  <!-- Favicon personalizado -->
+  <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
   <meta name="theme-color" content="#ffffff">
   <meta http-equiv="Cache-Control" content="public, max-age=31536000" />
-
-  <!-- Facebook Pixel Code -->
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1311550759901086');
-    fbq('track', 'PageView');
-  </script>
 
   <!-- Vite irá injetar os assets corretos no build -->
   <script type="module" src="/src/main.jsx"></script>
@@ -129,5 +133,35 @@
   <script>
     document.getElementById('root')?.classList.remove('js-loading');
   </script>
+  
+  <!-- Facebook Pixel Code - carregado de forma assíncrona após o conteúdo principal -->
+  <script>
+    // Carregar o Facebook Pixel somente após o carregamento do conteúdo principal
+    window.addEventListener('load', function() {
+      // Verificar consentimento (simples implementação)
+      var consentCookie = document.cookie.match(/cookieConsent=(true|false)/);
+      var hasConsent = consentCookie ? consentCookie[1] === 'true' : true; // Default para true se não existir
+      
+      if (hasConsent) {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1311550759901086');
+        fbq('track', 'PageView');
+        
+        console.log('[Analytics] Facebook Pixel carregado com sucesso');
+      } else {
+        console.log('[Analytics] Facebook Pixel não carregado por falta de consentimento');
+      }
+    });
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1311550759901086&ev=PageView&noscript=1"
+  /></noscript>
 </body>
 </html>

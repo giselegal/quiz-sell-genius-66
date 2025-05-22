@@ -38,26 +38,30 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         if (type === 'text') {
           optionRef.current.style.borderColor = '#b29670';
           optionRef.current.style.boxShadow = isStrategicOption 
-            ? '0 6px 12px rgba(178, 150, 112, 0.4)' // Sombra mais pronunciada para estratégicas
+            ? '0 10px 20px rgba(178, 150, 112, 0.6)' // Sombra mais pronunciada para estratégicas
             : '0 4px 8px rgba(178, 150, 112, 0.25)';
           
           if (isStrategicOption) {
             // Destacar mais as opções estratégicas selecionadas
             optionRef.current.style.backgroundColor = '#faf6f1';
-            optionRef.current.style.transform = 'translateY(-2px)';
+            optionRef.current.style.transform = 'translateY(-4px)'; // Efeito de elevação aumentado
+            // Adicionar borda inferior extra para enfatizar seleção
+            optionRef.current.style.borderBottom = '4px solid #b29670';
           }
         } 
         // Para opções de imagem - sem borda, apenas sombra
         else {
           optionRef.current.style.borderColor = 'transparent';
           optionRef.current.style.boxShadow = isStrategicOption 
-            ? '0 15px 30px rgba(0, 0, 0, 0.25)' // Sombra mais pronunciada para estratégicas
+            ? '0 18px 35px rgba(0, 0, 0, 0.30)' // Sombra mais pronunciada para estratégicas
             : '0 12px 24px rgba(0, 0, 0, 0.2)';
         }
       } else {
         if (type === 'text') {
-          optionRef.current.style.borderColor = '#B89B7A';
-          optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+          optionRef.current.style.borderColor = isStrategicOption ? '#B89B7A' : '#E0D5C5';
+          optionRef.current.style.boxShadow = isStrategicOption 
+            ? '0 4px 8px rgba(0, 0, 0, 0.1)' 
+            : '0 2px 4px rgba(0, 0, 0, 0.05)';
           
           if (isStrategicOption) {
             // Resetar estilo para opções estratégicas não selecionadas
@@ -66,7 +70,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           }
         } else {
           optionRef.current.style.borderColor = 'transparent';
-          optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+          optionRef.current.style.boxShadow = isStrategicOption 
+            ? '0 6px 12px rgba(0, 0, 0, 0.15)' 
+            : '0 2px 4px rgba(0, 0, 0, 0.05)';
         }
       }
     }
@@ -110,8 +116,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   return (
     <div 
       className={cn(
-        "relative h-full",
-        isDisabled && isStrategicOption ? "opacity-45 cursor-not-allowed transition-opacity duration-300" : 
+        "relative h-full w-full", // Largura total dentro da coluna
+        isDisabled && isStrategicOption ? "opacity-40 cursor-not-allowed transition-opacity duration-300" : 
         (isDisabled ? "opacity-50 cursor-not-allowed" : "")
       )}
       onClick={handleClick}
@@ -120,17 +126,29 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         ref={optionRef}
         className={cn(
-          "relative h-full flex flex-col rounded-lg overflow-hidden",
+          "relative h-full flex flex-col rounded-lg overflow-hidden w-full", // Largura total
           "cursor-pointer", 
           
-          // Para opções de texto - manter borda
-          type === 'text' && "p-4 border",
+          // Para opções estratégicas, adicionamos estilo mais elaborado
+          isStrategicOption && type === 'text' && "p-5 sm:p-7 border-2 !px-7", // Padding aumentado para melhor legibilidade
+          
+          // Para opções estratégicas de imagem, ajuste para melhor visualização
+          isStrategicOption && type !== 'text' && "pb-3 w-full",
+          
+          // Para opções normais de imagem, aumentar largura
+          type !== 'text' && "w-full",
+          
+          // Para opções de texto - manter borda e aumentar padding horizontal
+          !isStrategicOption && type === 'text' && "p-4 sm:p-5 !px-6 border",
           
           // Para opções de imagem - SEM borda na coluna
           type !== 'text' && "border-0",
           
           // Fundo sólido sem transparência e adicionando sombra padrão
-          "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300"
+          "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300",
+          
+          // Adicionar uma borda extra para opções estratégicas não selecionadas
+          isStrategicOption && !isSelected && "border-[#B89B7A]"
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -147,23 +165,24 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         <p className={cn(
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium py-1 px-2 mt-auto text-[#432818] relative", 
-                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-sm"
+                "leading-tight font-medium py-2 px-2 mt-auto text-[#432818] relative", 
+                isMobile ? "text-[1rem]" : "text-base sm:text-lg" // Aumentado para opções de imagem
               )
             : cn(
                 "leading-relaxed text-[#432818]",
-                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base"
+                // Força tamanhos maiores para garantir legibilidade em mobile
+                isMobile 
+                  ? (isStrategicOption ? "text-[1.25rem] font-medium !leading-tight" : "text-[1.1rem] !leading-snug") 
+                  : (isStrategicOption ? "text-lg sm:text-xl font-medium" : "text-base sm:text-lg")
               )
         )}>
           {highlightStrategicWords(option.text)}
-        </p>
-        
-        {/* Indicador de seleção - check com círculo para questões estratégicas */}
+        </p>            {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
           isStrategicOption ? (
-            <div className="absolute -top-1 -right-1 h-7 w-7 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
+            <div className="absolute -top-2 -right-2 h-9 w-9 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
               <Check
-                className="h-5 w-5 text-white"
+                className="h-6 w-6 text-white"
                 strokeWidth={3}
               />
             </div>
@@ -173,6 +192,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
               strokeWidth={3}
             />
           )
+        )}
+        
+        {/* Indicador visual adicional para questões estratégicas */}
+        {isStrategicOption && !isSelected && (
+          <div className="absolute -top-1 -right-1 h-5 w-5 bg-[#f9f4ef] border-2 border-[#b29670] rounded-full"></div>
         )}
       </div>
     </div>

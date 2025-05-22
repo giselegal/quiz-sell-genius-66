@@ -296,7 +296,9 @@ const ResultPage: React.FC = () => {
                 <div className="bg-[#f9f4ef] p-6 rounded-lg space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
                   <div className="text-center md:text-left space-y-1">
                     <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por Apenas</p>
-                    <p className="text-4xl font-bold text-[#aa6b5d]">5x de R$ 8,83</p>
+                    <p className="text-3xl sm:text-4xl font-bold text-[#B55B4C] whitespace-nowrap tracking-tight">
+                      <span className="text-xl sm:text-2xl font-medium mr-1">5x de</span> R$ 8,83
+                    </p>
                   </div>
                   <div className="text-center md:text-left">
                     <p className="text-sm text-[#432818]">Ou R$ 39,90 à vista</p>

@@ -30,7 +30,7 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
       animate="visible"
       variants={containerVariants}
     >
-      <motion.div className="flex items-center justify-between mb-2">
+      <motion.div className="flex items-center justify-between mb-3">
         <motion.h3 
           className="text-sm font-medium text-[#432818] relative inline-block"
           whileHover={{ x: 3 }}
@@ -46,13 +46,13 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
       </motion.div>
 
       <motion.div 
-        className="grid grid-cols-1 gap-3"
+        className="grid grid-cols-1 gap-4"
         variants={containerVariants}
       >
         {secondaryStyles.slice(0, 2).map((style, index) => (
           <motion.div 
             key={style.category} 
-            className="p-3 bg-white rounded-lg hover:shadow-md transition-all duration-300"
+            className="p-4 bg-white rounded-lg hover:shadow-md transition-all duration-300"
             variants={itemVariants}
             whileHover={{ 
               y: -2, 
@@ -78,9 +78,9 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
                 </motion.span>
               </div>
               
-              <div className="w-full bg-[#FAF9F7] rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-[#FAF9F7] rounded-full h-2.5 overflow-hidden">
                 <motion.div 
-                  className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] h-2 rounded-full relative"
+                  className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] h-2.5 rounded-full relative"
                   initial={{ width: 0 }}
                   animate={{ width: `${style.percentage}%` }}
                   transition={{ delay: 0.8 + index * 0.2, duration: 1, ease: "easeOut" }}

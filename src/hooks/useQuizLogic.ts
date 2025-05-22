@@ -1,7 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
-import { preloadImagesByUrls, preloadCriticalImages } from '../utils/imageManager';
+import { preloadImagesByUrls, preloadCriticalImages, getLowQualityImage } from '../utils/imageManager';
+import { useConnectionSpeed } from './useConnectionSpeed';
 
 export const useQuizLogic = () => {
   // 1. State declarations (all at the top)
@@ -17,6 +18,9 @@ export const useQuizLogic = () => {
     return savedResult ? JSON.parse(savedResult) : null;
   });
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
+  
+  // Utiliza o hook de velocidade de conexão para ajustar qualidade de imagens
+  const { connectionSpeed, isLowEndDevice } = useConnectionSpeed();
 
   // 2. Computed values
   const currentQuestion = quizQuestions[currentQuestionIndex];
@@ -41,10 +45,10 @@ export const useQuizLogic = () => {
         .filter(Boolean) as string[];
 
       if (firstQuestionImages.length > 0) {
-        // High priority preload for first question
+        // High priority preload for first question - adaptado pela velocidade da conexão
         preloadImagesByUrls(firstQuestionImages, {
-          quality: 85, // Alterado de 95 para 85
-          batchSize: 4,
+          quality: connectionSpeed.quality, // Qualidade adaptativa 
+          batchSize: connectionSpeed.batchSize, // Batch size adaptativo
           onComplete: () => {
             setIsInitialLoadComplete(true);
           }
@@ -62,8 +66,9 @@ export const useQuizLogic = () => {
 
           if (nextQuestionImages.length > 0) {
             preloadImagesByUrls(nextQuestionImages, { 
-              quality: 85, // Alterado de 95 para 85
-              batchSize: 2 
+              // Qualidade para próxima questão é 5 pontos menor que a atual
+              quality: Math.max(connectionSpeed.quality - 5, 60),
+              batchSize: Math.max(connectionSpeed.batchSize - 1, 1) 
             });
           }
         }
@@ -72,8 +77,12 @@ export const useQuizLogic = () => {
       }
     }
     
-    // Also start preloading strategic images in the background
-    preloadCriticalImages('strategic');
+    // Also start preloading strategic images in the background com qualidade adaptativa
+    preloadCriticalImages('strategic', {
+      quality: isLowEndDevice 
+        ? Math.max(connectionSpeed.quality - 10, 60) // Menor qualidade para dispositivos mais lentos
+        : connectionSpeed.quality - 5 // Qualidade ligeiramente menor para imagens estratégicas
+    });
   }, []); // Removido currentQuestion e nextQuestion das dependências para rodar apenas uma vez
 
   // 3. Simple utility functions that don't depend on other functions
@@ -99,8 +108,8 @@ export const useQuizLogic = () => {
 
       if (nextImages.length > 0) {
         preloadImagesByUrls(nextImages, { 
-          quality: 85, // Alterado de 95 para 85
-          batchSize: 3 
+          quality: connectionSpeed.quality, // Qualidade adaptativa
+          batchSize: connectionSpeed.batchSize
         });
       }
       
@@ -116,8 +125,8 @@ export const useQuizLogic = () => {
 
         if (nextNextImages.length > 0) {
           preloadImagesByUrls(nextNextImages, { 
-            quality: 85, // Alterado de 95 para 85
-            batchSize: 2 
+            quality: Math.max(connectionSpeed.quality - 10, 60), // Qualidade reduzida para questões futuras
+            batchSize: Math.max(connectionSpeed.batchSize - 1, 1)
           });
         }
       }
@@ -154,22 +163,22 @@ export const useQuizLogic = () => {
       if (strategicQuestionsProgress === 1) {
         // Na primeira questão estratégica, iniciamos o preload das imagens principais de resultado
         preloadCriticalImages(['results'], { 
-          quality: 80, 
-          batchSize: 2 
+          quality: connectionSpeed.quality, 
+          batchSize: connectionSpeed.batchSize 
         });
         console.log('[Otimização] Iniciando pré-carregamento das imagens principais de resultado');
       } else if (strategicQuestionsProgress === 2) {
         // Na segunda questão, carregamos imagens de transformação
         preloadCriticalImages(['transformation'], { 
-          quality: 75, 
-          batchSize: 2 
+          quality: Math.max(connectionSpeed.quality - 5, 70), 
+          batchSize: connectionSpeed.batchSize
         });
         console.log('[Otimização] Pré-carregando imagens de transformação');
       } else if (strategicQuestionsProgress >= 3) {
         // Na terceira ou posterior, começamos a carregar imagens de bônus e depoimentos
         preloadCriticalImages(['bonus', 'testimonials'], { 
-          quality: 75,
-          batchSize: 2 
+          quality: Math.max(connectionSpeed.quality - 10, 65),
+          batchSize: Math.max(connectionSpeed.batchSize - 1, 1)
         });
         console.log('[Otimização] Pré-carregando imagens de bônus e depoimentos');
       }
@@ -248,10 +257,14 @@ export const useQuizLogic = () => {
     const primaryStyle = styleResults[0] || null;
     const secondaryStyles = styleResults.slice(1);
 
+    // Obter userName do localStorage se disponível
+    const storedUserName = localStorage.getItem('userName') || '';
+
     const result: QuizResult = { // Explicitly type QuizResult
       primaryStyle,
       secondaryStyles,
       totalSelections,
+      userName: storedUserName, // Adicionado userName obrigatório
       // clickOrder: clickOrderInternal // Optional: save the click order used
     };
 

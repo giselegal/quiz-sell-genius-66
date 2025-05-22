@@ -65,24 +65,38 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const getGridColumns = () => {
     if (question.type === 'text') {
       if (isStrategicQuestion) {
-        return "grid-cols-1 gap-3 px-2";
+        return "grid-cols-1 gap-4 px-0 sm:px-2"; // Aumentado o gap para melhor espaçamento
       }
-      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
+      return isMobile ? "grid-cols-1 gap-4 px-0 sm:px-2" : "grid-cols-1 gap-5 px-4";
     }
-    return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
+    // Para opções com imagens, mantemos as mesmas colunas do layout original,
+    // apenas ajustamos padding e gap para melhor visualização
+    return isMobile
+      ? "grid-cols-2 gap-3 px-0" // Aumentado gap entre colunas em mobile
+      : "grid-cols-2 gap-5 px-0 md:px-2"; // Aumentado gap entre colunas em desktop
   };
   
   return (
-    <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
-      isMobile && "px-2", 
-      isStrategicQuestion && "max-w-3xl"
+    <div className={cn("w-full max-w-[99%] md:max-w-6xl mx-auto pb-5 relative", // Aumentado para 99% da largura em mobile
+      isMobile && "px-0.5", // Padding mínimo para não tocar nas bordas da tela
+      isStrategicQuestion && "max-w-[99%] md:max-w-3xl py-6 bg-gradient-to-b from-[#fffbf7] to-[#fff] border border-[#B89B7A]/30 rounded-xl shadow-lg" // Aumentado padding e sombra
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
+          {isStrategicQuestion && (
+            <div className="text-center mb-4">
+              <span className="inline-block px-5 py-2 bg-[#B89B7A] text-white text-base font-bold rounded-full shadow-sm">
+                ⭐ Questão Especial
+              </span>
+            </div>
+          )}
           <h2 className={cn(
-            "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-            isMobile ? "text-base" : "text-base sm:text-xl",
-            isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
+            "font-playfair text-center mb-5 px-1 sm:px-3 pt-3 text-brand-coffee font-semibold tracking-normal", // Reduzido padding em mobile
+            // Aumentado consideravelmente tanto para mobile quanto desktop
+            isStrategicQuestion 
+              ? (isMobile ? "text-[1.55rem] leading-tight" : "text-2xl sm:text-4xl")
+              : (isMobile ? "text-xl leading-snug" : "text-xl sm:text-3xl"),
+            isStrategicQuestion && "text-[#432818] mb-8 font-bold whitespace-pre-line bg-[#f9f4ef] py-5 px-2 sm:px-4 rounded-lg shadow-md border border-[#B89B7A]/30" // Destaque visual aprimorado
           )}>
             {highlightStrategicWords(question.title)}
           </h2>
@@ -92,7 +106,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               <img 
                 src={question.imageUrl} 
                 alt="Question visual" 
-                className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+                className="w-full max-w-[95%] md:max-w-md mx-auto rounded-lg shadow-md border border-[#B89B7A]/20" // Aumentado para 95% em mobile
                 onError={() => {
                   console.error(`Failed to load image: ${question.imageUrl}`);
                   setImageError(true);
@@ -107,7 +121,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         "grid h-full",
         getGridColumns(),
         hasImageOptions && "mb-4 relative",
-        isStrategicQuestion && "gap-4"
+        isStrategicQuestion && "gap-3 md:gap-5" // Reduzido gap em mobile para caber mais conteúdo
       )}>
         {question.options.map(option => (
           <QuizOption 
