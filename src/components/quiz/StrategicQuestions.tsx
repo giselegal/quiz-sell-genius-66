@@ -4,10 +4,6 @@ import { UserResponse } from '@/types/quiz';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { preloadCriticalImages, preloadImagesByUrls } from '@/utils/imageManager';
-import OptimizedImage from '../ui/OptimizedImage';
-import { getAllImages } from '@/data/imageBank'; // Importar para acessar o banco de imagens
-import { Button } from '../ui/button';
-import { ArrowRight } from 'lucide-react';
 
 // Imagens críticas da página de resultados a serem pré-carregadas
 const RESULT_CRITICAL_IMAGES = [
@@ -28,7 +24,6 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   currentQuestionIndex,
   answers,
   onAnswer,
-  onNextClick
 }) => {
   const [mountKey, setMountKey] = useState(Date.now());
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
@@ -95,12 +90,6 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   }, [currentQuestionIndex]);
 
   if (currentQuestionIndex >= strategicQuestions.length) return null;
-  
-  const handleNextClick = () => {
-    if (onNextClick) {
-      onNextClick();
-    }
-  };
   
   const currentQuestion = strategicQuestions[currentQuestionIndex];
   const currentAnswers = answers[currentQuestion?.id] || [];

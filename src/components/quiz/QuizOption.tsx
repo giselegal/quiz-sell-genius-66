@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { QuizOption as QuizOptionType } from '@/types/quiz';
@@ -33,10 +32,12 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       onClick={handleClick}
       className={cn(
         "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer bg-white",
-        isSelected 
-          ? "border-2 border-[#B89B7A] shadow-lg transform scale-[1.01]" 
-          : isDisabled 
-            ? "border-2 border-transparent opacity-75 cursor-not-allowed" 
+        isSelected
+          ? type !== 'text' && option.imageUrl
+            ? "shadow-xl transform scale-[1.02]" // Efeito 3D para imagens
+            : "border-2 border-[#B89B7A] shadow-lg transform scale-[1.01]" // Borda para texto
+          : isDisabled
+            ? "border-2 border-transparent opacity-75 cursor-not-allowed"
             : "border-2 border-transparent hover:border-[#B89B7A]/60 hover:shadow-md hover:scale-[1.005]",
         type === 'text' ? "p-4" : "flex flex-col"
       )}
