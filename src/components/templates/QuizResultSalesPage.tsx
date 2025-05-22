@@ -1,25 +1,3 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { StyleResult } from '@/types/quiz';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
-import { trackButtonClick, trackSaleConversion } from '@/utils/analytics';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Card } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { ShoppingCart, Heart, Award, CheckCircle, Star, XCircle } from 'lucide-react';
 
 // Helper function to get style descriptions
