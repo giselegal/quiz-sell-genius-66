@@ -61,14 +61,14 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       
       <div className={cn(
         "flex-1 p-3 text-[#432818]",
-        type !== 'text' && option.imageUrl ? "border-t border-[#B89B7A]/10" : ""
+        type !== 'text' && option.imageUrl ? "border-t border-[#B89B7A]/10 text-sm" : ""
       )}>
         <p>{option.text}</p>
       </div>
       
       {isSelected && (
-        <div className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm">
-          <Check className="w-4 h-4" />
+        <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm">
+          <Check className="w-3 h-3" />
         </div>
       )}
     </div>
