@@ -85,7 +85,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
   // Renderizar diretamente o conteúdo principal sem estados de carregamento
   return (
     <main
-      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-[#fffaf4] to-[#f8f5f0] py-8 sm:py-12 md:py-16 relative overflow-x-hidden"
+      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-[#fffaf4] to-[#f8f5f0] py-8 sm:py-12 md:py-16 relative overflow-hidden"
       data-section="intro"
     >
       {/* Elementos decorativos de fundo para elegância adicional */}
