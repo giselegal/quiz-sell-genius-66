@@ -225,16 +225,41 @@ const QuizPage: React.FC = () => {
         trackResultView(results.primaryStyle.category);
       }
       
+      // Define uma flag para garantir que a navegação ocorra
+      let navigationOccurred = false;
+      
       // Adiciona um pequeno delay para garantir que a animação de transição seja concluída
-      setTimeout(() => {
-        navigate('/resultado');
+      const navigationTimer = setTimeout(() => {
+        if (!navigationOccurred) {
+          navigationOccurred = true;
+          navigate('/resultado');
+        }
       }, 800); // Tempo suficiente para completar a animação
+      
+      // Adiciona um fallback caso a navegação não ocorra dentro de um tempo máximo
+      const fallbackTimer = setTimeout(() => {
+        if (!navigationOccurred) {
+          console.warn('Navegação com timeout normal falhou, usando fallback');
+          navigationOccurred = true;
+          clearTimeout(navigationTimer);
+          navigate('/resultado');
+        }
+      }, 3000); // Tempo máximo que o usuário deve ficar na tela de transição
+      
+      return () => {
+        // Limpa os timers em caso de desmontagem do componente
+        clearTimeout(navigationTimer);
+        clearTimeout(fallbackTimer);
+      };
     } catch (error) {
+      console.error('Erro ao navegar para a página de resultados:', error);
       toast({
         title: "Erro ao mostrar resultado",
         description: "Não foi possível carregar o resultado. Por favor, tente novamente.",
         variant: "destructive",
       });
+      // Em caso de erro, tenta navegar diretamente
+      navigate('/resultado');
     }
   }, [strategicAnswers, submitQuizIfComplete, navigate]);
 
@@ -336,6 +361,24 @@ const QuizPage: React.FC = () => {
       })), { quality: 100 });
     }
   }, [showingFinalTransition]);
+
+  // Adicione este useEffect para garantir que o usuário não fique preso na tela de transição
+  useEffect(() => {
+    let maxTransitionTimer: NodeJS.Timeout | null = null;
+    
+    if (showingFinalTransition) {
+      maxTransitionTimer = setTimeout(() => {
+        console.warn('Tempo máximo de transição atingido, forçando navegação');
+        navigate('/resultado');
+      }, 5000); // Tempo máximo absoluto na tela de transição
+    }
+    
+    return () => {
+      if (maxTransitionTimer) {
+        clearTimeout(maxTransitionTimer);
+      }
+    };
+  }, [showingFinalTransition, navigate]);
 
   return (
     <LoadingManager isLoading={!pageIsReady}>
