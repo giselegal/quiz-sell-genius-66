@@ -43,15 +43,6 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
           />
           Estilos Complementares
         </motion.h3>
-        
-        <motion.div 
-          className="text-[10px] text-[#aa6b5d] bg-[#FAF9F7] px-2 py-0.5 rounded-full"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          {secondaryStyles.length} estilos
-        </motion.div>
       </motion.div>
 
       <motion.div 

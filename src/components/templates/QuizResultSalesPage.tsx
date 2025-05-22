@@ -22,6 +22,30 @@ import {
 } from '@/components/ui/carousel';
 import { ShoppingCart, Heart, Award, CheckCircle, Star } from 'lucide-react';
 
+// Helper function to get style descriptions
+const getStyleDescription = (styleType: string): string => {
+  switch (styleType) {
+    case 'Natural':
+      return 'Você valoriza o conforto e a praticidade. Seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia.';
+    case 'Clássico':
+      return 'Você aprecia roupas atemporais e elegantes. Seu estilo é refinado e tradicional, com peças de qualidade que nunca saem de moda.';
+    case 'Contemporâneo':
+      return 'Você gosta de estar atualizado e seguir as tendências. Seu estilo é moderno e versátil, combinando o clássico com o atual.';
+    case 'Elegante':
+      return 'Você valoriza a sofisticação e o requinte. Seu estilo é polido e imponente, com peças de alta qualidade e acabamento impecável.';
+    case 'Romântico':
+      return 'Você aprecia detalhes delicados e femininos. Seu estilo é suave e gracioso, com elementos como rendas, babados e estampas florais.';
+    case 'Sexy':
+      return 'Você gosta de valorizar suas curvas. Seu estilo é sensual e marcante, com peças que destacam seu corpo e sua confiança.';
+    case 'Dramático':
+      return 'Você busca impactar e chamar atenção. Seu estilo é arrojado e marcante, com peças estruturadas e de design diferenciado.';
+    case 'Criativo':
+      return 'Você adora expressar sua individualidade. Seu estilo é único e original, combinando cores, texturas e elementos de forma não convencional.';
+    default:
+      return 'Seu estilo pessoal reflete sua personalidade e preferências únicas.';
+  }
+};
+
 // Lazy load componentes menos críticos
 const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
 const BenefitList = lazy(() => import('@/components/quiz-result/sales/BenefitList'));
@@ -152,13 +176,30 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 </div>
               </div>
               {secondaryStyles.length > 0 && (
-                <div>
-                  <h3 className="font-medium text-[#aa6b5d] mb-2">Seus estilos secundários:</h3>
-                  <div className="grid grid-cols-2 gap-4">
+                <div className="mt-8">
+                  <h3 className="text-lg font-medium text-[#aa6b5d] mb-4">
+                    Seus estilos complementares
+                  </h3>
+                  <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-4 sm:space-y-0">
                     {secondaryStyles.slice(0, 2).map((style, index) => (
-                      <div key={index} className="bg-white p-3 rounded-lg shadow-sm">
-                        <p className="font-medium">{style.category}</p>
-                        <p className="text-sm text-[#3a3a3a]/60">{style.percentage}%</p>
+                      <div
+                        key={index}
+                        className="flex-1 bg-white p-4 rounded-lg shadow-sm"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-[#432818]">
+                            {style.category}
+                          </span>
+                          <span className="text-sm font-semibold text-[#aa6b5d]">
+                            {style.percentage}%
+                          </span>
+                        </div>
+                        <div className="w-full h-2 bg-[#FAF9F7] rounded-full mt-2 overflow-hidden">
+                          <div
+                            className="h-2 bg-[#B89B7A] rounded-full"
+                            style={{ width: `${style.percentage}%` }}
+                          />
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -424,30 +465,6 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
       </footer>
     </div>
   );
-};
-
-// Helper function to get style descriptions
-const getStyleDescription = (styleType: string): string => {
-  switch (styleType) {
-    case 'Natural':
-      return 'Você valoriza o conforto e a praticidade. Seu estilo é descontraído e casual, com peças fáceis de usar no dia a dia.';
-    case 'Clássico':
-      return 'Você aprecia roupas atemporais e elegantes. Seu estilo é refinado e tradicional, com peças de qualidade que nunca saem de moda.';
-    case 'Contemporâneo':
-      return 'Você gosta de estar atualizado e seguir as tendências. Seu estilo é moderno e versátil, combinando o clássico com o atual.';
-    case 'Elegante':
-      return 'Você valoriza a sofisticação e o requinte. Seu estilo é polido e imponente, com peças de alta qualidade e acabamento impecável.';
-    case 'Romântico':
-      return 'Você aprecia detalhes delicados e femininos. Seu estilo é suave e gracioso, com elementos como rendas, babados e estampas florais.';
-    case 'Sexy':
-      return 'Você gosta de valorizar suas curvas. Seu estilo é sensual e marcante, com peças que destacam seu corpo e sua confiança.';
-    case 'Dramático':
-      return 'Você busca impactar e chamar atenção. Seu estilo é arrojado e marcante, com peças estruturadas e de design diferenciado.';
-    case 'Criativo':
-      return 'Você adora expressar sua individualidade. Seu estilo é único e original, combinando cores, texturas e elementos de forma não convencional.';
-    default:
-      return 'Seu estilo pessoal reflete sua personalidade e preferências únicas.';
-  }
 };
 
 export default QuizResultSalesPage;
