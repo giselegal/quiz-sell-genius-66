@@ -24,19 +24,19 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
   useEffect(() => {
     // Verifica se houve pré-carregamento durante questões estratégicas
     const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
-    // Início com 10% ou 50% dependendo se houve pré-carregamento
-    const startPercentage = hasPreloadedResults ? 70 : 10;
+    // Início com percentual mais alto se houve pré-carregamento
+    const startPercentage = hasPreloadedResults ? 75 : 15;
     setProgressPercentage(startPercentage);
     
-    // Progresso simulado que avança mais rápido se houve pré-carregamento
+    // Progresso simulado com incrementos menores para animação mais suave
     const interval = setInterval(() => {
       setProgressPercentage(prev => {
-        // Simulação de progresso que desacelera próximo a 90%
-        const increment = prev < 30 ? 10 : prev < 60 ? 5 : prev < 80 ? 2 : 1;
-        const newValue = Math.min(90, prev + increment);
+        // Simulação de progresso que desacelera próximo a 95%
+        const increment = prev < 40 ? 3 : prev < 70 ? 2 : prev < 85 ? 1 : 0.5;
+        const newValue = Math.min(95, prev + increment);
         return newValue;
       });
-    }, hasPreloadedResults ? 80 : 350); // Mais rápido se pré-carregado
+    }, hasPreloadedResults ? 100 : 200); // Intervalo mais uniforme
     
     return () => clearInterval(interval);
   }, []);
@@ -60,17 +60,22 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
         <div className="mb-4 sm:mb-6">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-sm text-[#8F7A6A]">Carregando resultado personalizado</span>
-            <span className="text-sm text-[#8F7A6A]">{progressPercentage}%</span>
+            {/* Removido o indicador percentual numérico para uma experiência mais limpa */}
           </div>
-          <div className="h-2 bg-[#F3E8E6] rounded-full overflow-hidden">
+          <div className="h-3 bg-[#F3E8E6] rounded-full overflow-hidden relative">
             <div 
-              className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-300 ease-out" 
+              className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-500 ease-in-out absolute top-0 left-0" 
               style={{ width: `${progressPercentage}%` }}
-            />
+            >
+              {/* Adiciona um efeito de brilho para tornar a barra mais atraente */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" 
+                   style={{ backgroundSize: '200% 100%', animation: 'shimmer 2s infinite' }}></div>
+            </div>
           </div>
           <div className="flex justify-between mt-1 text-xs text-[#8F7A6A]/70">
-            <span>Tempo decorrido: {elapsedSeconds}s</span>
-            <span>Otimizando imagens...</span>
+            {/* Não exibimos mais o tempo exato para manter a interface limpa */}
+            <span>Preparando seu resultado personalizado...</span>
+            <span>Aguarde um momento</span>
           </div>
         </div>
         
