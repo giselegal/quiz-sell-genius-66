@@ -1,60 +1,61 @@
+
 import { QuizQuestion } from '../../types/quiz';
 
 export const purchaseIntentQuestions: QuizQuestion[] = [
   {
     id: 'strategic-5',
-    title: 'Você já considerou investir em algum guia ou consultoria de estilo no passado?',
+    title: 'Qual é o seu plano com relação a adquirir um guia de estilo?',
     type: 'text',
     multiSelect: 1,
-    // A questão 15 (strategic-5) não deve ter imagem
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_31_41_jmjkty.webp',
     options: [
       {
         id: 'strategic-5-1',
-        text: 'Sim, já pesquisei mas não cheguei a comprar',
+        text: 'Estou pronta para investir em mim mesma hoje',
         styleCategory: 'Strategic'
       },
       {
         id: 'strategic-5-2',
-        text: 'Sim, já investi em algum curso/guia/consultoria',
+        text: 'Quero conhecer as opções antes de decidir',
         styleCategory: 'Strategic'
       },
       {
         id: 'strategic-5-3',
-        text: 'Não, esta é a primeira vez que considero isso',
-        styleCategory: 'Strategic'
-      },
-      {
-        id: 'strategic-5-4',
-        text: 'Prefiro não responder',
+        text: 'Estou só curiosa por enquanto',
         styleCategory: 'Strategic'
       }
     ]
   },
   {
     id: 'strategic-6',
-    title: 'Quanto você estaria disposta a investir em um guia completo de estilo personalizado?',
+    title: 'O que mais te impediria de adquirir um guia de estilo hoje?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_01_31_03_bqjnc6.webp',
     options: [
       {
         id: 'strategic-6-1',
-        text: 'Menos de R$100',
+        text: 'Preço - preciso ter certeza que vale o investimento',
         styleCategory: 'Strategic'
       },
       {
         id: 'strategic-6-2',
-        text: 'Entre R$100 e R$300',
+        text: 'Insegurança - não sei se conseguirei aplicar sozinha',
         styleCategory: 'Strategic'
       },
       {
         id: 'strategic-6-3',
-        text: 'Entre R$300 e R$500',
+        text: 'Tempo - não sei se terei tempo para estudar o material',
         styleCategory: 'Strategic'
       },
       {
         id: 'strategic-6-4',
-        text: 'Mais de R$500',
+        text: 'Confiança - não sei se vai funcionar para o meu caso',
+        styleCategory: 'Strategic'
+      },
+      {
+        id: 'strategic-6-5',
+        text: 'Nada me impediria, estou decidida',
         styleCategory: 'Strategic'
       }
     ]

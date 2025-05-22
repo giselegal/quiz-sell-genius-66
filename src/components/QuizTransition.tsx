@@ -30,13 +30,15 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
               Enquanto calculamos o seu resultado...
             </h2>
             
-            <p className="text-[#1A1818]/80 text-base">
-              Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.
-            </p>
-            
-            <p className="text-[#1A1818]/80 text-base">
-              A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.
-            </p>
+            <div className="space-y-4">
+              <p className="text-[#1A1818]/80 text-base">
+                Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.
+              </p>
+              
+              <p className="text-[#1A1818]/80 text-base">
+                A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.
+              </p>
+            </div>
             
             <div className="bg-[#B89B7A]/10 p-6 rounded-lg">
               <p className="text-[#432818] italic text-center font-medium">
@@ -47,12 +49,18 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
         </AnimatedWrapper>
 
         <AnimatedWrapper>
-          <QuizQuestion
-            question={strategicQuestions[0]}
-            onAnswer={handleFirstStrategicAnswer}
-            currentAnswers={currentAnswers}
-            autoAdvance={true}
-          />
+          <div className="bg-white rounded-xl shadow-md overflow-hidden border border-[#B89B7A]/20">
+            <div className="p-6 md:p-8">
+              <QuizQuestion
+                question={strategicQuestions[0]}
+                onAnswer={handleFirstStrategicAnswer}
+                currentAnswers={currentAnswers}
+                autoAdvance={true}
+                showQuestionImage={true}
+                isStrategicQuestion={true}
+              />
+            </div>
+          </div>
         </AnimatedWrapper>
       </div>
     </div>

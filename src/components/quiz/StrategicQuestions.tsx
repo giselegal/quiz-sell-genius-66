@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -6,6 +7,8 @@ import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { preloadCriticalImages, preloadImagesByUrls } from '@/utils/imageManager';
 import OptimizedImage from '../ui/OptimizedImage';
 import { getAllImages } from '@/data/imageBank'; // Importar para acessar o banco de imagens
+import { Button } from '../ui/button';
+import { ArrowRight } from 'lucide-react';
 
 // Imagens críticas da página de resultados a serem pré-carregadas
 const RESULT_CRITICAL_IMAGES = [
@@ -19,12 +22,14 @@ interface StrategicQuestionsProps {
   currentQuestionIndex: number;
   answers: Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
+  onNextClick?: () => void;
 }
 
 export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   currentQuestionIndex,
   answers,
-  onAnswer
+  onAnswer,
+  onNextClick
 }) => {
   const [mountKey, setMountKey] = useState(Date.now());
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
@@ -91,17 +96,60 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   }, [currentQuestionIndex]);
 
   if (currentQuestionIndex >= strategicQuestions.length) return null;
+  
+  const handleNextClick = () => {
+    if (onNextClick) {
+      onNextClick();
+    }
+  };
+  
+  const currentQuestion = strategicQuestions[currentQuestionIndex];
+  const currentAnswers = answers[currentQuestion?.id] || [];
+  const canProceed = currentAnswers.length > 0;
 
   return (
     <AnimatedWrapper key={mountKey}>
-      <QuizQuestion
-        question={strategicQuestions[currentQuestionIndex]}
-        onAnswer={onAnswer}
-        currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
-        autoAdvance={false}
-        showQuestionImage={true}
-        isStrategicQuestion={true}
-      />
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden border border-[#B89B7A]/20">
+        <div className="p-6 md:p-8">
+          <div className="mb-6">
+            <div className="w-full h-1 bg-[#B89B7A]/20 rounded-full overflow-hidden mb-2">
+              <div 
+                className="h-full bg-[#B89B7A]" 
+                style={{ 
+                  width: `${((currentQuestionIndex + 1) / strategicQuestions.length) * 100}%` 
+                }}
+              ></div>
+            </div>
+            <div className="text-xs text-[#432818]/60 text-center">
+              Pergunta {currentQuestionIndex + 1} de {strategicQuestions.length}
+            </div>
+          </div>
+          
+          <QuizQuestion
+            question={currentQuestion}
+            onAnswer={onAnswer}
+            currentAnswers={currentAnswers}
+            autoAdvance={false}
+            showQuestionImage={true}
+            isStrategicQuestion={true}
+          />
+          
+          <div className="flex justify-end mt-6">
+            <Button
+              onClick={handleNextClick}
+              disabled={!canProceed}
+              className={`px-6 py-2 rounded-md shadow-sm flex items-center ${
+                canProceed 
+                  ? "bg-[#B89B7A] text-white hover:bg-[#A38A69]" 
+                  : "bg-[#B89B7A]/40 text-white cursor-not-allowed"
+              }`}
+            >
+              Próxima
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </div>
     </AnimatedWrapper>
   );
 };

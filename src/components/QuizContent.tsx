@@ -67,8 +67,9 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             question={currentQuestion}
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
-            onNextClick={handleNextClick}
             showQuestionImage={true}
+            autoAdvance={false}
+            onNextClick={handleNextClick}
             onPreviousClick={handlePrevious}
           />
         )}
