@@ -89,15 +89,15 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {(!option.imageUrl || type === 'text') && (
         <div className={cn(
           "flex-1 p-3 text-[#432818] relative bg-white transition-shadow duration-200",
-          isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl shadow-[#B89B7A]/20 transform scale-[1.01]",
-          isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl shadow-[#FFD700]/30 animate-pulse-border ring-2 ring-[#B89B7A]/60",
+          isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl shadow-[#B89B7A]/20 scale-[1.01]",
+          isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl shadow-[#FFD700]/30 animate-pulse-border ring-2 ring-[#B89B7A]/60 scale-[1.01]",
           !isSelected && "border border-[#B89B7A]/40"
         )}>
-          <span className="block text-base sm:text-lg font-semibold text-[#432818] text-center break-words leading-tight">
+          <span className="block w-full text-base sm:text-lg font-semibold text-[#432818] text-center break-words leading-tight z-30 relative">
             {option.text}
           </span>
           {isSelected && (
-            <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm">
+            <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-40">
               <Check className="w-2.5 h-2.5" />
             </div>
           )}
