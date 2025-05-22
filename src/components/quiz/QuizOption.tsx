@@ -54,8 +54,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
-              "w-full h-[260px] object-cover rounded-t-lg z-10",
-              isSelected && "opacity-95 shadow-2xl transform scale-[1.04]"
+              "w-full h-[260px] object-cover rounded-t-lg z-20 transition-all duration-200",
+              isSelected && "opacity-95 shadow-2xl transform scale-[1.04] z-30"
             )}
             style={{ maxHeight: '260px', minHeight: '180px' }}
             onError={(e) => {
@@ -64,11 +64,14 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             }}
           />
           {/* Texto sobreposto na base da imagem, com fundo translúcido */}
-          <div className="absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg z-20 flex items-center justify-center">
+          <div className={cn(
+            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-10",
+            isSelected && "z-10 opacity-70"
+          )}>
             <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">{option.text}</span>
           </div>
           {isSelected && (
-            <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-30">
+            <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-40">
               <Check className="w-3 h-3" />
             </div>
           )}
