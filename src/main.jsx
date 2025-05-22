@@ -1,23 +1,33 @@
+
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import { initializeAnimationOptimization } from './utils/disable-animations'
-import { initializeResourcePreloading } from './utils/preloadResources'
+import { initializeResourcePreloading, setupRouteChangePreloading } from './utils/preloadResources'
+import { fixMainRoutes } from './utils/fixMainRoutes'
+import { checkMainRoutes } from './utils/routeChecker'
 
-// 1) Inicializa o que é crítico
-initializeAnimationOptimization()
+// 1) Initialize critical resources and route fixing
 initializeResourcePreloading()
 
-// 2) Renderiza imediatamente
+// 2) Render immediately
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 
-// 3) Lazy-load de monitoramentos e rotas quando o navegador estiver ocioso
+// 3) Setup route change monitoring and fixes
 const loadNonCritical = () => {
-  import('./utils/performance-monitor').then(m => m.monitorPerformance())
-  import('./utils/siteHealthCheck').then(m => m.checkSiteHealth())
-  import('./utils/funnelMonitor').then(m => m.monitorFunnelRoutes())
+  // Fix any URL issues in the main routes
+  fixMainRoutes()
+  
+  // Setup monitoring for route changes to preload resources
+  setupRouteChangePreloading()
+  
+  // Check the status of main routes
+  setTimeout(() => {
+    checkMainRoutes()
+    console.log('✅ Main routes activated and checked')
+  }, 1000)
 }
+
 if ('requestIdleCallback' in window) {
   window.requestIdleCallback(loadNonCritical, { timeout: 2000 })
 } else {
