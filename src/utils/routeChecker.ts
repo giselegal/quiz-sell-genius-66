@@ -1,6 +1,5 @@
-
 // Utilitário para verificar as rotas específicas do site da Gisele Galvão
-// Versão: 1.0.1
+// Versão: 1.0.2
 
 interface RouteStatus {
   path: string;
@@ -23,9 +22,10 @@ export function checkMainRoutes(): RouteCheckResult {
   console.log('🧪 Verificando rotas principais do site...');
   
   const mainRoutes = [
-    { path: '/', name: 'Página Inicial' },
+    { path: '/', name: 'Quiz' },
+    { path: '/home', name: 'Página Inicial' },
     { path: '/resultado', name: 'Página de Resultados' },
-    { path: '/quiz-descubra-seu-estilo', name: 'Página do Quiz' }
+    { path: '/quiz-descubra-seu-estilo', name: 'Página do Quiz Completo' }
   ];
   
   const results: RouteStatus[] = mainRoutes.map(route => {

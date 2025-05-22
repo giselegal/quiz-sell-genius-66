@@ -123,7 +123,10 @@ const App = () => {
             ) : (
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
-                  <Route path="/" element={<HomePage />} />
+                  {/* Agora a rota principal direciona diretamente para o QuizPage */}
+                  <Route path="/" element={<QuizPage />} />
+                  {/* HomePage agora está em uma rota separada */}
+                  <Route path="/home" element={<HomePage />} />
                   <Route path="/quiz" element={<QuizPage />} />
                   <Route path="/resultado" element={<ResultPage />} />
                   <Route path="/prototipo" element={<ResultPagePrototype />} />

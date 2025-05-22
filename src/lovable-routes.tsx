@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
@@ -13,6 +14,7 @@ const ResultPagePrototype = lazy(() => import('./pages/ResultPagePrototype'));
 const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
 const ResultPage = lazy(() => import('./components/pages/ResultPage'));
 const QuizPage = lazy(() => import('./components/QuizPage'));
+const HomePage = lazy(() => import('./pages/HomePage'));
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -32,7 +34,10 @@ export const LovableRoutes: React.FC = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Routes>
-        <Route path="/" element={<AdminDashboard />} />
+        {/* Rota principal agora mostra o QuizPage */}
+        <Route path="/" element={<QuizPage />} />
+        {/* HomePage agora está em uma rota separada */}
+        <Route path="/home" element={<HomePage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/editor" element={<EditorPage />} />
         <Route path="/admin/settings" element={<SettingsPage />} />

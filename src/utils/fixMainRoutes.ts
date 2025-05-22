@@ -1,21 +1,28 @@
-
 /**
  * Script para verificar e corrigir problemas específicos nas URLs principais da Gisele Galvão
  * - https://giselegalvao.com.br/
  * - https://giselegalvao.com.br/resultado
  * - https://giselegalvao.com.br/quiz-descubra-seu-estilo
- * Versão: 1.0.1
+ * Versão: 1.0.2
  */
 
 // URLs principais para monitorar e corrigir
 const MAIN_ROUTES = [
   {
     path: '/',
+    title: 'Quiz de Estilo - Descubra Seu Estilo com Gisele Galvão | Vista-se de Você!'
+  },
+  {
+    path: '/home',
     title: 'Descubra Seu Estilo com Gisele Galvão | Vista-se de Você!'
   },
   {
     path: '/resultado',
     title: 'Seu Resultado | Descubra Seu Estilo com Gisele Galvão'
+  },
+  {
+    path: '/quiz',
+    title: 'Quiz de Estilo | Gisele Galvão'
   },
   {
     path: '/quiz-descubra-seu-estilo',
