@@ -385,10 +385,12 @@ const QuizPage: React.FC = () => {
   // ------------------------------------------------------------------
   useEffect(() => {
     if (showingTransition) {
+      console.log('[QuizPage] Iniciando questões estratégicas após transição...');
       const timer = setTimeout(() => {
         setShowingStrategicQuestions(true); // exibe questões estratégicas
         setCurrentStrategicQuestionIndex(0); // garante início da sequência
         setShowingTransition(false);        // encerra tela de transição
+        console.log('[QuizPage] Questões estratégicas iniciadas!');
       }, 600); // mesmo tempo da animação (0.6 s)
 
       return () => clearTimeout(timer);
@@ -433,8 +435,6 @@ const QuizPage: React.FC = () => {
                       strategicAnswers={strategicAnswers}
                       handleShowResult={handleShowResult}
                       hideCounter={true}
-                      transitionMessage="Preparando seus resultados..."
-                      showLoadingIndicator={true} // Adicionar indicador visual se o componente suportar
                     />
                   </motion.div>
                 ) : (
