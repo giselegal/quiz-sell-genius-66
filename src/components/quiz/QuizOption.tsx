@@ -52,7 +52,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
     >
       {type !== 'text' && option.imageUrl && (
         <div className={cn(
-          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2"
+          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2 z-10" // Adicionado z-10
           // Classes de container para imagem estratégica movidas para o div principal
         )}>
           <img
@@ -88,12 +88,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {/* Para opções de texto puro, mantém layout anterior mas ativa só sombra na seleção */}
       {(!option.imageUrl || type === 'text') && (
         <div className={cn(
-          "flex-1 p-3 text-[#432818] relative bg-white transition-shadow duration-200",
-          // Classes de seleção para texto-apenas já estão no container principal (div)
-          // As classes abaixo são para o conteúdo interno, se necessário, mas a borda e sombra principal estão no pai.
-          // isSelected && !forStrategic && "shadow-xl shadow-[#B89B7A]/20 scale-[1.01]", // Removido daqui, já tratado no pai
-          // isSelected && forStrategic && "shadow-2xl shadow-[#FFD700]/30 animate-enhanced-pulse ring-4 ring-[#FFD700] scale-[1.01]", // Removido daqui
-          // !isSelected && "border border-[#B89B7A]/40" // Removido daqui, borda padrão no pai
+          "flex-1 p-3 text-[#432818] relative bg-white transition-shadow duration-200 z-10" // Adicionado z-10
         )}>
           <span className="block w-full text-base sm:text-lg font-semibold text-[#432818] text-center break-words leading-tight z-30 relative">
             {option.text}
