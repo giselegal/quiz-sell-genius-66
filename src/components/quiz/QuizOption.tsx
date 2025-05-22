@@ -99,7 +99,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             {option.text}
           </span>
           {isSelected && (
-            <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm">
+            <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-50"> {/* Adicionado z-50 para garantir visibilidade */}
               <Check className="w-2.5 h-2.5" />
             </div>
           )}
