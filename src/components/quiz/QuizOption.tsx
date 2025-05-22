@@ -56,21 +56,27 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         )}> 
           <div className="w-full h-[16px]" /> {/* respiro superior */}
           <div className="relative w-full flex items-end justify-center" style={{ minHeight: '240px', height: 'auto' }}>
-            <img 
-              src={option.imageUrl} 
-              alt={option.text}
-              className={cn(
-                "block object-contain rounded-t-lg z-20 transition-all duration-200",
-                isSelected ? "scale-[1.10] shadow-2xl -translate-y-2" : "",
-                "mx-auto",
-                "max-h-[340px] min-h-[180px] w-full sm:w-[380px] md:w-[420px] lg:w-[480px]"
-              )}
-              style={{ maxHeight: '340px', minHeight: '180px', width: '100%' }}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
-              }}
-            />
+            <div className={cn(
+              "relative flex items-end justify-center w-full",
+              // Só a imagem se move, sem fundo
+              "pointer-events-none"
+            )}>
+              <img 
+                src={option.imageUrl} 
+                alt={option.text}
+                className={cn(
+                  "block object-contain rounded-t-lg z-20 transition-all duration-200 bg-transparent",
+                  isSelected ? "scale-[1.10] shadow-2xl -translate-y-2" : "",
+                  "mx-auto",
+                  "max-h-[340px] min-h-[180px] w-full sm:w-[380px] md:w-[420px] lg:w-[480px]"
+                )}
+                style={{ maxHeight: '340px', minHeight: '180px', width: '100%' }}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
+                }}
+              />
+            </div>
             {/* Texto sempre sobreposto, centralizado, nunca atrás da imagem */}
             <div className={cn(
               "absolute bottom-0 left-0 w-full px-3 py-2 flex items-center justify-center z-30 bg-white/90 rounded-b-lg",
