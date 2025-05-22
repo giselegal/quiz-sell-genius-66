@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Card } from '@/components/ui/card';
 import { StyleResult } from '@/types/quiz';
 import { styleConfig } from '@/config/styleConfig';
@@ -11,39 +11,11 @@ interface ResultSkeletonProps {
 
 const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
   const mainImageSrc = primaryStyle && styleConfig[primaryStyle.category]?.image;
-  const [progressPercentage, setProgressPercentage] = useState(10);
-  const [preloadStartTime] = useState(Date.now());
   
   // Constantes para garantir proporções consistentes em todos os breakpoints
   const IMAGE_ASPECT_RATIO = 4/5; // Proporção altura/largura (4:5)
   const BASE_WIDTH = 256; // w-64 em pixels
   const BASE_HEIGHT = Math.round(BASE_WIDTH / IMAGE_ASPECT_RATIO);
-
-  // Simulação do progresso de carregamento baseado no tempo decorrido
-  // e no pré-carregamento que já foi feito durante as questões estratégicas
-  useEffect(() => {
-    // Verifica se houve pré-carregamento durante questões estratégicas
-    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
-    // Início com percentual mais alto se houve pré-carregamento
-    const startPercentage = hasPreloadedResults ? 75 : 15;
-    setProgressPercentage(startPercentage);
-    
-    // Progresso simulado com incrementos menores para animação mais suave
-    const interval = setInterval(() => {
-      setProgressPercentage(prev => {
-        // Simulação de progresso que desacelera próximo a 95%
-        const increment = prev < 40 ? 3 : prev < 70 ? 2 : prev < 85 ? 1 : 0.5;
-        const newValue = Math.min(95, prev + increment);
-        return newValue;
-      });
-    }, hasPreloadedResults ? 100 : 200); // Intervalo mais uniforme
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  // Calcular tempo decorrido desde o início do carregamento
-  const elapsedTimeMs = Date.now() - preloadStartTime;
-  const elapsedSeconds = Math.floor(elapsedTimeMs / 1000);
 
   return (
     <div className="min-h-screen bg-[#fffaf7] p-4 md:p-6" aria-busy="true" role="status">
@@ -56,26 +28,11 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
           </div>
         </Card>
         
-        {/* Indicador de progresso - mostra o pré-carregamento em andamento */}
-        <div className="mb-4 sm:mb-6">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-sm text-[#8F7A6A]">Carregando resultado personalizado</span>
-            {/* Removido o indicador percentual numérico para uma experiência mais limpa */}
-          </div>
-          <div className="h-3 bg-[#F3E8E6] rounded-full overflow-hidden relative">
-            <div 
-              className="h-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-500 ease-in-out absolute top-0 left-0" 
-              style={{ width: `${progressPercentage}%` }}
-            >
-              {/* Adiciona um efeito de brilho para tornar a barra mais atraente */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" 
-                   style={{ backgroundSize: '200% 100%', animation: 'shimmer 2s infinite' }}></div>
-            </div>
-          </div>
-          <div className="flex justify-between mt-1 text-xs text-[#8F7A6A]/70">
-            {/* Não exibimos mais o tempo exato para manter a interface limpa */}
-            <span>Preparando seu resultado personalizado...</span>
-            <span>Aguarde um momento</span>
+        {/* Substituímos a barra de progresso por uma mensagem simples de carregamento */}
+        <div className="mb-4 sm:mb-6 text-center">
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <LoadingSpinner size="sm" color="#aa6b5d" />
+            <span className="text-sm text-[#8F7A6A]">Preparando seu resultado personalizado...</span>
           </div>
         </div>
         

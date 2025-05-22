@@ -27,9 +27,13 @@ export const useLoadingState = ({
     
     const elapsedTime = Date.now() - startTime;
     
+    // Verificar se os resultados foram pré-carregados para acelerar a transição
+    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
+    const effectiveMinDuration = hasPreloadedResults ? Math.min(minDuration, 300) : minDuration;
+    
     // If less time has passed than minDuration, wait before completing
-    if (elapsedTime < minDuration) {
-      const remainingTime = minDuration - elapsedTime;
+    if (elapsedTime < effectiveMinDuration) {
+      const remainingTime = effectiveMinDuration - elapsedTime;
       setTimeout(() => {
         setIsLoading(false);
       }, remainingTime);

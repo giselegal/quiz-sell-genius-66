@@ -51,7 +51,7 @@ const ResultPage: React.FC = () => {
     isLoading,
     completeLoading
   } = useLoadingState({
-    minDuration: isLowPerformance ? 400 : 800,
+    minDuration: isLowPerformance ? 300 : 600, // Tempos reduzidos para melhorar a experiência
     disableTransitions: isLowPerformance
   });
 
@@ -128,7 +128,11 @@ const ResultPage: React.FC = () => {
                 <div className="text-sm text-[#8F7A6A] text-center mb-2">
                   Seu estilo predominante
                 </div>
-                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
+                <Progress 
+                  value={primaryStyle.percentage} 
+                  className="h-3 bg-[#F3E8E6] rounded-full overflow-hidden" 
+                  indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-500 ease-in-out"
+                />
               </div>
             </div>
 
