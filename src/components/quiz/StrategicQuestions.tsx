@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -132,21 +131,6 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
             autoAdvance={false}
             showQuestionImage={true}
           />
-          
-          <div className="flex justify-end mt-6">
-            <Button
-              onClick={handleNextClick}
-              disabled={!canProceed}
-              className={`px-6 py-2 rounded-md shadow-sm flex items-center ${
-                canProceed 
-                  ? "bg-[#B89B7A] text-white hover:bg-[#A38A69]" 
-                  : "bg-[#B89B7A]/40 text-white cursor-not-allowed"
-              }`}
-            >
-              Próxima
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
         </div>
       </div>
     </AnimatedWrapper>
