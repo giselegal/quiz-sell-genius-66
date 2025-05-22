@@ -35,16 +35,23 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
   const highlightedText = parts.map((part, index) => {
     // Verificar se este trecho deve ser destacado
     if (shouldHighlight(part)) {
-      return (
-        <span key={index} className="text-[#B89B7A] font-bold">
-          {part}{index < parts.length - 1 ? ' ' : ''}
-        </span>
+      return React.createElement(
+        'span', 
+        { 
+          key: index, 
+          className: 'text-[#B89B7A] font-bold'
+        }, 
+        part + (index < parts.length - 1 ? ' ' : '')
       );
     }
     
     // Caso contrário, retornar o texto normal
-    return <React.Fragment key={index}>{part}{index < parts.length - 1 ? ' ' : ''}</React.Fragment>;
+    return React.createElement(
+      React.Fragment, 
+      { key: index }, 
+      part + (index < parts.length - 1 ? ' ' : '')
+    );
   });
   
-  return <>{highlightedText}</>;
+  return React.createElement(React.Fragment, null, highlightedText);
 };

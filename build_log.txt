@@ -1,0 +1,245 @@
+vite v5.4.19 building for production...
+transforming...
+✓ 3065 modules transformed.
+rendering chunks...
+warnings when minifying css:
+▲ [WARNING] Unexpected "{" [css-syntax-error]
+
+    <stdin>:613:5:
+      613 │      {
+          ╵      ^
+
+
+▲ [WARNING] Unexpected "{" [css-syntax-error]
+
+    <stdin>:631:5:
+      631 │      {
+          ╵      ^
+
+
+computing gzip size...
+dist/index.html                                            5.85 kB │ gzip:   2.22 kB
+dist/assets/index-Fq12yONa.css                           118.47 kB │ gzip:  18.59 kB
+dist/assets/index-DiAY-zzT.js                              0.24 kB │ gzip:   0.18 kB
+dist/assets/check-B35cPEjw.js                              0.29 kB │ gzip:   0.24 kB
+dist/assets/chevron-right-Cfi6dvbr.js                      0.30 kB │ gzip:   0.25 kB
+dist/assets/chevron-left-B61xc-OB.js                       0.30 kB │ gzip:   0.25 kB
+dist/assets/browser-BBteK7MZ.js                            0.30 kB │ gzip:   0.25 kB
+dist/assets/play-jPhS8lb2.js                               0.30 kB │ gzip:   0.25 kB
+dist/assets/arrow-down-a1BGAmyP.js                         0.33 kB │ gzip:   0.26 kB
+dist/assets/arrow-right-C7ScViGT.js                        0.33 kB │ gzip:   0.27 kB
+dist/assets/circle-check-big-Oki2vwX-.js                   0.36 kB │ gzip:   0.28 kB
+dist/assets/circle-x-Clepzh3c.js                           0.38 kB │ gzip:   0.28 kB
+dist/assets/copy-Rt4wouSl.js                               0.41 kB │ gzip:   0.31 kB
+dist/assets/chart-bar-BVRAWLiS.js                          0.41 kB │ gzip:   0.29 kB
+dist/assets/external-link-BrYeAahX.js                      0.42 kB │ gzip:   0.30 kB
+dist/assets/eye-DbDP16Lu.js                                0.43 kB │ gzip:   0.31 kB
+dist/assets/chart-no-axes-column-increasing-5p5CZQ7m.js    0.44 kB │ gzip:   0.30 kB
+dist/assets/award-danXKWhT.js                              0.44 kB │ gzip:   0.33 kB
+dist/assets/shopping-cart-Bq1z30-x.js                      0.46 kB │ gzip:   0.33 kB
+dist/assets/square-pen-D-179ZNp.js                         0.49 kB │ gzip:   0.34 kB
+dist/assets/file-text-CwFxnfjd.js                          0.50 kB │ gzip:   0.32 kB
+dist/assets/gift-C12ADDyd.js                               0.53 kB │ gzip:   0.36 kB
+dist/assets/trash-2-O32XeJdd.js                            0.53 kB │ gzip:   0.35 kB
+dist/assets/quote-BwbySH7Y.js                              0.56 kB │ gzip:   0.30 kB
+dist/assets/use-mobile-C0ffKj1k.js                         0.62 kB │ gzip:   0.34 kB
+dist/assets/star-CNmbXDnC.js                               0.64 kB │ gzip:   0.40 kB
+dist/assets/useGlobalStyles-D8FOJ4tJ.js                    0.74 kB │ gzip:   0.53 kB
+dist/assets/shield-Lhsfy9L6.js                             0.77 kB │ gzip:   0.42 kB
+dist/assets/save-CuBk16Y6.js                               0.78 kB │ gzip:   0.39 kB
+dist/assets/textarea-C3GHKZU4.js                           0.82 kB │ gzip:   0.44 kB
+dist/assets/useLoadingState-XHkTDFRh.js                    0.87 kB │ gzip:   0.53 kB
+dist/assets/settings-CBep-A7P.js                           0.89 kB │ gzip:   0.45 kB
+dist/assets/trash-D7mleC4h.js                              0.90 kB │ gzip:   0.44 kB
+dist/assets/input-D7B3hAVO.js                              0.90 kB │ gzip:   0.47 kB
+dist/assets/badge-4jFGB_QC.js                              0.99 kB │ gzip:   0.47 kB
+dist/assets/separator-Cq-RXBB3.js                          1.04 kB │ gzip:   0.54 kB
+dist/assets/users-4TnzrbSN.js                              1.22 kB │ gzip:   0.51 kB
+dist/assets/user-CaM142-1.js                               1.30 kB │ gzip:   0.48 kB
+dist/assets/plus-PjxWdyDF.js                               1.38 kB │ gzip:   0.50 kB
+dist/assets/button-Cr08rwO9.js                             1.45 kB │ gzip:   0.68 kB
+dist/assets/triangle-alert-DsAlCwNR.js                     2.43 kB │ gzip:   0.76 kB
+dist/assets/useUtmParameters-C7_hj2aw.js                   2.53 kB │ gzip:   0.99 kB
+dist/assets/card-CQ7LFyWk.js                               2.53 kB │ gzip:   0.58 kB
+dist/assets/progress-Cg9AXjx-.js                           2.63 kB │ gzip:   1.13 kB
+dist/assets/HomePage-bPXPebrx.js                           2.66 kB │ gzip:   1.07 kB
+dist/assets/NotFoundPage-9lFs62-2.js                       2.73 kB │ gzip:   0.77 kB
+dist/assets/index-DCBJsS6N.js                              3.20 kB │ gzip:   1.54 kB
+dist/assets/table-DtBVABog.js                              3.85 kB │ gzip:   0.81 kB
+dist/assets/switch-CC23V7k1.js                             3.89 kB │ gzip:   1.64 kB
+dist/assets/styleConfig-1sUi8fUz.js                        3.92 kB │ gzip:   1.49 kB
+dist/assets/tabs-BDw6s7cE.js                               4.10 kB │ gzip:   1.52 kB
+dist/assets/AdminDashboard-C6XSb7B1.js                     5.82 kB │ gzip:   1.31 kB
+dist/assets/GuaranteeSection-BOm_BLhz.js                   6.72 kB │ gzip:   1.67 kB
+dist/assets/EditorNotFoundPage-gPzAzYB2.js                 6.92 kB │ gzip:   1.45 kB
+dist/assets/BenefitList-DF-RFLZ3.js                        7.05 kB │ gzip:   1.83 kB
+dist/assets/analytics-CiL2k7yc.js                          8.71 kB │ gzip:   2.91 kB
+dist/assets/MentorSection-C0Ey7zJ2.js                      9.41 kB │ gzip:   2.08 kB
+dist/assets/Testimonials-wBuHMPWQ.js                      10.63 kB │ gzip:   2.25 kB
+dist/assets/GridLayout-BkRiBnpT.js                        10.70 kB │ gzip:   2.64 kB
+dist/assets/MotivationSection-Yv195CTB.js                 10.74 kB │ gzip:   1.86 kB
+dist/assets/AdminLayout-Ir3_FnkL.js                       10.84 kB │ gzip:   1.60 kB
+dist/assets/LineChart-DzUmvU9V.js                         11.16 kB │ gzip:   4.31 kB
+dist/assets/DataTab-C-EvFZax.js                           11.82 kB │ gzip:   1.86 kB
+dist/assets/EditorPage-iR-Ef-1h.js                        13.44 kB │ gzip:   1.96 kB
+dist/assets/scroll-area-0eqmAhsu.js                       14.56 kB │ gzip:   4.23 kB
+dist/assets/QuizOfferPage-BhX3-Slf.js                     15.64 kB │ gzip:   3.15 kB
+dist/assets/BonusSection-DDWdhfnr.js                      17.04 kB │ gzip:   2.75 kB
+dist/assets/FunnelTab-cUU3wLSG.js                         20.02 kB │ gzip:   2.92 kB
+dist/assets/vendor-utils-BTGVH9Kg.js                      20.28 kB │ gzip:   6.83 kB
+dist/assets/vendor-router-DDjIN5BU.js                     21.23 kB │ gzip:   7.90 kB
+dist/assets/UtmTab-BHWhzjJh.js                            23.88 kB │ gzip:   3.57 kB
+dist/assets/PieChart-vZFXHS92.js                          25.95 kB │ gzip:   7.04 kB
+dist/assets/ProgressTab-D4OpVMQw.js                       26.85 kB │ gzip:   3.50 kB
+dist/assets/select-3aHf0U2f.js                            27.26 kB │ gzip:   8.12 kB
+dist/assets/BeforeAfterTransformation4-B2F6ut3V.js        40.48 kB │ gzip:   6.02 kB
+dist/assets/SecurePurchaseElement-D5hWn4rD.js             41.53 kB │ gzip:   6.43 kB
+dist/assets/UsersTab-Dc3CU84N.js                          41.62 kB │ gzip:   5.64 kB
+dist/assets/FunnelComparisonTab-BRxYY5aq.js               41.89 kB │ gzip:   4.28 kB
+dist/assets/ResultPagePrototype-By5TsLtS.js               46.03 kB │ gzip:   7.32 kB
+dist/assets/ResultPage-TfOP2rLP.js                        53.83 kB │ gzip:   8.70 kB
+dist/assets/AnalyticsPage-uPYrwFT6.js                     61.45 kB │ gzip:   9.71 kB
+dist/assets/ABTestManagerPage-BvgCWgdK.js                 66.74 kB │ gzip:   7.79 kB
+dist/assets/QuizPage-BW7Os7TM.js                          78.28 kB │ gzip:  15.23 kB
+dist/assets/ABTestPage-CBZrZs20.js                        78.60 kB │ gzip:  10.72 kB
+dist/assets/IntegrationTab-DZHqH8ty.js                    78.96 kB │ gzip:   8.46 kB
+dist/assets/index-ZhHbCxcE.js                             85.13 kB │ gzip:  21.27 kB
+dist/assets/vendor-ui-B6H33EdH.js                         90.23 kB │ gzip:  30.10 kB
+dist/assets/EnhancedResultPageEditorPage-DmYx2Z-G.js      95.23 kB │ gzip:  10.54 kB
+dist/assets/client-BeoTz2VV.js                           108.23 kB │ gzip:  29.54 kB
+dist/assets/proxy-juBSwtoH.js                            112.83 kB │ gzip:  37.33 kB
+dist/assets/SettingsPage-BFcG30X0.js                     140.24 kB │ gzip:  14.99 kB
+dist/assets/vendor-react-CcMVubkO.js                     141.87 kB │ gzip:  45.60 kB
+dist/assets/BarChart-f7tKkxnb.js                         373.46 kB │ gzip: 103.20 kB
+dist/assets/OverviewTab-Bug5-Yka.js                      784.53 kB │ gzip: 137.03 kB
+✓ built in 9.06s
+
+✨ [vite-plugin-compression]:algorithm=gzip - compressed file successfully: 
+dist//workspaces/quiz-sell-genius-66/assets/ABTestManagerPage-BvgCWgdK.js.gz              65.23kb / gzip: 7.39kb
+dist//workspaces/quiz-sell-genius-66/assets/AdminDashboard-C6XSb7B1.js.gz                 5.69kb / gzip: 1.26kb
+dist//workspaces/quiz-sell-genius-66/assets/AdminLayout-Ir3_FnkL.js.gz                    10.59kb / gzip: 1.55kb
+dist//workspaces/quiz-sell-genius-66/assets/ABTestPage-CBZrZs20.js.gz                     76.89kb / gzip: 10.23kb
+dist//workspaces/quiz-sell-genius-66/assets/BeforeAfterTransformation4-B2F6ut3V.js.gz     39.55kb / gzip: 5.80kb
+dist//workspaces/quiz-sell-genius-66/assets/BenefitList-DF-RFLZ3.js.gz                    6.90kb / gzip: 1.78kb
+dist//workspaces/quiz-sell-genius-66/assets/BonusSection-DDWdhfnr.js.gz                   16.66kb / gzip: 2.67kb
+dist//workspaces/quiz-sell-genius-66/assets/DataTab-C-EvFZax.js.gz                        11.54kb / gzip: 1.79kb
+dist//workspaces/quiz-sell-genius-66/assets/EditorPage-iR-Ef-1h.js.gz                     13.14kb / gzip: 1.88kb
+dist//workspaces/quiz-sell-genius-66/assets/EditorNotFoundPage-gPzAzYB2.js.gz             6.76kb / gzip: 1.41kb
+dist//workspaces/quiz-sell-genius-66/assets/FunnelComparisonTab-BRxYY5aq.js.gz            40.93kb / gzip: 4.03kb
+dist//workspaces/quiz-sell-genius-66/assets/FunnelTab-cUU3wLSG.js.gz                      19.57kb / gzip: 2.79kb
+dist//workspaces/quiz-sell-genius-66/assets/GridLayout-BkRiBnpT.js.gz                     10.45kb / gzip: 2.56kb
+dist//workspaces/quiz-sell-genius-66/assets/GuaranteeSection-BOm_BLhz.js.gz               6.57kb / gzip: 1.63kb
+dist//workspaces/quiz-sell-genius-66/assets/HomePage-bPXPebrx.js.gz                       2.60kb / gzip: 1.04kb
+dist//workspaces/quiz-sell-genius-66/assets/LineChart-DzUmvU9V.js.gz                      10.90kb / gzip: 4.20kb
+dist//workspaces/quiz-sell-genius-66/assets/EnhancedResultPageEditorPage-DmYx2Z-G.js.gz   93.08kb / gzip: 9.96kb
+dist//workspaces/quiz-sell-genius-66/assets/MentorSection-C0Ey7zJ2.js.gz                  9.21kb / gzip: 2.02kb
+dist//workspaces/quiz-sell-genius-66/assets/NotFoundPage-9lFs62-2.js.gz                   2.67kb / gzip: 0.75kb
+dist//workspaces/quiz-sell-genius-66/assets/MotivationSection-Yv195CTB.js.gz              10.53kb / gzip: 1.79kb
+dist//workspaces/quiz-sell-genius-66/assets/PieChart-vZFXHS92.js.gz                       25.34kb / gzip: 6.86kb
+dist//workspaces/quiz-sell-genius-66/assets/ProgressTab-D4OpVMQw.js.gz                    26.24kb / gzip: 3.35kb
+dist//workspaces/quiz-sell-genius-66/assets/AnalyticsPage-uPYrwFT6.js.gz                  60.04kb / gzip: 9.31kb
+dist//workspaces/quiz-sell-genius-66/assets/ResultPage-TfOP2rLP.js.gz                     52.60kb / gzip: 8.36kb
+dist//workspaces/quiz-sell-genius-66/assets/QuizPage-BW7Os7TM.js.gz                       76.57kb / gzip: 14.62kb
+dist//workspaces/quiz-sell-genius-66/assets/ResultPagePrototype-By5TsLtS.js.gz            44.98kb / gzip: 7.00kb
+dist//workspaces/quiz-sell-genius-66/assets/SecurePurchaseElement-D5hWn4rD.js.gz          40.57kb / gzip: 6.14kb
+dist//workspaces/quiz-sell-genius-66/assets/Testimonials-wBuHMPWQ.js.gz                   10.39kb / gzip: 2.18kb
+dist//workspaces/quiz-sell-genius-66/assets/UsersTab-Dc3CU84N.js.gz                       40.67kb / gzip: 5.37kb
+dist//workspaces/quiz-sell-genius-66/assets/UtmTab-BHWhzjJh.js.gz                         23.33kb / gzip: 3.42kb
+dist//workspaces/quiz-sell-genius-66/assets/analytics-CiL2k7yc.js.gz                      8.51kb / gzip: 2.84kb
+dist//workspaces/quiz-sell-genius-66/assets/button-Cr08rwO9.js.gz                         1.42kb / gzip: 0.66kb
+dist//workspaces/quiz-sell-genius-66/assets/card-CQ7LFyWk.js.gz                           2.47kb / gzip: 0.56kb
+dist//workspaces/quiz-sell-genius-66/assets/IntegrationTab-DZHqH8ty.js.gz                 77.12kb / gzip: 7.98kb
+dist//workspaces/quiz-sell-genius-66/assets/index-DCBJsS6N.js.gz                          3.13kb / gzip: 1.50kb
+dist//workspaces/quiz-sell-genius-66/assets/QuizOfferPage-BhX3-Slf.js.gz                  15.29kb / gzip: 3.04kb
+dist//workspaces/quiz-sell-genius-66/assets/plus-PjxWdyDF.js.gz                           1.35kb / gzip: 0.49kb
+dist//workspaces/quiz-sell-genius-66/assets/progress-Cg9AXjx-.js.gz                       2.57kb / gzip: 1.11kb
+dist//workspaces/quiz-sell-genius-66/assets/scroll-area-0eqmAhsu.js.gz                    14.22kb / gzip: 4.12kb
+dist//workspaces/quiz-sell-genius-66/assets/separator-Cq-RXBB3.js.gz                      1.02kb / gzip: 0.52kb
+dist//workspaces/quiz-sell-genius-66/assets/styleConfig-1sUi8fUz.js.gz                    3.85kb / gzip: 1.46kb
+dist//workspaces/quiz-sell-genius-66/assets/switch-CC23V7k1.js.gz                         3.80kb / gzip: 1.60kb
+dist//workspaces/quiz-sell-genius-66/assets/table-DtBVABog.js.gz                          3.76kb / gzip: 0.79kb
+dist//workspaces/quiz-sell-genius-66/assets/tabs-BDw6s7cE.js.gz                           4.00kb / gzip: 1.48kb
+dist//workspaces/quiz-sell-genius-66/assets/triangle-alert-DsAlCwNR.js.gz                 2.37kb / gzip: 0.74kb
+dist//workspaces/quiz-sell-genius-66/assets/useUtmParameters-C7_hj2aw.js.gz               2.47kb / gzip: 0.96kb
+dist//workspaces/quiz-sell-genius-66/assets/user-CaM142-1.js.gz                           1.26kb / gzip: 0.47kb
+dist//workspaces/quiz-sell-genius-66/assets/users-4TnzrbSN.js.gz                          1.19kb / gzip: 0.50kb
+dist//workspaces/quiz-sell-genius-66/assets/SettingsPage-BFcG30X0.js.gz                   137.03kb / gzip: 14.09kb
+dist//workspaces/quiz-sell-genius-66/assets/vendor-router-DDjIN5BU.js.gz                  20.73kb / gzip: 7.71kb
+dist//workspaces/quiz-sell-genius-66/index.html.gz                                        5.73kb / gzip: 2.17kb
+dist//workspaces/quiz-sell-genius-66/assets/select-3aHf0U2f.js.gz                         26.62kb / gzip: 7.92kb
+dist//workspaces/quiz-sell-genius-66/assets/vendor-utils-BTGVH9Kg.js.gz                   19.81kb / gzip: 6.67kb
+dist//workspaces/quiz-sell-genius-66/assets/client-BeoTz2VV.js.gz                         105.69kb / gzip: 28.76kb
+dist//workspaces/quiz-sell-genius-66/assets/index-ZhHbCxcE.js.gz                          83.34kb / gzip: 20.55kb
+dist//workspaces/quiz-sell-genius-66/assets/vendor-ui-B6H33EdH.js.gz                      88.12kb / gzip: 29.34kb
+dist//workspaces/quiz-sell-genius-66/assets/index-Fq12yONa.css.gz                         115.69kb / gzip: 17.99kb
+dist//workspaces/quiz-sell-genius-66/assets/proxy-juBSwtoH.js.gz                          110.19kb / gzip: 36.35kb
+dist//workspaces/quiz-sell-genius-66/assets/vendor-react-CcMVubkO.js.gz                   138.54kb / gzip: 44.46kb
+dist//workspaces/quiz-sell-genius-66/assets/BarChart-f7tKkxnb.js.gz                       364.71kb / gzip: 100.56kb
+dist//workspaces/quiz-sell-genius-66/assets/OverviewTab-Bug5-Yka.js.gz                    766.16kb / gzip: 131.06kb
+
+
+
+✨ [vite-plugin-compression]:algorithm=brotliCompress - compressed file successfully: 
+dist//workspaces/quiz-sell-genius-66/assets/AdminDashboard-C6XSb7B1.js.br                 5.69kb / brotliCompress: 1.09kb
+dist//workspaces/quiz-sell-genius-66/assets/AdminLayout-Ir3_FnkL.js.br                    10.59kb / brotliCompress: 1.33kb
+dist//workspaces/quiz-sell-genius-66/assets/AnalyticsPage-uPYrwFT6.js.br                  60.04kb / brotliCompress: 7.94kb
+dist//workspaces/quiz-sell-genius-66/assets/ABTestPage-CBZrZs20.js.br                     76.89kb / brotliCompress: 8.55kb
+dist//workspaces/quiz-sell-genius-66/assets/BenefitList-DF-RFLZ3.js.br                    6.90kb / brotliCompress: 1.58kb
+dist//workspaces/quiz-sell-genius-66/assets/ABTestManagerPage-BvgCWgdK.js.br              65.23kb / brotliCompress: 6.27kb
+dist//workspaces/quiz-sell-genius-66/assets/DataTab-C-EvFZax.js.br                        11.54kb / brotliCompress: 1.56kb
+dist//workspaces/quiz-sell-genius-66/assets/BonusSection-DDWdhfnr.js.br                   16.66kb / brotliCompress: 2.33kb
+dist//workspaces/quiz-sell-genius-66/assets/EditorNotFoundPage-gPzAzYB2.js.br             6.76kb / brotliCompress: 1.23kb
+dist//workspaces/quiz-sell-genius-66/assets/EditorPage-iR-Ef-1h.js.br                     13.14kb / brotliCompress: 1.61kb
+dist//workspaces/quiz-sell-genius-66/assets/BeforeAfterTransformation4-B2F6ut3V.js.br     39.55kb / brotliCompress: 5.03kb
+dist//workspaces/quiz-sell-genius-66/assets/FunnelComparisonTab-BRxYY5aq.js.br            40.93kb / brotliCompress: 3.42kb
+dist//workspaces/quiz-sell-genius-66/assets/GridLayout-BkRiBnpT.js.br                     10.45kb / brotliCompress: 2.30kb
+dist//workspaces/quiz-sell-genius-66/assets/GuaranteeSection-BOm_BLhz.js.br               6.57kb / brotliCompress: 1.46kb
+dist//workspaces/quiz-sell-genius-66/assets/HomePage-bPXPebrx.js.br                       2.60kb / brotliCompress: 0.91kb
+dist//workspaces/quiz-sell-genius-66/assets/FunnelTab-cUU3wLSG.js.br                      19.57kb / brotliCompress: 2.42kb
+dist//workspaces/quiz-sell-genius-66/assets/LineChart-DzUmvU9V.js.br                      10.90kb / brotliCompress: 3.82kb
+dist//workspaces/quiz-sell-genius-66/assets/MentorSection-C0Ey7zJ2.js.br                  9.21kb / brotliCompress: 1.79kb
+dist//workspaces/quiz-sell-genius-66/assets/MotivationSection-Yv195CTB.js.br              10.53kb / brotliCompress: 1.60kb
+dist//workspaces/quiz-sell-genius-66/assets/NotFoundPage-9lFs62-2.js.br                   2.67kb / brotliCompress: 0.65kb
+dist//workspaces/quiz-sell-genius-66/assets/IntegrationTab-DZHqH8ty.js.br                 77.12kb / brotliCompress: 6.66kb
+dist//workspaces/quiz-sell-genius-66/assets/PieChart-vZFXHS92.js.br                       25.34kb / brotliCompress: 6.11kb
+dist//workspaces/quiz-sell-genius-66/assets/ProgressTab-D4OpVMQw.js.br                    26.24kb / brotliCompress: 2.94kb
+dist//workspaces/quiz-sell-genius-66/assets/QuizOfferPage-BhX3-Slf.js.br                  15.29kb / brotliCompress: 2.63kb
+dist//workspaces/quiz-sell-genius-66/assets/EnhancedResultPageEditorPage-DmYx2Z-G.js.br   93.08kb / brotliCompress: 8.21kb
+dist//workspaces/quiz-sell-genius-66/assets/ResultPage-TfOP2rLP.js.br                     52.60kb / brotliCompress: 7.20kb
+dist//workspaces/quiz-sell-genius-66/assets/ResultPagePrototype-By5TsLtS.js.br            44.98kb / brotliCompress: 5.99kb
+dist//workspaces/quiz-sell-genius-66/assets/QuizPage-BW7Os7TM.js.br                       76.57kb / brotliCompress: 12.50kb
+dist//workspaces/quiz-sell-genius-66/assets/Testimonials-wBuHMPWQ.js.br                   10.39kb / brotliCompress: 1.93kb
+dist//workspaces/quiz-sell-genius-66/assets/SecurePurchaseElement-D5hWn4rD.js.br          40.57kb / brotliCompress: 5.43kb
+dist//workspaces/quiz-sell-genius-66/assets/UtmTab-BHWhzjJh.js.br                         23.33kb / brotliCompress: 2.96kb
+dist//workspaces/quiz-sell-genius-66/assets/UsersTab-Dc3CU84N.js.br                       40.67kb / brotliCompress: 4.62kb
+dist//workspaces/quiz-sell-genius-66/assets/analytics-CiL2k7yc.js.br                      8.51kb / brotliCompress: 2.47kb
+dist//workspaces/quiz-sell-genius-66/assets/button-Cr08rwO9.js.br                         1.42kb / brotliCompress: 0.55kb
+dist//workspaces/quiz-sell-genius-66/assets/card-CQ7LFyWk.js.br                           2.47kb / brotliCompress: 0.47kb
+dist//workspaces/quiz-sell-genius-66/assets/index-DCBJsS6N.js.br                          3.13kb / brotliCompress: 1.35kb
+dist//workspaces/quiz-sell-genius-66/assets/SettingsPage-BFcG30X0.js.br                   137.03kb / brotliCompress: 11.25kb
+dist//workspaces/quiz-sell-genius-66/assets/plus-PjxWdyDF.js.br                           1.35kb / brotliCompress: 0.45kb
+dist//workspaces/quiz-sell-genius-66/assets/progress-Cg9AXjx-.js.br                       2.57kb / brotliCompress: 0.96kb
+dist//workspaces/quiz-sell-genius-66/assets/scroll-area-0eqmAhsu.js.br                    14.22kb / brotliCompress: 3.68kb
+dist//workspaces/quiz-sell-genius-66/assets/index-Fq12yONa.css.br                         115.69kb / brotliCompress: 14.27kb
+dist//workspaces/quiz-sell-genius-66/assets/separator-Cq-RXBB3.js.br                      1.02kb / brotliCompress: 0.46kb
+dist//workspaces/quiz-sell-genius-66/assets/styleConfig-1sUi8fUz.js.br                    3.85kb / brotliCompress: 1.30kb
+dist//workspaces/quiz-sell-genius-66/assets/switch-CC23V7k1.js.br                         3.80kb / brotliCompress: 1.38kb
+dist//workspaces/quiz-sell-genius-66/assets/table-DtBVABog.js.br                          3.76kb / brotliCompress: 0.67kb
+dist//workspaces/quiz-sell-genius-66/assets/select-3aHf0U2f.js.br                         26.62kb / brotliCompress: 7.06kb
+dist//workspaces/quiz-sell-genius-66/assets/tabs-BDw6s7cE.js.br                           4.00kb / brotliCompress: 1.29kb
+dist//workspaces/quiz-sell-genius-66/assets/useUtmParameters-C7_hj2aw.js.br               2.47kb / brotliCompress: 0.86kb
+dist//workspaces/quiz-sell-genius-66/assets/triangle-alert-DsAlCwNR.js.br                 2.37kb / brotliCompress: 0.66kb
+dist//workspaces/quiz-sell-genius-66/assets/user-CaM142-1.js.br                           1.26kb / brotliCompress: 0.41kb
+dist//workspaces/quiz-sell-genius-66/assets/users-4TnzrbSN.js.br                          1.19kb / brotliCompress: 0.45kb
+dist//workspaces/quiz-sell-genius-66/assets/vendor-router-DDjIN5BU.js.br                  20.73kb / brotliCompress: 6.89kb
+dist//workspaces/quiz-sell-genius-66/assets/vendor-utils-BTGVH9Kg.js.br                   19.81kb / brotliCompress: 5.87kb
+dist//workspaces/quiz-sell-genius-66/index.html.br                                        5.73kb / brotliCompress: 1.72kb
+dist//workspaces/quiz-sell-genius-66/assets/client-BeoTz2VV.js.br                         105.69kb / brotliCompress: 25.17kb
+dist//workspaces/quiz-sell-genius-66/assets/index-ZhHbCxcE.js.br                          83.34kb / brotliCompress: 17.71kb
+dist//workspaces/quiz-sell-genius-66/assets/vendor-ui-B6H33EdH.js.br                      88.12kb / brotliCompress: 25.78kb
+dist//workspaces/quiz-sell-genius-66/assets/vendor-react-CcMVubkO.js.br                   138.54kb / brotliCompress: 38.91kb
+dist//workspaces/quiz-sell-genius-66/assets/proxy-juBSwtoH.js.br                          110.19kb / brotliCompress: 32.71kb
+dist//workspaces/quiz-sell-genius-66/assets/BarChart-f7tKkxnb.js.br                       364.71kb / brotliCompress: 83.18kb
+dist//workspaces/quiz-sell-genius-66/assets/OverviewTab-Bug5-Yka.js.br                    766.16kb / brotliCompress: 103.98kb
+
+
