@@ -29,38 +29,35 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
   const isImageOption = type !== 'text' && option.imageUrl;
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 640;
 
+  // Forçar re-render visual correto para seleção em questões estratégicas
+  // Se for questão estratégica, sempre use a prop isStrategicQuestion para aplicar o efeito de seleção
+
+  // Se for imagem e está selecionada, sempre aplica o efeito 3D, independente do device
+  // (corrige casos onde o mobile não detecta corretamente ou o contexto é estratégico)
   return (
     <div
       onClick={handleClick}
       className={cn(
         "relative rounded-lg overflow-hidden transition-all duration-200 cursor-pointer bg-white",
-        // MOBILE: Efeito 3D SELECIONADO para imagem
-        isImageOption && isSelected && isMobile && "shadow-2xl transform scale-[1.04]",
-        // MOBILE: Sombra leve no hover para imagem não selecionada
-        isImageOption && !isSelected && !isDisabled && isMobile && "hover:shadow-lg",
-        // MOBILE: NUNCA borda para imagem
-        // DESKTOP: Mantém padrão anterior (sem borda, mas sem efeito especial)
-        // Texto selecionado: borda dourada forte + sombra
+        isImageOption && isSelected && "shadow-2xl transform scale-[1.04]",
+        isImageOption && !isSelected && !isDisabled && "hover:shadow-lg",
+        // Nunca borda para imagem
         !isImageOption && isSelected && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.01]",
-        // Texto não selecionado: borda dourada sutil
         !isImageOption && !isSelected && !isDisabled && "border border-[#B89B7A]/40",
-        // Desabilitado
         isDisabled && "border border-gray-200 opacity-75 cursor-not-allowed",
         type === 'text' ? "p-4" : "flex flex-col"
       )}
     >
       {type !== 'text' && option.imageUrl && (
-        <div className={cn("w-full flex-1 flex items-stretch", isMobile && "min-h-[220px] p-0")}> 
+        <div className={cn("w-full flex-1 flex items-stretch min-h-[220px] p-0")}> 
           <img 
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
-              isMobile
-                ? "w-full h-[260px] object-cover rounded-t-lg"
-                : "w-full h-full object-contain rounded-t-lg",
-              isSelected && isMobile && "opacity-95"
+              "w-full h-[260px] object-cover rounded-t-lg",
+              isSelected && "opacity-95"
             )}
-            style={isMobile ? { maxHeight: '260px', minHeight: '180px' } : {}} 
+            style={{ maxHeight: '260px', minHeight: '180px' }}
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
@@ -70,7 +67,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       )}
       <div className={cn(
         "flex-1 p-3 text-[#432818]",
-        type !== 'text' && option.imageUrl && isMobile ? "border-t border-[#B89B7A]/10 text-[10px]" : ""
+        type !== 'text' && option.imageUrl ? "border-t border-[#B89B7A]/10 text-[10px]" : ""
       )}>
         <p>{option.text}</p>
       </div>
