@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { motion } from 'framer-motion';
@@ -26,7 +25,7 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
 
   return (
     <motion.div 
-      className="space-y-3 p-5 bg-amber-50/50 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+      className="space-y-3 p-5 bg-[#fffaf7] rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -40,13 +39,13 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ delay: 0.8, duration: 0.8 }}
-            className="absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-amber-400 to-transparent rounded-full"
+            className="absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-[#B89B7A] to-transparent rounded-full"
           />
           Estilos Complementares
         </motion.h3>
         
         <motion.div 
-          className="text-[10px] text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full"
+          className="text-[10px] text-[#aa6b5d] bg-[#FAF9F7] px-2 py-0.5 rounded-full"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6, duration: 0.5 }}
@@ -78,7 +77,7 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
                   {style.category}
                 </motion.h4>
                 <motion.span 
-                  className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full"
+                  className="text-xs font-semibold text-[#aa6b5d] bg-[#fffaf7] px-2 py-0.5 rounded-full"
                   initial={{ scale: 0.9 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.6 + index * 0.1, duration: 0.3 }}
@@ -88,9 +87,9 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
                 </motion.span>
               </div>
               
-              <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-[#FAF9F7] rounded-full h-2 overflow-hidden">
                 <motion.div 
-                  className="bg-gradient-to-r from-amber-300 to-amber-500 h-2 rounded-full relative"
+                  className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] h-2 rounded-full relative"
                   initial={{ width: 0 }}
                   animate={{ width: `${style.percentage}%` }}
                   transition={{ delay: 0.8 + index * 0.2, duration: 1, ease: "easeOut" }}

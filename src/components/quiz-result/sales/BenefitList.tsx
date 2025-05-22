@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Check } from 'lucide-react';
@@ -59,7 +58,7 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
   };
 
   return (
-    <Card className="p-8 bg-gradient-to-br from-white to-[#fffaf7] border border-[#B89B7A]/20 shadow-md rounded-xl">
+    <Card className="p-8 bg-[#fffaf7] border border-[#B89B7A]/20 shadow-md rounded-xl">
       <motion.h3 
         className="text-xl font-playfair text-[#432818] mb-6 relative inline-block"
         initial={{ opacity: 0, y: -10 }}
@@ -90,7 +89,7 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
             className="flex gap-4 group hover:bg-[#fffcfa] p-2 rounded-lg transition-colors duration-300"
             variants={itemVariants}
           >
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#B89B7A]/30 to-[#aa6b5d]/30 flex items-center justify-center group-hover:shadow-md transition-shadow duration-300">
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#B89B7A]/30 to-[#aa6b5d]/30 flex items-center justify-center group-hover:shadow-lg transition-shadow duration-300">
               <Check className="w-5 h-5 text-[#aa6b5d] group-hover:scale-110 transition-transform duration-300" />
             </div>
             <div>

@@ -239,8 +239,8 @@ const PricingSection: React.FC<PricingSectionProps> = ({
               onMouseLeave={() => setIsHovered(false)}
               disabled={isLoading}
               style={{
-                background: "linear-gradient(to right, #4CAF50, #45a049)",
-                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+                background: "linear-gradient(to right, #B89B7A, #aa6b5d)",
+                boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)"
               }}
             >
               <AnimatePresence mode="wait">
@@ -282,7 +282,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
             
             {/* Elegant shadow beneath button */}
             <motion.div 
-              className="h-2 bg-gradient-to-r from-transparent via-[#45a049]/30 to-transparent rounded-full mt-2 mx-auto"
+              className="h-2 bg-gradient-to-r from-transparent via-[#B89B7A]/30 to-transparent rounded-full mt-2 mx-auto"
               initial={{ width: "60%" }}
               animate={{ width: "80%" }}
               transition={{ duration: 1, repeat: Infinity, repeatType: "reverse" }}
@@ -300,14 +300,14 @@ const PricingSection: React.FC<PricingSectionProps> = ({
               animate={{ rotate: [0, 360] }}
               transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
             >
-              <Clock className="w-3 h-3" />
+              <Clock className="w-3 h-3 text-[#aa6b5d]" />
             </motion.div>
             <span>Oferta por tempo limitado</span>
           </motion.p>
 
           {/* Payment Methods */}
           <motion.p 
-            className="text-center text-sm text-[#3a3a3a]/70"
+            className="text-center text-sm text-[#432818]/70"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 1.6 }}

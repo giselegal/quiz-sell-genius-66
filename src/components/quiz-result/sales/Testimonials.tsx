@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { QuoteIcon } from 'lucide-react';
@@ -66,10 +65,10 @@ const Testimonials: React.FC<TestimonialsProps> = ({
         transition={{ duration: 0.7 }}
         className="text-center mb-10"
       >
-        <h3 className="text-2xl md:text-3xl font-playfair text-center text-[#aa6b5d] mb-3">
+        <h3 className="text-2xl md:text-3xl font-playfair text-center text-[#B89B7A] mb-3">
           Transformações Reais
         </h3>
-        <p className="text-center text-[#3a3a3a] mb-4 max-w-2xl mx-auto">
+        <p className="text-center text-[#8F7A6A] mb-4 max-w-2xl mx-auto">
           O que mulheres como você estão dizendo sobre esta jornada de transformação
         </p>
         <motion.div 
@@ -126,14 +125,14 @@ const Testimonials: React.FC<TestimonialsProps> = ({
                 </motion.div>
               </div>
               
-              <p className="text-[#3a3a3a] italic mb-6 leading-relaxed flex-grow">
+              <p className="text-[#8F7A6A] italic mb-6 leading-relaxed flex-grow">
                 "{item.text}"
               </p>
               
               <div className="mt-auto pt-4 border-t border-[#B89B7A]/20">
                 <p className="font-medium text-[#432818]">{item.name}</p>
                 {item.role && (
-                  <p className="text-sm text-[#432818]/70">{item.role}</p>
+                  <p className="text-sm text-[#8F7A6A]/70">{item.role}</p>
                 )}
               </div>
             </Card>
