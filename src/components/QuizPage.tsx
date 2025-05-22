@@ -65,12 +65,12 @@ const QuizPage: React.FC = () => {
     let currentStep = 0;
     if (showingStrategicQuestions) {
       currentStep = totalQuestions + currentStrategicQuestionIndex;
-    } else {
+    } else if (!showingTransition && !showingFinalTransition) { // Apenas se estiver mostrando questões normais
       currentStep = currentQuestionIndex;
     }
     const percentage = Math.round((currentStep / totalSteps) * 100);
     setProgressPercentage(percentage);
-  }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, totalQuestions]);
+  }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, showingTransition, showingFinalTransition, totalQuestions]);
 
   useEffect(() => {
     if (!quizStartTracked && !showIntro) { // Only track quiz start when not showing intro
@@ -114,6 +114,11 @@ const QuizPage: React.FC = () => {
     console.log(`Quiz started by ${name}`);
   };
 
+  const handleProceedToStrategic = () => {
+    setShowingTransition(false);
+    setShowingStrategicQuestions(true);
+  };
+
   const handleStrategicAnswerInternal = useCallback((response: UserResponse) => {
     try {
       setStrategicAnswers(prev => ({
@@ -135,8 +140,11 @@ const QuizPage: React.FC = () => {
                        totalQuestions + strategicQuestions.length);
       }
       if (currentStrategicQuestionIndex === strategicQuestions.length - 1) {
-        setShowingFinalTransition(true);
-        trackQuizComplete();
+        // Não chama setShowingFinalTransition aqui diretamente.
+        // O botão "Ver Resultado" em QuizNavigation fará isso.
+        // Apenas registra a resposta.
+        // setShowingFinalTransition(true); // Removido
+        trackQuizComplete(); // Mantém o rastreamento de conclusão do quiz (parte estratégica)
       } else {
         const nextIndex = currentStrategicQuestionIndex + 1;
         if (nextIndex < strategicQuestions.length) {
@@ -271,18 +279,23 @@ const QuizPage: React.FC = () => {
       if (!canActuallyProceed) {
         return; 
       }
-    }
-    if (!isLastQuestion) {
-      handleNext(); 
-    } else {
-      calculateResults();
-      setShowingTransition(true); 
-      trackQuizAnswer(
-        "quiz_main_complete", 
-        ["completed"], 
-        totalQuestions, 
-        totalQuestions + strategicQuestions.length
-      );
+      if (!isLastQuestion) {
+        handleNext(); 
+      } else {
+        calculateResults();
+        setShowingTransition(true); // Mostra MainTransition
+        trackQuizAnswer(
+          "quiz_main_complete", 
+          ["completed"], 
+          totalQuestions, 
+          totalQuestions + strategicQuestions.length
+        );
+      }
+    } else { // Lógica para questões estratégicas agora é tratada por onNext em QuizNavigation
+      // Se é a última questão estratégica, o botão "Ver Resultado" em QuizNavigation chamará handleShowResult via onNext.
+      // Se não for a última, handleStrategicAnswerInternal já avança o índice.
+      // Esta função (handleNextClickInternal) não deve ser chamada diretamente para avançar questões estratégicas.
+      // A chamada onNext de QuizNavigation para questões estratégicas deve ser handleStrategicAnswerInternal ou uma nova função que chame handleShowResult.
     }
   }, [
     showingStrategicQuestions, 
@@ -292,13 +305,10 @@ const QuizPage: React.FC = () => {
     handleNext, 
     calculateResults, 
     totalQuestions,
-    strategicQuestions.length
+    strategicQuestions.length,
+    // handleStrategicAnswerInternal, // Removido das dependências diretas aqui
+    // handleShowResult // Removido das dependências diretas aqui
   ]);
-
-  const handleProceedToStrategic = () => {
-    setShowingTransition(false);
-    setShowingStrategicQuestions(true);
-  };
 
   const currentQuestionTypeForNav = showingStrategicQuestions ? 'strategic' : 'normal';
   
@@ -327,11 +337,14 @@ const QuizPage: React.FC = () => {
       canProceed={visualCanProceedButton} 
       onNext={
         showingStrategicQuestions && actualCurrentQuestionData
-          ? () => handleStrategicAnswerInternal({ 
-              questionId: actualCurrentQuestionData.id,
-              selectedOptions: strategicAnswers[actualCurrentQuestionData.id] || []
-            })
-          : handleNextClickInternal
+          ? (currentStrategicQuestionIndex === strategicQuestions.length - 1 
+              ? () => { setShowingFinalTransition(true); handleShowResult(); } // Última estratégica: mostra transição final e resultado
+              : () => handleStrategicAnswerInternal({ // Não é a última estratégica: processa resposta e avança
+                  questionId: actualCurrentQuestionData.id,
+                  selectedOptions: strategicAnswers[actualCurrentQuestionData.id] || []
+                })
+            )
+          : handleNextClickInternal // Questões normais
       }
       onPrevious={
         showingStrategicQuestions
@@ -430,12 +443,8 @@ const QuizPage: React.FC = () => {
                     }}
                   >
                     <QuizTransitionManager
-                      showingTransition={false} // Não é mais a transição principal
                       showingFinalTransition={showingFinalTransition}
-                      // handleStrategicAnswer={handleStrategicAnswerInternal} // Removido, pois QuizPage lida com isso
-                      // strategicAnswers={strategicAnswers} // Removido
                       handleShowResult={handleShowResult}
-                      hideCounter={true}
                     />
                   </motion.div>
                 ) : (
@@ -459,8 +468,7 @@ const QuizPage: React.FC = () => {
                         currentQuestion={actualCurrentQuestionData} 
                         currentAnswers={showingStrategicQuestions && actualCurrentQuestionData.id ? strategicAnswers[actualCurrentQuestionData.id] || [] : currentAnswers}
                         handleAnswerSubmit={showingStrategicQuestions ? handleStrategicAnswerInternal : handleAnswerSubmitInternal}
-                        handleNextClick={handleNextClickInternal} 
-                        handlePrevious={handlePrevious} 
+                        // handleNextClick e handlePrevious não são mais passados para QuizContent, pois QuizNavigation os gerencia
                       />
                       {renderQuizNavigation()}
                     </motion.div>
