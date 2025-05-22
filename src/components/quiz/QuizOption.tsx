@@ -54,13 +54,13 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
     >
       {type !== 'text' && option.imageUrl && (
         <div className={cn(
-          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative",
+          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2", // gap-2 para respiro mínimo
         )}> 
           <img 
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
-              "w-full h-[260px] object-cover rounded-t-lg z-20 transition-all duration-200",
+              "w-full h-[260px] object-cover rounded-t-lg z-30 transition-all duration-200", // z-30 para sobresair ao texto
               isSelected && forStrategic && "animate-enhanced-pulse ring-4 ring-[#FFD700] shadow-2xl",
               isSelected && !forStrategic && "scale-[1.04] shadow-2xl",
               !isSelected && "hover:scale-[1.02] hover:shadow-lg"
@@ -73,7 +73,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           />
           {/* Texto sobreposto na base da imagem, com fundo translúcido */}
           <div className={cn(
-            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-20",
+            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-20", // z-20 para ficar atrás da imagem
             isSelected && "opacity-70"
           )}>
             <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">{option.text}</span>
@@ -88,9 +88,9 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {/* Para opções de texto puro, mantém layout anterior mas ativa só sombra na seleção */}
       {(!option.imageUrl || type === 'text') && (
         <div className={cn(
-          "flex-1 p-3 text-[#432818] relative bg-white",
-          isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl transform scale-[1.01]",
-          isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl animate-pulse-border ring-2 ring-[#B89B7A]/60",
+          "flex-1 p-3 text-[#432818] relative bg-white transition-shadow duration-200",
+          isSelected && !forStrategic && "border-2 border-[#B89B7A] shadow-xl shadow-[#B89B7A]/20 transform scale-[1.01]",
+          isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl shadow-[#FFD700]/30 animate-pulse-border ring-2 ring-[#B89B7A]/60",
           !isSelected && "border border-[#B89B7A]/40"
         )}>
           <p>{option.text}</p>
