@@ -51,7 +51,10 @@ const ResultPage: React.FC = () => {
     isLoading,
     completeLoading
   } = useLoadingState({
-    minDuration: isLowPerformance ? 300 : 600, // Tempos reduzidos para melhorar a experiência
+    // Para evitar a exibição sequencial de duas barras de progresso,
+    // reduzimos drasticamente o tempo de carregamento quando os resultados
+    // já foram pré-carregados durante o quiz
+    minDuration: isLowPerformance ? 100 : 300,
     disableTransitions: isLowPerformance
   });
 
@@ -61,20 +64,25 @@ const ResultPage: React.FC = () => {
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
-
-    // Pré-carregar logo e imagens críticas diretamente via ResourcePreloader
     
-    // O preload agora é feito de forma centralizada com ResourcePreloader
-    // Não precisamos mais de preload manual aqui
+    // Verificar se os resultados já foram pré-carregados
+    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
     
-    // Definir timeout de segurança para remover o skeleton após 2.5 segundos (reduzido)
+    // Se os resultados já foram pré-carregados durante o quiz, pulamos o skeleton quase que imediatamente
+    if (hasPreloadedResults) {
+      setImagesLoaded({ style: true, guide: true });
+      completeLoading();
+      return; // Retornamos cedo sem criar o timeout
+    } 
+    
+    // Definir timeout de segurança apenas se não tiver pré-carregado
     const safetyTimeout = setTimeout(() => {
       setImagesLoaded({ style: true, guide: true });
       completeLoading();
     }, 2500);
 
     return () => clearTimeout(safetyTimeout);
-  }, [primaryStyle, globalStyles.logo]);
+  }, [primaryStyle, globalStyles.logo, completeLoading]);
   
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();

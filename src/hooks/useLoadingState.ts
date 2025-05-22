@@ -29,7 +29,10 @@ export const useLoadingState = ({
     
     // Verificar se os resultados foram pré-carregados para acelerar a transição
     const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
-    const effectiveMinDuration = hasPreloadedResults ? Math.min(minDuration, 300) : minDuration;
+    
+    // Se os resultados já foram pré-carregados, reduzimos drasticamente o tempo
+    // de carregamento para quase instantâneo para evitar o skeleton desnecessário
+    const effectiveMinDuration = hasPreloadedResults ? 50 : minDuration;
     
     // If less time has passed than minDuration, wait before completing
     if (elapsedTime < effectiveMinDuration) {
