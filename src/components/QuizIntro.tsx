@@ -85,7 +85,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
   // Renderizar diretamente o conteúdo principal sem estados de carregamento
   return (
     <main
-      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-white to-gray-50 py-6"
+      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-white to-gray-50 py-8"
       data-section="intro"
     >
       {/* Skip link para acessibilidade */}
@@ -96,7 +96,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
         Pular para o formulário
       </a>
       
-      <header className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 mx-auto">
+      <header className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-8 mx-auto">
         {/* Logo centralizado - renderização imediata */}
         <div className="flex flex-col items-center space-y-2">
           <div className="relative">
@@ -143,7 +143,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
         </h1>
       </header>
 
-      <section className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 mx-auto">
+      <section className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 md:space-y-8 mx-auto">
         {/* Imagem principal - renderização imediata e LCP */}
         <div className="mt-2 w-full max-w-xs sm:max-w-md md:max-w-lg mx-auto">
           <div
@@ -193,10 +193,10 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
         </p>
 
         {/* Formulário - renderização imediata */}
-        <div id="quiz-form">
+        <div id="quiz-form" className="mt-8">
           <form
             onSubmit={handleSubmit}
-            className="w-full space-y-4"
+            className="w-full space-y-6"
             autoComplete="off"
           >
             <div>
