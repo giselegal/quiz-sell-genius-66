@@ -61,7 +61,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
-              "w-full h-[260px] object-cover rounded-t-lg z-30 transition-all duration-200",
+              // imagem abaixo do overlay
+              "w-full h-[260px] object-cover rounded-t-lg z-10 transition-all duration-200",
               isSelected && !forStrategic && "scale-[1.04] shadow-2xl",
               !isSelected && "hover:scale-[1.02] hover:shadow-lg"
             )}
@@ -71,12 +72,14 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
               target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
             }}
           />
-          {/* Texto sobreposto na base da imagem, com fundo translúcido */}
+          {/* Texto sobreposto na base da imagem */}
           <div className={cn(
-            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-20", // z-20 para ficar atrás da imagem
+            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-30",
             isSelected && "opacity-70"
           )}>
-            <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">{option.text}</span>
+            <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">
+              {option.text}
+            </span>
           </div>
           {isSelected && (
             <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-40">
