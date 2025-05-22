@@ -166,7 +166,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type !== 'text' 
             ? cn(
                 "leading-tight font-medium py-2 px-2 mt-auto text-[#432818] relative", 
-                isMobile ? "text-[1rem]" : "text-base sm:text-lg" // Aumentado para opções de imagem
+                isMobile ? "text-[0.95rem]" : "text-base sm:text-lg" // Tamanho original para opções de imagem
               )
             : cn(
                 "leading-relaxed text-[#432818]",
