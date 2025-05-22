@@ -40,9 +40,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     let newSelectedOptions: string[];
     
     if (currentAnswers.includes(optionId)) {
+      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
+      if (isStrategicQuestion && currentAnswers.length === 1) {
+        return; // Não permite desmarcar a única opção em questões estratégicas
+      }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
       if (isStrategicQuestion) {
+        // Para questões estratégicas, substituímos qualquer seleção anterior
         newSelectedOptions = [optionId];
       } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];

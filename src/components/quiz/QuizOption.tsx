@@ -132,12 +132,21 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           {highlightStrategicWords(option.text)}
         </p>
         
-        {/* Indicador de seleção - apenas o check sem círculo */}
+        {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
-          <Check
-            className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670]"
-            strokeWidth={3}
-          />
+          isStrategicOption ? (
+            <div className="absolute -top-0.5 -right-0.5 h-5 w-5 bg-[#b29670] rounded-full flex items-center justify-center">
+              <Check
+                className="h-3 w-3 text-white"
+                strokeWidth={3}
+              />
+            </div>
+          ) : (
+            <Check
+              className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670]"
+              strokeWidth={3}
+            />
+          )
         )}
       </div>
     </div>

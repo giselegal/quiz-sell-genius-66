@@ -125,10 +125,13 @@ export const useQuizLogic = () => {
   }, [nextQuestion, nextNextQuestion]);
 
   const handleStrategicAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
+    // Garantir que sempre haja apenas uma opção selecionada para questões estratégicas
+    const finalOptions = selectedOptions.length > 1 ? [selectedOptions[selectedOptions.length - 1]] : selectedOptions;
+    
     setStrategicAnswers(prev => {
       const newAnswers = {
         ...prev,
-        [questionId]: selectedOptions
+        [questionId]: finalOptions
       };
       localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers)); // Salvar imediatamente
       
