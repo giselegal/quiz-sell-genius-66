@@ -56,11 +56,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
         )}> 
           <div className="w-full h-[16px]" /> {/* respiro superior */}
           <div className="relative w-full flex items-end justify-center" style={{ minHeight: '240px', height: 'auto' }}>
-            <div className={cn(
-              "relative flex items-end justify-center w-full",
-              // Só a imagem se move, sem fundo
-              "pointer-events-none"
-            )}>
+            <div className="relative flex items-end justify-center w-full">
               <img 
                 src={option.imageUrl} 
                 alt={option.text}
@@ -68,9 +64,10 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
                   "block object-contain rounded-t-lg z-20 transition-all duration-200 bg-transparent",
                   isSelected ? "scale-[1.10] shadow-2xl -translate-y-2" : "",
                   "mx-auto",
-                  "max-h-[340px] min-h-[180px] w-full sm:w-[380px] md:w-[420px] lg:w-[480px]"
+                  // Remove w-full, define largura máxima real
+                  "max-h-[340px] min-h-[180px] w-[90vw] sm:w-[380px] md:w-[440px] lg:w-[520px] xl:w-[600px]"
                 )}
-                style={{ maxHeight: '340px', minHeight: '180px', width: '100%' }}
+                style={{ maxHeight: '340px', minHeight: '180px' }}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
