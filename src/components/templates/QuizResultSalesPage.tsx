@@ -118,8 +118,8 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
             height="64"
           />
           <div className="text-right">
-            <p className="text-sm text-[#432818]">Parcelamento: 5x de R$ 8,83*</p>
-            <p className="text-sm text-[#432818]">ou R$ 39,90 à vista</p>
+            <p className="text-sm text-[#432818]"><span className="font-semibold text-[#aa6b5d]">5 x de R$ 8,83 *</span></p>
+            <p className="text-sm text-[#432818]">Ou R$ 39,90 à vista</p>
           </div>
         </div>
       </header>
