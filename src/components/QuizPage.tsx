@@ -46,15 +46,9 @@ const QuizPage: React.FC = () => {
     isInitialLoadComplete
   } = useQuizLogic();
 
-  // Check for username in localStorage on component mount
   useEffect(() => {
-    const savedUserName = localStorage.getItem('userName');
-    if (savedUserName) {
-      setShowIntro(false); // Skip intro if username exists
-    } else {
-      // Se não houver nome de usuário, garantimos que o QuizIntro seja exibido
-      setShowIntro(true);
-    }
+    // Sempre mostrar o QuizIntro ao acessar a rota
+    setShowIntro(true);
   }, []);
 
   useEffect(() => {
