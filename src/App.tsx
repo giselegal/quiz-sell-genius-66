@@ -125,8 +125,8 @@ const App = () => {
                 <Routes>
                   {/* Agora a rota principal direciona diretamente para o QuizPage */}
                   <Route path="/" element={<QuizPage />} />
-                  {/* HomePage agora está em uma rota separada */}
-                  <Route path="/home" element={<HomePage />} />
+                  {/* HomePage também direciona para o QuizPage para unificação */}
+                  <Route path="/home" element={<QuizPage />} />
                   <Route path="/quiz" element={<QuizPage />} />
                   <Route path="/resultado" element={<ResultPage />} />
                   <Route path="/prototipo" element={<ResultPagePrototype />} />

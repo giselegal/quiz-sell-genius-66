@@ -51,6 +51,9 @@ const QuizPage: React.FC = () => {
     const savedUserName = localStorage.getItem('userName');
     if (savedUserName) {
       setShowIntro(false); // Skip intro if username exists
+    } else {
+      // Se não houver nome de usuário, garantimos que o QuizIntro seja exibido
+      setShowIntro(true);
     }
   }, []);
 

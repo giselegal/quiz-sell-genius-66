@@ -14,7 +14,7 @@ const MAIN_ROUTES = [
   },
   {
     path: '/home',
-    title: 'Descubra Seu Estilo com Gisele Galvão | Vista-se de Você!'
+    title: 'Quiz de Estilo - Descubra Seu Estilo com Gisele Galvão | Vista-se de Você!'
   },
   {
     path: '/resultado',

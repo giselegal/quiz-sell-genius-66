@@ -34,10 +34,10 @@ export const LovableRoutes: React.FC = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Routes>
-        {/* Rota principal mostra o QuizPage que contém o QuizIntro */}
+        {/* Rota principal mostra o QuizPage que já contém o QuizIntro */}
         <Route path="/" element={<QuizPage />} />
-        {/* HomePage agora está em uma rota separada */}
-        <Route path="/home" element={<HomePage />} />
+        {/* Rota '/home' agora também aponta para QuizPage para unificação */}
+        <Route path="/home" element={<QuizPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/editor" element={<EditorPage />} />
         <Route path="/admin/settings" element={<SettingsPage />} />
