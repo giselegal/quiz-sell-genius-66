@@ -211,7 +211,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 placeholder="Digite seu nome"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 border-[#B89B7A] focus:border-2 focus:border-[#A1835D] focus:ring-[#A1835D]"
+                className="w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 border-[#B89B7A] focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-[#A1835D] focus-visible:ring-2 focus-visible:ring-[#A1835D] focus:ring-offset-2 focus-visible:ring-offset-2 focus:ring-offset-[#FEFEFE] focus-visible:ring-offset-[#FEFEFE]"
                 autoFocus
                 aria-required="true"
                 autoComplete="off"
