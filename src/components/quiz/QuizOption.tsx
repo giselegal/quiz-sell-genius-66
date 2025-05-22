@@ -37,48 +37,67 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         // Para opções de texto - manter borda amarela
         if (type === 'text') {
           optionRef.current.style.borderColor = '#b29670';
-          optionRef.current.style.boxShadow = '0 4px 8px rgba(178, 150, 112, 0.25)';
+          optionRef.current.style.boxShadow = isStrategicOption 
+            ? '0 6px 12px rgba(178, 150, 112, 0.4)' // Sombra mais pronunciada para estratégicas
+            : '0 4px 8px rgba(178, 150, 112, 0.25)';
           
-          // Leve destaque para opções selecionadas
-          optionRef.current.style.backgroundColor = '#faf6f1';
-          optionRef.current.style.transform = 'translateY(-2px)'; 
+          if (isStrategicOption) {
+            // Destacar mais as opções estratégicas selecionadas
+            optionRef.current.style.backgroundColor = '#faf6f1';
+            optionRef.current.style.transform = 'translateY(-2px)';
+          }
         } 
         // Para opções de imagem - sem borda, apenas sombra
         else {
           optionRef.current.style.borderColor = 'transparent';
-          optionRef.current.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.2)';
+          optionRef.current.style.boxShadow = isStrategicOption 
+            ? '0 15px 30px rgba(0, 0, 0, 0.25)' // Sombra mais pronunciada para estratégicas
+            : '0 12px 24px rgba(0, 0, 0, 0.2)';
         }
       } else {
         if (type === 'text') {
-          optionRef.current.style.borderColor = '#E0D5C5';
+          optionRef.current.style.borderColor = '#B89B7A';
           optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
           
-          // Resetar estilo para opções não selecionadas
-          optionRef.current.style.backgroundColor = '#FEFEFE';
-          optionRef.current.style.transform = 'translateY(0)';
+          if (isStrategicOption) {
+            // Resetar estilo para opções estratégicas não selecionadas
+            optionRef.current.style.backgroundColor = '#FEFEFE';
+            optionRef.current.style.transform = 'translateY(0)';
+          }
         } else {
           optionRef.current.style.borderColor = 'transparent';
           optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
         }
       }
     }
-  }, [isSelected, type]);
+  }, [isSelected, type, isStrategicOption]);
   
   // Manipulador de clique customizado com debounce
   const handleClick = () => {
     if (!isDisabled) {
+      // Se já está selecionado e é uma questão estratégica, não permitimos desmarcar
+      if (isSelected && isStrategicOption) {
+        return; // Impede desmarcar a opção em questões estratégicas
+      }
+      
       // Aplicar mudança visual imediatamente para feedback instantâneo
       if (optionRef.current) {
         if (type === 'text') {
           optionRef.current.style.borderColor = isSelected ? '#B89B7A' : '#b29670';
-          optionRef.current.style.backgroundColor = '#faf6f1';
-          optionRef.current.style.transform = 'translateY(-2px)';
+          
+          // Efeito visual adicional para opções estratégicas
+          if (isStrategicOption && !isSelected) {
+            optionRef.current.style.backgroundColor = '#faf6f1';
+            optionRef.current.style.transform = 'translateY(-2px)';
+          }
         }
         
         // Aplicar sombra correspondente ao estado
         optionRef.current.style.boxShadow = isSelected 
           ? '0 2px 4px rgba(0, 0, 0, 0.05)' 
-          : (type === 'text' ? '0 4px 8px rgba(178, 150, 112, 0.25)' : '0 12px 24px rgba(0, 0, 0, 0.2)');
+          : (isStrategicOption 
+              ? (type === 'text' ? '0 6px 12px rgba(178, 150, 112, 0.4)' : '0 15px 30px rgba(0, 0, 0, 0.25)') 
+              : (type === 'text' ? '0 4px 8px rgba(178, 150, 112, 0.25)' : '0 12px 24px rgba(0, 0, 0, 0.2)'));
       }
       
       // Chamar onSelect com um pequeno atraso para evitar flash
@@ -91,8 +110,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   return (
     <div 
       className={cn(
-        "relative h-full w-full", // Largura total dentro da coluna
-        isDisabled && isStrategicOption ? "opacity-40 cursor-not-allowed transition-opacity duration-300" : 
+        "relative h-full",
+        isDisabled && isStrategicOption ? "opacity-45 cursor-not-allowed transition-opacity duration-300" : 
         (isDisabled ? "opacity-50 cursor-not-allowed" : "")
       )}
       onClick={handleClick}
@@ -101,29 +120,17 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         ref={optionRef}
         className={cn(
-          "relative h-full flex flex-col rounded-lg overflow-hidden w-full", // Largura total
+          "relative h-full flex flex-col rounded-lg overflow-hidden",
           "cursor-pointer", 
           
-          // Para opções estratégicas, mantemos estilo similar às normais para não diferenciar
-          isStrategicOption && type === 'text' && "p-4 sm:p-5 md:p-6 border !px-6 sm:!px-6", 
-          
-          // Para opções estratégicas de imagem, estilo similar às normais
-          isStrategicOption && type !== 'text' && "pb-3 w-full",
-          
-          // Para opções normais de imagem, aumentar largura
-          type !== 'text' && "w-full",
-          
-          // Para opções de texto - manter borda e ajustar padding horizontal para desktop
-          !isStrategicOption && type === 'text' && "p-4 sm:p-4 md:p-5 !px-6 sm:!px-5 border",
+          // Para opções de texto - manter borda
+          type === 'text' && "p-4 border",
           
           // Para opções de imagem - SEM borda na coluna
           type !== 'text' && "border-0",
           
           // Fundo sólido sem transparência e adicionando sombra padrão
-          "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300",
-          
-          // Adicionar uma borda extra para opções estratégicas não selecionadas
-          isStrategicOption && !isSelected && "border-[#B89B7A]"
+          "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300"
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -140,26 +147,32 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         <p className={cn(
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium py-2 px-2 mt-auto text-[#432818] relative", 
-                isMobile ? "text-[0.85rem]" : "text-base" // Reduzido ainda mais o tamanho da fonte em mobile para opções de imagem
+                "leading-tight font-medium py-1 px-2 mt-auto text-[#432818] relative", 
+                isMobile ? "text-[0.7rem]" : "text-[0.7rem] sm:text-sm"
               )
             : cn(
                 "leading-relaxed text-[#432818]",
-                // Ajustes para proporcionalidade em mobile e desktop
-                isMobile 
-                  ? (isStrategicOption ? "text-[1.1rem] font-medium !leading-tight" : "text-[1rem] !leading-snug") 
-                  : (isStrategicOption ? "text-base sm:text-lg font-medium" : "text-sm sm:text-base")
+                isMobile ? "text-[0.75rem]" : "text-sm sm:text-base"
               )
         )}>
           {highlightStrategicWords(option.text)}
-        </p>            {/* Indicador de seleção - check com círculo para questões estratégicas */}
+        </p>
+        
+        {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
-          <div className="absolute -top-2 -right-2 h-7 w-7 sm:h-8 sm:w-8 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
+          isStrategicOption ? (
+            <div className="absolute -top-1 -right-1 h-7 w-7 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
+              <Check
+                className="h-5 w-5 text-white"
+                strokeWidth={3}
+              />
+            </div>
+          ) : (
             <Check
-              className="h-5 w-5 sm:h-5 sm:w-5 text-white"
+              className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670]"
               strokeWidth={3}
             />
-          </div>
+          )
         )}
       </div>
     </div>

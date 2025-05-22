@@ -51,40 +51,6 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
                 transition={{ duration: 1, delay: 1.2 }}
               />
             </motion.h2>
-
-            {/* Barra de progresso junto com o nome do estilo */}
-            <motion.div 
-              className="mt-2 mb-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1 }}
-            >
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-sm font-medium text-[#8F7A6A]">
-                  Percentual: <strong>{primaryStyle.percentage}%</strong>
-                </span>
-              </div>
-              <div className="w-full bg-[#FAF9F7] rounded-full h-2.5 overflow-hidden">
-                <motion.div 
-                  className="bg-gradient-to-r from-amber-500 to-amber-600 h-2.5 rounded-full relative"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${primaryStyle.percentage}%` }}
-                  transition={{ delay: 1.2, duration: 1, ease: "easeOut" }}
-                >
-                  <motion.div 
-                    className="absolute top-0 right-0 h-full w-4 bg-white/30"
-                    animate={{ 
-                      x: [30, -10, 30],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      repeatType: "loop"
-                    }}
-                  />
-                </motion.div>
-              </div>
-            </motion.div>
             
             <motion.p 
               className="text-[#432818] leading-relaxed text-base"
@@ -94,6 +60,18 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
             >
               {description}
             </motion.p>
+            
+            <motion.div 
+              className="flex items-center space-x-2 pt-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1.4 }}
+            >
+              <span className="inline-block h-4 w-4 rounded-full bg-amber-400"></span>
+              <span className="text-sm text-[#8F7A6A] font-medium">
+                Percentual: <strong>{primaryStyle.percentage}%</strong>
+              </span>
+            </motion.div>
           </motion.div>
           
           <motion.div 
@@ -133,5 +111,7 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
     </motion.div>
   );
 };
+
+export default PrimaryStyleCard;
 
 export default PrimaryStyleCard;

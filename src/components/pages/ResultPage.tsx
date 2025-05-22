@@ -123,7 +123,7 @@ const ResultPage: React.FC = () => {
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
-      <div className="container mx-auto px-4 py-6 max-w-3xl relative z-10">
+      <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         {/* ATTENTION: Primary Style Card */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
@@ -258,7 +258,9 @@ const ResultPage: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </div>              <div className="bg-[#fffaf7] px-4 py-8 rounded-lg text-center mb-8">
+            </div>
+
+            <div className="bg-[#fffaf7] px-4 py-8 rounded-lg text-center mb-8">
               <div className="text-center mb-8">
                 <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
                   Guia de Estilo e Imagem + Bônus Exclusivos
@@ -268,7 +270,7 @@ const ResultPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white text-left p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-sm mx-auto">
+              <div className="bg-white text-left p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
                 <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
@@ -291,12 +293,10 @@ const ResultPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="bg-[#f9f4ef] p-4 rounded-lg space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
+                <div className="bg-[#f9f4ef] p-6 rounded-lg space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
                   <div className="text-center md:text-left space-y-1">
                     <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por Apenas</p>
-                    <p className="text-2xl sm:text-3xl font-bold text-[#B55B4C] whitespace-nowrap tracking-tight">
-                      <span className="text-lg sm:text-xl font-medium mr-1">5x de</span> R$ 8,83
-                    </p>
+                    <p className="text-4xl font-bold text-[#aa6b5d]">5x de R$ 8,83</p>
                   </div>
                   <div className="text-center md:text-left">
                     <p className="text-sm text-[#432818]">Ou R$ 39,90 à vista</p>

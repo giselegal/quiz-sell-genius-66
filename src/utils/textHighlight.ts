@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 export const highlightStrategicWords = (text: string): React.ReactNode => {
@@ -38,10 +39,7 @@ export const highlightStrategicWords = (text: string): React.ReactNode => {
     if (uniqueSortedWords.some(word => part.toLowerCase() === word.toLowerCase())) {
       return React.createElement('strong', { 
         key: index, 
-        className: 'text-[#432818] font-bold relative inline-block px-0.5' +  // Negrito para mais destaque
-          ' after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[5px]' + // Linha decorativa mais grossa
-          ' after:bg-[#b29670]/50 after:rounded-full' + // Cor da linha decorativa com mais opacidade
-          ' text-[1.15em]' // Texto claramente maior que o resto
+        className: 'text-[#432818] font-medium'  // Changed to match the coffee color theme
       }, part);
     }
     return part;

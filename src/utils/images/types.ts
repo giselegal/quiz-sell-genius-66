@@ -59,6 +59,4 @@ export interface PreloadOptions {
   timeout?: number;
   batchSize?: number;
   format?: string;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
 }
