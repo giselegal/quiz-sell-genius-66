@@ -93,7 +93,9 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
           isSelected && forStrategic && "border-2 border-[#B89B7A] shadow-2xl shadow-[#FFD700]/30 animate-pulse-border ring-2 ring-[#B89B7A]/60",
           !isSelected && "border border-[#B89B7A]/40"
         )}>
-          <p>{option.text}</p>
+          <span className="block text-base sm:text-lg font-semibold text-[#432818] text-center break-words leading-tight">
+            {option.text}
+          </span>
           {isSelected && (
             <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm">
               <Check className="w-2.5 h-2.5" />
