@@ -131,7 +131,6 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
             currentAnswers={currentAnswers}
             autoAdvance={false}
             showQuestionImage={true}
-            isStrategicQuestion={true}
           />
           
           <div className="flex justify-end mt-6">
