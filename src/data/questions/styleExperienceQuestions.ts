@@ -35,7 +35,7 @@ export const styleExperienceQuestions: QuizQuestion[] = [
     title: 'O que você mais valoriza em um guia de estilo?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334748/ChatGPT_Image_4_de_mai._de_2025_01_40_38_qtv4xy.png',
+    // A questão 14 (strategic-4) não deve ter imagem
     options: [
       {
         id: 'strategic-4-1',

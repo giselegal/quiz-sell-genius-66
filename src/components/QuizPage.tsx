@@ -155,8 +155,11 @@ const QuizPage: React.FC = () => {
     if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
       const nextIndex = currentStrategicQuestionIndex + 1;
       if (nextIndex < strategicQuestions.length) {
+        // Verifica se a próxima questão é de tipo estratégico-3 ou abaixo, que podem ter imagens
         const nextQuestionData = strategicQuestions[nextIndex];
-        if (nextQuestionData.imageUrl) {
+        // Verifica se a questão tem imageUrl e se não é uma das questões strategic-3, strategic-4 ou strategic-5
+        if (nextQuestionData.imageUrl && 
+            !['strategic-3', 'strategic-4', 'strategic-5'].includes(nextQuestionData.id)) {
           preloadImages([{ 
             src: nextQuestionData.imageUrl, 
             id: `strategic-${nextIndex}`,
@@ -165,6 +168,8 @@ const QuizPage: React.FC = () => {
             preloadPriority: 5 
           }], { quality: 90 });
         }
+        
+        // Opções de imagem para questões anteriores a strategic-3
         const optionImages = nextQuestionData.options
           .map(option => option.imageUrl)
           .filter(Boolean) as string[];
@@ -177,23 +182,11 @@ const QuizPage: React.FC = () => {
             preloadPriority: 4
           })), { quality: 85, batchSize: 3 });
         }
-        if (nextIndex + 1 < strategicQuestions.length) {
-          const nextNextQuestion = strategicQuestions[nextIndex + 1];
-          if (nextNextQuestion.imageUrl) {
-            preloadImages([{ 
-              src: nextNextQuestion.imageUrl,
-              id: `strategic-${nextIndex+1}`,
-              category: 'strategic',
-              alt: `Question ${nextIndex+1}`,
-              preloadPriority: 2
-            }], { quality: 85 });
-          }
-        }
       }
       setCurrentStrategicQuestionIndex(prev => prev + 1);
     }
     // Se for a última, a lógica de "Ver Resultado" em QuizNavigation.onNext cuidará disso.
-  }, [currentStrategicQuestionIndex, strategicQuestions, totalQuestions /* Adicionado totalQuestions se usado em preload */]);
+  }, [currentStrategicQuestionIndex, strategicQuestions]);
 
   const handleAnswerSubmitInternal = useCallback((response: UserResponse) => {
     try {
@@ -235,32 +228,10 @@ const QuizPage: React.FC = () => {
         trackResultView(results.primaryStyle.category);
       }
       
-      // Define uma flag para garantir que a navegação ocorra
-      let navigationOccurred = false;
+      // Navegação para a página de resultados ocorre ao clicar no botão "Vamos ao resultado?"
+      // Sem timers para avanço automático
+      navigate('/resultado');
       
-      // Adiciona um pequeno delay para garantir que a animação de transição seja concluída
-      const navigationTimer = setTimeout(() => {
-        if (!navigationOccurred) {
-          navigationOccurred = true;
-          navigate('/resultado');
-        }
-      }, 800); // Tempo suficiente para completar a animação
-      
-      // Adiciona um fallback caso a navegação não ocorra dentro de um tempo máximo
-      const fallbackTimer = setTimeout(() => {
-        if (!navigationOccurred) {
-          console.warn('Navegação com timeout normal falhou, usando fallback');
-          navigationOccurred = true;
-          clearTimeout(navigationTimer);
-          navigate('/resultado');
-        }
-      }, 3000); // Tempo máximo que o usuário deve ficar na tela de transição
-      
-      return () => {
-        // Limpa os timers em caso de desmontagem do componente
-        clearTimeout(navigationTimer);
-        clearTimeout(fallbackTimer);
-      };
     } catch (error) {
       console.error('Erro ao navegar para a página de resultados:', error);
       toast({
@@ -375,24 +346,6 @@ const QuizPage: React.FC = () => {
       })), { quality: 100 });
     }
   }, [showingFinalTransition]);
-
-  // Adicione este useEffect para garantir que o usuário não fique preso na tela de transição
-  useEffect(() => {
-    let maxTransitionTimer: NodeJS.Timeout | null = null;
-    
-    if (showingFinalTransition) {
-      maxTransitionTimer = setTimeout(() => {
-        console.warn('Tempo máximo de transição atingido, forçando navegação');
-        navigate('/resultado');
-      }, 5000); // Tempo máximo absoluto na tela de transição
-    }
-    
-    return () => {
-      if (maxTransitionTimer) {
-        clearTimeout(maxTransitionTimer);
-      }
-    };
-  }, [showingFinalTransition, navigate]);
 
   return (
     <LoadingManager isLoading={!pageIsReady}>
