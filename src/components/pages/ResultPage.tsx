@@ -296,7 +296,10 @@ const ResultPage: React.FC = () => {
                 <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
                   <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
                   <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-                  <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+                  <div className="mt-2 flex flex-col items-center gap-1">
+                    <p className="text-sm text-[#432818]">Parcelamento: 5x de R$ 8,83*</p>
+                    <p className="text-sm text-[#432818]">ou R$ 39,90 à vista</p>
+                  </div>
                 </div>
               </div>
             </div>
