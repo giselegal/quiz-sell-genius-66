@@ -302,10 +302,9 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            <Button onClick={handleCTAClick} className="text-white text-sm md:text-base lg:text-lg leading-none py-3 px-6 md:py-5 md:px-8 rounded-md shadow-md transition-colors btn-3d w-full md:w-auto mb-2" style={{
+            <Button onClick={handleCTAClick} className="text-white text-sm leading-none py-3 px-6 md:py-5 md:px-8 rounded-md shadow-md transition-colors btn-3d w-full md:w-auto mb-2" style={{
             background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-            fontSize: "1rem" /* Smaller font size for button */
+            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
             }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
