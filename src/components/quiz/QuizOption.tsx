@@ -51,28 +51,28 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       data-strategic={forStrategic ? `${questionId}-${option.id}` : ""}
     >
       {type !== 'text' && option.imageUrl && (
-        <div className="w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2">
+        <div className="w-full flex-1 flex items-stretch min-h-[220px] md:min-h-[240px] p-0 relative gap-2">
           <img
             src={option.imageUrl}
             alt={option.text}
             className={cn(
-              "w-full h-[260px] object-cover rounded-t-lg transition-all duration-200",
+              "w-full h-[260px] md:h-[280px] object-cover rounded-t-lg transition-all duration-200",
               // Aumentar z-index e escala quando selecionado para sobressair ao texto
               isSelected && "scale-[1.04] shadow-2xl z-[60]",
               !isSelected && "hover:scale-[1.02] hover:shadow-lg z-10"
             )}
-            style={{ maxHeight: '260px', minHeight: '180px' }}
+            style={{ maxHeight: '280px', minHeight: '180px' }}
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
             }}
           />
           <div className={cn(
-            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-[50]",
+            "absolute bottom-0 left-0 w-full bg-white/90 px-3 py-2 rounded-b-lg flex items-center justify-center transition-all duration-200 z-[50]",
             // Diminuir opacidade quando selecionado para destacar a imagem
             isSelected && "opacity-85"
           )}>
-            <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">
+            <span className="text-[11px] md:text-xs text-[#432818] text-center font-medium leading-tight">
               {option.text}
             </span>
           </div>
