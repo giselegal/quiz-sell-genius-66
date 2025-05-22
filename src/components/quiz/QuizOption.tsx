@@ -55,13 +55,13 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {type !== 'text' && option.imageUrl && (
         <div className={cn(
           "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative gap-2",
-          forStrategic && isSelected && "animate-enhanced-pulse ring-4 ring-[#FFD700] shadow-2xl"
+          forStrategic && isSelected && "animate-enhanced-pulse shadow-2xl",
+          !forStrategic && isSelected && "shadow-2xl"
         )}>
-          <img 
-            src={option.imageUrl} 
+          <img
+            src={option.imageUrl}
             alt={option.text}
             className={cn(
-              // imagem abaixo do overlay
               "w-full h-[260px] object-cover rounded-t-lg z-10 transition-all duration-200",
               isSelected && !forStrategic && "scale-[1.04] shadow-2xl",
               !isSelected && "hover:scale-[1.02] hover:shadow-lg"
@@ -72,9 +72,9 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
               target.src = 'https://placehold.co/400x300?text=Imagem+não+encontrada';
             }}
           />
-          {/* Texto sobreposto na base da imagem */}
+          {/* Texto sobreposto na base da imagem, com fundo translúcido e z-40 para garantir visibilidade */}
           <div className={cn(
-            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-30",
+            "absolute bottom-0 left-0 w-full bg-white/80 px-2 py-1 rounded-b-lg flex items-center justify-center transition-all duration-200 z-40",
             isSelected && "opacity-70"
           )}>
             <span className="text-[10px] text-[#432818] text-center font-medium leading-tight">
@@ -82,7 +82,7 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             </span>
           </div>
           {isSelected && (
-            <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-40">
+            <div className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-50">
               <Check className="w-2.5 h-2.5" />
             </div>
           )}
