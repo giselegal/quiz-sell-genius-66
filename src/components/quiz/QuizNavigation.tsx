@@ -37,18 +37,19 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
       setAutoAdvanceTimer(null);
     }
 
-    if (canProceed && currentQuestionType === 'normal') { // Efeito de ativação e auto-avanço só para normais
+    if (canProceed) { // Efeito de ativação se puder prosseguir (normal ou estratégico)
       setShowActivationEffect(true);
       const visualTimer = setTimeout(() => {
         setShowActivationEffect(false);
-      }, 2000);
+      }, 2000); // Duração do efeito visual
 
-      if (shouldAutoAdvance()) {
+      // Auto-avanço apenas para questões normais
+      if (currentQuestionType === 'normal' && shouldAutoAdvance()) {
         console.log('Configurando avanço automático em 45ms');
         const newTimer = setTimeout(() => {
           console.log('Executando avanço automático agora');
           onNext();
-        }, 45);
+        }, 45); // Tempo para auto-avanço
         setAutoAdvanceTimer(newTimer);
       }
 
@@ -58,10 +59,10 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
           clearTimeout(autoAdvanceTimer);
         }
       };
-    } else {
+    } else { // Se não puder prosseguir
       setShowActivationEffect(false);
     }
-  }, [canProceed, onNext, shouldAutoAdvance, currentQuestionType]); // Adicionado currentQuestionType
+  }, [canProceed, onNext, shouldAutoAdvance, currentQuestionType]);
 
   const getHelperText = useCallback((): string => {
     if (!canProceed) {
@@ -104,7 +105,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
               ${
                 canProceed
                   ? `bg-[#b29670] text-white hover:bg-[#a0845c] border-[#b29670] ${
-                      showActivationEffect && currentQuestionType === 'normal' ? 'scale-105 shadow-lg' : ''
+                      showActivationEffect ? 'scale-105 shadow-lg' : '' // Aplicar efeito se showActivationEffect for true
                     }`
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300'
               }`}
