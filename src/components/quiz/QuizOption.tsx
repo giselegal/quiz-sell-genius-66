@@ -53,13 +53,17 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       style={{ boxShadow: !isImageOption && isSelected && forStrategic ? '0 0 0 4px #B89B7A33, 0 4px 24px #B89B7A22' : undefined }}
     >
       {type !== 'text' && option.imageUrl && (
-        <div className={cn("w-full flex-1 flex items-stretch min-h-[220px] p-0 relative")}> 
+        <div className={cn(
+          "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative",
+        )}> 
           <img 
             src={option.imageUrl} 
             alt={option.text}
             className={cn(
               "w-full h-[260px] object-cover rounded-t-lg z-20 transition-all duration-200",
-              isSelected && "opacity-95 shadow-2xl transform scale-[1.04] z-30"
+              isSelected && forStrategic && "animate-enhanced-pulse ring-4 ring-[#FFD700] shadow-2xl",
+              isSelected && !forStrategic && "scale-[1.04] shadow-2xl",
+              !isSelected && "hover:scale-[1.02] hover:shadow-lg"
             )}
             style={{ maxHeight: '260px', minHeight: '180px' }}
             onError={(e) => {
