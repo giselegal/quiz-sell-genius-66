@@ -117,6 +117,3 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
 };
 
 export default SecondaryStylesSection;
-};
-
-export default SecondaryStylesSection;

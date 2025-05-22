@@ -105,6 +105,3 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
 };
 
 export default BenefitList;
-};
-
-export default BenefitList;

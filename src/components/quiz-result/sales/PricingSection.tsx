@@ -319,7 +319,5 @@ const PricingSection: React.FC<PricingSectionProps> = ({
     </motion.div>
   );
 };
-  );
-};
 
 export default PricingSection;
