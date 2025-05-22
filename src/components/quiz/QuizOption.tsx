@@ -79,8 +79,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             </span>
           </div>
           {isSelected && (
-            <div className="absolute top-1 right-1 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-60"> {/* Posição do checkmark ajustada para top-1 right-1 */}
-              <Check className="w-2.5 h-2.5" />
+            <div className="absolute top-[2px] right-[2px] w-3.5 h-3.5 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-60"> {/* Posicionado na extremidade e menor */}
+              <Check className="w-2 h-2" /> {/* Ícone Check menor */}
             </div>
           )}
         </div>
@@ -99,8 +99,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
             {option.text}
           </span>
           {isSelected && (
-            <div className="absolute top-1 right-1 w-4 h-4 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-60"> {/* Posição do checkmark ajustada para top-1 right-1 */}
-              <Check className="w-2.5 h-2.5" />
+            <div className="absolute top-[2px] right-[2px] w-3.5 h-3.5 rounded-full flex items-center justify-center bg-[#B89B7A] text-white shadow-sm z-60"> {/* Posicionado na extremidade e menor */}
+              <Check className="w-2 h-2" /> {/* Ícone Check menor */}
             </div>
           )}
         </div>
