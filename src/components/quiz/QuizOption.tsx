@@ -52,7 +52,8 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {type !== 'text' && option.imageUrl && (
         <div className={cn(
           "w-full flex-1 flex items-stretch min-h-[220px] p-0 relative",
-          forStrategic && isSelected && "ring-2 ring-[#B89B7A]/60 animate-pulse-border shadow-2xl"
+          // Efeito especial de seleção para questões estratégicas
+          forStrategic && isSelected ? "ring-4 ring-[#FFD700] animate-pulse-border shadow-[0_0_0_6px_rgba(255,215,0,0.25),0_8px_32px_rgba(184,155,122,0.18)]" : ""
         )}> 
           <div className="w-full h-[12px]" /> {/* respiro superior */}
           <div className="relative w-full flex items-end justify-center" style={{ minHeight: '220px' }}>
