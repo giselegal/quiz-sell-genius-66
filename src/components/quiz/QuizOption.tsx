@@ -104,86 +104,64 @@ export const QuizOption: React.FC<QuizOptionProps> = ({
       {isSelected && (
         <div 
           className={cn(
-            "absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-xl border-2 border-white",
-            forStrategic ? "bg-[#B89B7A]" : "bg-[#B89B7A]" // Cor dourada da identidade visual
+            "absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-xl border border-white",
+            forStrategic 
+              ? "bg-[#B89B7A] ring-4 ring-[#B89B7A]/30 animate-strategic-pulse" 
+              : "bg-[#B89B7A]"
           )}
           style={{ 
             zIndex: 9999,
             pointerEvents: "none",
           }}
         >
-          <Check className="w-3 h-3 stroke-2" />
+          <Check className={cn(
+            "w-3 h-3 stroke-2",
+            forStrategic && "animate-bounce-subtle"
+          )} />
         </div>
       )}
 
-      {/* Overlay para "botão" em opções estratégicas */}
+      {/* Overlay sutil para questões estratégicas */}
       {forStrategic && (
         <div 
           className={cn(
-            "absolute inset-0 pointer-events-none",
-            "border-2 rounded-lg transition-all duration-300",
+            "absolute inset-0 pointer-events-none rounded-lg transition-all duration-300",
             isSelected 
-              ? "border-[#B89B7A] shadow-[0_0_15px_rgba(184,155,122,0.5)]" 
-              : "border-[#B89B7A]/40 hover:border-[#B89B7A]/60"
+              ? "border border-[#B89B7A] bg-[#B89B7A]/5" 
+              : "border border-dashed border-[#B89B7A]/40 hover:border-[#B89B7A]/60"
           )}
-          style={{ zIndex: 50 }}
+          style={{ zIndex: 30 }}
         />
       )}
 
-      {/* Efeito de seleção pulsante para questões estratégicas */}
-      {forStrategic && isSelected && (
-        <div 
-          className="absolute inset-0 pointer-events-none z-[45] strategic-pulse-effect rounded-lg"
-          style={{ 
-            background: 'radial-gradient(circle, rgba(184,155,122,0.1) 0%, rgba(255,255,255,0) 70%)'
-          }}
-        />
-      )}
-
-      {/* Definir animações em style global para garantir que sejam carregadas */}
+      {/* Definições CSS simplificadas para as animações */}
       <style jsx global>{`
-        /* Efeito pulsante para as questões estratégicas */
-        @keyframes strategic-pulse-animation {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.7; }
+        @keyframes strategic-pulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(184, 155, 122, 0.6); }
+          50% { box-shadow: 0 0 0 8px rgba(184, 155, 122, 0); }
         }
         
-        .strategic-pulse-effect {
-          animation: strategic-pulse-animation 2s infinite ease-in-out;
+        .animate-strategic-pulse {
+          animation: strategic-pulse 2s infinite ease-out;
         }
         
-        /* Efeito de borda para questões estratégicas selecionadas */
-        div[data-strategic]:not([data-strategic=""]):where(.border-[#B89B7A]) {
-          box-shadow: 0 0 0 2px #B89B7A, 0 0 20px 5px rgba(184, 155, 122, 0.3) !important;
-          transition: all 0.3s ease-in-out !important;
+        @keyframes bounce-subtle {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.2); }
         }
         
-        /* Estilo de "botão" para opções estratégicas */
-        div[data-strategic]:not([data-strategic=""]):hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 25px rgba(184, 155, 122, 0.2);
-        }
-        
-        /* Destaque adicional quando selecionado */
-        div[data-strategic]:not([data-strategic=""]):where(:has(> div[class*="bg-[#B89B7A]"])) {
-          background-color: rgba(184, 155, 122, 0.05);
+        .animate-bounce-subtle {
+          animation: bounce-subtle 2s infinite ease-in-out;
         }
       `}</style>
       
-      {/* Adicionar um script para forçar reflow e garantir que as animações funcionem */}
+      {/* Script simplificado */}
       {forStrategic && isSelected && (
         <script dangerouslySetInnerHTML={{
           __html: `
             (function() {
-              // Forçar repaint para garantir que as animações sejam aplicadas
-              setTimeout(() => {
-                const strategicElements = document.querySelectorAll('[data-strategic="${questionId}-${option.id}"]');
-                strategicElements.forEach(el => {
-                  el.style.animationName = 'none';
-                  void el.offsetWidth; // Trigger reflow
-                  el.style.animationName = '';
-                });
-              }, 50);
+              document.querySelectorAll('[data-strategic="${questionId}-${option.id}"]')
+                .forEach(el => el.classList.add('strategic-selected'));
             })();
           `
         }} />
