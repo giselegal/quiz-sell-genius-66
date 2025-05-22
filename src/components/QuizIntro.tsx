@@ -227,8 +227,10 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 'bg-[#B89B7A] text-white hover:bg-[#A1835D] active:bg-[#947645] hover:shadow-lg',
                 'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
                 'sm:py-3 sm:px-4 sm:text-base',
-                'md:py-3.5 md:text-lg'
+                'md:py-3.5 md:text-lg',
+                nome.trim() === '': 'opacity-50 cursor-not-allowed'
               )}
+              disabled={nome.trim() === ''}
             >
               <span className="flex items-center justify-center gap-2">
                 Quero Descobrir meu Estilo Agora!
