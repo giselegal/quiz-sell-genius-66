@@ -468,7 +468,7 @@ const QuizPage: React.FC = () => {
                         currentQuestion={actualCurrentQuestionData} 
                         currentAnswers={showingStrategicQuestions && actualCurrentQuestionData.id ? strategicAnswers[actualCurrentQuestionData.id] || [] : currentAnswers}
                         handleAnswerSubmit={showingStrategicQuestions ? handleStrategicAnswerInternal : handleAnswerSubmitInternal}
-                        // handleNextClick e handlePrevious não são mais passados para QuizContent, pois QuizNavigation os gerencia
+                        // As props handleNextClick e handlePrevious foram removidas intencionalmente de QuizContent
                       />
                       {renderQuizNavigation()}
                     </motion.div>
