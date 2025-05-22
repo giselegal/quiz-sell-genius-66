@@ -4,7 +4,7 @@ import { QuizOption as QuizOptionType } from '@/types/quiz';
 import { highlightStrategicWords } from '@/utils/textHighlight';
 import { QuizOptionImage } from './QuizOptionImage';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { CheckCircle } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface QuizOptionProps {
   option: QuizOptionType;
@@ -132,9 +132,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           {highlightStrategicWords(option.text)}
         </p>
         
-        {/* Indicador de seleção */}
+        {/* Indicador de seleção - apenas o check sem círculo */}
         {isSelected && (
-          <CheckCircle
+          <Check
             className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670]"
             strokeWidth={3}
           />
