@@ -111,11 +111,26 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
               <QuizQuestion
                 key={`strategic-${currentQuestionIndex}`}
                 question={strategicQuestions[currentQuestionIndex]}
-                onAnswer={handleQuestionAnswer}
+                onAnswer={(response) => {
+                  handleQuestionAnswer(response);
+                  if (response.selectedOptions.length > 0) {
+                    setTimeout(() => {
+                      if (currentQuestionIndex < strategicQuestions.length - 1) {
+                        setCurrentQuestionIndex(prev => prev + 1);
+                      } else {
+                        // Última questão estratégica: notifica o parent
+                        onAnswer({
+                          questionId: strategicQuestions[currentQuestionIndex].id,
+                          selectedOptions: response.selectedOptions,
+                        });
+                      }
+                    }, 350); // Delay para UX suave
+                  }
+                }}
                 currentAnswers={currentAnswersForQuestion}
                 autoAdvance={true}
                 hideTitle={true}
-                onNextClick={undefined} // Remove o botão das questões estratégicas
+                onNextClick={undefined}
               />
             </div>
           </Card>
