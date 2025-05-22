@@ -228,7 +228,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
                 'sm:py-3 sm:px-4 sm:text-base',
                 'md:py-3.5 md:text-lg',
-                nome.trim() === '': 'opacity-50 cursor-not-allowed'
+                nome.trim() === '' && 'opacity-50 cursor-not-allowed'
               )}
               disabled={nome.trim() === ''}
             >

@@ -115,11 +115,13 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
           </div>
           
           <QuizQuestion
+            key={currentQuestion?.id}
             question={currentQuestion}
             onAnswer={onAnswer}
             currentAnswers={currentAnswers}
             autoAdvance={false}
             showQuestionImage={true}
+            isStrategicQuestion={true}
           />
         </div>
       </div>
