@@ -79,11 +79,25 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
           />
         </h2>
         
-        <img
-          src={productsImage}
-          alt="Todos os produtos e bônus mockup"
-          className="w-full rounded-lg mb-6 hover:scale-105 transition-transform duration-300 shadow-md"
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="relative group"
+        >
+          <img
+            src={productsImage}
+            alt="Guia Completo e Bônus Exclusivos"
+            className="w-full rounded-lg mb-6 shadow-md transition-all duration-500 hover:shadow-xl"
+          />
+          <motion.div 
+            className="absolute -inset-0.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{ 
+              background: "linear-gradient(45deg, rgba(184,155,122,0.2) 0%, rgba(170,107,93,0.2) 100%)" 
+            }}
+            whileHover={{ opacity: 1 }}
+          />
+        </motion.div>
 
         <div className="space-y-6 relative z-10">
           <div className="flex flex-col md:flex-row gap-6 items-center justify-center mb-6 p-6 bg-gradient-to-r from-[#fff7f3] to-[#fff9f5] rounded-lg border border-[#B89B7A]/20 shadow-sm">
@@ -149,42 +163,68 @@ const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config }) => {
 
       <BenefitList items={config?.benefitItems} />
       
-      <div className="grid md:grid-cols-2 gap-6 relative z-10">
-        <div className="interactive-section">
+      <div className="grid md:grid-cols-2 gap-8 relative z-10 my-10">
+        <motion.div 
+          className="interactive-section rounded-lg overflow-hidden shadow-lg"
+          whileHover={{ scale: 1.03 }}
+          transition={{ type: "spring", stiffness: 300, damping: 15 }}
+        >
           <img
             src={bonusImage}
-            alt="Mockup celular peças-chave por dentro"
-            className="w-full rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+            alt="Acesso ao guia completo no celular"
+            className="w-full rounded-lg transition-transform duration-300"
           />
-        </div>
-        <div className="interactive-section">
+          <div className="p-3 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 text-center">
+            <span className="text-[#432818] font-medium">Acesse de qualquer dispositivo</span>
+          </div>
+        </motion.div>
+        <motion.div 
+          className="interactive-section rounded-lg overflow-hidden shadow-lg"
+          whileHover={{ scale: 1.03 }}
+          transition={{ type: "spring", stiffness: 300, damping: 15 }}
+        >
           <img
             src={mentorImage}
-            alt="Foto Gisele Galvão"
-            className="w-full rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+            alt="Mentoria com especialista em Estilo"
+            className="w-full rounded-lg transition-transform duration-300"
           />
-        </div>
+          <div className="p-3 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 text-center">
+            <span className="text-[#432818] font-medium">Criado por especialista em imagem</span>
+          </div>
+        </motion.div>
       </div>
       
       <Testimonials items={config?.testimonials} />
       <Guarantee text={config?.guaranteeText} />
       
-      <div className="text-center mt-8 relative z-10">
-        <Button 
-          className="btn-elegant btn-3d text-white py-6 rounded-md text-lg px-8"
-          onClick={() => window.location.href = ctaUrl}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+      <div className="text-center mt-12 relative z-10">
+        <motion.div
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
         >
-          <span className="flex items-center gap-2">
-            <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isHovered ? 'scale-110' : ''}`} />
-            {ctaText}
-          </span>
-        </Button>
+          <Button 
+            className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] hover:from-[#a08968] hover:to-[#965e54] text-white py-7 px-10 rounded-md text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            onClick={() => window.location.href = ctaUrl}
+          >
+            <span className="flex items-center gap-3 font-medium">
+              <ShoppingCart className="w-5 h-5" />
+              {ctaText}
+            </span>
+          </Button>
+        </motion.div>
         
-        <p className="text-sm text-[#aa6b5d] mt-3">
+        <motion.p 
+          className="text-sm text-[#aa6b5d] mt-4 font-medium"
+          initial={{ opacity: 0.5 }}
+          animate={{ opacity: 1 }}
+          transition={{ 
+            duration: 1.5,
+            repeat: Infinity,
+            repeatType: "reverse"
+          }}
+        >
           ⏳ Oferta exclusiva por tempo limitado
-        </p>
+        </motion.p>
       </div>
     </div>
   );
