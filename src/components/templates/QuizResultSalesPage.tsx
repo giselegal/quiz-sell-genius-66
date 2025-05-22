@@ -139,13 +139,10 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
             width="128"
             height="64"
           />
-          <Button 
-            onClick={handleBuyNow}
-            className="bg-[#aa6b5d] hover:bg-[#8f574a]"
-          >
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            Quero Comprar
-          </Button>
+          <div className="text-right">
+            <p className="text-sm text-[#432818]">Parcelamento: 5x de R$ 8,83*</p>
+            <p className="text-sm text-[#432818]">ou R$ 39,90 à vista</p>
+          </div>
         </div>
       </header>
 
