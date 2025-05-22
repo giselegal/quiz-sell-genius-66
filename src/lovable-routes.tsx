@@ -34,7 +34,7 @@ export const LovableRoutes: React.FC = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Routes>
-        {/* Rota principal agora mostra o QuizPage */}
+        {/* Rota principal mostra o QuizPage que contém o QuizIntro */}
         <Route path="/" element={<QuizPage />} />
         {/* HomePage agora está em uma rota separada */}
         <Route path="/home" element={<HomePage />} />

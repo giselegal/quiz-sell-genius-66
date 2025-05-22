@@ -1,5 +1,4 @@
 
-// Fix the errors in ResultPage.tsx by ensuring proper closing tags
 import React from 'react';
 import { motion } from 'framer-motion';
 

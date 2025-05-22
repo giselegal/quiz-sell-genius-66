@@ -388,27 +388,21 @@ const QuizPage: React.FC = () => {
               <AnimatePresence mode="wait">
                 {showingTransition ? (
                   <motion.div
-                    key="main-transition" // Chave única para MainTransition
+                    key="main-transition"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    transition={{ 
-                      duration: 0.6,
-                      ease: "easeInOut" 
-                    }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
                   >
                     <MainTransition onProceedToStrategicQuestions={handleProceedToStrategic} />
                   </motion.div>
                 ) : showingFinalTransition ? (
                   <motion.div
-                    key="final-transition" // Chave para a transição final
+                    key="final-transition"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    transition={{ 
-                      duration: 0.6,
-                      ease: "easeInOut" 
-                    }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
                   >
                     <QuizTransitionManager
                       showingFinalTransition={showingFinalTransition}
@@ -422,10 +416,7 @@ const QuizPage: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }} 
                       animate={{ opacity: 1, y: 0 }} 
                       exit={{ opacity: 0, y: -20 }}
-                      transition={{ 
-                        duration: 0.5,
-                        ease: "easeOut" 
-                      }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                       <QuizContent
                         user={user}
@@ -437,7 +428,7 @@ const QuizPage: React.FC = () => {
                         currentAnswers={showingStrategicQuestions && actualCurrentQuestionData.id ? strategicAnswers[actualCurrentQuestionData.id] || [] : currentAnswers}
                         handleAnswerSubmit={
                           showingStrategicQuestions && actualCurrentQuestionData
-                            ? recordStrategicAnswer // Alterado para a nova função
+                            ? recordStrategicAnswer
                             : handleAnswerSubmitInternal
                         }
                       />

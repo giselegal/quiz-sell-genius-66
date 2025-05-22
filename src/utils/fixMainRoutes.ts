@@ -3,7 +3,7 @@
  * - https://giselegalvao.com.br/
  * - https://giselegalvao.com.br/resultado
  * - https://giselegalvao.com.br/quiz-descubra-seu-estilo
- * Versão: 1.0.2
+ * Versão: 1.0.3
  */
 
 // URLs principais para monitorar e corrigir
