@@ -226,7 +226,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   disabled={!nome.trim()}
                   className={cn(
                     "w-full rounded-lg py-3 text-white font-semibold transition-all duration-300 ease-in-out relative overflow-hidden group",
-                    "bg-gradient-to-r from-[#432818] to-[#5a3a24] hover:from-[#A1835D] hover:to-[#B89B7A] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
+                    "bg-[#B89B7A] hover:bg-[#A1835D] focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 focus:ring-offset-[#FEFEFE]",
                     "disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500",
                     "text-base sm:text-lg",
                     "h-12 sm:h-14",
@@ -239,8 +239,8 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   <span className="relative z-10">Descobrir meu Estilo</span>
                   <span
                     className={cn(
-                      "absolute top-0 right-0 h-full w-0 bg-white/20 transform -skew-x-12 transition-all duration-500 ease-in-out",
-                      "group-hover:w-1/3 group-focus:w-1/3"
+                      "absolute top-0 left-0 h-full w-0 bg-gradient-to-r from-white/20 to-white/10 transform skew-x-12 transition-all duration-500 ease-in-out",
+                      "group-hover:w-full group-focus:w-full"
                     )}
                   />
                 </button>
