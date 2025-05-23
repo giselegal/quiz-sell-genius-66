@@ -176,49 +176,47 @@ img:hover, .hover-scale:hover {
 
   /* Destaque de termos estratégicos */
   .highlight-strategic {
-    /* background-color: hsl(var(--accent) / 0.3); */
-    background-color: transparent; /* TESTE para warning de minificação */
+    background-color: rgba(240, 240, 245, 0.3); /* Versão mais segura do hsl(var(--accent) / 0.3) */
     padding: 0.1em 0.2em;
     border-radius: 0.2em;
     font-weight: 600;
   }
-  
-  /* Media queries para dispositivos móveis */
-  @media (max-width: 640px) {
-    /* Questões só com texto em mobile - aumentar fonte */
-    .text-only-question .question-text,
-    .text-only-question .options {
-      font-size: 1.4rem;
-    }
+}
 
-    /* Questões Estratégicas em mobile - títulos e opções maiores */
-    .strategic-question .question-title,
-    .strategic-question .options,
-    .strategic-question-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    /* Destaque mais pronunciado em mobile */
-    .highlight-strategic {
-      /* background-color: hsl(var(--accent) / 0.4); */
-      background-color: transparent; /* TESTE para warning de minificação */
-      padding: 0.15em 0.25em;
-    }
+/* Media queries para dispositivos móveis */
+@media (max-width: 640px) {
+  /* Questões só com texto em mobile - aumentar fonte */
+  .text-only-question .question-text,
+  .text-only-question .options {
+    font-size: 1.4rem;
   }
 
-  /* Dispositivos móveis muito pequenos */
-  @media (max-width: 375px) {
-    /* Ajuste para telas muito pequenas */
-    .text-only-question .question-text,
-    .text-only-question .options {
-      font-size: 1.25rem;
-    }
-    
-    .strategic-question .question-title,
-    .strategic-question .options,
-    .strategic-question-title {
-      font-size: 1.35rem;
-    }
+  /* Questões Estratégicas em mobile - títulos e opções maiores */
+  .strategic-question .question-title,
+  .strategic-question .options,
+  .strategic-question-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  /* Destaque mais pronunciado em mobile */
+  .highlight-strategic {
+    background-color: rgba(240, 240, 245, 0.4); /* Versão mais segura do hsl(var(--accent) / 0.4) */
+    padding: 0.15em 0.25em;
+  }
+}
+
+/* Dispositivos móveis muito pequenos */
+@media (max-width: 375px) {
+  /* Ajuste para telas muito pequenas */
+  .text-only-question .question-text,
+  .text-only-question .options {
+    font-size: 1.25rem;
+  }
+  
+  .strategic-question .question-title,
+  .strategic-question .options,
+  .strategic-question-title {
+    font-size: 1.35rem;
   }
 }
