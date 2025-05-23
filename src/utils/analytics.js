@@ -182,3 +182,54 @@ export const getAnalyticsEvents = () => {
   }
   return [];
 };
+
+/**
+ * Limpa os dados de analytics, incluindo o dataLayer e os parâmetros UTM armazenados.
+ */
+export const clearAnalyticsData = () => {
+  if (typeof window === 'undefined') return;
+
+  // Limpar o dataLayer
+  if (window.dataLayer && Array.isArray(window.dataLayer)) {
+    window.dataLayer.length = 0; // Esvazia o array mantendo a referência
+    console.log('[Analytics] window.dataLayer foi limpo.');
+  }
+
+  // Lista de parâmetros UTM para remover do localStorage
+  const utmKeys = [
+    'utm_source', 
+    'utm_medium', 
+    'utm_campaign', 
+    'utm_term', 
+    'utm_content',
+    'ref',
+    'source'
+  ];
+
+  // Remover parâmetros UTM do localStorage
+  utmKeys.forEach(key => {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.warn(`[Analytics] Falha ao remover ${key} do localStorage`, e);
+    }
+  });
+  console.log('[Analytics] Parâmetros UTM do localStorage foram limpos.');
+
+  // Nota: A limpeza do cache de métricas (resetMetricsCache) é feita em analyticsHelpers.ts
+  // e deve ser chamada separadamente se necessário.
+};
+
+/**
+ * Testa a configuração do Facebook Pixel enviando um evento de PageView.
+ * (Esta é uma função de exemplo, pode precisar de ajustes)
+ */
+export const testFacebookPixel = () => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('track', 'PageView');
+    console.log('[Analytics] Evento PageView de teste enviado para o Facebook Pixel.');
+    return true;
+  }
+  console.warn('[Analytics] Facebook Pixel (window.fbq) não encontrado.');
+  return false;
+};
