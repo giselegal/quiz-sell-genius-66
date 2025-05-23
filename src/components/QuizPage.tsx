@@ -49,8 +49,14 @@ const QuizPage: React.FC = () => {
   // Check for username in localStorage on component mount
   useEffect(() => {
     const savedUserName = localStorage.getItem('userName');
-    if (savedUserName) {
-      setShowIntro(false); // Skip intro if username exists
+    if (savedUserName && savedUserName.trim()) {
+      // Se houver um nome salvo e ele não estiver vazio
+      setShowIntro(false); // Skip intro if username exists and is not empty
+    } else {
+      // Se não houver nome salvo ou estiver vazio, sempre mostrar a intro
+      setShowIntro(true);
+      // Limpar qualquer nome inválido que possa existir
+      localStorage.removeItem('userName');
     }
   }, []);
 
@@ -91,18 +97,28 @@ const QuizPage: React.FC = () => {
     : (showingStrategicQuestions ? 1 : 3);
 
   const handleStartQuiz = (name: string) => {
-    // Save user name to localStorage
-    localStorage.setItem('userName', name);
+    // Validar que o nome não está vazio
+    if (!name || !name.trim()) {
+      toast({
+        title: "Nome obrigatório",
+        description: "Por favor, digite seu nome para continuar com o quiz.",
+        variant: "destructive",
+      });
+      return; // Não continua se o nome estiver vazio
+    }
     
-    // Update Auth context
+    // Salvar nome no localStorage
+    localStorage.setItem('userName', name.trim());
+    
+    // Atualizar contexto de autenticação
     if (login) {
       login(name);
     }
     
-    // Start the quiz
+    // Iniciar o quiz
     setShowIntro(false);
     
-    // Preload quiz images when starting the quiz
+    // Pré-carregar imagens do quiz
     preloadImages([{ 
       src: currentQuestion?.imageUrl || '', 
       id: `question-0`,
@@ -111,7 +127,7 @@ const QuizPage: React.FC = () => {
       preloadPriority: 5 
     }], { quality: 90 });
     
-    console.log(`Quiz started by ${name}`);
+    console.log(`Quiz iniciado por ${name}`);
   };
 
   const handleProceedToStrategic = () => {
