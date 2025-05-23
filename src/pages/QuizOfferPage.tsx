@@ -125,27 +125,26 @@ const customStyles = `
   }
 `;
 
-// Constantes para otimização de imagens
-const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"; // Logo da marca
-const HERO_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp"; // Mulher perdida com guarda-roupa bagunçado
-const PROBLEM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp"; // Mulher perdida com guarda-roupa bagunçado
-const SOLUTION_QUIZ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp"; // Qual é o Seu Estilo FUNIL 2
-const GUIDES_BENEFITS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"; // Mockup tablet com guia
-const GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp"; // Mockup 3 revistas guia de estilo
-const BONUS_1_KEY_PIECES_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp"; // Mockup revista peças-chave
-const BONUS_1_KEY_PIECES_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.webp"; // Mockup de como é o guia por dentro
-const BONUS_2_VISAGISM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp"; // Mockup tablet visagismo
-const BONUS_2_VISAGISM_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp"; // Visagismo
-const MENTOR_GISELE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp"; // Gisele Galvão
-const MENTOR_GISELE_ALT_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"; // Gisele-Galvão-Espelho
-const TESTIMONIALS_RESULTS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp"; // Depoimentos
-const TESTIMONIALS_RESULTS_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745521117/Captura_de_tela_2025-03-31_034324_qxvdho.webp"; // Antes e depois Mariangela e Adriana
-const BEFORE_AFTER_IMAGE_1_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp";
-const BEFORE_AFTER_IMAGE_2_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp";
-const BEFORE_AFTER_IMAGE_3_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp";
-const GUARANTEE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp"; // 7 dias de garantia
-const GUARANTEE_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"; // Mockup completo com bônus
-const FAQ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515862/Sem_nome_1000_x_1000_px_1280_x_720_px_vmqk3j.webp"; // Perguntas estratégicas
+// Constantes para otimização de imagens - URLs atualizadas
+const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
+const HERO_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
+const PROBLEM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
+const SOLUTION_QUIZ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp";
+const GUIDES_BENEFITS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp";
+const GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp";
+const BONUS_1_KEY_PIECES_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp";
+const BONUS_1_KEY_PIECES_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.webp";
+const BONUS_2_VISAGISM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp";
+const BONUS_2_VISAGISM_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp";
+const MENTOR_GISELE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp";
+const TESTIMONIALS_RESULTS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp";
+// Imagens de transformação reais da ResultPage
+const TRANSFORMATION_REAL_IMAGE_1_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp";
+const TRANSFORMATION_REAL_IMAGE_2_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp";
+const TRANSFORMATION_REAL_IMAGE_3_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp";
+const GUARANTEE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp";
+const GUARANTEE_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp";
+const FAQ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515862/Sem_nome_1000_x_1000_px_1280_x_720_px_vmqk3j.webp";
 
 // Componente de estrelas para avaliações (mantido)
 const RatingStars = ({ rating }) => {
@@ -158,28 +157,6 @@ const RatingStars = ({ rating }) => {
                     className={`${i < rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'} mr-0.5`}
                 />
             ))}
-        </div>
-    );
-};
-
-// Componente de indicador de usuários ativos (mantido)
-const ActiveUsersIndicator = () => {
-    const [activeCustomers, setActiveCustomers] = useState(312); // Número inicial de clientes satisfeitos
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const change = Math.floor(Math.random() * 5) - 2; // -2 a +2
-            setActiveCustomers(prev => Math.max(300, Math.min(350, prev + change))); // Mantém entre 300 e 350
-        }, 13000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div className="flex items-center bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 px-4 py-2 rounded-full text-sm text-purple-800 shadow-md">
-            <Heart size={18} className="text-pink-500 mr-2 animate-pulse" />
-            <span className="font-semibold">+{activeCustomers} Clientes Felizes</span>
-            <span className="ml-1.5">Transformaram Seus Estilos!</span>
         </div>
     );
 };
@@ -230,29 +207,6 @@ const CountdownTimer = () => {
                 <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">
                     {formatNumber(time.seconds)}
                 </div>
-            </div>
-        </div>
-    );
-};
-
-// Componente de notificação de vagas limitadas (mantido)
-const LimitedSpotsNotification = () => {
-    const [spotsFilled, setSpotsFilled] = useState(86);
-
-    return (
-        <div className="bg-[#FFF7ED] border border-[#FDBA74] rounded-lg p-4 flex items-center justify-between">
-            <div className="flex items-center">
-                <TrendingUp size={20} className="text-[#F97316] mr-2" />
-                <div>
-                    <p className="font-medium text-[#7C2D12]">Vagas limitadas para hoje!</p>
-                    <p className="text-sm text-[#9A3412]">Apenas 14 vagas restantes</p>
-                </div>
-            </div>
-            <div className="h-2 w-40 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                    className="h-full bg-[#F97316] rounded-full"
-                    style={{ width: `${spotsFilled}%` }}
-                ></div>
             </div>
         </div>
     );
@@ -384,15 +338,15 @@ const QuizOfferPage: React.FC = () => {
             <div className="fixed top-0 right-0 w-1/3 h-1/3 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full blur-3xl opacity-60"></div>
             <div className="fixed bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-[var(--color-accent)]/10 to-transparent rounded-full blur-3xl opacity-60"></div>
 
-            {/* Header */}
-            <header className="bg-white shadow-lg py-4 px-6 sticky top-0 z-50">
+            {/* Header - Simplificado */}
+            <header className="py-4 px-6 sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-[var(--color-primary)]/10">
                 <div className="container mx-auto max-w-6xl flex justify-center">
                     <FixedIntroImage
                         src={HERO_IMAGE_URL}
                         alt="Logo Gisele Galvão"
                         width={200}
                         height={100}
-                        className="h-auto"
+                        className="h-auto object-contain"
                     />
                 </div>
             </header>
@@ -401,11 +355,11 @@ const QuizOfferPage: React.FC = () => {
                 {/* 1. Headline e Subheadline */}
                 <section className="section-spacing">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-                        <div className="card-modern p-8 md:p-12 text-center animate-fade-in-up">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-dark mb-6 font-playfair leading-tight">
+                        <div className="card-modern p-6 md:p-8 lg:p-12 text-center animate-fade-in-up">
+                            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-brand-dark mb-6 font-playfair leading-tight">
                                 Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa
                             </h1>
-                            <p className="text-xl md:text-2xl text-brand-medium max-w-4xl mx-auto mb-10 leading-relaxed font-inter">
+                            <p className="text-lg md:text-xl lg:text-2xl text-brand-medium max-w-4xl mx-auto mb-10 leading-relaxed font-inter">
                                 Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência.
                             </p>
 
@@ -414,8 +368,8 @@ const QuizOfferPage: React.FC = () => {
                                 <FixedIntroImage
                                     src={HERO_COMPLEMENTARY_IMAGE_URL}
                                     alt="Mulher perdida com guarda-roupa bagunçado"
-                                    width={800}
-                                    height={533}
+                                    width={600}
+                                    height={400}
                                     className="w-full h-auto object-cover rounded-xl"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl"></div>
@@ -426,9 +380,9 @@ const QuizOfferPage: React.FC = () => {
                                     handleCtaClick('headline_cta', 'Quero Descobrir Meu Estilo Agora!');
                                     window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
                                 }}
-                                className="btn-primary text-lg md:text-xl animate-pulse-gentle mb-6"
+                                className="btn-primary text-base md:text-lg lg:text-xl px-6 md:px-8 py-3 md:py-4 animate-pulse-gentle mb-6 w-full sm:w-auto"
                             >
-                                <ArrowRight size={24} className="mr-2" />
+                                <ArrowRight size={20} className="mr-2" />
                                 Quero Descobrir Meu Estilo Agora!
                             </button>
 
@@ -436,9 +390,6 @@ const QuizOfferPage: React.FC = () => {
                                 <Lock size={16} className="text-brand-primary" />
                                 <span>Compra segura e acesso imediato.</span>
                             </p>
-                            <div className="mt-6 flex justify-center">
-                                <ActiveUsersIndicator />
-                            </div>
                         </div>
                     </div>
                 </section>
@@ -446,7 +397,7 @@ const QuizOfferPage: React.FC = () => {
                 {/* 2. Introdução ao Problema/Dor */}
                 <section className="section-spacing bg-brand-soft">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-                        <div className="card-modern p-8 md:p-12">
+                        <div className="card-modern p-6 md:p-8 lg:p-12">
                             <div className="text-center mb-12">
                                 <FixedIntroImage
                                     src={PROBLEM_IMAGE_URL}
@@ -479,14 +430,14 @@ const QuizOfferPage: React.FC = () => {
                 {/* 3. Apresentação da Solução: Quiz de Estilo */}
                 <section className="section-spacing">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-                        <div className="card-modern p-8 md:p-12 text-center">
+                        <div className="card-modern p-6 md:p-8 lg:p-12 text-center">
                             <div className="mb-12 max-w-xl mx-auto relative transform hover:scale-[1.02] transition-transform duration-500">
                                 <FixedIntroImage
                                     src={SOLUTION_QUIZ_IMAGE_URL}
                                     alt="Quiz de Estilo Gisele Galvão"
-                                    width={700}
-                                    height={525}
-                                    className="w-full h-auto rounded-xl shadow-lg object-cover"
+                                    width={600}
+                                    height={450}
+                                    className="w-full h-auto rounded-xl shadow-lg object-contain"
                                 />
                                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white px-4 py-2 rounded-full shadow-lg text-sm font-bold transform rotate-6">
                                     <Gift size={20} className="inline mr-1" /> Exclusivo!
@@ -513,9 +464,9 @@ const QuizOfferPage: React.FC = () => {
                                     handleCtaClick('solution_cta', 'Fazer o Quiz e Descobrir Meu Estilo');
                                     window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
                                 }}
-                                className="btn-primary text-lg md:text-xl animate-pulse-gentle mb-6"
+                                className="btn-primary text-base md:text-lg lg:text-xl px-6 md:px-8 py-3 md:py-4 animate-pulse-gentle mb-6 w-full sm:w-auto"
                             >
-                                <ShoppingBag size={24} className="mr-2" />
+                                <ShoppingBag size={20} className="mr-2" />
                                 Fazer o Quiz e Descobrir Meu Estilo
                             </button>
                             <div className="mt-6 flex justify-center">
@@ -528,7 +479,7 @@ const QuizOfferPage: React.FC = () => {
                 {/* 4. Benefícios dos Guias de Estilo e Imagem */}
                 <section className="section-spacing bg-brand-soft">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-                        <div className="card-modern p-8 md:p-12">
+                        <div className="card-modern p-6 md:p-8 lg:p-12">
                             <h2 className="text-4xl md:text-5xl font-bold text-brand-dark mb-12 text-center font-playfair">
                                 Muito Mais Que um Quiz: Uma Jornada Completa
                             </h2>
@@ -729,7 +680,7 @@ const QuizOfferPage: React.FC = () => {
                                                 alt="Gisele Galvão"
                                                 width={400}
                                                 height={400}
-                                                className="rounded-full shadow-2xl mx-auto relative z-10 transform hover:scale-105 transition-all duration-500 border-4 border-white"
+                                                className="rounded-full shadow-2xl mx-auto relative z-10 transform hover:scale-105 transition-all duration-500 border-4 border-white object-cover"
                                             />
                                         </div>
                                     </div>
@@ -764,15 +715,11 @@ const QuizOfferPage: React.FC = () => {
                                             </p>
                                         </div>
 
-                                        {/* Credenciais */}
-                                        <div className="grid grid-cols-2 gap-4 pt-6">
+                                        {/* Credenciais atualizadas */}
+                                        <div className="grid grid-cols-1 gap-4 pt-6">
                                             <div className="text-center p-4 bg-white rounded-lg shadow-md">
-                                                <div className="text-3xl font-bold text-brand-primary font-playfair">500+</div>
-                                                <div className="text-sm text-brand-medium font-inter">Mulheres Transformadas</div>
-                                            </div>
-                                            <div className="text-center p-4 bg-white rounded-lg shadow-md">
-                                                <div className="text-3xl font-bold text-brand-accent font-playfair">5+</div>
-                                                <div className="text-sm text-brand-medium font-inter">Anos de Experiência</div>
+                                                <div className="text-3xl font-bold text-brand-primary font-playfair">3000+</div>
+                                                <div className="text-sm text-brand-medium font-inter">Mulheres Transformadas com seus Estilos de Ser Revelados</div>
                                             </div>
                                         </div>
                                     </div>
@@ -782,19 +729,19 @@ const QuizOfferPage: React.FC = () => {
                     </div>
                 </section>
 
-                {/* 7. Depoimentos e Resultados */}
+                {/* 7. Depoimentos e Resultados - Seção atualizada */}
                 <section className="section-spacing bg-white relative overflow-hidden">
                     {/* Elementos decorativos */}
                     <div className="absolute top-1/4 left-0 w-72 h-72 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full -translate-x-36"></div>
-                    <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-gradient-to-tl from-[var(--color-accent)]/10 to-transparent rounded-full translate-x-40"></div>
+                    <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-gradient-to-tl from-[var(--color-accent)]/10 to-transparent rounded-full translate-x-40 translate-y-40"></div>
                     
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
                         <div className="max-w-7xl mx-auto">
-                            {/* Header da seção */}
+                            {/* Header da seção - texto corrigido */}
                             <div className="text-center mb-16 animate-fade-in-up">
                                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
                                     Resultados Reais de 
-                                    <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">Mulheres Reais</span>
+                                    <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent"> Mulheres Reais</span>
                                 </h2>
                                 <p className="text-xl text-brand-medium max-w-4xl mx-auto font-inter leading-relaxed">
                                     Veja o que dizem as mulheres que já descobriram seu estilo e transformaram sua imagem com os guias
@@ -809,29 +756,29 @@ const QuizOfferPage: React.FC = () => {
                                         alt="Depoimentos de clientes"
                                         width={1000}
                                         height={600}
-                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500"
+                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500 object-contain w-full h-auto"
                                     />
                                 </div>
                             </div>
 
-                            {/* Depoimento em destaque */}
+                            {/* Depoimentos reais da transformação */}
                             <div className="mb-16">
                                 <div className="card-modern p-8 md:p-12 bg-gradient-to-r from-[var(--color-primary)]/5 to-[var(--color-accent)]/5 border-l-4 border-[var(--color-primary)]">
                                     <div className="text-center">
                                         <div className="text-6xl text-[var(--color-primary)] opacity-30 mb-4">"</div>
                                         <p className="text-xl md:text-2xl text-brand-dark leading-relaxed font-inter italic mb-6">
-                                            Os guias da Gisele me deram a clareza que eu precisava para parar de me sentir perdida na frente do guarda-roupa. Agora sei o que me valoriza e me sinto muito mais confiante!
+                                            Descobrir meu estilo predominante foi libertador! Agora sei exatamente o que me valoriza e como expressar minha personalidade através das roupas. Minha autoestima mudou completamente!
                                         </p>
                                         <div className="flex items-center justify-center">
                                             <div className="h-px w-12 bg-[var(--color-primary)] mr-4"></div>
-                                            <p className="text-lg font-semibold text-brand-primary">Maria S.</p>
+                                            <p className="text-lg font-semibold text-brand-primary">Mariana R.</p>
                                             <div className="h-px w-12 bg-[var(--color-primary)] ml-4"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Grid de antes e depois */}
+                            {/* Grid de transformações reais */}
                             <div className="mb-16">
                                 <h3 className="text-3xl md:text-4xl font-bold text-brand-dark text-center mb-12 font-playfair">
                                     Transformações Incríveis
@@ -839,73 +786,56 @@ const QuizOfferPage: React.FC = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                     <div className="card-modern p-6 text-center group">
                                         <FixedIntroImage 
-                                            src={BEFORE_AFTER_IMAGE_1_URL} 
-                                            alt="Antes e Depois Cliente 1" 
+                                            src={TRANSFORMATION_REAL_IMAGE_1_URL} 
+                                            alt="Transformação estilo clássico" 
                                             width={350} 
                                             height={350} 
-                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300" 
+                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300 object-cover w-full h-auto" 
                                         />
-                                        <p className="text-sm text-brand-medium font-inter">Transformação Cliente 1</p>
+                                        <p className="text-sm text-brand-medium font-inter">Estilo Clássico Revelado</p>
                                     </div>
                                     <div className="card-modern p-6 text-center group">
                                         <FixedIntroImage 
-                                            src={BEFORE_AFTER_IMAGE_2_URL} 
-                                            alt="Antes e Depois Cliente 2" 
+                                            src={TRANSFORMATION_REAL_IMAGE_2_URL} 
+                                            alt="Transformação estilo romântico" 
                                             width={350} 
                                             height={350} 
-                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300" 
+                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300 object-cover w-full h-auto" 
                                         />
-                                        <p className="text-sm text-brand-medium font-inter">Transformação Cliente 2</p>
+                                        <p className="text-sm text-brand-medium font-inter">Estilo Romântico Descoberto</p>
                                     </div>
                                     <div className="card-modern p-6 text-center group">
                                         <FixedIntroImage 
-                                            src={BEFORE_AFTER_IMAGE_3_URL} 
-                                            alt="Antes e Depois Cliente 3" 
+                                            src={TRANSFORMATION_REAL_IMAGE_3_URL} 
+                                            alt="Transformação estilo criativo" 
                                             width={350} 
                                             height={350} 
-                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300" 
+                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300 object-cover w-full h-auto" 
                                         />
-                                        <p className="text-sm text-brand-medium font-inter">Transformação Cliente 3</p>
+                                        <p className="text-sm text-brand-medium font-inter">Estilo Criativo Autêntico</p>
                                     </div>
-                                </div>
-                            </div>
-
-                            {/* Imagem complementar */}
-                            <div className="mb-16">
-                                <div className="card-modern p-8">
-                                    <FixedIntroImage
-                                        src={TESTIMONIALS_RESULTS_COMPLEMENTARY_IMAGE_URL}
-                                        alt="Antes e depois Mariangela e Adriana"
-                                        width={900}
-                                        height={550}
-                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500"
-                                    />
                                 </div>
                             </div>
 
                             {/* Texto de conclusão */}
                             <div className="text-center mb-12">
                                 <p className="text-lg md:text-xl text-brand-medium mb-8 leading-relaxed font-inter max-w-4xl mx-auto">
-                                    Estas são apenas algumas das centenas de mulheres que já transformaram sua relação com a moda e sua imagem pessoal através do Quiz de Estilo e dos Guias exclusivos.
+                                    Estas são apenas algumas das milhares de mulheres que já transformaram sua relação com a moda e sua imagem pessoal através do Quiz de Estilo e dos Guias exclusivos.
                                 </p>
                                 
                                 <div className="card-modern p-8 md:p-12 bg-gradient-to-r from-[var(--color-accent)]/10 to-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 mb-12">
                                     <p className="text-xl md:text-2xl text-brand-dark font-bold leading-relaxed font-inter">
-                                        Você também pode ter essa transformação! Imagine como seria se vestir todos os dias com <span className="text-brand-primary">confiança</span>, sabendo que cada peça do seu guarda-roupa reflete quem você é e comunica sua essência. Imagine <span className="text-brand-accent">economizar tempo e dinheiro</span>, tendo um guarda-roupa funcional onde tudo combina entre si. Imagine sentir que sua imagem externa finalmente está alinhada com quem você é por dentro.
+                                        Você também pode ter essa transformação! Imagine como seria se vestir todos os dias com <span className="text-brand-primary">confiança</span>, sabendo que cada peça do seu guarda-roupa reflete quem você é e comunica sua essência. Imagine <span className="text-brand-accent">economizar tempo e dinheiro</span>, tendo um guarda-roupa funcional onde tudo combina entre si.
                                     </p>
                                 </div>
 
                                 <button
                                     onClick={() => handleCtaClick('testimonials_cta', 'Sim, Quero Essa Transformação!')}
-                                    className="btn-primary text-xl md:text-2xl px-12 py-5 animate-pulse-gentle"
+                                    className="btn-primary text-lg md:text-xl lg:text-2xl px-8 md:px-12 py-4 md:py-5 animate-pulse-gentle w-full sm:w-auto"
                                 >
                                     Sim, Quero Essa Transformação!
-                                    <Heart size={24} className="inline ml-3" />
+                                    <Heart size={20} className="inline ml-3" />
                                 </button>
-                                
-                                <div className="mt-6 flex justify-center">
-                                    <LimitedSpotsNotification />
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -932,7 +862,7 @@ const QuizOfferPage: React.FC = () => {
                                         alt="Selo de Garantia 7 Dias"
                                         width={320}
                                         height={320}
-                                        className="mx-auto relative z-10 animate-pulse-gentle"
+                                        className="mx-auto relative z-10 animate-pulse-gentle object-contain"
                                     />
                                 </div>
                             </div>
@@ -1005,7 +935,7 @@ const QuizOfferPage: React.FC = () => {
                                         alt="Mockup completo com bônus"
                                         width={800}
                                         height={500}
-                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500"
+                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500 object-contain w-full h-auto"
                                     />
                                 </div>
 
@@ -1027,10 +957,10 @@ const QuizOfferPage: React.FC = () => {
                             <div className="text-center">
                                 <button
                                     onClick={() => handleCtaClick('guarantee_cta', 'Quero Descobrir Meu Estilo Agora!')}
-                                    className="btn-primary text-xl md:text-2xl px-12 py-6 mb-6 animate-pulse-gentle group"
+                                    className="btn-primary text-lg md:text-xl lg:text-2xl px-8 md:px-12 py-4 md:py-6 mb-6 animate-pulse-gentle group w-full sm:w-auto"
                                 >
                                     Quero Descobrir Meu Estilo Agora!
-                                    <Shield size={24} className="inline ml-3 group-hover:scale-110 transition-transform" />
+                                    <Shield size={20} className="inline ml-3 group-hover:scale-110 transition-transform" />
                                 </button>
                                 
                                 <p className="text-base text-gray-300 flex items-center justify-center gap-2 font-inter">
@@ -1069,7 +999,7 @@ const QuizOfferPage: React.FC = () => {
                                         alt="Perguntas estratégicas"
                                         width={700}
                                         height={420}
-                                        className="rounded-xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500"
+                                        className="rounded-xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 object-contain w-full h-auto"
                                     />
                                 </div>
                             </div>
@@ -1091,15 +1021,15 @@ const QuizOfferPage: React.FC = () => {
                                     
                                     <button
                                         onClick={() => handleCtaClick('faq_cta', 'Quero Transformar Minha Imagem Agora!')}
-                                        className="btn-primary text-xl md:text-2xl px-12 py-5 mb-6 animate-pulse-gentle group"
+                                        className="btn-primary text-lg md:text-xl lg:text-2xl px-8 md:px-12 py-4 md:py-5 mb-6 animate-pulse-gentle group w-full sm:w-auto"
                                     >
                                         Quero Transformar Minha Imagem Agora!
-                                        <ArrowRight size={22} className="inline ml-3 group-hover:translate-x-1 transition-transform" />
+                                        <ArrowRight size={20} className="inline ml-3 group-hover:translate-x-1 transition-transform" />
                                     </button>
                                     
                                     <p className="text-sm text-brand-medium flex items-center justify-center gap-2 font-inter">
                                         <Users size={16} className="text-brand-primary" />
-                                        Junte-se a centenas de mulheres que já redescobriram sua confiança!
+                                        Junte-se a milhares de mulheres que já redescobriram sua confiança!
                                     </p>
                                 </div>
                             </div>
