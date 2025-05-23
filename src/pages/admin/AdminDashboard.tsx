@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -30,6 +29,12 @@ const AdminDashboard = () => {
             linkTo="/resultado"
             buttonText="Ver Resultados"
             isExternal
+          />
+          <DashboardCard
+            title="Editor de Oferta"
+            description="Edite a página de oferta do quiz"
+            linkTo="/admin/quiz-offer-editor"
+            buttonText="Abrir Editor"
           />
         </div>
       </div>
