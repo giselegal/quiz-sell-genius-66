@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
@@ -15,6 +14,7 @@ const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPa
 const ResultPage = lazy(() => import('./components/pages/ResultPage'));
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
+const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage')); // Adicionar importação
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -49,6 +49,7 @@ export const LovableRoutes: React.FC = () => {
         <Route path="/resultado/editor" element={<EnhancedResultPageEditorPage />} />
         <Route path="/quiz" element={<QuizPage />} />
         <Route path="/prototipo" element={<ResultPagePrototype />} />
+        <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} /> {/* Adicionar nova rota */}
       </Routes>
     </Suspense>
   );
