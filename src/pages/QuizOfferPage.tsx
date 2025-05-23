@@ -30,22 +30,23 @@ const RatingStars = ({ rating }) => {
 
 // Componente de indicador de usuários ativos
 const ActiveUsersIndicator = () => {
-  const [activeCustomers, setActiveCustomers] = useState(278); // Alterado para "clientes satisfeitos" ou similar
+  const [activeCustomers, setActiveCustomers] = useState(312); // Número inicial de clientes satisfeitos
   
   useEffect(() => {
+    // Simula pequenas flutuações no número de clientes
     const interval = setInterval(() => {
-      const change = Math.floor(Math.random() * 3) - 1; // Pequenas flutuações
-      setActiveCustomers(prev => Math.max(250, Math.min(350, prev + change)));
-    }, 12000);
+      const change = Math.floor(Math.random() * 5) - 2; // -2 a +2
+      setActiveCustomers(prev => Math.max(300, Math.min(350, prev + change))); // Mantém entre 300 e 350
+    }, 13000);
     
     return () => clearInterval(interval);
   }, []);
   
   return (
-    <div className="flex items-center bg-[#F0EBE3] px-3 py-2 rounded-full text-sm text-[#432818]">
-      <Heart size={16} className="text-red-500 mr-2" />
-      <span className="font-medium">{activeCustomers} clientes</span>
-      <span className="ml-1">transformaram seu estilo conosco!</span>
+    <div className="flex items-center bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 px-4 py-2 rounded-full text-sm text-purple-800 shadow-md">
+      <Heart size={18} className="text-pink-500 mr-2 animate-pulse" />
+      <span className="font-semibold">+{activeCustomers} Clientes Felizes</span>
+      <span className="ml-1.5">Transformaram Seus Estilos!</span>
     </div>
   );
 };
@@ -130,16 +131,15 @@ const FaqSection = () => {
   
   const faqItems = [
     {
-      question: "O que está incluído nesta oferta exclusiva?",
-      answer: "Ao adquirir nossa oferta, você recebe acesso completo ao nosso Quiz de Estilo detalhado, um perfil de estilo personalizado, recomendações de peças e looks, guia de combinações de cores, além de dicas exclusivas de especialistas em moda para transformar seu guarda-roupa e sua confiança."
+      question: "O que exatamente estou comprando com esta oferta?",
+      answer: "Você está adquirindo um pacote completo de transformação de estilo! Isso inclui: acesso ao nosso Quiz de Estilo exclusivo e detalhado, um dossiê personalizado do seu estilo com recomendações de peças e looks, um guia prático de combinações de cores, além de bônus especiais como masterclasses e acesso a uma comunidade exclusiva."
     },
     {
-      question: "Como funciona o Quiz de Estilo após a compra?",
-      answer: "Após a confirmação da sua compra, você receberá acesso imediato à área de membros onde poderá realizar o Quiz de Estilo no seu próprio ritmo. Ele foi projetado para ser rápido e eficiente, levando em média 5-7 minutos para ser concluído."
+      question: "Como e quando terei acesso ao Quiz de Estilo e aos outros materiais?",
+      answer: "Imediatamente após a confirmação do seu pagamento! Você receberá um e-mail com todas as instruções para acessar nossa área de membros exclusiva, onde encontrará o Quiz de Estilo e todos os guias, vídeos e bônus prometidos, disponíveis 24/7."
     },
     {
-      question: "Os resultados do quiz são realmente precisos e personalizados?",
-      answer: "Sim! Nosso quiz foi desenvolvido por especialistas em moda e estilo pessoal, com base em anos de pesquisa. Ele analisa suas respostas para criar um perfil de estilo detalhado e recomendações que realmente se alinham com sua individualidade. A taxa de satisfação é superior a 98%."
+      question: "Este valor é um pagamento único ou uma assinatura mensal?",
     },
     {
       question: "Preciso pagar algo a mais para ver os resultados do quiz ou ter acesso aos bônus?",
