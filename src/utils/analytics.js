@@ -320,3 +320,19 @@ export const trackResultView = (quizId, resultId, eventData = {}) => {
   }
   console.log(`[Analytics] Visualização de resultado: ${quizId} - ${resultId}`, data);
 };
+
+/**
+ * Rastreia a geração de um lead.
+ * @param {string} formId - Identificador do formulário ou origem do lead.
+ * @param {object} leadData - Dados adicionais sobre o lead (ex: email, nome).
+ */
+export const trackLeadGeneration = (formId, leadData = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { form_id: formId, ...leadData };
+
+  // Usa a função trackConversion com o tipo 'lead'
+  trackConversion('lead', data);
+
+  // Log específico para lead generation, se necessário, além do que trackConversion já faz.
+  console.log(`[Analytics] Geração de Lead: ${formId}`, data);
+};
