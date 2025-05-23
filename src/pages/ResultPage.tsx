@@ -93,8 +93,9 @@ const ResultPage: React.FC = () => {
   // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   
-  // Scroll tracking for sticky header
+  // Scroll tracking for sticky header and bottom bar
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showBottomBar, setShowBottomBar] = useState(false);
   
   // Active section tracking
   const [activeSection, setActiveSection] = useState('primary-style');
@@ -154,6 +155,14 @@ const ResultPage: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
       
+      // Show bottom bar only when near the end of the page
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrolledToBottom = scrollTop + windowHeight >= documentHeight - 800; // Show 800px before end
+      
+      setShowBottomBar(scrolledToBottom);
+      
       // Track active section
       const sections = [
         { id: 'primary-style', element: document.getElementById('primary-style') },
@@ -189,20 +198,29 @@ const ResultPage: React.FC = () => {
   const { category } = primaryStyle;
   const { image, guideImage, description } = styleConfig[category];
   
-  const handleCTAClick = () => {
+  const handleCTAClick = (e) => {
+    // Prevenir comportamento padrão e propagação
+    e.preventDefault();
+    e.stopPropagation();
+    
     // Prevenir múltiplos cliques
     if (window.ctaClickProcessing) return;
     window.ctaClickProcessing = true;
     
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     
-    // Redirecionar imediatamente
-    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    // Para desktop, usar window.open para garantir funcionamento
+    if (window.innerWidth >= 768) {
+      window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
+    } else {
+      // Para mobile, usar location.href
+      window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    }
     
     // Limpar flag após delay
     setTimeout(() => {
       window.ctaClickProcessing = false;
-    }, 2000);
+    }, 1000);
   };
   
   const scrollToSection = (sectionId) => {
@@ -230,16 +248,17 @@ const ResultPage: React.FC = () => {
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-[#aa6b5d]/10 to-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       <div className="absolute top-1/3 left-0 w-1/5 h-1/5 bg-gradient-to-r from-[#B89B7A]/5 to-[#aa6b5d]/5 rounded-full blur-3xl -translate-x-1/2"></div>
       
-      {/* Header - Simplificado */}
-      <Header 
-        primaryStyle={primaryStyle} 
-        logoHeight={globalStyles.logoHeight} 
-        logo={globalStyles.logo} 
-        logoAlt={globalStyles.logoAlt} 
-        userName="" 
-        isScrolled={isScrolled}
-        simplified={true}
-      />
+      {/* Header - Super simplificado */}
+      <header className="py-4 px-6 sticky top-0 z-50 bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto max-w-4xl flex justify-center">
+          <img
+            src={globalStyles.logo}
+            alt={globalStyles.logoAlt || "Logo"}
+            style={{ height: globalStyles.logoHeight || '60px' }}
+            className="h-auto object-contain"
+          />
+        </div>
+      </header>
 
       {/* Navigation dots (only visible on scroll) */}
       <div className={`fixed right-6 top-1/2 transform -translate-y-1/2 z-50 transition-opacity duration-500 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
@@ -264,8 +283,8 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky CTA - Melhorado */}
-      <div className={`fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-[#B89B7A]/20 py-3 px-4 z-40 transition-transform duration-500 ${isScrolled ? 'translate-y-0' : 'translate-y-full'}`}>
+      {/* Sticky CTA - Aparece apenas no final da página */}
+      <div className={`fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-[#B89B7A]/20 py-3 px-4 z-40 transition-transform duration-500 ${showBottomBar ? 'translate-y-0' : 'translate-y-full'}`}>
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
           <div className="text-center sm:text-left">
             <p className="text-sm font-medium text-[#432818]">Guia de Estilo e Imagem + Bônus</p>
@@ -277,7 +296,7 @@ const ResultPage: React.FC = () => {
           </div>
           <Button 
             onClick={handleCTAClick} 
-            className="text-white text-sm sm:text-base leading-none py-3 px-6 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto"
+            className="text-white text-sm sm:text-base leading-none py-3 px-6 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto cursor-pointer"
             style={{
               background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
               boxShadow: tokens.shadows.cta,
@@ -285,6 +304,7 @@ const ResultPage: React.FC = () => {
             }}
             onMouseEnter={() => setIsButtonHovered(true)} 
             onMouseLeave={() => setIsButtonHovered(false)}
+            type="button"
           >
             <span className="flex items-center justify-center gap-2">
               <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
@@ -523,7 +543,7 @@ const ResultPage: React.FC = () => {
             
             <Button
               onClick={handleCTAClick}
-              className="w-full md:w-2/3 lg:w-1/2 mx-auto text-white text-lg md:text-xl py-4 px-8 rounded-full shadow-lg transition-all duration-300 relative z-10 flex items-center justify-center gap-3 font-bold group"
+              className="w-full md:w-2/3 lg:w-1/2 mx-auto text-white text-lg md:text-xl py-4 px-8 rounded-full shadow-lg transition-all duration-300 relative z-10 flex items-center justify-center gap-3 font-bold group cursor-pointer"
               style={{
                 background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
                 boxShadow: tokens.shadows.cta,
@@ -531,6 +551,7 @@ const ResultPage: React.FC = () => {
               }}
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
+              type="button"
             >
               <ShoppingCart className={`w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-hover:scale-110`} />
               <span className="text-base md:text-xl">Adquirir Agora</span>
