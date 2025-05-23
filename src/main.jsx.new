@@ -25,6 +25,12 @@ const loadNonCriticalUtils = () => {
     const { monitorFunnelRoutes } = module;
     monitorFunnelRoutes();
   });
+
+  // Carregar otimizações de design do funil 2
+  import('./utils/funnel2DesignOptimizations').then(module => {
+    const { optimizeFunnel2Design } = module;
+    optimizeFunnel2Design();
+  });
   
   // Exibir informações de versão no console
   displayVersion();
