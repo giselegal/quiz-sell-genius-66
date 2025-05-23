@@ -435,14 +435,50 @@ const ResultPage: React.FC = () => {
                   <div className="absolute -top-4 -right-12 bg-[#B2784B]/10 px-3 py-1 rounded-full transform rotate-6">
                     <span className="text-xs font-bold text-[#D68047]">77% OFF</span>
                   </div>
+                  
+                  {/* Ícone de tempo limitado */}
+                  <div className="absolute -top-3 -left-16 flex items-center bg-[#FFD700]/10 px-2 py-1 rounded-full">
+                    <div className="animate-pulse mr-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D68047" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <span className="text-xs font-medium text-[#D68047]">Por tempo limitado</span>
+                  </div>
+                  
                   <p className="text-[#8F7A6A] line-through mb-1">De: R$ 175,00</p>
                   <p className="text-base text-[#aa6b5d] font-medium mb-1">5x de <span className="text-3xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent shadow-sm">R$ 8,83</span></p>
                   <p className="text-sm text-[#8F7A6A] mt-1">Ou R$ 39,90 à vista</p>
+                  
+                  {/* Mockup do guia de estilo */}
+                  <div className="mt-6 relative max-w-[180px] mx-auto">
+                    <div className="relative w-full h-32 bg-gradient-to-b from-[#F5EAE0] to-[#FFF7F2] rounded-lg shadow-md flex items-center justify-center transform -rotate-3 overflow-hidden border border-[#B89B7A]/20">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-4/5 h-4/5 bg-gradient-to-br from-[#B89B7A]/30 to-[#aa6b5d]/20 rounded-md flex items-center justify-center">
+                          <span className="text-xs font-medium text-[#432818]">Guia Personalizado</span>
+                        </div>
+                      </div>
+                      <div className="absolute top-1 right-1 transform rotate-12">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 3v4c0 2-2 4-4 4H2"></path>
+                          <path d="M8 17l-6-6 6-6"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    {/* Selo de garantia */}
+                    <div className="absolute -bottom-4 -right-4 bg-gradient-to-br from-[#4CAF50] to-[#45a049] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md">
+                      <div className="text-[8px] font-bold text-center leading-tight">
+                        7 DIAS<br/>GARANTIA
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
                 <Button 
                   onClick={handleCTAClick} 
-                  className="mt-4 w-full max-w-md text-white py-5 px-8 rounded-md text-lg font-medium shadow-lg transition-all duration-300"
+                  className="mt-4 w-full max-w-md text-white py-5 px-8 rounded-md text-lg font-medium shadow-lg transition-all duration-300 relative overflow-hidden group"
                   style={{
                     background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
                     boxShadow: tokens.shadows.cta,
@@ -451,8 +487,11 @@ const ResultPage: React.FC = () => {
                   onMouseEnter={() => setIsButtonHovered(true)} 
                   onMouseLeave={() => setIsButtonHovered(false)}
                 >
+                  {/* Efeito de brilho no hover */}
+                  <div className="absolute top-0 left-0 w-full h-full bg-white opacity-0 group-hover:opacity-10 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000 ease-out"></div>
+                  
                   <span className="flex items-center justify-center gap-2">
-                    <ShoppingCart className="w-5 h-5" />
+                    <ShoppingCart className="w-5 h-5 transform transition-transform group-hover:scale-110" />
                     Adquirir Agora
                   </span>
                 </Button>
