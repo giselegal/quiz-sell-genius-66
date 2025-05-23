@@ -266,9 +266,9 @@ const QuizOfferPage: React.FC = () => {
                 </div>
             </header>
 
-            <main className="relative z-10 flex flex-col gap-y-16">
+            <main className="relative z-10 flex flex-col gap-y-8 md:gap-y-12">
                 {/* 1. Headline e Subheadline */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-5xl">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 max-w-5xl">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30 text-center animate-fade-in">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#432818] mb-6 font-playfair leading-tight drop-shadow-sm">
                             Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em um Aliado da Sua Imagem Pessoal
@@ -277,13 +277,14 @@ const QuizOfferPage: React.FC = () => {
                             Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência, com **praticidade e confiança.**
                         </p>
 
-                        <div className="mb-10 max-w-xl mx-auto relative rounded-lg overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 ease-in-out">
+                        {/* Hero complementary image wrapper */}
+                        <div className="mb-8 max-w-xl mx-auto relative rounded-lg overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 ease-in-out">
                             <FixedIntroImage
                                 src={HERO_COMPLEMENTARY_IMAGE_URL}
                                 alt="Mulher perdida com guarda-roupa bagunçado"
                                 width={800}
                                 height={533}
-                                className="w-full h-auto object-cover"
+                                className="w-full h-auto object-cover max-w-xl mx-auto"
                             />
                             {/* Decorative overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
@@ -319,7 +320,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 2. Introdução ao Problema/Dor */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-5xl">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 max-w-5xl">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#aa6b5d]/30">
                         <div className="text-center mb-12">
                             <FixedIntroImage
@@ -353,7 +354,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 3. Apresentação da Solução: Quiz de Estilo */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-5xl">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 max-w-5xl">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30 text-center">
                         <div className="mb-12 max-w-xl mx-auto relative transform hover:scale-[1.02] transition-transform duration-500 ease-in-out">
                             <FixedIntroImage
@@ -410,7 +411,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 4. Benefícios dos Guias de Estilo e Imagem */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FFFBF7]">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FFFBF7]">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30">
                         <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-12 text-center font-playfair leading-tight">
                             Muito Mais Que um Simples Quiz: Uma Jornada Completa de Autoconhecimento
@@ -481,7 +482,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 5. Bônus Especial 1: Peças-Chave do Guarda-Roupa de Sucesso */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FDF6F0]">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FDF6F0]">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#aa6b5d]/30">
                         <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-4 text-center font-playfair">
                             BÔNUS ESPECIAL <span className="text-[#B89B7A]">#1</span>
@@ -551,7 +552,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 6. Bônus Especial 2: Guia Visagismo Facial */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FFFBF7]">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FFFBF7]">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30">
                         <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-4 text-center font-playfair">
                             BÔNUS ESPECIAL <span className="text-[#aa6b5d]">#2</span>
@@ -631,7 +632,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 7. Apresentação da Mentora: Gisele Galvão */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FDF6F0]">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FDF6F0]">
                     <div className="max-w-4xl mx-auto text-center">
                         <h2 className="text-4xl md:text-5xl font-bold mb-10 font-playfair text-[#4A2E20]">
                             Conheça Sua Mentora
@@ -668,7 +669,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 8. Depoimentos e Resultados */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FFFBF7]">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FFFBF7]">
                     <div className="max-w-5xl mx-auto text-center">
                         <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-10 font-playfair">
                             Resultados Reais de Mulheres Reais
@@ -726,7 +727,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 9. Garantia e Chamada para Ação */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#4A2E20] text-white">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#4A2E20] text-white">
                     <div className="max-w-4xl mx-auto text-center">
                         <div className="mb-10">
                             <FixedIntroImage
@@ -792,7 +793,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 10. Perguntas Frequentes */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FDF6F0]">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FDF6F0]">
                     <div className="max-w-4xl mx-auto text-center">
                         <div className="mb-10 flex justify-center">
                             <FixedIntroImage
