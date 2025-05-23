@@ -25,7 +25,7 @@ const LoadingFallback = () => (
 // Lazy loading das páginas principais para melhorar performance
 const HomePage = lazy(() => import('./pages/HomePage'));
 const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./components/pages/ResultPage'));
+const ResultPage = lazy(() => import('./pages/ResultPage'));
 const ResultPagePrototype = lazy(() => import('./pages/ResultPagePrototype'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));

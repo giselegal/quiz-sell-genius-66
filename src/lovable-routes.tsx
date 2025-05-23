@@ -11,7 +11,7 @@ const ABTestPage = lazy(() => import('./pages/admin/ABTestPage'));
 const ABTestManagerPage = lazy(() => import('./pages/ABTestManagerPage'));
 const ResultPagePrototype = lazy(() => import('./pages/ResultPagePrototype'));
 const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
-const ResultPage = lazy(() => import('./components/pages/ResultPage'));
+const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage')); // Adicionar importação

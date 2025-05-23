@@ -1,3 +1,4 @@
+// ✅ TESTE - Arquivo ResultPage atualizado - 23/05/2025
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
