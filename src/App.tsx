@@ -37,6 +37,7 @@ const EditorNotFoundPage = lazy(() => import('./pages/EditorNotFoundPage'));
 const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
 const ABTestPage = lazy(() => import('./pages/admin/ABTestPage'));
 const ABTestManagerPage = lazy(() => import('./pages/ABTestManagerPage'));
+const QuizOfferPageVisualEditor = lazy(() => import('./pages/admin/QuizOfferPageVisualEditor'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -146,6 +147,8 @@ const App = () => {
                   <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
                   {/* Adicionando acesso ao protótipo no painel admin */}
                   <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
+                  {/* Nova rota para o editor visual da página de oferta do quiz */}
+                  <Route path="/quiz-offer-editor" element={<QuizOfferPageVisualEditor />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </Suspense>
