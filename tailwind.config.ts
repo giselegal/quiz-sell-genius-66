@@ -78,12 +78,6 @@ export default {
           'accent-foreground': "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))"
-        },
-        'brand': {
-          DEFAULT: '#B89B7A',
-          'gold': '#C1A57B',
-          'text': '#8F7A6A',
-          'coffee': '#5D4037',
         }
       },
       borderRadius: {
