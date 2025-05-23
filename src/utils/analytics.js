@@ -170,3 +170,15 @@ export const captureUTMParameters = () => {
   console.log('[Analytics] Parâmetros UTM capturados:', utmParams);
   return utmParams;
 };
+
+/**
+ * Retorna todos os eventos de analytics rastreados (do dataLayer).
+ * @returns {Array<object>} Array de eventos de analytics.
+ */
+export const getAnalyticsEvents = () => {
+  if (typeof window !== 'undefined' && window.dataLayer && Array.isArray(window.dataLayer)) {
+    // Retorna uma cópia para evitar mutações externas do dataLayer original
+    return [...window.dataLayer];
+  }
+  return [];
+};
