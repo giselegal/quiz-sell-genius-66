@@ -1,8 +1,7 @@
-
 import React, { ReactNode } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
-import { BarChart, Edit, Settings, BarChartHorizontal } from 'lucide-react';
+import { BarChart, Edit, Settings, BarChartHorizontal, Layout } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 interface AdminLayoutProps {
@@ -26,6 +25,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               <Link to="/admin/editor" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
                 <Edit className="h-4 w-4 inline-block mr-2" />
                 Editor Unificado
+              </Link>
+              <Link to="/admin/quiz-offer-editor" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
+                <Layout className="h-4 w-4 inline-block mr-2" />
+                Editor de Oferta
               </Link>
               <Link to="/admin/analytics" className="px-3 py-2 rounded-md text-sm font-medium text-[#8F7A6A] hover:bg-slate-100">
                 <BarChart className="h-4 w-4 inline-block mr-2" />
