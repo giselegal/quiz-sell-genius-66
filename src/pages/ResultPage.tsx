@@ -230,7 +230,7 @@ const ResultPage: React.FC = () => {
         <div className="container mx-auto max-w-4xl flex items-center justify-between">
           <div className="hidden md:block">
             <p className="text-sm font-medium text-[#432818]">Guia de Estilo e Imagem + Bônus</p>
-            <p className="text-lg font-bold text-[#aa6b5d]">5x de R$ 8,83 <span className="text-sm font-normal">ou R$ 39,90 à vista</span></p>
+            <p className="text-sm text-[#aa6b5d] font-medium">5x de <span className="text-xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent">R$ 8,83</span> <span className="text-xs font-normal text-[#8F7A6A]">ou R$ 39,90 à vista</span></p>
           </div>
           <Button 
             onClick={handleCTAClick} 
@@ -431,10 +431,13 @@ const ResultPage: React.FC = () => {
               </p>
               
               <div className="flex flex-col items-center">
-                <div className="mb-6">
+                <div className="mb-6 relative">
+                  <div className="absolute -top-4 -right-12 bg-[#B2784B]/10 px-3 py-1 rounded-full transform rotate-6">
+                    <span className="text-xs font-bold text-[#D68047]">77% OFF</span>
+                  </div>
                   <p className="text-[#8F7A6A] line-through mb-1">De: R$ 175,00</p>
-                  <p className="text-2xl font-bold text-[#aa6b5d]">Por apenas R$ 39,90</p>
-                  <p className="text-sm text-[#8F7A6A] mt-1">ou em 5x de R$ 8,83</p>
+                  <p className="text-base text-[#aa6b5d] font-medium mb-1">5x de <span className="text-3xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent shadow-sm">R$ 8,83</span></p>
+                  <p className="text-sm text-[#8F7A6A] mt-1">Ou R$ 39,90 à vista</p>
                 </div>
                 
                 <Button 
