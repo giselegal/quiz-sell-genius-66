@@ -113,5 +113,3 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
 };
 
 export default PrimaryStyleCard;
-
-export default PrimaryStyleCard;

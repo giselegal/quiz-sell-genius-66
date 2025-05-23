@@ -2,9 +2,9 @@
 @import './styles/spinner-optimized.css';
 @import './styles/effects.css';
 @import './styles/spinner-optimized.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 /* Melhorar performance desativando todas as animações não críticas */
 * {
@@ -147,11 +147,11 @@ img:hover, .hover-scale:hover {
   }
 
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
 
   body {
-    @apply bg-background;
+    background-color: hsl(var(--background));
   }
 
   .font-playfair {

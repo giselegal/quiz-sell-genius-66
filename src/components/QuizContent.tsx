@@ -60,16 +60,13 @@ export const QuizContent: React.FC<QuizContentProps> = ({
               return acc;
             }, {}) : {}}
             onAnswer={handleAnswerSubmit}
-            onNextClick={handleNextClick}
           />
         ) : (
           <QuizQuestion
             question={currentQuestion}
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
-            onNextClick={handleNextClick}
             showQuestionImage={true}
-            onPreviousClick={handlePrevious}
           />
         )}
       </div>
