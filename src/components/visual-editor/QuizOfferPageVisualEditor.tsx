@@ -146,8 +146,19 @@ interface VisualEditorData {
   testimonialsPadding?: string;
   guaranteePadding?: string;
   faqPadding?: string;
-  problemParagraph2: 'A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".',
-  problemParagraph3: 'Quantas vezes você já perdeu tempo precioso tentando montar um look que te fizesse sentir confiante? Ou gastou dinheiro em peças que raramente (ou nunca) usou?',
+}
+
+const defaultData: VisualEditorData = {
+  // Textos editáveis - Hero
+  heroTitle: 'Transforme Seu Estilo com Nosso Quiz Exclusivo!',
+  heroSubtitle: 'Descubra como realçar sua beleza única e potencializar sua imagem pessoal.',
+  heroCtaText: 'Comece o Quiz Agora',
+  
+  // Seção Problema
+  problemTitle: 'O Desafio de Se Vestir Bem',
+  problemDescription: 'Muitas mulheres enfrentam dificuldades na hora de escolher o que vestir, sentindo-se inseguras e insatisfeitas com a própria imagem.',
+  problemParagraph1: 'A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".',
+  problemParagraph2: 'Quantas vezes você já perdeu tempo precioso tentando montar um look que te fizesse sentir confiante? Ou gastou dinheiro em peças que raramente (ou nunca) usou?',
   problemConclusion: 'Isso acontece porque você ainda não descobriu seu estilo predominante - aquele que está alinhado com sua personalidade, valores e essência.',
   
   // Solução
@@ -969,6 +980,7 @@ const QuizOfferPageVisualEditor: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="layout" className="p-4 space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
+                {/* Controles globais já existentes */}
                 <Card className="p-4">
                   <h3 className="font-medium mb-4">Espaçamento</h3>
                   <div className="space-y-4">
@@ -1041,4 +1053,132 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                       >
                         <option value="max-w-sm">Pequeno (max-w-sm)</option>
                         <option value="max-w-md">Médio (max-w-md)</option>
-                        <option value="max-w-lg">Grande (p
+                        <option value="max-w-lg">Grande (max-w-lg)</option>
+                        <option value="max-w-xl">Extra Grande (max-w-xl)</option>
+                      </select>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Padding/Margem por Seção</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="heroPadding">Hero</Label>
+                      <Input
+                        id="heroPadding"
+                        value={editorData.heroPadding || ''}
+                        onChange={e => updateData('heroPadding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="problemPadding">Problema</Label>
+                      <Input
+                        id="problemPadding"
+                        value={editorData.problemPadding || ''}
+                        onChange={e => updateData('problemPadding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="solutionPadding">Solução</Label>
+                      <Input
+                        id="solutionPadding"
+                        value={editorData.solutionPadding || ''}
+                        onChange={e => updateData('solutionPadding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="benefitsPadding">Benefícios</Label>
+                      <Input
+                        id="benefitsPadding"
+                        value={editorData.benefitsPadding || ''}
+                        onChange={e => updateData('benefitsPadding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus1Padding">Bônus 1</Label>
+                      <Input
+                        id="bonus1Padding"
+                        value={editorData.bonus1Padding || ''}
+                        onChange={e => updateData('bonus1Padding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus2Padding">Bônus 2</Label>
+                      <Input
+                        id="bonus2Padding"
+                        value={editorData.bonus2Padding || ''}
+                        onChange={e => updateData('bonus2Padding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="mentorPadding">Mentora</Label>
+                      <Input
+                        id="mentorPadding"
+                        value={editorData.mentorPadding || ''}
+                        onChange={e => updateData('mentorPadding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="testimonialsPadding">Depoimentos</Label>
+                      <Input
+                        id="testimonialsPadding"
+                        value={editorData.testimonialsPadding || ''}
+                        onChange={e => updateData('testimonialsPadding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="guaranteePadding">Garantia</Label>
+                      <Input
+                        id="guaranteePadding"
+                        value={editorData.guaranteePadding || ''}
+                        onChange={e => updateData('guaranteePadding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="faqPadding">FAQ</Label>
+                      <Input
+                        id="faqPadding"
+                        value={editorData.faqPadding || ''}
+                        onChange={e => updateData('faqPadding', e.target.value)}
+                        placeholder="Ex: py-8 md:py-12"
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
+
+        {/* Preview Panel */}
+        {isPreviewMode && (
+          <div className="flex-1 p-4 overflow-y-auto">
+            <QuizOfferPageEditable data={editorData} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default QuizOfferPageVisualEditor;

@@ -149,6 +149,18 @@ interface QuizOfferPageEditableProps {
     headerFixed: boolean;
     animationsEnabled: boolean;
     gradientBackground: boolean;
+
+    // Padding/Margem por seção (opcional)
+    heroPadding?: string;
+    problemPadding?: string;
+    solutionPadding?: string;
+    benefitsPadding?: string;
+    bonus1Padding?: string;
+    bonus2Padding?: string;
+    mentorPadding?: string;
+    testimonialsPadding?: string;
+    guaranteePadding?: string;
+    faqPadding?: string;
   };
 }
 
@@ -345,7 +357,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
 
             <main className={`relative z-10 flex flex-col gap-y-8 md:gap-y-12`}>
                 {/* 1. Headline e Subheadline */}
-                <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding} ${data.containerMaxWidth}`}>
+                <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.heroPadding || data.sectionPadding} ${data.containerMaxWidth}`}>
                     <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border text-center`} 
                          style={{ borderColor: `${data.primaryColor}30` }}>
                         <h1 className="text-4xl md:text-6xl font-bold text-center mb-8 font-playfair leading-tight"
@@ -400,7 +412,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
                 </section>
 
                 {/* 2. Identificação do Problema */}
-                <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding}`} 
+                <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.problemPadding || data.sectionPadding} ${data.containerMaxWidth}`} 
                          style={{ backgroundColor: data.backgroundColor }}>
                     <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border`}
                          style={{ borderColor: `${data.primaryColor}30` }}>
@@ -449,7 +461,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
                 </section>
 
                 {/* 3. Seção Solução (Quiz) */}
-                <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding} ${data.containerMaxWidth}`}>
+                <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.solutionPadding || data.sectionPadding} ${data.containerMaxWidth}`}>
                     <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border text-center`}
                          style={{ borderColor: `${data.primaryColor}30` }}>
                         <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-playfair leading-tight"
@@ -508,7 +520,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
 
                 {/* 4. Seção Benefícios dos Guias */}
                 {data.showBonuses && (
-                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding} ${data.containerMaxWidth}`}>
+                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.benefitsPadding || data.sectionPadding} ${data.containerMaxWidth}`}>
                         <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border`}
                              style={{ borderColor: `${data.primaryColor}30` }}>
                             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-playfair leading-tight"
@@ -559,7 +571,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
 
                 {/* 5. Bônus 1 - Peças-Chave */}
                 {data.showBonuses && (
-                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding} ${data.containerMaxWidth}`}>
+                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.bonus1Padding || data.sectionPadding} ${data.containerMaxWidth}`}>
                         <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border`}
                              style={{ borderColor: `${data.primaryColor}30` }}>
                             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-playfair leading-tight"
@@ -610,7 +622,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
 
                 {/* 6. Bônus 2 - Visagismo */}
                 {data.showBonuses && (
-                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding} ${data.containerMaxWidth}`}>
+                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.bonus2Padding || data.sectionPadding} ${data.containerMaxWidth}`}>
                         <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border`}
                              style={{ borderColor: `${data.primaryColor}30` }}>
                             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-playfair leading-tight"
@@ -661,7 +673,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
 
                 {/* 7. Seção Mentora */}
                 {data.showMentor && (
-                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding} ${data.containerMaxWidth}`}>
+                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.mentorPadding || data.sectionPadding} ${data.containerMaxWidth}`}>
                         <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border`}
                              style={{ borderColor: `${data.primaryColor}30` }}>
                             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-playfair leading-tight"
@@ -707,7 +719,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
 
                 {/* 8. Seção Depoimentos */}
                 {data.showTestimonials && (
-                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding} ${data.containerMaxWidth}`}>
+                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.testimonialsPadding || data.sectionPadding} ${data.containerMaxWidth}`}>
                         <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border`}
                              style={{ borderColor: `${data.primaryColor}30` }}>
                             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-playfair leading-tight"
@@ -772,7 +784,7 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
 
                 {/* 9. Seção Garantia */}
                 {data.showGuarantee && (
-                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.sectionPadding} ${data.containerMaxWidth}`}>
+                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.guaranteePadding || data.sectionPadding} ${data.containerMaxWidth}`}>
                         <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border`}
                              style={{ borderColor: `${data.primaryColor}30` }}>
                             <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center font-playfair leading-tight"
@@ -829,6 +841,20 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
                                     <ArrowRight size={24} className="inline ml-3 group-hover:scale-110 transition-transform" />
                                 </a>
                             </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* 10. FAQ */}
+                {data.showFaq && (
+                    <section className={`container mx-auto px-4 sm:px-6 lg:px-8 ${data.faqPadding || data.sectionPadding} ${data.containerMaxWidth}`}>
+                        <div className={`bg-white ${data.cardPadding} rounded-2xl shadow-xl border`}
+                             style={{ borderColor: `${data.primaryColor}30` }}>
+                            <FaqSectionNew 
+                                title={data.faqTitle} 
+                                ctaText={data.faqCtaText} 
+                                ctaUrl={data.ctaUrl} 
+                            />
                         </div>
                     </section>
                 )}
