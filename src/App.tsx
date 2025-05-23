@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -79,19 +78,6 @@ const App = () => {
       
       console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
       console.log('✅ Main routes activated');
-
-      // Resetar o status da sessão quando a página é recarregada completamente
-      if (typeof window !== 'undefined' && window.performance) {
-        const navigationEntries = performance.getEntriesByType('navigation');
-        if (navigationEntries.length > 0) {
-          const navType = (navigationEntries[0] as any).type;
-          if (navType === 'reload') {
-            // Limpar sessionStorage quando a página é recarregada
-            sessionStorage.removeItem('hasSeenIntroThisSession');
-            console.log('Page reload detected, session status reset');
-          }
-        }
-      }
     } catch (error) {
       console.error('Erro ao inicializar aplicativo:', error);
     }
@@ -136,7 +122,7 @@ const App = () => {
             ) : (
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
-                  {/* A rota principal direciona para QuizPage que agora mostra QuizIntro na primeira visita da sessão */}
+                  {/* A rota principal direciona para QuizPage, que foi modificado para sempre mostrar QuizIntro primeiro */}
                   <Route path="/" element={<QuizPage />} />
                   <Route path="/home" element={<HomePage />} />
                   <Route path="/quiz" element={<QuizPage />} />

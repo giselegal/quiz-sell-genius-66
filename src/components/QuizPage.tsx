@@ -21,7 +21,7 @@ const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
   const navigate = useNavigate();
   
-  // Modificado: Use showIntro para controlar o estado visual e adicione uma verificação de sessionStorage
+  // Modificado: Sempre exibir o QuizIntro primeiro, independente do histórico
   const [showIntro, setShowIntro] = useState(true);
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
   const [showingTransition, setShowingTransition] = useState(false);
@@ -47,24 +47,7 @@ const QuizPage: React.FC = () => {
     isInitialLoadComplete
   } = useQuizLogic();
 
-  // Verifica na montagem do componente se deve mostrar a intro com base no sessionStorage
-  useEffect(() => {
-    const hasSeenIntroThisSession = sessionStorage.getItem('hasSeenIntroThisSession') === 'true';
-    const savedUserName = localStorage.getItem('userName');
-    
-    if (hasSeenIntroThisSession && savedUserName && savedUserName.trim()) {
-      // Se já viu a intro nesta sessão E tem um nome salvo, pula a intro
-      setShowIntro(false);
-    } else {
-      // Mostra a intro se for primeira visita na sessão OU não tiver nome salvo
-      setShowIntro(true);
-      
-      // Se não houver nome salvo ou estiver vazio, limpar
-      if (!savedUserName || !savedUserName.trim()) {
-        localStorage.removeItem('userName');
-      }
-    }
-  }, []);
+  // Removida a verificação de sessionStorage - o quiz sempre iniciará com o QuizIntro
 
   // Garante que sem nome salvo, sempre exibe a intro
   useEffect(() => {
@@ -126,8 +109,7 @@ const QuizPage: React.FC = () => {
     // Salvar nome no localStorage
     localStorage.setItem('userName', name.trim());
     
-    // Marcar que o usuário viu a intro nesta sessão
-    sessionStorage.setItem('hasSeenIntroThisSession', 'true');
+    // Removemos a marcação de sessão para garantir que sempre mostre a intro primeiro
     
     // Atualizar contexto de autenticação
     if (login) {

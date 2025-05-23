@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Fluxo do Quiz - Intro Sempre Visível</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #B89B7A;
+    }
+    .test-section {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .test-button {
+      background-color: #B89B7A;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .test-button:hover {
+      background-color: #A1835D;
+    }
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8f5f0;
+      border-radius: 4px;
+      white-space: pre-wrap;
+    }
+    .pass {
+      color: green;
+      font-weight: bold;
+    }
+    .fail {
+      color: red;
+      font-weight: bold;
+    }
+    .warning {
+      color: orange;
+      font-weight: bold;
+    }
+    #testResults {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Teste de Fluxo do Quiz - Intro Sempre Visível</h1>
+
+  <div class="test-section">
+    <h2>Instruções</h2>
+    <p>Esta página testa se as modificações feitas garantem que o quiz sempre começa pela tela de introdução, independentemente do estado anterior da sessão.</p>
+    
+    <h3>Passos para teste manual:</h3>
+    <ol>
+      <li>Acesse a página principal do quiz</li>
+      <li>Verifique se o quiz sempre começa pela tela de introdução (QuizIntro)</li>
+      <li>Preencha seu nome e inicie o quiz</li>
+      <li>Após completar o quiz, feche a aba do navegador</li>
+      <li>Reabra a aplicação e verifique se o QuizIntro é exibido novamente</li>
+    </ol>
+  </div>
+
+  <div class="test-section">
+    <h2>Executar Teste Automático</h2>
+    <p>Clique no botão abaixo para executar o teste automático que verifica o comportamento do quiz:</p>
+    <button id="runTest" class="test-button">Executar Teste</button>
+    
+    <div class="results">
+      <h3>Resultados:</h3>
+      <div id="testResults">Os resultados do teste aparecerão aqui.</div>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>Status do Armazenamento Atual</h2>
+    <p>Status atual do armazenamento local (verifique se os valores são consistentes com o comportamento esperado):</p>
+    <button id="checkStorage" class="test-button">Verificar Armazenamento</button>
+    
+    <div class="results">
+      <div id="storageStatus">Clique no botão para verificar.</div>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>Limpar Armazenamento</h2>
+    <p>Limpe o armazenamento para simular um usuário novo:</p>
+    <button id="clearStorage" class="test-button">Limpar Armazenamento</button>
+    
+    <div class="results">
+      <div id="clearResult">Status de limpeza aparecerá aqui.</div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('runTest').addEventListener('click', function() {
+      const resultsDiv = document.getElementById('testResults');
+      resultsDiv.innerHTML = 'Executando testes...';
+      
+      // Executar o teste e capturar a saída
+      const originalConsoleLog = console.log;
+      const originalConsoleError = console.error;
+      const originalConsoleWarn = console.warn;
+      
+      let testOutput = '';
+      
+      console.log = function(...args) {
+        originalConsoleLog.apply(console, args);
+        const message = args.join(' ');
+        testOutput += formatMessage(message) + '\n';
+        updateResults();
+      };
+      
+      console.error = function(...args) {
+        originalConsoleError.apply(console, args);
+        const message = args.join(' ');
+        testOutput += `<span class="fail">${formatMessage(message)}</span>` + '\n';
+        updateResults();
+      };
+      
+      console.warn = function(...args) {
+        originalConsoleWarn.apply(console, args);
+        const message = args.join(' ');
+        testOutput += `<span class="warning">${formatMessage(message)}</span>` + '\n';
+        updateResults();
+      };
+      
+      function updateResults() {
+        resultsDiv.innerHTML = testOutput;
+        resultsDiv.scrollTop = resultsDiv.scrollHeight;
+      }
+      
+      function formatMessage(message) {
+        if (message.includes('✅')) {
+          return message.replace(/✅/g, '<span class="pass">✅</span>');
+        } else if (message.includes('❌')) {
+          return message.replace(/❌/g, '<span class="fail">❌</span>');
+        } else if (message.includes('⚠️')) {
+          return message.replace(/⚠️/g, '<span class="warning">⚠️</span>');
+        }
+        return message;
+      }
+      
+      // Carregar e executar o script de teste
+      const script = document.createElement('script');
+      script.src = '/tests/intro-flow-test.js';
+      script.onload = function() {
+        // Restaurar console original depois que o script for carregado e executado
+        setTimeout(function() {
+          console.log = originalConsoleLog;
+          console.error = originalConsoleError;
+          console.warn = originalConsoleWarn;
+        }, 1000);
+      };
+      document.body.appendChild(script);
+    });
+    
+    document.getElementById('checkStorage').addEventListener('click', function() {
+      const statusDiv = document.getElementById('storageStatus');
+      const userName = localStorage.getItem('userName');
+      const hasSeenIntro = sessionStorage.getItem('hasSeenIntroThisSession');
+      
+      let output = '<strong>localStorage:</strong><br>';
+      output += `userName: ${userName || 'não definido'}<br><br>`;
+      
+      output += '<strong>sessionStorage:</strong><br>';
+      output += `hasSeenIntroThisSession: ${hasSeenIntro || 'não definido'}<br>`;
+      
+      statusDiv.innerHTML = output;
+    });
+    
+    document.getElementById('clearStorage').addEventListener('click', function() {
+      const clearResultDiv = document.getElementById('clearResult');
+      
+      // Limpar localStorage e sessionStorage
+      localStorage.removeItem('userName');
+      sessionStorage.removeItem('hasSeenIntroThisSession');
+      
+      clearResultDiv.innerHTML = '<span class="pass">✅ Armazenamento limpo com sucesso!</span><br>' +
+                                'O próximo acesso ao quiz deve sempre mostrar a tela de introdução.';
+    });
+  </script>
+</body>
+</html>
