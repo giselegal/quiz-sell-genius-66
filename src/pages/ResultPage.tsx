@@ -608,6 +608,40 @@ const ResultPage: React.FC = () => {
                 </p>
                 
                 <SecurePurchaseElement className="mt-6" />
+                
+                {/* Métodos de pagamento aceitos */}
+                <div className="mt-4 text-center">
+                  <p className="text-xs text-[#8F7A6A] mb-2">Métodos de pagamento aceitos:</p>
+                  <div className="flex justify-center items-center gap-3 flex-wrap">
+                    {/* Cartões de crédito */}
+                    <div className="bg-white rounded-md px-2 py-1 shadow-sm border border-gray-200 flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[#8F7A6A] mr-1">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                      </svg>
+                      <span className="text-xs text-[#432818]">Cartões</span>
+                    </div>
+                    
+                    {/* Pix */}
+                    <div className="bg-white rounded-md px-2 py-1 shadow-sm border border-gray-200 flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                      <span className="text-xs text-[#432818]">Pix</span>
+                    </div>
+                    
+                    {/* Boleto */}
+                    <div className="bg-white rounded-md px-2 py-1 shadow-sm border border-gray-200 flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[#8F7A6A] mr-1">
+                        <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path>
+                        <path d="M4 10h18"></path>
+                        <path d="M7 15h3"></path>
+                        <path d="M14 15h3"></path>
+                      </svg>
+                      <span className="text-xs text-[#432818]">Boleto</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </Card>
