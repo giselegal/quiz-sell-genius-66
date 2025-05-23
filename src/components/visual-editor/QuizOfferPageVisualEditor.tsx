@@ -159,6 +159,7 @@ const defaultData: VisualEditorData = {
   problemDescription: 'Muitas mulheres enfrentam dificuldades na hora de escolher o que vestir, sentindo-se inseguras e insatisfeitas com a própria imagem.',
   problemParagraph1: 'A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".',
   problemParagraph2: 'Quantas vezes você já perdeu tempo precioso tentando montar um look que te fizesse sentir confiante? Ou gastou dinheiro em peças que raramente (ou nunca) usou?',
+  problemParagraph3: 'Isso acontece porque você ainda não descobriu seu estilo predominante - aquele que está alinhado com sua personalidade, valores e essência.',
   problemConclusion: 'Isso acontece porque você ainda não descobriu seu estilo predominante - aquele que está alinhado com sua personalidade, valores e essência.',
   
   // Solução
