@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -66,6 +65,16 @@ const QuizPage: React.FC = () => {
       }
     }
   }, []);
+
+  // Garante que sem nome salvo, sempre exibe a intro
+  useEffect(() => {
+    if (!showIntro) {
+      const savedName = localStorage.getItem('userName');
+      if (!savedName || !savedName.trim()) {
+        setShowIntro(true);
+      }
+    }
+  }, [showIntro]);
 
   useEffect(() => {
     if (isInitialLoadComplete) {
