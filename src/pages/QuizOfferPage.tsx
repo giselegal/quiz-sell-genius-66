@@ -30,23 +30,22 @@ const RatingStars = ({ rating }) => {
 
 // Componente de indicador de usuários ativos
 const ActiveUsersIndicator = () => {
-  const [activeUsers, setActiveUsers] = useState(142);
+  const [activeCustomers, setActiveCustomers] = useState(278); // Alterado para "clientes satisfeitos" ou similar
   
   useEffect(() => {
-    // Simula pequenas flutuações no número de usuários ativos
     const interval = setInterval(() => {
-      const change = Math.floor(Math.random() * 5) - 2; // -2 a +2
-      setActiveUsers(prev => Math.max(120, Math.min(180, prev + change)));
-    }, 15000);
+      const change = Math.floor(Math.random() * 3) - 1; // Pequenas flutuações
+      setActiveCustomers(prev => Math.max(250, Math.min(350, prev + change)));
+    }, 12000);
     
     return () => clearInterval(interval);
   }, []);
   
   return (
-    <div className="flex items-center bg-[#F0EBE3] px-3 py-2 rounded-full text-sm text-[#432818] animate-pulse">
-      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-      <span className="font-medium">{activeUsers} pessoas</span>
-      <span className="ml-1">fazendo o quiz agora</span>
+    <div className="flex items-center bg-[#F0EBE3] px-3 py-2 rounded-full text-sm text-[#432818]">
+      <Heart size={16} className="text-red-500 mr-2" />
+      <span className="font-medium">{activeCustomers} clientes</span>
+      <span className="ml-1">transformaram seu estilo conosco!</span>
     </div>
   );
 };
@@ -131,20 +130,24 @@ const FaqSection = () => {
   
   const faqItems = [
     {
-      question: "Quanto tempo leva para completar o quiz?",
-      answer: "O quiz foi projetado para ser rápido e eficiente, levando apenas 3 minutos em média para ser concluído. Você receberá resultados precisos imediatamente após responder todas as perguntas."
+      question: "O que está incluído nesta oferta exclusiva?",
+      answer: "Ao adquirir nossa oferta, você recebe acesso completo ao nosso Quiz de Estilo detalhado, um perfil de estilo personalizado, recomendações de peças e looks, guia de combinações de cores, além de dicas exclusivas de especialistas em moda para transformar seu guarda-roupa e sua confiança."
     },
     {
-      question: "Os resultados são realmente precisos?",
-      answer: "Sim! Nosso quiz foi desenvolvido por especialistas em moda e estilo pessoal, com base em anos de pesquisa e feedback de milhares de usuários. A taxa de satisfação com os resultados é superior a 95%."
+      question: "Como funciona o Quiz de Estilo após a compra?",
+      answer: "Após a confirmação da sua compra, você receberá acesso imediato à área de membros onde poderá realizar o Quiz de Estilo no seu próprio ritmo. Ele foi projetado para ser rápido e eficiente, levando em média 5-7 minutos para ser concluído."
     },
     {
-      question: "O que recebo após completar o quiz?",
-      answer: "Você receberá um perfil detalhado do seu estilo predominante, recomendações personalizadas de peças que valorizam seu tipo de corpo e estilo, combinações de cores ideais para você, e dicas exclusivas de especialistas em moda."
+      question: "Os resultados do quiz são realmente precisos e personalizados?",
+      answer: "Sim! Nosso quiz foi desenvolvido por especialistas em moda e estilo pessoal, com base em anos de pesquisa. Ele analisa suas respostas para criar um perfil de estilo detalhado e recomendações que realmente se alinham com sua individualidade. A taxa de satisfação é superior a 98%."
     },
     {
-      question: "Preciso pagar para ver meus resultados?",
-      answer: "Não! O quiz e os resultados básicos são completamente gratuitos. Oferecemos opções premium com análises mais detalhadas e personalizadas, mas você sempre receberá resultados valiosos sem nenhum custo."
+      question: "Preciso pagar algo a mais para ver os resultados do quiz ou ter acesso aos bônus?",
+      answer: "Não! O valor da oferta inclui acesso completo ao Quiz de Estilo, todos os seus resultados detalhados, e todos os bônus prometidos. Não há taxas ocultas ou pagamentos adicionais para o conteúdo descrito nesta página."
+    },
+    {
+      question: "Por quanto tempo terei acesso ao material?",
+      answer: "Você terá acesso vitalício ao seu perfil de estilo e aos materiais base do quiz. Bônus específicos podem ter prazos de acesso diferenciados, que serão claramente informados."
     }
   ];
   
@@ -243,10 +246,10 @@ const QuizOfferPage: React.FC = () => {
         
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#432818] mb-6 font-playfair">
-            Descubra seu Estilo Único e Transforme seu Guarda-Roupa
+            Revele Seu Estilo Único e Transforme Seu Guarda-Roupa Com Nossa Oferta Exclusiva!
           </h1>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            Em apenas alguns minutos, nosso quiz revelará seu estilo predominante e como criar looks que combinam perfeitamente com sua essência.
+            Nossa consultoria de estilo, que inclui um quiz detalhado, é o primeiro passo para você construir um visual que reflete sua verdadeira essência e te dá confiança todos os dias.
           </p>
         </div>
         
@@ -367,10 +370,10 @@ const QuizOfferPage: React.FC = () => {
       <section className="py-16 px-4 bg-[#f9f9f9]">
         <div className="max-w-7xl mx-auto text-center mb-12">
           <h2 className="text-2xl md:text-3xl font-semibold mb-6 font-playfair text-[#432818]">
-            Por que Fazer o Quiz?
+            Por Que Investir na Sua Transformação de Estilo?
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Descubra os benefícios exclusivos que preparamos para você ao participar do nosso quiz de estilo.
+            Descubra os benefícios exclusivos que nossa oferta proporciona, incluindo o acesso ao nosso renomado quiz de estilo.
           </p>
         </div>
         
@@ -414,7 +417,7 @@ const QuizOfferPage: React.FC = () => {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto text-center mb-12">
           <h2 className="text-2xl md:text-3xl font-semibold mb-6 font-playfair text-[#432818]">
-            Dúvidas Frequentes
+            Ainda Tem Dúvidas?
           </h2>
         </div>
         
