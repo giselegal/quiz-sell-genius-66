@@ -190,7 +190,7 @@ img:hover, .hover-scale:hover {
     .text-only-question .options {
       font-size: 1.4rem;
     }
-    
+
     /* Questões Estratégicas em mobile - títulos e opções maiores */
     .strategic-question .question-title,
     .strategic-question .options,
@@ -198,7 +198,7 @@ img:hover, .hover-scale:hover {
       font-size: 1.5rem;
       font-weight: 700;
     }
-    
+
     /* Destaque mais pronunciado em mobile */
     .highlight-strategic {
       /* background-color: hsl(var(--accent) / 0.4); */
@@ -206,7 +206,7 @@ img:hover, .hover-scale:hover {
       padding: 0.15em 0.25em;
     }
   }
-  
+
   /* Dispositivos móveis muito pequenos */
   @media (max-width: 375px) {
     /* Ajuste para telas muito pequenas */
