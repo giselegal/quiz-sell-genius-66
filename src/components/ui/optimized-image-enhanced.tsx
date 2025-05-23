@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { getOptimizedImageUrl, getLowQualityPlaceholder } from '@/utils/imageOptimizer';
+import getOptimizedImageUrl from '@/utils/imageOptimizer/getOptimizedImageUrl';
+import getLowQualityPlaceholder from '@/utils/imageOptimizer/getLowQualityPlaceholder';
 
 interface OptimizedImageProps {
   src: string;

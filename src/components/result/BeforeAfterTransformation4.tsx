@@ -66,9 +66,9 @@ const Badge: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = '' }) => (
-  <span 
-    className={`absolute z-10 bg-[${designTokens.colors.primary}] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm ${className}`}
-    style={{ boxShadow: designTokens.shadows.sm }}
+  <span
+    className={`absolute z-10 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm ${className}`}
+    style={{ boxShadow: designTokens.shadows.sm, backgroundColor: designTokens.colors.primary }}
   >
     {children}
   </span>

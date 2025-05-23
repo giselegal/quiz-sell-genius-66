@@ -472,9 +472,12 @@ export default defineLovable({
                   className={`
                     cursor-pointer rounded-lg overflow-hidden border-2 transition-all
                     ${currentAnswers.includes(option.id) 
-                      ? `border-[${accentColor}] shadow-lg` 
+                      ? 'shadow-lg' 
                       : 'border-transparent hover:border-gray-300'}
                   `}
+                  style={currentAnswers.includes(option.id) 
+                    ? { borderColor: accentColor } 
+                    : undefined}
                 >
                   {(type === 'both' || type === 'image') && option.imageUrl && (
                     <div className="w-full">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -208,10 +207,11 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                     <TableCell className="py-1.5 text-xs">{item.totalAnswers}</TableCell>
                     <TableCell className="py-1.5">
                       <div className="flex items-center gap-2">
-                        <Progress 
-                          value={item.retentionFromStart} 
+                        <Progress
+                          value={item.retentionFromStart}
                           className="h-1.5 w-[40px]"
-                          indicatorClassName={`bg-[${getBarColor(index, dropoffData.length)}]`}
+                          indicatorClassName=""
+                          {...(item.retentionFromStart != null && { style: { '--tw-bg-opacity': '1', backgroundColor: getBarColor(index, dropoffData.length) } as React.CSSProperties })}
                         />
                         <span className="text-xs">{item.retentionFromStart}%</span>
                       </div>
