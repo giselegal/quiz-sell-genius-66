@@ -295,119 +295,158 @@ const QuizOfferPage: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen bg-[#FFFBF7] text-[#333333] font-sans"> {/* Cor de fundo e texto base */}
+    <div className="min-h-screen relative overflow-hidden" style={{
+      backgroundColor: '#fffaf7',
+      color: '#432818',
+      fontFamily: 'inherit'
+    }}>
+      {/* Decorative background elements */}
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 
       {/* 1. Headline e Subheadline */}
-      <section className="py-16 px-4 md:px-8 lg:px-16 bg-gradient-to-b from-[#FDF6F0] to-[#FFFBF7]">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="mb-8 flex justify-center">
+      <div className="relative z-10">
+        {/* Header similar ao da página de resultado */}
+        <div className="bg-white shadow-sm p-6 mb-6">
+          <div className="flex justify-center w-full">
             <FixedIntroImage 
               src={HERO_IMAGE_URL}
               alt="Logo Gisele Galvão" 
-              width={200} // Ajustar tamanho conforme necessário
-              height={100} // Ajustar tamanho conforme necessário
+              width={200}
+              height={100}
+              className="h-auto mx-auto"
             />
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#4A2E20] mb-6 font-playfair leading-tight">
-            Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em um Aliado da Sua Imagem Pessoal
-          </h1>
-          <p className="text-lg md:text-xl text-[#6B4F43] max-w-3xl mx-auto mb-10">
-            Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.
-          </p>
-          <div className="mb-10 flex justify-center">
-             <FixedIntroImage 
-              src={HERO_COMPLEMENTARY_IMAGE_URL}
-              alt="Mulher perdida com guarda-roupa bagunçado" 
-              width={600}
-              height={400}
-              className="rounded-lg shadow-xl"
-            />
-          </div>
-          <a 
-            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
-            onClick={() => handleCtaClick('headline_cta', 'Quero Descobrir Meu Estilo Agora!')}
-            className="group inline-block px-10 py-4 bg-[#B89B7A] hover:bg-[#A1835D] text-white font-semibold rounded-lg text-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            Quero Descobrir Meu Estilo Agora!
-            <ArrowRight size={22} className="inline ml-2 group-hover:translate-x-1 transition-transform" />
-          </a>
-           <p className="mt-4 text-sm text-gray-500 flex items-center justify-center">
-            <Lock size={14} className="mr-1 text-[#B89B7A]" />
-            Compra segura e acesso imediato.
-          </p>
         </div>
-      </section>
 
-      {/* 2. Introdução ao Problema/Dor */}
-      <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FFFBF7]">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <FixedIntroImage 
-              src={PROBLEM_IMAGE_URL}
-              alt="Mulher frustrada com guarda-roupa"
-              width={500}
-              height={350}
-              className="rounded-lg shadow-xl mx-auto"
-            />
+        <div className="container mx-auto px-4 py-6 max-w-4xl">
+          {/* Hero Section como Card elegante */}
+          <div className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 rounded-lg">
+            <div className="text-center">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#432818] mb-6 font-playfair leading-tight">
+                Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em um Aliado da Sua Imagem Pessoal
+              </h1>
+              <p className="text-lg md:text-xl text-[#6B4F43] max-w-3xl mx-auto mb-8">
+                Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.
+              </p>
+              
+              <div className="mb-8 max-w-lg mx-auto relative">
+                <FixedIntroImage 
+                  src={HERO_COMPLEMENTARY_IMAGE_URL}
+                  alt="Mulher perdida com guarda-roupa bagunçado" 
+                  width={600}
+                  height={400}
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                />
+                {/* Elegant decorative corner */}
+                <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
+                <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
+              </div>
+              
+              <a 
+                href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+                onClick={() => handleCtaClick('headline_cta', 'Quero Descobrir Meu Estilo Agora!')}
+                className="inline-block text-white text-lg py-4 px-8 rounded-md shadow-md transition-all btn-3d mb-4"
+                style={{
+                  background: "linear-gradient(to right, #B89B7A, #aa6b5d)",
+                  boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)"
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <ArrowRight size={20} />
+                  <span>Quero Descobrir Meu Estilo Agora!</span>
+                </span>
+              </a>
+              
+              <p className="text-sm text-[#6B4F43] flex items-center justify-center gap-1">
+                <Lock size={14} className="text-[#B89B7A]" />
+                <span>Compra segura e acesso imediato</span>
+              </p>
+            </div>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[#4A2E20] mb-8 text-center font-playfair">
-            Você se identifica com isso?
-          </h2>
-          <p className="text-lg text-[#6B4F43] mb-6 leading-relaxed">
-            Você já se sentiu frustrada ao abrir seu guarda-roupa cheio de roupas e mesmo assim não ter o que vestir? Ou já comprou peças que pareciam perfeitas na loja, mas que nunca combinaram com nada que você tem?
-          </p>
-          <p className="text-lg text-[#6B4F43] mb-6 leading-relaxed">
-            A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".
-          </p>
-          <p className="text-lg text-[#6B4F43] mb-6 leading-relaxed">
-            Quantas vezes você já perdeu tempo precioso tentando montar um look que te fizesse sentir confiante? Ou gastou dinheiro em peças que raramente (ou nunca) usou? Talvez você sinta que sua imagem não comunica quem você realmente é, enquanto observa pessoas que parecem ter um estilo definido e autêntico.
-          </p>
-          <p className="text-lg text-[#6B4F43] font-semibold leading-relaxed">
-            Isso acontece porque você ainda não descobriu seu estilo predominante - aquele que está alinhado com sua personalidade, valores e essência. Sem esse conhecimento, você continua comprando peças aleatórias que não conversam entre si e não expressam quem você é.
-          </p>
-        </div>
-      </section>
 
-      {/* 3. Apresentação da Solução: Quiz de Estilo */}
-      <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FDF6F0]">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-10">
-            <FixedIntroImage 
-              src={SOLUTION_QUIZ_IMAGE_URL}
-              alt="Quiz de Estilo Gisele Galvão"
-              width={600}
-              height={450}
-              className="rounded-lg shadow-xl mx-auto"
-            />
+          {/* 2. Introdução ao Problema/Dor */}
+          <div className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 rounded-lg">
+            <div className="text-center mb-8">
+              <FixedIntroImage 
+                src={PROBLEM_IMAGE_URL}
+                alt="Mulher frustrada com guarda-roupa"
+                width={500}
+                height={350}
+                className="rounded-lg shadow-md mx-auto mb-6"
+              />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#432818] mb-8 text-center font-playfair">
+              Você se identifica com isso?
+            </h2>
+            <div className="space-y-6 text-lg text-[#6B4F43] leading-relaxed">
+              <p>
+                Você já se sentiu frustrada ao abrir seu guarda-roupa cheio de roupas e mesmo assim não ter o que vestir? Ou já comprou peças que pareciam perfeitas na loja, mas que nunca combinaram com nada que você tem?
+              </p>
+              <p>
+                A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".
+              </p>
+              <p>
+                Quantas vezes você já perdeu tempo precioso tentando montar um look que te fizesse sentir confiante? Ou gastou dinheiro em peças que raramente (ou nunca) usou? Talvez você sinta que sua imagem não comunica quem você realmente é, enquanto observa pessoas que parecem ter um estilo definido e autêntico.
+              </p>
+              <p className="font-semibold text-[#432818]">
+                Isso acontece porque você ainda não descobriu seu estilo predominante - aquele que está alinhado com sua personalidade, valores e essência. Sem esse conhecimento, você continua comprando peças aleatórias que não conversam entre si e não expressam quem você é.
+              </p>
+            </div>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[#4A2E20] mb-6 font-playfair">
-            A Solução Para Sua Transformação de Estilo Começa Aqui!
-          </h2>
-          <p className="text-lg text-[#6B4F43] mb-6 leading-relaxed">
-            E se eu te dissesse que em apenas alguns minutos você pode descobrir seu estilo predominante e começar a transformar sua relação com a moda e sua imagem pessoal?
-          </p>
-          <p className="text-xl text-[#4A2E20] font-semibold mb-6 leading-relaxed">
-            Apresento a você o Quiz de Estilo Gisele Galvão - uma ferramenta desenvolvida com base em anos de experiência em consultoria de imagem e estilo pessoal.
-          </p>
-          <p className="text-lg text-[#6B4F43] mb-6 leading-relaxed">
-            Este não é apenas mais um teste genérico da internet. É um método preciso que analisa suas preferências reais e identifica seu estilo predominante entre os 7 estilos universais: Clássico, Natural, Romântico, Dramático, Criativo, Elegante e Contemporâneo.
-          </p>
-          <p className="text-lg text-[#6B4F43] mb-6 leading-relaxed">
-            Ao descobrir seu estilo predominante, você dá o primeiro passo para criar um guarda-roupa que realmente funciona para você, economizar tempo e dinheiro nas suas compras, expressar sua personalidade através da sua imagem e sentir-se confiante e autêntica todos os dias.
-          </p>
-          <p className="text-lg text-[#6B4F43] mb-10 leading-relaxed">
-            O quiz é rápido, intuitivo e foi criado especialmente para mulheres que desejam alinhar sua imagem à sua essência, sem precisar seguir tendências passageiras ou gastar fortunas com roupas que não combinam entre si.
-          </p>
-          <a 
-            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
-            onClick={() => handleCtaClick('solution_cta', 'Fazer o Quiz e Descobrir Meu Estilo')}
-            className="group inline-block px-10 py-4 bg-[#B89B7A] hover:bg-[#A1835D] text-white font-semibold rounded-lg text-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            Fazer o Quiz e Descobrir Meu Estilo
-            <ShoppingBag size={22} className="inline ml-2 group-hover:scale-110 transition-transform" />
-          </a>
-        </div>
-      </section>
+
+          {/* 3. Apresentação da Solução: Quiz de Estilo */}
+          <div className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 rounded-lg">
+            <div className="text-center">
+              <div className="mb-8 max-w-lg mx-auto relative">
+                <FixedIntroImage 
+                  src={SOLUTION_QUIZ_IMAGE_URL}
+                  alt="Quiz de Estilo Gisele Galvão"
+                  width={600}
+                  height={450}
+                  className="w-full h-auto rounded-lg shadow-md"
+                />
+                {/* Elegant badge */}
+                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                  Exclusivo
+                </div>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#432818] mb-6 font-playfair">
+                A Solução Para Sua Transformação de Estilo Começa Aqui!
+              </h2>
+              <div className="space-y-6 text-lg text-[#6B4F43] leading-relaxed mb-8">
+                <p>
+                  E se eu te dissesse que em apenas alguns minutos você pode descobrir seu estilo predominante e começar a transformar sua relação com a moda e sua imagem pessoal?
+                </p>
+                <p className="text-xl text-[#432818] font-semibold">
+                  Apresento a você o Quiz de Estilo Gisele Galvão - uma ferramenta desenvolvida com base em anos de experiência em consultoria de imagem e estilo pessoal.
+                </p>
+                <p>
+                  Este não é apenas mais um teste genérico da internet. É um método preciso que analisa suas preferências reais e identifica seu estilo predominante entre os 7 estilos universais: Clássico, Natural, Romântico, Dramático, Criativo, Elegante e Contemporâneo.
+                </p>
+                <p>
+                  Ao descobrir seu estilo predominante, você dá o primeiro passo para criar um guarda-roupa que realmente funciona para você, economizar tempo e dinheiro nas suas compras, expressar sua personalidade através da sua imagem e sentir-se confiante e autêntica todos os dias.
+                </p>
+                <p>
+                  O quiz é rápido, intuitivo e foi criado especialmente para mulheres que desejam alinhar sua imagem à sua essência, sem precisar seguir tendências passageiras ou gastar fortunas com roupas que não combinam entre si.
+                </p>
+              </div>
+              <a 
+                href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+                onClick={() => handleCtaClick('solution_cta', 'Fazer o Quiz e Descobrir Meu Estilo')}
+                className="inline-block text-white text-lg py-4 px-8 rounded-md shadow-md transition-all btn-3d"
+                style={{
+                  background: "linear-gradient(to right, #B89B7A, #aa6b5d)",
+                  boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)"
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <ShoppingBag size={20} />
+                  <span>Fazer o Quiz e Descobrir Meu Estilo</span>
+                </span>
+              </a>
+            </div>
+          </div>
 
       {/* 4. Benefícios dos Guias de Estilo e Imagem */}
       <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FFFBF7]">
