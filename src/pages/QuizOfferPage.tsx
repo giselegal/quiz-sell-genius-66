@@ -452,51 +452,53 @@ const QuizOfferPage: React.FC = () => {
 
       {/* 4. Benefícios dos Guias de Estilo e Imagem */}
       <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FFFBF7]">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#4A2E20] mb-12 text-center font-playfair">
-            Muito Mais Que um Simples Quiz: Uma Jornada Completa de Autoconhecimento
-          </h2>
-          <div className="md:flex md:items-center md:gap-12 mb-12">
-            <div className="md:w-1/2 mb-8 md:mb-0">
+       <div className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 rounded-lg">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#4A2E20] mb-12 text-center font-playfair">
+              Muito Mais Que um Simples Quiz: Uma Jornada Completa de Autoconhecimento
+            </h2>
+            <div className="md:flex md:items-center md:gap-12 mb-12">
+              <div className="md:w-1/2 mb-8 md:mb-0">
+                <FixedIntroImage 
+                  src={GUIDES_BENEFITS_IMAGE_URL}
+                  alt="Guia de Imagem e Estilo em tablet"
+                  width={500}
+                  height={400}
+                  className="rounded-lg shadow-xl mx-auto"
+                />
+              </div>
+              <div className="md:w-1/2">
+                <p className="text-lg text-[#6B4F43] mb-6 leading-relaxed">
+                  Mas descobrir seu estilo é apenas o começo. Para realmente transformar sua imagem, você precisa de orientação prática e estratégica.
+                </p>
+                <p className="text-xl text-[#4A2E20] font-semibold mb-6 leading-relaxed">
+                  Por isso, ao fazer o quiz, você terá acesso ao Guia de Imagem e Estilo específico para o seu estilo predominante!
+                </p>
+                <p className="text-lg text-[#6B4F43] mb-4 leading-relaxed font-semibold">
+                  Cada guia foi cuidadosamente desenvolvido para oferecer:
+                </p>
+                <ul className="list-disc list-inside text-lg text-[#6B4F43] space-y-3 mb-6">
+                  <li><span className="font-semibold">Autoconhecimento profundo:</span> Entenda como sua personalidade, valores e essência se refletem no seu estilo. Como você viu no início do quiz, 55% da comunicação é visual, 38% é tom de voz e apenas 7% é verbal. Isso significa que sua imagem comunica muito antes de você falar qualquer coisa!</li>
+                  <li><span className="font-semibold">Orientações práticas:</span> Descubra quais cores, tecidos, estampas e modelagens valorizam seu tipo físico e estilo. Aprenda a identificar peças que realmente combinam com você e que podem ser usadas de múltiplas formas.</li>
+                  <li><span className="font-semibold">Estratégias de imagem:</span> Aprenda a comunicar visualmente quem você é antes mesmo de dizer uma palavra. Entenda como usar sua imagem para transmitir seus valores e personalidade em qualquer ambiente.</li>
+                  <li><span className="font-semibold">Dicas de composição:</span> Saiba como montar looks versáteis e autênticos para diferentes ocasiões, desde o dia a dia até eventos especiais, sempre mantendo sua essência.</li>
+                </ul>
+              </div>
+            </div>
+            <div className="flex justify-center mb-10">
               <FixedIntroImage 
-                src={GUIDES_BENEFITS_IMAGE_URL}
-                alt="Guia de Imagem e Estilo em tablet"
-                width={500}
+                src={GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL}
+                alt="Mockup 3 revistas guia de estilo"
+                width={600}
                 height={400}
-                className="rounded-lg shadow-xl mx-auto"
+                className="rounded-lg shadow-xl"
               />
             </div>
-            <div className="md:w-1/2">
-              <p className="text-lg text-[#6B4F43] mb-6 leading-relaxed">
-                Mas descobrir seu estilo é apenas o começo. Para realmente transformar sua imagem, você precisa de orientação prática e estratégica.
-              </p>
-              <p className="text-xl text-[#4A2E20] font-semibold mb-6 leading-relaxed">
-                Por isso, ao fazer o quiz, você terá acesso ao Guia de Imagem e Estilo específico para o seu estilo predominante!
-              </p>
-              <p className="text-lg text-[#6B4F43] mb-4 leading-relaxed font-semibold">
-                Cada guia foi cuidadosamente desenvolvido para oferecer:
-              </p>
-              <ul className="list-disc list-inside text-lg text-[#6B4F43] space-y-3 mb-6">
-                <li><span className="font-semibold">Autoconhecimento profundo:</span> Entenda como sua personalidade, valores e essência se refletem no seu estilo. Como você viu no início do quiz, 55% da comunicação é visual, 38% é tom de voz e apenas 7% é verbal. Isso significa que sua imagem comunica muito antes de você falar qualquer coisa!</li>
-                <li><span className="font-semibold">Orientações práticas:</span> Descubra quais cores, tecidos, estampas e modelagens valorizam seu tipo físico e estilo. Aprenda a identificar peças que realmente combinam com você e que podem ser usadas de múltiplas formas.</li>
-                <li><span className="font-semibold">Estratégias de imagem:</span> Aprenda a comunicar visualmente quem você é antes mesmo de dizer uma palavra. Entenda como usar sua imagem para transmitir seus valores e personalidade em qualquer ambiente.</li>
-                <li><span className="font-semibold">Dicas de composição:</span> Saiba como montar looks versáteis e autênticos para diferentes ocasiões, desde o dia a dia até eventos especiais, sempre mantendo sua essência.</li>
-              </ul>
-            </div>
+            <p className="text-lg text-[#6B4F43] text-center max-w-3xl mx-auto leading-relaxed">
+              Com o Guia de Imagem e Estilo, você terá todas as ferramentas para construir uma imagem que realmente reflete quem você é e potencializa sua comunicação pessoal e profissional. Não se trata apenas de estar na moda, mas de criar um estilo atemporal que te representa em qualquer situação.
+            </p>
           </div>
-          <div className="flex justify-center mb-10">
-            <FixedIntroImage 
-              src={GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL}
-              alt="Mockup 3 revistas guia de estilo"
-              width={600}
-              height={400}
-              className="rounded-lg shadow-xl"
-            />
-          </div>
-          <p className="text-lg text-[#6B4F43] text-center max-w-3xl mx-auto leading-relaxed">
-            Com o Guia de Imagem e Estilo, você terá todas as ferramentas para construir uma imagem que realmente reflete quem você é e potencializa sua comunicação pessoal e profissional. Não se trata apenas de estar na moda, mas de criar um estilo atemporal que te representa em qualquer situação.
-          </p>
-        </div>
+        </div> {/* Fecha wrapper da seção 4 */}
       </section>
 
       {/* 5. Bônus Especial 1: Peças-Chave do Guarda-Roupa de Sucesso */}
@@ -791,16 +793,8 @@ const QuizOfferPage: React.FC = () => {
           </div>
         </div>
       </section>
-      
-      {/* Remover seções antigas que não são mais necessárias */}
-      {/* Hero Section com imagem otimizada - REMOVIDO */}
-      {/* Seção de estatísticas - REMOVIDO ou substituído por Depoimentos */}
-      {/* Seção de depoimentos - REMOVIDO e substituído pela nova seção 8 */}
-      {/* Seção de benefícios - REMOVIDO e substituído pela nova seção 4 e bônus */}
-      {/* Seção de FAQ - REMOVIDO e substituído pela nova FaqSectionNew */}
-      {/* Seção de chamada para ação final - REMOVIDO e integrado nas novas seções */}
     </div>
   );
-}
+};
 
 export default QuizOfferPage;
