@@ -147,8 +147,8 @@ const App = () => {
                   <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
                   {/* Adicionando acesso ao protótipo no painel admin */}
                   <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
-                  {/* Nova rota para o editor visual da página de oferta do quiz */}
-                  <Route path="/quiz-offer-editor" element={<QuizOfferPageVisualEditor />} />
+                  {/* Editor visual da página de oferta do quiz sob rota Admin */}
+                  <Route path="/admin/quiz-offer-editor" element={<QuizOfferPageVisualEditor />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </Suspense>
