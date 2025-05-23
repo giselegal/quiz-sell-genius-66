@@ -15,17 +15,17 @@ const getLowQualityPlaceholder = (originalUrl: string): string => {
     const baseUrlParts = originalUrl.split('/upload/');
     if (baseUrlParts.length < 2) return originalUrl;
     
-    // Create transformation string for tiny placeholder
-    // Very low quality (q_10), small width (w_20), blur effect (e_blur:500)
-    const transformations = 'f_auto,q_20,w_60,e_blur:200';
+    // Improved transformation for better placeholders
+    // Better quality/size balance for placeholder
+    const transformations = 'f_auto,q_10,w_30,e_blur:800';
     
     // Return low quality placeholder URL
     return `${baseUrlParts[0]}/upload/${transformations}/${baseUrlParts[1]}`;
   } 
   // For local images
   else if (originalUrl.startsWith('/')) {
-    // Simple parameter approach for local images
-    return `${originalUrl}?w=60&q=20&blur=200`;
+    // Enhanced parameter approach for local images
+    return `${originalUrl}?w=30&q=10&blur=800`;
   }
   
   // For other URLs (fallback)
