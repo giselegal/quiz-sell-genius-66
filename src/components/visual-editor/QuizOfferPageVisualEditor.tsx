@@ -324,12 +324,16 @@ const QuizOfferPageVisualEditor: React.FC = () => {
       <div className="flex-1 flex overflow-hidden">
         {/* Editor Panel */}
         {!isPreviewMode && (
-          <div className="w-80 bg-white border-r overflow-y-auto">
+          <div className="w-96 bg-white border-r overflow-y-auto">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
-              <TabsList className="w-full">
+              <TabsList className="w-full grid grid-cols-4">
                 <TabsTrigger value="content" className="flex-1">
                   <Type className="w-4 h-4 mr-1" />
                   Conteúdo
+                </TabsTrigger>
+                <TabsTrigger value="images" className="flex-1">
+                  <Image className="w-4 h-4 mr-1" />
+                  Imagens
                 </TabsTrigger>
                 <TabsTrigger value="design" className="flex-1">
                   <Palette className="w-4 h-4 mr-1" />
@@ -341,16 +345,18 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="content" className="p-4 space-y-6">
+              <TabsContent value="content" className="p-4 space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
                 <Card className="p-4">
                   <h3 className="font-medium mb-4">Seção Hero</h3>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div>
                       <Label htmlFor="heroTitle">Título Principal</Label>
-                      <Input
+                      <Textarea
                         id="heroTitle"
                         value={editorData.heroTitle}
                         onChange={(e) => updateData('heroTitle', e.target.value)}
+                        rows={2}
+                        className="text-sm"
                       />
                     </div>
                     <div>
@@ -359,15 +365,17 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                         id="heroSubtitle"
                         value={editorData.heroSubtitle}
                         onChange={(e) => updateData('heroSubtitle', e.target.value)}
-                        rows={2}
+                        rows={3}
+                        className="text-sm"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="heroImage">URL da Imagem</Label>
+                      <Label htmlFor="heroCtaText">Texto do Botão</Label>
                       <Input
-                        id="heroImage"
-                        value={editorData.heroImage}
-                        onChange={(e) => updateData('heroImage', e.target.value)}
+                        id="heroCtaText"
+                        value={editorData.heroCtaText}
+                        onChange={(e) => updateData('heroCtaText', e.target.value)}
+                        className="text-sm"
                       />
                     </div>
                   </div>
@@ -375,64 +383,477 @@ const QuizOfferPageVisualEditor: React.FC = () => {
 
                 <Card className="p-4">
                   <h3 className="font-medium mb-4">Seção Problema</h3>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div>
-                      <Label htmlFor="problemTitle">Título do Problema</Label>
+                      <Label htmlFor="problemTitle">Título</Label>
                       <Input
                         id="problemTitle"
                         value={editorData.problemTitle}
                         onChange={(e) => updateData('problemTitle', e.target.value)}
+                        className="text-sm"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="problemDescription">Descrição</Label>
+                      <Label htmlFor="problemParagraph1">Parágrafo 1</Label>
                       <Textarea
-                        id="problemDescription"
-                        value={editorData.problemDescription}
-                        onChange={(e) => updateData('problemDescription', e.target.value)}
-                        rows={3}
+                        id="problemParagraph1"
+                        value={editorData.problemParagraph1}
+                        onChange={(e) => updateData('problemParagraph1', e.target.value)}
+                        rows={2}
+                        className="text-sm"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="problemImage">URL da Imagem</Label>
-                      <Input
-                        id="problemImage"
-                        value={editorData.problemImage}
-                        onChange={(e) => updateData('problemImage', e.target.value)}
+                      <Label htmlFor="problemConclusion">Conclusão</Label>
+                      <Textarea
+                        id="problemConclusion"
+                        value={editorData.problemConclusion}
+                        onChange={(e) => updateData('problemConclusion', e.target.value)}
+                        rows={2}
+                        className="text-sm"
                       />
                     </div>
                   </div>
                 </Card>
 
                 <Card className="p-4">
-                  <h3 className="font-medium mb-4">Call to Action</h3>
-                  <div className="space-y-4">
+                  <h3 className="font-medium mb-4">Seção Solução</h3>
+                  <div className="space-y-3">
                     <div>
-                      <Label htmlFor="ctaText">Texto do Botão</Label>
-                      <Input
-                        id="ctaText"
-                        value={editorData.ctaText}
-                        onChange={(e) => updateData('ctaText', e.target.value)}
+                      <Label htmlFor="solutionTitle">Título</Label>
+                      <Textarea
+                        id="solutionTitle"
+                        value={editorData.solutionTitle}
+                        onChange={(e) => updateData('solutionTitle', e.target.value)}
+                        rows={2}
+                        className="text-sm"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="ctaUrl">URL do Link</Label>
+                      <Label htmlFor="solutionParagraph2">Descrição Principal</Label>
+                      <Textarea
+                        id="solutionParagraph2"
+                        value={editorData.solutionParagraph2}
+                        onChange={(e) => updateData('solutionParagraph2', e.target.value)}
+                        rows={2}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="solutionCtaText">Texto do Botão</Label>
+                      <Input
+                        id="solutionCtaText"
+                        value={editorData.solutionCtaText}
+                        onChange={(e) => updateData('solutionCtaText', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Seção Benefícios</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="benefitsTitle">Título</Label>
+                      <Textarea
+                        id="benefitsTitle"
+                        value={editorData.benefitsTitle}
+                        onChange={(e) => updateData('benefitsTitle', e.target.value)}
+                        rows={2}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="benefitsMainDescription">Descrição Principal</Label>
+                      <Textarea
+                        id="benefitsMainDescription"
+                        value={editorData.benefitsMainDescription}
+                        onChange={(e) => updateData('benefitsMainDescription', e.target.value)}
+                        rows={2}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Bônus 1 - Peças-Chave</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="bonus1Title">Título</Label>
+                      <Input
+                        id="bonus1Title"
+                        value={editorData.bonus1Title}
+                        onChange={(e) => updateData('bonus1Title', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus1Subtitle">Subtítulo</Label>
+                      <Input
+                        id="bonus1Subtitle"
+                        value={editorData.bonus1Subtitle}
+                        onChange={(e) => updateData('bonus1Subtitle', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus1Description">Descrição</Label>
+                      <Textarea
+                        id="bonus1Description"
+                        value={editorData.bonus1Description}
+                        onChange={(e) => updateData('bonus1Description', e.target.value)}
+                        rows={2}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Bônus 2 - Visagismo</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="bonus2Title">Título</Label>
+                      <Input
+                        id="bonus2Title"
+                        value={editorData.bonus2Title}
+                        onChange={(e) => updateData('bonus2Title', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus2Subtitle">Subtítulo</Label>
+                      <Input
+                        id="bonus2Subtitle"
+                        value={editorData.bonus2Subtitle}
+                        onChange={(e) => updateData('bonus2Subtitle', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus2Description">Descrição</Label>
+                      <Textarea
+                        id="bonus2Description"
+                        value={editorData.bonus2Description}
+                        onChange={(e) => updateData('bonus2Description', e.target.value)}
+                        rows={2}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Mentora</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="mentorTitle">Título da Seção</Label>
+                      <Input
+                        id="mentorTitle"
+                        value={editorData.mentorTitle}
+                        onChange={(e) => updateData('mentorTitle', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="mentorName">Nome</Label>
+                      <Input
+                        id="mentorName"
+                        value={editorData.mentorName}
+                        onChange={(e) => updateData('mentorName', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="mentorRole">Função/Cargo</Label>
+                      <Textarea
+                        id="mentorRole"
+                        value={editorData.mentorRole}
+                        onChange={(e) => updateData('mentorRole', e.target.value)}
+                        rows={2}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="mentorDescription3">Descrição Principal</Label>
+                      <Textarea
+                        id="mentorDescription3"
+                        value={editorData.mentorDescription3}
+                        onChange={(e) => updateData('mentorDescription3', e.target.value)}
+                        rows={2}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Depoimentos</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="testimonialsTitle">Título</Label>
+                      <Input
+                        id="testimonialsTitle"
+                        value={editorData.testimonialsTitle}
+                        onChange={(e) => updateData('testimonialsTitle', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="testimonialsQuote">Depoimento Principal</Label>
+                      <Textarea
+                        id="testimonialsQuote"
+                        value={editorData.testimonialsQuote}
+                        onChange={(e) => updateData('testimonialsQuote', e.target.value)}
+                        rows={2}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="testimonialsCtaText">Texto do Botão</Label>
+                      <Input
+                        id="testimonialsCtaText"
+                        value={editorData.testimonialsCtaText}
+                        onChange={(e) => updateData('testimonialsCtaText', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Garantia</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="guaranteeTitle">Título</Label>
+                      <Input
+                        id="guaranteeTitle"
+                        value={editorData.guaranteeTitle}
+                        onChange={(e) => updateData('guaranteeTitle', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="guaranteePrice">Preço</Label>
+                      <Input
+                        id="guaranteePrice"
+                        value={editorData.guaranteePrice}
+                        onChange={(e) => updateData('guaranteePrice', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="guaranteeCtaText">Texto do Botão</Label>
+                      <Input
+                        id="guaranteeCtaText"
+                        value={editorData.guaranteeCtaText}
+                        onChange={(e) => updateData('guaranteeCtaText', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">FAQ</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="faqTitle">Título</Label>
+                      <Input
+                        id="faqTitle"
+                        value={editorData.faqTitle}
+                        onChange={(e) => updateData('faqTitle', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="faqCtaText">Texto do Botão</Label>
+                      <Input
+                        id="faqCtaText"
+                        value={editorData.faqCtaText}
+                        onChange={(e) => updateData('faqCtaText', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">URLs e Links</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="ctaUrl">URL do Checkout</Label>
                       <Input
                         id="ctaUrl"
                         value={editorData.ctaUrl}
                         onChange={(e) => updateData('ctaUrl', e.target.value)}
+                        className="text-sm"
                       />
                     </div>
                   </div>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="design" className="p-4 space-y-6">
+              <TabsContent value="images" className="p-4 space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Imagens Hero</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="heroImage">Logo Principal</Label>
+                      <Input
+                        id="heroImage"
+                        value={editorData.heroImage}
+                        onChange={(e) => updateData('heroImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="heroComplementaryImage">Imagem Complementar</Label>
+                      <Input
+                        id="heroComplementaryImage"
+                        value={editorData.heroComplementaryImage}
+                        onChange={(e) => updateData('heroComplementaryImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Imagens das Seções</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="problemImage">Problema</Label>
+                      <Input
+                        id="problemImage"
+                        value={editorData.problemImage}
+                        onChange={(e) => updateData('problemImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="solutionImage">Solução (Quiz)</Label>
+                      <Input
+                        id="solutionImage"
+                        value={editorData.solutionImage}
+                        onChange={(e) => updateData('solutionImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="benefitsImage">Benefícios</Label>
+                      <Input
+                        id="benefitsImage"
+                        value={editorData.benefitsImage}
+                        onChange={(e) => updateData('benefitsImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="benefitsComplementaryImage">Benefícios Complementar</Label>
+                      <Input
+                        id="benefitsComplementaryImage"
+                        value={editorData.benefitsComplementaryImage}
+                        onChange={(e) => updateData('benefitsComplementaryImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Imagens Bônus</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="bonus1Image">Bônus 1 Principal</Label>
+                      <Input
+                        id="bonus1Image"
+                        value={editorData.bonus1Image}
+                        onChange={(e) => updateData('bonus1Image', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus1ComplementaryImage">Bônus 1 Complementar</Label>
+                      <Input
+                        id="bonus1ComplementaryImage"
+                        value={editorData.bonus1ComplementaryImage}
+                        onChange={(e) => updateData('bonus1ComplementaryImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus2Image">Bônus 2 Principal</Label>
+                      <Input
+                        id="bonus2Image"
+                        value={editorData.bonus2Image}
+                        onChange={(e) => updateData('bonus2Image', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="bonus2ComplementaryImage">Bônus 2 Complementar</Label>
+                      <Input
+                        id="bonus2ComplementaryImage"
+                        value={editorData.bonus2ComplementaryImage}
+                        onChange={(e) => updateData('bonus2ComplementaryImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Outras Imagens</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="mentorImage">Mentora</Label>
+                      <Input
+                        id="mentorImage"
+                        value={editorData.mentorImage}
+                        onChange={(e) => updateData('mentorImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="testimonialsImage">Depoimentos</Label>
+                      <Input
+                        id="testimonialsImage"
+                        value={editorData.testimonialsImage}
+                        onChange={(e) => updateData('testimonialsImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="guaranteeImage">Garantia</Label>
+                      <Input
+                        id="guaranteeImage"
+                        value={editorData.guaranteeImage}
+                        onChange={(e) => updateData('guaranteeImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="faqImage">FAQ</Label>
+                      <Input
+                        id="faqImage"
+                        value={editorData.faqImage}
+                        onChange={(e) => updateData('faqImage', e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="design" className="p-4 space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
                 <Card className="p-4">
                   <h3 className="font-medium mb-4">Cores</h3>
                   <div className="space-y-4">
                     <div>
-                      <Label>Cor de Fundo</Label>
+                      <Label>Cor de Fundo Principal</Label>
                       <div className="mt-2">
                         <ColorPicker
                           color={editorData.backgroundColor}
@@ -450,11 +871,29 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <Label>Cor Primária</Label>
+                      <Label>Cor Primária (Botões)</Label>
                       <div className="mt-2">
                         <ColorPicker
                           color={editorData.primaryColor}
                           onChange={(color) => updateData('primaryColor', color)}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Cor Secundária</Label>
+                      <div className="mt-2">
+                        <ColorPicker
+                          color={editorData.secondaryColor}
+                          onChange={(color) => updateData('secondaryColor', color)}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Cor de Destaque</Label>
+                      <div className="mt-2">
+                        <ColorPicker
+                          color={editorData.accentColor}
+                          onChange={(color) => updateData('accentColor', color)}
                         />
                       </div>
                     </div>
@@ -465,7 +904,7 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                   <h3 className="font-medium mb-4">Tipografia</h3>
                   <div className="space-y-4">
                     <div>
-                      <Label>Tamanho da Fonte: {editorData.fontSize}px</Label>
+                      <Label>Tamanho da Fonte Base: {editorData.fontSize}px</Label>
                       <Slider
                         value={[editorData.fontSize]}
                         onValueChange={(value) => updateData('fontSize', value[0])}
@@ -475,32 +914,30 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                         className="mt-2"
                       />
                     </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Bordas e Sombras</h3>
+                  <div className="space-y-4">
                     <div>
                       <Label>Raio da Borda: {editorData.borderRadius}px</Label>
                       <Slider
                         value={[editorData.borderRadius]}
                         onValueChange={(value) => updateData('borderRadius', value[0])}
                         min={0}
-                        max={20}
-                        step={1}
+                        max={32}
+                        step={2}
                         className="mt-2"
                       />
                     </div>
-                  </div>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="layout" className="p-4 space-y-6">
-                <Card className="p-4">
-                  <h3 className="font-medium mb-4">Espaçamento</h3>
-                  <div className="space-y-4">
                     <div>
-                      <Label>Espaçamento: {editorData.spacing}px</Label>
+                      <Label>Intensidade da Sombra: {editorData.shadowIntensity}px</Label>
                       <Slider
-                        value={[editorData.spacing]}
-                        onValueChange={(value) => updateData('spacing', value[0])}
-                        min={8}
-                        max={32}
+                        value={[editorData.shadowIntensity]}
+                        onValueChange={(value) => updateData('shadowIntensity', value[0])}
+                        min={0}
+                        max={40}
                         step={2}
                         className="mt-2"
                       />
@@ -509,8 +946,152 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                 </Card>
 
                 <Card className="p-4">
+                  <h3 className="font-medium mb-4">Efeitos Visuais</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="gradientBackground">Fundo Gradiente</Label>
+                      <Switch
+                        id="gradientBackground"
+                        checked={editorData.gradientBackground}
+                        onCheckedChange={(checked) => updateData('gradientBackground', checked)}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="animationsEnabled">Animações</Label>
+                      <Switch
+                        id="animationsEnabled"
+                        checked={editorData.animationsEnabled}
+                        onCheckedChange={(checked) => updateData('animationsEnabled', checked)}
+                      />
+                    </div>
+                  </div>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="layout" className="p-4 space-y-4 max-h-[calc(100vh-120px)] overflow-y-auto">
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Espaçamento</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <Label>Espaçamento Base: {editorData.spacing}px</Label>
+                      <Slider
+                        value={[editorData.spacing]}
+                        onValueChange={(value) => updateData('spacing', value[0])}
+                        min={8}
+                        max={48}
+                        step={2}
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="sectionPadding">Padding das Seções</Label>
+                      <select
+                        id="sectionPadding"
+                        value={editorData.sectionPadding}
+                        onChange={(e) => updateData('sectionPadding', e.target.value)}
+                        className="w-full mt-2 p-2 border rounded-md text-sm"
+                      >
+                        <option value="py-6 md:py-8">Pequeno (6/8)</option>
+                        <option value="py-8 md:py-10">Médio (8/10)</option>
+                        <option value="py-10 md:py-12">Grande (10/12)</option>
+                        <option value="py-12 md:py-16">Extra Grande (12/16)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="cardPadding">Padding dos Cards</Label>
+                      <select
+                        id="cardPadding"
+                        value={editorData.cardPadding}
+                        onChange={(e) => updateData('cardPadding', e.target.value)}
+                        className="w-full mt-2 p-2 border rounded-md text-sm"
+                      >
+                        <option value="p-4">Pequeno (p-4)</option>
+                        <option value="p-6">Médio (p-6)</option>
+                        <option value="p-8">Grande (p-8)</option>
+                        <option value="p-10">Extra Grande (p-10)</option>
+                      </select>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Container</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="containerMaxWidth">Largura Máxima</Label>
+                      <select
+                        id="containerMaxWidth"
+                        value={editorData.containerMaxWidth}
+                        onChange={(e) => updateData('containerMaxWidth', e.target.value)}
+                        className="w-full mt-2 p-2 border rounded-md text-sm"
+                      >
+                        <option value="max-w-4xl">Pequeno (max-w-4xl)</option>
+                        <option value="max-w-5xl">Médio (max-w-5xl)</option>
+                        <option value="max-w-6xl">Grande (max-w-6xl)</option>
+                        <option value="max-w-7xl">Extra Grande (max-w-7xl)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="imageSize">Tamanho das Imagens</Label>
+                      <select
+                        id="imageSize"
+                        value={editorData.imageSize}
+                        onChange={(e) => updateData('imageSize', e.target.value)}
+                        className="w-full mt-2 p-2 border rounded-md text-sm"
+                      >
+                        <option value="max-w-sm">Pequeno (max-w-sm)</option>
+                        <option value="max-w-md">Médio (max-w-md)</option>
+                        <option value="max-w-lg">Grande (max-w-lg)</option>
+                        <option value="max-w-xl">Extra Grande (max-w-xl)</option>
+                        <option value="max-w-2xl">2XL (max-w-2xl)</option>
+                      </select>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
                   <h3 className="font-medium mb-4">Seções Visíveis</h3>
                   <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="showActiveUsers">Usuários Ativos</Label>
+                      <Switch
+                        id="showActiveUsers"
+                        checked={editorData.showActiveUsers}
+                        onCheckedChange={(checked) => updateData('showActiveUsers', checked)}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="showCountdown">Contagem Regressiva</Label>
+                      <Switch
+                        id="showCountdown"
+                        checked={editorData.showCountdown}
+                        onCheckedChange={(checked) => updateData('showCountdown', checked)}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="showLimitedSpots">Vagas Limitadas</Label>
+                      <Switch
+                        id="showLimitedSpots"
+                        checked={editorData.showLimitedSpots}
+                        onCheckedChange={(checked) => updateData('showLimitedSpots', checked)}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="showBonuses">Mostrar Bônus</Label>
+                      <Switch
+                        id="showBonuses"
+                        checked={editorData.showBonuses}
+                        onCheckedChange={(checked) => updateData('showBonuses', checked)}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="showMentor">Mostrar Mentora</Label>
+                      <Switch
+                        id="showMentor"
+                        checked={editorData.showMentor}
+                        onCheckedChange={(checked) => updateData('showMentor', checked)}
+                      />
+                    </div>
                     <div className="flex items-center justify-between">
                       <Label htmlFor="showTestimonials">Mostrar Depoimentos</Label>
                       <Switch
@@ -533,6 +1114,28 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                         id="showFaq"
                         checked={editorData.showFaq}
                         onCheckedChange={(checked) => updateData('showFaq', checked)}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="showBeforeAfter">Antes e Depois</Label>
+                      <Switch
+                        id="showBeforeAfter"
+                        checked={editorData.showBeforeAfter}
+                        onCheckedChange={(checked) => updateData('showBeforeAfter', checked)}
+                      />
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Configurações</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="headerFixed">Header Fixo</Label>
+                      <Switch
+                        id="headerFixed"
+                        checked={editorData.headerFixed}
+                        onCheckedChange={(checked) => updateData('headerFixed', checked)}
                       />
                     </div>
                   </div>
