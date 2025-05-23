@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import AdminLayout from '../../components/admin/AdminLayout';
+import QuizOfferPageEditor from './editors/QuizOfferPageEditor'; // Importar editor Funil 2
+import ResultPageEditor from './editors/ResultPageEditor'; // Importar editor Funil 1
 
 const EditorPage = () => {
   const [searchParams] = useSearchParams();
@@ -97,23 +99,11 @@ const EditorPage = () => {
             )}
 
             {tabParam === 'funil1' && (
-              <div className="h-full flex items-center justify-center border-2 border-dashed border-green-300 rounded-lg bg-green-50">
-                <div className="text-center">
-                  <h2 className="text-xl font-semibold mb-2 text-green-700">Editor Funil 1 (/resultado)</h2>
-                  <p className="text-gray-600">Editor para a página de resultados (Teste A/B).</p>
-                  {/* Futuramente: Componente de editor para ResultPage.tsx */}
-                </div>
-              </div>
+              <ResultPageEditor />
             )}
 
             {tabParam === 'funil2' && (
-              <div className="h-full flex items-center justify-center border-2 border-dashed border-purple-300 rounded-lg bg-purple-50">
-                <div className="text-center">
-                  <h2 className="text-xl font-semibold mb-2 text-purple-700">Editor Funil 2 (/quiz-descubra-seu-estilo)</h2>
-                  <p className="text-gray-600">Editor para a página de oferta do quiz (Teste A/B).</p>
-                  {/* Futuramente: Componente de editor para QuizOfferPage.tsx */}
-                </div>
-              </div>
+              <QuizOfferPageEditor />
             )}
           </div>
         </div>
