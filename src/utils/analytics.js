@@ -112,3 +112,61 @@ export const trackConversion = (conversionType, conversionData = {}) => {
   
   console.log(`[Analytics] Conversão: ${conversionType}`, conversionData);
 };
+
+/**
+ * Captura parâmetros UTM da URL e os armazena para uso em analytics
+ * @returns {object} Objeto com os parâmetros UTM capturados
+ */
+export const captureUTMParameters = () => {
+  if (typeof window === 'undefined') return {};
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmParams = {};
+  
+  // Lista de parâmetros UTM a capturar
+  const utmKeys = [
+    'utm_source', 
+    'utm_medium', 
+    'utm_campaign', 
+    'utm_term', 
+    'utm_content',
+    'ref',
+    'source'
+  ];
+  
+  // Extrair parâmetros da URL
+  utmKeys.forEach(key => {
+    const value = urlParams.get(key);
+    if (value) {
+      utmParams[key] = value;
+      
+      // Armazenar no localStorage para uso posterior
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        console.warn(`[Analytics] Falha ao armazenar ${key} no localStorage`, e);
+      }
+    }
+  });
+  
+  // Registrar no Google Analytics
+  if (window.gtag && Object.keys(utmParams).length > 0) {
+    window.gtag('set', 'user_properties', utmParams);
+  }
+  
+  // Enviar para Facebook Pixel
+  if (window.fbq && Object.keys(utmParams).length > 0) {
+    window.fbq('trackCustom', 'UTMCapture', utmParams);
+  }
+  
+  // DataLayer para Google Tag Manager
+  if (window.dataLayer && Object.keys(utmParams).length > 0) {
+    window.dataLayer.push({
+      event: 'utm_capture',
+      ...utmParams
+    });
+  }
+  
+  console.log('[Analytics] Parâmetros UTM capturados:', utmParams);
+  return utmParams;
+};
