@@ -35,13 +35,25 @@ const EditorPage = () => {
                 className={`px-4 py-2 rounded-md ${tabParam === 'result' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'}`}
                 onClick={() => window.location.href = '/admin/editor?tab=result'}
               >
-                Resultado
+                Resultado (Legado)
               </button>
               <button 
                 className={`px-4 py-2 rounded-md ${tabParam === 'sales' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'}`}
                 onClick={() => window.location.href = '/admin/editor?tab=sales'}
               >
-                Página de Vendas
+                Página de Vendas (Legado)
+              </button>
+              <button 
+                className={`px-4 py-2 rounded-md ${tabParam === 'funil1' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
+                onClick={() => window.location.href = '/admin/editor?tab=funil1'}
+              >
+                Funil 1 (/resultado)
+              </button>
+              <button 
+                className={`px-4 py-2 rounded-md ${tabParam === 'funil2' ? 'bg-purple-100 text-purple-800' : 'hover:bg-gray-100'}`}
+                onClick={() => window.location.href = '/admin/editor?tab=funil2'}
+              >
+                Funil 2 (/quiz-descubra-seu-estilo)
               </button>
             </div>
           </div>
@@ -59,8 +71,8 @@ const EditorPage = () => {
             {tabParam === 'result' && (
               <div className="h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
                 <div className="text-center">
-                  <h2 className="text-xl font-semibold mb-2">Editor Avançado de Resultados</h2>
-                  <p className="text-gray-600 mb-4">Use o editor avançado para personalizar completamente a página de resultados</p>
+                  <h2 className="text-xl font-semibold mb-2">Editor Avançado de Resultados (Legado)</h2>
+                  <p className="text-gray-600 mb-4">Use o editor avançado legado para personalizar completamente a página de resultados.</p>
                   <button 
                     onClick={() => window.location.href = '/resultado/editor'} 
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -78,8 +90,28 @@ const EditorPage = () => {
             {tabParam === 'sales' && (
               <div className="h-full flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
                 <div className="text-center">
-                  <h2 className="text-xl font-semibold mb-2">Editor de Página de Vendas</h2>
-                  <p className="text-gray-600">Este é o novo editor simplificado para a página de Vendas</p>
+                  <h2 className="text-xl font-semibold mb-2">Editor de Página de Vendas (Legado)</h2>
+                  <p className="text-gray-600">Este é o editor legado para a página de Vendas.</p>
+                </div>
+              </div>
+            )}
+
+            {tabParam === 'funil1' && (
+              <div className="h-full flex items-center justify-center border-2 border-dashed border-green-300 rounded-lg bg-green-50">
+                <div className="text-center">
+                  <h2 className="text-xl font-semibold mb-2 text-green-700">Editor Funil 1 (/resultado)</h2>
+                  <p className="text-gray-600">Editor para a página de resultados (Teste A/B).</p>
+                  {/* Futuramente: Componente de editor para ResultPage.tsx */}
+                </div>
+              </div>
+            )}
+
+            {tabParam === 'funil2' && (
+              <div className="h-full flex items-center justify-center border-2 border-dashed border-purple-300 rounded-lg bg-purple-50">
+                <div className="text-center">
+                  <h2 className="text-xl font-semibold mb-2 text-purple-700">Editor Funil 2 (/quiz-descubra-seu-estilo)</h2>
+                  <p className="text-gray-600">Editor para a página de oferta do quiz (Teste A/B).</p>
+                  {/* Futuramente: Componente de editor para QuizOfferPage.tsx */}
                 </div>
               </div>
             )}
