@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
@@ -124,7 +123,5 @@ const Guarantee: React.FC<GuaranteeProps> = ({
     </Card>
   );
 };
-
-export default Guarantee;
 
 export default Guarantee;
