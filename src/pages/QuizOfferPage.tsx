@@ -4,6 +4,127 @@ import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 
+// CSS personalizado para fontes e estilos do template
+const customStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+  
+  :root {
+    --color-primary: #B89B7A;
+    --color-primary-dark: #A1835D;
+    --color-secondary: #432818;
+    --color-secondary-light: #6B4F43;
+    --color-accent: #aa6b5d;
+    --color-background: #FFFBF7;
+    --color-background-soft: #FDF6F0;
+    --color-background-light: #FFFAF7;
+    --color-white: #ffffff;
+    --color-text-dark: #432818;
+    --color-text-medium: #6B4F43;
+    --color-text-light: #8B7355;
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-heading: 'Playfair Display', Georgia, serif;
+    --shadow-soft: 0 4px 16px rgba(184, 155, 122, 0.15);
+    --shadow-medium: 0 8px 24px rgba(184, 155, 122, 0.2);
+    --shadow-strong: 0 16px 32px rgba(184, 155, 122, 0.25);
+    --border-radius: 12px;
+    --border-radius-lg: 20px;
+    --border-radius-xl: 24px;
+  }
+  
+  .font-inter { font-family: var(--font-primary); }
+  .font-playfair { font-family: var(--font-heading); }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    color: white;
+    font-weight: 700;
+    border-radius: 50px;
+    padding: 16px 32px;
+    box-shadow: var(--shadow-medium);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font-primary);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-strong);
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-accent) 100%);
+  }
+  
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .btn-primary:hover::before {
+    left: 100%;
+  }
+  
+  .card-modern {
+    background: var(--color-white);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(184, 155, 122, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .card-modern:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .text-brand-primary { color: var(--color-primary); }
+  .text-brand-secondary { color: var(--color-secondary); }
+  .text-brand-accent { color: var(--color-accent); }
+  .text-brand-dark { color: var(--color-text-dark); }
+  .text-brand-medium { color: var(--color-text-medium); }
+  .text-brand-light { color: var(--color-text-light); }
+  
+  .bg-brand-background { background-color: var(--color-background); }
+  .bg-brand-soft { background-color: var(--color-background-soft); }
+  .bg-brand-light { background-color: var(--color-background-light); }
+  
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  .animate-pulse-gentle {
+    animation: pulseGentle 2s infinite;
+  }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes pulseGentle {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  .section-spacing { padding: 5rem 0; }
+  .section-spacing-sm { padding: 3rem 0; }
+  
+  @media (max-width: 768px) {
+    .section-spacing { padding: 3rem 0; }
+    .section-spacing-sm { padding: 2rem 0; }
+    .btn-primary { padding: 14px 24px; font-size: 16px; }
+  }
+`;
+
 // Constantes para otimização de imagens
 const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"; // Logo da marca
 const HERO_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp"; // Mulher perdida com guarda-roupa bagunçado
@@ -217,6 +338,11 @@ const FaqSectionNew = () => {
 
 const QuizOfferPage: React.FC = () => {
     useEffect(() => {
+        // Inject custom styles
+        const styleElement = document.createElement('style');
+        styleElement.textContent = customStyles;
+        document.head.appendChild(styleElement);
+        
         preloadCriticalImages(
             [
                 HERO_IMAGE_URL,
@@ -237,6 +363,11 @@ const QuizOfferPage: React.FC = () => {
         if (typeof window !== 'undefined' && 'performance' in window) {
             window.performance.mark('offer-page-mounted');
         }
+        
+        return () => {
+            // Cleanup
+            document.head.removeChild(styleElement);
+        };
     }, []);
 
     const handleCtaClick = (buttonId: string, action: string = 'Comprar Agora') => {
@@ -248,13 +379,13 @@ const QuizOfferPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-[#fffaf7] to-[#fdf6f0] text-[#432818] font-sans">
+        <div className="min-h-screen bg-brand-background font-inter text-brand-dark">
             {/* Decorative background elements */}
-            <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-70"></div>
-            <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 opacity-70"></div>
+            <div className="fixed top-0 right-0 w-1/3 h-1/3 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full blur-3xl opacity-60"></div>
+            <div className="fixed bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-[var(--color-accent)]/10 to-transparent rounded-full blur-3xl opacity-60"></div>
 
             {/* Header */}
-            <header className="bg-white shadow-lg py-4 px-6 mb-8 sticky top-0 z-50">
+            <header className="bg-white shadow-lg py-4 px-6 sticky top-0 z-50">
                 <div className="container mx-auto max-w-6xl flex justify-center">
                     <FixedIntroImage
                         src={HERO_IMAGE_URL}
@@ -266,401 +397,302 @@ const QuizOfferPage: React.FC = () => {
                 </div>
             </header>
 
-            <main className="relative z-10 flex flex-col gap-y-8 md:gap-y-12">
+            <main className="relative z-10">
                 {/* 1. Headline e Subheadline */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 max-w-5xl">
-                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30 text-center animate-fade-in">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#432818] mb-6 font-playfair leading-tight drop-shadow-sm">
-                            Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em um Aliado da Sua Imagem Pessoal
-                        </h1>
-                        <p className="text-xl md:text-2xl text-[#6B4F43] max-w-4xl mx-auto mb-10 leading-relaxed">
-                            Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência, com **praticidade e confiança.**
-                        </p>
+                <section className="section-spacing">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+                        <div className="card-modern p-8 md:p-12 text-center animate-fade-in-up">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-dark mb-6 font-playfair leading-tight">
+                                Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa
+                            </h1>
+                            <p className="text-xl md:text-2xl text-brand-medium max-w-4xl mx-auto mb-10 leading-relaxed font-inter">
+                                Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência.
+                            </p>
 
-                        {/* Hero complementary image wrapper */}
-                        <div className="mb-8 max-w-xl mx-auto relative rounded-lg overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 ease-in-out">
-                            <FixedIntroImage
-                                src={HERO_COMPLEMENTARY_IMAGE_URL}
-                                alt="Mulher perdida com guarda-roupa bagunçado"
-                                width={800}
-                                height={533}
-                                className="w-full h-auto object-cover max-w-xl mx-auto"
-                            />
-                            {/* Decorative overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                            <div className="absolute -top-3 -right-3 w-10 h-10 border-t-4 border-r-4 border-[#B89B7A] rounded-tr-lg"></div>
-                            <div className="absolute -bottom-3 -left-3 w-10 h-10 border-b-4 border-l-4 border-[#B89B7A] rounded-bl-lg"></div>
-                        </div>
+                            {/* Hero complementary image wrapper */}
+                            <div className="mb-8 max-w-xl mx-auto relative rounded-xl overflow-hidden shadow-lg transform hover:scale-[1.02] transition-transform duration-500">
+                                <FixedIntroImage
+                                    src={HERO_COMPLEMENTARY_IMAGE_URL}
+                                    alt="Mulher perdida com guarda-roupa bagunçado"
+                                    width={800}
+                                    height={533}
+                                    className="w-full h-auto object-cover rounded-xl"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl"></div>
+                            </div>
 
-                        <a
-                            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
-                            onClick={() => handleCtaClick('headline_cta', 'Quero Descobrir Meu Estilo Agora!')}
-                            className="inline-block text-white text-xl md:text-2xl py-4 px-10 rounded-full shadow-lg transition-all duration-300 ease-in-out btn-3d pulse-animation font-bold"
-                            style={{
-                                background: "linear-gradient(to right, #B89B7A, #aa6b5d)",
-                                boxShadow: "0 8px 20px rgba(184, 155, 122, 0.5)"
-                            }}
-                        >
-                            <span className="flex items-center justify-center gap-3">
-                                <ArrowRight size={24} className="transform group-hover:translate-x-1 transition-transform" />
-                                <span>Quero Descobrir Meu Estilo Agora!</span>
-                            </span>
-                        </a>
+                            <button
+                                onClick={() => {
+                                    handleCtaClick('headline_cta', 'Quero Descobrir Meu Estilo Agora!');
+                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                }}
+                                className="btn-primary text-lg md:text-xl animate-pulse-gentle mb-6"
+                            >
+                                <ArrowRight size={24} className="mr-2" />
+                                Quero Descobrir Meu Estilo Agora!
+                            </button>
 
-                        <p className="text-base text-[#6B4F43] flex items-center justify-center gap-2 mt-4">
-                            <Lock size={16} className="text-[#B89B7A]" />
-                            <span className="font-medium">Compra segura e acesso imediato.</span>
-                        </p>
-                        <div className="mt-6 flex justify-center">
-                            <ActiveUsersIndicator />
+                            <p className="text-sm text-brand-light flex items-center justify-center gap-2">
+                                <Lock size={16} className="text-brand-primary" />
+                                <span>Compra segura e acesso imediato.</span>
+                            </p>
+                            <div className="mt-6 flex justify-center">
+                                <ActiveUsersIndicator />
+                            </div>
                         </div>
                     </div>
                 </section>
-
-                ---
 
                 {/* 2. Introdução ao Problema/Dor */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 max-w-5xl">
-                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#aa6b5d]/30">
-                        <div className="text-center mb-12">
-                            <FixedIntroImage
-                                src={PROBLEM_IMAGE_URL}
-                                alt="Mulher frustrada com guarda-roupa"
-                                width={600}
-                                height={400}
-                                className="rounded-xl shadow-lg mx-auto mb-8 transform hover:scale-105 transition-transform duration-300"
-                            />
-                            <h2 className="text-4xl md:text-5xl font-bold text-[#432818] font-playfair leading-tight">
-                                Você se identifica com isso?
-                            </h2>
-                        </div>
-                        <div className="space-y-8 text-lg md:text-xl text-[#6B4F43] leading-relaxed">
-                            <p>
-                                Você já se sentiu **frustrada ao abrir seu guarda-roupa cheio de roupas e mesmo assim não ter o que vestir?** Ou já comprou peças que pareciam perfeitas na loja, mas que nunca combinaram com nada que você tem?
-                            </p>
-                            <p>
-                                A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que **"nada fica bom em mim"**.
-                            </p>
-                            <p>
-                                Quantas vezes você já perdeu tempo precioso tentando montar um look que te fizesse sentir **confiante**? Ou gastou dinheiro em peças que raramente (ou nunca) usou? Talvez você sinta que sua imagem não comunica quem você realmente é, enquanto observa pessoas que parecem ter um estilo definido e autêntico.
-                            </p>
-                            <p className="font-semibold text-[#432818] bg-[#FFF7ED] p-4 rounded-lg border-l-4 border-[#B89B7A] shadow-inner">
-                                Isso acontece porque você ainda não descobriu seu **estilo predominante** - aquele que está alinhado com sua personalidade, valores e essência. Sem esse conhecimento, você continua comprando peças aleatórias que não conversam entre si e não expressam quem você é.
-                            </p>
+                <section className="section-spacing bg-brand-soft">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+                        <div className="card-modern p-8 md:p-12">
+                            <div className="text-center mb-12">
+                                <FixedIntroImage
+                                    src={PROBLEM_IMAGE_URL}
+                                    alt="Mulher frustrada com guarda-roupa"
+                                    width={600}
+                                    height={400}
+                                    className="rounded-xl shadow-lg mx-auto mb-8 transform hover:scale-105 transition-transform duration-300"
+                                />
+                                <h2 className="text-4xl md:text-5xl font-bold text-brand-dark font-playfair">
+                                    Você se identifica com isso?
+                                </h2>
+                            </div>
+                            <div className="space-y-6 text-lg md:text-xl text-brand-medium leading-relaxed font-inter">
+                                <p>
+                                    Você já se sentiu <strong>frustrada ao abrir seu guarda-roupa cheio de roupas</strong> e mesmo assim não ter o que vestir? Ou já comprou peças que pareciam perfeitas na loja, mas que nunca combinaram com nada?
+                                </p>
+                                <p>
+                                    A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, isso aumenta a ansiedade e o sentimento de que <strong>"nada fica bom em mim"</strong>.
+                                </p>
+                                <div className="bg-gradient-to-r from-[var(--color-background-light)] to-[var(--color-background-soft)] p-6 rounded-xl border-l-4 border-[var(--color-primary)]">
+                                    <p className="font-semibold text-brand-dark">
+                                        Isso acontece porque você ainda não descobriu seu <strong>estilo predominante</strong> - aquele alinhado com sua personalidade e essência.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
-
-                ---
 
                 {/* 3. Apresentação da Solução: Quiz de Estilo */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 max-w-5xl">
-                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30 text-center">
-                        <div className="mb-12 max-w-xl mx-auto relative transform hover:scale-[1.02] transition-transform duration-500 ease-in-out">
-                            <FixedIntroImage
-                                src={SOLUTION_QUIZ_IMAGE_URL}
-                                alt="Quiz de Estilo Gisele Galvão"
-                                width={700}
-                                height={525}
-                                className="w-full h-auto rounded-xl shadow-2xl object-cover"
-                            />
-                            <div className="absolute -top-5 -right-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-6 py-3 rounded-full shadow-lg text-lg font-bold transform rotate-6 ring-4 ring-white ring-opacity-50">
-                                <Gift size={24} className="inline-block mr-2" /> Exclusivo!
+                <section className="section-spacing">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+                        <div className="card-modern p-8 md:p-12 text-center">
+                            <div className="mb-12 max-w-xl mx-auto relative transform hover:scale-[1.02] transition-transform duration-500">
+                                <FixedIntroImage
+                                    src={SOLUTION_QUIZ_IMAGE_URL}
+                                    alt="Quiz de Estilo Gisele Galvão"
+                                    width={700}
+                                    height={525}
+                                    className="w-full h-auto rounded-xl shadow-lg object-cover"
+                                />
+                                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white px-4 py-2 rounded-full shadow-lg text-sm font-bold transform rotate-6">
+                                    <Gift size={20} className="inline mr-1" /> Exclusivo!
+                                </div>
                             </div>
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-bold text-[#432818] mb-8 font-playfair leading-tight">
-                            A Solução Para Sua Transformação de Estilo Começa Aqui!
-                        </h2>
-                        <div className="space-y-8 text-lg md:text-xl text-[#6B4F43] leading-relaxed mb-10">
-                            <p>
-                                E se eu te dissesse que em apenas alguns minutos você pode descobrir seu estilo predominante e começar a transformar sua relação com a moda e sua imagem pessoal?
-                            </p>
-                            <p className="text-2xl text-[#432818] font-extrabold bg-[#e8dccb]/30 p-5 rounded-lg border-l-4 border-[#B89B7A] shadow-inner">
-                                Apresento a você o **Quiz de Estilo Gisele Galvão** - uma ferramenta desenvolvida com base em anos de experiência em consultoria de imagem e estilo pessoal.
-                            </p>
-                            <p>
-                                Este não é apenas mais um teste genérico da internet. É um **método preciso** que analisa suas preferências reais e identifica seu estilo predominante entre os **7 estilos universais:** Clássico, Natural, Romântico, Dramático, Criativo, Elegante e Contemporâneo.
-                            </p>
-                            <p>
-                                Ao descobrir seu estilo predominante, você dá o primeiro passo para **criar um guarda-roupa que realmente funciona para você**, economizar tempo e dinheiro nas suas compras, expressar sua personalidade através da sua imagem e sentir-se **confiante e autêntica todos os dias.**
-                            </p>
-                            <p>
-                                O quiz é **rápido, intuitivo** e foi criado especialmente para mulheres que desejam alinhar sua imagem à sua essência, sem precisar seguir tendências passageiras ou gastar fortunas com roupas que não combinam entre si.
-                            </p>
-                        </div>
-                        <a
-                            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
-                            onClick={() => handleCtaClick('solution_cta', 'Fazer o Quiz e Descobrir Meu Estilo')}
-                            className="inline-block text-white text-xl md:text-2xl py-4 px-10 rounded-full shadow-lg transition-all duration-300 ease-in-out btn-3d pulse-animation font-bold"
-                            style={{
-                                background: "linear-gradient(to right, #B89B7A, #aa6b5d)",
-                                boxShadow: "0 8px 20px rgba(184, 155, 122, 0.5)"
-                            }}
-                        >
-                            <span className="flex items-center justify-center gap-3">
-                                <ShoppingBag size={24} className="transform group-hover:translate-x-1 transition-transform" />
-                                <span>Fazer o Quiz e Descobrir Meu Estilo</span>
-                            </span>
-                        </a>
-                        <div className="mt-6 flex justify-center">
-                            <CountdownTimer />
+                            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark mb-8 font-playfair">
+                                A Solução Para Sua Transformação
+                            </h2>
+                            <div className="space-y-6 text-lg md:text-xl text-brand-medium leading-relaxed mb-10 font-inter">
+                                <p>
+                                    E se eu te dissesse que em apenas alguns minutos você pode descobrir seu estilo predominante e transformar sua relação com a moda?
+                                </p>
+                                <div className="bg-gradient-to-r from-[var(--color-background-light)] to-[var(--color-background-soft)] p-6 rounded-xl border-l-4 border-[var(--color-primary)]">
+                                    <p className="text-xl text-brand-dark font-bold">
+                                        Apresento o <strong>Quiz de Estilo Gisele Galvão</strong> - método preciso para identificar seu estilo entre os 7 estilos universais.
+                                    </p>
+                                </div>
+                                <p>
+                                    Este não é apenas mais um teste genérico. É uma ferramenta desenvolvida com anos de experiência em consultoria de imagem.
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    handleCtaClick('solution_cta', 'Fazer o Quiz e Descobrir Meu Estilo');
+                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                }}
+                                className="btn-primary text-lg md:text-xl animate-pulse-gentle mb-6"
+                            >
+                                <ShoppingBag size={24} className="mr-2" />
+                                Fazer o Quiz e Descobrir Meu Estilo
+                            </button>
+                            <div className="mt-6 flex justify-center">
+                                <CountdownTimer />
+                            </div>
                         </div>
                     </div>
                 </section>
-
-                ---
 
                 {/* 4. Benefícios dos Guias de Estilo e Imagem */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FFFBF7]">
-                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30">
-                        <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-12 text-center font-playfair leading-tight">
-                            Muito Mais Que um Simples Quiz: Uma Jornada Completa de Autoconhecimento
-                        </h2>
-                        <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-                            <div className="order-2 md:order-1">
-                                <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
-                                    Mas descobrir seu estilo é apenas o começo. Para realmente transformar sua imagem, você precisa de **orientação prática e estratégica.**
-                                </p>
-                                <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold mb-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#aa6b5d] shadow-inner">
-                                    Por isso, ao fazer o quiz, você terá acesso ao **Guia de Imagem e Estilo específico para o seu estilo predominante!**
-                                </p>
-                                <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
-                                    Cada guia foi cuidadosamente desenvolvido para oferecer:
-                                </p>
-                                <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
-                                    <li className="flex items-start">
-                                        <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Autoconhecimento profundo:</span> Entenda como sua personalidade, valores e essência se refletem no seu estilo. Como você viu no início do quiz, 55% da comunicação é visual, 38% é tom de voz e apenas 7% é verbal. Isso significa que sua imagem comunica muito antes de você falar qualquer coisa!
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Orientações práticas:</span> Descubra quais cores, tecidos, estampas e modelagens valorizam seu tipo físico e estilo. Aprenda a identificar peças que realmente combinam com você e que podem ser usadas de múltiplas formas.
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Estratégias de imagem:</span> Aprenda a comunicar visualmente quem você é antes mesmo de dizer uma palavra. Entenda como usar sua imagem para transmitir seus valores e personalidade em qualquer ambiente.
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Dicas de composição:</span> Saiba como montar looks versáteis e autênticos para diferentes ocasiões, desde o dia a dia até eventos especiais, sempre mantendo sua essência.
-                                        </div>
-                                    </li>
-                                </ul>
+                <section className="section-spacing bg-brand-soft">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+                        <div className="card-modern p-8 md:p-12">
+                            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark mb-12 text-center font-playfair">
+                                Muito Mais Que um Quiz: Uma Jornada Completa
+                            </h2>
+                            <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
+                                <div className="order-2 md:order-1 space-y-6">
+                                    <p className="text-lg md:text-xl text-brand-medium leading-relaxed font-inter">
+                                        Descobrir seu estilo é apenas o começo. Para transformar sua imagem, você precisa de <strong>orientação prática e estratégica.</strong>
+                                    </p>
+                                    <div className="bg-gradient-to-r from-[var(--color-background-light)] to-[var(--color-background-soft)] p-6 rounded-xl border-l-4 border-[var(--color-accent)]">
+                                        <p className="text-xl text-brand-dark font-bold">
+                                            Por isso, você terá acesso ao <strong>Guia de Imagem e Estilo específico</strong> para seu resultado!
+                                        </p>
+                                    </div>
+                                    <p className="text-lg font-semibold text-brand-medium font-inter">
+                                        Cada guia foi desenvolvido para oferecer:
+                                    </p>
+                                    <ul className="space-y-4 text-base md:text-lg text-brand-medium">
+                                        <li className="flex items-start">
+                                            <BadgeCheck size={24} className="text-brand-primary mr-3 mt-1 flex-shrink-0" />
+                                            <div>
+                                                <span className="font-bold text-brand-dark">Autoconhecimento profundo:</span> Entenda como sua personalidade se reflete no seu estilo. 55% da comunicação é visual!
+                                            </div>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <BadgeCheck size={24} className="text-brand-primary mr-3 mt-1 flex-shrink-0" />
+                                            <div>
+                                                <span className="font-bold text-brand-dark">Orientações práticas:</span> Cores, tecidos, estampas e modelagens que valorizam você.
+                                            </div>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <BadgeCheck size={24} className="text-brand-primary mr-3 mt-1 flex-shrink-0" />
+                                            <div>
+                                                <span className="font-bold text-brand-dark">Estratégias de imagem:</span> Comunique visualmente quem você é.
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="order-1 md:order-2">
+                                    <FixedIntroImage
+                                        src={GUIDES_BENEFITS_IMAGE_URL}
+                                        alt="Guia de Imagem e Estilo em tablet"
+                                        width={600}
+                                        height={480}
+                                        className="rounded-xl shadow-lg mx-auto transform hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
                             </div>
-                            <div className="order-1 md:order-2">
+                            <div className="flex justify-center mb-10">
                                 <FixedIntroImage
-                                    src={GUIDES_BENEFITS_IMAGE_URL}
-                                    alt="Guia de Imagem e Estilo em tablet"
-                                    width={600}
-                                    height={480}
-                                    className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
+                                    src={GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL}
+                                    alt="Mockup 3 revistas guia de estilo"
+                                    width={700}
+                                    height={450}
+                                    className="rounded-xl shadow-lg transform hover:scale-[1.02] transition-transform duration-300"
                                 />
                             </div>
+                            <p className="text-lg md:text-xl text-brand-medium text-center max-w-4xl mx-auto leading-relaxed font-inter">
+                                Com o <strong>Guia de Imagem e Estilo</strong>, você terá ferramentas para construir uma imagem autêntica e criar um estilo atemporal.
+                            </p>
                         </div>
-                        <div className="flex justify-center mb-10">
-                            <FixedIntroImage
-                                src={GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL}
-                                alt="Mockup 3 revistas guia de estilo"
-                                width={700}
-                                height={450}
-                                className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
-                            />
-                        </div>
-                        <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed mt-8">
-                            Com o **Guia de Imagem e Estilo**, você terá todas as ferramentas para construir uma imagem que realmente reflete quem você é e potencializa sua comunicação pessoal e profissional. Não se trata apenas de estar na moda, mas de criar um **estilo atemporal que te representa em qualquer situação.**
-                        </p>
                     </div>
                 </section>
 
-                ---
-
-                {/* 5. Bônus Especial 1: Peças-Chave do Guarda-Roupa de Sucesso */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FDF6F0]">
-                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#aa6b5d]/30">
-                        <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-4 text-center font-playfair">
-                            BÔNUS ESPECIAL <span className="text-[#B89B7A]">#1</span>
-                        </h2>
-                        <p className="text-2xl text-[#B89B7A] font-extrabold mb-10 text-center drop-shadow">
-                            Guia das Peças-Chave do Guarda-Roupa de Sucesso
-                        </p>
-                        <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-                            <div>
-                                <FixedIntroImage
-                                    src={BONUS_1_KEY_PIECES_IMAGE_URL}
-                                    alt="Guia Peças-Chave do Guarda-Roupa"
-                                    width={600}
-                                    height={480}
-                                    className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
-                                />
+                {/* 5. Bônus Especiais */}
+                <section className="section-spacing">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark mb-4 font-playfair">
+                                Bônus <span className="text-brand-primary">Especiais</span>
+                            </h2>
+                            <p className="text-xl text-brand-medium font-inter">
+                                Receba materiais exclusivos para acelerar sua transformação
+                            </p>
+                        </div>
+                        
+                        {/* Bônus 1 */}
+                        <div className="card-modern p-8 md:p-12 mb-12">
+                            <div className="flex items-center justify-center mb-6">
+                                <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white px-6 py-2 rounded-full text-lg font-bold">
+                                    BÔNUS #1
+                                </span>
                             </div>
-                            <div>
-                                <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
-                                    Como bônus especial, você também receberá o **Guia das Peças-Chave do Guarda-Roupa de Sucesso** - um manual completo para construir um armário funcional, versátil e alinhado com sua identidade.
-                                </p>
-                                <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
-                                    Neste guia exclusivo, você vai descobrir:
-                                </p>
-                                <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        Quais são as **peças essenciais** que toda mulher deveria ter, independente do seu estilo.
-                                    </li>
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        Como adaptar essas peças-chave ao seu estilo predominante para criar **looks autênticos**.
-                                    </li>
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        Estratégias para maximizar combinações e **minimizar gastos**, economizando tempo e dinheiro.
-                                    </li>
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        Como montar um **guarda-roupa cápsula** que funciona para sua rotina e estilo de vida.
-                                    </li>
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                        Dicas para **valorizar seu tipo físico** e criar uma imagem coerente e cheia de presença.
-                                    </li>
-                                </ul>
+                            <h3 className="text-3xl md:text-4xl font-bold text-brand-dark mb-6 text-center font-playfair">
+                                Guia das Peças-Chave do Guarda-Roupa
+                            </h3>
+                            <div className="grid md:grid-cols-2 gap-12 items-center">
+                                <div>
+                                    <FixedIntroImage
+                                        src={BONUS_1_KEY_PIECES_IMAGE_URL}
+                                        alt="Guia Peças-Chave do Guarda-Roupa"
+                                        width={600}
+                                        height={480}
+                                        className="rounded-xl shadow-lg mx-auto transform hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
+                                <div className="space-y-4">
+                                    <p className="text-lg text-brand-medium leading-relaxed font-inter">
+                                        Manual completo para construir um armário funcional e versátil alinhado com sua identidade.
+                                    </p>
+                                    <ul className="space-y-3 text-base text-brand-medium">
+                                        <li className="flex items-start">
+                                            <Check size={20} className="text-brand-primary mr-3 mt-1 flex-shrink-0" />
+                                            Peças essenciais que toda mulher deveria ter
+                                        </li>
+                                        <li className="flex items-start">
+                                            <Check size={20} className="text-brand-primary mr-3 mt-1 flex-shrink-0" />
+                                            Como adaptar ao seu estilo predominante
+                                        </li>
+                                        <li className="flex items-start">
+                                            <Check size={20} className="text-brand-primary mr-3 mt-1 flex-shrink-0" />
+                                            Estratégias para maximizar combinações
+                                        </li>
+                                        <li className="flex items-start">
+                                            <Check size={20} className="text-brand-primary mr-3 mt-1 flex-shrink-0" />
+                                            Como montar um guarda-roupa cápsula
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                        <div className="flex justify-center mb-10">
-                            <FixedIntroImage
-                                src={BONUS_1_KEY_PIECES_COMPLEMENTARY_IMAGE_URL}
-                                alt="Detalhes do Guia Peças-Chave"
-                                width={700}
-                                height={450}
-                                className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
-                            />
-                        </div>
-                        <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed">
-                            Imagine ter um guarda-roupa onde todas as peças combinam entre si, onde você consegue montar looks incríveis em minutos, e onde cada item reflete quem você é! Sem mais compras por impulso, sem mais peças esquecidas com etiqueta, sem mais frustração ao se vestir pela manhã.
-                        </p>
-                        <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold text-center max-w-4xl mx-auto mt-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#B89B7A] shadow-inner">
-                            Este bônus sozinho já vale o investimento no quiz e nos guias, pois vai te ajudar a **economizar tempo e dinheiro**, além de eliminar a frustração diária de não saber o que vestir. É como ter uma consultora de imagem pessoal te orientando em cada compra e na montagem dos seus looks.
-                        </p>
-                    </div>
-                </section>
 
-                ---
-
-                {/* 6. Bônus Especial 2: Guia Visagismo Facial */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FFFBF7]">
-                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30">
-                        <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-4 text-center font-playfair">
-                            BÔNUS ESPECIAL <span className="text-[#aa6b5d]">#2</span>
-                        </h2>
-                        <p className="text-2xl text-[#B89B7A] font-extrabold mb-10 text-center drop-shadow">
-                            Guia de Visagismo Facial
-                        </p>
-                        <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-                            <div className="order-2 md:order-1">
-                                <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
-                                    E tem mais! Você também receberá o **Guia de Visagismo Facial** - uma ferramenta poderosa para valorizar seus traços naturais e potencializar sua beleza única.
-                                </p>
-                                <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
-                                    O visagismo é a arte de harmonizar sua imagem considerando a estrutura do seu rosto. Neste guia exclusivo, você vai aprender:
-                                </p>
-                                <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Como identificar o **formato do seu rosto** (oval, redondo, quadrado, retangular, etc.).</span>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Quais **cortes de cabelo** valorizam seus traços naturais e equilibram as proporções do seu rosto.</span>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Como escolher **brincos, colares e óculos** que complementam seu formato facial e realçam sua beleza.</span>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Técnicas de **maquiagem** para realçar seus pontos fortes e criar harmonia visual.</span>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                        <div>
-                                            <span className="font-bold text-[#4A2E20]">Dicas personalizadas para cada tipo de rosto, considerando os terços faciais e as linhas predominantes.</span>
-                                        </div>
-                                    </li>
-                                </ul>
+                        {/* Bônus 2 */}
+                        <div className="card-modern p-8 md:p-12">
+                            <div className="flex items-center justify-center mb-6">
+                                <span className="bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-primary)] text-white px-6 py-2 rounded-full text-lg font-bold">
+                                    BÔNUS #2
+                                </span>
                             </div>
-                            <div className="order-1 md:order-2">
-                                <FixedIntroImage
-                                    src={BONUS_2_VISAGISM_IMAGE_URL}
-                                    alt="Guia de Visagismo Facial"
-                                    width={600}
-                                    height={480}
-                                    className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex justify-center mb-10">
-                            <FixedIntroImage
-                                src={BONUS_2_VISAGISM_COMPLEMENTARY_IMAGE_URL}
-                                alt="Exemplo de Visagismo"
-                                width={700}
-                                height={450}
-                                className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
-                            />
-                        </div>
-                        <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed">
-                            Imagine saber exatamente quais acessórios escolher para valorizar seu rosto e complementar seu estilo! Este conhecimento vai **transformar a maneira como você se vê e como os outros te percebem.**
-                        </p>
-                        <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold text-center max-w-4xl mx-auto mt-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#aa6b5d] shadow-inner">
-                            Com o Guia de Visagismo Facial, você terá mais uma ferramenta poderosa para construir uma imagem autêntica, harmoniosa e impactante. Seus acessórios e corte de cabelo trabalharão a favor da sua beleza natural, criando uma imagem coesa e equilibrada.
-                        </p>
-                    </div>
-                </section>
-
-                ---
-
-                {/* 7. Apresentação da Mentora: Gisele Galvão */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FDF6F0]">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-10 font-playfair text-[#4A2E20]">
-                            Conheça Sua Mentora
-                        </h2>
-                        <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30 md:flex md:items-center md:gap-10">
-                            <div className="md:w-1/3 mb-8 md:mb-0">
-                                <FixedIntroImage
-                                    src={MENTOR_GISELE_IMAGE_URL}
-                                    alt="Gisele Galvão"
-                                    width={300}
-                                    height={300}
-                                    className="rounded-full shadow-2xl mx-auto border-4 border-[#B89B7A]/50 transform hover:scale-105 transition-transform duration-300"
-                                />
-                            </div>
-                            <div className="md:w-2/3 text-left">
-                                <h3 className="text-3xl font-extrabold text-[#4A2E20] mb-3 font-playfair">Gisele Galvão</h3>
-                                <p className="text-xl text-[#B89B7A] font-semibold mb-4 border-b-2 border-[#B89B7A]/50 pb-3">
-                                    Consultora de Imagem e Estilo, Personal Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.
-                                </p>
-                                <p className="text-lg text-[#6B4F43] mb-3 leading-relaxed">
-                                    Advogada de formação. Mãe da Victória, esposa do Fabrício. Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano.
-                                </p>
-                                <p className="text-lg text-[#6B4F43] mb-3 leading-relaxed">
-                                    Colérica, virginiana, paciente, pacificadora e muito empata. Amo receber, atos de serviços e tempo de qualidade são minha linguagem de amor. Amo vinho, chás e café. Meus maiores valores são minha família, justiça, honestidade, ética e liberdade.
-                                </p>
-                                <p className="text-lg text-[#6B4F43] leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#aa6b5d] shadow-inner">
-                                    Há anos venho ajudando mulheres a descobrirem seu estilo autêntico e transformarem sua relação com a moda e a imagem pessoal. Minha missão é fazer com que você se vista de você mesma, comunicando sua essência através da sua imagem. Através da minha metodologia exclusiva, já transformei a vida de centenas de mulheres.
-                                </p>
+                            <h3 className="text-3xl md:text-4xl font-bold text-brand-dark mb-6 text-center font-playfair">
+                                Guia de Visagismo Facial
+                            </h3>
+                            <div className="grid md:grid-cols-2 gap-12 items-center">
+                                <div className="order-2 md:order-1 space-y-4">
+                                    <p className="text-lg text-brand-medium leading-relaxed font-inter">
+                                        Ferramenta poderosa para valorizar seus traços naturais e potencializar sua beleza única.
+                                    </p>
+                                    <ul className="space-y-3 text-base text-brand-medium">
+                                        <li className="flex items-start">
+                                            <Check size={20} className="text-brand-accent mr-3 mt-1 flex-shrink-0" />
+                                            Identificar o formato do seu rosto
+                                        </li>
+                                        <li className="flex items-start">
+                                            <Check size={20} className="text-brand-accent mr-3 mt-1 flex-shrink-0" />
+                                            Cortes de cabelo que valorizam você
+                                        </li>
+                                        <li className="flex items-start">
+                                            <Check size={20} className="text-brand-accent mr-3 mt-1 flex-shrink-0" />
+                                            Escolher acessórios ideais
+                                        </li>
+                                        <li className="flex items-start">
+                                            <Check size={20} className="text-brand-accent mr-3 mt-1 flex-shrink-0" />
+                                            Técnicas de maquiagem personalizadas
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="order-1 md:order-2">
+                                    <FixedIntroImage
+                                        src={BONUS_2_VISAGISM_IMAGE_URL}
+                                        alt="Guia de Visagismo Facial"
+                                        width={600}
+                                        height={480}
+                                        className="rounded-xl shadow-lg mx-auto transform hover:scale-105 transition-transform duration-300"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -668,58 +700,217 @@ const QuizOfferPage: React.FC = () => {
 
                 ---
 
-                {/* 8. Depoimentos e Resultados */}
-                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-[#FFFBF7]">
-                    <div className="max-w-5xl mx-auto text-center">
-                        <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-10 font-playfair">
-                            Resultados Reais de Mulheres Reais
-                        </h2>
-                        <p className="text-lg md:text-xl text-[#6B4F43] max-w-4xl mx-auto mb-12 leading-relaxed">
-                            Veja o que dizem as mulheres que já descobriram seu estilo e transformaram sua imagem com os guias:
-                        </p>
-                        <div className="mb-12">
-                            <FixedIntroImage
-                                src={TESTIMONIALS_RESULTS_IMAGE_URL}
-                                alt="Depoimentos de clientes"
-                                width={900}
-                                height={560}
-                                className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-300"
-                            />
+                {/* 6. Apresentação da Mentora: Gisele Galvão */}
+                <section className="section-spacing bg-brand-soft relative overflow-hidden">
+                    {/* Elementos decorativos */}
+                    <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-[var(--color-primary)]/5 to-transparent rounded-full -translate-x-32 -translate-y-32"></div>
+                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-[var(--color-accent)]/5 to-transparent rounded-full translate-x-48 translate-y-48"></div>
+                    
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+                        <div className="max-w-6xl mx-auto">
+                            {/* Header da seção */}
+                            <div className="text-center mb-16 animate-fade-in-up">
+                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
+                                    Conheça Sua 
+                                    <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent"> Mentora</span>
+                                </h2>
+                                <p className="text-xl text-brand-medium font-inter max-w-3xl mx-auto">
+                                    A especialista que vai guiar sua transformação de imagem
+                                </p>
+                            </div>
+
+                            {/* Card principal da mentora */}
+                            <div className="card-modern p-8 md:p-12 lg:p-16">
+                                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                                    {/* Foto da mentora */}
+                                    <div className="order-2 lg:order-1">
+                                        <div className="relative">
+                                            <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-full blur-2xl opacity-20 scale-110"></div>
+                                            <FixedIntroImage
+                                                src={MENTOR_GISELE_IMAGE_URL}
+                                                alt="Gisele Galvão"
+                                                width={400}
+                                                height={400}
+                                                className="rounded-full shadow-2xl mx-auto relative z-10 transform hover:scale-105 transition-all duration-500 border-4 border-white"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Informações da mentora */}
+                                    <div className="order-1 lg:order-2 space-y-6">
+                                        <div>
+                                            <h3 className="text-4xl md:text-5xl font-bold text-brand-dark mb-4 font-playfair">
+                                                Gisele Galvão
+                                            </h3>
+                                            <div className="h-1 w-24 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-full mb-6"></div>
+                                        </div>
+
+                                        <div className="bg-gradient-to-r from-[var(--color-primary)]/10 to-[var(--color-accent)]/10 p-6 rounded-xl border-l-4 border-[var(--color-primary)]">
+                                            <p className="text-lg text-brand-dark font-semibold font-inter leading-relaxed">
+                                                Consultora de Imagem e Estilo, Personal Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.
+                                            </p>
+                                        </div>
+
+                                        <div className="space-y-4 text-brand-medium font-inter">
+                                            <p className="text-lg leading-relaxed">
+                                                Advogada de formação. Mãe da Victória, esposa do Fabrício. Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano.
+                                            </p>
+                                            <p className="text-lg leading-relaxed">
+                                                Colérica, virginiana, paciente, pacificadora e muito empata. Amo receber, atos de serviços e tempo de qualidade são minha linguagem de amor. Amo vinho, chás e café. Meus maiores valores são minha família, justiça, honestidade, ética e liberdade.
+                                            </p>
+                                        </div>
+
+                                        <div className="bg-brand-cream p-6 rounded-xl border-l-4 border-[var(--color-accent)]">
+                                            <p className="text-lg text-brand-dark leading-relaxed font-inter italic">
+                                                "Há anos venho ajudando mulheres a descobrirem seu estilo autêntico e transformarem sua relação com a moda e a imagem pessoal. Minha missão é fazer com que você se vista de você mesma, comunicando sua essência através da sua imagem. Através da minha metodologia exclusiva, já transformei a vida de centenas de mulheres."
+                                            </p>
+                                        </div>
+
+                                        {/* Credenciais */}
+                                        <div className="grid grid-cols-2 gap-4 pt-6">
+                                            <div className="text-center p-4 bg-white rounded-lg shadow-md">
+                                                <div className="text-3xl font-bold text-brand-primary font-playfair">500+</div>
+                                                <div className="text-sm text-brand-medium font-inter">Mulheres Transformadas</div>
+                                            </div>
+                                            <div className="text-center p-4 bg-white rounded-lg shadow-md">
+                                                <div className="text-3xl font-bold text-brand-accent font-playfair">5+</div>
+                                                <div className="text-sm text-brand-medium font-inter">Anos de Experiência</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <p className="text-xl text-[#6B4F43] mb-8 leading-relaxed font-semibold italic p-4 bg-[#e8dccb]/30 rounded-lg border-l-4 border-[#B89B7A] shadow-inner">
-                            "Os guias da Gisele me deram a clareza que eu precisava para parar de me sentir perdida na frente do guarda-roupa. Agora sei o que me valoriza e me sinto muito mais confiante!" - Maria S.
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                            <FixedIntroImage src={BEFORE_AFTER_IMAGE_1_URL} alt="Antes e Depois Cliente 1" width={350} height={350} className="rounded-xl shadow-lg mx-auto border-4 border-[#B89B7A]/30 transform hover:scale-105 transition-transform duration-300" />
-                            <FixedIntroImage src={BEFORE_AFTER_IMAGE_2_URL} alt="Antes e Depois Cliente 2" width={350} height={350} className="rounded-xl shadow-lg mx-auto border-4 border-[#aa6b5d]/30 transform hover:scale-105 transition-transform duration-300" />
-                            <FixedIntroImage src={BEFORE_AFTER_IMAGE_3_URL} alt="Antes e Depois Cliente 3" width={350} height={350} className="rounded-xl shadow-lg mx-auto border-4 border-[#B89B7A]/30 transform hover:scale-105 transition-transform duration-300" />
-                        </div>
-                        <div className="mb-12">
-                            <FixedIntroImage
-                                src={TESTIMONIALS_RESULTS_COMPLEMENTARY_IMAGE_URL}
-                                alt="Antes e depois Mariangela e Adriana"
-                                width={800}
-                                height={500}
-                                className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-300"
-                            />
-                        </div>
-                        <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
-                            Estas são apenas algumas das centenas de mulheres que já transformaram sua relação com a moda e sua imagem pessoal através do Quiz de Estilo e dos Guias exclusivos.
-                        </p>
-                        <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold mb-10 leading-relaxed p-4 bg-[#fff7ed] rounded-lg border-l-4 border-[#B89B7A] shadow-inner">
-                            Você também pode ter essa transformação! Imagine como seria se vestir todos os dias com **confiança**, sabendo que cada peça do seu guarda-roupa reflete quem você é e comunica sua essência. Imagine **economizar tempo e dinheiro**, tendo um guarda-roupa funcional onde tudo combina entre si. Imagine sentir que sua imagem externa finalmente está alinhada com quem você é por dentro.
-                        </p>
-                        <a
-                            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
-                            onClick={() => handleCtaClick('testimonials_cta', 'Sim, Quero Essa Transformação!')}
-                            className="group inline-block px-12 py-5 bg-[#B89B7A] hover:bg-[#A1835D] text-white font-bold rounded-full text-xl md:text-2xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 animate-bounce-subtle"
-                            style={{ boxShadow: "0 8px 20px rgba(184, 155, 122, 0.5)" }}
-                        >
-                            Sim, Quero Essa Transformação!
-                            <Heart size={24} className="inline ml-3 group-hover:fill-white transition-colors animate-heart-beat" />
-                        </a>
-                        <div className="mt-6 flex justify-center">
-                            <LimitedSpotsNotification />
+                    </div>
+                </section>
+
+                ---
+
+                {/* 7. Depoimentos e Resultados */}
+                <section className="section-spacing bg-white relative overflow-hidden">
+                    {/* Elementos decorativos */}
+                    <div className="absolute top-1/4 left-0 w-72 h-72 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full -translate-x-36"></div>
+                    <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-gradient-to-tl from-[var(--color-accent)]/10 to-transparent rounded-full translate-x-40"></div>
+                    
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+                        <div className="max-w-7xl mx-auto">
+                            {/* Header da seção */}
+                            <div className="text-center mb-16 animate-fade-in-up">
+                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
+                                    Resultados Reais de 
+                                    <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">Mulheres Reais</span>
+                                </h2>
+                                <p className="text-xl text-brand-medium max-w-4xl mx-auto font-inter leading-relaxed">
+                                    Veja o que dizem as mulheres que já descobriram seu estilo e transformaram sua imagem com os guias
+                                </p>
+                            </div>
+
+                            {/* Imagem principal de depoimentos */}
+                            <div className="mb-16 animate-fade-in-up">
+                                <div className="card-modern p-8">
+                                    <FixedIntroImage
+                                        src={TESTIMONIALS_RESULTS_IMAGE_URL}
+                                        alt="Depoimentos de clientes"
+                                        width={1000}
+                                        height={600}
+                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Depoimento em destaque */}
+                            <div className="mb-16">
+                                <div className="card-modern p-8 md:p-12 bg-gradient-to-r from-[var(--color-primary)]/5 to-[var(--color-accent)]/5 border-l-4 border-[var(--color-primary)]">
+                                    <div className="text-center">
+                                        <div className="text-6xl text-[var(--color-primary)] opacity-30 mb-4">"</div>
+                                        <p className="text-xl md:text-2xl text-brand-dark leading-relaxed font-inter italic mb-6">
+                                            Os guias da Gisele me deram a clareza que eu precisava para parar de me sentir perdida na frente do guarda-roupa. Agora sei o que me valoriza e me sinto muito mais confiante!
+                                        </p>
+                                        <div className="flex items-center justify-center">
+                                            <div className="h-px w-12 bg-[var(--color-primary)] mr-4"></div>
+                                            <p className="text-lg font-semibold text-brand-primary">Maria S.</p>
+                                            <div className="h-px w-12 bg-[var(--color-primary)] ml-4"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Grid de antes e depois */}
+                            <div className="mb-16">
+                                <h3 className="text-3xl md:text-4xl font-bold text-brand-dark text-center mb-12 font-playfair">
+                                    Transformações Incríveis
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    <div className="card-modern p-6 text-center group">
+                                        <FixedIntroImage 
+                                            src={BEFORE_AFTER_IMAGE_1_URL} 
+                                            alt="Antes e Depois Cliente 1" 
+                                            width={350} 
+                                            height={350} 
+                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300" 
+                                        />
+                                        <p className="text-sm text-brand-medium font-inter">Transformação Cliente 1</p>
+                                    </div>
+                                    <div className="card-modern p-6 text-center group">
+                                        <FixedIntroImage 
+                                            src={BEFORE_AFTER_IMAGE_2_URL} 
+                                            alt="Antes e Depois Cliente 2" 
+                                            width={350} 
+                                            height={350} 
+                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300" 
+                                        />
+                                        <p className="text-sm text-brand-medium font-inter">Transformação Cliente 2</p>
+                                    </div>
+                                    <div className="card-modern p-6 text-center group">
+                                        <FixedIntroImage 
+                                            src={BEFORE_AFTER_IMAGE_3_URL} 
+                                            alt="Antes e Depois Cliente 3" 
+                                            width={350} 
+                                            height={350} 
+                                            className="rounded-xl shadow-lg mx-auto mb-4 transform group-hover:scale-105 transition-transform duration-300" 
+                                        />
+                                        <p className="text-sm text-brand-medium font-inter">Transformação Cliente 3</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Imagem complementar */}
+                            <div className="mb-16">
+                                <div className="card-modern p-8">
+                                    <FixedIntroImage
+                                        src={TESTIMONIALS_RESULTS_COMPLEMENTARY_IMAGE_URL}
+                                        alt="Antes e depois Mariangela e Adriana"
+                                        width={900}
+                                        height={550}
+                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Texto de conclusão */}
+                            <div className="text-center mb-12">
+                                <p className="text-lg md:text-xl text-brand-medium mb-8 leading-relaxed font-inter max-w-4xl mx-auto">
+                                    Estas são apenas algumas das centenas de mulheres que já transformaram sua relação com a moda e sua imagem pessoal através do Quiz de Estilo e dos Guias exclusivos.
+                                </p>
+                                
+                                <div className="card-modern p-8 md:p-12 bg-gradient-to-r from-[var(--color-accent)]/10 to-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 mb-12">
+                                    <p className="text-xl md:text-2xl text-brand-dark font-bold leading-relaxed font-inter">
+                                        Você também pode ter essa transformação! Imagine como seria se vestir todos os dias com <span className="text-brand-primary">confiança</span>, sabendo que cada peça do seu guarda-roupa reflete quem você é e comunica sua essência. Imagine <span className="text-brand-accent">economizar tempo e dinheiro</span>, tendo um guarda-roupa funcional onde tudo combina entre si. Imagine sentir que sua imagem externa finalmente está alinhada com quem você é por dentro.
+                                    </p>
+                                </div>
+
+                                <button
+                                    onClick={() => handleCtaClick('testimonials_cta', 'Sim, Quero Essa Transformação!')}
+                                    className="btn-primary text-xl md:text-2xl px-12 py-5 animate-pulse-gentle"
+                                >
+                                    Sim, Quero Essa Transformação!
+                                    <Heart size={24} className="inline ml-3" />
+                                </button>
+                                
+                                <div className="mt-6 flex justify-center">
+                                    <LimitedSpotsNotification />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
