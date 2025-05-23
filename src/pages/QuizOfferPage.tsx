@@ -447,6 +447,8 @@ const QuizOfferPage: React.FC = () => {
               </a>
             </div>
           </div>
+        </div>
+      </div> {/* Fecha div relative z-10 da seção inicial */}
 
       {/* 4. Benefícios dos Guias de Estilo e Imagem */}
       <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FFFBF7]">
@@ -799,6 +801,6 @@ const QuizOfferPage: React.FC = () => {
       {/* Seção de chamada para ação final - REMOVIDO e integrado nas novas seções */}
     </div>
   );
-};
+}
 
 export default QuizOfferPage;
