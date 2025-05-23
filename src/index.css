@@ -176,7 +176,8 @@ img:hover, .hover-scale:hover {
 
   /* Destaque de termos estratégicos */
   .highlight-strategic {
-    background-color: hsl(var(--accent) / 0.3);
+    /* background-color: hsl(var(--accent) / 0.3); */
+    background-color: transparent; /* TESTE para warning de minificação */
     padding: 0.1em 0.2em;
     border-radius: 0.2em;
     font-weight: 600;
@@ -200,7 +201,8 @@ img:hover, .hover-scale:hover {
     
     /* Destaque mais pronunciado em mobile */
     .highlight-strategic {
-      background-color: hsl(var(--accent) / 0.4);
+      /* background-color: hsl(var(--accent) / 0.4); */
+      background-color: transparent; /* TESTE para warning de minificação */
       padding: 0.15em 0.25em;
     }
   }
