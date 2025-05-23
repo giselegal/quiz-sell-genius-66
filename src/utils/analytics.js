@@ -233,3 +233,90 @@ export const testFacebookPixel = () => {
   console.warn('[Analytics] Facebook Pixel (window.fbq) não encontrado.');
   return false;
 };
+
+/**
+ * Rastreia o início de um quiz.
+ * @param {string} quizId - Identificador do quiz.
+ * @param {object} eventData - Dados adicionais sobre o evento.
+ */
+export const trackQuizStart = (quizId, eventData = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { quiz_id: quizId, ...eventData };
+
+  if (window.gtag) {
+    window.gtag('event', 'quiz_start', data);
+  }
+  if (window.fbq) {
+    window.fbq('trackCustom', 'QuizStart', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'quiz_start', ...data });
+  }
+  console.log(`[Analytics] Quiz iniciado: ${quizId}`, data);
+};
+
+/**
+ * Rastreia uma resposta a uma pergunta do quiz.
+ * @param {string} quizId - Identificador do quiz.
+ * @param {string} questionId - Identificador da pergunta.
+ * @param {string} answer - Resposta fornecida.
+ * @param {object} eventData - Dados adicionais sobre o evento.
+ */
+export const trackQuizAnswer = (quizId, questionId, answer, eventData = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { quiz_id: quizId, question_id: questionId, answer: answer, ...eventData };
+
+  if (window.gtag) {
+    window.gtag('event', 'quiz_answer', data);
+  }
+  if (window.fbq) {
+    window.fbq('trackCustom', 'QuizAnswer', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'quiz_answer', ...data });
+  }
+  console.log(`[Analytics] Resposta ao quiz: ${questionId} - ${answer}`, data);
+};
+
+/**
+ * Rastreia a conclusão de um quiz.
+ * @param {string} quizId - Identificador do quiz.
+ * @param {object} eventData - Dados adicionais sobre o evento (ex: pontuação).
+ */
+export const trackQuizComplete = (quizId, eventData = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { quiz_id: quizId, ...eventData };
+
+  if (window.gtag) {
+    window.gtag('event', 'quiz_complete', data);
+  }
+  if (window.fbq) {
+    window.fbq('trackCustom', 'QuizComplete', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'quiz_complete', ...data });
+  }
+  console.log(`[Analytics] Quiz concluído: ${quizId}`, data);
+};
+
+/**
+ * Rastreia a visualização da página de resultados do quiz.
+ * @param {string} quizId - Identificador do quiz.
+ * @param {string} resultId - Identificador do resultado/persona.
+ * @param {object} eventData - Dados adicionais sobre o evento.
+ */
+export const trackResultView = (quizId, resultId, eventData = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { quiz_id: quizId, result_id: resultId, ...eventData };
+
+  if (window.gtag) {
+    window.gtag('event', 'result_view', data);
+  }
+  if (window.fbq) {
+    window.fbq('trackCustom', 'ResultView', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'result_view', ...data });
+  }
+  console.log(`[Analytics] Visualização de resultado: ${quizId} - ${resultId}`, data);
+};
