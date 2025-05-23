@@ -273,10 +273,40 @@ const defaultData: VisualEditorData = {
   gradientBackground: true,
 };
 
+const JsonEditor: React.FC<{
+  value: string;
+  onChange: (jsonString: string, isValid: boolean, parsed?: any) => void;
+}> = ({ value, onChange }) => {
+  const [text, setText] = useState(value);
+  useEffect(() => {
+    setText(value);
+  }, [value]);
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setText(val);
+    try {
+      const parsed = JSON.parse(val);
+      onChange(val, true, parsed);
+    } catch {
+      onChange(val, false);
+    }
+  };
+  return (
+    <textarea
+      className="w-full font-mono text-xs border rounded p-2 min-h-[400px] bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
+      value={text}
+      onChange={handleChange}
+      spellCheck={false}
+      style={{ fontFamily: 'monospace', minHeight: 400 }}
+    />
+  );
+};
+
 const QuizOfferPageVisualEditor: React.FC = () => {
   const [editorData, setEditorData] = useState<VisualEditorData>(defaultData);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [activeTab, setActiveTab] = useState('content');
+  const [jsonError, setJsonError] = useState<string | null>(null);
 
   useEffect(() => {
     // Carregar dados salvos do localStorage
@@ -338,7 +368,7 @@ const QuizOfferPageVisualEditor: React.FC = () => {
         {!isPreviewMode && (
           <div className="w-96 bg-white border-r overflow-y-auto">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
-              <TabsList className="w-full grid grid-cols-4">
+              <TabsList className="w-full grid grid-cols-5">
                 <TabsTrigger value="content" className="flex-1">
                   <Type className="w-4 h-4 mr-1" />
                   Conteúdo
@@ -354,6 +384,10 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                 <TabsTrigger value="layout" className="flex-1">
                   <Layout className="w-4 h-4 mr-1" />
                   Layout
+                </TabsTrigger>
+                <TabsTrigger value="json" className="flex-1">
+                  <span className="w-4 h-4 mr-1 font-mono">{'{}'}</span>
+                  JSON
                 </TabsTrigger>
               </TabsList>
 
@@ -1165,6 +1199,27 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                       />
                     </div>
                   </div>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="json" className="p-4 max-h-[calc(100vh-120px)] overflow-y-auto">
+                <Card className="p-4">
+                  <h3 className="font-medium mb-4">Edição Avançada via JSON</h3>
+                  <JsonEditor
+                    value={JSON.stringify(editorData, null, 2)}
+                    onChange={(jsonString, isValid, parsed) => {
+                      if (isValid && parsed) {
+                        setEditorData(parsed);
+                        setJsonError(null);
+                      } else {
+                        setJsonError('JSON inválido');
+                      }
+                    }}
+                  />
+                  {jsonError && (
+                    <div className="mt-2 text-red-600 text-sm">{jsonError}</div>
+                  )}
+                  <div className="mt-2 text-xs text-gray-500">Edite o JSON para alterar rapidamente qualquer campo. Alterações válidas são aplicadas imediatamente no preview.</div>
                 </Card>
               </TabsContent>
             </Tabs>
