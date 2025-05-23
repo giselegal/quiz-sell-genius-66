@@ -9,7 +9,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { ColorPicker } from '@/components/result-editor/ColorPicker';
 import { Eye, EyeOff, Save, Settings, Image, Type, Layout, Palette } from 'lucide-react';
-import QuizOfferPage from './QuizOfferPage';
+import QuizOfferPageEditable from './QuizOfferPageEditable';
 
 interface VisualEditorData {
   // Textos editáveis - Hero
@@ -1150,16 +1150,13 @@ const QuizOfferPageVisualEditor: React.FC = () => {
           <div 
             className="min-h-full"
             style={{
-              backgroundColor: editorData.backgroundColor,
-              color: editorData.textColor,
-              fontSize: `${editorData.fontSize}px`,
               '--primary-color': editorData.primaryColor,
               '--secondary-color': editorData.secondaryColor,
               '--border-radius': `${editorData.borderRadius}px`,
               '--spacing': `${editorData.spacing}px`,
             } as React.CSSProperties}
           >
-            <QuizOfferPage />
+            <QuizOfferPageEditable data={editorData} />
           </div>
         </div>
       </div>
