@@ -266,9 +266,9 @@ const QuizOfferPage: React.FC = () => {
                 </div>
             </header>
 
-            <main className="relative z-10">
+            <main className="relative z-10 flex flex-col gap-y-16">
                 {/* 1. Headline e Subheadline */}
-                <section className="container mx-auto px-4 py-8 max-w-5xl">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-5xl">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30 text-center animate-fade-in">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#432818] mb-6 font-playfair leading-tight drop-shadow-sm">
                             Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em um Aliado da Sua Imagem Pessoal
@@ -319,7 +319,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 2. Introdução ao Problema/Dor */}
-                <section className="container mx-auto px-4 py-16 max-w-5xl">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-5xl">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#aa6b5d]/30">
                         <div className="text-center mb-12">
                             <FixedIntroImage
@@ -353,7 +353,7 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 3. Apresentação da Solução: Quiz de Estilo */}
-                <section className="container mx-auto px-4 py-16 max-w-5xl">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-5xl">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30 text-center">
                         <div className="mb-12 max-w-xl mx-auto relative transform hover:scale-[1.02] transition-transform duration-500 ease-in-out">
                             <FixedIntroImage
@@ -410,225 +410,229 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 4. Benefícios dos Guias de Estilo e Imagem */}
-                <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FFFBF7]">
-                    <div className="container mx-auto max-w-5xl">
-                        <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30">
-                            <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-12 text-center font-playfair leading-tight">
-                                Muito Mais Que um Simples Quiz: Uma Jornada Completa de Autoconhecimento
-                            </h2>
-                            <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-                                <div className="order-2 md:order-1">
-                                    <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
-                                        Mas descobrir seu estilo é apenas o começo. Para realmente transformar sua imagem, você precisa de **orientação prática e estratégica.**
-                                    </p>
-                                    <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold mb-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#aa6b5d] shadow-inner">
-                                        Por isso, ao fazer o quiz, você terá acesso ao **Guia de Imagem e Estilo específico para o seu estilo predominante!**
-                                    </p>
-                                    <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
-                                        Cada guia foi cuidadosamente desenvolvido para oferecer:
-                                    </p>
-                                    <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
-                                        <li className="flex items-start">
-                                            <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            <div>
-                                                <span className="font-bold text-[#4A2E20]">Autoconhecimento profundo:</span> Entenda como sua personalidade, valores e essência se refletem no seu estilo. Como você viu no início do quiz, 55% da comunicação é visual, 38% é tom de voz e apenas 7% é verbal. Isso significa que sua imagem comunica muito antes de você falar qualquer coisa!
-                                            </div>
-                                        </li>
-                                        <li className="flex items-start">
-                                            <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            <div>
-                                                <span className="font-bold text-[#4A2E20]">Orientações práticas:</span> Descubra quais cores, tecidos, estampas e modelagens valorizam seu tipo físico e estilo. Aprenda a identificar peças que realmente combinam com você e que podem ser usadas de múltiplas formas.
-                                            </div>
-                                        </li>
-                                        <li className="flex items-start">
-                                            <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            <div>
-                                                <span className="font-bold text-[#4A2E20]">Estratégias de imagem:</span> Aprenda a comunicar visualmente quem você é antes mesmo de dizer uma palavra. Entenda como usar sua imagem para transmitir seus valores e personalidade em qualquer ambiente.
-                                            </div>
-                                        </li>
-                                        <li className="flex items-start">
-                                            <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            <div>
-                                                <span className="font-bold text-[#4A2E20]">Dicas de composição:</span> Saiba como montar looks versáteis e autênticos para diferentes ocasiões, desde o dia a dia até eventos especiais, sempre mantendo sua essência.
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="order-1 md:order-2">
-                                    <FixedIntroImage
-                                        src={GUIDES_BENEFITS_IMAGE_URL}
-                                        alt="Guia de Imagem e Estilo em tablet"
-                                        width={600}
-                                        height={480}
-                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FFFBF7]">
+                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30">
+                        <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-12 text-center font-playfair leading-tight">
+                            Muito Mais Que um Simples Quiz: Uma Jornada Completa de Autoconhecimento
+                        </h2>
+                        <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
+                            <div className="order-2 md:order-1">
+                                <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
+                                    Mas descobrir seu estilo é apenas o começo. Para realmente transformar sua imagem, você precisa de **orientação prática e estratégica.**
+                                </p>
+                                <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold mb-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#aa6b5d] shadow-inner">
+                                    Por isso, ao fazer o quiz, você terá acesso ao **Guia de Imagem e Estilo específico para o seu estilo predominante!**
+                                </p>
+                                <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
+                                    Cada guia foi cuidadosamente desenvolvido para oferecer:
+                                </p>
+                                <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
+                                    <li className="flex items-start">
+                                        <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Autoconhecimento profundo:</span> Entenda como sua personalidade, valores e essência se refletem no seu estilo. Como você viu no início do quiz, 55% da comunicação é visual, 38% é tom de voz e apenas 7% é verbal. Isso significa que sua imagem comunica muito antes de você falar qualquer coisa!
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Orientações práticas:</span> Descubra quais cores, tecidos, estampas e modelagens valorizam seu tipo físico e estilo. Aprenda a identificar peças que realmente combinam com você e que podem ser usadas de múltiplas formas.
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Estratégias de imagem:</span> Aprenda a comunicar visualmente quem você é antes mesmo de dizer uma palavra. Entenda como usar sua imagem para transmitir seus valores e personalidade em qualquer ambiente.
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <BadgeCheck size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Dicas de composição:</span> Saiba como montar looks versáteis e autênticos para diferentes ocasiões, desde o dia a dia até eventos especiais, sempre mantendo sua essência.
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
-                            <div className="flex justify-center mb-10">
+                            <div className="order-1 md:order-2">
                                 <FixedIntroImage
-                                    src={GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL}
-                                    alt="Mockup 3 revistas guia de estilo"
-                                    width={700}
-                                    height={450}
-                                    className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
+                                    src={GUIDES_BENEFITS_IMAGE_URL}
+                                    alt="Guia de Imagem e Estilo em tablet"
+                                    width={600}
+                                    height={480}
+                                    className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
                                 />
                             </div>
-                            <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed mt-8">
-                                Com o **Guia de Imagem e Estilo**, você terá todas as ferramentas para construir uma imagem que realmente reflete quem você é e potencializa sua comunicação pessoal e profissional. Não se trata apenas de estar na moda, mas de criar um **estilo atemporal que te representa em qualquer situação.**
-                            </p>
                         </div>
+                        <div className="flex justify-center mb-10">
+                            <FixedIntroImage
+                                src={GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL}
+                                alt="Mockup 3 revistas guia de estilo"
+                                width={700}
+                                height={450}
+                                className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
+                            />
+                        </div>
+                        <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed mt-8">
+                            Com o **Guia de Imagem e Estilo**, você terá todas as ferramentas para construir uma imagem que realmente reflete quem você é e potencializa sua comunicação pessoal e profissional. Não se trata apenas de estar na moda, mas de criar um **estilo atemporal que te representa em qualquer situação.**
+                        </p>
                     </div>
                 </section>
 
                 ---
 
                 {/* 5. Bônus Especial 1: Peças-Chave do Guarda-Roupa de Sucesso */}
-                <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FDF6F0]">
-                    <div className="container mx-auto max-w-5xl">
-                        <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#aa6b5d]/30">
-                            <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-4 text-center font-playfair">
-                                BÔNUS ESPECIAL <span className="text-[#B89B7A]">#1</span>
-                            </h2>
-                            <p className="text-2xl text-[#B89B7A] font-extrabold mb-10 text-center drop-shadow">
-                                Guia das Peças-Chave do Guarda-Roupa de Sucesso
-                            </p>
-                            <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-                                <div>
-                                    <FixedIntroImage
-                                        src={BONUS_1_KEY_PIECES_IMAGE_URL}
-                                        alt="Guia Peças-Chave do Guarda-Roupa"
-                                        width={600}
-                                        height={480}
-                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
-                                <div>
-                                    <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
-                                        Como bônus especial, você também receberá o **Guia das Peças-Chave do Guarda-Roupa de Sucesso** - um manual completo para construir um armário funcional, versátil e alinhado com sua identidade.
-                                    </p>
-                                    <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
-                                        Neste guia exclusivo, você vai descobrir:
-                                    </p>
-                                    <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            Quais são as **peças essenciais** que toda mulher deveria ter, independente do seu estilo.
-                                        </li>
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            Como adaptar essas peças-chave ao seu estilo predominante para criar **looks autênticos**.
-                                        </li>
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            Estratégias para maximizar combinações e **minimizar gastos**, economizando tempo e dinheiro.
-                                        </li>
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            Como montar um **guarda-roupa cápsula** que funciona para sua rotina e estilo de vida.
-                                        </li>
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                                            Dicas para **valorizar seu tipo físico** e criar uma imagem coerente e cheia de presença.
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="flex justify-center mb-10">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FDF6F0]">
+                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#aa6b5d]/30">
+                        <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-4 text-center font-playfair">
+                            BÔNUS ESPECIAL <span className="text-[#B89B7A]">#1</span>
+                        </h2>
+                        <p className="text-2xl text-[#B89B7A] font-extrabold mb-10 text-center drop-shadow">
+                            Guia das Peças-Chave do Guarda-Roupa de Sucesso
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
+                            <div>
                                 <FixedIntroImage
-                                    src={BONUS_1_KEY_PIECES_COMPLEMENTARY_IMAGE_URL}
-                                    alt="Detalhes do Guia Peças-Chave"
-                                    width={700}
-                                    height={450}
-                                    className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
+                                    src={BONUS_1_KEY_PIECES_IMAGE_URL}
+                                    alt="Guia Peças-Chave do Guarda-Roupa"
+                                    width={600}
+                                    height={480}
+                                    className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
                                 />
                             </div>
-                            <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed">
-                                Imagine ter um guarda-roupa onde todas as peças combinam entre si, onde você consegue montar looks incríveis em minutos, e onde cada item reflete quem você é! Sem mais compras por impulso, sem mais peças esquecidas com etiqueta, sem mais frustração ao se vestir pela manhã.
-                            </p>
-                            <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold text-center max-w-4xl mx-auto mt-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#B89B7A] shadow-inner">
-                                Este bônus sozinho já vale o investimento no quiz e nos guias, pois vai te ajudar a **economizar tempo e dinheiro**, além de eliminar a frustração diária de não saber o que vestir. É como ter uma consultora de imagem pessoal te orientando em cada compra e na montagem dos seus looks.
-                            </p>
+                            <div>
+                                <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
+                                    Como bônus especial, você também receberá o **Guia das Peças-Chave do Guarda-Roupa de Sucesso** - um manual completo para construir um armário funcional, versátil e alinhado com sua identidade.
+                                </p>
+                                <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
+                                    Neste guia exclusivo, você vai descobrir:
+                                </p>
+                                <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        Quais são as **peças essenciais** que toda mulher deveria ter, independente do seu estilo.
+                                    </li>
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        Como adaptar essas peças-chave ao seu estilo predominante para criar **looks autênticos**.
+                                    </li>
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        Estratégias para maximizar combinações e **minimizar gastos**, economizando tempo e dinheiro.
+                                    </li>
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        Como montar um **guarda-roupa cápsula** que funciona para sua rotina e estilo de vida.
+                                    </li>
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                                        Dicas para **valorizar seu tipo físico** e criar uma imagem coerente e cheia de presença.
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
+                        <div className="flex justify-center mb-10">
+                            <FixedIntroImage
+                                src={BONUS_1_KEY_PIECES_COMPLEMENTARY_IMAGE_URL}
+                                alt="Detalhes do Guia Peças-Chave"
+                                width={700}
+                                height={450}
+                                className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
+                            />
+                        </div>
+                        <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed">
+                            Imagine ter um guarda-roupa onde todas as peças combinam entre si, onde você consegue montar looks incríveis em minutos, e onde cada item reflete quem você é! Sem mais compras por impulso, sem mais peças esquecidas com etiqueta, sem mais frustração ao se vestir pela manhã.
+                        </p>
+                        <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold text-center max-w-4xl mx-auto mt-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#B89B7A] shadow-inner">
+                            Este bônus sozinho já vale o investimento no quiz e nos guias, pois vai te ajudar a **economizar tempo e dinheiro**, além de eliminar a frustração diária de não saber o que vestir. É como ter uma consultora de imagem pessoal te orientando em cada compra e na montagem dos seus looks.
+                        </p>
                     </div>
                 </section>
 
                 ---
 
                 {/* 6. Bônus Especial 2: Guia Visagismo Facial */}
-                <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FFFBF7]">
-                    <div className="container mx-auto max-w-5xl">
-                        <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30">
-                            <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-4 text-center font-playfair">
-                                BÔNUS ESPECIAL <span className="text-[#aa6b5d]">#2</span>
-                            </h2>
-                            <p className="text-2xl text-[#B89B7A] font-extrabold mb-10 text-center drop-shadow">
-                                Guia de Visagismo Facial
-                            </p>
-                            <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-                                <div className="order-2 md:order-1">
-                                    <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
-                                        E tem mais! Você também receberá o **Guia de Visagismo Facial** - uma ferramenta poderosa para valorizar seus traços naturais e potencializar sua beleza única.
-                                    </p>
-                                    <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
-                                        O visagismo é a arte de harmonizar sua imagem considerando a estrutura do seu rosto. Neste guia exclusivo, você vai aprender:
-                                    </p>
-                                    <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                            Como identificar o **formato do seu rosto** (oval, redondo, quadrado, retangular, etc.).
-                                        </li>
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                            Quais **cortes de cabelo** valorizam seus traços naturais e equilibram as proporções do seu rosto.
-                                        </li>
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                            Como escolher **brincos, colares e óculos** que complementam seu formato facial e realçam sua beleza.
-                                        </li>
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                            Técnicas de **maquiagem** para realçar seus pontos fortes e criar harmonia visual.
-                                        </li>
-                                        <li className="flex items-start">
-                                            <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
-                                            Dicas personalizadas para cada tipo de rosto, considerando os terços faciais e as linhas predominantes.
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="order-1 md:order-2">
-                                    <FixedIntroImage
-                                        src={BONUS_2_VISAGISM_IMAGE_URL}
-                                        alt="Guia de Visagismo Facial"
-                                        width={600}
-                                        height={480}
-                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
-                                    />
-                                </div>
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FFFBF7]">
+                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-[#B89B7A]/30">
+                        <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-4 text-center font-playfair">
+                            BÔNUS ESPECIAL <span className="text-[#aa6b5d]">#2</span>
+                        </h2>
+                        <p className="text-2xl text-[#B89B7A] font-extrabold mb-10 text-center drop-shadow">
+                            Guia de Visagismo Facial
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
+                            <div className="order-2 md:order-1">
+                                <p className="text-lg md:text-xl text-[#6B4F43] mb-6 leading-relaxed">
+                                    E tem mais! Você também receberá o **Guia de Visagismo Facial** - uma ferramenta poderosa para valorizar seus traços naturais e potencializar sua beleza única.
+                                </p>
+                                <p className="text-lg md:text-xl text-[#6B4F43] mb-4 leading-relaxed font-semibold">
+                                    O visagismo é a arte de harmonizar sua imagem considerando a estrutura do seu rosto. Neste guia exclusivo, você vai aprender:
+                                </p>
+                                <ul className="list-none space-y-4 text-lg text-[#6B4F43] pl-0">
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Como identificar o **formato do seu rosto** (oval, redondo, quadrado, retangular, etc.).</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Quais **cortes de cabelo** valorizam seus traços naturais e equilibram as proporções do seu rosto.</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Como escolher **brincos, colares e óculos** que complementam seu formato facial e realçam sua beleza.</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Técnicas de **maquiagem** para realçar seus pontos fortes e criar harmonia visual.</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start">
+                                        <Check size={24} className="text-[#aa6b5d] mr-3 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <span className="font-bold text-[#4A2E20]">Dicas personalizadas para cada tipo de rosto, considerando os terços faciais e as linhas predominantes.</span>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
-                            <div className="flex justify-center mb-10">
+                            <div className="order-1 md:order-2">
                                 <FixedIntroImage
-                                    src={BONUS_2_VISAGISM_COMPLEMENTARY_IMAGE_URL}
-                                    alt="Exemplo de Visagismo"
-                                    width={700}
-                                    height={450}
-                                    className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
+                                    src={BONUS_2_VISAGISM_IMAGE_URL}
+                                    alt="Guia de Visagismo Facial"
+                                    width={600}
+                                    height={480}
+                                    className="rounded-xl shadow-2xl mx-auto transform hover:scale-105 transition-transform duration-300"
                                 />
                             </div>
-                            <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed">
-                                Imagine saber exatamente quais acessórios escolher para valorizar seu rosto e complementar seu estilo! Este conhecimento vai **transformar a maneira como você se vê e como os outros te percebem.**
-                            </p>
-                            <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold text-center max-w-4xl mx-auto mt-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#aa6b5d] shadow-inner">
-                                Com o Guia de Visagismo Facial, você terá mais uma ferramenta poderosa para construir uma imagem autêntica, harmoniosa e impactante. Seus acessórios e corte de cabelo trabalharão a favor da sua beleza natural, criando uma imagem coesa e equilibrada.
-                            </p>
                         </div>
+                        <div className="flex justify-center mb-10">
+                            <FixedIntroImage
+                                src={BONUS_2_VISAGISM_COMPLEMENTARY_IMAGE_URL}
+                                alt="Exemplo de Visagismo"
+                                width={700}
+                                height={450}
+                                className="rounded-xl shadow-xl transform hover:scale-[1.02] transition-transform duration-300"
+                            />
+                        </div>
+                        <p className="text-lg md:text-xl text-[#6B4F43] text-center max-w-4xl mx-auto leading-relaxed">
+                            Imagine saber exatamente quais acessórios escolher para valorizar seu rosto e complementar seu estilo! Este conhecimento vai **transformar a maneira como você se vê e como os outros te percebem.**
+                        </p>
+                        <p className="text-xl md:text-2xl text-[#4A2E20] font-extrabold text-center max-w-4xl mx-auto mt-6 leading-relaxed bg-[#e8dccb]/30 p-4 rounded-lg border-l-4 border-[#aa6b5d] shadow-inner">
+                            Com o Guia de Visagismo Facial, você terá mais uma ferramenta poderosa para construir uma imagem autêntica, harmoniosa e impactante. Seus acessórios e corte de cabelo trabalharão a favor da sua beleza natural, criando uma imagem coesa e equilibrada.
+                        </p>
                     </div>
                 </section>
 
                 ---
 
                 {/* 7. Apresentação da Mentora: Gisele Galvão */}
-                <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FDF6F0]">
-                    <div className="container mx-auto max-w-4xl text-center">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FDF6F0]">
+                    <div className="max-w-4xl mx-auto text-center">
                         <h2 className="text-4xl md:text-5xl font-bold mb-10 font-playfair text-[#4A2E20]">
                             Conheça Sua Mentora
                         </h2>
@@ -664,8 +668,8 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 8. Depoimentos e Resultados */}
-                <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#FFFBF7]">
-                    <div className="container mx-auto max-w-5xl text-center">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FFFBF7]">
+                    <div className="max-w-5xl mx-auto text-center">
                         <h2 className="text-4xl md:text-5xl font-bold text-[#4A2E20] mb-10 font-playfair">
                             Resultados Reais de Mulheres Reais
                         </h2>
@@ -722,8 +726,8 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 9. Garantia e Chamada para Ação */}
-                <section className="py-16 px-4 md:px-8 lg:px-16 bg-[#4A2E20] text-white">
-                    <div className="container mx-auto max-w-4xl text-center">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#4A2E20] text-white">
+                    <div className="max-w-4xl mx-auto text-center">
                         <div className="mb-10">
                             <FixedIntroImage
                                 src={GUARANTEE_IMAGE_URL}
@@ -788,8 +792,8 @@ const QuizOfferPage: React.FC = () => {
                 ---
 
                 {/* 10. Perguntas Frequentes */}
-                <section className="py-20 px-4 md:px-8 lg:px-16 bg-[#FDF6F0]">
-                    <div className="container mx-auto max-w-4xl text-center">
+                <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-[#FDF6F0]">
+                    <div className="max-w-4xl mx-auto text-center">
                         <div className="mb-10 flex justify-center">
                             <FixedIntroImage
                                 src={FAQ_IMAGE_URL}
@@ -818,98 +822,6 @@ const QuizOfferPage: React.FC = () => {
                     </div>
                 </section>
             </main>
-
-            {/* Custom Tailwind CSS classes for animations */}
-            <style jsx>{`
-                .font-playfair {
-                    font-family: 'Playfair Display', serif; /* Certifique-se de importar essa fonte ou usar uma alternativa */
-                }
-                .btn-3d {
-                    position: relative;
-                    transform-style: preserve-3d;
-                    transition: all 0.2s ease-out;
-                    z-index: 1;
-                }
-                .btn-3d:before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: linear-gradient(to right, #A1835D, #935C4A); /* Darker shade for 3D effect */
-                    border-radius: inherit;
-                    transform: translateZ(-1px);
-                    box-shadow: 0 6px 0px rgba(0,0,0,0.2);
-                    transition: all 0.2s ease-out;
-                    z-index: -1;
-                }
-                .btn-3d:hover {
-                    transform: translateY(-2px) translateZ(0);
-                }
-                .btn-3d:hover:before {
-                    transform: translateY(2px) translateZ(-1px);
-                    box-shadow: 0 4px 0px rgba(0,0,0,0.2);
-                }
-                .btn-3d:active {
-                    transform: translateY(2px) translateZ(0);
-                }
-                .btn-3d:active:before {
-                    transform: translateY(0px) translateZ(-1px);
-                    box-shadow: 0 2px 0px rgba(0,0,0,0.2);
-                }
-
-                @keyframes pulse-animation {
-                    0% { transform: scale(1); }
-                    50% { transform: scale(1.02); }
-                    100% { transform: scale(1); }
-                }
-                .pulse-animation {
-                    animation: pulse-animation 2s infinite ease-in-out;
-                }
-
-                @keyframes bounce-subtle {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-3px); }
-                }
-                .animate-bounce-subtle {
-                    animation: bounce-subtle 3s infinite ease-in-out;
-                }
-
-                @keyframes heart-beat {
-                    0%, 100% { transform: scale(1); }
-                    15% { transform: scale(1.1); }
-                    30% { transform: scale(1); }
-                    45% { transform: scale(1.1); }
-                }
-                .animate-heart-beat {
-                    animation: heart-beat 1.5s infinite;
-                }
-
-                @keyframes pulse-light {
-                    0%, 100% { box-shadow: 0 8px 20px rgba(184, 155, 122, 0.5); }
-                    50% { box-shadow: 0 12px 30px rgba(184, 155, 122, 0.7); }
-                }
-                .animate-pulse-light {
-                    animation: pulse-light 2.5s infinite ease-in-out;
-                }
-
-                @keyframes fade-in {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .animate-fade-in {
-                    animation: fade-in 0.8s ease-out forwards;
-                }
-
-                @keyframes fade-in-up {
-                    from { opacity: 0; transform: translateY(40px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .animate-fade-in-up {
-                    animation: fade-in-up 0.8s ease-out forwards;
-                }
-            `}</style>
         </div>
     );
 };
