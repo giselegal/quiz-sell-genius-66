@@ -21,6 +21,8 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
 import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
+import CountdownTimer from '@/components/ui/countdown-timer';
+import LimitedStockIndicator from '@/components/ui/limited-stock-indicator';
 
 // Seções carregadas via lazy
 const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
@@ -97,6 +99,32 @@ const ResultPage: React.FC = () => {
   
   // Active section tracking
   const [activeSection, setActiveSection] = useState('primary-style');
+  
+  // Temporizador de contagem regressiva
+  const [timer, setTimer] = useState({
+    hours: 2,
+    minutes: 59,
+    seconds: 59
+  });
+  
+  useEffect(() => {
+    const countdownInterval = setInterval(() => {
+      setTimer(prevTimer => {
+        if (prevTimer.seconds > 0) {
+          return { ...prevTimer, seconds: prevTimer.seconds - 1 };
+        } else if (prevTimer.minutes > 0) {
+          return { ...prevTimer, minutes: prevTimer.minutes - 1, seconds: 59 };
+        } else if (prevTimer.hours > 0) {
+          return { hours: prevTimer.hours - 1, minutes: 59, seconds: 59 };
+        } else {
+          // Reset timer quando chegar a zero (para manter a oferta "limitada")
+          return { hours: 2, minutes: 59, seconds: 59 };
+        }
+      });
+    }, 1000);
+    
+    return () => clearInterval(countdownInterval);
+  }, []);
   
   useEffect(() => {
     if (!primaryStyle) return;
@@ -432,7 +460,7 @@ const ResultPage: React.FC = () => {
               
               <div className="flex flex-col items-center">
                 <div className="mb-6 relative">
-                  <div className="absolute -top-4 -right-12 bg-[#B2784B]/10 px-3 py-1 rounded-full transform rotate-6">
+                  <div className="absolute -top-4 -right-12 bg-gradient-to-r from-[#B2784B]/20 to-[#D68047]/10 px-3 py-1 rounded-full transform rotate-6 animate-pulse shadow-sm border border-[#D68047]/20">
                     <span className="text-xs font-bold text-[#D68047]">77% OFF</span>
                   </div>
                   
@@ -448,7 +476,10 @@ const ResultPage: React.FC = () => {
                   </div>
                   
                   <p className="text-[#8F7A6A] line-through mb-1">De: R$ 175,00</p>
-                  <p className="text-base text-[#aa6b5d] font-medium mb-1">5x de <span className="text-3xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent shadow-sm">R$ 8,83</span></p>
+                  <p className="text-base text-[#aa6b5d] font-medium mb-1">
+                    5x de <span className="text-3xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent shadow-sm inline-block transform transition-transform hover:scale-105">R$ 8,83</span>
+                    <span className="ml-2 text-xs font-semibold bg-gradient-to-r from-[#FFD700] to-[#FFA500] px-2 py-0.5 rounded-md text-white animate-bounce inline-block shadow-sm">MELHOR OFERTA</span>
+                  </p>
                   <p className="text-sm text-[#8F7A6A] mt-1">Ou R$ 39,90 à vista</p>
                   
                   {/* Mockup do guia de estilo */}
