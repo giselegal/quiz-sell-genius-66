@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -302,11 +302,21 @@ const JsonEditor: React.FC<{
   );
 };
 
+const debounce = (func: (...args: any[]) => void, wait: number) => {
+  let timeout: ReturnType<typeof setTimeout>;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+};
+
 const QuizOfferPageVisualEditor: React.FC = () => {
   const [editorData, setEditorData] = useState<VisualEditorData>(defaultData);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [activeTab, setActiveTab] = useState('content');
   const [jsonError, setJsonError] = useState<string | null>(null);
+
+  const debouncedSetEditorData = useRef(debounce((parsed: any) => setEditorData(parsed), 250)).current;
 
   useEffect(() => {
     // Carregar dados salvos do localStorage
@@ -1209,7 +1219,7 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                     value={JSON.stringify(editorData, null, 2)}
                     onChange={(jsonString, isValid, parsed) => {
                       if (isValid && parsed) {
-                        setEditorData(parsed);
+                        debouncedSetEditorData(parsed);
                         setJsonError(null);
                       } else {
                         setJsonError('JSON inválido');

@@ -447,209 +447,77 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
         
-        {/* Final CTA Section */}
-        <section id="cta" className="scroll-mt-20 mb-16">
-          <Card className="p-6 bg-white shadow-lg border border-[#B89B7A]/20 rounded-xl overflow-hidden relative">
-            <div className="text-center">
-              <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-                Pronta para Transformar seu Estilo?
-              </h2>
-              <p className="text-[#432818] text-lg mb-8 max-w-2xl mx-auto">
-                Adquira agora seu guia completo personalizado para o estilo <span className="font-medium text-[#aa6b5d]">{category}</span> e comece a transformação da sua imagem hoje mesmo.
+        {/* Final CTA Section - NOVO DESIGN */}
+        <section id="cta" className="scroll-mt-20 my-10 bg-white rounded-xl shadow-lg p-6 border border-[#B89B7A]/20 text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-pattern-light opacity-5 pointer-events-none"></div>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-4 relative z-10">
+              Pronta para Transformar seu Estilo?
+            </h2>
+            <p className="text-lg text-[#aa6b5d] mb-6 relative z-10">
+              Adquira agora seu guia completo personalizado para o estilo <span className="font-medium text-[#aa6b5d]">{category}</span> e comece a transformação da sua imagem hoje mesmo.
+            </p>
+            <div className="mb-6 relative z-10">
+              <span className="text-sm line-through text-[#8F7A6A] block">De R$ 175,00</span>
+              <p className="text-4xl md:text-5xl font-extrabold text-[#aa6b5d] drop-shadow-md mb-2">
+                Por apenas
+                <span className="block text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent leading-none">R$ 39,90</span>
               </p>
-              
-              <div className="flex flex-col items-center">
-                <div className="mb-6 relative">
-                  <div className="absolute -top-4 -right-12 bg-gradient-to-r from-[#B2784B]/20 to-[#D68047]/10 px-3 py-1 rounded-full transform rotate-6 animate-pulse shadow-sm border border-[#D68047]/20">
-                    <span className="text-xs font-bold text-[#D68047]">77% OFF</span>
-                  </div>
-                  
-                  {/* Ícone de tempo limitado */}
-                  <div className="absolute -top-3 -left-16 flex items-center bg-[#FFD700]/10 px-2 py-1 rounded-full">
-                    <div className="animate-pulse mr-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D68047" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                      </svg>
-                    </div>
-                    <span className="text-xs font-medium text-[#D68047]">Por tempo limitado</span>
-                  </div>
-                  
-                  {/* Temporizador de contagem regressiva */}
-                  <div className="mb-3">
-                    <div className="text-xs font-medium text-[#D68047] mb-1 flex justify-center items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 animate-pulse">
-                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                      </svg>
-                      Oferta expira em:
-                    </div>
-                    <CountdownTimer className="mb-2" />
-                  </div>
-                  
-                  {/* Indicador de estoque limitado */}
-                  <LimitedStockIndicator className="mb-4" />
-                  
-                  <p className="text-[#8F7A6A] line-through mb-1 relative">
-                    <span>De: R$ 175,00</span>
-                    <span className="absolute top-0 right-0 transform translate-x-full -translate-y-1/2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-r-full">
-                      -77%
-                    </span>
-                  </p>
-                  <p className="relative text-base text-[#aa6b5d] font-medium mb-1">
-                    5x de 
-                    <span className="text-3xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent shadow-sm inline-block transform transition-transform hover:scale-105 ml-2">
-                      R$ 8,83
-                    </span>
-                    <span className="ml-2 text-xs font-semibold bg-gradient-to-r from-[#FFD700] to-[#FFA500] px-2 py-0.5 rounded-md text-white animate-bounce inline-block shadow-sm">
-                      MELHOR OFERTA
-                    </span>
-                    <span className="absolute -right-4 top-1/3 transform rotate-12">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D68047" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-pulse">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                      </svg>
-                    </span>
-                  </p>
-                  <div className="mt-1 flex justify-center items-center">
-                    <p className="text-sm text-[#8F7A6A]">Ou</p>
-                    <p className="text-sm font-medium text-[#aa6b5d] mx-1">R$ 39,90</p>
-                    <p className="text-sm text-[#8F7A6A]">à vista</p>
-                    <div className="ml-2 text-[10px] bg-[#4CAF50]/20 text-[#4CAF50] px-2 py-0.5 rounded font-medium">
-                      Economize R$ 4,25
-                    </div>
-                  </div>
-                  
-                  {/* Mockup do guia de estilo */}
-                  <div className="mt-8 relative max-w-[220px] mx-auto">
-                    <div className="relative w-full h-36 bg-gradient-to-b from-[#F5EAE0] to-[#FFF7F2] rounded-lg shadow-md flex items-center justify-center transform -rotate-3 overflow-hidden border border-[#B89B7A]/30 hover:scale-105 transition-transform duration-300">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-4/5 h-4/5 bg-gradient-to-br from-[#B89B7A]/30 to-[#aa6b5d]/20 rounded-md flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="text-xs font-bold text-[#432818] mb-1">Guia Personalizado</div>
-                            <div className="text-[10px] text-[#8F7A6A]">Estilo {category}</div>
-                            <div className="h-px w-16 bg-[#B89B7A]/30 my-1 mx-auto"></div>
-                            <div className="mt-1">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mx-auto text-[#B89B7A]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="absolute top-1 right-1 transform rotate-12">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M18 3v4c0 2-2 4-4 4H2"></path>
-                          <path d="M8 17l-6-6 6-6"></path>
-                        </svg>
-                      </div>
-                      
-                      {/* Decorações extras */}
-                      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-[#B89B7A]/20 to-transparent rounded-br-md"></div>
-                      <div className="absolute top-0 right-0 w-1/4 h-1/4 bg-gradient-to-bl from-[#aa6b5d]/20 to-transparent rounded-tr-md"></div>
-                    </div>
-                    
-                    {/* Selo de garantia aprimorado */}
-                    <div className="absolute -bottom-4 -right-4 bg-gradient-to-br from-[#4CAF50] to-[#45a049] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-md border-2 border-white transform hover:rotate-12 transition-transform duration-300">
-                      <div className="text-[10px] font-bold text-center leading-tight">
-                        <div className="mb-0.5">7 DIAS</div>
-                        <div className="h-px w-8 bg-white/50 mb-0.5 mx-auto"></div>
-                        <div>GARANTIA</div>
-                      </div>
-                    </div>
-                    
-                    {/* Selos de benefícios */}
-                    <div className="absolute -top-6 -left-6 flex">
-                      <div className="bg-[#FFF7F2] rounded-full shadow-md p-1.5 border border-[#B89B7A]/30 transform -rotate-6 mr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                      </div>
-                      <div className="bg-[#FFF7F2] rounded-full shadow-md p-1.5 border border-[#B89B7A]/30 transform rotate-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <Button 
-                  onClick={handleCTAClick} 
-                  className="mt-4 w-full max-w-md text-white py-5 px-8 rounded-md text-lg font-medium shadow-lg transition-all duration-300 relative overflow-hidden group"
-                  style={{
-                    background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
-                    boxShadow: tokens.shadows.cta,
-                    transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
-                  }}
-                  onMouseEnter={() => setIsButtonHovered(true)} 
-                  onMouseLeave={() => setIsButtonHovered(false)}
-                >
-                  {/* Efeito de brilho no hover */}
-                  <div className="absolute top-0 left-0 w-full h-full bg-white opacity-0 group-hover:opacity-10 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000 ease-out"></div>
-                  
-                  {/* Efeito de pulsação */}
-                  <div className="absolute inset-0 rounded-md animate-ping bg-white opacity-0 group-hover:opacity-5"></div>
-                  
-                  <span className="flex items-center justify-center gap-2 relative">
-                    <ShoppingCart className="w-5 h-5 transform transition-transform group-hover:scale-110 group-hover:rotate-6" />
-                    Adquirir Agora
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </span>
-                </Button>
-                
-                <p className="text-xs text-[#8F7A6A] mt-2 mb-3 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  Pagamento 100% seguro e criptografado
-                </p>
-                
-                <SecurePurchaseElement className="mt-6" />
-                
-                {/* Métodos de pagamento aceitos */}
-                <div className="mt-4 text-center">
-                  <p className="text-xs text-[#8F7A6A] mb-2">Métodos de pagamento aceitos:</p>
-                  <div className="flex justify-center items-center gap-3 flex-wrap">
-                    {/* Cartões de crédito */}
-                    <div className="bg-white rounded-md px-2 py-1 shadow-sm border border-gray-200 flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[#8F7A6A] mr-1">
-                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                      </svg>
-                      <span className="text-xs text-[#432818]">Cartões</span>
-                    </div>
-                    
-                    {/* Pix */}
-                    <div className="bg-white rounded-md px-2 py-1 shadow-sm border border-gray-200 flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                      </svg>
-                      <span className="text-xs text-[#432818]">Pix</span>
-                    </div>
-                    
-                    {/* Boleto */}
-                    <div className="bg-white rounded-md px-2 py-1 shadow-sm border border-gray-200 flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[#8F7A6A] mr-1">
-                        <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path>
-                        <path d="M4 10h18"></path>
-                        <path d="M7 15h3"></path>
-                        <path d="M14 15h3"></path>
-                      </svg>
-                      <span className="text-xs text-[#432818]">Boleto</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <span className="text-xl font-semibold text-[#432818] block">ou 5x de R$ 8,83</span>
             </div>
-          </Card>
-          
-          <div className="text-center mt-10 text-sm text-[#8F7A6A]">
-            <BuildInfo />
-          </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 relative z-10">
+              <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-3 rounded-lg flex items-center gap-2 font-semibold text-sm shadow-inner">
+                <Lock className="w-5 h-5" />
+                Oferta Exclusiva Válida Por:
+              </div>
+              <CountdownTimer initialHours={timer.hours} initialMinutes={timer.minutes} initialSeconds={timer.seconds} />
+            </div>
+            <LimitedStockIndicator />
+            <Button
+              onClick={handleCTAClick}
+              className="w-full md:w-2/3 lg:w-1/2 text-white text-xl py-4 px-8 rounded-full shadow-lg transition-all duration-300 relative z-10 flex items-center justify-center gap-3 font-bold group"
+              style={{
+                background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
+                boxShadow: tokens.shadows.cta,
+                transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
+              }}
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
+            >
+              <ShoppingCart className={`w-6 h-6 transition-transform duration-300 group-hover:scale-110`} />
+              Adquirir Agora
+              <ArrowDown className="w-5 h-5 ml-2 animate-bounce-custom" />
+            </Button>
+            <SecurePurchaseElement />
+          </AnimatedWrapper>
         </section>
+      </div>
+      {/* Barra inferior fixa com novo layout */}
+      <div className="fixed bottom-0 left-0 z-50 w-full bg-white shadow-lg rounded-t-xl py-3 px-4 flex items-center justify-between gap-4 sm:gap-6">
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <a href="#" className="flex items-center gap-2 text-indigo-600 font-bold text-lg">
+            YouWare
+          </a>
+          <div className="h-6 w-px bg-gray-300 mx-2"></div>
+          <div className="flex items-center gap-2 cursor-pointer p-1 rounded-full hover:bg-gray-100 transition-colors duration-200">
+            <img alt="User Avatar" className="h-8 w-8 rounded-full border-2 border-indigo-300 object-cover" src="https://placehold.co/40x40/E0E7FF/6366F1?text=GL" />
+            <div className="text-sm font-medium text-gray-800 truncate max-w-[100px] sm:max-w-none">Graciele Louback</div>
+          </div>
+        </div>
+        <button className="relative flex items-center justify-center h-12 w-32 rounded-full text-white font-semibold text-base focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="h-6 w-6 mr-1">
+            <path d="M10.9979 1.58018C11.6178 1.22132 12.3822 1.22132 13.0021 1.58018L20.5021 5.92229C21.1197 6.27987 21.5 6.93946 21.5 7.65314V16.3469C21.5 17.0606 21.1197 17.7202 20.5021 18.0778L13.0021 22.4199C12.3822 22.7788 11.6178 22.7788 10.9979 22.4199L3.49793 18.0778C2.88029 17.7202 2.5 17.0606 2.5 16.3469V7.65314C2.5 6.93946 2.88029 6.27987 3.49793 5.92229L10.9979 1.58018ZM5.25052 8.09243C4.91718 7.89945 4.5 8.13997 4.5 8.52514V15.1938C4.5 15.9075 4.88029 16.5671 5.49793 16.9247L11.2495 20.2545C11.5828 20.4475 12 20.207 12 19.8218V13.1531C12 12.4395 11.6197 11.7799 11.0021 11.4223L5.25052 8.09243ZM15.7681 5.51719C15.2898 5.24106 14.5143 5.24106 14.036 5.51719C13.5577 5.79332 13.5577 6.24101 14.036 6.51713C14.5143 6.79326 15.2898 6.79326 15.7681 6.51713C16.2464 6.24101 16.2464 5.79332 15.7681 5.51719ZM9.96825 5.51723C9.48995 5.2411 8.71447 5.2411 8.23617 5.51723C7.75787 5.79335 7.75787 6.24104 8.23617 6.51717C8.71447 6.7933 9.48995 6.7933 9.96825 6.51717C10.4466 6.24104 10.4466 5.79335 9.96825 5.51723ZM16.9925 15.8452C17.5903 15.5 18.0749 14.6605 18.075 13.9702C18.075 13.2798 17.5904 13 16.9926 13.3452C16.3948 13.6904 15.9101 14.5299 15.9101 15.2202C15.9101 15.9106 16.3947 16.1904 16.9925 15.8452ZM6.3662 12.2003C6.84448 12.4765 7.2322 12.2526 7.23218 11.7003C7.23216 11.148 6.84442 10.4765 6.36614 10.2003C5.88785 9.92414 5.50014 10.148 5.50016 10.7003C5.50018 11.2526 5.88792 11.9241 6.3662 12.2003ZM10.6951 17.6982C10.6951 18.2505 10.3074 18.4743 9.82909 18.1981C9.35081 17.922 8.96307 17.2504 8.96305 16.6981C8.96303 16.1458 9.35074 15.922 9.82903 16.1981C10.3073 16.4743 10.6951 17.1459 10.6951 17.6982ZM7.23218 15.6993C7.2322 16.2516 6.84448 16.4755 6.3662 16.1993C5.88792 15.9232 5.50018 15.2516 5.50016 14.6993C5.50014 14.147 5.88785 13.9232 6.36614 14.1993C6.84442 14.4755 7.23216 15.1471 7.23218 15.6993ZM10.6946 13.6998C10.6946 14.2521 10.3069 14.476 9.82860 14.1998C9.35032 13.9236 8.96258 13.2521 8.96256 12.6998C8.96254 12.1475 9.35026 11.9237 9.82854 12.1998C10.3068 12.476 10.6946 13.1476 10.6946 13.6998Z"></path>
+          </svg>
+          Projeto
+        </button>
+        <div className="flex items-center justify-end gap-2 flex-1 min-w-0">
+          <div className="flex items-center gap-1 text-gray-600">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="h-4 w-4">
+              <path d="M12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3ZM12.0003 19C16.2359 19 19.8603 16.052 20.7777 12C19.8603 7.94803 16.2359 5 12.0003 5C7.7646 5 4.14022 7.94803 3.22278 12C4.14022 16.052 7.7646 19 12.0003 19ZM12.0003 16.5C9.51498 16.5 7.50026 14.4853 7.50026 12C7.50026 9.51472 9.51498 7.5 12.0003 7.5C14.4855 7.5 16.5003 9.51472 16.5003 12C16.5003 14.4853 14.4855 16.5 12.0003 16.5ZM12.0003 14.5C13.381 14.5 14.5003 13.3807 14.5003 12C14.5003 10.6193 13.381 9.5 12.0003 9.5C10.6196 9.5 9.50026 10.6193 9.50026 12C9.50026 13.3807 10.6196 14.5 12.0003 14.5Z"></path>
+            </svg>
+            <span className="text-sm font-medium">1.2K Views</span>
+          </div>
+        </div>
       </div>
     </div>
   );
