@@ -37,7 +37,7 @@ const EditorNotFoundPage = lazy(() => import('./pages/EditorNotFoundPage'));
 const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
 const ABTestPage = lazy(() => import('./pages/admin/ABTestPage'));
 const ABTestManagerPage = lazy(() => import('./pages/ABTestManagerPage'));
-const QuizOfferPageVisualEditor = lazy(() => import('./pages/admin/QuizOfferPageVisualEditor'));
+const QuizOfferPageVisualEditor = lazy(() => import('@/components/visual-editor/QuizOfferPageVisualEditor'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
