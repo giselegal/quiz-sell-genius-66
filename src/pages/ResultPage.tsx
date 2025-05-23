@@ -475,12 +475,48 @@ const ResultPage: React.FC = () => {
                     <span className="text-xs font-medium text-[#D68047]">Por tempo limitado</span>
                   </div>
                   
-                  <p className="text-[#8F7A6A] line-through mb-1">De: R$ 175,00</p>
-                  <p className="text-base text-[#aa6b5d] font-medium mb-1">
-                    5x de <span className="text-3xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent shadow-sm inline-block transform transition-transform hover:scale-105">R$ 8,83</span>
-                    <span className="ml-2 text-xs font-semibold bg-gradient-to-r from-[#FFD700] to-[#FFA500] px-2 py-0.5 rounded-md text-white animate-bounce inline-block shadow-sm">MELHOR OFERTA</span>
+                  {/* Temporizador de contagem regressiva */}
+                  <div className="mb-3">
+                    <div className="text-xs font-medium text-[#D68047] mb-1 flex justify-center items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 animate-pulse">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                      </svg>
+                      Oferta expira em:
+                    </div>
+                    <CountdownTimer className="mb-2" />
+                  </div>
+                  
+                  {/* Indicador de estoque limitado */}
+                  <LimitedStockIndicator className="mb-4" />
+                  
+                  <p className="text-[#8F7A6A] line-through mb-1 relative">
+                    <span>De: R$ 175,00</span>
+                    <span className="absolute top-0 right-0 transform translate-x-full -translate-y-1/2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-r-full">
+                      -77%
+                    </span>
                   </p>
-                  <p className="text-sm text-[#8F7A6A] mt-1">Ou R$ 39,90 à vista</p>
+                  <p className="relative text-base text-[#aa6b5d] font-medium mb-1">
+                    5x de 
+                    <span className="text-3xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent shadow-sm inline-block transform transition-transform hover:scale-105 ml-2">
+                      R$ 8,83
+                    </span>
+                    <span className="ml-2 text-xs font-semibold bg-gradient-to-r from-[#FFD700] to-[#FFA500] px-2 py-0.5 rounded-md text-white animate-bounce inline-block shadow-sm">
+                      MELHOR OFERTA
+                    </span>
+                    <span className="absolute -right-4 top-1/3 transform rotate-12">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D68047" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-pulse">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                    </span>
+                  </p>
+                  <div className="mt-1 flex justify-center items-center">
+                    <p className="text-sm text-[#8F7A6A]">Ou</p>
+                    <p className="text-sm font-medium text-[#aa6b5d] mx-1">R$ 39,90</p>
+                    <p className="text-sm text-[#8F7A6A]">à vista</p>
+                    <div className="ml-2 text-[10px] bg-[#4CAF50]/20 text-[#4CAF50] px-2 py-0.5 rounded font-medium">
+                      Economize R$ 4,25
+                    </div>
+                  </div>
                   
                   {/* Mockup do guia de estilo */}
                   <div className="mt-6 relative max-w-[180px] mx-auto">
@@ -521,11 +557,24 @@ const ResultPage: React.FC = () => {
                   {/* Efeito de brilho no hover */}
                   <div className="absolute top-0 left-0 w-full h-full bg-white opacity-0 group-hover:opacity-10 transform -translate-x-full group-hover:translate-x-full transition-all duration-1000 ease-out"></div>
                   
-                  <span className="flex items-center justify-center gap-2">
-                    <ShoppingCart className="w-5 h-5 transform transition-transform group-hover:scale-110" />
+                  {/* Efeito de pulsação */}
+                  <div className="absolute inset-0 rounded-md animate-ping bg-white opacity-0 group-hover:opacity-5"></div>
+                  
+                  <span className="flex items-center justify-center gap-2 relative">
+                    <ShoppingCart className="w-5 h-5 transform transition-transform group-hover:scale-110 group-hover:rotate-6" />
                     Adquirir Agora
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
                   </span>
                 </Button>
+                
+                <p className="text-xs text-[#8F7A6A] mt-2 mb-3 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
+                  Pagamento 100% seguro e criptografado
+                </p>
                 
                 <SecurePurchaseElement className="mt-6" />
               </div>
