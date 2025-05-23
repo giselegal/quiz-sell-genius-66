@@ -519,11 +519,20 @@ const ResultPage: React.FC = () => {
                   </div>
                   
                   {/* Mockup do guia de estilo */}
-                  <div className="mt-6 relative max-w-[180px] mx-auto">
-                    <div className="relative w-full h-32 bg-gradient-to-b from-[#F5EAE0] to-[#FFF7F2] rounded-lg shadow-md flex items-center justify-center transform -rotate-3 overflow-hidden border border-[#B89B7A]/20">
+                  <div className="mt-8 relative max-w-[220px] mx-auto">
+                    <div className="relative w-full h-36 bg-gradient-to-b from-[#F5EAE0] to-[#FFF7F2] rounded-lg shadow-md flex items-center justify-center transform -rotate-3 overflow-hidden border border-[#B89B7A]/30 hover:scale-105 transition-transform duration-300">
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="w-4/5 h-4/5 bg-gradient-to-br from-[#B89B7A]/30 to-[#aa6b5d]/20 rounded-md flex items-center justify-center">
-                          <span className="text-xs font-medium text-[#432818]">Guia Personalizado</span>
+                          <div className="text-center">
+                            <div className="text-xs font-bold text-[#432818] mb-1">Guia Personalizado</div>
+                            <div className="text-[10px] text-[#8F7A6A]">Estilo {category}</div>
+                            <div className="h-px w-16 bg-[#B89B7A]/30 my-1 mx-auto"></div>
+                            <div className="mt-1">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mx-auto text-[#B89B7A]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                              </svg>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="absolute top-1 right-1 transform rotate-12">
@@ -532,12 +541,34 @@ const ResultPage: React.FC = () => {
                           <path d="M8 17l-6-6 6-6"></path>
                         </svg>
                       </div>
+                      
+                      {/* Decorações extras */}
+                      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-[#B89B7A]/20 to-transparent rounded-br-md"></div>
+                      <div className="absolute top-0 right-0 w-1/4 h-1/4 bg-gradient-to-bl from-[#aa6b5d]/20 to-transparent rounded-tr-md"></div>
                     </div>
                     
-                    {/* Selo de garantia */}
-                    <div className="absolute -bottom-4 -right-4 bg-gradient-to-br from-[#4CAF50] to-[#45a049] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md">
-                      <div className="text-[8px] font-bold text-center leading-tight">
-                        7 DIAS<br/>GARANTIA
+                    {/* Selo de garantia aprimorado */}
+                    <div className="absolute -bottom-4 -right-4 bg-gradient-to-br from-[#4CAF50] to-[#45a049] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-md border-2 border-white transform hover:rotate-12 transition-transform duration-300">
+                      <div className="text-[10px] font-bold text-center leading-tight">
+                        <div className="mb-0.5">7 DIAS</div>
+                        <div className="h-px w-8 bg-white/50 mb-0.5 mx-auto"></div>
+                        <div>GARANTIA</div>
+                      </div>
+                    </div>
+                    
+                    {/* Selos de benefícios */}
+                    <div className="absolute -top-6 -left-6 flex">
+                      <div className="bg-[#FFF7F2] rounded-full shadow-md p-1.5 border border-[#B89B7A]/30 transform -rotate-6 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                      </div>
+                      <div className="bg-[#FFF7F2] rounded-full shadow-md p-1.5 border border-[#B89B7A]/30 transform rotate-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
                       </div>
                     </div>
                   </div>
