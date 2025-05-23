@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { preloadCriticalImages } from '@/utils/images/preloading';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift } from 'lucide-react';
-import { trackPageView, trackButtonClick, trackConversion } from '@/utils/analytics';
-import { markTestVariant, getTestVariant, isInTestVariant } from '@/utils/ab-testing';
+import { trackButtonClick } from '@/utils/analytics';
 
-// Constantes para teste A/B
-const TEST_ID = 'quiz_offer_page';
-const VARIANT_B = 'B';
+// Constantes para versão B da página
+const VARIANT_B = true;
 
 // Constantes para otimização de imagens
 const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up";
@@ -212,24 +210,12 @@ const StatsSection = () => {
 };
 
 const QuizOfferPage: React.FC = () => {
-  // Atribuir usuário à versão do teste A/B
+  // Versão B da página
   useEffect(() => {
-    const currentVariant = getTestVariant(TEST_ID);
-    // Se estamos mostrando a versão B, marcamos o usuário para esta variante
-    if (VARIANT_B) {
-      markTestVariant(TEST_ID, VARIANT_B);
-    }
-    
-    // Registrar visualização de página
-    trackPageView('quiz_offer_page', {
-      testId: TEST_ID,
-      variant: VARIANT_B
-    });
-    
     // Pré-carregar imagens críticas assim que o componente for montado
     preloadCriticalImages(
       [HERO_IMAGE_URL],
-      { quality: 95, format: 'auto', onComplete: () => console.log('Imagens críticas carregadas') }
+      { quality: 95 }
     );
     
     // Reportar métricas de performance
@@ -243,8 +229,7 @@ const QuizOfferPage: React.FC = () => {
     trackButtonClick(
       buttonId,
       'Começar Quiz Agora',
-      'quiz_offer_page',
-      { testId: TEST_ID, variant: VARIANT_B }
+      'quiz_offer_page'
     );
   };
   
