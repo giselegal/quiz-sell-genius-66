@@ -343,5 +343,129 @@ const ResultPage: React.FC = () => {
               <p className="text-[#8F7A6A]">Carregando transformações...</p>
             </div>
           }>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade
-(Content truncated due to size limit. Use line ranges to read in chunks)
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <BeforeAfterTransformation />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+
+        {/* Motivation Section */}
+        <section id="motivation" className="scroll-mt-20 mb-16">
+          <Suspense fallback={
+            <div className="py-10 flex flex-col items-center justify-center">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A]">Carregando conteúdo...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <MotivationSection />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+        
+        {/* Bonus Section */}
+        <section id="bonuses" className="scroll-mt-20 mb-16">
+          <Suspense fallback={
+            <div className="py-10 flex flex-col items-center justify-center">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A]">Carregando bônus...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <BonusSection />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+        
+        {/* Testimonials Section */}
+        <section id="testimonials" className="scroll-mt-20 mb-16">
+          <Suspense fallback={
+            <div className="py-10 flex flex-col items-center justify-center">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A]">Carregando depoimentos...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <Testimonials />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+        
+        {/* Guarantee Section */}
+        <section id="guarantee" className="scroll-mt-20 mb-16">
+          <Suspense fallback={
+            <div className="py-10 flex flex-col items-center justify-center">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A]">Carregando garantia...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <GuaranteeSection />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+        
+        {/* Mentor Section */}
+        <section id="mentor" className="scroll-mt-20 mb-16">
+          <Suspense fallback={
+            <div className="py-10 flex flex-col items-center justify-center">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A]">Carregando informações da mentora...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <MentorSection />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+        
+        {/* Final CTA Section */}
+        <section id="cta" className="scroll-mt-20 mb-16">
+          <Card className="p-6 bg-white shadow-lg border border-[#B89B7A]/20 rounded-xl overflow-hidden relative">
+            <div className="text-center">
+              <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
+                Pronta para Transformar seu Estilo?
+              </h2>
+              <p className="text-[#432818] text-lg mb-8 max-w-2xl mx-auto">
+                Adquira agora seu guia completo personalizado para o estilo <span className="font-medium text-[#aa6b5d]">{category}</span> e comece a transformação da sua imagem hoje mesmo.
+              </p>
+              
+              <div className="flex flex-col items-center">
+                <div className="mb-6">
+                  <p className="text-[#8F7A6A] line-through mb-1">De: R$ 175,00</p>
+                  <p className="text-2xl font-bold text-[#aa6b5d]">Por apenas R$ 39,90</p>
+                  <p className="text-sm text-[#8F7A6A] mt-1">ou em 5x de R$ 8,83</p>
+                </div>
+                
+                <Button 
+                  onClick={handleCTAClick} 
+                  className="mt-4 w-full max-w-md text-white py-5 px-8 rounded-md text-lg font-medium shadow-lg transition-all duration-300"
+                  style={{
+                    background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
+                    boxShadow: tokens.shadows.cta,
+                    transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
+                  }}
+                  onMouseEnter={() => setIsButtonHovered(true)} 
+                  onMouseLeave={() => setIsButtonHovered(false)}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <ShoppingCart className="w-5 h-5" />
+                    Adquirir Agora
+                  </span>
+                </Button>
+                
+                <SecurePurchaseElement className="mt-6" />
+              </div>
+            </div>
+          </Card>
+          
+          <div className="text-center mt-10 text-sm text-[#8F7A6A]">
+            <BuildInfo />
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default ResultPage;
