@@ -1,6 +1,9 @@
 /* filepath: /workspaces/quiz-sell-genius-66/src/index.css */
 @import './styles/spinner-optimized.css';
 @import './styles/effects.css';
+@import './styles/typography.css';
+@import './styles/animations.css';
+@import './styles/spinner.css';
 @import './styles/spinner-optimized.css';
 @tailwind base;
 @tailwind components;
