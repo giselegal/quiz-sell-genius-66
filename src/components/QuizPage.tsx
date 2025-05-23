@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -7,7 +8,7 @@ import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import QuizNavigation from './quiz/QuizNavigation';
-import QuizIntro from './QuizIntro'; // Import QuizIntro
+import QuizIntro from './QuizIntro'; 
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { useAuth } from '../context/AuthContext';
 import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '../utils/analytics';
@@ -15,13 +16,14 @@ import { preloadImages } from '@/utils/imageManager';
 import LoadingManager from './quiz/LoadingManager';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { MainTransition } from './quiz/MainTransition'; // Importar MainTransition
+import { MainTransition } from './quiz/MainTransition';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
   const navigate = useNavigate();
   
-  const [showIntro, setShowIntro] = useState(true); // Add state for showing intro
+  // Modificado: Use showIntro para controlar o estado visual e adicione uma verificação de sessionStorage
+  const [showIntro, setShowIntro] = useState(true);
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
   const [showingTransition, setShowingTransition] = useState(false);
   const [showingFinalTransition, setShowingFinalTransition] = useState(false);
@@ -46,17 +48,22 @@ const QuizPage: React.FC = () => {
     isInitialLoadComplete
   } = useQuizLogic();
 
-  // Check for username in localStorage on component mount
+  // Verifica na montagem do componente se deve mostrar a intro com base no sessionStorage
   useEffect(() => {
+    const hasSeenIntroThisSession = sessionStorage.getItem('hasSeenIntroThisSession') === 'true';
     const savedUserName = localStorage.getItem('userName');
-    if (savedUserName && savedUserName.trim()) {
-      // Se houver um nome salvo e ele não estiver vazio
-      setShowIntro(false); // Skip intro if username exists and is not empty
+    
+    if (hasSeenIntroThisSession && savedUserName && savedUserName.trim()) {
+      // Se já viu a intro nesta sessão E tem um nome salvo, pula a intro
+      setShowIntro(false);
     } else {
-      // Se não houver nome salvo ou estiver vazio, sempre mostrar a intro
+      // Mostra a intro se for primeira visita na sessão OU não tiver nome salvo
       setShowIntro(true);
-      // Limpar qualquer nome inválido que possa existir
-      localStorage.removeItem('userName');
+      
+      // Se não houver nome salvo ou estiver vazio, limpar
+      if (!savedUserName || !savedUserName.trim()) {
+        localStorage.removeItem('userName');
+      }
     }
   }, []);
 
@@ -71,7 +78,7 @@ const QuizPage: React.FC = () => {
     let currentStep = 0;
     if (showingStrategicQuestions) {
       currentStep = totalQuestions + currentStrategicQuestionIndex;
-    } else if (!showingTransition && !showingFinalTransition) { // Apenas se estiver mostrando questões normais
+    } else if (!showingTransition && !showingFinalTransition) {
       currentStep = currentQuestionIndex;
     }
     const percentage = Math.round((currentStep / totalSteps) * 100);
@@ -79,7 +86,7 @@ const QuizPage: React.FC = () => {
   }, [currentQuestionIndex, currentStrategicQuestionIndex, showingStrategicQuestions, showingTransition, showingFinalTransition, totalQuestions]);
 
   useEffect(() => {
-    if (!quizStartTracked && !showIntro) { // Only track quiz start when not showing intro
+    if (!quizStartTracked && !showIntro) {
       localStorage.setItem('quiz_start_time', Date.now().toString());
       const userName = user?.userName || localStorage.getItem('userName') || 'Anônimo';
       const userEmail = user?.email || localStorage.getItem('userEmail');
@@ -104,11 +111,14 @@ const QuizPage: React.FC = () => {
         description: "Por favor, digite seu nome para continuar com o quiz.",
         variant: "destructive",
       });
-      return; // Não continua se o nome estiver vazio
+      return;
     }
     
     // Salvar nome no localStorage
     localStorage.setItem('userName', name.trim());
+    
+    // Marcar que o usuário viu a intro nesta sessão
+    sessionStorage.setItem('hasSeenIntroThisSession', 'true');
     
     // Atualizar contexto de autenticação
     if (login) {
