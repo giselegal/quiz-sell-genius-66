@@ -134,18 +134,18 @@ interface VisualEditorData {
   headerFixed: boolean;
   animationsEnabled: boolean;
   gradientBackground: boolean;
-}
 
-const defaultData: VisualEditorData = {
-  // Hero
-  heroTitle: 'Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em um Aliado da Sua Imagem Pessoal',
-  heroSubtitle: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.',
-  heroCtaText: 'Quero Descobrir Meu Estilo Agora!',
-  
-  // Problema
-  problemTitle: 'Você se identifica com isso?',
-  problemDescription: 'Você já se sentiu frustrada ao abrir seu guarda-roupa cheio de roupas e mesmo assim não ter o que vestir?',
-  problemParagraph1: 'Você já se sentiu frustrada ao abrir seu guarda-roupa cheio de roupas e mesmo assim não ter o que vestir? Ou já comprou peças que pareciam perfeitas na loja, mas que nunca combinaram com nada que você tem?',
+  // Padding/Margem por seção
+  heroPadding?: string;
+  problemPadding?: string;
+  solutionPadding?: string;
+  benefitsPadding?: string;
+  bonus1Padding?: string;
+  bonus2Padding?: string;
+  mentorPadding?: string;
+  testimonialsPadding?: string;
+  guaranteePadding?: string;
+  faqPadding?: string;
   problemParagraph2: 'A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".',
   problemParagraph3: 'Quantas vezes você já perdeu tempo precioso tentando montar um look que te fizesse sentir confiante? Ou gastou dinheiro em peças que raramente (ou nunca) usou?',
   problemConclusion: 'Isso acontece porque você ainda não descobriu seu estilo predominante - aquele que está alinhado com sua personalidade, valores e essência.',
@@ -1041,127 +1041,4 @@ const QuizOfferPageVisualEditor: React.FC = () => {
                       >
                         <option value="max-w-sm">Pequeno (max-w-sm)</option>
                         <option value="max-w-md">Médio (max-w-md)</option>
-                        <option value="max-w-lg">Grande (max-w-lg)</option>
-                        <option value="max-w-xl">Extra Grande (max-w-xl)</option>
-                        <option value="max-w-2xl">2XL (max-w-2xl)</option>
-                      </select>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="p-4">
-                  <h3 className="font-medium mb-4">Seções Visíveis</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showActiveUsers">Usuários Ativos</Label>
-                      <Switch
-                        id="showActiveUsers"
-                        checked={editorData.showActiveUsers}
-                        onCheckedChange={(checked) => updateData('showActiveUsers', checked)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showCountdown">Contagem Regressiva</Label>
-                      <Switch
-                        id="showCountdown"
-                        checked={editorData.showCountdown}
-                        onCheckedChange={(checked) => updateData('showCountdown', checked)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showLimitedSpots">Vagas Limitadas</Label>
-                      <Switch
-                        id="showLimitedSpots"
-                        checked={editorData.showLimitedSpots}
-                        onCheckedChange={(checked) => updateData('showLimitedSpots', checked)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showBonuses">Mostrar Bônus</Label>
-                      <Switch
-                        id="showBonuses"
-                        checked={editorData.showBonuses}
-                        onCheckedChange={(checked) => updateData('showBonuses', checked)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showMentor">Mostrar Mentora</Label>
-                      <Switch
-                        id="showMentor"
-                        checked={editorData.showMentor}
-                        onCheckedChange={(checked) => updateData('showMentor', checked)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showTestimonials">Mostrar Depoimentos</Label>
-                      <Switch
-                        id="showTestimonials"
-                        checked={editorData.showTestimonials}
-                        onCheckedChange={(checked) => updateData('showTestimonials', checked)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showGuarantee">Mostrar Garantia</Label>
-                      <Switch
-                        id="showGuarantee"
-                        checked={editorData.showGuarantee}
-                        onCheckedChange={(checked) => updateData('showGuarantee', checked)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showFaq">Mostrar FAQ</Label>
-                      <Switch
-                        id="showFaq"
-                        checked={editorData.showFaq}
-                        onCheckedChange={(checked) => updateData('showFaq', checked)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="showBeforeAfter">Antes e Depois</Label>
-                      <Switch
-                        id="showBeforeAfter"
-                        checked={editorData.showBeforeAfter}
-                        onCheckedChange={(checked) => updateData('showBeforeAfter', checked)}
-                      />
-                    </div>
-                  </div>
-                </Card>
-
-                <Card className="p-4">
-                  <h3 className="font-medium mb-4">Configurações</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="headerFixed">Header Fixo</Label>
-                      <Switch
-                        id="headerFixed"
-                        checked={editorData.headerFixed}
-                        onCheckedChange={(checked) => updateData('headerFixed', checked)}
-                      />
-                    </div>
-                  </div>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
-        )}
-
-        {/* Preview Panel */}
-        <div className="flex-1 overflow-auto">
-          <div 
-            className="min-h-full"
-            style={{
-              '--primary-color': editorData.primaryColor,
-              '--secondary-color': editorData.secondaryColor,
-              '--border-radius': `${editorData.borderRadius}px`,
-              '--spacing': `${editorData.spacing}px`,
-            } as React.CSSProperties}
-          >
-            <QuizOfferPageEditable data={editorData} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default QuizOfferPageVisualEditor;
+                        <option value="max-w-lg">Grande (p
