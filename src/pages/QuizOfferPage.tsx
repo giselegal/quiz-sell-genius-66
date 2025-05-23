@@ -225,10 +225,10 @@ const QuizOfferPage: React.FC = () => {
   }, []);
   
   // Função para rastrear cliques em botões
-  const handleCtaClick = (buttonId) => {
+  const handleCtaClick = (buttonId: string, action: string = 'Comprar Agora') => {
     trackButtonClick(
       buttonId,
-      'Começar Quiz Agora',
+      action,
       'quiz_offer_page'
     );
   };
@@ -270,16 +270,16 @@ const QuizOfferPage: React.FC = () => {
         
         <div className="mt-8 flex flex-col items-center">
           <a 
-            href="/quiz" 
-            onClick={() => handleCtaClick('hero_cta')}
+            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+            onClick={() => handleCtaClick('hero_cta', 'Quero Descobrir Meu Estilo Agora')}
             className="group px-8 py-4 bg-[#B89B7A] hover:bg-[#A1835D] text-white font-medium rounded-md text-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center"
           >
-            <span>Começar Quiz Agora</span>
-            <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+            <span>Quero Descobrir Meu Estilo Agora!</span>
+            <ShoppingBag size={18} className="ml-2 group-hover:scale-110 transition-transform" />
           </a>
           <p className="mt-4 text-sm text-gray-500 flex items-center">
-            <Clock size={14} className="mr-1" />
-            Leva apenas 3 minutos para descobrir seu estilo único
+            <Shield size={14} className="mr-1" />
+            Compra segura e acesso imediato ao quiz e materiais exclusivos.
           </p>
         </div>
       </section>
@@ -428,26 +428,22 @@ const QuizOfferPage: React.FC = () => {
             Pronto para Transformar Seu Estilo?
           </h2>
           <p className="text-lg text-gray-200 mb-8">
-            Não perca mais tempo, descubra agora mesmo o estilo que combina perfeitamente com você.
+            Adquira seu acesso e descubra o estilo que combina perfeitamente com você através do nosso quiz exclusivo.
           </p>
-          
-          <div className="inline-block">
-            <CountdownTimer />
-          </div>
           
           <div className="mt-8">
             <a 
-              href="/quiz" 
-              onClick={() => handleCtaClick('footer_cta')}
+              href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912" 
+              onClick={() => handleCtaClick('footer_cta', 'Garantir Minha Vaga e Fazer o Quiz')}
               className="group px-10 py-4 bg-[#B89B7A] hover:bg-[#A1835D] text-white font-medium rounded-md text-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center mx-auto"
             >
-              <span>Fazer o Quiz Agora</span>
+              <span>Garantir Minha Vaga e Fazer o Quiz!</span>
               <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
             </a>
             
             <p className="mt-4 text-sm text-gray-300 flex items-center justify-center">
               <Users size={14} className="mr-1" />
-              Se junte a mais de 250.000 pessoas que já descobriram seu estilo
+              Se junte a mais de 250.000 pessoas que já transformaram seu estilo
             </p>
           </div>
         </div>
