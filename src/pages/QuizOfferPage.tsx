@@ -302,6 +302,42 @@ const FaqSectionNew = () => {
     );
 };
 
+// Componente de título padronizado - SIMPLIFICADO
+const SectionTitle: React.FC<{
+  children: React.ReactNode;
+  subtitle?: string;
+  size?: 'lg' | 'xl';
+  className?: string;
+  variant?: 'primary' | 'secondary' | 'simple';
+}> = ({ children, subtitle, size = 'xl', className = '', variant = 'simple' }) => (
+  <div className={`text-center mb-16 animate-fade-in-up ${className}`}>
+    {/* Decoração superior - APENAS para títulos principais */}
+    {variant === 'primary' && (
+      <div className="flex justify-center mb-4">
+        <div className="w-24 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-full"></div>
+      </div>
+    )}
+    
+    {/* Título principal - estilos diferenciados */}
+    <h2 className={`font-bold font-playfair leading-tight mb-6 ${
+      variant === 'primary' 
+        ? 'text-4xl md:text-5xl lg:text-6xl text-brand-dark'
+        : variant === 'secondary'
+        ? 'text-3xl md:text-4xl lg:text-5xl text-brand-dark'
+        : 'text-3xl md:text-4xl font-bold text-brand-dark'
+    }`}>
+      {children}
+    </h2>
+    
+    {/* Subtítulo opcional */}
+    {subtitle && (
+      <p className="text-xl text-brand-medium font-inter max-w-3xl mx-auto">
+        {subtitle}
+      </p>
+    )}
+  </div>
+);
+
 const QuizOfferPage: React.FC = () => {
     useEffect(() => {
         // Inject custom styles
@@ -515,9 +551,9 @@ const QuizOfferPage: React.FC = () => {
                 <section className="section-spacing bg-brand-soft">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                         <div className="card-modern p-6 md:p-8 lg:p-12">
-                            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark mb-12 text-center font-playfair">
+                            <SectionTitle variant="primary">
                                 Muito Mais Que um Quiz: Uma Jornada Completa
-                            </h2>
+                            </SectionTitle>
                             <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
                                 <div className="order-2 md:order-1 space-y-6">
                                     <p className="text-lg md:text-xl text-brand-medium leading-relaxed font-inter">
@@ -581,14 +617,12 @@ const QuizOfferPage: React.FC = () => {
                 {/* 5. Bônus Especiais */}
                 <section className="section-spacing">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-                        <div className="text-center mb-16">
-                            <h2 className="text-4xl md:text-5xl font-bold text-brand-dark mb-4 font-playfair">
-                                Bônus <span className="text-brand-primary">Especiais</span>
-                            </h2>
-                            <p className="text-xl text-brand-medium font-inter">
-                                Receba materiais exclusivos para acelerar sua transformação
-                            </p>
-                        </div>
+                        <SectionTitle 
+                            variant="secondary"
+                            subtitle="Receba materiais exclusivos para acelerar sua transformação"
+                        >
+                            Bônus <span className="text-brand-primary">Especiais</span>
+                        </SectionTitle>
                         
                         {/* Bônus 1 */}
                         <div className="card-modern p-8 md:p-12 mb-12">
@@ -692,16 +726,13 @@ const QuizOfferPage: React.FC = () => {
                     
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
                         <div className="max-w-6xl mx-auto">
-                            {/* Header da seção */}
-                            <div className="text-center mb-16 animate-fade-in-up">
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
-                                    Conheça Sua 
-                                    <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent"> Mentora</span>
-                                </h2>
-                                <p className="text-xl text-brand-medium font-inter max-w-3xl mx-auto">
-                                    A especialista que vai guiar sua transformação de imagem
-                                </p>
-                            </div>
+                            <SectionTitle 
+                                variant="primary"
+                                subtitle="A especialista que vai guiar sua transformação de imagem"
+                            >
+                                Conheça Sua 
+                                <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent"> Mentora</span>
+                            </SectionTitle>
 
                             {/* Card principal da mentora */}
                             <div className="card-modern p-8 md:p-12 lg:p-16">
@@ -772,16 +803,13 @@ const QuizOfferPage: React.FC = () => {
                     
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
                         <div className="max-w-7xl mx-auto">
-                            {/* Header da seção - texto corrigido */}
-                            <div className="text-center mb-16 animate-fade-in-up">
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
-                                    Resultados Reais de 
-                                    <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent"> Mulheres Reais</span>
-                                </h2>
-                                <p className="text-xl text-brand-medium max-w-4xl mx-auto font-inter leading-relaxed">
-                                    Veja o que dizem as mulheres que já descobriram seu estilo e transformaram sua imagem com os guias
-                                </p>
-                            </div>
+                            <SectionTitle 
+                                variant="primary"
+                                subtitle="Veja o que dizem as mulheres que já descobriram seu estilo e transformaram sua imagem com os guias"
+                            >
+                                Resultados Reais de 
+                                <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent"> Mulheres Reais</span>
+                            </SectionTitle>
 
                             {/* Imagem principal de depoimentos */}
                             <div className="mb-16 animate-fade-in-up">
@@ -902,7 +930,7 @@ const QuizOfferPage: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Header da seção */}
+                            {/* Header da seção - SEM DECORAÇÕES EXCESSIVAS */}
                             <div className="text-center mb-16">
                                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-playfair leading-tight">
                                     Sua Satisfação 
@@ -1089,20 +1117,13 @@ const QuizOfferPage: React.FC = () => {
                     
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
                         <div className="max-w-6xl mx-auto">
-                            {/* Header da seção */}
-                            <div className="text-center mb-16 animate-fade-in-up">
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
-                                    Perguntas 
-                                    <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">Frequentes</span>
-                                </h2>
-                                {/* Elementos decorativos */}
-                                <div className="flex justify-center mb-4">
-                                    <div className="w-24 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-full"></div>
-                                </div>
-                                <p className="text-xl text-brand-medium font-inter max-w-3xl mx-auto">
-                                    Tire suas dúvidas e descubra como transformar sua imagem
-                                </p>
-                            </div>
+                            <SectionTitle 
+                                variant="primary"
+                                subtitle="Tire suas dúvidas e descubra como transformar sua imagem"
+                            >
+                                Perguntas 
+                                <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">Frequentes</span>
+                            </SectionTitle>
 
                             {/* Imagem ilustrativa */}
                             <div className="mb-16 flex justify-center">
