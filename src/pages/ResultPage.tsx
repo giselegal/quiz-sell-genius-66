@@ -775,26 +775,15 @@ const ResultPage: React.FC = () => {
                       </p>
                     </div>
 
-                    {/* INDICADOR DE VALOR - VISUAL MELHORADO */}
+                    {/* INDICADOR DE VALOR - SIMPLIFICADO */}
                     <div className="mt-4 pt-4 border-t border-[#B89B7A]/15">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {index === 0 ? (
-                            <span className="inline-flex items-center gap-1">
-                              <div className="w-1.5 h-1.5 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] rounded-full"></div>
-                            
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1">
-                              <div className="w-1.5 h-1.5 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] rounded-full"></div>
-                              
-                            </span>
-                          )}
+                          {index === 0 ? 'Guia Principal' : 'Bônus Incluso'}
                         </span>
                         <div className="flex items-center gap-2">
-                          <div className={`w-2.5 h-2.5 rounded-full ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]'}`}></div>
                           <span className={`text-sm font-semibold ${index === 0 ? 'text-[#aa6b5d]' : 'text-[#aa6b5d]'}`}>
-                            {index === 0 ? 'Personalizado' : 'Bônus'}
+                            {index === 0 ? 'Personalizado' : 'Grátis'}
                           </span>
                         </div>
                       </div>
@@ -807,25 +796,21 @@ const ResultPage: React.FC = () => {
               <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/25 max-w-3xl mx-auto relative overflow-hidden"
                    style={{ boxShadow: tokens.shadows.lg }}>
                 
-                {/* BACKGROUND DECORATIVO */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#B89B7A]/5 to-transparent rounded-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#aa6b5d]/5 to-transparent rounded-full"></div>
+                {/* BACKGROUND DECORATIVO - SIMPLIFICADO */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#B89B7A]/3 to-transparent rounded-full"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#aa6b5d]/3 to-transparent rounded-full"></div>
                 
                 <div className="relative z-10">
                   <h4 className="font-bold text-[#432818] mb-6 text-center text-lg lg:text-xl">
-                    <span className="inline-flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
-                      Seu Kit Completo de Transformação
-                      <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
-                    </span>
+                    Seu Kit Completo de Transformação
                   </h4>
                   
                   <div className="space-y-4">
-                    {/* Item Principal - DESTAQUE MELHORADO */}
+                    {/* Item Principal - DESIGN LIMPO */}
                     <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 p-5 bg-white/80 rounded-xl border border-[#B89B7A]/20 relative"
                          style={{ boxShadow: tokens.shadows.md }}>
                       
-                      {/* BADGE DE DESTAQUE */}
+                      {/* BADGE DE DESTAQUE - SIMPLIFICADO */}
                       <div className="absolute -top-2 -left-2 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
                         Guia Completo
                       </div>
@@ -854,7 +839,7 @@ const ResultPage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Bônus 1 - VISUAL CONSISTENTE */}
+                    {/* Bônus 1 - VISUAL LIMPO */}
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4 bg-white/60 rounded-xl border border-[#B89B7A]/10">
                       <div className="flex items-start gap-3 flex-1">
                         <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-2"></div>
@@ -874,7 +859,7 @@ const ResultPage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Bônus 2 - VISUAL CONSISTENTE */}
+                    {/* Bônus 2 - VISUAL LIMPO */}
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4 bg-white/60 rounded-xl border border-[#B89B7A]/10">
                       <div className="flex items-start gap-3 flex-1">
                         <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-2"></div>
@@ -895,19 +880,18 @@ const ResultPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Resumo Final - DESIGN ELEGANTE E ESTRATÉGICO */}
+                  {/* Resumo Final - DESIGN LIMPO E ELEGANTE */}
                   <div className="border-t border-[#B89B7A]/20 mt-8 pt-8">
                     
-                    {/* BADGE DE OFERTA - ELEGANTE */}
+                    {/* BADGE DE OFERTA - LIMPO */}
                     <div className="text-center mb-6">
                       <div className="inline-flex items-center gap-2 bg-[#432818] text-white px-4 py-2 rounded-full text-sm font-semibold">
-                        <div className="w-2 h-2 bg-[#B89B7A] rounded-full"></div>
                         <span>OFERTA EXCLUSIVA QUIZ COMPLETO</span>
                       </div>
                     </div>
                     
                     <div className="text-center space-y-6">
-                      {/* COMPARAÇÃO DE VALOR - CLEAN */}
+                      {/* COMPARAÇÃO DE VALOR - SIMPLIFICADA */}
                       <div className="space-y-2">
                         <p className="text-base" style={{ color: tokens.colors.textMuted }}>
                           <span className="font-medium text-[#432818]">Valor total individual:</span> 
@@ -922,7 +906,7 @@ const ResultPage: React.FC = () => {
                         <div className="w-20 h-px bg-[#B89B7A]/30"></div>
                       </div>
                       
-                      {/* PREÇO PRINCIPAL - ELEGANTE */}
+                      {/* PREÇO PRINCIPAL - LIMPO */}
                       <div className="mb-6">
                         <div className="text-5xl lg:text-6xl font-bold text-[#432818] mb-2">
                           R$ 39,90
@@ -932,14 +916,14 @@ const ResultPage: React.FC = () => {
                         </p>
                       </div>
                       
-                      {/* ECONOMIA - MINIMALISTA */}
+                      {/* ECONOMIA - SIMPLIFICADA */}
                       <div className="inline-block bg-[#f8fdf8] border border-[#4CAF50]/20 px-6 py-3 rounded-lg">
                         <span className="text-[#2d7d32] font-semibold">
                           Economia de R$ 135,10 (77% de desconto)
                         </span>
                       </div>
                       
-                      {/* URGÊNCIA - SUTIL */}
+                      {/* URGÊNCIA - LIMPA */}
                       <div className="mt-4">
                         <p className="text-sm font-medium text-[#8F7A6A] flex items-center justify-center gap-2">
                           <Clock className="w-4 h-4" />
@@ -949,7 +933,7 @@ const ResultPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* CTA BUTTON - ÁREA DE TOQUE MELHORADA */}
+                  {/* CTA BUTTON - LIMPO */}
                   <div className="text-center mb-10 relative z-10 flex justify-center mt-8">
                     <button
                       onClick={handleCTAClick} 
@@ -987,16 +971,12 @@ const ResultPage: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* TRUST ELEMENTS - ESPAÇAMENTO E VISUAL MELHORADOS */}
+                  {/* TRUST ELEMENTS - SIMPLIFICADOS */}
                   <div className="flex items-center justify-center gap-8 text-sm flex-wrap mt-8 px-4">
                     <div className="inline-flex items-center gap-3 bg-[#fff7f3] px-5 py-3 rounded-full border border-[#B89B7A]/25 transition-transform duration-300 hover:scale-105"
                          style={{ boxShadow: tokens.shadows.sm }}>
-                      <div className="w-2.5 h-2.5 bg-[#aa6b5d] rounded-full animate-pulse"></div>
                       <span className="text-sm text-[#432818] font-semibold">
-                        <span className="inline-flex items-center gap-1">
-                          <div className="w-1 h-3 bg-gradient-to-t from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
-                          Acesso imediato
-                        </span>
+                        Acesso imediato
                       </span>
                     </div>
                     
