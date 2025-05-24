@@ -630,7 +630,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Mentor Section */}
-        <section id="mentor" className="scroll-mt-20 mb-12">
+        <section id="mentor" className="scroll-mt-20 mb-16">
           <SectionTitle 
             variant="simple"
             subtitle="Conheça a especialista que vai guiar sua transformação de imagem"
@@ -648,14 +648,25 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </Suspense>
         </section>
+
+        {/* SEÇÃO DE TRANSIÇÃO - Adicionar espaço antes do CTA final */}
+        <div className="mb-20">
+          <div className="text-center py-12">
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6"></div>
+            <p className="text-lg text-[#8F7A6A] font-medium">
+              Está pronta para transformar seu estilo?
+            </p>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-6"></div>
+          </div>
+        </div>
         
-        {/* Final CTA Section - SIMPLIFICADO */}
-        <section id="cta" className="scroll-mt-20 my-10 bg-white rounded-xl shadow-lg p-8 border border-[#B89B7A]/20 text-center relative overflow-hidden">
+        {/* Final CTA Section - ESPAÇAMENTO OTIMIZADO */}
+        <section id="cta" className="scroll-mt-20 mb-20 bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-[#B89B7A]/20 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-pattern-light opacity-5 pointer-events-none"></div>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
             {/* Título CTA com decoração elegante */}
             <AnimatedWrapper 
-              className="text-center mb-8"
+              className="text-center mb-12"
               animation="fade"
               show={true}
               duration={600}
@@ -666,7 +677,7 @@ const ResultPage: React.FC = () => {
                 <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
               </div>
               
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#432818] mb-4 leading-tight bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent relative z-10">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#432818] mb-6 leading-tight bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent relative z-10">
                 Transforme Seu Estilo Hoje
               </h2>
               
@@ -675,9 +686,9 @@ const ResultPage: React.FC = () => {
               </p>
             </AnimatedWrapper>
             
-            {/* PREVIEW VISUAL DOS MATERIAIS - IMAGENS REAIS CORRIGIDAS */}
-            <div className="mb-8 relative z-10">
-              <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+            {/* PREVIEW VISUAL DOS MATERIAIS - ESPAÇAMENTO MELHORADO */}
+            <div className="mb-12 relative z-10">
+              <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-10">
                 {/* Guia Principal - Imagem específica por categoria */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
                   <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm p-2">
@@ -736,11 +747,11 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Preview dos conteúdos internos - CORRIGIDO */}
-              <div className="mb-8">
+              {/* Preview dos conteúdos internos - ESPAÇAMENTO MELHORADO */}
+              <div className="mb-12">
                 <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 border border-[#B89B7A]/20 max-w-3xl mx-auto">
-                  <h4 className="text-lg font-semibold text-[#432818] mb-4 text-center">O que você encontrará dentro:</h4>
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <h4 className="text-lg font-semibold text-[#432818] mb-6 text-center">O que você encontrará dentro:</h4>
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
                     <div className="relative rounded-lg overflow-hidden shadow-sm bg-white p-2">
                       <ProgressiveImage 
                         src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920634/Espanhol_Portugu%C3%AAs_8_horqsn.png" 
@@ -758,7 +769,7 @@ const ResultPage: React.FC = () => {
                       />
                     </div>
                   </div>
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
                     <div className="flex flex-col items-center">
                       <CheckCircle className="w-5 h-5 text-[#B89B7A] mb-1" />
                       <span className="text-xs text-[#432818] font-medium">Paletas de Cores</span>
@@ -778,8 +789,11 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Valor Total Simplificado - ANCORAGEM OTIMIZADA */}
+            {/* SEÇÃO DE VALOR - SEPARADA DO CTA */}
+            <div className="mb-16">
+              {/* Valor Total - ANCORAGEM OTIMIZADA */}
               <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-xl p-4 sm:p-6 border border-[#B89B7A]/10 max-w-lg mx-auto mb-8 overflow-hidden shadow-sm">
                 <div className="flex items-center justify-between mb-4 px-1 sm:px-2">
                   <span className="text-[#8F7A6A] font-medium text-xs sm:text-sm">Valor individual dos materiais:</span>
@@ -806,27 +820,27 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* CTA Final - RESPONSIVIDADE MELHORADA */}
-              <div className="text-center mb-6">
-                <Button 
-                  onClick={handleCTAClick} 
-                  className="text-white text-lg sm:text-xl leading-none py-4 sm:py-5 px-6 sm:px-8 md:px-12 rounded-lg sm:rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold w-full sm:w-auto min-h-[56px]"
-                  style={{
-                    background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
-                    boxShadow: `0 8px 25px rgba(76, 175, 80, 0.4)`,
-                  }}
-                  type="button"
-                >
-                  <span className="flex items-center justify-center gap-2 sm:gap-3">
-                    <ShoppingCart className="w-5 sm:w-6 h-5 sm:h-6 flex-shrink-0" />
-                    <span className="whitespace-nowrap text-sm sm:text-base md:text-lg">Garantir Minha Transformação</span>
-                  </span>
-                </Button>
-              </div>
+            {/* CTA Final - BEM SEPARADO */}
+            <div className="text-center mb-8">
+              <Button 
+                onClick={handleCTAClick} 
+                className="text-white text-lg sm:text-xl leading-none py-4 sm:py-5 px-6 sm:px-8 md:px-12 rounded-lg sm:rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold w-full sm:w-auto min-h-[56px]"
+                style={{
+                  background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
+                  boxShadow: `0 8px 25px rgba(76, 175, 80, 0.4)`,
+                }}
+                type="button"
+              >
+                <span className="flex items-center justify-center gap-2 sm:gap-3">
+                  <ShoppingCart className="w-5 sm:w-6 h-5 sm:h-6 flex-shrink-0" />
+                  <span className="whitespace-nowrap text-sm sm:text-base md:text-lg">Garantir Minha Transformação</span>
+                </span>
+              </Button>
 
-              {/* Elementos de confiança simplificados - ORGANIZADOS */}
-              <div className="flex items-center justify-center gap-8 text-sm text-[#8F7A6A] flex-wrap">
+              {/* Elementos de confiança - MAIS ESPAÇADOS */}
+              <div className="flex items-center justify-center gap-8 text-sm text-[#8F7A6A] flex-wrap mt-6">
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
                   <span className="whitespace-nowrap">Compra Segura</span>
@@ -839,6 +853,9 @@ const ResultPage: React.FC = () => {
             </div>
           </AnimatedWrapper>
         </section>
+
+        {/* ESPAÇO ADICIONAL antes do sticky CTA aparecer */}
+        <div className="mb-32"></div>
       </div>
     </div>
   );
