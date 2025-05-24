@@ -961,8 +961,8 @@ const ResultPage: React.FC = () => {
                   🔒 <strong>Pagamento 100% seguro</strong> • <strong>Site confiável</strong>
                 </p>
               </div>
-            </AnimatedWrapper>
-          </div>
+            </div>
+          </AnimatedWrapper>
         </section>
 
         {/* BOTTOM SPACING */}
