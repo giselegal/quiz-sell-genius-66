@@ -2,7 +2,6 @@
 import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
@@ -15,21 +14,70 @@ import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
-import BuildInfo from '@/components/BuildInfo';
-import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
-import ResourcePreloader from '@/components/result/ResourcePreloader';
-import PerformanceMonitor from '@/components/result/PerformanceMonitor';
 
-// Seções carregadas via lazy
-const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
-const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
-const BonusSection = lazy(() => import('@/components/result/BonusSection'));
-const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
-const GuaranteeSection = lazy(() => import('@/components/result/GuaranteeSection'));
-const MentorSection = lazy(() => import('@/components/result/MentorSection'));
+// Lazy loading com fallback seguro
+const BeforeAfterTransformation = lazy(() => 
+  import('@/components/result/BeforeAfterTransformation4').catch(() => ({
+    default: () => (
+      <div className="text-center py-8">
+        <p className="text-gray-600">Seção de transformações em desenvolvimento</p>
+      </div>
+    )
+  }))
+);
+
+const MotivationSection = lazy(() =>
+  import('@/components/result/MotivationSection').catch(() => ({
+    default: () => (
+      <div className="text-center py-8">
+        <p className="text-gray-600">Seção de motivação em desenvolvimento</p>
+      </div>
+    )
+  }))
+);
+
+const BonusSection = lazy(() =>
+  import('@/components/result/BonusSection').catch(() => ({
+    default: () => (
+      <div className="text-center py-8">
+        <p className="text-gray-600">Seção de bônus em desenvolvimento</p>
+      </div>
+    )
+  }))
+);
+
+const Testimonials = lazy(() =>
+  import('@/components/quiz-result/sales/Testimonials').catch(() => ({
+    default: () => (
+      <div className="text-center py-8">
+        <p className="text-gray-600">Depoimentos em desenvolvimento</p>
+      </div>
+    )
+  }))
+);
+
+const GuaranteeSection = lazy(() =>
+  import('@/components/result/GuaranteeSection').catch(() => ({
+    default: () => (
+      <div className="text-center py-8">
+        <p className="text-gray-600">Seção de garantia em desenvolvimento</p>
+      </div>
+    )
+  }))
+);
+
+const MentorSection = lazy(() =>
+  import('@/components/result/MentorSection').catch(() => ({
+    default: () => (
+      <div className="text-center py-8">
+        <p className="text-gray-600">Seção da mentora em desenvolvimento</p>
+      </div>
+    )
+  }))
+);
 
 // Design tokens - SISTEMA PADRONIZADO
 const tokens = {
@@ -242,12 +290,26 @@ const ResultPage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  if (!primaryStyle) return <ErrorState />;
-  if (isLoading) return <ResultSkeleton />;
+  // Verificação de segurança para primaryStyle
+  if (!primaryStyle) {
+    return <ErrorState />;
+  }
+
+  if (isLoading) {
+    return <ResultSkeleton />;
+  }
   
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
   
+  // Verificação de segurança para styleConfig
+  const styleData = styleConfig[category];
+  if (!styleData) {
+    console.error(`Style config not found for category: ${category}`);
+    return <ErrorState />;
+  }
+  
+  const { image, guideImage, description } = styleData;
+
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Prevenir comportamento padrão e propagação
     e.preventDefault();
@@ -285,9 +347,9 @@ const ResultPage: React.FC = () => {
   
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundColor: globalStyles.backgroundColor || tokens.colors.background,
-      color: globalStyles.textColor || tokens.colors.text,
-      fontFamily: globalStyles.fontFamily || 'inherit'
+      backgroundColor: globalStyles?.backgroundColor || tokens.colors.background,
+      color: globalStyles?.textColor || tokens.colors.text,
+      fontFamily: globalStyles?.fontFamily || 'inherit'
     }}>
       {/* Custom scrollbar styles */}
       <style dangerouslySetInnerHTML={{
@@ -308,24 +370,21 @@ const ResultPage: React.FC = () => {
         `
       }} />
 
-      {/* Preloaders and monitors */}
-      <ResourcePreloader />
-      <PerformanceMonitor />
-      
-      {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-br from-[#B89B7A]/10 to-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-[#aa6b5d]/10 to-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-      <div className="absolute top-1/3 left-0 w-1/5 h-1/5 bg-gradient-to-r from-[#B89B7A]/5 to-[#aa6b5d]/5 rounded-full blur-3xl -translate-x-1/2"></div>
-      
-      {/* Header - Super simplificado */}
+      {/* Header - Verificação de segurança */}
       <header className="py-4 px-6 sticky top-0 z-50 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto max-w-4xl flex justify-center">
-          <img
-            src={globalStyles.logo}
-            alt={globalStyles.logoAlt || "Logo"}
-            style={{ height: globalStyles.logoHeight || '60px' }}
-            className="h-auto object-contain"
-          />
+          {globalStyles?.logo && (
+            <img
+              src={globalStyles.logo}
+              alt={globalStyles.logoAlt || "Logo"}
+              style={{ height: globalStyles.logoHeight || '60px' }}
+              className="h-auto object-contain"
+              onError={(e) => {
+                console.error('Logo failed to load');
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          )}
         </div>
       </header>
 
@@ -465,25 +524,39 @@ const ResultPage: React.FC = () => {
                     <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-5 border border-[#B89B7A]/10"
                          style={{ boxShadow: tokens.shadows.sm }}>
                       <h3 className="text-lg font-medium text-[#aa6b5d] mb-3">Estilos que Também Influenciam Você</h3>
-                      <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                      {secondaryStyles && secondaryStyles.length > 0 ? (
+                        <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                      ) : (
+                        <p className="text-sm text-gray-600">Carregando estilos secundários...</p>
+                      )}
                     </div>
                   </AnimatedWrapper>
                 </div>
 
-                {/* IMAGE SECTION - OTIMIZADA */}
+                {/* IMAGE SECTION - COM FALLBACK */}
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 lg:order-2">
                   <div className="w-full max-w-xs lg:max-w-sm mx-auto relative"> 
-                    <ProgressiveImage 
-                      src={`${image}?q=85&f=auto&w=400`} 
-                      alt={`Estilo ${category}`} 
-                      width={400} 
-                      height={500} 
-                      className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-105" 
-                      style={{ boxShadow: tokens.shadows.md }}
-                      loading="eager" 
-                      fetchPriority="high" 
-                      onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
-                    />
+                    {image ? (
+                      <ProgressiveImage 
+                        src={`${image}?q=85&f=auto&w=400`} 
+                        alt={`Estilo ${category}`} 
+                        width={400} 
+                        height={500} 
+                        className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-105" 
+                        style={{ boxShadow: tokens.shadows.md }}
+                        loading="eager" 
+                        fetchPriority="high" 
+                        onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
+                        onError={(e) => {
+                          console.error('Style image failed to load');
+                          setImagesLoaded(prev => ({ ...prev, style: true }));
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-96 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <p className="text-gray-600">Imagem não disponível</p>
+                      </div>
+                    )}
                     
                     {/* DECORATIVE CORNERS - RESPONSIVOS */}
                     <div className="absolute -top-2 -right-2 w-8 lg:w-10 h-8 lg:h-10 border-t-2 border-r-2 border-[#B89B7A] rounded-tr-lg"></div>
@@ -498,20 +571,30 @@ const ResultPage: React.FC = () => {
                 </AnimatedWrapper>
               </div>
               
-              {/* GUIDE IMAGE - OTIMIZADA */}
+              {/* GUIDE IMAGE - COM FALLBACK */}
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
                 <div className="mt-12 max-w-2xl mx-auto relative">
                   <h3 className="text-xl lg:text-2xl font-medium text-center text-[#aa6b5d] mb-6">
                     Seu Guia de Estilo Personalizado
                   </h3>
-                  <ProgressiveImage 
-                    src={`${guideImage}?q=85&f=auto&w=800`} 
-                    alt={`Guia de Estilo ${category}`} 
-                    loading="lazy" 
-                    className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-102" 
-                    style={{ boxShadow: tokens.shadows.lg }}
-                    onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
-                  />
+                  {guideImage ? (
+                    <ProgressiveImage 
+                      src={`${guideImage}?q=85&f=auto&w=800`} 
+                      alt={`Guia de Estilo ${category}`} 
+                      loading="lazy" 
+                      className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-102" 
+                      style={{ boxShadow: tokens.shadows.lg }}
+                      onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))}
+                      onError={(e) => {
+                        console.error('Guide image failed to load');
+                        setImagesLoaded(prev => ({ ...prev, guide: true }));
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+                      <p className="text-gray-600">Guia não disponível</p>
+                    </div>
+                  )}
                   
                   {/* BADGE CONSISTENTE */}
                   <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 rounded-full text-xs font-medium transform rotate-12"
@@ -533,7 +616,7 @@ const ResultPage: React.FC = () => {
             Antes e Depois: Estilo {category} na Prática
           </SectionTitle>
           <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
+            <div className="py-12 flex flex-col items-center justify-center bg-white rounded-xl border border-[#B89B7A]/20">
               <LoadingSpinner size="lg" className="mb-4" />
               <p className="text-[#8F7A6A]">Carregando transformações...</p>
             </div>
@@ -551,12 +634,12 @@ const ResultPage: React.FC = () => {
         <section id="motivation" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="secondary"
-            subtitle="Por que mulheres com seu perfil {category} conquistam mais confiança e oportunidades"
+            subtitle={`Por que mulheres com seu perfil ${category} conquistam mais confiança e oportunidades`}
           >
             A Ciência Por Trás do Seu Estilo {category}
           </SectionTitle>
           <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
+            <div className="py-12 flex flex-col items-center justify-center bg-white rounded-xl border border-[#B89B7A]/20">
               <LoadingSpinner size="lg" className="mb-4" />
               <p className="text-[#8F7A6A]">Carregando conteúdo...</p>
             </div>
@@ -571,12 +654,12 @@ const ResultPage: React.FC = () => {
         <section id="bonuses" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Ferramentas extras para você dominar completamente seu estilo {category}"
+            subtitle={`Ferramentas extras para você dominar completamente seu estilo ${category}`}
           >
             Bônus Exclusivos Para o Estilo {category}
           </SectionTitle>
           <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
+            <div className="py-12 flex flex-col items-center justify-center bg-white rounded-xl border border-[#B89B7A]/20">
               <LoadingSpinner size="lg" className="mb-4" />
               <p className="text-[#8F7A6A]">Carregando bônus...</p>
             </div>
@@ -591,12 +674,12 @@ const ResultPage: React.FC = () => {
         <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="O que mulheres {category} estão dizendo sobre sua transformação"
+            subtitle={`O que mulheres ${category} estão dizendo sobre sua transformação`}
           >
             Resultados Reais de Mulheres Como Você
           </SectionTitle>
           <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
+            <div className="py-12 flex flex-col items-center justify-center bg-white rounded-xl border border-[#B89B7A]/20">
               <LoadingSpinner size="lg" className="mb-4" />
               <p className="text-[#8F7A6A]">Carregando depoimentos...</p>
             </div>
@@ -611,12 +694,12 @@ const ResultPage: React.FC = () => {
         <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Teste seu novo estilo {category} por 7 dias. Se não amar, devolvemos seu dinheiro"
+            subtitle={`Teste seu novo estilo ${category} por 7 dias. Se não amar, devolvemos seu dinheiro`}
           >
             Garantia Incondicional de 7 Dias
           </SectionTitle>
           <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
+            <div className="py-12 flex flex-col items-center justify-center bg-white rounded-xl border border-[#B89B7A]/20">
               <LoadingSpinner size="lg" className="mb-4" />
               <p className="text-[#8F7A6A]">Carregando garantia...</p>
             </div>
@@ -636,7 +719,7 @@ const ResultPage: React.FC = () => {
             Quem Criou Seu Guia Personalizado
           </SectionTitle>
           <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
+            <div className="py-12 flex flex-col items-center justify-center bg-white rounded-xl border border-[#B89B7A]/20">
               <LoadingSpinner size="lg" className="mb-4" />
               <p className="text-[#8F7A6A]">Carregando informações da mentora...</p>
             </div>
