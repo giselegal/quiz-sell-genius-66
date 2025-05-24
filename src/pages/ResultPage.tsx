@@ -900,7 +900,6 @@ const ResultPage: React.FC = () => {
 
               {/* TRUST ELEMENTS - SPACING PADRONIZADO */}
               <div className="flex items-center justify-center gap-6 lg:gap-8 text-sm text-[#8F7A6A] flex-wrap mt-8 px-4">
-
                 {/* URGENCY BADGE - CONSISTENTE */}
                 <div className="mt-6 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20"
                      style={{ boxShadow: tokens.shadows.sm }}>

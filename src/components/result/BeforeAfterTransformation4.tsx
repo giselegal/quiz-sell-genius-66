@@ -99,7 +99,7 @@ const NavButton = React.memo<{
   onClick: () => void;
 }>(({ direction, onClick }) => (
   <button
-    className="bg-white/95 backdrop-blur-sm rounded-full p-3 shadow-md hover:bg-[#B89B7A]/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-1 z-20"
+    className="bg-white/95 backdrop-blur-sm rounded-full p-2 md:p-3 shadow-md hover:bg-[#B89B7A]/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-1 z-20"
     onClick={useCallback((e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -109,9 +109,9 @@ const NavButton = React.memo<{
     aria-label={direction === 'prev' ? 'Anterior' : 'Próxima'}
   >
     {direction === 'prev' ? (
-      <ChevronLeft size={24} className="text-[#432818]" style={{ pointerEvents: 'none' }} />
+      <ChevronLeft size={16} className="text-[#432818] md:w-6 md:h-6" style={{ pointerEvents: 'none' }} />
     ) : (
-      <ChevronRight size={24} className="text-[#432818]" style={{ pointerEvents: 'none' }} />
+      <ChevronRight size={16} className="text-[#432818] md:w-6 md:h-6" style={{ pointerEvents: 'none' }} />
     )}
   </button>
 ));
@@ -310,7 +310,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   
                   {/* NAVIGATION - OPTIMIZED */}
                   {transformations.length > 1 && (
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 z-20">
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 md:px-2 z-20">
                       <NavButton direction="prev" onClick={goToPrevious} />
                       <NavButton direction="next" onClick={goToNext} />
                     </div>
