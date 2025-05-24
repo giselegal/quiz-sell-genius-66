@@ -364,7 +364,18 @@ const ResultPage: React.FC = () => {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="space-y-6 order-2 md:order-1">
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
-                    <p className="text-[#432818] leading-relaxed text-base md:text-lg">{description}</p>
+                    <p className="text-[#432818] leading-relaxed text-base md:text-lg">
+                      {description.split('você').map((part, index, array) => (
+                        <React.Fragment key={index}>
+                          {part}
+                          {index < array.length - 1 && (
+                            <span className="font-bold text-[#aa6b5d] bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                              você
+                            </span>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </p>
                   </AnimatedWrapper>
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={600}>
                     <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-5 shadow-sm border border-[#B89B7A]/10">
