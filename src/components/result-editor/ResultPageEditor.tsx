@@ -517,47 +517,52 @@ function renderContentEditor(sectionPath: string, config: any, updateSection: (p
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
+    // Remover temporariamente as referências aos editores que não existem
     case 'offer.authority':
-      return (
-        <AuthorityEditor 
-          content={current.content || {}}
-          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
-        />
-      );
     case 'offer.faq':
-      return (
-        <FaqEditor 
-          content={current.content || {}}
-          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
-        />
-      );
     case 'offer.urgency':
-      return (
-        <UrgencyEditor 
-          content={current.content || {}}
-          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
-        />
-      );
     case 'offer.comparison':
-      return (
-        <ComparisonEditor 
-          content={current.content || {}}
-          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
-        />
-      );
     case 'offer.riskReversal':
-      return (
-        <RiskReversalEditor 
-          content={current.content || {}}
-          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
-        />
-      );
     case 'offer.finalCta':
       return (
-        <FinalCtaEditor 
-          content={current.content || {}}
-          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
-        />
+        <div className="space-y-4">
+          <div className="p-4 border rounded-lg bg-yellow-50 border-yellow-200">
+            <p className="text-sm text-yellow-800">
+              🚧 Editor em desenvolvimento para: <strong>{getEditorTitle(sectionPath)}</strong>
+            </p>
+            <p className="text-xs text-yellow-600 mt-2">
+              Use o editor genérico abaixo por enquanto.
+            </p>
+          </div>
+          {Object.entries(current.content || {}).map(([key, value]) => {
+            if (typeof value === 'string') {
+              return (
+                <div key={key} className="space-y-2">
+                  <label htmlFor={key} className="text-sm font-medium capitalize">
+                    {key.replace(/([A-Z])/g, ' $1').trim()}
+                  </label>
+                  {value.length > 100 ? (
+                    <textarea
+                      id={key}
+                      value={value as string}
+                      onChange={(e) => updateSection(`${sectionPath}.content.${key}`, e.target.value)}
+                      className="w-full min-h-[100px] p-2 border rounded-md"
+                    />
+                  ) : (
+                    <input
+                      id={key}
+                      type="text"
+                      value={value as string}
+                      onChange={(e) => updateSection(`${sectionPath}.content.${key}`, e.target.value)}
+                      className="w-full p-2 border rounded-md"
+                    />
+                  )}
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
       );
     default:
       return (
