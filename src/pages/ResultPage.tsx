@@ -919,89 +919,94 @@ const ResultPage: React.FC = () => {
 
                   {/* RESUMO FINAL - DESIGN LIMPO */}
                   <div className="border-t-2 border-[#B89B7A]/20 pt-8">
-                    {/* <- substituído por novo conteúdo -> */}
-                    <div className="text-center space-y-8">
-                      <h3 className="text-2xl font-bold text-[#432818] mb-4">TUDO O QUE VOCÊ VAI RECEBER HOJE:</h3>
 
-                      <div className="space-y-6 text-left max-w-2xl mx-auto">
-                        <p className="font-semibold">1. Guias Completos de Estilo Personalizado</p>
-                        <ul className="list-disc list-inside space-y-2">
-                          <li>
-                            <strong>Manual Exclusivo do Seu Estilo Predominante:</strong> {category}
-                          </li>
-                          <li>
-                            <strong>+ Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.map(s => s.category).join(' e ')}
-                          </li>
-                          <li>
-                            Transforme sua imagem com looks estratégicos que comunicam sua essência e valorizam sua personalidade única.
-                          </li>
-                        </ul>
-                        <p><strong>Valor individual:</strong> R$ 79,00</p>
-                      </div>
+  {/* inicia novo conteúdo */}
+  <div className="text-center space-y-8">
+    <h3 className="text-2xl font-bold text-[#432818] mb-4">
+      TUDO O QUE VOCÊ VAI RECEBER HOJE:
+    </h3>
 
-                      <div className="space-y-6 text-left max-w-2xl mx-auto">
-                        <p className="font-semibold">BÔNUS 1: Guia das Peças Estratégicas</p>
-                        <p>
-                          Descubra as peças essenciais que multiplicam suas possibilidades de looks, economizam tempo e dinheiro.
-                        </p>
-                        <p><strong>Valor individual:</strong> R$ 59,00</p>
-                      </div>
+    <div className="space-y-6 text-left max-w-2xl mx-auto">
+      <p className="font-semibold">1. Guias Completos de Estilo Personalizado</p>
+      <ul className="list-disc list-inside space-y-2">
+        <li>
+          <strong>Manual Exclusivo do Seu Estilo Predominante:</strong> {category}
+        </li>
+        <li>
+          <strong>+ Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.map(s => s.category).join(' e ')}
+        </li>
+        <li>
+          Transforme sua imagem com looks estratégicos que comunicam sua essência 
+          e valorizam sua personalidade única.
+        </li>
+      </ul>
+      <p><strong>Valor individual:</strong> R$ 79,00</p>
+    </div>
 
-                      <div className="space-y-6 text-left max-w-2xl mx-auto">
-                        <p className="font-semibold">BÔNUS 2: Manual de Visagismo Facial</p>
-                        <p>
-                          Cortes de cabelo e acessórios ideais para seu formato de rosto, realçando sua beleza natural.
-                        </p>
-                        <p><strong>Valor individual:</strong> R$ 37,00</p>
-                      </div>
+    <div className="space-y-6 text-left max-w-2xl mx-auto">
+      <p className="font-semibold">BÔNUS 1: Guia das Peças Estratégicas</p>
+      <p>
+        Descubra as peças essenciais que multiplicam suas possibilidades de looks, 
+        economizam tempo e dinheiro.
+      </p>
+      <p><strong>Valor individual:</strong> R$ 59,00</p>
+    </div>
 
-                      <div className="max-w-sm mx-auto space-y-4">
-                        <p><strong>Valor total:</strong> R$ 175,00</p>
-                        <p className="text-xl font-bold">HOJE POR APENAS:</p>
-                        <p className="text-2xl font-bold">5x R$ 8,83 no cartão</p>
-                        <p>ou</p>
-                        <p className="text-2xl font-bold">R$ 39,90 à vista</p>
-                        <p className="text-lg text-[#2d7d32] font-semibold">Economia de R$ 135,10 (77% OFF)</p>
-                        <p className="flex items-center justify-center gap-2 text-[#8F7A6A]">
-                          <Clock className="w-6 h-6" />
-                          ⏱️ Esta oferta expira quando você sair desta página
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+    <div className="space-y-6 text-left max-w-2xl mx-auto">
+      <p className="font-semibold">BÔNUS 2: Manual de Visagismo Facial</p>
+      <p>
+        Cortes de cabelo e acessórios ideais para seu formato de rosto, 
+        realçando sua beleza natural.
+      </p>
+      <p><strong>Valor individual:</strong> R$ 37,00</p>
+    </div>
 
-                  {/* CTA BUTTON - atual */}
-                  <div className="text-center mb-10 relative z-10 flex justify-center mt-8">
-                    <button
-                      onClick={handleCTAClick}
-                      className="text-white w-full max-w-xs sm:max-w-sm font-bold py-4 px-6 rounded-md shadow-md transition-all duration-300"
-                      style={{
-                        background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
-                        boxShadow: tokens.shadows.cta
-                      }}
-                      type="button"
-                    >
-                      GARANTIR MINHA TRANSFORMAÇÃO AGORA
-                    </button>
-                  </div>
+    <div className="max-w-sm mx-auto space-y-4">
+      <p><strong>Valor total:</strong> R$ 175,00</p>
+      <p className="text-xl font-bold">HOJE POR APENAS:</p>
+      <p className="text-2xl font-bold">5x R$ 8,83 no cartão</p>
+      <p>ou</p>
+      <p className="text-2xl font-bold">R$ 39,90 à vista</p>
+      <p className="text-lg text-[#2d7d32] font-semibold">
+        Economia de R$ 135,10 (77% OFF)
+      </p>
+      <p className="flex items-center justify-center gap-2 text-[#8F7A6A]">
+        <Clock className="w-6 h-6" />
+        ⏱️ Esta oferta expira quando você sair desta página
+      </p>
+    </div>
+  </div>
 
-                  {/* TRUST ELEMENTS */}
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm mt-6">
-                    <div className="flex items-center gap-2">
-                      ✓ Acesso Imediato
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-[#432818]" /> Pagamento 100% seguro
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-[#432818]" /> Site confiável
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </AnimatedWrapper>
-        </section>
+  {/* CTA BUTTON */}
+  <div className="text-center mb-10 relative z-10 flex justify-center mt-8">
+    <button
+      onClick={handleCTAClick}
+      className="text-white w-full max-w-xs sm:max-w-sm font-bold py-4 px-6 rounded-md shadow-md transition-all duration-300"
+      style={{
+        background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
+        boxShadow: tokens.shadows.cta
+      }}
+      type="button"
+    >
+      GARANTIR MINHA TRANSFORMAÇÃO AGORA
+    </button>
+  </div>
+
+  {/* TRUST ELEMENTS */}
+  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm mt-6">
+    <div className="flex items-center gap-2">
+      ✓ Acesso Imediato
+    </div>
+    <div className="flex items-center gap-2">
+      <Shield className="w-4 h-4 text-[#432818]" /> Pagamento 100% seguro
+    </div>
+    <div className="flex items-center gap-2">
+      <Star className="w-4 h-4 text-[#432818]" /> Site confiável
+    </div>
+  </div>
+  {/* fim novo conteúdo */}
+
+</div>
 
         {/* BOTTOM SPACING */}
         <div className="mb-16 md:mb-24"></div>
