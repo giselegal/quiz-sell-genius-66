@@ -734,37 +734,65 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            {/* CTA PRINCIPAL - ÚNICO E PODEROSO */}
-            <div className="text-center mb-12 relative z-10">
+            {/* CTA PRINCIPAL - OTIMIZADO E RESPONSIVO */}
+            <div className="text-center mb-10 relative z-10">
               <Button 
                 onClick={handleCTAClick} 
-                className="text-white text-xl sm:text-2xl leading-none py-6 sm:py-8 px-8 sm:px-16 rounded-2xl shadow-2xl transition-all duration-300 cursor-pointer font-bold w-full sm:w-auto min-h-[72px] transform hover:scale-105"
+                className="text-white leading-none transition-all duration-300 cursor-pointer font-bold shadow-xl hover:shadow-2xl group relative overflow-hidden"
                 style={{
-                  background: `linear-gradient(135deg, ${tokens.colors.success}, ${tokens.colors.successDark}, #2E7D32)`,
-                  boxShadow: `0 12px 40px rgba(76, 175, 80, 0.5)`,
+                  background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
+                  boxShadow: `0 8px 32px rgba(184, 155, 122, 0.4)`,
+                  borderRadius: '16px',
+                  padding: '1rem 2rem',
+                  fontSize: '1.125rem',
+                  minHeight: '56px',
+                  width: '100%',
+                  maxWidth: '400px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = `0 12px 40px rgba(184, 155, 122, 0.5)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = `0 8px 32px rgba(184, 155, 122, 0.4)`;
                 }}
                 type="button"
               >
-                <span className="flex items-center justify-center gap-3 sm:gap-4">
-                  <ShoppingCart className="w-6 sm:w-8 h-6 sm:h-8 flex-shrink-0" />
-                  <span className="whitespace-nowrap">GARANTIR MINHA TRANSFORMAÇÃO</span>
+                {/* Efeito brilho sutil */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.5s_ease-in-out] pointer-events-none"></span>
+                
+                <span className="flex items-center justify-center gap-3 relative z-10">
+                  <ShoppingCart className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
+                  <span className="font-semibold">
+                    <span className="hidden sm:inline">Garantir Minha Transformação</span>
+                    <span className="sm:hidden">Garantir Transformação</span>
+                  </span>
                 </span>
               </Button>
 
-              {/* Elementos de confiança */}
-              <div className="flex items-center justify-center gap-6 text-sm text-[#8F7A6A] flex-wrap mt-8">
+              {/* Elementos de confiança - CORES DA MARCA */}
+              <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm text-[#8F7A6A] flex-wrap mt-6 px-4">
                 <div className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-[#4CAF50]" />
-                  <span className="font-medium">100% Seguro</span>
+                  <Shield className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
+                  <span className="font-medium whitespace-nowrap">100% Seguro</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-[#4CAF50]" />
-                  <span className="font-medium">Acesso Imediato</span>
+                  <Award className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
+                  <span className="font-medium whitespace-nowrap">Acesso Imediato</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-[#4CAF50]" />
-                  <span className="font-medium">Garantia 7 dias</span>
+                  <Clock className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
+                  <span className="font-medium whitespace-nowrap">Garantia 7 dias</span>
                 </div>
+              </div>
+
+              {/* Informação adicional de urgência */}
+              <div className="mt-4 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20">
+                <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
+                <span className="text-sm text-[#432818] font-medium">
+                  ⚡ Acesso liberado em 2 minutos
+                </span>
               </div>
             </div>
           </AnimatedWrapper>
