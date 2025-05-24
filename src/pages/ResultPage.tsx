@@ -352,14 +352,15 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky CTA - COR DA MARCA */}
+      {/* Sticky CTA - HIERARQUIA CORRIGIDA */}
       <div className={`fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-[#B89B7A]/20 py-3 px-4 z-40 transition-transform duration-500 ${showBottomBar ? 'translate-y-0' : 'translate-y-full'}`}>
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
           <div className="text-center sm:text-left">
             <p className="text-sm font-medium text-[#432818]">Guia de Estilo e Imagem + Bônus</p>
             <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
-              <span className="text-xs text-[#8F7A6A] whitespace-nowrap">5x de</span>
-              <span className="text-xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">R$ 8,83</span>
+              {/* HIERARQUIA CORRIGIDA - PARCELAS EM DESTAQUE */}
+              <span className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">5x R$ 8,83</span>
+              <span className="text-xs text-[#8F7A6A] whitespace-nowrap">sem juros</span>
               <span className="text-xs font-normal text-[#8F7A6A] whitespace-nowrap">ou R$ 39,90 à vista</span>
             </div>
           </div>
@@ -793,7 +794,7 @@ const ResultPage: React.FC = () => {
               </div>
 
               {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
-              <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/25 max-w-4xl mx-auto relative overflow-hidden"
+              <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/25 max-w-6xl mx-auto relative overflow-hidden"
                    style={{ boxShadow: tokens.shadows.lg }}>
                 
                 <div className="relative z-10">
@@ -805,7 +806,7 @@ const ResultPage: React.FC = () => {
                   <div className="space-y-4 mb-8">
                     
                     {/* PRODUTO PRINCIPAL */}
-                    <div className="bg-white rounded-xl p-6 border-2 border-[#B89B7A]/30 relative"
+                    <div className="bg-white rounded-xl p-6 lg:p-8 border-2 border-[#B89B7A]/30 relative"
                          style={{ boxShadow: tokens.shadows.md }}>
                       
                       {/* Badge destacado */}
@@ -814,16 +815,16 @@ const ResultPage: React.FC = () => {
                       </div>
                       
                       <div className="pt-2">
-                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                           
                           {/* Informações do produto */}
-                          <div className="flex-1">
-                            <h5 className="text-xl font-bold text-[#432818] mb-3">
+                          <div className="flex-1 max-w-none">
+                            <h5 className="text-xl lg:text-2xl font-bold text-[#432818] mb-4">
                               Manual Personalizado do Estilo {category}
                             </h5>
                             
                             {secondaryStyles && secondaryStyles.length > 0 && (
-                              <p className="text-base mb-4 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                              <p className="text-base lg:text-lg mb-4 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                                 <strong>Inclui também:</strong> Guias dos seus estilos complementares 
                                 <span className="text-[#aa6b5d] font-semibold">
                                   {' '}{secondaryStyles.slice(0, 2).map(style => style.category).join(' e ')}
@@ -831,16 +832,16 @@ const ResultPage: React.FC = () => {
                               </p>
                             )}
                             
-                            <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-4 py-2 rounded-lg font-medium border border-[#B89B7A]/20">
+                            <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-6 py-3 rounded-lg font-medium border border-[#B89B7A]/20">
                               📋 Análise 100% Personalizada
                             </div>
                           </div>
                           
                           {/* Valor */}
-                          <div className="text-center lg:text-right lg:min-w-[120px]">
-                            <div className="bg-[#f8fdf8] border border-[#4CAF50]/20 px-4 py-3 rounded-lg">
-                              <span className="text-[#2d7d32] font-bold text-lg block">INCLUÍDO</span>
-                              <span className="text-sm text-gray-500 line-through">Valor: R$ 79,00</span>
+                          <div className="text-center lg:text-right lg:min-w-[140px]">
+                            <div className="bg-[#f8fdf8] border border-[#4CAF50]/20 px-6 py-4 rounded-lg">
+                              <span className="text-[#2d7d32] font-bold text-xl block">INCLUÍDO</span>
+                              <span className="text-base text-gray-500 line-through">Valor: R$ 79,00</span>
                             </div>
                           </div>
                         </div>
@@ -848,62 +849,62 @@ const ResultPage: React.FC = () => {
                     </div>
 
                     {/* BÔNUS 1 */}
-                    <div className="bg-white/80 rounded-xl p-5 border border-[#B89B7A]/15"
+                    <div className="bg-white/80 rounded-xl p-6 lg:p-8 border border-[#B89B7A]/15"
                          style={{ boxShadow: tokens.shadows.sm }}>
                       
-                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                         
                         {/* Informações */}
-                        <div className="flex items-start gap-4 flex-1">
-                          <div className="w-8 h-8 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        <div className="flex items-start gap-6 flex-1">
+                          <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
                             1
                           </div>
-                          <div>
-                            <h6 className="font-bold text-[#432818] text-lg mb-2">
+                          <div className="flex-1">
+                            <h6 className="font-bold text-[#432818] text-xl lg:text-2xl mb-3">
                               Guia das Peças Estratégicas
                             </h6>
-                            <p className="text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                              Lista das 15 peças essenciais para maximizar seu guarda-roupa
+                            <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                              Lista das 15 peças essenciais para maximizar seu guarda-roupa e criar looks versáteis para qualquer ocasião
                             </p>
                           </div>
                         </div>
                         
                         {/* Valor bônus */}
-                        <div className="text-center lg:text-right lg:min-w-[120px]">
-                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg">
-                            <span className="text-[#aa6b5d] font-bold block">BÔNUS GRÁTIS</span>
-                            <span className="text-sm text-gray-500 line-through">R$ 59,00</span>
+                        <div className="text-center lg:text-right lg:min-w-[140px]">
+                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-6 py-4 rounded-lg">
+                            <span className="text-[#aa6b5d] font-bold text-lg block">BÔNUS GRÁTIS</span>
+                            <span className="text-base text-gray-500 line-through">R$ 59,00</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
                     {/* BÔNUS 2 */}
-                    <div className="bg-white/80 rounded-xl p-5 border border-[#B89B7A]/15"
+                    <div className="bg-white/80 rounded-xl p-6 lg:p-8 border border-[#B89B7A]/15"
                          style={{ boxShadow: tokens.shadows.sm }}>
                       
-                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                         
                         {/* Informações */}
-                        <div className="flex items-start gap-4 flex-1">
-                          <div className="w-8 h-8 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        <div className="flex items-start gap-6 flex-1">
+                          <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
                             2
                           </div>
-                          <div>
-                            <h6 className="font-bold text-[#432818] text-lg mb-2">
+                          <div className="flex-1">
+                            <h6 className="font-bold text-[#432818] text-xl lg:text-2xl mb-3">
                               Manual de Visagismo Personalizado
                             </h6>
-                            <p className="text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                              Cortes e acessórios ideais para seu formato de rosto
+                            <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                              Cortes de cabelo, maquiagem e acessórios ideais para seu formato de rosto, realçando sua beleza natural
                             </p>
                           </div>
                         </div>
                         
                         {/* Valor bônus */}
-                        <div className="text-center lg:text-right lg:min-w-[120px]">
-                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg">
-                            <span className="text-[#aa6b5d] font-bold block">BÔNUS GRÁTIS</span>
-                            <span className="text-sm text-gray-500 line-through">R$ 37,00</span>
+                        <div className="text-center lg:text-right lg:min-w-[140px]">
+                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-6 py-4 rounded-lg">
+                            <span className="text-[#aa6b5d] font-bold text-lg block">BÔNUS GRÁTIS</span>
+                            <span className="text-base text-gray-500 line-through">R$ 37,00</span>
                           </div>
                         </div>
                       </div>
@@ -914,53 +915,74 @@ const ResultPage: React.FC = () => {
                   <div className="border-t-2 border-[#B89B7A]/20 pt-8">
                     
                     {/* Badge de oferta */}
-                    <div className="text-center mb-6">
-                      <div className="inline-flex items-center gap-2 bg-[#432818] text-white px-6 py-3 rounded-full text-base font-semibold">
+                    <div className="text-center mb-8">
+                      <div className="inline-flex items-center gap-2 bg-[#432818] text-white px-8 py-4 rounded-full text-lg font-semibold">
                         <span>🎯 OFERTA EXCLUSIVA QUIZ COMPLETO</span>
                       </div>
                     </div>
                     
-                    <div className="text-center space-y-6">
+                    <div className="text-center space-y-8">
                       
                       {/* Comparação de valor */}
-                      <div className="bg-white/60 rounded-lg p-4 border border-[#B89B7A]/20">
-                        <p className="text-lg mb-2" style={{ color: tokens.colors.textMuted }}>
+                      <div className="bg-white/60 rounded-lg p-6 border border-[#B89B7A]/20 max-w-lg mx-auto">
+                        <p className="text-xl mb-3" style={{ color: tokens.colors.textMuted }}>
                           <span className="font-medium text-[#432818]">Valor total se comprado separadamente:</span>
                         </p>
-                        <span className="text-2xl font-bold text-gray-400 line-through">R$ 175,00</span>
+                        <span className="text-3xl font-bold text-gray-400 line-through">R$ 175,00</span>
                       </div>
                       
                       {/* Separador elegante */}
-                      <div className="flex items-center justify-center gap-4 my-8">
-                        <div className="w-24 h-px bg-[#B89B7A]/40"></div>
-                        <span className="text-2xl font-bold text-[#432818] px-6 bg-white rounded-full py-2 border-2 border-[#B89B7A]/30">
+                      <div className="flex items-center justify-center gap-6 my-12">
+                        <div className="w-32 h-px bg-[#B89B7A]/40"></div>
+                        <span className="text-3xl font-bold text-[#432818] px-8 bg-white rounded-full py-3 border-2 border-[#B89B7A]/30">
                           Seu Investimento
                         </span>
-                        <div className="w-24 h-px bg-[#B89B7A]/40"></div>
+                        <div className="w-32 h-px bg-[#B89B7A]/40"></div>
                       </div>
                       
-                      {/* Preço principal */}
-                      <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-8 border-2 border-[#B89B7A]/30 max-w-md mx-auto"
+                      {/* Preço principal - HIERARQUIA CORRIGIDA */}
+                      <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-10 border-2 border-[#B89B7A]/30 max-w-lg mx-auto"
                            style={{ boxShadow: tokens.shadows.lg }}>
-                        <div className="text-6xl lg:text-7xl font-bold text-[#432818] mb-3">
-                          R$ 39,90
+                        
+                        {/* PARCELAS EM DESTAQUE PRINCIPAL */}
+                        <div className="text-center mb-6">
+                          <div className="text-6xl lg:text-7xl font-bold text-[#432818] mb-3">
+                            5x R$ 8,83
+                          </div>
+                          <p className="text-xl font-medium text-[#aa6b5d] mb-4">
+                            sem juros no cartão
+                          </p>
                         </div>
-                        <p className="text-lg mb-4" style={{ color: tokens.colors.textMuted }}>
-                          ou <span className="text-[#432818] font-bold text-xl">5x de R$ 8,83</span> sem juros
-                        </p>
+                        
+                        {/* SEPARADOR SUTIL */}
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                          <div className="w-16 h-px bg-[#B89B7A]/30"></div>
+                          <span className="text-lg text-[#8F7A6A]">ou</span>
+                          <div className="w-16 h-px bg-[#B89B7A]/30"></div>
+                        </div>
+                        
+                        {/* VALOR À VISTA SECUNDÁRIO */}
+                        <div className="text-center mb-8">
+                          <div className="text-4xl font-bold text-[#432818] mb-2">
+                            R$ 39,90
+                          </div>
+                          <p className="text-lg" style={{ color: tokens.colors.textMuted }}>
+                            à vista (Pix/Boleto)
+                          </p>
+                        </div>
                         
                         {/* Economia destacada */}
-                        <div className="bg-[#f8fdf8] border-2 border-[#4CAF50]/30 px-6 py-4 rounded-xl">
-                          <span className="text-[#2d7d32] font-bold text-lg">
+                        <div className="bg-[#f8fdf8] border-2 border-[#4CAF50]/30 px-8 py-6 rounded-xl">
+                          <span className="text-[#2d7d32] font-bold text-xl">
                             💰 Economia de R$ 135,10 (77% OFF)
                           </span>
                         </div>
                       </div>
                       
                       {/* Urgência */}
-                      <div className="bg-[#fff7f3] border border-[#B89B7A]/20 px-6 py-4 rounded-lg max-w-lg mx-auto">
-                        <p className="text-base font-medium text-[#8F7A6A] flex items-center justify-center gap-2">
-                          <Clock className="w-5 h-5" />
+                      <div className="bg-[#fff7f3] border border-[#B89B7A]/20 px-8 py-6 rounded-lg max-w-2xl mx-auto">
+                        <p className="text-lg font-medium text-[#8F7A6A] flex items-center justify-center gap-3">
+                          <Clock className="w-6 h-6" />
                           <span>⏰ Esta oferta expira quando você sair desta página</span>
                         </p>
                       </div>
@@ -1028,8 +1050,7 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </AnimatedWrapper>
+            </AnimatedWrapper>
         </section>
 
         {/* BOTTOM SPACING */}
