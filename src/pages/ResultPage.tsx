@@ -840,9 +840,9 @@ const ResultPage: React.FC = () => {
                       <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
                     </div>
                     
-                    <div className="inline-flex items-center gap-2 bg-[#fff7f3] px-3 py-2 rounded-full border border-[#B89B7A]/20"
-                         style={{ boxShadow: tokens.shadows.sm }}>
+                    <div className="inline-flex items-center gap-2">
                       <span className="text-[#aa6b5d] text-xs font-bold">
+                        💰 Economia de R$ 135,10 (77% OFF)
                       </span>
                     </div>
                     
