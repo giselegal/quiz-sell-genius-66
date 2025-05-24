@@ -1006,7 +1006,8 @@ const ResultPage: React.FC = () => {
   {/* fim novo conteúdo */}
                   </div>   {/* fecha <div className="border-t-2 ..."> */}
                 </div>     {/* fecha div relative z-10 do RESUMO DO VALOR */}
-              </div>       {/* fecha div mb-12 relative z-10 */}
+              </div>       {/* fecha div bg-gradient-to-br (RESUMO DO VALOR) */}
+            </div>         {/* fecha div mb-12 relative z-10 (PRODUCTS PREVIEW) */}
             </AnimatedWrapper>  {/* fecha AnimatedWrapper da seção CTA */}
         </section>
 
