@@ -783,12 +783,12 @@ const ResultPage: React.FC = () => {
                       <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
                       <span>Manual completo do seu <strong>Estilo {category}</strong> (Predominante) {
                         secondaryStyles && secondaryStyles.length > 0 && (
-                          <>e Estilos <strong>{secondaryStyles.map(style => style.category).join(', ')}</strong> (Complementares)</>
+                          <>e Estilos <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(', ')}</strong> (Complementares)</>
                         )
                       }</span>
                     </div>
                     <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
-                      <span className="line-through">R$ 120,00</span> → <span className="text-[#aa6b5d] font-medium">R$ 39,90</span>
+                      <span className="line-through">R$ 85,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
                     </div>
                   </li>
                   <li className="flex items-center justify-between">
@@ -796,8 +796,22 @@ const ResultPage: React.FC = () => {
                       <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
                       <span>Guia das Peças Estratégicas que multiplicam seus looks</span>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
-                      <span className="line-through">R$ 67,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
+                    <div className="text-xs text-[#8F# Verificar mudanças no código
+git status
+
+# Adicionar arquivos alterados
+git add .
+
+# Fazer commit das alterações
+git commit -m "páginas"
+
+# Enviar alterações para o GitHub
+git push origin main
+
+npm run build
+
+7A6A] ml-4 flex-shrink-0">
+                      <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                     </div>
                   </li>
                   <li className="flex items-center justify-between">
@@ -806,21 +820,20 @@ const ResultPage: React.FC = () => {
                       <span>Manual de visagismo para valorizar sua beleza única</span>
                     </div>
                     <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
-                      <span className="line-through">R$ 87,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
+                      <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                     </div>
                   </li>
                 </ul>
                 <div className="border-t border-[#B89B7A]/20 mt-3 pt-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-[#432818]">Valor se comprar separado:</span>
+                    <span className="text-sm font-medium text-[#432818]">Valor Total:</span>
                     <div className="text-right">
-                      <span className="text-sm text-[#8F7A6A] line-through">R$ 274,00</span>
-                      <div className="text-lg font-bold text-[#aa6b5d]">Hoje R$ 39,90</div>
+                      <span className="text-sm text-[#8F7A6A] line-through">R$ 175,00</span>
                     </div>
                   </div>
                   <div className="text-center mt-2">
                     <span className="text-xs text-[#aa6b5d] font-bold bg-[#fff7f3] px-2 py-1 rounded-full">
-                      💰 Economia de R$ 234,10 (85% OFF)
+                      💰 Economia de R$ 135,10 (77% OFF)
                     </span>
                   </div>
                 </div>
@@ -838,7 +851,7 @@ const ResultPage: React.FC = () => {
                     </p>
                   </div>
                   
-                  <p className="text-sm text-[#8F7A6A] mb-2">Valor se comprar separado: <span className="line-through font-medium">R$ 274,00</span></p>
+                  <p className="text-sm text-[#8F7A6A] mb-2">Valor se comprar separado: <span className="line-through font-medium">R$ 175,00</span></p>
                   <p className="text-lg font-bold text-[#432818] mb-4">Seu preço especial hoje:</p>
                   <div className="mb-4">
                     <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
@@ -850,7 +863,7 @@ const ResultPage: React.FC = () => {
                   <div className="inline-flex items-center gap-2 bg-[#fff7f3] px-3 py-2 rounded-full border border-[#B89B7A]/20"
                        style={{ boxShadow: tokens.shadows.sm }}>
                     <span className="text-[#aa6b5d] text-xs font-bold">
-                      💰 Economia de R$ 234,10 (85% OFF)
+                      💰 Economia de R$ 135,10 (77% OFF)
                     </span>
                   </div>
                   
