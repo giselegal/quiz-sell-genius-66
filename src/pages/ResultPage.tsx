@@ -714,8 +714,17 @@ const ResultPage: React.FC = () => {
                         </div>
                         
                         {/* Novo valor */}
-                        <div className="text-center">
-                          <span className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">R$ 39,90</span>
+                        <div className="text-center relative">
+                          <div className="relative inline-block">
+                            {/* Efeito de luz de fundo */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] opacity-20 blur-lg scale-110 animate-pulse"></div>
+                            {/* Segundo efeito de luz mais sutil */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#B89B7A]/30 via-white/20 to-[#aa6b5d]/30 opacity-40 blur-md scale-105"></div>
+                            {/* Texto principal */}
+                            <span className="relative text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] via-[#D4C4A8] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap drop-shadow-sm">
+                              R$ 39,90
+                            </span>
+                          </div>
                         </div>
                         
                         {/* Economia */}
