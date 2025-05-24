@@ -239,6 +239,23 @@ const ResultPage: React.FC = () => {
       color: globalStyles.textColor || tokens.colors.text,
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
+      {/* Custom scrollbar styles */}
+      <style jsx global>{`
+        ::-webkit-scrollbar {
+          width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+          background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #B89B7A, #aa6b5d);
+          border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(to bottom, #aa6b5d, #B89B7A);
+        }
+      `}</style>
+
       {/* Preloaders and monitors */}
       <ResourcePreloader />
       <PerformanceMonitor />
@@ -261,8 +278,8 @@ const ResultPage: React.FC = () => {
       </header>
 
       {/* Navigation dots (only visible on scroll) */}
-      <div className={`fixed right-6 top-1/2 transform -translate-y-1/2 z-50 transition-opacity duration-500 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="flex flex-col gap-3">
+      <div className={`fixed right-4 top-1/2 transform -translate-y-1/2 z-50 transition-opacity duration-500 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="flex flex-col gap-2">
           {[
             { id: 'primary-style', label: 'Seu Estilo' },
             { id: 'transformations', label: 'Transformações' },
@@ -275,7 +292,7 @@ const ResultPage: React.FC = () => {
             <button
               key={section.id}
               onClick={() => scrollToSection(section.id)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${activeSection === section.id ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] scale-125 shadow-md' : 'bg-gray-300 hover:bg-gray-400'}`}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${activeSection === section.id ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] scale-125 shadow-sm' : 'bg-gray-300 hover:bg-gray-400'}`}
               aria-label={`Ir para seção ${section.label}`}
               title={section.label}
             />
