@@ -779,23 +779,28 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Valor Total Simplificado - LAYOUT CORRIGIDO */}
-              <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-xl p-6 border border-[#B89B7A]/10 max-w-lg mx-auto mb-8 overflow-hidden">
-                <div className="flex items-center justify-between mb-4 px-2">
-                  <span className="text-[#8F7A6A] font-medium text-sm">Valor individual:</span>
-                  <span className="text-lg font-bold text-[#aa6b5d] line-through whitespace-nowrap">R$ 175,00</span>
+              {/* Valor Total Simplificado - ANCORAGEM OTIMIZADA */}
+              <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-xl p-4 sm:p-6 border border-[#B89B7A]/10 max-w-lg mx-auto mb-8 overflow-hidden shadow-sm">
+                <div className="flex items-center justify-between mb-4 px-1 sm:px-2">
+                  <span className="text-[#8F7A6A] font-medium text-xs sm:text-sm">Valor individual dos materiais:</span>
+                  <span className="text-base sm:text-lg font-bold text-[#aa6b5d] line-through whitespace-nowrap">R$ 175,00</span>
                 </div>
-                <div className="text-center border-t border-[#B89B7A]/20 pt-4 px-2">
-                  <p className="text-[#8F7A6A] text-sm mb-3">Seu investimento hoje:</p>
-                  <div className="mb-3">
-                    <span className="text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                <div className="text-center border-t border-[#B89B7A]/20 pt-4 px-1 sm:px-2">
+                  <p className="text-[#8F7A6A] text-xs sm:text-sm mb-3">Sua oferta especial hoje:</p>
+                  <div className="mb-4">
+                    <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       R$ 39,90
                     </span>
                   </div>
-                  <div className="flex justify-center">
-                    <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200">
-                      <span className="text-green-600 text-sm font-medium whitespace-nowrap">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                    <div className="inline-flex items-center gap-2 bg-green-50 px-3 sm:px-4 py-2 rounded-full border border-green-200">
+                      <span className="text-green-600 text-xs sm:text-sm font-medium whitespace-nowrap">
                         💰 77% de desconto
+                      </span>
+                    </div>
+                    <div className="inline-flex items-center gap-2 bg-blue-50 px-3 sm:px-4 py-2 rounded-full border border-blue-200">
+                      <span className="text-blue-600 text-xs sm:text-sm font-medium whitespace-nowrap">
+                        ⚡ Oferta limitada
                       </span>
                     </div>
                   </div>
