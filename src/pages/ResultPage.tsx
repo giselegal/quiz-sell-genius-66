@@ -753,8 +753,9 @@ const ResultPage: React.FC = () => {
                 
                 {/* Elementos de confiança - SEPARADOS E COM RESPIRO */}
                 <div className="text-center space-y-6">
-                  <div>
-                    <span className="text-[#432818] text-sm font-medium">🔒 Pagamento 100% Seguro</span>
+                  <div className="flex items-center justify-center gap-2">
+                    <Shield className="w-4 h-4 text-[#B89B7A]" />
+                    <span className="text-[#432818] text-sm font-medium">Pagamento 100% Seguro</span>
                   </div>
                   
                   <div className="flex items-center justify-center gap-8 text-sm text-[#8F7A6A]">
