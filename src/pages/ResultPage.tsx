@@ -676,12 +676,6 @@ const ResultPage: React.FC = () => {
                 <p className="text-xl md:text-2xl text-[#8F7A6A] leading-relaxed">
                   Seu guia personalizado <span className="font-bold text-[#aa6b5d]">{category}</span> + materiais exclusivos
                 </p>
-                
-                <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/10">
-                  <p className="text-[#432818] font-semibold">
-                    🎯 <strong>Resultado garantido:</strong> Em 30 dias você terá um guarda-roupa funcional onde tudo combina entre si
-                  </p>
-                </div>
               </div>
             </div>
             
@@ -847,7 +841,7 @@ const ResultPage: React.FC = () => {
               </div>
               
               <p className="text-xs text-[#8F7A6A] mt-4 max-w-md mx-auto">
-                🔒 <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong> • <strong>Suporte dedicado</strong>
+                🔒 <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong>
               </p>
             </div>
           </AnimatedWrapper>
