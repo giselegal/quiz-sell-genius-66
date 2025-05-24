@@ -669,19 +669,19 @@ const ResultPage: React.FC = () => {
               {/* Nova seção de preços redesenhada */}
               <div className="mb-8">
                 {/* Preço principal em destaque */}
-                <div className="relative bg-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-[#B89B7A]/30 mb-6 overflow-hidden mt-6">
+                <div className="relative bg-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-[#B89B7A]/30 mb-6 overflow-visible mt-8">
                   {/* Elementos decorativos de fundo */}
                   <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#B89B7A]/5 to-transparent rounded-full blur-2xl"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#aa6b5d]/5 to-transparent rounded-full blur-2xl"></div>
                   
-                  {/* Badge de destaque - posição corrigida */}
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
-                    <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-6 py-1.5 rounded-full text-sm font-semibold shadow-lg">
+                  {/* Badge de destaque - posição definitivamente corrigida */}
+                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-30">
+                    <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-6 py-1.5 rounded-full text-sm font-semibold shadow-lg whitespace-nowrap">
                       🔥 Oferta Especial
                     </div>
                   </div>
                   
-                  <div className="relative z-10 text-center pt-6">
+                  <div className="relative z-10 text-center pt-8">
                     {/* Preço parcelado destacado */}
                     <div className="mb-6">
                       {/* Container flex para manter preço em uma linha */}
