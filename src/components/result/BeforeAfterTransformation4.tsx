@@ -313,11 +313,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       <Badge className="top-3 right-3 bg-white/90 backdrop-blur-sm text-[#432818] font-medium">
                         {activeTransformation.name}
                       </Badge>
-                      
-                      {/* Selo 'Resultados Reais' */}
-                      <span className="absolute bottom-[10%] left-1/2 -translate-x-1/2 bg-[#B89B7A]/30 text-white text-[0.6rem] px-2 py-0.5 rounded-full shadow-sm opacity-80">
-                        Resultados Reais
-                      </span>
                     </motion.div>
                   </AnimatePresence>
                   

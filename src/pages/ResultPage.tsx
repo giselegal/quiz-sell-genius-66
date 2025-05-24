@@ -392,8 +392,8 @@ const ResultPage: React.FC = () => {
                     className="w-full h-auto rounded-lg shadow-lg hover:scale-102 transition-transform duration-300" 
                     onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
                   />
-                  {/* Elegant badge */}
-                  <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                  {/* Elegant badge - 8% menor */}
+                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1.5 rounded-full shadow-lg text-xs font-medium transform rotate-12">
                     Exclusivo
                   </div>
                 </div>
