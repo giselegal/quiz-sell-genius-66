@@ -8,6 +8,13 @@ import { preloadImagesByUrls } from '@/utils/imageManager';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Extend Window interface to include custom property
+declare global {
+  interface Window {
+    ctaClickProcessing?: boolean;
+  }
+}
+
 // Design tokens centralizados
 const designTokens = {
   colors: {
@@ -193,13 +200,35 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   }, [loadedImages, activeIndex]);
 
   // OPTIMIZED CTA HANDLER
-  const handleCTA = useCallback(() => {
+  const handleCTA = useCallback((e?: React.MouseEvent) => {
+    // Prevenir comportamento padrão e propagação
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    // Prevenir múltiplos cliques
+    if (window.ctaClickProcessing) return;
+    window.ctaClickProcessing = true;
+    
     if (handleCTAClick) {
       handleCTAClick();
     } else {
       trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-      window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+      
+      // Para desktop, usar window.open para garantir funcionamento
+      if (window.innerWidth >= 768) {
+        window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
+      } else {
+        // Para mobile, usar location.href
+        window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+      }
     }
+    
+    // Limpar flag após delay
+    setTimeout(() => {
+      window.ctaClickProcessing = false;
+    }, 1000);
   }, [handleCTAClick]);
 
   // LOADING SKELETON - SIMPLIFIED
@@ -215,7 +244,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           <Card className="overflow-hidden border border-[#B89B7A]/20">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
               <div className="p-6 flex flex-col items-center">
-                <div className="w-full max-w-sm aspect-[4/5] bg-[#f8f5f0] rounded-lg animate-pulse"></div>
+                <div className="w-full max-w-sm aspect-[4/5] bg-[#f8f5f0] rounded-lg mb-4 animate-pulse"></div>
                 <div className="flex justify-center space-x-2 mt-4">
                   {transformations.map((_, idx) => (
                     <div key={idx} className="w-3 h-3 bg-[#f8f5f0] rounded-full animate-pulse"></div>
@@ -336,13 +365,14 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       onClick={handleCTA}
                       onMouseEnter={() => setIsButtonHovered(true)}
                       onMouseLeave={() => setIsButtonHovered(false)}
-                      className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-sm md:text-base mb-2"
+                      className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-sm md:text-base mb-2 cursor-pointer"
                       style={{
                         background: "linear-gradient(to right, #4CAF50, #45a049)",
                         boxShadow: "0 8px 32px rgba(76, 175, 80, 0.4)",
                       }}
+                      type="button"
                     >
-                      <span className="flex items-center justify-center gap-2">
+                      <span className="flex items-center justify-center gap-2" style={{ pointerEvents: 'none' }}>
                         <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1, rotate: isButtonHovered ? 10 : 0 }}>
                           <ShoppingCart className="w-5 h-5" />
                         </motion.div>

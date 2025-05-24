@@ -778,34 +778,34 @@ const ResultPage: React.FC = () => {
               <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 border border-[#B89B7A]/20 max-w-2xl mx-auto">
                 <h4 className="font-bold text-[#432818] mb-3">Tudo que você recebe hoje:</h4>
                 <ul className="text-sm text-[#8F7A6A] space-y-3">
-                  <li>
-                    <div className="flex items-start gap-2 mb-1">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <span className="flex-1">Manual completo do seu <strong>Estilo {category}</strong> (Predominante) {
+                  <li className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                      <span>Manual completo do seu <strong>Estilo {category}</strong> (Predominante){
                         secondaryStyles && secondaryStyles.length > 0 && (
-                          <>e Estilos <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(', ')}</strong> (Complementares)</>
+                          <> + <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(' + ')}</strong> (Complementares)</>
                         )
                       }</span>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 text-right">
+                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
                       <span className="line-through">R$ 85,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
                     </div>
                   </li>
-                  <li>
-                    <div className="flex items-start gap-2 mb-1">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <span className="flex-1">Guia das Peças Estratégicas que multiplicam seus looks</span>
+                  <li className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                      <span>Guia das Peças Estratégicas que multiplicam seus looks</span>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 text-right">
+                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
                       <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                     </div>
                   </li>
-                  <li>
-                    <div className="flex items-start gap-2 mb-1">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <span className="flex-1">Manual de visagismo para valorizar sua beleza única</span>
+                  <li className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                      <span>Manual de visagismo para valorizar sua beleza única</span>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 text-right">
+                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
                       <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                     </div>
                   </li>
@@ -817,111 +817,104 @@ const ResultPage: React.FC = () => {
                       <span className="text-sm text-[#8F7A6A] line-through">R$ 175,00</span>
                     </div>
                   </div>
-                  <div className="text-center mt-2">
-                    <span className="text-xs text-[#aa6b5d] font-bold bg-[#fff7f3] px-2 py-1 rounded-full">
-                      💰 Economia de R$ 135,10 (77% OFF)
-                    </span>
+                </div>
+              </div>
+
+              {/* PRICING SECTION - OTIMIZADA */}
+              <div className="mb-12 relative z-10">
+                <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 lg:p-8 border-2 border-[#B89B7A]/20 max-w-lg mx-auto"
+                     style={{ boxShadow: tokens.shadows.lg }}>
+                  <div className="text-center">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                      <p className="text-red-700 text-sm font-bold">
+                        🔥 OFERTA EXCLUSIVA PARA QUEM FEZ O QUIZ
+                      </p>
+                    </div>
+                    
+                    <p className="text-sm text-[#8F7A6A] mb-2">Valor se comprar separado: <span className="line-through font-medium">R$ 175,00</span></p>
+                    <p className="text-lg font-bold text-[#432818] mb-4">Seu preço especial hoje:</p>
+                    <div className="mb-4">
+                      <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                        R$ 39,90
+                      </span>
+                      <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
+                    </div>
+                    
+                    <div className="inline-flex items-center gap-2 bg-[#fff7f3] px-3 py-2 rounded-full border border-[#B89B7A]/20"
+                         style={{ boxShadow: tokens.shadows.sm }}>
+                      <span className="text-[#aa6b5d] text-xs font-bold">
+                      </span>
+                    </div>
+                    
+                    <div className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-4 py-2 rounded-full border border-[#B89B7A]/20"
+                         style={{ boxShadow: tokens.shadows.sm }}>
+                      <Hourglass className="w-4 h-4 text-[#aa6b5d] animate-spin" 
+                                 style={{ 
+                                   animation: 'spin 3s linear infinite',
+                                   transformOrigin: 'center'
+                                 }} />
+                      <span className="text-xs text-[#432818] font-medium">
+                        Esta oferta expira quando você sair desta página
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* PRICING SECTION - OTIMIZADA */}
-            <div className="mb-12 relative z-10">
-              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 lg:p-8 border-2 border-[#B89B7A]/20 max-w-lg mx-auto"
-                   style={{ boxShadow: tokens.shadows.lg }}>
-                <div className="text-center">
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                    <p className="text-red-700 text-sm font-bold">
-                      🔥 OFERTA EXCLUSIVA PARA QUEM FEZ O QUIZ
-                    </p>
-                  </div>
-                  
-                  <p className="text-sm text-[#8F7A6A] mb-2">Valor se comprar separado: <span className="line-through font-medium">R$ 175,00</span></p>
-                  <p className="text-lg font-bold text-[#432818] mb-4">Seu preço especial hoje:</p>
-                  <div className="mb-4">
-                    <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                      R$ 39,90
-                    </span>
-                    <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
-                  </div>
-                  
-                  <div className="inline-flex items-center gap-2 bg-[#fff7f3] px-3 py-2 rounded-full border border-[#B89B7A]/20"
-                       style={{ boxShadow: tokens.shadows.sm }}>
-                    <span className="text-[#aa6b5d] text-xs font-bold">
-                      💰 Economia de R$ 135,10 (77% OFF)
-                    </span>
-                  </div>
-                  
-                  <div className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-4 py-2 rounded-full border border-[#B89B7A]/20"
-                       style={{ boxShadow: tokens.shadows.sm }}>
-                    <Hourglass className="w-4 h-4 text-[#aa6b5d] animate-spin" 
-                               style={{ 
-                                 animation: 'spin 3s linear infinite',
-                                 transformOrigin: 'center'
-                               }} />
-                    <span className="text-xs text-[#432818] font-medium">
-                      Esta oferta expira quando você sair desta página
-                    </span>
-                  </div>
+              {/* CTA BUTTON - OTIMIZADO */}
+              <div className="text-center mb-10 relative z-10 flex justify-center">
+                <button
+                  onClick={handleCTAClick} 
+                  className="text-white leading-none transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:ring-offset-2 text-sm sm:text-base lg:text-lg"
+                  style={{
+                    background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
+                    boxShadow: tokens.shadows.cta,
+                    borderRadius: tokens.radius.lg,
+                    padding: '0.875rem 1.5rem',
+                    minHeight: '48px',
+                    width: '100%',
+                    maxWidth: '420px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = tokens.shadows.xl;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = tokens.shadows.cta;
+                  }}
+                  type="button"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
+                  <span className="font-semibold">
+                    <span className="hidden sm:inline">Garantir Minha Transformação</span>
+                    <span className="sm:hidden">Garantir Transformação</span>
+                  </span>
+                </button>
+              </div>
+
+              {/* TRUST ELEMENTS - SPACING PADRONIZADO */}
+              <div className="flex items-center justify-center gap-6 lg:gap-8 text-sm text-[#8F7A6A] flex-wrap mt-8 px-4">
+
+                {/* URGENCY BADGE - CONSISTENTE */}
+                <div className="mt-6 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20"
+                     style={{ boxShadow: tokens.shadows.sm }}>
+                  <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
+                  <span className="text-sm text-[#432818] font-medium">
+                    ⚡ Acesso liberado instantaneamente
+                  </span>
                 </div>
+                
+                <p className="text-xs text-[#8F7A6A] mt-6 max-w-md mx-auto">
+                  🔒 <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong>
+                </p>
               </div>
-            </div>
-
-            {/* CTA BUTTON - OTIMIZADO */}
-            <div className="text-center mb-10 relative z-10 flex justify-center">
-              <button
-                onClick={handleCTAClick} 
-                className="text-white leading-none transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:ring-offset-2 text-sm sm:text-base lg:text-lg"
-                style={{
-                  background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
-                  boxShadow: tokens.shadows.cta,
-                  borderRadius: tokens.radius.lg,
-                  padding: '0.875rem 1.5rem',
-                  minHeight: '48px',
-                  width: '100%',
-                  maxWidth: '420px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = tokens.shadows.xl;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = tokens.shadows.cta;
-                }}
-                type="button"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
-                <span className="font-semibold">
-                  <span className="hidden sm:inline">Garantir Minha Transformação</span>
-                  <span className="sm:hidden">Garantir Transformação</span>
-                </span>
-              </button>
-            </div>
-
-            {/* TRUST ELEMENTS - SPACING PADRONIZADO */}
-            <div className="flex items-center justify-center gap-6 lg:gap-8 text-sm text-[#8F7A6A] flex-wrap mt-8 px-4">
-
-              {/* URGENCY BADGE - CONSISTENTE */}
-              <div className="mt-6 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20"
-                   style={{ boxShadow: tokens.shadows.sm }}>
-                <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
-                <span className="text-sm text-[#432818] font-medium">
-                  ⚡ Acesso liberado instantaneamente
-                </span>
-              </div>
-              
-              <p className="text-xs text-[#8F7A6A] mt-6 max-w-md mx-auto">
-                🔒 <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong>
-              </p>
-            </div>
-          </AnimatedWrapper>
+            </AnimatedWrapper>
         </section>
 
         {/* BOTTOM SPACING */}
