@@ -10,12 +10,19 @@ const GuaranteeSection: React.FC = () => {
       
       {/* Content */}
       <div className="relative z-10 text-center">
-        {/* Elegant guarantee icon with animation */}
-        <div className="flex flex-col items-center gap-4 mb-6">
+        {/* Elegant guarantee circle with animated border */}
+        <div className="flex flex-col items-center gap-6 mb-6">
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full animate-pulse opacity-30"></div>
-            <div className="relative bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] p-6 rounded-full shadow-xl">
-              <Shield className="w-12 h-12 text-white" />
+            {/* Animated border */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] animate-spin opacity-30" style={{ animationDuration: '4s' }}></div>
+            <div className="absolute inset-1 rounded-full bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] animate-spin opacity-40" style={{ animationDuration: '6s', animationDirection: 'reverse' }}></div>
+            
+            {/* Main circle */}
+            <div className="relative bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] w-32 h-32 rounded-full flex items-center justify-center shadow-xl">
+              <div className="bg-white w-24 h-24 rounded-full flex flex-col items-center justify-center shadow-inner">
+                <span className="text-2xl font-bold text-[#B89B7A]">7</span>
+                <span className="text-sm font-medium text-[#aa6b5d]">dias</span>
+              </div>
             </div>
           </div>
           
@@ -23,18 +30,14 @@ const GuaranteeSection: React.FC = () => {
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-2">
               Garantia de Satisfação Total
             </h2>
-            <div className="bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 border-2 border-[#B89B7A]/30 text-[#432818] px-8 py-4 rounded-full flex items-center justify-center gap-3 font-semibold text-lg shadow-inner max-w-md mx-auto">
-              <Award className="w-6 h-6 text-[#aa6b5d]" />
-              <span className="text-[#aa6b5d]">7 Dias de Garantia</span>
-            </div>
           </div>
         </div>
 
-        <p className="text-base md:text-lg text-[#8F7A6A] max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base md:text-lg text-[#8F7A6A] max-w-2xl mx-auto leading-relaxed mb-6">
           Experimente nosso guia de estilo por 7 dias completos. Se não ficar totalmente satisfeita com os resultados, devolvemos 100% do seu investimento, sem perguntas ou complicações.
         </p>
         
-        <div className="mt-6 grid md:grid-cols-3 gap-4 text-sm text-[#432818]">
+        <div className="grid md:grid-cols-3 gap-4 text-sm text-[#432818]">
           <div className="flex items-center gap-2 justify-center">
             <CheckCircle className="w-4 h-4 text-[#4CAF50]" />
             <span>Reembolso Total</span>
