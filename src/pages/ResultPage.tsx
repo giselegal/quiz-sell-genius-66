@@ -557,6 +557,118 @@ const ResultPage: React.FC = () => {
             Seu guia personalizado {category} + materiais exclusivos
           </p>
 
+          {/* GRID DE PRODUTOS COM DESCRIÇÕES MELHORADAS */}
+          <div className="mb-12 relative z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-4xl mx-auto mb-10">
+              {[
+                {
+                  src: (() => {
+                    const guideImages = {
+                      'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+                      'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
+                      'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
+                      'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+                      'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
+                      'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp',
+                      'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
+                      'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
+                    };
+                    return guideImages[category] || guideImages['Natural'];
+                  })(),
+                  title: `Guia Completo ${category}`,
+                  subtitle: 'Seu manual personalizado com looks, combinações e dicas específicas para seu estilo',
+                  badge: 'PRINCIPAL'
+                },
+                {
+                  src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png',
+                  title: 'Guia completo das Peças-Chave',
+                  subtitle: 'Descubra quais peças não podem faltar no seu guarda-roupa que multiplicam seus looks',
+                  badge: 'BÔNUS'
+                },
+                {
+                  src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png',
+                  title: 'Guia de Visagismo',
+                  subtitle: 'Descubra os cortes de cabelo e acessórios que mais valorizam seu rosto',
+                  badge: 'EXCLUSIVO'
+                }
+              ].map((product, index) => (
+                <div key={index} className={`bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 transition-transform duration-300 hover:scale-105 relative ${index === 2 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+                     style={{ boxShadow: tokens.shadows.sm }}>
+                  
+                  {/* BADGE DO PRODUTO */}
+                  <div className="absolute -top-2 -right-2 z-10">
+                    <span className={`text-xs font-bold px-2 py-1 rounded-full text-white shadow-sm ${
+                      product.badge === 'PRINCIPAL' ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]' :
+                      product.badge === 'BÔNUS' ? 'bg-gradient-to-r from-green-500 to-green-600' :
+                      'bg-gradient-to-r from-purple-500 to-purple-600'
+                    }`}>
+                      {product.badge}
+                    </span>
+                  </div>
+
+                  {/* IMAGEM DO PRODUTO */}
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-4 flex items-center justify-center relative overflow-hidden"
+                       style={{ boxShadow: tokens.shadows.sm }}>
+                    <ProgressiveImage 
+                      src={product.src}
+                      alt={product.title}
+                      className="w-full h-full object-cover rounded-lg"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* INFORMAÇÕES DO PRODUTO */}
+                  <div className="text-left">
+                    <h4 className="font-bold text-[#432818] text-sm lg:text-base mb-2 leading-tight">
+                      {product.title}
+                    </h4>
+                    <p className="text-xs lg:text-sm text-[#8F7A6A] leading-relaxed line-clamp-3">
+                      {product.subtitle}
+                    </p>
+                  </div>
+
+                  {/* INDICADOR DE VALOR */}
+                  <div className="mt-3 pt-3 border-t border-[#B89B7A]/10">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-[#8F7A6A]">
+                        {index === 0 ? 'Produto Principal' : 'Incluído Grátis'}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
+                        <span className="text-xs font-medium text-[#aa6b5d]">
+                          {index === 0 ? 'Personalizado' : 'Bônus'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* RESUMO DO VALOR */}
+            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 border border-[#B89B7A]/20 max-w-2xl mx-auto">
+              <h4 className="font-bold text-[#432818] mb-2">O que você recebe hoje:</h4>
+              <ul className="text-sm text-[#8F7A6A] space-y-1">
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                  <span>Guia completo do seu estilo {category} personalizado</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                  <span>E-book com estratégias de transformação pessoal</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                  <span>Manual de visagismo para cabelo e cores ideais</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                  <span>Acesso vitalício + atualizações gratuitas</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
           <div className="mb-8">
             <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
               R$ 39,90
