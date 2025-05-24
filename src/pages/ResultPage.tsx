@@ -281,14 +281,14 @@ const ResultPage: React.FC = () => {
       {/* Custom scrollbar styles */}
       <style jsx global>{`
         ::-webkit-scrollbar {
-          width: 4px;
+          width: 8px;
         }
         ::-webkit-scrollbar-track {
           background: #f1f1f1;
         }
         ::-webkit-scrollbar-thumb {
           background: linear-gradient(to bottom, #B89B7A, #aa6b5d);
-          border-radius: 2px;
+          border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(to bottom, #aa6b5d, #B89B7A);
@@ -484,7 +484,7 @@ const ResultPage: React.FC = () => {
         {/* Before/After Transformation Section */}
         <section id="transformations" className="scroll-mt-20 mb-16">
           <SectionTitle>
-            Transformações Reais de Mulheres como Você
+            Transformações Reais
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -579,7 +579,7 @@ const ResultPage: React.FC = () => {
           <SectionTitle 
             subtitle="Conheça a especialista que vai guiar sua transformação de imagem"
           >
-            Sua Mentora de Estilo
+            Conheça sua Mentora
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
