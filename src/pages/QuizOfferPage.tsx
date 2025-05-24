@@ -526,7 +526,7 @@ const QuizOfferPage: React.FC = () => {
                                     <span className="text-4xl font-bold mx-2">R$ 8,83</span>
                                 </div>
                                 <p className="text-lg">ou à vista <strong>R$ 39,90</strong></p>
-                                <p className="text-sm mt-2 opacity-75">89% OFF - Economia de R$ 321,10</p>
+                                <p className="text-sm mt-2 opacity-75">77% OFF - Economia de R$ 135,10</p>
                             </div>
 
                             {/* CTA Final */}
