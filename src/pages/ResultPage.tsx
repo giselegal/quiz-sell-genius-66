@@ -344,10 +344,10 @@ const ResultPage: React.FC = () => {
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
           <div className="text-center sm:text-left">
             <p className="text-sm font-medium text-[#432818]">Guia de Estilo e Imagem + Bônus</p>
-            <div className="flex flex-col sm:flex-row items-center gap-2">
-              <span className="text-xs text-[#8F7A6A]">5x de</span>
-              <span className="text-xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">R$ 8,83</span>
-              <span className="text-xs font-normal text-[#8F7A6A]">ou R$ 39,90 à vista</span>
+            <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+              <span className="text-xs text-[#8F7A6A] whitespace-nowrap">5x de</span>
+              <span className="text-xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">R$ 8,83</span>
+              <span className="text-xs font-normal text-[#8F7A6A] whitespace-nowrap">ou R$ 39,90 à vista</span>
             </div>
           </div>
           <Button 
@@ -672,27 +672,32 @@ const ResultPage: React.FC = () => {
                 Por apenas
               </p>
               <div className="mb-6">
-                <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-xl p-8 border-2 border-[#B89B7A]/20 shadow-lg relative overflow-hidden">
-                  {/* Elementos decorativos */}
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-[#B89B7A]/10 to-transparent rounded-full blur-xl"></div>
-                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-[#aa6b5d]/10 to-transparent rounded-full blur-xl"></div>
+                <div className="bg-gradient-to-br from-[#B89B7A] via-[#D4B79F] to-[#aa6b5d] rounded-xl p-8 shadow-lg relative overflow-hidden">
+                  {/* Elementos decorativos brancos */}
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
                   
                   <div className="relative z-10">
                     <div className="text-center mb-6">
-                      <span className="text-lg text-[#8F7A6A] font-medium block mb-3">Parcelado em até</span>
-                      <div className="flex items-baseline justify-center gap-4 mb-4">
-                        <span className="text-2xl text-[#aa6b5d] font-semibold">5x de</span>
-                        <div className="relative">
-                          <span className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent leading-none">R$ 8,83</span>
-                          <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full opacity-30"></div>
+                      <span className="text-lg text-white/90 font-medium block mb-4">Parcelado em até</span>
+                      
+                      {/* Preço parcelado - uma linha compacta */}
+                      <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 mb-6 shadow-md border border-white/30">
+                        <div className="flex items-center justify-center gap-3 flex-wrap">
+                          <span className="text-xl md:text-2xl text-[#aa6b5d] font-semibold whitespace-nowrap">5x de</span>
+                          <div className="relative">
+                            <span className="text-4xl md:text-5xl font-bold text-[#B89B7A] leading-none whitespace-nowrap">R$ 8,83</span>
+                            <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full opacity-50"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                     
+                    {/* Preço à vista */}
                     <div className="text-center">
-                      <div className="inline-flex items-center gap-3 bg-white/70 backdrop-blur-sm px-6 py-3 rounded-full border border-[#B89B7A]/20 shadow-md">
-                        <div className="w-2 h-2 bg-[#4CAF50] rounded-full animate-pulse"></div>
-                        <span className="text-lg text-[#432818] font-semibold">ou à vista R$ 39,90</span>
+                      <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm px-6 py-4 rounded-full border border-white/30 shadow-md">
+                        <div className="w-2 h-2 bg-[#4CAF50] rounded-full animate-pulse shadow-sm"></div>
+                        <span className="text-lg md:text-xl text-white font-semibold whitespace-nowrap">ou à vista R$ 39,90</span>
                       </div>
                     </div>
                   </div>
