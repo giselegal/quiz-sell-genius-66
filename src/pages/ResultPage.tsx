@@ -6,7 +6,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight, Shield, Award } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -339,8 +339,8 @@ const ResultPage: React.FC = () => {
                   </div>
                   <Progress 
                     value={primaryStyle.percentage} 
-                    className="h-3 bg-[#F3E8E6] rounded-full overflow-hidden" 
-                    indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-500 ease-in-out"
+                    className="h-2 bg-[#F3E8E6] rounded-full overflow-hidden" 
+                    indicatorClassName="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] transition-all duration-500 ease-in-out"
                   />
                 </div>
               </div>
@@ -535,6 +535,20 @@ const ResultPage: React.FC = () => {
             </div>
             
             <div className="flex flex-col items-center justify-center gap-4 mb-8 relative z-10">
+              {/* Ícone de garantia elegante com animação */}
+              <div className="flex flex-col items-center gap-3">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] rounded-full animate-ping opacity-20"></div>
+                  <div className="relative bg-gradient-to-r from-[#D4AF37] to-[#B8860B] p-4 rounded-full shadow-lg">
+                    <Award className="w-8 h-8 text-white animate-pulse" />
+                  </div>
+                </div>
+                <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 text-[#432818] px-6 py-3 rounded-full flex items-center gap-3 font-semibold text-sm shadow-inner">
+                  <Shield className="w-5 h-5 text-[#aa6b5d] animate-bounce" />
+                  <span className="text-[#aa6b5d]">Garantia de 7 Dias - Satisfação Total</span>
+                </div>
+              </div>
+              
               <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 text-[#432818] p-4 rounded-lg flex items-center gap-3 font-semibold text-sm shadow-inner">
                 <Clock className="w-6 h-6 text-[#aa6b5d] animate-pulse" />
                 <span className="text-[#aa6b5d]">Oferta Exclusiva Válida Por Pouco Tempo</span>
