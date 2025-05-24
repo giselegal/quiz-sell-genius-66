@@ -652,7 +652,7 @@ const ResultPage: React.FC = () => {
             <div className="relative z-10">
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-8"></div>
               <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#432818] mb-4">
-                Pronta para Sua Transformação?
+                Chegou o Momento de Agir
               </h3>
               <p className="text-lg text-[#8F7A6A] font-medium max-w-md mx-auto">
                 Tudo que você precisa para descobrir e aplicar seu estilo pessoal
@@ -685,8 +685,8 @@ const ResultPage: React.FC = () => {
                 <span className="text-[#aa6b5d]">Hoje Mesmo!</span>
               </h2>
               
-              <p className="text-xl lg:text-2xl text-[#8F7A6A] leading-relaxed max-w-2xl mx-auto">
-                Seu guia personalizado <span className="font-bold text-[#aa6b5d]">{category}</span> + materiais exclusivos
+              <p className="text-xl text-[#8F7A6A] mb-8">
+                Seu guia personalizado {category} + materiais exclusivos de Estilo e Imagem
               </p>
             </div>
             
