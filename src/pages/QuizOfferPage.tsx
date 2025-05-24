@@ -912,162 +912,212 @@ const QuizOfferPage: React.FC = () => {
                                 <p className="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed max-w-4xl mx-auto font-inter">
                                     Estou tão confiante de que estes materiais vão transformar sua relação com a moda e sua imagem pessoal que ofereço uma <span className="text-[var(--color-accent)] font-bold">garantia incondicional de 7 dias.</span> Se por qualquer motivo você não ficar satisfeita com o conteúdo, basta solicitar o reembolso dentro desse período e devolveremos <span className="text-[var(--color-primary)] font-bold">100% do seu investimento</span>, sem perguntas. Seu risco é zero!
                                 </p>
-                            </div>="bg-white rounded-xl p-6 border border-[var(--color-primary)]/20 shadow-lg mb-6">
-<h4 className="text-xl font-bold text-brand-dark mb-4 text-center">Valor Individual dos Materiais:</h4>
-                            {/* Card de investimento */}
-                            <div className="card-modern bg-brand-cream text-brand-dark p-8 md:p-12 lg:p-16 mb-12">ify-between">
-                                <div className="text-center mb-12">
-                                    <h3 className="text-3xl md:text-4xl font-bold mb-8 font-playfair">
-                                        Investimento Único Para Uma Transformação Completa    </div>
-                                    </h3>y-between">
-                                    arda-Roupa</span>
-                                    {/* Preço em destaque - implementado */}
-                                    <div className="mb-8">
-                                        <p className="text-xl font-medium text-brand-medium mb-4 font-inter">
-                                            Por apenasal</span>
-                                        </p>
-                                        <div className="bg-gradient-to-br from-[var(--color-background-light)] to-[var(--color-background-soft)] rounded-xl p-8 border-2 border-[var(--color-primary)]/20 shadow-lg relative overflow-hidden mb-6">
-                                            {/* Elementos decorativos */}="border-t pt-2 mt-4">
-                                            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full blur-xl"></div>lassName="flex justify-between text-lg font-bold">
-                                            <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-[var(--color-accent)]/10 to-transparent rounded-full blur-xl"></div>  <span>Valor Total:</span>
-                                                    <span className="line-through text-red-500">R$ 361</span>
-                                            <div className="relative z-10">
-                                                <div className="text-center mb-6">
-                                                    <span className="text-lg text-brand-medium font-medium block mb-3 font-inter">Parcelado em até</span>
-                                                    <div className="flex items-baseline justify-center gap-4 mb-4">
-                                                        <span className="text-2xl text-brand-accent font-semibold font-inter">5x de</span>
-                                                        <div className="relative">ocional DESTACADO */}
-                                                            <span className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent leading-none font-playfair">R$ 8,83</span>Name="bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden">
-                                                            <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-full opacity-30"></div>* Badge de oferta */}
-                                                        </div>  <div className="absolute -top-4 -right-4 bg-red-500 text-white px-6 py-2 rounded-full text-sm font-bold transform rotate-12 shadow-lg">
-                                                    </div>          🔥 89% OFF
-                                                </div>                                            </div>
-                                                
-                                                <div className="text-center">ame="text-center">
-                                                    <div className="inline-flex items-center gap-3 bg-white/70 backdrop-blur-sm px-6 py-3 rounded-full border border-[var(--color-primary)]/20 shadow-md">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>e por:</p>
-                                                        <span className="text-lg text-brand-dark font-semibold font-inter">ou à vista R$ 39,90</span>
-                                                    </div>
-                                                </div>div className="mb-6">
-                                            </div>p-4 mb-4">
-                                        </div>
-                                    </div>      <div className="relative">
-                                </div>              <span className="text-7xl font-bold font-playfair">R$ 8,83</span>
-0 h-1 bg-white/30 rounded-full"></div>
-                                {/* Lista de benefícios */}
-                                <div className="mb-12">   </div>
-                                    <p className="text-xl md:text-2xl mb-8 font-bold text-brand-dark text-center">Você terá acesso a:</p>
-                                    <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">line-block">
-                                        <div className="flex items-start bg-white p-6 rounded-xl shadow-md">      <span className="text-2xl font-bold">ou à vista R$ 39,90</span>
-                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />      </div>
-                                            <div>
-                                                <span className="font-bold text-lg">Quiz de Estilo</span>
-                                                <p className="text-brand-medium">para descobrir seu estilo predominante</p>/* Countdown mais visível */}
-                                            </div>d-xl p-4">
-                                        </div>
-                                        <div className="flex items-start bg-white p-6 rounded-xl shadow-md">div>
-                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />div>
-                                            <div>
-                                                <span className="font-bold text-lg">Guia de Imagem e Estilo</span>
-                                                <p className="text-brand-medium">específico para seu resultado</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-start bg-white p-6 rounded-xl shadow-md">-12">
-                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />me="text-xl md:text-2xl mb-8 font-bold text-brand-dark text-center">Você terá acesso a:</p>
-                                            <div>lassName="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                                                <span className="font-bold text-lg">Bônus 1:</span>  <div className="flex items-start bg-white p-6 rounded-xl shadow-md">
-                                                <p className="text-brand-medium">Guia das Peças-Chave do Guarda-Roupa</p>                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />
-                                            </div>
-                                        </div>lassName="font-bold text-lg">Quiz de Estilo</span>
-                                        <div className="flex items-start bg-white p-6 rounded-xl shadow-md">lassName="text-brand-medium">para descobrir seu estilo predominante</p>
-                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />
-                                            <div>
-                                                <span className="font-bold text-lg">Bônus 2:</span>ame="flex items-start bg-white p-6 rounded-xl shadow-md">
-                                                <p className="text-brand-medium">Guia de Visagismo Facial</p>ize={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />
-                                            </div>n w-full h-auto"
-                                        </div>          <span className="font-bold text-lg">Guia de Imagem e Estilo</span>
-                                    </div>          <p className="text-brand-medium">específico para seu resultado</p>
-                                </div>                                            </div>
-s de valor */}
-                                {/* Mockup do produto */}s-start bg-white p-6 rounded-xl shadow-md">
-                                <div className="mb-12">l text-brand-medium leading-relaxed font-inter text-center">
-                                    <FixedIntroImage
-                                        src={GUARANTEE_COMPLEMENTARY_IMAGE_URL}        <span className="font-bold text-lg">Bônus 1:</span></p>
-                                        alt="Mockup completo com bônus"            <p className="text-brand-medium">Guia das Peças-Chave do Guarda-Roupa</p>  
-                                        width={800}r(--color-accent)]">
-                                        height={500}-center font-inter">
-                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500 object-contain w-full h-auto"m investimento em você mesma, na sua confiança e na forma como o mundo te percebe.
-                                    /><Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />                                        </p>
-                                </div>  <div>
-          <span className="font-bold text-lg">Bônus 2:</span>
-                                {/* Textos de valor */}              <p className="text-brand-medium">Guia de Visagismo Facial</p>
-                                <div className="space-y-6 mb-12">                                            </div>
-                                    <p className="text-lg md:text-xl text-brand-medium leading-relaxed font-inter text-center">
-                                        Pense bem: quanto você já gastou com roupas que nunca usou? Quanto vale para você economizar tempo todas as manhãs, sabendo exatamente o que vestir? Quanto vale se sentir confiante e autêntica em qualquer situação?assName="text-center">
-                                    </p>
-                                    
-                                    <div className="bg-brand-soft p-8 rounded-xl border-l-4 border-[var(--color-accent)]">-auto"
-                                        <p className="text-xl md:text-2xl text-brand-dark font-bold leading-relaxed text-center font-inter">div className="mb-12">
-                                            Este investimento em autoconhecimento e imagem pessoal vai muito além de roupas - é um investimento em você mesma, na sua confiança e na forma como o mundo te percebe.
-                                        </p>cale-110 transition-transform" />
-                                    </div>lt="Mockup completo com bônus"
-                                </div>        width={800}
                             </div>
 
-                            {/* CTA Principal */}nto 100% seguro. Acesso imediato.
-                            <div className="text-center"><Shield size={20} className="inline ml-3 group-hover:scale-110 transition-transform" />p>
-                                <buttonbutton>                            </div>
-                                    onClick={() => handleCtaClick('guarantee_cta', 'Quero Descobrir Meu Estilo Agora!')}  
-                                    className="btn-primary text-lg md:text-xl lg:text-2xl px-8 md:px-12 py-4 md:py-6 mb-6 animate-pulse-gentle group w-full sm:w-auto"      <p className="text-base text-gray-300 flex items-center justify-center gap-2 font-inter">
-                                >          <Lock size={16} />
-                                    Quero Descobrir Meu Estilo Agora!                                    Pagamento 100% seguro. Acesso imediato.
-                                    <Shield size={20} className="inline ml-3 group-hover:scale-110 transition-transform" />
-                                </button>
-                                
-                                <p className="text-base text-gray-300 flex items-center justify-center gap-2 font-inter">
-                                    <Lock size={16} />
-                                    Pagamento 100% seguro. Acesso imediato.
-                                </p>elative">
-                            </div>d-soft relative overflow-hidden">Name="max-w-6xl mx-auto">
-                        </div>                          {/* Header da seção */}
-                    </div>to-br from-[var(--color-primary)]/10 to-transparent rounded-full -translate-x-32"></div>center mb-16 animate-fade-in-up">
-                </section>nded-full translate-x-36"></div>-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
+                            {/* Card de investimento - OTIMIZADO */}
+                            <div className="card-modern bg-brand-cream text-brand-dark p-8 md:p-12 lg:p-16 mb-12">
+                                <div className="text-center mb-12">
+                                    <h3 className="text-3xl md:text-4xl font-bold mb-8 font-playfair">
+                                        Investimento Único Para Uma Transformação Completa
+                                    </h3>
+                                    
+                                    {/* Value anchoring - CORRIGIDO */}
+                                    <div className="bg-white rounded-xl p-6 border border-[var(--color-primary)]/20 shadow-lg mb-6">
+                                        <h4 className="text-xl font-bold text-brand-dark mb-4 text-center">Valor Individual dos Materiais:</h4>
+                                        <div className="space-y-2 text-brand-medium">
+                                            <div className="flex justify-between">
+                                                <span>• Quiz + Guia de Estilo Personalizado</span>
+                                                <span className="font-semibold">R$ 197</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>• Guia Peças-Chave do Guarda-Roupa</span>
+                                                <span className="font-semibold">R$ 97</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>• Guia de Visagismo Facial</span>
+                                                <span className="font-semibold">R$ 67</span>
+                                            </div>
+                                            <div className="border-t pt-2 mt-4">
+                                                <div className="flex justify-between text-lg font-bold">
+                                                    <span>Valor Total:</span>
+                                                    <span className="line-through text-red-500">R$ 361</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                {/* 9. Perguntas Frequentes */})] bg-clip-text text-transparent">Frequentes</span>
-                <section className="section-spacing bg-brand-soft relative overflow-hidden">e="max-w-6xl mx-auto">                                </h2>
-                    {/* Elementos decorativos */}auto">
-                    <div className="absolute top-1/3 left-0 w-64 h-64 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full -translate-x-32"></div>mo transformar sua imagem
-                    <div className="absolute bottom-1/3 right-0 w-72 h-72 bg-gradient-to-tl from-[var(--color-accent)]/10 to-transparent rounded-full translate-x-36"></div>className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
-                      Perguntas 
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">                                    <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">Frequentes</span>
+                                    {/* Preço promocional DESTACADO - CORRIGIDO */}
+                                    <div className="bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden mb-8">
+                                        {/* Badge de oferta */}
+                                        <div className="absolute -top-4 -right-4 bg-red-500 text-white px-6 py-2 rounded-full text-sm font-bold transform rotate-12 shadow-lg">
+                                            🔥 89% OFF
+                                        </div>
+                                        
+                                        <div className="text-center">
+                                            <p className="text-xl mb-2 opacity-90">Oferta Exclusiva por Tempo Limitado</p>
+                                            <p className="text-lg mb-6 opacity-75">Apenas hoje por:</p>
+                                            
+                                            {/* Preço principal */}
+                                            <div className="mb-6">
+                                                <div className="flex items-baseline justify-center gap-4 mb-4">
+                                                    <span className="text-3xl font-semibold">5x de</span>
+                                                    <div className="relative">
+                                                        <span className="text-7xl font-bold font-playfair">R$ 8,83</span>
+                                                        <div className="absolute -bottom-2 left-0 right-0 h-1 bg-white/30 rounded-full"></div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 inline-block">
+                                                    <span className="text-2xl font-bold">ou à vista R$ 39,90</span>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Countdown mais visível */}
+                                            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                                                <CountdownTimer />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Lista de benefícios - MELHORADA */}
+                                <div className="mb-12">
+                                    <p className="text-xl md:text-2xl mb-8 font-bold text-brand-dark text-center">Você terá acesso a:</p>
+                                    <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                                        <div className="flex items-start bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500">
+                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />
+                                            <div>
+                                                <span className="font-bold text-lg text-brand-dark">Quiz de Estilo</span>
+                                                <p className="text-brand-medium">Descubra seu estilo predominante em 5 minutos</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start bg-white p-6 rounded-xl shadow-md border-l-4 border-[var(--color-primary)]">
+                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />
+                                            <div>
+                                                <span className="font-bold text-lg text-brand-dark">Guia de Imagem e Estilo</span>
+                                                <p className="text-brand-medium">Personalizado para seu resultado específico</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start bg-white p-6 rounded-xl shadow-md border-l-4 border-[var(--color-accent)]">
+                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />
+                                            <div>
+                                                <span className="font-bold text-lg text-brand-dark">Bônus 1: Peças-Chave</span>
+                                                <p className="text-brand-medium">Monte um guarda-roupa funcional</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500">
+                                            <Check size={24} className="text-green-600 mr-4 mt-1 flex-shrink-0" />
+                                            <div>
+                                                <span className="font-bold text-lg text-brand-dark">Bônus 2: Visagismo</span>
+                                                <p className="text-brand-medium">Valorize seus traços naturais</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Mockup do produto */}
+                                <div className="mb-12">
+                                    <FixedIntroImage
+                                        src={GUARANTEE_COMPLEMENTARY_IMAGE_URL}
+                                        alt="Mockup completo com bônus"
+                                        width={800}
+                                        height={500}
+                                        className="rounded-xl shadow-2xl mx-auto transform hover:scale-[1.02] transition-transform duration-500 object-contain w-full h-auto"
+                                    />
+                                </div>
+
+                                {/* Textos de valor - MELHORADOS */}
+                                <div className="space-y-6 mb-12">
+                                    <div className="bg-gradient-to-r from-[var(--color-background-light)] to-[var(--color-background-soft)] p-6 rounded-xl border-l-4 border-[var(--color-primary)]">
+                                        <p className="text-lg md:text-xl text-brand-dark font-semibold leading-relaxed text-center font-inter">
+                                            💭 Pense bem: quanto você já gastou com roupas que nunca usou? Quanto vale economizar tempo todas as manhãs sabendo exatamente o que vestir?
+                                        </p>
+                                    </div>
+                                    
+                                    <div className="bg-gradient-to-r from-[var(--color-accent)]/10 to-[var(--color-primary)]/10 p-8 rounded-xl border border-[var(--color-primary)]/20">
+                                        <p className="text-xl md:text-2xl text-brand-dark font-bold leading-relaxed text-center font-inter">
+                                            ✨ Este investimento em autoconhecimento vai muito além de roupas - é um investimento em você mesma, na sua <span className="text-[var(--color-primary)]">confiança</span> e na forma como o mundo te percebe.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* CTA Principal - OTIMIZADO */}
+                            <div className="text-center">
+                                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-6 mb-6 shadow-2xl">
+                                    <button
+                                        onClick={() => {
+                                            handleCtaClick('guarantee_cta', 'Quero Descobrir Meu Estilo Agora!');
+                                            window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                        }}
+                                        className="bg-white text-green-600 font-bold text-xl md:text-2xl lg:text-3xl px-8 md:px-12 py-4 md:py-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto group"
+                                    >
+                                        🚀 QUERO DESCOBRIR MEU ESTILO AGORA!
+                                        <Shield size={24} className="inline ml-3 group-hover:scale-110 transition-transform" />
+                                    </button>
+                                </div>
+                                
+                                {/* Trust signals melhorados */}
+                                <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-300 mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <Lock size={16} className="text-green-400" />
+                                        <span>Pagamento 100% Seguro</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Shield size={16} className="text-blue-400" />
+                                        <span>Garantia 7 Dias</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Users size={16} className="text-yellow-400" />
+                                        <span>3000+ Aprovações</span>
+                                    </div>
+                                </div>
+                                
+                                <p className="text-sm text-gray-400 font-inter">
+                                    ⚡ Acesso imediato após confirmação do pagamento
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 9. Perguntas Frequentes */}
+                <section className="section-spacing bg-brand-soft relative overflow-hidden">
+                    {/* Elementos decorativos */}
+                    <div className="absolute top-1/3 left-0 w-64 h-64 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full -translate-x-32"></div>
+                    <div className="absolute bottom-1/3 right-0 w-72 h-72 bg-gradient-to-tl from-[var(--color-accent)]/10 to-transparent rounded-full translate-x-36"></div>
+                    
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
                         <div className="max-w-6xl mx-auto">
-                            {/* Header da seção */} font-inter max-w-3xl mx-auto">
-                            <div className="text-center mb-16 animate-fade-in-up">como transformar sua imagem
+                            {/* Header da seção */}
+                            <div className="text-center mb-16 animate-fade-in-up">
                                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-brand-dark font-playfair leading-tight">
                                     Perguntas 
                                     <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">Frequentes</span>
-                                </h2>*/}
-                                <p className="text-xl text-brand-medium font-inter max-w-3xl mx-auto">ex justify-center">
-                                    Tire suas dúvidas e descubra como transformar sua imagembject-contain w-full h-auto"
-                                </p>ixedIntroImage
-                            </div>  src={FAQ_IMAGE_URL}
-      alt="Perguntas estratégicas"
-                            {/* Imagem ilustrativa */}                                        width={700}
-                            <div className="mb-16 flex justify-center">20}
-                                <div className="card-modern p-8">rounded-xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 object-contain w-full h-auto"
-                                    <FixedIntroImage
-                                        src={FAQ_IMAGE_URL}div>
-                                        alt="Perguntas estratégicas"                            </div>
-                                        width={700}
-                                        height={420}Name="text-center">
-                                        className="rounded-xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 object-contain w-full h-auto"olor-primary)]/20 mb-12">
-                                    />rk mb-6 font-playfair">
-                                </div>da tem dúvidas?
+                                </h2>
+                                {/* Elementos decorativos */}
+                                <div className="flex justify-center mb-4">
+                                    <div className="w-24 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-full"></div>
+                                </div>
+                                <p className="text-xl text-brand-medium font-inter max-w-3xl mx-auto">
+                                    Tire suas dúvidas e descubra como transformar sua imagem
+                                </p>
                             </div>
-ter leading-relaxed max-w-3xl mx-auto">
-                            {/* FAQ Component */} nossa garantia de 7 dias, você pode testar sem riscos!
-                            <div className="mb-16">ssName="card-modern p-8 md:p-12 bg-gradient-to-r from-[var(--color-primary)]/5 to-[var(--color-accent)]/5 border border-[var(--color-primary)]/20 mb-12">                                    </p>
-                                <FaqSectionNew /><h3 className="text-3xl md:text-4xl font-bold text-brand-dark mb-6 font-playfair">       
+
+                            {/* Imagem ilustrativa */}
+                            <div className="mb-16 flex justify-center">
+                                <FixedIntroImage
+                                    src={FAQ_IMAGE_URL}
+                                    alt="Perguntas estratégicas"
+                                    width={700}
+                                    height={420}
+                                    className="rounded-xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500 object-contain w-full h-auto"
+                                />
+                            </div>
+
+                            {/* FAQ Component */}
+                            <div className="mb-16">
+                                <FaqSectionNew />
                             </div>
 
                             {/* CTA Final */}
@@ -1081,35 +1131,6 @@ ter leading-relaxed max-w-3xl mx-auto">
                                     </p>
                                     
                                     <button
-                                        onClick={() => handleCtaClick('faq_cta', 'Quero Transformar Minha Imagem Agora!')}
-                                        className="btn-primary text-lg md:text-xl lg:text-2xl px-8 md:px-12 py-4 md:py-5 mb-6 animate-pulse-gentle group w-full sm:w-auto"
-                                    >
-                                        Quero Transformar Minha Imagem Agora!
-                                        <ArrowRight size={20} className="inline ml-3 group-hover:translate-x-1 transition-transform" />
-                                    </button>
-                                    
-                                    <p className="text-sm text-brand-medium flex items-center justify-center gap-2 font-inter">
-                                        <Users size={16} className="text-brand-primary" />
-                                        Junte-se a milhares de mulheres que já redescobriram sua confiança!
-
-
-
-
-
-
-
-
-
-
-
-
-export default QuizOfferPage;};    );        </div>            </main>                </section>                    </div>                        </div>                            </div>                                </div>                                    </p>
-
-
-
-
-
-export default QuizOfferPage;};    );        </div>            </main>                </section>                    </div>                        </div>                            </div>                                </div>                                    </p>                                        Junte-se a milhares de mulheres que já redescobriram sua confiança!                                        <Users size={16} className="text-brand-primary" />                                    <p className="text-sm text-brand-medium flex items-center justify-center gap-2 font-inter">                                                                        </button>                                        <ArrowRight size={20} className="inline ml-3 group-hover:translate-x-1 transition-transform" />                                        Quero Transformar Minha Imagem Agora!                                    >                                        className="btn-primary text-lg md:text-xl lg:text-2xl px-8 md:px-12 py-4 md:py-5 mb-6 animate-pulse-gentle group w-full sm:w-auto"                                        onClick={() => handleCtaClick('faq_cta', 'Quero Transformar Minha Imagem Agora!')}                                    <button                                                                        </p>                                        Não deixe a insegurança te impedir de descobrir seu verdadeiro estilo. Com nossa garantia de 7 dias, você pode testar sem riscos!                                    <p className="text-lg md:text-xl text-brand-medium mb-8 font-inter leading-relaxed max-w-3xl mx-auto">                                    </h3>                                        Ainda tem dúvidas?                                    <button
                                         onClick={() => handleCtaClick('faq_cta', 'Quero Transformar Minha Imagem Agora!')}
                                         className="btn-primary text-lg md:text-xl lg:text-2xl px-8 md:px-12 py-4 md:py-5 mb-6 animate-pulse-gentle group w-full sm:w-auto"
                                     >
