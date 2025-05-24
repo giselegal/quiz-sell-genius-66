@@ -715,7 +715,7 @@ const ResultPage: React.FC = () => {
                         
                         {/* Novo valor */}
                         <div className="text-center">
-                          <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">R$ 39,90</span>
+                          <span className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">R$ 39,90</span>
                         </div>
                         
                         {/* Economia */}
@@ -729,16 +729,6 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
                 
-                {/* Comparação com valor individual */}
-                <div className="text-center mb-6">
-                  <p className="text-[#8F7A6A] text-sm">
-                    Valor individual dos materiais: <span className="font-semibold text-[#aa6b5d]">R$ 175,00</span>
-                  </p>
-                  <p className="text-[#4CAF50] text-sm font-medium mt-1">
-                    ✨ Você economiza mais de 75% comprando o kit completo
-                  </p>
-                </div>
-                
                 {/* Pagamento 100% Seguro */}
                 <div className="text-center mb-6">
                   <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/10">
@@ -749,11 +739,11 @@ const ResultPage: React.FC = () => {
             </div>
             
             <div className="flex flex-col items-center justify-center gap-4 mb-8 relative z-10">
-              <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 text-[#432818] p-4 rounded-lg flex items-center gap-3 font-semibold text-sm shadow-inner">
+              <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 text-[#432818] p-2 rounded-lg flex items-center gap-3 font-semibold text-sm shadow-inner">
                 <div className="relative">
-                  <Hourglass className="w-6 h-6 text-[#aa6b5d] animate-pulse" />
+                  <Hourglass className="w-5 h-5 text-[#aa6b5d] animate-pulse" />
                   <div className="absolute inset-0 animate-spin" style={{ animationDuration: '3s' }}>
-                    <Hourglass className="w-6 h-6 text-[#aa6b5d] opacity-30" />
+                    <Hourglass className="w-5 h-5 text-[#aa6b5d] opacity-30" />
                   </div>
                 </div>
                 <span className="text-[#aa6b5d]">Oferta Exclusiva Válida Por Pouco Tempo</span>
