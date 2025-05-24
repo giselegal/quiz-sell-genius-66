@@ -275,9 +275,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
       <div className="max-w-4xl mx-auto px-6">
         {/* HEADER */}
         <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4">
-            Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
+          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-2">
+            Transformações Que Inspiram
           </h3>
+          <p className="text-base md:text-lg text-[#8F7A6A] mb-4">
+            Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
+          </p>
           <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto"></div>
         </motion.div>
         
@@ -340,7 +343,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               <div className="p-6 bg-white">
                 <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
                   <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                    Transforme sua Imagem, Transforme sua Vida
+                    Transforme sua Imagem
                   </span>
                 </h4>
                 
