@@ -431,7 +431,7 @@ const ResultPage: React.FC = () => {
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
                     <div className="space-y-4">
                       <p className="text-[#432818] leading-relaxed text-base lg:text-lg font-medium">
-                        <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através da moda!
+                        <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
                       </p>
                       
                       {/* STYLE DESCRIPTION - MELHORADA */}
@@ -525,7 +525,7 @@ const ResultPage: React.FC = () => {
         <section id="transformations" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com a moda"
+            subtitle="Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com Estilo, Imagem e Presença"
           >
             Transformações Que Inspiram
           </SectionTitle>
@@ -548,7 +548,7 @@ const ResultPage: React.FC = () => {
         <section id="motivation" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="secondary"
-            subtitle="Sua jornada de autoconhecimento através da moda começa agora"
+            subtitle="Sua jornada de autoconhecimento através do Estilo e Imagem começa agora"
           >
             O Poder de Se Vestir Com Propósito
           </SectionTitle>
@@ -608,7 +608,7 @@ const ResultPage: React.FC = () => {
         <section id="guarantee" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Teste por 7 dias. Se não transformar sua relação com a moda, devolvemos seu dinheiro"
+            subtitle="Teste por 7 dias. Se não transformar sua relação com seu Estilo e Presença, devolvemos seu dinheiro"
           >
             Garantia Blindada
           </SectionTitle>
@@ -708,23 +708,39 @@ const ResultPage: React.FC = () => {
                       };
                       return guideImages[category] || guideImages['Natural'];
                     })(),
-                    title: `Guia ${category}`,
-                    subtitle: 'Personalizado'
+                    title: `Manual de Estilo ${category}`,
+                    subtitle: 'Seu guia estratégico com 50+ looks meticulosamente selecionados que comunicam sua essência antes mesmo de você falar. Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única, transformando seu guarda-roupa em uma poderosa ferramenta de comunicação visual e autoexpressão.',
+                    badge: 'PRINCIPAL'
                   },
                   {
                     src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png',
-                    title: 'E-book Completo',
-                    subtitle: 'Transformação'
+                    title: 'Guia das Peças Estratégicas',
+                    subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação',
+                    badge: 'BÔNUS EXCLUSIVO'
                   },
                   {
                     src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png',
-                    title: 'Bônus Visagismo',
-                    subtitle: 'Cabelo & Cores'
+                    title: 'Manual de Visagismo Pessoal',
+                    subtitle: 'Descubra os cortes de cabelo e acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo',
+                    badge: 'BÔNUS PREMIUM'
                   }
                 ].map((product, index) => (
-                  <div key={index} className={`bg-gradient-to-br from-white to-[#fff7f3] rounded-lg p-4 border border-[#B89B7A]/10 transition-transform duration-300 hover:scale-105 ${index === 2 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+                  <div key={index} className={`bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 transition-transform duration-300 hover:scale-105 relative ${index === 2 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
                        style={{ boxShadow: tokens.shadows.sm }}>
-                    <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden"
+                    
+                    {/* BADGE DO PRODUTO */}
+                    <div className="absolute -top-2 -right-2 z-10">
+                      <span className={`text-xs font-bold px-2 py-1 rounded-full text-white shadow-sm ${
+                        product.badge === 'PRINCIPAL' ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]' :
+                        product.badge === 'BÔNUS EXCLUSIVO' ? 'bg-gradient-to-r from-green-500 to-green-600' :
+                        'bg-gradient-to-r from-purple-500 to-purple-600'
+                      }`}>
+                        {product.badge}
+                      </span>
+                    </div>
+
+                    {/* IMAGEM DO PRODUTO */}
+                    <div className="aspect-[3/4] bg-white rounded-lg mb-4 flex items-center justify-center relative overflow-hidden"
                          style={{ boxShadow: tokens.shadows.sm }}>
                       <ProgressiveImage 
                         src={product.src}
@@ -733,10 +749,56 @@ const ResultPage: React.FC = () => {
                         loading="lazy"
                       />
                     </div>
-                    <h4 className="font-bold text-[#432818] text-sm mb-1">{product.title}</h4>
-                    <p className="text-xs text-[#8F7A6A]">{product.subtitle}</p>
+
+                    {/* INFORMAÇÕES DO PRODUTO */}
+                    <div className="text-left">
+                      <h4 className="font-bold text-[#432818] text-sm lg:text-base mb-2 leading-tight">
+                        {product.title}
+                      </h4>
+                      <p className="text-xs lg:text-sm text-[#8F7A6A] leading-relaxed line-clamp-4">
+                        {product.subtitle}
+                      </p>
+                    </div>
+
+                    {/* INDICADOR DE VALOR */}
+                    <div className="mt-3 pt-3 border-t border-[#B89B7A]/10">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-[#8F7A6A]">
+                          {index === 0 ? 'Produto Principal' : 'Incluído Grátis'}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
+                          <span className="text-xs font-medium text-[#aa6b5d]">
+                            {index === 0 ? 'Personalizado' : 'Bônus'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
+              </div>
+
+              {/* RESUMO DO VALOR MELHORADO */}
+              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 border border-[#B89B7A]/20 max-w-2xl mx-auto">
+                <h4 className="font-bold text-[#432818] mb-2">🎁 Tudo que você recebe hoje:</h4>
+                <ul className="text-sm text-[#8F7A6A] space-y-1">
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                    <span>Manual completo do estilo <strong>{category}</strong> com 50+ looks prontos</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                    <span>Guia das 15 peças estratégicas que multiplicam seus looks</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                    <span>Manual de visagismo para valorizar sua beleza única</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
+                    <span><strong>Acesso vitalício</strong> + atualizações sem custo adicional</span>
+                  </li>
+                </ul>
               </div>
             </div>
 
