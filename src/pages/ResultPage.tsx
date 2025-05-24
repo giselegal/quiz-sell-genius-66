@@ -1,4 +1,3 @@
-// ✅ TESTE - Arquivo ResultPage atualizado - 23/05/2025
 import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -1007,6 +1006,7 @@ const ResultPage: React.FC = () => {
   {/* fim novo conteúdo */}
 
 </div>
+        </section>
 
         {/* BOTTOM SPACING */}
         <div className="mb-16 md:mb-24"></div>
