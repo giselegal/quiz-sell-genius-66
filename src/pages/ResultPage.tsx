@@ -720,7 +720,7 @@ const ResultPage: React.FC = () => {
                         
                         {/* Economia */}
                         <div className="text-center">
-                          <p className="text-[#B89B7A] text-sm font-medium">
+                          <p className="text-[#4CAF50] text-sm font-medium">
                             Economia de R$ 135,10
                           </p>
                         </div>
