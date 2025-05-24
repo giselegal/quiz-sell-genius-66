@@ -760,11 +760,11 @@ const ResultPage: React.FC = () => {
                   <div className="flex items-center justify-center gap-8 text-sm text-[#8F7A6A]">
                     <div className="flex items-center gap-2">
                       <Shield className="w-4 h-4 text-[#B89B7A]" />
-                      <span>SSL Seguro</span>
+                      <span>Site Seguro</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Award className="w-4 h-4 text-[#B89B7A]" />
-                      <span>Garantia 7 Dias</span>
+                      <span>Acesso Imediato</span>
                     </div>
                   </div>
                 </div>
