@@ -669,14 +669,14 @@ const ResultPage: React.FC = () => {
               {/* Nova seção de preços redesenhada */}
               <div className="mb-8">
                 {/* Preço principal em destaque */}
-                <div className="relative bg-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-[#B89B7A]/30 mb-6 overflow-hidden">
+                <div className="relative bg-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-[#B89B7A]/30 mb-6 overflow-hidden mt-6">
                   {/* Elementos decorativos de fundo */}
                   <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#B89B7A]/5 to-transparent rounded-full blur-2xl"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#aa6b5d]/5 to-transparent rounded-full blur-2xl"></div>
                   
-                  {/* Badge de destaque */}
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                  {/* Badge de destaque - posição corrigida */}
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+                    <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-6 py-1.5 rounded-full text-sm font-semibold shadow-lg">
                       🔥 Oferta Especial
                     </div>
                   </div>
@@ -696,8 +696,6 @@ const ResultPage: React.FC = () => {
                           <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full opacity-50"></div>
                         </div>
                       </div>
-                      
-                      <p className="text-[#8F7A6A] text-sm">sem juros no cartão</p>
                     </div>
                     
                     {/* Divisor elegante */}
@@ -733,6 +731,18 @@ const ResultPage: React.FC = () => {
                     ✨ Você economiza mais de 75% comprando o kit completo
                   </p>
                 </div>
+                
+                {/* Pagamento 100% Seguro */}
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/10">
+                    <div className="w-4 h-4 bg-[#4CAF50] rounded-full flex items-center justify-center">
+                      <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4"/>
+                      </svg>
+                    </div>
+                    <span className="text-[#432818] text-sm font-medium">🔒 Pagamento 100% Seguro</span>
+                  </div>
+                </div>
               </div>
             </div>
             
@@ -747,28 +757,6 @@ const ResultPage: React.FC = () => {
                 <span className="text-[#aa6b5d]">Oferta Exclusiva Válida Por Pouco Tempo</span>
               </div>
             </div>
-            
-            <Button
-              onClick={handleCTAClick}
-              className="w-full md:w-2/3 lg:w-1/2 mx-auto text-white text-lg md:text-xl py-4 px-8 rounded-full shadow-lg transition-all duration-300 relative z-10 font-bold group cursor-pointer"
-              style={{
-                background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
-                boxShadow: tokens.shadows.cta,
-                transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px'
-              }}
-              onMouseEnter={() => setIsButtonHovered(true)}
-              onMouseLeave={() => setIsButtonHovered(false)}
-              type="button"
-            >
-              <ShoppingCart className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-hover:scale-110 pointer-events-none" />
-              <span className="text-base md:text-xl pointer-events-none">Adquirir Agora</span>
-              <ArrowDown className="w-4 h-4 md:w-5 md:h-5 animate-bounce-custom pointer-events-none" />
-            </Button>
-            <SecurePurchaseElement />
           </AnimatedWrapper>
         </section>
       </div>
