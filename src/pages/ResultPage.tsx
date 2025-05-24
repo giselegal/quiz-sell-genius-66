@@ -674,7 +674,7 @@ const ResultPage: React.FC = () => {
               {/* Nova seção de preços redesenhada */}
               <div className="mb-8">
                 {/* Preço principal em destaque */}
-                <div className="relative bg-white rounded-2xl p-8 shadow-xl border-2 border-[#B89B7A]/30 mb-6 overflow-hidden">
+                <div className="relative bg-white rounded-2xl p-6 md:p-8 shadow-xl border-2 border-[#B89B7A]/30 mb-6 overflow-hidden">
                   {/* Elementos decorativos de fundo */}
                   <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#B89B7A]/5 to-transparent rounded-full blur-2xl"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#aa6b5d]/5 to-transparent rounded-full blur-2xl"></div>
@@ -689,16 +689,19 @@ const ResultPage: React.FC = () => {
                   <div className="relative z-10 text-center pt-6">
                     {/* Preço parcelado destacado */}
                     <div className="mb-6">
-                      <p className="text-[#8F7A6A] text-sm mb-2">Parcele em até</p>
-                      <div className="flex items-center justify-center gap-3 mb-4">
-                        <span className="text-2xl md:text-3xl font-bold text-[#aa6b5d]">5x de</span>
+                      <p className="text-[#8F7A6A] text-sm mb-3">Parcele em até</p>
+                      
+                      {/* Container flex para manter preço em uma linha */}
+                      <div className="flex items-center justify-center gap-2 mb-3 flex-wrap">
+                        <span className="text-xl md:text-2xl font-bold text-[#aa6b5d] whitespace-nowrap">5x de</span>
                         <div className="relative">
-                          <span className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                          <span className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">
                             R$ 8,83
                           </span>
-                          <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full opacity-50"></div>
+                          <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full opacity-50"></div>
                         </div>
                       </div>
+                      
                       <p className="text-[#8F7A6A] text-sm">sem juros no cartão</p>
                     </div>
                     
@@ -710,23 +713,29 @@ const ResultPage: React.FC = () => {
                     </div>
                     
                     {/* Preço à vista */}
-                    <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] rounded-xl p-6 border border-[#B89B7A]/10">
-                      <p className="text-[#8F7A6A] text-sm mb-2">À vista com desconto</p>
-                      <div className="flex items-center justify-center gap-2">
-                        <span className="text-2xl md:text-3xl font-bold text-[#4CAF50]">R$ 39,90</span>
-                        <div className="bg-[#4CAF50] text-white text-xs px-2 py-1 rounded-full">
-                          -20%
-                        </div>
+                    <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] rounded-xl p-4 md:p-6 border border-[#B89B7A]/10">
+                      <p className="text-[#8F7A6A] text-sm mb-2">À vista por apenas</p>
+                      
+                      {/* Container flex para comparação de preços */}
+                      <div className="flex items-center justify-center gap-3 mb-2 flex-wrap">
+                        <span className="text-lg text-[#8F7A6A] line-through">R$ 175,00</span>
+                        <span className="text-2xl md:text-3xl font-bold text-[#4CAF50] whitespace-nowrap">R$ 39,90</span>
                       </div>
-                      <p className="text-[#8F7A6A] text-xs mt-1">economia de R$ 10,00</p>
+                      
+                      <p className="text-[#4CAF50] text-sm font-medium">
+                        Economia de R$ 135,10
+                      </p>
                     </div>
                   </div>
                 </div>
                 
-                {/* Valor original tachado */}
+                {/* Comparação com valor individual */}
                 <div className="text-center mb-6">
                   <p className="text-[#8F7A6A] text-sm">
-                    De <span className="line-through text-[#aa6b5d] font-semibold">R$ 175,00</span> por apenas
+                    Valor individual dos materiais: <span className="font-semibold text-[#aa6b5d]">R$ 175,00</span>
+                  </p>
+                  <p className="text-[#4CAF50] text-sm font-medium mt-1">
+                    ✨ Você economiza mais de 75% comprando o kit completo
                   </p>
                 </div>
               </div>
