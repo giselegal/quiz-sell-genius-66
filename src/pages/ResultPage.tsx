@@ -684,8 +684,6 @@ const ResultPage: React.FC = () => {
                   <div className="relative z-10 text-center pt-6">
                     {/* Preço parcelado destacado */}
                     <div className="mb-6">
-                      <p className="text-[#8F7A6A] text-sm mb-3">Parcele em até</p>
-                      
                       {/* Container flex para manter preço em uma linha */}
                       <div className="flex items-center justify-center gap-2 mb-3 flex-wrap">
                         <span className="text-xl md:text-2xl font-bold text-[#aa6b5d] whitespace-nowrap">5x de</span>
@@ -712,10 +710,10 @@ const ResultPage: React.FC = () => {
                       {/* Container flex para comparação de preços */}
                       <div className="flex items-center justify-center gap-3 mb-2 flex-wrap">
                         <span className="text-lg text-[#8F7A6A] line-through">R$ 175,00</span>
-                        <span className="text-2xl md:text-3xl font-bold text-[#4CAF50] whitespace-nowrap">R$ 39,90</span>
+                        <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">R$ 39,90</span>
                       </div>
                       
-                      <p className="text-[#4CAF50] text-sm font-medium">
+                      <p className="text-[#B89B7A] text-sm font-medium">
                         Economia de R$ 135,10
                       </p>
                     </div>
@@ -735,11 +733,6 @@ const ResultPage: React.FC = () => {
                 {/* Pagamento 100% Seguro */}
                 <div className="text-center mb-6">
                   <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/10">
-                    <div className="w-4 h-4 bg-[#4CAF50] rounded-full flex items-center justify-center">
-                      <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
-                        <path d="M9 12l2 2 4-4"/>
-                      </svg>
-                    </div>
                     <span className="text-[#432818] text-sm font-medium">🔒 Pagamento 100% Seguro</span>
                   </div>
                 </div>
