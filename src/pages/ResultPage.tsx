@@ -962,6 +962,7 @@ const ResultPage: React.FC = () => {
                 </p>
               </div>
             </AnimatedWrapper>
+          </div>
         </section>
 
         {/* BOTTOM SPACING */}
