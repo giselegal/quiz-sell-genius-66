@@ -76,6 +76,45 @@ const tokens = {
   }
 };
 
+// Componente de título padronizado
+const SectionTitle: React.FC<{
+  children: React.ReactNode;
+  subtitle?: string;
+  size?: 'lg' | 'xl';
+  className?: string;
+}> = ({ children, subtitle, size = 'xl', className = '' }) => (
+  <motion.div 
+    className={`text-center mb-12 ${className}`}
+    initial={{ opacity: 0, y: 20 }} 
+    animate={{ opacity: 1, y: 0 }} 
+    transition={{ duration: 0.6 }}
+  >
+    {/* Decoração superior */}
+    <div className="inline-flex items-center gap-3 mb-4">
+      <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+      <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
+      <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+    </div>
+    
+    {/* Título principal */}
+    <h2 className={`font-playfair font-bold text-[#432818] mb-4 leading-tight bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent ${
+      size === 'xl' ? 'text-3xl md:text-4xl lg:text-5xl' : 'text-2xl md:text-3xl lg:text-4xl'
+    }`}>
+      {children}
+    </h2>
+    
+    {/* Subtítulo opcional */}
+    {subtitle && (
+      <p className="text-lg md:text-xl text-[#8F7A6A] leading-relaxed max-w-3xl mx-auto mb-6">
+        {subtitle}
+      </p>
+    )}
+    
+    {/* Linha decorativa inferior */}
+    <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
+  </motion.div>
+);
+
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
@@ -332,7 +371,7 @@ const ResultPage: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
-        {/* Primary Style Card - Com nome do usuário */}
+        {/* Primary Style Card - Título melhorado */}
         <section id="primary-style" className="scroll-mt-20">
           <Card className="p-6 mb-10 bg-white shadow-lg border border-[#B89B7A]/20 rounded-xl overflow-hidden relative">
             {/* Decorative corner accents */}
@@ -341,12 +380,28 @@ const ResultPage: React.FC = () => {
             
             <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
               <div className="text-center mb-8">
-                <h1 className="text-xl md:text-3xl font-playfair text-[#432818] mb-2">
-                  {user?.userName && (
-                    <span className="text-xl md:text-2xl text-[#aa6b5d] block mb-3 font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                {/* Nome do usuário com decoração elegante */}
+                {user?.userName && (
+                  <motion.div 
+                    className="mb-6"
+                    initial={{ opacity: 0, scale: 0.95 }} 
+                    animate={{ opacity: 1, scale: 1 }} 
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    <div className="inline-flex items-center gap-2 mb-3">
+                      <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#B89B7A]"></div>
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full"></div>
+                      <div className="w-6 h-px bg-gradient-to-l from-transparent to-[#B89B7A]"></div>
+                    </div>
+                    <span className="text-xl md:text-2xl text-[#aa6b5d] font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       Olá, {user.userName}!
                     </span>
-                  )}
+                    <div className="w-12 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mt-2"></div>
+                  </motion.div>
+                )}
+                
+                {/* Título principal do estilo */}
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-playfair text-[#432818] mb-6 leading-tight">
                   Seu Estilo Predominante é:
                 </h1>
                 <div className="max-w-md mx-auto mb-6">
@@ -432,6 +487,11 @@ const ResultPage: React.FC = () => {
 
         {/* Before/After Transformation Section */}
         <section id="transformations" className="scroll-mt-20 mb-16">
+          <SectionTitle 
+            subtitle="Veja como outras mulheres transformaram sua imagem descobrindo seu estilo autêntico"
+          >
+            Transformações Reais
+          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -446,6 +506,11 @@ const ResultPage: React.FC = () => {
 
         {/* Motivation Section */}
         <section id="motivation" className="scroll-mt-20 mb-16">
+          <SectionTitle 
+            subtitle="Descubra o poder de se vestir com propósito e autenticidade"
+          >
+            A Jornada da Sua Transformação
+          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -460,6 +525,11 @@ const ResultPage: React.FC = () => {
         
         {/* Bonus Section */}
         <section id="bonuses" className="scroll-mt-20 mb-12">
+          <SectionTitle 
+            subtitle="Materiais exclusivos para acelerar sua transformação de imagem"
+          >
+            Bônus Especiais Inclusos
+          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -474,6 +544,11 @@ const ResultPage: React.FC = () => {
         
         {/* Testimonials Section */}
         <section id="testimonials" className="scroll-mt-20 mb-12">
+          <SectionTitle 
+            subtitle="Histórias reais de mulheres que transformaram sua relação com a moda"
+          >
+            O Que Dizem Nossas Clientes
+          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -488,6 +563,11 @@ const ResultPage: React.FC = () => {
         
         {/* Guarantee Section */}
         <section id="guarantee" className="scroll-mt-20 mb-12">
+          <SectionTitle 
+            subtitle="Sua satisfação é nossa prioridade - compre sem riscos"
+          >
+            Garantia de Satisfação
+          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -502,6 +582,11 @@ const ResultPage: React.FC = () => {
         
         {/* Mentor Section */}
         <section id="mentor" className="scroll-mt-20 mb-12">
+          <SectionTitle 
+            subtitle="Conheça a especialista que vai guiar sua transformação de imagem"
+          >
+            Sua Mentora de Estilo
+          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -514,16 +599,33 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
         
-        {/* Final CTA Section - Valores melhorados */}
-        <section id="cta" className="scroll-mt-20 my-10 bg-white rounded-xl shadow-lg p-6 border border-[#B89B7A]/20 text-center relative overflow-hidden">
+        {/* Final CTA Section - Título melhorado */}
+        <section id="cta" className="scroll-mt-20 my-10 bg-white rounded-xl shadow-lg p-8 border border-[#B89B7A]/20 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-pattern-light opacity-5 pointer-events-none"></div>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-4 relative z-10">
-              Pronta para Transformar seu Estilo?
-            </h2>
-            <p className="text-lg text-[#aa6b5d] mb-6 relative z-10">
-              Adquira agora seu guia completo personalizado para o estilo <span className="font-medium text-[#aa6b5d]">{category}</span> e comece a transformação da sua imagem hoje mesmo.
-            </p>
+            {/* Título CTA com decoração elegante */}
+            <motion.div 
+              className="text-center mb-8"
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.6 }}
+            >
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-md animate-pulse"></div>
+                <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+              </div>
+              
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#432818] mb-4 leading-tight bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent relative z-10">
+                Pronta para Transformar seu Estilo?
+              </h2>
+              
+              <p className="text-lg md:text-xl text-[#8F7A6A] leading-relaxed mb-6 relative z-10">
+                Adquira agora seu guia completo personalizado para o estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> e comece a transformação da sua imagem hoje mesmo.
+              </p>
+              
+              <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
+            </motion.div>
             
             {/* Ancoragem de valor melhorada */}
             <div className="mb-6 relative z-10">
