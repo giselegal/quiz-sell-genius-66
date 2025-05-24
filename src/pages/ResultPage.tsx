@@ -846,8 +846,7 @@ const ResultPage: React.FC = () => {
                       </span>
                     </div>
                     
-                    <div className="mt-4 inline-flex items-center gap-2 px-2 py-1"
-                         style={{ boxShadow: tokens.shadows.sm }}>
+                    <div className="mt-4 inline-flex items-center gap-2 px-2 py-1">
                       <Hourglass className="w-4 h-4 text-[#aa6b5d] animate-spin" 
                                  style={{ 
                                    animation: 'spin 3s linear infinite',
