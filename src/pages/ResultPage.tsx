@@ -333,14 +333,13 @@ const ResultPage: React.FC = () => {
                   Seu Estilo Predominante
                 </h1>
                 <div className="max-w-md mx-auto mb-6">
-                  <div className="flex items-center justify-between text-sm text-[#8F7A6A] mb-2">
-                    <span>Compatibilidade</span>
+                  <div className="flex items-center justify-end text-sm text-[#8F7A6A] mb-2">
                     <span className="font-medium">{primaryStyle.percentage}%</span>
                   </div>
                   <Progress 
                     value={primaryStyle.percentage} 
-                    className="h-2 bg-[#F3E8E6] rounded-full overflow-hidden" 
-                    indicatorClassName="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] transition-all duration-500 ease-in-out"
+                    className="h-1.5 bg-[#F5F2EC] rounded-full overflow-hidden shadow-inner" 
+                    indicatorClassName="bg-gradient-to-r from-[#FFD700] via-[#FFA500] to-[#DAA520] transition-all duration-700 ease-in-out shadow-sm"
                   />
                 </div>
               </div>
@@ -557,19 +556,23 @@ const ResultPage: React.FC = () => {
             
             <Button
               onClick={handleCTAClick}
-              className="w-full md:w-2/3 lg:w-1/2 mx-auto text-white text-lg md:text-xl py-4 px-8 rounded-full shadow-lg transition-all duration-300 relative z-10 flex items-center justify-center gap-3 font-bold group cursor-pointer"
+              className="w-full md:w-2/3 lg:w-1/2 mx-auto text-white text-lg md:text-xl py-4 px-8 rounded-full shadow-lg transition-all duration-300 relative z-10 font-bold group cursor-pointer"
               style={{
                 background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
                 boxShadow: tokens.shadows.cta,
                 transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px'
               }}
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
               type="button"
             >
-              <ShoppingCart className={`w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-hover:scale-110`} />
-              <span className="text-base md:text-xl">Adquirir Agora</span>
-              <ArrowDown className="w-4 h-4 md:w-5 md:h-5 ml-2 animate-bounce-custom" />
+              <ShoppingCart className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-hover:scale-110 pointer-events-none" />
+              <span className="text-base md:text-xl pointer-events-none">Adquirir Agora</span>
+              <ArrowDown className="w-4 h-4 md:w-5 md:h-5 animate-bounce-custom pointer-events-none" />
             </Button>
             <SecurePurchaseElement />
           </AnimatedWrapper>
