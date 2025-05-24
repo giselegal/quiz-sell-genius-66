@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { preloadCriticalImages } from '@/utils/images/preloading';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
-import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift } from 'lucide-react';
+import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart, CheckCircle, ArrowDown, Hourglass } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 
 // CSS simplificado e otimizado

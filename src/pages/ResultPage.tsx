@@ -743,13 +743,9 @@ const ResultPage: React.FC = () => {
                          style={{ boxShadow: tokens.shadows.sm }}>
                       <ProgressiveImage 
                         src={`${product.src}?q=80&f=auto&w=300`}
-                        srcSet={`${product.src}?q=80&f=auto&w=300 300w, ${product.src}?q=80&f=auto&w=600 600w`}
-                        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                         alt={product.title}
                         className="w-full h-full object-contain rounded-lg"
                         loading="lazy"
-                        role="img"
-                        aria-label={`Capa do ${product.title}`}
                       />
                     </div>
 
@@ -887,6 +883,17 @@ const ResultPage: React.FC = () => {
                     <div className="inline-flex items-center gap-2 bg-green-50 px-3 py-2 rounded-lg border border-green-200 mb-3">
                       <span className="text-green-700 text-sm font-bold">
                         💰 Você economiza R$ 135,10 (77% OFF)
+                      </span>
+                    </div>
+                    
+                    <div className="inline-flex items-center justify-center gap-2 bg-orange-50 px-3 py-2 rounded-lg border border-orange-200">
+                      <Hourglass className="w-4 h-4 text-orange-600 animate-spin" 
+                                 style={{ 
+                                   animation: 'spin 3s linear infinite',
+                                   transformOrigin: 'center'
+                                 }} />
+                      <span className="text-xs text-orange-700 font-medium text-center leading-tight">
+                        Esta oferta expira quando você sair desta página
                       </span>
                     </div>
                   </div>
