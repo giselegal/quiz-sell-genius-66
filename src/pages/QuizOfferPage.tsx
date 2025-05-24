@@ -478,35 +478,41 @@ const QuizOfferPage: React.FC = () => {
                             {/* Preview produtos */}
                             <div className="grid md:grid-cols-3 gap-6 mb-8">
                                 <div className="text-center">
-                                    <FixedIntroImage
-                                        src={GUIDES_BENEFITS_IMAGE_URL}
-                                        alt="Guia Personalizado"
-                                        width={250}
-                                        height={200}
-                                        className="w-full h-auto rounded-lg mb-3"
-                                    />
+                                    <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                        <FixedIntroImage
+                                            src={GUIDES_BENEFITS_IMAGE_URL}
+                                            alt="Guia Personalizado"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
                                     <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Guia Personalizado</h3>
                                     <p className="text-sm text-[var(--text-medium)]">Para seu estilo específico</p>
                                 </div>
                                 <div className="text-center">
-                                    <FixedIntroImage
-                                        src={BONUS_1_KEY_PIECES_IMAGE_URL}
-                                        alt="Bônus Peças-Chave"
-                                        width={250}
-                                        height={200}
-                                        className="w-full h-auto rounded-lg mb-3"
-                                    />
+                                    <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                        <FixedIntroImage
+                                            src={BONUS_1_KEY_PIECES_IMAGE_URL}
+                                            alt="Bônus Peças-Chave"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
                                     <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Peças-Chave</h3>
                                     <p className="text-sm text-[var(--text-medium)]">Guarda-roupa funcional</p>
                                 </div>
                                 <div className="text-center">
-                                    <FixedIntroImage
-                                        src={BONUS_2_VISAGISM_IMAGE_URL}
-                                        alt="Bônus Visagismo"
-                                        width={250}
-                                        height={200}
-                                        className="w-full h-auto rounded-lg mb-3"
-                                    />
+                                    <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                        <FixedIntroImage
+                                            src={BONUS_2_VISAGISM_IMAGE_URL}
+                                            alt="Bônus Visagismo"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
                                     <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Visagismo</h3>
                                     <p className="text-sm text-[var(--text-medium)]">Valorize seus traços</p>
                                 </div>
@@ -520,7 +526,7 @@ const QuizOfferPage: React.FC = () => {
                                     <span className="text-4xl font-bold mx-2">R$ 8,83</span>
                                 </div>
                                 <p className="text-lg">ou à vista <strong>R$ 39,90</strong></p>
-                                <p className="text-sm mt-2 opacity-75">De R$ 361 por apenas R$ 39,90 (89% OFF)</p>
+                                <p className="text-sm mt-2 opacity-75">89% OFF - Economia de R$ 321,10</p>
                             </div>
 
                             {/* CTA Final */}
