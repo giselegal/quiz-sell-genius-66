@@ -43,7 +43,8 @@ const tokens = {
     background: '#fffaf7',
     backgroundAlt: '#f9f4ef',
     text: '#432818',
-    textLight: '#8F7A6A',
+    textLight: '#8F7A6A', // Usado para subtítulos grandes ou texto menos crítico
+    textMuted: '#6B5B4E', // Nova cor para melhor contraste em textos secundários menores
     success: '#4CAF50',
     successDark: '#45a049',
     border: 'rgba(184, 155, 122, 0.2)',
@@ -453,7 +454,7 @@ const ResultPage: React.FC = () => {
                         </p>
                       </div>
                       
-                      <p className="text-[#8F7A6A] text-sm lg:text-base">
+                      <p className="text-sm lg:text-base" style={{ color: tokens.colors.textMuted }}>
                         <strong>Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!</strong>
                       </p>
                     </div>
@@ -524,7 +525,7 @@ const ResultPage: React.FC = () => {
         </section>
 
         {/* Before/After Transformation Section */}
-        <section id="transformations" className="scroll-mt-20 mb-20">
+        <section id="transformations" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com Estilo, Imagem e Presença"
@@ -547,7 +548,7 @@ const ResultPage: React.FC = () => {
         </section>
 
         {/* Motivation Section */}
-        <section id="motivation" className="scroll-mt-20 mb-20">
+        <section id="motivation" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="secondary"
             subtitle="Sua jornada de autoconhecimento através do Estilo e Imagem começa agora"
@@ -567,7 +568,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Bonus Section */}
-        <section id="bonuses" className="scroll-mt-20 mb-20">
+        <section id="bonuses" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="Materiais exclusivos para acelerar sua transformação (sem custo adicional)"
@@ -587,7 +588,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Testimonials Section */}
-        <section id="testimonials" className="scroll-mt-20 mb-20">
+        <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="Histórias reais de mulheres que saíram da frustração para a confiança total"
@@ -607,7 +608,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Guarantee Section */}
-        <section id="guarantee" className="scroll-mt-20 mb-20">
+        <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="Teste por 7 dias. Se não transformar sua relação com seu Estilo e Presença, devolvemos seu dinheiro"
@@ -627,7 +628,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Mentor Section */}
-        <section id="mentor" className="scroll-mt-20 mb-20">
+        <section id="mentor" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="A especialista que já ajudou +de 3.000 mulheres a descobrirem seu estilo autêntico"
@@ -647,25 +648,25 @@ const ResultPage: React.FC = () => {
         </section>
 
         {/* SEÇÃO DE TRANSIÇÃO MELHORADA */}
-        <div className="mb-16">
-          <div className="text-center py-16 relative">
+        <div className="mb-12 md:mb-16">
+          <div className="text-center py-12 md:py-16 relative">
             {/* Background decorativo */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#fff7f3]/50 to-[#f9f4ef]/50 rounded-2xl"></div>
             <div className="relative z-10">
-              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-8"></div>
+              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6 md:mb-8"></div>
               <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#432818] mb-4">
                 Chegou o Momento de Agir
               </h3>
-              <p className="text-lg text-[#8F7A6A] font-medium max-w-md mx-auto">
+              <p className="text-lg font-medium max-w-md mx-auto" style={{ color: tokens.colors.textMuted }}>
                 Tudo que você precisa para aplicar seu Estilo Pessoal
               </p>
-              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-8"></div>
+              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-6 md:mt-8"></div>
             </div>
           </div>
         </div>
         
         {/* Final CTA Section - OTIMIZADA */}
-        <section id="cta" className="scroll-mt-20 mb-20 bg-white rounded-xl p-6 lg:p-12 border border-[#B89B7A]/20 text-center relative overflow-hidden"
+        <section id="cta" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20 bg-white rounded-xl p-6 lg:p-12 border border-[#B89B7A]/20 text-center relative overflow-hidden"
                  style={{ boxShadow: tokens.shadows.xl }}>
           <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/30 to-[#f9f4ef]/30 pointer-events-none"></div>
           
@@ -687,7 +688,7 @@ const ResultPage: React.FC = () => {
                 <span className="text-[#aa6b5d]">Hoje Mesmo!</span>
               </h2>
               
-              <p className="text-xl text-[#8F7A6A] mb-8">
+              <p className="text-xl mb-8" style={{ color: tokens.colors.textMuted }}>
                 Seu Guia personalizado {category} + materiais exclusivos de Estilo e Imagem
               </p>
             </div>
@@ -741,10 +742,14 @@ const ResultPage: React.FC = () => {
                     <div className="aspect-[4/5] bg-white rounded-lg mb-4 flex items-center justify-center relative overflow-hidden"
                          style={{ boxShadow: tokens.shadows.sm }}>
                       <ProgressiveImage 
-                        src={product.src}
+                        src={`${product.src}?q=80&f=auto&w=300`}
+                        srcSet={`${product.src}?q=80&f=auto&w=300 300w, ${product.src}?q=80&f=auto&w=600 600w`}
+                        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                         alt={product.title}
                         className="w-full h-full object-contain rounded-lg"
                         loading="lazy"
+                        role="img"
+                        aria-label={`Capa do ${product.title}`}
                       />
                     </div>
 
@@ -753,7 +758,7 @@ const ResultPage: React.FC = () => {
                       <h4 className="font-bold text-[#432818] text-sm lg:text-base mb-2 leading-tight">
                         {product.title}
                       </h4>
-                      <p className="text-xs lg:text-sm text-[#8F7A6A] leading-relaxed flex-1 overflow-hidden">
+                      <p className="text-xs lg:text-sm flex-1 overflow-hidden" style={{ color: tokens.colors.textMuted }}>
                         {product.subtitle}
                       </p>
                     </div>
@@ -761,7 +766,7 @@ const ResultPage: React.FC = () => {
                     {/* INDICADOR DE VALOR */}
                     <div className="mt-3 pt-3 border-t border-[#B89B7A]/10">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-[#8F7A6A]">
+                        <span className="text-xs" style={{ color: tokens.colors.textMuted }}>
                           {index === 0 ? 'Produto Principal' : 'Incluído Grátis'}
                         </span>
                         <div className="flex items-center gap-1">
@@ -784,15 +789,15 @@ const ResultPage: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 p-3 bg-white/50 rounded-lg">
                     <div className="flex items-start gap-2 flex-1">
                       <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <div className="text-sm text-[#8F7A6A] leading-relaxed">
-                        <span className="block">Manual completo do seu <strong>Estilo {category}</strong> Predominante </span>
+                      <div className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                        <span className="block text-[#432818]">Manual completo do seu <strong>Estilo {category}</strong> Predominante </span>
                         {secondaryStyles && secondaryStyles.length > 0 && (
-                          <span className="block text-xs mt-1">+ <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(' + ')}</strong> - Complementares</span>
+                          <span className="block text-xs mt-1" style={{ color: tokens.colors.textMuted }}>+ <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(' + ')}</strong> - Complementares</span>
                         )}
                       </div>
                     </div>
                     <div className="text-right sm:text-right ml-auto sm:ml-0 flex-shrink-0">
-                      <div className="text-xs text-[#8F7A6A]">
+                      <div className="text-xs" style={{ color: tokens.colors.textMuted }}>
                         <span className="line-through block">R$ 79,00</span>
                         <span className="text-[#aa6b5d] font-medium">Incluído</span>
                       </div>
@@ -802,10 +807,10 @@ const ResultPage: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-white/50 rounded-lg">
                     <div className="flex items-start gap-2 flex-1">
                       <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <span className="text-sm text-[#8F7A6A] leading-relaxed">Guia das Peças Estratégicas</span>
+                      <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}><span className="text-[#432818]">Guia das Peças Estratégicas</span></span>
                     </div>
                     <div className="text-right ml-auto sm:ml-0 flex-shrink-0">
-                      <div className="text-xs text-[#8F7A6A]">
+                      <div className="text-xs" style={{ color: tokens.colors.textMuted }}>
                         <span className="line-through block">R$ 59,00</span>
                         <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                       </div>
@@ -815,10 +820,10 @@ const ResultPage: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-white/50 rounded-lg">
                     <div className="flex items-start gap-2 flex-1">
                       <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <span className="text-sm text-[#8F7A6A] leading-relaxed">Manual de visagismo para valorizar sua beleza única</span>
+                      <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}><span className="text-[#432818]">Manual de visagismo para valorizar sua beleza única</span></span>
                     </div>
                     <div className="text-right ml-auto sm:ml-0 flex-shrink-0">
-                      <div className="text-xs text-[#8F7A6A]">
+                      <div className="text-xs" style={{ color: tokens.colors.textMuted }}>
                         <span className="line-through block">R$ 37,00</span>
                         <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                       </div>
@@ -833,13 +838,13 @@ const ResultPage: React.FC = () => {
                       </p>
                     </div>
                     
-                    <p className="text-sm text-[#8F7A6A] mb-2">Tudo isso deveria custar: <span className="line-through font-medium">R$ 175,00</span></p>
+                    <p className="text-sm mb-2" style={{ color: tokens.colors.textMuted }}>Tudo isso deveria custar: <span className="line-through font-medium">R$ 175,00</span></p>
                     <p className="text-lg font-bold text-[#432818] mb-4">Seu preço Especial Hoje:</p>
                     <div className="mb-4">
                       <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                         R$ 39,90
                       </span>
-                      <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83</p>
+                      <p className="text-sm mt-2" style={{ color: tokens.colors.textMuted }}>ou 5x de R$ 8,83</p>
                     </div>
                     
                     <div className="inline-flex items-center gap-2 mb-4">
@@ -900,7 +905,7 @@ const ResultPage: React.FC = () => {
               </div>
 
               {/* TRUST ELEMENTS - SPACING PADRONIZADO */}
-              <div className="flex items-center justify-center gap-6 lg:gap-8 text-sm text-[#8F7A6A] flex-wrap mt-8 px-4">
+              <div className="flex items-center justify-center gap-6 lg:gap-8 text-sm flex-wrap mt-8 px-4" style={{ color: tokens.colors.textMuted }}>
                 <div className="mt-6 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20"
                      style={{ boxShadow: tokens.shadows.sm }}>
                   <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
@@ -909,7 +914,7 @@ const ResultPage: React.FC = () => {
                   </span>
                 </div>
                 
-                <p className="text-xs text-[#8F7A6A] mt-6 max-w-md mx-auto">
+                <p className="text-xs mt-6 max-w-md mx-auto" style={{ color: tokens.colors.textMuted }}>
                   🔒 <strong>Pagamento 100% seguro</strong> • <strong>Site confiável</strong>
                 </p>
               </div>
@@ -917,7 +922,7 @@ const ResultPage: React.FC = () => {
         </section>
 
         {/* BOTTOM SPACING */}
-        <div className="mb-24"></div>
+        <div className="mb-16 md:mb-24"></div>
       </div>
     </div>
   );
