@@ -611,9 +611,8 @@ const ResultPage: React.FC = () => {
         <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle={`Teste seu novo estilo ${category} por 7 dias. Se não amar, devolvemos seu dinheiro`}
           >
-          
+            Garantia Total
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -1027,6 +1026,8 @@ const ResultPage: React.FC = () => {
                       </span>
                     </p>
                   </div>
+                </div>
+              </div>
             </div>
           </AnimatedWrapper>
         </section>
