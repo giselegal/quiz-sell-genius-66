@@ -705,17 +705,26 @@ const ResultPage: React.FC = () => {
                     
                     {/* Preço à vista */}
                     <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] rounded-xl p-4 md:p-6 border border-[#B89B7A]/10">
-                      <p className="text-[#8F7A6A] text-sm mb-2">À vista por apenas</p>
+                      <p className="text-[#8F7A6A] text-sm mb-3">À vista por apenas</p>
                       
-                      {/* Container flex para comparação de preços */}
-                      <div className="flex items-center justify-center gap-3 mb-2 flex-wrap">
-                        <span className="text-lg text-[#8F7A6A] line-through">R$ 175,00</span>
-                        <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">R$ 39,90</span>
+                      <div className="space-y-2 mb-3">
+                        {/* Valor original */}
+                        <div className="text-center">
+                          <span className="text-lg text-[#8F7A6A] line-through">R$ 175,00</span>
+                        </div>
+                        
+                        {/* Novo valor */}
+                        <div className="text-center">
+                          <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">R$ 39,90</span>
+                        </div>
+                        
+                        {/* Economia */}
+                        <div className="text-center">
+                          <p className="text-[#B89B7A] text-sm font-medium">
+                            Economia de R$ 135,10
+                          </p>
+                        </div>
                       </div>
-                      
-                      <p className="text-[#B89B7A] text-sm font-medium">
-                        Economia de R$ 135,10
-                      </p>
                     </div>
                   </div>
                 </div>

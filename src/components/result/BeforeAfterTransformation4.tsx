@@ -43,6 +43,7 @@ const designTokens = {
     cta: '0 4px 14px rgba(76, 175, 80, 0.4)',
   },
   transitions: {
+    
     default: 'all 0.3s ease',
     fast: 'all 0.15s ease',
     slow: 'all 0.5s ease',
