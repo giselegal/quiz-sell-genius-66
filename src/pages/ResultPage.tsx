@@ -869,28 +869,52 @@ const ResultPage: React.FC = () => {
 
             {/* SEÇÃO DE VALOR - SEPARADA DO CTA */}
             <div className="mb-16">
-              {/* Valor Total - ANCORAGEM OTIMIZADA */}
-              <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-xl p-4 sm:p-6 border border-[#B89B7A]/10 max-w-lg mx-auto mb-8 overflow-hidden shadow-sm">
-                <div className="flex items-center justify-between mb-4 px-1 sm:px-2">
-                  <span className="text-[#8F7A6A] font-medium text-xs sm:text-sm">Valor individual dos materiais:</span>
-                  <span className="text-base sm:text-lg font-bold text-[#aa6b5d] line-through whitespace-nowrap">R$ 175,00</span>
+              {/* Valor Total - ANCORAGEM CORRIGIDA */}
+              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 sm:p-6 border border-[#B89B7A]/20 max-w-lg mx-auto mb-8 overflow-hidden shadow-md">
+                {/* Lista de valores individuais - VISÍVEL */}
+                <div className="mb-6">
+                  <h5 className="text-sm font-semibold text-[#432818] mb-4 text-center">Valor individual dos materiais:</h5>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center py-2 border-b border-[#B89B7A]/10">
+                      <span className="text-xs sm:text-sm text-[#432818]">Guia de Estilo {category}</span>
+                      <span className="text-sm font-medium text-[#8F7A6A] line-through">R$ 67,00</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-[#B89B7A]/10">
+                      <span className="text-xs sm:text-sm text-[#432818]">E-book Transformação</span>
+                      <span className="text-sm font-medium text-[#8F7A6A] line-through">R$ 47,00</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-[#B89B7A]/10">
+                      <span className="text-xs sm:text-sm text-[#432818]">Guia de Visagismo</span>
+                      <span className="text-sm font-medium text-[#8F7A6A] line-through">R$ 37,00</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-[#B89B7A]/10">
+                      <span className="text-xs sm:text-sm text-[#432818]">Bônus Exclusivos</span>
+                      <span className="text-sm font-medium text-[#8F7A6A] line-through">R$ 24,00</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center pt-3 mt-3 border-t-2 border-[#B89B7A]/30">
+                    <span className="text-sm font-bold text-[#432818]">TOTAL NORMAL:</span>
+                    <span className="text-lg font-bold text-[#aa6b5d] line-through">R$ 175,00</span>
+                  </div>
                 </div>
+
                 <div className="text-center border-t border-[#B89B7A]/20 pt-4 px-1 sm:px-2">
-                  <p className="text-[#8F7A6A] text-xs sm:text-sm mb-3">Sua oferta especial hoje:</p>
+                  <p className="text-[#432818] text-sm sm:text-base mb-3 font-medium">Sua oferta especial hoje:</p>
                   <div className="mb-4">
                     <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       R$ 39,90
                     </span>
+                    <p className="text-xs text-[#8F7A6A] mt-1">ou 5x de R$ 8,83 sem juros</p>
                   </div>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
                     <div className="inline-flex items-center gap-2 bg-green-50 px-3 sm:px-4 py-2 rounded-full border border-green-200">
                       <span className="text-green-600 text-xs sm:text-sm font-medium whitespace-nowrap">
-                        💰 77% de desconto
+                        💰 Economia de R$ 135,10
                       </span>
                     </div>
-                    <div className="inline-flex items-center gap-2 bg-blue-50 px-3 sm:px-4 py-2 rounded-full border border-blue-200">
-                      <span className="text-blue-600 text-xs sm:text-sm font-medium whitespace-nowrap">
-                        ⚡ Oferta limitada
+                    <div className="inline-flex items-center gap-2 bg-red-50 px-3 sm:px-4 py-2 rounded-full border border-red-200">
+                      <span className="text-red-600 text-xs sm:text-sm font-medium whitespace-nowrap">
+                        ⏰ Oferta por tempo limitado
                       </span>
                     </div>
                   </div>
@@ -898,8 +922,8 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            {/* CTA Final - BEM SEPARADO */}
-            <div className="text-center mb-8">
+            {/* CTA Final - ESPAÇAMENTO AUMENTADO */}
+            <div className="text-center mb-16">
               <Button 
                 onClick={handleCTAClick} 
                 className="text-white text-lg sm:text-xl leading-none py-4 sm:py-5 px-6 sm:px-8 md:px-12 rounded-lg sm:rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold w-full sm:w-auto min-h-[56px]"
@@ -930,8 +954,8 @@ const ResultPage: React.FC = () => {
           </AnimatedWrapper>
         </section>
 
-        {/* ESPAÇO ADICIONAL antes do sticky CTA aparecer */}
-        <div className="mb-32"></div>
+        {/* ESPAÇO ADICIONAL MAIOR antes do sticky CTA aparecer */}
+        <div className="mb-48"></div>
       </div>
     </div>
   );
