@@ -326,14 +326,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   {/* Navegação - setas menores */}
                   {transformations.length > 1 && (
                     <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 pointer-events-none">
-                      <NavButton 
-                        direction="prev" 
-                        onClick={() => navigateToTransformation((activeIndex - 1 + transformations.length) % transformations.length)} 
-                      />
-                      <NavButton 
-                        direction="next" 
-                        onClick={() => navigateToTransformation((activeIndex + 1) % transformations.length)} 
-                      />
+                      <div className="pointer-events-auto">
+                        <NavButton 
+                          direction="prev" 
+                          onClick={() => navigateToTransformation((activeIndex - 1 + transformations.length) % transformations.length)} 
+                        />
+                      </div>
+                      <div className="pointer-events-auto">
+                        <NavButton 
+                          direction="next" 
+                          onClick={() => navigateToTransformation((activeIndex + 1) % transformations.length)} 
+                        />
+                      </div>
                     </div>
                   )}
                 </div>

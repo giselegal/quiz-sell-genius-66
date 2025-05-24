@@ -886,10 +886,36 @@ const QuizOfferPage: React.FC = () => {
                                         Investimento Único Para Uma Transformação Completa
                                     </h3>
                                     
-                                    {/* Preço em destaque */}
-                                    <div className="flex justify-center items-baseline mb-8">
-                                        <span className="text-3xl font-semibold mr-2 text-brand-medium">R$</span>
-                                        <span className="text-6xl md:text-7xl font-bold text-brand-primary drop-shadow-md font-playfair"> [VALOR]</span>
+                                    {/* Preço em destaque - implementado */}
+                                    <div className="mb-8">
+                                        <p className="text-xl font-medium text-brand-medium mb-4 font-inter">
+                                            Por apenas
+                                        </p>
+                                        <div className="bg-gradient-to-br from-[var(--color-background-light)] to-[var(--color-background-soft)] rounded-xl p-8 border-2 border-[var(--color-primary)]/20 shadow-lg relative overflow-hidden mb-6">
+                                            {/* Elementos decorativos */}
+                                            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full blur-xl"></div>
+                                            <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-[var(--color-accent)]/10 to-transparent rounded-full blur-xl"></div>
+                                            
+                                            <div className="relative z-10">
+                                                <div className="text-center mb-6">
+                                                    <span className="text-lg text-brand-medium font-medium block mb-3 font-inter">Parcelado em até</span>
+                                                    <div className="flex items-baseline justify-center gap-4 mb-4">
+                                                        <span className="text-2xl text-brand-accent font-semibold font-inter">5x de</span>
+                                                        <div className="relative">
+                                                            <span className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent leading-none font-playfair">R$ 8,83</span>
+                                                            <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-full opacity-30"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="text-center">
+                                                    <div className="inline-flex items-center gap-3 bg-white/70 backdrop-blur-sm px-6 py-3 rounded-full border border-[var(--color-primary)]/20 shadow-md">
+                                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                                        <span className="text-lg text-brand-dark font-semibold font-inter">ou à vista R$ 39,90</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
