@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, ChevronLeft, ChevronRight, Star, CheckCircle } from 'lucide-react';
+import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 import OptimizedImage from '@/components/ui/optimized-image';
 import { preloadImagesByUrls } from '@/utils/imageManager';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
-import { useQuiz } from '@/hooks/useQuiz';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Extend Window interface to include custom property
@@ -16,22 +15,19 @@ declare global {
   }
 }
 
-// Design tokens atualizados para alinhar com a marca
+// Design tokens centralizados
 const designTokens = {
   colors: {
     primary: '#B89B7A',
     secondary: '#aa6b5d',
     text: '#432818',
     textLight: '#8F7A6A',
-    textMuted: '#6B5B4E',
     background: '#fffaf7',
     cardBg: '#ffffff',
-    accent: '#B89B7A', // Mudança: alinhado com marca
-    accentHover: '#aa6b5d', // Mudança: alinhado com marca
-    success: '#4CAF50',
+    accent: '#4CAF50',
+    accentHover: '#45a049',
     divider: 'rgba(184, 155, 122, 0.2)',
     highlight: '#f9f4ef',
-    gradientBg: 'linear-gradient(135deg, #B89B7A, #aa6b5d)', // Nova: gradiente da marca
   },
   spacing: {
     xs: '0.5rem',
@@ -47,11 +43,11 @@ const designTokens = {
     full: '9999px',
   },
   shadows: {
-    sm: '0 2px 4px rgba(184, 155, 122, 0.08)',
-    md: '0 4px 8px rgba(184, 155, 122, 0.12)',
-    lg: '0 8px 16px rgba(184, 155, 122, 0.16)',
-    xl: '0 12px 24px rgba(184, 155, 122, 0.20)',
-    cta: '0 8px 32px rgba(184, 155, 122, 0.4)', // Mudança: sombra da marca
+    sm: '0 1px 3px rgba(0,0,0,0.1)',
+    md: '0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1)',
+    lg: '0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05)',
+    highlight: '0 0 15px rgba(184, 155, 122, 0.15)',
+    cta: '0 4px 14px rgba(76, 175, 80, 0.4)',
   },
   transitions: {
     default: 'all 0.3s ease',
@@ -70,8 +66,6 @@ interface TransformationItem {
   id: string; 
   width?: number;
   height?: number;
-  style?: string; // Nova: estilo associado
-  result: string; // Nova: resultado específico
 }
 
 // Componente Badge reutilizável
@@ -122,25 +116,21 @@ const NavButton = React.memo<{
   </button>
 ));
 
-// DADOS DAS TRANSFORMAÇÕES - APRIMORADOS
+// SIMPLIFIED TRANSFORMATIONS DATA
 const transformations: TransformationItem[] = [
   {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
     name: "Adriana",
     id: "transformation-adriana",
     width: 600,
-    height: 750,
-    style: "Clássico",
-    result: "Descobriu como usar cores neutras sofisticadas e passou a ser vista como líder na empresa"
+    height: 750
   }, 
   {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
     name: "Mariangela", 
     id: "transformation-mariangela",
     width: 600,
-    height: 750,
-    style: "Natural",
-    result: "Aprendeu a combinar conforto com elegância e ganhou confiança para reuniões importantes"
+    height: 750
   }
 ];
 
@@ -180,12 +170,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   const [isLoading, setIsLoading] = useState(true);
   
   const isLowPerformance = useIsLowPerformanceDevice();
-  const { primaryStyle } = useQuiz(); // Nova: pegar o estilo do quiz
   const imageUrls = transformations.map(t => t.image);
   const { loadedImages } = useImagePreloader(imageUrls, 0);
   
   const activeTransformation = transformations[activeIndex];
-  const userStyleCategory = primaryStyle?.category || 'seu estilo';
 
   // MEMOIZED NAVIGATION FUNCTIONS
   const navigateToTransformation = useCallback((index: number) => {
@@ -211,64 +199,68 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     }
   }, [loadedImages, activeIndex]);
 
-  // CTA HANDLER OTIMIZADO
+  // OPTIMIZED CTA HANDLER
   const handleCTA = useCallback((e?: React.MouseEvent) => {
+    // Prevenir comportamento padrão e propagação
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
     
+    // Prevenir múltiplos cliques
     if (window.ctaClickProcessing) return;
     window.ctaClickProcessing = true;
     
     if (handleCTAClick) {
       handleCTAClick();
     } else {
-      trackButtonClick('checkout_button', 'Seção Transformações', 'transformation_section');
+      trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
       
+      // Para desktop, usar window.open para garantir funcionamento
       if (window.innerWidth >= 768) {
         window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
       } else {
+        // Para mobile, usar location.href
         window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
       }
     }
     
+    // Limpar flag após delay
     setTimeout(() => {
       window.ctaClickProcessing = false;
     }, 1000);
   }, [handleCTAClick]);
 
-  // LOADING SKELETON APRIMORADO
+  // LOADING SKELETON - SIMPLIFIED
   if (isLoading) {
     return (
       <div className="my-12">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-8">
-            <div className="h-8 bg-gradient-to-r from-[#f8f5f0] to-[#f0ebe6] rounded-lg mb-4 animate-pulse max-w-md mx-auto"></div>
-            <div className="h-6 bg-gradient-to-r from-[#f8f5f0] to-[#f0ebe6] rounded-lg mb-4 animate-pulse max-w-2xl mx-auto"></div>
+            <div className="h-8 bg-gradient-to-r from-[#f8f5f0] to-[#f0ebe6] rounded-lg mb-4 animate-pulse"></div>
             <div className="w-20 h-1 bg-[#f8f5f0] rounded-full mx-auto animate-pulse"></div>
           </div>
           
           <Card className="overflow-hidden border border-[#B89B7A]/20">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="p-6 lg:p-8 flex flex-col items-center">
-                <div className="w-full max-w-sm aspect-[4/5] bg-[#f8f5f0] rounded-xl mb-6 animate-pulse"></div>
-                <div className="flex justify-center space-x-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
+              <div className="p-6 flex flex-col items-center">
+                <div className="w-full max-w-sm aspect-[4/5] bg-[#f8f5f0] rounded-lg mb-4 animate-pulse"></div>
+                <div className="flex justify-center space-x-2 mt-4">
                   {transformations.map((_, idx) => (
                     <div key={idx} className="w-3 h-3 bg-[#f8f5f0] rounded-full animate-pulse"></div>
                   ))}
                 </div>
               </div>
               
-              <div className="p-6 lg:p-8 space-y-6">
-                <div className="h-8 bg-[#f8f5f0] rounded animate-pulse"></div>
-                <div className="h-20 bg-[#f8f5f0] rounded animate-pulse"></div>
-                <div className="space-y-4">
-                  {Array(3).fill(0).map((_, idx) => (
-                    <div key={idx} className="h-16 bg-[#f8f5f0] rounded-xl animate-pulse"></div>
+              <div className="p-6 bg-white space-y-4">
+                <div className="h-6 bg-[#f8f5f0] rounded animate-pulse"></div>
+                <div className="h-16 bg-[#f8f5f0] rounded animate-pulse"></div>
+                <div className="space-y-3">
+                  {Array(4).fill(0).map((_, idx) => (
+                    <div key={idx} className="h-5 bg-[#f8f5f0] rounded animate-pulse"></div>
                   ))}
                 </div>
-                <div className="h-14 bg-[#f8f5f0] rounded-xl animate-pulse"></div>
+                <div className="h-12 bg-[#f8f5f0] rounded animate-pulse"></div>
               </div>
             </div>
           </Card>
@@ -277,60 +269,25 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     );
   }
 
-  // COMPONENTE PRINCIPAL OTIMIZADO
+  // MAIN COMPONENT - OPTIMIZED
   return (
     <div className="my-12">
-      <div className="max-w-5xl mx-auto px-6">
-        {/* HEADER PERSONALIZADO */}
-        <motion.div 
-          className="text-center mb-12" 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.6 }}
-        >
-          {/* Badge de Credibilidade */}
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-4 py-2 rounded-full border border-[#B89B7A]/20 mb-6">
-            <Star className="w-4 h-4 text-[#B89B7A] fill-current" />
-            <span className="text-sm font-medium text-[#432818]">Casos de Sucesso Reais</span>
-            <Star className="w-4 h-4 text-[#B89B7A] fill-current" />
-          </div>
-
-          <h3 className="text-2xl md:text-3xl lg:text-4xl font-playfair font-bold text-[#432818] mb-4 leading-tight">
-            Mulheres{' '}
-            <span className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-              {userStyleCategory}
-            </span>
-            {' '}Que Se Transformaram
+      <div className="max-w-4xl mx-auto px-6">
+        {/* HEADER */}
+        <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4">
+            Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
           </h3>
-          
-          <p className="text-lg md:text-xl text-[#8F7A6A] leading-relaxed max-w-3xl mx-auto mb-6">
-            Veja como descobrir e aplicar seu estilo {userStyleCategory.toLowerCase()} mudou completamente a vida dessas mulheres
-          </p>
-          
           <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto"></div>
         </motion.div>
         
-        {/* CARD PRINCIPAL REDESENHADO */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <Card className="overflow-hidden border border-[#B89B7A]/20 rounded-2xl relative"
-                style={{ boxShadow: designTokens.shadows.xl }}>
-            
-            {/* Background decorativo */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/30 to-[#f9f4ef]/30 pointer-events-none"></div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
-              {/* SEÇÃO DE IMAGEM APRIMORADA */}
-              <div className="p-6 lg:p-8 flex flex-col items-center">
+        {/* MAIN CARD */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+          <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-lg transition-all duration-300">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
+              {/* IMAGE SECTION */}
+              <div className="p-6 flex flex-col items-center">
                 <div className="relative w-full max-w-sm mx-auto">
-                  {/* Badge do resultado */}
-                  <div className="absolute -top-3 -right-3 z-20 bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md">
-                    ✨ {activeTransformation.style}
-                  </div>
-
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTransformation.id}
@@ -342,145 +299,98 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     >
                       <OptimizedImage
                         src={activeTransformation.image}
-                        alt={`Transformação de ${activeTransformation.name} - Estilo ${activeTransformation.style}`}
+                        alt={`Transformação de ${activeTransformation.name}`}
                         width={activeTransformation.width}
                         height={activeTransformation.height}
-                        className="w-full h-auto rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"
-                        style={{ boxShadow: designTokens.shadows.lg }}
+                        className="w-full h-auto rounded-lg shadow-md"
                         priority={true}
                       />
-                      
-                      {/* Overlay com nome */}
-                      <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 border border-[#B89B7A]/20">
-                        <p className="font-semibold text-[#432818] text-center">
-                          {activeTransformation.name}
-                        </p>
-                        <p className="text-sm text-[#6B5B4E] text-center">
-                          Estilo {activeTransformation.style}
-                        </p>
-                      </div>
                     </motion.div>
                   </AnimatePresence>
                   
-                  {/* NAVEGAÇÃO MELHORADA */}
+                  {/* NAVIGATION - OPTIMIZED */}
                   {transformations.length > 1 && (
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 z-20">
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 md:px-2 z-20">
                       <NavButton direction="prev" onClick={goToPrevious} />
                       <NavButton direction="next" onClick={goToNext} />
                     </div>
                   )}
                 </div>
                 
-                {/* INDICADORES MELHORADOS */}
+                {/* INDICATORS */}
                 {transformations.length > 1 && (
-                  <div className="flex justify-center space-x-3 mt-6">
-                    {transformations.map((transformation, idx) => (
+                  <div className="flex justify-center space-x-3 mt-4">
+                    {transformations.map((_, idx) => (
                       <button
                         key={idx}
                         onClick={() => navigateToTransformation(idx)}
-                        className={`group relative transition-all duration-300 ${
-                          idx === activeIndex ? 'scale-110' : 'hover:scale-105'
-                        }`}
-                        aria-label={`Ver transformação de ${transformation.name}`}
-                      >
-                        <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
                           idx === activeIndex 
-                            ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] shadow-md' 
-                            : 'bg-gray-300 group-hover:bg-[#B89B7A]/50'
-                        }`} />
-                        {idx === activeIndex && (
-                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#432818] text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                            {transformation.name}
-                          </div>
-                        )}
-                      </button>
+                            ? 'bg-[#B89B7A] scale-110 shadow-sm' 
+                            : 'bg-gray-300 hover:bg-[#B89B7A]/50 hover:scale-105'
+                        }`}
+                        aria-label={`Ver transformação ${idx + 1}`}
+                      />
                     ))}
                   </div>
                 )}
               </div>
               
-              {/* SEÇÃO DE CONTEÚDO REDESENHADA */}
-              <div className="p-6 lg:p-8 bg-white/50">
-                {/* Título personalizado */}
-                <div className="mb-6">
-                  <h4 className="text-xl lg:text-2xl font-playfair font-bold text-[#432818] mb-3">
-                    Resultado de{' '}
-                    <span className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                      {activeTransformation.name}
-                    </span>
-                  </h4>
-                  
-                  <p className="text-base lg:text-lg text-[#6B5B4E] leading-relaxed">
-                    "{activeTransformation.result}"
-                  </p>
+              {/* CONTENT SECTION - SIMPLIFIED */}
+              <div className="p-6 bg-white">
+                <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
+                  <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
+                    Transforme sua Imagem, Transforme sua Vida
+                  </span>
+                </h4>
+                
+                <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
+                  Seu estilo é muito mais que roupas — é a expressão da sua personalidade e o reflexo dos seus sonhos e objetivos.
+                </p>
+                
+                {/* BENEFITS LIST */}
+                <div className="bg-[#f9f4ef]/70 rounded-lg p-5 mb-6 border border-[#B89B7A]/10">
+                  <ul className="space-y-3 text-center md:text-left">
+                    <CheckItem>Looks que expressam sua verdadeira essência</CheckItem>
+                    <CheckItem>Cores e modelagens que realçam sua beleza natural</CheckItem>
+                    <CheckItem>Imagem profissional alinhada aos seus objetivos</CheckItem>
+                    <CheckItem>Guarda-roupa inteligente e sem desperdícios</CheckItem>
+                  </ul>
                 </div>
                 
-                {/* BENEFÍCIOS PERSONALIZADOS PARA O ESTILO */}
-                <div className="space-y-4 mb-8">
-                  <StyleBenefit
-                    icon={<CheckCircle className="w-5 h-5 text-white" />}
-                    title="Looks {style} Autênticos"
-                    description="Combinações que expressam sua personalidade {style} única"
-                    userStyle={userStyleCategory}
-                  />
-                  
-                  <StyleBenefit
-                    icon={<Star className="w-5 h-5 text-white" />}
-                    title="Cores Ideais para {style}"
-                    description="Paleta personalizada que realça sua beleza natural"
-                    userStyle={userStyleCategory}
-                  />
-                  
-                  <StyleBenefit
-                    icon={<ShoppingCart className="w-5 h-5 text-white" />}
-                    title="Guarda-roupa {style} Inteligente"
-                    description="Peças estratégicas que maximizam suas combinações"
-                    userStyle={userStyleCategory}
-                  />
-                </div>
-                
-                {/* CTA OTIMIZADO */}
-                <div className="space-y-4">
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                {/* CTA SECTION */}
+                <div className="flex flex-col items-center md:items-start">
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                     <Button
                       onClick={handleCTA}
                       onMouseEnter={() => setIsButtonHovered(true)}
                       onMouseLeave={() => setIsButtonHovered(false)}
-                      className="w-full py-4 px-6 rounded-xl font-bold text-base lg:text-lg transition-all duration-300 cursor-pointer text-white border-0"
+                      className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-sm md:text-base mb-2 cursor-pointer"
                       style={{
-                        background: designTokens.colors.gradientBg,
-                        boxShadow: designTokens.shadows.cta,
+                        background: "linear-gradient(to right, #4CAF50, #45a049)",
+                        boxShadow: "0 8px 32px rgba(76, 175, 80, 0.4)",
                       }}
                       type="button"
                     >
-                      <span className="flex items-center justify-center gap-3" style={{ pointerEvents: 'none' }}>
-                        <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1 }}>
+                      <span className="flex items-center justify-center gap-2" style={{ pointerEvents: 'none' }}>
+                        <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1, rotate: isButtonHovered ? 10 : 0 }}>
                           <ShoppingCart className="w-5 h-5" />
                         </motion.div>
-                        Descobrir Meu Estilo {userStyleCategory}
+                        Quero Meu Guia de Estilo
                       </span>
                     </Button>
                   </motion.div>
                   
-                  {/* Elementos de confiança */}
-                  <div className="text-center space-y-3">
-                    <p className="text-sm font-medium text-[#aa6b5d]">
-                      ⚡ Acesso imediato • 🔒 Pagamento seguro
-                    </p>
-                    
-                    <div className="flex items-center justify-center gap-2 text-xs text-[#6B5B4E]">
-                      <div className="w-2 h-2 bg-[#4CAF50] rounded-full animate-pulse"></div>
-                      <span>+2.847 mulheres já descobriram seu estilo autêntico</span>
-                    </div>
-                  </div>
+                  <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4">
+                    Oferta por tempo limitado
+                  </p>
                 
-                  {/* MÉTODOS DE PAGAMENTO */}
-                  <div className="w-full max-w-[280px] mx-auto">
+                  {/* PAYMENT METHODS */}
+                  <div className="w-full max-w-[280px] mx-auto md:mx-0">
                     <img
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
-                      alt="Métodos de pagamento aceitos"
-                      className="w-full rounded-lg"
-                      style={{ boxShadow: designTokens.shadows.sm }}
+                      alt="Métodos de pagamento"
+                      className="w-full rounded-lg shadow-sm"
                       loading="lazy"
                       width="280"
                       height="70"
