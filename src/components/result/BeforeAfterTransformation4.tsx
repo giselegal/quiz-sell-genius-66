@@ -209,15 +209,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Título com decoração */}
           <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <div className="inline-flex items-center gap-2 mb-3">
-              <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#aa6b5d]"></div>
-              <div className="w-1.5 h-1.5 bg-[#aa6b5d] rounded-full"></div>
-              <div className="w-6 h-px bg-gradient-to-l from-transparent to-[#aa6b5d]"></div>
-            </div>
-            <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+            <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4">
               Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
             </h3>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-3"></div>
+            <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
           </motion.div>
           
           {/* Card principal com skeleton */}
@@ -281,15 +276,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Título com decoração */}
         <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <div className="inline-flex items-center gap-2 mb-3">
-            <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#aa6b5d]"></div>
-            <div className="w-1.5 h-1.5 bg-[#aa6b5d] rounded-full"></div>
-            <div className="w-6 h-px bg-gradient-to-l from-transparent to-[#aa6b5d]"></div>
-          </div>
-          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4">
             Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
           </h3>
-          <div className="w-16 h-0.5 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-3"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
         </motion.div>
         
         {/* Card principal com grid layout */}
@@ -365,30 +355,16 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               
               {/* Coluna de conteúdo */}
               <div className="p-5 md:p-6 bg-white">
-                {/* Título mobile */}
+                {/* Título unificado - mobile e desktop */}
                 <motion.h4 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
-                  className="text-lg font-medium text-[#432818] md:hidden text-center mb-4 relative"
+                  className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4"
                 >
                   <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                    O Poder de Vestir-se de Você!
+                    Transforme sua Imagem, Transforme sua Vida
                   </span>
-                  <div className="w-12 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mt-2"></div>
-                </motion.h4>
-                
-                {/* Título desktop */}
-                <motion.h4 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="text-xl font-medium text-[#432818] hidden md:block text-left mb-4 relative"
-                >
-                  <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                    Transformação Visual com Propósito
-                  </span>
-                  <div className="w-16 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mt-2"></div>
                 </motion.h4>
                 
                 {/* Texto descritivo */}
@@ -398,7 +374,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   transition={{ duration: 0.4, delay: 0.4 }}
                   className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5"
                 >
-                  Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.
+                  Seu estilo é muito mais que roupas — é a expressão da sua personalidade e o reflexo dos seus sonhos e objetivos.
                 </motion.p>
                 
                 {/* Lista de benefícios */}
@@ -409,10 +385,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10 hover:border-[#B89B7A]/20 transition-all duration-300 hover:shadow-sm"
                 >
                   <ul className="space-y-3.5 text-center md:text-left">
-                    <CheckItem>Looks com intenção e identidade</CheckItem>
-                    <CheckItem>Cores, modelagens e tecidos a seu favor</CheckItem>
-                    <CheckItem>Imagem alinhada aos seus objetivos</CheckItem>
-                    <CheckItem>Guarda-roupa funcional, sem compras por impulso</CheckItem>
+                    <CheckItem>Looks que expressam sua verdadeira essência</CheckItem>
+                    <CheckItem>Cores e modelagens que realçam sua beleza natural</CheckItem>
+                    <CheckItem>Imagem profissional alinhada aos seus objetivos</CheckItem>
+                    <CheckItem>Guarda-roupa inteligente e sem desperdícios</CheckItem>
                   </ul>
                 </motion.div>
                 
