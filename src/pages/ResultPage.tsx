@@ -840,19 +840,19 @@ const ResultPage: React.FC = () => {
                       <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
                     </div>
                     
-                    <div className="inline-flex items-center gap-2">
+                    <div className="inline-flex items-center gap-2 mb-4">
                       <span className="text-[#aa6b5d] text-xs font-bold">
                         💰 Economia de R$ 135,10 (77% OFF)
                       </span>
                     </div>
                     
-                    <div className="mt-4 inline-flex items-center gap-2 px-2 py-1">
-                      <Hourglass className="w-4 h-4 text-[#aa6b5d] animate-spin" 
+                    <div className="inline-flex items-center justify-center gap-2 bg-orange-50 px-3 py-2 rounded-lg border border-orange-200">
+                      <Hourglass className="w-4 h-4 text-orange-600 animate-spin" 
                                  style={{ 
                                    animation: 'spin 3s linear infinite',
                                    transformOrigin: 'center'
                                  }} />
-                      <span className="text-xs text-[#432818] font-medium whitespace-nowrap">
+                      <span className="text-xs text-orange-700 font-medium text-center leading-tight">
                         Esta oferta expira quando você sair desta página
                       </span>
                     </div>
