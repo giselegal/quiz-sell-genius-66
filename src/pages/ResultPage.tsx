@@ -389,11 +389,6 @@ const ResultPage: React.FC = () => {
                     duration={500}
                     delay={200}
                   >
-                    <div className="inline-flex items-center gap-2 mb-3">
-                      <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#B89B7A]"></div>
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full"></div>
-                      <div className="w-6 h-px bg-gradient-to-l from-transparent to-[#B89B7A]"></div>
-                    </div>
                     <span className="text-xl md:text-2xl text-[#aa6b5d] font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       Olá, {user.userName}!
                     </span>
@@ -402,7 +397,7 @@ const ResultPage: React.FC = () => {
                 )}
                 
                 {/* Título principal do estilo */}
-                <h1 className="text-2xl md:text-3xl lg:text-4xl font-playfair text-[#432818] mb-6 leading-tight">
+                <h1 className="text-xl md:text-2xl lg:text-3xl font-playfair text-[#432818] mb-6 leading-tight whitespace-nowrap">
                   Seu Estilo Predominante é:
                 </h1>
                 <div className="max-w-md mx-auto mb-6">
@@ -681,7 +676,7 @@ const ResultPage: React.FC = () => {
                   
                   {/* Badge de destaque */}
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                    <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
                       🔥 Oferta Especial
                     </div>
                   </div>
