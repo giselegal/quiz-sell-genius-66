@@ -350,7 +350,7 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky CTA - Aparece apenas no final da página */}
+      {/* Sticky CTA - COR DA MARCA */}
       <div className={`fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-[#B89B7A]/20 py-3 px-4 z-40 transition-transform duration-500 ${showBottomBar ? 'translate-y-0' : 'translate-y-full'}`}>
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
           <div className="text-center sm:text-left">
@@ -365,8 +365,8 @@ const ResultPage: React.FC = () => {
             onClick={handleCTAClick} 
             className="text-white text-sm sm:text-base leading-none py-3 px-6 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto cursor-pointer"
             style={{
-              background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
-              boxShadow: tokens.shadows.cta,
+              background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
+              boxShadow: '0 4px 14px rgba(184, 155, 122, 0.4)',
               transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
             }}
             onMouseEnter={() => setIsButtonHovered(true)} 
@@ -508,7 +508,7 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </Suspense>
 
-          {/* CTA INTERMEDIÁRIO - CRÍTICO */}
+          {/* CTA INTERMEDIÁRIO - COR DA MARCA */}
           <div className="mt-12 text-center">
             <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-8 border border-[#B89B7A]/20 max-w-2xl mx-auto">
               <h3 className="text-2xl font-playfair font-bold text-[#432818] mb-4">
@@ -535,8 +535,8 @@ const ResultPage: React.FC = () => {
                 onClick={handleCTAClick} 
                 className="text-white text-lg leading-none py-4 px-8 rounded-lg shadow-lg transition-all duration-300 cursor-pointer font-semibold"
                 style={{
-                  background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
-                  boxShadow: tokens.shadows.cta,
+                  background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
+                  boxShadow: '0 4px 14px rgba(184, 155, 122, 0.4)',
                 }}
                 type="button"
               >
@@ -680,7 +680,7 @@ const ResultPage: React.FC = () => {
               <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
                 {/* Guia Principal - Imagem específica por categoria */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                  <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
                     <ProgressiveImage 
                       src={(() => {
                         const guideImages = {
@@ -696,7 +696,7 @@ const ResultPage: React.FC = () => {
                         return guideImages[category] || guideImages['Natural'];
                       })()} 
                       alt={`Guia ${category}`}
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-contain rounded-lg"
                       loading="lazy"
                     />
                     <div className="absolute top-2 right-2 bg-[#B89B7A] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">PDF</div>
@@ -707,32 +707,32 @@ const ResultPage: React.FC = () => {
 
                 {/* E-book Transformação */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                  <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
                     <ProgressiveImage 
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png" 
                       alt="E-book Transformação de Imagem"
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-contain rounded-lg"
                       loading="lazy"
                     />
                     <div className="absolute top-2 right-2 bg-[#aa6b5d] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">E-BOOK</div>
                   </div>
-                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Transformação</h4>
-                  <p className="text-xs text-[#8F7A6A]">Passo a passo completo</p>
+                  <h4 className="font-semibold text-[#432818] text-sm mb-1">E-book Transformação</h4>
+                  <p className="text-xs text-[#8F7A6A]">Método completo de mudança</p>
                 </div>
 
                 {/* Guia de Visagismo */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                  <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
                     <ProgressiveImage 
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png" 
                       alt="Guia de Visagismo"
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-contain rounded-lg"
                       loading="lazy"
                     />
                     <div className="absolute top-2 right-2 bg-[#D4B79F] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">BÔNUS</div>
                   </div>
                   <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Visagismo</h4>
-                  <p className="text-xs text-[#8F7A6A]">Cortes e cores ideais</p>
+                  <p className="text-xs text-[#8F7A6A]">Cabelos e cores perfeitas</p>
                 </div>
               </div>
 
@@ -744,16 +744,16 @@ const ResultPage: React.FC = () => {
                     <div className="relative rounded-lg overflow-hidden shadow-sm">
                       <ProgressiveImage 
                         src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920634/Espanhol_Portugu%C3%AAs_8_horqsn.png" 
-                        alt="Páginas internas do guia"
-                        className="w-full h-32 object-cover"
+                        alt="Todos os produtos da oferta"
+                        className="w-full h-32 object-contain bg-white rounded-lg"
                         loading="lazy"
                       />
                     </div>
                     <div className="relative rounded-lg overflow-hidden shadow-sm">
                       <ProgressiveImage 
                         src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.png" 
-                        alt="Visão geral dos materiais"
-                        className="w-full h-32 object-cover"
+                        alt="Capas dos 3 guias principais"
+                        className="w-full h-32 object-contain bg-white rounded-lg"
                         loading="lazy"
                       />
                     </div>
