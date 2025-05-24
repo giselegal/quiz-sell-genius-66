@@ -675,12 +675,12 @@ const ResultPage: React.FC = () => {
               </p>
             </AnimatedWrapper>
             
-            {/* PREVIEW VISUAL DOS MATERIAIS - IMAGENS REAIS */}
+            {/* PREVIEW VISUAL DOS MATERIAIS - IMAGENS REAIS CORRIGIDAS */}
             <div className="mb-8 relative z-10">
               <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
                 {/* Guia Principal - Imagem específica por categoria */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm p-2">
                     <ProgressiveImage 
                       src={(() => {
                         const guideImages = {
@@ -696,10 +696,10 @@ const ResultPage: React.FC = () => {
                         return guideImages[category] || guideImages['Natural'];
                       })()} 
                       alt={`Guia ${category}`}
-                      className="w-full h-full object-contain rounded-lg"
+                      className="max-w-full max-h-full object-contain rounded-lg"
                       loading="lazy"
                     />
-                    <div className="absolute top-2 right-2 bg-[#B89B7A] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">PDF</div>
+                    <div className="absolute top-1 right-1 bg-[#B89B7A] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">PDF</div>
                   </div>
                   <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Estilo {category}</h4>
                   <p className="text-xs text-[#8F7A6A]">Personalizado para você</p>
@@ -707,14 +707,14 @@ const ResultPage: React.FC = () => {
 
                 {/* E-book Transformação */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm p-2">
                     <ProgressiveImage 
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png" 
                       alt="E-book Transformação de Imagem"
-                      className="w-full h-full object-contain rounded-lg"
+                      className="max-w-full max-h-full object-contain rounded-lg"
                       loading="lazy"
                     />
-                    <div className="absolute top-2 right-2 bg-[#aa6b5d] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">E-BOOK</div>
+                    <div className="absolute top-1 right-1 bg-[#aa6b5d] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">E-BOOK</div>
                   </div>
                   <h4 className="font-semibold text-[#432818] text-sm mb-1">E-book Transformação</h4>
                   <p className="text-xs text-[#8F7A6A]">Método completo de mudança</p>
@@ -722,38 +722,38 @@ const ResultPage: React.FC = () => {
 
                 {/* Guia de Visagismo */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm p-2">
                     <ProgressiveImage 
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png" 
                       alt="Guia de Visagismo"
-                      className="w-full h-full object-contain rounded-lg"
+                      className="max-w-full max-h-full object-contain rounded-lg"
                       loading="lazy"
                     />
-                    <div className="absolute top-2 right-2 bg-[#D4B79F] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">BÔNUS</div>
+                    <div className="absolute top-1 right-1 bg-[#D4B79F] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">BÔNUS</div>
                   </div>
                   <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Visagismo</h4>
                   <p className="text-xs text-[#8F7A6A]">Cabelos e cores perfeitas</p>
                 </div>
               </div>
 
-              {/* Preview dos conteúdos internos */}
+              {/* Preview dos conteúdos internos - CORRIGIDO */}
               <div className="mb-8">
                 <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 border border-[#B89B7A]/20 max-w-3xl mx-auto">
                   <h4 className="text-lg font-semibold text-[#432818] mb-4 text-center">O que você encontrará dentro:</h4>
                   <div className="grid md:grid-cols-2 gap-4">
-                    <div className="relative rounded-lg overflow-hidden shadow-sm">
+                    <div className="relative rounded-lg overflow-hidden shadow-sm bg-white p-2">
                       <ProgressiveImage 
                         src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920634/Espanhol_Portugu%C3%AAs_8_horqsn.png" 
                         alt="Todos os produtos da oferta"
-                        className="w-full h-32 object-contain bg-white rounded-lg"
+                        className="w-full h-32 object-contain rounded-lg"
                         loading="lazy"
                       />
                     </div>
-                    <div className="relative rounded-lg overflow-hidden shadow-sm">
+                    <div className="relative rounded-lg overflow-hidden shadow-sm bg-white p-2">
                       <ProgressiveImage 
                         src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.png" 
                         alt="Capas dos 3 guias principais"
-                        className="w-full h-32 object-contain bg-white rounded-lg"
+                        className="w-full h-32 object-contain rounded-lg"
                         loading="lazy"
                       />
                     </div>
