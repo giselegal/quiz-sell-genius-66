@@ -327,7 +327,7 @@ const ResultPage: React.FC = () => {
       </header>
 
       {/* Navigation dots (only visible on scroll) */}
-      <div className={`fixed right-4 top-1/2 transform -translate-y-1/2 z-50 transition-opacity duration-500 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`fixed right-4 top-
         <div className="flex flex-col gap-2">
           {[
             { id: 'primary-style', label: 'Seu Estilo' },
@@ -431,7 +431,7 @@ const ResultPage: React.FC = () => {
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
                     <div className="space-y-4">
                       <p className="text-[#432818] leading-relaxed text-base lg:text-lg font-medium">
-                        <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através da moda!
+                        <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
                       </p>
                       
                       {/* STYLE DESCRIPTION - MELHORADA */}
@@ -440,7 +440,7 @@ const ResultPage: React.FC = () => {
                         <p className="text-[#432818] text-sm lg:text-base leading-relaxed">
                           <strong>Seu estilo {category}</strong> revela uma mulher que {
                             category === 'Natural' ? 'valoriza autenticidade e conforto, sem abrir mão da elegância natural' :
-                            category === 'Clássico' ? 'aprecia sofisticação atemporal e peças que nunca saem de moda' :
+                            category === 'Clássico' ? 'aprecia sofisticação atemporal e peças que nunca saem de estilo' :
                             category === 'Contemporâneo' ? 'está sempre em sintonia com as tendências, mas de forma equilibrada' :
                             category === 'Elegante' ? 'irradia refinamento e classe em cada detalhe do seu visual' :
                             category === 'Romântico' ? 'expressa delicadeza e feminilidade através de looks encantadores' :
@@ -525,7 +525,7 @@ const ResultPage: React.FC = () => {
         <section id="transformations" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com a moda"
+            subtitle="Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com a imagem pessoal"
           >
             Transformações Que Inspiram
           </SectionTitle>
@@ -548,7 +548,7 @@ const ResultPage: React.FC = () => {
         <section id="motivation" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="secondary"
-            subtitle="Sua jornada de autoconhecimento através da moda começa agora"
+            subtitle="Sua jornada de autoconhecimento através do estilo começa agora"
           >
             O Poder de Se Vestir Com Propósito
           </SectionTitle>
@@ -608,7 +608,7 @@ const ResultPage: React.FC = () => {
         <section id="guarantee" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Teste por 7 dias. Se não transformar sua relação com a moda, devolvemos seu dinheiro"
+            subtitle="Teste por 7 dias. Se não transformar sua relação com a imagem pessoal, devolvemos seu dinheiro"
           >
             Garantia Blindada
           </SectionTitle>
