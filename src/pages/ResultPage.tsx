@@ -736,12 +736,12 @@ const ResultPage: React.FC = () => {
                     </div>
 
                     {/* IMAGEM DO PRODUTO */}
-                    <div className="aspect-[3/4] bg-white rounded-lg mb-4 flex items-center justify-center relative overflow-hidden"
+                    <div className="aspect-[4/5] bg-white rounded-lg mb-4 flex items-center justify-center relative overflow-hidden"
                          style={{ boxShadow: tokens.shadows.sm }}>
                       <ProgressiveImage 
                         src={product.src}
                         alt={product.title}
-                        className="w-full h-full object-cover rounded-lg"
+                        className="w-full h-full object-contain rounded-lg"
                         loading="lazy"
                       />
                     </div>
