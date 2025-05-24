@@ -494,7 +494,7 @@ const ResultPage: React.FC = () => {
 
         {/* Before/After Transformation Section */}
         <section id="transformations" className="scroll-mt-20 mb-16">
-          <SectionTitle variant="primary">
+          <SectionTitle variant="simple">
             Transformações Reais
           </SectionTitle>
           <Suspense fallback={
@@ -722,35 +722,24 @@ const ResultPage: React.FC = () => {
                     <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-2xl p-8 border border-[#B89B7A]/10">
                       <p className="text-[#8F7A6A] text-base mb-6">À vista por apenas</p>
                       
-                      {/* Valores com mais espaçamento */}
-                      <div className="space-y-4 mb-6">
+                      {/* Valores com layout reorganizado */}
+                      <div className="space-y-6 mb-6">
                         {/* Valor original */}
                         <div className="text-center">
                           <span className="text-xl text-[#8F7A6A] line-through">R$ 175,00</span>
                         </div>
                         
-                        {/* Novo valor com efeito espelhado */}
-                        <div className="text-center relative py-4">
-                          <div className="relative inline-block">
-                            {/* Efeito espelhado - reflexo inferior */}
-                            <div className="absolute top-full left-0 right-0 h-full bg-gradient-to-r from-[#B89B7A] via-[#D4C4A8] to-[#aa6b5d] bg-clip-text text-transparent opacity-30 transform scale-y-[-1] translate-y-3">
-                              <span className="text-5xl md:text-6xl font-bold whitespace-nowrap">
-                                R$ 39,90
-                              </span>
-                            </div>
-                            
-                            {/* Máscara de fade para o reflexo */}
-                            <div className="absolute top-full left-0 right-0 h-full bg-gradient-to-b from-transparent via-white/50 to-white transform translate-y-3"></div>
-                            
-                            {/* Texto principal */}
-                            <span className="relative text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] via-[#D4C4A8] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap drop-shadow-sm">
+                        {/* Novo valor - SEM EFEITO ESPELHADO */}
+                        <div className="text-center">
+                          <div className="max-w-fit mx-auto">
+                            <span className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-[#B89B7A] via-[#D4C4A8] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap drop-shadow-sm">
                               R$ 39,90
                             </span>
                           </div>
                         </div>
                         
                         {/* Economia com mais destaque */}
-                        <div className="text-center mt-6">
+                        <div className="text-center">
                           <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200">
                             <span className="text-green-600 text-sm font-medium">
                               💰 Economia de R$ 135,10
