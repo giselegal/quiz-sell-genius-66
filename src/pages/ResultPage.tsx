@@ -710,7 +710,7 @@ const ResultPage: React.FC = () => {
                     })(),
                     title: `Manual de Estilo ${category}`,
                     subtitle: 'Seu guia estratégico com 50+ looks meticulosamente selecionados que comunicam sua essência antes mesmo de você falar. Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única, transformando seu guarda-roupa em uma poderosa ferramenta de comunicação visual e autoexpressão.',
-                    badge: 'PRINCIPAL'
+                    badge: 'GUIA'
                   },
                   {
                     src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png',
@@ -730,11 +730,7 @@ const ResultPage: React.FC = () => {
                     
                     {/* BADGE DO PRODUTO */}
                     <div className="absolute -top-2 -right-2 z-10">
-                      <span className={`text-xs font-bold px-2 py-1 rounded-full text-white shadow-sm ${
-                        product.badge === 'PRINCIPAL' ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]' :
-                        product.badge === 'BÔNUS EXCLUSIVO' ? 'bg-gradient-to-r from-green-500 to-green-600' :
-                        'bg-gradient-to-r from-purple-500 to-purple-600'
-                      }`}>
+                      <span className="text-xs font-bold px-2 py-1 rounded-full text-white shadow-sm bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]">
                         {product.badge}
                       </span>
                     </div>
@@ -750,12 +746,12 @@ const ResultPage: React.FC = () => {
                       />
                     </div>
 
-                    {/* INFORMAÇÕES DO PRODUTO */}
-                    <div className="text-left">
+                    {/* INFORMAÇÕES DO PRODUTO - LAYOUT MELHORADO */}
+                    <div className="text-left min-h-[120px] flex flex-col">
                       <h4 className="font-bold text-[#432818] text-sm lg:text-base mb-2 leading-tight">
                         {product.title}
                       </h4>
-                      <p className="text-xs lg:text-sm text-[#8F7A6A] leading-relaxed line-clamp-4">
+                      <p className="text-xs lg:text-sm text-[#8F7A6A] leading-relaxed flex-1 overflow-hidden">
                         {product.subtitle}
                       </p>
                     </div>
@@ -837,23 +833,22 @@ const ResultPage: React.FC = () => {
             </div>
 
             {/* CTA BUTTON - OTIMIZADO */}
-            <div className="text-center mb-10 relative z-10">
+            <div className="text-center mb-10 relative z-10 flex justify-center">
               <button
                 onClick={handleCTAClick} 
-                className="text-white leading-none transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:ring-offset-2"
+                className="text-white leading-none transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:ring-offset-2 text-sm sm:text-base lg:text-lg"
                 style={{
                   background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
                   boxShadow: tokens.shadows.cta,
                   borderRadius: tokens.radius.lg,
-                  padding: '1rem 2rem',
-                  fontSize: '1.125rem',
-                  minHeight: '56px',
+                  padding: '0.875rem 1.5rem',
+                  minHeight: '48px',
                   width: '100%',
                   maxWidth: '420px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '12px'
+                  gap: '8px'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
@@ -865,27 +860,17 @@ const ResultPage: React.FC = () => {
                 }}
                 type="button"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ pointerEvents: 'none' }} />
-                <ShoppingCart className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" style={{ pointerEvents: 'none' }} />
-                <span className="font-semibold" style={{ pointerEvents: 'none' }}>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
+                <span className="font-semibold">
                   <span className="hidden sm:inline">Garantir Minha Transformação</span>
                   <span className="sm:hidden">Garantir Transformação</span>
                 </span>
               </button>
+            </div>
 
-              {/* TRUST ELEMENTS - SPACING PADRONIZADO */}
-              <div className="flex items-center justify-center gap-6 lg:gap-8 text-sm text-[#8F7A6A] flex-wrap mt-8 px-4">
-                {[
-                  { icon: Shield, text: '100% Seguro' },
-                  { icon: Award, text: 'Acesso Imediato' },
-                  { icon: Clock, text: 'Garantia 7 dias' }
-                ].map(({ icon: Icon, text }, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Icon className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
-                    <span className="font-medium whitespace-nowrap">{text}</span>
-                  </div>
-                ))}
-              </div>
+            {/* TRUST ELEMENTS - SPACING PADRONIZADO */}
+            <div className="flex items-center justify-center gap-6 lg:gap-8 text-sm text-[#8F7A6A] flex-wrap mt-8 px-4">
 
               {/* URGENCY BADGE - CONSISTENTE */}
               <div className="mt-6 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20"
