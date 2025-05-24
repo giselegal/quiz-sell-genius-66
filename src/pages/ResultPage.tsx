@@ -401,15 +401,19 @@ const ResultPage: React.FC = () => {
                     delay={200}
                   >
                     <span className="text-xl md:text-2xl text-[#aa6b5d] font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                      Olá, {user.userName}!
+                      🎉 Parabéns, {user.userName}!
                     </span>
                     <div className="w-12 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mt-2"></div>
                   </AnimatedWrapper>
                 )}
                 
-                {/* Título principal do estilo */}
-                <h1 className="text-xl md:text-2xl lg:text-3xl font-playfair text-[#432818] mb-6 leading-tight whitespace-nowrap">
-                  Seu Estilo Predominante é:
+                {/* Título principal do estilo - MELHORADO */}
+                <h1 className="text-xl md:text-2xl lg:text-3xl font-playfair text-[#432818] mb-6 leading-tight">
+                  Descobrimos Seu Estilo Predominante:
+                  <br />
+                  <span className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                    {category}
+                  </span>
                 </h1>
                 <div className="max-w-md mx-auto mb-6">
                   <div className="flex items-center justify-end text-sm text-[#8F7A6A] mb-2">
@@ -426,18 +430,31 @@ const ResultPage: React.FC = () => {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="space-y-6 order-2 md:order-1">
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
-                    <p className="text-[#432818] leading-relaxed text-base md:text-lg">
-                      {description.split('você').map((part, index, array) => (
-                        <React.Fragment key={index}>
-                          {part}
-                          {index < array.length - 1 && (
-                            <span className="font-bold text-[#aa6b5d] bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                              você
-                            </span>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </p>
+                    {/* COPY MELHORADA - EMOCIONAL E ESPECÍFICA */}
+                    <div className="space-y-4">
+                      <p className="text-[#432818] leading-relaxed text-base md:text-lg font-medium">
+                        <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através da moda!
+                      </p>
+                      
+                      <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/10">
+                        <p className="text-[#432818] text-sm md:text-base leading-relaxed">
+                          ✨ <strong>Seu estilo {category}</strong> revela uma mulher que {
+                            category === 'Natural' ? 'valoriza autenticidade e conforto, sem abrir mão da elegância natural' :
+                            category === 'Clássico' ? 'aprecia sofisticação atemporal e peças que nunca saem de moda' :
+                            category === 'Contemporâneo' ? 'está sempre em sintonia com as tendências, mas de forma equilibrada' :
+                            category === 'Elegante' ? 'irradia refinamento e classe em cada detalhe do seu visual' :
+                            category === 'Romântico' ? 'expressa delicadeza e feminilidade através de looks encantadores' :
+                            category === 'Sexy' ? 'tem confiança para valorizar sua sensualidade de forma elegante' :
+                            category === 'Dramático' ? 'não tem medo de fazer declarações ousadas com seu estilo' :
+                            'expressa criatividade e originalidade em cada combinação de roupas'
+                          }.
+                        </p>
+                      </div>
+                      
+                      <p className="text-[#8F7A6A] text-sm md:text-base">
+                        💡 <strong>Problema resolvido:</strong> Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!
+                      </p>
+                    </div>
                   </AnimatedWrapper>
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={600}>
                     <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-5 shadow-sm border border-[#B89B7A]/10">
@@ -494,8 +511,11 @@ const ResultPage: React.FC = () => {
 
         {/* Before/After Transformation Section */}
         <section id="transformations" className="scroll-mt-20 mb-20">
-          <SectionTitle variant="simple">
-            Transformações Reais
+          <SectionTitle 
+            variant="simple"
+            subtitle="Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com a moda"
+          >
+            Transformações Que Inspiram
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -516,9 +536,9 @@ const ResultPage: React.FC = () => {
         <section id="motivation" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="secondary"
-            subtitle="Descubra o poder de se vestir com propósito e autenticidade"
+            subtitle="Sua jornada de autoconhecimento através da moda começa agora"
           >
-            A Jornada da Sua Transformação
+            O Poder de Se Vestir Com Propósito
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -536,7 +556,7 @@ const ResultPage: React.FC = () => {
         <section id="bonuses" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Materiais exclusivos para acelerar sua transformação de imagem"
+            subtitle="Materiais exclusivos para acelerar sua transformação (sem custo adicional)"
           >
             Bônus Especiais Inclusos
           </SectionTitle>
@@ -556,9 +576,9 @@ const ResultPage: React.FC = () => {
         <section id="testimonials" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Histórias reais de mulheres que transformaram sua relação com a moda"
+            subtitle="Histórias reais de mulheres que saíram da frustração para a confiança total"
           >
-            O Que Dizem Nossas Clientes
+            Resultados Que Falam Por Si
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -576,9 +596,9 @@ const ResultPage: React.FC = () => {
         <section id="guarantee" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Sua satisfação é nossa prioridade - compre sem riscos"
+            subtitle="Teste por 7 dias. Se não transformar sua relação com a moda, devolvemos seu dinheiro"
           >
-            Garantia de Satisfação
+            Garantia Blindada
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -596,9 +616,9 @@ const ResultPage: React.FC = () => {
         <section id="mentor" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Conheça a especialista que vai guiar sua transformação de imagem"
+            subtitle="A especialista que já ajudou mais de 3.000 mulheres a descobrirem seu estilo autêntico"
           >
-            Conheça sua Mentora
+            Sua Mentora de Estilo
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -635,7 +655,7 @@ const ResultPage: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/30 to-[#f9f4ef]/30 pointer-events-none"></div>
           
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
-            {/* Título CTA IMPACTANTE */}
+            {/* Título CTA IMPACTANTE - MELHORADO */}
             <div className="relative z-10 mb-12">
               <div className="inline-flex items-center gap-4 mb-6">
                 <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
@@ -643,17 +663,26 @@ const ResultPage: React.FC = () => {
                 <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
               </div>
               
+              {/* COPY DO CTA OTIMIZADA */}
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-[#432818] mb-6 leading-tight">
                 <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                  Transforme Seu Estilo
+                  Transforme Seu Guarda-Roupa
                 </span>
                 <br />
-                <span className="text-[#aa6b5d]">Hoje Mesmo</span>
+                <span className="text-[#aa6b5d]">Hoje Mesmo!</span>
               </h2>
               
-              <p className="text-xl md:text-2xl text-[#8F7A6A] leading-relaxed mb-8 max-w-2xl mx-auto">
-                Guia completo <span className="font-bold text-[#aa6b5d]">{category}</span> + bônus exclusivos
-              </p>
+              <div className="space-y-4 max-w-2xl mx-auto mb-8">
+                <p className="text-xl md:text-2xl text-[#8F7A6A] leading-relaxed">
+                  Seu guia personalizado <span className="font-bold text-[#aa6b5d]">{category}</span> + materiais exclusivos
+                </p>
+                
+                <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/10">
+                  <p className="text-[#432818] font-semibold">
+                    🎯 <strong>Resultado garantido:</strong> Em 30 dias você terá um guarda-roupa funcional onde tudo combina entre si
+                  </p>
+                </div>
+              </div>
             </div>
             
             {/* PREVIEW COMPACTO DOS MATERIAIS */}
@@ -713,18 +742,34 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            {/* VALOR SIMPLIFICADO */}
+            {/* VALOR SIMPLIFICADO - COM JUSTIFICATIVA */}
             <div className="mb-12 relative z-10">
               <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 sm:p-8 border-2 border-[#B89B7A]/20 max-w-md mx-auto shadow-lg">
                 <div className="text-center">
-                  <p className="text-sm text-[#8F7A6A] mb-2">Valor normal: <span className="line-through font-medium">R$ 175,00</span></p>
-                  <p className="text-lg font-bold text-[#432818] mb-4">Oferta especial:</p>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                    <p className="text-red-700 text-sm font-bold">
+                      🔥 OFERTA EXCLUSIVA PARA QUEM FEZ O QUIZ
+                    </p>
+                  </div>
+                  
+                  <p className="text-sm text-[#8F7A6A] mb-2">Investimento normal: <span className="line-through font-medium">R$ 175,00</span></p>
+                  <p className="text-lg font-bold text-[#432818] mb-4">Seu preço especial:</p>
                   <div className="mb-4">
                     <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       R$ 39,90
                     </span>
                     <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
                   </div>
+                  
+                  <div className="inline-flex items-center gap-2 bg-[#fff7f3] px-3 py-2 rounded-full border border-[#B89B7A]/20">
+                    <span className="text-[#aa6b5d] text-xs font-bold">
+                      💰 Economia de R$ 135,10 (77% OFF)
+                    </span>
+                  </div>
+                  
+                  <p className="text-xs text-[#8F7A6A] mt-3">
+                    ⏰ Esta oferta expira quando você sair desta página
+                  </p>
                 </div>
               </div>
             </div>
@@ -793,13 +838,17 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Informação adicional de urgência */}
+              {/* Informação adicional de urgência - MELHORADA */}
               <div className="mt-4 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20">
                 <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
                 <span className="text-sm text-[#432818] font-medium">
-                  ⚡ Acesso liberado em 2 minutos
+                  ⚡ Acesso liberado instantaneamente
                 </span>
               </div>
+              
+              <p className="text-xs text-[#8F7A6A] mt-4 max-w-md mx-auto">
+                🔒 <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong> • <strong>Suporte dedicado</strong>
+              </p>
             </div>
           </AnimatedWrapper>
         </section>
