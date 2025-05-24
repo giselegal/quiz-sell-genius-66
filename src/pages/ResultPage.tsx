@@ -507,6 +507,46 @@ const ResultPage: React.FC = () => {
               <BeforeAfterTransformation />
             </AnimatedWrapper>
           </Suspense>
+
+          {/* CTA INTERMEDIÁRIO - CRÍTICO */}
+          <div className="mt-12 text-center">
+            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-8 border border-[#B89B7A]/20 max-w-2xl mx-auto">
+              <h3 className="text-2xl font-playfair font-bold text-[#432818] mb-4">
+                Pronta para Sua Transformação?
+              </h3>
+              <p className="text-[#8F7A6A] mb-6 leading-relaxed">
+                Receba seu guia personalizado para o estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> e comece hoje mesmo!
+              </p>
+              
+              {/* Preço resumido */}
+              <div className="flex items-center justify-center gap-4 mb-6 flex-wrap">
+                <div className="text-center">
+                  <span className="text-sm text-[#8F7A6A]">5x de</span>
+                  <span className="text-2xl font-bold text-[#aa6b5d] ml-2">R$ 8,83</span>
+                </div>
+                <div className="text-[#8F7A6A]">ou</div>
+                <div className="text-center">
+                  <span className="text-sm text-[#8F7A6A]">à vista</span>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent ml-2">R$ 39,90</span>
+                </div>
+              </div>
+
+              <Button 
+                onClick={handleCTAClick} 
+                className="text-white text-lg leading-none py-4 px-8 rounded-lg shadow-lg transition-all duration-300 cursor-pointer font-semibold"
+                style={{
+                  background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
+                  boxShadow: tokens.shadows.cta,
+                }}
+                type="button"
+              >
+                <span className="flex items-center justify-center gap-3">
+                  <ShoppingCart className="w-5 h-5" />
+                  Quero Meu Guia Personalizado
+                </span>
+              </Button>
+            </div>
+          </div>
         </section>
 
         {/* Motivation Section */}
@@ -609,7 +649,7 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
         
-        {/* Final CTA Section - Título melhorado */}
+        {/* Final CTA Section - SIMPLIFICADO */}
         <section id="cta" className="scroll-mt-20 my-10 bg-white rounded-xl shadow-lg p-8 border border-[#B89B7A]/20 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-pattern-light opacity-5 pointer-events-none"></div>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
@@ -627,147 +667,107 @@ const ResultPage: React.FC = () => {
               </div>
               
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#432818] mb-4 leading-tight bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent relative z-10">
-                Pronta para Transformar seu Estilo?
+                Transforme Seu Estilo Hoje
               </h2>
               
-              <p className="text-lg md:text-xl text-[#8F7A6A] leading-relaxed mb-6 relative z-10">
-                Adquira agora seu guia completo personalizado para o estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> e comece a transformação da sua imagem hoje mesmo.
+              <p className="text-lg md:text-xl text-[#8F7A6A] leading-relaxed mb-8 relative z-10">
+                Seu guia completo para o estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> + bônus exclusivos
               </p>
-              
-              <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
             </AnimatedWrapper>
             
-            {/* Ancoragem de valor melhorada */}
-            <div className="mb-6 relative z-10">
-              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-6 mb-6 border border-[#B89B7A]/10">
-                <h3 className="text-lg font-medium text-[#aa6b5d] mb-6 text-center">O que você recebe:</h3>
-                
-                {/* Lista organizada e alinhada */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
-                    <div className="flex items-center gap-3 flex-1">
-                      <CheckCircle className="w-5 h-5 text-[#B89B7A] flex-shrink-0" />
-                      <span className="text-[#432818] font-medium text-left">Guia de Estilo Personalizado</span>
+            {/* PREVIEW VISUAL DOS MATERIAIS - NOVO */}
+            <div className="mb-8 relative z-10">
+              <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+                {/* Guia Principal */}
+                <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
+                  <div className="aspect-[3/4] bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
+                    <div className="text-white text-center">
+                      <div className="w-8 h-8 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5" />
+                      </div>
+                      <div className="text-xs font-medium">Guia {category}</div>
                     </div>
-                    <span className="text-[#aa6b5d] font-semibold whitespace-nowrap ml-4">R$ 97,00</span>
+                    <div className="absolute top-2 right-2 bg-white/20 px-2 py-1 rounded-full text-xs text-white font-medium">PDF</div>
                   </div>
-                  
-                  <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
-                    <div className="flex items-center gap-3 flex-1">
-                      <CheckCircle className="w-5 h-5 text-[#B89B7A] flex-shrink-0" />
-                      <span className="text-[#432818] font-medium text-left">E-book Transformação de Imagem</span>
-                    </div>
-                    <span className="text-[#aa6b5d] font-semibold whitespace-nowrap ml-4">R$ 47,00</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
-                    <div className="flex items-center gap-3 flex-1">
-                      <CheckCircle className="w-5 h-5 text-[#B89B7A] flex-shrink-0" />
-                      <span className="text-[#432818] font-medium text-left">Checklist de Guarda-roupa</span>
-                    </div>
-                    <span className="text-[#aa6b5d] font-semibold whitespace-nowrap ml-4">R$ 31,00</span>
-                  </div>
+                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Estilo Personalizado</h4>
+                  <p className="text-xs text-[#8F7A6A]">Especialmente para você</p>
                 </div>
-                
-                {/* Total */}
-                <div className="border-t-2 border-[#B89B7A]/20 pt-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-[#8F7A6A] font-medium">Valor total individual:</span>
-                    <span className="text-xl font-bold text-[#aa6b5d] line-through whitespace-nowrap">R$ 175,00</span>
+
+                {/* E-book */}
+                <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
+                  <div className="aspect-[3/4] bg-gradient-to-br from-[#aa6b5d] to-[#8F5A4D] rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
+                    <div className="text-white text-center">
+                      <div className="w-8 h-8 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
+                        <Award className="w-5 h-5" />
+                      </div>
+                      <div className="text-xs font-medium">Transformação</div>
+                    </div>
+                    <div className="absolute top-2 right-2 bg-white/20 px-2 py-1 rounded-full text-xs text-white font-medium">E-BOOK</div>
+                  </div>
+                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Transformação</h4>
+                  <p className="text-xs text-[#8F7A6A]">Passo a passo completo</p>
+                </div>
+
+                {/* Checklist */}
+                <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
+                  <div className="aspect-[3/4] bg-gradient-to-br from-[#D4B79F] to-[#B89B7A] rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
+                    <div className="text-white text-center">
+                      <div className="w-8 h-8 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
+                        <Shield className="w-5 h-5" />
+                      </div>
+                      <div className="text-xs font-medium">Checklist</div>
+                    </div>
+                    <div className="absolute top-2 right-2 bg-white/20 px-2 py-1 rounded-full text-xs text-white font-medium">PDF</div>
+                  </div>
+                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Checklist Guarda-roupa</h4>
+                  <p className="text-xs text-[#8F7A6A]">Organize seu closet</p>
+                </div>
+              </div>
+
+              {/* Valor Total Simplificado */}
+              <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-lg p-6 border border-[#B89B7A]/10 max-w-md mx-auto mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[#8F7A6A] font-medium">Valor individual:</span>
+                  <span className="text-xl font-bold text-[#aa6b5d] line-through">R$ 175,00</span>
+                </div>
+                <div className="text-center border-t border-[#B89B7A]/20 pt-4">
+                  <p className="text-[#8F7A6A] text-sm mb-2">Seu investimento hoje:</p>
+                  <div className="text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-2">
+                    R$ 39,90
+                  </div>
+                  <div className="inline-flex items-center gap-2 bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                    <span className="text-green-600 text-sm font-medium">
+                      💰 77% de desconto
+                    </span>
                   </div>
                 </div>
               </div>
-              
-              {/* Nova seção de preços redesenhada - COM MELHOR RESPIRO */}
-              <div className="mb-12">
-                {/* Espaçamento superior aumentado */}
-                <div className="mb-8">
-                  <p className="text-lg font-medium text-[#432818] mb-8 text-center">
-                    Transforme sua vida por apenas
-                  </p>
-                </div>
 
-                {/* Preço principal em destaque - SIMPLIFICADO */}
-                <div className="relative bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-[#B89B7A]/20 mb-12 overflow-visible">
-                  
-                  {/* Badge de destaque - POSIÇÃO MELHORADA */}
-                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-30">
-                    <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-8 py-2 rounded-full text-sm font-semibold shadow-lg">
-                      🔥 Oferta Especial
-                    </div>
-                  </div>
-                  
-                  <div className="text-center pt-4">
-                    {/* Preço parcelado com mais respiro */}
-                    <div className="mb-10">
-                      <div className="flex items-center justify-center gap-3 mb-4">
-                        <span className="text-2xl font-bold text-[#aa6b5d]">5x de</span>
-                        <div className="relative">
-                          <span className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                            R$ 8,83
-                          </span>
-                        </div>
-                      </div>
-                      <p className="text-[#8F7A6A] text-sm">sem juros no cartão</p>
-                    </div>
-                    
-                    {/* Divisor mais elegante com mais espaço */}
-                    <div className="flex items-center justify-center mb-10">
-                      <div className="flex-1 h-px bg-[#B89B7A]/20 max-w-16"></div>
-                      <span className="px-6 text-[#8F7A6A] text-base font-medium">ou</span>
-                      <div className="flex-1 h-px bg-[#B89B7A]/20 max-w-16"></div>
-                    </div>
-                    
-                    {/* Preço à vista - SIMPLIFICADO */}
-                    <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-2xl p-8 border border-[#B89B7A]/10">
-                      <p className="text-[#8F7A6A] text-base mb-6">À vista por apenas</p>
-                      
-                      {/* Valores com layout reorganizado */}
-                      <div className="space-y-6 mb-6">
-                        {/* Valor original */}
-                        <div className="text-center">
-                          <span className="text-xl text-[#8F7A6A] line-through">R$ 175,00</span>
-                        </div>
-                        
-                        {/* Novo valor - SEM EFEITO ESPELHADO */}
-                        <div className="text-center">
-                          <div className="max-w-fit mx-auto">
-                            <span className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-[#B89B7A] via-[#D4C4A8] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap drop-shadow-sm">
-                              R$ 39,90
-                            </span>
-                          </div>
-                        </div>
-                        
-                        {/* Economia com mais destaque */}
-                        <div className="text-center">
-                          <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200">
-                            <span className="text-green-600 text-sm font-medium">
-                              💰 Economia de R$ 135,10
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              {/* CTA Final Simplificado */}
+              <Button 
+                onClick={handleCTAClick} 
+                className="text-white text-xl leading-none py-5 px-12 rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold mb-6"
+                style={{
+                  background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
+                  boxShadow: `0 8px 25px rgba(76, 175, 80, 0.4)`,
+                }}
+                type="button"
+              >
+                <span className="flex items-center justify-center gap-3">
+                  <ShoppingCart className="w-6 h-6" />
+                  Garantir Minha Transformação
+                </span>
+              </Button>
+
+              {/* Elementos de confiança simplificados */}
+              <div className="flex items-center justify-center gap-6 text-sm text-[#8F7A6A]">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-[#B89B7A]" />
+                  <span>Compra Segura</span>
                 </div>
-                
-                {/* Elementos de confiança - SEPARADOS E COM RESPIRO */}
-                <div className="text-center space-y-6">
-                  <div className="flex items-center justify-center gap-2">
-                    <Shield className="w-4 h-4 text-[#B89B7A]" />
-                    <span className="text-[#432818] text-sm font-medium">Pagamento 100% Seguro</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-center gap-8 text-sm text-[#8F7A6A]">
-                    <div className="flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-[#B89B7A]" />
-                      <span>Site Seguro</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Award className="w-4 h-4 text-[#B89B7A]" />
-                      <span>Acesso Imediato</span>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4 text-[#B89B7A]" />
+                  <span>Acesso Imediato</span>
                 </div>
               </div>
             </div>
