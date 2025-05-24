@@ -6,7 +6,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight, Shield, Award } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight, Shield, Award, Hourglass } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -339,7 +339,7 @@ const ResultPage: React.FC = () => {
                   <Progress 
                     value={primaryStyle.percentage} 
                     className="h-1.5 bg-[#F5F2EC] rounded-full overflow-hidden shadow-inner" 
-                    indicatorClassName="bg-gradient-to-r from-[#FFD700] via-[#FFA500] to-[#DAA520] transition-all duration-700 ease-in-out shadow-sm"
+                    indicatorClassName="bg-gradient-to-r from-[#B89B7A] via-[#D4B79F] to-[#A1835D] transition-all duration-700 ease-in-out shadow-sm"
                   />
                 </div>
               </div>
@@ -500,24 +500,41 @@ const ResultPage: React.FC = () => {
             {/* Ancoragem de valor melhorada */}
             <div className="mb-6 relative z-10">
               <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-6 mb-6 border border-[#B89B7A]/10">
-                <h3 className="text-lg font-medium text-[#aa6b5d] mb-4">O que você recebe:</h3>
-                <ul className="text-left space-y-2 text-[#432818]">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-[#4CAF50]" />
-                    Guia de Estilo Personalizado (Valor: R$ 97,00)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-[#4CAF50]" />
-                    E-book Transformação de Imagem (Valor: R$ 47,00)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-[#4CAF50]" />
-                    Checklist de Guarda-roupa (Valor: R$ 31,00)
-                  </li>
-                </ul>
-                <div className="border-t border-[#B89B7A]/20 mt-4 pt-4">
-                  <p className="text-sm text-[#8F7A6A]">Valor total individual:</p>
-                  <p className="text-xl font-bold text-[#aa6b5d] line-through">R$ 175,00</p>
+                <h3 className="text-lg font-medium text-[#aa6b5d] mb-6 text-center">O que você recebe:</h3>
+                
+                {/* Lista organizada e alinhada */}
+                <div className="space-y-4 mb-6">
+                  <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-5 h-5 text-[#4CAF50] flex-shrink-0" />
+                      <span className="text-[#432818] font-medium">Guia de Estilo Personalizado</span>
+                    </div>
+                    <span className="text-[#aa6b5d] font-semibold">R$ 97,00</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-5 h-5 text-[#4CAF50] flex-shrink-0" />
+                      <span className="text-[#432818] font-medium">E-book Transformação de Imagem</span>
+                    </div>
+                    <span className="text-[#aa6b5d] font-semibold">R$ 47,00</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-5 h-5 text-[#4CAF50] flex-shrink-0" />
+                      <span className="text-[#432818] font-medium">Checklist de Guarda-roupa</span>
+                    </div>
+                    <span className="text-[#aa6b5d] font-semibold">R$ 31,00</span>
+                  </div>
+                </div>
+                
+                {/* Total */}
+                <div className="border-t-2 border-[#B89B7A]/20 pt-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[#8F7A6A] font-medium">Valor total individual:</span>
+                    <span className="text-xl font-bold text-[#aa6b5d] line-through">R$ 175,00</span>
+                  </div>
                 </div>
               </div>
               
@@ -534,22 +551,13 @@ const ResultPage: React.FC = () => {
             </div>
             
             <div className="flex flex-col items-center justify-center gap-4 mb-8 relative z-10">
-              {/* Ícone de garantia elegante com animação */}
-              <div className="flex flex-col items-center gap-3">
+              <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 text-[#432818] p-4 rounded-lg flex items-center gap-3 font-semibold text-sm shadow-inner">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] rounded-full animate-ping opacity-20"></div>
-                  <div className="relative bg-gradient-to-r from-[#D4AF37] to-[#B8860B] p-4 rounded-full shadow-lg">
-                    <Award className="w-8 h-8 text-white animate-pulse" />
+                  <Hourglass className="w-6 h-6 text-[#aa6b5d] animate-pulse" />
+                  <div className="absolute inset-0 animate-spin" style={{ animationDuration: '3s' }}>
+                    <Hourglass className="w-6 h-6 text-[#aa6b5d] opacity-30" />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 text-[#432818] px-6 py-3 rounded-full flex items-center gap-3 font-semibold text-sm shadow-inner">
-                  <Shield className="w-5 h-5 text-[#aa6b5d] animate-bounce" />
-                  <span className="text-[#aa6b5d]">Garantia de 7 Dias - Satisfação Total</span>
-                </div>
-              </div>
-              
-              <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 text-[#432818] p-4 rounded-lg flex items-center gap-3 font-semibold text-sm shadow-inner">
-                <Clock className="w-6 h-6 text-[#aa6b5d] animate-pulse" />
                 <span className="text-[#aa6b5d]">Oferta Exclusiva Válida Por Pouco Tempo</span>
               </div>
             </div>

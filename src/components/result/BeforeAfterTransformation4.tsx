@@ -89,22 +89,22 @@ const CheckItem: React.FC<{
   </li>
 );
 
-// Componente NavButton reutilizável
+// Componente NavButton reutilizável - setas menores
 const NavButton: React.FC<{
   direction: 'prev' | 'next';
   onClick: () => void;
 }> = ({ direction, onClick }) => (
   <motion.button
-    whileHover={{ scale: 1.1 }}
+    whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
-    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
+    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-1 shadow-sm hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-1 focus:ring-[#B89B7A] focus:ring-offset-1"
     onClick={onClick}
     aria-label={direction === 'prev' ? 'Anterior' : 'Próxima'}
   >
     {direction === 'prev' ? (
-      <ChevronLeft size={22} className="text-[#432818]" />
+      <ChevronLeft size={16} className="text-[#432818]" />
     ) : (
-      <ChevronRight size={22} className="text-[#432818]" />
+      <ChevronRight size={16} className="text-[#432818]" />
     )}
   </motion.button>
 );
@@ -308,17 +308,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         className="w-full h-auto rounded-lg shadow-md"
                         priority={true}
                       />
-                      
-                      {/* Nome da pessoa */}
-                      <Badge className="top-3 right-3 bg-white/90 backdrop-blur-sm text-[#432818] font-medium">
-                        {activeTransformation.name}
-                      </Badge>
                     </motion.div>
                   </AnimatePresence>
                   
-                  {/* Navegação */}
+                  {/* Navegação - setas menores */}
                   {transformations.length > 1 && (
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 pointer-events-none">
                       <NavButton 
                         direction="prev" 
                         onClick={() => navigateToTransformation((activeIndex - 1 + transformations.length) % transformations.length)} 
