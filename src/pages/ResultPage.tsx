@@ -675,99 +675,160 @@ const ResultPage: React.FC = () => {
               </p>
             </AnimatedWrapper>
             
-            {/* PREVIEW VISUAL DOS MATERIAIS - NOVO */}
+            {/* PREVIEW VISUAL DOS MATERIAIS - IMAGENS REAIS */}
             <div className="mb-8 relative z-10">
               <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-                {/* Guia Principal */}
+                {/* Guia Principal - Imagem específica por categoria */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
-                    <div className="text-white text-center">
-                      <div className="w-8 h-8 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
-                        <CheckCircle className="w-5 h-5" />
-                      </div>
-                      <div className="text-xs font-medium">Guia {category}</div>
-                    </div>
-                    <div className="absolute top-2 right-2 bg-white/20 px-2 py-1 rounded-full text-xs text-white font-medium">PDF</div>
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                    <ProgressiveImage 
+                      src={(() => {
+                        const guideImages = {
+                          'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+                          'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
+                          'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
+                          'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+                          'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
+                          'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp',
+                          'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
+                          'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
+                        };
+                        return guideImages[category] || guideImages['Natural'];
+                      })()} 
+                      alt={`Guia ${category}`}
+                      className="w-full h-full object-cover rounded-lg"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-2 right-2 bg-[#B89B7A] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">PDF</div>
                   </div>
-                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Estilo Personalizado</h4>
-                  <p className="text-xs text-[#8F7A6A]">Especialmente para você</p>
+                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Estilo {category}</h4>
+                  <p className="text-xs text-[#8F7A6A]">Personalizado para você</p>
                 </div>
 
-                {/* E-book */}
+                {/* E-book Transformação */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-gradient-to-br from-[#aa6b5d] to-[#8F5A4D] rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
-                    <div className="text-white text-center">
-                      <div className="w-8 h-8 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
-                        <Award className="w-5 h-5" />
-                      </div>
-                      <div className="text-xs font-medium">Transformação</div>
-                    </div>
-                    <div className="absolute top-2 right-2 bg-white/20 px-2 py-1 rounded-full text-xs text-white font-medium">E-BOOK</div>
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                    <ProgressiveImage 
+                      src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png" 
+                      alt="E-book Transformação de Imagem"
+                      className="w-full h-full object-cover rounded-lg"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-2 right-2 bg-[#aa6b5d] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">E-BOOK</div>
                   </div>
                   <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Transformação</h4>
                   <p className="text-xs text-[#8F7A6A]">Passo a passo completo</p>
                 </div>
 
-                {/* Checklist */}
+                {/* Guia de Visagismo */}
                 <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-gradient-to-br from-[#D4B79F] to-[#B89B7A] rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
-                    <div className="text-white text-center">
-                      <div className="w-8 h-8 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
-                        <Shield className="w-5 h-5" />
-                      </div>
-                      <div className="text-xs font-medium">Checklist</div>
-                    </div>
-                    <div className="absolute top-2 right-2 bg-white/20 px-2 py-1 rounded-full text-xs text-white font-medium">PDF</div>
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                    <ProgressiveImage 
+                      src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png" 
+                      alt="Guia de Visagismo"
+                      className="w-full h-full object-cover rounded-lg"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-2 right-2 bg-[#D4B79F] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">BÔNUS</div>
                   </div>
-                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Checklist Guarda-roupa</h4>
-                  <p className="text-xs text-[#8F7A6A]">Organize seu closet</p>
+                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Visagismo</h4>
+                  <p className="text-xs text-[#8F7A6A]">Cortes e cores ideais</p>
                 </div>
               </div>
 
-              {/* Valor Total Simplificado */}
-              <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-lg p-6 border border-[#B89B7A]/10 max-w-md mx-auto mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[#8F7A6A] font-medium">Valor individual:</span>
-                  <span className="text-xl font-bold text-[#aa6b5d] line-through">R$ 175,00</span>
-                </div>
-                <div className="text-center border-t border-[#B89B7A]/20 pt-4">
-                  <p className="text-[#8F7A6A] text-sm mb-2">Seu investimento hoje:</p>
-                  <div className="text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-2">
-                    R$ 39,90
+              {/* Preview dos conteúdos internos */}
+              <div className="mb-8">
+                <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 border border-[#B89B7A]/20 max-w-3xl mx-auto">
+                  <h4 className="text-lg font-semibold text-[#432818] mb-4 text-center">O que você encontrará dentro:</h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="relative rounded-lg overflow-hidden shadow-sm">
+                      <ProgressiveImage 
+                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920634/Espanhol_Portugu%C3%AAs_8_horqsn.png" 
+                        alt="Páginas internas do guia"
+                        className="w-full h-32 object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="relative rounded-lg overflow-hidden shadow-sm">
+                      <ProgressiveImage 
+                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.png" 
+                        alt="Visão geral dos materiais"
+                        className="w-full h-32 object-cover"
+                        loading="lazy"
+                      />
+                    </div>
                   </div>
-                  <div className="inline-flex items-center gap-2 bg-green-50 px-3 py-1 rounded-full border border-green-200">
-                    <span className="text-green-600 text-sm font-medium">
-                      💰 77% de desconto
+                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                    <div className="flex flex-col items-center">
+                      <CheckCircle className="w-5 h-5 text-[#B89B7A] mb-1" />
+                      <span className="text-xs text-[#432818] font-medium">Paletas de Cores</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <Award className="w-5 h-5 text-[#B89B7A] mb-1" />
+                      <span className="text-xs text-[#432818] font-medium">Looks Completos</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <Shield className="w-5 h-5 text-[#B89B7A] mb-1" />
+                      <span className="text-xs text-[#432818] font-medium">Peças Essenciais</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <ShoppingCart className="w-5 h-5 text-[#B89B7A] mb-1" />
+                      <span className="text-xs text-[#432818] font-medium">Onde Comprar</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Valor Total Simplificado - LAYOUT CORRIGIDO */}
+              <div className="bg-gradient-to-r from-[#fff9f5] to-[#fff7f3] rounded-xl p-6 border border-[#B89B7A]/10 max-w-lg mx-auto mb-8 overflow-hidden">
+                <div className="flex items-center justify-between mb-4 px-2">
+                  <span className="text-[#8F7A6A] font-medium text-sm">Valor individual:</span>
+                  <span className="text-lg font-bold text-[#aa6b5d] line-through whitespace-nowrap">R$ 175,00</span>
+                </div>
+                <div className="text-center border-t border-[#B89B7A]/20 pt-4 px-2">
+                  <p className="text-[#8F7A6A] text-sm mb-3">Seu investimento hoje:</p>
+                  <div className="mb-3">
+                    <span className="text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                      R$ 39,90
                     </span>
                   </div>
+                  <div className="flex justify-center">
+                    <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200">
+                      <span className="text-green-600 text-sm font-medium whitespace-nowrap">
+                        💰 77% de desconto
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* CTA Final Simplificado */}
-              <Button 
-                onClick={handleCTAClick} 
-                className="text-white text-xl leading-none py-5 px-12 rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold mb-6"
-                style={{
-                  background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
-                  boxShadow: `0 8px 25px rgba(76, 175, 80, 0.4)`,
-                }}
-                type="button"
-              >
-                <span className="flex items-center justify-center gap-3">
-                  <ShoppingCart className="w-6 h-6" />
-                  Garantir Minha Transformação
-                </span>
-              </Button>
+              {/* CTA Final Simplificado - MELHOR ESPAÇAMENTO */}
+              <div className="text-center mb-6">
+                <Button 
+                  onClick={handleCTAClick} 
+                  className="text-white text-xl leading-none py-5 px-8 md:px-12 rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold"
+                  style={{
+                    background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
+                    boxShadow: `0 8px 25px rgba(76, 175, 80, 0.4)`,
+                  }}
+                  type="button"
+                >
+                  <span className="flex items-center justify-center gap-3">
+                    <ShoppingCart className="w-6 h-6" />
+                    <span className="whitespace-nowrap">Garantir Minha Transformação</span>
+                  </span>
+                </Button>
+              </div>
 
-              {/* Elementos de confiança simplificados */}
-              <div className="flex items-center justify-center gap-6 text-sm text-[#8F7A6A]">
+              {/* Elementos de confiança simplificados - ORGANIZADOS */}
+              <div className="flex items-center justify-center gap-8 text-sm text-[#8F7A6A] flex-wrap">
                 <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-[#B89B7A]" />
-                  <span>Compra Segura</span>
+                  <Shield className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
+                  <span className="whitespace-nowrap">Compra Segura</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-[#B89B7A]" />
-                  <span>Acesso Imediato</span>
+                  <Award className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
+                  <span className="whitespace-nowrap">Acesso Imediato</span>
                 </div>
               </div>
             </div>
