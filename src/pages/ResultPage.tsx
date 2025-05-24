@@ -931,7 +931,7 @@ const ResultPage: React.FC = () => {
                     <div className="text-center space-y-8">
                       
                       {/* Comparação de valor */}
-                      <div className="bg-white/60 rounded-lg p-6 border border-[#B89B7A]/20 max-w-lg mx-auto">
+                      <div className="w-full sm:max-w-lg bg-white/60 rounded-lg p-6 border border-[#B89B7A]/20 mx-auto">
                         <p className="text-xl mb-3" style={{ color: tokens.colors.textMuted }}>
                           <span className="font-medium text-[#432818]">Valor total se comprado separadamente:</span>
                         </p>
@@ -947,8 +947,8 @@ const ResultPage: React.FC = () => {
                         <div className="w-32 h-px bg-[#B89B7A]/40"></div>
                       </div>
                       
-                      {/* Preço principal - HIERARQUIA CORRIGIDA */}
-                      <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-10 border-2 border-[#B89B7A]/30 max-w-lg mx-auto"
+                      {/* Preço principal */}
+                      <div className="w-full sm:max-w-lg bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-10 border-2 border-[#B89B7A]/30 mx-auto"
                            style={{ boxShadow: tokens.shadows.lg }}>
                         
                         {/* PARCELAS EM DESTAQUE PRINCIPAL */}
@@ -990,7 +990,7 @@ const ResultPage: React.FC = () => {
                       </div>
                       
                       {/* Urgência */}
-                      <div className="bg-[#fff7f3] border border-[#B89B7A]/20 px-8 py-6 rounded-lg max-w-2xl mx-auto">
+                      <div className="w-full sm:max-w-2xl bg-[#fff7f3] border border-[#B89B7A]/20 px-8 py-6 rounded-lg mx-auto">
                         <p className="text-lg font-medium text-[#8F7A6A] flex items-center justify-center gap-3">
                           <Clock className="w-6 h-6" />
                           <span>Esta oferta expira quando você sair desta página</span>
