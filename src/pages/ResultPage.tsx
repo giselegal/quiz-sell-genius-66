@@ -528,9 +528,9 @@ const ResultPage: React.FC = () => {
         <section id="transformations" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Veja como estas mulheres descobriram seu potencial através do estilo autêntico"
+            subtitle="Veja como mulheres descobriram sua melhor versão seguindo as mesmas estratégias que você vai receber"
           >
-            Transformações Que Inspiram
+            Antes e Depois: Estilo {category} na Prática
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -551,9 +551,9 @@ const ResultPage: React.FC = () => {
         <section id="motivation" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="secondary"
-            subtitle="Descubra como seu Estilo pode ser sua maior Ferramenta de Autoexpressão"
+            subtitle="Por que mulheres com seu perfil {category} conquistam mais confiança e oportunidades"
           >
-            O Poder de Vestir-se de Você
+            A Ciência Por Trás do Seu Estilo {category}
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -571,9 +571,9 @@ const ResultPage: React.FC = () => {
         <section id="bonuses" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Recursos extras para maximizar seus resultados"
+            subtitle="Ferramentas extras para você dominar completamente seu estilo {category}"
           >
-            Materiais Complementares
+            Bônus Exclusivos Para o Estilo {category}
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -591,9 +591,9 @@ const ResultPage: React.FC = () => {
         <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Depoimentos autênticos de quem já viveu essa transformação"
+            subtitle="O que mulheres {category} estão dizendo sobre sua transformação"
           >
-            Histórias de Sucesso
+            Resultados Reais de Mulheres Como Você
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -611,9 +611,9 @@ const ResultPage: React.FC = () => {
         <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Sua segurança é nossa prioridade. Teste sem riscos por 7 dias completos"
+            subtitle="Teste seu novo estilo {category} por 7 dias. Se não amar, devolvemos seu dinheiro"
           >
-            Compra Protegida
+            Garantia Incondicional de 7 Dias
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -631,9 +631,9 @@ const ResultPage: React.FC = () => {
         <section id="mentor" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Conheça quem vai guiar sua transformação pessoal"
+            subtitle="Especialista que já guiou mais de 10.000 mulheres na descoberta do seu estilo autêntico"
           >
-            Sua Consultora de Imagem
+            Quem Criou Seu Guia Personalizado
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
