@@ -235,7 +235,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   if (isLoading) {
     return (
       <div className="my-12">
-        <div className="max-w-4xl mx-auto px-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-8">
             <div className="h-8 bg-gradient-to-r from-[#f8f5f0] to-[#f0ebe6] rounded-lg mb-4 animate-pulse"></div>
             <div className="w-20 h-1 bg-[#f8f5f0] rounded-full mx-auto animate-pulse"></div>
@@ -243,8 +243,8 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           
           <Card className="overflow-hidden border border-[#B89B7A]/20">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
-              <div className="p-6 flex flex-col items-center">
-                <div className="w-full max-w-sm aspect-[4/5] bg-[#f8f5f0] rounded-lg mb-4 animate-pulse"></div>
+              <div className="p-4 md:p-6 flex flex-col items-center">
+                <div className="w-full aspect-[4/5] bg-[#f8f5f0] rounded-lg mb-4 animate-pulse"></div>
                 <div className="flex justify-center space-x-2 mt-4">
                   {transformations.map((_, idx) => (
                     <div key={idx} className="w-3 h-3 bg-[#f8f5f0] rounded-full animate-pulse"></div>
@@ -252,7 +252,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 </div>
               </div>
               
-              <div className="p-6 bg-white space-y-4">
+              <div className="p-4 md:p-6 bg-white space-y-4">
                 <div className="h-6 bg-[#f8f5f0] rounded animate-pulse"></div>
                 <div className="h-16 bg-[#f8f5f0] rounded animate-pulse"></div>
                 <div className="space-y-3">
@@ -269,58 +269,59 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     );
   }
 
-  // MAIN COMPONENT - OPTIMIZED
+  // MAIN COMPONENT - REDESENHADO PARA MELHOR RESPONSIVIDADE
   return (
     <div className="my-8 md:my-12 lg:my-16">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* HEADER - MELHORADO PARA RESPONSIVIDADE */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        {/* HEADER */}
         <motion.div 
-          className="text-center mb-8 md:mb-10 lg:mb-12" 
+          className="text-center mb-8 md:mb-10" 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.5 }}
         >
           <div className="relative">
             {/* Elemento decorativo de fundo */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-30">
-              <div className="w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-[#B89B7A]/20 to-[#aa6b5d]/10 rounded-full blur-3xl"></div>
+            <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
+              <div className="w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-[#B89B7A]/20 to-[#aa6b5d]/10 rounded-full blur-3xl"></div>
             </div>
             
-            <h3 className="relative text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4 md:mb-6 px-4 leading-tight max-w-4xl mx-auto">
-              Mulheres que Aprenderam e Praticam no dia a dia
+            <h3 className="relative text-xl md:text-2xl lg:text-3xl font-playfair text-[#aa6b5d] mb-4">
+              <span className="bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                Mulheres que Aprenderam e Praticam no dia a dia
+              </span>
               <br className="hidden sm:block" />
-              <span className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-light">
+              <span className="text-lg md:text-xl lg:text-2xl font-light">
                 Seu Estilo de Ser
               </span>
             </h3>
           </div>
           
-          <div className="w-16 md:w-20 lg:w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
+          <div className="w-16 md:w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
           
-          {/* Subtítulo adicional para contexto */}
           <p className="text-sm md:text-base text-[#8F7A6A] mt-4 max-w-2xl mx-auto px-4 font-light">
             Veja como outras mulheres transformaram sua imagem e conquistaram mais confiança
           </p>
         </motion.div>
         
-        {/* MAIN CARD - LAYOUT ESTRATÉGICO MELHORADO */}
+        {/* MAIN CARD - LAYOUT MELHORADO */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-lg hover:shadow-xl transition-all duration-500 bg-white backdrop-blur-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 min-h-[500px] lg:min-h-[600px]">
-              {/* SEÇÃO DA IMAGEM - 2/5 do espaço em desktop, ordem estratégica */}
-              <div className="lg:col-span-2 order-2 lg:order-1 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center relative">
-                {/* Badge de destaque para mobile */}
-                <div className="absolute top-4 left-4 lg:hidden z-20">
-                  <span className="bg-[#B89B7A] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm backdrop-blur-sm">
+          <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-lg transition-all duration-300 bg-white">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-0">
+              {/* SEÇÃO DA IMAGEM - Otimizada para todos os dispositivos */}
+              <div className="md:col-span-1 lg:col-span-2 order-1 md:order-1 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-4 md:p-6 flex flex-col items-center justify-center relative">
+                {/* Badge de destaque */}
+                <div className="absolute top-4 left-4 z-20">
+                  <span className="bg-[#B89B7A] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">
                     ✨ Transformação Real
                   </span>
                 </div>
                 
-                <div className="relative w-full max-w-sm lg:max-w-none mx-auto">
+                <div className="relative w-full max-w-xs md:max-w-sm mx-auto">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTransformation.id}
@@ -346,26 +347,30 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     </motion.div>
                   </AnimatePresence>
                   
-                  {/* NAVIGATION - OTIMIZADA PARA TOUCH */}
+                  {/* NAVIGATION - Melhorada para mobile */}
                   {transformations.length > 1 && (
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 md:px-4 z-30">
-                      <NavButton direction="prev" onClick={goToPrevious} />
-                      <NavButton direction="next" onClick={goToNext} />
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 z-30 pointer-events-none">
+                      <div className="pointer-events-auto">
+                        <NavButton direction="prev" onClick={goToPrevious} />
+                      </div>
+                      <div className="pointer-events-auto">
+                        <NavButton direction="next" onClick={goToNext} />
+                      </div>
                     </div>
                   )}
                 </div>
                 
-                {/* INDICATORS - POSICIONAMENTO ESTRATÉGICO */}
+                {/* INDICATORS */}
                 {transformations.length > 1 && (
-                  <div className="flex justify-center space-x-3 mt-6">
+                  <div className="flex justify-center space-x-3 mt-4">
                     {transformations.map((_, idx) => (
                       <button
                         key={idx}
                         onClick={() => navigateToTransformation(idx)}
                         className={`w-3 h-3 rounded-full transition-all duration-300 ${
                           idx === activeIndex 
-                            ? 'bg-[#B89B7A] scale-110 shadow-sm' 
-                            : 'bg-gray-300 hover:bg-[#B89B7A]/50 hover:scale-105'
+                            ? 'bg-[#B89B7A] scale-110' 
+                            : 'bg-gray-300 hover:bg-[#B89B7A]/50'
                         }`}
                         aria-label={`Ver transformação ${idx + 1}`}
                       />
@@ -374,22 +379,22 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 )}
               </div>
               
-              {/* SEÇÃO DE CONTEÚDO - 3/5 do espaço em desktop */}
-              <div className="lg:col-span-3 order-1 lg:order-2 p-6 lg:p-8 xl:p-10 bg-white flex flex-col justify-center">
-                <div className="max-w-xl mx-auto lg:mx-0">
-                  <h4 className="text-xl md:text-2xl lg:text-3xl font-medium text-[#432818] text-center lg:text-left mb-4 lg:mb-6">
+              {/* SEÇÃO DE CONTEÚDO - Melhor estruturada */}
+              <div className="md:col-span-1 lg:col-span-3 order-2 md:order-2 p-4 md:p-6 bg-white flex flex-col">
+                <div className="h-full flex flex-col">
+                  <h4 className="text-xl md:text-2xl font-medium text-[#432818] text-center md:text-left mb-4">
                     <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
                       🎯 Seus Guias de Estilo Completos
                     </span>
                   </h4>
                   
-                  <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] rounded-lg p-6 lg:p-8 mb-6 lg:mb-8 border-2 border-[#B89B7A]/20 shadow-md">
+                  <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] rounded-lg p-4 md:p-6 mb-4 md:mb-6 border border-[#B89B7A]/20 shadow-sm flex-grow">
                     {/* PRODUTO PRINCIPAL */}
-                    <div className="mb-6">
-                      <h5 className="text-lg md:text-xl font-semibold text-[#432818] mb-4 flex items-center gap-2">
+                    <div className="mb-4 md:mb-6">
+                      <h5 className="text-lg font-semibold text-[#432818] mb-3 flex items-center gap-2">
                         ✨ <span className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">Guias de Estilo Personalizados</span>
                       </h5>
-                      <ul className="space-y-3 text-[#aa6b5d] text-base">
+                      <ul className="space-y-2 md:space-y-3 text-[#aa6b5d]">
                         <CheckItem>Guia do Estilo [SEU ESTILO] - Cores, formas e essência</CheckItem>
                         <CheckItem>Manual de Combinações Inteligentes</CheckItem>
                         <CheckItem>Dicionário de Peças Estratégicas</CheckItem>
@@ -397,97 +402,95 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       </ul>
                     </div>
 
-                    {/* BÔNUS */}
-                    <div className="border-t border-[#B89B7A]/20 pt-6">
-                      <h6 className="text-lg font-semibold text-[#432818] mb-4 text-center">
+                    {/* BÔNUS - Layout melhorado */}
+                    <div className="border-t border-[#B89B7A]/20 pt-4 md:pt-6">
+                      <h6 className="text-base md:text-lg font-semibold text-[#432818] mb-3 text-center">
                         🎁 <span className="text-[#4CAF50]">BÔNUS EXCLUSIVOS</span>
                       </h6>
                       
-                      <div className="grid gap-4 md:grid-cols-2">
-                        <div className="bg-white/80 rounded-lg p-4 border border-[#B89B7A]/10">
-                          <div className="font-semibold text-[#aa6b5d] text-sm mb-2">🔥 BÔNUS #1</div>
+                      <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+                        <div className="bg-white/80 rounded-lg p-3 border border-[#B89B7A]/10">
+                          <div className="font-semibold text-[#aa6b5d] text-sm mb-1">🔥 BÔNUS #1</div>
                           <p className="text-[#432818] font-medium text-sm mb-1">Guia das Peças Estratégicas</p>
                           <p className="text-xs text-gray-600 line-through">Valor: R$ 59,00</p>
                         </div>
                         
-                        <div className="bg-white/80 rounded-lg p-4 border border-[#B89B7A]/10">
-                          <div className="font-semibold text-[#aa6b5d] text-sm mb-2">💄 BÔNUS #2</div>
+                        <div className="bg-white/80 rounded-lg p-3 border border-[#B89B7A]/10">
+                          <div className="font-semibold text-[#aa6b5d] text-sm mb-1">💄 BÔNUS #2</div>
                           <p className="text-[#432818] font-medium text-sm mb-1">Manual de Visagismo Facial</p>
                           <p className="text-xs text-gray-600 line-through">Valor: R$ 37,00</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* PREÇO */}
-                    <div className="bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg p-6 mt-6 text-center border-2 border-[#4CAF50]/30">
-                      <div className="mb-4">
-                        <p className="text-sm text-gray-600 mb-2">Valor Total dos Produtos:</p>
-                        <p className="text-xl text-gray-500 line-through mb-2">R$ 175,00</p>
-                        <div className="flex items-center justify-center gap-3 mb-3">
-                          <span className="text-3xl md:text-4xl font-bold text-[#4CAF50]">R$ 39,90</span>
-                          <span className="bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full animate-pulse">77% OFF</span>
-                        </div>
-                        <p className="text-sm text-[#aa6b5d] font-medium">⏰ Oferta válida por tempo limitado</p>
+                    {/* PREÇO - Mais compacto e efetivo */}
+                    <div className="bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg p-4 mt-4 md:mt-6 text-center border border-[#4CAF50]/30">
+                      <p className="text-sm text-gray-600 mb-1">Valor Total dos Produtos:</p>
+                      <p className="text-lg text-gray-500 line-through mb-1">R$ 175,00</p>
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <span className="text-2xl md:text-3xl font-bold text-[#4CAF50]">R$ 39,90</span>
+                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">77% OFF</span>
                       </div>
+                      <p className="text-xs text-[#aa6b5d] font-medium">⏰ Oferta válida por tempo limitado</p>
                     </div>
                   </div>
                   
-                  {/* CTA SECTION - POSICIONAMENTO ESTRATÉGICO */}
-                  <div className="flex flex-col items-center lg:items-start space-y-4">
-                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                  {/* CTA SECTION - Melhor adaptada para diferentes telas */}
+                  <div className="flex flex-col items-center space-y-3">
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full">
                       <Button
                         onClick={handleCTA}
                         onMouseEnter={() => setIsButtonHovered(true)}
                         onMouseLeave={() => setIsButtonHovered(false)}
-                        className="w-full sm:w-auto py-4 px-8 lg:px-12 rounded-md shadow-lg transition-all duration-300 font-bold text-base md:text-lg mb-2 cursor-pointer"
+                        className="w-full py-3 md:py-4 px-4 md:px-8 rounded-md shadow-lg transition-all duration-300 font-bold text-sm md:text-base"
                         style={{
                           background: "linear-gradient(to right, #4CAF50, #45a049)",
-                          boxShadow: "0 8px 32px rgba(76, 175, 80, 0.4)",
+                          boxShadow: "0 8px 20px rgba(76, 175, 80, 0.3)",
                         }}
                         type="button"
                       >
-                        <span className="flex items-center justify-center gap-2" style={{ pointerEvents: 'none' }}>
+                        <span className="flex items-center justify-center gap-2">
                           <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1, rotate: isButtonHovered ? 10 : 0 }}>
-                            <ShoppingCart className="w-5 h-5" />
+                            <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
                           </motion.div>
                           🚀 GARANTIR MINHA TRANSFORMAÇÃO AGORA
                         </span>
                       </Button>
                     </motion.div>
                     
-                    {/* GARANTIAS */}
-                    <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-xs md:text-sm text-[#aa6b5d] font-medium">
+                    {/* GARANTIAS - Mais compactas */}
+                    <div className="flex flex-wrap justify-center gap-3 text-xs text-[#aa6b5d] font-medium">
                       <div className="flex items-center gap-1">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
                           <circle cx="12" cy="12" r="12" fill="#4CAF50"/>
                           <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span>Acesso imediato</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
                           <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" fill="#4CAF50"/>
                           <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span>100% seguro</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#4CAF50"/>
                         </svg>
                         <span>Garantia de satisfação</span>
                       </div>
                     </div>
                   
-                    {/* PAYMENT METHODS - RESPONSIVO */}
-                    <div className="w-full max-w-[300px] lg:max-w-[280px] mx-auto lg:mx-0">
+                    {/* PAYMENT METHODS - Melhor ajustadas */}
+                    <div className="w-full max-w-[240px] mx-auto">
                       <img
                         src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
                         alt="Métodos de pagamento"
                         className="w-full rounded-lg shadow-sm"
                         loading="lazy"
-                        width="280"
-                        height="70"
+                        width="240"
+                        height="60"
                       />
                     </div>
                   </div>
