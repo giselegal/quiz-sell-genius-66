@@ -326,11 +326,11 @@ const ResultPage: React.FC = () => {
               <div className="text-center mb-8">
                 <h1 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-2">
                   {user?.userName && (
-                    <span className="text-lg md:text-xl text-[#aa6b5d] block mb-2">
+                    <span className="text-xl md:text-2xl text-[#aa6b5d] block mb-3 font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       Olá, {user.userName}!
                     </span>
                   )}
-                  Seu Estilo Predominante
+                  Seu Estilo Predominante é:
                 </h1>
                 <div className="max-w-md mx-auto mb-6">
                   <div className="flex items-center justify-end text-sm text-[#8F7A6A] mb-2">
@@ -357,7 +357,7 @@ const ResultPage: React.FC = () => {
                   </AnimatedWrapper>
                 </div>
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 md:order-2">
-                  <div className="max-w-[280px] mx-auto relative"> 
+                  <div className="max-w-[238px] md:max-w-[280px] mx-auto relative"> 
                     <ProgressiveImage 
                       src={`${image}?q=85&f=auto&w=280`} 
                       alt={`Estilo ${category}`} 
@@ -368,12 +368,12 @@ const ResultPage: React.FC = () => {
                       fetchPriority="high" 
                       onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
                     />
-                    {/* Elegant decorative corners */}
-                    <div className="absolute -top-2 -right-2 w-10 h-10 border-t-2 border-r-2 border-[#B89B7A] rounded-tr-lg"></div>
-                    <div className="absolute -bottom-2 -left-2 w-10 h-10 border-b-2 border-l-2 border-[#B89B7A] rounded-bl-lg"></div>
+                    {/* Elegant decorative corners - ajustados para mobile */}
+                    <div className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 w-8 h-8 md:w-10 md:h-10 border-t-2 border-r-2 border-[#B89B7A] rounded-tr-lg"></div>
+                    <div className="absolute -bottom-1.5 -left-1.5 md:-bottom-2 md:-left-2 w-8 h-8 md:w-10 md:h-10 border-b-2 border-l-2 border-[#B89B7A] rounded-bl-lg"></div>
                     
-                    {/* Style badge */}
-                    <div className="absolute -top-3 -left-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-1 rounded-full shadow-lg text-sm font-medium transform -rotate-12">
+                    {/* Style badge - ajustado para mobile */}
+                    <div className="absolute -top-2 -left-2 md:-top-3 md:-left-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 md:px-4 md:py-1 rounded-full shadow-lg text-xs md:text-sm font-medium transform -rotate-12">
                       {category}
                     </div>
                   </div>
@@ -392,8 +392,8 @@ const ResultPage: React.FC = () => {
                     className="w-full h-auto rounded-lg shadow-lg hover:scale-102 transition-transform duration-300" 
                     onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
                   />
-                  {/* Elegant badge - 8% menor */}
-                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1.5 rounded-full shadow-lg text-xs font-medium transform rotate-12">
+                  {/* Elegant badge - mais 5% menor */}
+                  <div className="absolute -top-2.5 -right-2.5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-2.5 py-1 rounded-full shadow-lg text-xs font-medium transform rotate-12">
                     Exclusivo
                   </div>
                 </div>

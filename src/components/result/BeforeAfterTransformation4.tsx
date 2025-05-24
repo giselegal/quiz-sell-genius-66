@@ -210,7 +210,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           {/* Título com decoração */}
           <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] inline-block">
-              Descubra o poder da imagem intencional
+              Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
             </h3>
           </motion.div>
           
@@ -276,7 +276,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
         {/* Título com decoração */}
         <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d]">
-            Descubra o poder da imagem intencional
+            Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
           </h3>
         </motion.div>
         
