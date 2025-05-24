@@ -528,7 +528,7 @@ const ResultPage: React.FC = () => {
         <section id="transformations" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com Estilo, Imagem e Presença"
+            subtitle="Veja como estas mulheres descobriram seu potencial através do estilo autêntico"
           >
             Transformações Que Inspiram
           </SectionTitle>
@@ -551,9 +551,9 @@ const ResultPage: React.FC = () => {
         <section id="motivation" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="secondary"
-            subtitle="Sua jornada de autoconhecimento através do Estilo e Imagem começa agora"
+            subtitle="Descubra como seu Estilo pode ser sua maior Ferramenta de Autoexpressão"
           >
-            O Poder de Se Vestir Com Propósito
+            O Poder de Vestir-se de Você
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -571,9 +571,9 @@ const ResultPage: React.FC = () => {
         <section id="bonuses" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Materiais exclusivos para acelerar sua transformação (sem custo adicional)"
+            subtitle="Recursos extras para maximizar seus resultados"
           >
-            Bônus Especiais Inclusos
+            Materiais Complementares
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -591,9 +591,9 @@ const ResultPage: React.FC = () => {
         <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Histórias reais de mulheres que saíram da frustração para a confiança total"
+            subtitle="Depoimentos autênticos de quem já viveu essa transformação"
           >
-            Resultados Que Falam Por Si
+            Histórias de Sucesso
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -611,9 +611,9 @@ const ResultPage: React.FC = () => {
         <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Teste por 7 dias. Se não transformar sua relação com seu Estilo e Presença, devolvemos seu dinheiro"
+            subtitle="Sua segurança é nossa prioridade. Teste sem riscos por 7 dias completos"
           >
-            Garantia Blindada
+            Compra Protegida
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -631,9 +631,9 @@ const ResultPage: React.FC = () => {
         <section id="mentor" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="A especialista que já ajudou +de 3.000 mulheres a descobrirem seu estilo autêntico"
+            subtitle="Conheça quem vai guiar sua transformação pessoal"
           >
-            Sua Mentora de Imagem e Estilo
+            Sua Consultora de Imagem
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -655,10 +655,10 @@ const ResultPage: React.FC = () => {
             <div className="relative z-10">
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6 md:mb-8"></div>
               <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#432818] mb-4">
-                Chegou o Momento de Agir
+                É Hora de Decidir
               </h3>
               <p className="text-lg font-medium max-w-md mx-auto" style={{ color: tokens.colors.textMuted }}>
-                Tudo que você precisa para aplicar seu Estilo Pessoal
+                Seu novo estilo está a um clique de distância
               </p>
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-6 md:mt-8"></div>
             </div>
@@ -682,14 +682,14 @@ const ResultPage: React.FC = () => {
               
               <h2 className="text-4xl lg:text-6xl font-playfair font-bold text-[#432818] mb-6 leading-tight">
                 <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                  Transforme Seu Guarda-Roupa
+                  Desperte Sua Confiança
                 </span>
                 <br />
-                <span className="text-[#aa6b5d]">Hoje Mesmo!</span>
+                <span className="text-[#aa6b5d]">Com Seu Estilo Único!</span>
               </h2>
               
               <p className="text-xl mb-8" style={{ color: tokens.colors.textMuted }}>
-                Seu Guia personalizado {category} + materiais exclusivos de Estilo e Imagem
+                Guia {category} personalizado + materiais de apoio inclusos
               </p>
             </div>
             
