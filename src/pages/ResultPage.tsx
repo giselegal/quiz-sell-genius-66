@@ -792,142 +792,176 @@ const ResultPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* RESUMO DO VALOR - CONTRASTE E HIERARQUIA MELHORADOS */}
-              <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/25 max-w-3xl mx-auto relative overflow-hidden"
+              {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
+              <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/25 max-w-4xl mx-auto relative overflow-hidden"
                    style={{ boxShadow: tokens.shadows.lg }}>
                 
-                {/* BACKGROUND DECORATIVO - SIMPLIFICADO */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#B89B7A]/3 to-transparent rounded-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#aa6b5d]/3 to-transparent rounded-full"></div>
-                
                 <div className="relative z-10">
-                  <h4 className="font-bold text-[#432818] mb-6 text-center text-lg lg:text-xl">
+                  <h4 className="font-bold text-[#432818] mb-8 text-center text-xl lg:text-2xl">
                     Seu Kit Completo de Transformação
                   </h4>
                   
-                  <div className="space-y-4">
-                    {/* Item Principal - DESIGN LIMPO */}
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 p-5 bg-white/80 rounded-xl border border-[#B89B7A]/20 relative"
+                  {/* PRODUTOS EM CARDS SEPARADOS - DESIGN LIMPO */}
+                  <div className="space-y-4 mb-8">
+                    
+                    {/* PRODUTO PRINCIPAL */}
+                    <div className="bg-white rounded-xl p-6 border-2 border-[#B89B7A]/30 relative"
                          style={{ boxShadow: tokens.shadows.md }}>
                       
-                      {/* BADGE DE DESTAQUE - SIMPLIFICADO */}
-                      <div className="absolute -top-2 -left-2 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
-                        Guia Completo
+                      {/* Badge destacado */}
+                      <div className="absolute -top-3 left-6 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-md">
+                        ⭐ Produto Principal
                       </div>
                       
-                      <div className="flex items-start gap-4 flex-1 pt-2">
-                        <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-1.5"></div>
-                        <div className="leading-relaxed">
-                          <span className="block text-[#432818] font-bold mb-2 text-base lg:text-lg">
-                            Manual Personalizado do seu Estilo Predominate {category}
-                          </span>
-                          {secondaryStyles && secondaryStyles.length > 0 && (
-                            <span className="block text-sm mb-3 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                              e os guias dos seus estilos complementares: <strong className="text-[#aa6b5d]">{secondaryStyles.slice(0, 2).map(style => style.category).join(' e ')}</strong>
-                            </span>
-                          )}
-                          <span className="inline-block text-xs bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-3 py-1.5 rounded-full font-medium border border-[#B89B7A]/20">
-                            Guia Personalizado
-                          </span>
-                        </div>
-                      </div>
-                      <div className="text-center lg:text-right flex-shrink-0">
-                        <div className="text-sm">
-                          <span className="text-[#aa6b5d] font-bold text-base block">INCLUÍDO</span>
-                          <span className="line-through text-gray-500">de R$ 79,00</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bônus 1 - VISUAL LIMPO */}
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4 bg-white/60 rounded-xl border border-[#B89B7A]/10">
-                      <div className="flex items-start gap-3 flex-1">
-                        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-2"></div>
-                        <div className="leading-relaxed">
-                          <span className="block text-[#432818] font-semibold mb-1">Guia das Peças Estratégicas</span>
-                          <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Lista das 15 peças essenciais para maximizar seu guarda-roupa
-                          </span>
-                        </div>
-                      </div>
-                      <div className="text-center lg:text-right flex-shrink-0">
-                        <div className="text-sm">
-                          <span className="text-[#aa6b5d] font-bold">BÔNUS GRÁTIS</span>
-                          <br />
-                          <span className="line-through text-gray-500">R$ 59,00</span>
+                      <div className="pt-2">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                          
+                          {/* Informações do produto */}
+                          <div className="flex-1">
+                            <h5 className="text-xl font-bold text-[#432818] mb-3">
+                              Manual Personalizado do Estilo {category}
+                            </h5>
+                            
+                            {secondaryStyles && secondaryStyles.length > 0 && (
+                              <p className="text-base mb-4 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                                <strong>Inclui também:</strong> Guias dos seus estilos complementares 
+                                <span className="text-[#aa6b5d] font-semibold">
+                                  {' '}{secondaryStyles.slice(0, 2).map(style => style.category).join(' e ')}
+                                </span>
+                              </p>
+                            )}
+                            
+                            <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-4 py-2 rounded-lg font-medium border border-[#B89B7A]/20">
+                              📋 Análise 100% Personalizada
+                            </div>
+                          </div>
+                          
+                          {/* Valor */}
+                          <div className="text-center lg:text-right lg:min-w-[120px]">
+                            <div className="bg-[#f8fdf8] border border-[#4CAF50]/20 px-4 py-3 rounded-lg">
+                              <span className="text-[#2d7d32] font-bold text-lg block">INCLUÍDO</span>
+                              <span className="text-sm text-gray-500 line-through">Valor: R$ 79,00</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Bônus 2 - VISUAL LIMPO */}
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4 bg-white/60 rounded-xl border border-[#B89B7A]/10">
-                      <div className="flex items-start gap-3 flex-1">
-                        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-2"></div>
-                        <div className="leading-relaxed">
-                          <span className="block text-[#432818] font-semibold mb-1">Manual de Visagismo Personalizado</span>
-                          <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Cortes e acessórios ideais para seu formato de rosto
-                          </span>
+                    {/* BÔNUS 1 */}
+                    <div className="bg-white/80 rounded-xl p-5 border border-[#B89B7A]/15"
+                         style={{ boxShadow: tokens.shadows.sm }}>
+                      
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        
+                        {/* Informações */}
+                        <div className="flex items-start gap-4 flex-1">
+                          <div className="w-8 h-8 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                            1
+                          </div>
+                          <div>
+                            <h6 className="font-bold text-[#432818] text-lg mb-2">
+                              Guia das Peças Estratégicas
+                            </h6>
+                            <p className="text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                              Lista das 15 peças essenciais para maximizar seu guarda-roupa
+                            </p>
+                          </div>
+                        </div>
+                        
+                        {/* Valor bônus */}
+                        <div className="text-center lg:text-right lg:min-w-[120px]">
+                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg">
+                            <span className="text-[#aa6b5d] font-bold block">BÔNUS GRÁTIS</span>
+                            <span className="text-sm text-gray-500 line-through">R$ 59,00</span>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-center lg:text-right flex-shrink-0">
-                        <div className="text-sm">
-                          <span className="text-[#aa6b5d] font-bold">BÔNUS GRÁTIS</span>
-                          <br />
-                          <span className="line-through text-gray-500">R$ 37,00</span>
+                    </div>
+
+                    {/* BÔNUS 2 */}
+                    <div className="bg-white/80 rounded-xl p-5 border border-[#B89B7A]/15"
+                         style={{ boxShadow: tokens.shadows.sm }}>
+                      
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        
+                        {/* Informações */}
+                        <div className="flex items-start gap-4 flex-1">
+                          <div className="w-8 h-8 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                            2
+                          </div>
+                          <div>
+                            <h6 className="font-bold text-[#432818] text-lg mb-2">
+                              Manual de Visagismo Personalizado
+                            </h6>
+                            <p className="text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                              Cortes e acessórios ideais para seu formato de rosto
+                            </p>
+                          </div>
+                        </div>
+                        
+                        {/* Valor bônus */}
+                        <div className="text-center lg:text-right lg:min-w-[120px]">
+                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg">
+                            <span className="text-[#aa6b5d] font-bold block">BÔNUS GRÁTIS</span>
+                            <span className="text-sm text-gray-500 line-through">R$ 37,00</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Resumo Final - DESIGN LIMPO E ELEGANTE */}
-                  <div className="border-t border-[#B89B7A]/20 mt-8 pt-8">
+                  {/* RESUMO FINAL - DESIGN LIMPO */}
+                  <div className="border-t-2 border-[#B89B7A]/20 pt-8">
                     
-                    {/* BADGE DE OFERTA - LIMPO */}
+                    {/* Badge de oferta */}
                     <div className="text-center mb-6">
-                      <div className="inline-flex items-center gap-2 bg-[#432818] text-white px-4 py-2 rounded-full text-sm font-semibold">
-                        <span>OFERTA EXCLUSIVA QUIZ COMPLETO</span>
+                      <div className="inline-flex items-center gap-2 bg-[#432818] text-white px-6 py-3 rounded-full text-base font-semibold">
+                        <span>🎯 OFERTA EXCLUSIVA QUIZ COMPLETO</span>
                       </div>
                     </div>
                     
                     <div className="text-center space-y-6">
-                      {/* COMPARAÇÃO DE VALOR - SIMPLIFICADA */}
-                      <div className="space-y-2">
-                        <p className="text-base" style={{ color: tokens.colors.textMuted }}>
-                          <span className="font-medium text-[#432818]">Valor total individual:</span> 
-                          <span className="line-through font-semibold ml-2 text-xl text-gray-400">R$ 175,00</span>
+                      
+                      {/* Comparação de valor */}
+                      <div className="bg-white/60 rounded-lg p-4 border border-[#B89B7A]/20">
+                        <p className="text-lg mb-2" style={{ color: tokens.colors.textMuted }}>
+                          <span className="font-medium text-[#432818]">Valor total se comprado separadamente:</span>
                         </p>
+                        <span className="text-2xl font-bold text-gray-400 line-through">R$ 175,00</span>
                       </div>
                       
-                      {/* SEPARADOR MINIMALISTA */}
-                      <div className="flex items-center justify-center gap-4 my-6">
-                        <div className="w-20 h-px bg-[#B89B7A]/30"></div>
-                        <span className="text-xl font-semibold text-[#432818] px-4">Seu Investimento</span>
-                        <div className="w-20 h-px bg-[#B89B7A]/30"></div>
+                      {/* Separador elegante */}
+                      <div className="flex items-center justify-center gap-4 my-8">
+                        <div className="w-24 h-px bg-[#B89B7A]/40"></div>
+                        <span className="text-2xl font-bold text-[#432818] px-6 bg-white rounded-full py-2 border-2 border-[#B89B7A]/30">
+                          Seu Investimento
+                        </span>
+                        <div className="w-24 h-px bg-[#B89B7A]/40"></div>
                       </div>
                       
-                      {/* PREÇO PRINCIPAL - LIMPO */}
-                      <div className="mb-6">
-                        <div className="text-5xl lg:text-6xl font-bold text-[#432818] mb-2">
+                      {/* Preço principal */}
+                      <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-8 border-2 border-[#B89B7A]/30 max-w-md mx-auto"
+                           style={{ boxShadow: tokens.shadows.lg }}>
+                        <div className="text-6xl lg:text-7xl font-bold text-[#432818] mb-3">
                           R$ 39,90
                         </div>
-                        <p className="text-base" style={{ color: tokens.colors.textMuted }}>
-                          ou <span className="text-[#432818] font-semibold text-lg">5x de R$ 8,83</span> sem juros
+                        <p className="text-lg mb-4" style={{ color: tokens.colors.textMuted }}>
+                          ou <span className="text-[#432818] font-bold text-xl">5x de R$ 8,83</span> sem juros
                         </p>
+                        
+                        {/* Economia destacada */}
+                        <div className="bg-[#f8fdf8] border-2 border-[#4CAF50]/30 px-6 py-4 rounded-xl">
+                          <span className="text-[#2d7d32] font-bold text-lg">
+                            💰 Economia de R$ 135,10 (77% OFF)
+                          </span>
+                        </div>
                       </div>
                       
-                      {/* ECONOMIA - SIMPLIFICADA */}
-                      <div className="inline-block bg-[#f8fdf8] border border-[#4CAF50]/20 px-6 py-3 rounded-lg">
-                        <span className="text-[#2d7d32] font-semibold">
-                          Economia de R$ 135,10 (77% de desconto)
-                        </span>
-                      </div>
-                      
-                      {/* URGÊNCIA - LIMPA */}
-                      <div className="mt-4">
-                        <p className="text-sm font-medium text-[#8F7A6A] flex items-center justify-center gap-2">
-                          <Clock className="w-4 h-4" />
-                          <span>Esta oferta expira quando você sair desta página</span>
+                      {/* Urgência */}
+                      <div className="bg-[#fff7f3] border border-[#B89B7A]/20 px-6 py-4 rounded-lg max-w-lg mx-auto">
+                        <p className="text-base font-medium text-[#8F7A6A] flex items-center justify-center gap-2">
+                          <Clock className="w-5 h-5" />
+                          <span>⏰ Esta oferta expira quando você sair desta página</span>
                         </p>
                       </div>
                     </div>
