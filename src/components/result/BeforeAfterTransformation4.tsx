@@ -199,7 +199,20 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
 
   // Função para navegar entre transformações
   const navigateToTransformation = (index: number) => {
-    setActiveIndex(index);
+    if (index >= 0 && index < transformations.length) {
+      setActiveIndex(index);
+    }
+  };
+
+  // Funções específicas para navegação
+  const goToPrevious = () => {
+    const prevIndex = (activeIndex - 1 + transformations.length) % transformations.length;
+    navigateToTransformation(prevIndex);
+  };
+
+  const goToNext = () => {
+    const nextIndex = (activeIndex + 1) % transformations.length;
+    navigateToTransformation(nextIndex);
   };
 
   // O esqueleto de carregamento é mostrado enquanto isLoading é true
@@ -319,13 +332,13 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       <div className="pointer-events-auto">
                         <NavButton 
                           direction="prev" 
-                          onClick={() => navigateToTransformation((activeIndex - 1 + transformations.length) % transformations.length)} 
+                          onClick={goToPrevious}
                         />
                       </div>
                       <div className="pointer-events-auto">
                         <NavButton 
                           direction="next" 
-                          onClick={() => navigateToTransformation((activeIndex + 1) % transformations.length)} 
+                          onClick={goToNext}
                         />
                       </div>
                     </div>
