@@ -488,88 +488,12 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
               </AnimatedWrapper>
-
-              {/* NOVA SEÇÃO MOTIVACIONAL + CTA */}
-              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={500} delay={1000}>
-                <div className="mt-16 text-center max-w-2xl mx-auto">
-                  {/* Texto motivacional */}
-                  <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-8 border border-[#B89B7A]/20 mb-8">
-                    <div className="mb-6">
-                      <p className="text-lg text-[#432818] leading-relaxed mb-4">
-                        <span className="font-semibold text-[#aa6b5d]">Você já descobriu seu Estilo</span> e isso é muito poderoso. 
-                        <span className="font-medium text-[#B89B7A]"> Conhecimento é clareza.</span>
-                      </p>
-                      <p className="text-lg text-[#432818] leading-relaxed mb-6">
-                        E clareza muda o jeito que você se vê, se escolhe, se posiciona.
-                      </p>
-                      
-                      {/* Separador visual */}
-                      <div className="flex items-center justify-center gap-3 mb-6">
-                        <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-                        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
-                        <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-                      </div>
-                      
-                      <p className="text-lg text-[#432818] leading-relaxed mb-2">
-                        <span className="font-semibold text-[#aa6b5d]">Mas é na ação que a verdadeira transformação acontece.</span>
-                      </p>
-                      <p className="text-lg text-[#432818] leading-relaxed">
-                        É quando você aplica o que aprendeu… que <span className="font-medium text-[#B89B7A]">o espelho começa a contar uma nova história.</span>
-                      </p>
-                    </div>
-
-                    {/* Call to Action motivacional */}
-                    <div className="text-center">
-                      <h4 className="text-xl font-playfair font-bold text-[#432818] mb-4">
-                        Pronta para Escrever Essa Nova História?
-                      </h4>
-                      <p className="text-[#8F7A6A] mb-6 text-sm">
-                        Receba seu guia completo do estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> e comece sua transformação hoje mesmo
-                      </p>
-                      
-                      {/* Preço compacto */}
-                      <div className="flex items-center justify-center gap-4 mb-6 text-sm">
-                        <span className="text-[#8F7A6A]">Apenas</span>
-                        <span className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">R$ 39,90</span>
-                        <span className="text-[#8F7A6A]">ou 5x R$ 8,83</span>
-                      </div>
-
-                      <Button 
-                        onClick={handleCTAClick} 
-                        className="text-white text-base sm:text-lg leading-none py-3 sm:py-4 px-6 sm:px-8 rounded-lg shadow-lg transition-all duration-300 cursor-pointer font-semibold w-full sm:w-auto min-h-[48px]"
-                        style={{
-                          background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
-                          boxShadow: '0 4px 14px rgba(184, 155, 122, 0.4)',
-                        }}
-                        type="button"
-                      >
-                        <span className="flex items-center justify-center gap-2 sm:gap-3">
-                          <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
-                          <span className="whitespace-nowrap">Começar Minha Transformação</span>
-                        </span>
-                      </Button>
-
-                      {/* Elemento de confiança */}
-                      <div className="flex items-center justify-center gap-4 text-xs text-[#8F7A6A] mt-4">
-                        <div className="flex items-center gap-1">
-                          <Shield className="w-3 h-3 text-[#B89B7A]" />
-                          <span>Seguro</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Award className="w-3 h-3 text-[#B89B7A]" />
-                          <span>Acesso imediato</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </AnimatedWrapper>
             </AnimatedWrapper>
           </Card>
         </section>
 
         {/* Before/After Transformation Section */}
-        <section id="transformations" className="scroll-mt-20 mb-16">
+        <section id="transformations" className="scroll-mt-20 mb-20">
           <SectionTitle variant="simple">
             Transformações Reais
           </SectionTitle>
@@ -584,49 +508,12 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </Suspense>
 
-          {/* CTA INTERMEDIÁRIO - RESPONSIVIDADE MELHORADA */}
-          <div className="mt-12 text-center">
-            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 sm:p-8 border border-[#B89B7A]/20 max-w-2xl mx-auto">
-              <h3 className="text-xl sm:text-2xl font-playfair font-bold text-[#432818] mb-4">
-                Pronta para Sua Transformação?
-              </h3>
-              <p className="text-[#8F7A6A] mb-6 leading-relaxed text-sm sm:text-base">
-                Receba seu guia personalizado para o estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> e comece hoje mesmo!
-              </p>
-              
-              {/* Preço resumido - RESPONSIVO */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
-                <div className="text-center">
-                  <span className="text-xs sm:text-sm text-[#8F7A6A]">5x de</span>
-                  <span className="text-xl sm:text-2xl font-bold text-[#aa6b5d] ml-2">R$ 8,83</span>
-                </div>
-                <div className="text-[#8F7A6A] text-sm">ou</div>
-                <div className="text-center">
-                  <span className="text-xs sm:text-sm text-[#8F7A6A]">à vista</span>
-                  <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent ml-2">R$ 39,90</span>
-                </div>
-              </div>
-
-              <Button 
-                onClick={handleCTAClick} 
-                className="text-white text-base sm:text-lg leading-none py-3 sm:py-4 px-6 sm:px-8 rounded-lg shadow-lg transition-all duration-300 cursor-pointer font-semibold w-full sm:w-auto min-h-[48px]"
-                style={{
-                  background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
-                  boxShadow: '0 4px 14px rgba(184, 155, 122, 0.4)',
-                }}
-                type="button"
-              >
-                <span className="flex items-center justify-center gap-2 sm:gap-3">
-                  <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
-                  <span className="whitespace-nowrap">Quero Meu Guia Personalizado</span>
-                </span>
-              </Button>
-            </div>
-          </div>
+          {/* REMOVER CTA INTERMEDIÁRIO */}
+          {/* CTA após transformações removido para não saturar */}
         </section>
 
         {/* Motivation Section */}
-        <section id="motivation" className="scroll-mt-20 mb-16">
+        <section id="motivation" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="secondary"
             subtitle="Descubra o poder de se vestir com propósito e autenticidade"
@@ -646,7 +533,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Bonus Section */}
-        <section id="bonuses" className="scroll-mt-20 mb-12">
+        <section id="bonuses" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="Materiais exclusivos para acelerar sua transformação de imagem"
@@ -666,7 +553,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Testimonials Section */}
-        <section id="testimonials" className="scroll-mt-20 mb-12">
+        <section id="testimonials" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="Histórias reais de mulheres que transformaram sua relação com a moda"
@@ -686,7 +573,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Guarantee Section */}
-        <section id="guarantee" className="scroll-mt-20 mb-12">
+        <section id="guarantee" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="Sua satisfação é nossa prioridade - compre sem riscos"
@@ -706,7 +593,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Mentor Section */}
-        <section id="mentor" className="scroll-mt-20 mb-16">
+        <section id="mentor" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
             subtitle="Conheça a especialista que vai guiar sua transformação de imagem"
@@ -725,49 +612,56 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
 
-        {/* SEÇÃO DE TRANSIÇÃO - Adicionar espaço antes do CTA final */}
-        <div className="mb-20">
-          <div className="text-center py-12">
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6"></div>
-            <p className="text-lg text-[#8F7A6A] font-medium">
-              Está pronta para transformar seu estilo?
-            </p>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-6"></div>
+        {/* SEÇÃO DE TRANSIÇÃO MELHORADA */}
+        <div className="mb-16">
+          <div className="text-center py-16 relative">
+            {/* Background decorativo */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#fff7f3]/50 to-[#f9f4ef]/50 rounded-2xl"></div>
+            <div className="relative z-10">
+              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-8"></div>
+              <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#432818] mb-4">
+                Pronta para Sua Transformação?
+              </h3>
+              <p className="text-lg text-[#8F7A6A] font-medium max-w-md mx-auto">
+                Tudo que você precisa para descobrir e aplicar seu estilo pessoal
+              </p>
+              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-8"></div>
+            </div>
           </div>
         </div>
         
-        {/* Final CTA Section - ESPAÇAMENTO OTIMIZADO */}
-        <section id="cta" className="scroll-mt-20 mb-20 bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-[#B89B7A]/20 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-pattern-light opacity-5 pointer-events-none"></div>
+        {/* Final CTA Section - ÚNICO E PODEROSO */}
+        <section id="cta" className="scroll-mt-20 mb-20 bg-white rounded-2xl shadow-xl p-8 sm:p-12 border border-[#B89B7A]/20 text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/30 to-[#f9f4ef]/30 pointer-events-none"></div>
+          
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
-            {/* Título CTA com decoração elegante */}
-            <AnimatedWrapper 
-              className="text-center mb-12"
-              animation="fade"
-              show={true}
-              duration={600}
-            >
-              <div className="inline-flex items-center gap-3 mb-4">
-                <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-                <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-md animate-pulse"></div>
-                <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+            {/* Título CTA IMPACTANTE */}
+            <div className="relative z-10 mb-12">
+              <div className="inline-flex items-center gap-4 mb-6">
+                <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                <div className="w-4 h-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-lg animate-pulse"></div>
+                <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
               </div>
               
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#432818] mb-6 leading-tight bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent relative z-10">
-                Transforme Seu Estilo Hoje
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-[#432818] mb-6 leading-tight">
+                <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
+                  Transforme Seu Estilo
+                </span>
+                <br />
+                <span className="text-[#aa6b5d]">Hoje Mesmo</span>
               </h2>
               
-              <p className="text-lg md:text-xl text-[#8F7A6A] leading-relaxed mb-8 relative z-10">
-                Seu guia completo para o estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> + bônus exclusivos
+              <p className="text-xl md:text-2xl text-[#8F7A6A] leading-relaxed mb-8 max-w-2xl mx-auto">
+                Guia completo <span className="font-bold text-[#aa6b5d]">{category}</span> + bônus exclusivos
               </p>
-            </AnimatedWrapper>
+            </div>
             
-            {/* PREVIEW VISUAL DOS MATERIAIS - ESPAÇAMENTO MELHORADO */}
+            {/* PREVIEW COMPACTO DOS MATERIAIS */}
             <div className="mb-12 relative z-10">
-              <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-10">
-                {/* Guia Principal - Imagem específica por categoria */}
-                <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm p-2">
+              <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto mb-10">
+                {/* Cards dos produtos - SIMPLIFICADOS */}
+                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 shadow-sm">
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
                     <ProgressiveImage 
                       src={(() => {
                         const guideImages = {
@@ -783,179 +677,101 @@ const ResultPage: React.FC = () => {
                         return guideImages[category] || guideImages['Natural'];
                       })()} 
                       alt={`Guia ${category}`}
-                      className="max-w-full max-h-full object-contain rounded-lg"
+                      className="w-full h-full object-cover rounded-lg"
                       loading="lazy"
                     />
-                    <div className="absolute top-1 right-1 bg-[#B89B7A] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">PDF</div>
                   </div>
-                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Estilo {category}</h4>
-                  <p className="text-xs text-[#8F7A6A]">Personalizado para você</p>
+                  <h4 className="font-bold text-[#432818] text-sm mb-1">Guia {category}</h4>
+                  <p className="text-xs text-[#8F7A6A]">Personalizado</p>
                 </div>
 
-                {/* E-book Transformação */}
-                <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm p-2">
+                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 shadow-sm">
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
                     <ProgressiveImage 
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png" 
-                      alt="E-book Transformação de Imagem"
-                      className="max-w-full max-h-full object-contain rounded-lg"
+                      alt="E-book Transformação"
+                      className="w-full h-full object-cover rounded-lg"
                       loading="lazy"
                     />
-                    <div className="absolute top-1 right-1 bg-[#aa6b5d] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">E-BOOK</div>
                   </div>
-                  <h4 className="font-semibold text-[#432818] text-sm mb-1">E-book Transformação</h4>
-                  <p className="text-xs text-[#8F7A6A]">Método completo de mudança</p>
+                  <h4 className="font-bold text-[#432818] text-sm mb-1">E-book Completo</h4>
+                  <p className="text-xs text-[#8F7A6A]">Transformação</p>
                 </div>
 
-                {/* Guia de Visagismo */}
-                <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/20">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm p-2">
+                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 shadow-sm">
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
                     <ProgressiveImage 
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png" 
                       alt="Guia de Visagismo"
-                      className="max-w-full max-h-full object-contain rounded-lg"
+                      className="w-full h-full object-cover rounded-lg"
                       loading="lazy"
                     />
-                    <div className="absolute top-1 right-1 bg-[#D4B79F] px-2 py-1 rounded-full text-xs text-white font-medium shadow-sm">BÔNUS</div>
                   </div>
-                  <h4 className="font-semibold text-[#432818] text-sm mb-1">Guia de Visagismo</h4>
-                  <p className="text-xs text-[#8F7A6A]">Cabelos e cores perfeitas</p>
-                </div>
-              </div>
-
-              {/* Preview dos conteúdos internos - ESPAÇAMENTO MELHORADO */}
-              <div className="mb-12">
-                <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 border border-[#B89B7A]/20 max-w-3xl mx-auto">
-                  <h4 className="text-lg font-semibold text-[#432818] mb-6 text-center">O que você encontrará dentro:</h4>
-                  <div className="grid md:grid-cols-2 gap-4 mb-6">
-                    <div className="relative rounded-lg overflow-hidden shadow-sm bg-white p-2">
-                      <ProgressiveImage 
-                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920634/Espanhol_Portugu%C3%AAs_8_horqsn.png" 
-                        alt="Todos os produtos da oferta"
-                        className="w-full h-32 object-contain rounded-lg"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="relative rounded-lg overflow-hidden shadow-sm bg-white p-2">
-                      <ProgressiveImage 
-                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.png" 
-                        alt="Capas dos 3 guias principais"
-                        className="w-full h-32 object-contain rounded-lg"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-                    <div className="flex flex-col items-center">
-                      <CheckCircle className="w-5 h-5 text-[#B89B7A] mb-1" />
-                      <span className="text-xs text-[#432818] font-medium">Paletas de Cores</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <Award className="w-5 h-5 text-[#B89B7A] mb-1" />
-                      <span className="text-xs text-[#432818] font-medium">Looks Completos</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <Shield className="w-5 h-5 text-[#B89B7A] mb-1" />
-                      <span className="text-xs text-[#432818] font-medium">Peças Essenciais</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <ShoppingCart className="w-5 h-5 text-[#B89B7A] mb-1" />
-                      <span className="text-xs text-[#432818] font-medium">Onde Comprar</span>
-                    </div>
-                  </div>
+                  <h4 className="font-bold text-[#432818] text-sm mb-1">Bônus Visagismo</h4>
+                  <p className="text-xs text-[#8F7A6A]">Cabelo & Cores</p>
                 </div>
               </div>
             </div>
 
-            {/* SEÇÃO DE VALOR - SEPARADA DO CTA */}
-            <div className="mb-16">
-              {/* Valor Total - ANCORAGEM CORRIGIDA */}
-              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 sm:p-6 border border-[#B89B7A]/20 max-w-lg mx-auto mb-8 overflow-hidden shadow-md">
-                {/* Lista de valores individuais - VISÍVEL */}
-                <div className="mb-6">
-                  <h5 className="text-sm font-semibold text-[#432818] mb-4 text-center">Valor individual dos materiais:</h5>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center py-2 border-b border-[#B89B7A]/10">
-                      <span className="text-xs sm:text-sm text-[#432818]">Guia de Estilo {category}</span>
-                      <span className="text-sm font-medium text-[#8F7A6A] line-through">R$ 67,00</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-[#B89B7A]/10">
-                      <span className="text-xs sm:text-sm text-[#432818]">E-book Transformação</span>
-                      <span className="text-sm font-medium text-[#8F7A6A] line-through">R$ 47,00</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-[#B89B7A]/10">
-                      <span className="text-xs sm:text-sm text-[#432818]">Guia de Visagismo</span>
-                      <span className="text-sm font-medium text-[#8F7A6A] line-through">R$ 37,00</span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-[#B89B7A]/10">
-                      <span className="text-xs sm:text-sm text-[#432818]">Bônus Exclusivos</span>
-                      <span className="text-sm font-medium text-[#8F7A6A] line-through">R$ 24,00</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center pt-3 mt-3 border-t-2 border-[#B89B7A]/30">
-                    <span className="text-sm font-bold text-[#432818]">TOTAL NORMAL:</span>
-                    <span className="text-lg font-bold text-[#aa6b5d] line-through">R$ 175,00</span>
-                  </div>
-                </div>
-
-                <div className="text-center border-t border-[#B89B7A]/20 pt-4 px-1 sm:px-2">
-                  <p className="text-[#432818] text-sm sm:text-base mb-3 font-medium">Sua oferta especial hoje:</p>
+            {/* VALOR SIMPLIFICADO */}
+            <div className="mb-12 relative z-10">
+              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 sm:p-8 border-2 border-[#B89B7A]/20 max-w-md mx-auto shadow-lg">
+                <div className="text-center">
+                  <p className="text-sm text-[#8F7A6A] mb-2">Valor normal: <span className="line-through font-medium">R$ 175,00</span></p>
+                  <p className="text-lg font-bold text-[#432818] mb-4">Oferta especial:</p>
                   <div className="mb-4">
-                    <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                    <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       R$ 39,90
                     </span>
-                    <p className="text-xs text-[#8F7A6A] mt-1">ou 5x de R$ 8,83 sem juros</p>
+                    <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
                   </div>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
-                    <div className="inline-flex items-center gap-2 bg-green-50 px-3 sm:px-4 py-2 rounded-full border border-green-200">
-                      <span className="text-green-600 text-xs sm:text-sm font-medium whitespace-nowrap">
-                        💰 Economia de R$ 135,10
-                      </span>
-                    </div>
-                    <div className="inline-flex items-center gap-2 bg-red-50 px-3 sm:px-4 py-2 rounded-full border border-red-200">
-                      <span className="text-red-600 text-xs sm:text-sm font-medium whitespace-nowrap">
-                        ⏰ Oferta por tempo limitado
-                      </span>
-                    </div>
+                  <div className="inline-flex items-center gap-2 bg-green-100 px-4 py-2 rounded-full border border-green-300">
+                    <span className="text-green-700 text-sm font-bold">
+                      💰 Economia de 77% (R$ 135,10)
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* CTA Final - ESPAÇAMENTO AUMENTADO */}
-            <div className="text-center mb-16">
+            {/* CTA PRINCIPAL - ÚNICO E PODEROSO */}
+            <div className="text-center mb-12 relative z-10">
               <Button 
                 onClick={handleCTAClick} 
-                className="text-white text-lg sm:text-xl leading-none py-4 sm:py-5 px-6 sm:px-8 md:px-12 rounded-lg sm:rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold w-full sm:w-auto min-h-[56px]"
+                className="text-white text-xl sm:text-2xl leading-none py-6 sm:py-8 px-8 sm:px-16 rounded-2xl shadow-2xl transition-all duration-300 cursor-pointer font-bold w-full sm:w-auto min-h-[72px] transform hover:scale-105"
                 style={{
-                  background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
-                  boxShadow: `0 8px 25px rgba(76, 175, 80, 0.4)`,
+                  background: `linear-gradient(135deg, ${tokens.colors.success}, ${tokens.colors.successDark}, #2E7D32)`,
+                  boxShadow: `0 12px 40px rgba(76, 175, 80, 0.5)`,
                 }}
                 type="button"
               >
-                <span className="flex items-center justify-center gap-2 sm:gap-3">
-                  <ShoppingCart className="w-5 sm:w-6 h-5 sm:h-6 flex-shrink-0" />
-                  <span className="whitespace-nowrap text-sm sm:text-base md:text-lg">Garantir Minha Transformação</span>
+                <span className="flex items-center justify-center gap-3 sm:gap-4">
+                  <ShoppingCart className="w-6 sm:w-8 h-6 sm:h-8 flex-shrink-0" />
+                  <span className="whitespace-nowrap">GARANTIR MINHA TRANSFORMAÇÃO</span>
                 </span>
               </Button>
 
-              {/* Elementos de confiança - MAIS ESPAÇADOS */}
-              <div className="flex items-center justify-center gap-8 text-sm text-[#8F7A6A] flex-wrap mt-6">
+              {/* Elementos de confiança */}
+              <div className="flex items-center justify-center gap-6 text-sm text-[#8F7A6A] flex-wrap mt-8">
                 <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
-                  <span className="whitespace-nowrap">Compra Segura</span>
+                  <Shield className="w-5 h-5 text-[#4CAF50]" />
+                  <span className="font-medium">100% Seguro</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
-                  <span className="whitespace-nowrap">Acesso Imediato</span>
+                  <Award className="w-5 h-5 text-[#4CAF50]" />
+                  <span className="font-medium">Acesso Imediato</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-[#4CAF50]" />
+                  <span className="font-medium">Garantia 7 dias</span>
                 </div>
               </div>
             </div>
           </AnimatedWrapper>
         </section>
 
-        {/* ESPAÇO ADICIONAL MAIOR antes do sticky CTA aparecer */}
-        <div className="mb-48"></div>
+        {/* ESPAÇO PARA STICKY CTA */}
+        <div className="mb-32"></div>
       </div>
     </div>
   );
