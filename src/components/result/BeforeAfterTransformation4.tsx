@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 import OptimizedImage from '@/components/ui/optimized-image';
-import { preloadImagesByUrls } from '@/utils/imageManager';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -116,13 +115,14 @@ const NavButton = React.memo<{
   </button>
 ));
 
-// SIMPLIFIED TRANSFORMATIONS DATA
-const transformations: TransformationItem[] = [
+// SIMPLIFIED TRANSFORMATIONS DATA - Reestruturado para antes/depois
+const transformations: {
+  before: TransformationItem;
+  after: TransformationItem;
+  name: string;
+  id: string;
+}[] = [
   {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
-    name: "Adriana",
-    id: "transformation-adriana",
-    width: 600,
     height: 750
   }, 
   {
