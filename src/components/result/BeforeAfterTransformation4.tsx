@@ -115,14 +115,13 @@ const NavButton = React.memo<{
   </button>
 ));
 
-// SIMPLIFIED TRANSFORMATIONS DATA - Reestruturado para antes/depois
-const transformations: {
-  before: TransformationItem;
-  after: TransformationItem;
-  name: string;
-  id: string;
-}[] = [
+// SIMPLIFIED TRANSFORMATIONS DATA - Corrigido para formato correto
+const transformations: TransformationItem[] = [
   {
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+    name: "Adriana",
+    id: "transformation-adriana",
+    width: 600,
     height: 750
   }, 
   {
@@ -273,7 +272,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   return (
     <div className="my-8 md:my-12 lg:my-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        {/* HEADER */}
+        {/* HEADER - Atualizado com as novas informações */}
         <motion.div 
           className="text-center mb-8 md:mb-10" 
           initial={{ opacity: 0, y: 20 }} 
@@ -288,11 +287,11 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             
             <h3 className="relative text-xl md:text-2xl lg:text-3xl font-playfair text-[#aa6b5d] mb-4">
               <span className="bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                Mulheres que Aprenderam e Praticam no dia a dia
+                Transformações Que Inspiram
               </span>
               <br className="hidden sm:block" />
               <span className="text-lg md:text-xl lg:text-2xl font-light">
-                Seu Estilo de Ser
+                Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
               </span>
             </h3>
           </div>
@@ -300,7 +299,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           <div className="w-16 md:w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
           
           <p className="text-sm md:text-base text-[#8F7A6A] mt-4 max-w-2xl mx-auto px-4 font-light">
-            Veja como outras mulheres transformaram sua imagem e conquistaram mais confiança
+            Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com Estilo, Imagem e Presença
           </p>
         </motion.div>
         
@@ -379,14 +378,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 )}
               </div>
               
-              {/* SEÇÃO DE CONTEÚDO - Melhor estruturada */}
+              {/* SEÇÃO DE CONTEÚDO - Atualizada com novos textos */}
               <div className="md:col-span-1 lg:col-span-3 order-2 md:order-2 p-4 md:p-6 bg-white flex flex-col">
                 <div className="h-full flex flex-col">
                   <h4 className="text-xl md:text-2xl font-medium text-[#432818] text-center md:text-left mb-4">
                     <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                      🎯 Seus Guias de Estilo Completos
+                      Transforme sua Imagem, Transforme sua Vida
                     </span>
                   </h4>
+                  
+                  <p className="text-[#8F7A6A] text-base mb-5 text-center md:text-left">
+                    Seu estilo é muito mais que roupas — é a expressão da sua personalidade e o reflexo dos seus sonhos e objetivos.
+                  </p>
                   
                   <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] rounded-lg p-4 md:p-6 mb-4 md:mb-6 border border-[#B89B7A]/20 shadow-sm flex-grow">
                     {/* PRODUTO PRINCIPAL */}
@@ -395,10 +398,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         ✨ <span className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">Guias de Estilo Personalizados</span>
                       </h5>
                       <ul className="space-y-2 md:space-y-3 text-[#aa6b5d]">
-                        <CheckItem>Guia do Estilo [SEU ESTILO] - Cores, formas e essência</CheckItem>
-                        <CheckItem>Manual de Combinações Inteligentes</CheckItem>
-                        <CheckItem>Dicionário de Peças Estratégicas</CheckItem>
-                        <CheckItem>Guia de Acessórios e Finalizações</CheckItem>
+                        <CheckItem>Looks que expressam sua verdadeira essência</CheckItem>
+                        <CheckItem>Cores e modelagens que realçam sua beleza natural</CheckItem>
+                        <CheckItem>Imagem profissional alinhada aos seus objetivos</CheckItem>
+                        <CheckItem>Guarda-roupa inteligente e sem desperdícios</CheckItem>
                       </ul>
                     </div>
 
@@ -431,11 +434,11 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         <span className="text-2xl md:text-3xl font-bold text-[#4CAF50]">R$ 39,90</span>
                         <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">77% OFF</span>
                       </div>
-                      <p className="text-xs text-[#aa6b5d] font-medium">⏰ Oferta válida por tempo limitado</p>
+                      <p className="text-xs text-[#aa6b5d] font-medium">⏰ Oferta por tempo limitado</p>
                     </div>
                   </div>
                   
-                  {/* CTA SECTION - Melhor adaptada para diferentes telas */}
+                  {/* CTA SECTION - Atualizada com novo texto */}
                   <div className="flex flex-col items-center space-y-3">
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full">
                       <Button
@@ -453,7 +456,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                           <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1, rotate: isButtonHovered ? 10 : 0 }}>
                             <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
                           </motion.div>
-                          🚀 GARANTIR MINHA TRANSFORMAÇÃO AGORA
+                          Quero Meu Guia de Estilo
                         </span>
                       </Button>
                     </motion.div>
