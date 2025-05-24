@@ -1004,8 +1004,10 @@ const ResultPage: React.FC = () => {
     </div>
   </div>
   {/* fim novo conteúdo */}
-</div>   // fecha <div className="border-t-2 ...">
-          </AnimatedWrapper>  // fecha AnimatedWrapper da seção CTA
+                  </div>   {/* fecha <div className="border-t-2 ..."> */}
+                </div>     {/* fecha div relative z-10 do RESUMO DO VALOR */}
+              </div>       {/* fecha div mb-12 relative z-10 */}
+            </AnimatedWrapper>  {/* fecha AnimatedWrapper da seção CTA */}
         </section>
 
         {/* BOTTOM SPACING */}
