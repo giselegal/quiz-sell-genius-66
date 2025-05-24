@@ -530,7 +530,7 @@ const ResultPage: React.FC = () => {
             variant="simple"
             subtitle="Veja como mulheres descobriram sua melhor versão seguindo as mesmas estratégias que você vai receber"
           >
-            Antes e Depois na Prática
+            Resultados que Falam por Si
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -613,7 +613,7 @@ const ResultPage: React.FC = () => {
             variant="simple"
             subtitle={`Teste seu novo estilo ${category} por 7 dias. Se não amar, devolvemos seu dinheiro`}
           >
-            Garantia Incondicional
+          
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -633,7 +633,7 @@ const ResultPage: React.FC = () => {
             variant="simple"
             subtitle="Especialista que já guiou mais de 10.000 mulheres na descoberta do seu estilo autêntico"
           >
-            Quem Criou Seu Guia
+            Conheça Sua Mentora
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -655,7 +655,7 @@ const ResultPage: React.FC = () => {
             <div className="relative z-10">
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6 md:mb-8"></div>
               <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#432818] mb-4">
-                É Hora de Decidir
+                É Hora de Agir
               </h3>
               <p className="text-lg font-medium max-w-md mx-auto" style={{ color: tokens.colors.textMuted }}>
                 Seu novo estilo está a um clique de distância
@@ -725,8 +725,8 @@ const ResultPage: React.FC = () => {
                   },
                   {
                     src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png',
-                    title: 'Manual de Visagismo Pessoal',
-                    subtitle: 'Descubra os cortes de cabelo, cores e acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo aplicado.',
+                    title: 'Manual de Visagismo',
+                    subtitle: 'Descubra os cortes de cabelo, acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo aplicado.',
                     badge: 'BÔNUS PREMIUM',
                     priority: false
                   }
@@ -780,7 +780,7 @@ const ResultPage: React.FC = () => {
                     <div className="mt-4 pt-4 border-t border-[#B89B7A]/15">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {index === 0 ? '📖 Produto Principal' : '🎁 Incluído Grátis'}
+                          {index === 0 ? ' Produto Principal' : ' Incluído Grátis'}
                         </span>
                         <div className="flex items-center gap-2">
                           <div className={`w-2.5 h-2.5 rounded-full ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#4CAF50] to-[#45a049]'}`}></div>
@@ -804,7 +804,7 @@ const ResultPage: React.FC = () => {
                 
                 <div className="relative z-10">
                   <h4 className="font-bold text-[#432818] mb-6 text-center text-lg lg:text-xl">
-                    🎯 Seu Kit Completo de Transformação
+                    Seu Kit Completo de Transformação
                   </h4>
                   
                   <div className="space-y-4">
@@ -814,22 +814,22 @@ const ResultPage: React.FC = () => {
                       
                       {/* BADGE DE DESTAQUE */}
                       <div className="absolute -top-2 -left-2 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
-                        ⭐ PRINCIPAL
+                        Guia Completo
                       </div>
                       
                       <div className="flex items-start gap-4 flex-1 pt-2">
                         <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-1.5"></div>
                         <div className="leading-relaxed">
                           <span className="block text-[#432818] font-bold mb-2 text-base lg:text-lg">
-                            Manual Personalizado do Estilo {category}
+                            Manual Personalizado do seu Estilo Predominate {category}
                           </span>
                           {secondaryStyles && secondaryStyles.length > 0 && (
                             <span className="block text-sm mb-3 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                              ✨ Inclui elementos dos estilos: <strong className="text-[#aa6b5d]">{secondaryStyles.slice(0, 2).map(style => style.category).join(' e ')}</strong>
+                              e os guias dos seus estilos complementares: <strong className="text-[#aa6b5d]">{secondaryStyles.slice(0, 2).map(style => style.category).join(' e ')}</strong>
                             </span>
                           )}
                           <span className="inline-block text-xs bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-3 py-1.5 rounded-full font-medium border border-[#B89B7A]/20">
-                            📚 Guia Personalizado
+                            Guia Personalizado
                           </span>
                         </div>
                       </div>
@@ -848,7 +848,7 @@ const ResultPage: React.FC = () => {
                         <div className="leading-relaxed">
                           <span className="block text-[#432818] font-semibold mb-1">Guia das Peças Estratégicas</span>
                           <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Lista das 15 peças essenciais para maximizar seu guarda-roupa
+                  
                           </span>
                         </div>
                       </div>
@@ -868,7 +868,7 @@ const ResultPage: React.FC = () => {
                         <div className="leading-relaxed">
                           <span className="block text-[#432818] font-semibold mb-1">Manual de Visagismo Personalizado</span>
                           <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Cortes, cores e acessórios ideais para seu formato de rosto
+                            Cortes e acessórios ideais para seu formato de rosto
                           </span>
                         </div>
                       </div>
@@ -888,14 +888,14 @@ const ResultPage: React.FC = () => {
                     <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-4 mb-6 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-orange-500/5"></div>
                       <p className="text-red-700 text-base font-bold text-center relative z-10 flex items-center justify-center gap-2">
-                        🔥 OFERTA EXCLUSIVA - QUIZ COMPLETO
+                        OFERTA EXCLUSIVA - QUIZ COMPLETO
                         <span className="animate-pulse">⚡</span>
                       </p>
                     </div>
                     
                     <div className="text-center space-y-3">
                       <p className="text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                        <span className="font-semibold text-[#432818]">Valor individual dos produtos:</span> 
+                        <span className="font-semibold text-[#432818]">Tudo isso deveria custar:</span> 
                         <span className="line-through font-bold ml-2 text-lg text-gray-500">R$ 175,00</span>
                       </p>
                       
@@ -916,7 +916,7 @@ const ResultPage: React.FC = () => {
                       
                       <div className="inline-flex items-center gap-3 bg-green-50 px-4 py-3 rounded-xl border-2 border-green-200 mb-4">
                         <span className="text-green-700 font-bold text-base">
-                          💰 Você economiza R$ 135,10 (77% OFF)
+                          Você economiza R$ 135,10 (77% OFF)
                         </span>
                       </div>
                       
