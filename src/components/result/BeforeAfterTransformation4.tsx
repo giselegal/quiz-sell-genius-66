@@ -340,12 +340,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               <div className="p-6 bg-white">
                 <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
                   <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                    Transforme sua Imagem, Transforme sua Vida
+                    Transforme sua Imagem
                   </span>
                 </h4>
                 
                 <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
-                  Seu estilo é muito mais que roupas — é a expressão da sua personalidade e o reflexo dos seus sonhos e objetivos.
+                  Seu estilo é muito mais que roupas — é a expressão da sua essência e uma aliada para atingir seus objetivos.
                 </p>
                 
                 {/* BENEFITS LIST */}

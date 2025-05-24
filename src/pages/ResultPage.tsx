@@ -798,7 +798,7 @@ const ResultPage: React.FC = () => {
                 
                 <div className="relative z-10">
                   <h4 className="font-bold text-[#432818] mb-8 text-center text-xl lg:text-2xl">
-                    Seu Kit Completo de Transformação
+                    TUDO O QUE VOCÊ VAI RECEBER HOJE:
                   </h4>
                   
                   {/* PRODUTOS EM CARDS SEPARADOS - DESIGN LIMPO */}
@@ -822,17 +822,20 @@ const ResultPage: React.FC = () => {
                           {/* Informações do produto */}
                           <div className="flex-1 max-w-none">
                             <h5 className="text-xl lg:text-2xl font-bold text-[#432818] mb-4">
-                              Manual Personalizado do Estilo {category}
+                              1. Guias Completos de Estilo Personalizado
                             </h5>
                             
-                            {secondaryStyles && secondaryStyles.length > 0 && (
-                              <p className="text-base lg:text-lg mb-4 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                                <strong>Inclui também:</strong> Guias dos seus estilos complementares 
-                                <span className="text-[#aa6b5d] font-semibold">
-                                  {' '}{secondaryStyles.slice(0, 2).map(style => style.category).join(' e ')}
-                                </span>
+                            <div className="space-y-3 mb-4">
+                              <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                                <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> {category}
                               </p>
-                            )}
+                              <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                                <strong>• + Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.map(s => s.category).join(' e ')}
+                              </p>
+                              <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                                Transforme sua imagem com looks estratégicos que comunicam sua essência e valorizam sua personalidade única.
+                              </p>
+                            </div>
                             
                             <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-6 py-3 rounded-lg font-medium border border-[#B89B7A]/20">
                               <div className="flex items-center gap-2">
@@ -866,10 +869,10 @@ const ResultPage: React.FC = () => {
                           </div>
                           <div className="flex-1">
                             <h6 className="font-bold text-[#432818] text-xl lg:text-2xl mb-3">
-                              Guia das Peças Estratégicas
+                              BÔNUS 1: Guia das Peças Estratégicas
                             </h6>
                             <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                              Lista das 15 peças essenciais para maximizar seu guarda-roupa e criar looks versáteis para qualquer ocasião
+                              Descubra as peças essenciais que multiplicam suas possibilidades de looks, economizam tempo e dinheiro.
                             </p>
                           </div>
                         </div>
@@ -878,7 +881,7 @@ const ResultPage: React.FC = () => {
                         <div className="text-center lg:text-right lg:min-w-[140px]">
                           <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-6 py-4 rounded-lg">
                             <span className="text-[#aa6b5d] font-bold text-lg block">BÔNUS GRÁTIS</span>
-                            <span className="text-base text-gray-500 line-through">R$ 59,00</span>
+                            <span className="text-base text-gray-500 line-through">Valor: R$ 59,00</span>
                           </div>
                         </div>
                       </div>
@@ -897,10 +900,10 @@ const ResultPage: React.FC = () => {
                           </div>
                           <div className="flex-1">
                             <h6 className="font-bold text-[#432818] text-xl lg:text-2xl mb-3">
-                              Manual de Visagismo Personalizado
+                              BÔNUS 2: Manual de Visagismo Facial
                             </h6>
                             <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                              Cortes de cabelo, maquiagem e acessórios ideais para seu formato de rosto, realçando sua beleza natural
+                              Cortes de cabelo e acessórios ideais para seu formato de rosto, realçando sua beleza natural.
                             </p>
                           </div>
                         </div>
@@ -909,7 +912,7 @@ const ResultPage: React.FC = () => {
                         <div className="text-center lg:text-right lg:min-w-[140px]">
                           <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-6 py-4 rounded-lg">
                             <span className="text-[#aa6b5d] font-bold text-lg block">BÔNUS GRÁTIS</span>
-                            <span className="text-base text-gray-500 line-through">R$ 37,00</span>
+                            <span className="text-base text-gray-500 line-through">Valor: R$ 37,00</span>
                           </div>
                         </div>
                       </div>
@@ -918,93 +921,61 @@ const ResultPage: React.FC = () => {
 
                   {/* RESUMO FINAL - DESIGN LIMPO */}
                   <div className="border-t-2 border-[#B89B7A]/20 pt-8">
+                    <div className="text-center space-y-6">
+                      <div className="max-w-sm mx-auto space-y-4 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-6 rounded-xl border border-[#B89B7A]/20"
+                           style={{ boxShadow: tokens.shadows.sm }}>
+                        <p className="text-lg"><strong>Valor total:</strong> R$ 175,00</p>
+                        <p className="text-xl font-bold text-[#432818]">HOJE POR APENAS:</p>
+                        <p className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                          5x R$ 8,83 no cartão
+                        </p>
+                        <p className="text-lg">ou</p>
+                        <p className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                          R$ 39,90 à vista
+                        </p>
+                        <p className="text-lg text-[#2d7d32] font-semibold">
+                          Economia de R$ 135,10 (77% OFF)
+                        </p>
+                        <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-sm">
+                          <Clock className="w-4 h-4" />
+                          Esta oferta expira quando você sair desta página
+                        </p>
+                      </div>
+                    </div>
 
-  {/* inicia novo conteúdo */}
-  <div className="text-center space-y-8">
-    <h3 className="text-2xl font-bold text-[#432818] mb-4">
-      TUDO O QUE VOCÊ VAI RECEBER HOJE:
-    </h3>
+                    {/* CTA BUTTON */}
+                    <div className="text-center mb-8 relative z-10 flex justify-center mt-8">
+                      <button
+                        onClick={handleCTAClick}
+                        className="text-white w-full max-w-md font-bold py-4 px-8 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+                        style={{
+                          background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
+                          boxShadow: tokens.shadows.cta
+                        }}
+                        type="button"
+                      >
+                        GARANTIR MINHA TRANSFORMAÇÃO AGORA
+                      </button>
+                    </div>
 
-    <div className="space-y-6 text-left max-w-2xl mx-auto">
-      <p className="font-semibold">1. Guias Completos de Estilo Personalizado</p>
-      <ul className="list-disc list-inside space-y-2">
-        <li>
-          <strong>Manual Exclusivo do Seu Estilo Predominante:</strong> {category}
-        </li>
-        <li>
-          <strong>+ Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.map(s => s.category).join(' e ')}
-        </li>
-        <li>
-          Transforme sua imagem com looks estratégicos que comunicam sua essência 
-          e valorizam sua personalidade única.
-        </li>
-      </ul>
-      <p><strong>Valor individual:</strong> R$ 79,00</p>
-    </div>
-
-    <div className="space-y-6 text-left max-w-2xl mx-auto">
-      <p className="font-semibold">BÔNUS 1: Guia das Peças Estratégicas</p>
-      <p>
-        Descubra as peças essenciais que multiplicam suas possibilidades de looks, 
-        economizam tempo e dinheiro.
-      </p>
-      <p><strong>Valor individual:</strong> R$ 59,00</p>
-    </div>
-
-    <div className="space-y-6 text-left max-w-2xl mx-auto">
-      <p className="font-semibold">BÔNUS 2: Manual de Visagismo Facial</p>
-      <p>
-        Cortes de cabelo e acessórios ideais para seu formato de rosto, 
-        realçando sua beleza natural.
-      </p>
-      <p><strong>Valor individual:</strong> R$ 37,00</p>
-    </div>
-
-    <div className="max-w-sm mx-auto space-y-4">
-      <p><strong>Valor total:</strong> R$ 175,00</p>
-      <p className="text-xl font-bold">HOJE POR APENAS:</p>
-      <p className="text-2xl font-bold">5x R$ 8,83 no cartão</p>
-      <p>ou</p>
-      <p className="text-2xl font-bold">R$ 39,90 à vista</p>
-      <p className="text-lg text-[#2d7d32] font-semibold">
-        Economia de R$ 135,10 (77% OFF)
-      </p>
-      <p className="flex items-center justify-center gap-2 text-[#8F7A6A]">
-        <Clock className="w-6 h-6" />
-        ⏱️ Esta oferta expira quando você sair desta página
-      </p>
-    </div>
-  </div>
-
-  {/* CTA BUTTON */}
-  <div className="text-center mb-10 relative z-10 flex justify-center mt-8">
-    <button
-      onClick={handleCTAClick}
-      className="text-white w-full max-w-xs sm:max-w-sm font-bold py-4 px-6 rounded-md shadow-md transition-all duration-300"
-      style={{
-        background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
-        boxShadow: tokens.shadows.cta
-      }}
-      type="button"
-    >
-      GARANTIR MINHA TRANSFORMAÇÃO AGORA
-    </button>
-  </div>
-
-  {/* TRUST ELEMENTS */}
-  <div className="flex items-center justify-center gap-8 text-sm flex-wrap mt-8 px-4">
-    <div className="flex items-center gap-2">
-      ✓ Acesso Imediato
-    </div>
-    <div className="flex items-center gap-2">
-      <Shield className="w-4 h-4 text-[#432818]" /> Pagamento 100% seguro
-    </div>
-    <div className="flex items-center gap-2">
-      <Star className="w-4 h-4 text-[#432818]" /> Site confiável
-    </div>
-  </div>
-  {/* fim novo conteúdo */}
-                  </div>   {/* fecha <div className="border-t-2 ..."> */}
+                    {/* TRUST ELEMENTS */}
+                    <div className="flex items-center justify-center gap-8 text-sm flex-wrap mt-6 px-4">
+                      <div className="flex items-center gap-2 text-[#432818]">
+                        <div className="w-4 h-4 bg-[#4CAF50] rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">✓</span>
+                        </div>
+                        Acesso Imediato
+                      </div>
+                      <div className="flex items-center gap-2 text-[#432818]">
+                        <Shield className="w-4 h-4 text-[#432818]" /> 
+                        Pagamento 100% seguro
+                      </div>
+                      <div className="flex items-center gap-2 text-[#432818]">
+                        <Star className="w-4 h-4 text-[#432818]" /> 
+                        Site confiável
+                      </div>
+                    </div>
+                  </div>
                 </div>     {/* fecha div relative z-10 do RESUMO DO VALOR */}
               </div>       {/* fecha div bg-gradient-to-br (RESUMO DO VALOR) */}
             </div>         {/* fecha div mb-12 relative z-10 (PRODUCTS PREVIEW) */}
