@@ -777,46 +777,51 @@ const ResultPage: React.FC = () => {
               {/* RESUMO DO VALOR MELHORADO */}
               <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 border border-[#B89B7A]/20 max-w-2xl mx-auto">
                 <h4 className="font-bold text-[#432818] mb-3">Tudo que você recebe hoje:</h4>
-                <ul className="text-sm text-[#8F7A6A] space-y-2">
-                  <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                    <div className="flex-1">
+                <ul className="text-sm text-[#8F7A6A] space-y-3">
+                  <li className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
                       <span>Manual completo do seu <strong>Estilo {category}</strong> (Predominante) {
                         secondaryStyles && secondaryStyles.length > 0 && (
                           <>e Estilos <strong>{secondaryStyles.map(style => style.category).join(', ')}</strong> (Complementares)</>
                         )
                       }</span>
-                      <div className="text-xs text-[#8F7A6A] mt-1">
-                        <span className="line-through">R$ 85,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
-                      </div>
+                    </div>
+                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
+                      <span className="line-through">R$ 120,00</span> → <span className="text-[#aa6b5d] font-medium">R$ 39,90</span>
                     </div>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                    <div className="flex-1">
+                  <li className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
                       <span>Guia das Peças Estratégicas que multiplicam seus looks</span>
-                      <div className="text-xs text-[#8F7A6A] mt-1">
-                        <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
-                      </div>
+                    </div>
+                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
+                      <span className="line-through">R$ 67,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
                     </div>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                    <div className="flex-1">
+                  <li className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
                       <span>Manual de visagismo para valorizar sua beleza única</span>
-                      <div className="text-xs text-[#8F7A6A] mt-1">
-                        <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
-                      </div>
+                    </div>
+                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
+                      <span className="line-through">R$ 87,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
                     </div>
                   </li>
                 </ul>
                 <div className="border-t border-[#B89B7A]/20 mt-3 pt-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-[#432818]">Valor Total:</span>
+                    <span className="text-sm font-medium text-[#432818]">Valor se comprar separado:</span>
                     <div className="text-right">
-                      <span className="text-sm text-[#8F7A6A] line-through">R$ 175,00</span>
-                      <div className="text-lg font-bold text-[#aa6b5d]">R$ 39,90</div>
+                      <span className="text-sm text-[#8F7A6A] line-through">R$ 274,00</span>
+                      <div className="text-lg font-bold text-[#aa6b5d]">Hoje R$ 39,90</div>
                     </div>
+                  </div>
+                  <div className="text-center mt-2">
+                    <span className="text-xs text-[#aa6b5d] font-bold bg-[#fff7f3] px-2 py-1 rounded-full">
+                      💰 Economia de R$ 234,10 (85% OFF)
+                    </span>
                   </div>
                 </div>
               </div>
@@ -833,8 +838,8 @@ const ResultPage: React.FC = () => {
                     </p>
                   </div>
                   
-                  <p className="text-sm text-[#8F7A6A] mb-2">Investimento normal: <span className="line-through font-medium">R$ 175,00</span></p>
-                  <p className="text-lg font-bold text-[#432818] mb-4">Seu preço especial:</p>
+                  <p className="text-sm text-[#8F7A6A] mb-2">Valor se comprar separado: <span className="line-through font-medium">R$ 274,00</span></p>
+                  <p className="text-lg font-bold text-[#432818] mb-4">Seu preço especial hoje:</p>
                   <div className="mb-4">
                     <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       R$ 39,90
@@ -845,7 +850,7 @@ const ResultPage: React.FC = () => {
                   <div className="inline-flex items-center gap-2 bg-[#fff7f3] px-3 py-2 rounded-full border border-[#B89B7A]/20"
                        style={{ boxShadow: tokens.shadows.sm }}>
                     <span className="text-[#aa6b5d] text-xs font-bold">
-                      💰 Economia de R$ 135,10 (77% OFF)
+                      💰 Economia de R$ 234,10 (85% OFF)
                     </span>
                   </div>
                   
