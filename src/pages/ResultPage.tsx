@@ -778,48 +778,34 @@ const ResultPage: React.FC = () => {
               <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 border border-[#B89B7A]/20 max-w-2xl mx-auto">
                 <h4 className="font-bold text-[#432818] mb-3">Tudo que você recebe hoje:</h4>
                 <ul className="text-sm text-[#8F7A6A] space-y-3">
-                  <li className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                      <span>Manual completo do seu <strong>Estilo {category}</strong> (Predominante) {
+                  <li>
+                    <div className="flex items-start gap-2 mb-1">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                      <span className="flex-1">Manual completo do seu <strong>Estilo {category}</strong> (Predominante) {
                         secondaryStyles && secondaryStyles.length > 0 && (
                           <>e Estilos <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(', ')}</strong> (Complementares)</>
                         )
                       }</span>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
+                    <div className="text-xs text-[#8F7A6A] ml-4 text-right">
                       <span className="line-through">R$ 85,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
                     </div>
                   </li>
-                  <li className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                      <span>Guia das Peças Estratégicas que multiplicam seus looks</span>
+                  <li>
+                    <div className="flex items-start gap-2 mb-1">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                      <span className="flex-1">Guia das Peças Estratégicas que multiplicam seus looks</span>
                     </div>
-                    <div className="text-xs text-[#8F# Verificar mudanças no código
-git status
-
-# Adicionar arquivos alterados
-git add .
-
-# Fazer commit das alterações
-git commit -m "páginas"
-
-# Enviar alterações para o GitHub
-git push origin main
-
-npm run build
-
-7A6A] ml-4 flex-shrink-0">
+                    <div className="text-xs text-[#8F7A6A] ml-4 text-right">
                       <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                     </div>
                   </li>
-                  <li className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                      <span>Manual de visagismo para valorizar sua beleza única</span>
+                  <li>
+                    <div className="flex items-start gap-2 mb-1">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                      <span className="flex-1">Manual de visagismo para valorizar sua beleza única</span>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
+                    <div className="text-xs text-[#8F7A6A] ml-4 text-right">
                       <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                     </div>
                   </li>
@@ -867,9 +853,17 @@ npm run build
                     </span>
                   </div>
                   
-                  <p className="text-xs text-[#8F7A6A] mt-3">
-                    ⏰ Esta oferta expira quando você sair desta página
-                  </p>
+                  <div className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-4 py-2 rounded-full border border-[#B89B7A]/20"
+                       style={{ boxShadow: tokens.shadows.sm }}>
+                    <Hourglass className="w-4 h-4 text-[#aa6b5d] animate-spin" 
+                               style={{ 
+                                 animation: 'spin 3s linear infinite',
+                                 transformOrigin: 'center'
+                               }} />
+                    <span className="text-xs text-[#432818] font-medium">
+                      Esta oferta expira quando você sair desta página
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
