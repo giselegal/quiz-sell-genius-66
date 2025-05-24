@@ -83,11 +83,11 @@ const SectionTitle: React.FC<{
   size?: 'lg' | 'xl';
   className?: string;
 }> = ({ children, subtitle, size = 'xl', className = '' }) => (
-  <motion.div 
+  <AnimatedWrapper 
     className={`text-center mb-12 ${className}`}
-    initial={{ opacity: 0, y: 20 }} 
-    animate={{ opacity: 1, y: 0 }} 
-    transition={{ duration: 0.6 }}
+    animation="fade"
+    show={true}
+    duration={600}
   >
     {/* Decoração superior */}
     <div className="inline-flex items-center gap-3 mb-4">
@@ -112,7 +112,7 @@ const SectionTitle: React.FC<{
     
     {/* Linha decorativa inferior */}
     <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
-  </motion.div>
+  </AnimatedWrapper>
 );
 
 const ResultPage: React.FC = () => {
@@ -382,11 +382,12 @@ const ResultPage: React.FC = () => {
               <div className="text-center mb-8">
                 {/* Nome do usuário com decoração elegante */}
                 {user?.userName && (
-                  <motion.div 
+                  <AnimatedWrapper 
                     className="mb-6"
-                    initial={{ opacity: 0, scale: 0.95 }} 
-                    animate={{ opacity: 1, scale: 1 }} 
-                    transition={{ duration: 0.5, delay: 0.2 }}
+                    animation="scale"
+                    show={true}
+                    duration={500}
+                    delay={200}
                   >
                     <div className="inline-flex items-center gap-2 mb-3">
                       <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#B89B7A]"></div>
@@ -397,7 +398,7 @@ const ResultPage: React.FC = () => {
                       Olá, {user.userName}!
                     </span>
                     <div className="w-12 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mt-2"></div>
-                  </motion.div>
+                  </AnimatedWrapper>
                 )}
                 
                 {/* Título principal do estilo */}
@@ -604,11 +605,11 @@ const ResultPage: React.FC = () => {
           <div className="absolute inset-0 bg-pattern-light opacity-5 pointer-events-none"></div>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
             {/* Título CTA com decoração elegante */}
-            <motion.div 
+            <AnimatedWrapper 
               className="text-center mb-8"
-              initial={{ opacity: 0, y: 20 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              transition={{ duration: 0.6 }}
+              animation="fade"
+              show={true}
+              duration={600}
             >
               <div className="inline-flex items-center gap-3 mb-4">
                 <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
@@ -625,7 +626,7 @@ const ResultPage: React.FC = () => {
               </p>
               
               <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
-            </motion.div>
+            </AnimatedWrapper>
             
             {/* Ancoragem de valor melhorada */}
             <div className="mb-6 relative z-10">
