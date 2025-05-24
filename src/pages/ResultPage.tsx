@@ -43,7 +43,7 @@ const tokens = {
     background: '#fffaf7',
     backgroundAlt: '#f9f4ef',
     text: '#432818',
-    textLight: '#706156', // Ajuste no contraste do texto
+    textLight: '#8F7A6A',
     success: '#4CAF50',
     successDark: '#45a049',
     border: 'rgba(184, 155, 122, 0.2)',
@@ -439,7 +439,7 @@ const ResultPage: React.FC = () => {
                       {/* STYLE DESCRIPTION - MELHORADA */}
                       <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/10"
                            style={{ boxShadow: tokens.shadows.sm }}>
-                        <p className="text-[#504136] text-sm lg:text-base leading-relaxed">
+                        <p className="text-[#432818] text-sm lg:text-base leading-relaxed">
                           <strong>Seu estilo {category}</strong> revela uma mulher que {
                             category === 'Natural' ? 'valoriza autenticidade e conforto, sem abrir mão da elegância natural' :
                             category === 'Clássico' ? 'aprecia sofisticação atemporal e peças que nunca saem de moda' :
@@ -473,9 +473,7 @@ const ResultPage: React.FC = () => {
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 lg:order-2">
                   <div className="w-full max-w-xs lg:max-w-sm mx-auto relative"> 
                     <ProgressiveImage 
-                      src={`${image}?q=85&f=auto&w=400`}
-                      srcSet={`${image}?q=85&f=auto&w=400 400w, ${image}?q=85&f=auto&w=800 800w`}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33.3vw"
+                      src={`${image}?q=85&f=auto&w=400`} 
                       alt={`Estilo ${category}`} 
                       width={400} 
                       height={500} 
@@ -483,9 +481,6 @@ const ResultPage: React.FC = () => {
                       style={{ boxShadow: tokens.shadows.md }}
                       loading="eager" 
                       fetchPriority="high" 
-                      // Adicionando role e aria-label para acessibilidade
-                      role="img"
-                      aria-label={`Imagem do estilo ${category}`}
                       onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
                     />
                     
@@ -511,10 +506,7 @@ const ResultPage: React.FC = () => {
                   <ProgressiveImage 
                     src={`${guideImage}?q=85&f=auto&w=800`} 
                     alt={`Guia de Estilo ${category}`} 
-                    loading="lazy"
-                    // Adicionando role e aria-label para acessibilidade
-                    role="img"
-                    aria-label={`Guia de Estilo ${category}`}
+                    loading="lazy" 
                     className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-102" 
                     style={{ boxShadow: tokens.shadows.lg }}
                     onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
@@ -560,7 +552,7 @@ const ResultPage: React.FC = () => {
             variant="secondary"
             subtitle="Sua jornada de autoconhecimento através do Estilo e Imagem começa agora"
           >
-            O Poder de Vestir-se de Você
+            O Poder de Se Vestir Com Propósito
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
