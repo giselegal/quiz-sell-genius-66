@@ -6,7 +6,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight, Shield, Award, Hourglass } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight, Shield, Award, Hourglass, Star, Gift, Target, Zap, TrendingUp } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -811,7 +811,10 @@ const ResultPage: React.FC = () => {
                       
                       {/* Badge destacado */}
                       <div className="absolute -top-3 left-6 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-md">
-                        ⭐ Produto Principal
+                        <div className="flex items-center gap-2">
+                          <Star className="w-4 h-4" />
+                          <span>Produto Principal</span>
+                        </div>
                       </div>
                       
                       <div className="pt-2">
@@ -833,7 +836,10 @@ const ResultPage: React.FC = () => {
                             )}
                             
                             <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-6 py-3 rounded-lg font-medium border border-[#B89B7A]/20">
-                              📋 Análise 100% Personalizada
+                              <div className="flex items-center gap-2">
+                                <Zap className="w-4 h-4 text-[#aa6b5d]" />
+                                <span>Análise 100% Personalizada</span>
+                              </div>
                             </div>
                           </div>
                           
@@ -916,8 +922,9 @@ const ResultPage: React.FC = () => {
                     
                     {/* Badge de oferta */}
                     <div className="text-center mb-8">
-                      <div className="inline-flex items-center gap-2 bg-[#432818] text-white px-8 py-4 rounded-full text-lg font-semibold">
-                        <span>🎯 OFERTA EXCLUSIVA QUIZ COMPLETO</span>
+                      <div className="inline-flex items-center gap-3 bg-[#432818] text-white px-8 py-4 rounded-full text-lg font-semibold">
+                        <Target className="w-5 h-5" />
+                        <span>OFERTA EXCLUSIVA QUIZ COMPLETO</span>
                       </div>
                     </div>
                     
@@ -973,9 +980,12 @@ const ResultPage: React.FC = () => {
                         
                         {/* Economia destacada */}
                         <div className="bg-[#f8fdf8] border-2 border-[#4CAF50]/30 px-8 py-6 rounded-xl">
-                          <span className="text-[#2d7d32] font-bold text-xl">
-                            💰 Economia de R$ 135,10 (77% OFF)
-                          </span>
+                          <div className="flex items-center justify-center gap-3">
+                            <TrendingUp className="w-6 h-6 text-[#2d7d32]" />
+                            <span className="text-[#2d7d32] font-bold text-xl">
+                              Economia de R$ 135,10 (77% OFF)
+                            </span>
+                          </div>
                         </div>
                       </div>
                       
@@ -983,7 +993,7 @@ const ResultPage: React.FC = () => {
                       <div className="bg-[#fff7f3] border border-[#B89B7A]/20 px-8 py-6 rounded-lg max-w-2xl mx-auto">
                         <p className="text-lg font-medium text-[#8F7A6A] flex items-center justify-center gap-3">
                           <Clock className="w-6 h-6" />
-                          <span>⏰ Esta oferta expira quando você sair desta página</span>
+                          <span>Esta oferta expira quando você sair desta página</span>
                         </p>
                       </div>
                     </div>
