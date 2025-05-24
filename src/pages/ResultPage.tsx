@@ -76,28 +76,37 @@ const tokens = {
   }
 };
 
-// Componente de título padronizado
+// Componente de título padronizado - SIMPLIFICADO
 const SectionTitle: React.FC<{
   children: React.ReactNode;
   subtitle?: string;
   size?: 'lg' | 'xl';
   className?: string;
-}> = ({ children, subtitle, size = 'xl', className = '' }) => (
+  variant?: 'primary' | 'secondary' | 'simple';
+}> = ({ children, subtitle, size = 'xl', className = '', variant = 'simple' }) => (
   <AnimatedWrapper 
     className={`text-center mb-12 ${className}`}
     animation="fade"
     show={true}
     duration={600}
   >
-    {/* Decoração superior */}
-    <div className="inline-flex items-center gap-3 mb-4">
-      <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-      <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
-      <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-    </div>
+    {/* Decoração superior - APENAS para títulos principais */}
+    {variant === 'primary' && (
+      <div className="inline-flex items-center gap-3 mb-4">
+        <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
+        <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+      </div>
+    )}
     
-    {/* Título principal */}
-    <h2 className={`font-playfair font-bold text-[#432818] mb-4 leading-tight bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent ${
+    {/* Título principal - estilos diferenciados */}
+    <h2 className={`font-playfair font-bold leading-tight ${
+      variant === 'primary' 
+        ? 'text-[#432818] mb-4 bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent'
+        : variant === 'secondary'
+        ? 'text-[#432818] mb-4'
+        : 'text-[#432818] mb-4'
+    } ${
       size === 'xl' ? 'text-3xl md:text-4xl lg:text-5xl' : 'text-2xl md:text-3xl lg:text-4xl'
     }`}>
       {children}
@@ -110,8 +119,10 @@ const SectionTitle: React.FC<{
       </p>
     )}
     
-    {/* Linha decorativa inferior */}
-    <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
+    {/* Linha decorativa inferior - APENAS para título principal */}
+    {variant === 'primary' && (
+      <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
+    )}
   </AnimatedWrapper>
 );
 
@@ -483,7 +494,7 @@ const ResultPage: React.FC = () => {
 
         {/* Before/After Transformation Section */}
         <section id="transformations" className="scroll-mt-20 mb-16">
-          <SectionTitle>
+          <SectionTitle variant="primary">
             Transformações Reais
           </SectionTitle>
           <Suspense fallback={
@@ -501,6 +512,7 @@ const ResultPage: React.FC = () => {
         {/* Motivation Section */}
         <section id="motivation" className="scroll-mt-20 mb-16">
           <SectionTitle 
+            variant="secondary"
             subtitle="Descubra o poder de se vestir com propósito e autenticidade"
           >
             A Jornada da Sua Transformação
@@ -520,6 +532,7 @@ const ResultPage: React.FC = () => {
         {/* Bonus Section */}
         <section id="bonuses" className="scroll-mt-20 mb-12">
           <SectionTitle 
+            variant="simple"
             subtitle="Materiais exclusivos para acelerar sua transformação de imagem"
           >
             Bônus Especiais Inclusos
@@ -539,6 +552,7 @@ const ResultPage: React.FC = () => {
         {/* Testimonials Section */}
         <section id="testimonials" className="scroll-mt-20 mb-12">
           <SectionTitle 
+            variant="simple"
             subtitle="Histórias reais de mulheres que transformaram sua relação com a moda"
           >
             O Que Dizem Nossas Clientes
@@ -558,6 +572,7 @@ const ResultPage: React.FC = () => {
         {/* Guarantee Section */}
         <section id="guarantee" className="scroll-mt-20 mb-12">
           <SectionTitle 
+            variant="simple"
             subtitle="Sua satisfação é nossa prioridade - compre sem riscos"
           >
             Garantia de Satisfação
@@ -577,6 +592,7 @@ const ResultPage: React.FC = () => {
         {/* Mentor Section */}
         <section id="mentor" className="scroll-mt-20 mb-12">
           <SectionTitle 
+            variant="simple"
             subtitle="Conheça a especialista que vai guiar sua transformação de imagem"
           >
             Conheça sua Mentora
