@@ -791,7 +791,7 @@ const ResultPage: React.FC = () => {
                     </div>
                     <div className="text-right sm:text-right ml-auto sm:ml-0 flex-shrink-0">
                       <div className="text-xs text-[#8F7A6A]">
-                        <span className="line-through block">R$ 85,00</span>
+                        <span className="line-through block">R$ 79,00</span>
                         <span className="text-[#aa6b5d] font-medium">Incluído</span>
                       </div>
                     </div>
@@ -800,11 +800,11 @@ const ResultPage: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-white/50 rounded-lg">
                     <div className="flex items-start gap-2 flex-1">
                       <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <span className="text-sm text-[#8F7A6A] leading-relaxed">Guia das Peças-Chave</span>
+                      <span className="text-sm text-[#8F7A6A] leading-relaxed">Guia das Peças Estratégicas</span>
                     </div>
                     <div className="text-right ml-auto sm:ml-0 flex-shrink-0">
                       <div className="text-xs text-[#8F7A6A]">
-                        <span className="line-through block">R$ 55,00</span>
+                        <span className="line-through block">R$ 59,00</span>
                         <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                       </div>
                     </div>
@@ -817,7 +817,7 @@ const ResultPage: React.FC = () => {
                     </div>
                     <div className="text-right ml-auto sm:ml-0 flex-shrink-0">
                       <div className="text-xs text-[#8F7A6A]">
-                        <span className="line-through block">R$ 35,00</span>
+                        <span className="line-through block">R$ 37,00</span>
                         <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
                       </div>
                     </div>
