@@ -508,41 +508,41 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </Suspense>
 
-          {/* CTA INTERMEDIÁRIO - COR DA MARCA */}
+          {/* CTA INTERMEDIÁRIO - RESPONSIVIDADE MELHORADA */}
           <div className="mt-12 text-center">
-            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-8 border border-[#B89B7A]/20 max-w-2xl mx-auto">
-              <h3 className="text-2xl font-playfair font-bold text-[#432818] mb-4">
+            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 sm:p-8 border border-[#B89B7A]/20 max-w-2xl mx-auto">
+              <h3 className="text-xl sm:text-2xl font-playfair font-bold text-[#432818] mb-4">
                 Pronta para Sua Transformação?
               </h3>
-              <p className="text-[#8F7A6A] mb-6 leading-relaxed">
+              <p className="text-[#8F7A6A] mb-6 leading-relaxed text-sm sm:text-base">
                 Receba seu guia personalizado para o estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> e comece hoje mesmo!
               </p>
               
-              {/* Preço resumido */}
-              <div className="flex items-center justify-center gap-4 mb-6 flex-wrap">
+              {/* Preço resumido - RESPONSIVO */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-6">
                 <div className="text-center">
-                  <span className="text-sm text-[#8F7A6A]">5x de</span>
-                  <span className="text-2xl font-bold text-[#aa6b5d] ml-2">R$ 8,83</span>
+                  <span className="text-xs sm:text-sm text-[#8F7A6A]">5x de</span>
+                  <span className="text-xl sm:text-2xl font-bold text-[#aa6b5d] ml-2">R$ 8,83</span>
                 </div>
-                <div className="text-[#8F7A6A]">ou</div>
+                <div className="text-[#8F7A6A] text-sm">ou</div>
                 <div className="text-center">
-                  <span className="text-sm text-[#8F7A6A]">à vista</span>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent ml-2">R$ 39,90</span>
+                  <span className="text-xs sm:text-sm text-[#8F7A6A]">à vista</span>
+                  <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent ml-2">R$ 39,90</span>
                 </div>
               </div>
 
               <Button 
                 onClick={handleCTAClick} 
-                className="text-white text-lg leading-none py-4 px-8 rounded-lg shadow-lg transition-all duration-300 cursor-pointer font-semibold"
+                className="text-white text-base sm:text-lg leading-none py-3 sm:py-4 px-6 sm:px-8 rounded-lg shadow-lg transition-all duration-300 cursor-pointer font-semibold w-full sm:w-auto min-h-[48px]"
                 style={{
                   background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
                   boxShadow: '0 4px 14px rgba(184, 155, 122, 0.4)',
                 }}
                 type="button"
               >
-                <span className="flex items-center justify-center gap-3">
-                  <ShoppingCart className="w-5 h-5" />
-                  Quero Meu Guia Personalizado
+                <span className="flex items-center justify-center gap-2 sm:gap-3">
+                  <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
+                  <span className="whitespace-nowrap">Quero Meu Guia Personalizado</span>
                 </span>
               </Button>
             </div>
@@ -802,20 +802,20 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* CTA Final Simplificado - MELHOR ESPAÇAMENTO */}
+              {/* CTA Final - RESPONSIVIDADE MELHORADA */}
               <div className="text-center mb-6">
                 <Button 
                   onClick={handleCTAClick} 
-                  className="text-white text-xl leading-none py-5 px-8 md:px-12 rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold"
+                  className="text-white text-lg sm:text-xl leading-none py-4 sm:py-5 px-6 sm:px-8 md:px-12 rounded-lg sm:rounded-xl shadow-xl transition-all duration-300 cursor-pointer font-bold w-full sm:w-auto min-h-[56px]"
                   style={{
                     background: `linear-gradient(to right, ${tokens.colors.success}, ${tokens.colors.successDark})`,
                     boxShadow: `0 8px 25px rgba(76, 175, 80, 0.4)`,
                   }}
                   type="button"
                 >
-                  <span className="flex items-center justify-center gap-3">
-                    <ShoppingCart className="w-6 h-6" />
-                    <span className="whitespace-nowrap">Garantir Minha Transformação</span>
+                  <span className="flex items-center justify-center gap-2 sm:gap-3">
+                    <ShoppingCart className="w-5 sm:w-6 h-5 sm:h-6 flex-shrink-0" />
+                    <span className="whitespace-nowrap text-sm sm:text-base md:text-lg">Garantir Minha Transformação</span>
                   </span>
                 </Button>
               </div>
