@@ -776,25 +776,49 @@ const ResultPage: React.FC = () => {
 
               {/* RESUMO DO VALOR MELHORADO */}
               <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 border border-[#B89B7A]/20 max-w-2xl mx-auto">
-                <h4 className="font-bold text-[#432818] mb-2">🎁 Tudo que você recebe hoje:</h4>
-                <ul className="text-sm text-[#8F7A6A] space-y-1">
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                    <span>Manual completo do estilo <strong>{category}</strong> com 50+ looks prontos</span>
+                <h4 className="font-bold text-[#432818] mb-3">Tudo que você recebe hoje:</h4>
+                <ul className="text-sm text-[#8F7A6A] space-y-2">
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                    <div className="flex-1">
+                      <span>Manual completo do seu <strong>Estilo {category}</strong> (Predominante) {
+                        secondaryStyles && secondaryStyles.length > 0 && (
+                          <>e Estilos <strong>{secondaryStyles.map(style => style.category).join(', ')}</strong> (Complementares)</>
+                        )
+                      }</span>
+                      <div className="text-xs text-[#8F7A6A] mt-1">
+                        <span className="line-through">R$ 85,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
+                      </div>
+                    </div>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                    <span>Guia das 15 peças estratégicas que multiplicam seus looks</span>
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                    <div className="flex-1">
+                      <span>Guia das Peças Estratégicas que multiplicam seus looks</span>
+                      <div className="text-xs text-[#8F7A6A] mt-1">
+                        <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
+                      </div>
+                    </div>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                    <span>Manual de visagismo para valorizar sua beleza única</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                    <span><strong>Acesso vitalício</strong> + atualizações sem custo adicional</span>
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                    <div className="flex-1">
+                      <span>Manual de visagismo para valorizar sua beleza única</span>
+                      <div className="text-xs text-[#8F7A6A] mt-1">
+                        <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
+                      </div>
+                    </div>
                   </li>
                 </ul>
+                <div className="border-t border-[#B89B7A]/20 mt-3 pt-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-[#432818]">Valor Total:</span>
+                    <div className="text-right">
+                      <span className="text-sm text-[#8F7A6A] line-through">R$ 175,00</span>
+                      <div className="text-lg font-bold text-[#aa6b5d]">R$ 39,90</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
