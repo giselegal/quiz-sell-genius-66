@@ -60,7 +60,7 @@ const GuaranteeSection: React.FC = () => {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-4 text-sm text-[#432818]">
+        <div className="grid md:grid-cols-2 gap-4 text-sm text-[#432818] max-w-md mx-auto">
           <div className="flex items-center gap-2 justify-center">
             <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
             <span>Reembolso Total</span>
@@ -68,10 +68,6 @@ const GuaranteeSection: React.FC = () => {
           <div className="flex items-center gap-2 justify-center">
             <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
             <span>Sem Complicações</span>
-          </div>
-          <div className="flex items-center gap-2 justify-center">
-            <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
-            <span>Processamento Rápido</span>
           </div>
         </div>
       </div>

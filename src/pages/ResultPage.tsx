@@ -538,15 +538,35 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
               
-              <p className="text-lg font-medium text-[#432818] mb-2">
+              <p className="text-lg font-medium text-[#432818] mb-4">
                 Por apenas
               </p>
-              <div className="mb-4">
-                <div className="flex items-baseline justify-center gap-2 mb-2">
-                  <span className="text-sm text-[#8F7A6A]">5x de</span>
-                  <span className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent">R$ 8,83</span>
+              <div className="mb-6">
+                <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 border-2 border-[#B89B7A]/20 shadow-md relative overflow-hidden">
+                  {/* Decorative background elements */}
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-[#B89B7A]/10 to-transparent rounded-full blur-xl"></div>
+                  <div className="absolute bottom-0 left-0 w-12 h-12 bg-gradient-to-tr from-[#aa6b5d]/10 to-transparent rounded-full blur-xl"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="text-center mb-4">
+                      <span className="text-sm text-[#8F7A6A] font-medium block mb-2">Parcelado em até</span>
+                      <div className="flex items-baseline justify-center gap-3 mb-3">
+                        <span className="text-lg text-[#aa6b5d] font-semibold">5x de</span>
+                        <div className="relative">
+                          <span className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#B2784B] to-[#D68047] bg-clip-text text-transparent leading-none">R$ 8,83</span>
+                          <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#B2784B] to-[#D68047] rounded-full opacity-30"></div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full border border-[#B89B7A]/20 shadow-sm">
+                        <div className="w-2 h-2 bg-[#4CAF50] rounded-full animate-pulse"></div>
+                        <span className="text-base text-[#432818] font-medium">ou à vista R$ 39,90</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-base text-[#432818]">ou à vista R$ 39,90</span>
               </div>
             </div>
             
