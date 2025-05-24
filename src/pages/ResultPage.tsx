@@ -1013,6 +1013,6 @@ const ResultPage: React.FC = () => {
       </div>
     </div>
   );
-{'}'};
+};
 
 export default ResultPage;
