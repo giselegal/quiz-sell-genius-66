@@ -10,9 +10,8 @@
 ### 1. Estrutura JSX Balanceada ✅
 ```
 </div>      <!-- trust elements -->
-</div>      <!-- relative z-10 products wrapper -->
-</div>      <!-- products preview mb-12 -->
-</AnimatedWrapper>
+</div>      <!-- inner CTA wrapper -->
+</AnimatedWrapper>  <!-- CORRETO -->
 </section>  <!-- CTA section -->
 </div>      <!-- bottom spacing -->
 </div>      <!-- container principal -->

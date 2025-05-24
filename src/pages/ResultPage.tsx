@@ -992,7 +992,7 @@ const ResultPage: React.FC = () => {
   </div>
 
   {/* TRUST ELEMENTS */}
-  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm mt-6">
+  <div className="flex items-center justify-center gap-8 text-sm flex-wrap mt-8 px-4">
     <div className="flex items-center gap-2">
       ✓ Acesso Imediato
     </div>
@@ -1004,8 +1004,8 @@ const ResultPage: React.FC = () => {
     </div>
   </div>
   {/* fim novo conteúdo */}
-
-</div>
+</div>   // fecha <div className="border-t-2 ...">
+          </AnimatedWrapper>  // fecha AnimatedWrapper da seção CTA
         </section>
 
         {/* BOTTOM SPACING */}
@@ -1013,6 +1013,6 @@ const ResultPage: React.FC = () => {
       </div>
     </div>
   );
-};
+{'}'};
 
 export default ResultPage;
