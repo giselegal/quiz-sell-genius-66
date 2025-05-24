@@ -693,9 +693,9 @@ const ResultPage: React.FC = () => {
               </p>
             </div>
             
-            {/* PRODUCTS PREVIEW - GRID OTIMIZADO */}
+            {/* PRODUCTS PREVIEW - GRID OTIMIZADO E RESPONSIVO MELHORADO */}
             <div className="mb-12 relative z-10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-4xl mx-auto mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto mb-10">
                 {[
                   {
                     src: (() => {
@@ -713,43 +713,47 @@ const ResultPage: React.FC = () => {
                     })(),
                     title: `Manual de Estilo ${category}`,
                     subtitle: 'Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única, transformando seu guarda-roupa em uma poderosa ferramenta de comunicação visual e autoexpressão.',
-                    badge: 'GUIA'
+                    badge: 'GUIA PRINCIPAL',
+                    priority: true
                   },
                   {
                     src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png',
                     title: 'Guia das Peças Estratégicas',
-                    subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação',
-                    badge: 'BÔNUS EXCLUSIVO'
+                    subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação do seu dia a dia.',
+                    badge: 'BÔNUS EXCLUSIVO',
+                    priority: false
                   },
                   {
                     src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png',
                     title: 'Manual de Visagismo Pessoal',
-                    subtitle: 'Descubra os cortes de cabelo e acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo',
-                    badge: 'BÔNUS PREMIUM'
+                    subtitle: 'Descubra os cortes de cabelo, cores e acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo aplicado.',
+                    badge: 'BÔNUS PREMIUM',
+                    priority: false
                   }
                 ].map((product, index) => (
-                  <div key={index} className={`bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 transition-transform duration-300 hover:scale-105 relative ${index === 2 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
-                       style={{ boxShadow: tokens.shadows.sm }}>
+                  <div key={index} className={`bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-5 lg:p-6 border border-[#B89B7A]/15 transition-all duration-300 hover:scale-105 hover:shadow-lg relative ${index === 2 ? 'md:col-span-2 xl:col-span-1' : ''}`}
+                       style={{ boxShadow: tokens.shadows.md }}>
                     
-                    {/* BADGE DO PRODUTO */}
-                    <div className="absolute -top-2 -right-2 z-10">
-                      <span className="text-xs font-bold px-2 py-1 rounded-full text-white shadow-sm bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]">
+                    {/* BADGE DO PRODUTO - MELHOR CONTRASTE */}
+                    <div className="absolute -top-3 -right-3 z-10">
+                      <span className={`text-xs font-bold px-3 py-1.5 rounded-full text-white shadow-md ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#4CAF50] to-[#45a049]'}`}>
                         {product.badge}
                       </span>
                     </div>
 
-                    {/* IMAGEM DO PRODUTO */}
-                    <div className="w-full bg-white rounded-lg mb-4 flex items-center justify-center relative overflow-hidden p-4"
+                    {/* IMAGEM DO PRODUTO - PROPORÇÕES MELHORADAS */}
+                    <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden p-4"
                          style={{ 
                            boxShadow: tokens.shadows.sm,
-                           minHeight: '240px',
-                           maxHeight: '280px'
+                           minHeight: '280px',
+                           maxHeight: '320px'
                          }}>
                       <ProgressiveImage 
-                        src={`${product.src}?q=80&f=auto&w=300`}
+                        src={`${product.src}?q=85&f=auto&w=400`}
                         alt={product.title}
-                        className="w-full h-full object-contain rounded-lg"
-                        loading="lazy"
+                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105"
+                        loading={product.priority ? "eager" : "lazy"}
+                        fetchPriority={product.priority ? "high" : "low"}
                         style={{
                           maxWidth: '100%',
                           maxHeight: '100%',
@@ -757,27 +761,30 @@ const ResultPage: React.FC = () => {
                           height: 'auto'
                         }}
                       />
+                      
+                      {/* OVERLAY DE HOVER */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#B89B7A]/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg pointer-events-none"></div>
                     </div>
 
-                    {/* INFORMAÇÕES DO PRODUTO - LAYOUT MELHORADO */}
-                    <div className="text-left min-h-[120px] flex flex-col">
-                      <h4 className="font-bold text-[#432818] text-sm lg:text-base mb-2 leading-tight">
+                    {/* INFORMAÇÕES DO PRODUTO - ESPAÇAMENTO MELHORADO */}
+                    <div className="text-left min-h-[140px] flex flex-col">
+                      <h4 className="font-bold text-[#432818] text-base lg:text-lg mb-3 leading-tight line-height-1.2">
                         {product.title}
                       </h4>
-                      <p className="text-xs lg:text-sm flex-1 overflow-hidden" style={{ color: tokens.colors.textMuted }}>
+                      <p className="text-sm lg:text-base flex-1 leading-relaxed line-height-1.4" style={{ color: tokens.colors.textMuted }}>
                         {product.subtitle}
                       </p>
                     </div>
 
-                    {/* INDICADOR DE VALOR */}
-                    <div className="mt-3 pt-3 border-t border-[#B89B7A]/10">
+                    {/* INDICADOR DE VALOR - VISUAL MELHORADO */}
+                    <div className="mt-4 pt-4 border-t border-[#B89B7A]/15">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs" style={{ color: tokens.colors.textMuted }}>
-                          {index === 0 ? 'Produto Principal' : 'Incluído Grátis'}
+                        <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
+                          {index === 0 ? '📖 Produto Principal' : '🎁 Incluído Grátis'}
                         </span>
-                        <div className="flex items-center gap-1">
-                          <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
-                          <span className="text-xs font-medium text-[#aa6b5d]">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2.5 h-2.5 rounded-full ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#4CAF50] to-[#45a049]'}`}></div>
+                          <span className={`text-sm font-semibold ${index === 0 ? 'text-[#aa6b5d]' : 'text-[#4CAF50]'}`}>
                             {index === 0 ? 'Personalizado' : 'Bônus'}
                           </span>
                         </div>
@@ -787,178 +794,197 @@ const ResultPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* RESUMO DO VALOR MELHORADO */}
-              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 lg:p-6 border border-[#B89B7A]/20 max-w-2xl mx-auto">
-                <h4 className="font-bold text-[#432818] mb-4 text-center lg:text-left">Seu Kit Completo de Transformação:</h4>
+              {/* RESUMO DO VALOR - CONTRASTE E HIERARQUIA MELHORADOS */}
+              <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/25 max-w-3xl mx-auto relative overflow-hidden"
+                   style={{ boxShadow: tokens.shadows.lg }}>
                 
-                <div className="space-y-3">
-                  {/* Item Principal */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 p-4 bg-white/70 rounded-lg border border-[#B89B7A]/10"
-                       style={{ boxShadow: tokens.shadows.sm }}>
-                    <div className="flex items-start gap-3 flex-1">
-                      <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-2"></div>
-                      <div className="text-sm leading-relaxed">
-                        <span className="block text-[#432818] font-semibold mb-1">
-                          Manual Personalizado do Estilo {category}
-                        </span>
-                        {secondaryStyles && secondaryStyles.length > 0 && (
-                          <span className="block text-xs mb-2" style={{ color: tokens.colors.textMuted }}>
-                            Inclui elementos dos estilos: <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(' e ')}</strong>
-                          </span>
-                        )}
-                        <span className="text-xs bg-[#B89B7A]/10 text-[#432818] px-2 py-1 rounded-full">
-                          📖 Produto Principal
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <div className="text-xs" style={{ color: tokens.colors.textMuted }}>
-                        <span className="text-[#aa6b5d] font-bold text-sm">INCLUÍDO</span>
-                        <br />
-                        <span className="line-through">de R$ 79,00</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bônus 1 */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 bg-white/50 rounded-lg">
-                    <div className="flex items-start gap-3 flex-1">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <div className="text-sm">
-                        <span className="block text-[#432818] font-medium">Guia das Peças Estratégicas</span>
-                        <span className="text-xs" style={{ color: tokens.colors.textMuted }}>
-                          Lista das 15 peças essenciais para maximizar seu guarda-roupa
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <div className="text-xs">
-                        <span className="text-[#4CAF50] font-bold">BÔNUS GRÁTIS</span>
-                        <br />
-                        <span className="line-through" style={{ color: tokens.colors.textMuted }}>R$ 59,00</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bônus 2 */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 bg-white/50 rounded-lg">
-                    <div className="flex items-start gap-3 flex-1">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
-                      <div className="text-sm">
-                        <span className="block text-[#432818] font-medium">Manual de Visagismo Personalizado</span>
-                        <span className="text-xs" style={{ color: tokens.colors.textMuted }}>
-                          Cortes, cores e acessórios ideais para seu formato de rosto
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <div className="text-xs">
-                        <span className="text-[#4CAF50] font-bold">BÔNUS GRÁTIS</span>
-                        <br />
-                        <span className="line-through" style={{ color: tokens.colors.textMuted }}>R$ 37,00</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Resumo Final */}
-                <div className="border-t border-[#B89B7A]/20 mt-5 pt-4">
-                  <div className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-lg p-3 mb-4">
-                    <p className="text-red-700 text-sm font-bold text-center">
-                      🔥 OFERTA EXCLUSIVA - QUIZ COMPLETO
-                    </p>
-                  </div>
+                {/* BACKGROUND DECORATIVO */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#B89B7A]/5 to-transparent rounded-full"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#aa6b5d]/5 to-transparent rounded-full"></div>
+                
+                <div className="relative z-10">
+                  <h4 className="font-bold text-[#432818] mb-6 text-center text-lg lg:text-xl">
+                    🎯 Seu Kit Completo de Transformação
+                  </h4>
                   
-                  <div className="text-center space-y-2">
-                    <p className="text-sm" style={{ color: tokens.colors.textMuted }}>
-                      <span className="font-medium">Valor individual dos produtos:</span> 
-                      <span className="line-through font-bold ml-2">R$ 175,00</span>
-                    </p>
-                    
-                    <div className="flex items-center justify-center gap-3 my-3">
-                      <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-                      <span className="text-lg font-bold text-[#432818]">Seu Investimento Hoje</span>
-                      <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                  <div className="space-y-4">
+                    {/* Item Principal - DESTAQUE MELHORADO */}
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 p-5 bg-white/80 rounded-xl border border-[#B89B7A]/20 relative"
+                         style={{ boxShadow: tokens.shadows.md }}>
+                      
+                      {/* BADGE DE DESTAQUE */}
+                      <div className="absolute -top-2 -left-2 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                        ⭐ PRINCIPAL
+                      </div>
+                      
+                      <div className="flex items-start gap-4 flex-1 pt-2">
+                        <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-1.5"></div>
+                        <div className="leading-relaxed">
+                          <span className="block text-[#432818] font-bold mb-2 text-base lg:text-lg">
+                            Manual Personalizado do Estilo {category}
+                          </span>
+                          {secondaryStyles && secondaryStyles.length > 0 && (
+                            <span className="block text-sm mb-3 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                              ✨ Inclui elementos dos estilos: <strong className="text-[#aa6b5d]">{secondaryStyles.slice(0, 2).map(style => style.category).join(' e ')}</strong>
+                            </span>
+                          )}
+                          <span className="inline-block text-xs bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-3 py-1.5 rounded-full font-medium border border-[#B89B7A]/20">
+                            📚 Guia Personalizado
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-center lg:text-right flex-shrink-0">
+                        <div className="text-sm">
+                          <span className="text-[#aa6b5d] font-bold text-base block">INCLUÍDO</span>
+                          <span className="line-through text-gray-500">de R$ 79,00</span>
+                        </div>
+                      </div>
                     </div>
-                    
-                    <div className="mb-3">
-                      <span className="text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                        R$ 39,90
-                      </span>
-                      <p className="text-sm mt-1" style={{ color: tokens.colors.textMuted }}>
-                        ou <strong>5x de R$ 8,83</strong> sem juros
+
+                    {/* Bônus 1 - VISUAL CONSISTENTE */}
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4 bg-white/60 rounded-xl border border-[#B89B7A]/10">
+                      <div className="flex items-start gap-3 flex-1">
+                        <div className="w-2 h-2 bg-[#4CAF50] rounded-full flex-shrink-0 mt-2"></div>
+                        <div className="leading-relaxed">
+                          <span className="block text-[#432818] font-semibold mb-1">Guia das Peças Estratégicas</span>
+                          <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                            Lista das 15 peças essenciais para maximizar seu guarda-roupa
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-center lg:text-right flex-shrink-0">
+                        <div className="text-sm">
+                          <span className="text-[#4CAF50] font-bold">BÔNUS GRÁTIS</span>
+                          <br />
+                          <span className="line-through text-gray-500">R$ 59,00</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bônus 2 - VISUAL CONSISTENTE */}
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4 bg-white/60 rounded-xl border border-[#B89B7A]/10">
+                      <div className="flex items-start gap-3 flex-1">
+                        <div className="w-2 h-2 bg-[#4CAF50] rounded-full flex-shrink-0 mt-2"></div>
+                        <div className="leading-relaxed">
+                          <span className="block text-[#432818] font-semibold mb-1">Manual de Visagismo Personalizado</span>
+                          <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                            Cortes, cores e acessórios ideais para seu formato de rosto
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-center lg:text-right flex-shrink-0">
+                        <div className="text-sm">
+                          <span className="text-[#4CAF50] font-bold">BÔNUS GRÁTIS</span>
+                          <br />
+                          <span className="line-through text-gray-500">R$ 37,00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Resumo Final - HIERARQUIA MELHORADA */}
+                  <div className="border-t border-[#B89B7A]/25 mt-6 pt-6">
+                    {/* ALERTA DE OFERTA - VISUAL MELHORADO */}
+                    <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-4 mb-6 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-orange-500/5"></div>
+                      <p className="text-red-700 text-base font-bold text-center relative z-10 flex items-center justify-center gap-2">
+                        🔥 OFERTA EXCLUSIVA - QUIZ COMPLETO
+                        <span className="animate-pulse">⚡</span>
                       </p>
                     </div>
                     
-                    <div className="inline-flex items-center gap-2 bg-green-50 px-3 py-2 rounded-lg border border-green-200 mb-3">
-                      <span className="text-green-700 text-sm font-bold">
-                        💰 Você economiza R$ 135,10 (77% OFF)
-                      </span>
-                    </div>
-                    
-                    <div className="inline-flex items-center justify-center gap-2 bg-orange-50 px-3 py-2 rounded-lg border border-orange-200">
-                      <Hourglass className="w-4 h-4 text-orange-600 animate-spin" 
-                                 style={{ 
-                                   animation: 'spin 3s linear infinite',
-                                   transformOrigin: 'center'
-                                 }} />
-                      <span className="text-xs text-orange-700 font-medium text-center leading-tight">
-                        Esta oferta expira quando você sair desta página
-                      </span>
+                    <div className="text-center space-y-3">
+                      <p className="text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                        <span className="font-semibold text-[#432818]">Valor individual dos produtos:</span> 
+                        <span className="line-through font-bold ml-2 text-lg text-gray-500">R$ 175,00</span>
+                      </p>
+                      
+                      <div className="flex items-center justify-center gap-4 my-4">
+                        <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                        <span className="text-xl font-bold text-[#432818] whitespace-nowrap">Seu Investimento Hoje</span>
+                        <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                      </div>
+                      
+                      <div className="mb-4">
+                        <span className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                          R$ 39,90
+                        </span>
+                        <p className="text-base mt-2 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                          ou <strong className="text-[#432818] text-lg">5x de R$ 8,83</strong> sem juros
+                        </p>
+                      </div>
+                      
+                      <div className="inline-flex items-center gap-3 bg-green-50 px-4 py-3 rounded-xl border-2 border-green-200 mb-4">
+                        <span className="text-green-700 font-bold text-base">
+                          💰 Você economiza R$ 135,10 (77% OFF)
+                        </span>
+                      </div>
+                      
+                      <div className="inline-flex items-center justify-center gap-3 bg-orange-50 px-4 py-3 rounded-xl border-2 border-orange-200">
+                        <Hourglass className="w-5 h-5 text-orange-600" 
+                                   style={{ 
+                                     animation: 'spin 3s linear infinite',
+                                     transformOrigin: 'center'
+                                   }} />
+                        <span className="text-sm text-orange-700 font-semibold text-center leading-tight max-w-xs">
+                          Esta oferta expira quando você sair desta página
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* CTA BUTTON - OTIMIZADO */}
-              <div className="text-center mb-10 relative z-10 flex justify-center">
+              {/* CTA BUTTON - ÁREA DE TOQUE MELHORADA */}
+              <div className="text-center mb-10 relative z-10 flex justify-center mt-8">
                 <button
                   onClick={handleCTAClick} 
-                  className="text-white leading-none transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:ring-offset-2 text-sm sm:text-base lg:text-lg"
+                  className="text-white leading-none transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-4 focus:ring-[#B89B7A]/30 focus:ring-offset-2 text-base lg:text-lg"
                   style={{
                     background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
                     boxShadow: tokens.shadows.cta,
                     borderRadius: tokens.radius.lg,
-                    padding: '0.875rem 1.5rem',
-                    minHeight: '48px',
+                    padding: '1rem 2rem',
+                    minHeight: '56px',
                     width: '100%',
-                    maxWidth: '420px',
+                    maxWidth: '480px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '8px'
+                    gap: '12px'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)';
                     e.currentTarget.style.boxShadow = tokens.shadows.xl;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
                     e.currentTarget.style.boxShadow = tokens.shadows.cta;
                   }}
                   type="button"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="font-semibold">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+                  <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
+                  <span className="font-bold relative z-10">
                     <span className="hidden sm:inline">Garantir Minha Transformação</span>
                     <span className="sm:hidden">Garantir Transformação</span>
                   </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 group-hover:animate-pulse rounded-lg"></div>
                 </button>
               </div>
 
-              {/* TRUST ELEMENTS - SPACING PADRONIZADO */}
-              <div className="flex items-center justify-center gap-6 lg:gap-8 text-sm flex-wrap mt-8 px-4" style={{ color: tokens.colors.textMuted }}>
-                <div className="mt-6 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20"
+              {/* TRUST ELEMENTS - ESPAÇAMENTO E VISUAL MELHORADOS */}
+              <div className="flex items-center justify-center gap-8 text-sm flex-wrap mt-8 px-4">
+                <div className="inline-flex items-center gap-3 bg-[#fff7f3] px-5 py-3 rounded-full border border-[#B89B7A]/25 transition-transform duration-300 hover:scale-105"
                      style={{ boxShadow: tokens.shadows.sm }}>
-                  <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
-                  <span className="text-sm text-[#432818] font-medium">
+                  <div className="w-2.5 h-2.5 bg-[#aa6b5d] rounded-full animate-pulse"></div>
+                  <span className="text-sm text-[#432818] font-semibold">
                     ⚡ Acesso imediato
                   </span>
                 </div>
                 
-                <p className="text-xs mt-6 max-w-md mx-auto" style={{ color: tokens.colors.textMuted }}>
-                  🔒 <strong>Pagamento 100% seguro</strong> • <strong>Site confiável</strong>
+                <p className="text-sm font-medium max-w-md mx-auto text-center leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                  🔒 <strong className="text-[#432818]">Pagamento 100% seguro</strong> • <strong className="text-[#432818]">Site confiável</strong>
                 </p>
               </div>
             </div>
