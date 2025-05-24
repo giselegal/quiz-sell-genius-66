@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-// Design tokens centralizados
+// Design tokens centralizados - Atualizado para remover verde
 const designTokens = {
   colors: {
     primary: '#B89B7A',
@@ -23,8 +23,8 @@ const designTokens = {
     textLight: '#8F7A6A',
     background: '#fffaf7',
     cardBg: '#ffffff',
-    accent: '#4CAF50',
-    accentHover: '#45a049',
+    accent: '#aa6b5d',      // Substituído de #4CAF50 para #aa6b5d
+    accentHover: '#96594d', // Substituído de #45a049 para um tom mais escuro
     divider: 'rgba(184, 155, 122, 0.2)',
     highlight: '#f9f4ef',
   },
@@ -46,7 +46,7 @@ const designTokens = {
     md: '0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1)',
     lg: '0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05)',
     highlight: '0 0 15px rgba(184, 155, 122, 0.15)',
-    cta: '0 4px 14px rgba(76, 175, 80, 0.4)',
+    cta: '0 4px 14px rgba(170, 107, 93, 0.4)', // Atualizado para usar a cor accent
   },
   transitions: {
     default: 'all 0.3s ease',
@@ -408,7 +408,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     {/* BÔNUS - Layout melhorado */}
                     <div className="border-t border-[#B89B7A]/20 pt-4 md:pt-6">
                       <h6 className="text-base md:text-lg font-semibold text-[#432818] mb-3 text-center">
-                        🎁 <span className="text-[#4CAF50]">BÔNUS EXCLUSIVOS</span>
+                        🎁 <span className="text-[#aa6b5d]">BÔNUS EXCLUSIVOS</span>
                       </h6>
                       
                       <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
@@ -427,12 +427,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     </div>
 
                     {/* PREÇO - Mais compacto e efetivo */}
-                    <div className="bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg p-4 mt-4 md:mt-6 text-center border border-[#4CAF50]/30">
+                    <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 rounded-lg p-4 mt-4 md:mt-6 text-center border border-[#aa6b5d]/30">
                       <p className="text-sm text-gray-600 mb-1">Valor Total dos Produtos:</p>
                       <p className="text-lg text-gray-500 line-through mb-1">R$ 175,00</p>
                       <div className="flex items-center justify-center gap-2 mb-2">
-                        <span className="text-2xl md:text-3xl font-bold text-[#4CAF50]">R$ 39,90</span>
-                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">77% OFF</span>
+                        <span className="text-2xl md:text-3xl font-bold text-[#aa6b5d]">R$ 39,90</span>
+                        <span className="bg-[#aa6b5d] text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">77% OFF</span>
                       </div>
                       <p className="text-xs text-[#aa6b5d] font-medium">⏰ Oferta por tempo limitado</p>
                     </div>
@@ -447,8 +447,8 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         onMouseLeave={() => setIsButtonHovered(false)}
                         className="w-full py-3 md:py-4 px-4 md:px-8 rounded-md shadow-lg transition-all duration-300 font-bold text-sm md:text-base"
                         style={{
-                          background: "linear-gradient(to right, #4CAF50, #45a049)",
-                          boxShadow: "0 8px 20px rgba(76, 175, 80, 0.3)",
+                          background: "linear-gradient(to right, #B89B7A, #aa6b5d)",
+                          boxShadow: "0 8px 20px rgba(170, 107, 93, 0.3)",
                         }}
                         type="button"
                       >
@@ -465,21 +465,21 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     <div className="flex flex-wrap justify-center gap-3 text-xs text-[#aa6b5d] font-medium">
                       <div className="flex items-center gap-1">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
-                          <circle cx="12" cy="12" r="12" fill="#4CAF50"/>
+                          <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
                           <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span>Acesso imediato</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
-                          <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" fill="#4CAF50"/>
+                          <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" fill="#aa6b5d"/>
                           <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span>100% seguro</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#4CAF50"/>
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#aa6b5d"/>
                         </svg>
                         <span>Garantia de satisfação</span>
                       </div>
