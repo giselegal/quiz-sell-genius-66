@@ -14,6 +14,7 @@ import HeaderEditor from './editors/HeaderEditor';
 import MainContentEditor from './editors/MainContentEditor';
 import OfferHeroEditor from './editors/OfferHeroEditor';
 import PricingEditor from './editors/PricingEditor';
+import FaqEditor from './editors/FaqEditor';
 import { set, get } from 'lodash';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useToast } from '@/components/ui/use-toast';
@@ -517,9 +518,15 @@ function renderContentEditor(sectionPath: string, config: any, updateSection: (p
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
-    // Remover temporariamente as referências aos editores que não existem
-    case 'offer.authority':
     case 'offer.faq':
+      return (
+        <FaqEditor 
+          content={current.content || {}}
+          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+        />
+      );
+    // Outros editores temporariamente genéricos
+    case 'offer.authority':
     case 'offer.urgency':
     case 'offer.comparison':
     case 'offer.riskReversal':
@@ -534,6 +541,7 @@ function renderContentEditor(sectionPath: string, config: any, updateSection: (p
               Use o editor genérico abaixo por enquanto.
             </p>
           </div>
+          {/* Editor genérico */}
           {Object.entries(current.content || {}).map(([key, value]) => {
             if (typeof value === 'string') {
               return (
