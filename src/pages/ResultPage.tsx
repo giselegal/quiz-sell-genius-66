@@ -846,14 +846,14 @@ const ResultPage: React.FC = () => {
                       </span>
                     </div>
                     
-                    <div className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-4 py-2 rounded-full border border-[#B89B7A]/20"
+                    <div className="mt-4 inline-flex items-center gap-2 px-2 py-1"
                          style={{ boxShadow: tokens.shadows.sm }}>
                       <Hourglass className="w-4 h-4 text-[#aa6b5d] animate-spin" 
                                  style={{ 
                                    animation: 'spin 3s linear infinite',
                                    transformOrigin: 'center'
                                  }} />
-                      <span className="text-xs text-[#432818] font-medium">
+                      <span className="text-xs text-[#432818] font-medium whitespace-nowrap">
                         Esta oferta expira quando você sair desta página
                       </span>
                     </div>
