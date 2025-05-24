@@ -725,20 +725,15 @@ const ResultPage: React.FC = () => {
                     </span>
                     <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
                   </div>
-                  <div className="inline-flex items-center gap-2 bg-green-100 px-4 py-2 rounded-full border border-green-300">
-                    <span className="text-green-700 text-sm font-bold">
-                      💰 Economia de 77% (R$ 135,10)
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
 
             {/* CTA PRINCIPAL - OTIMIZADO E RESPONSIVO */}
             <div className="text-center mb-10 relative z-10">
-              <Button 
+              <button
                 onClick={handleCTAClick} 
-                className="text-white leading-none transition-all duration-300 cursor-pointer font-bold shadow-xl hover:shadow-2xl group relative overflow-hidden"
+                className="text-white leading-none transition-all duration-300 cursor-pointer font-bold shadow-xl hover:shadow-2xl group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:ring-offset-2"
                 style={{
                   background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
                   boxShadow: `0 8px 32px rgba(184, 155, 122, 0.4)`,
@@ -747,7 +742,11 @@ const ResultPage: React.FC = () => {
                   fontSize: '1.125rem',
                   minHeight: '56px',
                   width: '100%',
-                  maxWidth: '400px'
+                  maxWidth: '400px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
@@ -759,17 +758,24 @@ const ResultPage: React.FC = () => {
                 }}
                 type="button"
               >
-                {/* Efeito brilho sutil */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_1.5s_ease-in-out] pointer-events-none"></span>
+                {/* Efeito brilho sutil - SEM POINTER EVENTS */}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ pointerEvents: 'none' }}
+                />
                 
-                <span className="flex items-center justify-center gap-3 relative z-10">
-                  <ShoppingCart className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="font-semibold">
-                    <span className="hidden sm:inline">Garantir Minha Transformação</span>
-                    <span className="sm:hidden">Garantir Transformação</span>
-                  </span>
+                {/* Ícone - SEM POINTER EVENTS */}
+                <ShoppingCart 
+                  className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" 
+                  style={{ pointerEvents: 'none' }}
+                />
+                
+                {/* Texto - SEM POINTER EVENTS */}
+                <span className="font-semibold" style={{ pointerEvents: 'none' }}>
+                  <span className="hidden sm:inline">Garantir Minha Transformação</span>
+                  <span className="sm:hidden">Garantir Transformação</span>
                 </span>
-              </Button>
+              </button>
 
               {/* Elementos de confiança - CORES DA MARCA */}
               <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm text-[#8F7A6A] flex-wrap mt-6 px-4">
