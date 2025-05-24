@@ -31,7 +31,7 @@ const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimoni
 const GuaranteeSection = lazy(() => import('@/components/result/GuaranteeSection'));
 const MentorSection = lazy(() => import('@/components/result/MentorSection'));
 
-// Design tokens
+// Design tokens - EXPANDIDOS E PADRONIZADOS
 const tokens = {
   colors: {
     primary: '#B89B7A',
@@ -50,29 +50,30 @@ const tokens = {
     borderLight: 'rgba(184, 155, 122, 0.1)',
   },
   spacing: {
-    xs: '0.5rem',
-    sm: '1rem',
-    md: '1.5rem',
-    lg: '2rem',
-    xl: '3rem',
+    xs: '0.5rem',    // 8px
+    sm: '1rem',      // 16px
+    md: '1.5rem',    // 24px
+    lg: '2rem',      // 32px
+    xl: '3rem',      // 48px
+    '2xl': '4rem',   // 64px
   },
   shadows: {
-    sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
-    md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    highlight: '0 0 15px rgba(184, 155, 122, 0.3)',
-    cta: '0 4px 14px rgba(76, 175, 80, 0.4)',
+    sm: '0 2px 4px rgba(184, 155, 122, 0.1)',
+    md: '0 4px 8px rgba(184, 155, 122, 0.15)',
+    lg: '0 8px 16px rgba(184, 155, 122, 0.2)',
+    xl: '0 12px 24px rgba(184, 155, 122, 0.25)',
   },
   radius: {
-    sm: '0.25rem',
-    md: '0.5rem',
-    lg: '1rem',
-    full: '9999px',
+    sm: '0.5rem',    // 8px
+    md: '0.75rem',   // 12px
+    lg: '1rem',      // 16px
+    xl: '1.5rem',    // 24px
   },
-  transitions: {
-    fast: '0.2s ease',
-    medium: '0.3s ease',
-    slow: '0.5s ease',
+  breakpoints: {
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
   }
 };
 
@@ -381,13 +382,14 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
-        {/* Primary Style Card - Título melhorado */}
+      <div className="container mx-auto px-6 md:px-8 py-8 max-w-4xl relative z-10">
+        {/* Primary Style Card - CONSISTÊNCIA VISUAL */}
         <section id="primary-style" className="scroll-mt-20">
-          <Card className="p-6 mb-10 bg-white shadow-lg border border-[#B89B7A]/20 rounded-xl overflow-hidden relative">
-            {/* Decorative corner accents */}
-            <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-[#B89B7A]/30 rounded-tl-xl"></div>
-            <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-[#B89B7A]/30 rounded-br-xl"></div>
+          <Card className="p-6 md:p-8 mb-12 bg-white border border-[#B89B7A]/20 rounded-xl overflow-hidden relative" 
+                style={{ boxShadow: tokens.shadows.lg }}>
+            {/* Decorative corner accents - PADRONIZADOS */}
+            <div className="absolute top-0 left-0 w-12 md:w-16 h-12 md:h-16 border-t-2 border-l-2 border-[#B89B7A]/30 rounded-tl-xl"></div>
+            <div className="absolute bottom-0 right-0 w-12 md:w-16 h-12 md:h-16 border-b-2 border-r-2 border-[#B89B7A]/30 rounded-br-xl"></div>
             
             <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
               <div className="text-center mb-8">
@@ -427,8 +429,8 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6 order-2 md:order-1">
+              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div className="space-y-6 order-2 lg:order-1">
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
                     {/* COPY MELHORADA - EMOCIONAL E ESPECÍFICA */}
                     <div className="space-y-4">
@@ -463,44 +465,51 @@ const ResultPage: React.FC = () => {
                     </div>
                   </AnimatedWrapper>
                 </div>
-                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 md:order-2">
-                  <div className="max-w-[214px] md:max-w-[280px] mx-auto relative"> 
+                
+                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 lg:order-2">
+                  {/* IMAGE SIZING - RESPONSIVO PADRONIZADO */}
+                  <div className="w-full max-w-xs md:max-w-sm mx-auto relative"> 
                     <ProgressiveImage 
-                      src={`${image}?q=85&f=auto&w=280`} 
+                      src={`${image}?q=85&f=auto&w=400`} 
                       alt={`Estilo ${category}`} 
-                      width={280} 
-                      height={350} 
-                      className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                      width={400} 
+                      height={500} 
+                      className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-105" 
+                      style={{ boxShadow: tokens.shadows.md }}
                       loading="eager" 
                       fetchPriority="high" 
                       onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
                     />
-                    {/* Elegant decorative corners - ajustados para mobile menor */}
-                    <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-7 h-7 md:w-10 md:h-10 border-t-2 border-r-2 border-[#B89B7A] rounded-tr-lg"></div>
-                    <div className="absolute -bottom-1 -left-1 md:-bottom-2 md:-left-2 w-7 h-7 md:w-10 md:h-10 border-b-2 border-l-2 border-[#B89B7A] rounded-bl-lg"></div>
+                    {/* Decorative corners - RESPONSIVOS */}
+                    <div className="absolute -top-2 -right-2 w-8 md:w-10 h-8 md:h-10 border-t-2 border-r-2 border-[#B89B7A] rounded-tr-lg"></div>
+                    <div className="absolute -bottom-2 -left-2 w-8 md:w-10 h-8 md:h-10 border-b-2 border-l-2 border-[#B89B7A] rounded-bl-lg"></div>
                     
-                    {/* Style badge - ajustado para mobile menor */}
-                    <div className="absolute -top-1.5 -left-1.5 md:-top-3 md:-left-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-2.5 py-0.5 md:px-4 md:py-1 rounded-full shadow-lg text-xs md:text-sm font-medium transform -rotate-12">
+                    {/* Style badge - RESPONSIVO */}
+                    <div className="absolute -top-3 -left-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 md:px-4 md:py-1.5 rounded-full text-xs md:text-sm font-medium transform -rotate-12"
+                         style={{ boxShadow: tokens.shadows.sm }}>
                       {category}
                     </div>
                   </div>
                 </AnimatedWrapper>
               </div>
               
+              {/* Guide Image - PADRONIZADO */}
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-                <div className="mt-10 max-w-[600px] mx-auto relative">
-                  <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+                <div className="mt-12 max-w-2xl mx-auto relative">
+                  <h3 className="text-xl md:text-2xl font-medium text-center text-[#aa6b5d] mb-6">
                     Seu Guia de Estilo Personalizado
                   </h3>
                   <ProgressiveImage 
-                    src={`${guideImage}?q=85&f=auto&w=600`} 
+                    src={`${guideImage}?q=85&f=auto&w=800`} 
                     alt={`Guia de Estilo ${category}`} 
                     loading="lazy" 
-                    className="w-full h-auto rounded-lg shadow-lg hover:scale-102 transition-transform duration-300" 
+                    className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-102" 
+                    style={{ boxShadow: tokens.shadows.lg }}
                     onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
                   />
-                  {/* Elegant badge - mais 5% menor */}
-                  <div className="absolute -top-2.5 -right-2.5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-2.5 py-1 rounded-full shadow-lg text-xs font-medium transform rotate-12">
+                  {/* Badge - CONSISTENTE */}
+                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 rounded-full text-xs font-medium transform rotate-12"
+                       style={{ boxShadow: tokens.shadows.sm }}>
                     Exclusivo
                   </div>
                 </div>
@@ -650,8 +659,9 @@ const ResultPage: React.FC = () => {
           </div>
         </div>
         
-        {/* Final CTA Section - ÚNICO E PODEROSO */}
-        <section id="cta" className="scroll-mt-20 mb-20 bg-white rounded-2xl shadow-xl p-8 sm:p-12 border border-[#B89B7A]/20 text-center relative overflow-hidden">
+        {/* Final CTA Section - VISUAL CONSISTENCY */}
+        <section id="cta" className="scroll-mt-20 mb-20 bg-white rounded-xl p-6 md:p-8 lg:p-12 border border-[#B89B7A]/20 text-center relative overflow-hidden"
+                 style={{ boxShadow: tokens.shadows.xl }}>
           <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/30 to-[#f9f4ef]/30 pointer-events-none"></div>
           
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
@@ -679,12 +689,14 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
             
-            {/* PREVIEW COMPACTO DOS MATERIAIS */}
+            {/* PREVIEW DOS MATERIAIS - GRID RESPONSIVO */}
             <div className="mb-12 relative z-10">
-              <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto mb-10">
-                {/* Cards dos produtos - SIMPLIFICADOS */}
-                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 shadow-sm">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto mb-10">
+                {/* Cards dos produtos - PADRONIZADOS */}
+                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-lg p-4 border border-[#B89B7A]/10"
+                     style={{ boxShadow: tokens.shadows.sm }}>
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden"
+                       style={{ boxShadow: tokens.shadows.sm }}>
                     <ProgressiveImage 
                       src={(() => {
                         const guideImages = {
@@ -708,8 +720,10 @@ const ResultPage: React.FC = () => {
                   <p className="text-xs text-[#8F7A6A]">Personalizado</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 shadow-sm">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-lg p-4 border border-[#B89B7A]/10"
+                     style={{ boxShadow: tokens.shadows.sm }}>
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden"
+                       style={{ boxShadow: tokens.shadows.sm }}>
                     <ProgressiveImage 
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png" 
                       alt="E-book Transformação"
@@ -721,8 +735,10 @@ const ResultPage: React.FC = () => {
                   <p className="text-xs text-[#8F7A6A]">Transformação</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-4 border border-[#B89B7A]/10 shadow-sm">
-                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden shadow-sm">
+                <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-lg p-4 border border-[#B89B7A]/10 sm:col-span-2 lg:col-span-1"
+                     style={{ boxShadow: tokens.shadows.sm }}>
+                  <div className="aspect-[3/4] bg-white rounded-lg mb-3 flex items-center justify-center relative overflow-hidden"
+                       style={{ boxShadow: tokens.shadows.sm }}>
                     <ProgressiveImage 
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png" 
                       alt="Guia de Visagismo"
@@ -736,9 +752,10 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            {/* VALOR SIMPLIFICADO - COM JUSTIFICATIVA */}
+            {/* VALOR - VISUAL CONSISTENCY */}
             <div className="mb-12 relative z-10">
-              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 sm:p-8 border-2 border-[#B89B7A]/20 max-w-md mx-auto shadow-lg">
+              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 md:p-8 border-2 border-[#B89B7A]/20 max-w-lg mx-auto"
+                   style={{ boxShadow: tokens.shadows.lg }}>
                 <div className="text-center">
                   <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
                     <p className="text-red-700 text-sm font-bold">
@@ -768,20 +785,20 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            {/* CTA PRINCIPAL - OTIMIZADO E RESPONSIVO */}
+            {/* CTA BUTTON - CONSISTENCY */}
             <div className="text-center mb-10 relative z-10">
               <button
                 onClick={handleCTAClick} 
-                className="text-white leading-none transition-all duration-300 cursor-pointer font-bold shadow-xl hover:shadow-2xl group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:ring-offset-2"
+                className="text-white leading-none transition-all duration-300 cursor-pointer font-bold group relative overflow-hidden border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:ring-offset-2"
                 style={{
                   background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
-                  boxShadow: `0 8px 32px rgba(184, 155, 122, 0.4)`,
-                  borderRadius: '16px',
+                  boxShadow: tokens.shadows.lg,
+                  borderRadius: tokens.radius.lg,
                   padding: '1rem 2rem',
                   fontSize: '1.125rem',
                   minHeight: '56px',
                   width: '100%',
-                  maxWidth: '400px',
+                  maxWidth: '420px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -789,11 +806,11 @@ const ResultPage: React.FC = () => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = `0 12px 40px rgba(184, 155, 122, 0.5)`;
+                  e.currentTarget.style.boxShadow = tokens.shadows.xl;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = `0 8px 32px rgba(184, 155, 122, 0.4)`;
+                  e.currentTarget.style.boxShadow = tokens.shadows.lg;
                 }}
                 type="button"
               >
@@ -816,8 +833,8 @@ const ResultPage: React.FC = () => {
                 </span>
               </button>
 
-              {/* Elementos de confiança - CORES DA MARCA */}
-              <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm text-[#8F7A6A] flex-wrap mt-6 px-4">
+              {/* Elementos de confiança - SPACING PADRONIZADO */}
+              <div className="flex items-center justify-center gap-6 md:gap-8 text-sm text-[#8F7A6A] flex-wrap mt-8 px-4">
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
                   <span className="font-medium whitespace-nowrap">100% Seguro</span>
@@ -832,15 +849,16 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Informação adicional de urgência - MELHORADA */}
-              <div className="mt-4 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20">
+              {/* Informação adicional - CONSISTENCY */}
+              <div className="mt-6 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20"
+                   style={{ boxShadow: tokens.shadows.sm }}>
                 <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
                 <span className="text-sm text-[#432818] font-medium">
                   ⚡ Acesso liberado instantaneamente
                 </span>
               </div>
               
-              <p className="text-xs text-[#8F7A6A] mt-4 max-w-md mx-auto">
+              <p className="text-xs text-[#8F7A6A] mt-6 max-w-md mx-auto">
                 🔒 <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong>
               </p>
             </div>
@@ -848,7 +866,7 @@ const ResultPage: React.FC = () => {
         </section>
 
         {/* ESPAÇO PARA STICKY CTA */}
-        <div className="mb-32"></div>
+        <div className="mb-24"></div>
       </div>
     </div>
   );
