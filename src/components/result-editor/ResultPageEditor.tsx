@@ -274,6 +274,108 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
             }}
             primaryStyle={primaryStyle}
           />
+
+          {/* Authority Section - NOVO */}
+          <EditableSection
+            title="Autoridade e Credibilidade"
+            sectionPath="offer.authority"
+            content={resultPageConfig.offer?.authority?.content || {}}
+            style={resultPageConfig.offer?.authority?.style || {}}
+            visible={resultPageConfig.offer?.authority?.visible ?? true}
+            isPreview={previewMode}
+            onEdit={() => setEditingSection('offer.authority')}
+            onToggleVisibility={() => toggleSection('offer.authority')}
+            onStyleEdit={() => {
+              setEditingStyles(true);
+              setEditingSection('offer.authority');
+            }}
+            primaryStyle={primaryStyle}
+          />
+
+          {/* FAQ Section - NOVO */}
+          <EditableSection
+            title="Perguntas Frequentes"
+            sectionPath="offer.faq"
+            content={resultPageConfig.offer?.faq?.content || {}}
+            style={resultPageConfig.offer?.faq?.style || {}}
+            visible={resultPageConfig.offer?.faq?.visible ?? true}
+            isPreview={previewMode}
+            onEdit={() => setEditingSection('offer.faq')}
+            onToggleVisibility={() => toggleSection('offer.faq')}
+            onStyleEdit={() => {
+              setEditingStyles(true);
+              setEditingSection('offer.faq');
+            }}
+            primaryStyle={primaryStyle}
+          />
+
+          {/* Urgency Section - NOVO */}
+          <EditableSection
+            title="Urgência e Escassez"
+            sectionPath="offer.urgency"
+            content={resultPageConfig.offer?.urgency?.content || {}}
+            style={resultPageConfig.offer?.urgency?.style || {}}
+            visible={resultPageConfig.offer?.urgency?.visible ?? true}
+            isPreview={previewMode}
+            onEdit={() => setEditingSection('offer.urgency')}
+            onToggleVisibility={() => toggleSection('offer.urgency')}
+            onStyleEdit={() => {
+              setEditingStyles(true);
+              setEditingSection('offer.urgency');
+            }}
+            primaryStyle={primaryStyle}
+          />
+
+          {/* Comparison Section - NOVO */}
+          <EditableSection
+            title="Comparação de Valor"
+            sectionPath="offer.comparison"
+            content={resultPageConfig.offer?.comparison?.content || {}}
+            style={resultPageConfig.offer?.comparison?.style || {}}
+            visible={resultPageConfig.offer?.comparison?.visible ?? true}
+            isPreview={previewMode}
+            onEdit={() => setEditingSection('offer.comparison')}
+            onToggleVisibility={() => toggleSection('offer.comparison')}
+            onStyleEdit={() => {
+              setEditingStyles(true);
+              setEditingSection('offer.comparison');
+            }}
+            primaryStyle={primaryStyle}
+          />
+
+          {/* Risk Reversal Section - NOVO */}
+          <EditableSection
+            title="Reversão de Risco"
+            sectionPath="offer.riskReversal"
+            content={resultPageConfig.offer?.riskReversal?.content || {}}
+            style={resultPageConfig.offer?.riskReversal?.style || {}}
+            visible={resultPageConfig.offer?.riskReversal?.visible ?? true}
+            isPreview={previewMode}
+            onEdit={() => setEditingSection('offer.riskReversal')}
+            onToggleVisibility={() => toggleSection('offer.riskReversal')}
+            onStyleEdit={() => {
+              setEditingStyles(true);
+              setEditingSection('offer.riskReversal');
+            }}
+            primaryStyle={primaryStyle}
+          />
+
+          {/* Final CTA Section - NOVO */}
+          <EditableSection
+            title="CTA Final"
+            sectionPath="offer.finalCta"
+            content={resultPageConfig.offer?.finalCta?.content || {}}
+            style={resultPageConfig.offer?.finalCta?.style || {}}
+            visible={resultPageConfig.offer?.finalCta?.visible ?? true}
+            isPreview={previewMode}
+            onEdit={() => setEditingSection('offer.finalCta')}
+            onToggleVisibility={() => toggleSection('offer.finalCta')}
+            onStyleEdit={() => {
+              setEditingStyles(true);
+              setEditingSection('offer.finalCta');
+            }}
+            primaryStyle={primaryStyle}
+          />
         </div>
       </div>
       
@@ -349,7 +451,13 @@ function getEditorTitle(sectionPath: string): string {
     'offer.benefits': 'Benefícios',
     'offer.pricing': 'Preço e Botão de Compra',
     'offer.testimonials': 'Depoimentos',
-    'offer.guarantee': 'Garantia'
+    'offer.guarantee': 'Garantia',
+    'offer.authority': 'Autoridade e Credibilidade',
+    'offer.faq': 'Perguntas Frequentes',
+    'offer.urgency': 'Urgência e Escassez',
+    'offer.comparison': 'Comparação de Valor',
+    'offer.riskReversal': 'Reversão de Risco',
+    'offer.finalCta': 'CTA Final'
   };
   
   return map[sectionPath] || sectionPath;
@@ -409,10 +517,52 @@ function renderContentEditor(sectionPath: string, config: any, updateSection: (p
           onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
         />
       );
+    case 'offer.authority':
+      return (
+        <AuthorityEditor 
+          content={current.content || {}}
+          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+        />
+      );
+    case 'offer.faq':
+      return (
+        <FaqEditor 
+          content={current.content || {}}
+          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+        />
+      );
+    case 'offer.urgency':
+      return (
+        <UrgencyEditor 
+          content={current.content || {}}
+          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+        />
+      );
+    case 'offer.comparison':
+      return (
+        <ComparisonEditor 
+          content={current.content || {}}
+          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+        />
+      );
+    case 'offer.riskReversal':
+      return (
+        <RiskReversalEditor 
+          content={current.content || {}}
+          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+        />
+      );
+    case 'offer.finalCta':
+      return (
+        <FinalCtaEditor 
+          content={current.content || {}}
+          onUpdate={(content) => updateSection(`${sectionPath}.content`, content)}
+        />
+      );
     default:
       return (
         <div className="space-y-4">
-          {Object.entries(current.content).map(([key, value]) => {
+          {Object.entries(current.content || {}).map(([key, value]) => {
             if (typeof value === 'string') {
               return (
                 <div key={key} className="space-y-2">
