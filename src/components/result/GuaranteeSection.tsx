@@ -34,10 +34,19 @@ const GuaranteeSection: React.FC = () => {
           </div>
           
           <div className="space-y-3">
+            <div className="inline-flex items-center gap-3 mb-3">
+              <div className="w-8 h-px bg-gradient-to-r from-transparent to-[#B89B7A]"></div>
+              <div className="w-2 h-2 bg-[#B89B7A] rounded-full animate-pulse"></div>
+              <div className="w-8 h-px bg-gradient-to-l from-transparent to-[#B89B7A]"></div>
+            </div>
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] font-bold leading-tight">
               Sua Satisfação Garantida
             </h2>
-            <div className="w-16 h-1 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full mx-auto"></div>
+            <div className="inline-flex items-center gap-3 mt-3">
+              <div className="w-8 h-px bg-gradient-to-r from-transparent to-[#aa6b5d]"></div>
+              <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
+              <div className="w-8 h-px bg-gradient-to-l from-transparent to-[#aa6b5d]"></div>
+            </div>
           </div>
         </div>
 
