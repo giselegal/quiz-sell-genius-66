@@ -505,27 +505,27 @@ const ResultPage: React.FC = () => {
                 {/* Lista organizada e alinhada */}
                 <div className="space-y-4 mb-6">
                   <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#4CAF50] flex-shrink-0" />
-                      <span className="text-[#432818] font-medium">Guia de Estilo Personalizado</span>
+                    <div className="flex items-center gap-3 flex-1">
+                      <CheckCircle className="w-5 h-5 text-[#B89B7A] flex-shrink-0" />
+                      <span className="text-[#432818] font-medium text-left">Guia de Estilo Personalizado</span>
                     </div>
-                    <span className="text-[#aa6b5d] font-semibold">R$ 97,00</span>
+                    <span className="text-[#aa6b5d] font-semibold whitespace-nowrap ml-4">R$ 97,00</span>
                   </div>
                   
                   <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#4CAF50] flex-shrink-0" />
-                      <span className="text-[#432818] font-medium">E-book Transformação de Imagem</span>
+                    <div className="flex items-center gap-3 flex-1">
+                      <CheckCircle className="w-5 h-5 text-[#B89B7A] flex-shrink-0" />
+                      <span className="text-[#432818] font-medium text-left">E-book Transformação de Imagem</span>
                     </div>
-                    <span className="text-[#aa6b5d] font-semibold">R$ 47,00</span>
+                    <span className="text-[#aa6b5d] font-semibold whitespace-nowrap ml-4">R$ 47,00</span>
                   </div>
                   
                   <div className="flex items-center justify-between py-2 border-b border-[#B89B7A]/10">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#4CAF50] flex-shrink-0" />
-                      <span className="text-[#432818] font-medium">Checklist de Guarda-roupa</span>
+                    <div className="flex items-center gap-3 flex-1">
+                      <CheckCircle className="w-5 h-5 text-[#B89B7A] flex-shrink-0" />
+                      <span className="text-[#432818] font-medium text-left">Checklist de Guarda-roupa</span>
                     </div>
-                    <span className="text-[#aa6b5d] font-semibold">R$ 31,00</span>
+                    <span className="text-[#aa6b5d] font-semibold whitespace-nowrap ml-4">R$ 31,00</span>
                   </div>
                 </div>
                 
@@ -533,7 +533,7 @@ const ResultPage: React.FC = () => {
                 <div className="border-t-2 border-[#B89B7A]/20 pt-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-[#8F7A6A] font-medium">Valor total individual:</span>
-                    <span className="text-xl font-bold text-[#aa6b5d] line-through">R$ 175,00</span>
+                    <span className="text-xl font-bold text-[#aa6b5d] line-through whitespace-nowrap">R$ 175,00</span>
                   </div>
                 </div>
               </div>

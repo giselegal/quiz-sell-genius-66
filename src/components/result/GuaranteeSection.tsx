@@ -10,26 +10,33 @@ const GuaranteeSection: React.FC = () => {
       
       {/* Content */}
       <div className="relative z-10 text-center">
-        {/* Elegant guarantee circle with animated border */}
-        <div className="flex flex-col items-center gap-6 mb-6">
+        {/* Elegant guarantee circle with enhanced design */}
+        <div className="flex flex-col items-center gap-8 mb-8">
           <div className="relative">
-            {/* Animated border */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] animate-spin opacity-30" style={{ animationDuration: '4s' }}></div>
-            <div className="absolute inset-1 rounded-full bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] animate-spin opacity-40" style={{ animationDuration: '6s', animationDirection: 'reverse' }}></div>
+            {/* Multiple animated borders for depth */}
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#B89B7A]/20 via-[#aa6b5d]/20 to-[#B89B7A]/20 blur-sm"></div>
+            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] animate-spin opacity-40" style={{ animationDuration: '8s' }}></div>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] animate-spin opacity-30" style={{ animationDuration: '12s', animationDirection: 'reverse' }}></div>
             
-            {/* Main circle */}
-            <div className="relative bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] w-32 h-32 rounded-full flex items-center justify-center shadow-xl">
-              <div className="bg-white w-24 h-24 rounded-full flex flex-col items-center justify-center shadow-inner">
-                <span className="text-2xl font-bold text-[#B89B7A]">7</span>
-                <span className="text-sm font-medium text-[#aa6b5d]">dias</span>
+            {/* Main circle with enhanced shadow */}
+            <div className="relative bg-gradient-to-br from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] w-36 h-36 rounded-full flex items-center justify-center shadow-2xl">
+              <div className="bg-gradient-to-br from-white to-[#fefefe] w-28 h-28 rounded-full flex flex-col items-center justify-center shadow-inner border border-[#B89B7A]/10">
+                <span className="text-3xl font-bold bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent leading-none">7</span>
+                <span className="text-sm font-semibold text-[#aa6b5d] tracking-wide uppercase mt-1">dias</span>
               </div>
             </div>
+
+            {/* Floating particles effect */}
+            <div className="absolute top-2 right-2 w-2 h-2 bg-[#B89B7A]/60 rounded-full animate-ping"></div>
+            <div className="absolute bottom-3 left-1 w-1.5 h-1.5 bg-[#aa6b5d]/60 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+            <div className="absolute top-1/2 left-0 w-1 h-1 bg-[#B89B7A]/40 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
           </div>
           
-          <div className="space-y-2">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-2">
+          <div className="space-y-3">
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] font-bold leading-tight">
               Garantia de Satisfação Total
             </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full mx-auto"></div>
           </div>
         </div>
 
