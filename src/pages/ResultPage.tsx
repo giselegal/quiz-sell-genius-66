@@ -396,7 +396,7 @@ const ResultPage: React.FC = () => {
                 {user?.userName && (
                   <AnimatedWrapper className="mb-6" animation="scale" show={true} duration={500} delay={200}>
                     <span className="text-xl lg:text-2xl text-[#aa6b5d] font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                      🎉 Parabéns, {user.userName}!
+                      Parabéns, {user.userName}!
                     </span>
                     <div className="w-12 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mt-2"></div>
                   </AnimatedWrapper>
@@ -438,7 +438,7 @@ const ResultPage: React.FC = () => {
                       <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/10"
                            style={{ boxShadow: tokens.shadows.sm }}>
                         <p className="text-[#432818] text-sm lg:text-base leading-relaxed">
-                          ✨ <strong>Seu estilo {category}</strong> revela uma mulher que {
+                          <strong>Seu estilo {category}</strong> revela uma mulher que {
                             category === 'Natural' ? 'valoriza autenticidade e conforto, sem abrir mão da elegância natural' :
                             category === 'Clássico' ? 'aprecia sofisticação atemporal e peças que nunca saem de moda' :
                             category === 'Contemporâneo' ? 'está sempre em sintonia com as tendências, mas de forma equilibrada' :
@@ -452,7 +452,7 @@ const ResultPage: React.FC = () => {
                       </div>
                       
                       <p className="text-[#8F7A6A] text-sm lg:text-base">
-                        💡 <strong>Problema resolvido:</strong> Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!
+                        <strong>Problema resolvido:</strong> Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!
                       </p>
                     </div>
                   </AnimatedWrapper>
