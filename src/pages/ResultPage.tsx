@@ -324,7 +324,7 @@ const ResultPage: React.FC = () => {
             
             <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
               <div className="text-center mb-8">
-                <h1 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-2">
+                <h1 className="text-xl md:text-3xl font-playfair text-[#432818] mb-2">
                   {user?.userName && (
                     <span className="text-xl md:text-2xl text-[#aa6b5d] block mb-3 font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                       Olá, {user.userName}!
@@ -357,7 +357,7 @@ const ResultPage: React.FC = () => {
                   </AnimatedWrapper>
                 </div>
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 md:order-2">
-                  <div className="max-w-[238px] md:max-w-[280px] mx-auto relative"> 
+                  <div className="max-w-[214px] md:max-w-[280px] mx-auto relative"> 
                     <ProgressiveImage 
                       src={`${image}?q=85&f=auto&w=280`} 
                       alt={`Estilo ${category}`} 
@@ -368,12 +368,12 @@ const ResultPage: React.FC = () => {
                       fetchPriority="high" 
                       onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
                     />
-                    {/* Elegant decorative corners - ajustados para mobile */}
-                    <div className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 w-8 h-8 md:w-10 md:h-10 border-t-2 border-r-2 border-[#B89B7A] rounded-tr-lg"></div>
-                    <div className="absolute -bottom-1.5 -left-1.5 md:-bottom-2 md:-left-2 w-8 h-8 md:w-10 md:h-10 border-b-2 border-l-2 border-[#B89B7A] rounded-bl-lg"></div>
+                    {/* Elegant decorative corners - ajustados para mobile menor */}
+                    <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-7 h-7 md:w-10 md:h-10 border-t-2 border-r-2 border-[#B89B7A] rounded-tr-lg"></div>
+                    <div className="absolute -bottom-1 -left-1 md:-bottom-2 md:-left-2 w-7 h-7 md:w-10 md:h-10 border-b-2 border-l-2 border-[#B89B7A] rounded-bl-lg"></div>
                     
-                    {/* Style badge - ajustado para mobile */}
-                    <div className="absolute -top-2 -left-2 md:-top-3 md:-left-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 md:px-4 md:py-1 rounded-full shadow-lg text-xs md:text-sm font-medium transform -rotate-12">
+                    {/* Style badge - ajustado para mobile menor */}
+                    <div className="absolute -top-1.5 -left-1.5 md:-top-3 md:-left-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-2.5 py-0.5 md:px-4 md:py-1 rounded-full shadow-lg text-xs md:text-sm font-medium transform -rotate-12">
                       {category}
                     </div>
                   </div>
@@ -428,6 +428,84 @@ const ResultPage: React.FC = () => {
               <MotivationSection />
             </AnimatedWrapper>
           </Suspense>
+        </section>
+
+        {/* Style Awareness Section */}
+        <section className="scroll-mt-20 mb-16">
+          <div className="bg-white rounded-xl shadow-lg border border-[#B89B7A]/20 p-6 md:p-8 relative overflow-hidden">
+            {/* Decorative background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/50 to-[#f9f4ef]/30 pointer-events-none"></div>
+            
+            <div className="relative z-10">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-4">
+                  A Diferença de Conhecer Seu Estilo
+                </h3>
+                <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full mx-auto"></div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Quando você não conhece */}
+                <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-lg p-6 border border-red-200/30">
+                  <h4 className="text-lg font-semibold text-red-700 mb-4 flex items-center gap-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                    Quando você não conhece seu estilo...
+                  </h4>
+                  <ul className="space-y-3">
+                    {[
+                      "Compra peças por impulso que não combinam entre si",
+                      "Sente que tem um guarda-roupa cheio, mas \"nada para vestir\"",
+                      "Investe em tendências que não valorizam sua imagem",
+                      "Tem dificuldade em criar uma imagem coerente e autêntica"
+                    ].map((item, index) => (
+                      <li key={index} className="flex items-start gap-3 group">
+                        <div className="mt-1.5 w-4 h-4 rounded-full border-2 border-red-400 flex items-center justify-center flex-shrink-0 group-hover:border-red-500 transition-colors duration-300">
+                          <div className="w-2 h-2 bg-red-400 rounded-full group-hover:bg-red-500 transition-colors duration-300"></div>
+                        </div>
+                        <span className="text-gray-700 group-hover:text-gray-900 transition-colors duration-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Quando você domina */}
+                <div className="bg-gradient-to-br from-[#B89B7A]/10 to-[#aa6b5d]/10 rounded-lg p-6 border border-[#B89B7A]/20">
+                  <h4 className="text-lg font-semibold text-[#aa6b5d] mb-4 flex items-center gap-2">
+                    <div className="w-3 h-3 bg-[#B89B7A] rounded-full animate-pulse"></div>
+                    Quando você domina seu estilo...
+                  </h4>
+                  <ul className="space-y-3">
+                    {[
+                      "Economiza tempo e dinheiro em compras conscientes",
+                      "Projeta a imagem que realmente representa você",
+                      "Aumenta sua confiança em qualquer ambiente",
+                      "Cria looks harmoniosos com menos peças"
+                    ].map((item, index) => (
+                      <li key={index} className="flex items-start gap-3 group">
+                        <div className="mt-1.5 w-4 h-4 rounded-full bg-[#B89B7A] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span className="text-[#432818] group-hover:text-[#aa6b5d] transition-colors duration-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Call to action */}
+              <div className="text-center mt-8">
+                <p className="text-[#8F7A6A] text-lg mb-4">
+                  Transforme sua relação com a moda e descubra o poder do seu estilo autêntico
+                </p>
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#B89B7A]/20 to-[#aa6b5d]/20 px-4 py-2 rounded-full border border-[#B89B7A]/30">
+                  <div className="w-2 h-2 bg-[#B89B7A] rounded-full animate-bounce"></div>
+                  <span className="text-[#aa6b5d] font-medium text-sm">Seu guia está esperando por você</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
         
         {/* Bonus Section */}

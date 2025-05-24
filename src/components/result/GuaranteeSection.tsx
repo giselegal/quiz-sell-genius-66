@@ -13,16 +13,17 @@ const GuaranteeSection: React.FC = () => {
         {/* Elegant guarantee circle with enhanced design */}
         <div className="flex flex-col items-center gap-8 mb-8">
           <div className="relative">
-            {/* Multiple animated borders for depth */}
+            {/* Multiple animated borders for depth - bordas mais finas */}
             <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#B89B7A]/20 via-[#aa6b5d]/20 to-[#B89B7A]/20 blur-sm"></div>
-            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] animate-spin opacity-40" style={{ animationDuration: '8s' }}></div>
+            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] animate-spin opacity-40" style={{ animationDuration: '8s' }}></div>
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] animate-spin opacity-30" style={{ animationDuration: '12s', animationDirection: 'reverse' }}></div>
             
             {/* Main circle with enhanced shadow */}
             <div className="relative bg-gradient-to-br from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] w-36 h-36 rounded-full flex items-center justify-center shadow-2xl">
               <div className="bg-gradient-to-br from-white to-[#fefefe] w-28 h-28 rounded-full flex flex-col items-center justify-center shadow-inner border border-[#B89B7A]/10">
                 <span className="text-3xl font-bold bg-gradient-to-br from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent leading-none">7</span>
-                <span className="text-sm font-semibold text-[#aa6b5d] tracking-wide uppercase mt-1">dias</span>
+                <span className="text-xs font-semibold text-[#aa6b5d] tracking-wide mt-1">dias de</span>
+                <span className="text-xs font-semibold text-[#aa6b5d] tracking-wide">Garantia</span>
               </div>
             </div>
 
@@ -46,15 +47,15 @@ const GuaranteeSection: React.FC = () => {
         
         <div className="grid md:grid-cols-3 gap-4 text-sm text-[#432818]">
           <div className="flex items-center gap-2 justify-center">
-            <CheckCircle className="w-4 h-4 text-[#4CAF50]" />
+            <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
             <span>Reembolso Total</span>
           </div>
           <div className="flex items-center gap-2 justify-center">
-            <CheckCircle className="w-4 h-4 text-[#4CAF50]" />
+            <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
             <span>Sem Complicações</span>
           </div>
           <div className="flex items-center gap-2 justify-center">
-            <CheckCircle className="w-4 h-4 text-[#4CAF50]" />
+            <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
             <span>Processamento Rápido</span>
           </div>
         </div>
