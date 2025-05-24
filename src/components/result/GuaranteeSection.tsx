@@ -35,15 +35,21 @@ const GuaranteeSection: React.FC = () => {
           
           <div className="space-y-3">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] font-bold leading-tight">
-              Garantia de Satisfação Total
+              Sua Satisfação Garantida
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full mx-auto"></div>
           </div>
         </div>
 
-        <p className="text-base md:text-lg text-[#8F7A6A] max-w-2xl mx-auto leading-relaxed mb-6">
-          Experimente nosso guia de estilo por 7 dias completos. Se não ficar totalmente satisfeita com os resultados, devolvemos 100% do seu investimento, sem perguntas ou complicações.
-        </p>
+        <div className="space-y-6 mb-6">
+          <p className="text-base md:text-lg text-[#8F7A6A] max-w-2xl mx-auto leading-relaxed">
+            Acreditamos tanto na transformação que o Guia de Estilo proporciona que oferecemos uma garantia incondicional. Se por qualquer motivo você não ficar 100% satisfeita nos primeiros 7 dias, basta nos enviar um e-mail e reembolsaremos o valor integral.
+          </p>
+          
+          <p className="text-base md:text-lg text-[#432818] max-w-2xl mx-auto leading-relaxed font-medium">
+            Sem perguntas, sem burocracia. Seu investimento é totalmente seguro.
+          </p>
+        </div>
         
         <div className="grid md:grid-cols-3 gap-4 text-sm text-[#432818]">
           <div className="flex items-center gap-2 justify-center">
