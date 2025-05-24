@@ -89,24 +89,27 @@ const CheckItem: React.FC<{
   </li>
 );
 
-// Componente NavButton reutilizável - setas menores
+// Componente NavButton reutilizável - CORRIGIDO
 const NavButton: React.FC<{
   direction: 'prev' | 'next';
   onClick: () => void;
 }> = ({ direction, onClick }) => (
-  <motion.button
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-1 shadow-sm hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-1 focus:ring-[#B89B7A] focus:ring-offset-1"
-    onClick={onClick}
+  <button
+    className="bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-md hover:bg-[#B89B7A]/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-1 z-20 cursor-pointer"
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick();
+    }}
+    style={{ pointerEvents: 'auto' }}
     aria-label={direction === 'prev' ? 'Anterior' : 'Próxima'}
   >
     {direction === 'prev' ? (
-      <ChevronLeft size={16} className="text-[#432818]" />
+      <ChevronLeft size={20} className="text-[#432818]" style={{ pointerEvents: 'none' }} />
     ) : (
-      <ChevronRight size={16} className="text-[#432818]" />
+      <ChevronRight size={20} className="text-[#432818]" style={{ pointerEvents: 'none' }} />
     )}
-  </motion.button>
+  </button>
 );
 
 // Dados das transformações
@@ -326,39 +329,38 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     </motion.div>
                   </AnimatePresence>
                   
-                  {/* Navegação - setas menores */}
+                  {/* Navegação - CORRIGIDA */}
                   {transformations.length > 1 && (
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 pointer-events-none">
-                      <div className="pointer-events-auto">
-                        <NavButton 
-                          direction="prev" 
-                          onClick={goToPrevious}
-                        />
-                      </div>
-                      <div className="pointer-events-auto">
-                        <NavButton 
-                          direction="next" 
-                          onClick={goToNext}
-                        />
-                      </div>
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 z-20">
+                      <NavButton 
+                        direction="prev" 
+                        onClick={goToPrevious}
+                      />
+                      <NavButton 
+                        direction="next" 
+                        onClick={goToNext}
+                      />
                     </div>
                   )}
                 </div>
                 
-                {/* Indicadores de slides */}
+                {/* Indicadores de slides - MELHORADOS */}
                 {transformations.length > 1 && (
                   <div className="flex justify-center space-x-3 mt-4">
                     {transformations.map((_, idx) => (
-                      <motion.button
+                      <button
                         key={idx}
-                        onClick={() => navigateToTransformation(idx)}
-                        whileHover={{ scale: 1.2 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          navigateToTransformation(idx);
+                        }}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
                           idx === activeIndex 
-                            ? 'bg-[#B89B7A] scale-110' 
-                            : 'bg-gray-300 hover:bg-[#B89B7A]/50'
+                            ? 'bg-[#B89B7A] scale-110 shadow-sm' 
+                            : 'bg-gray-300 hover:bg-[#B89B7A]/50 hover:scale-105'
                         }`}
+                        style={{ pointerEvents: 'auto' }}
                         aria-label={`Ver transformação ${idx + 1}`}
                       />
                     ))}
