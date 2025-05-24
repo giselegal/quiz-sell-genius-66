@@ -452,7 +452,7 @@ const ResultPage: React.FC = () => {
                       </div>
                       
                       <p className="text-[#8F7A6A] text-sm lg:text-base">
-                        <strong>Problema resolvido:</strong> Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!
+                        <strong>Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!</strong>
                       </p>
                     </div>
                   </AnimatedWrapper>
@@ -628,9 +628,9 @@ const ResultPage: React.FC = () => {
         <section id="mentor" className="scroll-mt-20 mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="A especialista que já ajudou mais de 3.000 mulheres a descobrirem seu estilo autêntico"
+            subtitle="A especialista que já ajudou +de 3.000 mulheres a descobrirem seu estilo autêntico"
           >
-            Sua Mentora de Estilo
+            Sua Mentora de Imagem e Estilo
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -655,7 +655,7 @@ const ResultPage: React.FC = () => {
                 Chegou o Momento de Agir
               </h3>
               <p className="text-lg text-[#8F7A6A] font-medium max-w-md mx-auto">
-                Tudo que você precisa para descobrir e aplicar seu estilo pessoal
+                Tudo que você precisa para aplicar seu Estilo Pessoal
               </p>
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-8"></div>
             </div>
@@ -686,7 +686,7 @@ const ResultPage: React.FC = () => {
               </h2>
               
               <p className="text-xl text-[#8F7A6A] mb-8">
-                Seu guia personalizado {category} + materiais exclusivos de Estilo e Imagem
+                Seu Guia personalizado {category} + materiais exclusivos de Estilo e Imagem
               </p>
             </div>
             
@@ -709,7 +709,7 @@ const ResultPage: React.FC = () => {
                       return guideImages[category] || guideImages['Natural'];
                     })(),
                     title: `Manual de Estilo ${category}`,
-                    subtitle: 'Seu guia estratégico com 50+ looks meticulosamente selecionados que comunicam sua essência antes mesmo de você falar. Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única, transformando seu guarda-roupa em uma poderosa ferramenta de comunicação visual e autoexpressão.',
+                    subtitle: 'Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única, transformando seu guarda-roupa em uma poderosa ferramenta de comunicação visual e autoexpressão.',
                     badge: 'GUIA'
                   },
                   {
@@ -775,74 +775,74 @@ const ResultPage: React.FC = () => {
               </div>
 
               {/* RESUMO DO VALOR MELHORADO */}
-              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 border border-[#B89B7A]/20 max-w-2xl mx-auto">
-                <h4 className="font-bold text-[#432818] mb-3">Tudo que você recebe hoje:</h4>
-                <ul className="text-sm text-[#8F7A6A] space-y-3">
-                  <li className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                      <span>Manual completo do seu <strong>Estilo {category}</strong> (Predominante){
-                        secondaryStyles && secondaryStyles.length > 0 && (
-                          <> + <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(' + ')}</strong> (Complementares)</>
-                        )
-                      }</span>
+              <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-4 lg:p-6 border border-[#B89B7A]/20 max-w-2xl mx-auto">
+                <h4 className="font-bold text-[#432818] mb-4 text-center lg:text-left">Tudo que você recebe hoje:</h4>
+                
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 p-3 bg-white/50 rounded-lg">
+                    <div className="flex items-start gap-2 flex-1">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                      <div className="text-sm text-[#8F7A6A] leading-relaxed">
+                        <span className="block">Manual completo do seu <strong>Estilo {category}</strong> Predominante </span>
+                        {secondaryStyles && secondaryStyles.length > 0 && (
+                          <span className="block text-xs mt-1">+ <strong>{secondaryStyles.slice(0, 2).map(style => style.category).join(' + ')}</strong> - Complementares</span>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
-                      <span className="line-through">R$ 85,00</span> → <span className="text-[#aa6b5d] font-medium">Incluído</span>
+                    <div className="text-right sm:text-right ml-auto sm:ml-0 flex-shrink-0">
+                      <div className="text-xs text-[#8F7A6A]">
+                        <span className="line-through block">R$ 85,00</span>
+                        <span className="text-[#aa6b5d] font-medium">Incluído</span>
+                      </div>
                     </div>
-                  </li>
-                  <li className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                      <span>Guia das Peças Estratégicas que multiplicam seus looks</span>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-white/50 rounded-lg">
+                    <div className="flex items-start gap-2 flex-1">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                      <span className="text-sm text-[#8F7A6A] leading-relaxed">Guia das Peças-Chave</span>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
-                      <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
+                    <div className="text-right ml-auto sm:ml-0 flex-shrink-0">
+                      <div className="text-xs text-[#8F7A6A]">
+                        <span className="line-through block">R$ 55,00</span>
+                        <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
+                      </div>
                     </div>
-                  </li>
-                  <li className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0"></div>
-                      <span>Manual de visagismo para valorizar sua beleza única</span>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-3 bg-white/50 rounded-lg">
+                    <div className="flex items-start gap-2 flex-1">
+                      <div className="w-1.5 h-1.5 bg-[#B89B7A] rounded-full flex-shrink-0 mt-2"></div>
+                      <span className="text-sm text-[#8F7A6A] leading-relaxed">Manual de visagismo para valorizar sua beleza única</span>
                     </div>
-                    <div className="text-xs text-[#8F7A6A] ml-4 flex-shrink-0">
-                      <span className="line-through">R$ 45,00</span> → <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
-                    </div>
-                  </li>
-                </ul>
-                <div className="border-t border-[#B89B7A]/20 mt-3 pt-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-[#432818]">Valor Total:</span>
-                    <div className="text-right">
-                      <span className="text-sm text-[#8F7A6A] line-through">R$ 175,00</span>
+                    <div className="text-right ml-auto sm:ml-0 flex-shrink-0">
+                      <div className="text-xs text-[#8F7A6A]">
+                        <span className="line-through block">R$ 35,00</span>
+                        <span className="text-[#aa6b5d] font-medium">Bônus Grátis</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* PRICING SECTION - OTIMIZADA */}
-              <div className="mb-12 relative z-10">
-                <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 lg:p-8 border-2 border-[#B89B7A]/20 max-w-lg mx-auto"
-                     style={{ boxShadow: tokens.shadows.lg }}>
-                  <div className="text-center">
+                <div className="border-t border-[#B89B7A]/20 mt-4 pt-4">
                     <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
                       <p className="text-red-700 text-sm font-bold">
                         🔥 OFERTA EXCLUSIVA PARA QUEM FEZ O QUIZ
                       </p>
                     </div>
                     
-                    <p className="text-sm text-[#8F7A6A] mb-2">Valor se comprar separado: <span className="line-through font-medium">R$ 175,00</span></p>
-                    <p className="text-lg font-bold text-[#432818] mb-4">Seu preço especial hoje:</p>
+                    <p className="text-sm text-[#8F7A6A] mb-2">Tudo isso deveria custar: <span className="line-through font-medium">R$ 175,00</span></p>
+                    <p className="text-lg font-bold text-[#432818] mb-4">Seu preço Especial Hoje:</p>
                     <div className="mb-4">
                       <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                         R$ 39,90
                       </span>
-                      <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
+                      <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83</p>
                     </div>
                     
                     <div className="inline-flex items-center gap-2 mb-4">
                       <span className="text-[#aa6b5d] text-xs font-bold">
-                        💰 Economia de R$ 135,10 (77% OFF)
+                        Economia de R$ 135,10 (77% OFF)
                       </span>
                     </div>
                     
@@ -904,12 +904,12 @@ const ResultPage: React.FC = () => {
                      style={{ boxShadow: tokens.shadows.sm }}>
                   <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
                   <span className="text-sm text-[#432818] font-medium">
-                    ⚡ Acesso liberado instantaneamente
+                    ⚡ Acesso imediato
                   </span>
                 </div>
                 
                 <p className="text-xs text-[#8F7A6A] mt-6 max-w-md mx-auto">
-                  🔒 <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong>
+                  🔒 <strong>Pagamento 100% seguro</strong> • <strong>Site confiável</strong>
                 </p>
               </div>
             </div>
