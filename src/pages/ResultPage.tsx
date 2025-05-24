@@ -895,70 +895,56 @@ const ResultPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Resumo Final - HIERARQUIA MELHORADA */}
-                  <div className="border-t border-[#B89B7A]/25 mt-6 pt-6">
-                    {/* ALERTA DE OFERTA - VISUAL MELHORADO E RESPONSIVO */}
-                    <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-3 md:p-4 mb-6 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-orange-500/5"></div>
-                      <p className="text-red-700 text-sm md:text-base font-bold text-center relative z-10 flex flex-col sm:flex-row items-center justify-center gap-2">
-                        <span className="inline-flex items-center gap-2">
-                          <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
-                          <span className="whitespace-nowrap">OFERTA EXCLUSIVA</span>
-                        </span>
-                        <span className="hidden sm:inline">-</span>
-                        <span className="inline-flex items-center gap-2">
-                          <span className="whitespace-nowrap">QUIZ COMPLETO</span>
-                          <div className="w-1 h-4 bg-gradient-to-b from-orange-500 to-red-500 rounded-full animate-pulse"></div>
-                        </span>
-                      </p>
+                  {/* Resumo Final - DESIGN ELEGANTE E ESTRATÉGICO */}
+                  <div className="border-t border-[#B89B7A]/20 mt-8 pt-8">
+                    
+                    {/* BADGE DE OFERTA - ELEGANTE */}
+                    <div className="text-center mb-6">
+                      <div className="inline-flex items-center gap-2 bg-[#432818] text-white px-4 py-2 rounded-full text-sm font-semibold">
+                        <div className="w-2 h-2 bg-[#B89B7A] rounded-full"></div>
+                        <span>OFERTA EXCLUSIVA QUIZ COMPLETO</span>
+                      </div>
                     </div>
                     
-                    <div className="text-center space-y-4 md:space-y-3">
-                      {/* VALOR ORIGINAL - RESPONSIVO */}
-                      <p className="text-sm md:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                        <span className="font-semibold text-[#432818]">Tudo isso deveria custar:</span> 
-                        <span className="line-through font-bold ml-2 text-lg md:text-xl text-gray-500">R$ 175,00</span>
-                      </p>
-                      
-                      {/* SEPARADOR VISUAL - RESPONSIVO */}
-                      <div className="flex items-center justify-center gap-3 md:gap-4 my-4 md:my-6">
-                        <div className="w-12 md:w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-                        <span className="text-lg md:text-xl font-bold text-[#432818] whitespace-nowrap px-2">Seu Investimento Hoje</span>
-                        <div className="w-12 md:w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-                      </div>
-                      
-                      {/* PREÇO PRINCIPAL - RESPONSIVO E ESTRATÉGICO */}
-                      <div className="mb-4 md:mb-6">
-                        <span className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent block leading-tight">
-                          R$ 39,90
-                        </span>
-                        <p className="text-sm md:text-base mt-2 leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                          ou <strong className="text-[#432818] text-base md:text-lg">5x de R$ 8,83</strong> sem juros
+                    <div className="text-center space-y-6">
+                      {/* COMPARAÇÃO DE VALOR - CLEAN */}
+                      <div className="space-y-2">
+                        <p className="text-base" style={{ color: tokens.colors.textMuted }}>
+                          <span className="font-medium text-[#432818]">Valor total individual:</span> 
+                          <span className="line-through font-semibold ml-2 text-xl text-gray-400">R$ 175,00</span>
                         </p>
                       </div>
                       
-                      {/* ECONOMIA - ESTRATÉGICO COM VERDE */}
-                      <div className="inline-flex items-center gap-2 md:gap-3 bg-green-50 px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 border-green-200 mb-4 md:mb-6">
-                        <div className="w-2 h-2 bg-green-600 rounded-full flex-shrink-0"></div>
-                        <span className="text-green-700 font-bold text-sm md:text-base text-center">
-                          <span className="block sm:inline">Você economiza</span>
-                          <span className="block sm:inline sm:ml-1">R$ 135,10 (77% OFF)</span>
+                      {/* SEPARADOR MINIMALISTA */}
+                      <div className="flex items-center justify-center gap-4 my-6">
+                        <div className="w-20 h-px bg-[#B89B7A]/30"></div>
+                        <span className="text-xl font-semibold text-[#432818] px-4">Seu Investimento</span>
+                        <div className="w-20 h-px bg-[#B89B7A]/30"></div>
+                      </div>
+                      
+                      {/* PREÇO PRINCIPAL - ELEGANTE */}
+                      <div className="mb-6">
+                        <div className="text-5xl lg:text-6xl font-bold text-[#432818] mb-2">
+                          R$ 39,90
+                        </div>
+                        <p className="text-base" style={{ color: tokens.colors.textMuted }}>
+                          ou <span className="text-[#432818] font-semibold text-lg">5x de R$ 8,83</span> sem juros
+                        </p>
+                      </div>
+                      
+                      {/* ECONOMIA - MINIMALISTA */}
+                      <div className="inline-block bg-[#f8fdf8] border border-[#4CAF50]/20 px-6 py-3 rounded-lg">
+                        <span className="text-[#2d7d32] font-semibold">
+                          Economia de R$ 135,10 (77% de desconto)
                         </span>
                       </div>
                       
-                      {/* URGÊNCIA - RESPONSIVO E VISUAL MELHORADO */}
-                      <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3 bg-gradient-to-r from-orange-50 to-red-50 px-3 md:px-4 py-3 md:py-4 rounded-xl border-2 border-orange-200 max-w-sm mx-auto">
-                        <div className="inline-flex items-center gap-2">
-                          <Hourglass className="w-4 h-4 md:w-5 md:h-5 text-orange-600 flex-shrink-0" 
-                                     style={{ 
-                                       animation: 'spin 3s linear infinite',
-                                       transformOrigin: 'center'
-                                     }} />
-                          <span className="text-xs md:text-sm text-orange-700 font-semibold text-center leading-tight">
-                            <span className="block sm:inline">Esta oferta expira</span>
-                            <span className="block sm:inline sm:ml-1">quando você sair desta página</span>
-                          </span>
-                        </div>
+                      {/* URGÊNCIA - SUTIL */}
+                      <div className="mt-4">
+                        <p className="text-sm font-medium text-[#8F7A6A] flex items-center justify-center gap-2">
+                          <Clock className="w-4 h-4" />
+                          <span>Esta oferta expira quando você sair desta página</span>
+                        </p>
                       </div>
                     </div>
                   </div>
