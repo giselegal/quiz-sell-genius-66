@@ -736,7 +736,7 @@ const ResultPage: React.FC = () => {
                     
                     {/* BADGE DO PRODUTO - MELHOR CONTRASTE */}
                     <div className="absolute -top-3 -right-3 z-10">
-                      <span className={`text-xs font-bold px-3 py-1.5 rounded-full text-white shadow-md ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#4CAF50] to-[#45a049]'}`}>
+                      <span className={`text-xs font-bold px-3 py-1.5 rounded-full text-white shadow-md ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]'}`}>
                         {product.badge}
                       </span>
                     </div>
@@ -780,11 +780,21 @@ const ResultPage: React.FC = () => {
                     <div className="mt-4 pt-4 border-t border-[#B89B7A]/15">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {index === 0 ? ' Produto Principal' : ' Incluído Grátis'}
+                          {index === 0 ? (
+                            <span className="inline-flex items-center gap-1">
+                              <div className="w-1.5 h-1.5 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] rounded-full"></div>
+                              Produto Principal
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1">
+                              <div className="w-1.5 h-1.5 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] rounded-full"></div>
+                              Incluído Grátis
+                            </span>
+                          )}
                         </span>
                         <div className="flex items-center gap-2">
-                          <div className={`w-2.5 h-2.5 rounded-full ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#4CAF50] to-[#45a049]'}`}></div>
-                          <span className={`text-sm font-semibold ${index === 0 ? 'text-[#aa6b5d]' : 'text-[#4CAF50]'}`}>
+                          <div className={`w-2.5 h-2.5 rounded-full ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]'}`}></div>
+                          <span className={`text-sm font-semibold ${index === 0 ? 'text-[#aa6b5d]' : 'text-[#aa6b5d]'}`}>
                             {index === 0 ? 'Personalizado' : 'Bônus'}
                           </span>
                         </div>
@@ -804,7 +814,11 @@ const ResultPage: React.FC = () => {
                 
                 <div className="relative z-10">
                   <h4 className="font-bold text-[#432818] mb-6 text-center text-lg lg:text-xl">
-                    Seu Kit Completo de Transformação
+                    <span className="inline-flex items-center gap-2">
+                      <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
+                      Seu Kit Completo de Transformação
+                      <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
+                    </span>
                   </h4>
                   
                   <div className="space-y-4">
@@ -844,17 +858,17 @@ const ResultPage: React.FC = () => {
                     {/* Bônus 1 - VISUAL CONSISTENTE */}
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4 bg-white/60 rounded-xl border border-[#B89B7A]/10">
                       <div className="flex items-start gap-3 flex-1">
-                        <div className="w-2 h-2 bg-[#4CAF50] rounded-full flex-shrink-0 mt-2"></div>
+                        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-2"></div>
                         <div className="leading-relaxed">
                           <span className="block text-[#432818] font-semibold mb-1">Guia das Peças Estratégicas</span>
                           <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                  
+                            Lista das 15 peças essenciais para maximizar seu guarda-roupa
                           </span>
                         </div>
                       </div>
                       <div className="text-center lg:text-right flex-shrink-0">
                         <div className="text-sm">
-                          <span className="text-[#4CAF50] font-bold">BÔNUS GRÁTIS</span>
+                          <span className="text-[#aa6b5d] font-bold">BÔNUS GRÁTIS</span>
                           <br />
                           <span className="line-through text-gray-500">R$ 59,00</span>
                         </div>
@@ -864,7 +878,7 @@ const ResultPage: React.FC = () => {
                     {/* Bônus 2 - VISUAL CONSISTENTE */}
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4 bg-white/60 rounded-xl border border-[#B89B7A]/10">
                       <div className="flex items-start gap-3 flex-1">
-                        <div className="w-2 h-2 bg-[#4CAF50] rounded-full flex-shrink-0 mt-2"></div>
+                        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0 mt-2"></div>
                         <div className="leading-relaxed">
                           <span className="block text-[#432818] font-semibold mb-1">Manual de Visagismo Personalizado</span>
                           <span className="text-sm leading-relaxed" style={{ color: tokens.colors.textMuted }}>
@@ -874,7 +888,7 @@ const ResultPage: React.FC = () => {
                       </div>
                       <div className="text-center lg:text-right flex-shrink-0">
                         <div className="text-sm">
-                          <span className="text-[#4CAF50] font-bold">BÔNUS GRÁTIS</span>
+                          <span className="text-[#aa6b5d] font-bold">BÔNUS GRÁTIS</span>
                           <br />
                           <span className="line-through text-gray-500">R$ 37,00</span>
                         </div>
@@ -888,8 +902,9 @@ const ResultPage: React.FC = () => {
                     <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-4 mb-6 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-orange-500/5"></div>
                       <p className="text-red-700 text-base font-bold text-center relative z-10 flex items-center justify-center gap-2">
+                        <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
                         OFERTA EXCLUSIVA - QUIZ COMPLETO
-                        <span className="animate-pulse">⚡</span>
+                        <div className="w-1 h-4 bg-gradient-to-b from-orange-500 to-red-500 rounded-full animate-pulse"></div>
                       </p>
                     </div>
                     
@@ -915,6 +930,7 @@ const ResultPage: React.FC = () => {
                       </div>
                       
                       <div className="inline-flex items-center gap-3 bg-green-50 px-4 py-3 rounded-xl border-2 border-green-200 mb-4">
+                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
                         <span className="text-green-700 font-bold text-base">
                           Você economiza R$ 135,10 (77% OFF)
                         </span>
@@ -979,12 +995,23 @@ const ResultPage: React.FC = () => {
                      style={{ boxShadow: tokens.shadows.sm }}>
                   <div className="w-2.5 h-2.5 bg-[#aa6b5d] rounded-full animate-pulse"></div>
                   <span className="text-sm text-[#432818] font-semibold">
-                    ⚡ Acesso imediato
+                    <span className="inline-flex items-center gap-1">
+                      <div className="w-1 h-3 bg-gradient-to-t from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
+                      Acesso imediato
+                    </span>
                   </span>
                 </div>
                 
                 <p className="text-sm font-medium max-w-md mx-auto text-center leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                  🔒 <strong className="text-[#432818]">Pagamento 100% seguro</strong> • <strong className="text-[#432818]">Site confiável</strong>
+                  <span className="inline-flex items-center gap-1">
+                    <Shield className="w-3 h-3 text-[#432818]" />
+                    <strong className="text-[#432818]">Pagamento 100% seguro</strong>
+                  </span>
+                  <span className="mx-2">•</span>
+                  <span className="inline-flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3 text-[#432818]" />
+                    <strong className="text-[#432818]">Site confiável</strong>
+                  </span>
                 </p>
               </div>
             </div>
