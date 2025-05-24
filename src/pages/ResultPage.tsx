@@ -2,11 +2,10 @@
 import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight, Shield, Award, Hourglass } from 'lucide-react';
+import { ShoppingCart, Shield, Award, Clock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -15,8 +14,6 @@ import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
-import BuildInfo from '@/components/BuildInfo';
-import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
@@ -159,30 +156,29 @@ const ResultPage: React.FC = () => {
   // Active section tracking
   const [activeSection, setActiveSection] = useState('primary-style');
   
-  // Temporizador de contagem regressiva
-  const [timer, setTimer] = useState({
-    hours: 2,
-    minutes: 59,
-    seconds: 59
-  });
-  
-  useEffect(() => {
-    const countdownInterval = setInterval(() => {
-      setTimer(prevTimer => {
-        if (prevTimer.seconds > 0) {
-          return { ...prevTimer, seconds: prevTimer.seconds - 1 };
-        } else if (prevTimer.minutes > 0) {
-          return { ...prevTimer, minutes: prevTimer.minutes - 1, seconds: 59 };
-        } else if (prevTimer.hours > 0) {
-          return { hours: prevTimer.hours - 1, minutes: 59, seconds: 59 };
-        } else {
-          // Reset timer quando chegar a zero (para manter a oferta "limitada")
-          return { hours: 2, minutes: 59, seconds: 59 };
-        }
-      });
-    }, 1000);
+  // MEMOIZED SCROLL HANDLER
+  const handleScroll = useCallback(() => {
+    const scrollY = window.scrollY;
+    setIsScrolled(scrollY > 100);
     
-    return () => clearInterval(countdownInterval);
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrolledToBottom = scrollY + windowHeight >= documentHeight - 800;
+    setShowBottomBar(scrolledToBottom);
+    
+    // Track active section
+    const sections = [
+      'primary-style', 'transformations', 'motivation', 'bonuses',
+      'testimonials', 'guarantee', 'mentor', 'cta'
+    ];
+    
+    for (let i = sections.length - 1; i >= 0; i--) {
+      const element = document.getElementById(sections[i]);
+      if (element?.getBoundingClientRect().top <= 200) {
+        setActiveSection(sections[i]);
+        break;
+      }
+    }
   }, []);
   
   useEffect(() => {
@@ -209,70 +205,40 @@ const ResultPage: React.FC = () => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
   
-  // Scroll tracking effect
+  // SCROLL TRACKING EFFECT - OTIMIZADO
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-      
-      // Show bottom bar only when near the end of the page
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const scrolledToBottom = scrollTop + windowHeight >= documentHeight - 800; // Show 800px before end
-      
-      setShowBottomBar(scrolledToBottom);
-      
-      // Track active section
-      const sections = [
-        'primary-style', 'transformations', 'motivation', 'bonuses',
-        'testimonials', 'guarantee', 'mentor', 'cta'
-      ];
-      
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const element = document.getElementById(sections[i]);
-        if (element?.getBoundingClientRect().top <= 200) {
-          setActiveSection(sections[i]);
-          break;
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [handleScroll]);
   
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
   
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
+  const { image, guideImage } = styleConfig[category];
   
-  const handleCTAClick = (e) => {
-    // Prevenir comportamento padrão e propagação
+  // MEMOIZED CTA HANDLER
+  const handleCTAClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // Prevenir múltiplos cliques
-    if (window.ctaClickProcessing) return;
-    window.ctaClickProcessing = true;
+    if ((window as any).ctaClickProcessing) return;
+    (window as any).ctaClickProcessing = true;
     
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     
-    // Para desktop, usar window.open para garantir funcionamento
     if (window.innerWidth >= 768) {
       window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
     } else {
-      // Para mobile, usar location.href
       window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
     }
     
-    // Limpar flag após delay
     setTimeout(() => {
-      window.ctaClickProcessing = false;
+      (window as any).ctaClickProcessing = false;
     }, 1000);
-  };
+  }, []);
   
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = useCallback((sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
       window.scrollTo({
@@ -280,7 +246,7 @@ const ResultPage: React.FC = () => {
         behavior: 'smooth'
       });
     }
-  };
+  }, []);
   
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
@@ -326,8 +292,8 @@ const ResultPage: React.FC = () => {
         </div>
       </header>
 
-      {/* Navigation dots (only visible on scroll) */}
-      <div className={`fixed right-4 top-
+      {/* Navigation dots (only visible on scroll) - CORRIGIDO */}
+      <div className={`fixed right-4 top-1/2 transform -translate-y-1/2 z-50 transition-opacity duration-500 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
         <div className="flex flex-col gap-2">
           {[
             { id: 'primary-style', label: 'Seu Estilo' },
@@ -341,7 +307,11 @@ const ResultPage: React.FC = () => {
             <button
               key={section.id}
               onClick={() => scrollToSection(section.id)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${activeSection === section.id ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] scale-125 shadow-sm' : 'bg-gray-300 hover:bg-gray-400'}`}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                activeSection === section.id 
+                  ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] scale-125 shadow-sm' 
+                  : 'bg-gray-300 hover:bg-gray-400'
+              }`}
               aria-label={`Ir para seção ${section.label}`}
               title={section.label}
             />
@@ -740,14 +710,14 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            {/* PRICING SECTION - OTIMIZADA */}
+            {/* PRICING SECTION - EMOJI REMOVIDO */}
             <div className="mb-12 relative z-10">
               <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 lg:p-8 border-2 border-[#B89B7A]/20 max-w-lg mx-auto"
                    style={{ boxShadow: tokens.shadows.lg }}>
                 <div className="text-center">
                   <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
                     <p className="text-red-700 text-sm font-bold">
-                      🔥 OFERTA EXCLUSIVA PARA QUEM FEZ O QUIZ
+                      OFERTA EXCLUSIVA PARA QUEM FEZ O QUIZ
                     </p>
                   </div>
                   
@@ -763,12 +733,12 @@ const ResultPage: React.FC = () => {
                   <div className="inline-flex items-center gap-2 bg-[#fff7f3] px-3 py-2 rounded-full border border-[#B89B7A]/20"
                        style={{ boxShadow: tokens.shadows.sm }}>
                     <span className="text-[#aa6b5d] text-xs font-bold">
-                      💰 Economia de R$ 135,10 (77% OFF)
+                      Economia de R$ 135,10 (77% OFF)
                     </span>
                   </div>
                   
                   <p className="text-xs text-[#8F7A6A] mt-3">
-                    ⏰ Esta oferta expira quando você sair desta página
+                    Esta oferta expira quando você sair desta página
                   </p>
                 </div>
               </div>
@@ -825,17 +795,17 @@ const ResultPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* URGENCY BADGE - CONSISTENTE */}
+              {/* URGENCY BADGE - EMOJI REMOVIDO */}
               <div className="mt-6 inline-flex items-center gap-2 bg-[#fff7f3] px-4 py-2 rounded-full border border-[#B89B7A]/20"
                    style={{ boxShadow: tokens.shadows.sm }}>
                 <div className="w-2 h-2 bg-[#aa6b5d] rounded-full animate-pulse"></div>
                 <span className="text-sm text-[#432818] font-medium">
-                  ⚡ Acesso liberado instantaneamente
+                  Acesso liberado instantaneamente
                 </span>
               </div>
               
               <p className="text-xs text-[#8F7A6A] mt-6 max-w-md mx-auto">
-                🔒 <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong>
+                <strong>Pagamento 100% seguro</strong> • <strong>Garantia de 7 dias</strong>
               </p>
             </div>
           </AnimatedWrapper>
