@@ -209,9 +209,15 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Título com decoração */}
           <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] inline-block">
+            <div className="inline-flex items-center gap-2 mb-3">
+              <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#aa6b5d]"></div>
+              <div className="w-1.5 h-1.5 bg-[#aa6b5d] rounded-full"></div>
+              <div className="w-6 h-px bg-gradient-to-l from-transparent to-[#aa6b5d]"></div>
+            </div>
+            <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
               Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
             </h3>
+            <div className="w-16 h-0.5 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-3"></div>
           </motion.div>
           
           {/* Card principal com skeleton */}
@@ -275,9 +281,15 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Título com decoração */}
         <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d]">
+          <div className="inline-flex items-center gap-2 mb-3">
+            <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#aa6b5d]"></div>
+            <div className="w-1.5 h-1.5 bg-[#aa6b5d] rounded-full"></div>
+            <div className="w-6 h-px bg-gradient-to-l from-transparent to-[#aa6b5d]"></div>
+          </div>
+          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
             Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
           </h3>
+          <div className="w-16 h-0.5 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-3"></div>
         </motion.div>
         
         {/* Card principal com grid layout */}
@@ -354,9 +366,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
-                  className="text-lg font-medium text-[#432818] md:hidden text-center mb-4"
+                  className="text-lg font-medium text-[#432818] md:hidden text-center mb-4 relative"
                 >
-                  O Poder de Vestir-se de Você!
+                  <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
+                    O Poder de Vestir-se de Você!
+                  </span>
+                  <div className="w-12 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mt-2"></div>
                 </motion.h4>
                 
                 {/* Título desktop */}
@@ -364,9 +379,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
-                  className="text-xl font-medium text-[#432818] hidden md:block text-left mb-4"
+                  className="text-xl font-medium text-[#432818] hidden md:block text-left mb-4 relative"
                 >
-                  Transformação Visual com Propósito
+                  <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
+                    Transformação Visual com Propósito
+                  </span>
+                  <div className="w-16 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mt-2"></div>
                 </motion.h4>
                 
                 {/* Texto descritivo */}
