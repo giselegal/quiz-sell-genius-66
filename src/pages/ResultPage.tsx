@@ -499,9 +499,15 @@ const ResultPage: React.FC = () => {
                 {secondaryStyles && (
                   <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-5 border border-[#B89B7A]/10">
                     <h3 className="text-lg font-medium text-[#aa6b5d] mb-3">Estilos que Também Influenciam Você</h3>
-                    <Suspense fallback={<div>Carregando...</div>}>
-                      <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-                    </Suspense>
+                    {/* RENDERIZAÇÃO SIMPLIFICADA PARA EVITAR ERRO */}
+                    <div className="space-y-2">
+                      {secondaryStyles.map((style, index) => (
+                        <div key={index} className="flex items-center justify-between p-2 bg-white rounded border border-[#B89B7A]/10">
+                          <span className="text-sm font-medium text-[#432818]">{style.category}</span>
+                          <span className="text-xs text-[#8F7A6A]">{style.percentage}%</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -732,6 +738,13 @@ const ResultPage: React.FC = () => {
                 </li>
               </ul>
             </div>
+          </div>
+
+          <div className="mb-8">
+            <span className="text-5xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+              R$ 39,90
+            </span>
+            <p className="text-sm text-[#8F7A6A] mt-2">ou 5x de R$ 8,83 sem juros</p>
           </div>
 
           <button
