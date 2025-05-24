@@ -488,6 +488,82 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
               </AnimatedWrapper>
+
+              {/* NOVA SEÇÃO MOTIVACIONAL + CTA */}
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={500} delay={1000}>
+                <div className="mt-16 text-center max-w-2xl mx-auto">
+                  {/* Texto motivacional */}
+                  <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-8 border border-[#B89B7A]/20 mb-8">
+                    <div className="mb-6">
+                      <p className="text-lg text-[#432818] leading-relaxed mb-4">
+                        <span className="font-semibold text-[#aa6b5d]">Você já descobriu seu Estilo</span> e isso é muito poderoso. 
+                        <span className="font-medium text-[#B89B7A]"> Conhecimento é clareza.</span>
+                      </p>
+                      <p className="text-lg text-[#432818] leading-relaxed mb-6">
+                        E clareza muda o jeito que você se vê, se escolhe, se posiciona.
+                      </p>
+                      
+                      {/* Separador visual */}
+                      <div className="flex items-center justify-center gap-3 mb-6">
+                        <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full"></div>
+                        <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                      </div>
+                      
+                      <p className="text-lg text-[#432818] leading-relaxed mb-2">
+                        <span className="font-semibold text-[#aa6b5d]">Mas é na ação que a verdadeira transformação acontece.</span>
+                      </p>
+                      <p className="text-lg text-[#432818] leading-relaxed">
+                        É quando você aplica o que aprendeu… que <span className="font-medium text-[#B89B7A]">o espelho começa a contar uma nova história.</span>
+                      </p>
+                    </div>
+
+                    {/* Call to Action motivacional */}
+                    <div className="text-center">
+                      <h4 className="text-xl font-playfair font-bold text-[#432818] mb-4">
+                        Pronta para Escrever Essa Nova História?
+                      </h4>
+                      <p className="text-[#8F7A6A] mb-6 text-sm">
+                        Receba seu guia completo do estilo <span className="font-semibold text-[#aa6b5d]">{category}</span> e comece sua transformação hoje mesmo
+                      </p>
+                      
+                      {/* Preço compacto */}
+                      <div className="flex items-center justify-center gap-4 mb-6 text-sm">
+                        <span className="text-[#8F7A6A]">Apenas</span>
+                        <span className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">R$ 39,90</span>
+                        <span className="text-[#8F7A6A]">ou 5x R$ 8,83</span>
+                      </div>
+
+                      <Button 
+                        onClick={handleCTAClick} 
+                        className="text-white text-base sm:text-lg leading-none py-3 sm:py-4 px-6 sm:px-8 rounded-lg shadow-lg transition-all duration-300 cursor-pointer font-semibold w-full sm:w-auto min-h-[48px]"
+                        style={{
+                          background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
+                          boxShadow: '0 4px 14px rgba(184, 155, 122, 0.4)',
+                        }}
+                        type="button"
+                      >
+                        <span className="flex items-center justify-center gap-2 sm:gap-3">
+                          <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
+                          <span className="whitespace-nowrap">Começar Minha Transformação</span>
+                        </span>
+                      </Button>
+
+                      {/* Elemento de confiança */}
+                      <div className="flex items-center justify-center gap-4 text-xs text-[#8F7A6A] mt-4">
+                        <div className="flex items-center gap-1">
+                          <Shield className="w-3 h-3 text-[#B89B7A]" />
+                          <span>Seguro</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Award className="w-3 h-3 text-[#B89B7A]" />
+                          <span>Acesso imediato</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedWrapper>
             </AnimatedWrapper>
           </Card>
         </section>
