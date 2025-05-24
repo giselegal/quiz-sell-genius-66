@@ -247,7 +247,7 @@ const ResultPage: React.FC = () => {
   const { category } = primaryStyle;
   const { image, guideImage, description } = styleConfig[category];
   
-  const handleCTAClick = (e) => {
+  const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Prevenir comportamento padrão e propagação
     e.preventDefault();
     e.stopPropagation();
@@ -272,7 +272,7 @@ const ResultPage: React.FC = () => {
     }, 1000);
   };
   
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
       window.scrollTo({
@@ -289,21 +289,23 @@ const ResultPage: React.FC = () => {
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
       {/* Custom scrollbar styles */}
-      <style jsx global>{`
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-          background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #B89B7A, #aa6b5d);
-          border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #aa6b5d, #B89B7A);
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          ::-webkit-scrollbar {
+            width: 8px;
+          }
+          ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+          }
+          ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #B89B7A, #aa6b5d);
+            border-radius: 4px;
+          }
+          ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #aa6b5d, #B89B7A);
+          }
+        `
+      }} />
 
       {/* Preloaders and monitors */}
       <ResourcePreloader />
@@ -911,8 +913,7 @@ const ResultPage: React.FC = () => {
                   🔒 <strong>Pagamento 100% seguro</strong> • <strong>Site confiável</strong>
                 </p>
               </div>
-            </div>
-          </AnimatedWrapper>
+            </AnimatedWrapper>
         </section>
 
         {/* BOTTOM SPACING */}
