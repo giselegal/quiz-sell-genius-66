@@ -1,38 +1,50 @@
 
-// Fix the error in HeroSection.tsx by removing any unexpected tokens at line 164
-// Note: Since I don't have the full file content, I will create a minimal fix
 import React from 'react';
+import { StyleResult } from '@/types/quiz';
 
-// Sample component to fix the error
-const HeroSection = ({ title, subtitle, imageUrl, ctaText, onCtaClick }) => {
+interface HeroSectionProps {
+  primaryStyle: StyleResult;
+  title: any;
+  subtitle: any;
+  imageUrl?: any;
+  ctaText?: any;
+  onCtaClick?: () => void;
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({
+  primaryStyle,
+  title,
+  subtitle,
+  imageUrl,
+  ctaText,
+  onCtaClick
+}) => {
   return (
-    <div className="bg-gradient-to-b from-amber-50 to-white py-12 md:py-20">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              {title}
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-6">
-              {subtitle}
-            </p>
-            <button 
-              onClick={onCtaClick}
-              className="px-8 py-4 bg-[#B89B7A] hover:bg-[#a38a6a] text-white font-medium rounded-lg shadow transition-colors"
-            >
-              {ctaText}
-            </button>
-          </div>
-          <div className="md:w-1/2">
-            <img 
-              src={imageUrl} 
-              alt="Hero image" 
-              className="rounded-lg shadow-lg w-full h-auto"
-            />
-          </div>
-        </div>
+    <section className="py-12 px-4">
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="text-4xl font-bold mb-4 text-[#aa6b5d]">
+          {title || `Seu Estilo é ${primaryStyle.category}!`}
+        </h1>
+        <p className="text-xl mb-8 text-gray-600">
+          {subtitle || `Descubra como aplicar seu estilo ${primaryStyle.category} no dia a dia.`}
+        </p>
+        {imageUrl && (
+          <img 
+            src={imageUrl} 
+            alt="Hero" 
+            className="mx-auto mb-8 rounded-lg shadow-lg max-w-full h-auto"
+          />
+        )}
+        {ctaText && onCtaClick && (
+          <button 
+            onClick={onCtaClick}
+            className="bg-[#aa6b5d] text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-[#8a5a4d] transition-colors"
+          >
+            {ctaText}
+          </button>
+        )}
       </div>
-    </div>
+    </section>
   );
 };
 

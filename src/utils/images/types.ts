@@ -1,4 +1,5 @@
 
+
 export interface ImageAnalysis {
   url: string;
   element?: HTMLImageElement;
@@ -70,6 +71,7 @@ export interface ImageMetadata {
   format: string;
   size: number;
   url: string;
+  alt?: string;
 }
 
 export interface ImageCacheEntry {
@@ -77,6 +79,8 @@ export interface ImageCacheEntry {
   metadata: ImageMetadata;
   timestamp: number;
   blob?: Blob;
+  loadStatus?: 'loading' | 'loaded' | 'error';
+  lastAccessed?: number;
 }
 
 export interface ImageSettings {
@@ -84,6 +88,8 @@ export interface ImageSettings {
   format: string;
   width?: number;
   height?: number;
+  responsive?: boolean;
+  crop?: string;
 }
 
 export interface ImageOptimizationOptions {
@@ -93,4 +99,6 @@ export interface ImageOptimizationOptions {
   height?: number;
   progressive?: boolean;
   lossless?: boolean;
+  crop?: string;
 }
+

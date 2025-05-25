@@ -248,11 +248,11 @@ export const useQuizLogic = () => {
     const primaryStyle = styleResults[0] || null;
     const secondaryStyles = styleResults.slice(1);
 
-    const result: QuizResult = { // Explicitly type QuizResult
+    const result: QuizResult = {
       primaryStyle,
       secondaryStyles,
       totalSelections,
-      // clickOrder: clickOrderInternal // Optional: save the click order used
+      userName: 'Usuário' // Default username
     };
 
     setQuizResult(result);
