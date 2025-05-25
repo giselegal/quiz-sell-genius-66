@@ -8,11 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Monitor, Smartphone, Tablet, Plus, Settings, Eye, Grid3x3, Layers, Undo2, Redo2, Save, Download, Upload, Palette, FileText, Share2, Users, History, HelpCircle } from 'lucide-react';
-import { COMPONENT_REGISTRY, COMPONENT_CATEGORIES, ComponentDefinition } from './ComponentRegistry';
-import { ComponentToolbar } from './ComponentToolbar';
-import { StepsPanel } from './StepsPanel';
-import { PropertiesPanel } from './PropertiesPanel';
-import { DropZoneCanvas } from './DropZoneCanvas';
+import { COMPONENT_REGISTRY, COMPONENT_CATEGORIES, ComponentDefinition } from '../../../components/result-editor/ComponentRegistry';
+import { ComponentToolbar } from '../../../components/result-editor/ComponentToolbar';
+import { StepsPanel } from '../../../components/result-editor/StepsPanel';
+import { PropertiesPanel } from '../../../components/result-editor/PropertiesPanel';
+import { DropZoneCanvas } from '../../../components/result-editor/DropZoneCanvas';
 import Link from 'next/link';
 import { 
   Filter, 
@@ -513,7 +513,10 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
               onUpdateStep={updateStep}
               onDeleteStep={deleteStep}
               onDuplicateStep={duplicateStep}
-              onReorderSteps={(reorderedSteps) => setSteps(reorderedSteps)} // Assumindo que StepsPanel pode reordenar
+              onReorderSteps={(oldIndex, newIndex) => {
+                saveToHistory(); // Salvar antes de reordenar
+                setSteps((prevSteps) => arrayMove(prevSteps, oldIndex, newIndex));
+              }}
               collapsed={sidebarCollapsed.steps}
             />
           </div>
