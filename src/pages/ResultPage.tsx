@@ -21,6 +21,8 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
 import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
+import { InlineEditor } from '@/components/editors/InlineEditor';
+import { SectionEditor } from '@/components/editors/SectionEditor';
 
 // Seções carregadas via lazy
 const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
@@ -166,14 +168,12 @@ const ResultPage: React.FC = () => {
     seconds: 59
   });
   
-  useEffect(() => {
-    const countdownInterval = setInterval(() => {
-      setTimer(prevTimer => {
-        if (prevTimer.seconds > 0) {
-          return { ...prevTimer, seconds: prevTimer.seconds - 1 };
-        } else if (prevTimer.minutes > 0) {
-          return { ...prevTimer, minutes: prevTimer.minutes - 1, seconds: 59 };
-        } else if (prevTimer.hours > 0) {
+  // Edit mode state
+  const [editMode, setEditMode] = useState(false);
+  const [pageContent, setPageContent] = useState({
+    title: 'Descobrimos Seu Estilo Predominante:',
+    subtitle: 'Agora você tem clareza total sobre quem você é',
+    sections: {
           return { hours: prevTimer.hours - 1, minutes: 59, seconds: 59 };
         } else {
           // Reset timer quando chegar a zero (para manter a oferta "limitada")
