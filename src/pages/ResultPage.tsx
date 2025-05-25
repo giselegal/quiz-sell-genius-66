@@ -647,10 +647,9 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
 
-        {/* SEÇÃO DE TRANSIÇÃO MELHORADA */}
-        <div className="mb-12 md:mb-16">
+        {/* Removendo a seção de transição melhorada */}
+        {/* <div className="mb-12 md:mb-16">
           <div className="text-center py-12 md:py-16 relative">
-            {/* Background decorativo */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#fff7f3]/50 to-[#f9f4ef]/50 rounded-2xl"></div>
             <div className="relative z-10">
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6 md:mb-8"></div>
@@ -663,7 +662,7 @@ const ResultPage: React.FC = () => {
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-6 md:mt-8"></div>
             </div>
           </div>
-        </div>
+        </div> */}
         
         {/* NOVA SEÇÃO DE PRICING MELHORADA */}
         <EnhancedPricingSection />
