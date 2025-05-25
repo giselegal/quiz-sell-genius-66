@@ -1,82 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { EnhancedResultPageEditor } from '@/components/result-editor/EnhancedResultPageEditor';
+// Remover import do componente que não existe
+// import { EnhancedResultPageEditor } from '@/components/result-editor/EnhancedResultPageEditor';
 import { useQuiz } from '@/hooks/useQuiz';
 import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, AlertTriangle } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import { ArrowLeft, Save, Edit, Palette } from 'lucide-react';
 
-// Este componente serve como um ponto de entrada para o editor visual aprimorado
-// da página de resultados, permitindo acesso através do sistema de roteamento
 const EnhancedResultPageEditorPage: React.FC = () => {
   const navigate = useNavigate();
   const { primaryStyle, secondaryStyles } = useQuiz();
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
-  
-  // Verificar se o usuário tem acesso de administrador
-  useEffect(() => {
-    // Verificar se o usuário tem role = 'admin'
-    const isAdmin = user && 
-      typeof user === 'object' && 
-      'role' in user && 
-      user.role === 'admin';
-    
-    if (!isAdmin) {
-      // Tentar configurar acesso de admin se não estiver configurado
-      const savedRole = localStorage.getItem('userRole');
-      
-      if (savedRole === 'admin') {
-        // O localStorage tem o role admin, mas o AuthContext não.
-        // Isso pode acontecer se o script foi executado após o carregamento da aplicação.
-        // Recarregar a página para atualizar o contexto.
-        toast({
-          title: "Recarregando página",
-          description: "Detectamos que você tem acesso de administrador. Recarregando para aplicar as configurações.",
-        });
-        
-        // Recarregar a página após um breve delay
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-        
-        return;
-      }
-      
-      // O usuário não tem acesso de admin
-      toast({
-        title: "Acesso Restrito",
-        description: "Você não tem permissão para acessar esta página. Execute o script de acesso admin no console.",
-        variant: "destructive"
-      });
-      
-      // Redirecionar para a página de resultado após um breve delay
-      const timer = setTimeout(() => {
-        navigate('/resultado');
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [user, navigate]);
-  
-  // Verificar se há estilos carregados
-  useEffect(() => {
-    if (!primaryStyle) {
-      toast({
-        title: "Não foi possível carregar os dados do estilo",
-        description: "Você será redirecionado para a página de resultado.",
-        variant: "destructive"
-      });
-      
-      // Redirecionar para a página de resultado após um breve delay
-      const timer = setTimeout(() => {
-        navigate('/resultado');
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [primaryStyle, navigate]);
   
   // Carregar o funil do localStorage se existir
   const [initialFunnel, setInitialFunnel] = useState<any>(null);
@@ -97,7 +31,6 @@ const EnhancedResultPageEditorPage: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // Salvar no localStorage para persistência local
       localStorage.setItem('currentQuizFunnel', JSON.stringify(funnel));
       
       toast({
@@ -116,37 +49,63 @@ const EnhancedResultPageEditorPage: React.FC = () => {
     }
   };
   
-  // Verificar se o usuário tem acesso de administrador
-  const isAdmin = user && 
-    typeof user === 'object' && 
-    'role' in user && 
-    user.role === 'admin';
-  
-  if (!isAdmin) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-lg">
-          <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-4">Acesso Restrito</h2>
-          <p className="mb-6">Esta página requer privilégios de administrador. Execute o script de acesso admin no console do navegador.</p>
-          <Button onClick={() => navigate('/resultado')}>
-            Voltar para Resultados
-          </Button>
+  // COMPONENTE TEMPORÁRIO enquanto o editor real não existe
+  const TemporaryEditor = () => (
+    <div className="max-w-4xl mx-auto">
+      <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <div className="flex items-center mb-4">
+          <Palette className="h-6 w-6 text-blue-500 mr-3" />
+          <h2 className="text-xl font-semibold">Editor Enhanced - Em Desenvolvimento</h2>
+        </div>
+        
+        <div className="space-y-4">
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <h3 className="font-medium text-blue-900 mb-2">Status do Editor</h3>
+            <p className="text-blue-700 text-sm">
+              O componente EnhancedResultPageEditor ainda não foi implementado.
+              Este é um placeholder temporário.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 border rounded-lg">
+              <h4 className="font-medium mb-2">Dados Carregados:</h4>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Primary Style: {primaryStyle ? '✅ Carregado' : '❌ Não carregado'}</li>
+                <li>• Secondary Styles: {secondaryStyles?.length ? `✅ ${secondaryStyles.length} estilos` : '❌ Nenhum'}</li>
+                <li>• Funil Salvo: {initialFunnel ? '✅ Encontrado' : '❌ Não encontrado'}</li>
+              </ul>
+            </div>
+            
+            <div className="p-4 border rounded-lg">
+              <h4 className="font-medium mb-2">Próximos Passos:</h4>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>1. Criar componente EnhancedResultPageEditor</li>
+                <li>2. Implementar interface de edição</li>
+                <li>3. Conectar com dados do quiz</li>
+                <li>4. Salvar alterações</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => navigate('/resultado')} 
+              variant="outline"
+            >
+              Ver Página Atual
+            </Button>
+            <Button 
+              onClick={() => handleSaveFunnel({ test: 'data' })}
+              disabled={isLoading}
+            >
+              Testar Salvamento
+            </Button>
+          </div>
         </div>
       </div>
-    );
-  }
-  
-  if (!primaryStyle) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Carregando...</h2>
-          <p>Preparando o editor da página de resultado.</p>
-        </div>
-      </div>
-    );
-  }
+    </div>
+  );
   
   return (
     <div className="min-h-screen bg-[#FAF9F7]">
@@ -154,36 +113,27 @@ const EnhancedResultPageEditorPage: React.FC = () => {
         <Button 
           variant="outline" 
           size="sm" 
-          onClick={() => navigate('/resultado')}
+          onClick={() => navigate('/admin')}
           className="gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          Voltar
+          Voltar ao Dashboard
         </Button>
         <h1 className="text-xl font-semibold text-[#432818]">Editor da Página de Resultado</h1>
         <Button 
           variant="default" 
           size="sm" 
-          onClick={() => {
-            toast({
-              title: "Alterações salvas",
-              description: "As configurações foram salvas com sucesso.",
-            });
-          }}
+          onClick={() => handleSaveFunnel({ timestamp: Date.now() })}
           className="gap-2 bg-green-600 hover:bg-green-700"
+          disabled={isLoading}
         >
           <Save className="h-4 w-4" />
-          Salvar
+          {isLoading ? 'Salvando...' : 'Salvar'}
         </Button>
       </div>
       
       <div className="p-4">
-        <EnhancedResultPageEditor
-          primaryStyle={primaryStyle}
-          secondaryStyles={secondaryStyles || []}
-          initialFunnel={initialFunnel}
-          onSave={handleSaveFunnel}
-        />
+        <TemporaryEditor />
       </div>
     </div>
   );

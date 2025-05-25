@@ -12,6 +12,8 @@ import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
 import LovableRoutes from './lovable-routes';
 import { fixMainRoutes } from './utils/fixMainRoutes';
 import { AdminRoute } from '@/components/admin/AdminRoute';
+import { AdminDashboard } from '@/components/admin/AdminDashboard';
+import EnhancedResultPageEditor from '@/components/result/EnhancedResultPageEditor';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -27,9 +29,7 @@ const LoadingFallback = () => (
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
-const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
-const EnhancedResultPageEditor = lazy(() => import('./pages/admin/EnhancedResultPageEditor'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
