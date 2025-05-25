@@ -11,21 +11,8 @@ export default function HomePage() {
   const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
-    // Verificar se há um quiz público para mostrar
-    const urlParams = new URLSearchParams(window.location.search);
-    const quizParam = urlParams.get('quiz');
-    const adminParam = urlParams.get('admin');
-    
-    // Redirecionar automaticamente para o novo editor
-    const redirectToEditor = () => {
-      setRedirecting(true);
-      router.push('/admin/editor');
-    };
-
-    // Aguardar um momento para mostrar o loading
-    const timer = setTimeout(redirectToEditor, 800);
-
-    return () => clearTimeout(timer);
+    // Removido o redirecionamento automático para permitir acesso manual
+    // Os usuários podem acessar as diferentes seções através do painel
   }, [user, router]);
 
   return (
@@ -36,14 +23,34 @@ export default function HomePage() {
         </div>
         <h1 className="text-2xl font-bold text-[#432818] mb-2">Quiz Sell Genius</h1>
         <p className="text-[#B89B7A]">
-          {redirecting ? 'Redirecionando para o Editor Visual...' : 'Carregando editor visual...'}
+          Sistema de criação de quizzes e páginas de vendas
         </p>
         
+        {/* Links de navegação */}
+        <div className="mt-6 space-y-3">
+          <a 
+            href="/admin" 
+            className="block px-6 py-3 bg-[#B89B7A] text-white rounded-lg hover:bg-[#9F836A] transition-colors"
+          >
+            🎛️ Painel Administrativo
+          </a>
+          <a 
+            href="/admin/editor" 
+            className="block px-6 py-3 bg-[#D4C4A0] text-[#432818] rounded-lg hover:bg-[#C2B08A] transition-colors"
+          >
+            ✏️ Editor Visual
+          </a>
+          <a 
+            href="/resultado" 
+            className="block px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            👁️ Página de Resultados
+          </a>
+        </div>
+        
         {/* Debug info */}
-        <div className="mt-4 text-xs text-[#B89B7A] opacity-70">
-          <p>🎯 Destino: /admin/editor (Editor Visual)</p>
+        <div className="mt-6 text-xs text-[#B89B7A] opacity-70">
           <p>👤 Status: {user ? `Logado como ${user.userName}` : 'Usuário automático'}</p>
-          {redirecting && <p>⏳ Redirecionando...</p>}
         </div>
       </div>
     </div>

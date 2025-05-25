@@ -12,12 +12,20 @@ export const AdminDashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center py-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Redirecionando para o Editor Visual...
+            Painel Administrativo
           </h1>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">
-            Você será redirecionado automaticamente para o novo editor em alguns segundos.
+          <p className="text-gray-600 mb-6">
+            Escolha uma das opções abaixo para gerenciar seu sistema.
           </p>
+          
+          {/* Botão de acesso ao Dashboard Antigo */}
+          <div className="mb-8">
+            <Link to="/admin/old">
+              <button className="px-4 py-2 border border-amber-500 text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors rounded-md font-medium">
+                🔙 Dashboard Antigo
+              </button>
+            </Link>
+          </div>
         </div>
         
         <div className="max-w-3xl mx-auto mt-8">
