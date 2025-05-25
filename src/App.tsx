@@ -105,11 +105,11 @@ const App = () => {
                   {/* ROTA PRINCIPAL - Quiz com introdução */}
                   <Route path="/" element={<QuizPage />} />
                   
-                  {/* ADMIN - Dashboard centralizado */}
-                  <Route path="/admin" element={<AdminDashboard />} />
+                  {/* ADMIN - Dashboard antigo como padrão */}
+                  <Route path="/admin/*" element={<OldAdminDashboard />} />
                   
-                  {/* DASHBOARD ANTIGO - Dashboard legacy com abas */}
-                  <Route path="/admin/old/*" element={<OldAdminDashboard />} />
+                  {/* DASHBOARD NOVO - Dashboard centralizado */}
+                  <Route path="/admin/new" element={<AdminDashboard />} />
                   
                   {/* EDITOR - Página do editor visual */}
                   <Route path="/admin/editor" element={<EnhancedResultPageEditorPage />} />

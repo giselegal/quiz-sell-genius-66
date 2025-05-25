@@ -21,7 +21,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 
 // Lazy load dos componentes administrativos
-const EditorPage = React.lazy(() => import('./EditorPage'));
 const SettingsPage = React.lazy(() => import('./SettingsPage'));
 const AnalyticsPage = React.lazy(() => import('./AnalyticsPage'));
 const ABTestPage = React.lazy(() => import('./ABTestPage'));
@@ -39,7 +38,8 @@ const OldAdminDashboard = () => {
   // Determinar qual aba está ativa baseado na URL
   React.useEffect(() => {
     const path = location.pathname;
-    if (path.includes('/editor')) setActiveTab('editor');
+    if (path.includes('/visual-editor')) setActiveTab('visual-editor');
+    else if (path.includes('/editor')) setActiveTab('editor');
     else if (path.includes('/settings')) setActiveTab('settings');
     else if (path.includes('/analytics')) setActiveTab('analytics');
     else if (path.includes('/ab-test')) setActiveTab('ab-test');
@@ -50,29 +50,8 @@ const OldAdminDashboard = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    switch (tab) {
-      case 'dashboard':
-        navigate('/admin/old');
-        break;
-      case 'editor':
-        navigate('/admin/old/editor');
-        break;
-      case 'settings':
-        navigate('/admin/old/settings');
-        break;
-      case 'analytics':
-        navigate('/admin/old/analytics');
-        break;
-      case 'ab-test':
-        navigate('/admin/old/ab-test');
-        break;
-      case 'offer-editor':
-        navigate('/admin/old/offer-editor');
-        break;
-      case 'prototype':
-        navigate('/admin/old/prototype');
-        break;
-    }
+    // Para o dashboard antigo, não precisamos navegar para outras rotas
+    // As abas são controladas internamente pelo componente
   };
 
   return (
@@ -81,15 +60,15 @@ const OldAdminDashboard = () => {
       <header className="bg-white border-b px-6 py-3 shadow-sm">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <Link to="/admin/old" className="text-xl font-bold text-[#432818]">
-              Dashboard Antigo
+            <Link to="/admin" className="text-xl font-bold text-[#432818]">
+              Dashboard Administrativo
             </Link>
             <div className="text-sm text-[#8F7A6A] hidden md:block">
-              Central de controle administrativo (versão legacy)
+              Central de controle administrativo
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/admin">
+            <Link to="/admin/new">
               <Button variant="outline" size="sm">
                 Novo Dashboard
               </Button>
@@ -121,7 +100,7 @@ const OldAdminDashboard = () => {
               </TabsTrigger>
               <TabsTrigger value="editor" className="flex items-center gap-2">
                 <Edit className="w-4 h-4" />
-                Editor
+                Editor Visual
               </TabsTrigger>
               <TabsTrigger value="offer-editor" className="flex items-center gap-2">
                 <Layout className="w-4 h-4" />
@@ -148,8 +127,8 @@ const OldAdminDashboard = () => {
             {/* Dashboard Principal */}
             <TabsContent value="dashboard" className="space-y-6">
               <div className="mb-6">
-                <h1 className="text-3xl font-bold text-[#432818] mb-2">Painel Administrativo - Dashboard Antigo</h1>
-                <p className="text-[#8F7A6A]">Gerencie todos os aspectos do seu quiz de estilo em um só lugar (versão legacy)</p>
+                <h1 className="text-3xl font-bold text-[#432818] mb-2">Painel Administrativo</h1>
+                <p className="text-[#8F7A6A]">Gerencie todos os aspectos do seu quiz de estilo em um só lugar</p>
                 
                 {/* Aviso sobre versão antiga */}
                 <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
@@ -157,11 +136,11 @@ const OldAdminDashboard = () => {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L3.232 16.5c-.77.833.192 2.5 1.732 2.5z" />
                     </svg>
-                    <span className="font-medium">Dashboard Legacy</span>
+                    <span className="font-medium">Dashboard Principal</span>
                   </div>
                   <p className="text-amber-700 text-sm mt-1">
-                    Você está acessando a versão antiga do dashboard. Para uma experiência mais moderna, 
-                    <Link to="/admin" className="underline font-medium ml-1">acesse o novo dashboard</Link>.
+                    Esta é a interface principal do dashboard. Para uma experiência alternativa, 
+                    <Link to="/admin/new" className="underline font-medium ml-1">acesse o novo dashboard</Link>.
                   </p>
                 </div>
               </div>
@@ -264,7 +243,7 @@ const OldAdminDashboard = () => {
                     <CardTitle>Versão</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-[#8F7A6A]">v2.0.0 (Legacy)</p>
+                    <p className="text-sm text-[#8F7A6A]">v2.1.0</p>
                   </CardContent>
                 </Card>
               </div>
@@ -273,10 +252,7 @@ const OldAdminDashboard = () => {
             {/* Outras abas carregam os componentes específicos */}
             <TabsContent value="editor">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando editor...</div>}>
-                <Routes>
-                  <Route path="/editor" element={<EditorPage />} />
-                  <Route path="*" element={<EditorPage />} />
-                </Routes>
+                <EnhancedResultPageEditorPage />
               </React.Suspense>
             </TabsContent>
 
@@ -316,7 +292,7 @@ const OldAdminDashboard = () => {
       {/* Footer */}
       <footer className="bg-white border-t p-3 text-center text-sm text-[#8F7A6A]">
         <div className="container mx-auto">
-          Admin Dashboard Legacy © {new Date().getFullYear()} - Central de controle administrativo
+          Admin Dashboard © {new Date().getFullYear()} - Central de controle administrativo
         </div>
       </footer>
     </div>

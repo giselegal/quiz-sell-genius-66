@@ -30,21 +30,15 @@ export default function HomePage() {
         <div className="mt-6 space-y-3">
           <a 
             href="/admin" 
-            className="block px-6 py-3 bg-[#B89B7A] text-white rounded-lg hover:bg-[#9F836A] transition-colors"
+            className="block px-6 py-3 bg-[#B89B7A] text-white rounded-lg hover:bg-[#9F836A] transition-colors font-medium"
           >
-            🎛️ Painel Administrativo
-          </a>
-          <a 
-            href="/admin/editor" 
-            className="block px-6 py-3 bg-[#D4C4A0] text-[#432818] rounded-lg hover:bg-[#C2B08A] transition-colors"
-          >
-            ✏️ Editor Visual
+            🎛️ Acessar Dashboard Administrativo
           </a>
           <a 
             href="/resultado" 
             className="block px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
           >
-            👁️ Página de Resultados
+            👁️ Visualizar Página de Resultados
           </a>
         </div>
         
