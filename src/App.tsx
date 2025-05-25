@@ -1,134 +1,59 @@
-import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// App.tsx (Reintroduzindo Providers)
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { Toaster } from '@/components/ui/toaster';
-import { captureUTMParameters } from './utils/analytics';
-import { loadFacebookPixel } from './utils/facebookPixel';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import CriticalCSSLoader from './components/CriticalCSSLoader';
-import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
-import LovableRoutes from './lovable-routes';
-import { fixMainRoutes } from './utils/fixMainRoutes';
-import { AdminDashboard } from '@/components/admin/AdminDashboard';
+import { Toaster } from '@/components/ui/toaster'; // Adicionado Toaster que geralmente acompanha TooltipProvider
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-screen bg-gray-50">
-    <div className="text-center">
-      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
-      <p className="mt-4 text-gray-600">Carregando...</p>
-    </div>
+  <div style={{ padding: '20px', textAlign: 'center', color: 'blue', fontSize: '20px', border: '2px solid blue', margin: '20px' }}>
+    Carregando componente lazy... <br/> Pathname atual: {window.location.pathname}
   </div>
 );
 
-// Lazy loading das páginas principais
-const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./pages/ResultPage'));
-const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+// Lazy loading da página do editor (já simplificada para mensagem verde)
 const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
-const OldAdminDashboard = lazy(() => import('./pages/admin/OldAdminDashboard'));
 
-// Avalia se o dispositivo tem performance limitada
-const isLowPerformanceDevice = () => {
-  const memory = (navigator as any).deviceMemory;
-  if (memory && memory < 4) return true;
-  
-  const cpuCores = navigator.hardwareConcurrency;
-  if (cpuCores && cpuCores < 4) return true;
-  
-  return false;
-};
+// Página de teste simples para a raiz
+const SimpleHomePage = () => (
+  <div style={{ padding: '50px', textAlign: 'center', backgroundColor: 'lightblue', fontSize: '24px' }}>
+    <h1>PÁGINA INICIAL DE TESTE</h1>
+    <p>Esta é a rota "/"</p>
+  </div>
+);
 
-// Detecta se o aplicativo está rodando dentro do ambiente Lovable.dev
-const isRunningInLovable = () => {
-  return typeof window !== 'undefined' && (
-    window.location.hostname.includes('lovableproject.com') || 
-    window.location.hostname.includes('lovable.dev') ||
-    window.location.search.includes('lovable=true')
+// Página de teste simples para "não encontrado"
+const NotFoundTestPage = () => (
+    <div style={{ padding: '50px', textAlign: 'center', backgroundColor: 'lightcoral', fontSize: '24px' }}>
+      <h1>404 - ROTA NÃO ENCONTRADA</h1>
+      <p>Path: {window.location.pathname}</p>
+    </div>
   );
-};
 
 const App = () => {
-  const lowPerformance = isLowPerformanceDevice();
-  const isLovableEnv = isRunningInLovable();
-
-  // Inicializar analytics e corrigir rotas na montagem do componente
-  useEffect(() => {
-    try {
-      loadFacebookPixel();
-      captureUTMParameters();
-      fixMainRoutes();
-      
-      console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
-      console.log('✅ Main routes activated');
-    } catch (error) {
-      console.error('Erro ao inicializar aplicativo:', error);
-    }
-  }, [lowPerformance]);
-
-  // Reinicializar Facebook Pixel e correção de rotas em mudanças de rota
-  useEffect(() => {    
-    const handleRouteChange = () => {
-      if (typeof window !== 'undefined') {
-        fixMainRoutes();
-        
-        if (window.fbq) {
-          window.fbq('track', 'PageView');
-          console.log('PageView tracked on route change');
-        }
-      }
-    };
-    
-    window.addEventListener('popstate', handleRouteChange);
-    
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-    };
-  }, []);
-
+  console.log("App.tsx with Providers is rendering. Current window.location.pathname:", window.location.pathname);
   return (
     <AuthProvider>
       <QuizProvider>
         <TooltipProvider>
           <Router>
-            <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
-            <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
-            
-            {isLovableEnv ? (
-              <LovableRoutes />
-            ) : (
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  {/* ROTA PRINCIPAL - Quiz com introdução */}
-                  <Route path="/" element={<QuizPage />} />
-                  
-                  {/* ADMIN - Dashboard antigo como padrão */}
-                  <Route path="/admin/*" element={<OldAdminDashboard />} />
-                  
-                  {/* DASHBOARD NOVO - Dashboard centralizado */}
-                  <Route path="/admin/new" element={<AdminDashboard />} />
-                  
-                  {/* EDITOR - Página do editor visual */}
-                  <Route path="/admin/editor" element={<EnhancedResultPageEditorPage />} />
-                  
-                  {/* RESULTADO - Página de resultados do quiz */}
-                  <Route path="/resultado" element={<ResultPage />} />
-                  
-                  {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
-                  <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                  
-                  {/* Redirecionamentos para manter compatibilidade */}
-                  <Route path="/home" element={<Navigate to="/" replace />} />
-                  <Route path="/quiz" element={<Navigate to="/" replace />} />
-                  
-                  {/* 404 - Página não encontrada */}
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </Suspense>
-            )}
+            <div style={{ border: '3px dashed purple', padding: '10px', margin: '10px', backgroundColor: '#f5e6ff' }}>
+              <h1 style={{ textAlign: 'center', color: 'purple' }}>VISUALIZADOR DE APP COM PROVIDERS ATIVO</h1>
+              <p style={{ textAlign: 'center' }}>Pathname no momento da renderização do App: {window.location.pathname}</p>
+              <nav style={{ textAlign: 'center', marginBottom: '20px' }}>
+                <a href="/admin/editor" style={{marginRight: '10px', fontSize: '18px'}}>Ir para Editor</a>
+                <a href="/" style={{fontSize: '18px'}}>Ir para Home</a>
+              </nav>
+            </div>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/admin/editor" element={<EnhancedResultPageEditorPage />} />
+                <Route path="/" element={<SimpleHomePage />} />
+                <Route path="*" element={<NotFoundTestPage />} />
+              </Routes>
+            </Suspense>
           </Router>
           <Toaster />
         </TooltipProvider>
