@@ -31,23 +31,41 @@ const PLAN_FEATURES = {
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
+    // Para desenvolvimento, criar usuário automático se não existir
     const savedName = localStorage.getItem('userName');
     const savedEmail = localStorage.getItem('userEmail');
     const savedRole = localStorage.getItem('userRole');
-    const savedPlan = localStorage.getItem('userPlan') as any || 'PROFESSIONAL'; // Definindo como PROFESSIONAL por padrão para teste
+    const savedPlan = localStorage.getItem('userPlan') as any || 'PROFESSIONAL';
     
-    return savedName ? { 
+    // Se não há usuário salvo, criar um automático para desenvolvimento
+    if (!savedName) {
+      const autoUser = {
+        userName: 'Desenvolvedor',
+        email: 'dev@teste.com',
+        plan: 'PROFESSIONAL' as const,
+        features: PLAN_FEATURES.PROFESSIONAL
+      };
+      
+      // Salvar no localStorage
+      localStorage.setItem('userName', autoUser.userName);
+      localStorage.setItem('userEmail', autoUser.email);
+      localStorage.setItem('userPlan', autoUser.plan);
+      
+      return autoUser;
+    }
+    
+    return { 
       userName: savedName,
       ...(savedEmail && { email: savedEmail }),
       ...(savedRole && { role: savedRole }),
       plan: savedPlan,
       features: PLAN_FEATURES[savedPlan] || PLAN_FEATURES.FREE
-    } : null;
+    };
   });
 
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [hasEditorAccess, setHasEditorAccess] = useState(false);
-  const [hasPremiumFeatures, setHasPremiumFeatures] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true); // Por padrão admin para desenvolvimento
+  const [hasEditorAccess, setHasEditorAccess] = useState(true); // Sempre permitir acesso
+  const [hasPremiumFeatures, setHasPremiumFeatures] = useState(true); // Sempre premium para desenvolvimento
 
   const login = (name: string, email?: string, password?: string) => {
     // Para desenvolvimento, aceitar qualquer senha ou sem senha
@@ -87,22 +105,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, [user]);
 
   const checkAdminStatus = useCallback(async () => {
-    const adminEmails = [
-      'admin@sellgenius.com.br',
-      'editor@sellgenius.com.br',
-      'seu-email@admin.com'
-    ];
-    
-    if (user?.email && adminEmails.includes(user.email.toLowerCase())) {
-      setIsAdmin(true);
-      setHasEditorAccess(true);
-      setHasPremiumFeatures(true);
-    } else {
-      setIsAdmin(false);
-      setHasEditorAccess(true); // Permitir acesso ao editor para todos por enquanto
-      setHasPremiumFeatures(user?.plan === 'PROFESSIONAL' || user?.plan === 'ENTERPRISE');
-    }
-  }, [user?.email, user?.plan]);
+    // Para desenvolvimento, sempre dar acesso completo
+    setIsAdmin(true);
+    setHasEditorAccess(true);
+    setHasPremiumFeatures(true);
+  }, []);
 
   useEffect(() => {
     checkAdminStatus();
