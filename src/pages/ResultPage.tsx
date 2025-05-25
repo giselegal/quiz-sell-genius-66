@@ -496,8 +496,7 @@ const ResultPage: React.FC = () => {
                     value={primaryStyle.percentage} 
                     className="h-2 rounded-full overflow-hidden" 
                     style={{ backgroundColor: tokens.colors.backgroundAlt }}
-                    indicatorClassName="transition-all duration-700 ease-in-out"
-                    indicatorStyle={{ background: tokens.gradients.primary }}
+                    indicatorClassName="transition-all duration-700 ease-in-out bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" 
                   />
                 </div>
               </div>
