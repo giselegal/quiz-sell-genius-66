@@ -5,14 +5,7 @@ import { Edit, Settings, Users, BarChart, Eye, Palette } from 'lucide-react';
 export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   
-  // Redirecionar automaticamente para o editor
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate('/admin/editor');
-    }, 500); // Pequeno delay para mostrar o dashboard brevemente
-    
-    return () => clearTimeout(timer);
-  }, [navigate]);
+  // Removido o redirecionamento automático para permitir acesso ao dashboard
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">

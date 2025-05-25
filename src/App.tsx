@@ -29,6 +29,7 @@ const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
+const OldAdminDashboard = lazy(() => import('./pages/admin/OldAdminDashboard'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -106,6 +107,9 @@ const App = () => {
                   
                   {/* ADMIN - Dashboard centralizado */}
                   <Route path="/admin" element={<AdminDashboard />} />
+                  
+                  {/* DASHBOARD ANTIGO - Dashboard legacy com abas */}
+                  <Route path="/admin/old/*" element={<OldAdminDashboard />} />
                   
                   {/* EDITOR - Página do editor visual */}
                   <Route path="/admin/editor" element={<EnhancedResultPageEditorPage />} />

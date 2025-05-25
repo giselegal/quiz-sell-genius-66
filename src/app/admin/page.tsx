@@ -19,14 +19,7 @@ import {
 export default function AdminDashboard() {
   const navigate = useNavigate();
   
-  // Redirecionar automaticamente para o editor
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate('/admin/editor');
-    }, 100); // Redirecionamento quase imediato
-    
-    return () => clearTimeout(timer);
-  }, [navigate]);
+  // Removido o redirecionamento automático para permitir acesso ao dashboard
 
   return (
     <div className="space-y-8">
@@ -40,6 +33,12 @@ export default function AdminDashboard() {
         </div>
         
         <div className="flex gap-3">
+          <Link to="/admin/old">
+            <button className="px-4 py-2 border border-amber-500 text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
+              <Eye className="w-4 h-4 mr-2 inline" />
+              Dashboard Antigo
+            </button>
+          </Link>
           <button className="px-4 py-2 border border-[#B89B7A] text-[#432818] rounded-lg hover:bg-[#F5F2E9] transition-colors">
             <Eye className="w-4 h-4 mr-2 inline" />
             Visualizar Site
