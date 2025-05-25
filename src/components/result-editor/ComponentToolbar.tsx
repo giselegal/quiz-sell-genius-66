@@ -1,27 +1,33 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search } from 'lucide-react';
-import { ComponentDefinition } from './ComponentRegistry';
+import { Search, Lock } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { getAvailableComponents, COMPONENT_CATEGORIES, type ComponentDefinition } from './ComponentRegistry';
 
 interface ComponentToolbarProps {
   categories: any[];
   components: ComponentDefinition[];
-  collapsed: boolean;
+  collapsed?: boolean;
 }
 
-const DraggableComponent: React.FC<{ component: ComponentDefinition }> = ({ component }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    isDragging
-  } = useDraggable({
+interface DraggableComponentProps {
+  component: ComponentDefinition;
+  isLocked?: boolean;
+}
+
+const DraggableComponent: React.FC<DraggableComponentProps> = ({ component, isLocked = false }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: component.id,
-    data: { type: 'component' }
+    data: {
+      type: 'component',
+      component: component
+    },
+    disabled: isLocked
   });
 
   const style = transform ? {
@@ -34,17 +40,33 @@ const DraggableComponent: React.FC<{ component: ComponentDefinition }> = ({ comp
     <div
       ref={setNodeRef}
       style={style}
-      {...listeners}
-      {...attributes}
-      className={`p-3 border border-gray-200 rounded-lg cursor-grab hover:border-blue-400 hover:bg-blue-50 transition-colors ${
-        isDragging ? 'opacity-50' : ''
-      }`}
+      {...(isLocked ? {} : { ...listeners, ...attributes })}
+      className={`
+        p-3 border border-[#D4C4A0] rounded-lg transition-all duration-200 
+        ${isLocked 
+          ? 'cursor-not-allowed opacity-50 bg-gray-100' 
+          : 'cursor-grab hover:shadow-md hover:border-[#B89B7A] bg-white active:cursor-grabbing'
+        }
+        ${isDragging ? 'opacity-50' : ''}
+      `}
     >
-      <div className="flex flex-col items-center gap-2 text-center">
-        <Icon className="w-6 h-6 text-gray-600" />
-        <span className="text-sm font-medium text-gray-900">{component.label}</span>
-        <span className="text-xs text-gray-500">{component.description}</span>
+      <div className="flex items-center gap-2 mb-2">
+        <Icon className={`w-4 h-4 ${isLocked ? 'text-gray-400' : 'text-[#B89B7A]'}`} />
+        <span className={`font-medium text-sm ${isLocked ? 'text-gray-400' : 'text-[#432818]'}`}>
+          {component.label}
+        </span>
+        {component.isPremium && (
+          <Badge 
+            variant="outline" 
+            className={`text-xs ${isLocked ? 'border-gray-300 text-gray-400' : 'border-yellow-400 text-yellow-700'}`}
+          >
+            {isLocked ? <Lock className="w-3 h-3" /> : 'PRO'}
+          </Badge>
+        )}
       </div>
+      <p className={`text-xs ${isLocked ? 'text-gray-400' : 'text-[#B89B7A]'}`}>
+        {component.description}
+      </p>
     </div>
   );
 };
@@ -52,106 +74,161 @@ const DraggableComponent: React.FC<{ component: ComponentDefinition }> = ({ comp
 export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({ 
   categories, 
   components, 
-  collapsed 
+  collapsed = false 
 }) => {
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeCategory, setActiveCategory] = useState('basic');
+  const { hasPremiumFeatures, hasFeature, user } = useAuth();
+
+  // Filtrar componentes disponíveis baseado no plano do usuário
+  const availableComponents = getAvailableComponents(user?.features || [], hasPremiumFeatures);
+  
+  // Separar componentes disponíveis dos bloqueados
+  const { available, locked } = components.reduce((acc, component) => {
+    const isAvailable = availableComponents.find(c => c.id === component.id);
+    if (isAvailable) {
+      acc.available.push(component);
+    } else if (component.isPremium) {
+      acc.locked.push(component);
+    }
+    return acc;
+  }, { available: [] as ComponentDefinition[], locked: [] as ComponentDefinition[] });
+
+  // Filtrar por categoria e busca
+  const filteredComponents = [...available, ...locked].filter(component => {
+    const matchesCategory = selectedCategory === 'all' || component.category === selectedCategory;
+    const matchesSearch = component.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         component.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   if (collapsed) {
     return (
       <div className="p-4">
-        <div className="grid grid-cols-1 gap-2">
-          {components.slice(0, 4).map((component) => {
-            const Icon = component.icon;
-            return (
-              <div
-                key={component.id}
-                className="w-12 h-12 border border-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-50 cursor-pointer"
-                title={component.label}
-              >
-                <Icon className="w-5 h-5 text-gray-600" />
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-2 gap-2">
+          {available.slice(0, 4).map((component) => (
+            <DraggableComponent key={component.id} component={component} />
+          ))}
         </div>
       </div>
     );
   }
 
-  const filteredComponents = components.filter(component =>
-    component.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    component.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const componentsByCategory = categories.reduce((acc, category) => {
-    acc[category.id] = filteredComponents.filter(comp => comp.category === category.id);
-    return acc;
-  }, {} as Record<string, ComponentDefinition[]>);
-
   return (
-    <div className="flex-1 flex flex-col">
-      {/* Search */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+    <div className="h-full flex flex-col">
+      {/* Header com busca */}
+      <div className="p-4 border-b border-[#D4C4A0]">
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#B89B7A] w-4 h-4" />
           <Input
-            type="text"
             placeholder="Buscar componentes..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 border-[#D4C4A0] focus:border-[#B89B7A] text-[#432818]"
           />
+        </div>
+
+        {/* Status do usuário */}
+        <div className="mb-4 p-3 bg-[#F5F2E9] rounded-lg">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-[#432818]">
+              Plano: {user?.plan || 'FREE'}
+            </span>
+            <Badge 
+              variant="outline"
+              className={`${
+                hasPremiumFeatures 
+                  ? 'border-green-500 text-green-700 bg-green-50' 
+                  : 'border-yellow-500 text-yellow-700 bg-yellow-50'
+              }`}
+            >
+              {hasPremiumFeatures ? 'Premium' : 'Básico'}
+            </Badge>
+          </div>
+          <p className="text-xs text-[#B89B7A] mt-1">
+            {available.length} componentes disponíveis
+          </p>
         </div>
       </div>
 
-      {/* Categories */}
-      <Tabs value={activeCategory} onValueChange={setActiveCategory} className="flex-1 flex flex-col">
-        <TabsList className="grid grid-cols-2 mx-4 mt-4">
-          {categories.slice(0, 2).map((category) => (
-            <TabsTrigger 
-              key={category.id} 
-              value={category.id}
-              className="text-xs"
-            >
-              <category.icon className="w-4 h-4 mr-1" />
-              {category.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        
-        <TabsList className="grid grid-cols-3 mx-4 mt-2">
-          {categories.slice(2).map((category) => (
-            <TabsTrigger 
-              key={category.id} 
-              value={category.id}
-              className="text-xs"
-            >
-              <category.icon className="w-4 h-4 mr-1" />
-              {category.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        {/* Components Grid */}
-        <div className="flex-1 overflow-y-auto p-4">
-          {categories.map((category) => (
-            <TabsContent key={category.id} value={category.id} className="mt-0">
-              <div className="grid grid-cols-1 gap-3">
-                {componentsByCategory[category.id]?.map((component) => (
-                  <DraggableComponent key={component.id} component={component} />
-                ))}
-                
-                {componentsByCategory[category.id]?.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    <category.icon className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-sm">Nenhum componente encontrado</p>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-          ))}
+      {/* Filtros de categoria */}
+      <div className="p-4 border-b border-[#D4C4A0]">
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setSelectedCategory('all')}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+              selectedCategory === 'all'
+                ? 'bg-[#B89B7A] text-[#432818]'
+                : 'bg-[#F5F2E9] text-[#B89B7A] hover:bg-[#D4C4A0]'
+            }`}
+          >
+            Todos ({filteredComponents.length})
+          </button>
+          {COMPONENT_CATEGORIES.map((category) => {
+            const categoryCount = filteredComponents.filter(c => c.category === category.id).length;
+            if (categoryCount === 0) return null;
+            
+            return (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                  selectedCategory === category.id
+                    ? 'bg-[#B89B7A] text-[#432818]'
+                    : 'bg-[#F5F2E9] text-[#B89B7A] hover:bg-[#D4C4A0]'
+                }`}
+              >
+                {category.name} ({categoryCount})
+              </button>
+            );
+          })}
         </div>
-      </Tabs>
+      </div>
+
+      {/* Lista de componentes */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {filteredComponents.length === 0 ? (
+          <div className="text-center py-8 text-[#B89B7A]">
+            <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
+            <p className="text-sm">Nenhum componente encontrado</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {/* Componentes disponíveis */}
+            {filteredComponents
+              .filter(c => available.find(a => a.id === c.id))
+              .map((component) => (
+                <DraggableComponent key={component.id} component={component} />
+              ))}
+            
+            {/* Componentes bloqueados */}
+            {filteredComponents
+              .filter(c => locked.find(l => l.id === c.id))
+              .map((component) => (
+                <DraggableComponent key={component.id} component={component} isLocked={true} />
+              ))}
+          </div>
+        )}
+
+        {/* Upgrade prompt para usuários não premium */}
+        {locked.length > 0 && !hasPremiumFeatures && (
+          <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg">
+            <h4 className="font-semibold text-yellow-800 mb-2">🚀 Desbloqueie Mais Componentes</h4>
+            <p className="text-sm text-yellow-700 mb-3">
+              Upgrade para o plano Professional e tenha acesso a {locked.length} componentes premium:
+            </p>
+            <ul className="text-xs text-yellow-600 mb-3 space-y-1">
+              <li>• Vídeos e áudios</li>
+              <li>• Gráficos e carrosseis</li>
+              <li>• Componentes de preço</li>
+              <li>• Animações avançadas</li>
+            </ul>
+            <button className="w-full bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors">
+              Fazer Upgrade
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

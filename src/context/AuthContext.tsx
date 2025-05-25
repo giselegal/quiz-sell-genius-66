@@ -49,7 +49,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [hasEditorAccess, setHasEditorAccess] = useState(false);
   const [hasPremiumFeatures, setHasPremiumFeatures] = useState(false);
 
-  const login = (name: string, email?: string) => {
+  const login = (name: string, email?: string, password?: string) => {
+    // Para desenvolvimento, aceitar qualquer senha ou sem senha
     const userData: User = { 
       userName: name,
       plan: 'PROFESSIONAL', // Por padrão, dar acesso premium para teste
