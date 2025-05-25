@@ -5,7 +5,7 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Monitor, Smartphone, Tablet, Plus, Settings, Eye, Grid3x3, Layers, Undo2, Redo2, Save } from 'lucide-react';
+import { Monitor, Smartphone, Tablet, Plus, Settings, Eye, Grid3x3, Layers, Undo2, Redo2, Save, Download, Upload, Palette, FileText, Share2, Users, History, HelpCircle } from 'lucide-react';
 import { COMPONENT_REGISTRY, COMPONENT_CATEGORIES, ComponentDefinition } from './ComponentRegistry';
 import { ComponentToolbar } from './ComponentToolbar';
 import { StepsPanel } from './StepsPanel';
@@ -358,6 +358,268 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({ onSave, initialB
     reader.readAsText(file);
   }, []);
 
+  // Novos estados para funcionalidades avançadas
+  const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
+  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
+  const [showThemePanel, setShowThemePanel] = useState(false);
+  const [showCollaboration, setShowCollaboration] = useState(false);
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState('default');
+  const [isPublished, setIsPublished] = useState(false);
+  const [publishUrl, setPublishUrl] = useState('');
+
+  // Função para aplicar template
+  const applyTemplate = useCallback((template: any) => {
+    saveToHistory();
+    setSteps(template.steps);
+    setActiveStepId(template.steps[0]?.id);
+    setShowTemplateLibrary(false);
+  }, [saveToHistory]);
+
+  // Função para upload de mídia
+  const handleMediaUpload = useCallback((file: File) => {
+    // Simular upload - na prática integraria com serviço de storage
+    const url = URL.createObjectURL(file);
+    return url;
+  }, []);
+
+  // Função para aplicar tema
+  const applyTheme = useCallback((theme: any) => {
+    setCurrentTheme(theme.id);
+    // Aplicar cores globais a todos os componentes
+    setSteps(prev => prev.map(step => ({
+      ...step,
+      items: step.items.map(item => ({
+        ...item,
+        props: {
+          ...item.props,
+          color: theme.textColor,
+          backgroundColor: theme.primaryColor
+        }
+      }))
+    })));
+  }, []);
+
+  // Função para publicar
+  const handlePublish = useCallback(() => {
+    const config = {
+      steps,
+      activeStepId,
+      previewMode,
+      timestamp: Date.now(),
+      version: '2.0',
+      theme: currentTheme
+    };
+    
+    // Simular publicação - na prática enviaria para API
+    const publishedUrl = `https://quiz.app/published/${Date.now()}`;
+    setPublishUrl(publishedUrl);
+    setIsPublished(true);
+    setShowPublishModal(false);
+    
+    onSave(config);
+  }, [steps, activeStepId, previewMode, currentTheme, onSave]);
+
+  // Templates pré-definidos
+  const TEMPLATES = [
+    {
+      id: 'lead-magnet',
+      name: 'Lead Magnet',
+      category: 'Marketing',
+      preview: '🧲',
+      steps: [
+        {
+          id: 'step-1',
+          name: 'Captura de Lead',
+          items: [
+            {
+              id: 'heading-1',
+              type: 'heading',
+              props: {
+                content: 'Descubra Seu Perfil Ideal',
+                level: 1,
+                fontSize: 48,
+                textAlign: 'center'
+              },
+              position: 0
+            },
+            {
+              id: 'text-1',
+              type: 'text',
+              props: {
+                content: 'Responda algumas perguntas e receba um relatório personalizado',
+                fontSize: 18,
+                textAlign: 'center'
+              },
+              position: 1
+            },
+            {
+              id: 'input-1',
+              type: 'input',
+              props: {
+                label: 'Seu melhor e-mail',
+                type: 'email',
+                placeholder: 'exemplo@email.com'
+              },
+              position: 2
+            },
+            {
+              id: 'button-1',
+              type: 'button',
+              props: {
+                text: 'Começar Quiz',
+                fullWidth: true
+              },
+              position: 3
+            }
+          ],
+          settings: {
+            showLogo: true,
+            showProgress: true,
+            allowReturn: false,
+            isVisible: true
+          }
+        }
+      ]
+    },
+    {
+      id: 'product-recommendation',
+      name: 'Recomendação de Produto',
+      category: 'E-commerce',
+      preview: '🛍️',
+      steps: [
+        {
+          id: 'step-1',
+          name: 'Descobrir Preferências',
+          items: [
+            {
+              id: 'heading-1',
+              type: 'heading',
+              props: {
+                content: 'Encontre o Produto Perfeito',
+                level: 1,
+                fontSize: 42,
+                textAlign: 'center'
+              },
+              position: 0
+            },
+            {
+              id: 'image-1',
+              type: 'image',
+              props: {
+                src: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400',
+                alt: 'Produtos',
+                width: 600,
+                height: 400
+              },
+              position: 1
+            }
+          ],
+          settings: {
+            showLogo: true,
+            showProgress: true,
+            allowReturn: true,
+            isVisible: true
+          }
+        }
+      ]
+    },
+    {
+      id: 'personality-test',
+      name: 'Teste de Personalidade',
+      category: 'Educação',
+      preview: '🧠',
+      steps: [
+        {
+          id: 'step-1',
+          name: 'Introdução',
+          items: [
+            {
+              id: 'heading-1',
+              type: 'heading',
+              props: {
+                content: 'Descubra Sua Personalidade',
+                level: 1,
+                fontSize: 48,
+                textAlign: 'center'
+              },
+              position: 0
+            },
+            {
+              id: 'testimonial-1',
+              type: 'testimonial',
+              props: {
+                quote: 'Este teste me ajudou a entender melhor minhas características!',
+                author: 'Ana Costa',
+                role: 'Usuária',
+                avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=80&h=80&fit=crop&crop=face',
+                rating: 5
+              },
+              position: 1
+            }
+          ],
+          settings: {
+            showLogo: true,
+            showProgress: true,
+            allowReturn: true,
+            isVisible: true
+          }
+        }
+      ]
+    }
+  ];
+
+  // Temas pré-definidos
+  const THEMES = [
+    {
+      id: 'default',
+      name: 'Padrão',
+      primaryColor: '#B89B7A',
+      secondaryColor: '#aa6b5d',
+      textColor: '#432818',
+      backgroundColor: '#ffffff',
+      preview: '🎨'
+    },
+    {
+      id: 'modern-blue',
+      name: 'Azul Moderno',
+      primaryColor: '#3B82F6',
+      secondaryColor: '#1D4ED8',
+      textColor: '#1F2937',
+      backgroundColor: '#ffffff',
+      preview: '💙'
+    },
+    {
+      id: 'vibrant-orange',
+      name: 'Laranja Vibrante',
+      primaryColor: '#F97316',
+      secondaryColor: '#EA580C',
+      textColor: '#1F2937',
+      backgroundColor: '#ffffff',
+      preview: '🧡'
+    },
+    {
+      id: 'elegant-purple',
+      name: 'Roxo Elegante',
+      primaryColor: '#8B5CF6',
+      secondaryColor: '#7C3AED',
+      textColor: '#1F2937',
+      backgroundColor: '#ffffff',
+      preview: '💜'
+    },
+    {
+      id: 'dark-mode',
+      name: 'Modo Escuro',
+      primaryColor: '#10B981',
+      secondaryColor: '#059669',
+      textColor: '#F9FAFB',
+      backgroundColor: '#111827',
+      preview: '🌙'
+    }
+  ];
+
   return (
     <DndContext
       sensors={sensors}
@@ -487,13 +749,45 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({ onSave, initialB
 
               {/* Actions Right */}
               <div className="flex items-center gap-2">
+                {/* Template Library */}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowTemplateLibrary(true)}
+                >
+                  <FileText className="w-4 h-4 mr-1" />
+                  Templates
+                </Button>
+
+                {/* Media Library */}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowMediaLibrary(true)}
+                >
+                  📁 Mídia
+                </Button>
+
+                {/* Theme Panel */}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowThemePanel(true)}
+                >
+                  <Palette className="w-4 h-4 mr-1" />
+                  Temas
+                </Button>
+
+                {/* Export/Import */}
                 <Button 
                   variant="outline" 
                   size="sm"
                   onClick={exportConfig}
                 >
-                  📥 Exportar
+                  <Download className="w-4 h-4 mr-1" />
+                  Exportar
                 </Button>
+                
                 <input
                   type="file"
                   accept=".json"
@@ -506,12 +800,55 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({ onSave, initialB
                   size="sm"
                   onClick={() => document.getElementById('import-config')?.click()}
                 >
-                  📤 Importar
+                  <Upload className="w-4 h-4 mr-1" />
+                  Importar
                 </Button>
+
+                {/* Collaboration */}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowCollaboration(true)}
+                >
+                  <Users className="w-4 h-4 mr-1" />
+                  Colaborar
+                </Button>
+
+                {/* Analytics */}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowAnalytics(true)}
+                >
+                  📊 Analytics
+                </Button>
+
+                {/* Help */}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowTutorial(true)}
+                >
+                  <HelpCircle className="w-4 h-4" />
+                </Button>
+
+                {/* Preview */}
                 <Button variant="outline" size="sm">
                   <Eye className="w-4 h-4 mr-1" />
                   Preview
                 </Button>
+
+                {/* Publish */}
+                <Button 
+                  onClick={() => setShowPublishModal(true)}
+                  size="sm"
+                  className={isPublished ? 'bg-green-600 hover:bg-green-700' : ''}
+                >
+                  <Share2 className="w-4 h-4 mr-1" />
+                  {isPublished ? 'Publicado' : 'Publicar'}
+                </Button>
+
+                {/* Save */}
                 <Button onClick={handleSave} size="sm">
                   <Save className="w-4 h-4 mr-1" />
                   Salvar
@@ -580,6 +917,243 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({ onSave, initialB
           </Card>
         ) : null}
       </DragOverlay>
+
+      {/* Modals e Painéis */}
+      
+      {/* Template Library Modal */}
+      {showTemplateLibrary && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Biblioteca de Templates</h2>
+                <Button variant="ghost" onClick={() => setShowTemplateLibrary(false)}>✕</Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {TEMPLATES.map((template) => (
+                  <Card key={template.id} className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
+                    <div className="text-center">
+                      <div className="text-4xl mb-2">{template.preview}</div>
+                      <h3 className="font-semibold mb-1">{template.name}</h3>
+                      <p className="text-sm text-gray-600 mb-3">{template.category}</p>
+                      <Button 
+                        size="sm" 
+                        className="w-full"
+                        onClick={() => applyTemplate(template)}
+                      >
+                        Usar Template
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Theme Panel Modal */}
+      {showThemePanel && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-2xl">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Escolher Tema</h2>
+                <Button variant="ghost" onClick={() => setShowThemePanel(false)}>✕</Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {THEMES.map((theme) => (
+                  <Card 
+                    key={theme.id} 
+                    className={`p-4 hover:shadow-lg transition-shadow cursor-pointer ${
+                      currentTheme === theme.id ? 'ring-2 ring-blue-500' : ''
+                    }`}
+                    onClick={() => applyTheme(theme)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="text-2xl">{theme.preview}</div>
+                      <div>
+                        <h3 className="font-semibold">{theme.name}</h3>
+                        <div className="flex gap-1 mt-1">
+                          <div 
+                            className="w-4 h-4 rounded-full" 
+                            style={{ backgroundColor: theme.primaryColor }}
+                          />
+                          <div 
+                            className="w-4 h-4 rounded-full" 
+                            style={{ backgroundColor: theme.secondaryColor }}
+                          />
+                          <div 
+                            className="w-4 h-4 rounded-full" 
+                            style={{ backgroundColor: theme.textColor }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Publish Modal */}
+      {showPublishModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-md">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-bold">Publicar Quiz</h2>
+                <Button variant="ghost" onClick={() => setShowPublishModal(false)}>✕</Button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Seu quiz será publicado e ficará disponível publicamente através de um link único.
+                  </p>
+                </div>
+                
+                {publishUrl && (
+                  <div className="p-3 bg-green-50 rounded-lg">
+                    <p className="text-sm font-medium text-green-800 mb-1">Quiz Publicado!</p>
+                    <p className="text-xs text-green-600 break-all">{publishUrl}</p>
+                  </div>
+                )}
+                
+                <div className="flex gap-3">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setShowPublishModal(false)}
+                    className="flex-1"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button 
+                    onClick={handlePublish}
+                    className="flex-1"
+                  >
+                    {isPublished ? 'Atualizar' : 'Publicar'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Analytics Modal */}
+      {showAnalytics && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Analytics do Quiz</h2>
+                <Button variant="ghost" onClick={() => setShowAnalytics(false)}>✕</Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="p-4">
+                  <h3 className="font-semibold mb-2">📊 Visualizações</h3>
+                  <p className="text-3xl font-bold text-blue-600">1,247</p>
+                  <p className="text-sm text-gray-600">+15% esta semana</p>
+                </Card>
+                
+                <Card className="p-4">
+                  <h3 className="font-semibold mb-2">✅ Conclusões</h3>
+                  <p className="text-3xl font-bold text-green-600">892</p>
+                  <p className="text-sm text-gray-600">Taxa: 71.5%</p>
+                </Card>
+                
+                <Card className="p-4">
+                  <h3 className="font-semibold mb-2">📧 Leads</h3>
+                  <p className="text-3xl font-bold text-purple-600">634</p>
+                  <p className="text-sm text-gray-600">Conversão: 71.1%</p>
+                </Card>
+              </div>
+              
+              <div className="mt-6">
+                <h3 className="font-semibold mb-4">Performance por Etapa</h3>
+                <div className="space-y-3">
+                  {steps.map((step, index) => (
+                    <div key={step.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                      <span>{step.name}</span>
+                      <div className="flex items-center gap-4">
+                        <span className="text-sm text-gray-600">
+                          {Math.floor(Math.random() * 100)}% conclusão
+                        </span>
+                        <div className="w-24 h-2 bg-gray-200 rounded-full">
+                          <div 
+                            className="h-full bg-blue-500 rounded-full" 
+                            style={{ width: `${Math.floor(Math.random() * 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Tutorial Modal */}
+      {showTutorial && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-2xl">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Tutorial Rápido</h2>
+                <Button variant="ghost" onClick={() => setShowTutorial(false)}>✕</Button>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">1</div>
+                  <div>
+                    <h3 className="font-semibold">Arraste Componentes</h3>
+                    <p className="text-sm text-gray-600">Arraste elementos da sidebar para o canvas</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">2</div>
+                  <div>
+                    <h3 className="font-semibold">Edite Propriedades</h3>
+                    <p className="text-sm text-gray-600">Clique em um elemento e edite no painel direito</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">3</div>
+                  <div>
+                    <h3 className="font-semibold">Gerencie Etapas</h3>
+                    <p className="text-sm text-gray-600">Adicione e organize etapas no painel esquerdo</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">4</div>
+                  <div>
+                    <h3 className="font-semibold">Publique</h3>
+                    <p className="text-sm text-gray-600">Clique em "Publicar" para gerar um link público</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-6 text-center">
+                <Button onClick={() => setShowTutorial(false)}>
+                  Entendi!
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
     </DndContext>
   );
 };
