@@ -13,7 +13,7 @@ import LovableRoutes from './lovable-routes';
 import { fixMainRoutes } from './utils/fixMainRoutes';
 import { AdminRoute } from '@/components/admin/AdminRoute';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
-import EnhancedResultPageEditor from '@/components/result/EnhancedResultPageEditor';
+import EnhancedResultPageEditor from './components/result/EnhancedResultPageEditor';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -30,6 +30,7 @@ const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const NewPage = lazy(() => import('./pages/NewPage'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -130,6 +131,9 @@ const App = () => {
                   
                   {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
                   <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                  
+                  {/* NOVA PÁGINA */}
+                  <Route path="/nova-pagina" element={<NewPage />} />
                   
                   {/* Redirecionamentos para manter compatibilidade */}
                   <Route path="/home" element={<Navigate to="/" replace />} />
