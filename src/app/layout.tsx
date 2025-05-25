@@ -4,6 +4,7 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import dynamic from 'next/dynamic';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -11,6 +12,11 @@ export const metadata: Metadata = {
   title: 'Quiz Sell Genius',
   description: 'Plataforma de criação de quizzes de alta conversão',
 };
+
+const LovableClientProvider = dynamic(
+  () => import('../components/LovableClientProvider').then(mod => mod.LovableClientProvider),
+  { ssr: false }
+);
 
 export default function RootLayout({
   children,
@@ -22,7 +28,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
           <AuthProvider>
-            {children}
+            <LovableClientProvider>
+              {children}
+            </LovableClientProvider>
           </AuthProvider>
           <Toaster />
         </ThemeProvider>

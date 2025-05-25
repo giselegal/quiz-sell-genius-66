@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { 
   BarChart3,
   Users,
@@ -17,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export default function AdminDashboard() {
-  const navigate = useNavigate();
+  const router = useRouter();
   
   // Removido o redirecionamento automático para permitir acesso ao dashboard
 
