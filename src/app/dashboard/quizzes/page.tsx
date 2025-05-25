@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useCallback } from 'react';
 import { DndContext, DragEndEvent, DragStartEvent, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -145,8 +147,6 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
 
     // Drag de componente para canvas
     if (active.data.current?.type === 'component' && over.data.current?.type === 'canvas') {
-      const component = COMPONENT_REGISTRY.find(c => c.id === active.id);
-      if (component && activeStep) {
         saveToHistory();
         
         const newItem: CanvasItem = {
