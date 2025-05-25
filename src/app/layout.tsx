@@ -23,9 +23,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
           <AuthProvider>
-            <LovableClientProvider>
+            <ClientLayout>
               {children}
-            </LovableClientProvider>
+            </ClientLayout>
           </AuthProvider>
           <Toaster />
         </ThemeProvider>
