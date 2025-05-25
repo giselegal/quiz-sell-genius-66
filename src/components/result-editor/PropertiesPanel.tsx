@@ -1,207 +1,373 @@
 import React from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Block } from '@/types/editor';
-import { X, Trash } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import HeaderBlockEditor from './block-editors/HeaderBlockEditor';
-import HeadlineBlockEditor from './block-editors/HeadlineBlockEditor';
-import TextBlockEditor from './block-editors/TextBlockEditor';
-import ImageBlockEditor from './block-editors/ImageBlockEditor';
-import BenefitsBlockEditor from './block-editors/BenefitsBlockEditor';
-import PricingBlockEditor from './block-editors/PricingBlockEditor';
-import GuaranteeBlockEditor from './block-editors/GuaranteeBlockEditor';
-import CTABlockEditor from './block-editors/CTABlockEditor';
-import StyleResultBlockEditor from './block-editors/StyleResultBlockEditor';
-import SecondaryStylesBlockEditor from './block-editors/SecondaryStylesBlockEditor';
-import HeroSectionBlockEditor from './block-editors/HeroSectionBlockEditor';
-import ProductsBlockEditor from './block-editors/ProductsBlockEditor';
-import TestimonialsBlockEditor from './block-editors/TestimonialsBlockEditor';
-import SpacerBlockEditor from './block-editors/SpacerBlockEditor';
-import VideoBlockEditor from './block-editors/VideoBlockEditor';
-import TwoColumnBlockEditor from './block-editors/TwoColumnBlockEditor';
-import IconBlockEditor from './block-editors/IconBlockEditor';
-import FAQBlockEditor from './block-editors/FAQBlockEditor';
-import CarouselBlockEditor from './block-editors/CarouselBlockEditor';
-import CustomCodeBlockEditor from './block-editors/CustomCodeBlockEditor';
-import AnimationBlockEditor from './block-editors/AnimationBlockEditor';
-import StyleEditor from './style-editors/StyleEditor';
+import { Settings, Copy, Trash2, Palette } from 'lucide-react';
 
 interface PropertiesPanelProps {
-  selectedBlockId: string | null;
-  blocks: Block[];
-  onClose: () => void;
-  onUpdate: (id: string, content: any) => void;
-  onDelete: (id: string) => void;
+  selectedItem: any;
+  step: any;
+  onUpdateItem: (itemId: string, props: Record<string, any>) => void;
+  onUpdateStep: (updates: any) => void;
+  onDeleteItem: (itemId: string) => void;
+  onDuplicateItem: (itemId: string) => void;
+  collapsed: boolean;
 }
 
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
-  selectedBlockId,
-  blocks,
-  onClose,
-  onUpdate,
-  onDelete
+  selectedItem,
+  step,
+  onUpdateItem,
+  onUpdateStep,
+  onDeleteItem,
+  onDuplicateItem,
+  collapsed
 }) => {
-  const selectedBlock = blocks.find(block => block.id === selectedBlockId);
-  
-  if (!selectedBlock) {
+  if (collapsed) {
     return (
-      <div className="h-full flex flex-col border-l">
-        <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="font-semibold">Propriedades</h2>
-        </div>
-        <div className="flex-1 flex items-center justify-center p-4 text-center">
-          <p className="text-[#8F7A6A]">
-            Selecione um bloco para editar suas propriedades
-          </p>
-        </div>
+      <div className="p-4 text-center">
+        <Settings className="w-6 h-6 mx-auto text-gray-400" />
       </div>
     );
   }
-  
-  const getBlockTitle = () => {
-    switch (selectedBlock.type) {
-      case 'header':
-        return 'Cabeçalho';
-      case 'headline':
-        return 'Título e Subtítulo';
-      case 'text':
-        return 'Texto';
-      case 'image':
-        return 'Imagem';
-      case 'benefits':
-        return 'Benefícios';
-      case 'pricing':
-        return 'Preço';
-      case 'guarantee':
-        return 'Garantia';
-      case 'cta':
-        return 'Botão de Ação';
-      case 'style-result':
-        return 'Estilo Principal';
-      case 'secondary-styles':
-        return 'Estilos Secundários';
-      case 'hero-section':
-        return 'Seção Hero';
-      case 'products':
-        return 'Produtos';
-      case 'testimonials':
-        return 'Depoimentos';
-      case 'spacer':
-        return 'Espaçamento';
-      case 'video':
-        return 'Vídeo';
-      case 'two-column':
-        return 'Duas Colunas';
-      case 'icon':
-        return 'Ícone Decorativo';
-      case 'faq':
-        return 'Perguntas Frequentes';
-      case 'carousel':
-        return 'Carrossel de Imagens';
-      case 'custom-code':
-        return 'Código Personalizado';
-      case 'animation-block':
-        return 'Bloco com Animação';
-      default:
-        return 'Componente';
-    }
-  };
-  
-  const renderContentEditor = () => {
-    switch (selectedBlock.type) {
-      case 'header':
-        return <HeaderBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'headline':
-        return <HeadlineBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'text':
-        return <TextBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'image':
-        return <ImageBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'benefits':
-        return <BenefitsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'pricing':
-        return <PricingBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'guarantee':
-        return <GuaranteeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'cta':
-        return <CTABlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'style-result':
-        return <StyleResultBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'secondary-styles':
-        return <SecondaryStylesBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'hero-section':
-        return <HeroSectionBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'products':
-        return <ProductsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'testimonials':
-        return <TestimonialsBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'spacer':
-        return <SpacerBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'video':
-        return <VideoBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'two-column':
-        return <TwoColumnBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'icon':
-        return <IconBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'faq':
-        return <FAQBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'carousel':
-        return <CarouselBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'custom-code':
-        return <CustomCodeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      case 'animation-block':
-        return <AnimationBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
-      default:
-        return <div>Editor não disponível para este tipo de bloco</div>;
-    }
-  };
-  
-  return (
-    <div className="h-full flex flex-col border-l">
-      <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-        <h2 className="font-semibold">{getBlockTitle()}</h2>
-        <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onDelete(selectedBlock.id)}
-            className="h-8 w-8 hover:bg-red-100 hover:text-red-600"
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="h-8 w-8"
-          >
-            <X className="h-4 w-4" />
-          </Button>
+
+  if (!selectedItem) {
+    return (
+      <div className="p-6">
+        <div className="text-center text-gray-500">
+          <Settings className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+          <h3 className="font-medium mb-2">Nenhum item selecionado</h3>
+          <p className="text-sm">Clique em um componente para editar suas propriedades</p>
         </div>
+        
+        {step && (
+          <div className="mt-8">
+            <h3 className="font-semibold mb-4">Configurações da Etapa</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="showLogo">Mostrar Logo</Label>
+                <Switch
+                  id="showLogo"
+                  checked={step.settings.showLogo}
+                  onCheckedChange={(checked) => 
+                    onUpdateStep({ settings: { ...step.settings, showLogo: checked } })
+                  }
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <Label htmlFor="showProgress">Mostrar Progresso</Label>
+                <Switch
+                  id="showProgress"
+                  checked={step.settings.showProgress}
+                  onCheckedChange={(checked) => 
+                    onUpdateStep({ settings: { ...step.settings, showProgress: checked } })
+                  }
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <Label htmlFor="allowReturn">Permitir Voltar</Label>
+                <Switch
+                  id="allowReturn"
+                  checked={step.settings.allowReturn}
+                  onCheckedChange={(checked) => 
+                    onUpdateStep({ settings: { ...step.settings, allowReturn: checked } })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-      
-      <ScrollArea className="flex-1 overflow-y-auto">
-        <div className="p-4">
-          <Tabs defaultValue="content" className="w-full">
-            <TabsList className="mb-4 sticky top-0 bg-white z-10">
-              <TabsTrigger value="content">Conteúdo</TabsTrigger>
-              <TabsTrigger value="style">Estilo</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="content" className="mt-0">
-              {renderContentEditor()}
-            </TabsContent>
-            
-            <TabsContent value="style" className="mt-0">
-              <StyleEditor
-                style={selectedBlock.content.style || {}}
-                onUpdate={(style) => onUpdate(selectedBlock.id, { style })}
+    );
+  }
+
+  const updateProp = (key: string, value: any) => {
+    onUpdateItem(selectedItem.id, { [key]: value });
+  };
+
+  const renderPropertyControls = () => {
+    switch (selectedItem.type) {
+      case 'text':
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label>Conteúdo</Label>
+              <Textarea
+                value={selectedItem.props.content || ''}
+                onChange={(e) => updateProp('content', e.target.value)}
+                rows={3}
               />
-            </TabsContent>
-          </Tabs>
+            </div>
+            
+            <div>
+              <Label>Tamanho da Fonte</Label>
+              <div className="mt-2">
+                <Slider
+                  value={[selectedItem.props.fontSize || 16]}
+                  onValueChange={([value]) => updateProp('fontSize', value)}
+                  min={12}
+                  max={72}
+                  step={1}
+                />
+                <span className="text-xs text-gray-500">{selectedItem.props.fontSize || 16}px</span>
+              </div>
+            </div>
+            
+            <div>
+              <Label>Cor</Label>
+              <Input
+                type="color"
+                value={selectedItem.props.color || '#432818'}
+                onChange={(e) => updateProp('color', e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <Label>Alinhamento</Label>
+              <Select
+                value={selectedItem.props.textAlign || 'left'}
+                onValueChange={(value) => updateProp('textAlign', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="left">Esquerda</SelectItem>
+                  <SelectItem value="center">Centro</SelectItem>
+                  <SelectItem value="right">Direita</SelectItem>
+                  <SelectItem value="justify">Justificado</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        );
+
+      case 'heading':
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label>Conteúdo</Label>
+              <Input
+                value={selectedItem.props.content || ''}
+                onChange={(e) => updateProp('content', e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <Label>Nível</Label>
+              <Select
+                value={selectedItem.props.level?.toString() || '1'}
+                onValueChange={(value) => updateProp('level', parseInt(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">H1</SelectItem>
+                  <SelectItem value="2">H2</SelectItem>
+                  <SelectItem value="3">H3</SelectItem>
+                  <SelectItem value="4">H4</SelectItem>
+                  <SelectItem value="5">H5</SelectItem>
+                  <SelectItem value="6">H6</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label>Tamanho da Fonte</Label>
+              <div className="mt-2">
+                <Slider
+                  value={[selectedItem.props.fontSize || 32]}
+                  onValueChange={([value]) => updateProp('fontSize', value)}
+                  min={16}
+                  max={72}
+                  step={1}
+                />
+                <span className="text-xs text-gray-500">{selectedItem.props.fontSize || 32}px</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <Label htmlFor="gradient">Gradiente</Label>
+              <Switch
+                id="gradient"
+                checked={selectedItem.props.gradient || false}
+                onCheckedChange={(checked) => updateProp('gradient', checked)}
+              />
+            </div>
+          </div>
+        );
+
+      case 'image':
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label>URL da Imagem</Label>
+              <Input
+                value={selectedItem.props.src || ''}
+                onChange={(e) => updateProp('src', e.target.value)}
+                placeholder="https://exemplo.com/imagem.jpg"
+              />
+            </div>
+            
+            <div>
+              <Label>Texto Alternativo</Label>
+              <Input
+                value={selectedItem.props.alt || ''}
+                onChange={(e) => updateProp('alt', e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <Label>Largura</Label>
+              <div className="mt-2">
+                <Slider
+                  value={[selectedItem.props.width || 400]}
+                  onValueChange={([value]) => updateProp('width', value)}
+                  min={100}
+                  max={800}
+                  step={10}
+                />
+                <span className="text-xs text-gray-500">{selectedItem.props.width || 400}px</span>
+              </div>
+            </div>
+            
+            <div>
+              <Label>Altura</Label>
+              <div className="mt-2">
+                <Slider
+                  value={[selectedItem.props.height || 300]}
+                  onValueChange={([value]) => updateProp('height', value)}
+                  min={100}
+                  max={600}
+                  step={10}
+                />
+                <span className="text-xs text-gray-500">{selectedItem.props.height || 300}px</span>
+              </div>
+            </div>
+            
+            <div>
+              <Label>Legenda</Label>
+              <Input
+                value={selectedItem.props.caption || ''}
+                onChange={(e) => updateProp('caption', e.target.value)}
+              />
+            </div>
+          </div>
+        );
+
+      case 'button':
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label>Texto do Botão</Label>
+              <Input
+                value={selectedItem.props.text || ''}
+                onChange={(e) => updateProp('text', e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <Label>Cor de Fundo</Label>
+              <Input
+                type="color"
+                value={selectedItem.props.backgroundColor || '#B89B7A'}
+                onChange={(e) => updateProp('backgroundColor', e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <Label>Cor do Texto</Label>
+              <Input
+                type="color"
+                value={selectedItem.props.textColor || '#ffffff'}
+                onChange={(e) => updateProp('textColor', e.target.value)}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <Label htmlFor="fullWidth">Largura Completa</Label>
+              <Switch
+                id="fullWidth"
+                checked={selectedItem.props.fullWidth || false}
+                onCheckedChange={(checked) => updateProp('fullWidth', checked)}
+              />
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="text-center text-gray-500 py-8">
+            <Palette className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+            <p className="text-sm">Propriedades não disponíveis para este componente</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="flex-1 flex flex-col">
+      {/* Header */}
+      <div className="p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-semibold">{selectedItem.type}</h3>
+          <div className="flex gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onDuplicateItem(selectedItem.id)}
+            >
+              <Copy className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onDeleteItem(selectedItem.id)}
+              className="text-red-600 hover:text-red-700"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
-      </ScrollArea>
+        <p className="text-xs text-gray-500">ID: {selectedItem.id}</p>
+      </div>
+
+      {/* Properties */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <Tabs defaultValue="style" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="style">Estilo</TabsTrigger>
+            <TabsTrigger value="content">Conteúdo</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="style" className="space-y-4 mt-4">
+            {renderPropertyControls()}
+          </TabsContent>
+          
+          <TabsContent value="content" className="space-y-4 mt-4">
+            <div>
+              <Label>Configurações Avançadas</Label>
+              <p className="text-xs text-gray-500 mt-1">
+                Configurações específicas do componente
+              </p>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };
