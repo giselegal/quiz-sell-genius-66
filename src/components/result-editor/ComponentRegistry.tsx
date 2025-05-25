@@ -15,7 +15,14 @@ import {
   Palette,
   Monitor,
   Clock,
-  TrendingUp
+  TrendingUp,
+  DollarSign,
+  RefreshCw,
+  PieChart,
+  Anchor,
+  Shield,
+  Award,
+  CheckCircle
 } from 'lucide-react';
 
 export interface ComponentDefinition {
@@ -285,6 +292,277 @@ export const COMPONENT_REGISTRY: ComponentDefinition[] = [
       content: 'https://via.placeholder.com/375x667',
       scale: 1,
       backgroundColor: '#f8fafc',
+      marginBottom: 20
+    }
+  },
+
+  // COMPONENTES DE VENDAS E PREÇOS
+  {
+    id: 'price-box',
+    type: 'price-box',
+    label: 'Caixa de Preço',
+    icon: DollarSign,
+    category: 'premium',
+    description: 'Exibição de preços com destaque para ofertas',
+    isPremium: true,
+    requiredFeature: 'custom-css',
+    defaultProps: {
+      originalPrice: 497,
+      currentPrice: 197,
+      currency: 'R$',
+      discount: 60,
+      showDiscount: true,
+      highlightSavings: true,
+      backgroundColor: '#ffffff',
+      borderColor: '#e5e7eb',
+      accentColor: '#ef4444',
+      textAlign: 'center',
+      padding: 24,
+      borderRadius: 12,
+      marginBottom: 20
+    }
+  },
+  {
+    id: 'value-anchor',
+    type: 'value-anchor',
+    label: 'Ancoragem de Valor',
+    icon: Anchor,
+    category: 'premium',
+    description: 'Componente para estabelecer valor percebido',
+    isPremium: true,
+    requiredFeature: 'advanced-animations',
+    defaultProps: {
+      title: 'Valor Real do que Você Recebe:',
+      items: [
+        { name: 'Curso Completo', value: 297 },
+        { name: 'Templates Exclusivos', value: 97 },
+        { name: 'Suporte VIP', value: 197 },
+        { name: 'Bônus Especiais', value: 147 }
+      ],
+      totalValue: 738,
+      yourPrice: 197,
+      showCalculation: true,
+      highlightSavings: true,
+      backgroundColor: '#f8fafc',
+      borderColor: '#10b981',
+      accentColor: '#10b981',
+      marginBottom: 20
+    }
+  },
+  {
+    id: 'before-after',
+    type: 'before-after',
+    label: 'Antes e Depois',
+    icon: RefreshCw,
+    category: 'premium',
+    description: 'Comparação visual de transformação',
+    isPremium: true,
+    requiredFeature: 'advanced-animations',
+    defaultProps: {
+      title: 'Sua Transformação',
+      beforeTitle: 'ANTES',
+      afterTitle: 'DEPOIS',
+      beforeItems: [
+        'Sem direção clara',
+        'Resultados inconsistentes',
+        'Baixa produtividade',
+        'Falta de sistema'
+      ],
+      afterItems: [
+        'Foco total no objetivo',
+        'Resultados previsíveis',
+        'Alta performance',
+        'Sistema organizado'
+      ],
+      beforeColor: '#ef4444',
+      afterColor: '#10b981',
+      showArrow: true,
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      marginBottom: 20
+    }
+  },
+
+  // COMPONENTES DE GRÁFICOS
+  {
+    id: 'bar-chart',
+    type: 'bar-chart',
+    label: 'Gráfico de Barras',
+    icon: BarChart3,
+    category: 'premium',
+    description: 'Gráfico de barras customizável',
+    isPremium: true,
+    requiredFeature: 'advanced-animations',
+    defaultProps: {
+      title: 'Resultados dos Nossos Alunos',
+      data: [
+        { label: 'Mês 1', value: 25, color: '#3b82f6' },
+        { label: 'Mês 2', value: 45, color: '#10b981' },
+        { label: 'Mês 3', value: 70, color: '#f59e0b' },
+        { label: 'Mês 4', value: 95, color: '#ef4444' }
+      ],
+      maxValue: 100,
+      showValues: true,
+      animated: true,
+      backgroundColor: '#ffffff',
+      gridColor: '#e5e7eb',
+      marginBottom: 20
+    }
+  },
+  {
+    id: 'pie-chart',
+    type: 'pie-chart',
+    label: 'Gráfico de Pizza',
+    icon: PieChart,
+    category: 'premium',
+    description: 'Gráfico circular para percentuais',
+    isPremium: true,
+    requiredFeature: 'advanced-animations',
+    defaultProps: {
+      title: 'Distribuição de Resultados',
+      data: [
+        { label: 'Excelente', value: 45, color: '#10b981' },
+        { label: 'Bom', value: 35, color: '#3b82f6' },
+        { label: 'Regular', value: 15, color: '#f59e0b' },
+        { label: 'Ruim', value: 5, color: '#ef4444' }
+      ],
+      showPercentages: true,
+      showLegend: true,
+      animated: true,
+      size: 300,
+      marginBottom: 20
+    }
+  },
+
+  // COMPONENTES DE SOCIAL PROOF
+  {
+    id: 'testimonial-card',
+    type: 'testimonial-card',
+    label: 'Depoimento',
+    icon: User,
+    category: 'premium',
+    description: 'Card de depoimento com foto e avaliação',
+    isPremium: true,
+    requiredFeature: 'custom-css',
+    defaultProps: {
+      name: 'Maria Silva',
+      role: 'Empreendedora',
+      avatar: 'https://via.placeholder.com/80x80',
+      rating: 5,
+      testimonial: 'Este quiz mudou completamente minha perspectiva sobre negócios. Resultados incríveis em apenas 30 dias!',
+      backgroundColor: '#ffffff',
+      borderColor: '#e5e7eb',
+      showStars: true,
+      marginBottom: 20
+    }
+  },
+  {
+    id: 'guarantee-badge',
+    type: 'guarantee-badge',
+    label: 'Selo de Garantia',
+    icon: Shield,
+    category: 'premium',
+    description: 'Badge de garantia para reduzir objeções',
+    isPremium: true,
+    requiredFeature: 'custom-css',
+    defaultProps: {
+      title: 'Garantia de 30 Dias',
+      subtitle: '100% do seu dinheiro de volta',
+      description: 'Se não ficar satisfeito, devolvemos todo o valor investido.',
+      icon: 'shield',
+      backgroundColor: '#fef3c7',
+      borderColor: '#f59e0b',
+      textColor: '#92400e',
+      accentColor: '#f59e0b',
+      size: 'large',
+      marginBottom: 20
+    }
+  },
+  {
+    id: 'benefits-list',
+    type: 'benefits-list',
+    label: 'Lista de Benefícios',
+    icon: CheckCircle,
+    category: 'premium',
+    description: 'Lista com checkmarks para destacar benefícios',
+    isPremium: true,
+    requiredFeature: 'custom-css',
+    defaultProps: {
+      title: 'O que você vai receber:',
+      benefits: [
+        'Acesso vitalício ao conteúdo',
+        'Suporte direto com especialistas',
+        'Certificado de conclusão',
+        'Garantia de 30 dias',
+        'Bônus exclusivos',
+        'Comunidade VIP'
+      ],
+      checkColor: '#10b981',
+      iconStyle: 'check',
+      backgroundColor: '#f8fafc',
+      padding: 24,
+      borderRadius: 12,
+      marginBottom: 20
+    }
+  },
+
+  // COMPONENTES DE URGÊNCIA
+  {
+    id: 'scarcity-counter',
+    type: 'scarcity-counter',
+    label: 'Contador de Escassez',
+    icon: Clock,
+    category: 'premium',
+    description: 'Contador de vagas ou tempo limitado',
+    isPremium: true,
+    requiredFeature: 'advanced-animations',
+    defaultProps: {
+      type: 'spots', // 'spots' ou 'time'
+      title: 'Restam apenas',
+      totalSpots: 100,
+      remainingSpots: 23,
+      updateInterval: 30000, // 30 segundos
+      backgroundColor: '#fef2f2',
+      borderColor: '#ef4444',
+      textColor: '#991b1b',
+      accentColor: '#ef4444',
+      showProgress: true,
+      marginBottom: 20
+    }
+  },
+  {
+    id: 'bonus-stack',
+    type: 'bonus-stack',
+    label: 'Stack de Bônus',
+    icon: Award,
+    category: 'premium',
+    description: 'Empilhamento de bônus para aumentar valor',
+    isPremium: true,
+    requiredFeature: 'advanced-animations',
+    defaultProps: {
+      title: 'Bônus Exclusivos Para Você:',
+      bonuses: [
+        {
+          name: 'E-book: Estratégias Avançadas',
+          value: 97,
+          description: 'Técnicas secretas dos experts'
+        },
+        {
+          name: 'Planilha de Controle',
+          value: 47,
+          description: 'Template pronto para usar'
+        },
+        {
+          name: 'Acesso ao Grupo VIP',
+          value: 197,
+          description: 'Networking com outros alunos'
+        }
+      ],
+      showValues: true,
+      animateReveal: true,
+      backgroundColor: '#ffffff',
+      borderColor: '#d97706',
+      accentColor: '#d97706',
       marginBottom: 20
     }
   }

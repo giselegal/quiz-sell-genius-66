@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Volume2, VolumeX, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
 
 interface ComponentProps {
   props: Record<string, any>;
@@ -407,11 +407,328 @@ export const ProgressBarComponent: React.FC<ComponentProps> = ({ props, isSelect
   );
 };
 
+// Componente de Caixa de Preço
+export const PriceBoxComponent: React.FC<ComponentProps> = ({ props, isSelected, onSelect }) => {
+  const discount = props.showDiscount ? Math.round(((props.originalPrice - props.currentPrice) / props.originalPrice) * 100) : 0;
+  const savings = props.originalPrice - props.currentPrice;
+
+  return (
+    <div 
+      className={`p-6 border-2 rounded-lg text-center ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+      onClick={onSelect}
+      style={{ 
+        backgroundColor: props.backgroundColor,
+        borderColor: props.borderColor,
+        borderRadius: props.borderRadius,
+        marginBottom: props.marginBottom,
+        padding: props.padding
+      }}
+    >
+      {props.showDiscount && (
+        <div 
+          className="inline-block px-3 py-1 rounded-full text-white font-bold text-sm mb-3"
+          style={{ backgroundColor: props.accentColor }}
+        >
+          {discount}% OFF
+        </div>
+      )}
+      
+      <div className="space-y-2">
+        <div className="flex justify-center items-center gap-2">
+          <span className="text-gray-500 line-through text-lg">
+            {props.currency} {props.originalPrice}
+          </span>
+        </div>
+        
+        <div className="text-4xl font-bold" style={{ color: props.accentColor }}>
+          {props.currency} {props.currentPrice}
+        </div>
+        
+        {props.highlightSavings && (
+          <div className="text-green-600 font-semibold">
+            Economia de {props.currency} {savings}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Componente de Ancoragem de Valor
+export const ValueAnchorComponent: React.FC<ComponentProps> = ({ props, isSelected, onSelect }) => {
+  const totalSavings = props.totalValue - props.yourPrice;
+
+  return (
+    <div 
+      className={`p-6 border rounded-lg ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+      onClick={onSelect}
+      style={{ 
+        backgroundColor: props.backgroundColor,
+        borderColor: props.borderColor,
+        marginBottom: props.marginBottom 
+      }}
+    >
+      <h3 className="text-xl font-bold mb-4 text-center">{props.title}</h3>
+      
+      <div className="space-y-3">
+        {props.items.map((item: any, index: number) => (
+          <div key={index} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+            <span className="font-medium">{item.name}</span>
+            <span className="font-bold" style={{ color: props.accentColor }}>
+              R$ {item.value}
+            </span>
+          </div>
+        ))}
+        
+        <div className="border-t-2 pt-3 mt-4">
+          <div className="flex justify-between items-center text-lg font-bold">
+            <span>Valor Total:</span>
+            <span style={{ color: props.accentColor }}>R$ {props.totalValue}</span>
+          </div>
+          
+          <div className="flex justify-between items-center text-2xl font-bold mt-2">
+            <span>Seu Investimento:</span>
+            <span className="text-green-600">R$ {props.yourPrice}</span>
+          </div>
+          
+          {props.highlightSavings && (
+            <div className="text-center mt-3 p-3 bg-green-50 rounded-lg">
+              <span className="text-green-800 font-bold text-lg">
+                Você economiza R$ {totalSavings}!
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Componente Antes e Depois
+export const BeforeAfterComponent: React.FC<ComponentProps> = ({ props, isSelected, onSelect }) => {
+  return (
+    <div 
+      className={`p-6 rounded-lg ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+      onClick={onSelect}
+      style={{ 
+        backgroundColor: props.backgroundColor,
+        borderRadius: props.borderRadius,
+        marginBottom: props.marginBottom 
+      }}
+    >
+      <h3 className="text-2xl font-bold text-center mb-6">{props.title}</h3>
+      
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* ANTES */}
+        <div className="text-center">
+          <div 
+            className="inline-block px-4 py-2 rounded-lg text-white font-bold mb-4"
+            style={{ backgroundColor: props.beforeColor }}
+          >
+            {props.beforeTitle}
+          </div>
+          
+          <ul className="space-y-3">
+            {props.beforeItems.map((item: string, index: number) => (
+              <li key={index} className="flex items-center gap-3">
+                <span 
+                  className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-white text-xs"
+                  style={{ backgroundColor: props.beforeColor }}
+                >
+                  ✗
+                </span>
+                <span className="text-gray-600">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Arrow */}
+        {props.showArrow && (
+          <div className="hidden md:flex items-center justify-center">
+            <div className="text-4xl font-bold text-gray-400">→</div>
+          </div>
+        )}
+
+        {/* DEPOIS */}
+        <div className="text-center">
+          <div 
+            className="inline-block px-4 py-2 rounded-lg text-white font-bold mb-4"
+            style={{ backgroundColor: props.afterColor }}
+          >
+            {props.afterTitle}
+          </div>
+          
+          <ul className="space-y-3">
+            {props.afterItems.map((item: string, index: number) => (
+              <li key={index} className="flex items-center gap-3">
+                <span 
+                  className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center text-white text-xs"
+                  style={{ backgroundColor: props.afterColor }}
+                >
+                  ✓
+                </span>
+                <span className="font-medium">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Componente de Gráfico de Barras
+export const BarChartComponent: React.FC<ComponentProps> = ({ props, isSelected, onSelect }) => {
+  const [animationProgress, setAnimationProgress] = useState(0);
+
+  useEffect(() => {
+    if (props.animated) {
+      const timer = setTimeout(() => {
+        setAnimationProgress(100);
+      }, 200);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimationProgress(100);
+    }
+  }, [props.animated]);
+
+  return (
+    <div 
+      className={`p-6 rounded-lg ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+      onClick={onSelect}
+      style={{ 
+        backgroundColor: props.backgroundColor,
+        marginBottom: props.marginBottom 
+      }}
+    >
+      <h3 className="text-xl font-bold text-center mb-6">{props.title}</h3>
+      
+      <div className="space-y-4">
+        {props.data.map((item: any, index: number) => (
+          <div key={index} className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="font-medium">{item.label}</span>
+              {props.showValues && (
+                <span className="font-bold">{item.value}%</span>
+              )}
+            </div>
+            
+            <div 
+              className="h-8 rounded-full overflow-hidden"
+              style={{ backgroundColor: props.gridColor }}
+            >
+              <div 
+                className="h-full transition-all duration-1000 ease-out rounded-full"
+                style={{ 
+                  backgroundColor: item.color,
+                  width: `${(item.value / props.maxValue) * animationProgress}%` 
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Componente de Lista de Benefícios
+export const BenefitsListComponent: React.FC<ComponentProps> = ({ props, isSelected, onSelect }) => {
+  return (
+    <div 
+      className={`p-6 rounded-lg ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+      onClick={onSelect}
+      style={{ 
+        backgroundColor: props.backgroundColor,
+        borderRadius: props.borderRadius,
+        padding: props.padding,
+        marginBottom: props.marginBottom 
+      }}
+    >
+      <h3 className="text-xl font-bold mb-4">{props.title}</h3>
+      
+      <ul className="space-y-3">
+        {props.benefits.map((benefit: string, index: number) => (
+          <li key={index} className="flex items-center gap-3">
+            <CheckCircle 
+              className="w-5 h-5 flex-shrink-0" 
+              style={{ color: props.checkColor }}
+            />
+            <span className="font-medium">{benefit}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// Componente de Contador de Escassez
+export const ScarcityCounterComponent: React.FC<ComponentProps> = ({ props, isSelected, onSelect }) => {
+  const [currentSpots, setCurrentSpots] = useState(props.remainingSpots);
+  
+  useEffect(() => {
+    if (props.type === 'spots' && props.updateInterval) {
+      const interval = setInterval(() => {
+        setCurrentSpots((prev: number) => Math.max(1, prev - Math.floor(Math.random() * 2)));
+      }, props.updateInterval);
+      
+      return () => clearInterval(interval);
+    }
+  }, [props.type, props.updateInterval]);
+
+  const percentage = (currentSpots / props.totalSpots) * 100;
+
+  return (
+    <div 
+      className={`p-6 border-2 rounded-lg text-center ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+      onClick={onSelect}
+      style={{ 
+        backgroundColor: props.backgroundColor,
+        borderColor: props.borderColor,
+        marginBottom: props.marginBottom 
+      }}
+    >
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold" style={{ color: props.textColor }}>
+          {props.title}
+        </h3>
+        
+        <div className="text-4xl font-bold" style={{ color: props.accentColor }}>
+          {currentSpots} {props.type === 'spots' ? 'vagas' : 'horas'}
+        </div>
+        
+        {props.showProgress && (
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div 
+              className="h-3 rounded-full transition-all duration-300"
+              style={{ 
+                backgroundColor: props.accentColor,
+                width: `${percentage}%` 
+              }}
+            />
+          </div>
+        )}
+        
+        <p className="text-sm" style={{ color: props.textColor }}>
+          {props.type === 'spots' ? 'Restam poucas vagas disponíveis!' : 'Tempo limitado!'}
+        </p>
+      </div>
+    </div>
+  );
+};
+
 // Exportar todos os componentes
 export const ComponentRenderers = {
   video: VideoComponent,
   audio: AudioComponent,
   'image-carousel': ImageCarouselComponent,
   countdown: CountdownComponent,
-  'progress-bar': ProgressBarComponent
+  'progress-bar': ProgressBarComponent,
+  'price-box': PriceBoxComponent,
+  'value-anchor': ValueAnchorComponent,
+  'before-after': BeforeAfterComponent,
+  'bar-chart': BarChartComponent,
+  'benefits-list': BenefitsListComponent,
+  'scarcity-counter': ScarcityCounterComponent,
 };
