@@ -11,7 +11,7 @@ export const AdminDashboard: React.FC = () => {
         </h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Card do Editor Enhanced */}
+          {/* Card do Editor Enhanced - LINK CORRETO */}
           <Link 
             to="/admin/editor"
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-blue-500"
@@ -20,10 +20,10 @@ export const AdminDashboard: React.FC = () => {
               <Edit className="h-8 w-8 text-blue-500 mr-4" />
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Editor Enhanced
+                  Editor Ao Vivo
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  Editar página de resultados
+                  Editor visual com preview em tempo real
                 </p>
               </div>
             </div>
@@ -109,16 +109,16 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Seção de informações rápidas */}
+        {/* Seção de acesso rápido */}
         <div className="mt-8 bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Acesso Rápido
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-medium text-blue-900 mb-2">Editor Enhanced</h3>
+              <h3 className="font-medium text-blue-900 mb-2">Editor Ao Vivo</h3>
               <p className="text-blue-700 text-sm mb-3">
-                Personalize cores, textos e layout da página de resultados em tempo real.
+                Edite cores, textos e layout com preview instantâneo.
               </p>
               <Link 
                 to="/admin/editor"

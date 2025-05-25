@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Edit, Palette } from 'lucide-react';
 import { VisualEditor } from '@/components/result-editor/VisualEditor';
 import { DragDropEditor } from '@/components/result-editor/DragDropEditor';
+import { LiveEditor } from '@/components/result-editor/LiveEditor';
 
 const EnhancedResultPageEditorPage: React.FC = () => {
   const navigate = useNavigate();
@@ -249,16 +250,13 @@ const EnhancedResultPageEditorPage: React.FC = () => {
           <ArrowLeft className="h-4 w-4" />
           Voltar ao Dashboard
         </Button>
-        <h1 className="text-xl font-semibold text-[#432818]">Editor Visual da Página</h1>
+        <h1 className="text-xl font-semibold text-[#432818]">Editor Ao Vivo</h1>
         <div className="text-sm text-gray-500">
-          Drag & Drop Editor
+          Edição em Tempo Real
         </div>
       </div>
       
-      <DragDropEditor
-        onSave={handleSaveBlocks}
-        initialBlocks={JSON.parse(localStorage.getItem('pageLayoutBlocks') || '[]')}
-      />
+      <LiveEditor onSave={handleSaveConfig} />
     </div>
   );
 };
