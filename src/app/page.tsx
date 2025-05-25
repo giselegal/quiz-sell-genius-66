@@ -1,8 +1,13 @@
 'use client';
 
 import React from 'react';
-import QuizFlow from '@/components/QuizFlow';
+import { BrowserRouter } from 'react-router-dom';
+import LovableRoutes from '@/lovable-routes';
 
 export default function HomePage() {
-  return <QuizFlow />;
+  return (
+    <BrowserRouter>
+      <LovableRoutes />
+    </BrowserRouter>
+  );
 }

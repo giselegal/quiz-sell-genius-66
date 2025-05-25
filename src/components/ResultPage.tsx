@@ -1,7 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Editable } from '@lovable/react';
 
 export default function ResultPage() {
   const { id } = useParams();

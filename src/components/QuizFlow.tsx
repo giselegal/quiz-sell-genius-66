@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 type QuestionOption = {
   id: string;
@@ -48,7 +48,7 @@ export default function QuizFlow() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, QuestionOption>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleOptionClick = (option: QuestionOption) => {
     // Salva a resposta selecionada
@@ -66,7 +66,7 @@ export default function QuizFlow() {
       setTimeout(() => {
         // Simula o processamento do resultado
         const resultId = calculateResultId(answers);
-        navigate(`/resultado/${resultId}`);
+        router.push(`/resultado/${resultId}`);
       }, 1000);
     }
   };
