@@ -1,4 +1,3 @@
-
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
@@ -52,15 +51,15 @@ prepareRootAndRender();
 // 3) Setup route change monitoring and fixes
 const loadNonCritical = () => {
   // Fix any URL issues in the main routes
-  fixMainRoutes()
+  // fixMainRoutes() // Comentado para teste de roteamento
   
   // Setup monitoring for route changes to preload resources
-  setupRouteChangePreloading()
+  // setupRouteChangePreloading() // Comentado para teste de roteamento
   
   // Check the status of main routes
   setTimeout(() => {
-    checkMainRoutes()
-    console.log('✅ Main routes activated and checked')
+    // checkMainRoutes() // Comentado para teste de roteamento
+    console.log('✅ Todas as funções de manipulação de rotas foram comentadas para teste')
   }, 1000)
 }
 
