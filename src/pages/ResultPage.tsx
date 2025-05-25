@@ -311,7 +311,7 @@ const ResultPage: React.FC = () => {
       color: tokens.colors.text,
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
-      {/* Custom scrollbar styles - CORES UNIFICADAS */}
+      {/* Custom scrollbar styles - CORES COMPLETAMENTE UNIFICADAS */}
       <style dangerouslySetInnerHTML={{
         __html: `
           ::-webkit-scrollbar {
@@ -410,11 +410,12 @@ const ResultPage: React.FC = () => {
           </div>
           <Button 
             onClick={handleCTAClick} 
-            className="text-white text-sm sm:text-base leading-none py-3 px-6 rounded-md transition-all duration-300 w-full sm:w-auto cursor-pointer border-0"
+            className="text-sm sm:text-base leading-none py-3 px-6 rounded-md transition-all duration-300 w-full sm:w-auto cursor-pointer border-0"
             style={{
               background: tokens.gradients.primary,
               boxShadow: tokens.shadows.cta,
               transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
+              color: '#ffffff' // Usando cor fixa para texto em botões
             }}
             onMouseEnter={() => setIsButtonHovered(true)} 
             onMouseLeave={() => setIsButtonHovered(false)}
@@ -581,11 +582,12 @@ const ResultPage: React.FC = () => {
                            borderLeft: `2px solid ${tokens.colors.primary}`
                          }}></div>
                     
-                    {/* STYLE BADGE - CORES UNIFICADAS */}
-                    <div className="absolute -top-3 -left-3 text-white px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-xs lg:text-sm font-medium transform -rotate-12"
+                    {/* STYLE BADGE - CORES COMPLETAMENTE UNIFICADAS */}
+                    <div className="absolute -top-3 -left-3 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-xs lg:text-sm font-medium transform -rotate-12"
                          style={{ 
                            background: tokens.gradients.primary,
-                           boxShadow: tokens.shadows.sm 
+                           boxShadow: tokens.shadows.sm,
+                           color: '#ffffff'
                          }}>
                       {category}
                     </div>
@@ -609,11 +611,12 @@ const ResultPage: React.FC = () => {
                     onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
                   />
                   
-                  {/* BADGE UNIFICADO */}
-                  <div className="absolute -top-3 -right-3 text-white px-3 py-1 rounded-full text-xs font-medium transform rotate-12"
+                  {/* BADGE COMPLETAMENTE UNIFICADO */}
+                  <div className="absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-medium transform rotate-12"
                        style={{ 
                          background: tokens.gradients.primary,
-                         boxShadow: tokens.shadows.sm 
+                         boxShadow: tokens.shadows.sm,
+                         color: '#ffffff'
                        }}>
                     Exclusivo
                   </div>
@@ -634,16 +637,13 @@ const ResultPage: React.FC = () => {
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando transformações...</p>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando transformações...</p>
             </div>
           }>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
               <BeforeAfterTransformation />
             </AnimatedWrapper>
           </Suspense>
-
-          {/* REMOVER CTA INTERMEDIÁRIO */}
-          {/* CTA após transformações removido para não saturar */}
         </section>
 
         {/* Motivation Section */}
@@ -657,7 +657,7 @@ const ResultPage: React.FC = () => {
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando conteúdo...</p>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando conteúdo...</p>
             </div>
           }>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
@@ -677,7 +677,7 @@ const ResultPage: React.FC = () => {
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando bônus...</p>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando bônus...</p>
             </div>
           }>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
@@ -697,7 +697,7 @@ const ResultPage: React.FC = () => {
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando depoimentos...</p>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando depoimentos...</p>
             </div>
           }>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
@@ -716,7 +716,7 @@ const ResultPage: React.FC = () => {
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando garantia...</p>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando garantia...</p>
             </div>
           }>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
@@ -736,7 +736,7 @@ const ResultPage: React.FC = () => {
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando informações da mentora...</p>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando informações da mentora...</p>
             </div>
           }>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>

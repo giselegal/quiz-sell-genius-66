@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -12,6 +11,7 @@ import CriticalCSSLoader from './components/CriticalCSSLoader';
 import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
 import LovableRoutes from './lovable-routes';
 import { fixMainRoutes } from './utils/fixMainRoutes';
+import { AdminRoute } from '@/components/admin/AdminRoute';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -29,6 +29,7 @@ const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const EnhancedResultPageEditor = lazy(() => import('./pages/admin/EnhancedResultPageEditor'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -104,8 +105,25 @@ const App = () => {
                   {/* ROTA PRINCIPAL - Quiz com introdução */}
                   <Route path="/" element={<QuizPage />} />
                   
+                  {/* Rota protegida para o Editor Enhanced */}
+                  <Route 
+                    path="/admin/editor" 
+                    element={
+                      <AdminRoute requireEditor={true}>
+                        <EnhancedResultPageEditor />
+                      </AdminRoute>
+                    } 
+                  />
+                  
                   {/* ADMIN - Dashboard centralizado com todas as funcionalidades administrativas */}
-                  <Route path="/admin/*" element={<AdminDashboard />} />
+                  <Route 
+                    path="/admin/*" 
+                    element={
+                      <AdminRoute>
+                        <AdminDashboard />
+                      </AdminRoute>
+                    } 
+                  />
                   
                   {/* RESULTADO - Página de resultados do quiz */}
                   <Route path="/resultado" element={<ResultPage />} />
