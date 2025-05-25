@@ -1,20 +1,21 @@
 
 export interface ImageAnalysis {
   url: string;
-  element: HTMLImageElement;
-  issues: string[];
+  element?: HTMLImageElement;
+  issues?: string[];
   dimensions?: {
     natural: { width: number; height: number },
     display: { width: number; height: number }
   };
   downloadSize?: number;
-  format?: string;
+  format?: string | number;
+  quality?: string | number;
+  width?: string | number;
+  height?: string | number;
   isOptimized?: boolean;
   isResponsive?: boolean;
-  quality?: number;
-  width?: number;
-  height?: number;
   suggestedImprovements?: string[];
+  estimatedSizeReduction?: number;
 }
 
 export interface ImageDiagnosticResult {
@@ -50,7 +51,6 @@ export interface PreloadImageDefinition {
   quality?: number;
 }
 
-// Add PreloadOptions interface to fix imports
 export interface PreloadOptions {
   quality?: number;
   priority?: 'high' | 'low' | 'auto';
@@ -59,4 +59,38 @@ export interface PreloadOptions {
   timeout?: number;
   batchSize?: number;
   format?: string;
+  onProgress?: (loaded: number, total: number) => void;
+  onComplete?: () => void;
+}
+
+// Additional missing types
+export interface ImageMetadata {
+  width: number;
+  height: number;
+  format: string;
+  size: number;
+  url: string;
+}
+
+export interface ImageCacheEntry {
+  url: string;
+  metadata: ImageMetadata;
+  timestamp: number;
+  blob?: Blob;
+}
+
+export interface ImageSettings {
+  quality: number;
+  format: string;
+  width?: number;
+  height?: number;
+}
+
+export interface ImageOptimizationOptions {
+  quality?: number;
+  format?: string;
+  width?: number;
+  height?: number;
+  progressive?: boolean;
+  lossless?: boolean;
 }
