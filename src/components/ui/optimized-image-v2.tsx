@@ -40,8 +40,8 @@ const OptimizedImageV2: React.FC<OptimizedImageV2Props> = ({
   const optimizedSrc = useMemo(() => {
     if (!src) return '';
     
-    // Use optimizeCloudinaryUrl with correct parameters
-    return optimizeCloudinaryUrl(src, quality, width, height);
+    // Use optimizeCloudinaryUrl with correct single parameter
+    return optimizeCloudinaryUrl(src, { quality, width, height });
   }, [src, width, height, quality]);
 
   if (error) {

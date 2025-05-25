@@ -70,7 +70,8 @@ export const preloadImagesByUrls = async (
       img.onload = () => {
         clearTimeout(timeoutId);
         updateImageCache(url, { 
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          loadStatus: 'loaded'
         });
         loaded++;
         onProgress?.(loaded, total);
@@ -80,7 +81,8 @@ export const preloadImagesByUrls = async (
       img.onerror = () => {
         clearTimeout(timeoutId);
         updateImageCache(url, { 
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          loadStatus: 'error'
         });
         loaded++;
         onProgress?.(loaded, total);
@@ -125,7 +127,8 @@ export const preloadImages = async (
   images: BankImage[],
   options: PreloadOptions = {}
 ): Promise<void> => {
-  const urls = images.map(img => img.url);
+  // Extract URLs from BankImage objects - assuming they have a 'src' property
+  const urls = images.map(img => img.src || img.imageUrl || '').filter(Boolean);
   return preloadImagesByUrls(urls, options);
 };
 
