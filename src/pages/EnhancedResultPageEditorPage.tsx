@@ -9,6 +9,7 @@ import { DragDropEditor } from '@/components/result-editor/DragDropEditor';
 import { LiveEditor } from '@/components/result-editor/LiveEditor';
 import EditorCompleto from '@/components/result-editor/EditorCompleto';
 import EditorSimples from '@/components/result-editor/EditorSimples';
+import EditorUltraSimples from '@/components/result-editor/EditorUltraSimples';
 
 const EnhancedResultPageEditorPage: React.FC = () => {
   const navigate = useNavigate();
@@ -242,7 +243,7 @@ const EnhancedResultPageEditorPage: React.FC = () => {
   
   return (
     <div className="min-h-screen">
-      <EditorSimples />
+      <EditorUltraSimples />
     </div>
   );
 };
