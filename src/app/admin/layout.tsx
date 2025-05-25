@@ -92,24 +92,27 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F5F2E9]">
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 ${sidebarOpen ? 'w-64' : 'w-20'} bg-white shadow-lg transition-all duration-300`}>
+      <div className={`fixed inset-y-0 left-0 z-50 ${sidebarOpen ? 'w-64' : 'w-20'} bg-[#432818] shadow-2xl transition-all duration-300`}>
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between px-6 border-b border-gray-200">
+        <div className="flex h-16 items-center justify-between px-6 border-b border-[#5C3B2A]">
           {sidebarOpen && (
-            <Link href="/admin" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">Q</span>
+            <Link href="/admin" className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#B89B7A] to-[#D4C4A0] rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-[#432818] font-bold text-lg">Q</span>
               </div>
-              <span className="font-bold text-xl">Quiz Admin</span>
+              <div>
+                <span className="font-bold text-xl text-[#F5F2E9]">Quiz</span>
+                <span className="font-light text-lg text-[#B89B7A] ml-1">Admin</span>
+              </div>
             </Link>
           )}
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2"
+            className="p-2 hover:bg-[#5C3B2A] text-[#B89B7A] hover:text-[#F5F2E9]"
           >
             <Menu className="w-4 h-4" />
           </Button>
@@ -125,19 +128,25 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <Link
                     href={item.href}
                     className={`
-                      group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors
+                      group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200
                       ${item.current 
-                        ? 'bg-blue-50 text-blue-700 border border-blue-200' 
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-[#B89B7A] text-[#432818] shadow-lg' 
+                        : 'text-[#B89B7A] hover:bg-[#5C3B2A] hover:text-[#F5F2E9]'
                       }
                     `}
                   >
-                    <Icon className={`mr-3 h-5 w-5 flex-shrink-0 ${item.current ? 'text-blue-500' : 'text-gray-400'}`} />
+                    <Icon className={`mr-3 h-5 w-5 flex-shrink-0 ${
+                      item.current ? 'text-[#432818]' : 'text-[#B89B7A] group-hover:text-[#F5F2E9]'
+                    }`} />
                     {sidebarOpen && (
                       <>
                         <span className="flex-1">{item.name}</span>
                         {item.badge && (
-                          <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-full">
+                          <span className={`ml-2 px-2 py-1 text-xs font-bold rounded-full shadow-md animate-pulse ${
+                            item.badge === 'NOVO' 
+                              ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-[#432818]' 
+                              : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                          }`}>
                             {item.badge}
                           </span>
                         )}
@@ -153,14 +162,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Quick Actions */}
         {sidebarOpen && (
           <div className="absolute bottom-6 left-3 right-3">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-4 text-white">
-              <h3 className="font-semibold text-sm mb-2">🚀 Editor Visual</h3>
-              <p className="text-xs text-blue-100 mb-3">
-                Crie quizzes incríveis com nosso editor drag & drop!
+            <div className="bg-gradient-to-br from-[#B89B7A] to-[#D4C4A0] rounded-xl p-4 text-[#432818] shadow-lg border border-[#D4C4A0]/30">
+              <h3 className="font-bold text-sm mb-2">✨ Editor Visual</h3>
+              <p className="text-xs opacity-80 mb-3 leading-relaxed">
+                Crie quizzes incríveis com nosso editor drag & drop profissional!
               </p>
               <Link href="/admin/editor">
-                <Button size="sm" variant="secondary" className="w-full">
-                  Experimentar Agora
+                <Button 
+                  size="sm" 
+                  className="w-full bg-[#432818] hover:bg-[#5C3B2A] text-[#F5F2E9] shadow-md transition-all duration-200 hover:shadow-lg"
+                >
+                  🚀 Experimentar Agora
                 </Button>
               </Link>
             </div>
@@ -171,58 +183,35 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content */}
       <div className={`${sidebarOpen ? 'ml-64' : 'ml-20'} transition-all duration-300`}>
         {/* Top Bar */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="bg-white/95 backdrop-blur-sm border-b border-[#D4C4A0]/30 px-6 py-4 shadow-sm">
           <div className="flex items-center justify-between">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#B89B7A] w-4 h-4" />
               <Input
                 placeholder="Buscar quizzes, resultados..."
-                className="pl-10 bg-gray-50 border-0"
+                className="pl-10 bg-[#F5F2E9]/50 border-[#D4C4A0]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]/20 text-[#432818] placeholder:text-[#B89B7A]"
               />
             </div>
 
             {/* Right Actions */}
             <div className="flex items-center gap-4">
               {/* Notifications */}
-              <Button variant="ghost" size="sm" className="relative">
+              <Button variant="ghost" size="sm" className="relative hover:bg-[#F5F2E9] text-[#432818]">
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-[#D4AF37] to-[#FFD700] rounded-full shadow-md animate-pulse"></span>
               </Button>
 
-              {/* User Menu */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center gap-2 p-2">
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src="/avatars/admin.jpg" />
-                      <AvatarFallback>AD</AvatarFallback>
-                    </Avatar>
-                    <div className="text-left">
-                      <p className="text-sm font-medium">Admin User</p>
-                      <p className="text-xs text-gray-500">admin@quiz.com</p>
-                    </div>
-                    <ChevronDown className="w-4 h-4 text-gray-400" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    Perfil
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    Configurações
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-600">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sair
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* User Info - Simplificado para desenvolvimento */}
+              <div className="flex items-center gap-3 p-2">
+                <Avatar className="w-8 h-8 ring-2 ring-[#B89B7A]/30">
+                  <AvatarFallback className="bg-[#B89B7A] text-[#432818] font-bold">DV</AvatarFallback>
+                </Avatar>
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-[#432818]">Desenvolvedor</p>
+                  <p className="text-xs text-[#B89B7A]">Acesso Total</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

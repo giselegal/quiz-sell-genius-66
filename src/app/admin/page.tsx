@@ -127,26 +127,41 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
+      {/* Header com aviso de desenvolvimento */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">
-            Bem-vindo de volta! Aqui está um resumo dos seus quizzes.
+          <h1 className="text-3xl font-bold text-[#432818]">Dashboard</h1>
+          <p className="text-[#B89B7A] mt-1">
+            🚀 Modo Desenvolvimento - Acesso total liberado para testes
           </p>
         </div>
         
         <div className="flex gap-3">
-          <Button variant="outline">
+          <Button variant="outline" className="border-[#B89B7A] text-[#432818]">
             <BarChart3 className="w-4 h-4 mr-2" />
             Relatórios
           </Button>
-          <Link href="/admin/editor/new">
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+          <Link href="/admin/editor/quiz/new">
+            <Button className="bg-gradient-to-r from-[#432818] to-[#5C3B2A] hover:from-[#5C3B2A] hover:to-[#6D4C37]">
               <Palette className="w-4 h-4 mr-2" />
               Novo Quiz Visual
             </Button>
           </Link>
+        </div>
+      </div>
+
+      {/* Banner de desenvolvimento */}
+      <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+            <span className="text-white font-bold">✓</span>
+          </div>
+          <div>
+            <h3 className="font-semibold text-green-800">Sistema Pronto para Desenvolvimento</h3>
+            <p className="text-green-700 text-sm">
+              Todas as funcionalidades estão disponíveis. Acesse <Link href="/admin/editor" className="underline font-medium">/admin/editor</Link> para começar!
+            </p>
+          </div>
         </div>
       </div>
 
