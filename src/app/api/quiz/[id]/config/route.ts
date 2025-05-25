@@ -6,21 +6,36 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const config = await request.json();
+    const { mode, ...config } = await request.json();
     const quizId = params.id;
 
-    // Salvar configuração no banco
+    // Determinar qual campo atualizar baseado no modo
+    const updateData: any = {
+      updatedAt: new Date(),
+    };
+
+    switch (mode) {
+      case 'quiz':
+        updateData.quizConfig = config;
+        break;
+      case 'result':
+        updateData.resultConfig = config;
+        break;
+      case 'offer':
+        updateData.offerConfig = config;
+        break;
+      default:
+        updateData.editorConfig = config;
+    }
+
     const updatedQuiz = await prisma.quiz.update({
       where: { id: quizId },
-      data: {
-        editorConfig: config,
-        updatedAt: new Date(),
-      },
+      data: updateData,
     });
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Configuração salva com sucesso!' 
+      message: `Configuração de ${mode} salva com sucesso!` 
     });
   } catch (error) {
     console.error('Erro ao salvar configuração:', error);
@@ -37,10 +52,15 @@ export async function GET(
 ) {
   try {
     const quizId = params.id;
+    const url = new URL(request.url);
+    const mode = url.searchParams.get('mode') || 'quiz';
 
     const quiz = await prisma.quiz.findUnique({
       where: { id: quizId },
       select: { 
+        quizConfig: true,
+        resultConfig: true,
+        offerConfig: true,
         editorConfig: true,
         title: true,
         description: true 
@@ -54,9 +74,29 @@ export async function GET(
       );
     }
 
+    // Retornar configuração baseada no modo
+    let config;
+    switch (mode) {
+      case 'quiz':
+        config = quiz.quizConfig;
+        break;
+      case 'result':
+        config = quiz.resultConfig;
+        break;
+      case 'offer':
+        config = quiz.offerConfig;
+        break;
+      default:
+        config = quiz.editorConfig;
+    }
+
     return NextResponse.json({ 
       success: true, 
-      config: quiz.editorConfig 
+      config,
+      quiz: {
+        title: quiz.title,
+        description: quiz.description
+      }
     });
   } catch (error) {
     console.error('Erro ao carregar configuração:', error);

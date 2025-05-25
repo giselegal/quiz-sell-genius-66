@@ -11,6 +11,15 @@ import { ComponentToolbar } from './ComponentToolbar';
 import { StepsPanel } from './StepsPanel';
 import { PropertiesPanel } from './PropertiesPanel';
 import { DropZoneCanvas } from './DropZoneCanvas';
+import Link from 'next/link';
+import { 
+  Filter, 
+  MoreVertical, 
+  Edit3, 
+  Trash2, 
+  Copy,
+  BarChart3
+} from 'lucide-react';
 
 interface CanvasItem {
   id: string;
@@ -278,7 +287,7 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
       position: itemToDuplicate.position + 1
     };
     
-    setSteps(prev => prev.map(step => 
+    setSteps(prev => prev.map step => 
       step.id === activeStepId 
         ? { 
             ...step, 
@@ -859,6 +868,28 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
       default: return 'Editor Visual';
     }
   };
+
+  const quizzes = [
+    {
+      id: '1',
+      title: 'Qual Seu Perfil de Liderança?',
+      status: 'published',
+      responses: 1247,
+      leads: 892,
+      createdAt: '2024-11-15',
+      hasVisualEditor: true
+    },
+    {
+      id: '2', 
+      title: 'Descubra Seu Produto Ideal',
+      status: 'draft',
+      responses: 0,
+      leads: 0,
+      createdAt: '2024-11-14',
+      hasVisualEditor: false
+    }
+    // ...existing quizzes...
+  ];
 
   return (
     <DndContext
