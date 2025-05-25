@@ -11,9 +11,7 @@ import CriticalCSSLoader from './components/CriticalCSSLoader';
 import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
 import LovableRoutes from './lovable-routes';
 import { fixMainRoutes } from './utils/fixMainRoutes';
-import { AdminRoute } from '@/components/admin/AdminRoute';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
-import EnhancedResultPageEditor from './components/result/EnhancedResultPageEditor';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -30,7 +28,7 @@ const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
-const NewPage = lazy(() => import('./pages/NewPage'));
+const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -106,34 +104,17 @@ const App = () => {
                   {/* ROTA PRINCIPAL - Quiz com introdução */}
                   <Route path="/" element={<QuizPage />} />
                   
-                  {/* Rota protegida para o Editor Enhanced */}
-                  <Route 
-                    path="/admin/editor" 
-                    element={
-                      <AdminRoute requireEditor={true}>
-                        <EnhancedResultPageEditor />
-                      </AdminRoute>
-                    } 
-                  />
+                  {/* ADMIN - Dashboard centralizado */}
+                  <Route path="/admin" element={<AdminDashboard />} />
                   
-                  {/* ADMIN - Dashboard centralizado com todas as funcionalidades administrativas */}
-                  <Route 
-                    path="/admin/*" 
-                    element={
-                      <AdminRoute>
-                        <AdminDashboard />
-                      </AdminRoute>
-                    } 
-                  />
+                  {/* EDITOR - Página do editor visual */}
+                  <Route path="/admin/editor" element={<EnhancedResultPageEditorPage />} />
                   
                   {/* RESULTADO - Página de resultados do quiz */}
                   <Route path="/resultado" element={<ResultPage />} />
                   
                   {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
                   <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                  
-                  {/* NOVA PÁGINA */}
-                  <Route path="/nova-pagina" element={<NewPage />} />
                   
                   {/* Redirecionamentos para manter compatibilidade */}
                   <Route path="/home" element={<Navigate to="/" replace />} />
