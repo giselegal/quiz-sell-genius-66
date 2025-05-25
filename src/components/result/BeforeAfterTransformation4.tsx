@@ -133,31 +133,54 @@ const transformations: TransformationItem[] = [
   }
 ];
 
-// OPTIMIZED IMAGE PRELOADER
+// OPTIMIZED IMAGE PRELOADER - Melhorado para ser mais robusto
 const useImagePreloader = (images: string[], initialIndex = 0) => {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   
   useEffect(() => {
-    if (images.length > 0) {
-      // Pré-carregar imagem atual
-      const currentImage = new Image();
-      currentImage.onload = () => {
-        setLoadedImages(prev => ({ ...prev, [images[initialIndex]]: true }));
-      };
-      currentImage.src = images[initialIndex];
-      
-      // Pré-carregar próxima imagem com delay
-      if (images.length > 1) {
-        setTimeout(() => {
-          const nextIndex = (initialIndex + 1) % images.length;
-          const nextImage = new Image();
-          nextImage.onload = () => {
-            setLoadedImages(prev => ({ ...prev, [images[nextIndex]]: true }));
-          };
-          nextImage.src = images[nextIndex];
-        }, 1000);
-      }
+    if (images.length === 0) {
+      setLoadedImages({});
+      return;
     }
+    
+    // Função para carregar imagem com tratamento de erros
+    const loadImage = (url: string) => {
+      const img = new Image();
+      
+      img.onload = () => {
+        setLoadedImages(prev => ({ ...prev, [url]: true }));
+      };
+      
+      img.onerror = () => {
+        console.error(`Falha ao carregar imagem: ${url}`);
+        // Marcar como carregada mesmo com erro para não bloquear a UI
+        setLoadedImages(prev => ({ ...prev, [url]: true }));
+      };
+      
+      img.src = url;
+    };
+    
+    // Carregar imagem atual
+    loadImage(images[initialIndex]);
+    
+    // Pré-carregar todas as outras imagens
+    images.forEach((url, idx) => {
+      if (idx !== initialIndex) {
+        setTimeout(() => loadImage(url), 500 * (idx + 1));
+      }
+    });
+    
+    // Fallback para garantir que o loading termine após um tempo
+    const timeoutId = setTimeout(() => {
+      const allImagesLoaded = images.reduce((acc, url) => ({
+        ...acc,
+        [url]: true
+      }), {});
+      
+      setLoadedImages(allImagesLoaded);
+    }, 5000); // 5 segundos de timeout
+    
+    return () => clearTimeout(timeoutId);
   }, [images, initialIndex]);
   
   return { loadedImages };
@@ -169,10 +192,23 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   const [isLoading, setIsLoading] = useState(true);
   
   const isLowPerformance = useIsLowPerformanceDevice();
-  const imageUrls = transformations.map(t => t.image);
+  
+  // Verificar se os dados das transformações existem e são válidos
+  const validTransformations = transformations.filter(t => 
+    t && t.image && t.name && t.id
+  );
+  
+  const imageUrls = validTransformations.map(t => t.image);
   const { loadedImages } = useImagePreloader(imageUrls, 0);
   
-  const activeTransformation = transformations[activeIndex];
+  // Garantir que há ao menos uma transformação válida
+  const activeTransformation = validTransformations[activeIndex] || {
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+    name: "Transformação",
+    id: "transformation-default",
+    width: 600,
+    height: 750
+  };
 
   // MEMOIZED NAVIGATION FUNCTIONS
   const navigateToTransformation = useCallback((index: number) => {
@@ -191,12 +227,33 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     navigateToTransformation(nextIndex);
   }, [activeIndex, navigateToTransformation]);
 
-  // LOADING STATE MANAGEMENT
+  // LOADING STATE MANAGEMENT - Melhorado para ser mais robusto
   useEffect(() => {
-    if (loadedImages[transformations[activeIndex].image]) {
+    // Se não houver imagens para carregar, sair do loading
+    if (imageUrls.length === 0) {
+      setIsLoading(false);
+      return;
+    }
+    
+    // Se a imagem atual estiver carregada, sair do loading
+    if (loadedImages[imageUrls[activeIndex]]) {
       setIsLoading(false);
     }
-  }, [loadedImages, activeIndex]);
+    
+    // Fallback para garantir que o loading termine após um tempo
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // 3 segundos de timeout
+    
+    return () => clearTimeout(timeoutId);
+  }, [loadedImages, activeIndex, imageUrls]);
+  
+  // Garantir que o componente renderize mesmo se não houver dados
+  useEffect(() => {
+    if (validTransformations.length === 0) {
+      setIsLoading(false);
+    }
+  }, [validTransformations]);
 
   // OPTIMIZED CTA HANDLER
   const handleCTA = useCallback((e?: React.MouseEvent) => {
