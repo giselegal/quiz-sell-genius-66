@@ -7,6 +7,8 @@ import { ArrowLeft, Save, Edit, Palette } from 'lucide-react';
 import { VisualEditor } from '@/components/result-editor/VisualEditor';
 import { DragDropEditor } from '@/components/result-editor/DragDropEditor';
 import { LiveEditor } from '@/components/result-editor/LiveEditor';
+import EditorCompleto from '@/components/result-editor/EditorCompleto';
+import EditorSimples from '@/components/result-editor/EditorSimples';
 
 const EnhancedResultPageEditorPage: React.FC = () => {
   const navigate = useNavigate();
@@ -239,24 +241,8 @@ const EnhancedResultPageEditorPage: React.FC = () => {
   );
   
   return (
-    <div className="min-h-screen bg-[#FAF9F7]">
-      <div className="border-b bg-white p-4 flex items-center justify-between shadow-sm">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={() => navigate('/admin')}
-          className="gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Voltar ao Dashboard
-        </Button>
-        <h1 className="text-xl font-semibold text-[#432818]">Editor Ao Vivo</h1>
-        <div className="text-sm text-gray-500">
-          Edição em Tempo Real
-        </div>
-      </div>
-      
-      <LiveEditor onSave={handleSaveConfig} />
+    <div className="min-h-screen">
+      <EditorSimples />
     </div>
   );
 };
