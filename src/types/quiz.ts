@@ -1,3 +1,4 @@
+
 import { UserAnswer } from '../utils/resultsCalculator';
 
 export interface QuizQuestion {
@@ -69,4 +70,18 @@ export interface QuizComponentData {
   type: string;
   content: any;
   style?: any;
+  data?: {
+    [key: string]: any;
+    title?: string;
+    subtitle?: string;
+    text?: string;
+    imageUrl?: string;
+    alt?: string;
+    question?: string;
+    options?: Array<{
+      id: string;
+      text: string;
+      isSelected?: boolean;
+    }>;
+  };
 }

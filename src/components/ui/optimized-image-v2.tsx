@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
-import { getOptimizedImageUrl } from '@/utils/imageManager';
+import { optimizeCloudinaryUrl } from '@/utils/imageManager';
 
 interface OptimizedImageV2Props {
   src: string;
@@ -39,13 +40,8 @@ const OptimizedImageV2: React.FC<OptimizedImageV2Props> = ({
   const optimizedSrc = useMemo(() => {
     if (!src) return '';
     
-    const options = {
-      width,
-      height,
-      quality
-    };
-    
-    return getOptimizedImageUrl(src, options);
+    // Use optimizeCloudinaryUrl with correct parameters
+    return optimizeCloudinaryUrl(src, quality, width, height);
   }, [src, width, height, quality]);
 
   if (error) {
