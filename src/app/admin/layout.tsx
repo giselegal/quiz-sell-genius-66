@@ -17,7 +17,9 @@ import {
   Menu,
   User,
   LogOut,
-  ChevronDown
+  ChevronDown,
+  Code,
+  TrendingUp
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -60,16 +62,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       badge: 'NOVO'
     },
     {
-      name: 'Resultados',
-      href: '/admin/results',
-      icon: Target,
-      current: pathname.startsWith('/admin/results')
+      name: 'Pixels & Tracking',
+      href: '/admin/tracking',
+      icon: Code,
+      current: pathname.startsWith('/admin/tracking'),
+      badge: 'PRO'
     },
     {
-      name: 'Ofertas',
-      href: '/admin/offers',
-      icon: ShoppingCart,
-      current: pathname.startsWith('/admin/offers')
+      name: 'Conversões',
+      href: '/admin/conversions',
+      icon: TrendingUp,
+      current: pathname.startsWith('/admin/conversions')
     },
     {
       name: 'Analytics',
