@@ -4,7 +4,6 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
-import { LovableProvider, EditorScript } from '@lovable/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,12 +21,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-          <LovableProvider>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-            <EditorScript />
-          </LovableProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
           <Toaster />
         </ThemeProvider>
       </body>
