@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Edit, Palette } from 'lucide-react';
 import { VisualEditor } from '@/components/result-editor/VisualEditor';
+import { DragDropEditor } from '@/components/result-editor/DragDropEditor';
 
 const EnhancedResultPageEditorPage: React.FC = () => {
   const navigate = useNavigate();
@@ -138,6 +139,29 @@ const EnhancedResultPageEditorPage: React.FC = () => {
     }
   };
   
+  // Função para salvar layout de blocos
+  const handleSaveBlocks = (blocks: any[]) => {
+    setIsLoading(true);
+    
+    try {
+      localStorage.setItem('pageLayoutBlocks', JSON.stringify(blocks));
+      
+      toast({
+        title: "Layout salvo",
+        description: "O layout da página foi salvo com sucesso.",
+      });
+    } catch (error) {
+      console.error('Erro ao salvar layout:', error);
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar o layout.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Componente temporário melhorado com preview funcional
   const EnhancedTemporaryEditor = () => (
     <div className="max-w-6xl mx-auto">
@@ -225,15 +249,16 @@ const EnhancedResultPageEditorPage: React.FC = () => {
           <ArrowLeft className="h-4 w-4" />
           Voltar ao Dashboard
         </Button>
-        <h1 className="text-xl font-semibold text-[#432818]">Editor da Página de Resultado</h1>
+        <h1 className="text-xl font-semibold text-[#432818]">Editor Visual da Página</h1>
         <div className="text-sm text-gray-500">
-          Preview Funcional
+          Drag & Drop Editor
         </div>
       </div>
       
-      <div className="p-4">
-        <EnhancedTemporaryEditor />
-      </div>
+      <DragDropEditor
+        onSave={handleSaveBlocks}
+        initialBlocks={JSON.parse(localStorage.getItem('pageLayoutBlocks') || '[]')}
+      />
     </div>
   );
 };
