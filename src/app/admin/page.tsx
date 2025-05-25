@@ -3,20 +3,18 @@
 import React from 'react';
 import Link from 'next/link';
 import { 
-  FileText, 
-  Target, 
-  ShoppingCart, 
-  Users, 
-  TrendingUp, 
-  Eye,
+  BarChart3,
+  Users,
+  Target,
+  TrendingUp,
   Plus,
   Palette,
-  BarChart3,
+  Code,
+  Eye,
+  Calendar,
   ArrowUp,
   ArrowDown,
-  Zap,
-  Clock,
-  CheckCircle
+  Activity
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,158 +22,137 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 
 export default function AdminDashboard() {
-  // Dados mockados para demonstração
   const stats = [
     {
       title: 'Total de Quizzes',
-      value: '24',
-      change: '+12%',
+      value: '12',
+      change: '+2',
       changeType: 'positive',
-      icon: FileText,
-      color: 'blue'
+      icon: BarChart3,
+      description: '2 novos este mês'
     },
     {
-      title: 'Visualizações',
-      value: '8.2K',
-      change: '+23%',
-      changeType: 'positive',
-      icon: Eye,
-      color: 'green'
-    },
-    {
-      title: 'Leads Gerados',
-      value: '1,543',
-      change: '+18%',
+      title: 'Respostas Hoje',
+      value: '847',
+      change: '+12.5%',
       changeType: 'positive',
       icon: Users,
-      color: 'purple'
+      description: 'vs. ontem'
     },
     {
       title: 'Taxa de Conversão',
-      value: '3.2%',
-      change: '-2%',
+      value: '4.8%',
+      change: '+0.3%',
+      changeType: 'positive',
+      icon: Target,
+      description: 'média geral'
+    },
+    {
+      title: 'Revenue Hoje',
+      value: 'R$ 2.847',
+      change: '-5.2%',
       changeType: 'negative',
       icon: TrendingUp,
-      color: 'orange'
+      description: 'vs. ontem'
     }
   ];
 
   const recentQuizzes = [
     {
       id: 1,
-      title: 'Qual Seu Estilo de Liderança?',
-      status: 'published',
-      views: 1234,
-      leads: 89,
-      conversion: 7.2,
-      lastUpdated: '2 horas atrás',
-      hasVisualEditor: true
+      title: 'Quiz de Liderança Empresarial',
+      status: 'ativo',
+      responses: 234,
+      conversions: 12,
+      rate: 5.1
     },
     {
       id: 2,
       title: 'Descubra Seu Produto Ideal',
-      status: 'draft',
-      views: 0,
-      leads: 0,
-      conversion: 0,
-      lastUpdated: '1 dia atrás',
-      hasVisualEditor: false
+      status: 'ativo',
+      responses: 189,
+      conversions: 8,
+      rate: 4.2
     },
     {
       id: 3,
-      title: 'Quiz de Personalidade Empresarial',
-      status: 'published',
-      views: 856,
-      leads: 45,
-      conversion: 5.3,
-      lastUpdated: '3 dias atrás',
-      hasVisualEditor: true
+      title: 'Personalidade Empreendedora',
+      status: 'rascunho',
+      responses: 0,
+      conversions: 0,
+      rate: 0
     }
   ];
 
   const quickActions = [
     {
-      title: 'Novo Quiz com Editor Visual',
-      description: 'Crie um quiz completo com nosso editor drag & drop',
+      title: 'Criar Quiz Visual',
+      description: 'Use o novo editor drag & drop',
       icon: Palette,
-      href: '/admin/editor/new',
-      color: 'bg-gradient-to-r from-blue-500 to-purple-600',
-      featured: true
+      href: '/admin/editor',
+      color: 'bg-blue-500',
+      badge: 'NOVO'
     },
     {
-      title: 'Quiz Tradicional',
-      description: 'Criar quiz com formulário padrão',
-      icon: FileText,
-      href: '/admin/quizzes/new',
-      color: 'bg-gradient-to-r from-green-500 to-teal-600'
+      title: 'Configurar Pixels',
+      description: 'Setup de tracking e conversão',
+      icon: Code,
+      href: '/admin/tracking',
+      color: 'bg-purple-500',
+      badge: 'PRO'
     },
     {
-      title: 'Analytics Avançado',
-      description: 'Ver relatórios detalhados',
+      title: 'Ver Analytics',
+      description: 'Relatórios detalhados',
       icon: BarChart3,
       href: '/admin/analytics',
-      color: 'bg-gradient-to-r from-orange-500 to-red-600'
+      color: 'bg-green-500'
     },
     {
       title: 'Gerenciar Leads',
-      description: 'Visualizar e exportar leads',
+      description: 'Todos os leads capturados',
       icon: Users,
       href: '/admin/leads',
-      color: 'bg-gradient-to-r from-purple-500 to-pink-600'
+      color: 'bg-orange-500'
     }
   ];
 
   return (
     <div className="space-y-8">
-      {/* Header com aviso de desenvolvimento */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-[#432818]">Dashboard</h1>
           <p className="text-[#B89B7A] mt-1">
-            🚀 Modo Desenvolvimento - Acesso total liberado para testes
+            Bem-vindo ao painel administrativo do Quiz Sell Genius
           </p>
         </div>
         
         <div className="flex gap-3">
           <Button variant="outline" className="border-[#B89B7A] text-[#432818]">
-            <BarChart3 className="w-4 h-4 mr-2" />
-            Relatórios
+            <Eye className="w-4 h-4 mr-2" />
+            Visualizar Site
           </Button>
-          <Link href="/admin/editor/quiz/new">
+          <Link href="/admin/editor">
             <Button className="bg-gradient-to-r from-[#432818] to-[#5C3B2A] hover:from-[#5C3B2A] hover:to-[#6D4C37]">
-              <Palette className="w-4 h-4 mr-2" />
-              Novo Quiz Visual
+              <Plus className="w-4 h-4 mr-2" />
+              Novo Quiz
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* Banner de desenvolvimento */}
-      <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold">✓</span>
-          </div>
-          <div>
-            <h3 className="font-semibold text-green-800">Sistema Pronto para Desenvolvimento</h3>
-            <p className="text-green-700 text-sm">
-              Todas as funcionalidades estão disponíveis. Acesse <Link href="/admin/editor" className="underline font-medium">/admin/editor</Link> para começar!
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
+      {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <Card key={index} className="relative overflow-hidden">
+            <Card key={index} className="border-[#D4C4A0] hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-[#B89B7A]">{stat.title}</p>
+                    <p className="text-3xl font-bold text-[#432818] mt-1">{stat.value}</p>
                     <div className="flex items-center mt-2">
                       {stat.changeType === 'positive' ? (
                         <ArrowUp className="w-4 h-4 text-green-500 mr-1" />
@@ -187,11 +164,11 @@ export default function AdminDashboard() {
                       }`}>
                         {stat.change}
                       </span>
-                      <span className="text-sm text-gray-500 ml-1">vs. mês anterior</span>
+                      <span className="text-sm text-[#B89B7A] ml-1">{stat.description}</span>
                     </div>
                   </div>
-                  <div className={`p-3 rounded-full bg-${stat.color}-100`}>
-                    <Icon className={`w-6 h-6 text-${stat.color}-600`} />
+                  <div className="p-3 bg-[#F5F2E9] rounded-full">
+                    <Icon className="w-6 h-6 text-[#B89B7A]" />
                   </div>
                 </div>
               </CardContent>
@@ -201,12 +178,10 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <Card>
+      <Card className="border-[#D4C4A0]">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-yellow-500" />
-            Ações Rápidas
-          </CardTitle>
+          <CardTitle className="text-[#432818]">🚀 Ações Rápidas</CardTitle>
+          <p className="text-[#B89B7A] text-sm">Acesse rapidamente as principais funcionalidades</p>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -214,24 +189,27 @@ export default function AdminDashboard() {
               const Icon = action.icon;
               return (
                 <Link key={index} href={action.href}>
-                  <Card className={`relative overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer ${
-                    action.featured ? 'ring-2 ring-blue-500 ring-opacity-50' : ''
-                  }`}>
-                    <CardContent className="p-6">
-                      <div className={`w-12 h-12 rounded-lg ${action.color} flex items-center justify-center mb-4`}>
-                        <Icon className="w-6 h-6 text-white" />
+                  <div className="p-4 border border-[#D4C4A0] rounded-lg hover:shadow-md transition-all duration-200 hover:border-[#B89B7A] cursor-pointer group">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <Icon className="w-5 h-5 text-white" />
                       </div>
-                      <h3 className="font-semibold text-gray-900 mb-2">
-                        {action.title}
-                        {action.featured && (
-                          <Badge className="ml-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
-                            NOVO!
-                          </Badge>
-                        )}
-                      </h3>
-                      <p className="text-sm text-gray-600">{action.description}</p>
-                    </CardContent>
-                  </Card>
+                      {action.badge && (
+                        <Badge 
+                          variant="outline" 
+                          className={`text-xs ${
+                            action.badge === 'NOVO' 
+                              ? 'border-yellow-400 text-yellow-700 bg-yellow-50' 
+                              : 'border-purple-400 text-purple-700 bg-purple-50'
+                          }`}
+                        >
+                          {action.badge}
+                        </Badge>
+                      )}
+                    </div>
+                    <h3 className="font-semibold text-[#432818] mb-1">{action.title}</h3>
+                    <p className="text-sm text-[#B89B7A]">{action.description}</p>
+                  </div>
                 </Link>
               );
             })}
@@ -239,138 +217,148 @@ export default function AdminDashboard() {
         </CardContent>
       </Card>
 
-      {/* Recent Quizzes */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-blue-500" />
-              Quizzes Recentes
-            </CardTitle>
-            <Link href="/admin/quizzes">
-              <Button variant="outline" size="sm">
-                Ver Todos
-              </Button>
-            </Link>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {recentQuizzes.map((quiz) => (
-              <div key={quiz.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-white" />
-                  </div>
-                  
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-gray-900">{quiz.title}</h3>
-                      <Badge 
-                        variant={quiz.status === 'published' ? 'default' : 'secondary'}
-                        className={quiz.status === 'published' ? 'bg-green-100 text-green-800' : ''}
-                      >
-                        {quiz.status === 'published' ? 'Publicado' : 'Rascunho'}
-                      </Badge>
-                      {quiz.hasVisualEditor && (
-                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                          <Palette className="w-3 h-3 mr-1" />
-                          Visual
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-4 mt-1 text-sm text-gray-600">
-                      <span>👁️ {quiz.views} views</span>
-                      <span>👥 {quiz.leads} leads</span>
-                      <span>📈 {quiz.conversion}% conversão</span>
-                      <span>🕒 {quiz.lastUpdated}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {quiz.hasVisualEditor && (
-                    <Link href={`/quiz/${quiz.id}/edit`}>
-                      <Button variant="outline" size="sm">
-                        <Palette className="w-4 h-4 mr-1" />
-                        Editor
-                      </Button>
-                    </Link>
-                  )}
-                  <Link href={`/admin/quizzes/${quiz.id}`}>
-                    <Button size="sm">
-                      <BarChart3 className="w-4 h-4 mr-1" />
-                      Ver
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Performance Overview */}
+      {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        {/* Recent Quizzes */}
+        <Card className="border-[#D4C4A0]">
           <CardHeader>
-            <CardTitle>Top Performers</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-[#432818]">Quizzes Recentes</CardTitle>
+              <Link href="/admin/quizzes">
+                <Button variant="outline" size="sm" className="border-[#B89B7A] text-[#432818]">
+                  Ver Todos
+                </Button>
+              </Link>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                { name: 'Quiz de Liderança', score: 92, trend: 'up' },
-                { name: 'Produto Ideal', score: 87, trend: 'up' },
-                { name: 'Personalidade', score: 74, trend: 'down' }
-              ].map((item, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <span className="text-sm font-medium">{item.name}</span>
-                  <div className="flex items-center gap-2">
-                    <Progress value={item.score} className="w-20" />
-                    <span className="text-sm font-medium">{item.score}%</span>
-                    {item.trend === 'up' ? (
-                      <ArrowUp className="w-4 h-4 text-green-500" />
-                    ) : (
-                      <ArrowDown className="w-4 h-4 text-red-500" />
-                    )}
+              {recentQuizzes.map((quiz) => (
+                <div key={quiz.id} className="flex items-center justify-between p-3 bg-[#F5F2E9] rounded-lg">
+                  <div className="flex-1">
+                    <h4 className="font-medium text-[#432818] text-sm">{quiz.title}</h4>
+                    <div className="flex items-center gap-4 mt-1">
+                      <Badge 
+                        variant="outline" 
+                        className={`text-xs ${
+                          quiz.status === 'ativo' 
+                            ? 'border-green-500 text-green-700 bg-green-50' 
+                            : 'border-gray-500 text-gray-700 bg-gray-50'
+                        }`}
+                      >
+                        {quiz.status}
+                      </Badge>
+                      <span className="text-xs text-[#B89B7A]">
+                        {quiz.responses} respostas
+                      </span>
+                      {quiz.rate > 0 && (
+                        <span className="text-xs text-green-600 font-medium">
+                          {quiz.rate}% conv.
+                        </span>
+                      )}
+                    </div>
                   </div>
+                  <Link href={`/admin/quizzes/${quiz.id}`}>
+                    <Button variant="ghost" size="sm" className="text-[#B89B7A] hover:text-[#432818]">
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                  </Link>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        {/* Performance Chart */}
+        <Card className="border-[#D4C4A0]">
           <CardHeader>
-            <CardTitle>Status dos Quizzes</CardTitle>
+            <CardTitle className="text-[#432818]">Performance Semanal</CardTitle>
+            <p className="text-[#B89B7A] text-sm">Conversões dos últimos 7 dias</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span className="text-sm">Publicados</span>
+              {[
+                { day: 'Segunda', value: 85, conversions: 12 },
+                { day: 'Terça', value: 92, conversions: 15 },
+                { day: 'Quarta', value: 78, conversions: 9 },
+                { day: 'Quinta', value: 96, conversions: 18 },
+                { day: 'Sexta', value: 88, conversions: 14 },
+                { day: 'Sábado', value: 65, conversions: 7 },
+                { day: 'Domingo', value: 72, conversions: 8 }
+              ].map((data, index) => (
+                <div key={index} className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-[#432818]">{data.day}</span>
+                    <span className="text-sm text-[#B89B7A]">{data.conversions} conversões</span>
+                  </div>
+                  <Progress value={data.value} className="h-2" />
                 </div>
-                <span className="font-semibold">18</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-yellow-500" />
-                  <span className="text-sm">Rascunhos</span>
-                </div>
-                <span className="font-semibold">6</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Palette className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm">Com Editor Visual</span>
-                </div>
-                <span className="font-semibold">12</span>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Activity Feed */}
+      <Card className="border-[#D4C4A0]">
+        <CardHeader>
+          <CardTitle className="text-[#432818] flex items-center gap-2">
+            <Activity className="w-5 h-5" />
+            Atividade Recente
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {[
+              {
+                action: 'Novo quiz criado',
+                details: '"Quiz de Marketing Digital" foi publicado',
+                time: '2 horas atrás',
+                icon: Plus,
+                color: 'text-green-600'
+              },
+              {
+                action: 'Meta atingida',
+                details: '100 conversões alcançadas este mês',
+                time: '4 horas atrás',
+                icon: Target,
+                color: 'text-blue-600'
+              },
+              {
+                action: 'Pixel configurado',
+                details: 'Facebook Pixel foi instalado com sucesso',
+                time: '1 dia atrás',
+                icon: Code,
+                color: 'text-purple-600'
+              },
+              {
+                action: 'Relatório gerado',
+                details: 'Exportação de leads concluída',
+                time: '2 dias atrás',
+                icon: BarChart3,
+                color: 'text-orange-600'
+              }
+            ].map((activity, index) => {
+              const Icon = activity.icon;
+              return (
+                <div key={index} className="flex items-center gap-4 p-3 hover:bg-[#F5F2E9] rounded-lg transition-colors">
+                  <div className={`p-2 rounded-full bg-gray-100`}>
+                    <Icon className={`w-4 h-4 ${activity.color}`} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-[#432818] text-sm">{activity.action}</p>
+                    <p className="text-xs text-[#B89B7A]">{activity.details}</p>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-[#B89B7A]">
+                    <Calendar className="w-3 h-3" />
+                    {activity.time}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
