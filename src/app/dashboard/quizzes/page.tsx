@@ -287,7 +287,7 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
       position: itemToDuplicate.position + 1
     };
     
-    setSteps(prev => prev.map step => 
+    setSteps(prev => prev.map(step => 
       step.id === activeStepId 
         ? { 
             ...step, 

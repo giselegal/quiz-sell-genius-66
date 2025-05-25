@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 // Dynamically load the legacy QuizOfferPage component
 const QuizOfferPage = dynamic(
-  () => import('../../../pages/QuizOfferPage').then(mod => mod.default),
+  () => import('@/pages/QuizOfferPage'),
   { ssr: false }
 );
 
