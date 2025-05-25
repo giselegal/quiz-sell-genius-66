@@ -2,8 +2,10 @@ import React, { createContext, useContext, useState, ReactNode, useEffect, useCa
 
 interface User {
   userName: string;
-  email?: string; // Added email as optional property
-  role?: string;  // Added role property for admin access
+  email?: string;
+  role?: string;
+  plan?: 'FREE' | 'STARTER' | 'PROFESSIONAL' | 'ENTERPRISE';
+  features?: string[];
 }
 
 interface AuthContextType {
@@ -12,29 +14,46 @@ interface AuthContextType {
   logout: () => void;
   isAdmin: boolean;
   hasEditorAccess: boolean;
+  hasPremiumFeatures: boolean;
+  hasFeature: (feature: string) => boolean;
+  userPlan: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Definição dos planos e recursos
+const PLAN_FEATURES = {
+  FREE: ['basic-components', 'text', 'buttons', 'basic-forms'],
+  STARTER: ['basic-components', 'text', 'buttons', 'basic-forms', 'images', 'simple-animations'],
+  PROFESSIONAL: ['basic-components', 'text', 'buttons', 'basic-forms', 'images', 'simple-animations', 'videos', 'audio', 'carousels', 'advanced-animations', 'custom-css'],
+  ENTERPRISE: ['all-features', 'white-label', 'api-access', 'custom-integrations']
+};
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
     const savedName = localStorage.getItem('userName');
     const savedEmail = localStorage.getItem('userEmail');
     const savedRole = localStorage.getItem('userRole');
+    const savedPlan = localStorage.getItem('userPlan') as any || 'PROFESSIONAL'; // Definindo como PROFESSIONAL por padrão para teste
     
     return savedName ? { 
       userName: savedName,
       ...(savedEmail && { email: savedEmail }),
-      ...(savedRole && { role: savedRole })
+      ...(savedRole && { role: savedRole }),
+      plan: savedPlan,
+      features: PLAN_FEATURES[savedPlan] || PLAN_FEATURES.FREE
     } : null;
   });
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasEditorAccess, setHasEditorAccess] = useState(false);
+  const [hasPremiumFeatures, setHasPremiumFeatures] = useState(false);
 
   const login = (name: string, email?: string) => {
     const userData: User = { 
-      userName: name 
+      userName: name,
+      plan: 'PROFESSIONAL', // Por padrão, dar acesso premium para teste
+      features: PLAN_FEATURES.PROFESSIONAL
     };
     
     if (email) {
@@ -50,6 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     setUser(userData);
     localStorage.setItem('userName', name);
+    localStorage.setItem('userPlan', 'PROFESSIONAL');
   };
 
   const logout = () => {
@@ -57,23 +77,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('userPlan');
   };
+
+  const hasFeature = useCallback((feature: string) => {
+    if (!user) return false;
+    return user.features?.includes(feature) || user.features?.includes('all-features') || false;
+  }, [user]);
 
   const checkAdminStatus = useCallback(async () => {
     const adminEmails = [
       'admin@sellgenius.com.br',
       'editor@sellgenius.com.br',
-      'seu-email@admin.com' // Adicione seu email aqui
+      'seu-email@admin.com'
     ];
     
     if (user?.email && adminEmails.includes(user.email.toLowerCase())) {
       setIsAdmin(true);
       setHasEditorAccess(true);
+      setHasPremiumFeatures(true);
     } else {
       setIsAdmin(false);
-      setHasEditorAccess(false);
+      setHasEditorAccess(true); // Permitir acesso ao editor para todos por enquanto
+      setHasPremiumFeatures(user?.plan === 'PROFESSIONAL' || user?.plan === 'ENTERPRISE');
     }
-  }, [user?.email]);
+  }, [user?.email, user?.plan]);
 
   useEffect(() => {
     checkAdminStatus();
@@ -84,7 +112,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     login,
     logout,
     isAdmin,
-    hasEditorAccess
+    hasEditorAccess,
+    hasPremiumFeatures,
+    hasFeature,
+    userPlan: user?.plan || 'FREE'
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
