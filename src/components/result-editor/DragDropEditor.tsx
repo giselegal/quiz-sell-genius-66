@@ -1,545 +1,586 @@
 import React, { useState, useCallback } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndContext, DragEndEvent, DragStartEvent, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { 
-  Type, 
-  Image as ImageIcon, 
-  Square, 
-  Layout, 
-  Trash2, 
-  Copy, 
-  Settings,
-  Plus,
-  Move,
-  Eye,
-  EyeOff
-} from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Monitor, Smartphone, Tablet, Plus, Settings, Eye, Grid3x3, Layers, Undo2, Redo2, Save } from 'lucide-react';
+import { COMPONENT_REGISTRY, COMPONENT_CATEGORIES, ComponentDefinition } from './ComponentRegistry';
+import { ComponentToolbar } from './ComponentToolbar';
+import { StepsPanel } from './StepsPanel';
+import { PropertiesPanel } from './PropertiesPanel';
+import { DropZoneCanvas } from './DropZoneCanvas';
 
-interface Block {
+interface CanvasItem {
   id: string;
-  type: 'text' | 'image' | 'button' | 'card' | 'spacer';
-  content: any;
-  style: any;
-  visible: boolean;
+  type: string;
+  props: Record<string, any>;
+  position: number;
+}
+
+interface Step {
+  id: string;
+  name: string;
+  items: CanvasItem[];
+  settings: {
+    showLogo: boolean;
+    showProgress: boolean;
+    allowReturn: boolean;
+    isVisible: boolean;
+  };
 }
 
 interface DragDropEditorProps {
-  onSave: (blocks: Block[]) => void;
-  initialBlocks?: Block[];
+  onSave: (config: any) => void;
+  initialBlocks?: any[];
 }
 
-const ItemTypes = {
-  COMPONENT: 'component',
-  BLOCK: 'block'
-};
-
-// Componentes base que podem ser arrastados
-const AVAILABLE_COMPONENTS = [
-  {
-    type: 'text',
-    icon: Type,
-    label: 'Texto',
-    defaultContent: { text: 'Novo texto', tag: 'p' },
-    defaultStyle: { fontSize: 16, color: '#432818', fontWeight: 'normal' }
-  },
-  {
-    type: 'image',
-    icon: ImageIcon,
-    label: 'Imagem',
-    defaultContent: { 
-      src: 'https://via.placeholder.com/400x300', 
-      alt: 'Imagem placeholder',
-      caption: ''
-    },
-    defaultStyle: { width: 400, height: 300, borderRadius: 8 }
-  },
-  {
-    type: 'button',
-    icon: Square,
-    label: 'Botão',
-    defaultContent: { text: 'Clique aqui', link: '#' },
-    defaultStyle: { 
-      backgroundColor: '#B89B7A', 
-      color: '#ffffff', 
-      padding: '12px 24px',
-      borderRadius: 8,
-      fontSize: 16
-    }
-  },
-  {
-    type: 'card',
-    icon: Layout,
-    label: 'Card',
-    defaultContent: { 
-      title: 'Título do Card', 
-      content: 'Conteúdo do card...' 
-    },
-    defaultStyle: { 
-      backgroundColor: '#ffffff', 
-      padding: 24, 
-      borderRadius: 12,
-      border: '1px solid #E5D5C8'
-    }
-  }
-];
-
-// Componente arrastável da sidebar
-const DraggableComponent: React.FC<{ component: any }> = ({ component }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.COMPONENT,
-    item: { componentType: component.type },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    })
-  }));
-
-  const Icon = component.icon;
-
-  return (
-    <div
-      ref={drag}
-      className={`p-3 border rounded-lg cursor-grab flex flex-col items-center gap-2 hover:bg-gray-50 transition-colors ${
-        isDragging ? 'opacity-50' : ''
-      }`}
-    >
-      <Icon className="w-6 h-6 text-gray-600" />
-      <span className="text-sm font-medium">{component.label}</span>
-    </div>
-  );
-};
-
-// Bloco editável no canvas
-const EditableBlock: React.FC<{
-  block: Block;
-  index: number;
-  onUpdate: (index: number, block: Block) => void;
-  onDelete: (index: number) => void;
-  onDuplicate: (index: number) => void;
-  isSelected: boolean;
-  onSelect: () => void;
-}> = ({ block, index, onUpdate, onDelete, onDuplicate, isSelected, onSelect }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.BLOCK,
-    item: { index },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    })
-  }));
-
-  const [, drop] = useDrop(() => ({
-    accept: ItemTypes.BLOCK,
-    hover: (draggedItem: { index: number }) => {
-      if (draggedItem.index !== index) {
-        // Reorder logic would go here
+export const DragDropEditor: React.FC<DragDropEditorProps> = ({ onSave, initialBlocks = [] }) => {
+  // Estados principais
+  const [steps, setSteps] = useState<Step[]>([
+    {
+      id: 'step-1',
+      name: 'Etapa 1',
+      items: [],
+      settings: {
+        showLogo: true,
+        showProgress: true,
+        allowReturn: true,
+        isVisible: true
       }
     }
-  }));
+  ]);
+  
+  const [activeStepId, setActiveStepId] = useState('step-1');
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [draggedComponent, setDraggedComponent] = useState<ComponentDefinition | null>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState({
+    steps: false,
+    components: false,
+    properties: false
+  });
 
-  const updateContent = (newContent: any) => {
-    onUpdate(index, { ...block, content: { ...block.content, ...newContent } });
-  };
+  // Sistema de undo/redo
+  const [history, setHistory] = useState<any[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
 
-  const updateStyle = (newStyle: any) => {
-    onUpdate(index, { ...block, style: { ...block.style, ...newStyle } });
-  };
+  // Sensores para drag & drop
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
-  const renderBlock = () => {
-    switch (block.type) {
-      case 'text':
-        const TextTag = block.content.tag || 'p';
-        return (
-          <TextTag
-            contentEditable
-            suppressContentEditableWarning
-            onBlur={(e) => updateContent({ text: e.currentTarget.textContent })}
-            style={block.style}
-            className="outline-none"
-          >
-            {block.content.text}
-          </TextTag>
-        );
+  // Step ativo
+  const activeStep = steps.find(step => step.id === activeStepId);
+  const selectedItem = activeStep?.items.find(item => item.id === selectedItemId);
 
-      case 'image':
-        return (
-          <div className="relative">
-            <img
-              src={block.content.src}
-              alt={block.content.alt}
-              style={{
-                width: `${block.style.width}px`,
-                height: `${block.style.height}px`,
-                borderRadius: `${block.style.borderRadius}px`,
-                objectFit: 'cover'
-              }}
-              className="block"
-            />
-            {block.content.caption && (
-              <p className="text-sm text-gray-600 mt-2 text-center">
-                {block.content.caption}
-              </p>
-            )}
-          </div>
-        );
+  // Salvar estado no histórico
+  const saveToHistory = useCallback(() => {
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push({ steps, activeStepId });
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  }, [steps, activeStepId, history, historyIndex]);
 
-      case 'button':
-        return (
-          <button
-            style={block.style}
-            className="transition-opacity hover:opacity-80"
-          >
-            {block.content.text}
-          </button>
-        );
+  // Undo/Redo
+  const undo = useCallback(() => {
+    if (historyIndex > 0) {
+      const previousState = history[historyIndex - 1];
+      setSteps(previousState.steps);
+      setActiveStepId(previousState.activeStepId);
+      setHistoryIndex(historyIndex - 1);
+    }
+  }, [history, historyIndex]);
 
-      case 'card':
-        return (
-          <div style={block.style} className="shadow-sm">
-            <h3 
-              contentEditable
-              suppressContentEditableWarning
-              onBlur={(e) => updateContent({ title: e.currentTarget.textContent })}
-              className="font-semibold mb-2 outline-none"
-            >
-              {block.content.title}
-            </h3>
-            <div
-              contentEditable
-              suppressContentEditableWarning
-              onBlur={(e) => updateContent({ content: e.currentTarget.textContent })}
-              className="outline-none"
-            >
-              {block.content.content}
+  const redo = useCallback(() => {
+    if (historyIndex < history.length - 1) {
+      const nextState = history[historyIndex + 1];
+      setSteps(nextState.steps);
+      setActiveStepId(nextState.activeStepId);
+      setHistoryIndex(historyIndex + 1);
+    }
+  }, [history, historyIndex]);
+
+  // Handlers para drag & drop
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    const { active } = event;
+    
+    if (active.data.current?.type === 'component') {
+      const component = COMPONENT_REGISTRY.find(c => c.id === active.id);
+      setDraggedComponent(component || null);
+    }
+  }, []);
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (!over) {
+      setDraggedComponent(null);
+      return;
+    }
+
+    // Drag de componente para canvas
+    if (active.data.current?.type === 'component' && over.data.current?.type === 'canvas') {
+      const component = COMPONENT_REGISTRY.find(c => c.id === active.id);
+      if (component && activeStep) {
+        saveToHistory();
+        
+        const newItem: CanvasItem = {
+          id: `${component.type}-${Date.now()}`,
+          type: component.type,
+          props: { ...component.defaultProps },
+          position: activeStep.items.length
+        };
+
+        setSteps(prev => prev.map(step => 
+          step.id === activeStepId 
+            ? { ...step, items: [...step.items, newItem] }
+            : step
+        ));
+      }
+    }
+
+    // Reordenação de itens no canvas
+    if (active.data.current?.type === 'canvas-item' && over.data.current?.type === 'canvas-item') {
+      const activeIndex = activeStep?.items.findIndex(item => item.id === active.id) ?? -1;
+      const overIndex = activeStep?.items.findIndex(item => item.id === over.id) ?? -1;
+      
+      if (activeIndex !== -1 && overIndex !== -1 && activeStep) {
+        saveToHistory();
+        const newItems = arrayMove(activeStep.items, activeIndex, overIndex);
+        setSteps(prev => prev.map(step => 
+          step.id === activeStepId 
+            ? { ...step, items: newItems }
+            : step
+        ));
+      }
+    }
+
+    setDraggedComponent(null);
+  }, [activeStepId, activeStep, saveToHistory]);
+
+  // Função para adicionar nova etapa
+  const addStep = useCallback((name?: string) => {
+    saveToHistory();
+    const newStep: Step = {
+      id: `step-${Date.now()}`,
+      name: name || `Etapa ${steps.length + 1}`,
+      items: [],
+      settings: {
+        showLogo: true,
+        showProgress: true,
+        allowReturn: true,
+        isVisible: true
+      }
+    };
+    setSteps(prev => [...prev, newStep]);
+    setActiveStepId(newStep.id);
+  }, [steps.length, saveToHistory]);
+
+  // Função para atualizar etapa
+  const updateStep = useCallback((stepId: string, updates: Partial<Step>) => {
+    saveToHistory();
+    setSteps(prev => prev.map(step => 
+      step.id === stepId ? { ...step, ...updates } : step
+    ));
+  }, [saveToHistory]);
+
+  // Função para deletar etapa
+  const deleteStep = useCallback((stepId: string) => {
+    if (steps.length <= 1) return;
+    
+    saveToHistory();
+    setSteps(prev => prev.filter(step => step.id !== stepId));
+    
+    if (activeStepId === stepId) {
+      setActiveStepId(steps[0].id);
+    }
+  }, [steps, activeStepId, saveToHistory]);
+
+  // Função para duplicar etapa
+  const duplicateStep = useCallback((stepId: string) => {
+    const stepToDuplicate = steps.find(step => step.id === stepId);
+    if (!stepToDuplicate) return;
+    
+    saveToHistory();
+    const duplicatedStep: Step = {
+      ...stepToDuplicate,
+      id: `step-${Date.now()}`,
+      name: `${stepToDuplicate.name} (Cópia)`,
+      items: stepToDuplicate.items.map(item => ({
+        ...item,
+        id: `${item.type}-${Date.now()}-${Math.random()}`
+      }))
+    };
+    
+    const stepIndex = steps.findIndex(step => step.id === stepId);
+    setSteps(prev => [
+      ...prev.slice(0, stepIndex + 1),
+      duplicatedStep,
+      ...prev.slice(stepIndex + 1)
+    ]);
+  }, [steps, saveToHistory]);
+
+  // Função para atualizar propriedades do item
+  const updateItemProps = useCallback((itemId: string, newProps: Record<string, any>) => {
+    saveToHistory();
+    setSteps(prev => prev.map(step => 
+      step.id === activeStepId 
+        ? {
+            ...step, 
+            items: step.items.map(item => 
+              item.id === itemId 
+                ? { ...item, props: { ...item.props, ...newProps } }
+                : item
+            )
+          }
+        : step
+    ));
+  }, [activeStepId, saveToHistory]);
+
+  // Função para deletar item
+  const deleteItem = useCallback((itemId: string) => {
+    saveToHistory();
+    setSteps(prev => prev.map(step => 
+      step.id === activeStepId 
+        ? { ...step, items: step.items.filter(item => item.id !== itemId) }
+        : step
+    ));
+    if (selectedItemId === itemId) {
+      setSelectedItemId(null);
+    }
+  }, [activeStepId, selectedItemId, saveToHistory]);
+
+  // Função para duplicar item
+  const duplicateItem = useCallback((itemId: string) => {
+    const itemToDuplicate = activeStep?.items.find(item => item.id === itemId);
+    if (!itemToDuplicate) return;
+    
+    saveToHistory();
+    const duplicatedItem: CanvasItem = {
+      ...itemToDuplicate,
+      id: `${itemToDuplicate.type}-${Date.now()}`,
+      position: itemToDuplicate.position + 1
+    };
+    
+    setSteps(prev => prev.map(step => 
+      step.id === activeStepId 
+        ? { 
+            ...step, 
+            items: [
+              ...step.items.slice(0, itemToDuplicate.position + 1),
+              duplicatedItem,
+              ...step.items.slice(itemToDuplicate.position + 1)
+            ]
+          }
+        : step
+    ));
+  }, [activeStep, activeStepId, saveToHistory]);
+
+  // Função para salvar
+  const handleSave = useCallback(() => {
+    const editorConfig = {
+      steps,
+      activeStepId,
+      previewMode,
+      timestamp: Date.now(),
+      version: '2.0'
+    };
+    onSave(editorConfig);
+  }, [steps, activeStepId, previewMode, onSave]);
+
+  // Auto-save a cada 30 segundos
+  React.useEffect(() => {
+    const interval = setInterval(handleSave, 30000);
+    return () => clearInterval(interval);
+  }, [handleSave]);
+
+  // Shortcuts de teclado
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        redo();
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [undo, redo, handleSave]);
+
+  // Adicionar funcionalidade de exportação/importação
+  const exportConfig = useCallback(() => {
+    const config = {
+      steps,
+      activeStepId,
+      previewMode,
+      timestamp: Date.now(),
+      version: '2.0'
+    };
+    
+    const dataStr = JSON.stringify(config, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `quiz-config-${new Date().toISOString().split('T')[0]}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  }, [steps, activeStepId, previewMode]);
+
+  const importConfig = useCallback((file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const config = JSON.parse(e.target?.result as string);
+        setSteps(config.steps || []);
+        setActiveStepId(config.activeStepId || config.steps[0]?.id);
+        setPreviewMode(config.previewMode || 'desktop');
+      } catch (error) {
+        console.error('Erro ao importar configuração:', error);
+      }
+    };
+    reader.readAsText(file);
+  }, []);
+
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      modifiers={[restrictToVerticalAxis]}
+    >
+      <div className="flex h-screen bg-gray-50 overflow-hidden">
+        
+        {/* SIDEBAR ESQUERDA - ETAPAS */}
+        <div className={`transition-all duration-300 ${
+          sidebarCollapsed.steps ? 'w-16' : 'w-64'
+        } bg-white border-r border-gray-200 flex flex-col`}>
+          
+          {/* Header das Etapas */}
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              {!sidebarCollapsed.steps && (
+                <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <Layers className="w-5 h-5" />
+                  Etapas
+                </h2>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSidebarCollapsed(prev => ({ ...prev, steps: !prev.steps }))}
+              >
+                <Grid3x3 className="w-4 h-4" />
+              </Button>
             </div>
           </div>
-        );
 
-      default:
-        return <div>Componente desconhecido</div>;
-    }
-  };
-
-  return (
-    <div
-      ref={(node) => drag(drop(node))}
-      onClick={onSelect}
-      className={`relative group cursor-pointer transition-all ${
-        isDragging ? 'opacity-50' : ''
-      } ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2' : ''} ${
-        !block.visible ? 'opacity-50' : ''
-      }`}
-    >
-      {renderBlock()}
-      
-      {/* Controles de bloco */}
-      <div className={`absolute -top-2 -right-2 flex gap-1 ${
-        isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-      } transition-opacity`}>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onUpdate(index, { ...block, visible: !block.visible });
-          }}
-          className="w-6 h-6 bg-gray-700 text-white rounded-full flex items-center justify-center text-xs hover:bg-gray-800"
-          title={block.visible ? 'Ocultar' : 'Mostrar'}
-        >
-          {block.visible ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDuplicate(index);
-          }}
-          className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-blue-600"
-          title="Duplicar"
-        >
-          <Copy className="w-3 h-3" />
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(index);
-          }}
-          className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600"
-          title="Excluir"
-        >
-          <Trash2 className="w-3 h-3" />
-        </button>
-      </div>
-      
-      {/* Indicador de arraste */}
-      <div className={`absolute top-0 left-0 w-full h-1 bg-blue-500 ${
-        isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-      } transition-opacity`}>
-        <Move className="w-4 h-4 text-blue-500 absolute -top-1 left-1/2 transform -translate-x-1/2" />
-      </div>
-    </div>
-  );
-};
-
-// Área de drop do canvas
-const DropCanvas: React.FC<{
-  blocks: Block[];
-  onAddBlock: (componentType: string) => void;
-  children: React.ReactNode;
-}> = ({ blocks, onAddBlock, children }) => {
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: ItemTypes.COMPONENT,
-    drop: (item: { componentType: string }) => {
-      onAddBlock(item.componentType);
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver()
-    })
-  }));
-
-  return (
-    <div
-      ref={drop}
-      className={`min-h-96 p-6 border-2 border-dashed rounded-lg transition-colors ${
-        isOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
-      }`}
-    >
-      {blocks.length === 0 ? (
-        <div className="text-center text-gray-500 py-20">
-          <Layout className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-          <p className="text-lg font-medium mb-2">Canvas vazio</p>
-          <p className="text-sm">Arraste componentes da sidebar para começar</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// Painel de propriedades
-const PropertiesPanel: React.FC<{
-  selectedBlock: Block | null;
-  onUpdate: (block: Block) => void;
-}> = ({ selectedBlock, onUpdate }) => {
-  if (!selectedBlock) {
-    return (
-      <div className="p-4 text-center text-gray-500">
-        <Settings className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-        <p>Selecione um bloco para editar</p>
-      </div>
-    );
-  }
-
-  const updateStyle = (newStyle: any) => {
-    onUpdate({ ...selectedBlock, style: { ...selectedBlock.style, ...newStyle } });
-  };
-
-  const updateContent = (newContent: any) => {
-    onUpdate({ ...selectedBlock, content: { ...selectedBlock.content, ...newContent } });
-  };
-
-  return (
-    <div className="p-4 space-y-4">
-      <h3 className="font-semibold">Propriedades</h3>
-      
-      {selectedBlock.type === 'text' && (
-        <>
-          <div>
-            <label className="text-sm font-medium">Tamanho da Fonte</label>
-            <Slider
-              value={[selectedBlock.style.fontSize || 16]}
-              onValueChange={([value]) => updateStyle({ fontSize: value })}
-              min={12}
-              max={72}
-              step={1}
-              className="mt-2"
-            />
-            <span className="text-xs text-gray-500">{selectedBlock.style.fontSize || 16}px</span>
-          </div>
-          
-          <div>
-            <label className="text-sm font-medium">Cor</label>
-            <input
-              type="color"
-              value={selectedBlock.style.color || '#432818'}
-              onChange={(e) => updateStyle({ color: e.target.value })}
-              className="w-full h-10 border rounded mt-2"
-            />
-          </div>
-        </>
-      )}
-      
-      {selectedBlock.type === 'image' && (
-        <>
-          <div>
-            <label className="text-sm font-medium">URL da Imagem</label>
-            <input
-              type="text"
-              value={selectedBlock.content.src || ''}
-              onChange={(e) => updateContent({ src: e.target.value })}
-              className="w-full p-2 border rounded mt-2"
-              placeholder="https://exemplo.com/imagem.jpg"
-            />
-          </div>
-          
-          <div>
-            <label className="text-sm font-medium">Largura</label>
-            <Slider
-              value={[selectedBlock.style.width || 400]}
-              onValueChange={([value]) => updateStyle({ width: value })}
-              min={100}
-              max={800}
-              step={10}
-              className="mt-2"
-            />
-            <span className="text-xs text-gray-500">{selectedBlock.style.width || 400}px</span>
-          </div>
-          
-          <div>
-            <label className="text-sm font-medium">Altura</label>
-            <Slider
-              value={[selectedBlock.style.height || 300]}
-              onValueChange={([value]) => updateStyle({ height: value })}
-              min={100}
-              max={600}
-              step={10}
-              className="mt-2"
-            />
-            <span className="text-xs text-gray-500">{selectedBlock.style.height || 300}px</span>
-          </div>
-          
-          <div>
-            <label className="text-sm font-medium">Legenda</label>
-            <input
-              type="text"
-              value={selectedBlock.content.caption || ''}
-              onChange={(e) => updateContent({ caption: e.target.value })}
-              className="w-full p-2 border rounded mt-2"
-              placeholder="Legenda da imagem"
-            />
-          </div>
-        </>
-      )}
-      
-      {selectedBlock.type === 'button' && (
-        <>
-          <div>
-            <label className="text-sm font-medium">Texto do Botão</label>
-            <input
-              type="text"
-              value={selectedBlock.content.text || ''}
-              onChange={(e) => updateContent({ text: e.target.value })}
-              className="w-full p-2 border rounded mt-2"
-            />
-          </div>
-          
-          <div>
-            <label className="text-sm font-medium">Cor de Fundo</label>
-            <input
-              type="color"
-              value={selectedBlock.style.backgroundColor || '#B89B7A'}
-              onChange={(e) => updateStyle({ backgroundColor: e.target.value })}
-              className="w-full h-10 border rounded mt-2"
-            />
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-export const DragDropEditor: React.FC<DragDropEditorProps> = ({ onSave, initialBlocks = [] }) => {
-  const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
-  const [selectedBlockIndex, setSelectedBlockIndex] = useState<number | null>(null);
-
-  const addBlock = useCallback((componentType: string) => {
-    const component = AVAILABLE_COMPONENTS.find(c => c.type === componentType);
-    if (!component) return;
-
-    const newBlock: Block = {
-      id: Date.now().toString(),
-      type: componentType as any,
-      content: component.defaultContent,
-      style: component.defaultStyle,
-      visible: true
-    };
-
-    setBlocks(prev => [...prev, newBlock]);
-  }, []);
-
-  const updateBlock = useCallback((index: number, updatedBlock: Block) => {
-    setBlocks(prev => prev.map((block, i) => i === index ? updatedBlock : block));
-  }, []);
-
-  const deleteBlock = useCallback((index: number) => {
-    setBlocks(prev => prev.filter((_, i) => i !== index));
-    setSelectedBlockIndex(null);
-  }, []);
-
-  const duplicateBlock = useCallback((index: number) => {
-    const blockToDuplicate = blocks[index];
-    const duplicatedBlock: Block = {
-      ...blockToDuplicate,
-      id: Date.now().toString()
-    };
-    setBlocks(prev => [...prev.slice(0, index + 1), duplicatedBlock, ...prev.slice(index + 1)]);
-  }, [blocks]);
-
-  const handleSave = () => {
-    onSave(blocks);
-  };
-
-  const selectedBlock = selectedBlockIndex !== null ? blocks[selectedBlockIndex] : null;
-
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="flex h-screen bg-gray-50">
-        {/* Sidebar - Componentes */}
-        <div className="w-64 bg-white border-r p-4">
-          <h3 className="font-semibold mb-4">Componentes</h3>
-          <div className="grid grid-cols-2 gap-2 mb-6">
-            {AVAILABLE_COMPONENTS.map((component) => (
-              <DraggableComponent key={component.type} component={component} />
-            ))}
-          </div>
-          
-          <Button onClick={handleSave} className="w-full">
-            Salvar Layout
-          </Button>
+          {/* Lista de Etapas */}
+          <StepsPanel
+            steps={steps}
+            activeStepId={activeStepId}
+            onStepSelect={setActiveStepId}
+            onAddStep={addStep}
+            onUpdateStep={updateStep}
+            onDeleteStep={deleteStep}
+            onDuplicateStep={duplicateStep}
+            onReorderSteps={() => {}} // Implementar se necessário
+            collapsed={sidebarCollapsed.steps}
+          />
         </div>
 
-        {/* Canvas central */}
-        <div className="flex-1 p-4">
-          <DropCanvas blocks={blocks} onAddBlock={addBlock}>
-            {blocks.map((block, index) => (
-              <EditableBlock
-                key={block.id}
-                block={block}
-                index={index}
-                onUpdate={updateBlock}
-                onDelete={deleteBlock}
-                onDuplicate={duplicateBlock}
-                isSelected={selectedBlockIndex === index}
-                onSelect={() => setSelectedBlockIndex(index)}
-              />
-            ))}
-          </DropCanvas>
+        {/* SIDEBAR ESQUERDA 2 - COMPONENTES */}
+        <div className={`transition-all duration-300 ${
+          sidebarCollapsed.components ? 'w-16' : 'w-80'
+        } bg-white border-r border-gray-200 flex flex-col`}>
+          
+          {/* Header dos Componentes */}
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              {!sidebarCollapsed.components && (
+                <h2 className="font-semibold text-gray-900">Componentes</h2>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSidebarCollapsed(prev => ({ ...prev, components: !prev.components }))}
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Toolbar de Componentes */}
+          <ComponentToolbar
+            categories={COMPONENT_CATEGORIES}
+            components={COMPONENT_REGISTRY}
+            collapsed={sidebarCollapsed.components}
+          />
         </div>
 
-        {/* Sidebar - Propriedades */}
-        <div className="w-80 bg-white border-l">
-          <PropertiesPanel 
-            selectedBlock={selectedBlock}
-            onUpdate={(updatedBlock) => {
-              if (selectedBlockIndex !== null) {
-                updateBlock(selectedBlockIndex, updatedBlock);
-              }
-            }}
+        {/* ÁREA PRINCIPAL - CANVAS */}
+        <div className="flex-1 flex flex-col">
+          
+          {/* Toolbar Superior */}
+          <div className="bg-white border-b border-gray-200 p-4">
+            <div className="flex items-center justify-between">
+              
+              {/* Actions Left */}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={undo}
+                  disabled={historyIndex <= 0}
+                >
+                  <Undo2 className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={redo}
+                  disabled={historyIndex >= history.length - 1}
+                >
+                  <Redo2 className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              {/* Preview Mode Selector */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-700">Preview:</span>
+                <div className="flex border border-gray-300 rounded-lg">
+                  {[
+                    { mode: 'desktop', icon: Monitor, label: 'Desktop' },
+                    { mode: 'tablet', icon: Tablet, label: 'Tablet' },
+                    { mode: 'mobile', icon: Smartphone, label: 'Mobile' }
+                  ].map(({ mode, icon: Icon, label }) => (
+                    <Button
+                      key={mode}
+                      variant={previewMode === mode ? 'default' : 'ghost'}
+                      size="sm"
+                      onClick={() => setPreviewMode(mode as any)}
+                      className="rounded-none first:rounded-l-lg last:rounded-r-lg"
+                    >
+                      <Icon className="w-4 h-4 mr-1" />
+                      {label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Actions Right */}
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={exportConfig}
+                >
+                  📥 Exportar
+                </Button>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={(e) => e.target.files?.[0] && importConfig(e.target.files[0])}
+                  style={{ display: 'none' }}
+                  id="import-config"
+                />
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => document.getElementById('import-config')?.click()}
+                >
+                  📤 Importar
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Eye className="w-4 h-4 mr-1" />
+                  Preview
+                </Button>
+                <Button onClick={handleSave} size="sm">
+                  <Save className="w-4 h-4 mr-1" />
+                  Salvar
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Canvas */}
+          <div className="flex-1 overflow-auto p-6">
+            <DropZoneCanvas
+              items={activeStep?.items || []}
+              previewMode={previewMode}
+              selectedItemId={selectedItemId}
+              onSelectItem={setSelectedItemId}
+              onDeleteItem={deleteItem}
+            />
+          </div>
+        </div>
+
+        {/* SIDEBAR DIREITA - PROPRIEDADES */}
+        <div className={`transition-all duration-300 ${
+          sidebarCollapsed.properties ? 'w-16' : 'w-80'
+        } bg-white border-l border-gray-200 flex flex-col`}>
+          
+          {/* Header das Propriedades */}
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              {!sidebarCollapsed.properties && (
+                <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <Settings className="w-5 h-5" />
+                  Propriedades
+                </h2>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSidebarCollapsed(prev => ({ ...prev, properties: !prev.properties }))}
+              >
+                <Settings className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Painel de Propriedades */}
+          <PropertiesPanel
+            selectedItem={selectedItem}
+            step={activeStep}
+            onUpdateItem={updateItemProps}
+            onUpdateStep={(updates) => updateStep(activeStepId, updates)}
+            onDeleteItem={deleteItem}
+            onDuplicateItem={duplicateItem}
+            collapsed={sidebarCollapsed.properties}
           />
         </div>
       </div>
-    </DndProvider>
+
+      {/* Drag Overlay */}
+      <DragOverlay>
+        {draggedComponent ? (
+          <Card className="p-3 shadow-lg bg-white border-2 border-blue-500 opacity-90">
+            <div className="flex items-center gap-2">
+              <draggedComponent.icon className="w-5 h-5 text-blue-600" />
+              <span className="font-medium text-blue-900">{draggedComponent.label}</span>
+            </div>
+          </Card>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 };
 
