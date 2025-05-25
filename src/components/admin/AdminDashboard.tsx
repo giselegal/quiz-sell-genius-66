@@ -1,16 +1,38 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Edit, Settings, Users, BarChart, Eye, Palette } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
+  
+  // Redirecionar automaticamente para o editor
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate('/admin/editor');
+    }, 500); // Pequeno delay para mostrar o dashboard brevemente
+    
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Painel Administrativo
-        </h1>
+        <div className="text-center py-12">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            Redirecionando para o Editor Visual...
+          </h1>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">
+            Você será redirecionado automaticamente para o novo editor em alguns segundos.
+          </p>
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-3xl mx-auto mt-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+            Acesso Rápido (caso o redirecionamento não funcione)
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Card do Editor Enhanced - LINK CORRETO */}
           <Link 
             to="/admin/editor"
@@ -143,6 +165,7 @@ export const AdminDashboard: React.FC = () => {
                 Visualizar
               </Link>
             </div>
+          </div>
           </div>
         </div>
       </div>
