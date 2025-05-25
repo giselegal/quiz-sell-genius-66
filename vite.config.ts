@@ -15,7 +15,11 @@ export default defineConfig(({ mode }) => ({
     // Configurações CORS e mime-types para desenvolvimento
     headers: {
       'X-Content-Type-Options': 'nosniff',
-      'Access-Control-Allow-Origin': '*',
+      // Limitando CORS para hosts específicos
+      'Access-Control-Allow-Origin': [
+        'http://localhost:8080',
+        'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com'
+      ].join(', '),
     },
     fs: {
       allow: ['../']
