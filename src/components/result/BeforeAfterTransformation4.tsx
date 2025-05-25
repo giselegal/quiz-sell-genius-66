@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 import OptimizedImage from '@/components/ui/optimized-image';
+import { preloadImagesByUrls } from '@/utils/imageManager';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -14,7 +15,7 @@ declare global {
   }
 }
 
-// Design tokens centralizados - Atualizado para remover verde
+// Design tokens centralizados
 const designTokens = {
   colors: {
     primary: '#B89B7A',
@@ -23,8 +24,8 @@ const designTokens = {
     textLight: '#8F7A6A',
     background: '#fffaf7',
     cardBg: '#ffffff',
-    accent: '#aa6b5d',      // Substituído de #4CAF50 para #aa6b5d
-    accentHover: '#96594d', // Substituído de #45a049 para um tom mais escuro
+    accent: '#4CAF50',
+    accentHover: '#45a049',
     divider: 'rgba(184, 155, 122, 0.2)',
     highlight: '#f9f4ef',
   },
@@ -46,7 +47,7 @@ const designTokens = {
     md: '0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1)',
     lg: '0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05)',
     highlight: '0 0 15px rgba(184, 155, 122, 0.15)',
-    cta: '0 4px 14px rgba(170, 107, 93, 0.4)', // Atualizado para usar a cor accent
+    cta: '0 4px 14px rgba(76, 175, 80, 0.4)',
   },
   transitions: {
     default: 'all 0.3s ease',
@@ -115,7 +116,7 @@ const NavButton = React.memo<{
   </button>
 ));
 
-// SIMPLIFIED TRANSFORMATIONS DATA - Corrigido para formato correto
+// SIMPLIFIED TRANSFORMATIONS DATA
 const transformations: TransformationItem[] = [
   {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
@@ -133,54 +134,31 @@ const transformations: TransformationItem[] = [
   }
 ];
 
-// OPTIMIZED IMAGE PRELOADER - Melhorado para ser mais robusto
+// OPTIMIZED IMAGE PRELOADER
 const useImagePreloader = (images: string[], initialIndex = 0) => {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   
   useEffect(() => {
-    if (images.length === 0) {
-      setLoadedImages({});
-      return;
-    }
-    
-    // Função para carregar imagem com tratamento de erros
-    const loadImage = (url: string) => {
-      const img = new Image();
-      
-      img.onload = () => {
-        setLoadedImages(prev => ({ ...prev, [url]: true }));
+    if (images.length > 0) {
+      // Pré-carregar imagem atual
+      const currentImage = new Image();
+      currentImage.onload = () => {
+        setLoadedImages(prev => ({ ...prev, [images[initialIndex]]: true }));
       };
+      currentImage.src = images[initialIndex];
       
-      img.onerror = () => {
-        console.error(`Falha ao carregar imagem: ${url}`);
-        // Marcar como carregada mesmo com erro para não bloquear a UI
-        setLoadedImages(prev => ({ ...prev, [url]: true }));
-      };
-      
-      img.src = url;
-    };
-    
-    // Carregar imagem atual
-    loadImage(images[initialIndex]);
-    
-    // Pré-carregar todas as outras imagens
-    images.forEach((url, idx) => {
-      if (idx !== initialIndex) {
-        setTimeout(() => loadImage(url), 500 * (idx + 1));
+      // Pré-carregar próxima imagem com delay
+      if (images.length > 1) {
+        setTimeout(() => {
+          const nextIndex = (initialIndex + 1) % images.length;
+          const nextImage = new Image();
+          nextImage.onload = () => {
+            setLoadedImages(prev => ({ ...prev, [images[nextIndex]]: true }));
+          };
+          nextImage.src = images[nextIndex];
+        }, 1000);
       }
-    });
-    
-    // Fallback para garantir que o loading termine após um tempo
-    const timeoutId = setTimeout(() => {
-      const allImagesLoaded = images.reduce((acc, url) => ({
-        ...acc,
-        [url]: true
-      }), {});
-      
-      setLoadedImages(allImagesLoaded);
-    }, 5000); // 5 segundos de timeout
-    
-    return () => clearTimeout(timeoutId);
+    }
   }, [images, initialIndex]);
   
   return { loadedImages };
@@ -192,23 +170,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   const [isLoading, setIsLoading] = useState(true);
   
   const isLowPerformance = useIsLowPerformanceDevice();
-  
-  // Verificar se os dados das transformações existem e são válidos
-  const validTransformations = transformations.filter(t => 
-    t && t.image && t.name && t.id
-  );
-  
-  const imageUrls = validTransformations.map(t => t.image);
+  const imageUrls = transformations.map(t => t.image);
   const { loadedImages } = useImagePreloader(imageUrls, 0);
   
-  // Garantir que há ao menos uma transformação válida
-  const activeTransformation = validTransformations[activeIndex] || {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
-    name: "Transformação",
-    id: "transformation-default",
-    width: 600,
-    height: 750
-  };
+  const activeTransformation = transformations[activeIndex];
 
   // MEMOIZED NAVIGATION FUNCTIONS
   const navigateToTransformation = useCallback((index: number) => {
@@ -227,33 +192,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     navigateToTransformation(nextIndex);
   }, [activeIndex, navigateToTransformation]);
 
-  // LOADING STATE MANAGEMENT - Melhorado para ser mais robusto
+  // LOADING STATE MANAGEMENT
   useEffect(() => {
-    // Se não houver imagens para carregar, sair do loading
-    if (imageUrls.length === 0) {
-      setIsLoading(false);
-      return;
-    }
-    
-    // Se a imagem atual estiver carregada, sair do loading
-    if (loadedImages[imageUrls[activeIndex]]) {
+    if (loadedImages[transformations[activeIndex].image]) {
       setIsLoading(false);
     }
-    
-    // Fallback para garantir que o loading termine após um tempo
-    const timeoutId = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000); // 3 segundos de timeout
-    
-    return () => clearTimeout(timeoutId);
-  }, [loadedImages, activeIndex, imageUrls]);
-  
-  // Garantir que o componente renderize mesmo se não houver dados
-  useEffect(() => {
-    if (validTransformations.length === 0) {
-      setIsLoading(false);
-    }
-  }, [validTransformations]);
+  }, [loadedImages, activeIndex]);
 
   // OPTIMIZED CTA HANDLER
   const handleCTA = useCallback((e?: React.MouseEvent) => {
@@ -329,7 +273,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   return (
     <div className="my-8 md:my-12 lg:my-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        {/* HEADER - Atualizado com as novas informações */}
+        {/* HEADER */}
         <motion.div 
           className="text-center mb-8 md:mb-10" 
           initial={{ opacity: 0, y: 20 }} 
@@ -344,11 +288,11 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             
             <h3 className="relative text-xl md:text-2xl lg:text-3xl font-playfair text-[#aa6b5d] mb-4">
               <span className="bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                Transformações Que Inspiram
+                Mulheres que Aprenderam e Praticam no dia a dia
               </span>
               <br className="hidden sm:block" />
               <span className="text-lg md:text-xl lg:text-2xl font-light">
-                Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
+                Seu Estilo de Ser
               </span>
             </h3>
           </div>
@@ -356,7 +300,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           <div className="w-16 md:w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
           
           <p className="text-sm md:text-base text-[#8F7A6A] mt-4 max-w-2xl mx-auto px-4 font-light">
-            Veja mulheres reais que descobriram seu estilo e transformaram completamente sua relação com Estilo, Imagem e Presença
+            Veja como outras mulheres transformaram sua imagem e conquistaram mais confiança
           </p>
         </motion.div>
         
@@ -435,18 +379,14 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 )}
               </div>
               
-              {/* SEÇÃO DE CONTEÚDO - Atualizada com novos textos */}
+              {/* SEÇÃO DE CONTEÚDO - Melhor estruturada */}
               <div className="md:col-span-1 lg:col-span-3 order-2 md:order-2 p-4 md:p-6 bg-white flex flex-col">
                 <div className="h-full flex flex-col">
                   <h4 className="text-xl md:text-2xl font-medium text-[#432818] text-center md:text-left mb-4">
                     <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                      Transforme sua Imagem, Transforme sua Vida
+                      🎯 Seus Guias de Estilo Completos
                     </span>
                   </h4>
-                  
-                  <p className="text-[#8F7A6A] text-base mb-5 text-center md:text-left">
-                    Seu estilo é muito mais que roupas — é a expressão da sua personalidade e o reflexo dos seus sonhos e objetivos.
-                  </p>
                   
                   <div className="bg-gradient-to-r from-[#f9f4ef] to-[#fff7f3] rounded-lg p-4 md:p-6 mb-4 md:mb-6 border border-[#B89B7A]/20 shadow-sm flex-grow">
                     {/* PRODUTO PRINCIPAL */}
@@ -455,17 +395,17 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         ✨ <span className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">Guias de Estilo Personalizados</span>
                       </h5>
                       <ul className="space-y-2 md:space-y-3 text-[#aa6b5d]">
-                        <CheckItem>Looks que expressam sua verdadeira essência</CheckItem>
-                        <CheckItem>Cores e modelagens que realçam sua beleza natural</CheckItem>
-                        <CheckItem>Imagem profissional alinhada aos seus objetivos</CheckItem>
-                        <CheckItem>Guarda-roupa inteligente e sem desperdícios</CheckItem>
+                        <CheckItem>Guia do Estilo [SEU ESTILO] - Cores, formas e essência</CheckItem>
+                        <CheckItem>Manual de Combinações Inteligentes</CheckItem>
+                        <CheckItem>Dicionário de Peças Estratégicas</CheckItem>
+                        <CheckItem>Guia de Acessórios e Finalizações</CheckItem>
                       </ul>
                     </div>
 
                     {/* BÔNUS - Layout melhorado */}
                     <div className="border-t border-[#B89B7A]/20 pt-4 md:pt-6">
                       <h6 className="text-base md:text-lg font-semibold text-[#432818] mb-3 text-center">
-                        🎁 <span className="text-[#aa6b5d]">BÔNUS EXCLUSIVOS</span>
+                        🎁 <span className="text-[#4CAF50]">BÔNUS EXCLUSIVOS</span>
                       </h6>
                       
                       <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
@@ -484,18 +424,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     </div>
 
                     {/* PREÇO - Mais compacto e efetivo */}
-                    <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 rounded-lg p-4 mt-4 md:mt-6 text-center border border-[#aa6b5d]/30">
+                    <div className="bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg p-4 mt-4 md:mt-6 text-center border border-[#4CAF50]/30">
                       <p className="text-sm text-gray-600 mb-1">Valor Total dos Produtos:</p>
                       <p className="text-lg text-gray-500 line-through mb-1">R$ 175,00</p>
                       <div className="flex items-center justify-center gap-2 mb-2">
-                        <span className="text-2xl md:text-3xl font-bold text-[#aa6b5d]">R$ 39,90</span>
-                        <span className="bg-[#aa6b5d] text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">77% OFF</span>
+                        <span className="text-2xl md:text-3xl font-bold text-[#4CAF50]">R$ 39,90</span>
+                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">77% OFF</span>
                       </div>
-                      <p className="text-xs text-[#aa6b5d] font-medium">⏰ Oferta por tempo limitado</p>
+                      <p className="text-xs text-[#aa6b5d] font-medium">⏰ Oferta válida por tempo limitado</p>
                     </div>
                   </div>
                   
-                  {/* CTA SECTION - Atualizada com novo texto */}
+                  {/* CTA SECTION - Melhor adaptada para diferentes telas */}
                   <div className="flex flex-col items-center space-y-3">
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full">
                       <Button
@@ -504,8 +444,8 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         onMouseLeave={() => setIsButtonHovered(false)}
                         className="w-full py-3 md:py-4 px-4 md:px-8 rounded-md shadow-lg transition-all duration-300 font-bold text-sm md:text-base"
                         style={{
-                          background: "linear-gradient(to right, #B89B7A, #aa6b5d)",
-                          boxShadow: "0 8px 20px rgba(170, 107, 93, 0.3)",
+                          background: "linear-gradient(to right, #4CAF50, #45a049)",
+                          boxShadow: "0 8px 20px rgba(76, 175, 80, 0.3)",
                         }}
                         type="button"
                       >
@@ -513,7 +453,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                           <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1, rotate: isButtonHovered ? 10 : 0 }}>
                             <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
                           </motion.div>
-                          Quero Meu Guia de Estilo
+                          🚀 GARANTIR MINHA TRANSFORMAÇÃO AGORA
                         </span>
                       </Button>
                     </motion.div>
@@ -522,21 +462,21 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     <div className="flex flex-wrap justify-center gap-3 text-xs text-[#aa6b5d] font-medium">
                       <div className="flex items-center gap-1">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
-                          <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
+                          <circle cx="12" cy="12" r="12" fill="#4CAF50"/>
                           <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span>Acesso imediato</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
-                          <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" fill="#aa6b5d"/>
+                          <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" fill="#4CAF50"/>
                           <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span>100% seguro</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#aa6b5d"/>
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#4CAF50"/>
                         </svg>
                         <span>Garantia de satisfação</span>
                       </div>
