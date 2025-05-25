@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import LovableRoutes from '@/lovable-routes';
+import dynamic from 'next/dynamic';
+
+const QuizFlow = dynamic(
+  () => import('@/components/QuizFlow'),
+  { ssr: false }
+);
 
 export default function HomePage() {
-  return (
-    <BrowserRouter>
-      <LovableRoutes />
-    </BrowserRouter>
-  );
+  return <QuizFlow />;
 }
