@@ -4,7 +4,7 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
-import dynamic from 'next/dynamic';
+import ClientLayout from '@/components/ClientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,11 +12,6 @@ export const metadata: Metadata = {
   title: 'Quiz Sell Genius',
   description: 'Plataforma de criação de quizzes de alta conversão',
 };
-
-const LovableClientProvider = dynamic(
-  () => import('../components/LovableClientProvider').then(mod => mod.LovableClientProvider),
-  { ssr: false }
-);
 
 export default function RootLayout({
   children,
