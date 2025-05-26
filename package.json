@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "next build",
-    "build:dev": "vite build --mode development",
+    "build:dev": "next build",
     "build:ignore-errors": "NODE_OPTIONS=\"--max-old-space-size=4096 --no-warnings\" CI=false NEXT_PLUGIN_IGNORE_PRERENDER_ERRORS=true next build",
     "build:emergency": "bash emergency-build.sh",
     "build:static": "next build",
@@ -64,15 +64,19 @@
     "@types/react": "19.1.5",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
+    "@vitejs/plugin-react-swc": "^3.10.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^9.27.0",
     "eslint-config-next": "^15.4.0-canary.51",
     "eslint-plugin-next": "^0.0.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "lovable-tagger": "^1.1.8",
     "postcss": "^8.4.14",
     "tailwindcss": "^3.3.0",
     "typescript": "5.8.3",
-    "typescript-eslint": "^8.32.1"
+    "typescript-eslint": "^8.32.1",
+    "vite": "^6.3.5",
+    "vite-plugin-compression": "^0.5.1"
   }
 }
