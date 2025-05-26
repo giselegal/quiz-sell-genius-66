@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -15,6 +16,8 @@ export function LovableClientProvider({ children }: LovableProviderProps) {
     // Só executa no cliente
     if (typeof window !== 'undefined') {
       const isEditor = window.location.pathname.includes('/admin') || 
+                      window.location.pathname === '/' ||
+                      window.location.pathname.startsWith('/resultado/') ||
                       window.location.search.includes('editor=true');
       
       setIsEditorMode(isEditor);
@@ -23,21 +26,15 @@ export function LovableClientProvider({ children }: LovableProviderProps) {
         // Configuração global para o Lovable
         window.LOVABLE_CONFIG = {
           projectId: 'quiz-sell-genius',
-          apiBaseUrl: 'https://api.lovableproject.com',
+          apiBaseUrl: 'https://api.lovable.dev',
           // Opcional: definir credenciais se necessário
           // authToken: 'seu-token-aqui'
         };
         
-        // Carregamento dinâmico do script do editor
-        const script = document.createElement('script');
-        script.src = "https://cdn.lovableproject.com/editor/v1/editor.js";
-        script.async = true;
-        document.body.appendChild(script);
+        // Carregamento dinâmico do script do editor (já incluído no HTML)
+        // O script já está carregado via index.html, apenas configuramos
         
         return () => {
-          if (document.body.contains(script)) {
-            document.body.removeChild(script);
-          }
           delete window.LOVABLE_CONFIG;
         };
       }

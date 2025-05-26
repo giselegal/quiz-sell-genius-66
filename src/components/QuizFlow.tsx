@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -81,37 +82,75 @@ export default function QuizFlow() {
   const question = quizQuestions[currentQuestion];
 
   return (
-    <div className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-      <h1 className="mb-8 text-3xl font-bold text-brand-primary">Quiz de Negócios</h1>
+    <div 
+      className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4"
+      data-lovable-component="quiz-flow"
+      data-lovable-editable="true"
+    >
+      <h1 
+        className="mb-8 text-3xl font-bold text-brand-primary"
+        data-lovable-component="quiz-title"
+        data-lovable-editable="true"
+      >
+        Quiz de Negócios
+      </h1>
       
-      <div className="w-full max-w-md rounded-lg border bg-card p-6 shadow-lg">
+      <div 
+        className="w-full max-w-md rounded-lg border bg-card p-6 shadow-lg"
+        data-lovable-component="quiz-container"
+        data-lovable-editable="true"
+      >
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-8">
+          <div 
+            className="flex flex-col items-center justify-center py-8"
+            data-lovable-component="quiz-loading"
+            data-lovable-editable="true"
+          >
             <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
             <p className="text-lg font-medium">Calculando seu resultado...</p>
           </div>
         ) : (
           <>
-            <div className="mb-4 flex w-full justify-between text-sm text-muted-foreground">
+            <div 
+              className="mb-4 flex w-full justify-between text-sm text-muted-foreground"
+              data-lovable-component="quiz-progress-text"
+              data-lovable-editable="true"
+            >
               <span>Pergunta {currentQuestion + 1} de {quizQuestions.length}</span>
               <span>{Math.round(((currentQuestion + 1) / quizQuestions.length) * 100)}%</span>
             </div>
             
-            <div className="mb-6 h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div 
+              className="mb-6 h-2 w-full overflow-hidden rounded-full bg-muted"
+              data-lovable-component="quiz-progress-bar"
+              data-lovable-editable="true"
+            >
               <div 
                 className="h-full bg-primary transition-all duration-300 ease-in-out" 
                 style={{ width: `${((currentQuestion + 1) / quizQuestions.length) * 100}%` }}
               ></div>
             </div>
             
-            <h2 className="mb-6 text-xl font-medium">{question.text}</h2>
+            <h2 
+              className="mb-6 text-xl font-medium"
+              data-lovable-component="quiz-question"
+              data-lovable-editable="true"
+            >
+              {question.text}
+            </h2>
             
-            <div className="space-y-3">
+            <div 
+              className="space-y-3"
+              data-lovable-component="quiz-options"
+              data-lovable-editable="true"
+            >
               {question.options.map(option => (
                 <button
                   key={option.id}
                   className="w-full rounded-lg border bg-card p-4 text-left hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary"
                   onClick={() => handleOptionClick(option)}
+                  data-lovable-component="quiz-option"
+                  data-lovable-editable="true"
                 >
                   {option.text}
                 </button>

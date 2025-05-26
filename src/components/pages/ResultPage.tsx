@@ -106,11 +106,16 @@ const ResultPage: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-      color: globalStyles.textColor || '#432818',
-      fontFamily: globalStyles.fontFamily || 'inherit'
-    }}>
+    <div 
+      className="min-h-screen relative overflow-hidden" 
+      style={{
+        backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+        color: globalStyles.textColor || '#432818',
+        fontFamily: globalStyles.fontFamily || 'inherit'
+      }}
+      data-lovable-component="result-page"
+      data-lovable-editable="true"
+    >
       {/* Componente de pré-carregamento de recursos */}
       <ResourcePreloader />
       
@@ -121,11 +126,27 @@ const ResultPage: React.FC = () => {
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
-      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
+      <Header 
+        primaryStyle={primaryStyle} 
+        logoHeight={globalStyles.logoHeight} 
+        logo={globalStyles.logo} 
+        logoAlt={globalStyles.logoAlt} 
+        userName={user?.userName} 
+        data-lovable-component="result-header"
+        data-lovable-editable="true"
+      />
 
-      <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
+      <div 
+        className="container mx-auto px-4 py-6 max-w-4xl relative z-10"
+        data-lovable-component="result-content"
+        data-lovable-editable="true"
+      >
         {/* ATTENTION: Primary Style Card */}
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
+        <Card 
+          className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant"
+          data-lovable-component="primary-style-card"
+          data-lovable-editable="true"
+        >
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
               <div className="max-w-md mx-auto mb-6">
@@ -194,48 +215,64 @@ const ResultPage: React.FC = () => {
         {/* INTEREST: Before/After Transformation Section */}
         <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={700}>
-            <BeforeAfterTransformation handleCTAClick={handleCTAClick} />
+            <div data-lovable-component="before-after-section" data-lovable-editable="true">
+              <BeforeAfterTransformation handleCTAClick={handleCTAClick} />
+            </div>
           </AnimatedWrapper>
         </Suspense>
 
         {/* INTEREST: Motivation Section */}
         <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={800}>
-            <MotivationSection />
+            <div data-lovable-component="motivation-section" data-lovable-editable="true">
+              <MotivationSection />
+            </div>
           </AnimatedWrapper>
         </Suspense>
 
         {/* INTEREST: Bonus Section */}
         <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={850}>
-            <BonusSection />
+            <div data-lovable-component="bonus-section" data-lovable-editable="true">
+              <BonusSection />
+            </div>
           </AnimatedWrapper>
         </Suspense>
 
         {/* DESIRE: Testimonials */}
         <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={900}>
-            <Testimonials />
+            <div data-lovable-component="testimonials-section" data-lovable-editable="true">
+              <Testimonials />
+            </div>
           </AnimatedWrapper>
         </Suspense>
 
         {/* DESIRE: Guarantee Section */}
         <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1000}>
-            <GuaranteeSection />
+            <div data-lovable-component="guarantee-section" data-lovable-editable="true">
+              <GuaranteeSection />
+            </div>
           </AnimatedWrapper>
         </Suspense>
 
         {/* DESIRE: Mentor and Trust Elements */}
         <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
           <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1050}>
-            <MentorSection />
+            <div data-lovable-component="mentor-section" data-lovable-editable="true">
+              <MentorSection />
+            </div>
           </AnimatedWrapper>
         </Suspense>
 
         {/* ACTION: Final Value Proposition and CTA */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1100}>
-          <div className="text-center mt-10">
+          <div 
+            className="text-center mt-10"
+            data-lovable-component="final-cta-section"
+            data-lovable-editable="true"
+          >
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
               Vista-se de Você — na Prática
             </h2>
