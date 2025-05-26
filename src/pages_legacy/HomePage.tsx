@@ -1,6 +1,4 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { useState, useEffect } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import QuizIntro from '../components/QuizIntro';
 import QuizPage from '../components/QuizPage';
 import { useQuizContext } from '../context/QuizContext';

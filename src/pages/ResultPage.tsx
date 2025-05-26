@@ -1,6 +1,4 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';

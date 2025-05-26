@@ -1,5 +1,5 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import * as React from 'react';
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { useEffect, useState, useCallback } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { UserResponse } from '@/types/quiz';

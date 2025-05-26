@@ -1,7 +1,6 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { QuizQuestion } from './QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { QuizHeader } from './quiz/QuizHeader';

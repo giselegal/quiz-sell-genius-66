@@ -1,7 +1,5 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { useState, useEffect } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEditor';
 import { LoadingState } from '@/components/ui/loading-state';
 import { StyleResult } from '@/types/quiz';

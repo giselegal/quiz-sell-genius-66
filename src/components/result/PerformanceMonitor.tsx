@@ -1,4 +1,3 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useEffect, useState } from 'react';
 
 // Tipos para o monitoramento de desempenho

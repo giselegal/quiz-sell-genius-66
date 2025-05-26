@@ -1,6 +1,5 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useEffect, useState } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
 import { ContentContainer } from './shared/ContentContainer';

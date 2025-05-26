@@ -1,4 +1,5 @@
 "use client";
+import { useToast } from "@/components/ui/use-toast";
 
 import { useEffect, useState } from 'react';
 import { EnhancedResultPageEditor } from '@/components/result-editor/EnhancedResultPageEditor';
@@ -22,8 +23,8 @@ export default function ResultEditorPage() {
   };
   
   const secondaryStyles: StyleResult[] = [
-    { category: 'Elegante', percentage: 25 },
-    { category: 'Criativo', percentage: 10 }
+    { category: 'Elegante', percentage: 25, score: 25 },
+    { category: 'Criativo', percentage: 10, score: 10 }
   ];
   
   useEffect(() => {

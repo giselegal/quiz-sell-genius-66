@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import React, { useState, useEffect } from 'react';
 import { getAllImages } from '@/data/imageBank';
 import { optimizeCloudinaryUrl } from '@/utils/imageUtils';

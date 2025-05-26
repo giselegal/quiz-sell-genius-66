@@ -1,6 +1,4 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState, useEffect } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { StyleResult } from '@/types/quiz';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
 import { useRouter } from 'next/navigation';

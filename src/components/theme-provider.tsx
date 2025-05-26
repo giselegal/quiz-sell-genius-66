@@ -1,8 +1,7 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
+"use client";
 "use client"
 
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { safeLocalStorage } from "@/utils/localStorage";
 
 type Theme = "dark" | "light" | "system"
 
