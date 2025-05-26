@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 
@@ -128,9 +129,9 @@ export default function ResultPageWrapper({ id }: { id: string }) {
       </div>
       
       <div className="mt-6 text-center">
-        <a href="/" className="text-sm text-blue-600 hover:underline">
+        <Link href="/" className="text-sm text-blue-600 hover:underline">
           Voltar e refazer o quiz
-        </a>
+        </Link>
       </div>
     </div>
   );

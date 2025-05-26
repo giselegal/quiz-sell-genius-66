@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Html, Head, Main, NextScript } from 'next/document';
 
 // URLs de recursos críticos para preload
 const CRITICAL_RESOURCES = {
@@ -47,7 +48,7 @@ const CRITICAL_CSS = `
 const CustomDocument = () => {
   return (
     <html lang="pt-BR">
-      <head>
+      <Head>
         {/* Preload crítico de recursos com alta prioridade */}
         <link
           rel="preload"
@@ -93,7 +94,7 @@ const CustomDocument = () => {
         {/* Meta tags para desempenho */}
         <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </head>
+      </Head>
       <body>
         <div id="root"></div>
         {/* Script de detecção para relatórios de desempenho */}

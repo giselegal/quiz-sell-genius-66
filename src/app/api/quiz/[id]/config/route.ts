@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// Adicionando configuração necessária para build estático
+export const dynamic = "force-static";
+export const revalidate = 3600; // Revalidar a cada 1 hora
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

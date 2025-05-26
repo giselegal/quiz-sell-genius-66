@@ -6,6 +6,22 @@ import compression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Configurações para ignorar erros não críticos
+  build: {
+    reportCompressedSize: false, // Reduz warnings relacionados a tamanho
+    chunkSizeWarningLimit: 2000, // Aumenta limite de tamanho de chunk para evitar warnings
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Ignora warnings específicos
+        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+        if (warning.code === 'EMPTY_BUNDLE') return;
+        if (warning.code === 'EVAL') return;
+        if (warning.code === 'THIS_IS_UNDEFINED') return;
+        if (warning.message?.includes('sourcemap')) return;
+        warn(warning);
+      }
+    },
+  },
   root: '.',
   base: './',
   

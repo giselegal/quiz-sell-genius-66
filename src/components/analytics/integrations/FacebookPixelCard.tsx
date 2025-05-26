@@ -232,7 +232,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
                   <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.quiz_start} />
                 </div>
                 <p className="text-[10px] text-muted-foreground pl-6">
-                  Ocorre quando o usuário clica em "Começar" na tela inicial
+                  Ocorre quando o usuário clica em &ldquo;Começar&rdquo; na tela inicial
                 </p>
               </div>
               

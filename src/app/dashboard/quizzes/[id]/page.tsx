@@ -1,3 +1,6 @@
+// Importando configuração estática
+export { dynamic } from './static';
+
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -18,12 +21,13 @@ import {
 import Link from 'next/link';
 
 interface QuizDetailPageProps {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 // @ts-ignore - Ignorando conflito de tipos com o sistema do Next.js
-export default function QuizDetailPage({ params }: QuizDetailPageProps) {
+export default async function QuizDetailPage({ params }: QuizDetailPageProps) {
+  const { id } = await params;
   return (
     <div className="container mx-auto py-6">
       {/* Header com ações rápidas */}

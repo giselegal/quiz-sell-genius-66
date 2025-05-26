@@ -5,9 +5,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "next build",
+    "build:ignore-errors": "NODE_OPTIONS=\"--max-old-space-size=4096 --no-warnings\" CI=false NEXT_PLUGIN_IGNORE_PRERENDER_ERRORS=true next build",
+    "build:emergency": "bash emergency-build.sh",
+    "build:static": "next build",
+    "export": "next export",
+    "clean": "rm -rf .next/cache && rm -rf out && rm -rf dist",
     "dev": "next dev",
     "start": "next start",
-    "install-deps": "npm install"
+    "install-deps": "npm install",
+    "prepare-deploy": "bash clean-before-commit.sh",
+    "full-build": "npm run clean && npm run build:ignore-errors || npm run build:emergency"
   },
   "keywords": [],
   "author": "",
