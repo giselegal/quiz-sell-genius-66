@@ -1,3 +1,4 @@
+"use client";
 'use client';
 
 import QuizPage from '@/components/QuizPage';
