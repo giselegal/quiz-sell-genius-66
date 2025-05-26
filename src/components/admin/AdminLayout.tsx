@@ -5,14 +5,14 @@ import { Button } from '../ui/button';
 import { AdminHeader } from './AdminHeader';
 
 interface AdminLayoutProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 /**
  * Layout básico para componentes administrativos que não usam o novo AdminDashboard
  * Este componente será gradualmente descontinuado conforme migramos tudo para o novo dashboard
  */
-const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = () => {
   const { user } = useAuth();
   const location = useLocation();
   const currentTab = location.pathname.split('/').pop() || 'dashboard';

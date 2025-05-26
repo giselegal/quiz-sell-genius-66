@@ -33,12 +33,21 @@ function App() {
             {/* Rota para a página de resultados */}
             <Route path="/resultado" element={<ResultPage />} />
             <Route path="/resultado/:id" element={<ResultPage />} />
-            
-            {/* Rotas administrativas */}
-            <Route path="/admin" element={<AdminLayout />} />
-            <Route path="/admin/editor" element={<EditorPage />} />
-            <Route path="/admin/editor/:id" element={<EditorPage />} />
-            
+
+            {/* Rotas administrativas aninhadas */}
+            <Route path="/admin" element={<AdminLayout />}>
+              {/* Dashboard padrão do admin */}
+              <Route index element={
+                <div className="rounded-lg border bg-card p-6 shadow-sm">
+                  <h3 className="mb-4 text-lg font-medium">Bem-vindo ao Painel Admin</h3>
+                  <p className="mb-4 text-sm text-muted-foreground">Selecione uma opção no menu.</p>
+                </div>
+              } />
+              {/* Editor visual */}
+              <Route path="editor" element={<EditorPage />} />
+              <Route path="editor/:id" element={<EditorPage />} />
+            </Route>
+
             {/* Rota de fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
