@@ -1,13 +1,7 @@
 'use client';
 
-import React from 'react';
-import dynamic from 'next/dynamic';
-
-const QuizFlow = dynamic(
-  () => import('@/components/QuizFlow'),
-  { ssr: false }
-);
+import QuizPage from '@/components/QuizPage';
 
 export default function HomePage() {
-  return <QuizFlow />;
+  return <QuizPage />;
 }
