@@ -11,7 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
-.next/ # Adicionado para ignorar a saída de build e cache do Next.js
+# Adicionado para ignorar a saída de build e cache do Next.js
+.next/
 
 # Editor directories and files
 .vscode/*
