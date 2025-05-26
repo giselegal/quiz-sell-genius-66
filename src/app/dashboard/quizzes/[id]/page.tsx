@@ -17,7 +17,9 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function QuizDetailPage({ params }: { params: { id: string } }) {
+import { PageProps } from '@/types';
+
+export default function QuizDetailPage({ params }: PageProps) {
   return (
     <div className="container mx-auto py-6">
       {/* Header com ações rápidas */}
