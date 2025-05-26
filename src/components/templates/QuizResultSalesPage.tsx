@@ -1,6 +1,6 @@
 
 import React, { lazy, Suspense, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -67,7 +67,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
   userName = 'Visitante'
 }) => {
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [criticalImagesLoaded, setCriticalImagesLoaded] = useState(false);
 

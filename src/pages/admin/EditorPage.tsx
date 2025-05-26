@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'next/navigation';
 import AdminLayout from '../../components/admin/AdminLayout';
 import QuizOfferPageEditor from './editors/QuizOfferPageEditor';
 import ResultPageEditor from './editors/ResultPageEditor';

@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useRouter } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
 import QuizEditor from '@/components/quiz-editor/QuizEditor';
 import { LoadingState } from '@/components/ui/loading-state';

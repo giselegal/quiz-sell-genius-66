@@ -1,14 +1,14 @@
 
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const Index = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   
   useEffect(() => {
     // Redirect to the root path where QuizIntro/QuizPage will be shown
-    navigate('/');
-  }, [navigate]);
+    router.push('/');
+  }, [router]);
 
   return null;
 };

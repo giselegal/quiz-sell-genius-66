@@ -1,13 +1,14 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '../components/ui/button';
 
 const EditorNotFoundPage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleRetry = () => {
     // Tenta recarregar a página do editor
-    navigate('/admin/editor', { replace: true });
+    router.push('/admin/editor');
   };
 
   return (

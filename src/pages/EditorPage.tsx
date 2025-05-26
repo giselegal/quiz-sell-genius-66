@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'next/navigation';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
 import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';

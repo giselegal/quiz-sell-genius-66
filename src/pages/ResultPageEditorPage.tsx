@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const ResultPageEditorPage: React.FC = () => {
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
   const [customDomain, setCustomDomain] = useState(''); // Novo estado para domínio personalizado
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const ResultPageEditorPage: React.FC = () => {
           setSecondaryStyles(parsedResult.secondaryStyles || []);
         } else {
           console.error("Formato de resultado inválido");
-          navigate('/resultado');
+          router.push('/resultado');
         }
       } else {
         const defaultStyle: StyleResult = {
@@ -41,11 +41,11 @@ const ResultPageEditorPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Erro ao carregar resultados:", error);
-      navigate('/resultado');
+      router.push('/resultado');
     } finally {
       setIsLoading(false);
     }
-  }, [navigate]);
+  }, [router]);
 
   const handleSave = () => {
     try {
@@ -77,7 +77,7 @@ const ResultPageEditorPage: React.FC = () => {
           <p className="text-lg mb-4">Erro: Nenhum resultado encontrado para editar</p>
           <button 
             className="bg-primary text-white px-4 py-2 rounded"
-            onClick={() => navigate('/resultado')}
+            onClick={() => router.push('/resultado')}
           >
             Voltar para Resultados
           </button>

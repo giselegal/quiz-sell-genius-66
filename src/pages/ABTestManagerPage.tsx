@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { ABTest, ABTestVariation } from '@/hooks/useABTest';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,7 +17,7 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
 
 const ABTestManagerPage: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { toast } = useToast();
   const [tests, setTests] = useState<ABTest[]>([]);
   const [selectedTest, setSelectedTest] = useState<ABTest | null>(null);
@@ -342,7 +342,7 @@ const ABTestManagerPage: React.FC = () => {
   return (
     <div className="container mx-auto p-6">
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="outline" size="sm" onClick={() => navigate('/admin')}>
+        <Button variant="outline" size="sm" onClick={() => router.push('/admin')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar
         </Button>

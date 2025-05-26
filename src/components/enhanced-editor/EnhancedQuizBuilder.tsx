@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 /**

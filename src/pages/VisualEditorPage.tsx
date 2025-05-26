@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import VisualEditorLayout from '@/components/visual-editor/VisualEditorLayout';
 import { QuizQuestion } from '@/types/quiz';
 import { useToast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Save } from 'lucide-react';
 

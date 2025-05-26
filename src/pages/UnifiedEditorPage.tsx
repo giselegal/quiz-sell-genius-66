@@ -4,7 +4,7 @@ import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEd
 import { LoadingState } from '@/components/ui/loading-state';
 import { StyleResult } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
 
 const UnifiedEditorPage: React.FC = () => {

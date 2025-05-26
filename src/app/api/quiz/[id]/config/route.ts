@@ -29,7 +29,7 @@ export async function POST(
     }
 
     const updatedQuiz = await prisma.quiz.update({
-      where: { id: quizId },
+      where: { id: Number(quizId) },
       data: updateData,
     });
 
@@ -56,7 +56,7 @@ export async function GET(
     const mode = url.searchParams.get('mode') || 'quiz';
 
     const quiz = await prisma.quiz.findUnique({
-      where: { id: quizId },
+      where: { id: Number(quizId) },
       select: { 
         quizConfig: true,
         resultConfig: true,

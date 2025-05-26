@@ -17,7 +17,7 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { User as UserType, UserWithRole } from '@/types/user';
 import { useABTest } from '@/hooks/useABTest';
 
