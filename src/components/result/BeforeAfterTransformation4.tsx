@@ -35,30 +35,54 @@ const designTokens = {
     md: '1.5rem',
     lg: '2rem',
     xl: '3rem',
+  },
   borderRadius: {
     sm: '0.25rem',
     md: '0.5rem',
     lg: '0.75rem',
     full: '9999px',
+  },
   shadows: {
     sm: '0 1px 3px rgba(0,0,0,0.1)',
     md: '0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1)',
     lg: '0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05)',
     highlight: '0 0 15px rgba(184, 155, 122, 0.15)',
     cta: '0 4px 14px rgba(76, 175, 80, 0.4)',
+  },
   transitions: {
     default: 'all 0.3s ease',
     fast: 'all 0.15s ease',
     slow: 'all 0.5s ease',
+  }
 };
+
 interface BeforeAfterTransformationProps {
   handleCTAClick?: () => void;
+}
 interface TransformationItem {
-  image: string; 
+  image: string;
   name: string;
-  id: string; 
+  id: string;
   width?: number;
   height?: number;
+}
+
+const transformations: TransformationItem[] = [
+  {
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+    name: "Adriana",
+    id: "transformation-adriana",
+    width: 600,
+    height: 750
+  },
+  {
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+    name: "Mariangela",
+    id: "transformation-mariangela",
+    width: 600,
+    height: 750
+  }
+]
 // Componente Badge reutilizável
 const Badge: React.FC<{
   children: React.ReactNode;
@@ -97,52 +121,30 @@ const NavButton = React.memo<{
     }, [onClick])}
     style={{ pointerEvents: 'auto' }}
     aria-label={direction === 'prev' ? 'Anterior' : 'Próxima'}
+  >
     {direction === 'prev' ? (
       <ChevronLeft size={16} className="text-[#432818] md:w-6 md:h-6" style={{ pointerEvents: 'none' }} />
     ) : (
       <ChevronRight size={16} className="text-[#432818] md:w-6 md:h-6" style={{ pointerEvents: 'none' }} />
     )}
   </button>
-// SIMPLIFIED TRANSFORMATIONS DATA
-const transformations: TransformationItem[] = [
-  {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
-    name: "Adriana",
-    id: "transformation-adriana",
-    width: 600,
-    height: 750
-  }, 
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
-    name: "Mariangela", 
-    id: "transformation-mariangela",
-];
+));
 // OPTIMIZED IMAGE PRELOADER
-const useImagePreloader = (images: string[], initialIndex = 0) => {
-  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
-  
+function useImagePreloader(images: string[], initialIndex: number) {
+  const [loadedImages, setLoadedImages] = useState<boolean[]>(images.map(() => false));
   useEffect(() => {
-    if (images.length > 0) {
-      // Pré-carregar imagem atual
-      const currentImage = new Image();
-      currentImage.onload = () => {
-        setLoadedImages(prev => ({ ...prev, [images[initialIndex]]: true }));
-      };
-      currentImage.src = images[initialIndex];
-      
-      // Pré-carregar próxima imagem com delay
-      if (images.length > 1) {
-        setTimeout(() => {
-          const nextIndex = (initialIndex + 1) % images.length;
-          const nextImage = new Image();
-          nextImage.onload = () => {
-            setLoadedImages(prev => ({ ...prev, [images[nextIndex]]: true }));
-          };
-          nextImage.src = images[nextIndex];
-        }, 1000);
-      }
-    }
-  }, [images, initialIndex]);
+    images.forEach((src, idx) => {
+      const img = new window.Image();
+      img.onload = () => setLoadedImages(prev => {
+        const updated = [...prev];
+        updated[idx] = true;
+        return updated;
+      });
+      img.src = src;
+    });
+  }, [images]);
   return { loadedImages };
+}
 const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ handleCTAClick }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
@@ -338,4 +340,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     />
     </div>
   );
-export default React.memo(BeforeAfterTransformation);
+}
+
+export default BeforeAfterTransformation;
