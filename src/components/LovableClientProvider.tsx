@@ -1,13 +1,15 @@
 "use client";
-'use client';
 
 import React, { useEffect, useState } from 'react';
+
 interface LovableProviderProps {
   children: React.ReactNode;
 }
+
 // Este é um componente para integrar com o editor visual Lovable
 export function LovableClientProvider({ children }: LovableProviderProps) {
   const [isEditorMode, setIsEditorMode] = useState(false);
+  
   // Lógica para inicializar o editor quando estamos em modo de edição
   useEffect(() => {
     // Só executa no cliente
@@ -37,3 +39,4 @@ export function LovableClientProvider({ children }: LovableProviderProps) {
       {children}
     </div>
   );
+}

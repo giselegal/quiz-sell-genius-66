@@ -33,18 +33,16 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     if (autoAdvanceTimer) {
       clearTimeout(autoAdvanceTimer);
       setAutoAdvanceTimer(null);
-    if (canProceed) { // Efeito de ativação se puder prosseguir (normal ou estratégico)
+    }
+    if (canProceed) {
       setShowActivationEffect(true);
       const visualTimer = setTimeout(() => {
         setShowActivationEffect(false);
-      }, 2000); // Duração do efeito visual
-      // Auto-avanço apenas para questões normais
+      }, 2000);
       if (currentQuestionType === 'normal' && shouldAutoAdvance()) {
-        console.log('Configurando avanço automático em 45ms');
         const newTimer = setTimeout(() => {
-          console.log('Executando avanço automático agora');
           onNext();
-        }, 45); // Tempo para auto-avanço
+        }, 45);
         setAutoAdvanceTimer(newTimer);
       }
       return () => {
@@ -53,8 +51,9 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
           clearTimeout(autoAdvanceTimer);
         }
       };
-    } else { // Se não puder prosseguir
+    } else {
       setShowActivationEffect(false);
+    }
   }, [canProceed, onNext, shouldAutoAdvance, currentQuestionType]);
   const getHelperText = useCallback((): string => {
       return currentQuestionType === 'strategic'

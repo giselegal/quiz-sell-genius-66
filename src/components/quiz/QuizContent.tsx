@@ -54,6 +54,8 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             currentAnswers={currentAnswers || []}
             showQuestionImage={true}
             autoAdvance={true}
+            onAnswer={handleAnswerSubmit}
+          />
         )}
       </div>
     </>

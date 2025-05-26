@@ -46,7 +46,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     } else {
         // Para questões estratégicas, substituímos qualquer seleção anterior
         newSelectedOptions = [optionId];
-      } else if (question?.multiSelect || false && currentAnswers.length >= question?.multiSelect || false) {
+      } else if ((question?.multiSelect || false) && currentAnswers.length >= (question?.multiSelect || 0)) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
         newSelectedOptions = [...currentAnswers, optionId];

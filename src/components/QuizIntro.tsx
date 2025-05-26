@@ -25,11 +25,12 @@ const INTRO_IMAGE_ID =
 const STATIC_LOGO_IMAGE_URLS = {
   webp: `${LOGO_BASE_URL}f_webp,q_70,w_120,h_50,c_fit/${LOGO_IMAGE_ID}.webp`,
   png: `${LOGO_BASE_URL}f_png,q_70,w_120,h_50,c_fit/${LOGO_IMAGE_ID}.png`,
-// Imagem LCP: Otimizada para carregamento mais rápido - URLs pré-construídas
+};
 const STATIC_INTRO_IMAGE_URLS = {
   avif: `${INTRO_IMAGE_BASE_URL}f_avif,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.avif`,
   webp: `${INTRO_IMAGE_BASE_URL}f_webp,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.webp`,
   png: `${INTRO_IMAGE_BASE_URL}f_png,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.png`,
+};
 interface QuizIntroProps {
   onStart: (nome: string) => void;
 }
