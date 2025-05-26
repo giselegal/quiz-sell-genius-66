@@ -8,10 +8,10 @@ interface EditResultPageButtonProps {
 }
 
 export const EditResultPageButton: React.FC<EditResultPageButtonProps> = ({ className }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleClick = () => {
-    navigate('/resultado/editor');
+    router.push('/resultado/editor');
   };
 
   return (

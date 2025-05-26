@@ -14,7 +14,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   primaryStyle,
   secondaryStyles
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const templates = [
     {
@@ -60,7 +60,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
               <h3 className="text-xl font-playfair text-[#432818] mb-2">{template.title}</h3>
               <p className="text-[#8F7A6A] mb-4">{template.description}</p>
               <Button 
-                onClick={() => navigate(template.path, { 
+                onClick={() => router.push(template.path, { 
                   state: { primaryStyle, secondaryStyles } 
                 })}
                 className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"

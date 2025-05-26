@@ -25,7 +25,7 @@ interface PageData {
 
 export default function EnhancedResultPageEditorPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [pageData, setPageData] = useState<PageData | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
   const [loading, setLoading] = useState(true);
@@ -124,7 +124,7 @@ export default function EnhancedResultPageEditorPage() {
       
       if (!id) {
         const newId = Date.now().toString();
-        navigate(`/admin/editor/${newId}`);
+        router.push(`/admin/editor/${newId}`);
       }
     } catch (error) {
       console.error('Erro ao salvar página:', error);
@@ -235,12 +235,12 @@ export default function EnhancedResultPageEditorPage() {
       
       {/* Footer fixo */}
       <div className="sticky bottom-0 flex justify-between border-t bg-white p-4 shadow-lg">
-        <Button variant="outline" onClick={() => navigate('/admin')}>
+        <Button variant="outline" onClick={() => router.push('/admin')}>
           Voltar ao Painel
         </Button>
         
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => navigate('/resultado')}>
+          <Button variant="outline" onClick={() => router.push('/resultado')}>
             Ver Página de Resultados
           </Button>
           <Button onClick={handleSave} disabled={isSaving}>

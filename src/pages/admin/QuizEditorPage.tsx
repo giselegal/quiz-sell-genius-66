@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import AdminLayout from '@/components/admin/AdminLayout';
 import QuizEditor from '@/components/quiz-editor/QuizEditor';
 import { LoadingState } from '@/components/ui/loading-state';
@@ -8,8 +8,8 @@ import { getTemplateById } from '@/services/templates/templateService';
 import { QuizTemplate } from '@/types/quizTemplate';
 
 const QuizEditorPage = () => {
-  const { templateId } = useParams();
   const router = useRouter();
+  const { templateId } = router.query;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [template, setTemplate] = useState<QuizTemplate | null>(null);

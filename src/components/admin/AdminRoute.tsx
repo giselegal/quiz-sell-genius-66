@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { redirect } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 interface AdminRouteProps {
@@ -14,11 +14,13 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
   const { user, isAdmin, hasEditorAccess } = useAuth();
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    redirect('/login');
+    return null;
   }
 
   if (!isAdmin) {
-    return <Navigate to="/" replace />;
+    redirect('/');
+    return null;
   }
 
   if (requireEditor && !hasEditorAccess) {

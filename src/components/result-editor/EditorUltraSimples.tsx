@@ -3,7 +3,7 @@ import { ArrowLeft, Save, Palette } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const EditorUltraSimples: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [cor, setCor] = useState('#B89B7A');
   const [titulo, setTitulo] = useState('Descubra Seu Estilo Único');
 
@@ -26,7 +26,7 @@ const EditorUltraSimples: React.FC = () => {
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
       }}>
         <button
-          onClick={() => navigate('/admin')}
+          onClick={() => router.push('/admin')}
           style={{
             display: 'flex',
             alignItems: 'center',

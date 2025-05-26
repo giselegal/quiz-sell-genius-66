@@ -31,7 +31,7 @@ const QuizOfferPageVisualEditor = React.lazy(() => import('@/components/visual-e
 
 const OldAdminDashboard = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState('dashboard');
 

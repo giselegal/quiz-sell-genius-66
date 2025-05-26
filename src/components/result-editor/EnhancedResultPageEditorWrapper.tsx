@@ -17,7 +17,7 @@ export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorW
   secondaryStyles,
   initialFunnel
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [savedFunnel, setSavedFunnel] = useState<QuizFunnel | null>(null);
 
@@ -90,7 +90,7 @@ export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorW
 export const EnhancedResultPageEditorPage: React.FC = () => {
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export const EnhancedResultPageEditorPage: React.FC = () => {
         <div className="text-center">
           <p className="text-lg mb-4">Erro: Nenhum resultado encontrado para editar</p>
           <Button 
-            onClick={() => navigate('/resultado')}
+            onClick={() => router.push('/resultado')}
           >
             Voltar para Resultados
           </Button>

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Edit, Settings, Users, BarChart, Eye, Palette } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   
   // Removido o redirecionamento automático para permitir acesso ao dashboard
 

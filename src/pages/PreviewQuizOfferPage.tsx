@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Shield, Star, Clock, Zap, Award, CheckCircle, ArrowDown } from 'lucide-react';
@@ -45,7 +45,8 @@ const designTokens = {
 };
 
 const PreviewQuizOfferPage: React.FC = () => {
-  const { styleType } = useParams<{ styleType: string }>();
+  const router = useRouter();
+  const { styleType } = router.query;
   const [isHovered, setIsHovered] = useState(false);
   const [countdown, setCountdown] = useState({ hours: 2, minutes: 30, seconds: 45 });
 
