@@ -9,33 +9,33 @@ import { QuizTemplate } from '@/types/quizTemplate';
 
 const QuizEditorPage = () => {
   const { templateId } = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [template, setTemplate] = useState<QuizTemplate | null>(null);
 
   useEffect(() => {
     const loadTemplate = async () => {
-      if (templateId) {
+      if (templateId && typeof templateId === 'string') {
         try {
           const template = await getTemplateById(templateId);
           if (!template) {
             setError('Template não encontrado');
-            navigate('/admin/quiz-editor');
+            router.push('/admin/quiz-editor');
             return;
           }
           setTemplate(template);
         } catch (err) {
           console.error('Error loading template:', err);
           setError('Erro ao carregar template');
-          navigate('/admin/quiz-editor');
+          router.push('/admin/quiz-editor');
         }
       }
       setLoading(false);
     };
 
     loadTemplate();
-  }, [templateId, navigate]);
+  }, [templateId, router]);
 
   if (loading) {
     return (

@@ -41,6 +41,12 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@types/node": "^22.15.21"
+    "@tailwindcss/postcss": "^4.1.7",
+    "@types/node": "^22.15.21",
+    "@types/react": "19.1.5",
+    "eslint": "^9.27.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "typescript": "5.8.3"
   }
 }

@@ -9,10 +9,10 @@ import { Button } from '@/components/ui/button';
  * que direciona o usuário para o editor unificado
  */
 const EnhancedQuizBuilder: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   
   const handleOpenUnifiedEditor = () => {
-    navigate('/admin/editor');
+    router.push('/admin/editor');
   };
   
   return (

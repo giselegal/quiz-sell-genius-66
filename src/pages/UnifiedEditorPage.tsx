@@ -11,7 +11,7 @@ const UnifiedEditorPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   
@@ -102,7 +102,7 @@ const UnifiedEditorPage: React.FC = () => {
           <p className="text-[#8F7A6A] mb-6">{loadError}</p>
           <button 
             className="bg-[#B89B7A] text-white px-4 py-2 rounded hover:bg-[#8F7A6A]"
-            onClick={() => navigate('/admin')}
+            onClick={() => router.push('/admin')}
           >
             Voltar ao Painel
           </button>
@@ -122,7 +122,7 @@ const UnifiedEditorPage: React.FC = () => {
           </p>
           <button 
             className="bg-[#B89B7A] text-white px-4 py-2 rounded hover:bg-[#8F7A6A]"
-            onClick={() => navigate('/quiz')}
+            onClick={() => router.push('/quiz')}
           >
             Ir para o Quiz
           </button>

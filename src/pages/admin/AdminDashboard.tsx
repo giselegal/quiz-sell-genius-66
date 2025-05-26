@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { 
   BarChart, 
@@ -33,13 +33,13 @@ const QuizOfferPageVisualEditor = React.lazy(() => import('@/components/visual-e
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const [activeTab, setActiveTab] = useState('dashboard');
 
   // Determinar qual aba está ativa baseado na URL
   React.useEffect(() => {
-    const path = location.pathname;
+    const path = pathname;
     if (path.includes('/editor')) setActiveTab('editor');
     else if (path.includes('/settings')) setActiveTab('settings');
     else if (path.includes('/analytics')) setActiveTab('analytics');
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
     else if (path.includes('/offer-editor')) setActiveTab('offer-editor');
     else if (path.includes('/prototype')) setActiveTab('prototype');
     else setActiveTab('dashboard');
-  }, [location.pathname]);
+  }, [pathname]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);

@@ -4,7 +4,7 @@ import { StyleResult } from '@/types/quiz';
 import { QuizFunnel } from '@/types/quizResult';
 import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 interface EnhancedResultPageEditorWrapperProps {
   primaryStyle: StyleResult;
