@@ -371,3 +371,4 @@ export const testFacebookPixel = () => {
     return false;
   }
 };
+export const trackPageView = () => {};

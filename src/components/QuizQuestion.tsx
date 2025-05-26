@@ -50,7 +50,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       if (isStrategicQuestion) {
         // Para questões estratégicas, substituímos qualquer seleção anterior
         newSelectedOptions = [optionId];
-      } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
+      } else if (question?.multiSelect || false && currentAnswers.length >= question?.multiSelect || false) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
         newSelectedOptions = [...currentAnswers, optionId];
@@ -124,7 +124,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             isDisabled={
               (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
               (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                currentAnswers.length >= question.multiSelect)
+                currentAnswers.length >= question?.multiSelect || false)
             }
             isStrategicOption={isStrategicQuestion}
           />

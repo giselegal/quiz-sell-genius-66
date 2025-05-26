@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
+import { safeLocalStorage } from '@/utils/safeLocalStorage';
 
 interface User {
   userName: string;
