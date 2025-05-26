@@ -15,6 +15,7 @@ dist-ssr
 # Adicionado para ignorar a saída de build e cache do Next.js
 .next/
 .next/cache/
+.next/cache/**
 .next/trace
 .next/static/chunks/pages
 .next/static/development
@@ -23,6 +24,8 @@ dist-ssr
 .next/static/development
 .next/*.pack
 .next/cache/webpack/
+.next/cache/webpack/**
+*.pack
 
 # Editor directories and files
 .vscode/*
