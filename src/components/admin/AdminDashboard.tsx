@@ -21,7 +21,7 @@ export const AdminDashboard: React.FC = () => {
           
           {/* Botão de acesso ao Dashboard Antigo */}
           <div className="mb-8">
-            <Link to="/admin/old">
+            <Link href="/admin/old">
               <button className="px-4 py-2 border border-amber-500 text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors rounded-md font-medium">
                 🔙 Dashboard Antigo
               </button>

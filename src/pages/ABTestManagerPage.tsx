@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { useRouter } from 'next/navigation';
 import { ABTest, ABTestVariation } from '@/hooks/useABTest';
 import { Input } from '@/components/ui/input';
@@ -34,7 +35,7 @@ const ABTestManagerPage: React.FC = () => {
 
   const loadTests = () => {
     try {
-      const savedTests = localStorage.getItem('ab_tests');
+      const savedTests = safeLocalStorage.getItem('ab_tests');
       if (savedTests) {
         const parsedTests = JSON.parse(savedTests);
         setTests(parsedTests);
@@ -56,7 +57,7 @@ const ABTestManagerPage: React.FC = () => {
 
   const handleSaveTests = (updatedTests: ABTest[]) => {
     try {
-      localStorage.setItem('ab_tests', JSON.stringify(updatedTests));
+      safeLocalStorage.setItem('ab_tests', JSON.stringify(updatedTests));
       setTests(updatedTests);
       toast({
         title: 'Testes salvos',
@@ -321,12 +322,12 @@ const ABTestManagerPage: React.FC = () => {
     try {
       // Obter o número de visitantes
       const visitorKey = `ab_test_${testId}_visitor_count_${variationId}`;
-      const visitors = localStorage.getItem(visitorKey);
+      const visitors = safeLocalStorage.getItem(visitorKey);
       const visitorsCount = visitors ? parseInt(visitors, 10) : 0;
       
       // Obter o número de conversões
       const conversionKey = `ab_test_${testId}_${variationId}_conversions`;
-      const conversions = localStorage.getItem(conversionKey);
+      const conversions = safeLocalStorage.getItem(conversionKey);
       const conversionsCount = conversions ? parseInt(conversions, 10) : 0;
       
       if (visitorsCount === 0) return '0%';

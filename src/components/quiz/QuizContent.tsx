@@ -27,7 +27,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   handleAnswerSubmit,
 }) => {
   // Get user name from localStorage if not provided in props
-  const userName = user?.userName || localStorage.getItem('userName') || '';
+  const userName = user?.userName || safeLocalStorage.getItem('userName') || '';
   
   // Determine the required selections based on question type
   const requiredSelections = showingStrategicQuestions ? 1 : (currentQuestion?.multiSelect || 3);

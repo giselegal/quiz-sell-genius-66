@@ -99,7 +99,7 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handlePreviewQuizResult = () => {
-    const savedResult = localStorage.getItem('quiz_result');
+    const savedResult = safeLocalStorage.getItem('quiz_result');
     if (savedResult) {
       try {
         const parsedResult = JSON.parse(savedResult);

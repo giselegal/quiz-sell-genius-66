@@ -35,7 +35,7 @@ const EditorNotFoundPage = () => {
             Tentar novamente
           </Button>
           
-          <Link to="/admin">
+          <Link href="/admin">
             <Button variant="outline" className="border-[#B89B7A] text-[#B89B7A]">
               Voltar para o painel
             </Button>

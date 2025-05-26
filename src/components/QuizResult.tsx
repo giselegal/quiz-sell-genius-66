@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
 import { ContentContainer } from './shared/ContentContainer';
@@ -9,6 +10,7 @@ import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
 import BeforeAfterTransformation from './result/BeforeAfterTransformation4';
 import { CheckCircle } from 'lucide-react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { cn } from '@/lib/utils';
@@ -36,7 +38,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
     if (user && user.userName) {
       setUserName(user.userName);
     } else {
-      const storedName = localStorage.getItem('userName');
+      const storedName = safeLocalStorage.getItem('userName');
       if (storedName) {
         setUserName(storedName);
       }
@@ -51,7 +53,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
         setConfig(externalConfig);
       } else {
         const configKey = `quiz_result_config_${primaryStyle.category}`;
-        const savedConfig = localStorage.getItem(configKey);
+        const savedConfig = safeLocalStorage.getItem(configKey);
         
         if (savedConfig) {
           setConfig(JSON.parse(savedConfig));

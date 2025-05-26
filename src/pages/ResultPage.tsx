@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -6,6 +7,7 @@ import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight, Shield, Award, Hourglass, Star, Gift, Target, Zap, TrendingUp } from 'lucide-react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -212,7 +214,7 @@ const ResultPage: React.FC = () => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
     
-    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
+    const hasPreloadedResults = safeLocalStorage.getItem('preloadedResults') === 'true';
     
     if (hasPreloadedResults) {
       setImagesLoaded({ style: true, guide: true });

@@ -141,7 +141,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
         
         // Try to load existing results from localStorage
         try {
-          const savedResultConfig = localStorage.getItem('quiz_result_config_Elegante');
+          const savedResultConfig = safeLocalStorage.getItem('quiz_result_config_Elegante');
           if (savedResultConfig) {
             console.log('Found existing result configuration, integrating with builder state');
             // In a real implementation, we would merge the result config with the builder state

@@ -66,7 +66,7 @@ export const MarketingTab: React.FC = () => {
         
         <div className="mt-6">
           <Button variant="outline" asChild>
-            <Link to="/admin/analytics?tab=utm">
+            <Link href="/admin/analytics?tab=utm">
               View UTM Analytics
             </Link>
           </Button>

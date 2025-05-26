@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import QuizIntro from '../components/QuizIntro';
 import QuizPage from '../components/QuizPage';
 import { useQuizContext } from '../context/QuizContext';
@@ -17,7 +18,7 @@ const HomePage = () => {
   // Defer non-critical initialization
   useEffect(() => {
     // Register the time of start for calculating the quiz completion time later
-    localStorage.setItem('page_load_time', Date.now().toString());
+    safeLocalStorage.setItem('page_load_time', Date.now().toString());
     
     // Execute critical tasks immediately
     captureUTMParameters();
@@ -49,7 +50,7 @@ const HomePage = () => {
     login(name);
     
     // Save the official quiz start timestamp
-    localStorage.setItem('quiz_start_time', Date.now().toString());
+    safeLocalStorage.setItem('quiz_start_time', Date.now().toString());
     
     // Track quiz start with user data and UTM parameters
     trackQuizStart(name, email);
@@ -60,8 +61,8 @@ const HomePage = () => {
     }
     
     console.log(`Quiz started by ${name}${email ? ` (${email})` : ''}`);
-    localStorage.setItem('userName', name);
-    if (email) localStorage.setItem('userEmail', email);
+    safeLocalStorage.setItem('userName', name);
+    if (email) safeLocalStorage.setItem('userEmail', email);
   };
 
   if (isLoading) {

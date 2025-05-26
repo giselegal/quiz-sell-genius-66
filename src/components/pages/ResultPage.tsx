@@ -65,7 +65,7 @@ const ResultPage: React.FC = () => {
     window.scrollTo(0, 0);
     
     // Verificar se os resultados já foram pré-carregados
-    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
+    const hasPreloadedResults = safeLocalStorage.getItem('preloadedResults') === 'true';
     
     // Se os resultados já foram pré-carregados durante o quiz, pulamos o skeleton quase que imediatamente
     if (hasPreloadedResults) {

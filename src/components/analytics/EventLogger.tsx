@@ -17,7 +17,7 @@ export const EventLogger: React.FC = () => {
 
   const loadEvents = () => {
     try {
-      const eventsJson = localStorage.getItem('fb_pixel_event_log');
+      const eventsJson = safeLocalStorage.getItem('fb_pixel_event_log');
       const loadedEvents = eventsJson ? JSON.parse(eventsJson) : [];
       setEvents(loadedEvents);
     } catch (error) {
@@ -38,7 +38,7 @@ export const EventLogger: React.FC = () => {
   }, []);
 
   const clearEvents = () => {
-    localStorage.removeItem('fb_pixel_event_log');
+    safeLocalStorage.removeItem('fb_pixel_event_log');
     setEvents([]);
   };
 

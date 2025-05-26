@@ -60,7 +60,7 @@ const OldAdminDashboard = () => {
       <header className="bg-white border-b px-6 py-3 shadow-sm">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <Link to="/admin" className="text-xl font-bold text-[#432818]">
+            <Link href="/admin" className="text-xl font-bold text-[#432818]">
               Dashboard Administrativo
             </Link>
             <div className="text-sm text-[#8F7A6A] hidden md:block">
@@ -68,7 +68,7 @@ const OldAdminDashboard = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/admin/new">
+            <Link href="/admin/new">
               <Button variant="outline" size="sm">
                 Novo Dashboard
               </Button>
@@ -140,7 +140,7 @@ const OldAdminDashboard = () => {
                   </div>
                   <p className="text-amber-700 text-sm mt-1">
                     Esta é a interface principal do dashboard. Para uma experiência alternativa, 
-                    <Link to="/admin/new" className="underline font-medium ml-1">acesse o novo dashboard</Link>.
+                    <Link href="/admin/new" className="underline font-medium ml-1">acesse o novo dashboard</Link>.
                   </p>
                 </div>
               </div>
@@ -343,7 +343,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
 
   if (linkTo && isExternal) {
     return (
-      <Link to={linkTo} target={linkTo.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer">
+      <Link href={linkTo} target={linkTo.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer">
         {cardContent}
       </Link>
     );

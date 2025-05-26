@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { StyleResult } from '@/types/quiz';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
 import { useRouter } from 'next/navigation';
@@ -12,8 +13,8 @@ const ResultPageEditorPage: React.FC = () => {
 
   useEffect(() => {
     try {
-      const savedResult = localStorage.getItem('quizResult');
-      const savedDomain = localStorage.getItem('customDomain'); // Carregar domínio salvo
+      const savedResult = safeLocalStorage.getItem('quizResult');
+      const savedDomain = safeLocalStorage.getItem('customDomain'); // Carregar domínio salvo
 
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);
@@ -53,8 +54,8 @@ const ResultPageEditorPage: React.FC = () => {
         primaryStyle,
         secondaryStyles
       };
-      localStorage.setItem('quizResult', JSON.stringify(resultToSave));
-      localStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
+      safeLocalStorage.setItem('quizResult', JSON.stringify(resultToSave));
+      safeLocalStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
       alert('Configurações salvas com sucesso!');
     } catch (error) {
       console.error("Erro ao salvar configurações:", error);

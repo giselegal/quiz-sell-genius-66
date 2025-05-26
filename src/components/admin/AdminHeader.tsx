@@ -18,7 +18,7 @@ export function AdminHeader({
       <div className="flex items-center gap-2">
         {showBackButton && (
           <Button variant="ghost" size="icon" asChild>
-            <Link to={backTo}>
+            <Link href={backTo}>
               <ChevronLeft className="h-5 w-5" />
               <span className="sr-only">Voltar</span>
             </Link>
@@ -29,10 +29,10 @@ export function AdminHeader({
       
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
-          <Link to="/admin">Painel</Link>
+          <Link href="/admin">Painel</Link>
         </Button>
         <Button variant="outline" size="sm" asChild>
-          <Link to="/">Ver Site</Link>
+          <Link href="/">Ver Site</Link>
         </Button>
       </div>
     </div>

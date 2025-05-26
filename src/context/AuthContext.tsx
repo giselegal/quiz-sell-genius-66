@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
+import { safeLocalStorage } from '@/utils/localStorage';
 
 interface User {
   userName: string;
@@ -34,10 +35,10 @@ const PLAN_FEATURES = {
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
     // Para desenvolvimento, criar usuário automático se não existir
-    const savedName = localStorage.getItem('userName');
-    const savedEmail = localStorage.getItem('userEmail');
-    const savedRole = localStorage.getItem('userRole');
-    const savedPlan = localStorage.getItem('userPlan') as any || 'PROFESSIONAL';
+    const savedName = safeLocalStorage.getItem('userName');
+    const savedEmail = safeLocalStorage.getItem('userEmail');
+    const savedRole = safeLocalStorage.getItem('userRole');
+    const savedPlan = safeLocalStorage.getItem('userPlan') as any || 'PROFESSIONAL';
     
     // Se não há usuário salvo, criar um automático para desenvolvimento
     if (!savedName) {
@@ -48,10 +49,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         features: PLAN_FEATURES.PROFESSIONAL
       };
       
-      // Salvar no localStorage
-      localStorage.setItem('userName', autoUser.userName);
-      localStorage.setItem('userEmail', autoUser.email);
-      localStorage.setItem('userPlan', autoUser.plan);
+      // Salvar no localStorage apenas se estivermos no cliente
+      if (typeof window !== 'undefined') {
+        safeLocalStorage.setItem('userName', autoUser.userName);
+        safeLocalStorage.setItem('userEmail', autoUser.email);
+        safeLocalStorage.setItem('userPlan', autoUser.plan);
+      }
       
       return autoUser;
     }
@@ -79,26 +82,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     if (email) {
       userData.email = email;
-      localStorage.setItem('userEmail', email);
+      safeLocalStorage.setItem('userEmail', email);
     }
     
     // Preservar o status de admin caso exista
-    const savedRole = localStorage.getItem('userRole');
+    const savedRole = safeLocalStorage.getItem('userRole');
     if (savedRole) {
       userData.role = savedRole;
     }
     
     setUser(userData);
-    localStorage.setItem('userName', name);
-    localStorage.setItem('userPlan', 'PROFESSIONAL');
+    safeLocalStorage.setItem('userName', name);
+    safeLocalStorage.setItem('userPlan', 'PROFESSIONAL');
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userPlan');
+    safeLocalStorage.removeItem('userName');
+    safeLocalStorage.removeItem('userEmail');
+    safeLocalStorage.removeItem('userRole');
+    safeLocalStorage.removeItem('userPlan');
   };
 
   const hasFeature = useCallback((feature: string) => {

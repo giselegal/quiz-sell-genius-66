@@ -9,6 +9,7 @@ import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import QuizNavigation from './quiz/QuizNavigation';
 import QuizIntro from './QuizIntro'; 
 import { strategicQuestions } from '@/data/strategicQuestions';
+import { safeLocalStorage } from '@/utils/localStorage';
 import { useAuth } from '../context/AuthContext';
 import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '../utils/analytics';
 import { preloadImages } from '@/utils/imageManager';
@@ -52,7 +53,7 @@ const QuizPage: React.FC = () => {
   // Garante que sem nome salvo, sempre exibe a intro
   useEffect(() => {
     if (!showIntro) {
-      const savedName = localStorage.getItem('userName');
+      const savedName = safeLocalStorage.getItem('userName');
       if (!savedName || !savedName.trim()) {
         setShowIntro(true);
       }
@@ -79,9 +80,9 @@ const QuizPage: React.FC = () => {
 
   useEffect(() => {
     if (!quizStartTracked && !showIntro) {
-      localStorage.setItem('quiz_start_time', Date.now().toString());
-      const userName = user?.userName || localStorage.getItem('userName') || 'Anônimo';
-      const userEmail = user?.email || localStorage.getItem('userEmail');
+      safeLocalStorage.setItem('quiz_start_time', Date.now().toString());
+      const userName = user?.userName || safeLocalStorage.getItem('userName') || 'Anônimo';
+      const userEmail = user?.email || safeLocalStorage.getItem('userEmail');
       trackQuizStart(userName, userEmail);
       setQuizStartTracked(true);
     }
@@ -107,7 +108,7 @@ const QuizPage: React.FC = () => {
     }
     
     // Salvar nome no localStorage
-    localStorage.setItem('userName', name.trim());
+    safeLocalStorage.setItem('userName', name.trim());
     
     // Removemos a marcação de sessão para garantir que sempre mostre a intro primeiro
     
@@ -253,13 +254,13 @@ const QuizPage: React.FC = () => {
   const handleShowResult = useCallback(() => {
     try {
       const results = submitQuizIfComplete();
-      localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+      safeLocalStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
       
       // Registra que as imagens da página de resultados foram pré-carregadas
-      localStorage.setItem('preloadedResults', 'true');
+      safeLocalStorage.setItem('preloadedResults', 'true');
       
       // Registra o timestamp de quando o quiz foi finalizado
-      localStorage.setItem('quizCompletedAt', Date.now().toString());
+      safeLocalStorage.setItem('quizCompletedAt', Date.now().toString());
       
       if (results?.primaryStyle) {
         trackResultView(results.primaryStyle.category);

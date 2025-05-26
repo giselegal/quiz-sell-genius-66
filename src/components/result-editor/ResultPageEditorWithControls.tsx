@@ -48,7 +48,7 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
       {/* Barra de ferramentas do editor */}
       <div className="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <Link to="/resultado">
+          <Link href="/resultado">
             <Button variant="outline" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar

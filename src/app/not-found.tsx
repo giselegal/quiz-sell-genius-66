@@ -1,9 +1,9 @@
+'use client';
 
-import React from 'react';
 import Link from 'next/link';
-import { Button } from '../components/ui/button';
+import { Button } from '@/components/ui/button';
 
-const NotFoundPage = () => {
+export default function NotFound() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="text-center p-8">
@@ -17,6 +17,4 @@ const NotFoundPage = () => {
       </div>
     </div>
   );
-};
-
-export default NotFoundPage;
+}

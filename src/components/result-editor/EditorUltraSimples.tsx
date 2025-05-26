@@ -8,7 +8,7 @@ const EditorUltraSimples: React.FC = () => {
   const [titulo, setTitulo] = useState('Descubra Seu Estilo Único');
 
   const salvar = () => {
-    localStorage.setItem('editorUltraSimples', JSON.stringify({ cor, titulo }));
+    safeLocalStorage.setItem('editorUltraSimples', JSON.stringify({ cor, titulo }));
     alert('Configurações salvas!');
   };
 

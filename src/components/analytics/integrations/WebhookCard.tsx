@@ -22,8 +22,8 @@ export const WebhookCard: React.FC<WebhookCardProps> = ({
 
   const handleSaveWebhook = () => {
     try {
-      localStorage.setItem('webhook_url', webhookUrl);
-      localStorage.setItem('webhook_enabled', String(webhookEnabled));
+      safeLocalStorage.setItem('webhook_url', webhookUrl);
+      safeLocalStorage.setItem('webhook_enabled', String(webhookEnabled));
       toast({
         title: "Webhook settings saved",
         description: "Your webhook integration settings have been updated."

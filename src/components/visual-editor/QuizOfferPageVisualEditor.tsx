@@ -320,7 +320,7 @@ const QuizOfferPageVisualEditor: React.FC = () => {
 
   useEffect(() => {
     // Carregar dados salvos do localStorage
-    const savedData = localStorage.getItem('quizOfferPageEditor');
+    const savedData = safeLocalStorage.getItem('quizOfferPageEditor');
     if (savedData) {
       try {
         setEditorData({ ...defaultData, ...JSON.parse(savedData) });
@@ -335,14 +335,14 @@ const QuizOfferPageVisualEditor: React.FC = () => {
   };
 
   const saveData = () => {
-    localStorage.setItem('quizOfferPageEditor', JSON.stringify(editorData));
+    safeLocalStorage.setItem('quizOfferPageEditor', JSON.stringify(editorData));
     alert('Dados salvos com sucesso!');
   };
 
   const resetData = () => {
     if (confirm('Tem certeza que deseja resetar todos os dados?')) {
       setEditorData(defaultData);
-      localStorage.removeItem('quizOfferPageEditor');
+      safeLocalStorage.removeItem('quizOfferPageEditor');
     }
   };
 

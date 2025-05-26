@@ -25,10 +25,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = () => {
       <div className="p-6">
         <div className="mb-8 flex gap-4">
           <Button variant={location.pathname === '/admin' ? 'default' : 'outline'} asChild>
-            <Link to="/admin">Dashboard</Link>
+            <Link href="/admin">Dashboard</Link>
           </Button>
           <Button variant={location.pathname.includes('/admin/editor') ? 'default' : 'outline'} asChild>
-            <Link to="/admin/editor">Editor Visual</Link>
+            <Link href="/admin/editor">Editor Visual</Link>
           </Button>
         </div>
         
@@ -41,7 +41,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = () => {
                 Personalize a página de resultados com o editor visual de arrastar e soltar.
               </p>
               <Button asChild className="w-full">
-                <Link to="/admin/editor">Abrir Editor</Link>
+                <Link href="/admin/editor">Abrir Editor</Link>
               </Button>
             </div>
           )}
@@ -53,7 +53,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = () => {
                 Visualize e gerencie os resultados do quiz.
               </p>
               <Button variant="outline" asChild className="w-full">
-                <Link to="/resultado">Ver Resultados</Link>
+                <Link href="/resultado">Ver Resultados</Link>
               </Button>
             </div>
           )}
@@ -65,7 +65,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = () => {
                 Volte para o quiz principal.
               </p>
               <Button variant="outline" asChild className="w-full">
-                <Link to="/">Ir para Quiz</Link>
+                <Link href="/">Ir para Quiz</Link>
               </Button>
             </div>
           )}

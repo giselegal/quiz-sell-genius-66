@@ -41,3 +41,9 @@ dist-ssr
 # Ensure Lovable uploads are tracked
 !public/lovable-uploads/**
 !public/lovable-uploads/**
+
+# Next.js build files
+.next/
+.next/**
+*.next
+

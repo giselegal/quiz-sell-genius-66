@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEditor';
 import { LoadingState } from '@/components/ui/loading-state';
 import { StyleResult } from '@/types/quiz';
@@ -33,7 +34,7 @@ const UnifiedEditorPage: React.FC = () => {
         };
 
         // Try to load from localStorage first
-        const savedResult = localStorage.getItem('quiz_result');
+        const savedResult = safeLocalStorage.getItem('quiz_result');
         if (savedResult) {
           try {
             const parsedResult = JSON.parse(savedResult);
@@ -62,7 +63,7 @@ const UnifiedEditorPage: React.FC = () => {
         try {
           const styleType = defaultPrimaryStyle.category;
           const resultConfigKey = `result_page_config_${styleType}`;
-          if (!localStorage.getItem(resultConfigKey)) {
+          if (!safeLocalStorage.getItem(resultConfigKey)) {
             const defaultConfig = {
               styleType,
               globalStyles: {
@@ -72,7 +73,7 @@ const UnifiedEditorPage: React.FC = () => {
               },
               blocks: []
             };
-            localStorage.setItem(resultConfigKey, JSON.stringify(defaultConfig));
+            safeLocalStorage.setItem(resultConfigKey, JSON.stringify(defaultConfig));
             console.info(`Configuração padrão criada para estilo: ${styleType}`);
           }
         } catch (error) {

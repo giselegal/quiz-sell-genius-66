@@ -26,7 +26,7 @@ const AnalyticsPage: React.FC = () => {
   const [metricsCalculated, setMetricsCalculated] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<string[]>(['quiz_start', 'quiz_complete', 'result_view', 'lead_generated', 'sale']);
   const [compactView, setCompactView] = useState<boolean>(() => {
-    return localStorage.getItem('analytics_compact_view') === 'true';
+    return safeLocalStorage.getItem('analytics_compact_view') === 'true';
   });
   const isLowPerformance = useIsLowPerformanceDevice();
   
@@ -160,7 +160,7 @@ const AnalyticsPage: React.FC = () => {
   const toggleCompactView = () => {
     const newValue = !compactView;
     setCompactView(newValue);
-    localStorage.setItem('analytics_compact_view', String(newValue));
+    safeLocalStorage.setItem('analytics_compact_view', String(newValue));
   };
 
   // Render loading skeleton if data is not ready

@@ -28,7 +28,7 @@ const EditableComponent: React.FC<EditableComponentProps> = ({
   
   useEffect(() => {
     // Carregar nome do usuário do localStorage se disponível
-    const storedName = localStorage.getItem('userName');
+    const storedName = safeLocalStorage.getItem('userName');
     if (storedName) {
       setUserName(storedName);
     }
