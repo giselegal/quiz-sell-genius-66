@@ -1,3 +1,4 @@
+"use client";
 import { StyleResult, QuizResult } from '@/types/quiz';
 import { useState, useEffect, useCallback } from 'react'; // Adicionado useCallback
 import { toast } from '@/components/ui/use-toast';

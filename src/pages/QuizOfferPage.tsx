@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import { preloadCriticalImages } from '@/utils/images/preloading';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';

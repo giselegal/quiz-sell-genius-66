@@ -1,7 +1,7 @@
 "use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
-import { safeLocalStorage } from '@/utils/safeLocalStorage';
 
 interface User {
   userName: string;
@@ -13,7 +13,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (name: string, email?: string) => void;
+  login: (name: string, email?: string, password?: string) => void;
   logout: () => void;
   isAdmin: boolean;
   hasEditorAccess: boolean;
@@ -38,7 +38,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const savedName = safeLocalStorage.getItem('userName');
     const savedEmail = safeLocalStorage.getItem('userEmail');
     const savedRole = safeLocalStorage.getItem('userRole');
-    const savedPlan = safeLocalStorage.getItem('userPlan') as any || 'PROFESSIONAL';
+    const rawPlan = safeLocalStorage.getItem('userPlan');
+    const savedPlan = (rawPlan as keyof typeof PLAN_FEATURES) || 'PROFESSIONAL';
     
     // Se não há usuário salvo, criar um automático para desenvolvimento
     if (!savedName) {
@@ -64,7 +65,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       ...(savedEmail && { email: savedEmail }),
       ...(savedRole && { role: savedRole }),
       plan: savedPlan,
-      features: PLAN_FEATURES[savedPlan] || PLAN_FEATURES.FREE
+      features: PLAN_FEATURES[savedPlan]
     };
   });
 

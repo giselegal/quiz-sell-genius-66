@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from 'react';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { preloadImagesByUrls } from '@/utils/imageManager';

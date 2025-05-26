@@ -1,3 +1,4 @@
+"use client";
 // Facebook Pixel Initializer Component
 import { useEffect } from 'react';
 import { initFacebookPixel, trackPageView } from '@/utils/analytics';

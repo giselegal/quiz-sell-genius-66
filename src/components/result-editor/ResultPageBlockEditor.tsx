@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { ResultPageBlock, StyleResultBlock, CTABlock, TestimonialBlock, CarouselBlock } from '@/types/quizResult';
 import { Button } from '@/components/ui/button';

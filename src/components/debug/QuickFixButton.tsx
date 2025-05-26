@@ -1,3 +1,4 @@
+"use client";
 /**
  * Botão de correção rápida para imagens embaçadas
  * Adicione este componente em qualquer local da introdução do quiz 

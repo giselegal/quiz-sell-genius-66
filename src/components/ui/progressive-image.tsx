@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { getLowQualityPlaceholder } from '@/utils/imageUtils';
 import { motion, AnimatePresence } from 'framer-motion';

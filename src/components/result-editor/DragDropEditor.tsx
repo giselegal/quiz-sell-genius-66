@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback, useEffect } from 'react';
 import { DndContext, DragEndEvent, DragStartEvent, DragOverlay, closestCorners, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';

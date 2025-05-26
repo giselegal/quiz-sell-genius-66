@@ -1,3 +1,4 @@
+"use client";
 // filepath: src/app/offer/page.tsx
 'use client';
 

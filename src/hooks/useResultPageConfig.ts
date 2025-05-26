@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';

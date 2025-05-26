@@ -1,3 +1,4 @@
+"use client";
 import * as React from 'react';
 import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { useEffect, useState, useCallback } from 'react';

@@ -1,4 +1,3 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 /**
  * Safe localStorage wrapper for SSR compatibility
  */

@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { useState, useEffect } from 'react';
 import QuizIntro from '../components/QuizIntro';
 import QuizPage from '../components/QuizPage';

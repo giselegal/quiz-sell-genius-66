@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { StyleResult } from '../types/quiz';

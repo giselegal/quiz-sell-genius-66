@@ -1,3 +1,4 @@
+"use client";
 /**
  * FixedResultImage - Componente otimizado para imagens de resultados
  * 

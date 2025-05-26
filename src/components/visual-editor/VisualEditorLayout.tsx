@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

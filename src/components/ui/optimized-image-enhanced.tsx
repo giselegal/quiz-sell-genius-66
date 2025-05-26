@@ -1,3 +1,4 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import getOptimizedImageUrl from '@/utils/imageOptimizer/getOptimizedImageUrl';

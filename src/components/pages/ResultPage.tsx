@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';

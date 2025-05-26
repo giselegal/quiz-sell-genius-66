@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

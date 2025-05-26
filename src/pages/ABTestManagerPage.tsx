@@ -1,3 +1,6 @@
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
+"use client";
+import { safeLocalStorage } from @/utils/safeLocalStorage;
 import { useToast } from "@/components/ui/use-toast";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

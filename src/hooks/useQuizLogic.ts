@@ -1,3 +1,4 @@
+"use client";
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';

@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';

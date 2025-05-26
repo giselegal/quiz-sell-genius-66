@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { useToast } from "@/components/ui/use-toast";
 
 import React, { createContext, useContext, ReactNode } from 'react';

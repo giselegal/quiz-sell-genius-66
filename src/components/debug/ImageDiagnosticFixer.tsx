@@ -1,3 +1,4 @@
+"use client";
 /**
  * Componente de diagnóstico e correção de imagens para desenvolvimento
  * Este componente identifica e corrige problemas de imagens embaçadas

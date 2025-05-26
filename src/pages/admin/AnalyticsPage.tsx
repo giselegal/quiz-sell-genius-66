@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';

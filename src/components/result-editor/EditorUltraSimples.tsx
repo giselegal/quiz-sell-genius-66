@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { ArrowLeft, Save, Palette } from 'lucide-react';
 import { useRouter } from 'next/navigation';

@@ -1,3 +1,4 @@
+"use client";
 
 import { useState, useCallback, useEffect } from 'react';
 import { Block, EditorConfig, EditableContent, BlockType, EditorBlock } from '@/types/editor';

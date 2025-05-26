@@ -1,3 +1,4 @@
+"use client";
 
 /**
  * FixedIntroImage - Componente otimizado e sem embaçamento para as imagens da introdução

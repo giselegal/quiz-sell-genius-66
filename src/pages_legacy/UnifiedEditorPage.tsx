@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { useState, useEffect } from 'react';
 import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEditor';

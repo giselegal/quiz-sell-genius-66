@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from 'react';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import { CountdownTimer } from '@/components/ui/countdown-timer';
