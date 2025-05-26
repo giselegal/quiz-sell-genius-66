@@ -1,7 +1,18 @@
 {
+  "name": "quiz-sell-genius-66.git",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "build": "next build"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
+    "install-deps": "npm install"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
@@ -32,8 +43,10 @@
     "framer-motion": "^12.12.2",
     "lucide-react": "^0.511.0",
     "next": "^15.3.2",
+    "react": "^18.0.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.0.0",
     "react-resizable-panels": "^3.0.2",
     "recharts": "^2.15.3",
     "tailwind-merge": "^3.3.0",
