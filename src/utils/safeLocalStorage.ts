@@ -1,48 +1,42 @@
 import { safeLocalStorage } from "@/utils/safeLocalStorage";
-// Utilitário para usar localStorage de forma segura no SSR
+/**
+ * Safe localStorage wrapper for SSR compatibility
+ */
 export const safeLocalStorage = {
   getItem: (key: string): string | null => {
-    if (typeof window === 'undefined') {
-      return null;
-    }
+    if (typeof window === 'undefined') return null;
     try {
       return localStorage.getItem(key);
     } catch (error) {
-      console.warn('LocalStorage access failed:', error);
+      console.warn('localStorage.getItem failed:', error);
       return null;
     }
   },
 
   setItem: (key: string, value: string): void => {
-    if (typeof window === 'undefined') {
-      return;
-    }
+    if (typeof window === 'undefined') return;
     try {
       localStorage.setItem(key, value);
     } catch (error) {
-      console.warn('LocalStorage write failed:', error);
+      console.warn('localStorage.setItem failed:', error);
     }
   },
 
   removeItem: (key: string): void => {
-    if (typeof window === 'undefined') {
-      return;
-    }
+    if (typeof window === 'undefined') return;
     try {
       localStorage.removeItem(key);
     } catch (error) {
-      console.warn('LocalStorage remove failed:', error);
+      console.warn('localStorage.removeItem failed:', error);
     }
   },
 
   clear: (): void => {
-    if (typeof window === 'undefined') {
-      return;
-    }
+    if (typeof window === 'undefined') return;
     try {
       localStorage.clear();
     } catch (error) {
-      console.warn('LocalStorage clear failed:', error);
+      console.warn('localStorage.clear failed:', error);
     }
   }
 };

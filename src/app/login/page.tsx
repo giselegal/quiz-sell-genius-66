@@ -35,7 +35,7 @@ export default function LoginPage() {
     }
 
     try {
-      login(name, email || undefined, password || undefined);
+      login(name);
       router.push('/admin');
     } catch (err) {
       setError('Erro ao fazer login');
@@ -44,9 +44,9 @@ export default function LoginPage() {
 
   const handleQuickLogin = (type: 'admin' | 'user') => {
     if (type === 'admin') {
-      login('Admin User', 'admin@sellgenius.com.br', '123456');
+      login('Admin User');
     } else {
-      login('Usuário Teste', 'usuario@teste.com', '123456');
+      login('Usuário Teste');
     }
     router.push('/admin');
   };

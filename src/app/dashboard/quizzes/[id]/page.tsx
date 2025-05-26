@@ -117,7 +117,7 @@ export default async function QuizDetailPage({ params }: QuizDetailPageProps) {
                 <p className="text-gray-600 text-sm mb-4">
                   Crie perguntas interativas e personalize o layout
                 </p>
-                <Link href={`/quiz/${params.id}/edit?tab=quiz`}>
+                <Link href={`/quiz/${id}/edit?tab=quiz`}>
                   <Button className="w-full">
                     <Edit3 className="w-4 h-4 mr-2" />
                     Editar Quiz
@@ -136,7 +136,7 @@ export default async function QuizDetailPage({ params }: QuizDetailPageProps) {
                 <p className="text-gray-600 text-sm mb-4">
                   Personalize as páginas de resultado do quiz
                 </p>
-                <Link href={`/quiz/${params.id}/edit?tab=result`}>
+                <Link href={`/quiz/${id}/edit?tab=result`}>
                   <Button variant="outline" className="w-full border-green-300 text-green-700 hover:bg-green-50">
                     <Palette className="w-4 h-4 mr-2" />
                     Editar Resultado
@@ -155,7 +155,7 @@ export default async function QuizDetailPage({ params }: QuizDetailPageProps) {
                 <p className="text-gray-600 text-sm mb-4">
                   Crie páginas de venda e ofertas especiais
                 </p>
-                <Link href={`/quiz/${params.id}/edit?tab=offer`}>
+                <Link href={`/quiz/${id}/edit?tab=offer`}>
                   <Button variant="outline" className="w-full border-orange-300 text-orange-700 hover:bg-orange-50">
                     <Settings className="w-4 h-4 mr-2" />
                     Editar Oferta
@@ -174,7 +174,7 @@ export default async function QuizDetailPage({ params }: QuizDetailPageProps) {
                   Acesse todas as funcionalidades em uma única interface
                 </p>
               </div>
-              <Link href={`/quiz/${params.id}/edit`}>
+              <Link href={`/quiz/${id}/edit`}>
                 <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                   <Palette className="w-5 h-5 mr-2" />
                   Abrir Editor Visual

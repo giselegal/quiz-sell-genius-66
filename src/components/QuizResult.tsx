@@ -1,3 +1,4 @@
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useEffect, useState } from 'react';
 import { safeLocalStorage } from "@/utils/localStorage";
 import { StyleResult } from '../types/quiz';

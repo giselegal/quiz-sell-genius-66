@@ -1,3 +1,4 @@
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';

@@ -23,7 +23,7 @@ export default function EditQuizPage() {
   const params = useParams();
   const quizId = params?.id as string;
   const searchParams = useSearchParams();
-  const initialTab = searchParams.get('tab') || 'quiz';
+  const initialTab = searchParams?.get('tab') || 'quiz';
   
   const [activeTab, setActiveTab] = useState<'quiz' | 'result' | 'offer'>(initialTab as any);
   const [savedConfigs, setSavedConfigs] = useState({
@@ -43,7 +43,7 @@ export default function EditQuizPage() {
   const handleSave = async (config: any, mode: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/quiz/${params.id}/config`, {
+      const response = await fetch(`/api/quiz/${quizId}/config`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export default function EditQuizPage() {
             
             {/* Breadcrumb */}
             <div className="flex items-center gap-4">
-              <Link href={`/dashboard/quizzes/${params.id}`}>
+              <Link href={`/dashboard/quizzes/${quizId}`}>
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Voltar ao Painel
@@ -137,7 +137,7 @@ export default function EditQuizPage() {
           <Suspense fallback={<LoadingSpinner />}>
             <DragDropEditor
               mode="quiz"
-              quizId={params.id}
+              quizId={quizId}
               onSave={(config) => handleSave(config, 'quiz')}
             />
           </Suspense>
@@ -147,7 +147,7 @@ export default function EditQuizPage() {
           <Suspense fallback={<LoadingSpinner />}>
             <DragDropEditor
               mode="result"
-              quizId={params.id}
+              quizId={quizId}
               onSave={(config) => handleSave(config, 'result')}
             />
           </Suspense>
@@ -157,7 +157,7 @@ export default function EditQuizPage() {
           <Suspense fallback={<LoadingSpinner />}>
             <DragDropEditor
               mode="offer"
-              quizId={params.id}
+              quizId={quizId}
               onSave={(config) => handleSave(config, 'offer')}
             />
           </Suspense>

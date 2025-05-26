@@ -23,7 +23,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
 }) => {
   const [fbPixelId, setFbPixelId] = useState(() => {
     try {
-      return safeLocalStorage.getItem('fb_pixel_id') || initialId || '1311550759901086';
+      return localStorage.getItem('fb_pixel_id') || initialId || '1311550759901086';
     } catch (e) {
       return initialId || '1311550759901086';
     }
@@ -31,7 +31,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   
   const [fbPixelEnabled, setFbPixelEnabled] = useState(() => {
     try {
-      const stored = safeLocalStorage.getItem('tracking_enabled');
+      const stored = localStorage.getItem('tracking_enabled');
       return stored !== null ? stored === 'true' : initialEnabled;
     } catch (e) {
       return initialEnabled;
@@ -40,7 +40,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   
   const [fbAccessToken, setFbAccessToken] = useState(() => {
     try {
-      return safeLocalStorage.getItem('fb_access_token') || '';
+      return localStorage.getItem('fb_access_token') || '';
     } catch (e) {
       return '';
     }
@@ -48,7 +48,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
 
   const [trackedEvents, setTrackedEvents] = useState(() => {
     try {
-      const stored = safeLocalStorage.getItem('fb_tracked_events');
+      const stored = localStorage.getItem('fb_tracked_events');
       return stored ? JSON.parse(stored) : {
         quiz_start: true,
         quiz_answer: true,
@@ -76,10 +76,10 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   // Load settings from localStorage
   useEffect(() => {
     try {
-      const storedId = safeLocalStorage.getItem('fb_pixel_id');
-      const storedEnabled = safeLocalStorage.getItem('tracking_enabled');
-      const storedToken = safeLocalStorage.getItem('fb_access_token');
-      const storedEvents = safeLocalStorage.getItem('fb_tracked_events');
+      const storedId = localStorage.getItem('fb_pixel_id');
+      const storedEnabled = localStorage.getItem('tracking_enabled');
+      const storedToken = localStorage.getItem('fb_access_token');
+      const storedEvents = localStorage.getItem('fb_tracked_events');
       
       if (storedId) setFbPixelId(storedId);
       if (storedEnabled !== null) setFbPixelEnabled(storedEnabled === 'true');
@@ -92,10 +92,10 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
 
   const handleSaveFacebookPixel = () => {
     try {
-      safeLocalStorage.setItem('fb_pixel_id', fbPixelId);
-      safeLocalStorage.setItem('tracking_enabled', String(fbPixelEnabled));
-      safeLocalStorage.setItem('fb_access_token', fbAccessToken);
-      safeLocalStorage.setItem('fb_tracked_events', JSON.stringify(trackedEvents));
+      localStorage.setItem('fb_pixel_id', fbPixelId);
+      localStorage.setItem('tracking_enabled', String(fbPixelEnabled));
+      localStorage.setItem('fb_access_token', fbAccessToken);
+      localStorage.setItem('fb_tracked_events', JSON.stringify(trackedEvents));
       
       toast({
         title: "Configurações do Facebook Pixel salvas",

@@ -1,3 +1,4 @@
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 "use client";
 
 import { useState } from 'react';

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// Adicionando configuração necessária para build estático
-export const dynamic = "force-static";
-export const revalidate = 3600; // Revalidar a cada 1 hora
+// Configuração para rota dinâmica
+export const dynamic = "force-dynamic";
 
 export async function POST(
   request: NextRequest,
@@ -14,24 +13,10 @@ export async function POST(
     const { id } = await params;
     const quizId = id;
 
-    // Determinar qual campo atualizar baseado no modo
+    // Por enquanto, apenas atualizamos o updatedAt até o schema ser expandido
     const updateData: any = {
       updatedAt: new Date(),
     };
-
-    switch (mode) {
-      case 'quiz':
-        updateData.quizConfig = config;
-        break;
-      case 'result':
-        updateData.resultConfig = config;
-        break;
-      case 'offer':
-        updateData.offerConfig = config;
-        break;
-      default:
-        updateData.editorConfig = config;
-    }
 
     const updatedQuiz = await prisma.quiz.update({
       where: { id: Number(quizId) },
@@ -64,12 +49,10 @@ export async function GET(
     const quiz = await prisma.quiz.findUnique({
       where: { id: Number(quizId) },
       select: { 
-        quizConfig: true,
-        resultConfig: true,
-        offerConfig: true,
-        editorConfig: true,
+        id: true,
         title: true,
-        description: true 
+        createdAt: true,
+        updatedAt: true
       },
     });
 
@@ -80,28 +63,14 @@ export async function GET(
       );
     }
 
-    // Retornar configuração baseada no modo
-    let config;
-    switch (mode) {
-      case 'quiz':
-        config = quiz.quizConfig;
-        break;
-      case 'result':
-        config = quiz.resultConfig;
-        break;
-      case 'offer':
-        config = quiz.offerConfig;
-        break;
-      default:
-        config = quiz.editorConfig;
-    }
+    // Por enquanto, retornar configuração vazia até o schema ser atualizado
+    const config = {};
 
     return NextResponse.json({ 
       success: true, 
       config,
       quiz: {
-        title: quiz.title,
-        description: quiz.description
+        title: quiz.title
       }
     });
   } catch (error) {

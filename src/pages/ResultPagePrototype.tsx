@@ -1,3 +1,6 @@
+"use client";
+
+// filepath: /workspaces/quiz-sell-genius-66/src/pages/ResultPagePrototype.tsx
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';

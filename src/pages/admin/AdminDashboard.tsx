@@ -1,4 +1,7 @@
 
+"use client";
+
+// filepath: /workspaces/quiz-sell-genius-66/src/pages/admin/AdminDashboard.tsx
 import React, { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -40,12 +43,12 @@ const AdminDashboard = () => {
   // Determinar qual aba está ativa baseado na URL
   React.useEffect(() => {
     const path = pathname;
-    if (path.includes('/editor')) setActiveTab('editor');
-    else if (path.includes('/settings')) setActiveTab('settings');
-    else if (path.includes('/analytics')) setActiveTab('analytics');
-    else if (path.includes('/ab-test')) setActiveTab('ab-test');
-    else if (path.includes('/offer-editor')) setActiveTab('offer-editor');
-    else if (path.includes('/prototype')) setActiveTab('prototype');
+    if (path && path.includes('/editor')) setActiveTab('editor');
+    else if (path && path.includes('/settings')) setActiveTab('settings');
+    else if (path && path.includes('/analytics')) setActiveTab('analytics');
+    else if (path && path.includes('/ab-test')) setActiveTab('ab-test');
+    else if (path && path.includes('/offer-editor')) setActiveTab('offer-editor');
+    else if (path && path.includes('/prototype')) setActiveTab('prototype');
     else setActiveTab('dashboard');
   }, [pathname]);
 
@@ -53,25 +56,25 @@ const AdminDashboard = () => {
     setActiveTab(tab);
     switch (tab) {
       case 'dashboard':
-        navigate('/admin');
+        router.push('/admin');
         break;
       case 'editor':
-        navigate('/admin/editor');
+        router.push('/admin/editor');
         break;
       case 'settings':
-        navigate('/admin/settings');
+        router.push('/admin/settings');
         break;
       case 'analytics':
-        navigate('/admin/analytics');
+        router.push('/admin/analytics');
         break;
       case 'ab-test':
-        navigate('/admin/ab-test');
+        router.push('/admin/ab-test');
         break;
       case 'offer-editor':
-        navigate('/admin/offer-editor');
+        router.push('/admin/offer-editor');
         break;
       case 'prototype':
-        navigate('/admin/prototype');
+        router.push('/admin/prototype');
         break;
     }
   };

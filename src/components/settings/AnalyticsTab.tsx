@@ -26,8 +26,8 @@ export const AnalyticsTab: React.FC = () => {
   const handleSavePixelSettings = () => {
     // In a real application, this would save to a backend
     // Here we're just simulating with localStorage
-    safeLocalStorage.setItem('fb_pixel_id', pixelId);
-    safeLocalStorage.setItem('tracking_enabled', String(trackingEnabled));
+    localStorage.setItem('fb_pixel_id', pixelId);
+    localStorage.setItem('tracking_enabled', String(trackingEnabled));
     
     toast({
       title: "Settings saved",

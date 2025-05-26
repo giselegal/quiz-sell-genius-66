@@ -37,7 +37,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Card do Editor Enhanced - LINK CORRETO */}
           <Link 
-            to="/admin/editor"
+            href="/admin/editor"
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-blue-500"
           >
             <div className="flex items-center">
@@ -55,7 +55,7 @@ export const AdminDashboard: React.FC = () => {
 
           {/* Card para visualizar página atual */}
           <Link 
-            to="/resultado"
+            href="/resultado"
             target="_blank"
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-green-500"
           >
@@ -145,7 +145,7 @@ export const AdminDashboard: React.FC = () => {
                 Edite cores, textos e layout com preview instantâneo.
               </p>
               <Link 
-                to="/admin/editor"
+                href="/admin/editor"
                 className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
                 <Edit className="w-4 h-4 mr-1" />
@@ -159,7 +159,7 @@ export const AdminDashboard: React.FC = () => {
                 Visualize como a página está sendo exibida para os usuários.
               </p>
               <Link 
-                to="/resultado"
+                href="/resultado"
                 target="_blank"
                 className="inline-flex items-center text-green-600 hover:text-green-800 text-sm font-medium"
               >

@@ -65,7 +65,7 @@ export const useQuiz = () => {
       if (finalResults) {
         console.log("Final results from useQuizLogic:", finalResults);
         // A navegação pode ocorrer aqui ou ser gerenciada pelo componente que chama submitResults
-        // navigate('/resultado'); // Exemplo de navegação
+        // router.push('/resultado'); // Exemplo de navegação
       } else {
         // Tratar caso onde resultados não puderam ser calculados
         toast({

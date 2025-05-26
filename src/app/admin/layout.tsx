@@ -52,45 +52,45 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       name: 'Quizzes',
       href: '/admin/quizzes',
       icon: FileText,
-      current: pathname.startsWith('/admin/quizzes')
+      current: pathname?.startsWith('/admin/quizzes') || false
     },
     {
       name: 'Editor Visual',
       href: '/admin/editor',
       icon: Palette,
-      current: pathname.startsWith('/admin/editor'),
+      current: pathname?.startsWith('/admin/editor') || false,
       badge: 'NOVO'
     },
     {
       name: 'Pixels & Tracking',
       href: '/admin/tracking',
       icon: Code,
-      current: pathname.startsWith('/admin/tracking'),
+      current: pathname?.startsWith('/admin/tracking') || false,
       badge: 'PRO'
     },
     {
       name: 'Conversões',
       href: '/admin/conversions',
       icon: TrendingUp,
-      current: pathname.startsWith('/admin/conversions')
+      current: pathname?.startsWith('/admin/conversions') || false
     },
     {
       name: 'Analytics',
       href: '/admin/analytics',
       icon: BarChart3,
-      current: pathname.startsWith('/admin/analytics')
+      current: pathname?.startsWith('/admin/analytics') || false
     },
     {
       name: 'Leads',
       href: '/admin/leads',
       icon: Users,
-      current: pathname.startsWith('/admin/leads')
+      current: pathname?.startsWith('/admin/leads') || false
     },
     {
       name: 'Configurações',
       href: '/admin/settings',
       icon: Settings,
-      current: pathname.startsWith('/admin/settings')
+      current: pathname?.startsWith('/admin/settings') || false
     }
   ];
 

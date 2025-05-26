@@ -22,8 +22,8 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
   
   const handleSaveGoogleAnalytics = () => {
     try {
-      safeLocalStorage.setItem('ga_id', googleAnalyticsId);
-      safeLocalStorage.setItem('ga_enabled', String(googleAnalyticsEnabled));
+      localStorage.setItem('ga_id', googleAnalyticsId);
+      localStorage.setItem('ga_enabled', String(googleAnalyticsEnabled));
       toast({
         title: "Google Analytics settings saved",
         description: "Your Google Analytics integration settings have been updated."

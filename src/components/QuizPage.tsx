@@ -1,3 +1,4 @@
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import * as React from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -9,7 +10,6 @@ import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import QuizNavigation from './quiz/QuizNavigation';
 import QuizIntro from './QuizIntro'; 
 import { strategicQuestions } from '@/data/strategicQuestions';
-import { safeLocalStorage } from '@/utils/localStorage';
 import { useAuth } from '../context/AuthContext';
 import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '../utils/analytics';
 import { preloadImages } from '@/utils/imageManager';

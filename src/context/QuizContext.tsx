@@ -1,3 +1,4 @@
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
