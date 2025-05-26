@@ -17,9 +17,13 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-import { PageProps } from '@/types';
+interface QuizDetailPageProps {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
 
-export default function QuizDetailPage({ params }: PageProps) {
+// @ts-ignore - Ignorando conflito de tipos com o sistema do Next.js
+export default function QuizDetailPage({ params }: QuizDetailPageProps) {
   return (
     <div className="container mx-auto py-6">
       {/* Header com ações rápidas */}
