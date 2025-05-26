@@ -6,13 +6,12 @@ import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Save } from 'lucide-react';
-import { safeLocalStorage } from "@/utils/localStorage";
 
 const VisualEditorPage: React.FC = () => {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     // Carregar perguntas do localStorage ou de uma API
@@ -168,7 +167,7 @@ const VisualEditorPage: React.FC = () => {
   return (
     <div className="h-screen flex flex-col">
       <div className="bg-white border-b border-[#B89B7A]/20 p-2 flex items-center justify-between">
-        <Button variant="ghost" onClick={() => navigate(-1)}>
+        <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-1" />
           Voltar
         </Button>

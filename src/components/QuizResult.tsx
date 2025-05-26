@@ -10,7 +10,6 @@ import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
 import BeforeAfterTransformation from './result/BeforeAfterTransformation4';
 import { CheckCircle } from 'lucide-react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { cn } from '@/lib/utils';

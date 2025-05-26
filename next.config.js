@@ -23,14 +23,8 @@ const nextConfig = {
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
   },
-  // Desabilitando a pré-renderização para páginas com problemas de auth
-  experimental: {
-    serverComponentsExternalPackages: ['@auth'],
-    // Ignorar warnings em componentes experimentais
-    esmExternals: 'loose',
-  },
-  // Configuração para ignorar erros não críticos
-  swcMinify: true, // Usar minificador SWC que é mais tolerante a erros
+  // Configuração para pacotes externos do servidor
+  serverExternalPackages: ['@auth'],
 }
 
 module.exports = nextConfig;
