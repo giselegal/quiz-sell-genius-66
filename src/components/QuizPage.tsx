@@ -9,15 +9,11 @@ import { QuizContainer } from './quiz/QuizContainer';
 import { QuizContent } from './quiz/QuizContent';
 import { QuizTransitionManager } from './quiz/QuizTransitionManager';
 import QuizNavigation from './quiz/QuizNavigation';
-import QuizIntro from './QuizIntro'; 
-import { strategicQuestions } from '@/data/strategicQuestions';
+import QuizIntro from './QuizIntro';
 import { useAuth } from '../context/AuthContext';
-import { trackQuizStart, trackQuizAnswer, trackQuizComplete, trackResultView } from '../utils/analytics';
-import { preloadImages } from '@/utils/imageManager';
-import LoadingManager from './quiz/LoadingManager';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { MainTransition } from './quiz/MainTransition';
+import QuizResult from './QuizResult';
+import { QuizOfferHero } from './quiz-offer/QuizOfferHero';
+import { QuizOfferCTA } from './quiz-offer/QuizOfferCTA';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
@@ -33,6 +29,7 @@ const QuizPage: React.FC = () => {
   const [quizStartTracked, setQuizStartTracked] = useState(false);
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [pageIsReady, setPageIsReady] = useState(false);
+  const quizLogic = useQuizLogic();
   const {
     currentQuestion,
     currentQuestionIndex,
@@ -46,7 +43,7 @@ const QuizPage: React.FC = () => {
     handleStrategicAnswer: saveStrategicAnswer,
     submitQuizIfComplete,
     isInitialLoadComplete
-  } = useQuizLogic();
+  } = quizLogic;
   // Removida a verificação de sessionStorage - o quiz sempre iniciará com o QuizIntro
   // Garante que sem nome salvo, sempre exibe a intro
   useEffect(() => {
@@ -58,28 +55,68 @@ const QuizPage: React.FC = () => {
     }
   }, [showIntro]);
 
+  // Novo estado para controlar exibição do resultado e oferta
+  const [showResult, setShowResult] = useState(false);
+  const [showOffer, setShowOffer] = useState(false);
+  const [quizResult, setQuizResult] = useState<any>(null);
+
+  // Função para finalizar quiz e mostrar resultado
+  const handleQuizComplete = () => {
+    const result = calculateResults();
+    setQuizResult(result);
+    setShowResult(true);
+  };
+
+  // Quando resultado for exibido, mostrar oferta após X segundos
+  useEffect(() => {
+    if (showResult) {
+      const timer = setTimeout(() => setShowOffer(true), 3000); // 3s após resultado
+      return () => clearTimeout(timer);
+    }
+  }, [showResult]);
+
   return (
     <div>
-      {/* Implementação do QuizPage */}
+      {/* Intro do Quiz */}
       <QuizIntro 
         showIntro={showIntro} 
         setShowIntro={setShowIntro}
       />
-      
-      {!showIntro && currentQuestion && (
+      {/* Perguntas do Quiz */}
+      {!showIntro && !showResult && currentQuestion && (
         <QuizContainer>
           <QuizContent 
-            question={currentQuestion}
-            onAnswer={handleAnswer}
+            user={user}
+            currentQuestionIndex={currentQuestionIndex}
+            totalQuestions={totalQuestions}
+            showingStrategicQuestions={showingStrategicQuestions}
+            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+            currentQuestion={currentQuestion}
             currentAnswers={currentAnswers}
+            handleAnswerSubmit={handleAnswer}
           />
           <QuizNavigation 
-            onNext={handleNext}
-            onPrevious={handlePrevious}
             canProceed={currentAnswers.length > 0}
+            onNext={isLastQuestion ? handleQuizComplete : handleNext}
+            onPrevious={handlePrevious}
+            currentQuestionType={showingStrategicQuestions ? 'strategic' : 'normal'}
+            selectedOptionsCount={currentAnswers.length}
             isLastQuestion={isLastQuestion}
           />
         </QuizContainer>
+      )}
+      {/* Resultado do Quiz */}
+      {showResult && quizResult && (
+        <>
+          <QuizResult {...quizResult} />
+          {/* Oferta aparece após resultado */}
+          {showOffer && (
+            <div className="mt-8">
+              <QuizOfferHero onStartQuizClick={() => router.push('/')} />
+              <QuizOfferCTA />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

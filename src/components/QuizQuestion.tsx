@@ -36,20 +36,19 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   }, [question.id, scrollToQuestion]);
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
-    
     if (currentAnswers.includes(optionId)) {
       // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
       if (isStrategicQuestion) {
         return; // Não permite desmarcar a opção em questões estratégicas
       }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
+    } else if (isStrategicQuestion) {
+      // Para questões estratégicas, substituímos qualquer seleção anterior
+      newSelectedOptions = [optionId];
+    } else if ((question?.multiSelect || false) && currentAnswers.length >= (question?.multiSelect || 0)) {
+      newSelectedOptions = [...currentAnswers.slice(1), optionId];
     } else {
-        // Para questões estratégicas, substituímos qualquer seleção anterior
-        newSelectedOptions = [optionId];
-      } else if ((question?.multiSelect || false) && currentAnswers.length >= (question?.multiSelect || 0)) {
-        newSelectedOptions = [...currentAnswers.slice(1), optionId];
-      } else {
-        newSelectedOptions = [...currentAnswers, optionId];
+      newSelectedOptions = [...currentAnswers, optionId];
     }
     onAnswer({ 
       questionId: question.id,
@@ -113,7 +112,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             isDisabled={
               (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
               (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                currentAnswers.length >= question?.multiSelect || false)
+                currentAnswers.length >= (question.multiSelect || 0))
             }
             isStrategicOption={isStrategicQuestion}
           />
@@ -122,4 +121,5 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     </div>
   );
 };
-export { QuizQuestion };
+
+export default QuizQuestion;

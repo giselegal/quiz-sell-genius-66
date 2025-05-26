@@ -44,13 +44,13 @@ const QuizResult: React.FC<QuizResultProps> = ({
     }
   }, [user]);
   const [config, setConfig] = useState<ResultPageConfig | null>(null);
+  useEffect(() => {
     try {
       if (externalConfig) {
         setConfig(externalConfig);
       } else {
         const configKey = `quiz_result_config_${primaryStyle.category}`;
         const savedConfig = safeLocalStorage.getItem(configKey);
-        
         if (savedConfig) {
           setConfig(JSON.parse(savedConfig));
           console.log("Loaded config from localStorage:", configKey);
@@ -58,9 +58,11 @@ const QuizResult: React.FC<QuizResultProps> = ({
           console.log("No saved config found for:", primaryStyle.category);
           setConfig(null);
         }
+      }
     } catch (error) {
       console.error('Error loading custom settings:', error);
       setConfig(null);
+    }
   }, [primaryStyle.category, externalConfig]);
   if (!primaryStyle || !secondaryStyles) {
     console.error('Missing required props:', { primaryStyle, secondaryStyles });

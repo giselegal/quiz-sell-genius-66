@@ -14,7 +14,16 @@ import ErrorState from '@/components/result/ErrorState';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
+import ResultSkeleton from '@/components/result/ResultSkeleton';
+import { trackButtonClick } from '@/utils/analytics';
+import BuildInfo from '@/components/BuildInfo';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+import { useAuth } from '@/context/AuthContext';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import ProgressiveImage from '@/components/ui/progressive-image';
+import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
+import EnhancedPricingSection from '@/components/result/EnhancedPricingSection';
 
 // Seções carregadas via lazy
 const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
@@ -26,34 +35,70 @@ const MentorSection = lazy(() => import('@/components/result/MentorSection'));
 // Design tokens - SISTEMA COMPLETAMENTE PADRONIZADO
 const tokens = {
   colors: {
+    // CORES PRINCIPAIS - UNIFICADAS
     primary: '#B89B7A',
     primaryDark: '#A1835D',
     primaryLight: '#D4B79F',
     secondary: '#aa6b5d',
     secondaryDark: '#8F5A4D',
     secondaryLight: '#C28A7D',
+    
+    // BACKGROUNDS - CONSISTENTES
     background: '#fffaf7',
     backgroundCard: '#ffffff',
     backgroundAlt: '#f9f4ef',
     backgroundSection: '#fff7f3',
+    // TEXTOS - HIERARQUIA CLARA
     text: '#432818',
     textSecondary: '#6B5B4E',
     textMuted: '#8F7A6A',
     textLight: '#A5927B',
+    // ESTADOS E UTILIDADES
     success: '#4CAF50',
     successDark: '#45a049',
+    // BORDAS - UNIFICADAS
     border: '#E5D5C8',
     borderLight: '#F0E6DC',
     borderAccent: 'rgba(184, 155, 122, 0.2)',
   },
+  // GRADIENTES PADRONIZADOS
   gradients: {
     primary: 'linear-gradient(135deg, #B89B7A 0%, #aa6b5d 100%)',
     primaryReverse: 'linear-gradient(135deg, #aa6b5d 0%, #B89B7A 100%)',
     background: 'linear-gradient(135deg, #fff7f3 0%, #f9f4ef 100%)',
     text: 'linear-gradient(135deg, #B89B7A 0%, #aa6b5d 50%, #B89B7A 100%)',
+  // SISTEMA DE SPACING PADRONIZADO (4px base)
+  spacing: {
+    1: '0.25rem',  // 4px
+    2: '0.5rem',   // 8px
+    3: '0.75rem',  // 12px
+    4: '1rem',     // 16px
+    6: '1.5rem',   // 24px
+    8: '2rem',     // 32px
+    12: '3rem',    // 48px
+    16: '4rem',    // 64px
+    20: '5rem',    // 80px
+  // SHADOWS UNIFICADAS COM MARCA
+  shadows: {
+    sm: '0 2px 4px rgba(184, 155, 122, 0.08)',
+    md: '0 4px 8px rgba(184, 155, 122, 0.12)',
+    lg: '0 8px 16px rgba(184, 155, 122, 0.16)',
+    xl: '0 12px 24px rgba(184, 155, 122, 0.20)',
+    cta: '0 8px 32px rgba(184, 155, 122, 0.4)',
+  // BORDER RADIUS PADRONIZADO
+  radius: {
+    sm: '0.5rem',   // 8px
+    md: '0.75rem',  // 12px
+    lg: '1rem',     // 16px
+    xl: '1.5rem',   // 24px
+  // BREAKPOINTS CONSISTENTES
+  breakpoints: {
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
   }
 };
-
 // Componente de título padronizado - VISUAL CONSISTENCY MELHORADA
 const SectionTitle: React.FC<{
   children: React.ReactNode;
@@ -93,16 +138,15 @@ const SectionTitle: React.FC<{
          style={{ color: tokens.colors.textMuted }}>
         {subtitle}
       </p>
-    )}
     {/* Linha decorativa inferior - PADRONIZADA */}
-    <div className="w-20 h-1 rounded-full mx-auto shadow-sm" 
-         style={{ background: tokens.gradients.primary }}></div>
+      <div className="w-20 h-1 rounded-full mx-auto shadow-sm" 
+           style={{ background: tokens.gradients.primary }}></div>
   </AnimatedWrapper>
 );
-
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
+  const { user } = useAuth();
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false
@@ -111,7 +155,6 @@ const ResultPage: React.FC = () => {
   const { isLoading, completeLoading } = useLoadingState({
     minDuration: isLowPerformance ? 100 : 300,
     disableTransitions: isLowPerformance
-  });
   // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   
@@ -143,7 +186,6 @@ const ResultPage: React.FC = () => {
     }, 1000);
     return () => clearInterval(countdownInterval);
   }, []);
-  useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
     const hasPreloadedResults = safeLocalStorage.getItem('preloadedResults') === 'true';
@@ -151,17 +193,14 @@ const ResultPage: React.FC = () => {
       setImagesLoaded({ style: true, guide: true });
       completeLoading();
       return;
-    }
+    } 
     const safetyTimeout = setTimeout(() => {
     }, 2500);
     return () => clearTimeout(safetyTimeout);
   }, [primaryStyle, globalStyles.logo, completeLoading]);
-
-  useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
-
-  useEffect(() => {
+  // Scroll tracking effect
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
       
@@ -181,19 +220,14 @@ const ResultPage: React.FC = () => {
         if (element?.getBoundingClientRect().top <= 200) {
           setActiveSection(sections[i]);
           break;
-        }
       }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   if (!primaryStyle) return <ErrorState />;
-  if (isLoading) return null; // <ResultSkeleton />;
+  if (isLoading) return <ResultSkeleton />;
   const { category } = primaryStyle;
-  // Ajuste do styleConfig para fallback seguro
-  const styleData = styleConfig[category as keyof typeof styleConfig] || { image: '', guideImage: '', description: '' };
-  const { image, guideImage, description } = styleData;
+  const { image, guideImage, description } = styleConfig[category];
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Prevenir comportamento padrão e propagação
     e.preventDefault();
@@ -201,6 +235,7 @@ const ResultPage: React.FC = () => {
     // Prevenir múltiplos cliques
     if (window.ctaClickProcessing) return;
     window.ctaClickProcessing = true;
+    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     // Para desktop, usar window.open para garantir funcionamento
     if (window.innerWidth >= 768) {
       window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
@@ -211,25 +246,18 @@ const ResultPage: React.FC = () => {
     // Limpar flag após delay
     setTimeout(() => {
       window.ctaClickProcessing = false;
-    }, 1000);
   };
-
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
       window.scrollTo({
         top: section.offsetTop - 80,
         behavior: 'smooth'
-      });
-    }
-  };
-
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
       backgroundColor: tokens.colors.background,
       color: tokens.colors.text,
       fontFamily: globalStyles.fontFamily || 'inherit'
-    }}>
       {/* Custom scrollbar styles - CORES COMPLETAMENTE UNIFICADAS */}
       <style dangerouslySetInnerHTML={{
         __html: `
@@ -238,16 +266,16 @@ const ResultPage: React.FC = () => {
           }
           ::-webkit-scrollbar-track {
             background: ${tokens.colors.backgroundAlt};
-          }
           ::-webkit-scrollbar-thumb {
             background: ${tokens.gradients.primary};
             border-radius: 4px;
-          }
           ::-webkit-scrollbar-thumb:hover {
             background: ${tokens.gradients.primaryReverse};
-          }
         `
       }} />
+      {/* Preloaders and monitors */}
+      <ResourcePreloader />
+      <PerformanceMonitor />
       {/* Decorative background elements - CORES PADRONIZADAS */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" 
            style={{ background: 'radial-gradient(circle, rgba(184, 155, 122, 0.1) 0%, rgba(184, 155, 122, 0.05) 100%)' }}></div>
@@ -291,13 +319,11 @@ const ResultPage: React.FC = () => {
               title={section.label}
             />
           ))}
-        </div>
-      </div>
       {/* Sticky CTA - CORES UNIFICADAS */}
       <div className={`fixed bottom-0 left-0 right-0 py-3 px-4 z-40 transition-transform duration-500 ${showBottomBar ? 'translate-y-0' : 'translate-y-full'}`}
            style={{ 
              backgroundColor: tokens.colors.backgroundCard, 
-             boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
+             boxShadow: tokens.shadows.lg,
              borderTop: `1px solid ${tokens.colors.border}`
            }}>
         <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
@@ -324,9 +350,9 @@ const ResultPage: React.FC = () => {
             className="text-sm sm:text-base leading-none py-3 px-6 rounded-md transition-all duration-300 w-full sm:w-auto cursor-pointer border-0"
             style={{
               background: tokens.gradients.primary,
-              boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
+              boxShadow: tokens.shadows.cta,
               transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
-              color: '#ffffff'
+              color: '#ffffff' // Usando cor fixa para texto em botões
             }}
             onMouseEnter={() => setIsButtonHovered(true)} 
             onMouseLeave={() => setIsButtonHovered(false)}
@@ -337,8 +363,6 @@ const ResultPage: React.FC = () => {
               Adquirir Agora
             </span>
           </Button>
-        </div>
-      </div>
       {/* CONTAINER PRINCIPAL */}
       <div className="container mx-auto px-6 lg:px-8 py-8 max-w-4xl relative z-10">
         {/* Primary Style Card - CORES COMPLETAMENTE UNIFICADAS */}
@@ -347,7 +371,7 @@ const ResultPage: React.FC = () => {
                 style={{ 
                   backgroundColor: tokens.colors.backgroundCard,
                   border: `1px solid ${tokens.colors.border}`,
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.10)' 
+                  boxShadow: tokens.shadows.lg 
                 }}>
             {/* DECORATIVE CORNERS - CORES UNIFICADAS */}
             <div className="absolute top-0 left-0 w-12 lg:w-16 h-12 lg:h-16 rounded-tl-xl"
@@ -356,13 +380,27 @@ const ResultPage: React.FC = () => {
                    borderLeft: `2px solid ${tokens.colors.borderAccent}`
                  }}></div>
             <div className="absolute bottom-0 right-0 w-12 lg:w-16 h-12 lg:h-16 rounded-br-xl"
-                   style={{ 
-                     borderBottom: `2px solid ${tokens.colors.borderAccent}`,
-                     borderRight: `2px solid ${tokens.colors.borderAccent}`
-                   }}></div>
+                   borderBottom: `2px solid ${tokens.colors.borderAccent}`,
+                   borderRight: `2px solid ${tokens.colors.borderAccent}`
+            
             <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
               {/* HEADER SECTION */}
               <div className="text-center mb-8">
+                {user?.userName && (
+                  <AnimatedWrapper className="mb-6" animation="scale" show={true} duration={500} delay={200}>
+                    <span className="text-xl lg:text-2xl font-bold"
+                          style={{ 
+                            background: tokens.gradients.primary, 
+                            backgroundClip: 'text', 
+                            WebkitBackgroundClip: 'text', 
+                            color: 'transparent' 
+                          }}>
+                      Parabéns, {user.userName}!
+                    </span>
+                    <div className="w-12 h-px mx-auto mt-2" style={{ background: tokens.gradients.primary }}></div>
+                  </AnimatedWrapper>
+                )}
+                
                 {/* TÍTULO OTIMIZADO - CORES UNIFICADAS */}
                 <h1 className="text-xl lg:text-3xl font-playfair mb-6 leading-tight" 
                     style={{ color: tokens.colors.text }}>
@@ -383,7 +421,6 @@ const ResultPage: React.FC = () => {
                   <div className="flex items-center justify-end text-sm mb-2">
                     <span className="font-medium" style={{ color: tokens.colors.textMuted }}>
                       {primaryStyle.percentage}%
-                    </span>
                   </div>
                   <Progress 
                     value={primaryStyle.percentage} 
@@ -398,7 +435,8 @@ const ResultPage: React.FC = () => {
                 <div className="space-y-6 order-2 lg:order-1">
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
                     <div className="space-y-4">
-                      <p className="leading-relaxed text-base lg:text-lg font-medium" style={{ color: tokens.colors.text }}>
+                      <p className="leading-relaxed text-base lg:text-lg font-medium" 
+                         style={{ color: tokens.colors.text }}>
                         <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
                       </p>
                       
@@ -407,7 +445,7 @@ const ResultPage: React.FC = () => {
                            style={{ 
                              background: tokens.gradients.background,
                              border: `1px solid ${tokens.colors.borderLight}`,
-                             boxShadow: '0 2px 8px rgba(0,0,0,0.12)' 
+                             boxShadow: tokens.shadows.sm 
                            }}>
                         <p className="text-sm lg:text-base leading-relaxed" style={{ color: tokens.colors.text }}>
                           <strong>Seu estilo {category}</strong> revela uma mulher que {
@@ -424,86 +462,74 @@ const ResultPage: React.FC = () => {
                       </div>
                       <p className="text-sm lg:text-base" style={{ color: tokens.colors.textSecondary }}>
                         <strong>Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!</strong>
-                      </p>
                     </div>
-                  </AnimatedWrapper>
                   {/* SECONDARY STYLES - CORES UNIFICADAS */}
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={600}>
                     <div className="rounded-lg p-5" 
                          style={{ 
                            background: tokens.gradients.background,
                            border: `1px solid ${tokens.colors.borderLight}`,
-                           boxShadow: '0 2px 8px rgba(0,0,0,0.12)' 
+                           boxShadow: tokens.shadows.sm 
                          }}>
                       <h3 className="text-lg font-medium mb-3" style={{ color: tokens.colors.secondary }}>
                         Estilos que Também Influenciam Você
                       </h3>
                       <SecondaryStylesSection secondaryStyles={secondaryStyles} />
-                    </div>
-                  </AnimatedWrapper>
-                </div>
                 {/* IMAGE SECTION - BORDAS UNIFICADAS */}
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 lg:order-2">
                   <div className="w-full max-w-xs lg:max-w-sm mx-auto relative"> 
-                    <img
-                      src={`${image}?q=85&f=auto&w=400`}
-                      alt={`Estilo ${category}`}
-                      width={400}
-                      height={500}
-                      className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-105"
-                      style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}
-                      loading="eager"
-                      fetchPriority="high"
+                    <ProgressiveImage 
+                      src={`${image}?q=85&f=auto&w=400`} 
+                      alt={`Estilo ${category}`} 
+                      width={400} 
+                      height={500} 
+                      className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-105" 
+                      style={{ boxShadow: tokens.shadows.md }}
+                      loading="eager" 
+                      fetchPriority="high" 
                       onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
                     />
+                    
                     {/* DECORATIVE CORNERS - CORES UNIFICADAS */}
                     <div className="absolute -top-2 -right-2 w-8 lg:w-10 h-8 lg:h-10 rounded-tr-lg"
-                         style={{ 
                            borderTop: `2px solid ${tokens.colors.primary}`,
                            borderRight: `2px solid ${tokens.colors.primary}`
                          }}></div>
                     <div className="absolute -bottom-2 -left-2 w-8 lg:w-10 h-8 lg:h-10 rounded-bl-lg"
-                         style={{ 
                            borderBottom: `2px solid ${tokens.colors.primary}`,
                            borderLeft: `2px solid ${tokens.colors.primary}`
-                         }}></div>
                     {/* STYLE BADGE - CORES COMPLETAMENTE UNIFICADAS */}
                     <div className="absolute -top-3 -left-3 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-xs lg:text-sm font-medium transform -rotate-12"
-                         style={{ 
                            background: tokens.gradients.primary,
-                           boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+                           boxShadow: tokens.shadows.sm,
                            color: '#ffffff'
-                         }}>
                       {category}
-                    </div>
-                  </div>
                 </AnimatedWrapper>
-                {/* GUIDE IMAGE - CORES UNIFICADAS */}
-                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-                  <div className="mt-12 max-w-2xl mx-auto relative">
-                    <h3 className="text-xl lg:text-2xl font-medium text-center mb-6" 
-                        style={{ color: tokens.colors.secondary }}>
-                      Seu Guia de Estilo Personalizado
-                    </h3>
-                    <img
-                      src={`${guideImage}?q=85&f=auto&w=800`}
-                      alt={`Guia de Estilo ${category}`}
-                      className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-102"
-                      style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.10)' }}
-                      onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
-                    />
-                    {/* BADGE COMPLETAMENTE UNIFICADO */}
-                    <div className="absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-medium transform rotate-12"
-                         style={{ 
-                           background: tokens.gradients.primary,
-                           boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-                           color: '#ffffff'
-                         }}>
-                      Exclusivo
-                    </div>
-                  </div>
-                </AnimatedWrapper>
-              </div> {/* fecha grid */}
+              
+              {/* GUIDE IMAGE - CORES UNIFICADAS */}
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
+                <div className="mt-12 max-w-2xl mx-auto relative">
+                  <h3 className="text-xl lg:text-2xl font-medium text-center mb-6" 
+                      style={{ color: tokens.colors.secondary }}>
+                    Seu Guia de Estilo Personalizado
+                  </h3>
+                  <ProgressiveImage 
+                    src={`${guideImage}?q=85&f=auto&w=800`} 
+                    alt={`Guia de Estilo ${category}`} 
+                    loading="lazy" 
+                    className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-102" 
+                    style={{ boxShadow: tokens.shadows.lg }}
+                    onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
+                  
+                  {/* BADGE COMPLETAMENTE UNIFICADO */}
+                  <div className="absolute -top-3 -right-3 px-3 py-1 rounded-full text-xs font-medium transform rotate-12"
+                       style={{ 
+                         background: tokens.gradients.primary,
+                         boxShadow: tokens.shadows.sm,
+                         color: '#ffffff'
+                       }}>
+                    Exclusivo
+              </AnimatedWrapper>
             </AnimatedWrapper>
           </Card>
         </section>
@@ -512,76 +538,65 @@ const ResultPage: React.FC = () => {
           <SectionTitle 
             variant="simple"
             subtitle="Veja como mulheres descobriram sua melhor versão seguindo as mesmas estratégias que você vai receber"
-          >
             Resultados que Falam por Si
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
+              <LoadingSpinner size="lg" className="mb-4" />
               <p style={{ color: tokens.colors.textMuted }}>Carregando transformações...</p>
-            </div>
           }>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
               <BeforeAfterTransformation />
-            </AnimatedWrapper>
           </Suspense>
-        </section>
         {/* Motivation Section */}
         <section id="motivation" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
             variant="secondary"
             subtitle={`Por que mulheres com seu perfil ${category} conquistam mais confiança e oportunidades`}
-          >
             A Ciência Por Trás do Seu Estilo
-          </SectionTitle>
-          <Suspense fallback={<p style={{ color: tokens.colors.textMuted }}>Carregando conteúdo...</p>}>
-            <MotivationSection />
-          </Suspense>
-        </section>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando conteúdo...</p>
+              <MotivationSection />
+        
         {/* Bonus Section */}
         <section id="bonuses" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
             subtitle={`Ferramentas extras para potencializar uma Imagem de Sucesso ${category}`}
-          >
             Bônus Exclusivos
-          </SectionTitle>
-          <Suspense fallback={<p style={{ color: tokens.colors.textMuted }}>Carregando bônus...</p>}>
-            <BonusSection />
-          </Suspense>
-        </section>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando bônus...</p>
+              <BonusSection />
         {/* Testimonials Section */}
         <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
             subtitle={`O que mulheres ${category} estão dizendo sobre sua transformação`}
-          >
             Resultados Reais
-          </SectionTitle>
-          <Suspense fallback={<p style={{ color: tokens.colors.textMuted }}>Carregando depoimentos...</p>}>
-            <Testimonials />
-          </Suspense>
-        </section>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando depoimentos...</p>
+              <Testimonials />
         {/* Guarantee Section */}
         <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle>Garantia Total</SectionTitle>
-          <Suspense fallback={<p style={{ color: tokens.colors.textMuted }}>Carregando garantia...</p>}>
-            <GuaranteeSection />
-          </Suspense>
-        </section>
+            Garantia Total
+              <p style={{ color: tokens.colors.textMuted }}>Carregando garantia...</p>
+              <GuaranteeSection />
         {/* Mentor Section */}
         <section id="mentor" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
             subtitle="Especialista que já guiou mais de 10.000 mulheres na descoberta do seu estilo autêntico"
-          >
             Conheça Sua Mentora
-          </SectionTitle>
-          <Suspense fallback={<p style={{ color: tokens.colors.textMuted }}>Carregando informações da mentora...</p>}>
-            <MentorSection />
-          </Suspense>
-        </section>
+              <p style={{ color: tokens.colors.textMuted }}>Carregando informações da mentora...</p>
+              <MentorSection />
+        {/* Removendo a seção de transição melhorada */}
+        {/* <div className="mb-12 md:mb-16">
+          <div className="text-center py-12 md:py-16 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#fff7f3]/50 to-[#f9f4ef]/50 rounded-2xl"></div>
+            <div className="relative z-10">
+              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6 md:mb-8"></div>
+              <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#432818] mb-4">
+                É Hora de Agir
+              </h3>
+              <p className="text-lg font-medium max-w-md mx-auto" style={{ color: tokens.colors.textMuted }}>
+                Seu novo estilo está a um clique de distância
+              </p>
+              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-6 md:mt-8"></div>
+        </div> */}
         {/* NOVA SEÇÃO DE PRICING MELHORADA */}
-        {/* <EnhancedPricingSection /> */}
+        <EnhancedPricingSection />
         {/* BOTTOM SPACING */}
         <div className="mb-16 md:mb-24"></div>
-      </div>
     </div>
   );
 }

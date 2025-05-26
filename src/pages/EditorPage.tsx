@@ -1,4 +1,4 @@
-e "use client";
+"use client";
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -26,30 +26,23 @@ export const EditorPage = () => {
       visible: true,
       style: {
         ...defaultResultTemplate.header.style,
-        borderRadius: '0'
+        borderRadius: '0' // Using string value for borderRadius
       }
     },
     mainContent: {
       ...defaultResultTemplate.mainContent,
-      visible: true,
-      content: {},
-    },
-    offer: createOfferSectionConfig(),
+      visible: true
+    offer: createOfferSectionConfig(), // Using the createOfferConfig() function to create a proper OfferSection
     secondaryStyles: {
       content: {},
-      padding: '20px',
-      visible: true
-    },
+        padding: '20px'
     globalStyles: {
       primaryColor: '#B89B7A',
       secondaryColor: '#432818',
       textColor: '#432818',
       backgroundColor: '#FAF9F7',
       fontFamily: 'Playfair Display, serif'
-    },
     blocks: []
-  };
-
   return (
     <div className="h-screen">
       {showTemplates ? (

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
@@ -17,6 +16,7 @@ export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }
   const handleStartQuizClick = () => {
     trackButtonClick('hero-start-quiz', 'Começar Quiz', 'hero', 'start-quiz');
     onStartQuizClick();
+  };
   return (
     <div className="bg-[#F9F7F4] py-8 px-4 md:py-16 md:px-8 rounded-lg">
       <div className="max-w-4xl mx-auto text-center">
@@ -34,23 +34,32 @@ export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }
           >
             Começar o Quiz Gratuito
           </Button>
-          
+          <Button 
             onClick={handleCtaClick}
             className="text-white py-3 px-6 rounded-md btn-cta-green text-base md:text-lg w-full md:w-auto"
+          >
             <ShoppingCart className="w-5 h-5 mr-2" />
             Adquirir Guia Completo
+          </Button>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h3 className="font-medium text-[#432818]">7+ Estilos</h3>
             <p className="text-sm text-[#432818]/70">Identificados com precisão</p>
           </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h3 className="font-medium text-[#432818]">15+ Questões</h3>
             <p className="text-sm text-[#432818]/70">Para análise completa</p>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h3 className="font-medium text-[#432818]">100% Online</h3>
             <p className="text-sm text-[#432818]/70">Acesso imediato</p>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h3 className="font-medium text-[#432818]">Bônus Exclusivos</h3>
             <p className="text-sm text-[#432818]/70">Para transformar seu estilo</p>
+          </div>
+        </div>
       </div>
     </div>
   );

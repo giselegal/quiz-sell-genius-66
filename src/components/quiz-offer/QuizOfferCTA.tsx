@@ -55,28 +55,38 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
               </div>
               <div className="bg-[#aa6b5d] text-white text-xs px-2 py-0.5 rounded-full">
                 -78% OFF
+              </div>
+            </div>
+            <Button 
+              onClick={handleCTAClick}
+              className="w-full text-white py-6 rounded-md btn-cta-green text-lg"
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
+            >
+              <span className="flex items-center justify-center gap-2">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                Quero o Quiz Completo + Bônus
+              </span>
+            </Button>
           </div>
-        <Button 
-          onClick={handleCTAClick}
-          className="w-full text-white py-6 rounded-md btn-cta-green text-lg"
-          onMouseEnter={() => setIsButtonHovered(true)}
-          onMouseLeave={() => setIsButtonHovered(false)}
-        >
-          <span className="flex items-center justify-center gap-2">
-            <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-            Quero o Quiz Completo + Bônus
-          </span>
-        </Button>
+        </div>
         <div className="mt-4">
           <SecurePurchaseElement />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
           <div className="bg-white p-3 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h4 className="font-medium text-[#432818] text-sm">Guia Detalhado</h4>
             <p className="text-xs text-[#432818]/70">Descubra seu estilo pessoal com análises profundas</p>
+          </div>
+          <div className="bg-white p-3 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h4 className="font-medium text-[#432818] text-sm">Peças-Chave</h4>
             <p className="text-xs text-[#432818]/70">Identifique as roupas essenciais para seu estilo</p>
+          </div>
+          <div className="bg-white p-3 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h4 className="font-medium text-[#432818] text-sm">Visagismo Facial</h4>
             <p className="text-xs text-[#432818]/70">Adapte seu visual às suas características faciais</p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
