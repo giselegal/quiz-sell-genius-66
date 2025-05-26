@@ -8,19 +8,16 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
-
 interface WebhookCardProps {
   initialUrl?: string;
   initialEnabled?: boolean;
 }
-
 export const WebhookCard: React.FC<WebhookCardProps> = ({
   initialUrl = '',
   initialEnabled = false
 }) => {
   const [webhookUrl, setWebhookUrl] = useState(initialUrl);
   const [webhookEnabled, setWebhookEnabled] = useState(initialEnabled);
-
   const handleSaveWebhook = () => {
     try {
       localStorage.setItem('webhook_url', webhookUrl);
@@ -30,21 +27,17 @@ export const WebhookCard: React.FC<WebhookCardProps> = ({
         description: "Your webhook integration settings have been updated."
       });
     } catch (error) {
-      toast({
         title: "Error saving settings",
         description: "There was an error saving your settings. Please try again.",
         variant: "destructive"
-      });
     }
   };
-
   const handleTestConnection = () => {
     toast({
       title: "Testing Webhook connection",
       description: "Connection test initiated. Please check the console for results."
     });
     console.log("Testing connection to Webhook...");
-  };
   
   return (
     <Card>
@@ -71,16 +64,13 @@ export const WebhookCard: React.FC<WebhookCardProps> = ({
           <p className="text-sm text-muted-foreground">
             Your endpoint that will receive analytics events
           </p>
-        </div>
         
         <div className="flex items-center space-x-2">
           <Switch 
             id="webhook-enabled"
             checked={webhookEnabled}
             onCheckedChange={setWebhookEnabled}
-          />
           <Label htmlFor="webhook-enabled">Enable webhook</Label>
-        </div>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline" onClick={handleTestConnection}>
@@ -88,7 +78,6 @@ export const WebhookCard: React.FC<WebhookCardProps> = ({
         </Button>
         <Button onClick={handleSaveWebhook}>
           Save Settings
-        </Button>
       </CardFooter>
     </Card>
   );

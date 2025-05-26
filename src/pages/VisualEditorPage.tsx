@@ -15,7 +15,6 @@ const VisualEditorPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const router = useRouter();
-
   useEffect(() => {
     // Carregar perguntas do localStorage ou de uma API
     const loadQuestions = async () => {
@@ -41,60 +40,36 @@ const VisualEditorPage: React.FC = () => {
                   points: 3,
                   imageUrl: 'https://placehold.co/300x400?text=Estilo+Natural'
                 },
-                {
                   id: `option-${Date.now()}-2`,
                   text: 'Peças elegantes e sofisticadas',
                   styleCategory: 'Clássico',
-                  points: 3,
                   imageUrl: 'https://placehold.co/300x400?text=Estilo+Clássico'
-                },
-                {
                   id: `option-${Date.now()}-3`,
                   text: 'Looks modernos e minimalistas',
                   styleCategory: 'Contemporâneo',
-                  points: 3,
                   imageUrl: 'https://placehold.co/300x400?text=Estilo+Contemporâneo'
-                },
-                {
                   id: `option-${Date.now()}-4`,
                   text: 'Peças românticas e delicadas',
                   styleCategory: 'Romântico',
-                  points: 3,
                   imageUrl: 'https://placehold.co/300x400?text=Estilo+Romântico'
                 }
               ]
             },
-            {
               id: `question-${Date.now()}-2`,
               title: 'Como você descreveria sua personalidade?',
               type: 'text',
               multiSelect: 2,
-              options: [
-                {
                   id: `option-${Date.now()}-5`,
                   text: 'Prática e objetiva',
-                  styleCategory: 'Natural',
                   points: 2
-                },
-                {
                   id: `option-${Date.now()}-6`,
                   text: 'Sofisticada e tradicional',
-                  styleCategory: 'Clássico',
-                  points: 2
-                },
-                {
                   id: `option-${Date.now()}-7`,
                   text: 'Criativa e expressiva',
                   styleCategory: 'Criativo',
-                  points: 2
-                },
-                {
                   id: `option-${Date.now()}-8`,
                   text: 'Sensual e marcante',
                   styleCategory: 'Sexy',
-                  points: 2
-                }
-              ]
             }
           ];
           
@@ -111,31 +86,25 @@ const VisualEditorPage: React.FC = () => {
         setLoading(false);
       }
     };
-
     loadQuestions();
   }, [toast]);
-
   const handleSave = async (updatedQuestions: QuizQuestion[]) => {
     try {
       // Salvar no localStorage
       safeLocalStorage.setItem('quiz_editor_questions', JSON.stringify(updatedQuestions));
       
       // Aqui você poderia salvar em uma API também
-      
       toast({
         title: "Quiz salvo com sucesso",
         description: "Todas as alterações foram salvas."
       });
     } catch (error) {
       console.error('Erro ao salvar quiz:', error);
-      toast({
         title: "Erro ao salvar",
         description: "Não foi possível salvar as alterações do quiz.",
         variant: "destructive"
-      });
     }
   };
-
   const handleDuplicateQuiz = () => {
     // Implementar a lógica de duplicação do quiz
     const duplicatedQuiz = JSON.parse(JSON.stringify(questions));
@@ -149,16 +118,12 @@ const VisualEditorPage: React.FC = () => {
         id: `option-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
       }))
     }));
-    
     // Salvar o quiz duplicado com um novo nome
     safeLocalStorage.setItem('quiz_editor_questions_duplicate', JSON.stringify(newQuiz));
-    
     toast({
       title: "Quiz duplicado",
       description: "Uma cópia do quiz foi criada com sucesso."
     });
-  };
-
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-[#FAF9F7]">
@@ -166,7 +131,6 @@ const VisualEditorPage: React.FC = () => {
       </div>
     );
   }
-
   return (
     <div className="h-screen flex flex-col">
       <div className="bg-white border-b border-[#B89B7A]/20 p-2 flex items-center justify-between">
@@ -174,7 +138,6 @@ const VisualEditorPage: React.FC = () => {
           <ArrowLeft className="h-4 w-4 mr-1" />
           Voltar
         </Button>
-        
         <div className="flex items-center gap-2">
           <Button 
             className="bg-[#B89B7A] hover:bg-[#A38A69] text-white" 
@@ -184,16 +147,12 @@ const VisualEditorPage: React.FC = () => {
             Salvar Quiz
           </Button>
         </div>
-      </div>
-      
       <div className="flex-1">
         <VisualEditorLayout 
           initialQuestions={questions} 
           onSave={handleSave} 
         />
-      </div>
     </div>
   );
 };
-
 export default VisualEditorPage;

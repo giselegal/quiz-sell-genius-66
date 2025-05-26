@@ -1,19 +1,13 @@
 "use client";
-import { useToast } from "@/components/ui/use-toast";
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Download, Upload, Save } from 'lucide-react';
 import { exportProjectAsJson } from '@/utils/exportUtils';
-import { useToast } from '@/components/ui/use-toast';
-
-interface JsonConfigEditorProps {
   config: any;
   onUpdate: (newConfig: any) => void;
 }
-
 export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
   config,
   onUpdate
@@ -21,12 +15,10 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [jsonText, setJsonText] = useState('');
   const { toast } = useToast();
-
   const handleOpen = () => {
     setJsonText(JSON.stringify(config, null, 2));
     setIsOpen(true);
   };
-
   const handleSave = () => {
     try {
       const parsedConfig = JSON.parse(jsonText);
@@ -38,18 +30,12 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
       });
     } catch (error) {
       console.error('Error parsing JSON:', error);
-      toast({
         title: "Erro ao salvar",
         description: "JSON inválido. Verifique o formato e tente novamente.",
         variant: "destructive"
-      });
     }
-  };
-
   const handleExport = () => {
     exportProjectAsJson(config);
-  };
-
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -65,17 +51,12 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
           });
         } catch (error) {
           console.error('Error parsing imported JSON:', error);
-          toast({
             title: "Erro ao importar",
             description: "Arquivo JSON inválido",
             variant: "destructive"
-          });
         }
       };
       reader.readAsText(file);
-    }
-  };
-
   return (
     <>
       <div className="flex gap-2">
@@ -86,22 +67,12 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
         >
           Editar JSON
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
           onClick={handleExport}
-        >
           <Download className="w-4 h-4 mr-2" />
           Exportar
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
           onClick={() => document.getElementById('import-json')?.click()}
-        >
           <Upload className="w-4 h-4 mr-2" />
           Importar
-        </Button>
         <input
           id="import-json"
           type="file"
@@ -110,7 +81,6 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
           onChange={handleImport}
         />
       </div>
-
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>

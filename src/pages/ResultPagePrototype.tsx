@@ -23,7 +23,6 @@ import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import { User as UserType, UserWithRole } from '@/types/user';
 import { useABTest } from '@/hooks/useABTest';
-
 // Componente protótipo da página de resultados que mantém a funcionalidade principal
 const ResultPagePrototype: React.FC = () => {
   // Hooks e estados existentes
@@ -40,7 +39,6 @@ const ResultPagePrototype: React.FC = () => {
     minDuration: isLowPerformance ? 400 : 800,
     disableTransitions: isLowPerformance
   });
-  
   // Efeito para carregar imagens e determinar quando o carregamento está completo
   useEffect(() => {
     if (!primaryStyle) return;
@@ -51,39 +49,27 @@ const ResultPagePrototype: React.FC = () => {
       setImagesLoaded(true);
       completeLoading();
     }, 1000);
-    
     return () => clearTimeout(timer);
   }, [primaryStyle, completeLoading]);
-  
   // Tratamento para quando não há estilo primário
   if (!primaryStyle) return <ErrorState />;
   if (isLoading || isLoadingABTest) return <ResultSkeleton />;
-  
   const { category } = primaryStyle;
   const { image, guideImage, description } = styleConfig[category];
-  
   // Função para obter a URL de checkout
   const getCheckoutUrl = () => {
     let checkoutUrl = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-    
     if (currentVariation?.content?.checkoutUrl) {
       checkoutUrl = currentVariation.content.checkoutUrl;
     }
-    
     return checkoutUrl;
   };
-  
   // Função para lidar com o clique no botão CTA
   const handleCTAClick = () => {
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    
     if (currentVariation) {
       registerConversion();
-    }
-    
     window.location.href = getCheckoutUrl();
-  };
-  
   // Função para obter estilos com base na variação A/B
   const getStyleOverrides = () => {
     const baseStyles = {
@@ -91,37 +77,24 @@ const ResultPagePrototype: React.FC = () => {
       color: globalStyles.textColor || '#432818',
       fontFamily: globalStyles.fontFamily || 'inherit'
     };
-    
     if (currentVariation?.content?.styles) {
       return { ...baseStyles, ...currentVariation.content.styles };
-    }
-    
     return baseStyles;
-  };
-  
   // Função para obter informações de preço com base na variação A/B
   const getPriceInfo = () => {
     const priceInfo = {
       regularPrice: 'R$ 175,00',
       currentPrice: 'R$ 39,00',
       installments: '4X de R$ 10,86'
-    };
-    
     if (currentVariation?.content?.pricing) {
       return { ...priceInfo, ...currentVariation.content.pricing };
-    }
-    
     return priceInfo;
-  };
-  
   const priceInfo = getPriceInfo();
-  
   // Check if user has 'admin' role safely
   const isAdmin = user && 
     typeof user === 'object' && 
     'role' in user && 
     user.role === 'admin';
-  
   return (
     <div className="min-h-screen relative overflow-hidden" style={getStyleOverrides()}>
       {/* Elementos decorativos de fundo */}
@@ -130,7 +103,6 @@ const ResultPagePrototype: React.FC = () => {
       
       {/* Cabeçalho */}
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
-
       {/* Botão de Edição para Administradores */}
       {isAdmin && (
         <div className="container mx-auto px-4 py-2 max-w-4xl">
@@ -140,7 +112,6 @@ const ResultPagePrototype: React.FC = () => {
           </Link>
         </div>
       )}
-
       {/* Conteúdo principal */}
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         {/* Cartão de Estilo Primário */}
@@ -157,7 +128,6 @@ const ResultPagePrototype: React.FC = () => {
                 <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
               </div>
             </div>
-
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
@@ -169,8 +139,6 @@ const ResultPagePrototype: React.FC = () => {
                     <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
                     <SecondaryStylesSection secondaryStyles={secondaryStyles} />
                   </div>
-                </AnimatedWrapper>
-              </div>
               
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[238px] mx-auto relative">
@@ -186,9 +154,7 @@ const ResultPagePrototype: React.FC = () => {
                   {/* Cantos decorativos */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
                   <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
-                </div>
               </AnimatedWrapper>
-            </div>
             
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
               <div className="mt-8 max-w-[540px] mx-auto relative">
@@ -203,12 +169,9 @@ const ResultPagePrototype: React.FC = () => {
                 {/* Badge exclusivo */}
                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                   Exclusivo
-                </div>
-              </div>
             </AnimatedWrapper>
           </AnimatedWrapper>
         </Card>
-
         {/* Seção CTA Destacado */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
           <div className="text-center my-10">
@@ -218,9 +181,6 @@ const ResultPagePrototype: React.FC = () => {
               </h3>
               <div className="flex justify-center">
                 <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
-              </div>
-            </div>
-            
             <Button 
               onClick={handleCTAClick} 
               className="text-white py-4 px-6 rounded-md btn-cta-green" 
@@ -236,17 +196,13 @@ const ResultPagePrototype: React.FC = () => {
                 Quero meu Guia de Estilo Agora
               </span>
             </Button>
-            
             <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
               <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
                 {priceInfo.installments}
               </p>
-            </div>
-            
             <SecurePurchaseElement />
           </div>
         </AnimatedWrapper>
-
         {/* Seção Final - Proposta de Valor e CTA */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
           <div className="text-center mt-10">
@@ -259,7 +215,6 @@ const ResultPagePrototype: React.FC = () => {
               O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir 
               com autenticidade e transformar sua imagem em ferramenta de poder.
             </p>
-
             <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
               <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
@@ -272,75 +227,42 @@ const ResultPagePrototype: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </div>
-
             {/* Stack de Valor com preços e opção de parcelamento */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
-              
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Guia Principal</span>
                   <span className="font-medium">R$ 67,00</span>
-                </div>
-                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Peças-chave</span>
                   <span className="font-medium">R$ 79,00</span>
-                </div>
-                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Visagismo Facial</span>
                   <span className="font-medium">R$ 29,00</span>
-                </div>
                 <div className="flex justify-between items-center p-2 pt-3 font-bold">
                   <span>Valor Total</span>
                   <div className="relative">
                     <span>{priceInfo.regularPrice}</span>
                     <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
-                  </div>
-                </div>
-              </div>
-              
               <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
                 <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
                 <p className="text-4xl font-bold gold-text">{priceInfo.currentPrice}</p>
                 <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em {priceInfo.installments}</p>
-              </div>
-              
               {/* Imagem de métodos de pagamento */}
               <div className="mt-4">
                 <img
                   src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
                   alt="Métodos de pagamento"
                   className="w-full rounded-lg"
-                />
-              </div>
-            </div>
-
-            <Button 
-              onClick={handleCTAClick} 
               className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2" 
-              style={{
-                background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
                 fontSize: "1rem"
               }} 
-              onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
-            >
-              <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 <span>Garantir Meu Guia + Bônus Especiais</span>
-                
-              </span>
-            </Button>
-            
-            <SecurePurchaseElement />
-
             <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
               <Lock className="w-3 h-3" />
               <span>Oferta exclusiva nesta página</span>
-            </p>
-            
             {/* Botão para continuar a iterar */}
             <div className="mt-10 text-center">
               <Button 
@@ -352,17 +274,11 @@ const ResultPagePrototype: React.FC = () => {
               >
                 Continuar a iterar?
               </Button>
-            </div>
-          </div>
-        </AnimatedWrapper>
-
         {/* BuildInfo component at the bottom */}
         <div className="mt-8 text-center opacity-60">
           <BuildInfo />
-        </div>
       </div>
     </div>
   );
 };
-
 export default ResultPagePrototype;

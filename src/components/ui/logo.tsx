@@ -10,7 +10,6 @@ interface LogoProps {
   width?: number;
   height?: number;
 }
-
 const Logo: React.FC<LogoProps> = ({ 
   src = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
   alt = "Logo Gisele Galvão",
@@ -36,5 +35,4 @@ const Logo: React.FC<LogoProps> = ({
     </div>
   );
 };
-
 export default Logo;

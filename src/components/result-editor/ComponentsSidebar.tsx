@@ -18,11 +18,9 @@ import {
   Columns,
   BaggageClaim
 } from 'lucide-react';
-
 interface ComponentsSidebarProps {
   onComponentSelect: (type: BlockType) => void;
 }
-
 export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponentSelect }) => {
   // Component category definitions
   const componentCategories = [
@@ -34,34 +32,21 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponen
         { type: 'spacer', icon: <GripVertical size={16} />, label: 'Espaçador' },
       ]
     },
-    {
       title: 'Conteúdo',
-      components: [
         { type: 'headline', icon: <Heading1 size={16} />, label: 'Título' },
         { type: 'text', icon: <Type size={16} />, label: 'Texto' },
         { type: 'image', icon: <Image size={16} />, label: 'Imagem' },
         { type: 'video', icon: <Video size={16} />, label: 'Vídeo' },
-      ]
-    },
-    {
       title: 'Resultado',
-      components: [
         { type: 'style-result', icon: <BaggageClaim size={16} />, label: 'Estilo Principal' },
         { type: 'secondary-styles', icon: <LayoutGrid size={16} />, label: 'Estilos Secundários' },
-      ]
-    },
-    {
       title: 'Vendas',
-      components: [
         { type: 'pricing', icon: <CreditCard size={16} />, label: 'Preço' },
         { type: 'benefits', icon: <CheckCircle size={16} />, label: 'Benefícios' },
         { type: 'testimonials', icon: <MessageSquareQuote size={16} />, label: 'Depoimentos' },
         { type: 'guarantee', icon: <Award size={16} />, label: 'Garantia' },
         { type: 'cta', icon: <Award size={16} />, label: 'Chamada para Ação' },
-      ]
-    },
   ];
-
   return (
     <div className="h-full flex flex-col">
       <div className="p-4 border-b">

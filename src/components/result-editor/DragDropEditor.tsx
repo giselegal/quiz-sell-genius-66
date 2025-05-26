@@ -19,9 +19,7 @@ interface CanvasItem {
   props: Record<string, any>;
   position: number;
 }
-
 interface Step {
-  id: string;
   name: string;
   items: CanvasItem[];
   settings: {
@@ -30,15 +28,11 @@ interface Step {
     allowReturn: boolean;
     isVisible: boolean;
   };
-}
-
 interface DragDropEditorProps {
   onSave: (config: any) => void;
   initialBlocks?: any[];
   mode?: 'quiz' | 'result' | 'offer';
   quizId?: string;
-}
-
 export const DragDropEditor: React.FC<DragDropEditorProps> = ({ 
   onSave, 
   initialBlocks = [], 
@@ -69,11 +63,9 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
     components: false,
     properties: false
   });
-
   // Sistema de undo/redo
   const [history, setHistory] = useState<any[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-
   // Estados para funcionalidades avançadas
   const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
   const [showMediaLibrary, setShowMediaLibrary] = useState(false);
@@ -85,7 +77,6 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
   const [currentTheme, setCurrentTheme] = useState('default');
   const [isPublished, setIsPublished] = useState(false);
   const [publishUrl, setPublishUrl] = useState('');
-
   // Sensores para drag & drop
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -97,11 +88,9 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-
   // Step ativo
   const activeStep = steps.find(step => step.id === activeStepId);
   const selectedItem = activeStep?.items.find(item => item.id === selectedItemId);
-
   // Carregar configuração inicial baseada no modo
   useEffect(() => {
     const loadInitialConfig = async () => {
@@ -119,12 +108,9 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
         } catch (error) {
           console.error('Erro ao carregar configuração:', error);
         }
-      }
     };
-
     loadInitialConfig();
   }, [quizId, mode]);
-
   // Salvar estado no histórico
   const saveToHistory = useCallback(() => {
     const newHistory = history.slice(0, historyIndex + 1);
@@ -132,7 +118,6 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
   }, [steps, activeStepId, history, historyIndex]);
-
   // Undo/Redo
   const undo = useCallback(() => {
     if (historyIndex > 0) {
@@ -140,18 +125,13 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
       setSteps(previousState.steps);
       setActiveStepId(previousState.activeStepId);
       setHistoryIndex(historyIndex - 1);
-    }
   }, [history, historyIndex]);
-
   const redo = useCallback(() => {
     if (historyIndex < history.length - 1) {
       const nextState = history[historyIndex + 1];
       setSteps(nextState.steps);
       setActiveStepId(nextState.activeStepId);
       setHistoryIndex(historyIndex + 1);
-    }
-  }, [history, historyIndex]);
-
   // Handlers para drag & drop
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const { active } = event;
@@ -159,20 +139,14 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
     if (active.data.current?.type === 'component') {
       const component = COMPONENT_REGISTRY.find(c => c.id === active.id);
       setDraggedComponent(component || null);
-    }
   }, []);
-
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
-    
     if (!over) {
       setDraggedComponent(null);
       return;
-    }
-
     // Drag de componente para canvas
     if (active.data.current?.type === 'component' && over.data.current?.type === 'canvas') {
-      const component = COMPONENT_REGISTRY.find(c => c.id === active.id);
       if (component && activeStep) {
         saveToHistory();
         
@@ -182,88 +156,54 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
           props: { ...component.defaultProps },
           position: activeStep.items.length
         };
-
         setSteps(prev => prev.map(step => 
           step.id === activeStepId 
             ? { ...step, items: [...step.items, newItem] }
             : step
         ));
-      }
-    }
-
     // Reordenação de itens no canvas
     if (active.data.current?.type === 'canvas-item' && over.data.current?.type === 'canvas-item') {
       const activeIndex = activeStep?.items.findIndex(item => item.id === active.id) ?? -1;
       const overIndex = activeStep?.items.findIndex(item => item.id === over.id) ?? -1;
       
       if (activeIndex !== -1 && overIndex !== -1 && activeStep) {
-        saveToHistory();
         const newItems = arrayMove(activeStep.items, activeIndex, overIndex);
-        setSteps(prev => prev.map(step => 
-          step.id === activeStepId 
             ? { ...step, items: newItems }
-            : step
-        ));
-      }
-    }
-
     setDraggedComponent(null);
   }, [activeStepId, activeStep, saveToHistory]);
-
   // Função para adicionar nova etapa
   const addStep = useCallback((name?: string) => {
     saveToHistory();
     const newStep: Step = {
       id: `step-${Date.now()}`,
       name: name || `Etapa ${steps.length + 1}`,
-      items: [],
-      settings: {
-        showLogo: true,
-        showProgress: true,
-        allowReturn: true,
-        isVisible: true
-      }
-    };
     setSteps(prev => [...prev, newStep]);
     setActiveStepId(newStep.id);
   }, [steps.length, saveToHistory]);
-
   // Função para atualizar etapa
   const updateStep = useCallback((stepId: string, updates: Partial<Step>) => {
-    saveToHistory();
     setSteps(prev => prev.map(step => 
       step.id === stepId ? { ...step, ...updates } : step
     ));
   }, [saveToHistory]);
-
   // Função para deletar etapa
   const deleteStep = useCallback((stepId: string) => {
     if (steps.length <= 1) return;
-    
-    saveToHistory();
     setSteps(prev => prev.filter(step => step.id !== stepId));
-    
     if (activeStepId === stepId) {
       setActiveStepId(steps[0].id);
-    }
   }, [steps, activeStepId, saveToHistory]);
-
   // Função para duplicar etapa
   const duplicateStep = useCallback((stepId: string) => {
     const stepToDuplicate = steps.find(step => step.id === stepId);
     if (!stepToDuplicate) return;
-    
-    saveToHistory();
     const duplicatedStep: Step = {
       ...stepToDuplicate,
-      id: `step-${Date.now()}`,
       name: `${stepToDuplicate.name} (Cópia)`,
       items: stepToDuplicate.items.map(item => ({
         ...item,
         id: `${item.type}-${Date.now()}-${Math.random()}`
       }))
-    };
-    
     const stepIndex = steps.findIndex(step => step.id === stepId);
     setSteps(prev => [
       ...prev.slice(0, stepIndex + 1),
@@ -271,11 +211,8 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
       ...prev.slice(stepIndex + 1)
     ]);
   }, [steps, saveToHistory]);
-
   // Função para atualizar propriedades do item
   const updateItemProps = useCallback((itemId: string, newProps: Record<string, any>) => {
-    saveToHistory();
-    setSteps(prev => prev.map(step => 
       step.id === activeStepId 
         ? {
             ...step, 
@@ -284,50 +221,29 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
                 ? { ...item, props: { ...item.props, ...newProps } }
                 : item
             )
-          }
         : step
-    ));
   }, [activeStepId, saveToHistory]);
-
   // Função para deletar item
   const deleteItem = useCallback((itemId: string) => {
-    saveToHistory();
-    setSteps(prev => prev.map(step => 
-      step.id === activeStepId 
         ? { ...step, items: step.items.filter(item => item.id !== itemId) }
-        : step
-    ));
     if (selectedItemId === itemId) {
       setSelectedItemId(null);
-    }
   }, [activeStepId, selectedItemId, saveToHistory]);
-
   // Função para duplicar item
   const duplicateItem = useCallback((itemId: string) => {
     const itemToDuplicate = activeStep?.items.find(item => item.id === itemId);
     if (!itemToDuplicate) return;
-    
-    saveToHistory();
     const duplicatedItem: CanvasItem = {
       ...itemToDuplicate,
       id: `${itemToDuplicate.type}-${Date.now()}`,
       position: itemToDuplicate.position + 1
-    };
-    
-    setSteps(prev => prev.map(step => 
-      step.id === activeStepId 
         ? { 
-            ...step, 
             items: [
               ...step.items.slice(0, itemToDuplicate.position + 1),
               duplicatedItem,
               ...step.items.slice(itemToDuplicate.position + 1)
             ]
-          }
-        : step
-    ));
   }, [activeStep, activeStepId, saveToHistory]);
-
   // Função para salvar
   const handleSave = useCallback(() => {
     const editorConfig = {
@@ -338,50 +254,34 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
       version: '2.0',
       theme: currentTheme,
       mode
-    };
     onSave(editorConfig);
   }, [steps, activeStepId, previewMode, currentTheme, mode, onSave]);
-
   // Auto-save a cada 30 segundos
-  useEffect(() => {
     const interval = setInterval(handleSave, 30000);
     return () => clearInterval(interval);
   }, [handleSave]);
-
   // Shortcuts de teclado
-  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
         undo();
       } else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
-        e.preventDefault();
         redo();
       } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault();
         handleSave();
-      }
-    };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo, handleSave]);
-
   // Função para aplicar template
   const applyTemplate = useCallback((template: any) => {
-    saveToHistory();
     setSteps(template.steps);
     setActiveStepId(template.steps[0]?.id);
     setShowTemplateLibrary(false);
-  }, [saveToHistory]);
-
   // Função para upload de mídia
   const handleMediaUpload = useCallback((file: File) => {
     // Simular upload - na prática integraria com serviço de storage
     const url = URL.createObjectURL(file);
     return url;
-  }, []);
-
   // Função para aplicar tema
   const applyTheme = useCallback((theme: any) => {
     setCurrentTheme(theme.id);
@@ -389,36 +289,22 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
     setSteps(prev => prev.map(step => ({
       ...step,
       items: step.items.map(item => ({
-        ...item,
         props: {
           ...item.props,
           color: theme.textColor,
           backgroundColor: theme.primaryColor
-        }
-      }))
     })));
-  }, []);
-
   // Função para publicar
   const handlePublish = useCallback(() => {
     const config = {
-      steps,
-      activeStepId,
-      previewMode,
-      timestamp: Date.now(),
-      version: '2.0',
       theme: currentTheme
-    };
-    
     // Simular publicação - na prática enviaria para API
     const publishedUrl = `https://quiz.app/published/${Date.now()}`;
     setPublishUrl(publishedUrl);
     setIsPublished(true);
     setShowPublishModal(false);
-    
     onSave(config);
   }, [steps, activeStepId, previewMode, currentTheme, onSave]);
-
   // Templates específicos por modo
   const getTemplatesByMode = () => {
     if (mode === 'result') {
@@ -453,46 +339,15 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
               }
             }
           ]
-        }
       ];
-    }
-
     if (mode === 'offer') {
-      return [
-        {
           id: 'offer-urgency',
           name: 'Oferta com Urgência',
           category: 'Oferta',
           preview: '⚡',
-          steps: [
-            {
-              id: 'step-1',
               name: 'Oferta Especial',
-              items: [
-                {
-                  id: 'heading-1',
-                  type: 'heading',
-                  props: {
                     content: 'Oferta Exclusiva Para Você',
-                    level: 1,
-                    fontSize: 48,
-                    textAlign: 'center'
-                  },
                   position: 1
-                }
-              ],
-              settings: {
-                showLogo: true,
-                showProgress: false,
-                allowReturn: false,
-                isVisible: true
-              }
-            }
-          ]
-        }
-      ];
-    }
-
     // Templates para quiz
     return [
       {
@@ -504,7 +359,6 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
           {
             id: 'step-1',
             name: 'Captura de Lead',
-            items: [
               {
                 id: 'heading-1',
                 type: 'heading',
@@ -515,20 +369,14 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
                   textAlign: 'center'
                 },
                 position: 0
-              }
             ],
             settings: {
               showLogo: true,
               showProgress: true,
               allowReturn: false,
               isVisible: true
-            }
-          }
         ]
-      }
     ];
-  };
-
   // Header do modo
   const getModeTitle = () => {
     switch (mode) {
@@ -536,9 +384,6 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
       case 'result': return 'Editor de Resultado';
       case 'offer': return 'Editor de Oferta';
       default: return 'Editor Visual';
-    }
-  };
-
   return (
     <DndContext
       sensors={sensors}
@@ -560,14 +405,11 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
               </div>
               <div className="text-sm text-gray-600">
                 Quiz ID: {quizId}
-              </div>
             </div>
           </div>
         </div>
-
         {/* Ajustar margin-top para o header */}
         <div className="flex w-full mt-16">
-          
           {/* SIDEBAR ESQUERDA - ETAPAS */}
           <div className={`transition-all duration-300 ${
             sidebarCollapsed.steps ? 'w-16' : 'w-64'
@@ -589,9 +431,6 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
                 >
                   <Grid3x3 className="w-4 h-4" />
                 </Button>
-              </div>
-            </div>
-
             {/* Lista de Etapas */}
             <StepsPanel
               steps={steps}
@@ -604,43 +443,22 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
               onReorderSteps={() => {}}
               collapsed={sidebarCollapsed.steps}
             />
-          </div>
-
           {/* SIDEBAR ESQUERDA 2 - COMPONENTES */}
-          <div className={`transition-all duration-300 ${
             sidebarCollapsed.components ? 'w-16' : 'w-80'
-          } bg-white border-r border-gray-200 flex flex-col`}>
-            
             {/* Header dos Componentes */}
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
                 {!sidebarCollapsed.components && (
                   <h2 className="font-semibold text-gray-900">Componentes</h2>
-                )}
-                <Button
-                  variant="ghost"
-                  size="sm"
                   onClick={() => setSidebarCollapsed(prev => ({ ...prev, components: !prev.components }))}
-                >
                   <Plus className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-
             {/* Toolbar de Componentes */}
             <ComponentToolbar
               categories={COMPONENT_CATEGORIES}
               components={COMPONENT_REGISTRY}
               collapsed={sidebarCollapsed.components}
-            />
-          </div>
-
           {/* ÁREA PRINCIPAL - CANVAS */}
           <div className="flex-1 flex flex-col">
-            
             {/* Toolbar Superior */}
             <div className="bg-white border-b border-gray-200 p-4">
-              <div className="flex items-center justify-between">
                 
                 {/* Actions Left */}
                 <div className="flex items-center gap-2">
@@ -652,18 +470,10 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
                   >
                     <Undo2 className="w-4 h-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
                     onClick={redo}
                     disabled={historyIndex >= history.length - 1}
-                  >
                     <Redo2 className="w-4 h-4" />
-                  </Button>
-                </div>
-                
                 {/* Preview Mode Selector */}
-                <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-gray-700">Preview:</span>
                   <div className="flex border border-gray-300 rounded-lg">
                     {[
@@ -683,32 +493,18 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
                       </Button>
                     ))}
                   </div>
-                </div>
-
                 {/* Actions Right */}
-                <div className="flex items-center gap-2">
                   <Button 
                     variant="outline" 
-                    size="sm"
                     onClick={() => setShowTemplateLibrary(true)}
-                  >
                     <FileText className="w-4 h-4 mr-1" />
                     Templates
-                  </Button>
-
                   <Button variant="outline" size="sm">
                     <Eye className="w-4 h-4 mr-1" />
                     Preview
-                  </Button>
-
                   <Button onClick={handleSave} size="sm">
                     <Save className="w-4 h-4 mr-1" />
                     Salvar
-                  </Button>
-                </div>
-              </div>
-            </div>
-
             {/* Canvas */}
             <div className="flex-1 overflow-auto p-6">
               <DropZoneCanvas
@@ -718,33 +514,15 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
                 onSelectItem={setSelectedItemId}
                 onDeleteItem={deleteItem}
               />
-            </div>
-          </div>
-
           {/* SIDEBAR DIREITA - PROPRIEDADES */}
-          <div className={`transition-all duration-300 ${
             sidebarCollapsed.properties ? 'w-16' : 'w-80'
           } bg-white border-l border-gray-200 flex flex-col`}>
-            
             {/* Header das Propriedades */}
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
                 {!sidebarCollapsed.properties && (
-                  <h2 className="font-semibold text-gray-900 flex items-center gap-2">
                     <Settings className="w-5 h-5" />
                     Propriedades
-                  </h2>
-                )}
-                <Button
-                  variant="ghost"
-                  size="sm"
                   onClick={() => setSidebarCollapsed(prev => ({ ...prev, properties: !prev.properties }))}
-                >
                   <Settings className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-
             {/* Painel de Propriedades */}
             <PropertiesPanel
               selectedItem={selectedItem}
@@ -754,10 +532,6 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
               onDeleteItem={deleteItem}
               onDuplicateItem={duplicateItem}
               collapsed={sidebarCollapsed.properties}
-            />
-          </div>
-        </div>
-
         {/* Drag Overlay */}
         <DragOverlay>
           {draggedComponent ? (
@@ -765,11 +539,9 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
               <div className="flex items-center gap-2">
                 <draggedComponent.icon className="w-5 h-5 text-blue-600" />
                 <span className="font-medium text-blue-900">{draggedComponent.label}</span>
-              </div>
             </Card>
           ) : null}
         </DragOverlay>
-
         {/* Template Library Modal */}
         {showTemplateLibrary && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -778,10 +550,7 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-2xl font-bold">
                     Templates para {mode === 'quiz' ? 'Quiz' : mode === 'result' ? 'Resultado' : 'Oferta'}
-                  </h2>
                   <Button variant="ghost" onClick={() => setShowTemplateLibrary(false)}>✕</Button>
-                </div>
-                
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {getTemplatesByMode().map((template) => (
                     <Card key={template.id} className="p-4 hover:shadow-lg transition-shadow cursor-pointer">
@@ -799,14 +568,8 @@ export const DragDropEditor: React.FC<DragDropEditorProps> = ({
                       </div>
                     </Card>
                   ))}
-                </div>
-              </div>
-            </Card>
-          </div>
         )}
       </div>
     </DndContext>
-  );
 };
-
 export default DragDropEditor;

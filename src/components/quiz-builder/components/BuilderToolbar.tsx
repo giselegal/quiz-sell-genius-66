@@ -6,7 +6,6 @@ import {
   Save, Eye, EyeOff, Settings, Edit, Layout, 
   FileText, DatabaseBackup, Share2, Play, Import
 } from 'lucide-react';
-
 interface BuilderToolbarProps {
   activeView: 'editor' | 'preview';
   isPreviewing: boolean;
@@ -16,7 +15,6 @@ interface BuilderToolbarProps {
   onPreviewResultPage?: () => void;
   onImportQuizTemplate: () => void;
 }
-
 const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
   activeView,
   isPreviewing,
@@ -44,28 +42,21 @@ const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
               <Edit className="w-4 h-4 mr-2" />
               Construtor
             </TabsTrigger>
-            <TabsTrigger 
               value="preview" 
-              className="text-sm text-gray-200 data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white"
-            >
               <Play className="w-4 h-4 mr-2" />
               Prévia
-            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
-
       <div className="flex items-center space-x-2">
         <Button 
           variant="outline" 
           size="sm" 
           onClick={onImportQuizTemplate}
           className="text-gray-300 border-[#444444] bg-[#333333] hover:bg-[#444444] hover:text-white"
-        >
           <FileText className="w-4 h-4 mr-2" />
           Importar Quiz
         </Button>
-
         {activeView === 'editor' && (
           <Button 
             variant="outline" 
@@ -79,47 +70,24 @@ const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
                 Editar
               </>
             ) : (
-              <>
                 <Eye className="w-4 h-4 mr-2" />
                 Visualizar
-              </>
             )}
           </Button>
         )}
-        
         {activeView === 'preview' && (
-          <Button 
-            variant="outline" 
-            size="sm" 
             onClick={onPreviewResultPage}
-            className="text-gray-300 border-[#444444] bg-[#333333] hover:bg-[#444444] hover:text-white"
-          >
             <Layout className="w-4 h-4 mr-2" />
             Visualizar Resultado
-          </Button>
-        )}
-        
-        <Button 
           variant="default" 
-          size="sm" 
           onClick={onSave}
           className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
-        >
           <Save className="w-4 h-4 mr-2" />
           Salvar
-        </Button>
-        
-        <Button 
-          variant="default" 
-          size="sm" 
           className="bg-[#6E59A5] hover:bg-[#5D48A0] text-white"
-        >
           <Share2 className="w-4 h-4 mr-2" />
           Publicar
-        </Button>
-      </div>
     </div>
   );
 };
-
 export default BuilderToolbar;

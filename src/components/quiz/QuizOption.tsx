@@ -7,7 +7,6 @@ import { highlightStrategicWords } from '@/utils/textHighlight';
 import { QuizOptionImage } from './QuizOptionImage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Check } from 'lucide-react';
-
 interface QuizOptionProps {
   option: QuizOptionType;
   isSelected: boolean;
@@ -17,7 +16,6 @@ interface QuizOptionProps {
   isDisabled?: boolean;
   isStrategicOption?: boolean; // Nova prop
 }
-
 const QuizOption: React.FC<QuizOptionProps> = ({
   option,
   isSelected,
@@ -52,47 +50,31 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         // Para opções de imagem - sem borda, apenas sombra
         else {
           optionRef.current.style.borderColor = 'transparent';
-          optionRef.current.style.boxShadow = isStrategicOption 
             ? '0 15px 30px rgba(0, 0, 0, 0.25)' // Sombra mais pronunciada para estratégicas
             : '0 12px 24px rgba(0, 0, 0, 0.2)';
         }
       } else {
-        if (type === 'text') {
           optionRef.current.style.borderColor = '#B89B7A';
           optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
-          
-          if (isStrategicOption) {
             // Resetar estilo para opções estratégicas não selecionadas
             optionRef.current.style.backgroundColor = '#FEFEFE';
             optionRef.current.style.transform = 'translateY(0)';
-          }
         } else {
-          optionRef.current.style.borderColor = 'transparent';
-          optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
-        }
       }
     }
   }, [isSelected, type, isStrategicOption]);
-  
   // Manipulador de clique customizado com debounce
   const handleClick = () => {
     if (!isDisabled) {
       // Se já está selecionado e é uma questão estratégica, não permitimos desmarcar
       if (isSelected && isStrategicOption) {
         return; // Impede desmarcar a opção em questões estratégicas
-      }
       
       // Aplicar mudança visual imediatamente para feedback instantâneo
       if (optionRef.current) {
-        if (type === 'text') {
           optionRef.current.style.borderColor = isSelected ? '#B89B7A' : '#b29670';
-          
           // Efeito visual adicional para opções estratégicas
           if (isStrategicOption && !isSelected) {
-            optionRef.current.style.backgroundColor = '#faf6f1';
-            optionRef.current.style.transform = 'translateY(-2px)';
-          }
-        }
         
         // Aplicar sombra correspondente ao estado
         optionRef.current.style.boxShadow = isSelected 
@@ -100,15 +82,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           : (isStrategicOption 
               ? (type === 'text' ? '0 6px 12px rgba(178, 150, 112, 0.4)' : '0 15px 30px rgba(0, 0, 0, 0.25)') 
               : (type === 'text' ? '0 4px 8px rgba(178, 150, 112, 0.25)' : '0 12px 24px rgba(0, 0, 0, 0.2)'));
-      }
-      
       // Chamar onSelect com um pequeno atraso para evitar flash
       setTimeout(() => {
         onSelect(option.id);
       }, 10);
-    }
   };
-  
   return (
     <div 
       className={cn(
@@ -124,13 +102,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         className={cn(
           "relative h-full flex flex-col rounded-lg overflow-hidden",
           "cursor-pointer", 
-          
           // Para opções de texto - manter borda
           type === 'text' && "p-4 border",
-          
           // Para opções de imagem - SEM borda na coluna
           type !== 'text' && "border-0",
-          
           // Fundo sólido sem transparência e adicionando sombra padrão
           "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300"
         )}
@@ -144,8 +119,6 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             is3DQuestion={is3DQuestion}
             questionId={questionId || ''}
           />
-        )}
-        
         <p className={cn(
           type !== 'text' 
             ? cn(
@@ -158,11 +131,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 isMobile ? "text-[0.9rem]" : "text-sm sm:text-base",
                 isStrategicOption && "text-[1.1rem] sm:text-lg",  // Maior para opções estratégicas texto
                 !isStrategicOption && ".text-only-question & " && "text-[1rem] sm:text-lg" // Maior para opções só texto
-              )
         )}>
           {highlightStrategicWords(option.text)}
         </p>
-        
         {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
           isStrategicOption ? (
@@ -178,10 +149,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
               strokeWidth={3}
             />
           )
-        )}
       </div>
     </div>
   );
 };
-
 export { QuizOption };

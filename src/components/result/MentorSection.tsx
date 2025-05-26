@@ -14,15 +14,9 @@ const MentorSection: React.FC = () => {
           <p className="text-[#432818] mb-4">
             <strong>Gisele Galvão</strong> — Consultora de Imagem e Estilo, Persona Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.
           </p>
-          <p className="text-[#432818] mb-4">
             Advogada de formação. Mãe da Victória, esposa do Fabrício.
-          </p>
-          <p className="text-[#432818] mb-4">
             Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano. Colérica, virginiana, paciente, pacificadora e muito empata.
-          </p>
-          <p className="text-[#432818] mb-4">
             Amo receber, atos de serviços e tempo de qualidade são minha linguagem de amor. Amo vinho, chás e café. Meus maiores valores são minha família, justiça, honestidade, ética e liberdade.
-          </p>
         </div>
         
         <div className="relative">
@@ -43,7 +37,6 @@ const MentorSection: React.FC = () => {
           {/* Elegant decorative corner */}
           <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
           <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
-        </div>
       </div>
     </Card>;
 };

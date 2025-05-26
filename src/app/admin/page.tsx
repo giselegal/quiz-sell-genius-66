@@ -17,12 +17,10 @@ import {
   ArrowDown,
   Activity
 } from 'lucide-react';
-
 export default function AdminDashboard() {
   const router = useRouter();
   
   // Removido o redirecionamento automático para permitir acesso ao dashboard
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -49,11 +47,7 @@ export default function AdminDashboard() {
             <button className="px-4 py-2 bg-gradient-to-r from-[#432818] to-[#5C3B2A] text-white rounded-lg hover:from-[#5C3B2A] hover:to-[#6D4C37] transition-colors">
               <Plus className="w-4 h-4 mr-2 inline" />
               Novo Quiz
-            </button>
-          </Link>
-        </div>
       </div>
-
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
@@ -65,29 +59,21 @@ export default function AdminDashboard() {
             icon: BarChart3,
             description: '2 novos este mês'
           },
-          {
             title: 'Respostas Hoje',
             value: '847',
             change: '+12.5%',
-            changeType: 'positive',
             icon: Users,
             description: 'vs. ontem'
-          },
-          {
             title: 'Taxa de Conversão',
             value: '4.8%',
             change: '+0.3%',
-            changeType: 'positive',
             icon: Target,
             description: 'média geral'
-          },
-          {
             title: 'Revenue Hoje',
             value: 'R$ 2.847',
             change: '-5.2%',
             changeType: 'negative',
             icon: TrendingUp,
-            description: 'vs. ontem'
           }
         ].map((stat, index) => {
           const Icon = stat.icon;
@@ -113,19 +99,15 @@ export default function AdminDashboard() {
                 </div>
                 <div className="p-3 bg-[#F5F2E9] rounded-full">
                   <Icon className="w-6 h-6 text-[#B89B7A]" />
-                </div>
               </div>
             </div>
           );
         })}
-      </div>
-
       {/* Quick Actions */}
       <div className="border border-[#D4C4A0] rounded-lg bg-white">
         <div className="p-6 border-b border-[#D4C4A0]">
           <h2 className="text-xl font-bold text-[#432818]">🚀 Ações Rápidas</h2>
           <p className="text-[#B89B7A] text-sm mt-1">Acesse rapidamente as principais funcionalidades</p>
-        </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
@@ -137,22 +119,17 @@ export default function AdminDashboard() {
                 color: 'bg-blue-500',
                 badge: 'NOVO'
               },
-              {
                 title: 'Configurar Pixels',
                 description: 'Setup de tracking e conversão',
                 icon: Code,
                 to: '/admin/tracking',
                 color: 'bg-purple-500',
                 badge: 'PRO'
-              },
-              {
                 title: 'Ver Analytics',
                 description: 'Relatórios detalhados',
                 icon: BarChart3,
                 to: '/admin/analytics',
                 color: 'bg-green-500'
-              },
-              {
                 title: 'Gerenciar Leads',
                 description: 'Todos os leads capturados',
                 icon: Users,
@@ -180,14 +157,10 @@ export default function AdminDashboard() {
                     </div>
                     <h3 className="font-semibold text-[#432818] mb-1">{action.title}</h3>
                     <p className="text-sm text-[#B89B7A]">{action.description}</p>
-                  </div>
                 </Link>
               );
             })}
           </div>
-        </div>
-      </div>
-
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Quizzes */}
@@ -200,8 +173,6 @@ export default function AdminDashboard() {
                   Ver Todos
                 </button>
               </Link>
-            </div>
-          </div>
           <div className="p-6">
             <div className="space-y-4">
               {[
@@ -213,15 +184,11 @@ export default function AdminDashboard() {
                   conversions: 12,
                   rate: 5.1
                 },
-                {
                   id: 2,
                   title: 'Descubra Seu Produto Ideal',
-                  status: 'ativo',
                   responses: 189,
                   conversions: 8,
                   rate: 4.2
-                },
-                {
                   id: 3,
                   title: 'Personalidade Empreendedora',
                   status: 'rascunho',
@@ -243,34 +210,18 @@ export default function AdminDashboard() {
                       </span>
                       <span className="text-xs text-[#B89B7A]">
                         {quiz.responses} respostas
-                      </span>
                       {quiz.rate > 0 && (
                         <span className="text-xs text-green-600 font-medium">
                           {quiz.rate}% conv.
-                        </span>
-                      )}
-                    </div>
-                  </div>
                   <Link href={`/admin/quizzes/${quiz.id}`}>
                     <button className="p-2 text-[#B89B7A] hover:text-[#432818] hover:bg-white rounded transition-colors">
                       <Eye className="w-4 h-4" />
                     </button>
                   </Link>
-                </div>
               ))}
-            </div>
-          </div>
-        </div>
-
         {/* Performance Chart */}
-        <div className="border border-[#D4C4A0] rounded-lg bg-white">
-          <div className="p-6 border-b border-[#D4C4A0]">
             <h2 className="text-xl font-bold text-[#432818]">Performance Semanal</h2>
             <p className="text-[#B89B7A] text-sm mt-1">Conversões dos últimos 7 dias</p>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {[
                 { day: 'Segunda', value: 85, conversions: 12 },
                 { day: 'Terça', value: 92, conversions: 15 },
                 { day: 'Quarta', value: 78, conversions: 9 },
@@ -283,80 +234,45 @@ export default function AdminDashboard() {
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium text-[#432818]">{data.day}</span>
                     <span className="text-sm text-[#B89B7A]">{data.conversions} conversões</span>
-                  </div>
                   <div className="w-full bg-[#F5F2E9] rounded-full h-2">
                     <div 
                       className="bg-[#B89B7A] h-2 rounded-full transition-all duration-500"
                       style={{ width: `${data.value}%` }}
                     />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Activity Feed */}
-      <div className="border border-[#D4C4A0] rounded-lg bg-white">
-        <div className="p-6 border-b border-[#D4C4A0]">
           <h2 className="text-xl font-bold text-[#432818] flex items-center gap-2">
             <Activity className="w-5 h-5" />
             Atividade Recente
           </h2>
-        </div>
-        <div className="p-6">
           <div className="space-y-4">
-            {[
-              {
                 action: 'Novo quiz criado',
                 details: '"Quiz de Marketing Digital" foi publicado',
                 time: '2 horas atrás',
                 icon: Plus,
                 color: 'text-green-600'
-              },
-              {
                 action: 'Meta atingida',
                 details: '100 conversões alcançadas este mês',
                 time: '4 horas atrás',
                 icon: Target,
                 color: 'text-blue-600'
-              },
-              {
                 action: 'Pixel configurado',
                 details: 'Facebook Pixel foi instalado com sucesso',
                 time: '1 dia atrás',
-                icon: Code,
                 color: 'text-purple-600'
-              },
-              {
                 action: 'Relatório gerado',
                 details: 'Exportação de leads concluída',
                 time: '2 dias atrás',
-                icon: BarChart3,
                 color: 'text-orange-600'
-              }
             ].map((activity, index) => {
               const Icon = activity.icon;
-              return (
                 <div key={index} className="flex items-center gap-4 p-3 hover:bg-[#F5F2E9] rounded-lg transition-colors">
                   <div className="p-2 rounded-full bg-gray-100">
                     <Icon className={`w-4 h-4 ${activity.color}`} />
-                  </div>
-                  <div className="flex-1">
                     <p className="font-medium text-[#432818] text-sm">{activity.action}</p>
                     <p className="text-xs text-[#B89B7A]">{activity.details}</p>
-                  </div>
                   <div className="flex items-center gap-1 text-xs text-[#B89B7A]">
                     <Calendar className="w-3 h-3" />
                     {activity.time}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

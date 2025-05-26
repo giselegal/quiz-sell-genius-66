@@ -5,7 +5,6 @@ import { Info } from 'lucide-react';
 
 const AccessibilityTip: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
-
   return (
     <>
       {isVisible && (
@@ -34,5 +33,4 @@ const AccessibilityTip: React.FC = () => {
     </>
   );
 };
-
 export default AccessibilityTip;

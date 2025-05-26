@@ -21,7 +21,6 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import { 
   TrendingDown, 
   TrendingUp, 
   Users, 
@@ -38,11 +37,9 @@ interface AdvancedFunnelProps {
   analyticsData: any;
   loading?: boolean;
 }
-
 export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, loading = false }) => {
   const [selectedTimeframe, setSelectedTimeframe] = useState<'7d' | '30d' | 'all'>('7d');
   const [comparisonMode, setComparisonMode] = useState<'previous' | 'target'>('previous');
-
   // Cores para diferentes estágios do funil
   const stageColors = {
     visitors: '#8B5CF6',     // Roxo
@@ -52,16 +49,13 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
     lead_generated: '#EF4444', // Vermelho
     sale: '#059669'          // Verde escuro
   };
-
   // Calcular dados do funil
   const funnelData = useMemo(() => {
     if (!analyticsData?.events) return [];
-
     const events = analyticsData.events || [];
     
     // Simular dados de visitantes (em produção viria do analytics)
     const totalVisitors = 1000 + events.length * 5;
-    
     const stages = [
       {
         name: 'Visitantes',
@@ -72,7 +66,6 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
         color: stageColors.visitors,
         icon: Users
       },
-      {
         name: 'Iniciaram Quiz',
         stage: 'quiz_start',
         value: events.filter(e => e.type === 'quiz_start').length,
@@ -80,45 +73,30 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
         description: 'Usuários que começaram o quiz',
         color: stageColors.quiz_start,
         icon: Target
-      },
-      {
         name: 'Completaram Quiz',
         stage: 'quiz_complete', 
         value: events.filter(e => e.type === 'quiz_complete').length,
-        percentage: 0,
         description: 'Usuários que finalizaram o quiz',
         color: stageColors.quiz_complete,
         icon: CheckCircle
-      },
-      {
         name: 'Visualizaram Resultado',
         stage: 'result_view',
         value: events.filter(e => e.type === 'result_view').length,
-        percentage: 0,
         description: 'Usuários que viram os resultados',
         color: stageColors.result_view,
-        icon: Target
-      },
-      {
         name: 'Geraram Lead',
         stage: 'lead_generated',
         value: events.filter(e => e.type === 'lead_generated').length,
-        percentage: 0,
         description: 'Usuários que deixaram contato',
         color: stageColors.lead_generated,
-        icon: Users
-      },
-      {
         name: 'Realizaram Compra',
         stage: 'sale',
         value: events.filter(e => e.type === 'sale').length,
-        percentage: 0,
         description: 'Usuários que efetivaram compra',
         color: stageColors.sale,
         icon: DollarSign
       }
     ];
-
     // Calcular percentuais relativos ao estágio anterior
     stages.forEach((stage, index) => {
       if (index === 0) {
@@ -128,12 +106,9 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
         stage.percentage = previousStage.value > 0 
           ? (stage.value / previousStage.value) * 100 
           : 0;
-      }
     });
-
     return stages;
   }, [analyticsData]);
-
   // Calcular taxa de conversão geral
   const overallConversionRate = useMemo(() => {
     if (funnelData.length < 2) return 0;
@@ -141,7 +116,6 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
     const sales = funnelData[funnelData.length - 1]?.value || 0;
     return visitors > 0 ? (sales / visitors) * 100 : 0;
   }, [funnelData]);
-
   // Identificar gargalos (maiores quedas no funil)
   const bottlenecks = useMemo(() => {
     const drops = [];
@@ -157,10 +131,7 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
         severity: dropPercentage > 70 ? 'high' : dropPercentage > 50 ? 'medium' : 'low'
       });
     }
-    
     return drops.sort((a, b) => b.dropPercentage - a.dropPercentage);
-  }, [funnelData]);
-
   // Dados para gráfico de barras comparativo
   const comparisonData = funnelData.map(stage => ({
     name: stage.name.replace(' ', '\n'),
@@ -169,7 +140,6 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
     anterior: Math.floor(stage.value * (0.8 + Math.random() * 0.4)),
     meta: Math.floor(stage.value * 1.2)
   }));
-
   if (loading) {
     return (
       <Card>
@@ -184,7 +154,6 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
       </Card>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Header com métricas principais */}
@@ -203,51 +172,24 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
             </p>
           </CardContent>
         </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
                 <p className="text-sm font-medium text-muted-foreground">Maior Gargalo</p>
                 <p className="text-lg font-bold text-red-600">
                   {bottlenecks[0]?.dropPercentage.toFixed(1)}% queda
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {bottlenecks[0]?.from} → {bottlenecks[0]?.to}
-                </p>
-              </div>
               <AlertTriangle className="w-8 h-8 text-red-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
                 <p className="text-sm font-medium text-muted-foreground">Total de Vendas</p>
                 <p className="text-3xl font-bold text-blue-600">
                   {funnelData[funnelData.length - 1]?.value || 0}
-                </p>
-              </div>
               <DollarSign className="w-8 h-8 text-blue-600" />
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
               Conversões confirmadas
-            </p>
-          </CardContent>
-        </Card>
       </div>
-
       {/* Funil visual principal */}
-      <Card>
-        <CardHeader>
           <CardTitle>Funil de Conversão Visual</CardTitle>
           <CardDescription>
             Visualização do caminho completo do usuário desde a visita até a compra
           </CardDescription>
-        </CardHeader>
-        <CardContent>
           <div className="space-y-4">
             {funnelData.map((stage, index) => {
               const Icon = stage.icon;
@@ -273,8 +215,6 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg">{stage.name}</h3>
                       <p className="text-sm text-muted-foreground">{stage.description}</p>
-                    </div>
-                    
                     {/* Métricas */}
                     <div className="text-right space-y-1">
                       <div className="text-2xl font-bold">{stage.value.toLocaleString()}</div>
@@ -289,9 +229,7 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
                           </Badge>
                         )}
                       </div>
-                    </div>
                   </div>
-                  
                   {/* Barra de progresso visual */}
                   <div className="mt-2 mx-4">
                     <Progress 
@@ -301,26 +239,15 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
                         backgroundColor: `${stage.color}20`,
                       }}
                     />
-                  </div>
                 </div>
               );
             })}
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Análise de gargalos */}
-      <Card>
-        <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-red-500" />
             Análise de Gargalos
           </CardTitle>
-          <CardDescription>
             Identifica onde estão as maiores perdas no funil de conversão
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
           <div className="space-y-3">
             {bottlenecks.map((bottleneck, index) => (
               <div 
@@ -341,7 +268,6 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
                     <p className="text-sm text-muted-foreground">
                       Perda de {bottleneck.dropPercentage.toFixed(1)}% dos usuários
                     </p>
-                  </div>
                   <Badge 
                     variant={
                       bottleneck.severity === 'high' 
@@ -355,20 +281,13 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
                     {bottleneck.severity === 'medium' && 'Moderado'}
                     {bottleneck.severity === 'low' && 'Baixo'}
                   </Badge>
-                </div>
-              </div>
             ))}
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Gráficos comparativos */}
       <Tabs defaultValue="comparison" className="space-y-4">
         <TabsList>
           <TabsTrigger value="comparison">Comparação Temporal</TabsTrigger>
           <TabsTrigger value="trends">Tendências</TabsTrigger>
         </TabsList>
-
         <TabsContent value="comparison">
           <Card>
             <CardHeader>
@@ -387,37 +306,19 @@ export const AdvancedFunnel: React.FC<AdvancedFunnelProps> = ({ analyticsData, l
                     <Bar dataKey="meta" fill="#10B981" name="Meta" />
                   </BarChart>
                 </ResponsiveContainer>
-              </div>
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="trends">
-          <Card>
-            <CardHeader>
               <CardTitle>Tendências de Conversão</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={comparisonData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
                     <Line 
                       type="monotone" 
                       dataKey="atual" 
                       stroke="#3B82F6" 
                       strokeWidth={3}
                       name="Conversões Atuais"
-                    />
                   </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
     </div>
   );

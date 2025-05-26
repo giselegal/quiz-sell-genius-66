@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { optimizeCloudinaryUrl, getResponsiveImageSources, getLowQualityPlaceholder } from '@/utils/imageUtils';
 import { getImageMetadata, isImagePreloaded, getOptimizedImage } from '@/utils/imageManager';
-
 interface OptimizedImageProps {
   src: string;
   alt: string;
@@ -16,7 +15,6 @@ interface OptimizedImageProps {
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   style?: React.CSSProperties;
 }
-
 /**
  * Componente de imagem otimizado que implementa:
  * - Lazy loading
@@ -41,24 +39,19 @@ export default function OptimizedImage({
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [blurredLoaded, setBlurredLoaded] = useState(false);
-
   // Check if this image has metadata in our image bank
   const imageMetadata = useMemo(() => src ? getImageMetadata(src) : undefined, [src]);
-
   // Generate placeholders and optimized URLs only once
   const placeholderSrc = useMemo(() => {
     if (!src) return '';
     return getLowQualityPlaceholder(src);
   }, [src]);
-
   // Otimizar URLs do Cloudinary automaticamente
   const optimizedSrc = useMemo(() => {
-    if (!src) return '';
     
     // Use metadata width/height if available and not overridden
     const imgWidth = width || (imageMetadata?.width || undefined);
     const imgHeight = height || (imageMetadata?.height || undefined);
-    
     return getOptimizedImage(src, {
       quality: 75, // Reduzido de 95 para 75
       format: 'auto',
@@ -66,7 +59,6 @@ export default function OptimizedImage({
       height: imgHeight
     });
   }, [src, width, height, imageMetadata]);
-
   // Get responsive image attributes if needed
   const responsiveImageProps = useMemo(() => {
     if (!src) return { srcSet: '', sizes: '' };
@@ -75,14 +67,12 @@ export default function OptimizedImage({
     }
     return { srcSet: '', sizes: '' };
   }, [src, width]);
-
   // For priority images, we check if they're already preloaded and update state accordingly
   useEffect(() => {
     // Reset states when src changes
     setLoaded(false);
     setBlurredLoaded(false);
     setError(false);
-    
     if (src && priority) {
       if (isImagePreloaded(src)) {
         // If already preloaded, mark as loaded
@@ -98,12 +88,10 @@ export default function OptimizedImage({
         };
         img.onerror = () => setError(true);
       }
-
       // Always load the blurred version for smoother transitions
       const blurImg = new Image();
       blurImg.src = placeholderSrc;
       blurImg.onload = () => setBlurredLoaded(true);
-    }
   }, [optimizedSrc, placeholderSrc, priority, src, onLoad]);
   
   return (
@@ -153,8 +141,6 @@ export default function OptimizedImage({
         srcSet={responsiveImageProps.srcSet || undefined}
         sizes={responsiveImageProps.sizes || undefined}
         onLoad={() => {
-          setLoaded(true);
-          onLoad?.();
         }}
         onError={() => setError(true)}
         className={cn(
@@ -170,12 +156,9 @@ export default function OptimizedImage({
         )}
         style={style}
       />
-      
       {error && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded">
           <span className="text-sm text-gray-500">Imagem não disponível</span>
         </div>
-      )}
     </div>
   );
-}

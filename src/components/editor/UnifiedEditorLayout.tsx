@@ -8,26 +8,21 @@ import PropertiesPanel from './properties/PropertiesPanel';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import ResultEditorPanel from '@/components/unified-editor/panels/ResultEditorPanel';
-
 interface UnifiedEditorLayoutProps {
   primaryStyle: StyleResult;
 }
-
 export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({
   primaryStyle
 }) => {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('md');
-
   const {
     resultPageEditor,
     saveAll
   } = useUnifiedEditor(primaryStyle);
-
   const handleTogglePreview = () => {
     setIsPreviewing(prev => !prev);
   };
-
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <EditorToolbar

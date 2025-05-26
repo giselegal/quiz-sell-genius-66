@@ -1,7 +1,6 @@
 
 import React from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-
 const AdminPage = () => {
   return (
     <AdminLayout>
@@ -12,5 +11,4 @@ const AdminPage = () => {
     </AdminLayout>
   );
 };
-
 export default AdminPage;

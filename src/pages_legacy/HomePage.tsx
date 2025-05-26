@@ -15,7 +15,6 @@ const HomePage = () => {
   const { startQuiz } = useQuizContext();
   const { login } = useAuth();
   const { captureUtmParameters, utmParams } = useUtmParameters();
-
   // Defer non-critical initialization
   useEffect(() => {
     // Register the time of start for calculating the quiz completion time later
@@ -23,7 +22,6 @@ const HomePage = () => {
     
     // Execute critical tasks immediately
     captureUTMParameters();
-    
     // Defer non-critical tasks
     const timer = setTimeout(() => {
       import('@/utils/analytics').then(analytics => {
@@ -39,37 +37,28 @@ const HomePage = () => {
           console.log('User came from Facebook campaign');
         }
       }
-      
       setIsLoading(false);
     }, 100);
-    
     return () => clearTimeout(timer);
   }, [utmParams]);
-
   const handleStart = async (name: string, email?: string) => {
     setStarted(true);
     login(name);
-    
     // Save the official quiz start timestamp
     safeLocalStorage.setItem('quiz_start_time', Date.now().toString());
-    
     // Track quiz start with user data and UTM parameters
     trackQuizStart(name, email);
-    
     // If email was provided, register as lead
     if (email) {
       trackLeadGeneration(email);
     }
-    
     console.log(`Quiz started by ${name}${email ? ` (${email})` : ''}`);
     safeLocalStorage.setItem('userName', name);
     if (email) safeLocalStorage.setItem('userEmail', email);
   };
-
   if (isLoading) {
     return <LoadingState message="Carregando quiz..." />;
   }
-
   return (
     <div className="bg-background">
       {!started ? (
@@ -80,5 +69,4 @@ const HomePage = () => {
     </div>
   );
 };
-
 export default HomePage;

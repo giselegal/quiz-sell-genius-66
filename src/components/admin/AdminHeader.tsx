@@ -7,7 +7,6 @@ interface AdminHeaderProps {
   showBackButton?: boolean;
   backTo?: string;
 }
-
 export function AdminHeader({ 
   title, 
   showBackButton = true, 
@@ -31,10 +30,6 @@ export function AdminHeader({
         <Button variant="outline" size="sm" asChild>
           <Link href="/admin">Painel</Link>
         </Button>
-        <Button variant="outline" size="sm" asChild>
           <Link href="/">Ver Site</Link>
-        </Button>
-      </div>
     </div>
   );
-}

@@ -7,7 +7,6 @@ interface PropertyPanelProps {
   selectedComponent: any | null;
   onChange: (updatedComponent: any) => void;
 }
-
 export default function PropertyPanel({ 
   selectedComponent,
   onChange 
@@ -21,7 +20,6 @@ export default function PropertyPanel({
       </div>
     );
   }
-
   const updateProperty = (key: string, value: any) => {
     const updated = {
       ...selectedComponent,
@@ -32,7 +30,6 @@ export default function PropertyPanel({
     };
     onChange(updated);
   };
-
   return (
     <div className="space-y-4">
       <h3 className="font-medium">Propriedades</h3>
@@ -42,9 +39,6 @@ export default function PropertyPanel({
         <div className="mt-1 rounded border bg-gray-50 p-2 text-sm capitalize">
           {selectedComponent.type || 'Componente'}
         </div>
-      </div>
-
-      <div>
         <Label htmlFor="component-id">ID</Label>
         <Input 
           id="component-id"
@@ -53,8 +47,6 @@ export default function PropertyPanel({
           onChange={(e) => onChange({...selectedComponent, id: e.target.value})}
           placeholder="ID único do componente"
         />
-      </div>
-
       {/* Propriedades específicas para texto */}
       {(selectedComponent.type === 'heading' || selectedComponent.type === 'paragraph' || selectedComponent.type === 'button') && (
         <div>
@@ -65,12 +57,9 @@ export default function PropertyPanel({
             onChange={(e) => updateProperty('text', e.target.value)}
             placeholder="Digite o texto aqui"
           />
-        </div>
       )}
-
       {/* Propriedades específicas para heading */}
       {selectedComponent.type === 'heading' && (
-        <div>
           <Label htmlFor="heading-level">Nível do Título</Label>
           <Select 
             value={selectedComponent.props?.level?.toString() || '1'}
@@ -86,30 +75,16 @@ export default function PropertyPanel({
               <SelectItem value="4">H4 - Título Pequeno</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-      )}
-
       {/* Propriedades específicas para button */}
       {selectedComponent.type === 'button' && (
-        <div>
           <Label htmlFor="button-variant">Estilo do Botão</Label>
-          <Select 
             value={selectedComponent.props?.variant || 'primary'}
             onValueChange={(value) => updateProperty('variant', value)}
-          >
-            <SelectTrigger>
               <SelectValue placeholder="Selecione o estilo" />
-            </SelectTrigger>
-            <SelectContent>
               <SelectItem value="primary">Primário</SelectItem>
               <SelectItem value="secondary">Secundário</SelectItem>
               <SelectItem value="outline">Contorno</SelectItem>
               <SelectItem value="ghost">Fantasma</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
       {/* Propriedades específicas para image */}
       {selectedComponent.type === 'image' && (
         <>
@@ -123,18 +98,12 @@ export default function PropertyPanel({
               placeholder="https://exemplo.com/imagem.jpg"
             />
           </div>
-          <div>
             <Label htmlFor="image-alt">Texto Alternativo</Label>
-            <Input 
               id="image-alt"
               type="text" 
               value={selectedComponent.props?.alt || ''}
               onChange={(e) => updateProperty('alt', e.target.value)}
               placeholder="Descrição da imagem"
-            />
-          </div>
         </>
-      )}
     </div>
   );
-}

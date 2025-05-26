@@ -7,14 +7,12 @@ import { EditorToolbar } from './toolbar/EditorToolbar';
 import { EditorContent } from './content/EditorContent';
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory';
 import { useEditorActions } from '@/hooks/editor/useEditorActions';
-
 interface PageEditorProps {
   blocks: EditorBlock[];
   onBlocksChange: (blocks: EditorBlock[]) => void;
   onPreviewToggle: () => void;
   isPreviewing: boolean;
 }
-
 export const PageEditor: React.FC<PageEditorProps> = ({
   blocks,
   onBlocksChange,
@@ -27,7 +25,6 @@ export const PageEditor: React.FC<PageEditorProps> = ({
     onBlocksChange,
     addToHistory
   );
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
@@ -37,12 +34,10 @@ export const PageEditor: React.FC<PageEditorProps> = ({
       
       const newBlocks = arrayMove(blocks, activeIndex, overIndex)
         .map((block, index) => ({ ...block, order: index }));
-      
       onBlocksChange(newBlocks);
       addToHistory(newBlocks);
     }
   };
-
   return (
     <div className="h-full flex flex-col">
       <EditorToolbar 
@@ -54,7 +49,6 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         canUndo={canUndo}
         canRedo={canRedo}
       />
-
       <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
         <EditorContent 
           blocks={blocks}
@@ -66,5 +60,4 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         />
       </div>
     </div>
-  );
 };

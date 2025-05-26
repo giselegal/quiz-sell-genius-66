@@ -17,13 +17,10 @@ interface Component {
   props: Record<string, any>;
   children?: Component[];
 }
-
 interface PageData {
   id?: string;
   title: string;
   components: Component[];
-}
-
 export default function EnhancedResultPageEditorPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -48,7 +45,6 @@ export default function EnhancedResultPageEditorPage() {
                 type: 'heading',
                 props: { text: 'Parabéns! Aqui está seu resultado:', level: 1 }
               },
-              {
                 id: 'comp-2',
                 type: 'paragraph',
                 props: { text: 'Com base nas suas respostas, preparamos este conteúdo especial para você.' }
@@ -80,39 +76,27 @@ export default function EnhancedResultPageEditorPage() {
     
     fetchPageData();
   }, [id]);
-  
   const saveToHistory = (newPageData: PageData) => {
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push(newPageData);
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
   };
-
   const undo = () => {
     if (historyIndex > 0) {
       setHistoryIndex(historyIndex - 1);
       setPageData(history[historyIndex - 1]);
     }
-  };
-
   const redo = () => {
     if (historyIndex < history.length - 1) {
       setHistoryIndex(historyIndex + 1);
       setPageData(history[historyIndex + 1]);
-    }
-  };
-
   const handleComponentsChange = (newComponents: Component[]) => {
     if (!pageData) return;
-    
     const newPageData = { ...pageData, components: newComponents };
     setPageData(newPageData);
     saveToHistory(newPageData);
-  };
-
   const handleSave = async () => {
-    if (!pageData) return;
-    
     setIsSaving(true);
     try {
       // Simulando salvamento - substitua pela chamada real da API
@@ -122,34 +106,22 @@ export default function EnhancedResultPageEditorPage() {
         title: 'Sucesso',
         description: 'Página salva com sucesso!',
       });
-      
       if (!id) {
         const newId = Date.now().toString();
         router.push(`/admin/editor/${newId}`);
-      }
     } catch (error) {
       console.error('Erro ao salvar página:', error);
-      toast({
         title: 'Erro',
         description: 'Não foi possível salvar a página',
         variant: 'destructive',
-      });
     } finally {
       setIsSaving(false);
-    }
-  };
-
   const handlePreview = () => {
     if (pageData?.id) {
       window.open(`/resultado/${pageData.id}`, '_blank');
     } else {
-      toast({
         title: 'Info',
         description: 'Salve a página primeiro para visualizar',
-      });
-    }
-  };
-  
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -160,11 +132,9 @@ export default function EnhancedResultPageEditorPage() {
       </div>
     );
   }
-  
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
       <AdminHeader title={`Editor Visual - ${pageData?.title || 'Nova Página'}`} />
-      
       {/* Toolbar */}
       <div className="flex items-center justify-between border-b bg-white px-4 py-2 shadow-sm">
         <div className="flex items-center gap-2">
@@ -176,28 +146,15 @@ export default function EnhancedResultPageEditorPage() {
           >
             <Undo className="h-4 w-4" />
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
             onClick={redo}
             disabled={historyIndex >= history.length - 1}
-          >
             <Redo className="h-4 w-4" />
-          </Button>
-        </div>
-
-        <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={handlePreview}>
             <Eye className="h-4 w-4 mr-2" />
             Visualizar
-          </Button>
           <Button onClick={handleSave} disabled={isSaving}>
             <Save className="h-4 w-4 mr-2" />
             {isSaving ? 'Salvando...' : 'Salvar'}
-          </Button>
-        </div>
-      </div>
-      
       <div className="flex flex-1">
         <DndProvider backend={HTML5Backend}>
           {/* Paleta de Componentes */}
@@ -213,27 +170,19 @@ export default function EnhancedResultPageEditorPage() {
               onChange={handleComponentsChange}
               selectedComponent={selectedComponent}
             />
-          </div>
-          
           {/* Painel de Propriedades */}
           <div className="w-80 border-l bg-white shadow-sm">
             <PropertyPanel 
-              selectedComponent={selectedComponent}
               onChange={(updatedComponent) => {
                 if (!pageData || !selectedComponent) return;
                 
                 const updatedComponents = pageData.components.map(comp => 
                   comp.id === selectedComponent.id ? updatedComponent : comp
                 );
-                
                 handleComponentsChange(updatedComponents);
                 setSelectedComponent(updatedComponent);
               }}
-            />
-          </div>
         </DndProvider>
-      </div>
-      
       {/* Footer fixo */}
       <div className="sticky bottom-0 flex justify-between border-t bg-white p-4 shadow-lg">
         <Button variant="outline" onClick={() => router.push('/admin')}>
@@ -243,12 +192,6 @@ export default function EnhancedResultPageEditorPage() {
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => router.push('/resultado')}>
             Ver Página de Resultados
-          </Button>
-          <Button onClick={handleSave} disabled={isSaving}>
             {isSaving ? 'Salvando...' : 'Salvar Alterações'}
-          </Button>
-        </div>
-      </div>
     </div>
   );
-}

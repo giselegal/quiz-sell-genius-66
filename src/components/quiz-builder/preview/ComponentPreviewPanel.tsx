@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 import ComponentRenderer from './ComponentRenderer';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-
 interface ComponentPreviewPanelProps {
   components: QuizComponentData[];
   selectedComponentId: string | null;
@@ -15,7 +14,6 @@ interface ComponentPreviewPanelProps {
   activeStage: QuizStage | null;
   isPreviewing: boolean;
 }
-
 export const ComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
   components,
   selectedComponentId,
@@ -31,16 +29,13 @@ export const ComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
       </div>
     );
   }
-
   const sortedComponents = [...components].sort((a, b) => a.order - b.order);
-
   return (
     <div className="h-full bg-[#F9F5F1] flex flex-col">
       <div className="bg-white border-b border-gray-200 px-4 py-2">
         <h3 className="text-sm font-medium text-gray-600">
           Visualizando: {activeStage.title || `Etapa ${activeStage.order + 1}`}
         </h3>
-      </div>
       
       <ScrollArea className="flex-1 p-4">
         <div 
@@ -74,7 +69,6 @@ export const ComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
                 isPreviewing={isPreviewing}
               />
             ))
-          )}
         </div>
       </ScrollArea>
     </div>

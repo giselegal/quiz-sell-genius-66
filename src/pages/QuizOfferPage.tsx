@@ -21,7 +21,6 @@ const customStyles = `
     --success: #22c55e;
     --spacing: 2rem;
   }
-  
   .container-main { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
   .section-gap { margin-bottom: 4rem; }
   .card-clean { 
@@ -30,8 +29,6 @@ const customStyles = `
     padding: 2rem; 
     box-shadow: 0 4px 20px rgba(184, 155, 122, 0.1);
     border: 1px solid rgba(184, 155, 122, 0.1);
-  }
-  
   .btn-primary-clean {
     background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);
     color: white;
@@ -45,18 +42,13 @@ const customStyles = `
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-  }
-  
   .btn-primary-clean:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
-  }
-  
   .text-hierarchy-1 { font-size: 3rem; font-weight: 700; line-height: 1.1; }
   .text-hierarchy-2 { font-size: 2rem; font-weight: 600; line-height: 1.2; }
   .text-hierarchy-3 { font-size: 1.5rem; font-weight: 600; line-height: 1.3; }
   .text-body { font-size: 1.125rem; line-height: 1.6; }
-  
   @media (max-width: 768px) {
     .container-main { padding: 0 1rem; }
     .section-gap { margin-bottom: 3rem; }
@@ -64,9 +56,7 @@ const customStyles = `
     .text-hierarchy-1 { font-size: 2rem; }
     .text-hierarchy-2 { font-size: 1.5rem; }
     .btn-primary-clean { width: 100%; justify-content: center; padding: 1.25rem; }
-  }
 `;
-
 // Constantes para otimização de imagens - URLs atualizadas
 const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
 const HERO_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
@@ -87,7 +77,6 @@ const TRANSFORMATION_REAL_IMAGE_3_URL = "https://res.cloudinary.com/dqljyf76t/im
 const GUARANTEE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp";
 const GUARANTEE_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp";
 const FAQ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515862/Sem_nome_1000_x_1000_px_1280_x_720_px_vmqk3j.webp";
-
 // Componente de estrelas para avaliações (mantido)
 const RatingStars = ({ rating }) => {
     return (
@@ -102,7 +91,6 @@ const RatingStars = ({ rating }) => {
         </div>
     );
 };
-
 // Componente de contagem regressiva melhorado (mantido)
 const CountdownTimer = () => {
     const [time, setTime] = useState({
@@ -110,7 +98,6 @@ const CountdownTimer = () => {
         minutes: 59,
         seconds: 59
     });
-
     useEffect(() => {
         const interval = setInterval(() => {
             setTime(prevTime => {
@@ -125,13 +112,9 @@ const CountdownTimer = () => {
                 }
             });
         }, 1000);
-
         return () => clearInterval(interval);
     }, []);
-
     const formatNumber = (num) => num.toString().padStart(2, '0');
-
-    return (
         <div className="flex flex-col items-center">
             <p className="text-[#432818] font-semibold mb-2 flex items-center">
                 <Clock size={18} className="mr-1 text-[#B89B7A]" />
@@ -142,67 +125,40 @@ const CountdownTimer = () => {
                     {formatNumber(time.hours)}
                 </div>
                 <span className="text-[#B89B7A] font-bold text-xl">:</span>
-                <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">
                     {formatNumber(time.minutes)}
-                </div>
-                <span className="text-[#B89B7A] font-bold text-xl">:</span>
-                <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">
                     {formatNumber(time.seconds)}
-                </div>
             </div>
-        </div>
-    );
-};
-
 // Componente FAQ (mantido)
 const FaqSectionNew = () => {
     const [openItem, setOpenItem] = useState(null);
-
     const faqItems = [
         {
             question: "Quanto tempo leva para fazer o quiz?",
             answer: "O quiz leva apenas alguns minutos para ser completado. São perguntas simples e objetivas sobre suas preferências e estilo de vida."
         },
-        {
             question: "Como recebo os materiais após a compra?",
             answer: "Imediatamente após a confirmação do pagamento, você receberá um e-mail com as instruções de acesso a todos os materiais."
-        },
-        {
             question: "Os guias servem para qualquer tipo físico?",
             answer: "Sim! Os guias foram desenvolvidos considerando a diversidade de tipos físicos. O mais importante é o seu estilo predominante, e as orientações são adaptáveis para valorizar seu corpo único."
-        },
-        {
             question: "Preciso ter conhecimento prévio sobre moda?",
             answer: "Não! Os guias foram criados justamente para quem quer aprender do zero ou aprimorar seus conhecimentos sobre estilo pessoal. Tudo é explicado de forma clara e didática."
-        },
-        {
             question: "Posso acessar os materiais pelo celular?",
             answer: "Sim! Todos os materiais são digitais e podem ser acessados por qualquer dispositivo: computador, tablet ou smartphone."
-        },
-        {
             question: "E se eu não gostar do conteúdo?",
             answer: "Você tem 7 dias de garantia incondicional. Se não ficar satisfeita, basta solicitar o reembolso e devolveremos 100% do seu investimento."
-        },
-        {
             question: "Quanto tempo terei acesso aos materiais?",
             answer: "O acesso é vitalício! Você poderá consultar os guias sempre que precisar, sem prazo de expiração."
-        },
-        {
             question: "Os guias funcionam para qualquer idade?",
             answer: "Absolutamente! Os princípios de estilo pessoal são atemporais e adaptáveis para mulheres de todas as idades. O importante é expressar sua essência, independente da sua fase de vida."
         }
     ];
-
     const toggleItem = (index) => {
         setOpenItem(openItem === index ? null : index);
     };
-
-    return (
         <div className="w-full max-w-3xl mx-auto">
             <h3 className="text-3xl font-bold text-[#432818] mb-8 text-center font-playfair">
                 Perguntas Frequentes
             </h3>
-
             <div className="space-y-4">
                 {faqItems.map((item, index) => (
                     <div
@@ -219,7 +175,6 @@ const FaqSectionNew = () => {
                                 className={`text-[#B89B7A] transition-transform duration-300 ${openItem === index ? 'transform rotate-90' : ''}`}
                             />
                         </button>
-
                         {openItem === index && (
                             <div className="px-6 py-4 text-gray-700 bg-gray-50 border-t border-gray-100 text-base">
                                 {item.answer}
@@ -227,11 +182,6 @@ const FaqSectionNew = () => {
                         )}
                     </div>
                 ))}
-            </div>
-        </div>
-    );
-};
-
 // Componente de título padronizado - SIMPLIFICADO
 const SectionTitle: React.FC<{
   children: React.ReactNode;
@@ -258,18 +208,14 @@ const SectionTitle: React.FC<{
     }`}>
       {children}
     </h2>
-    
     {/* Subtítulo opcional */}
     {subtitle && (
       <p className="text-xl text-brand-medium font-inter max-w-3xl mx-auto">
         {subtitle}
       </p>
-    )}
   </div>
 );
-
 const QuizOfferPage: React.FC = () => {
-    useEffect(() => {
         // Inject custom styles
         const styleElement = document.createElement('style');
         styleElement.textContent = customStyles;
@@ -291,26 +237,17 @@ const QuizOfferPage: React.FC = () => {
             ],
             { quality: 95 }
         );
-
         if (typeof window !== 'undefined' && 'performance' in window) {
             window.performance.mark('offer-page-mounted');
-        }
-        
         return () => {
             // Cleanup
             document.head.removeChild(styleElement);
         };
-    }, []);
-
     const handleCtaClick = (buttonId: string, action: string = 'Comprar Agora') => {
         trackButtonClick(
             buttonId,
             action,
             'quiz_offer_page'
-        );
-    };
-
-    return (
         <div className="min-h-screen bg-[var(--background)]" style={{ fontFamily: 'Inter, sans-serif' }}>
             {/* Header limpo */}
             <header className="py-4 px-6 sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
@@ -322,9 +259,7 @@ const QuizOfferPage: React.FC = () => {
                         height={80}
                         className="h-auto object-contain"
                     />
-                </div>
             </header>
-
             <main>
                 {/* 1. Hero Section - LIMPO E FOCADO */}
                 <section className="section-gap pt-8">
@@ -334,8 +269,6 @@ const QuizOfferPage: React.FC = () => {
                             <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-6">
                                 <Award size={18} className="text-green-600" />
                                 <span className="text-sm font-semibold text-green-700">3000+ mulheres transformadas</span>
-                            </div>
-
                             {/* Headline simplificada */}
                             <h1 className="text-hierarchy-1 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
                                 Descubra Seu <span className="text-[var(--primary)]">Estilo Predominante</span>
@@ -346,7 +279,6 @@ const QuizOfferPage: React.FC = () => {
                             <p className="text-body text-[var(--text-medium)] mb-8 max-w-2xl mx-auto">
                                 Tenha finalmente um guarda-roupa que <strong>funciona 100%</strong>, onde tudo combina e reflete sua personalidade
                             </p>
-
                             {/* Hero image otimizada */}
                             <div className="mb-8 max-w-lg mx-auto">
                                 <FixedIntroImage
@@ -356,8 +288,6 @@ const QuizOfferPage: React.FC = () => {
                                     height={400}
                                     className="w-full h-auto rounded-xl shadow-lg"
                                 />
-                            </div>
-
                             {/* CTA principal único */}
                             <button
                                 onClick={() => {
@@ -369,25 +299,18 @@ const QuizOfferPage: React.FC = () => {
                                 <ArrowRight size={20} />
                                 Descobrir Meu Estilo Agora
                             </button>
-                            
                             {/* Trust elements simples */}
                             <div className="flex items-center justify-center gap-6 text-sm text-[var(--text-light)]">
                                 <div className="flex items-center gap-1">
                                     <Lock size={16} className="text-green-600" />
                                     <span>100% Seguro</span>
                                 </div>
-                                <div className="flex items-center gap-1">
                                     <Shield size={16} className="text-green-600" />
                                     <span>7 Dias Garantia</span>
-                                </div>
-                            </div>
                         </div>
-                    </div>
                 </section>
-
                 {/* 2. Problema - SIMPLIFICADO */}
                 <section className="section-gap">
-                    <div className="container-main">
                         <div className="card-clean">
                             <div className="grid md:grid-cols-2 gap-8 items-center">
                                 <div>
@@ -398,20 +321,12 @@ const QuizOfferPage: React.FC = () => {
                                         <p>
                                             <strong>Guarda-roupa cheio</strong> mas nunca tem o que vestir?
                                         </p>
-                                        <p>
                                             <strong>Compra peças</strong> que nunca combinam com nada?
-                                        </p>
-                                        <p>
                                             <strong>Sente que "nada fica bom"</strong> em você?
-                                        </p>
                                     </div>
                                     <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400 mt-6">
                                         <p className="text-[var(--text-dark)] font-semibold">
                                             Isso acontece porque você ainda não descobriu seu <strong>estilo predominante</strong>.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div>
                                     <FixedIntroImage
                                         src={PROBLEM_IMAGE_URL}
                                         alt="Frustração com guarda-roupa"
@@ -419,54 +334,22 @@ const QuizOfferPage: React.FC = () => {
                                         height={350}
                                         className="w-full h-auto rounded-lg"
                                     />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 {/* 3. Solução - DIRETO AO PONTO */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <div className="card-clean text-center">
                             <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
                                 A Solução: Quiz de Estilo
                             </h2>
-                            
                             <div className="max-w-md mx-auto mb-8">
-                                <FixedIntroImage
                                     src={SOLUTION_QUIZ_IMAGE_URL}
                                     alt="Quiz de Estilo"
                                     width={400}
                                     height={300}
                                     className="w-full h-auto rounded-lg"
-                                />
-                            </div>
-
-                            <p className="text-body text-[var(--text-medium)] mb-8 max-w-2xl mx-auto">
                                 Método preciso para identificar seu estilo entre os <strong>7 estilos universais</strong> + guia personalizado completo.
-                            </p>
-
-                            <button
-                                onClick={() => {
                                     handleCtaClick('solution_cta', 'Fazer Quiz');
-                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
-                                }}
-                                className="btn-primary-clean mb-6"
-                            >
                                 <ShoppingBag size={20} />
                                 Fazer o Quiz Agora
-                            </button>
-
                             <CountdownTimer />
-                        </div>
-                    </div>
-                </section>
-
                 {/* 4. Valor - PREÇO DESTACADO */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <div className="card-clean">
                             <div className="text-center mb-8">
                                 <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                                     Transformação Completa
@@ -474,8 +357,6 @@ const QuizOfferPage: React.FC = () => {
                                 <p className="text-body text-[var(--text-medium)]">
                                     Tudo que você precisa para descobrir e aplicar seu estilo
                                 </p>
-                            </div>
-
                             {/* Preview produtos */}
                             <div className="grid md:grid-cols-3 gap-6 mb-8">
                                 <div className="text-center">
@@ -487,49 +368,24 @@ const QuizOfferPage: React.FC = () => {
                                             height={312}
                                             className="w-full h-full object-contain"
                                         />
-                                    </div>
                                     <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Guia Personalizado</h3>
                                     <p className="text-sm text-[var(--text-medium)]">Para seu estilo específico</p>
-                                </div>
-                                <div className="text-center">
-                                    <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
-                                        <FixedIntroImage
                                             src={BONUS_1_KEY_PIECES_IMAGE_URL}
                                             alt="Bônus Peças-Chave"
-                                            width={250}
-                                            height={312}
-                                            className="w-full h-full object-contain"
-                                        />
-                                    </div>
                                     <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Peças-Chave</h3>
                                     <p className="text-sm text-[var(--text-medium)]">Guarda-roupa funcional</p>
-                                </div>
-                                <div className="text-center">
-                                    <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
-                                        <FixedIntroImage
                                             src={BONUS_2_VISAGISM_IMAGE_URL}
                                             alt="Bônus Visagismo"
-                                            width={250}
-                                            height={312}
-                                            className="w-full h-full object-contain"
-                                        />
-                                    </div>
                                     <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Visagismo</h3>
                                     <p className="text-sm text-[var(--text-medium)]">Valorize seus traços</p>
-                                </div>
-                            </div>
-
                             {/* Preço FOCADO */}
                             <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white text-center mb-8">
                                 <p className="text-sm opacity-90 mb-2">Oferta por tempo limitado</p>
                                 <div className="mb-4">
                                     <span className="text-sm">5x de</span>
                                     <span className="text-4xl font-bold mx-2">R$ 8,83</span>
-                                </div>
                                 <p className="text-lg">ou à vista <strong>R$ 39,90</strong></p>
                                 <p className="text-sm mt-2 opacity-75">77% OFF - Economia de R$ 135,10</p>
-                            </div>
-
                             {/* CTA Final */}
                             <div className="text-center">
                                 <button
@@ -542,46 +398,20 @@ const QuizOfferPage: React.FC = () => {
                                     <ShoppingCart size={20} />
                                     Garantir Minha Transformação
                                 </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 {/* 5. Garantia - SIMPLES */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <div className="card-clean text-center">
                             <FixedIntroImage
                                 src={GUARANTEE_IMAGE_URL}
                                 alt="Garantia 7 dias"
                                 width={200}
                                 height={200}
                                 className="mx-auto mb-6"
-                            />
                             <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                                 7 Dias de Garantia
-                            </h2>
                             <p className="text-body text-[var(--text-medium)] max-w-2xl mx-auto">
                                 Se não ficar satisfeita, devolvemos <strong>100% do seu dinheiro</strong>. Sem perguntas.
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
                 {/* 6. FAQ - COMPACTO */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <div className="card-clean">
                             <h2 className="text-hierarchy-2 text-[var(--text-dark)] text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
                                 Perguntas Frequentes
-                            </h2>
                             <FaqSectionNew />
-                        </div>
-                    </div>
-                </section>
             </main>
-        </div>
-    );
-};
-
 export default QuizOfferPage;

@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { optimizeCloudinaryUrl, getResponsiveImageSources, getLowQualityPlaceholder } from '@/utils/imageUtils';
 import { getImageMetadata, isImagePreloaded, getOptimizedImage } from '@/utils/imageManager';
-
 interface OptimizedImageProps {
   src: string;
   alt: string;
@@ -18,7 +17,6 @@ interface OptimizedImageProps {
   quality?: number;
   placeholderColor?: string;
 }
-
 /**
  * Componente de imagem otimizado com melhor experiência visual
  * - Carregamento progressivo com efeito blur
@@ -42,24 +40,19 @@ export const OptimizedImage = ({
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [blurredLoaded, setBlurredLoaded] = useState(false);
-
   // Obter metadados da imagem do banco de imagens
   const imageMetadata = useMemo(() => src ? getImageMetadata(src) : undefined, [src]);
-
   // Gerar placeholders e URLs otimizadas apenas uma vez
   const placeholderSrc = useMemo(() => {
     if (!src) return '';
     return getLowQualityPlaceholder(src);
   }, [src]);
-
   // Otimizar URLs do Cloudinary automaticamente
   const optimizedSrc = useMemo(() => {
-    if (!src) return '';
     
     // Usar metadados width/height se disponíveis e não substituídos
     const imgWidth = width || (imageMetadata?.width || undefined);
     const imgHeight = height || (imageMetadata?.height || undefined);
-    
     return getOptimizedImage(src, {
       quality: quality,
       format: 'auto',
@@ -67,7 +60,6 @@ export const OptimizedImage = ({
       height: imgHeight
     });
   }, [src, width, height, imageMetadata, quality]);
-
   // Obter atributos de imagem responsiva se necessário
   const responsiveImageProps = useMemo(() => {
     if (!src) return { srcSet: '', sizes: '' };
@@ -76,14 +68,12 @@ export const OptimizedImage = ({
     }
     return { srcSet: '', sizes: '' };
   }, [src, width]);
-
   // Para imagens prioritárias, verificamos se já estão pré-carregadas
   useEffect(() => {
     // Redefine estados quando src muda
     setLoaded(false);
     setBlurredLoaded(false);
     setError(false);
-    
     if (src && priority) {
       if (isImagePreloaded(src)) {
         setLoaded(true);
@@ -98,14 +88,11 @@ export const OptimizedImage = ({
         };
         img.onerror = () => setError(true);
       }
-
       // Sempre carrega a versão desfocada para transições mais suaves
       const blurImg = new Image();
       blurImg.src = placeholderSrc;
       blurImg.onload = () => setBlurredLoaded(true);
-    }
   }, [optimizedSrc, placeholderSrc, priority, src, onLoad]);
-
   // Determina a proporção de aspecto se width e height forem fornecidos
   const aspectRatio = width && height ? `${width} / ${height}` : undefined;
   
@@ -148,7 +135,6 @@ export const OptimizedImage = ({
             style={{ backgroundColor: placeholderColor }}
           />
         </>
-      )}
       
       <img 
         src={optimizedSrc} 
@@ -161,8 +147,6 @@ export const OptimizedImage = ({
         srcSet={responsiveImageProps.srcSet || undefined}
         sizes={responsiveImageProps.sizes || undefined}
         onLoad={() => {
-          setLoaded(true);
-          onLoad?.();
         }}
         onError={() => setError(true)}
         className={cn(
@@ -176,14 +160,11 @@ export const OptimizedImage = ({
           objectFit === 'scale-down' && "object-scale-down"
         )}
       />
-      
       {error && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded">
           <span className="text-sm text-gray-500">Imagem não disponível</span>
         </div>
-      )}
     </div>
   );
 };
-
 export default OptimizedImage;

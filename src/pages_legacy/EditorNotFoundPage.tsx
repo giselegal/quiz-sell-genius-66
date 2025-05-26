@@ -6,12 +6,10 @@ import { Button } from '../components/ui/button';
 
 const EditorNotFoundPage = () => {
   const router = useRouter();
-
   const handleRetry = () => {
     // Tenta recarregar a página do editor
     router.push('/admin/editor');
   };
-
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="text-center p-8 max-w-md">
@@ -27,7 +25,6 @@ const EditorNotFoundPage = () => {
             <li>Se o problema persistir, entre em contato com o suporte</li>
           </ul>
         </div>
-        
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button 
             className="bg-[#B89B7A] hover:bg-[#9F836A] text-white" 
@@ -41,10 +38,8 @@ const EditorNotFoundPage = () => {
               Voltar para o painel
             </Button>
           </Link>
-        </div>
       </div>
     </div>
   );
 };
-
 export default EditorNotFoundPage;

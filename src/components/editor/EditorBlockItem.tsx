@@ -9,13 +9,11 @@ import { Button } from '../ui/button';
 import { Trash2, GripVertical, ChevronDown, ChevronUp, Copy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EditBlockContent } from './EditBlockContent';
-
 interface EditorBlockItemProps {
   block: EditorBlock;
   onUpdate: (content: any) => void;
   onDelete: () => void;
 }
-
 export const EditorBlockItem: React.FC<EditorBlockItemProps> = ({
   block,
   onUpdate,
@@ -31,15 +29,12 @@ export const EditorBlockItem: React.FC<EditorBlockItemProps> = ({
     transition,
     isDragging
   } = useSortable({ id: block.id });
-
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
     opacity: isDragging ? 0.5 : 1,
     position: 'relative' as const,
     zIndex: isDragging ? 1 : 0
   };
-
   const getBlockTitle = () => {
     switch (block.type) {
       case 'headline': return 'Título';
@@ -52,13 +47,9 @@ export const EditorBlockItem: React.FC<EditorBlockItemProps> = ({
       case 'cta': return 'Botão CTA';
       default: return 'Bloco';
     }
-  };
-
   const handleDuplicate = () => {
     // This would be handled by the parent component
     alert('Duplicar bloco não implementado ainda');
-  };
-
   return (
     <Card
       ref={setNodeRef}
@@ -83,32 +74,16 @@ export const EditorBlockItem: React.FC<EditorBlockItemProps> = ({
           <span className="font-medium text-[#432818]">{getBlockTitle()}</span>
         </div>
         <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
             onClick={handleDuplicate}
-          >
             <Copy className="w-4 h-4 text-[#8F7A6A]" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
             onClick={() => setIsExpanded(!isExpanded)}
-          >
             {isExpanded ? 
               <ChevronUp className="w-4 h-4 text-[#8F7A6A]" /> : 
               <ChevronDown className="w-4 h-4 text-[#8F7A6A]" />
             }
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
             onClick={onDelete}
             className="text-red-500 hover:text-red-700 hover:bg-red-50"
-          >
             <Trash2 className="w-4 h-4" />
-          </Button>
-        </div>
       </div>
       
       {/* Block Content */}
@@ -118,8 +93,6 @@ export const EditorBlockItem: React.FC<EditorBlockItemProps> = ({
             block={block}
             onUpdate={onUpdate}
           />
-        </div>
-      )}
     </Card>
   );
 };

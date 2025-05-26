@@ -7,14 +7,12 @@ import QuizEditor from '@/components/quiz-editor/QuizEditor';
 import { LoadingState } from '@/components/ui/loading-state';
 import { getTemplateById } from '@/services/templates/templateService';
 import { QuizTemplate } from '@/types/quizTemplate';
-
 const QuizEditorPage = () => {
   const router = useRouter();
   const { templateId } = router.query;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [template, setTemplate] = useState<QuizTemplate | null>(null);
-
   useEffect(() => {
     const loadTemplate = async () => {
       if (templateId && typeof templateId === 'string') {
@@ -34,10 +32,8 @@ const QuizEditorPage = () => {
       }
       setLoading(false);
     };
-
     loadTemplate();
   }, [templateId, router]);
-
   if (loading) {
     return (
       <AdminLayout>
@@ -45,17 +41,10 @@ const QuizEditorPage = () => {
       </AdminLayout>
     );
   }
-
   if (error) {
-    return (
-      <AdminLayout>
         <div className="p-6">
           <p className="text-red-500">{error}</p>
         </div>
-      </AdminLayout>
-    );
-  }
-
   return (
     <AdminLayout>
       <div className="h-full bg-[#FAF9F7] p-6">
@@ -64,5 +53,4 @@ const QuizEditorPage = () => {
     </AdminLayout>
   );
 };
-
 export default QuizEditorPage;

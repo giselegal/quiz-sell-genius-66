@@ -23,7 +23,6 @@ import {
   BarChart3
 } from 'lucide-react';
 import { DragDropEditor } from '@/components/result-editor/DragDropEditor';
-
 export default function QuizzesDashboardPage() {
   // Função de salvamento dummy para o editor
   const handleSave = (config: any) => {

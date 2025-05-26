@@ -3,12 +3,10 @@ import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { styleConfig } from '@/config/styleConfig';
-
 interface StyleSelectorProps {
   selectedStyle: StyleResult;
   onStyleChange: (style: StyleResult) => void;
 }
-
 const StyleSelector: React.FC<StyleSelectorProps> = ({ selectedStyle, onStyleChange }) => {
   const handleStyleChange = (value: string) => {
     onStyleChange({
@@ -17,7 +15,6 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ selectedStyle, onStyleCha
       percentage: 100
     });
   };
-
   return (
     <div className="space-y-4">
       <div>
@@ -52,9 +49,7 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ selectedStyle, onStyleCha
             </p>
           </div>
         </div>
-      </div>
     </div>
   );
 };
-
 export default StyleSelector;

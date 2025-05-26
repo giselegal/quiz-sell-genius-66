@@ -5,18 +5,15 @@ import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StyleResult } from '@/types/quiz';
-
 interface TemplateSelectorProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
 }
-
 const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   primaryStyle,
   secondaryStyles
 }) => {
   const router = useRouter();
-
   const templates = [
     {
       id: 'sales-page',
@@ -25,14 +22,11 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp',
       path: '/templates/sales-page'
     },
-    {
       id: 'minimal-result',
       title: 'Resultado Minimalista',
       description: 'Design clean e minimalista focado apenas no resultado do quiz.',
       image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
       path: '/templates/minimal'
-    },
-    {
       id: 'cta-focused',
       title: 'Foco em Conversão',
       description: 'Página otimizada para maximizar taxas de conversão com múltiplos CTAs.',
@@ -40,7 +34,6 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       path: '/templates/cta-focused'
     }
   ];
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-playfair text-[#432818] mb-8 text-center">
@@ -68,12 +61,10 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
               >
                 Usar este modelo
               </Button>
-            </div>
           </Card>
         ))}
       </div>
     </div>
   );
 };
-
 export default TemplateSelector;

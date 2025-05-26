@@ -4,7 +4,6 @@ import React from 'react';
 import { useQuizBuilder } from '@/hooks/useQuizBuilder';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-
 /**
  * EnhancedQuizBuilder é um wrapper para o componente QuizBuilder
  * que direciona o usuário para o editor unificado
@@ -15,7 +14,6 @@ const EnhancedQuizBuilder: React.FC = () => {
   const handleOpenUnifiedEditor = () => {
     router.push('/admin/editor');
   };
-  
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-[#FAF9F7]">
       <div className="max-w-md p-6 bg-white rounded-lg shadow-md text-center">
@@ -33,5 +31,4 @@ const EnhancedQuizBuilder: React.FC = () => {
     </div>
   );
 };
-
 export default EnhancedQuizBuilder;

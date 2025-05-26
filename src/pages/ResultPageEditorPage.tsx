@@ -11,15 +11,12 @@ const ResultPageEditorPage: React.FC = () => {
   const [customDomain, setCustomDomain] = useState(''); // Novo estado para domínio personalizado
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     try {
       const savedResult = safeLocalStorage.getItem('quizResult');
       const savedDomain = safeLocalStorage.getItem('customDomain'); // Carregar domínio salvo
-
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);
-
         if (parsedResult?.primaryStyle) {
           setPrimaryStyle(parsedResult.primaryStyle);
           setSecondaryStyles(parsedResult.secondaryStyles || []);
@@ -33,14 +30,11 @@ const ResultPageEditorPage: React.FC = () => {
           score: 10,
           percentage: 100
         };
-
         setPrimaryStyle(defaultStyle);
         setSecondaryStyles([]);
       }
-
       if (savedDomain) {
         setCustomDomain(savedDomain);
-      }
     } catch (error) {
       console.error("Erro ao carregar resultados:", error);
       router.push('/resultado');
@@ -48,9 +42,7 @@ const ResultPageEditorPage: React.FC = () => {
       setIsLoading(false);
     }
   }, [router]);
-
   const handleSave = () => {
-    try {
       const resultToSave = {
         primaryStyle,
         secondaryStyles
@@ -58,12 +50,9 @@ const ResultPageEditorPage: React.FC = () => {
       safeLocalStorage.setItem('quizResult', JSON.stringify(resultToSave));
       safeLocalStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
       alert('Configurações salvas com sucesso!');
-    } catch (error) {
       console.error("Erro ao salvar configurações:", error);
       alert('Erro ao salvar configurações. Verifique o console para mais detalhes.');
-    }
   };
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -71,10 +60,7 @@ const ResultPageEditorPage: React.FC = () => {
       </div>
     );
   }
-
   if (!primaryStyle) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-lg mb-4">Erro: Nenhum resultado encontrado para editar</p>
           <button 
@@ -84,10 +70,6 @@ const ResultPageEditorPage: React.FC = () => {
             Voltar para Resultados
           </button>
         </div>
-      </div>
-    );
-  }
-
   return (
     <div className="editor-container">
       <ResultPageEditorWithControls 
@@ -109,9 +91,7 @@ const ResultPageEditorPage: React.FC = () => {
         >
           Salvar Configurações
         </button>
-      </div>
     </div>
   );
 };
-
 export default ResultPageEditorPage;

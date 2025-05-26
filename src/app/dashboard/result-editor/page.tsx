@@ -8,11 +8,9 @@ import { QuizFunnel } from '@/types/quizResult';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-
 export default function ResultEditorPage() {
   const { toast } = useToast();
   const [selectedQuiz, setSelectedQuiz] = useState<QuizFunnel | undefined>(undefined);
-
   const mockResults: StyleResult[] = [
     { 
       category: 'Iniciante', 
@@ -23,7 +21,6 @@ export default function ResultEditorPage() {
       backgroundColor: '#f3f4f6',
       textColor: '#374151'
     },
-    { 
       category: 'Intermediário', 
       percentage: 70,
       score: 50,
@@ -31,8 +28,6 @@ export default function ResultEditorPage() {
       description: 'Você tem um conhecimento sólido.',
       backgroundColor: '#dbeafe',
       textColor: '#1e40af'
-    },
-    { 
       category: 'Avançado', 
       percentage: 90,
       score: 80,
@@ -42,7 +37,6 @@ export default function ResultEditorPage() {
       textColor: '#166534'
     }
   ];
-
   useEffect(() => {
     const mockQuiz: QuizFunnel = {
       id: 'sample-quiz',
@@ -58,7 +52,6 @@ export default function ResultEditorPage() {
     
     setSelectedQuiz(mockQuiz);
   }, []);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm border-b">
@@ -78,7 +71,6 @@ export default function ResultEditorPage() {
           </div>
         </div>
       </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {selectedQuiz ? (
           <EnhancedResultPageEditor
@@ -96,10 +88,7 @@ export default function ResultEditorPage() {
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
               <p className="mt-4 text-gray-600">Carregando editor...</p>
-            </div>
-          </div>
         )}
-      </div>
     </div>
   );
 }

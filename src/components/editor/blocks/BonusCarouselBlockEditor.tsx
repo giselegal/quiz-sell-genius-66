@@ -5,30 +5,21 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash } from 'lucide-react';
 import { BlockEditorProps } from './types';
-
 export const BonusCarouselBlockEditor: React.FC<BlockEditorProps> = ({
   block,
   onUpdate
 }) => {
   const bonusImages = block.content.bonusImages || [];
-
   const addImage = () => {
     const newImages = [...bonusImages, { url: '', alt: '', title: '' }];
     onUpdate({ bonusImages: newImages });
   };
-
   const removeImage = (index: number) => {
     const newImages = bonusImages.filter((_, i) => i !== index);
-    onUpdate({ bonusImages: newImages });
-  };
-
   const updateImage = (index: number, field: 'url' | 'alt' | 'title', value: string) => {
     const newImages = bonusImages.map((img, i) => 
       i === index ? { ...img, [field]: value } : img
     );
-    onUpdate({ bonusImages: newImages });
-  };
-
   return (
     <div className="space-y-4">
       <div>
@@ -41,7 +32,6 @@ export const BonusCarouselBlockEditor: React.FC<BlockEditorProps> = ({
           placeholder="Você recebe também:"
         />
       </div>
-
       <div className="space-y-4">
         <Label>Imagens dos Bônus</Label>
         {bonusImages.map((image, index) => (
@@ -64,20 +54,12 @@ export const BonusCarouselBlockEditor: React.FC<BlockEditorProps> = ({
               placeholder="URL da imagem"
               className="mt-1"
             />
-            
-            <Input
               value={image.title || ''}
               onChange={(e) => updateImage(index, 'title', e.target.value)}
               placeholder="Título do bônus"
-              className="mt-1"
-            />
-            
-            <Input
               value={image.alt}
               onChange={(e) => updateImage(index, 'alt', e.target.value)}
               placeholder="Texto alternativo"
-              className="mt-1"
-            />
           </div>
         ))}
         
@@ -89,7 +71,6 @@ export const BonusCarouselBlockEditor: React.FC<BlockEditorProps> = ({
           <Plus className="w-4 h-4 mr-2" />
           Adicionar Imagem
         </Button>
-      </div>
     </div>
   );
 };

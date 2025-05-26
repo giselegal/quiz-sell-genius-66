@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef } from 'react';
 import { fixBlurryIntroQuizImages } from '@/utils/fixBlurryIntroQuizImages';
-
 interface AutoFixedImagesProps {
   children: React.ReactNode;
   fixOnMount?: boolean;
@@ -10,7 +9,6 @@ interface AutoFixedImagesProps {
   className?: string;
   observeSelector?: string; // Novo: seletor específico para observar
 }
-
 /**
  * Componente wrapper que aplica correções de imagens borradas automaticamente
  * Versão otimizada para desempenho com observação seletiva de DOM
@@ -27,7 +25,6 @@ const AutoFixedImages: React.FC<AutoFixedImagesProps> = ({
   
   // Debounce para evitar múltiplas chamadas
   const debounceTimeoutRef = useRef<number | null>(null);
-  
   // Função de debounce otimizada
   const debouncedFix = () => {
     if (debounceTimeoutRef.current) {
@@ -44,13 +41,10 @@ const AutoFixedImages: React.FC<AutoFixedImagesProps> = ({
         }, { timeout: 1000 });
       }, 300) as unknown as number;
     } else {
-      debounceTimeoutRef.current = setTimeout(() => {
         fixBlurryIntroQuizImages();
         debounceTimeoutRef.current = null;
       }, 500) as unknown as number;
-    }
   };
-  
   // Aplicar correção na montagem inicial - otimizada para não interferir com LCP
   useEffect(() => {
     if (fixOnMount) {
@@ -77,19 +71,13 @@ const AutoFixedImages: React.FC<AutoFixedImagesProps> = ({
         // Fallback para navegadores que não suportam PerformanceObserver
         setTimeout(fixBlurryIntroQuizImages, 1000);
       }
-    }
   }, [fixOnMount]);
-  
   // Observar mudanças no DOM com escopo reduzido
-  useEffect(() => {
     if (fixOnUpdate) {
       // Elementos a serem observados
       const elementsToObserve = document.querySelectorAll(observeSelector);
-      
       if (elementsToObserve.length === 0) {
         return; // Nada para observar
-      }
-      
       // Configurar MutationObserver otimizado
       const observer = new MutationObserver((mutations) => {
         // Verificar se alguma das mutações é relevante (adiciona imagens)
@@ -99,13 +87,11 @@ const AutoFixedImages: React.FC<AutoFixedImagesProps> = ({
             (node instanceof Element && node.querySelector('img'))
           )
         );
-        
         // Só processar se houver mudanças em imagens
         if (hasImageChanges) {
           debouncedFix();
         }
       });
-      
       // Observar apenas os elementos específicos, não todo o body
       elementsToObserve.forEach(element => {
         observer.observe(element, { 
@@ -113,27 +99,18 @@ const AutoFixedImages: React.FC<AutoFixedImagesProps> = ({
           subtree: true,
           attributes: false,
           characterData: false
-        });
-      });
-      
       return () => observer.disconnect();
-    }
   }, [fixOnUpdate, observeSelector]);
-  
   // Limpar o timeout quando o componente é desmontado
-  useEffect(() => {
     return () => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
-      }
     };
   }, []);
-  
   return (
     <div ref={containerRef} className={className}>
       {children}
     </div>
   );
 };
-
 export default React.memo(AutoFixedImages);

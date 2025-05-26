@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { optimizeCloudinaryUrl } from '@/utils/imageManager';
-
 interface OptimizedImageV2Props {
   src: string;
   alt: string;
@@ -12,7 +11,6 @@ interface OptimizedImageV2Props {
   className?: string;
   placeholder?: string;
 }
-
 const OptimizedImageV2: React.FC<OptimizedImageV2Props> = ({
   src,
   alt,
@@ -24,31 +22,24 @@ const OptimizedImageV2: React.FC<OptimizedImageV2Props> = ({
 }) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
-
   useEffect(() => {
     const img = new Image();
     img.src = src;
-
     img.onload = () => {
       setLoaded(true);
     };
-
     img.onerror = () => {
       setError(true);
-    };
   }, [src]);
-
   const optimizedSrc = useMemo(() => {
     if (!src) return '';
     
     // Use optimizeCloudinaryUrl with correct single parameter
     return optimizeCloudinaryUrl(src, { quality, width, height });
   }, [src, width, height, quality]);
-
   if (error) {
     return <div className="text-red-500">Failed to load image</div>;
   }
-
   return (
     <img
       src={optimizedSrc}
@@ -65,5 +56,4 @@ const OptimizedImageV2: React.FC<OptimizedImageV2Props> = ({
     />
   );
 };
-
 export default OptimizedImageV2;

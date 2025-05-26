@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Block } from '@/types/editor';
 import { LucideIcon } from 'lucide-react';
-
 interface ComponentItemProps {
   type: Block['type'];
   label: string;
@@ -12,7 +11,6 @@ interface ComponentItemProps {
   description: string;
   onSelect: (type: Block['type']) => void;
 }
-
 export function ComponentItem({
   type,
   label,
@@ -34,4 +32,3 @@ export function ComponentItem({
       </div>
     </div>
   );
-}

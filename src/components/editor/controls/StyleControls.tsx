@@ -5,7 +5,6 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ColorPicker } from '@/components/result-editor/ColorPicker';
 import { Switch } from '@/components/ui/switch';
-
 interface StyleControlsProps {
   style: any;
   onUpdate: (style: any) => void;
@@ -14,7 +13,6 @@ interface StyleControlsProps {
   logoHeight?: string | number;
   onLogoSizeChange?: (width: string, height: string) => void;
 }
-
 export const StyleControls: React.FC<StyleControlsProps> = ({ 
   style, 
   onUpdate,
@@ -29,7 +27,6 @@ export const StyleControls: React.FC<StyleControlsProps> = ({
       [property]: value
     });
   };
-
   return (
     <div className="space-y-4">
       <div>
@@ -39,7 +36,6 @@ export const StyleControls: React.FC<StyleControlsProps> = ({
           onChange={(color) => handleChange('backgroundColor', color)}
         />
       </div>
-
       {showLogoControls && onLogoSizeChange && (
         <div>
           <Label>Tamanho do Logo</Label>
@@ -52,19 +48,12 @@ export const StyleControls: React.FC<StyleControlsProps> = ({
                 placeholder="auto"
               />
             </div>
-            <div>
               <Label className="text-xs">Altura</Label>
-              <Input
                 value={logoHeight || ''}
                 onChange={(e) => onLogoSizeChange(logoWidth?.toString() || '', e.target.value)}
-                placeholder="auto"
-              />
-            </div>
           </div>
         </div>
       )}
-
-      <div>
         <Label>Dimensões da Imagem</Label>
         <div className="grid grid-cols-2 gap-2">
           <div>
@@ -74,19 +63,10 @@ export const StyleControls: React.FC<StyleControlsProps> = ({
               onChange={(e) => handleChange('width', e.target.value)}
               placeholder="100%"
             />
-          </div>
-          <div>
             <Label className="text-xs">Altura</Label>
-            <Input
               value={style.height || ''}
               onChange={(e) => handleChange('height', e.target.value)}
               placeholder="auto"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
         <Label>Ajuste da Imagem</Label>
         <Select
           value={style.objectFit || 'cover'}
@@ -103,38 +83,19 @@ export const StyleControls: React.FC<StyleControlsProps> = ({
             <SelectItem value="scale-down">Escalar para baixo</SelectItem>
           </SelectContent>
         </Select>
-      </div>
-
-      <div>
         <Label>Espaçamento</Label>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
             <Label className="text-xs">Margem</Label>
-            <Input
               value={style.margin || ''}
               onChange={(e) => handleChange('margin', e.target.value)}
               placeholder="0px"
-            />
-          </div>
-          <div>
             <Label className="text-xs">Padding</Label>
-            <Input
               value={style.padding || ''}
               onChange={(e) => handleChange('padding', e.target.value)}
-              placeholder="0px"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
         <Label>Arredondamento das Bordas</Label>
         <Input
           value={style.borderRadius || ''}
           onChange={(e) => handleChange('borderRadius', e.target.value)}
           placeholder="0px"
-        />
-      </div>
     </div>
   );
 };

@@ -2,13 +2,11 @@
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { cn } from '@/lib/utils';
-
 interface StyleResultPreviewProps {
   primaryStyle: StyleResult;
   description?: string;
   customImage?: string;
 }
-
 export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
   primaryStyle,
   description,
@@ -28,10 +26,8 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
       'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp',
       'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp'
     };
-    
     return customImage || styleImages[styleType] || defaultImage;
   };
-
   const getStyleDescription = (styleType: string): string => {
     // Descrições padrão para cada estilo
     const styleDescriptions = {
@@ -43,11 +39,7 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
       'Sexy': 'O estilo Sexy valoriza a sensualidade. Você gosta de destacar seus pontos fortes e não tem medo de mostrar um pouco mais da sua silhueta.',
       'Dramático': 'O estilo Dramático é ousado e impactante. Você gosta de peças que chamam a atenção e criar looks que não passam despercebidos.',
       'Criativo': 'O estilo Criativo é único e original. Você gosta de experimentar, misturar e criar seu próprio estilo sem seguir regras.'
-    };
-    
     return description || styleDescriptions[styleType] || 'Descrição não disponível para este estilo.';
-  };
-
   return (
     <div className="p-4 border rounded-lg bg-[#FAF9F7]">
       <div className="text-center mb-4">
@@ -58,7 +50,6 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
           {primaryStyle.percentage}% de compatibilidade
         </div>
       </div>
-
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <img
@@ -66,8 +57,6 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
             alt={`Estilo ${primaryStyle.category}`}
             className="w-full h-auto object-cover rounded-lg shadow-sm"
           />
-        </div>
-        <div>
           <p className="text-[#5A5A5A] leading-relaxed">
             {getStyleDescription(primaryStyle.category)}
           </p>
@@ -76,8 +65,6 @@ export const StyleResultPreview: React.FC<StyleResultPreviewProps> = ({
               Pontuação: <span className="font-medium">{primaryStyle.score} pontos</span>
             </p>
           </div>
-        </div>
-      </div>
     </div>
   );
 };

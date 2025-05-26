@@ -18,7 +18,6 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-
 export default function EditorHub() {
   const editorOptions = [
     {
@@ -30,7 +29,6 @@ export default function EditorHub() {
       features: ['Perguntas múltipla escolha', 'Lógica condicional', 'Personalização visual'],
       href: '/admin/editor/quiz/new'
     },
-    {
       id: 'result',
       title: 'Editor de Resultado',
       description: 'Desenhe páginas de resultado atrativas e personalizadas',
@@ -38,8 +36,6 @@ export default function EditorHub() {
       color: 'from-green-500 to-emerald-500',
       features: ['Resultados dinâmicos', 'Personalização completa', 'Call-to-actions'],
       href: '/admin/editor/result/new'
-    },
-    {
       id: 'offer',
       title: 'Editor de Oferta',
       description: 'Crie páginas de venda e ofertas irresistíveis',
@@ -49,51 +45,34 @@ export default function EditorHub() {
       href: '/admin/editor/offer/new'
     }
   ];
-
   const templates = [
-    {
       id: 1,
       name: 'Lead Magnet Pro',
       category: 'Marketing',
       preview: '🧲',
       description: 'Quiz otimizado para captura de leads',
       mode: 'quiz'
-    },
-    {
       id: 2,
       name: 'Resultado Impactante',
       category: 'Resultado',
       preview: '🎯',
       description: 'Página de resultado com alta conversão',
       mode: 'result'
-    },
-    {
       id: 3,
       name: 'Oferta Relâmpago',
       category: 'Vendas',
       preview: '⚡',
       description: 'Página de oferta com urgência',
       mode: 'offer'
-    }
-  ];
-
   const recentProjects = [
-    {
-      id: 1,
       title: 'Quiz de Liderança',
       mode: 'quiz',
       lastEdited: '2 horas atrás',
       status: 'published'
-    },
-    {
-      id: 2,
       title: 'Resultado Personalidade',
       mode: 'result',
       lastEdited: '1 dia atrás',
       status: 'draft'
-    }
-  ];
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -117,14 +96,9 @@ export default function EditorHub() {
           <Badge variant="outline">
             <Zap className="w-3 h-3 mr-1" />
             Drag & Drop
-          </Badge>
-          <Badge variant="outline">
             <Rocket className="w-3 h-3 mr-1" />
             Profissional
-          </Badge>
-        </div>
       </div>
-
       {/* Editor Options */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {editorOptions.map((option) => {
@@ -140,7 +114,6 @@ export default function EditorHub() {
                 <CardTitle className="text-xl">{option.title}</CardTitle>
                 <p className="text-gray-600">{option.description}</p>
               </CardHeader>
-              
               <CardContent className="relative">
                 <ul className="space-y-2 mb-6">
                   {option.features.map((feature, index) => (
@@ -161,8 +134,6 @@ export default function EditorHub() {
             </Card>
           );
         })}
-      </div>
-
       {/* Templates Section */}
       <Card>
         <CardHeader>
@@ -190,19 +161,11 @@ export default function EditorHub() {
                 </CardContent>
               </Card>
             ))}
-          </div>
         </CardContent>
       </Card>
-
       {/* Recent Projects */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
             <Edit3 className="w-5 h-5 text-blue-500" />
             Projetos Recentes
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
           {recentProjects.length > 0 ? (
             <div className="space-y-3">
               {recentProjects.map((project) => (
@@ -217,25 +180,20 @@ export default function EditorHub() {
                         <Badge variant="outline" className="text-xs">{project.mode}</Badge>
                         <span>•</span>
                         <span>{project.lastEdited}</span>
-                        <span>•</span>
                         <Badge variant={project.status === 'published' ? 'default' : 'secondary'} className="text-xs">
                           {project.status === 'published' ? 'Publicado' : 'Rascunho'}
                         </Badge>
                       </div>
-                    </div>
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">
                       <Copy className="w-4 h-4" />
-                    </Button>
                     <Link href={`/admin/editor/${project.mode}/${project.id}`}>
                       <Button size="sm">
                         <Edit3 className="w-4 h-4 mr-1" />
                         Editar
                       </Button>
                     </Link>
-                  </div>
-                </div>
               ))}
             </div>
           ) : (
@@ -243,11 +201,7 @@ export default function EditorHub() {
               <Palette className="w-12 h-12 mx-auto mb-4 text-gray-400" />
               <p className="mb-4">Nenhum projeto ainda</p>
               <p className="text-sm">Comece criando seu primeiro quiz com o editor visual!</p>
-            </div>
           )}
-        </CardContent>
-      </Card>
-
       {/* Call to Action */}
       <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
         <CardContent className="p-8 text-center">
@@ -267,11 +221,6 @@ export default function EditorHub() {
               <Button variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-blue-600">
                 <Eye className="w-5 h-5 mr-2" />
                 Ver Templates
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

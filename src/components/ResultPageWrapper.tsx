@@ -2,11 +2,9 @@
 
 import React from 'react';
 import ResultPage from '@/components/pages/ResultPage';
-
 interface ResultPageWrapperProps {
   id: string;
 }
-
 const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({ id }) => {
   return (
     <div data-lovable-component="result-page-wrapper" data-lovable-editable="true">
@@ -14,5 +12,4 @@ const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({ id }) => {
     </div>
   );
 };
-
 export default ResultPageWrapper;

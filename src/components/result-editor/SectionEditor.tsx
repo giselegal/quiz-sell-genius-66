@@ -7,18 +7,15 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Section } from '@/types/resultPageConfig';
-
 interface SectionEditorProps {
   section: Section;
   onUpdate: (section: Section) => void;
   sectionName: string;
 }
-
 const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectionName }) => {
   const handleVisibilityChange = (checked: boolean) => {
     onUpdate({ ...section, visible: checked });
   };
-
   const handleContentChange = (fieldName: string, value: string) => {
     onUpdate({ 
       ...section, 
@@ -27,8 +24,6 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
         [fieldName]: value 
       } 
     });
-  };
-
   return (
     <Card>
       <CardHeader className="py-3">
@@ -73,8 +68,6 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                           />
                         </div>
                       );
-                    }
-                    
                     return (
                       <div key={key} className="space-y-2">
                         <Label htmlFor={key} className="text-xs capitalize">
@@ -94,15 +87,10 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
             
             <AccordionItem value="appearance">
               <AccordionTrigger className="text-sm">Aparência</AccordionTrigger>
-              <AccordionContent>
-                <div className="space-y-4">
                   {section.appearance && Object.entries(section.appearance).map(([key, value]) => {
                     if (typeof value === 'boolean') {
-                      return (
                         <div key={key} className="flex items-center justify-between">
                           <Label htmlFor={`${key}-appearance`} className="text-xs capitalize">
-                            {key.replace(/([A-Z])/g, ' $1').trim()}
-                          </Label>
                           <Switch 
                             id={`${key}-appearance`}
                             checked={value}
@@ -115,19 +103,8 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                                 }
                               });
                             }}
-                          />
-                        </div>
-                      );
-                    }
-                    
-                    return (
-                      <div key={key} className="space-y-2">
                         <Label htmlFor={`${key}-appearance`} className="text-xs capitalize">
-                          {key.replace(/([A-Z])/g, ' $1').trim()}
-                        </Label>
-                        <Input
                           id={`${key}-appearance`}
-                          value={value}
                           onChange={(e) => {
                             onUpdate({
                               ...section,
@@ -137,18 +114,10 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                               }
                             });
                           }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
           </Accordion>
         )}
       </CardContent>
     </Card>
   );
 };
-
 export default SectionEditor;

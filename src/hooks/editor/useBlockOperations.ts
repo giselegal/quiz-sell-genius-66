@@ -3,15 +3,12 @@ import { useState, useCallback } from 'react';
 import { Block } from '@/types/editor';
 import { generateId } from '@/utils/idGenerator';
 import { getDefaultContentForType } from '@/utils/editorDefaults';
-
 export const useBlockOperations = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-
   const updateBlocks = useCallback((newBlocks: Block[]) => {
     setBlocks(newBlocks);
   }, []);
-
   const handleAddBlock = useCallback((type: Block['type']) => {
     const newBlock: Block = {
       id: generateId(),
@@ -19,21 +16,16 @@ export const useBlockOperations = () => {
       order: blocks.length,
       content: getDefaultContentForType(type)
     };
-
     setBlocks(prev => [...prev, newBlock]);
     setSelectedBlockId(newBlock.id);
-
     return newBlock.id;
   }, [blocks]);
-
   const handleUpdateBlock = useCallback((id: string, content: any) => {
     setBlocks(prev => 
       prev.map(block => 
         block.id === id ? { ...block, content: { ...block.content, ...content } } : block
       )
     );
-  }, []);
-
   const handleDeleteBlock = useCallback((id: string) => {
     setBlocks(prev => {
       const filteredBlocks = prev
@@ -41,12 +33,8 @@ export const useBlockOperations = () => {
         .map((block, index) => ({ ...block, order: index }));
       return filteredBlocks;
     });
-
     setSelectedBlockId(null);
-  }, []);
-
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
-    setBlocks(prev => {
       const result = Array.from(prev);
       const [removed] = result.splice(sourceIndex, 1);
       result.splice(destinationIndex, 0, removed);
@@ -55,9 +43,6 @@ export const useBlockOperations = () => {
         ...block,
         order: index
       }));
-    });
-  }, []);
-
   return {
     blocks,
     selectedBlockId,

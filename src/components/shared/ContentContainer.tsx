@@ -1,13 +1,11 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-
 interface ContentContainerProps {
   children: React.ReactNode;
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
 }
-
 export const ContentContainer: React.FC<ContentContainerProps> = ({ 
   children, 
   className,
@@ -20,7 +18,6 @@ export const ContentContainer: React.FC<ContentContainerProps> = ({
     'xl': 'max-w-7xl',
     'full': 'max-w-full',
   }[size];
-
   return (
     <div className={cn('mx-auto px-4 sm:px-6 w-full', maxWidthClass, className)}>
       {children}

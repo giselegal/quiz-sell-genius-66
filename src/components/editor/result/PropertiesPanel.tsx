@@ -7,14 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { EditableContent } from '@/types/editor';
 import { Trash2 } from 'lucide-react';
-
 interface PropertiesPanelProps {
   selectedComponentId: string | null;
   onClose: () => void;
   onUpdate: (content: Partial<EditableContent>) => void;
   onDelete: () => void;
 }
-
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   selectedComponentId,
   onClose,
@@ -28,7 +26,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
       </div>
     );
   }
-
   return (
     <div className="h-full p-4 space-y-4 bg-white">
       <div className="flex items-center justify-between mb-4">
@@ -41,8 +38,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         >
           <Trash2 className="w-4 h-4" />
         </Button>
-      </div>
-
       <Card className="p-4 space-y-4">
         <div className="space-y-2">
           <Label htmlFor="title">Título</Label>
@@ -52,25 +47,16 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             onChange={(e) => onUpdate({ title: e.target.value })}
           />
         </div>
-
-        <div className="space-y-2">
           <Label htmlFor="subtitle">Subtítulo</Label>
-          <Input
             id="subtitle"
             placeholder="Digite o subtítulo"
             onChange={(e) => onUpdate({ subtitle: e.target.value })}
-          />
-        </div>
-
-        <div className="space-y-2">
           <Label htmlFor="text">Texto</Label>
           <Textarea
             id="text"
             placeholder="Digite o texto"
             className="min-h-[100px]"
             onChange={(e) => onUpdate({ text: e.target.value })}
-          />
-        </div>
       </Card>
     </div>
   );

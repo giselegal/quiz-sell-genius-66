@@ -2,12 +2,10 @@
 import React from 'react';
 import Logo from '../ui/logo';
 import { motion } from 'framer-motion';
-
 interface ResultHeaderProps {
   userName: string;
   customTitle?: string;
 }
-
 const ResultHeader: React.FC<ResultHeaderProps> = ({ userName, customTitle }) => (
   <motion.div 
     className="text-center space-y-4 py-4"
@@ -29,10 +27,8 @@ const ResultHeader: React.FC<ResultHeaderProps> = ({ userName, customTitle }) =>
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.4 }}
       whileHover={{ scale: 1.01 }}
-    >
       {customTitle || `Olá, ${userName}, seu Estilo Predominante é:`}
     </motion.h1>
-    
     <motion.div 
       className="w-24 h-1 mx-auto bg-gradient-to-r from-amber-300 to-amber-500 rounded-full"
       initial={{ width: 0 }}
@@ -41,5 +37,4 @@ const ResultHeader: React.FC<ResultHeaderProps> = ({ userName, customTitle }) =>
     />
   </motion.div>
 );
-
 export default ResultHeader;

@@ -11,7 +11,6 @@ interface InlineEditorProps {
   element?: 'h1' | 'h2' | 'h3' | 'p' | 'div';
   style?: React.CSSProperties;
 }
-
 const InlineEditor: React.FC<InlineEditorProps> = ({
   value,
   onChange,
@@ -24,41 +23,28 @@ const InlineEditor: React.FC<InlineEditorProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
-
   useEffect(() => {
     setCurrentValue(value);
   }, [value]);
-
-  useEffect(() => {
     if (isEditing && editorRef.current) {
       editorRef.current.focus();
       editorRef.current.select();
     }
   }, [isEditing]);
-
   const handleClick = () => {
     setIsEditing(true);
   };
-
   const handleBlur = () => {
     setIsEditing(false);
     onChange(currentValue);
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !multiline) {
       e.preventDefault();
       setIsEditing(false);
       onChange(currentValue);
-    }
     if (e.key === 'Escape') {
-      setIsEditing(false);
       setCurrentValue(value); // Reset to original value
-    }
-  };
-
   const Element = element as keyof JSX.IntrinsicElements;
-
   if (isEditing) {
     return multiline ? (
       <textarea
@@ -79,20 +65,9 @@ const InlineEditor: React.FC<InlineEditorProps> = ({
       <input
         ref={editorRef as React.RefObject<HTMLInputElement>}
         type="text"
-        value={currentValue}
-        onChange={(e) => setCurrentValue(e.target.value)}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        className={cn(
           'w-full border border-blue-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500',
-          className
-        )}
-        style={style}
-      />
     );
   }
-
   return (
     <Element
       onClick={handleClick}
@@ -107,5 +82,4 @@ const InlineEditor: React.FC<InlineEditorProps> = ({
     </Element>
   );
 };
-
 export default InlineEditor;

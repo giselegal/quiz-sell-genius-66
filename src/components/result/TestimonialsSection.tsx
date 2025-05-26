@@ -1,18 +1,14 @@
 
 import React from 'react';
 import { Quote } from 'lucide-react';
-
 interface Testimonial {
   text: string;
   author: string;
   image?: string;
 }
-
 interface TestimonialsSectionProps {
   title: string;
   testimonials: Testimonial[];
-}
-
 export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   title,
   testimonials

@@ -3,7 +3,6 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-
 interface MainContentEditorProps {
   content: {
     description?: string;
@@ -12,15 +11,12 @@ interface MainContentEditorProps {
   };
   onUpdate: (content: any) => void;
 }
-
 const MainContentEditor: React.FC<MainContentEditorProps> = ({ content, onUpdate }) => {
   const handleChange = (key: string, value: any) => {
     onUpdate({
       ...content,
       [key]: value
     });
-  };
-
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -34,14 +30,12 @@ const MainContentEditor: React.FC<MainContentEditorProps> = ({ content, onUpdate
         />
       </div>
       
-      <div className="space-y-2">
         <Label htmlFor="customImage">URL da Imagem Personalizada</Label>
         <Input
           id="customImage"
           value={content.customImage || ''}
           onChange={(e) => handleChange('customImage', e.target.value)}
           placeholder="https://exemplo.com/imagem.jpg"
-        />
         
         {content.customImage && (
           <div className="mt-2">
@@ -58,9 +52,7 @@ const MainContentEditor: React.FC<MainContentEditorProps> = ({ content, onUpdate
             </div>
           </div>
         )}
-      </div>
     </div>
   );
 };
-
 export default MainContentEditor;

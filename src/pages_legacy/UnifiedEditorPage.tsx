@@ -8,7 +8,6 @@ import { StyleResult } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
-
 const UnifiedEditorPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
@@ -22,7 +21,6 @@ const UnifiedEditorPage: React.FC = () => {
     const tab = searchParams.get('tab') as EditorTab | null;
     return tab && ['quiz', 'result', 'sales'].includes(tab) ? tab as EditorTab : 'quiz';
   };
-
   // Carregar o estilo primário para os editores
   useEffect(() => {
     const loadStyles = async () => {
@@ -33,7 +31,6 @@ const UnifiedEditorPage: React.FC = () => {
           score: 12,
           percentage: 40
         };
-
         // Try to load from localStorage first
         const savedResult = safeLocalStorage.getItem('quiz_result');
         if (savedResult) {
@@ -76,26 +73,20 @@ const UnifiedEditorPage: React.FC = () => {
             };
             safeLocalStorage.setItem(resultConfigKey, JSON.stringify(defaultConfig));
             console.info(`Configuração padrão criada para estilo: ${styleType}`);
-          }
         } catch (error) {
           console.error('Erro ao criar configuração padrão:', error);
-        }
-        
         setLoading(false);
       } catch (error) {
         console.error('Erro ao carregar estilos:', error);
         setLoadError('Não foi possível carregar os dados necessários para o editor.');
-        setLoading(false);
       }
     };
     
     loadStyles();
   }, []);
-
   if (loading) {
     return <LoadingState message="Inicializando o editor unificado..." />;
   }
-
   if (loadError) {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-[#FAF9F7] p-6">
@@ -111,33 +102,18 @@ const UnifiedEditorPage: React.FC = () => {
         </div>
       </div>
     );
-  }
-
   if (!primaryStyle) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center bg-[#FAF9F7] p-6">
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-md text-center">
           <h2 className="text-2xl font-medium text-[#432818] mb-4">Estilo não encontrado</h2>
           <p className="text-[#8F7A6A] mb-6">
             É necessário que um estilo primário esteja definido para utilizar o editor.
             Execute o quiz primeiro para definir seu estilo.
           </p>
-          <button 
-            className="bg-[#B89B7A] text-white px-4 py-2 rounded hover:bg-[#8F7A6A]"
             onClick={() => router.push('/quiz')}
-          >
             Ir para o Quiz
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="h-screen w-full overflow-hidden">
       <UnifiedVisualEditor primaryStyle={primaryStyle} initialActiveTab={getInitialTab()} />
     </div>
   );
 };
-
 export default UnifiedEditorPage;

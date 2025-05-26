@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { BlockEditorProps } from './types';
-
 export const GuaranteeBlockEditor: React.FC<BlockEditorProps> = ({
   block,
   onUpdate
@@ -22,17 +21,13 @@ export const GuaranteeBlockEditor: React.FC<BlockEditorProps> = ({
         />
       </div>
       
-      <div>
         <Label htmlFor={`${block.id}-text`}>Texto da Garantia</Label>
         <Textarea
           id={`${block.id}-text`}
           value={block.content.text || ''}
           onChange={(e) => onUpdate({ text: e.target.value })}
-          className="mt-1"
           rows={4}
           placeholder="Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia."
-        />
-      </div>
     </div>
   );
 };

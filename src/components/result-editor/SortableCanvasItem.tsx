@@ -5,7 +5,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
 interface SortableCanvasItemProps {
   id: string;
   children: React.ReactNode;
@@ -14,7 +13,6 @@ interface SortableCanvasItemProps {
   onDelete: () => void;
   onDuplicate?: () => void;
 }
-
 export const SortableCanvasItem: React.FC<SortableCanvasItemProps> = ({
   id,
   children,
@@ -36,12 +34,9 @@ export const SortableCanvasItem: React.FC<SortableCanvasItemProps> = ({
       type: 'canvas-item'
     }
   });
-
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
   };
-
   return (
     <div
       ref={setNodeRef}
@@ -94,22 +89,17 @@ export const SortableCanvasItem: React.FC<SortableCanvasItemProps> = ({
                 onDelete();
               }}
               className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
-            >
               <Trash2 className="w-4 h-4" />
             </Button>
-          </div>
         </div>
       )}
-
       {/* Conteúdo do componente */}
       <div className="p-4">
         {children}
       </div>
-
       {/* Indicador de hover quando não selecionado */}
       {!isSelected && (
         <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#B89B7A] rounded-lg pointer-events-none transition-colors duration-200" />
-      )}
     </div>
   );
 };

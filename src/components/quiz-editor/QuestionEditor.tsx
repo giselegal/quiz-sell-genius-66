@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
   Card,
   CardContent,
   CardDescription,
@@ -24,7 +23,6 @@ import { Separator } from '@/components/ui/separator';
 import { generateId } from '@/utils/idGenerator';
 import QuestionOptionEditor from './QuestionOptionEditor';
 import { toast } from '@/components/ui/use-toast';
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -42,7 +40,6 @@ interface QuestionEditorProps {
   onCancel: () => void;
   onDelete: () => void;
 }
-
 const QuestionEditor: React.FC<QuestionEditorProps> = ({
   question,
   onSave,
@@ -58,37 +55,23 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
       options: []
     }
   );
-
   const handleAddOption = () => {
     const newOption: QuizOption = {
-      id: generateId(),
       text: 'Nova opção',
       styleCategory: 'Natural',
       points: 1
     };
-
     setEditedQuestion(prev => ({
       ...prev,
       options: [...prev.options, newOption]
     }));
   };
-
   const handleUpdateOption = (updatedOption: QuizOption) => {
-    setEditedQuestion(prev => ({
-      ...prev,
       options: prev.options.map(opt => 
         opt.id === updatedOption.id ? updatedOption : opt
       )
-    }));
-  };
-
   const handleDeleteOption = (optionId: string) => {
-    setEditedQuestion(prev => ({
-      ...prev,
       options: prev.options.filter(opt => opt.id !== optionId)
-    }));
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -99,24 +82,13 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
         variant: "destructive"
       });
       return;
-    }
-    
     if (editedQuestion.options.length < 2) {
-      toast({
         title: "Opções insuficientes",
         description: "Adicione pelo menos duas opções para a pergunta.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
     onSave(editedQuestion);
-  };
-
   if (!question) {
     return null;
   }
-
   return (
     <Card className="shadow-sm">
       <form onSubmit={handleSubmit}>
@@ -158,28 +130,17 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                 </Select>
               </div>
               
-              <div>
                 <Label htmlFor="multiSelect">Número de seleções</Label>
-                <Select
                   value={String(editedQuestion.multiSelect)}
                   onValueChange={(value) => 
                     setEditedQuestion(prev => ({ ...prev, multiSelect: parseInt(value) }))
-                  }
-                >
                   <SelectTrigger id="multiSelect">
                     <SelectValue placeholder="Selecione o número" />
-                  </SelectTrigger>
-                  <SelectContent>
                     <SelectItem value="1">1 seleção</SelectItem>
                     <SelectItem value="3">3 seleções</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
           </div>
           
           <Separator />
-          
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">Opções</h3>
@@ -192,8 +153,6 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Opção
               </Button>
-            </div>
-            
             <div className="space-y-4">
               {editedQuestion.options.map((option, index) => (
                 <QuestionOptionEditor
@@ -205,7 +164,6 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                   index={index}
                 />
               ))}
-              
               {editedQuestion.options.length === 0 && (
                 <div className="text-center p-4 border border-dashed rounded-md">
                   <p className="text-gray-500">Nenhuma opção adicionada</p>
@@ -220,17 +178,13 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                   </Button>
                 </div>
               )}
-            </div>
-          </div>
         </CardContent>
-        
         <CardFooter className="flex justify-between">
           <div className="flex gap-2">
             <Button type="button" variant="outline" onClick={onCancel}>
               <X className="w-4 h-4 mr-2" />
               Cancelar
             </Button>
-
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button type="button" variant="destructive">
@@ -253,8 +207,6 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-          </div>
-          
           <Button type="submit" className="bg-[#B89B7A] hover:bg-[#A38A69]">
             <Save className="w-4 h-4 mr-2" />
             Salvar Pergunta
@@ -262,7 +214,5 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
         </CardFooter>
       </form>
     </Card>
-  );
 };
-
 export default QuestionEditor;

@@ -8,11 +8,8 @@ interface TestimonialItem {
   role?: string;
   text: string;
 }
-
 interface TestimonialsProps {
   items?: TestimonialItem[];
-}
-
 const Testimonials: React.FC<TestimonialsProps> = ({ 
   items = [
     {
@@ -20,12 +17,9 @@ const Testimonials: React.FC<TestimonialsProps> = ({
       role: "Engenheira",
       text: "Antes, a roupa me vestia. Hoje, eu me visto com intenção. Essa jornada me reconectou com a mulher que sempre fui."
     },
-    {
       name: "Patrícia Paranhos",
       role: "Advogada",
       text: "Aprendi a reconhecer meu valor e refletir isso na forma como me apresento. As pessoas começaram a me enxergar diferente — porque eu estava diferente."
-    },
-    {
       name: "Sônia Spier",
       role: "Terapeuta",
       text: "Com a Gisele, entendi o poder da linguagem visual. Hoje eu escolho minhas roupas com consciência, propósito e leveza."
@@ -40,22 +34,13 @@ const Testimonials: React.FC<TestimonialsProps> = ({
       transition: {
         staggerChildren: 0.3
       }
-    }
   };
-
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
       y: 0,
-      transition: {
         type: "spring",
         stiffness: 100,
         damping: 12
-      }
-    }
-  };
-
   return (
     <div className="py-10">
       <motion.div
@@ -86,7 +71,6 @@ const Testimonials: React.FC<TestimonialsProps> = ({
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
-      >
         {items.map((item, index) => (
           <motion.div
             key={index}
@@ -106,15 +90,9 @@ const Testimonials: React.FC<TestimonialsProps> = ({
                 <div className="absolute top-2 left-2 w-10 h-10 border-t-2 border-l-2 border-[#B89B7A]/40 rounded-tl-md" />
               </motion.div>
               
-              <motion.div 
                 className="absolute bottom-0 right-0 w-12 h-12"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.8 + (index * 0.2) }}
-              >
                 <div className="absolute bottom-2 right-2 w-10 h-10 border-b-2 border-r-2 border-[#B89B7A]/40 rounded-br-md" />
-              </motion.div>
-              
               <div className="mb-5 text-[#B89B7A]">
                 <motion.div
                   initial={{ rotate: -10, scale: 0.9 }}
@@ -124,23 +102,18 @@ const Testimonials: React.FC<TestimonialsProps> = ({
                   <QuoteIcon size={32} strokeWidth={1.5} />
                 </motion.div>
               </div>
-              
               <p className="text-[#8F7A6A] italic mb-6 leading-relaxed flex-grow">
                 "{item.text}"
               </p>
-              
               <div className="mt-auto pt-4 border-t border-[#B89B7A]/20">
                 <p className="font-medium text-[#432818]">{item.name}</p>
                 {item.role && (
                   <p className="text-sm text-[#8F7A6A]/70">{item.role}</p>
                 )}
-              </div>
             </Card>
           </motion.div>
         ))}
-      </motion.div>
     </div>
   );
 };
-
 export default Testimonials;

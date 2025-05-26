@@ -8,11 +8,9 @@ import { trackButtonClick } from '@/utils/analytics';
 interface FloatingCTAProps {
   onClickCTA: () => void;
 }
-
 const FloatingCTA: React.FC<FloatingCTAProps> = ({ onClickCTA }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-
   // Detectar quando o usuário rolou além do header inicial
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +20,6 @@ const FloatingCTA: React.FC<FloatingCTAProps> = ({ onClickCTA }) => {
       
       setIsVisible(currentScrollPosition > threshold);
     };
-
     // Adicionar listener de scroll com throttling para performance
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     
@@ -33,22 +30,16 @@ const FloatingCTA: React.FC<FloatingCTAProps> = ({ onClickCTA }) => {
           timeoutId = null;
         }, 100); // 100ms throttle
       }
-    };
-
     window.addEventListener('scroll', throttledScrollHandler);
-    
     // Limpar listener
     return () => {
       window.removeEventListener('scroll', throttledScrollHandler);
       if (timeoutId) clearTimeout(timeoutId);
-    };
   }, []);
-
   const handleClick = () => {
     trackButtonClick('floating_cta', 'Comprar via Botão Flutuante', 'results_page');
     onClickCTA();
   };
-
   return (
     <AnimatePresence>
       {isVisible && (
@@ -85,5 +76,4 @@ const FloatingCTA: React.FC<FloatingCTAProps> = ({ onClickCTA }) => {
     </AnimatePresence>
   );
 };
-
 export default FloatingCTA;

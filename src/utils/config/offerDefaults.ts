@@ -1,6 +1,5 @@
 
 import { OfferContent, OfferSection, Section } from '@/types/resultPageConfig';
-
 export const createOfferConfig = (): Section => ({
   visible: true,
   content: {
@@ -20,7 +19,6 @@ export const createOfferConfig = (): Section => ({
     paddingX: '1rem'
   }
 });
-
 export const createOfferSectionConfig = (): OfferSection => {
   return {
     hero: {
@@ -43,7 +41,6 @@ export const createOfferSectionConfig = (): OfferSection => {
       }
     },
     benefits: {
-      content: {
         title: "O QUE VOCÊ VAI RECEBER",
         items: [
           "Análise personalizada do seu biotipo e coloração pessoal",
@@ -51,34 +48,14 @@ export const createOfferSectionConfig = (): OfferSection => {
           "Consultoria de 1 hora com nossa especialista",
           "Acesso a materiais exclusivos"
         ]
-      },
-      style: {
         backgroundColor: '#FFFFFF',
-        textAlign: 'center',
-        paddingY: '2rem',
-        paddingX: '1rem'
-      },
       visible: true
-    },
     products: {
       content: {},
       style: {},
-      visible: true
-    },
     pricing: {
-      content: {},
-      style: {},
-      visible: true
-    },
     testimonials: {
-      content: {},
-      style: {},
-      visible: true
-    },
     guarantee: {
-      content: {},
-      style: {},
-      visible: true
     }
   };
 };

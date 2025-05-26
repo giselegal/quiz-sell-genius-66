@@ -26,7 +26,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
   Table,
   TableBody,
   TableCell,
@@ -34,10 +33,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
 export default function QuizzesPage() {
   const [searchTerm, setSearchTerm] = useState('');
-
   const quizzes = [
     {
       id: 1,
@@ -50,18 +47,13 @@ export default function QuizzesPage() {
       type: 'personality',
       thumbnail: 'https://via.placeholder.com/100x60'
     },
-    {
       id: 2,
       title: 'Descubra Seu Produto Ideal',
-      status: 'ativo',
       responses: 1923,
       conversions: 89,
       conversionRate: 4.6,
       createdAt: '2024-01-12',
       type: 'product-finder',
-      thumbnail: 'https://via.placeholder.com/100x60'
-    },
-    {
       id: 3,
       title: 'Teste de Personalidade Empreendedora',
       status: 'rascunho',
@@ -69,10 +61,6 @@ export default function QuizzesPage() {
       conversions: 0,
       conversionRate: 0,
       createdAt: '2024-01-10',
-      type: 'personality',
-      thumbnail: 'https://via.placeholder.com/100x60'
-    },
-    {
       id: 4,
       title: 'Quiz de Marketing Digital',
       status: 'pausado',
@@ -81,10 +69,8 @@ export default function QuizzesPage() {
       conversionRate: 3.7,
       createdAt: '2024-01-08',
       type: 'knowledge',
-      thumbnail: 'https://via.placeholder.com/100x60'
     }
   ];
-
   const getStatusBadge = (status: string) => {
     const styles = {
       ativo: 'bg-green-100 text-green-800 border-green-200',
@@ -98,7 +84,6 @@ export default function QuizzesPage() {
       </Badge>
     );
   };
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -121,9 +106,7 @@ export default function QuizzesPage() {
               Novo Quiz
             </Button>
           </Link>
-        </div>
       </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="border-[#D4C4A0]">
@@ -135,54 +118,18 @@ export default function QuizzesPage() {
               </div>
               <div className="p-3 bg-[#F5F2E9] rounded-full">
                 <BarChart3 className="w-6 h-6 text-[#B89B7A]" />
-              </div>
             </div>
           </CardContent>
         </Card>
-
-        <Card className="border-[#D4C4A0]">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
                 <p className="text-sm font-medium text-[#B89B7A]">Respostas Totais</p>
                 <p className="text-3xl font-bold text-[#432818]">5,626</p>
-              </div>
-              <div className="p-3 bg-[#F5F2E9] rounded-full">
                 <Users className="w-6 h-6 text-[#B89B7A]" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-[#D4C4A0]">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
                 <p className="text-sm font-medium text-[#B89B7A]">Conversões</p>
                 <p className="text-3xl font-bold text-green-600">277</p>
-              </div>
               <div className="p-3 bg-green-50 rounded-full">
                 <Star className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-[#D4C4A0]">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
                 <p className="text-sm font-medium text-[#B89B7A]">Taxa Média</p>
                 <p className="text-3xl font-bold text-[#432818]">4.9%</p>
-              </div>
-              <div className="p-3 bg-[#F5F2E9] rounded-full">
-                <BarChart3 className="w-6 h-6 text-[#B89B7A]" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Search and Filters */}
       <Card className="border-[#D4C4A0]">
         <CardHeader>
@@ -196,10 +143,8 @@ export default function QuizzesPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 border-[#D4C4A0] focus:border-[#B89B7A]"
               />
-            </div>
           </div>
         </CardHeader>
-        
         <CardContent>
           <Table>
             <TableHeader>
@@ -233,27 +178,19 @@ export default function QuizzesPage() {
                     </div>
                   </TableCell>
                   <TableCell>{getStatusBadge(quiz.status)}</TableCell>
-                  <TableCell>
                     <div className="flex items-center gap-1">
                       <Users className="w-4 h-4 text-[#B89B7A]" />
                       {quiz.responses.toLocaleString()}
-                    </div>
-                  </TableCell>
                   <TableCell className="font-medium">{quiz.conversions}</TableCell>
-                  <TableCell>
                     <span className={`font-medium ${
                       quiz.conversionRate >= 5 ? 'text-green-600' :
                       quiz.conversionRate >= 3 ? 'text-yellow-600' : 'text-red-600'
                     }`}>
                       {quiz.conversionRate}%
                     </span>
-                  </TableCell>
-                  <TableCell>
                     <div className="flex items-center gap-1 text-[#B89B7A]">
                       <Calendar className="w-4 h-4" />
                       {new Date(quiz.createdAt).toLocaleDateString('pt-BR')}
-                    </div>
-                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -266,25 +203,17 @@ export default function QuizzesPage() {
                           <Eye className="w-4 h-4 mr-2" />
                           Visualizar
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
                           <Edit className="w-4 h-4 mr-2" />
                           Editar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
                           <Copy className="w-4 h-4 mr-2" />
                           Duplicar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
                           <BarChart3 className="w-4 h-4 mr-2" />
                           Analytics
-                        </DropdownMenuItem>
                         <DropdownMenuItem className="text-red-600">
                           <Trash2 className="w-4 h-4 mr-2" />
                           Excluir
-                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

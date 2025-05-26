@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
-
 interface HeroSectionProps {
   primaryStyle: StyleResult;
   title: any;
@@ -10,7 +9,6 @@ interface HeroSectionProps {
   ctaText?: any;
   onCtaClick?: () => void;
 }
-
 const HeroSection: React.FC<HeroSectionProps> = ({
   primaryStyle,
   title,
@@ -42,10 +40,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           >
             {ctaText}
           </button>
-        )}
       </div>
     </section>
   );
 };
-
 export default HeroSection;

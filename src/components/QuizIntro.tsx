@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-
 // Design tokens centralizados - apenas os essenciais
 const colors = {
   primary: '#B89B7A',
@@ -16,32 +15,24 @@ const colors = {
   textLight: '#6B7280',
   border: '#E5E7EB',
 };
-
 // --- Constantes e funções movidas para o escopo do módulo ---
 const LOGO_BASE_URL = 'https://res.cloudinary.com/dqljyf76t/image/upload/';
 const LOGO_IMAGE_ID = 'v1744911572/LOGO_DA_MARCA_GISELE_r14oz2';
-
 const INTRO_IMAGE_BASE_URL = 'https://res.cloudinary.com/dqljyf76t/image/upload/';
 const INTRO_IMAGE_ID =
   'v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up';
-
 // Otimizado para carregamento mais rápido - URLs pré-construídas
 const STATIC_LOGO_IMAGE_URLS = {
   webp: `${LOGO_BASE_URL}f_webp,q_70,w_120,h_50,c_fit/${LOGO_IMAGE_ID}.webp`,
   png: `${LOGO_BASE_URL}f_png,q_70,w_120,h_50,c_fit/${LOGO_IMAGE_ID}.png`,
-};
-
 // Imagem LCP: Otimizada para carregamento mais rápido - URLs pré-construídas
 const STATIC_INTRO_IMAGE_URLS = {
   avif: `${INTRO_IMAGE_BASE_URL}f_avif,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.avif`,
   webp: `${INTRO_IMAGE_BASE_URL}f_webp,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.webp`,
   png: `${INTRO_IMAGE_BASE_URL}f_png,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.png`,
-};
-
 interface QuizIntroProps {
   onStart: (nome: string) => void;
 }
-
 /**
  * QuizIntro - Componente ultra-otimizado da página inicial do quiz
  * Renderização imediata sem estados de carregamento
@@ -60,39 +51,29 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
       setError('Por favor, digite seu nome para continuar');
       return;
     }
-    
     // Limpar qualquer erro anterior
     setError('');
-    
     // Iniciar o quiz com o nome fornecido
     onStart(nome);
-    
     // Reportar Web Vitals após interação do usuário
     if (typeof window !== 'undefined' && 'performance' in window) {
       window.performance.mark('user-interaction');
-    }
   };
-
   // Efeito de inicialização única - executa apenas uma vez
   useEffect(() => {
     // Reportar Web Vitals
-    if (typeof window !== 'undefined' && 'performance' in window) {
       window.performance.mark('component-mounted');
-    }
-    
     // Reportar que o LCP foi renderizado (para analytics)
     const reportLcpRendered = () => {
       if (typeof window !== 'undefined' && window.QUIZ_PERF) {
         window.QUIZ_PERF.mark('lcp_rendered');
       }
     };
-    
     // Usar requestAnimationFrame para garantir que o reporte aconteça após a renderização
     requestAnimationFrame(() => {
       requestAnimationFrame(reportLcpRendered);
     });
   }, []);
-
   // Renderizar diretamente o conteúdo principal sem estados de carregamento
   return (
     <main
@@ -140,7 +121,6 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
             />
           </div>
         </div>
-
         {/* Título principal com a fonte Playfair Display */}
         <h1
           className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818]"
@@ -153,7 +133,6 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
           <span className="text-[#B89B7A]">Você</span>.
         </h1>
       </header>
-
       <section className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 md:space-y-8 mx-auto">
         {/* Imagem principal - renderização imediata e LCP */}
         <div className="mt-2 w-full max-w-xs sm:max-w-md md:max-w-lg mx-auto">
@@ -167,10 +146,8 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   srcSet={STATIC_INTRO_IMAGE_URLS.avif}
                   type="image/avif"
                 />
-                <source
                   srcSet={STATIC_INTRO_IMAGE_URLS.webp}
                   type="image/webp"
-                />
                 <img
                   src={STATIC_INTRO_IMAGE_URLS.png}
                   alt="Descubra seu estilo predominante e transforme seu guarda-roupa"
@@ -181,12 +158,8 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                   fetchPriority="high"
                   decoding="async"
                   id="lcp-image"
-                />
               </picture>
             </div>
-          </div>
-        </div>
-
         {/* Texto descritivo */}
         <p className="text-sm text-center leading-relaxed px-2 sm:text-base text-gray-600">
           Em poucos minutos, descubra seu{' '}
@@ -198,18 +171,15 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
             essência
           </span>, com
           praticidade e{' '}
-          <span className="font-semibold text-[#432818]">
             confiança
           </span>.
         </p>
-
         {/* Formulário - renderização imediata */}
         <div id="quiz-form" className="mt-8">
           <form
             onSubmit={handleSubmit}
             className="w-full space-y-6"
             autoComplete="off"
-          >
             <div>
               <label
                 htmlFor="name"
@@ -224,7 +194,6 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 onChange={(e) => {
                   setNome(e.target.value);
                   if (error) setError('');
-                }}
                 className={cn(
                   "w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-offset-2 focus-visible:ring-offset-2 focus:ring-offset-[#FEFEFE] focus-visible:ring-offset-[#FEFEFE]",
                   error 
@@ -239,11 +208,9 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 aria-invalid={!!error}
                 aria-describedby={error ? "name-error" : undefined}
                 required
-              />
               {error && (
                 <p id="name-error" className="mt-1.5 text-sm text-red-500 font-medium">{error}</p>
               )}
-            </div>
             
             <button
               type="submit"
@@ -255,35 +222,27 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 nome.trim() 
                   ? 'bg-[#B89B7A] text-white hover:bg-[#A1835D] active:bg-[#947645] hover:shadow-lg transform hover:scale-[1.01]' 
                   : 'bg-[#B89B7A]/50 text-white/90 cursor-not-allowed'
-              )}
               aria-disabled={!nome.trim()}
             >
               <span className="flex items-center justify-center gap-2">
                 {nome.trim() ? 'Quero Descobrir meu Estilo Agora!' : 'Digite seu nome para continuar'}
               </span>
             </button>
-
             <p className="text-xs text-center text-gray-500 pt-1">
               Seu nome é necessário para personalizar sua experiência. Ao clicar, você concorda com nossa{' '}
               <a 
                 href="#" 
                 className="text-[#B89B7A] hover:text-[#A1835D] underline focus:outline-none focus:ring-1 focus:ring-[#B89B7A] rounded"
-              >
                 política de privacidade
               </a>
             </p>
           </form>
-        </div>
       </section>
-      
       {/* Rodapé */}
       <footer className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 mt-auto pt-6 text-center mx-auto">
         <p className="text-xs text-gray-500">
           © {new Date().getFullYear()} Gisele Galvão - Todos os direitos reservados
-        </p>
       </footer>
     </main>
   );
-};
-
 export default QuizIntro;

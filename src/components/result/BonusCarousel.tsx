@@ -7,18 +7,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
 interface Bonus {
   title: string;
   description: string;
   image: string;
   order: number;
 }
-
 interface BonusCarouselProps {
   bonuses: Bonus[];
-}
-
 export const BonusCarousel: React.FC<BonusCarouselProps> = ({ bonuses }) => {
   return (
     <section className="py-12 px-4 bg-white">

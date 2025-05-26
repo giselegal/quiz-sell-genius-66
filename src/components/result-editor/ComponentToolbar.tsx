@@ -8,18 +8,14 @@ import { Input } from '@/components/ui/input';
 import { Search, Lock } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { getAvailableComponents, COMPONENT_CATEGORIES, type ComponentDefinition } from './ComponentRegistry';
-
 interface ComponentToolbarProps {
   categories: any[];
   components: ComponentDefinition[];
   collapsed?: boolean;
 }
-
 interface DraggableComponentProps {
   component: ComponentDefinition;
   isLocked?: boolean;
-}
-
 const DraggableComponent: React.FC<DraggableComponentProps> = ({ component, isLocked = false }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: component.id,
@@ -29,13 +25,10 @@ const DraggableComponent: React.FC<DraggableComponentProps> = ({ component, isLo
     },
     disabled: isLocked
   });
-
   const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
-
   const Icon = component.icon;
-
   return (
     <div
       ref={setNodeRef}
@@ -70,7 +63,6 @@ const DraggableComponent: React.FC<DraggableComponentProps> = ({ component, isLo
     </div>
   );
 };
-
 export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({ 
   categories, 
   components, 
@@ -79,7 +71,6 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const { hasPremiumFeatures, hasFeature, user } = useAuth();
-
   // Filtrar componentes disponíveis baseado no plano do usuário
   const availableComponents = getAvailableComponents(user?.features || [], hasPremiumFeatures);
   
@@ -93,15 +84,12 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
     }
     return acc;
   }, { available: [] as ComponentDefinition[], locked: [] as ComponentDefinition[] });
-
   // Filtrar por categoria e busca
   const filteredComponents = [...available, ...locked].filter(component => {
     const matchesCategory = selectedCategory === 'all' || component.category === selectedCategory;
     const matchesSearch = component.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          component.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  });
-
   if (collapsed) {
     return (
       <div className="p-4">
@@ -110,11 +98,8 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
             <DraggableComponent key={component.id} component={component} />
           ))}
         </div>
-      </div>
     );
   }
-
-  return (
     <div className="h-full flex flex-col">
       {/* Header com busca */}
       <div className="p-4 border-b border-[#D4C4A0]">
@@ -126,8 +111,6 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 border-[#D4C4A0] focus:border-[#B89B7A] text-[#432818]"
           />
-        </div>
-
         {/* Status do usuário */}
         <div className="mb-4 p-3 bg-[#F5F2E9] rounded-lg">
           <div className="flex items-center justify-between">
@@ -148,11 +131,7 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
           <p className="text-xs text-[#B89B7A] mt-1">
             {available.length} componentes disponíveis
           </p>
-        </div>
-      </div>
-
       {/* Filtros de categoria */}
-      <div className="p-4 border-b border-[#D4C4A0]">
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedCategory('all')}
@@ -161,7 +140,6 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
                 ? 'bg-[#B89B7A] text-[#432818]'
                 : 'bg-[#F5F2E9] text-[#B89B7A] hover:bg-[#D4C4A0]'
             }`}
-          >
             Todos ({filteredComponents.length})
           </button>
           {COMPONENT_CATEGORIES.map((category) => {
@@ -182,16 +160,12 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
               </button>
             );
           })}
-        </div>
-      </div>
-
       {/* Lista de componentes */}
       <div className="flex-1 overflow-y-auto p-4">
         {filteredComponents.length === 0 ? (
           <div className="text-center py-8 text-[#B89B7A]">
             <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p className="text-sm">Nenhum componente encontrado</p>
-          </div>
         ) : (
           <div className="space-y-3">
             {/* Componentes disponíveis */}
@@ -200,16 +174,9 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
               .map((component) => (
                 <DraggableComponent key={component.id} component={component} />
               ))}
-            
             {/* Componentes bloqueados */}
-            {filteredComponents
               .filter(c => locked.find(l => l.id === c.id))
-              .map((component) => (
                 <DraggableComponent key={component.id} component={component} isLocked={true} />
-              ))}
-          </div>
-        )}
-
         {/* Upgrade prompt para usuários não premium */}
         {locked.length > 0 && !hasPremiumFeatures && (
           <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg">
@@ -226,9 +193,3 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
             <button className="w-full bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors">
               Fazer Upgrade
             </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};

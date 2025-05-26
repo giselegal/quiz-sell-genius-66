@@ -11,14 +11,11 @@ interface Component {
   type: string;
   props: Record<string, any>;
 }
-
 interface EditorCanvasProps {
   components: Component[];
   onSelectComponent: (component: Component | null) => void;
   onChange: (components: Component[]) => void;
   selectedComponent: Component | null;
-}
-
 export default function EditorCanvas({ 
   components, 
   onSelectComponent,
@@ -42,7 +39,6 @@ export default function EditorCanvas({
       isOver: !!monitor.isOver(),
     }),
   }));
-
   const getDefaultProps = (type: string): Record<string, any> => {
     switch (type) {
       case 'heading':
@@ -58,49 +54,33 @@ export default function EditorCanvas({
       case 'container':
         return { children: [], style: { padding: '20px', backgroundColor: '#f9f9f9' } };
       default:
-        return { style: {} };
     }
   };
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (over && active.id !== over.id) {
       const oldIndex = components.findIndex((item) => item.id === active.id);
       const newIndex = components.findIndex((item) => item.id === over.id);
-
       onChange(arrayMove(components, oldIndex, newIndex));
-    }
-  };
-
   const handleComponentClick = (component: Component) => {
     onSelectComponent(component);
-  };
-
   const handleComponentDelete = (componentId: string) => {
     const updatedComponents = components.filter(comp => comp.id !== componentId);
     onChange(updatedComponents);
     
     if (selectedComponent?.id === componentId) {
       onSelectComponent(null);
-    }
-  };
-
   const handleComponentDuplicate = (component: Component) => {
     const duplicatedComponent: Component = {
       ...component,
       id: `comp-${Date.now()}`,
       props: { ...component.props }
     };
-    
     const componentIndex = components.findIndex(comp => comp.id === component.id);
     const newComponents = [...components];
     newComponents.splice(componentIndex + 1, 0, duplicatedComponent);
-    
     onChange(newComponents);
     onSelectComponent(duplicatedComponent);
-  };
-
   return (
     <div 
       ref={drop}
@@ -143,16 +123,10 @@ export default function EditorCanvas({
           </SortableContext>
         </DndContext>
       )}
-      
       {isOver && (
         <div className="fixed inset-0 pointer-events-none">
           <div className="flex h-full items-center justify-center">
             <div className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-lg">
               Solte aqui para adicionar o componente
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
-}

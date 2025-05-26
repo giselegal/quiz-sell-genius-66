@@ -7,19 +7,15 @@ import { ShoppingCart, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-rea
 import { trackButtonClick } from '@/utils/analytics';
 import { OptimizedImage } from '../ui/optimized-image';
 import { preloadImagesByUrls, getLowQualityPlaceholder } from '@/utils/imageManager';
-
 interface BeforeAfterTransformationProps {
   handleCTAClick?: () => void;
 }
-
 interface TransformationItem {
   image: string; 
   name: string;
   id: string; 
   width?: number;
   height?: number;
-}
-
 const transformations: TransformationItem[] = [
   {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
@@ -28,15 +24,11 @@ const transformations: TransformationItem[] = [
     width: 800,
     height: 1000
   }, 
-  {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
     name: "Mariangela",
     id: "transformation-mariangela",
-    width: 800,
-    height: 1000
   }
 ];
-
 const preloadInitialTransformationImages = () => {
   const imageUrls: string[] = [];
   transformations.slice(0, 1).forEach(item => { 
@@ -48,18 +40,14 @@ const preloadInitialTransformationImages = () => {
       quality: 90, 
       batchSize: 1,
     });
-  }
 };
-
 const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ handleCTAClick }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
   const activeTransformation = transformations[activeIndex];
   const autoSlideInterval = 5000; // Intervalo em milissegundos (5 segundos)
-
   useEffect(() => {
     preloadInitialTransformationImages(); 
     const fallbackLoadingTimer = setTimeout(() => {
@@ -67,39 +55,28 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
         setIsLoading(false);
       }
     }, 2500); 
-
     return () => clearTimeout(fallbackLoadingTimer);
   }, []); // Executa apenas uma vez na montagem
-  
-  useEffect(() => {
     setImageLoaded(false); 
     setIsLoading(true);    
-
     const currentImage = activeTransformation?.image;
     if (currentImage) {
       console.log("Attempting to load image:", currentImage); // Log para depuração
-
       // Precarrega a imagem atual
       const img = new Image();
       img.src = currentImage;
       img.onload = () => {
         setImageLoaded(true);
-        setIsLoading(false);
         console.log("Image loaded successfully:", currentImage);
       };
       img.onerror = (err) => {
         console.error("Failed to load image:", currentImage, err);
-        setIsLoading(false);
-      };
-
       // Precarrega a próxima imagem (se houver mais de uma)
       const nextIndex = (activeIndex + 1) % transformations.length;
       if (transformations.length > 1 && transformations[nextIndex] && nextIndex !== activeIndex) {
         const nextTransformationImage = transformations[nextIndex].image;
         const nextImg = new Image();
         nextImg.src = nextTransformationImage;
-      }
-
       const timer = setTimeout(() => {
         if (!imageLoaded) { 
           console.warn("Image loading timed out for:", currentImage);
@@ -107,62 +84,40 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
         }
       }, 5000); // Reduzido para 5s
       return () => clearTimeout(timer);
-
     } else {
       console.log("No active transformation image to load."); // Log para depuração
       setIsLoading(false); 
     }
   }, [activeIndex, activeTransformation]); // Removido imageLoaded da dependência para evitar loops
-
   // Efeito para a transição automática de slides
-  useEffect(() => {
     if (transformations.length <= 1 || !imageLoaded) return; // Não inicia se não houver imagens suficientes ou a imagem atual não carregou
-
     const intervalId = setInterval(() => {
       setActiveIndex(prev => (prev === transformations.length - 1 ? 0 : prev + 1));
     }, autoSlideInterval);
-
     return () => clearInterval(intervalId); 
   }, [transformations.length, autoSlideInterval, imageLoaded, activeIndex]); // Adicionado activeIndex para reiniciar o timer ao navegar manualmente
-
-  useEffect(() => {
     if (imageLoaded) {
       setIsLoading(false);
-    }
   }, [imageLoaded]);
-
   const handleDotClick = (index: number) => {
     setActiveIndex(index);
   };
-  
   const handlePrevClick = () => {
     setActiveIndex(prev => (prev === 0 ? transformations.length - 1 : prev - 1));
-  };
-  
   const handleNextClick = () => {
     setActiveIndex(prev => (prev === transformations.length - 1 ? 0 : prev + 1));
-  };
-  
   const handleButtonClick = () => {
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
     if (handleCTAClick) {
       handleCTAClick();
-    } else {
       window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-    }
-  };
-
   const createTinyPlaceholder = (url: string) => {
     const baseUrlParts = url.split('/upload/');
     if (baseUrlParts.length !== 2) return url;
     const tinyPlaceholder = `${baseUrlParts[0]}/upload/f_auto,q_20,w_20/${baseUrlParts[1].split('/').slice(1).join('/')}`;
     return tinyPlaceholder;
-  };
-
   if (!activeTransformation) {
     return null; 
-  }
-
   return (
     <div className="py-12 md:py-16 bg-gradient-to-b from-white to-[#fffaf7] dark:from-[#2c2520] dark:to-[#251f1a]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -174,7 +129,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             Mulheres reais que reencontraram a própria essência e passaram a refletir quem são — com leveza, intenção e autenticidade — através do estilo pessoal.
           </p>
         </div>
-
         <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-10 lg:gap-16">
           {/* Seção de Texto */}
           <div className="text-left lg:w-2/5 order-2 lg:order-1">
@@ -213,7 +167,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               </span>
             </Button>
           </div>
-
           {/* Seção do Slider de Imagem */}
           <div className="lg:w-3/5 order-1 lg:order-2 w-full max-w-xl mx-auto">
             {isLoading && !imageLoaded ? (
@@ -253,7 +206,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       />
                     ))}
                   </div>
-                </div>
               </Card>
             )}
              {transformations.length > 1 && (
@@ -263,14 +215,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     </Button>
                     <Button variant="outline" onClick={handleNextClick} className="text-[#432818] dark:text-[#d1c7b8] border-[#B89B7A] dark:border-[#E0C9B1]/50 hover:bg-[#B89B7A]/10 dark:hover:bg-[#E0C9B1]/10">
                         Próxima <ChevronRight className="w-5 h-5 ml-1" />
-                    </Button>
-                </div>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );
-};
-
 export default BeforeAfterTransformation;

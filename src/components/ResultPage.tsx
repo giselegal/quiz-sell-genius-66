@@ -22,16 +22,13 @@ export default function ResultPage() {
     
     return () => clearTimeout(timer);
   }, [params]);
-  
   if (loading) {
     return <div className="flex h-screen w-full items-center justify-center">Carregando seu resultado...</div>;
   }
-
   const handleCTAClick = () => {
     // Lógica do CTA
     console.log('CTA clicado');
   };
-  
   return (
     <div className="container mx-auto min-h-screen p-6">
       <h1 className="mb-8 text-center text-3xl font-bold">{result?.title}</h1>
@@ -71,7 +68,7 @@ export default function ResultPage() {
           
           <div className="flex items-center justify-between">
             <span className="text-lg font-semibold">Parcelas</span>
-            <span className="text-2xl font-bold text-primary">
+            <span className="text-lg font-semibold">
               5x R$ 8,83
             </span>
           </div>
@@ -81,7 +78,6 @@ export default function ResultPage() {
             <span className="text-xs font-normal text-muted-foreground">ou R$ 39,90 à vista</span>
           </div>
         </div>
-        
         <div className="mt-8 text-center">
           <Button 
             onClick={handleCTAClick} 
@@ -92,7 +88,6 @@ export default function ResultPage() {
             </span>
           </Button>
         </div>
-      </div>
     </div>
   );
 }

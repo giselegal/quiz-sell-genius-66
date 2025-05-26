@@ -6,7 +6,6 @@ import { CheckCircle2, Shield } from 'lucide-react';
 interface GuaranteeProps {
   text?: string;
 }
-
 const Guarantee: React.FC<GuaranteeProps> = ({
   text = "Garantia incondicional de 7 dias. Teste o guia completo e todos os bônus. Se não ficar satisfeita por qualquer motivo, devolvemos 100% do seu investimento. Sem perguntas."
 }) => {
@@ -24,34 +23,19 @@ const Guarantee: React.FC<GuaranteeProps> = ({
       }
     }
   };
-
   // Variantes para efeito de brilho
   const glowVariants = {
     initial: { opacity: 0.3 },
-    animate: { 
       opacity: 0.8,
-      transition: {
-        repeat: Infinity,
-        repeatType: "reverse" as const,
         duration: 2,
-        ease: "easeInOut"
-      }
-    }
-  };
-
   // Animação para o check dentro do escudo
   const checkVariants = {
     initial: { opacity: 0, y: 5 },
-    animate: { 
       opacity: 1, 
       y: 0,
       transition: { 
         delay: 0.5, 
         duration: 0.5 
-      }
-    }
-  };
-
   return (
     <Card className="p-6 md:p-8 my-8 glass-panel relative overflow-hidden border-[#B89B7A]/30">
       {/* Efeitos de gradiente animados */}
@@ -61,13 +45,8 @@ const Guarantee: React.FC<GuaranteeProps> = ({
         initial="initial"
         animate="animate"
       />
-      <motion.div 
         className="absolute -bottom-16 -left-16 w-32 h-32 rounded-full bg-gradient-to-tr from-[#aa6b5d]/15 to-[#B89B7A]/5 blur-xl"
-        variants={glowVariants}
-        initial="initial"
-        animate="animate"
         style={{ animationDelay: "1s" }}
-      />
       
       <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
         <div className="flex-shrink-0">
@@ -118,10 +97,8 @@ const Guarantee: React.FC<GuaranteeProps> = ({
             {text}
           </p>
           <div className="h-1 w-20 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]/80 mt-3 rounded-full"></div>
-        </div>
       </div>
     </Card>
   );
 };
-
 export default Guarantee;

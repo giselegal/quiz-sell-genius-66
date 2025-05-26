@@ -7,12 +7,10 @@ import ClientToaster from '@/components/ClientToaster';
 import ClientLayout from '@/components/ClientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
-
 export const metadata: Metadata = {
   title: 'Quiz Sell Genius',
   description: 'Plataforma de criação de quizzes de alta conversão',
 };
-
 export default function RootLayout({
   children,
 }: {

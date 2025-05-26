@@ -9,7 +9,6 @@ import { highlightStrategicWords } from '@/utils/textHighlight';
 import { Button } from './ui/button';
 import { ArrowRight } from 'lucide-react';
 import { useQuestionScroll } from '@/hooks/useQuestionScroll';
-
 interface QuizQuestionProps {
   question: QuizQuestionType;
   onAnswer: (response: UserResponse) => void;
@@ -19,7 +18,6 @@ interface QuizQuestionProps {
   showQuestionImage?: boolean;
   isStrategicQuestion?: boolean; // Nova prop
 }
-
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
@@ -33,11 +31,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const hasImageOptions = question.type !== 'text';
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
-
   useEffect(() => {
     scrollToQuestion(question.id);
   }, [question.id, scrollToQuestion]);
-
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
     
@@ -48,16 +44,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
-      if (isStrategicQuestion) {
         // Para questões estratégicas, substituímos qualquer seleção anterior
         newSelectedOptions = [optionId];
       } else if (question?.multiSelect || false && currentAnswers.length >= question?.multiSelect || false) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
         newSelectedOptions = [...currentAnswers, optionId];
-      }
     }
-    
     onAnswer({ 
       questionId: question.id,
       selectedOptions: newSelectedOptions
@@ -66,14 +59,9 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   
   const getGridColumns = () => {
     if (question.type === 'text') {
-      if (isStrategicQuestion) {
         return "grid-cols-1 gap-3 px-2";
-      }
       return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
-    }
     return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
-  };
-  
   return (
     <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
       isMobile && "px-2", 
@@ -134,6 +122,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     </div>
   );
 };
-
 export { QuizQuestion };
-

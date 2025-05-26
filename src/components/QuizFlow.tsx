@@ -2,19 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
 type QuestionOption = {
   id: string;
   text: string;
   value: number;
 };
-
 type Question = {
-  id: string;
-  text: string;
   options: QuestionOption[];
-};
-
 // Dados simulados para o quiz
 const quizQuestions: Question[] = [
   {
@@ -26,39 +20,29 @@ const quizQuestions: Question[] = [
       { id: 'q1_c', text: 'Construir autoridade', value: 8 }
     ]
   },
-  {
     id: 'q2',
     text: 'Qual é o seu maior desafio atualmente?',
-    options: [
       { id: 'q2_a', text: 'Atrair clientes', value: 8 },
       { id: 'q2_b', text: 'Converter leads', value: 10 },
       { id: 'q2_c', text: 'Fidelizar clientes', value: 5 }
-    ]
-  },
-  {
     id: 'q3',
     text: 'Quanto tempo você dedica ao seu negócio por semana?',
-    options: [
       { id: 'q3_a', text: 'Menos de 20 horas', value: 3 },
       { id: 'q3_b', text: '20 a 40 horas', value: 7 },
       { id: 'q3_c', text: 'Mais de 40 horas', value: 10 }
-    ]
   }
 ];
-
 export default function QuizFlow() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, QuestionOption>>({});
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
   const handleOptionClick = (option: QuestionOption) => {
     // Salva a resposta selecionada
     setAnswers(prev => ({
       ...prev,
       [quizQuestions[currentQuestion].id]: option
     }));
-
     // Avança para a próxima pergunta ou finaliza o quiz
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
@@ -72,16 +56,12 @@ export default function QuizFlow() {
       }, 1000);
     }
   };
-
   // Função simples para calcular um ID de resultado com base nas respostas
   const calculateResultId = (userAnswers: Record<string, QuestionOption>) => {
     const totalScore = Object.values(userAnswers).reduce((sum, option) => sum + option.value, 0);
     // Gerar um ID de resultado baseado no score total
     return `result_${totalScore}`;
-  };
-
   const question = quizQuestions[currentQuestion];
-
   return (
     <div 
       className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4"
@@ -99,8 +79,6 @@ export default function QuizFlow() {
       <div 
         className="w-full max-w-md rounded-lg border bg-card p-6 shadow-lg"
         data-lovable-component="quiz-container"
-        data-lovable-editable="true"
-      >
         {isLoading ? (
           <div 
             className="flex flex-col items-center justify-center py-8"
@@ -121,30 +99,19 @@ export default function QuizFlow() {
               <span>{Math.round(((currentQuestion + 1) / quizQuestions.length) * 100)}%</span>
             </div>
             
-            <div 
               className="mb-6 h-2 w-full overflow-hidden rounded-full bg-muted"
               data-lovable-component="quiz-progress-bar"
-              data-lovable-editable="true"
-            >
               <div 
                 className="h-full bg-primary transition-all duration-300 ease-in-out" 
                 style={{ width: `${((currentQuestion + 1) / quizQuestions.length) * 100}%` }}
               ></div>
-            </div>
-            
             <h2 
               className="mb-6 text-xl font-medium"
               data-lovable-component="quiz-question"
-              data-lovable-editable="true"
-            >
               {question.text}
             </h2>
-            
-            <div 
               className="space-y-3"
               data-lovable-component="quiz-options"
-              data-lovable-editable="true"
-            >
               {question.options.map(option => (
                 <button
                   key={option.id}
@@ -156,7 +123,6 @@ export default function QuizFlow() {
                   {option.text}
                 </button>
               ))}
-            </div>
           </>
         )}
       </div>

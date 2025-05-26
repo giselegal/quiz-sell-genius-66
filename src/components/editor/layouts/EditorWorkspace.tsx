@@ -7,16 +7,13 @@ import { EditPreview } from '../preview/EditPreview';
 import PropertiesPanel from '../properties/PropertiesPanel';
 import { cn } from '@/lib/utils';
 import { useEditor } from '@/hooks/useEditor';
-
 interface EditorWorkspaceProps {
   className?: string;
 }
-
 export function EditorWorkspace({ className }: EditorWorkspaceProps) {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const { config, addBlock, updateBlock, deleteBlock } = useEditor();
-
   return (
     <div className={cn("h-screen flex flex-col bg-[#FAF9F7]", className)}>
       <ResizablePanelGroup direction="horizontal">
@@ -29,9 +26,7 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
             }} 
           />
         </ResizablePanel>
-
         <ResizableHandle withHandle />
-
         {/* Preview Area */}
         <ResizablePanel defaultSize={55}>
           <EditPreview 
@@ -39,15 +34,9 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
             onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
             onSelectComponent={setSelectedComponentId}
             selectedComponentId={selectedComponentId}
-          />
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
         {/* Properties Panel */}
         <ResizablePanel defaultSize={25}>
           <PropertiesPanel
-            selectedComponentId={selectedComponentId}
             onClose={() => setSelectedComponentId(null)}
             blocks={config.blocks}
             onUpdate={(content) => {
@@ -56,14 +45,8 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
               }
             }}
             onDelete={() => {
-              if (selectedComponentId) {
                 deleteBlock(selectedComponentId);
                 setSelectedComponentId(null);
-              }
-            }}
-          />
-        </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );
-}

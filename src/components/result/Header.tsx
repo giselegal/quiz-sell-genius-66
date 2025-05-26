@@ -4,7 +4,6 @@ import { Card } from '@/components/ui/card';
 import Logo from '../ui/logo';
 import { StyleResult } from '@/types/quiz';
 import { useAuth } from '@/context/AuthContext';
-
 interface HeaderProps {
   logo?: string;
   logoAlt?: string;
@@ -15,7 +14,6 @@ interface HeaderProps {
   isScrolled?: boolean;
   className?: string;
 }
-
 export const Header: React.FC<HeaderProps> = ({
   logo = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
   logoAlt = "Logo Gisele Galvão",
@@ -55,7 +53,6 @@ export const Header: React.FC<HeaderProps> = ({
               {primaryStyle.category}
             </h2>
           )}
-        </div>
       </div>
     </Card>
   );

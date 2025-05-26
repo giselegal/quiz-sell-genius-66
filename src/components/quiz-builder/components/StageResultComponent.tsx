@@ -6,13 +6,11 @@ import { Button } from '@/components/ui/button';
 import { ContentContainer } from '@/components/shared/ContentContainer';
 import { GridLayout } from '@/components/shared/GridLayout';
 import { sharedStyles } from '@/styles/sharedStyles';
-
 interface StageResultComponentProps {
   data: QuizComponentData['data'];
   style: QuizComponentData['style'];
   isSelected: boolean;
 }
-
 const StageResultComponent: React.FC<StageResultComponentProps> = ({ 
   data, 
   style, 
@@ -50,28 +48,17 @@ const StageResultComponent: React.FC<StageResultComponentProps> = ({
               className="w-full rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
             />
           </div>
-          <div>
-            <img
               src={data.authorImageUrl || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"}
               alt="Autor do Guia"
-              className="w-full rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
-            />
-          </div>
         </GridLayout>
-        
         <div className="flex justify-center">
           <Button className="bg-[#B89B7A] hover:bg-[#A38A69] text-white px-6 py-3 rounded-md text-lg">
             {data.callToActionText || 'Conhecer o Guia Completo'}
           </Button>
-        </div>
-        
         <div className="mt-6 text-sm text-[#432818]/60 text-center">
           {data.stageTitle || 'Resultado'} • {data.stageNumber || 7} de 7
-        </div>
       </ContentContainer>
     </div>
   );
 };
-
 export default StageResultComponent;
-

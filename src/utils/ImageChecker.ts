@@ -1,6 +1,5 @@
 
 // Image checking and analysis utilities
-
 /**
  * Analyzes an image URL to extract optimization parameters and provide suggestions
  * @param url The image URL to analyze
@@ -23,7 +22,6 @@ export const analyzeImageUrl = (url: string) => {
     result.suggestions.push('Invalid URL provided');
     return result;
   }
-  
   // Check if it's a Cloudinary URL
   if (url.includes('cloudinary.com')) {
     // Extract transformations from URL
@@ -40,7 +38,6 @@ export const analyzeImageUrl = (url: string) => {
       } else {
         result.suggestions.push('Add f_auto parameter for automatic format optimization');
       }
-      
       // Extract quality information
       const qualityTransform = transforms.find(t => t.startsWith('q_'));
       if (qualityTransform) {
@@ -50,22 +47,15 @@ export const analyzeImageUrl = (url: string) => {
         if (result.quality !== 'auto' && parseInt(result.quality as string, 10) > 85) {
           result.suggestions.push('Consider using q_auto or reducing quality to 85 for better performance');
         }
-      } else {
         result.suggestions.push('Add q_auto parameter for automatic quality optimization');
-      }
-      
       // Extract width information
       const widthTransform = transforms.find(t => t.startsWith('w_'));
       if (widthTransform) {
         result.width = widthTransform.replace('w_', '');
-      } else {
         result.suggestions.push('Add width parameter to avoid loading unnecessarily large images');
-      }
-      
       // Check for other optimal parameters
       if (!transforms.some(t => t.startsWith('dpr_'))) {
         result.suggestions.push('Add dpr_auto for responsive device pixel ratio handling');
-      }
     } else {
       result.suggestions.push('No transformations found in URL. Add optimization parameters.');
     }
@@ -86,20 +76,14 @@ export const analyzeImageUrl = (url: string) => {
       result.format = 'webp';
     } else if (url.includes('.svg')) {
       result.format = 'svg';
-    }
-  }
-  
   return result;
 };
-
-/**
  * Checks if an image is likely too large for its display size
  * @param naturalWidth Natural width of the image
  * @param naturalHeight Natural height of the image
  * @param displayWidth Display width of the image
  * @param displayHeight Display height of the image
  * @returns Boolean indicating if the image is oversized
- */
 export const isOversizedImage = (
   naturalWidth: number,
   naturalHeight: number,
@@ -108,15 +92,10 @@ export const isOversizedImage = (
 ): boolean => {
   // Consider device pixel ratio for retina displays
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
-  
   // Allow for images up to 1.5x the display size (accounting for DPR)
   const optimalWidth = displayWidth * dpr * 1.5;
   const optimalHeight = displayHeight * dpr * 1.5;
-  
   return naturalWidth > optimalWidth || naturalHeight > optimalHeight;
-};
-
 export default {
   analyzeImageUrl,
   isOversizedImage
-};

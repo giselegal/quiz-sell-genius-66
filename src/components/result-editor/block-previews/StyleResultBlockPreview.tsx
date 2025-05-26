@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
-
 interface StyleResultBlockPreviewProps {
   content: {
     description?: string;
@@ -9,7 +8,6 @@ interface StyleResultBlockPreviewProps {
   };
   primaryStyle: StyleResult;
 }
-
 const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
   content,
   primaryStyle
@@ -17,8 +15,6 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
   const getStyleImage = (): string => {
     const defaultImage = 'https://placehold.co/600x400/png';
     return content.customImage || defaultImage;
-  };
-
   return (
     <div className="p-6 bg-[#FAF9F7] rounded-lg">
       <div className="text-center mb-4">
@@ -29,7 +25,6 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
           {primaryStyle.percentage}% de compatibilidade
         </div>
       </div>
-
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <img
@@ -37,15 +32,10 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
             alt={`Estilo ${primaryStyle.category}`}
             className="w-full h-auto object-cover rounded-lg shadow-sm"
           />
-        </div>
-        <div>
           <p className="text-[#5A5A5A] leading-relaxed">
             {content.description || `O estilo ${primaryStyle.category} é...`}
           </p>
-        </div>
-      </div>
     </div>
   );
 };
-
 export default StyleResultBlockPreview;

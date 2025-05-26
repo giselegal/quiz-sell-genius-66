@@ -8,5 +8,4 @@ const EnhancedResultPageEditorPage: React.FC = () => {
     </div>
   );
 };
-
 export default EnhancedResultPageEditorPage;

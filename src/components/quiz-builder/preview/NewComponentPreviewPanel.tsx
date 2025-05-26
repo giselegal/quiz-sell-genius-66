@@ -16,7 +16,6 @@ interface ComponentPreviewPanelProps {
   activeStage: QuizStage | null;
   isPreviewing: boolean;
 }
-
 export const NewComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
   components,
   selectedComponentId,
@@ -32,7 +31,6 @@ export const NewComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
       },
     })
   );
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
@@ -40,7 +38,6 @@ export const NewComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
       onMoveComponent(active.id.toString(), over.id.toString());
     }
   };
-
   if (!activeStage) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -48,16 +45,13 @@ export const NewComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
       </div>
     );
   }
-
   const sortedComponents = [...components].sort((a, b) => a.order - b.order);
-
   return (
     <div className="h-full bg-[#F9F5F1] flex flex-col">
       <div className="bg-white border-b border-gray-200 px-4 py-2">
         <h3 className="text-sm font-medium text-gray-600">
           Visualizando: {activeStage.title || `Etapa ${activeStage.order + 1}`}
         </h3>
-      </div>
       
       <ScrollArea className="flex-1 p-4">
         <div 
@@ -89,7 +83,6 @@ export const NewComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
               <SortableContext
                 items={sortedComponents.map(c => c.id)}
                 strategy={verticalListSortingStrategy}
-              >
                 {sortedComponents.map((component) => (
                   <DraggableComponent
                     key={component.id}
@@ -102,9 +95,7 @@ export const NewComponentPreviewPanel: React.FC<ComponentPreviewPanelProps> = ({
                 ))}
               </SortableContext>
             </DndContext>
-          )}
         </div>
       </ScrollArea>
     </div>
-  );
 };

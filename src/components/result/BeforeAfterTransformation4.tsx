@@ -15,7 +15,6 @@ declare global {
     ctaClickProcessing?: boolean;
   }
 }
-
 // Design tokens centralizados
 const designTokens = {
   colors: {
@@ -36,39 +35,30 @@ const designTokens = {
     md: '1.5rem',
     lg: '2rem',
     xl: '3rem',
-  },
   borderRadius: {
     sm: '0.25rem',
     md: '0.5rem',
     lg: '0.75rem',
     full: '9999px',
-  },
   shadows: {
     sm: '0 1px 3px rgba(0,0,0,0.1)',
     md: '0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1)',
     lg: '0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05)',
     highlight: '0 0 15px rgba(184, 155, 122, 0.15)',
     cta: '0 4px 14px rgba(76, 175, 80, 0.4)',
-  },
   transitions: {
     default: 'all 0.3s ease',
     fast: 'all 0.15s ease',
     slow: 'all 0.5s ease',
-  },
 };
-
 interface BeforeAfterTransformationProps {
   handleCTAClick?: () => void;
-}
-
 interface TransformationItem {
   image: string; 
   name: string;
   id: string; 
   width?: number;
   height?: number;
-}
-
 // Componente Badge reutilizável
 const Badge: React.FC<{
   children: React.ReactNode;
@@ -81,7 +71,6 @@ const Badge: React.FC<{
     {children}
   </span>
 );
-
 // MEMOIZED COMPONENTS PARA PERFORMANCE
 const CheckItem = React.memo<{ children: React.ReactNode }>(({ children }) => (
   <li className="flex items-start gap-3 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
@@ -95,7 +84,6 @@ const CheckItem = React.memo<{ children: React.ReactNode }>(({ children }) => (
   </li>
 ));
 CheckItem.displayName = 'CheckItem';
-
 const NavButton = React.memo<{
   direction: 'prev' | 'next';
   onClick: () => void;
@@ -109,15 +97,12 @@ const NavButton = React.memo<{
     }, [onClick])}
     style={{ pointerEvents: 'auto' }}
     aria-label={direction === 'prev' ? 'Anterior' : 'Próxima'}
-  >
     {direction === 'prev' ? (
       <ChevronLeft size={16} className="text-[#432818] md:w-6 md:h-6" style={{ pointerEvents: 'none' }} />
     ) : (
       <ChevronRight size={16} className="text-[#432818] md:w-6 md:h-6" style={{ pointerEvents: 'none' }} />
     )}
   </button>
-));
-
 // SIMPLIFIED TRANSFORMATIONS DATA
 const transformations: TransformationItem[] = [
   {
@@ -127,15 +112,10 @@ const transformations: TransformationItem[] = [
     width: 600,
     height: 750
   }, 
-  {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
     name: "Mariangela", 
     id: "transformation-mariangela",
-    width: 600,
-    height: 750
-  }
 ];
-
 // OPTIMIZED IMAGE PRELOADER
 const useImagePreloader = (images: string[], initialIndex = 0) => {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
@@ -162,77 +142,54 @@ const useImagePreloader = (images: string[], initialIndex = 0) => {
       }
     }
   }, [images, initialIndex]);
-  
   return { loadedImages };
-};
-
 const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ handleCTAClick }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
   const isLowPerformance = useIsLowPerformanceDevice();
   const imageUrls = transformations.map(t => t.image);
   const { loadedImages } = useImagePreloader(imageUrls, 0);
-  
   const activeTransformation = transformations[activeIndex];
-
   // MEMOIZED NAVIGATION FUNCTIONS
   const navigateToTransformation = useCallback((index: number) => {
     if (index >= 0 && index < transformations.length) {
       setActiveIndex(index);
-    }
   }, []);
-
   const goToPrevious = useCallback(() => {
     const prevIndex = (activeIndex - 1 + transformations.length) % transformations.length;
     navigateToTransformation(prevIndex);
   }, [activeIndex, navigateToTransformation]);
-
   const goToNext = useCallback(() => {
     const nextIndex = (activeIndex + 1) % transformations.length;
     navigateToTransformation(nextIndex);
-  }, [activeIndex, navigateToTransformation]);
-
   // LOADING STATE MANAGEMENT
-  useEffect(() => {
     if (loadedImages[transformations[activeIndex].image]) {
       setIsLoading(false);
-    }
   }, [loadedImages, activeIndex]);
-
   // OPTIMIZED CTA HANDLER
   const handleCTA = useCallback((e?: React.MouseEvent) => {
     // Prevenir comportamento padrão e propagação
     if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
     
     // Prevenir múltiplos cliques
     if (window.ctaClickProcessing) return;
     window.ctaClickProcessing = true;
-    
     if (handleCTAClick) {
       handleCTAClick();
     } else {
       trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-      
       // Para desktop, usar window.open para garantir funcionamento
       if (window.innerWidth >= 768) {
         window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
       } else {
         // Para mobile, usar location.href
         window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-      }
-    }
-    
     // Limpar flag após delay
     setTimeout(() => {
       window.ctaClickProcessing = false;
     }, 1000);
   }, [handleCTAClick]);
-
   // LOADING SKELETON - SIMPLIFIED
   if (isLoading) {
     return (
@@ -260,17 +217,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 <div className="space-y-3">
                   {Array(4).fill(0).map((_, idx) => (
                     <div key={idx} className="h-5 bg-[#f8f5f0] rounded animate-pulse"></div>
-                  ))}
-                </div>
                 <div className="h-12 bg-[#f8f5f0] rounded animate-pulse"></div>
-              </div>
             </div>
           </Card>
         </div>
       </div>
     );
-  }
-
   // MAIN COMPONENT - OPTIMIZED
   return (
     <div className="my-12">
@@ -286,9 +238,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
         {/* MAIN CARD */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
           <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-lg transition-all duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
               {/* IMAGE SECTION */}
-              <div className="p-6 flex flex-col items-center">
                 <div className="relative w-full max-w-sm mx-auto">
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -317,7 +267,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       <NavButton direction="next" onClick={goToNext} />
                     </div>
                   )}
-                </div>
                 
                 {/* INDICATORS */}
                 {transformations.length > 1 && (
@@ -332,12 +281,9 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                             : 'bg-gray-300 hover:bg-[#B89B7A]/50 hover:scale-105'
                         }`}
                         aria-label={`Ver transformação ${idx + 1}`}
-                      />
                     ))}
                   </div>
                 )}
-              </div>
-              
               {/* CONTENT SECTION - SIMPLIFIED */}
               <div className="p-6 bg-white">
                 <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
@@ -345,11 +291,9 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     Transforme sua Imagem
                   </span>
                 </h4>
-                
                 <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
                   Seu estilo é muito mais que roupas — é a expressão da sua essência e uma aliada para atingir seus objetivos.
                 </p>
-                
                 {/* BENEFITS LIST */}
                 <div className="bg-[#f9f4ef]/70 rounded-lg p-5 mb-6 border border-[#B89B7A]/10">
                   <ul className="space-y-3 text-center md:text-left">
@@ -358,8 +302,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     <CheckItem>Imagem profissional alinhada aos seus objetivos</CheckItem>
                     <CheckItem>Guarda-roupa inteligente e sem desperdícios</CheckItem>
                   </ul>
-                </div>
-                
                 {/* CTA SECTION */}
                 <div className="flex flex-col items-center md:items-start">
                   <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
@@ -373,7 +315,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         boxShadow: "0 8px 32px rgba(76, 175, 80, 0.4)",
                       }}
                       type="button"
-                    >
                       <span className="flex items-center justify-center gap-2" style={{ pointerEvents: 'none' }}>
                         <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1, rotate: isButtonHovered ? 10 : 0 }}>
                           <ShoppingCart className="w-5 h-5" />
@@ -382,11 +323,9 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       </span>
                     </Button>
                   </motion.div>
-                  
                   <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4">
                     Oferta por tempo limitado
                   </p>
-                
                   {/* PAYMENT METHODS */}
                   <div className="w-full max-w-[280px] mx-auto md:mx-0">
                     <img
@@ -397,15 +336,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       width="280"
                       height="70"
                     />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </motion.div>
-      </div>
     </div>
   );
-};
-
 export default React.memo(BeforeAfterTransformation);

@@ -17,7 +17,6 @@ export function Sidebar() {
     { href: '/dashboard/leads', icon: Users, label: 'Leads' },
     { href: '/dashboard/settings', icon: Settings, label: 'Configurações' },
   ];
-
   return (
     <div className="flex flex-col h-full p-4 bg-white border-r border-gray-200">
       {/* Logo */}
@@ -27,7 +26,6 @@ export function Sidebar() {
           {/* User avatar or settings icon can go here */}
         </div>
       </div>
-
       {/* Menu */}
       <nav className="flex-1">
         <ul className="space-y-2">
@@ -44,7 +42,6 @@ export function Sidebar() {
           ))}
         </ul>
       </nav>
-
       {/* Footer */}
       <div className="mt-auto">
         <a 
@@ -54,7 +51,6 @@ export function Sidebar() {
           <Settings className="w-5 h-5 mr-3" />
           Configurações
         </a>
-      </div>
     </div>
   );
 }

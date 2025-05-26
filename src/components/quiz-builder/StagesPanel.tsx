@@ -9,7 +9,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { StageSection } from './stages/StageSection';
-
 interface StagesPanelProps {
   stages: QuizStage[];
   activeStageId: string | null;
@@ -19,7 +18,6 @@ interface StagesPanelProps {
   onStageUpdate: (id: string, updates: Partial<QuizStage>) => void;
   onStageDelete: (id: string) => void;
 }
-
 export const StagesPanel: React.FC<StagesPanelProps> = ({
   stages,
   activeStageId,
@@ -36,14 +34,12 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
   });
   
   const [popoverOpen, setPopoverOpen] = useState(false);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-
   const handleDragEnd = (event) => {
     const { active, over } = event;
     
@@ -51,26 +47,19 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
       onStageMove(active.id, over.id);
     }
   };
-
   const handleAddStage = (type: QuizStage['type']) => {
     onStageAdd(type);
     setPopoverOpen(false);
-  };
-
   const coverStages = stages.filter(stage => stage.type === 'cover');
   const questionStages = stages.filter(stage => stage.type === 'question');
   const resultStages = stages.filter(stage => stage.type === 'result');
-
   const toggleSection = (section: 'cover' | 'question' | 'result') => {
     setExpandedTypes(prev => ({ ...prev, [section]: !prev[section] }));
-  };
-
   const stageTypes = [
     { type: 'cover' as const, label: 'Capa', icon: BookOpen },
     { type: 'question' as const, label: 'Questão', icon: FileQuestion },
     { type: 'result' as const, label: 'Resultado', icon: Award },
   ];
-
   return (
     <div className="h-full flex flex-col border-r border-[#333333] text-white">
       <div className="p-4 border-b border-[#333333] flex items-center justify-between">
@@ -114,31 +103,17 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
                 onStageDelete={onStageDelete}
               />
               
-              <StageSection
                 title="Questões"
                 isExpanded={expandedTypes.question}
                 stages={questionStages}
-                activeStageId={activeStageId}
                 onToggle={() => toggleSection('question')}
-                onStageSelect={onStageSelect}
-                onStageEdit={(id) => {}}
-                onStageDelete={onStageDelete}
-              />
-              
-              <StageSection
                 title="Resultados"
                 isExpanded={expandedTypes.result}
                 stages={resultStages}
-                activeStageId={activeStageId}
                 onToggle={() => toggleSection('result')}
-                onStageSelect={onStageSelect}
-                onStageEdit={(id) => {}}
-                onStageDelete={onStageDelete}
-              />
             </SortableContext>
           </DndContext>
         </div>
       </ScrollArea>
     </div>
-  );
 };

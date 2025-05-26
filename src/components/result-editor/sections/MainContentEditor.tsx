@@ -4,7 +4,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
-
 interface MainContentEditorProps {
   content: {
     introText?: string;
@@ -16,7 +15,6 @@ interface MainContentEditorProps {
   onUpdate: (content: any) => void;
   onToggleVisibility: (visible: boolean) => void;
 }
-
 export const MainContentEditor: React.FC<MainContentEditorProps> = ({
   content,
   visible,
@@ -45,7 +43,6 @@ export const MainContentEditor: React.FC<MainContentEditorProps> = ({
             />
           </div>
           
-          <div className="space-y-2">
             <Label>Benefícios</Label>
             {content.benefits?.map((benefit, index) => (
               <Input
@@ -59,23 +56,17 @@ export const MainContentEditor: React.FC<MainContentEditorProps> = ({
                 className="mb-2"
               />
             ))}
-          </div>
-          
-          <div className="space-y-2">
             <Label htmlFor="tabletImage">Imagem do Tablet</Label>
             <Input
               id="tabletImage"
               value={content.tabletImage || ''}
               onChange={(e) => onUpdate({ ...content, tabletImage: e.target.value })}
-            />
             {content.tabletImage && (
               <img 
                 src={content.tabletImage} 
                 alt="Preview do tablet" 
                 className="h-32 object-contain mt-2"
-              />
             )}
-          </div>
         </>
       )}
     </div>

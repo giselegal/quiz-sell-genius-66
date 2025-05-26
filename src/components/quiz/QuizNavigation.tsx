@@ -11,7 +11,6 @@ interface QuizNavigationProps {
   selectedOptionsCount: number;
   isLastQuestion?: boolean;
 }
-
 const QuizNavigation: React.FC<QuizNavigationProps> = ({
   canProceed,
   onNext,
@@ -22,7 +21,6 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
 }) => {
   const [showActivationEffect, setShowActivationEffect] = useState(false);
   const [autoAdvanceTimer, setAutoAdvanceTimer] = useState<NodeJS.Timeout | null>(null);
-
   const shouldAutoAdvance = useCallback((): boolean => {
     if (!canProceed) {
       return false;
@@ -31,19 +29,15 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     const normalCondition = currentQuestionType === 'normal' && selectedOptionsCount === 3;
     return normalCondition;
   }, [canProceed, currentQuestionType, selectedOptionsCount]);
-
   useEffect(() => {
     if (autoAdvanceTimer) {
       clearTimeout(autoAdvanceTimer);
       setAutoAdvanceTimer(null);
-    }
-
     if (canProceed) { // Efeito de ativação se puder prosseguir (normal ou estratégico)
       setShowActivationEffect(true);
       const visualTimer = setTimeout(() => {
         setShowActivationEffect(false);
       }, 2000); // Duração do efeito visual
-
       // Auto-avanço apenas para questões normais
       if (currentQuestionType === 'normal' && shouldAutoAdvance()) {
         console.log('Configurando avanço automático em 45ms');
@@ -53,7 +47,6 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
         }, 45); // Tempo para auto-avanço
         setAutoAdvanceTimer(newTimer);
       }
-
       return () => {
         clearTimeout(visualTimer);
         if (autoAdvanceTimer) {
@@ -62,20 +55,14 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
       };
     } else { // Se não puder prosseguir
       setShowActivationEffect(false);
-    }
   }, [canProceed, onNext, shouldAutoAdvance, currentQuestionType]);
-
   const getHelperText = useCallback((): string => {
-    if (!canProceed) {
       return currentQuestionType === 'strategic'
         ? 'Selecione 1 opção para continuar'
         : 'Selecione 3 opções para continuar';
-    }
     return '';
   }, [canProceed, currentQuestionType]);
-
   const nextButtonText = 'Avançar';
-
   return (
     <div className="mt-6 w-full px-4 md:px-0">
       <div className="flex flex-col items-center w-full">
@@ -83,7 +70,6 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
         {!canProceed && (
           <p className="text-sm text-[#8F7A6A] mb-3">{getHelperText()}</p>
         )}
-
         <div className="flex justify-center items-center w-full gap-3">
           {onPrevious && (
             <Button
@@ -94,7 +80,6 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
               Voltar
             </Button>
           )}
-
           {/* Botão Avançar/Ver Resultado agora é exibido para todos os tipos de questão */}
           <Button
             onClick={onNext}
@@ -119,5 +104,4 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     </div>
   );
 };
-
 export default QuizNavigation;

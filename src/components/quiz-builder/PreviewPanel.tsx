@@ -14,7 +14,6 @@ import {
   DragEndEvent, 
   DragStartEvent 
 } from '@dnd-kit/core';
-import { 
   SortableContext, 
   sortableKeyboardCoordinates, 
   useSortable, 
@@ -30,7 +29,6 @@ import MultipleChoiceComponent from './components/MultipleChoiceComponent';
 import QuizResultComponent from './components/QuizResultComponent';
 import StageCoverComponent from './components/StageCoverComponent';
 import StageQuestionComponent from './components/StageQuestionComponent';
-
 interface PreviewPanelProps {
   components: QuizComponentData[];
   selectedComponentId: string | null;
@@ -39,24 +37,19 @@ interface PreviewPanelProps {
   activeStage: QuizStage | null;
   isPreviewing: boolean;
 }
-
 interface SortableComponentProps {
   component: QuizComponentData;
   isSelected: boolean;
   onSelect: (id: string) => void;
   children: React.ReactNode;
-}
-
 const SortableComponent: React.FC<SortableComponentProps> = ({ component, isSelected, onSelect, children }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: component.id
   });
-
   const style = {
     transform: CSS.Transform.toString(transform),
     transition
   };
-
   return (
     <div
       ref={setNodeRef}
@@ -81,7 +74,6 @@ const SortableComponent: React.FC<SortableComponentProps> = ({ component, isSele
     </div>
   );
 };
-
 export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   components,
   selectedComponentId,
@@ -91,7 +83,6 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   isPreviewing = false
 }) => {
   const [activeId, setActiveId] = React.useState<string | null>(null);
-
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -101,29 +92,21 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
-  );
-
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
-  };
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
     setActiveId(null);
-    
     if (over && active.id !== over.id) {
       onMoveComponent(active.id as string, over.id as string);
     }
-  };
-
   const renderComponent = (component: QuizComponentData) => {
     const props = {
       data: component.data,
       style: component.style,
       isSelected: component.id === selectedComponentId,
     };
-
     switch (component.type) {
       case 'header':
         return <HeaderComponent {...props} />;
@@ -143,9 +126,6 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         return <StageQuestionComponent {...props} />;
       default:
         return <div className="p-4 bg-gray-100 text-center">Componente não reconhecido: {component.type}</div>;
-    }
-  };
-
   const getStageTypeLabel = (type: QuizStage['type']) => {
     switch (type) {
       case 'cover':
@@ -156,14 +136,8 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         return 'Página de Resultado';
       case 'strategic':
         return 'Questão Estratégica';
-      default:
         return type;
-    }
-  };
-
   const sortedComponents = [...components].sort((a, b) => a.order - b.order);
-
-  return (
     <div className="h-full flex flex-col border-r">
       <div className="p-4 border-b flex items-center justify-between">
         <h2 className="font-semibold">
@@ -178,7 +152,6 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
             "Preview"
           )}
         </h2>
-      </div>
       
       <ScrollArea className="flex-1 bg-[#FAF9F7]">
         <div className="p-4">
@@ -230,6 +203,3 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           </div>
         </div>
       </ScrollArea>
-    </div>
-  );
-};

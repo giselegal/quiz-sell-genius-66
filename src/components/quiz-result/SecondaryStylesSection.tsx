@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 interface SecondaryStylesSectionProps {
   secondaryStyles: StyleResult[];
 }
-
 const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ secondaryStyles }) => {
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -21,8 +20,6 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1 }
-  };
-
   return (
     <motion.div 
       className="space-y-3 p-5 bg-[#fffaf7] rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
@@ -44,7 +41,6 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
           Estilos Complementares
         </motion.h3>
       </motion.div>
-
       <motion.div 
         className="grid grid-cols-1 gap-3"
         variants={containerVariants}
@@ -73,7 +69,6 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.6 + index * 0.1, duration: 0.3 }}
                   whileHover={{ scale: 1.05 }}
-                >
                   {style.percentage}%
                 </motion.span>
               </div>
@@ -84,7 +79,6 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
                   initial={{ width: 0 }}
                   animate={{ width: `${style.percentage}%` }}
                   transition={{ delay: 0.8 + index * 0.2, duration: 1, ease: "easeOut" }}
-                >
                   <motion.div 
                     className="absolute top-0 right-0 h-full w-4 bg-white/30"
                     animate={{ 
@@ -94,16 +88,12 @@ const SecondaryStylesSection: React.FC<SecondaryStylesSectionProps> = ({ seconda
                       duration: 2,
                       repeat: Infinity,
                       repeatType: "loop"
-                    }}
                   />
                 </motion.div>
-              </div>
             </div>
           </motion.div>
         ))}
-      </motion.div>
     </motion.div>
   );
 };
-
 export default SecondaryStylesSection;

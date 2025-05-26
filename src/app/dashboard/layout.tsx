@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { FileEdit } from 'lucide-react';
-
 export default function DashboardLayout({
   children,
 }: {
@@ -23,15 +22,12 @@ export default function DashboardLayout({
             <FileEdit className="h-5 w-5 mr-3" />
             <span>Editor de Resultados</span>
           </Link>
-          
-          {/* ... outros links do menu ... */}
         </nav>
       </div>
       
       {/* Conteúdo principal */}
       <div className="flex-1 overflow-auto">
         {children}
-      </div>
     </div>
   );
 }

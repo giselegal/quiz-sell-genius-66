@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { LucideIcon } from 'lucide-react';
-
 interface ComponentItemProps {
   type: string;
   label: string;
@@ -10,7 +9,6 @@ interface ComponentItemProps {
   description: string;
   onSelect: (type: string) => void;
 }
-
 export function ComponentItem({
   type,
   label,
@@ -31,4 +29,3 @@ export function ComponentItem({
       <p className="text-[10px] text-gray-500 leading-tight">{description}</p>
     </Button>
   );
-}

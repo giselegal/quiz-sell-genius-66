@@ -2,7 +2,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button } from '../components/ui/button';
-
 const NotFoundPage = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -18,5 +17,4 @@ const NotFoundPage = () => {
     </div>
   );
 };
-
 export default NotFoundPage;

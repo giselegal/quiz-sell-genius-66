@@ -6,7 +6,6 @@ import { EditorBlock } from '@/types/editor';
 import { AddBlockButton } from '../AddBlockButton';
 import { EmptyEditor } from '../EmptyEditor';
 import { BlockRenderer } from '../BlockRenderer';
-
 interface EditorContentProps {
   blocks: EditorBlock[];
   onDragEnd: (event: DragEndEvent) => void;
@@ -15,7 +14,6 @@ interface EditorContentProps {
   onDeleteBlock: (id: string) => void;
   isPreviewing: boolean;
 }
-
 // Helper function to render a preview of a block
 const renderBlockPreview = (block: EditorBlock) => {
   switch (block.type) {
@@ -38,25 +36,18 @@ const renderBlockPreview = (block: EditorBlock) => {
       ) : (
         <div className="h-48 bg-gray-100 flex items-center justify-center mb-4 rounded-md">
           <p className="text-gray-400">Imagem</p>
-        </div>
-      );
     case 'benefits':
-      return (
-        <div className="mb-4">
           <h3 className="text-xl font-bold mb-2">{block.content.title || 'Benefícios'}</h3>
           <ul className="list-disc pl-5">
             {(block.content.items || []).map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
-        </div>
-      );
     // Add more cases for other block types as needed
     default:
       return <div className="p-4 border rounded mb-4">Bloco: {block.type}</div>;
   }
 };
-
 export const EditorContent: React.FC<EditorContentProps> = ({
   blocks,
   onDragEnd,
@@ -70,7 +61,6 @@ export const EditorContent: React.FC<EditorContentProps> = ({
       activationConstraint: { distance: 5 },
     })
   );
-
   if (isPreviewing) {
     return (
       <div className="bg-white rounded-lg shadow-sm p-6 min-h-96">
@@ -81,8 +71,6 @@ export const EditorContent: React.FC<EditorContentProps> = ({
         ))}
       </div>
     );
-  }
-
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
       <SortableContext items={blocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
@@ -102,5 +90,3 @@ export const EditorContent: React.FC<EditorContentProps> = ({
         )}
       </SortableContext>
     </DndContext>
-  );
-};

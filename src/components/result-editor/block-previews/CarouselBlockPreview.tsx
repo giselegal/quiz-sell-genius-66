@@ -9,7 +9,6 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
-
 interface CarouselBlockPreviewProps {
   content: {
     carouselImages?: {
@@ -24,7 +23,6 @@ interface CarouselBlockPreviewProps {
     style?: any;
   };
 }
-
 const CarouselBlockPreview: React.FC<CarouselBlockPreviewProps> = ({ content }) => {
   const { 
     carouselImages = [], 
@@ -34,7 +32,6 @@ const CarouselBlockPreview: React.FC<CarouselBlockPreviewProps> = ({ content }) 
     showDots = true,
     style = {} 
   } = content;
-
   // Referência para o API do carrossel para autoplay
   const [api, setApi] = React.useState<any>(null);
   
@@ -46,11 +43,9 @@ const CarouselBlockPreview: React.FC<CarouselBlockPreviewProps> = ({ content }) 
     const autoPlayInterval = setInterval(() => {
       api.scrollNext();
     }, interval);
-    
     // Limpar intervalo quando o componente é desmontado
     return () => clearInterval(autoPlayInterval);
   }, [api, autoPlay, interval]);
-
   return (
     <div style={style} className="w-full">
       {carouselImages.length === 0 ? (
@@ -84,7 +79,6 @@ const CarouselBlockPreview: React.FC<CarouselBlockPreviewProps> = ({ content }) 
               <CarouselNext className={cn("absolute right-2 top-1/2 transform -translate-y-1/2")} />
             </>
           )}
-          
           {showDots && carouselImages.length > 1 && (
             <div className="flex justify-center gap-1 mt-2">
               {carouselImages.map((_, index) => (
@@ -95,11 +89,9 @@ const CarouselBlockPreview: React.FC<CarouselBlockPreviewProps> = ({ content }) 
                 />
               ))}
             </div>
-          )}
         </Carousel>
       )}
     </div>
   );
 };
-
 export default CarouselBlockPreview;

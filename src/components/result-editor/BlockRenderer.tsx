@@ -25,7 +25,6 @@ import FAQBlockPreview from './block-previews/FAQBlockPreview';
 import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
 import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
 import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
-
 interface BlockRendererProps {
   block: Block;
   primaryStyle: StyleResult;
@@ -34,7 +33,6 @@ interface BlockRendererProps {
   onUpdate?: (content: any) => void;
   isDragging?: boolean;
 }
-
 export const BlockRenderer: React.FC<BlockRendererProps> = ({
   block,
   primaryStyle,
@@ -92,7 +90,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
         return <p>Bloco não reconhecido: {block.type}</p>;
     }
   };
-
   return (
     <div
       onClick={onSelect}
@@ -116,9 +113,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             }}
           />
         </div>
-      )}
     </div>
   );
 };
-
 export default BlockRenderer;

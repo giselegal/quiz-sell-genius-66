@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-
 interface AnimationBlockPreviewProps {
   content: {
     animationType?: 'fade-in' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom-in' | 'zoom-out';
@@ -13,7 +12,6 @@ interface AnimationBlockPreviewProps {
     style?: any;
   };
 }
-
 const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }) => {
   const {
     animationType = 'fade-in',
@@ -27,7 +25,6 @@ const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }
   const [isVisible, setIsVisible] = React.useState(animationTrigger !== 'onScroll');
   const [isHovered, setIsHovered] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
-  
   React.useEffect(() => {
     if (animationTrigger !== 'onScroll') return;
     
@@ -40,30 +37,22 @@ const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }
       },
       { threshold: 0.1 }
     );
-    
     if (ref.current) {
       observer.observe(ref.current);
     }
-    
     return () => {
       observer.disconnect();
     };
   }, [animationTrigger]);
-  
   // Gerar os estilos de animação com base nos parâmetros
   const getAnimationStyle = () => {
     // Só aplicar animação se estiver visível ou com hover quando necessário
     const shouldAnimate = isVisible || (animationTrigger === 'onHover' && isHovered);
-    
     if (!shouldAnimate) {
       return { opacity: 0 };
-    }
-    
     const baseStyle = {
       transition: `all ${animationDuration}ms ease-out`,
       transitionDelay: `${animationDelay}ms`,
-    };
-    
     // Estilos específicos para cada tipo de animação
     switch (animationType) {
       case 'fade-in':
@@ -72,46 +61,19 @@ const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }
           opacity: shouldAnimate ? 1 : 0,
         };
       case 'slide-up':
-        return {
-          ...baseStyle,
-          opacity: shouldAnimate ? 1 : 0,
           transform: shouldAnimate ? 'translateY(0)' : 'translateY(20px)',
-        };
       case 'slide-down':
-        return {
-          ...baseStyle,
-          opacity: shouldAnimate ? 1 : 0,
           transform: shouldAnimate ? 'translateY(0)' : 'translateY(-20px)',
-        };
       case 'slide-left':
-        return {
-          ...baseStyle,
-          opacity: shouldAnimate ? 1 : 0,
           transform: shouldAnimate ? 'translateX(0)' : 'translateX(20px)',
-        };
       case 'slide-right':
-        return {
-          ...baseStyle,
-          opacity: shouldAnimate ? 1 : 0,
           transform: shouldAnimate ? 'translateX(0)' : 'translateX(-20px)',
-        };
       case 'zoom-in':
-        return {
-          ...baseStyle,
-          opacity: shouldAnimate ? 1 : 0,
           transform: shouldAnimate ? 'scale(1)' : 'scale(0.95)',
-        };
       case 'zoom-out':
-        return {
-          ...baseStyle,
-          opacity: shouldAnimate ? 1 : 0,
           transform: shouldAnimate ? 'scale(1)' : 'scale(1.05)',
-        };
       default:
         return baseStyle;
-    }
-  };
-  
   return (
     <div
       ref={ref}
@@ -131,5 +93,4 @@ const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }
     </div>
   );
 };
-
 export default AnimationBlockPreview;

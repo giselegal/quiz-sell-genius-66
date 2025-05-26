@@ -7,7 +7,6 @@ interface UseAutoSaveProps {
   delay?: number;
   enabled?: boolean;
 }
-
 export const useAutoSave = ({ 
   data, 
   onSave, 
@@ -16,7 +15,6 @@ export const useAutoSave = ({
 }: UseAutoSaveProps) => {
   const timeoutRef = useRef<NodeJS.Timeout>();
   const lastSavedRef = useRef<string>('');
-
   const saveData = useCallback(async () => {
     const dataString = JSON.stringify(data);
     
@@ -31,33 +29,19 @@ export const useAutoSave = ({
       }
     }
   }, [data, onSave]);
-
   useEffect(() => {
     if (!enabled) return;
-
     // Limpa timeout anterior
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
-    }
-
     // Agenda novo save
     timeoutRef.current = setTimeout(saveData, delay);
-
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
-      }
     };
   }, [data, delay, enabled, saveData]);
-
   // Cleanup no unmount
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
   }, []);
-
   return { saveData };
 };

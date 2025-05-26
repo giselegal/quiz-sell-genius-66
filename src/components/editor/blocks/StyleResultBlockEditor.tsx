@@ -6,7 +6,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { BlockEditorProps } from './types';
 import { StyleResultPreview } from './StyleResultPreview';
 import { StyleResult } from '@/types/quiz';
-
 export const StyleResultBlockEditor: React.FC<BlockEditorProps> = ({
   block,
   onUpdate
@@ -17,7 +16,6 @@ export const StyleResultBlockEditor: React.FC<BlockEditorProps> = ({
     score: 100,
     percentage: 100
   };
-
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -31,18 +29,13 @@ export const StyleResultBlockEditor: React.FC<BlockEditorProps> = ({
             className="min-h-[100px]"
           />
         </div>
-
-        <div>
           <Label htmlFor="customImage">URL da Imagem Personalizada</Label>
           <Input
             id="customImage"
             value={block.content.customImage || ''}
             onChange={(e) => onUpdate({ customImage: e.target.value })}
             placeholder="https://exemplo.com/imagem.jpg"
-          />
-        </div>
       </div>
-
       <div className="border-t pt-6">
         <h3 className="text-sm font-medium text-[#432818] mb-4">Pré-visualização</h3>
         <StyleResultPreview 
@@ -50,7 +43,6 @@ export const StyleResultBlockEditor: React.FC<BlockEditorProps> = ({
           description={block.content.description}
           customImage={block.content.customImage}
         />
-      </div>
     </div>
   );
 };

@@ -7,12 +7,10 @@ import { ShoppingCart } from 'lucide-react';
 import { trackButtonClick, trackSaleConversion } from '@/utils/analytics';
 import { getCtaUrl } from '@/services/pixelManager';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
-
 interface QuizOfferCTAProps {
   price?: string;
   regularPrice?: string;
 }
-
 export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({ 
   price = "39,00", 
   regularPrice = "175,00" 
@@ -26,7 +24,6 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
     // Redirecionar para checkout
     window.location.href = getCtaUrl();
   };
-  
   return (
     <Card className="border-[#aa6b5d] border-2 shadow-lg overflow-hidden bg-[#F9F7F4]">
       <CardContent className="p-6">
@@ -58,11 +55,7 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
               </div>
               <div className="bg-[#aa6b5d] text-white text-xs px-2 py-0.5 rounded-full">
                 -78% OFF
-              </div>
-            </div>
           </div>
-        </div>
-        
         <Button 
           onClick={handleCTAClick}
           className="w-full text-white py-6 rounded-md btn-cta-green text-lg"
@@ -74,28 +67,18 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
             Quero o Quiz Completo + Bônus
           </span>
         </Button>
-        
         <div className="mt-4">
           <SecurePurchaseElement />
-        </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
           <div className="bg-white p-3 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h4 className="font-medium text-[#432818] text-sm">Guia Detalhado</h4>
             <p className="text-xs text-[#432818]/70">Descubra seu estilo pessoal com análises profundas</p>
-          </div>
-          <div className="bg-white p-3 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h4 className="font-medium text-[#432818] text-sm">Peças-Chave</h4>
             <p className="text-xs text-[#432818]/70">Identifique as roupas essenciais para seu estilo</p>
-          </div>
-          <div className="bg-white p-3 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h4 className="font-medium text-[#432818] text-sm">Visagismo Facial</h4>
             <p className="text-xs text-[#432818]/70">Adapte seu visual às suas características faciais</p>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );
 };
-
 export default QuizOfferCTA;

@@ -10,9 +10,7 @@ import {
   loadQuizResultConfig 
 } from '@/services/quizBuilderService';
 import { quizQuestions } from '@/data/quizQuestions';
-
 const STORAGE_KEY = 'quiz_builder_data';
-
 export const useTypeformQuizBuilder = () => {
   const [loading, setLoading] = useState(true);
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -27,8 +25,6 @@ export const useTypeformQuizBuilder = () => {
     setActiveStage,
     initializeStages
   } = useQuizStages();
-  
-  const {
     components,
     addComponent,
     updateComponent,
@@ -36,7 +32,6 @@ export const useTypeformQuizBuilder = () => {
     moveComponent,
     initializeComponents
   } = useQuizComponents();
-
   // Load data from localStorage on initialization
   useEffect(() => {
     const loadData = () => {
@@ -56,12 +51,10 @@ export const useTypeformQuizBuilder = () => {
           const { stages: initialStages, components: initialComponents } = createBuilderStateFromQuiz(
             quizQuestions
           );
-          
           initializeStages(initialStages);
           initializeComponents(initialComponents);
           if (initialStages.length > 0) {
             setActiveStage(initialStages[0].id);
-          }
         }
       } catch (error) {
         console.error('Error loading quiz data:', error);
@@ -71,39 +64,29 @@ export const useTypeformQuizBuilder = () => {
         initializeComponents(initialComponents);
         if (initialStages.length > 0) {
           setActiveStage(initialStages[0].id);
-        }
       } finally {
         setLoading(false);
       }
     };
-
     loadData();
   }, [initializeComponents, initializeStages, setActiveStage]);
-
   // Reset selected component when active stage changes
-  useEffect(() => {
     setSelectedComponentId(null);
   }, [activeStageId]);
-
   // Save data to localStorage on changes
-  useEffect(() => {
     if (!loading) {
-      try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
           components,
           stages
         }));
-      } catch (error) {
         console.error('Error saving quiz data:', error);
         toast({
           title: "Error saving",
           description: "Could not save quiz changes.",
           variant: "destructive",
         });
-      }
     }
   }, [components, stages, loading]);
-
   const saveCurrentState = useCallback(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -119,23 +102,9 @@ export const useTypeformQuizBuilder = () => {
         variant: "destructive",
       });
       return false;
-    }
   }, [components, stages]);
-
   return {
-    components,
-    stages,
-    activeStageId,
     selectedComponentId,
-    addComponent,
-    updateComponent,
-    deleteComponent,
-    moveComponent,
-    addStage,
-    updateStage,
-    deleteStage,
-    moveStage,
-    setActiveStage,
     setSelectedComponentId,
     saveCurrentState,
     initializeStages,

@@ -24,24 +24,16 @@ const quizTemplates = [
     ],
     components: []
   },
-  { 
     id: 'quiz-template-2', 
     title: 'Quiz de Estilo', 
     description: 'Template para quiz de estilo pessoal', 
     thumbnail: 'https://via.placeholder.com/150?text=Quiz+Estilo',
-    stages: [
-      { id: 'stage-cover', title: 'Capa', type: 'cover', order: 0 },
-      { id: 'stage-q1', title: 'Pergunta 1', type: 'question', order: 1 },
       { id: 'stage-q2', title: 'Pergunta 2', type: 'question', order: 2 },
       { id: 'stage-q3', title: 'Pergunta 3', type: 'question', order: 3 },
       { id: 'stage-result', title: 'Resultado', type: 'result', order: 4 }
-    ],
-    components: []
   }
 ];
-
 const resultTemplates = [
-  { 
     id: 'result-template-1', 
     title: 'Resultado Elegante', 
     description: 'Design elegante para página de resultados', 
@@ -51,40 +43,26 @@ const resultTemplates = [
       { id: 'block-header', type: 'header', content: { title: 'Seu Estilo é Elegante', style: {} } },
       { id: 'block-desc', type: 'styleDescription', content: { description: 'Descrição do estilo elegante', style: {} } }
     ]
-  },
-  { 
     id: 'result-template-2', 
     title: 'Resultado Contemporâneo', 
     description: 'Design contemporâneo para página de resultados', 
     thumbnail: 'https://via.placeholder.com/150?text=Resultado+Contemporaneo',
     styleType: 'Contemporâneo',
-    blocks: [
       { id: 'block-header', type: 'header', content: { title: 'Seu Estilo é Contemporâneo', style: {} } },
       { id: 'block-desc', type: 'styleDescription', content: { description: 'Descrição do estilo contemporâneo', style: {} } }
-    ]
-  }
-];
-
 const salesTemplates = [
-  { 
     id: 'sales-template-1', 
     title: 'Página de Vendas Básica', 
     description: 'Template básico para página de vendas', 
     thumbnail: 'https://via.placeholder.com/150?text=Vendas+Basica',
-    blocks: [
       { id: 'block-hero', type: 'hero', content: { title: 'Título do Produto', description: 'Descrição do produto', style: {} } },
       { id: 'block-pricing', type: 'pricing', content: { price: 'R$ 97,00', installments: '12x R$ 8,90', style: {} } }
-    ]
-  }
-];
-
 interface TemplateCardProps {
   title: string;
   description: string;
   thumbnail: string;
   onApply: () => void;
 }
-
 const TemplateCard: React.FC<TemplateCardProps> = ({ title, description, thumbnail, onApply }) => {
   return (
     <Card className="overflow-hidden">
@@ -108,13 +86,10 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ title, description, thumbna
     </Card>
   );
 };
-
 interface UnifiedTemplateModalProps {
   activeTab: EditorTab;
   onClose: () => void;
   onApplyTemplate: (templateData: any) => boolean;
-}
-
 export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
   activeTab,
   onClose,
@@ -122,7 +97,6 @@ export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
-
   const getTemplatesForTab = () => {
     switch (activeTab) {
       case 'quiz':
@@ -135,7 +109,6 @@ export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
         return [];
     }
   };
-
   const handleApplyTemplate = (template: any) => {
     setIsLoading(true);
     setSelectedTemplate(template);
@@ -154,11 +127,9 @@ export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
           });
           onClose();
         } else {
-          toast({
             title: "Erro ao aplicar template",
             description: "Não foi possível aplicar o template selecionado.",
             variant: "destructive",
-          });
         }
       } catch (error) {
         console.error('Erro ao aplicar template:', error);
@@ -172,9 +143,6 @@ export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
         setSelectedTemplate(null);
       }
     }, 1000);
-  };
-
-  return (
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
@@ -185,7 +153,6 @@ export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
             Selecione um template para começar. Você poderá personalizar todos os elementos depois.
           </DialogDescription>
         </DialogHeader>
-        
         <Tabs defaultValue="all" className="flex-1 flex flex-col mt-4">
           <TabsList className="mb-4">
             <TabsTrigger value="all">Todos</TabsTrigger>
@@ -216,17 +183,10 @@ export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
             <TabsContent value="favorites" className="mt-0">
               <div className="py-12 text-center">
                 <p className="text-gray-500">Você ainda não tem templates favoritos.</p>
-              </div>
-            </TabsContent>
-            
             <TabsContent value="recent" className="mt-0">
-              <div className="py-12 text-center">
                 <p className="text-gray-500">Você não usou nenhum template recentemente.</p>
-              </div>
-            </TabsContent>
           </ScrollArea>
         </Tabs>
-        
         {isLoading && (
           <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10">
             <div className="flex flex-col items-center">
@@ -237,5 +197,3 @@ export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
         )}
       </DialogContent>
     </Dialog>
-  );
-};

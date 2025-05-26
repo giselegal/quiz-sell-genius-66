@@ -11,12 +11,10 @@ import {
   CheckSquare,
   FileQuestion
 } from 'lucide-react';
-
 interface ComponentsSidebarProps {
   onComponentSelect: (type: QuizComponentType) => void;
   activeStage?: QuizStage | null;
 }
-
 export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
   onComponentSelect,
   activeStage
@@ -28,7 +26,6 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       </div>
     );
   }
-
   // Define components based on stage type
   const getComponentsForStageType = () => {
     switch (activeStage.type) {
@@ -39,31 +36,15 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
           { type: 'image', icon: <ImageIcon className="h-4 w-4 mr-2" />, label: 'Imagem' }
         ];
       case 'question':
-        return [
           { type: 'stageQuestion', icon: <FileQuestion className="h-4 w-4 mr-2" />, label: 'Pergunta' },
-          { type: 'text', icon: <FileText className="h-4 w-4 mr-2" />, label: 'Texto' },
           { type: 'multipleChoice', icon: <ListChecks className="h-4 w-4 mr-2" />, label: 'Múltipla Escolha' },
           { type: 'singleChoice', icon: <CheckSquare className="h-4 w-4 mr-2" />, label: 'Escolha Única' },
-          { type: 'image', icon: <ImageIcon className="h-4 w-4 mr-2" />, label: 'Imagem' }
-        ];
       case 'result':
-        return [
           { type: 'quizResult', icon: <ListChecks className="h-4 w-4 mr-2" />, label: 'Resultado' },
-          { type: 'text', icon: <FileText className="h-4 w-4 mr-2" />, label: 'Texto' },
-          { type: 'headline', icon: <Type className="h-4 w-4 mr-2" />, label: 'Título' },
-          { type: 'image', icon: <ImageIcon className="h-4 w-4 mr-2" />, label: 'Imagem' }
-        ];
       default:
-        return [
-          { type: 'text', icon: <FileText className="h-4 w-4 mr-2" />, label: 'Texto' },
-          { type: 'headline', icon: <Type className="h-4 w-4 mr-2" />, label: 'Título' },
-          { type: 'image', icon: <ImageIcon className="h-4 w-4 mr-2" />, label: 'Imagem' }
-        ];
     }
   };
-
   const components = getComponentsForStageType();
-
   return (
     <ScrollArea className="h-full p-4">
       <div className="space-y-4">
@@ -82,7 +63,6 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             </Button>
           ))}
         </div>
-      </div>
     </ScrollArea>
   );
 };

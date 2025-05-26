@@ -1,11 +1,9 @@
 
 import React from 'react';
 import { QuizResult, StyleResult } from '@/types/quiz';
-
 interface ResultPreviewProps {
   result: QuizResult;
 }
-
 const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
   // Use the correct properties from QuizResult interface
   const primaryStyle = result.primaryStyle;
@@ -21,7 +19,6 @@ const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
         <h2 className="text-xl font-medium text-[#432818]">
           Olá, seu Estilo Predominante é:
         </h2>
-        
         <div className="inline-block bg-[#ffefec] px-6 py-4 rounded-lg">
           <h3 className="text-2xl font-playfair text-[#aa6b5d]">
             {primaryStyle.category.toUpperCase()}
@@ -35,8 +32,6 @@ const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
       <div className="mb-8">
         <h2 className="text-xl font-medium text-center mb-4 text-[#432818]">
           Seus Estilos Complementares:
-        </h2>
-        
         <div className="grid md:grid-cols-2 gap-4">
           {secondaryStyles.map((style, index) => (
             <div key={index} className="bg-white p-4 rounded-lg border border-[#B89B7A]/20">
@@ -49,12 +44,8 @@ const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
                   className="h-full bg-[#B89B7A] rounded-full" 
                   style={{ width: `${style.percentage}%` }}
                 ></div>
-              </div>
             </div>
           ))}
-        </div>
-      </div>
-      
       <div className="grid md:grid-cols-2 gap-8 mb-8">
         <div>
           <img
@@ -62,25 +53,15 @@ const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
             alt="Guia Completo de Estilo"
             className="w-full rounded-lg shadow-lg"
           />
-        </div>
-        <div>
-          <img
             src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
             alt="Gisele Galvão"
-            className="w-full rounded-lg shadow-lg"
-          />
-        </div>
-      </div>
-      
       <div className="flex justify-center">
         <button className="bg-[#B89B7A] hover:bg-[#A38A69] text-white px-6 py-3 rounded-md text-lg transition-colors">
           Conhecer o Guia Completo
         </button>
-      </div>
     </div>
   );
 };
-
 function getStyleDescription(style: string): string {
   const descriptions: Record<string, string> = {
     'Natural': 'Você valoriza o conforto e a praticidade, com um visual descontraído e autêntico.',
@@ -92,8 +73,5 @@ function getStyleDescription(style: string): string {
     'Dramático': 'Você tem personalidade forte e gosta de causar impacto com seu visual.',
     'Criativo': 'Você aprecia a originalidade e não tem medo de ousar em combinações únicas.'
   };
-  
   return descriptions[style] || 'Você tem um estilo único que combina várias características.';
-}
-
 export default ResultPreview;

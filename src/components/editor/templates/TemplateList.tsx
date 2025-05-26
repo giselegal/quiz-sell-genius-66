@@ -5,17 +5,14 @@ import { Card } from '@/components/ui/card';
 import { giseleStyleTemplate } from '@/services/templates/giseleStyleTemplate';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 import { toast } from '@/components/ui/use-toast';
-
 interface TemplateListProps {
   onSelectTemplate?: () => void;
 }
-
 export const TemplateList: React.FC<TemplateListProps> = ({ onSelectTemplate }) => {
   const { resultPageConfig, importConfig } = useResultPageConfig("Natural");
   
   // Use the styleType from the current config
   const styleType = resultPageConfig?.styleType || "Natural";
-
   const handleSelectTemplate = (template: any) => {
     try {
       if (importConfig) {
@@ -26,20 +23,15 @@ export const TemplateList: React.FC<TemplateListProps> = ({ onSelectTemplate }) 
         title: "Template aplicado",
         description: "O template foi aplicado com sucesso",
       });
-      
       if (onSelectTemplate) {
         onSelectTemplate();
-      }
     } catch (error) {
       console.error('Error applying template:', error);
-      toast({
         title: "Erro ao aplicar template",
         description: "Ocorreu um erro ao aplicar o template",
         variant: "destructive"
-      });
     }
   };
-
   return (
     <div className="grid gap-4">
       <Card className="p-4">

@@ -7,7 +7,6 @@ import { AspectRatio } from '../ui/aspect-ratio';
 import { getFallbackStyle } from '@/utils/styleUtils';
 import { isImagePreloaded, getOptimizedImage, getImageMetadata } from '@/utils/imageManager';
 import OptimizedImage from '../ui/OptimizedImage';
-
 interface QuizOptionImageProps {
   imageUrl: string;
   altText: string;
@@ -16,7 +15,6 @@ interface QuizOptionImageProps {
   is3DQuestion: boolean;
   questionId: string;
 }
-
 export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   imageUrl,
   altText,
@@ -34,7 +32,6 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     getImageMetadata(imageUrl),
     [imageUrl]
   );
-  
   // Use memoization to avoid recalculating the URL on each render
   const optimizedImageUrl = useMemo(() => 
     getOptimizedImage(imageUrl, {
@@ -42,16 +39,12 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
       format: 'auto',
       width: imageUrl.includes('sapatos') ? 400 : 500
     }),
-    [imageUrl]
-  );
-  
   // Check if image is already preloaded on mount
   useEffect(() => {
     if (isImagePreloaded(imageUrl)) {
       setImageLoaded(true);
     }
   }, [imageUrl]);
-
   if (imageError) {
     return (
       <div className="w-full h-full" style={getFallbackStyle(styleCategory)}>
@@ -59,7 +52,6 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
       </div>
     );
   }
-
   return (
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
@@ -92,5 +84,4 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
         </div>
       </AspectRatio>
     </div>
-  );
 };

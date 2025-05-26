@@ -32,20 +32,16 @@ interface EditorConfig {
     titleSize: number;
     subtitleSize: number;
     bodySize: number;
-  };
   layout: {
     padding: number;
     borderRadius: number;
     spacing: number;
-  };
   content: {
     title: string;
     subtitle: string;
     description: string;
     buttonText: string;
-  };
 }
-
 const EditorCompleto: React.FC = () => {
   const [config, setConfig] = useState<EditorConfig>({
     colors: {
@@ -59,12 +55,10 @@ const EditorCompleto: React.FC = () => {
       titleSize: 48,
       subtitleSize: 32,
       bodySize: 16
-    },
     layout: {
       padding: 24,
       borderRadius: 12,
       spacing: 16
-    },
     content: {
       title: 'Descubra Seu Estilo Único',
       subtitle: 'Guia Personalizado de Estilo',
@@ -72,10 +66,8 @@ const EditorCompleto: React.FC = () => {
       buttonText: 'Adquirir Agora'
     }
   });
-
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [isLoading, setIsLoading] = useState(false);
-
   // Aplicar estilos em tempo real
   useEffect(() => {
     const style = document.createElement('style');
@@ -96,93 +88,60 @@ const EditorCompleto: React.FC = () => {
         -webkit-background-clip: text;
         color: transparent;
         margin-bottom: ${config.layout.spacing}px;
-      }
-      
       .live-preview h2 {
         font-size: ${config.typography.subtitleSize}px;
         color: ${config.colors.secondary};
-        margin-bottom: ${config.layout.spacing}px;
-      }
-      
       .live-preview p {
         font-size: ${config.typography.bodySize}px;
-        color: ${config.colors.text};
         line-height: 1.6;
         margin-bottom: ${config.layout.spacing * 1.5}px;
-      }
-      
       .live-preview .card {
         background-color: ${config.colors.cardBg};
-        border-radius: ${config.layout.borderRadius}px;
-        padding: ${config.layout.padding}px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        margin-bottom: ${config.layout.spacing}px;
-      }
-      
       .live-preview .btn {
-        background: linear-gradient(135deg, ${config.colors.primary}, ${config.colors.secondary});
         color: white;
         padding: ${config.layout.padding / 2}px ${config.layout.padding}px;
         border-radius: ${config.layout.borderRadius / 2}px;
         border: none;
-        font-size: ${config.typography.bodySize}px;
         cursor: pointer;
         transition: all 0.3s ease;
-      }
-      
       .live-preview .btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      }
     `;
-    
     // Remove estilo anterior se existir
     const oldStyle = document.getElementById('editor-live-styles');
     if (oldStyle) {
       oldStyle.remove();
-    }
-    
     document.head.appendChild(style);
-    
     return () => {
       style.remove();
     };
   }, [config]);
-
   const updateConfig = (section: keyof EditorConfig, key: string, value: any) => {
     setConfig(prev => ({
       ...prev,
       [section]: {
         ...prev[section],
         [key]: value
-      }
     }));
-  };
-
   const handleSave = () => {
     setIsLoading(true);
-    
     try {
       // Salvar no localStorage
       safeLocalStorage.setItem('editorConfig', JSON.stringify(config));
       safeLocalStorage.setItem('pageEditorConfig', JSON.stringify(config));
-      
       toast({
         title: "Configuração salva!",
         description: "As alterações foram aplicadas com sucesso.",
       });
     } catch (error) {
       console.error('Erro ao salvar:', error);
-      toast({
         title: "Erro ao salvar",
         description: "Não foi possível salvar as configurações.",
         variant: "destructive"
-      });
     } finally {
       setIsLoading(false);
-    }
-  };
-
   const resetConfig = () => {
     setConfig({
       colors: {
@@ -196,21 +155,16 @@ const EditorCompleto: React.FC = () => {
         titleSize: 48,
         subtitleSize: 32,
         bodySize: 16
-      },
       layout: {
         padding: 24,
         borderRadius: 12,
         spacing: 16
-      },
       content: {
         title: 'Descubra Seu Estilo Único',
         subtitle: 'Guia Personalizado de Estilo',
         description: 'Transforme sua imagem e conquiste mais confiança com um guia feito especialmente para você.',
         buttonText: 'Adquirir Agora'
-      }
     });
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header do Editor */}
@@ -233,16 +187,11 @@ const EditorCompleto: React.FC = () => {
             <Button variant="outline" onClick={resetConfig}>
               <RefreshCw className="h-4 w-4 mr-2" />
               Reset
-            </Button>
-            
             <Button onClick={handleSave} disabled={isLoading}>
               <Save className="h-4 w-4 mr-2" />
               {isLoading ? 'Salvando...' : 'Salvar'}
-            </Button>
-          </div>
         </div>
       </div>
-
       <div className="flex flex-1">
         {/* Painel de Controles */}
         <div className="w-80 bg-white border-r p-6 overflow-y-auto max-h-screen">
@@ -253,15 +202,11 @@ const EditorCompleto: React.FC = () => {
               </TabsTrigger>
               <TabsTrigger value="typography">
                 <Type className="h-4 w-4" />
-              </TabsTrigger>
               <TabsTrigger value="layout">
                 <Layout className="h-4 w-4" />
-              </TabsTrigger>
               <TabsTrigger value="content">
                 <Settings className="h-4 w-4" />
-              </TabsTrigger>
             </TabsList>
-
             {/* Cores */}
             <TabsContent value="colors" className="space-y-4">
               <div>
@@ -273,86 +218,24 @@ const EditorCompleto: React.FC = () => {
                     onChange={(e) => updateConfig('colors', 'primary', e.target.value)}
                     className="w-16 h-10"
                   />
-                  <Input
-                    value={config.colors.primary}
-                    onChange={(e) => updateConfig('colors', 'primary', e.target.value)}
                     className="flex-1"
-                  />
                 </div>
               </div>
-
-              <div>
                 <Label>Cor Secundária</Label>
-                <div className="flex gap-2 mt-1">
-                  <Input
-                    type="color"
                     value={config.colors.secondary}
                     onChange={(e) => updateConfig('colors', 'secondary', e.target.value)}
-                    className="w-16 h-10"
-                  />
-                  <Input
-                    value={config.colors.secondary}
-                    onChange={(e) => updateConfig('colors', 'secondary', e.target.value)}
-                    className="flex-1"
-                  />
-                </div>
-              </div>
-
-              <div>
                 <Label>Fundo</Label>
-                <div className="flex gap-2 mt-1">
-                  <Input
-                    type="color"
                     value={config.colors.background}
                     onChange={(e) => updateConfig('colors', 'background', e.target.value)}
-                    className="w-16 h-10"
-                  />
-                  <Input
-                    value={config.colors.background}
-                    onChange={(e) => updateConfig('colors', 'background', e.target.value)}
-                    className="flex-1"
-                  />
-                </div>
-              </div>
-
-              <div>
                 <Label>Texto</Label>
-                <div className="flex gap-2 mt-1">
-                  <Input
-                    type="color"
                     value={config.colors.text}
                     onChange={(e) => updateConfig('colors', 'text', e.target.value)}
-                    className="w-16 h-10"
-                  />
-                  <Input
-                    value={config.colors.text}
-                    onChange={(e) => updateConfig('colors', 'text', e.target.value)}
-                    className="flex-1"
-                  />
-                </div>
-              </div>
-
-              <div>
                 <Label>Fundo do Card</Label>
-                <div className="flex gap-2 mt-1">
-                  <Input
-                    type="color"
                     value={config.colors.cardBg}
                     onChange={(e) => updateConfig('colors', 'cardBg', e.target.value)}
-                    className="w-16 h-10"
-                  />
-                  <Input
-                    value={config.colors.cardBg}
-                    onChange={(e) => updateConfig('colors', 'cardBg', e.target.value)}
-                    className="flex-1"
-                  />
-                </div>
-              </div>
             </TabsContent>
-
             {/* Tipografia */}
             <TabsContent value="typography" className="space-y-4">
-              <div>
                 <Label>Tamanho do Título: {config.typography.titleSize}px</Label>
                 <Slider
                   value={[config.typography.titleSize]}
@@ -362,114 +245,52 @@ const EditorCompleto: React.FC = () => {
                   step={2}
                   className="mt-2"
                 />
-              </div>
-
-              <div>
                 <Label>Tamanho do Subtítulo: {config.typography.subtitleSize}px</Label>
-                <Slider
                   value={[config.typography.subtitleSize]}
                   onValueChange={([value]) => updateConfig('typography', 'subtitleSize', value)}
                   min={18}
                   max={48}
-                  step={2}
-                  className="mt-2"
-                />
-              </div>
-
-              <div>
                 <Label>Tamanho do Texto: {config.typography.bodySize}px</Label>
-                <Slider
                   value={[config.typography.bodySize]}
                   onValueChange={([value]) => updateConfig('typography', 'bodySize', value)}
                   min={12}
                   max={24}
                   step={1}
-                  className="mt-2"
-                />
-              </div>
-            </TabsContent>
-
             {/* Layout */}
             <TabsContent value="layout" className="space-y-4">
-              <div>
                 <Label>Padding: {config.layout.padding}px</Label>
-                <Slider
                   value={[config.layout.padding]}
                   onValueChange={([value]) => updateConfig('layout', 'padding', value)}
                   min={8}
-                  max={48}
                   step={4}
-                  className="mt-2"
-                />
-              </div>
-
-              <div>
                 <Label>Bordas Arredondadas: {config.layout.borderRadius}px</Label>
-                <Slider
                   value={[config.layout.borderRadius]}
                   onValueChange={([value]) => updateConfig('layout', 'borderRadius', value)}
                   min={0}
                   max={32}
-                  step={2}
-                  className="mt-2"
-                />
-              </div>
-
-              <div>
                 <Label>Espaçamento: {config.layout.spacing}px</Label>
-                <Slider
                   value={[config.layout.spacing]}
                   onValueChange={([value]) => updateConfig('layout', 'spacing', value)}
-                  min={8}
-                  max={32}
-                  step={2}
-                  className="mt-2"
-                />
-              </div>
-            </TabsContent>
-
             {/* Conteúdo */}
             <TabsContent value="content" className="space-y-4">
-              <div>
                 <Label>Título</Label>
                 <Input
                   value={config.content.title}
                   onChange={(e) => updateConfig('content', 'title', e.target.value)}
                   className="mt-1"
-                />
-              </div>
-
-              <div>
                 <Label>Subtítulo</Label>
-                <Input
                   value={config.content.subtitle}
                   onChange={(e) => updateConfig('content', 'subtitle', e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
                 <Label>Descrição</Label>
                 <textarea
                   value={config.content.description}
                   onChange={(e) => updateConfig('content', 'description', e.target.value)}
                   className="w-full p-2 border rounded-md mt-1"
                   rows={3}
-                />
-              </div>
-
-              <div>
                 <Label>Texto do Botão</Label>
-                <Input
                   value={config.content.buttonText}
                   onChange={(e) => updateConfig('content', 'buttonText', e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-            </TabsContent>
           </Tabs>
-        </div>
-
         {/* Preview */}
         <div className="flex-1 p-6">
           <div className={`mx-auto ${previewMode === 'mobile' ? 'max-w-sm' : 'max-w-4xl'}`}>
@@ -484,22 +305,13 @@ const EditorCompleto: React.FC = () => {
                     <h3 className="font-medium mb-2">Seu Estilo</h3>
                     <p className="text-sm">Descubra o estilo que combina perfeitamente com você.</p>
                   </div>
-                  <div className="card">
                     <h3 className="font-medium mb-2">Guia Personalizado</h3>
                     <p className="text-sm">Receba dicas exclusivas baseadas no seu perfil.</p>
-                  </div>
-                </div>
-                
                 <button className="btn w-full md:w-auto">
                   {config.content.buttonText}
                 </button>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
-
 export default EditorCompleto;

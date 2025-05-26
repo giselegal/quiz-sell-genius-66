@@ -4,13 +4,11 @@ import { Card } from '../ui/card';
 import { StyleResult } from '@/types/quiz';
 import { styleConfig } from '@/config/styleConfig';
 import { motion } from 'framer-motion';
-
 interface PrimaryStyleCardProps {
   primaryStyle: StyleResult;
   customDescription?: string;
   customImage?: string;
 }
-
 const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
   primaryStyle,
   customDescription,
@@ -57,30 +55,22 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 1 }}
-            >
               {description}
             </motion.p>
-            
             <motion.div 
               className="flex items-center space-x-2 pt-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 1.4 }}
-            >
               <span className="inline-block h-4 w-4 rounded-full bg-amber-400"></span>
               <span className="text-sm text-[#8F7A6A] font-medium">
                 Percentual: <strong>{primaryStyle.percentage}%</strong>
-              </span>
             </motion.div>
           </motion.div>
           
-          <motion.div 
             className="order-first md:order-last flex justify-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.6 }}
             whileHover={{ scale: 1.03 }}
-          >
             {imageUrl ? (
               <div className="relative overflow-hidden rounded-xl shadow-md">
                 <img 
@@ -97,19 +87,14 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
                     duration: 3, 
                     repeat: Infinity,
                     repeatType: "reverse" 
-                  }}
-                />
               </div>
             ) : (
               <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg w-full h-64 flex items-center justify-center shadow-inner">
                 <p className="text-amber-700">Imagem não disponível</p>
-              </div>
             )}
-          </motion.div>
         </div>
       </Card>
     </motion.div>
   );
 };
-
 export default PrimaryStyleCard;

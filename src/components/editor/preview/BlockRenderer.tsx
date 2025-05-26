@@ -11,12 +11,10 @@ import { TestimonialsBlock } from './blocks/TestimonialsBlock';
 import { PricingBlock } from './blocks/PricingBlock';
 import { GuaranteeBlock } from './blocks/GuaranteeBlock';
 import { CTABlock } from './blocks/CTABlock';
-
 interface BlockRendererProps {
   block: EditorBlock;
   onSelect: () => void;
 }
-
 export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect }) => {
   switch (block.type) {
     case 'header':
@@ -51,23 +49,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect })
       );
     case 'style-result':
     case 'secondary-styles':
-      return (
-        <div 
-          className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" 
-          onClick={onSelect}
-        >
           <h3 className="font-medium text-[#432818]">{block.type === 'style-result' ? 'Estilo Principal' : 'Estilos Secundários'}</h3>
           <p className="text-sm text-[#8F7A6A]">Clique para editar esta seção</p>
-        </div>
-      );
     default:
-      return (
-        <div 
-          className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" 
-          onClick={onSelect}
-        >
           <p className="text-[#8F7A6A]">Bloco do tipo: {block.type}</p>
-        </div>
-      );
   }
 };

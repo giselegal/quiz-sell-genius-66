@@ -8,7 +8,6 @@ import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { preloadCriticalImages, preloadImagesByUrls } from '@/utils/imageManager';
 import OptimizedImage from '../ui/OptimizedImage';
 import { getAllImages } from '@/data/imageBank'; // Importar para acessar o banco de imagens
-
 // Imagens críticas da página de resultados a serem pré-carregadas
 const RESULT_CRITICAL_IMAGES = [
   // URLs das imagens mais importantes da página de resultados
@@ -16,13 +15,11 @@ const RESULT_CRITICAL_IMAGES = [
   'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp',
   'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp'
 ];
-
 interface StrategicQuestionsProps {
   currentQuestionIndex: number;
   answers: Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
 }
-
 export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   currentQuestionIndex,
   answers,
@@ -55,15 +52,11 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
           batchSize: 2
         });
       }, 500); // Pequeno delay para não competir com recursos iniciais
-    }
   }, [imagesPreloaded]);
-  
   // Quando o índice da questão estratégica mudar, carregar mais imagens
   // de resultado em segundo plano, priorizando diferentes categorias
-  useEffect(() => {
     // Remonta componente quando a questão muda para garantir estado limpo
     setMountKey(Date.now());
-    
     // Carrega diferentes conjuntos de imagens com base no progresso
     if (currentQuestionIndex === 1) {
       // Na segunda questão estratégica, carrega transformações
@@ -74,26 +67,16 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
     } else if (currentQuestionIndex === 2) {
       // Na terceira questão, carrega bônus
       preloadCriticalImages(['bonus'], {
-        quality: 75,
-        batchSize: 2
-      });
     } else if (currentQuestionIndex >= 3) {
       // Em questões posteriores, carrega depoimentos
       preloadCriticalImages(['testimonials'], {
         quality: 70,
-        batchSize: 2
-      });
-      
       // Carrega imagens explícitas de alta prioridade
       preloadImagesByUrls(RESULT_CRITICAL_IMAGES, {
         quality: 85, 
         batchSize: 1
-      });
-    }
   }, [currentQuestionIndex]);
-
   if (currentQuestionIndex >= strategicQuestions.length) return null;
-
   return (
     <AnimatedWrapper key={mountKey}>
       <QuizQuestion
@@ -107,5 +90,4 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
     </AnimatedWrapper>
   );
 };
-
 export default StrategicQuestions;

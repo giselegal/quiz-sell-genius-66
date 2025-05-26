@@ -36,7 +36,6 @@ interface EditableBlockProps {
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
   primaryStyle: StyleResult;
 }
-
 const EditableBlock: React.FC<EditableBlockProps> = ({
   block,
   index,
@@ -60,10 +59,8 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
       type: 'BLOCK'
     }
   });
-
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
     opacity: isDragging ? 0.5 : 1,
     cursor: isPreviewMode ? 'default' : 'pointer',
     border: isSelected && !isPreviewMode ? '2px solid #B89B7A' : isPreviewMode ? 'none' : '2px dashed #e2e2e2',
@@ -120,9 +117,6 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
         return <AnimationBlockPreview content={block.content} />;
       default:
         return <div>Tipo de bloco desconhecido: {block.type}</div>;
-    }
-  };
-  
   if (isPreviewMode) {
     return (
       <div style={{ opacity: isDragging ? 0.5 : 1 }}>
@@ -130,7 +124,6 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
       </div>
     );
   }
-  
   return (
     <div
       ref={setNodeRef}
@@ -144,12 +137,9 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
           <Button size="icon" variant="ghost" className="h-8 w-8 hover:bg-[#f9f3e9]">
             <Edit className="h-4 w-4 text-[#8F7A6A]" />
           </Button>
-          <Button size="icon" variant="ghost" className="h-8 w-8 hover:bg-[#f9f3e9]">
             <Copy className="h-4 w-4 text-[#8F7A6A]" />
-          </Button>
           <Button size="icon" variant="ghost" className="h-8 w-8 hover:bg-red-100 hover:text-red-600">
             <Trash className="h-4 w-4" />
-          </Button>
           <div
             className="h-8 w-8 flex items-center justify-center cursor-move"
             {...listeners}
@@ -163,5 +153,4 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
     </div>
   );
 };
-
 export default EditableBlock;

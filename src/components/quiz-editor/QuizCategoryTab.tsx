@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { QuizCategory, QUIZ_CATEGORIES } from '@/types/quizEditor';
 import { QuizQuestion } from '@/types/quiz';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-
 interface CategoryInfo {
   id: QuizCategory;
   name: string;
@@ -14,15 +13,12 @@ interface CategoryInfo {
   icon: string;
   isStrategic: boolean;
 }
-
 interface QuizCategoryTabProps {
   category: CategoryInfo;
   isActive: boolean;
   onClick: () => void;
   questions: QuizQuestion[];
   onEditQuestion: (questionId: string) => void;
-}
-
 const QuizCategoryTab: React.FC<QuizCategoryTabProps> = ({
   category,
   isActive,
@@ -31,13 +27,11 @@ const QuizCategoryTab: React.FC<QuizCategoryTabProps> = ({
   onEditQuestion
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-
   React.useEffect(() => {
     if (isActive) {
       setIsOpen(true);
     }
   }, [isActive]);
-
   return (
     <div className={`rounded-md border ${isActive ? 'border-[#B89B7A]' : 'border-gray-200'}`}>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -79,16 +73,12 @@ const QuizCategoryTab: React.FC<QuizCategoryTabProps> = ({
                   </Button>
                 </div>
               ))
-            ) : (
               <div className="text-sm text-gray-400 p-2">
                 Nenhuma pergunta nesta categoria
               </div>
-            )}
-          </div>
         </CollapsibleContent>
       </Collapsible>
     </div>
   );
 };
-
 export default QuizCategoryTab;
