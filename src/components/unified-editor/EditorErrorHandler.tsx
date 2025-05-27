@@ -1,4 +1,6 @@
+
 "use client";
+
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
@@ -8,31 +10,42 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 interface EditorErrorHandlerProps {
   children: React.ReactNode;
 }
+
 const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
   useEffect(() => {
     // Simular verificação de carregamento
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
+
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
     // Adicionar listener para erros não capturados
     const handleError = (event: ErrorEvent) => {
       console.error('Erro capturado pelo EditorErrorHandler:', event.error);
       setHasError(true);
     };
+
     window.addEventListener('error', handleError);
     return () => window.removeEventListener('error', handleError);
+  }, []);
+
   const handleRetry = () => {
     // Recarregar a página atual
     window.location.reload();
   };
+
   const handleGoBack = () => {
     // Voltar para o dashboard
     router.push('/admin');
+  };
+
   if (isLoading) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -43,7 +56,9 @@ const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => 
       </div>
     );
   }
+
   if (hasError) {
+    return (
       <div className="h-full flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-md p-6 max-w-md">
           <h2 className="text-2xl font-medium text-[#432818] mb-4">Erro ao carregar o editor</h2>
@@ -60,6 +75,7 @@ const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => 
               <li>Se o problema persistir, entre em contato com o suporte</li>
             </ul>
           </div>
+          
           <div className="flex flex-col sm:flex-row gap-3">
             <Button 
               className="bg-[#B89B7A] hover:bg-[#9F836A] text-white" 
@@ -67,11 +83,21 @@ const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => 
             >
               Tentar novamente
             </Button>
+            <Button 
               variant="outline" 
               className="border-[#B89B7A] text-[#B89B7A]"
               onClick={handleGoBack}
+            >
               Voltar ao painel
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Se não houver erro, renderizar os filhos normalmente
   return <>{children}</>;
 };
+
 export default EditorErrorHandler;
