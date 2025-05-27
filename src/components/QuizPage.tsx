@@ -37,13 +37,61 @@ const QuizPage: React.FC = () => {
     currentAnswers,
     isLastQuestion,
     handleAnswer,
-    handleNext,
-    handlePrevious,
-    totalQuestions,
-    calculateResults
-    // submitQuizIfComplete removido
-    // ...outros retornos se necessário...
+    totalQuestions
   } = quizLogic;
+
+  // Implementar as funções que estavam faltando
+  const handleNext = () => {
+    if (currentQuestionIndex < totalQuestions - 1) {
+      quizLogic.setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      quizLogic.setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  const calculateResults = () => {
+    // Implementar lógica de cálculo de resultados
+    const styleCounter: Record<string, number> = {
+      'Natural': 0,
+      'Clássico': 0,
+      'Contemporâneo': 0,
+      'Elegante': 0,
+      'Romântico': 0,
+      'Sexy': 0,
+      'Dramático': 0,
+      'Criativo': 0
+    };
+
+    Object.entries(quizLogic.answers).forEach(([questionId, optionIds]) => {
+      const question = quizLogic.allQuestions.find(q => q.id === questionId);
+      if (!question) return;
+
+      optionIds.forEach(optionId => {
+        const option = question.options.find(o => o.id === optionId);
+        if (option && option.styleCategory) {
+          styleCounter[option.styleCategory] = (styleCounter[option.styleCategory] || 0) + 1;
+        }
+      });
+    });
+
+    // Encontrar o estilo com maior pontuação
+    const topStyle = Object.entries(styleCounter).reduce((a, b) => 
+      styleCounter[a[0]] > styleCounter[b[0]] ? a : b
+    );
+
+    const result = {
+      styleResult: topStyle[0],
+      styleScores: styleCounter,
+      personalizedRecommendations: [],
+      completedAt: new Date().toISOString()
+    };
+
+    return result;
+  };
 
   // Função para iniciar o quiz após o nome
   const handleStartQuiz = (nome: string) => {

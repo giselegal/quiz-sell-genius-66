@@ -31,6 +31,32 @@ const EditorPage = loadable(() => import('./components/admin/editor/EnhancedResu
   fallback: <div className="flex h-screen w-full items-center justify-center">Carregando editor...</div>
 });
 
+// Componente wrapper para QuizIntro com navegação
+const QuizIntroWrapper = () => {
+  const navigate = useNavigate();
+  
+  const handleStartQuiz = (nome: string) => {
+    // Salvar nome no localStorage
+    localStorage.setItem('userName', nome);
+    // Navegar para a página do quiz
+    navigate('/quiz');
+  };
+  
+  return <QuizIntro onStart={handleStartQuiz} />;
+};
+
+// Componente wrapper para navegação de demo
+const QuizDemoWrapper = () => {
+  const navigate = useNavigate();
+  
+  const handleStartQuiz = (nome: string) => {
+    localStorage.setItem('userName', nome);
+    navigate('/quiz');
+  };
+  
+  return <QuizIntro onStart={handleStartQuiz} />;
+};
+
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
@@ -39,7 +65,7 @@ function App() {
           <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Carregando...</div>}>
             <Routes>
               {/* ROTA PRINCIPAL - Quiz com QuizIntro */}
-              <Route path="/" element={<QuizIntro />} />
+              <Route path="/" element={<QuizIntroWrapper />} />
               
               {/* ROTAS DO QUIZ */}
               <Route path="/quiz" element={<QuizPage />} />
@@ -60,7 +86,7 @@ function App() {
               <Route path="/editor/:id" element={<EditorPage />} />
               
               {/* ROTAS DE DESENVOLVIMENTO/TESTE */}
-              <Route path="/demo" element={<QuizIntro />} />
+              <Route path="/demo" element={<QuizDemoWrapper />} />
               <Route path="/preview" element={<ResultPage />} />
               <Route path="/offer" element={<QuizOfferPage />} />
               <Route path="/test" element={
