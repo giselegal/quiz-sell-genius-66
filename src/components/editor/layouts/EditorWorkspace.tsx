@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -7,17 +8,19 @@ import { EditPreview } from '../preview/EditPreview';
 import PropertiesPanel from '../properties/PropertiesPanel';
 import { cn } from '@/lib/utils';
 import { useEditor } from '@/hooks/useEditor';
+
 interface EditorWorkspaceProps {
   className?: string;
 }
+
 export function EditorWorkspace({ className }: EditorWorkspaceProps) {
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const { config, addBlock, updateBlock, deleteBlock } = useEditor();
+
   return (
     <div className={cn("h-screen flex flex-col bg-[#FAF9F7]", className)}>
       <ResizablePanelGroup direction="horizontal">
-        {/* Components Sidebar */}
         <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
           <ComponentsSidebar 
             onComponentSelect={(type) => {
@@ -26,17 +29,23 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
             }} 
           />
         </ResizablePanel>
+        
         <ResizableHandle withHandle />
-        {/* Preview Area */}
+        
         <ResizablePanel defaultSize={55}>
           <EditPreview 
             isPreviewing={isPreviewing}
             onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
             onSelectComponent={setSelectedComponentId}
             selectedComponentId={selectedComponentId}
-        {/* Properties Panel */}
+          />
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
         <ResizablePanel defaultSize={25}>
           <PropertiesPanel
+            selectedComponentId={selectedComponentId}
             onClose={() => setSelectedComponentId(null)}
             blocks={config.blocks}
             onUpdate={(content) => {
@@ -45,8 +54,14 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
               }
             }}
             onDelete={() => {
+              if (selectedComponentId) {
                 deleteBlock(selectedComponentId);
                 setSelectedComponentId(null);
+              }
+            }}
+          />
+        </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );
+}

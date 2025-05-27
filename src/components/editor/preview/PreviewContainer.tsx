@@ -4,12 +4,14 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { EditorBlock } from '@/types/editor';
+
 interface PreviewContainerProps {
   viewMode: 'desktop' | 'mobile';
   blocks: EditorBlock[];
   onAddBlock: () => void;
   renderBlockContent: (block: EditorBlock) => React.ReactNode;
 }
+
 export const PreviewContainer: React.FC<PreviewContainerProps> = ({
   viewMode,
   blocks,
@@ -41,6 +43,7 @@ export const PreviewContainer: React.FC<PreviewContainerProps> = ({
               <PlusIcon className="w-4 h-4 mr-2" />
               Adicionar Componente
             </Button>
+          </div>
         )}
       </div>
     </div>

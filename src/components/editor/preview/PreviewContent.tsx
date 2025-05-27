@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PreviewBlock } from './PreviewBlock';
+
 interface PreviewContentProps {
   isPreviewing: boolean;
   selectedComponentId: string | null;
   onSelectComponent: (id: string | null) => void;
   viewMode: 'desktop' | 'mobile';
 }
+
 export function PreviewContent({
   isPreviewing,
   selectedComponentId,
@@ -18,6 +20,7 @@ export function PreviewContent({
   viewMode
 }: PreviewContentProps) {
   const { config, addBlock } = useEditor();
+
   if (!config.blocks.length) {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-[#8F7A6A] text-sm border-2 border-dashed border-[#B89B7A]/40 rounded-lg">
@@ -36,6 +39,7 @@ export function PreviewContent({
       </div>
     );
   }
+
   return (
     <div className={cn(
       "min-h-full bg-white rounded-lg shadow-sm border border-[#B89B7A]/20 p-6",
@@ -52,5 +56,7 @@ export function PreviewContent({
             isPreview={isPreviewing}
           />
         ))}
+      </div>
     </div>
   );
+}
