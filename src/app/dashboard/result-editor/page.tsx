@@ -21,6 +21,7 @@ export default function ResultEditorPage() {
       backgroundColor: '#f3f4f6',
       textColor: '#374151'
     },
+    {
       category: 'Intermediário', 
       percentage: 70,
       score: 50,
@@ -28,6 +29,8 @@ export default function ResultEditorPage() {
       description: 'Você tem um conhecimento sólido.',
       backgroundColor: '#dbeafe',
       textColor: '#1e40af'
+    },
+    {
       category: 'Avançado', 
       percentage: 90,
       score: 80,
@@ -88,7 +91,10 @@ export default function ResultEditorPage() {
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
               <p className="mt-4 text-gray-600">Carregando editor...</p>
+            </div>
+          </div>
         )}
+      </div>
     </div>
   );
 }

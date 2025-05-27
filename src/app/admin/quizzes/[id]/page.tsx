@@ -29,6 +29,7 @@ export default function QuizDetailPage() {
         <p className="text-[#B89B7A]">
           Esta funcionalidade será implementada em breve.
         </p>
+      </div>
     </div>
   );
 }

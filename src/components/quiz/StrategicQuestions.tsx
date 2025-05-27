@@ -49,7 +49,6 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
     // Carrega diferentes conjuntos de imagens com base no progresso
     // Funções removidas para evitar erro de import
     preloadImagesByUrls(RESULT_CRITICAL_IMAGES, {
-      quality: 85,
       batchSize: 1
     });
   }, [currentQuestionIndex]);

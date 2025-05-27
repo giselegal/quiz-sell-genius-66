@@ -22,6 +22,7 @@ export async function POST(
     return NextResponse.json({ 
       success: true, 
       message: `Configuração de ${mode} salva com sucesso!` 
+    });
   } catch (error) {
     console.error('Erro ao salvar configuração:', error);
     return NextResponse.json(
