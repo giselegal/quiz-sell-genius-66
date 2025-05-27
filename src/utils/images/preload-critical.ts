@@ -1,5 +1,14 @@
 
-import { PreloadOptions, PreloadImageDefinition } from './types';
+// Interface for preload options
+interface PreloadOptions {
+  quality?: number;
+  format?: 'auto' | 'webp' | 'jpg' | 'png';
+  timeout?: number;
+  onProgress?: (loaded: number, total: number) => void;
+  onComplete?: () => void;
+  batchSize?: number;
+}
+
 /**
  * Preloads a set of critical images that should be loaded before rendering
  * @param imageUrls Array of image URLs to preload
@@ -72,19 +81,28 @@ export const preloadCriticalImages = (
       img.onerror = (err) => {
         console.error(`[Preload] Failed to preload image: ${url.substring(0, 50)}...`, err);
         updateProgress(); // Still count as processed
+      };
+      
       // Start loading
       img.src = url;
     });
+  });
 };
+
+/**
  * Preloads only the most critical image on the page for LCP optimization
  * @param imageUrl The URL of the LCP image
+ * @param options Preload options
+ */
 export const preloadLCPImage = (
   imageUrl: string,
+  options: PreloadOptions = {}
+) => {
   // Higher quality and priority for LCP image
   const lcpOptions: PreloadOptions = {
     quality: 95,
     format: 'auto',
-    timeout: 2000, // Now properly defined in PreloadOptions
+    timeout: 2000,
     ...options
   };
   
@@ -96,7 +114,12 @@ export const preloadLCPImage = (
     linkEl.href = imageUrl;
     linkEl.setAttribute('fetchpriority', 'high');
     document.head.appendChild(linkEl);
+  }
+  
   return preloadCriticalImages([imageUrl], lcpOptions);
+};
+
 export default {
   preloadCriticalImages,
   preloadLCPImage
+};
