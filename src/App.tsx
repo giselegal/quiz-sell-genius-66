@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { Toaster } from './components/ui/toaster';
 import { ThemeProvider } from './components/theme-provider';
+import { AuthProvider } from './context/AuthContext';
 
 // Lazy-loaded components
 const QuizFlow = loadable(() => import('./components/QuizFlow'), {
@@ -28,35 +29,37 @@ const QuizOfferPage = loadable(() => import('./components/QuizOfferPage'), {
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <BrowserRouter>
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Carregando...</div>}>
-          <Routes>
-            {/* Rota principal para o quiz */}
-            <Route path="/" element={<QuizFlow />} />
-            {/* Rota para a página de resultados */}
-            <Route path="/resultado" element={<ResultPage />} />
-            <Route path="/resultado/:id" element={<ResultPage />} />
-            {/* Rota para página de oferta/venda */}
-            <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-            {/* Rotas administrativas aninhadas */}
-            <Route path="/admin" element={<AdminLayout />}>
-              {/* Dashboard padrão do admin */}
-              <Route index element={
-                <div className="rounded-lg border bg-card p-6 shadow-sm">
-                  <h3 className="mb-4 text-lg font-medium">Bem-vindo ao Painel Admin</h3>
-                  <p className="mb-4 text-sm text-muted-foreground">Selecione uma opção no menu.</p>
-                </div>
-              } />
-              {/* Editor visual */}
-              <Route path="editor" element={<EditorPage />} />
-              <Route path="editor/:id" element={<EditorPage />} />
-            </Route>
-            {/* Rota de fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Suspense>
-        <Toaster />
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Carregando...</div>}>
+            <Routes>
+              {/* Rota principal para o quiz */}
+              <Route path="/" element={<QuizFlow />} />
+              {/* Rota para a página de resultados */}
+              <Route path="/resultado" element={<ResultPage />} />
+              <Route path="/resultado/:id" element={<ResultPage />} />
+              {/* Rota para página de oferta/venda */}
+              <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+              {/* Rotas administrativas aninhadas */}
+              <Route path="/admin" element={<AdminLayout />}>
+                {/* Dashboard padrão do admin */}
+                <Route index element={
+                  <div className="rounded-lg border bg-card p-6 shadow-sm">
+                    <h3 className="mb-4 text-lg font-medium">Bem-vindo ao Painel Admin</h3>
+                    <p className="mb-4 text-sm text-muted-foreground">Selecione uma opção no menu.</p>
+                  </div>
+                } />
+                {/* Editor visual */}
+                <Route path="editor" element={<EditorPage />} />
+                <Route path="editor/:id" element={<EditorPage />} />
+              </Route>
+              {/* Rota de fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+          <Toaster />
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
