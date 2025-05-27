@@ -1,3 +1,4 @@
+
 import React from 'react';
 // Update the import path if the file is located elsewhere, for example:
 import EnhancedAutoFixedImages from '../ui/EnhancedAutoFixedImages';
@@ -32,20 +33,49 @@ const ImageOptimizationDemo: React.FC = () => {
                 />
               </div>
               
+              <div>
                 <h3 className="text-sm font-medium mb-2">Imagem com Qualidade Baixa</h3>
+                <img 
                   src="https://res.cloudinary.com/demo/image/upload/q_30/sample" 
                   alt="Exemplo com qualidade baixa"
+                  className="w-full h-auto rounded-md"
+                />
+              </div>
             </div>
           </EnhancedAutoFixedImages>
         </section>
         
         {/* Seção sem EnhancedAutoFixedImages para comparação */}
+        <section>
           <h2 className="text-lg font-medium mb-2">Sem otimização automática</h2>
+          <p className="text-sm text-gray-600 mb-4">
             Esta seção não usa o componente de correção, mostrando as imagens
             como seriam naturalmente carregadas sem otimização automática.
+          </p>
           <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-sm font-medium mb-2">Imagem do Cloudinary</h3>
+                <img 
+                  src="https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/sample" 
+                  alt="Exemplo do Cloudinary"
+                  className="w-full h-auto rounded-md"
+                />
+              </div>
+              
+              <div>
+                <h3 className="text-sm font-medium mb-2">Imagem com Qualidade Baixa</h3>
+                <img 
+                  src="https://res.cloudinary.com/demo/image/upload/q_30/sample" 
+                  alt="Exemplo com qualidade baixa"
+                  className="w-full h-auto rounded-md"
+                />
+              </div>
+            </div>
           </div>
+        </section>
       </div>
+      
       <div className="mt-8 p-4 border-t border-gray-200">
         <h2 className="text-lg font-medium mb-2">Como funciona</h2>
         <p className="text-sm text-gray-600">
@@ -54,7 +84,9 @@ const ImageOptimizationDemo: React.FC = () => {
           densidade de pixels e capacidade de processamento. Isso resulta em 
           imagens mais nítidas, sem sobrecarregar dispositivos de baixo desempenho.
         </p>
+      </div>
     </div>
   );
 };
+
 export default ImageOptimizationDemo;
