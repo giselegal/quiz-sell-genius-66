@@ -48,25 +48,36 @@ export const OptimizedImage = ({
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [blurredLoaded, setBlurredLoaded] = useState(false);
+
   // Obter metadados da imagem do banco de imagens
   const imageMetadata = useMemo(() => src ? getImageMetadata(src) : undefined, [src]);
+
   // Gerar placeholder manualmente (blur de baixa qualidade)
   const placeholderSrc = useMemo(() => {
     if (!src) return '';
     // Gera uma versão extremamente pequena para efeito blur
     return getOptimizedImage(src, { width: 16, quality: 10 });
   }, [src]);
+
   // Otimizar URLs do Cloudinary automaticamente
   const optimizedSrc = useMemo(() => {
-    const imgWidth = width || (imageMetadata?.width || undefined);
-    const imgHeight = height || (imageMetadata?.height || undefined);
+    // Garante que width e height sejam números ou undefined
+    const imgWidth = typeof width === 'number' && !isNaN(width)
+      ? width
+      : (typeof imageMetadata?.width === 'number' && !isNaN(imageMetadata.width) ? imageMetadata.width : undefined);
+    const imgHeight = typeof height === 'number' && !isNaN(height)
+      ? height
+      : (typeof imageMetadata?.height === 'number' && !isNaN(imageMetadata.height) ? imageMetadata.height : undefined);
     return getOptimizedImage(src, {
       width: imgWidth,
-      height: imgHeight
+      height: imgHeight,
+      quality
     });
   }, [src, width, height, imageMetadata, quality]);
+
   // Responsivo: não implementado sem função utilitária
   const responsiveImageProps = { srcSet: '', sizes: '' };
+
   // Para imagens prioritárias, verificamos se já estão pré-carregadas
   useEffect(() => {
     setLoaded(false);
@@ -85,11 +96,14 @@ export const OptimizedImage = ({
         };
         img.onerror = () => setError(true);
       }
-      // Placeholder blur (não implementado sem utilitário)
       setBlurredLoaded(true);
     }
   }, [optimizedSrc, placeholderSrc, priority, src, onLoad]);
-  const aspectRatio = width && height ? `${width} / ${height}` : undefined;
+
+  const aspectRatio = (typeof width === 'number' && typeof height === 'number' && width > 0 && height > 0)
+    ? `${width} / ${height}`
+    : undefined;
+
   return (
     <div
       className={cn(
@@ -122,8 +136,8 @@ export const OptimizedImage = ({
       <img
         src={optimizedSrc}
         alt={imageMetadata?.alt || alt}
-        width={width}
-        height={height}
+        width={typeof width === 'number' && !isNaN(width) ? width : undefined}
+        height={typeof height === 'number' && !isNaN(height) ? height : undefined}
         loading={priority ? "eager" : "lazy"}
         decoding={priority ? "sync" : "async"}
         fetchPriority={priority ? "high" : "auto"}
