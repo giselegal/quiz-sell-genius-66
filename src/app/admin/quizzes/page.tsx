@@ -26,6 +26,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
   Table,
   TableBody,
   TableCell,
@@ -47,13 +48,18 @@ export default function QuizzesPage() {
       type: 'personality',
       thumbnail: 'https://via.placeholder.com/100x60'
     },
+    {
       id: 2,
       title: 'Descubra Seu Produto Ideal',
+      status: 'ativo',
       responses: 1923,
       conversions: 89,
       conversionRate: 4.6,
       createdAt: '2024-01-12',
       type: 'product-finder',
+      thumbnail: 'https://via.placeholder.com/100x60'
+    },
+    {
       id: 3,
       title: 'Teste de Personalidade Empreendedora',
       status: 'rascunho',
@@ -61,6 +67,10 @@ export default function QuizzesPage() {
       conversions: 0,
       conversionRate: 0,
       createdAt: '2024-01-10',
+      type: 'personality',
+      thumbnail: 'https://via.placeholder.com/100x60'
+    },
+    {
       id: 4,
       title: 'Quiz de Marketing Digital',
       status: 'pausado',
@@ -69,6 +79,7 @@ export default function QuizzesPage() {
       conversionRate: 3.7,
       createdAt: '2024-01-08',
       type: 'knowledge',
+      thumbnail: 'https://via.placeholder.com/100x60'
     }
   ];
   const getStatusBadge = (status: string) => {
@@ -182,15 +193,20 @@ export default function QuizzesPage() {
                       <Users className="w-4 h-4 text-[#B89B7A]" />
                       {quiz.responses.toLocaleString()}
                   <TableCell className="font-medium">{quiz.conversions}</TableCell>
+                  <TableCell>
                     <span className={`font-medium ${
                       quiz.conversionRate >= 5 ? 'text-green-600' :
                       quiz.conversionRate >= 3 ? 'text-yellow-600' : 'text-red-600'
                     }`}>
                       {quiz.conversionRate}%
                     </span>
+                  </TableCell>
+                  <TableCell>
                     <div className="flex items-center gap-1 text-[#B89B7A]">
                       <Calendar className="w-4 h-4" />
                       {new Date(quiz.createdAt).toLocaleDateString('pt-BR')}
+                    </div>
+                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -203,17 +219,25 @@ export default function QuizzesPage() {
                           <Eye className="w-4 h-4 mr-2" />
                           Visualizar
                         </DropdownMenuItem>
+                        <DropdownMenuItem>
                           <Edit className="w-4 h-4 mr-2" />
                           Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
                           <Copy className="w-4 h-4 mr-2" />
                           Duplicar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
                           <BarChart3 className="w-4 h-4 mr-2" />
                           Analytics
+                        </DropdownMenuItem>
                         <DropdownMenuItem className="text-red-600">
                           <Trash2 className="w-4 h-4 mr-2" />
                           Excluir
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

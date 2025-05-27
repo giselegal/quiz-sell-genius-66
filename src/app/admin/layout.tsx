@@ -23,14 +23,23 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
+  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuRadioGroup
 } from '@/components/ui/dropdown-menu';
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -45,32 +54,45 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: LayoutDashboard,
       current: pathname === '/admin'
     },
+    {
       name: 'Quizzes',
       href: '/admin/quizzes',
       icon: FileText,
       current: pathname?.startsWith('/admin/quizzes') || false
+    },
+    {
       name: 'Editor Visual',
       href: '/admin/editor',
       icon: Palette,
       current: pathname?.startsWith('/admin/editor') || false,
       badge: 'NOVO'
+    },
+    {
       name: 'Pixels & Tracking',
       href: '/admin/tracking',
       icon: Code,
       current: pathname?.startsWith('/admin/tracking') || false,
       badge: 'PRO'
+    },
+    {
       name: 'Conversões',
       href: '/admin/conversions',
       icon: TrendingUp,
       current: pathname?.startsWith('/admin/conversions') || false
+    },
+    {
       name: 'Analytics',
       href: '/admin/analytics',
       icon: BarChart3,
       current: pathname?.startsWith('/admin/analytics') || false
+    },
+    {
       name: 'Leads',
       href: '/admin/leads',
       icon: Users,
       current: pathname?.startsWith('/admin/leads') || false
+    },
+    {
       name: 'Configurações',
       href: '/admin/settings',
       icon: Settings,
@@ -91,6 +113,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <div>
                 <span className="font-bold text-xl text-[#F5F2E9]">Quiz</span>
                 <span className="font-light text-lg text-[#B89B7A] ml-1">Admin</span>
+              </div>
             </Link>
           )}
           <Button
@@ -174,6 +197,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 placeholder="Buscar quizzes, resultados..."
                 className="pl-10 bg-[#F5F2E9]/50 border-[#D4C4A0]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]/20 text-[#432818] placeholder:text-[#B89B7A]"
               />
+            </div>
             {/* Right Actions */}
             <div className="flex items-center gap-4">
               {/* Notifications */}
@@ -190,9 +214,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <p className="text-sm font-semibold text-[#432818]">Desenvolvedor</p>
                   <p className="text-xs text-[#B89B7A]">Acesso Total</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
         {/* Page Content */}
         <main className="p-6">
           {children}
         </main>
+      </div>
     </div>
   );
+}

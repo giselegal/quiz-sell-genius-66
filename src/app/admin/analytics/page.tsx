@@ -69,7 +69,7 @@ export default function AnalyticsPage() {
             Acompanhe o desempenho geral dos seus quizzes
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
           <Button variant="outline" className="border-[#B89B7A] text-[#432818]">
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
@@ -101,13 +101,13 @@ export default function AnalyticsPage() {
                     <p className="text-sm font-medium text-[#B89B7A]">{stat.title}</p>
                     <p className="text-3xl font-bold text-[#432818] mt-1">{stat.value}</p>
                     <div className="flex items-center mt-2">
-                      {stat.changeType === 'positive' ? (
-                        <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-                      ) : (
+                      {stat.changeType === 'negative' ? (
                         <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
+                      ) : (
+                        <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
                       )}
                       <span className={`text-sm font-medium ${
-                        stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
+                        stat.changeType === 'negative' ? 'text-red-600' : 'text-green-600'
                       }`}>
                         {stat.change}
                       </span>
@@ -148,7 +148,7 @@ export default function AnalyticsPage() {
                       <p className="font-bold text-[#432818]">{quiz.conversions} conversões</p>
                       <Badge 
                         variant="outline"
-                        className={`${
+                        className={`$ {
                           quiz.rate >= 4 ? 'border-green-500 text-green-700' :
                           quiz.rate >= 3 ? 'border-yellow-500 text-yellow-700' :
                           'border-red-500 text-red-700'
@@ -207,7 +207,7 @@ export default function AnalyticsPage() {
                   <div key={index} className="relative">
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium text-[#432818]">{step.step}</span>
-                      <span>{step.value.toLocaleString()} ({step.percentage}%)</span>
+                      <span className="text-sm text-[#B89B7A]">{step.value.toLocaleString()} ({step.percentage}%)</span>
                     </div>
                     <div className="w-full bg-[#F5F2E9] rounded-full h-4">
                       <div
