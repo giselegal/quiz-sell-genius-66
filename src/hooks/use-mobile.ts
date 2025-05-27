@@ -20,6 +20,7 @@ export const useIsMobile = () => {
 
 export const useIsLowPerformanceDevice = () => {
   const [isLowPerformance, setIsLowPerformance] = useState(false);
+  useEffect(() => {
     // Check device memory (if available)
     const memory = (navigator as any).deviceMemory;
     if (memory && memory < 4) {
@@ -29,6 +30,9 @@ export const useIsLowPerformanceDevice = () => {
     // Check CPU cores
     const cpuCores = navigator.hardwareConcurrency;
     if (cpuCores && cpuCores < 4) {
+      setIsLowPerformance(true);
+      return;
+    }
     // Check if device is mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (isMobile) {
@@ -39,6 +43,8 @@ export const useIsLowPerformanceDevice = () => {
         setIsLowPerformance(true);
         return;
       }
+    }
     setIsLowPerformance(false);
+  }, []);
   return isLowPerformance;
 };

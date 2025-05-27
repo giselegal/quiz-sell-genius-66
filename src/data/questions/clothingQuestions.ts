@@ -1,4 +1,3 @@
-
 import { QuizQuestion } from '../../types/quiz';
 export const clothingQuestions: QuizQuestion[] = [
   {
@@ -14,30 +13,43 @@ export const clothingQuestions: QuizQuestion[] = [
         styleCategory: 'Natural',
         points: 1
       },
+      {
         id: '1b',
         text: 'Discrição, caimento clássico e sobriedade.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
         styleCategory: 'Clássico',
+      },
+      {
         id: '1c',
         text: 'Praticidade com um toque de estilo atual.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp',
         styleCategory: 'Contemporâneo',
+      },
+      {
         id: '1d',
         text: 'Elegância refinada, moderna e sem exageros.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp',
         styleCategory: 'Elegante',
+      },
+      {
         id: '1e',
         text: 'Delicadeza em tecidos suaves e fluidos.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp',
         styleCategory: 'Romântico',
+      },
+      {
         id: '1f',
         text: 'Sensualidade com destaque para o corpo.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp',
         styleCategory: 'Sexy',
+      },
+      {
         id: '1g',
         text: 'Impacto visual com peças estruturadas e assimétricas.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp',
         styleCategory: 'Dramático',
+      },
+      {
         id: '1h',
         text: 'Mix criativo com formas ousadas e originais.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp',
@@ -45,31 +57,50 @@ export const clothingQuestions: QuizQuestion[] = [
       }
     ]
   },
+  {
     id: '3',
     title: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
+    options: [
+      {
         id: '3a',
         text: 'Visual leve, despojado e natural.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+      },
+      {
         id: '3b',
         text: 'Visual clássico e tradicional.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp',
+      },
+      {
         id: '3c',
         text: 'Visual casual com toque atual.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+      },
+      {
         id: '3d',
         text: 'Visual refinado e imponente.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
+      },
+      {
         id: '3e',
         text: 'Visual romântico, feminino e delicado.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
+      },
+      {
         id: '3f',
         text: 'Visual sensual, com saia justa e decote.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
+      },
+      {
         id: '3g',
         text: 'Visual marcante e urbano (jeans + jaqueta).',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
+      },
+      {
         id: '3h',
         text: 'Visual criativo, colorido e ousado.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
+      }
+    ]
   }
 ];

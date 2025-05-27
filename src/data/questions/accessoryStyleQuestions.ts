@@ -1,4 +1,3 @@
-
 import { QuizQuestion } from '../../types/quiz';
 export const accessoryStyleQuestions: QuizQuestion[] = [
   {
@@ -14,30 +13,43 @@ export const accessoryStyleQuestions: QuizQuestion[] = [
         styleCategory: 'Natural',
         points: 1
       },
+      {
         id: '9b',
         text: 'Brincos pequenos e discretos. Corrente fininha.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
         styleCategory: 'Clássico',
+      },
+      {
         id: '9c',
         text: 'Acessórios que elevem meu look com um toque moderno.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/61_joafud.webp',
         styleCategory: 'Contemporâneo',
+      },
+      {
         id: '9d',
         text: 'Acessórios sofisticados, joias ou semijoias.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/60_vzsnps.webp',
         styleCategory: 'Elegante',
+      },
+      {
         id: '9e',
         text: 'Peças delicadas e com um toque feminino.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/59_dwaqrx.webp',
         styleCategory: 'Romântico',
+      },
+      {
         id: '9f',
         text: 'Brincos longos, colares que valorizem minha beleza.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735487/63_lwgokn.webp',
         styleCategory: 'Sexy',
+      },
+      {
         id: '9g',
         text: 'Acessórios pesados, que causem um impacto.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735485/62_mno8wg.webp',
         styleCategory: 'Dramático',
+      },
+      {
         id: '9h',
         text: 'Acessórios diferentes, grandes e marcantes.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735480/58_njdjoh.webp',

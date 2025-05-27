@@ -1,4 +1,3 @@
-
 import { QuizQuestion } from '../../types/quiz';
 export const stylePreferencesQuestions: QuizQuestion[] = [
   {
@@ -9,60 +8,92 @@ export const stylePreferencesQuestions: QuizQuestion[] = [
     options: [
       {
         id: '5a',
-        text: 'Estampas clean, com poucas informações.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/20_oh44vh.webp',
+        text: 'Estampas naturais, listras, xadrez, tons terrosos.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735367/20_ytqj2g.webp',
         styleCategory: 'Natural',
         points: 1
       },
+      {
         id: '5b',
         text: 'Estampas clássicas e atemporais.',
         imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735368/21_o7wkte.webp',
         styleCategory: 'Clássico',
+      },
+      {
         id: '5c',
-        text: 'Atemporais, mas que tenham uma pegada de atual e moderna.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735369/22_siebw2.webp',
+        text: 'Estampas geométricas, animal print, grafismos.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735368/22_ytqj2g.webp',
         styleCategory: 'Contemporâneo',
+      },
+      {
         id: '5d',
-        text: 'Estampas clássicas e atemporais, mas sofisticadas.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/23_bdfxrh.webp',
+        text: 'Estampas sofisticadas, arabescos, poás.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735369/23_ytqj2g.webp',
         styleCategory: 'Elegante',
+      },
+      {
         id: '5e',
-        text: 'Estampas florais e/ou delicadas como bolinhas, borboletas e corações.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/24_nptszu.webp',
+        text: 'Estampas florais delicadas, tons pastel.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735370/24_ytqj2g.webp',
         styleCategory: 'Romântico',
+      },
+      {
         id: '5f',
-        text: 'Estampas de animal print, como onça, zebra e cobra.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/25_motk6b.webp',
+        text: 'Estampas sensuais, animal print, cores quentes.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735370/25_ytqj2g.webp',
         styleCategory: 'Sexy',
+      },
+      {
         id: '5g',
-        text: 'Estampas geométricas, abstratas e exageradas como grandes poás.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/26_dptanw.webp',
+        text: 'Estampas impactantes, contrastes fortes.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/26_ytqj2g.webp',
         styleCategory: 'Dramático',
+      },
+      {
         id: '5h',
-        text: 'Estampas diferentes do usual, como africanas, xadrez grandes.',
-        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/27_wxmklx.webp',
+        text: 'Estampas criativas, mix de cores e formas.',
+        imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/27_ytqj2g.webp',
         styleCategory: 'Criativo',
       }
     ]
   },
+  {
     id: '10',
     title: 'VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...',
     type: 'text',
+    options: [
+      {
         id: '10a',
         text: 'São fáceis de cuidar.',
+      },
+      {
         id: '10b',
         text: 'São de excelente qualidade.',
+      },
+      {
         id: '10c',
         text: 'São fáceis de cuidar e modernos.',
+      },
+      {
         id: '10d',
         text: 'São sofisticados.',
+      },
+      {
         id: '10e',
         text: 'São delicados.',
+      },
+      {
         id: '10f',
         text: 'São perfeitos ao meu corpo.',
+      },
+      {
         id: '10g',
         text: 'São diferentes, e trazem um efeito para minha roupa.',
+      },
+      {
         id: '10h',
         text: 'São exclusivos, criam identidade no look.',
+      },
+    ]
   }
 ];

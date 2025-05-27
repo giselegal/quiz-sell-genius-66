@@ -16,7 +16,10 @@ interface FixedIntroImageProps {
   className?: string;
   priority?: boolean;
 }
+
+/**
  * Transforma qualquer URL do Cloudinary em uma versão de alta qualidade
+ */
 function getHighQualityUrl(url: string): string {
   if (!url || (!url.includes('cloudinary.com') && !url.includes('res.cloudinary.com'))) {
     return url;

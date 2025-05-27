@@ -1,4 +1,3 @@
-
 import { type BankImage } from '@/data/imageBank';
 import { type PreloadOptions } from './types';
 import { updateImageCache, hasImageWithStatus } from './caching';
@@ -10,10 +9,12 @@ import { updateImageCache, hasImageWithStatus } from './caching';
 export const isImagePreloaded = (url: string): boolean => {
   return hasImageWithStatus(url, 'loaded');
 };
+/**
  * Preload images by their IDs from the image bank
  * @param ids Array of image IDs to preload
  * @param options Preload options
- * @returns Promise that resolves when preloading is complete
+ * @returns Promise que resolve quando o preload termina
+ */
 export const preloadImagesByIds = async (
   ids: string[],
   options: PreloadOptions = {}
@@ -21,8 +22,11 @@ export const preloadImagesByIds = async (
   // This would need to be implemented with actual image bank data
   console.log('Preloading images by IDs:', ids);
   return Promise.resolve();
+};
+/**
  * Preload images by URLs
  * @param urls Array of image URLs to preload
+ */
 export const preloadImagesByUrls = async (
   urls: string[],
   const { 
@@ -81,29 +85,43 @@ export const preloadImagesByUrls = async (
     onComplete?.();
   } catch (error) {
     console.error('Error preloading images:', error);
+  }
+};
+/**
  * Preload images from bank images array
  * @param images Array of bank images to preload
+ */
 export const preloadImages = async (
   images: BankImage[],
   // Extract URLs from BankImage objects - assuming they have a 'src' property
   const urls = images.map(img => img.src || img.imageUrl || '').filter(Boolean);
   return preloadImagesByUrls(urls, options);
+};
+/**
  * Preload critical images by category
  * @param categories Array of categories or single category
+ */
 export const preloadCriticalImages = async (
   categories: string | string[],
   console.log('Preloading critical images for categories:', categories);
+};
+/**
  * Preload images by category
  * @param category Category to preload
+ */
 export const preloadImagesByCategory = async (
   category: string,
   console.log('Preloading images for category:', category);
+};
+/**
  * Get low quality version of an image
  * @param url Original image URL
  * @returns Low quality image URL
+ */
 export const getLowQualityImage = (url: string): string => {
   if (url.includes('cloudinary.com')) {
     return url.includes('/upload/') 
       ? url.replace('/upload/', '/upload/q_30,w_50/') 
       : url;
   return url;
+};

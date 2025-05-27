@@ -1,4 +1,3 @@
-
 /**
  * Serviço para gerenciar múltiplos Facebook Pixels no sistema
  */
@@ -21,37 +20,46 @@ export const FUNNEL_CONFIGS: Record<string, FunnelConfig> = {
   // Funnel 2 - Quiz embutido na oferta
   "quiz-descubra-seu-estilo": {
     pixelId: "1038647624890676",
+    token: "",
     utmCampaign: "Teste Lovable - Por Dentro",
     funnelName: "quiz_embutido",
+    ctaUrl: ""
   }
 };
+/**
  * Identifica o funil atual baseado na URL
+ */
+// Identifica o funil atual baseado na URL
 export const getCurrentFunnel = (): string => {
   if (typeof window === 'undefined') return 'default';
-  
   const path = window.location.pathname;
-  // Verifica caminhos específicos para identificar o funil
   if (path.includes('/quiz-descubra-seu-estilo')) {
     return 'quiz-descubra-seu-estilo';
-  // Funil padrão se nenhuma condição for atendida
+  }
   return 'default';
- * Obtém a configuração do funil atual
+}
+// Obtém a configuração do funil atual
 export const getCurrentFunnelConfig = (): FunnelConfig => {
   const funnelId = getCurrentFunnel();
   return FUNNEL_CONFIGS[funnelId] || FUNNEL_CONFIGS.default;
- * Obtém o ID do Pixel do Facebook para o funil atual
+}
+// Obtém o ID do Pixel do Facebook para o funil atual
 export const getPixelId = (): string => {
   return getCurrentFunnelConfig().pixelId;
- * Obtém o token de acesso do Facebook para o funil atual
+}
+// Obtém o token de acesso do Facebook para o funil atual
 export const getFacebookToken = (): string => {
   return getCurrentFunnelConfig().token;
- * Obtém a campanha UTM para o funil atual
+}
+// Obtém a campanha UTM para o funil atual
 export const getUtmCampaign = (): string => {
   return getCurrentFunnelConfig().utmCampaign;
- * Obtém a URL de CTA para o funil atual
+}
+// Obtém a URL de CTA para o funil atual
 export const getCtaUrl = (): string => {
   return getCurrentFunnelConfig().ctaUrl;
- * Marca evento específico de funil para análises
+}
+// Marca evento específico de funil para análises
 export const trackFunnelEvent = (eventName: string, eventData: Record<string, any> = {}): void => {
   const funnelConfig = getCurrentFunnelConfig();
   // Adiciona informações do funil aos dados do evento
@@ -66,3 +74,5 @@ export const trackFunnelEvent = (eventName: string, eventData: Record<string, an
   // Se o Facebook Pixel estiver disponível, envia o evento
   if (typeof window !== 'undefined' && window.fbq) {
     window.fbq('trackCustom', eventName, enrichedData);
+  }
+}
