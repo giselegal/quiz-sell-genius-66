@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
 import { DragDropEditor } from '@/components/result-editor/DragDropEditor';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-// Importando configuração estática
-export { dynamic } from './static';
+
 function LoadingSpinner() {
   return (
     <div className="min-h-screen flex items-center justify-center">
