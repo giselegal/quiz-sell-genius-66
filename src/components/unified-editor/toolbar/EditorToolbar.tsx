@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeOff, Save, BookTemplate, ChevronLeft, Monitor, Tablet, Smartphone } from 'lucide-react';
 import { EditorTab } from '../UnifiedVisualEditor';
+
 export interface EditorToolbarProps {
   isPreviewing: boolean;
   onPreviewToggle: () => void;
@@ -17,6 +18,7 @@ export interface EditorToolbarProps {
   onUndo?: () => void;
   onRedo?: () => void;
 }
+
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   isPreviewing,
   onPreviewToggle,
@@ -46,6 +48,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         )}
       </div>
       
+      <div className="flex items-center gap-2">
         {onViewportSizeChange && (
           <div className="border rounded-md p-0.5 flex mr-2">
             <Button
@@ -56,17 +59,32 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
             >
               <Monitor className="w-4 h-4" />
             </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               className={`px-2 ${viewportSize === 'md' ? 'bg-gray-100' : ''}`}
               onClick={() => onViewportSizeChange('md')}
+            >
               <Tablet className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               className={`px-2 ${viewportSize === 'sm' ? 'bg-gray-100' : ''}`}
               onClick={() => onViewportSizeChange('sm')}
+            >
               <Smartphone className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
+        
         {onOpenTemplateModal && (
           <Button variant="outline" size="sm" onClick={onOpenTemplateModal}>
             <BookTemplate className="w-4 h-4 mr-1" />
             Modelos
           </Button>
+        )}
+        
         <Button variant="outline" size="sm" onClick={onPreviewToggle}>
           {isPreviewing ? (
             <>
@@ -74,12 +92,18 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
               Editar
             </>
           ) : (
+            <>
               <Eye className="w-4 h-4 mr-1" />
               Visualizar
+            </>
           )}
+        </Button>
+        
         <Button onClick={onSave} size="sm" disabled={isSaving}>
           <Save className="w-4 h-4 mr-1" />
           {isSaving ? 'Salvando...' : 'Salvar'}
+        </Button>
+      </div>
     </div>
   );
 };
