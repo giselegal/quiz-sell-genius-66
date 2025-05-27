@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo } from 'react';
@@ -9,10 +10,12 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Search, User, Download, Clock, CheckCircle, Play, Eye, Mail, ShoppingCart } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
 interface UsersTabProps {
   analyticsData: any;
   loading: boolean;
 }
+
 export const UsersTab: React.FC<UsersTabProps> = ({
   analyticsData,
   loading
@@ -21,6 +24,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [selectedUserData, setSelectedUserData] = useState<any>(null);
   const [userEvents, setUserEvents] = useState<any[]>([]);
+
   // Prepare users list from analytics data
   const prepareUsersList = useMemo(() => {
     if (!analyticsData?.events) return [];
@@ -40,6 +44,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
           totalQuestions: 0
         });
       }
+
       const user = uniqueUsers.get(userId);
       // Update user data based on events
       if (event.timestamp) {
@@ -50,12 +55,19 @@ export const UsersTab: React.FC<UsersTabProps> = ({
         }
         if (!user.lastActivity || timestamp > user.lastActivity) {
           user.lastActivity = timestamp;
+        }
+      }
+
       if (event.type === 'quiz_complete') {
         user.completed = true;
         user.completeTime = new Date(event.timestamp);
+      }
+
       if (event.type === 'quiz_answer') {
         user.totalQuestions++;
+      }
     });
+
     // Convert map to array and filter by search term
     return Array.from(uniqueUsers.values())
       .filter(user => 
@@ -69,6 +81,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
         return b.lastActivity.getTime() - a.lastActivity.getTime();
       });
   }, [analyticsData, searchTerm]);
+
   // Handle user details view
   const handleViewUserDetails = (userId: string) => {
     setSelectedUser(userId);
@@ -76,11 +89,14 @@ export const UsersTab: React.FC<UsersTabProps> = ({
       setUserEvents([]);
       return;
     }
+
     // Get all events for the selected user
     const events = analyticsData.events.filter((event: any) => {
       return (event.sessionId === userId || event.userEmail === userId);
+    });
     setUserEvents(events);
   };
+
   // Format date for display
   const formatDate = (date: Date | null) => {
     if (!date) return 'N/A';
@@ -91,6 +107,8 @@ export const UsersTab: React.FC<UsersTabProps> = ({
       hour: '2-digit',
       minute: '2-digit'
     }).format(date);
+  };
+
   // Get icon for event type
   const getEventIcon = (eventType: string) => {
     switch (eventType) {
@@ -108,7 +126,11 @@ export const UsersTab: React.FC<UsersTabProps> = ({
         return <ShoppingCart className="h-4 w-4 text-green-500" />;
       default:
         return <User className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
   const users = prepareUsersList;
+
   return (
     <div className="space-y-6">
       <Card>
@@ -128,6 +150,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -180,14 +203,23 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                               <p className="text-sm font-medium text-gray-500">Nome</p>
                               <p className="text-base">{selectedUserData?.name}</p>
                             </div>
+                            <div>
                               <p className="text-sm font-medium text-gray-500">Email</p>
                               <p className="text-base">{selectedUserData?.email}</p>
+                            </div>
+                            <div>
                               <p className="text-sm font-medium text-gray-500">Início</p>
                               <p className="text-base">{formatDate(selectedUserData?.startTime)}</p>
+                            </div>
+                            <div>
                               <p className="text-sm font-medium text-gray-500">Conclusão</p>
                               <p className="text-base">{formatDate(selectedUserData?.completeTime)}</p>
+                            </div>
+                            <div>
                               <p className="text-sm font-medium text-gray-500">Perguntas Respondidas</p>
                               <p className="text-base">{selectedUserData?.totalQuestions}</p>
+                            </div>
+                            <div>
                               <p className="text-sm font-medium text-gray-500">Status</p>
                               <p className="text-base">
                                 {selectedUserData?.completed ? (
@@ -196,6 +228,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                                   <Badge variant="outline" className="border-yellow-500 text-yellow-500">Em progresso</Badge>
                                 )}
                               </p>
+                            </div>
                           </div>
                           <div className="border-t pt-4">
                             <h4 className="text-sm font-medium text-gray-500 mb-2">Histórico de Eventos</h4>
@@ -226,17 +259,21 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                                       </p>
                                       <p className="text-xs text-gray-500">
                                         {new Date(event.timestamp).toLocaleString()}
+                                      </p>
                                       {event.type === 'quiz_answer' && (
                                         <div className="mt-1 text-xs text-gray-600">
                                           <p>Opções selecionadas: {event.selectedOptions?.join(', ') || 'N/A'}</p>
                                         </div>
                                       )}
+                                    </div>
                                   </div>
                                 ))}
                                 {userEvents.length === 0 && (
                                   <p className="text-sm text-gray-500">Nenhum evento encontrado para este usuário.</p>
+                                )}
                               </div>
                             </ScrollArea>
+                          </div>
                           <DialogFooter>
                             <Button 
                               variant="outline" 
@@ -251,17 +288,22 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                           </DialogFooter>
                         </DialogContent>
                       </Dialog>
+                    </TableCell>
                   </TableRow>
                 )) : (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-6 text-muted-foreground">
                       {searchTerm ? 'Nenhum usuário encontrado para esta busca.' : 'Nenhum usuário encontrado.'}
+                    </TableCell>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
 };
+
 export default UsersTab;
