@@ -34,6 +34,7 @@ const getOptimizedImageUrl = (
     }
   }
   const format = options.format || 'auto';
+  
   // For Cloudinary URLs
   if (originalUrl.includes('cloudinary.com')) {
     // Extract base URL and transformation string (if any)
@@ -46,6 +47,7 @@ const getOptimizedImageUrl = (
     if (height > 0) transformations += `,h_${height}`;
     // Add dpr_auto for better display on high DPI devices
     transformations += ',dpr_auto';
+    
     // Return optimized cloudinary URL
     return `${baseUrlParts[0]}/upload/${transformations}/${baseUrlParts[1]}`;
   } 
@@ -53,7 +55,10 @@ const getOptimizedImageUrl = (
   else if (originalUrl.startsWith('/')) {
     // Enhanced parameter approach for local images
     return `${originalUrl}?w=${width}&q=${quality}${height ? `&h=${height}` : ''}&f=${format}`;
+  }
+  
   // For other URLs (fallback)
   return originalUrl;
 };
+
 export default getOptimizedImageUrl;
