@@ -1,13 +1,17 @@
 
 import React from 'react';
 import { Check } from 'lucide-react';
+
 interface Benefit {
   icon?: React.ReactNode;
   text: string;
 }
+
 interface BenefitsSectionProps {
   title: string;
   benefits: Benefit[];
+}
+
 export const BenefitsSection: React.FC<BenefitsSectionProps> = ({
   title,
   benefits

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '@/components/ui/card';
 
@@ -27,13 +28,19 @@ const MotivationSection: React.FC = () => {
             <li>• Investe em tendências que não valorizam sua imagem</li>
             <li>• Tem dificuldade em criar uma imagem coerente e autêntica</li>
           </ul>
+        </div>
         <div className="bg-[#f9f4ef] p-4 rounded-lg border border-[#B89B7A]/10">
           <h3 className="font-medium text-[#aa6b5d] mb-2">Quando você domina seu estilo...</h3>
+          <ul className="text-[#432818] space-y-2">
             <li>• Economiza tempo e dinheiro em compras conscientes</li>
             <li>• Projeta a imagem que realmente representa você</li>
             <li>• Aumenta sua confiança em qualquer ambiente</li>
             <li>• Cria looks harmoniosos com menos peças</li>
+          </ul>
+        </div>
+      </div>
     </Card>
   );
 };
+
 export default MotivationSection;
