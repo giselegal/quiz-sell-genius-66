@@ -44,7 +44,9 @@ export interface QuizComponentLayout {
   columns: 1 | 2 | 3 | 4;
   direction: 'vertical' | 'horizontal';
 export interface QuizComponentData {
+  id: string;
   type: QuizComponentType;
+  order: number;
   stageId?: string;
   content?: any;
   data?: {

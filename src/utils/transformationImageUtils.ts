@@ -26,22 +26,28 @@ export const preloadTransformationImages = (transformations) => {
       imgAfter.src = `${firstTransformation.afterImage}?q=85&f=auto&w=400&e_sharpen:60`;
       imgAfter.fetchPriority = "high";
       imgAfter.decoding = "sync"; // Decodificação síncrona para a primeira imagem
-  // Em segundo plano, pré-carregue as outras transformações
-  setTimeout(() => {
-    for (let i = 1; i < transformations.length; i++) {
-      const transformation = transformations[i];
-      
-      if (transformation.beforeImage) {
-        const imgBefore = new Image();
-        imgBefore.src = `${transformation.beforeImage}?q=85&f=auto&w=400`;
-        imgBefore.decoding = "async"; // Decodificação assíncrona para as demais
+    }
+    // Em segundo plano, pré-carregue as outras transformações
+    setTimeout(() => {
+      for (let i = 1; i < transformations.length; i++) {
+        const transformation = transformations[i];
+        
+        if (transformation.beforeImage) {
+          const imgBefore = new Image();
+          imgBefore.src = `${transformation.beforeImage}?q=85&f=auto&w=400`;
+          imgBefore.decoding = "async"; // Decodificação assíncrona para as demais
+        }
+        if (transformation.afterImage) {
+          const imgAfter = new Image();
+          imgAfter.src = `${transformation.afterImage}?q=85&f=auto&w=400`;
+          imgAfter.decoding = "async"; // Decodificação assíncrona para as demais
+        }
       }
-      if (transformation.afterImage) {
-        const imgAfter = new Image();
-        imgAfter.src = `${transformation.afterImage}?q=85&f=auto&w=400`;
-        imgAfter.decoding = "async"; // Decodificação assíncrona para as demais
-  }, 2000); // Atraso para priorizar o carregamento inicial
+    }, 2000); // Atraso para priorizar o carregamento inicial
+  }
 };
+
+/**
  * Melhora a qualidade da URL de uma imagem do Cloudinary
  * @param url URL da imagem do Cloudinary
  * @returns URL otimizada

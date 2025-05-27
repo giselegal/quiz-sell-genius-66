@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import debounce from 'lodash/debounce';
+
 interface UseAutosaveOptions<T> {
   data: T;
   onSave: (data: T) => Promise<boolean>;
@@ -10,6 +11,7 @@ interface UseAutosaveOptions<T> {
   enabled?: boolean;
   showToast?: boolean;
 }
+
 export function useAutosave<T>({
   data,
   onSave,
@@ -22,19 +24,25 @@ export function useAutosave<T>({
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastDataRef = useRef<T>(data);
   const pendingSaveRef = useRef<boolean>(false);
+
   const save = async (forceShowToast = false) => {
     if (!enabled) return;
     
     // Compare JSON stringified versions to detect changes
     const currentDataStr = JSON.stringify(data);
     const lastDataStr = JSON.stringify(lastDataRef.current);
+
     // Don't save if the data hasn't changed
     if (currentDataStr === lastDataStr && !forceShowToast) {
       return;
     }
+
     // If already saving, mark as pending and return
     if (isSaving) {
       pendingSaveRef.current = true;
+      return;
+    }
+
     setIsSaving(true);
     try {
       const success = await onSave(data);
@@ -58,6 +66,7 @@ export function useAutosave<T>({
           description: "Suas alterações não puderam ser salvas. Tente novamente.",
           variant: "destructive",
         });
+      }
     } finally {
       setIsSaving(false);
       
@@ -65,39 +74,64 @@ export function useAutosave<T>({
       if (pendingSaveRef.current) {
         pendingSaveRef.current = false;
         setTimeout(() => save(false), 100);
+      }
+    }
   };
+
   // Setup autosave
   useEffect(() => {
     // Clear existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+    }
+
     // Set new timeout
     timeoutRef.current = setTimeout(() => {
       save(false);
     }, interval);
+
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
     };
   }, [data, enabled, interval]);
+
   // Save immediately when component unmounts
+  useEffect(() => {
+    return () => {
       if (enabled && JSON.stringify(data) !== JSON.stringify(lastDataRef.current)) {
         save(false);
+      }
+    };
   }, [data, enabled]);
+
   return {
     isSaving,
     lastSaved,
     saveNow: () => save(true),
+  };
+}
+
 // Separate implementation for useAutoSave with different signature
 export function useAutoSave({ onSave, delay = 1000 }: { onSave: (data: any) => void; delay?: number }) {
   const savedCallback = useRef(onSave);
+
+  useEffect(() => {
     savedCallback.current = onSave;
   }, [onSave]);
+
   const debouncedSave = useRef(
     debounce((data: any) => {
       savedCallback.current(data);
     }, delay)
   ).current;
+
+  useEffect(() => {
+    return () => {
       debouncedSave.cancel();
+    };
   }, [debouncedSave]);
+
   return debouncedSave;
+}

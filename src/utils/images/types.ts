@@ -26,19 +26,23 @@ export interface ImageDiagnosticResult {
     totalImagesWithIssues: number;
     totalDownloadedBytes: number;
     estimatedPerformanceImpact: string;
+  };
   detailedIssues?: ImageAnalysis[];
+}
 export interface FixBlurryImagesOptions {
   quality?: number;
   format?: string;
-  skipOptimized?: boolean;
-  forceOptimize?: boolean;
   debug?: boolean;
+  placeholderColor?: string;
+}
+export interface PreloadImageDefinition {
   placeholderColor?: string;
 export interface PreloadImageDefinition {
   src: string;
-  id: string;
-  alt: string;
-  category: string;
+  preloadPriority?: number;
+  tags?: string[];
+}
+export interface PreloadOptions {
   preloadPriority?: number;
   tags?: string[];
 export interface PreloadOptions {
@@ -69,5 +73,10 @@ export interface ImageSettings {
   responsive?: boolean;
   crop?: string;
 export interface ImageOptimizationOptions {
+  width?: number;
+  height?: number;
+  quality?: number;
+  format?: 'auto' | 'webp' | 'avif' | 'jpg' | 'png';
+  crop?: 'fill' | 'fit' | 'limit';
   progressive?: boolean;
   lossless?: boolean;

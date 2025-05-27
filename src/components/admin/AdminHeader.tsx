@@ -30,6 +30,10 @@ export function AdminHeader({
         <Button variant="outline" size="sm" asChild>
           <Link href="/admin">Painel</Link>
         </Button>
+        <Button variant="outline" size="sm" asChild>
           <Link href="/">Ver Site</Link>
+        </Button>
+      </div>
     </div>
   );
+}

@@ -102,16 +102,22 @@ export const resultPageCriticalCSS = `
 .result-page {
   background-color: #fff;
   min-height: 100vh;
+}
 .result-header {
   padding: 1.5rem;
   text-align: center;
   background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
 .result-content {
   padding: 1rem;
+}
+`;
+
 export default {
   injectCriticalCSS,
   removeCriticalCSS,
   initialCriticalCSS,
   heroCriticalCSS,
   resultPageCriticalCSS
+};

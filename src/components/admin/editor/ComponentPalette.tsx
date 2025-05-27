@@ -32,6 +32,7 @@ export default function ComponentPalette() {
       
       <div className="pt-4 text-xs text-gray-500">
         💡 Arraste os componentes para o canvas para começar a editar
+      </div>
     </div>
   );
 }

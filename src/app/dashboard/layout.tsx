@@ -28,6 +28,7 @@ export default function DashboardLayout({
       {/* Conteúdo principal */}
       <div className="flex-1 overflow-auto">
         {children}
+      </div>
     </div>
   );
 }
