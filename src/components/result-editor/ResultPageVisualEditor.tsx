@@ -36,8 +36,6 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
       importConfig
     }
   } = useResultPageEditor(selectedStyle.category);
-  
-  const {
     blocks,
     selectedBlockId,
     setSelectedBlockId,
@@ -48,19 +46,15 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
   useEffect(() => {
     if (initialConfig && importConfig) {
       importConfig(initialConfig);
-    }
   }, [initialConfig, importConfig]);
-  
   // Sync blocks with config when needed
-  useEffect(() => {
     if (resultPageConfig?.blocks) {
       updateBlocks(resultPageConfig.blocks);
     } else {
       // Initialize with empty blocks if not present
       updateSection('blocks', []);
-    }
   }, [resultPageConfig, updateBlocks, updateSection]);
-  const handleUpdateConfig = (newConfig: any) => {
+  const handleUpdateConfig = (newConfig) => {
     if (newConfig) {
       try {
         importConfig(newConfig);
@@ -77,14 +71,11 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
         });
       } catch (error) {
         console.error('Error updating config:', error);
-        toast({
           title: "Erro ao atualizar configuração",
           description: "Ocorreu um erro ao aplicar a configuração",
           variant: "destructive",
           duration: 5000
-        });
       }
-    }
   };
   if (loading) {
     return (
@@ -98,8 +89,6 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     category: selectedStyle.category as any,
     score: selectedStyle.score,
     percentage: selectedStyle.percentage
-  };
-
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <EditorToolbar 
@@ -133,15 +122,11 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 primaryStyle={primaryStyle}
                 onReorderBlocks={blockActions.handleReorderBlocks}
               />
-            </ResizablePanel>
-            <ResizableHandle withHandle />
             <ResizablePanel defaultSize={25}>
               <PropertiesPanel
                 onClose={() => setSelectedBlockId(null)}
                 onUpdate={blockActions.handleUpdateBlock}
                 onDelete={blockActions.handleDeleteBlock}
-              />
-            </ResizablePanel>
           </ResizablePanelGroup>
         </TabsContent>
       </Tabs>

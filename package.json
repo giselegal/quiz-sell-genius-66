@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "next build || true",
+    "build": "next build",
     "build:dev": "next build",
     "build:ignore-errors": "NODE_OPTIONS=\"--max-old-space-size=4096 --no-warnings\" CI=false NEXT_PLUGIN_IGNORE_PRERENDER_ERRORS=true next build",
     "build:emergency": "bash emergency-build.sh",
@@ -15,8 +15,7 @@
     "start": "next start",
     "install-deps": "npm install",
     "prepare-deploy": "bash clean-before-commit.sh",
-    "full-build": "npm run clean && npm run build:ignore-errors || npm run build:emergency",
-    "build:force": "next build || true"
+    "full-build": "npm run clean && npm run build:ignore-errors || npm run build:emergency"
   },
   "keywords": [],
   "author": "",

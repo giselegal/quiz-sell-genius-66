@@ -32,22 +32,17 @@ export const EditorPage = () => {
     mainContent: {
       ...defaultResultTemplate.mainContent,
       visible: true
-    },
     offer: createOfferSectionConfig(), // Using the createOfferConfig() function to create a proper OfferSection
     secondaryStyles: {
-      visible: true,
       content: {},
-      padding: '20px'
-    },
+        padding: '20px'
     globalStyles: {
       primaryColor: '#B89B7A',
       secondaryColor: '#432818',
       textColor: '#432818',
       backgroundColor: '#FAF9F7',
       fontFamily: 'Playfair Display, serif'
-    },
     blocks: []
-  };
   return (
     <div className="h-screen">
       {showTemplates ? (

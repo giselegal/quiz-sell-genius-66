@@ -25,14 +25,11 @@ export const TemplateList: React.FC<TemplateListProps> = ({ onSelectTemplate }) 
       });
       if (onSelectTemplate) {
         onSelectTemplate();
-      }
     } catch (error) {
       console.error('Error applying template:', error);
-      toast({
         title: "Erro ao aplicar template",
         description: "Ocorreu um erro ao aplicar o template",
-        variant: "error"
-      });
+        variant: "destructive"
     }
   };
   return (

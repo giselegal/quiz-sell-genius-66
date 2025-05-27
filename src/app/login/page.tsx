@@ -28,13 +28,10 @@ export default function LoginPage() {
     if (!name.trim()) {
       setError('Nome é obrigatório');
       return;
-    }
-
     try {
       login(name);
     } catch (err) {
       setError('Erro ao fazer login');
-    }
   };
     const handleQuickLogin = (type: 'admin' | 'user') => {
     if (type === 'admin') {

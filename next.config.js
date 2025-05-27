@@ -3,10 +3,10 @@ const nextConfig = {
   reactStrictMode: false, // Desabilitando modo estrito para ignorar warnings não críticos
   // Desabilitando todas as verificações de tipos, ESLint e erros não críticos durante a compilação
   typescript: {
-    ignoreBuildErrors: true,    // continua build mesmo com erros de TS
+    ignoreBuildErrors: true
   },
   eslint: {
-    ignoreDuringBuilds: true,   // continua build mesmo com erros de lint
+    ignoreDuringBuilds: true
   },
   // Configuração para ignorar warnings durante o build
   onDemandEntries: {

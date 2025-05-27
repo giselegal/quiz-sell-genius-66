@@ -34,7 +34,6 @@ const designTokens = {
     md: '1.5rem',
     lg: '2rem',
     xl: '3rem',
-  },
   radius: {
     sm: '0.5rem',
     md: '0.75rem',
