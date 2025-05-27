@@ -10,22 +10,31 @@ interface TestimonialItem {
 }
 interface TestimonialsProps {
   items?: TestimonialItem[];
-const Testimonials: React.FC<TestimonialsProps> = ({ 
-  items = [
-    {
-      name: "Mariangela",
-      role: "Engenheira",
-      text: "Antes, a roupa me vestia. Hoje, eu me visto com intenção. Essa jornada me reconectou com a mulher que sempre fui."
-    },
-      name: "Patrícia Paranhos",
-      role: "Advogada",
-      text: "Aprendi a reconhecer meu valor e refletir isso na forma como me apresento. As pessoas começaram a me enxergar diferente — porque eu estava diferente."
-      name: "Sônia Spier",
-      role: "Terapeuta",
-      text: "Com a Gisele, entendi o poder da linguagem visual. Hoje eu escolho minhas roupas com consciência, propósito e leveza."
-    }
-  ] 
+}
+
+const defaultTestimonials: TestimonialItem[] = [
+  {
+    name: "Mariangela",
+    role: "Engenheira",
+    text: "Antes, a roupa me vestia. Hoje, eu me visto com intenção. Essa jornada me reconectou com a mulher que sempre fui."
+  },
+  {
+    name: "Patrícia Paranhos",
+    role: "Advogada",
+    text: "Aprendi a reconhecer meu valor e refletir isso na forma como me apresento. As pessoas começaram a me enxergar diferente — porque eu estava diferente."
+  },
+  {
+    name: "Sônia Spier",
+    role: "Terapeuta",
+    text: "Com a Gisele, entendi o poder da linguagem visual. Hoje eu escolho minhas roupas com consciência, propósito e leveza."
+  }
+];
+
+const Testimonials: React.FC<TestimonialsProps> = ({
+  items
 }) => {
+  const testimonialsToShow = items || defaultTestimonials;
+
   // Animações para container e itens
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -34,13 +43,20 @@ const Testimonials: React.FC<TestimonialsProps> = ({
       transition: {
         staggerChildren: 0.3
       }
+    }
   };
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
       y: 0,
+      transition: {
         type: "spring",
         stiffness: 100,
         damping: 12
+      }
+    }
+  };
   return (
     <div className="py-10">
       <motion.div
@@ -64,24 +80,24 @@ const Testimonials: React.FC<TestimonialsProps> = ({
           transition={{ duration: 1, delay: 0.3 }}
         />
       </motion.div>
-      
-      <motion.div 
+      <motion.div
         className="grid md:grid-cols-3 gap-6"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
-        {items.map((item, index) => (
+      >
+        {testimonialsToShow.map((item, index) => (
           <motion.div
             key={index}
             variants={itemVariants}
             whileHover={{ y: -5, transition: { duration: 0.3 } }}
           >
-            <Card 
+            <Card
               className="p-8 relative overflow-hidden rounded-xl border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col"
             >
               {/* Elementos decorativos animados */}
-              <motion.div 
+              <motion.div
                 className="absolute top-0 left-0 w-12 h-12"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -89,10 +105,14 @@ const Testimonials: React.FC<TestimonialsProps> = ({
               >
                 <div className="absolute top-2 left-2 w-10 h-10 border-t-2 border-l-2 border-[#B89B7A]/40 rounded-tl-md" />
               </motion.div>
-              
+              <motion.div
                 className="absolute bottom-0 right-0 w-12 h-12"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.8 + (index * 0.2) }}
+              >
                 <div className="absolute bottom-2 right-2 w-10 h-10 border-b-2 border-r-2 border-[#B89B7A]/40 rounded-br-md" />
+              </motion.div>
               <div className="mb-5 text-[#B89B7A]">
                 <motion.div
                   initial={{ rotate: -10, scale: 0.9 }}
@@ -110,9 +130,11 @@ const Testimonials: React.FC<TestimonialsProps> = ({
                 {item.role && (
                   <p className="text-sm text-[#8F7A6A]/70">{item.role}</p>
                 )}
+              </div>
             </Card>
           </motion.div>
         ))}
+      </motion.div>
     </div>
   );
 };

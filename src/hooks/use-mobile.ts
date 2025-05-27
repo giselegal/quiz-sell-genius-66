@@ -13,9 +13,11 @@ export const useIsMobile = () => {
     window.addEventListener('resize', checkMobile);
     return () => {
       window.removeEventListener('resize', checkMobile);
+    };
   }, []);
   return isMobile;
 };
+
 export const useIsLowPerformanceDevice = () => {
   const [isLowPerformance, setIsLowPerformance] = useState(false);
     // Check device memory (if available)
@@ -39,3 +41,4 @@ export const useIsLowPerformanceDevice = () => {
       }
     setIsLowPerformance(false);
   return isLowPerformance;
+};

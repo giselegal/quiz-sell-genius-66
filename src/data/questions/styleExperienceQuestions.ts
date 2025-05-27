@@ -13,25 +13,48 @@ export const styleExperienceQuestions: QuizQuestion[] = [
         text: 'Vendo exemplos visuais e imagens de referência',
         styleCategory: 'Strategic'
       },
+      {
         id: 'strategic-3-2',
         text: 'Lendo guias detalhados com explicações passo-a-passo',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-3-3',
         text: 'Com exemplos práticos que posso aplicar no meu dia-a-dia',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-3-4',
         text: 'Com orientação personalizada para o meu caso específico',
+        styleCategory: 'Strategic'
       }
     ]
   },
+  {
     id: 'strategic-4',
     title: 'O que você mais valoriza em um guia de estilo?',
     // A questão 14 (strategic-4) não deve ter imagem
+    options: [
+      {
         id: 'strategic-4-1',
         text: 'Praticidade e facilidade de aplicação',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-4-2',
         text: 'Exemplos de looks montados para diferentes ocasiões',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-4-3',
         text: 'Explicações detalhadas sobre o porquê das recomendações',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-4-4',
         text: 'Dicas para economizar e aproveitar melhor o que já tenho',
+        styleCategory: 'Strategic'
+      }
+    ]
   }
 ];

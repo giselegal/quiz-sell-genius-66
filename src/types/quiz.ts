@@ -1,4 +1,3 @@
-
 import { UserAnswer } from '../utils/resultsCalculator';
 export interface QuizQuestion {
   id: string;
@@ -10,13 +9,17 @@ export interface QuizQuestion {
   type?: "image" | "text" | "both"; // Restrict to valid types
 }
 export interface QuizOption {
+  id: string;
   text: string;
+  imageUrl?: string;
   stylePoints?: Record<string, number>;
   styleCategory?: string;
   points?: number;
+}
 export interface UserResponse {
   questionId: string;
   selectedOptions: string[];
+}
 export interface QuizContextType {
   currentQuestion: QuizQuestion | null;
   currentQuestionIndex: number;
@@ -30,6 +33,7 @@ export interface QuizContextType {
   handleAnswer: (questionId: string, optionIds: string[]) => void;
   calculateResults: () => void;
   isSubmitted: boolean;
+}
 export interface StyleResult {
   category: string;
   name?: string;
@@ -37,15 +41,18 @@ export interface StyleResult {
   percentage: number; // Added percentage property
   colorPalette?: string[];
   attributes?: string[];
+}
 export interface QuizResult {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
   totalSelections: number;
   userName?: string;
+}
 export interface BlockType {
   type: string;
   content: any;
   settings?: Record<string, any>;
+}
 export interface QuizComponentData {
   style?: any;
   data?: {
@@ -62,3 +69,4 @@ export interface QuizComponentData {
       isSelected?: boolean;
     }>;
   };
+}

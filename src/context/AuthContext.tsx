@@ -18,6 +18,7 @@ interface AuthContextType {
   hasPremiumFeatures: boolean;
   hasFeature: (feature: string) => boolean;
   userPlan: string;
+}
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Definição dos planos e recursos
 const PLAN_FEATURES = {
@@ -69,22 +70,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       userName: name,
       plan: 'PROFESSIONAL', // Por padrão, dar acesso premium para teste
       features: PLAN_FEATURES.PROFESSIONAL
+    };
     if (email) {
       userData.email = email;
       safeLocalStorage.setItem('userEmail', email);
+    }
     // Preservar o status de admin caso exista
+    const savedRole = safeLocalStorage.getItem('userRole');
     if (savedRole) {
       userData.role = savedRole;
+    }
     setUser(userData);
     safeLocalStorage.setItem('userName', name);
     safeLocalStorage.setItem('userPlan', 'PROFESSIONAL');
   };
   const logout = () => {
     setUser(null);
-    safeLocalStorage.removeItem('userName');
-    safeLocalStorage.removeItem('userEmail');
-    safeLocalStorage.removeItem('userRole');
-    safeLocalStorage.removeItem('userPlan');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userPlan');
+    }
+  };
   const hasFeature = useCallback((feature: string) => {
     if (!user) return false;
     return user.features?.includes(feature) || user.features?.includes('all-features') || false;
@@ -98,7 +106,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     checkAdminStatus();
   }, [checkAdminStatus]);
-  const value = {
+  const value: AuthContextType = {
     user,
     login,
     logout,
@@ -107,10 +115,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     hasPremiumFeatures,
     hasFeature,
     userPlan: user?.plan || 'FREE'
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
+}

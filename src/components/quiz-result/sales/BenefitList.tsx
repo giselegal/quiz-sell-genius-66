@@ -9,19 +9,27 @@ interface BenefitItem {
 }
 interface BenefitListProps {
   items?: BenefitItem[];
-const defaultBenefits = [
+}
+
+const defaultBenefits: BenefitItem[] = [
   {
     title: "Peças que revelam sua essência",
     description: "Descobrir as roupas e acessórios que comunicam quem você realmente é, valorizando seu corpo e sua personalidade."
   },
+  {
     title: "Compras com propósito",
     description: "Parar de acumular peças que não combinam e investir no que faz sentido para o seu momento."
+  },
+  {
     title: "Versatilidade sem esforço",
     description: "Criar combinações que expressam quem você é com menos esforço e mais impacto."
+  },
+  {
     title: "Autoconfiança visível",
     description: "Sentir segurança no que veste porque cada escolha tem harmonia com quem você é."
   }
 ];
+
 const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
   const benefitsToShow = items || defaultBenefits;
   
@@ -40,8 +48,12 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
     show: { 
       opacity: 1, 
       x: 0,
+      transition: {
         type: "spring",
         stiffness: 100
+      }
+    }
+  };
   return (
     <Card className="p-8 bg-[#fffaf7] border border-[#B89B7A]/20 shadow-md rounded-xl">
       <motion.h3 
@@ -65,6 +77,8 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
         variants={containerVariants}
         initial="hidden"
         whileInView="show"
+        viewport={{ once: true }}
+      >
         {benefitsToShow.map((benefit, index) => (
           <motion.div 
             key={index} 
@@ -77,6 +91,7 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
             <div>
               <h4 className="font-medium text-[#432818] mb-1 group-hover:text-[#aa6b5d] transition-colors duration-300">{benefit.title}</h4>
               <p className="text-[#6b605a] text-sm leading-relaxed">{benefit.description}</p>
+            </div>
           </motion.div>
         ))}
       </motion.div>

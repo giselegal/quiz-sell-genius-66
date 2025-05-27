@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { optimizeCloudinaryUrl, getResponsiveImageSources, getLowQualityPlaceholder } from '@/utils/imageUtils';
 import { getImageMetadata, isImagePreloaded, getOptimizedImage } from '@/utils/imageManager';
 interface OptimizedImageProps {
   src: string;
@@ -41,11 +40,6 @@ export default function OptimizedImage({
   const [blurredLoaded, setBlurredLoaded] = useState(false);
   // Check if this image has metadata in our image bank
   const imageMetadata = useMemo(() => src ? getImageMetadata(src) : undefined, [src]);
-  // Generate placeholders and optimized URLs only once
-  const placeholderSrc = useMemo(() => {
-    if (!src) return '';
-    return getLowQualityPlaceholder(src);
-  }, [src]);
   // Otimizar URLs do Cloudinary automaticamente
   const optimizedSrc = useMemo(() => {
     
@@ -59,28 +53,17 @@ export default function OptimizedImage({
       height: imgHeight
     });
   }, [src, width, height, imageMetadata]);
-  // Get responsive image attributes if needed
-  const responsiveImageProps = useMemo(() => {
-    if (!src) return { srcSet: '', sizes: '' };
-    if (width && width > 300) {
-      return getResponsiveImageSources(src, [width/2, width, width*1.5]);
-    }
-    return { srcSet: '', sizes: '' };
-  }, [src, width]);
   // For priority images, we check if they're already preloaded and update state accordingly
   useEffect(() => {
-    // Reset states when src changes
     setLoaded(false);
     setBlurredLoaded(false);
     setError(false);
     if (src && priority) {
       if (isImagePreloaded(src)) {
-        // If already preloaded, mark as loaded
         setLoaded(true);
         onLoad?.();
       } else {
-        // Otherwise load it now
-        const img = new Image();
+        const img = new window.Image();
         img.src = optimizedSrc;
         img.onload = () => {
           setLoaded(true);
@@ -88,11 +71,10 @@ export default function OptimizedImage({
         };
         img.onerror = () => setError(true);
       }
-      // Always load the blurred version for smoother transitions
-      const blurImg = new Image();
-      blurImg.src = placeholderSrc;
-      blurImg.onload = () => setBlurredLoaded(true);
-  }, [optimizedSrc, placeholderSrc, priority, src, onLoad]);
+      // Placeholder blur (não implementado sem utilitário)
+      setBlurredLoaded(true);
+    }
+  }, [optimizedSrc, priority, src, onLoad]);
   
   return (
     <div 
@@ -107,11 +89,7 @@ export default function OptimizedImage({
         <>
           {/* Low quality placeholder image */}
           {blurredLoaded && (
-            <img 
-              src={placeholderSrc} 
-              alt="" 
-              width={width} 
-              height={height} 
+            <div 
               className={cn(
                 "absolute inset-0 w-full h-full",
                 objectFit === 'cover' && "object-cover",
@@ -119,7 +97,7 @@ export default function OptimizedImage({
                 objectFit === 'fill' && "object-fill",
                 objectFit === 'none' && "object-none",
                 objectFit === 'scale-down' && "object-scale-down",
-                "blur-xl scale-110" // Blur effect for placeholders
+                "bg-gray-200 animate-pulse" // Cor sólida com efeito de pulso
               )}
               aria-hidden="true"
             />
@@ -138,8 +116,6 @@ export default function OptimizedImage({
         loading={priority ? "eager" : "lazy"}
         decoding={priority ? "sync" : "async"}
         fetchPriority={priority ? "high" : "auto"}
-        srcSet={responsiveImageProps.srcSet || undefined}
-        sizes={responsiveImageProps.sizes || undefined}
         onLoad={() => {
         }}
         onError={() => setError(true)}
@@ -160,5 +136,7 @@ export default function OptimizedImage({
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded">
           <span className="text-sm text-gray-500">Imagem não disponível</span>
         </div>
+      )}
     </div>
   );
+};

@@ -13,25 +13,48 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
         text: 'Sim, já pesquisei mas não cheguei a comprar',
         styleCategory: 'Strategic'
       },
+      {
         id: 'strategic-5-2',
         text: 'Sim, já investi em algum curso/guia/consultoria',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-5-3',
         text: 'Não, esta é a primeira vez que considero isso',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-5-4',
         text: 'Prefiro não responder',
+        styleCategory: 'Strategic'
       }
     ]
   },
+  {
     id: 'strategic-6',
     title: 'Quanto você estaria disposta a investir em um guia completo de estilo personalizado?',
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp',
+    options: [
+      {
         id: 'strategic-6-1',
         text: 'Menos de R$100',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-6-2',
         text: 'Entre R$100 e R$300',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-6-3',
         text: 'Entre R$300 e R$500',
+        styleCategory: 'Strategic'
+      },
+      {
         id: 'strategic-6-4',
         text: 'Mais de R$500',
+        styleCategory: 'Strategic'
+      }
+    ]
   }
 ];

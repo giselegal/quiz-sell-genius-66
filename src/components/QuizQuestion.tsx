@@ -18,7 +18,7 @@ interface QuizQuestionProps {
   showQuestionImage?: boolean;
   isStrategicQuestion?: boolean; // Nova prop
 }
-const QuizQuestion: React.FC<QuizQuestionProps> = ({
+const QuizQuestionComponent: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
   currentAnswers,
@@ -58,9 +58,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   
   const getGridColumns = () => {
     if (question.type === 'text') {
-        return "grid-cols-1 gap-3 px-2";
-      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
-    return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
+      return "grid-cols-1 gap-3 px-2";
+    }
+    if (isMobile) {
+      return "grid-cols-1 gap-3 px-2";
+    }
+    return "grid-cols-2 gap-3 px-2";
+  }
   return (
     <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
       isMobile && "px-2", 
@@ -107,7 +111,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             option={option} 
             isSelected={currentAnswers.includes(option.id)} 
             onSelect={handleOptionSelect}
-            type={question.type}
+            type={(question.type as 'text' | 'image' | 'both') || 'text'}
             questionId={question.id}
             isDisabled={
               (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
@@ -122,4 +126,4 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   );
 };
 
-export default QuizQuestion;
+export { QuizQuestionComponent as QuizQuestion };
