@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useUniversalNavigation } from '../hooks/useUniversalNavigation';
 
 type QuestionOption = {
   id: string;
