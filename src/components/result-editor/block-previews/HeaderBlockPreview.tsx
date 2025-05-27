@@ -1,5 +1,6 @@
 
 import React from 'react';
+
 interface HeaderBlockPreviewProps {
   content: {
     title?: string;
@@ -11,12 +12,15 @@ interface HeaderBlockPreviewProps {
     style?: any;
   };
 }
+
 const HeaderBlockPreview: React.FC<HeaderBlockPreviewProps> = ({ content }) => {
   const logoStyle = {
     width: content.logoWidth || 'auto',
     height: content.logoHeight || 'auto',
     maxWidth: '100%',
-    objectFit: 'contain' as 'contain' // Type assertion to ObjectFit
+    objectFit: 'contain' as const
+  };
+
   return (
     <div style={content.style} className="text-center">
       {content.logo && (
@@ -32,9 +36,13 @@ const HeaderBlockPreview: React.FC<HeaderBlockPreviewProps> = ({ content }) => {
         <h1 className="text-xl md:text-2xl font-semibold text-[#432818] mb-2">
           {content.title}
         </h1>
+      )}
+
       {content.subtitle && (
         <p className="text-[#8F7A6A]">{content.subtitle}</p>
+      )}
     </div>
   );
 };
+
 export default HeaderBlockPreview;
