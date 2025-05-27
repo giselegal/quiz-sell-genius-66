@@ -1,59 +1,59 @@
-"use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { optimizeCloudinaryUrl } from '@/utils/imageManager';
+import React, { useState, useCallback } from 'react';
+
 interface OptimizedImageV2Props {
   src: string;
   alt: string;
+  className?: string;
   width?: number;
   height?: number;
+  loading?: 'lazy' | 'eager';
+  onLoad?: () => void;
   quality?: number;
-  className?: string;
-  placeholder?: string;
 }
-const OptimizedImageV2: React.FC<OptimizedImageV2Props> = ({
+
+export const OptimizedImageV2: React.FC<OptimizedImageV2Props> = ({
   src,
   alt,
-  width = 400,
-  height = 300,
-  quality = 75,
   className = '',
-  placeholder
+  width,
+  height,
+  loading = 'lazy',
+  onLoad,
+  quality = 85
 }) => {
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
-  useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      setLoaded(true);
-    };
-    img.onerror = () => {
-      setError(true);
-  }, [src]);
-  const optimizedSrc = useMemo(() => {
-    if (!src) return '';
-    
-    // Use optimizeCloudinaryUrl with correct single parameter
-    return optimizeCloudinaryUrl(src, { quality, width, height });
-  }, [src, width, height, quality]);
-  if (error) {
-    return <div className="text-red-500">Failed to load image</div>;
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+    onLoad?.();
+  }, [onLoad]);
+
+  const handleError = useCallback(() => {
+    setHasError(true);
+  }, []);
+
+  if (hasError) {
+    return (
+      <div className={`bg-gray-200 flex items-center justify-center ${className}`}>
+        <span className="text-gray-500">Image not available</span>
+      </div>
+    );
   }
+
+  const optimizedSrc = `${src}?q=${quality}&f=auto${width ? `&w=${width}` : ''}`;
+
   return (
     <img
       src={optimizedSrc}
       alt={alt}
       width={width}
       height={height}
-      className={className}
-      style={{
-        opacity: loaded ? 1 : 0,
-        transition: 'opacity 0.3s ease-in-out',
-        objectFit: 'cover',
-        backgroundColor: placeholder || '#f2f2f2',
-      }}
+      loading={loading}
+      onLoad={handleLoad}
+      onError={handleError}
+      className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
     />
   );
 };
-export default OptimizedImageV2;
