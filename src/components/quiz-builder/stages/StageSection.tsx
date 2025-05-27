@@ -1,94 +1,105 @@
 
 import React from 'react';
-import { QuizStage } from '@/types/quizBuilder';
+import { QuizStage, QuizComponentData } from '@/types/quizBuilder';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Eye, Edit, Trash2, Plus } from 'lucide-react';
+
 interface StageSectionProps {
-  title: string;
-  isExpanded: boolean;
-  stages: QuizStage[];
-  activeStageId: string | null;
-  onToggle: () => void;
-  onStageSelect: (id: string) => void;
-  onStageEdit: (id: string) => void;
-  onStageDelete: (id: string) => void;
+  stage: QuizStage;
+  components: QuizComponentData[];
+  isActive: boolean;
+  onSelect: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  onAddComponent: () => void;
 }
-const StageItem = ({ stage, isActive, onSelect, onEdit, onDelete }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: stage.id
-  });
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition
+
+const StageSection: React.FC<StageSectionProps> = ({
+  stage,
+  components,
+  isActive,
+  onSelect,
+  onEdit,
+  onDelete,
+  onAddComponent
+}) => {
+  const getStageTypeBadge = (type: string) => {
+    const variants = {
+      cover: 'default',
+      question: 'secondary',
+      result: 'outline',
+      strategic: 'destructive'
+    } as const;
+    
+    const labels = {
+      cover: 'Capa',
+      question: 'Pergunta',
+      result: 'Resultado',
+      strategic: 'Estratégica'
+    };
+
+    return (
+      <Badge variant={variants[type as keyof typeof variants] || 'default'}>
+        {labels[type as keyof typeof labels] || type}
+      </Badge>
+    );
   };
-  const getStageIcon = () => {
-    switch (stage.type) {
-      case 'cover':
-        return '📖';
-      case 'question':
-        return '❓';
-      case 'result':
-        return '🏆';
-      case 'strategic':
-        return '🎯';
-      default:
-        return '📄';
-    }
+
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className={cn(
-        'flex items-center gap-2 p-2 rounded-md cursor-pointer',
-        isActive ? 'bg-[#9b87f5] text-white' : 'hover:bg-[#333333]'
-      )}
-      onClick={() => onSelect(stage.id)}
-    >
-      <span className="text-base">{getStageIcon()}</span>
-      <span className="flex-1 truncate">
-        {stage.title || `Etapa ${stage.order + 1}`}
-      </span>
-    </div>
+    <Card className={`cursor-pointer transition-all ${isActive ? 'ring-2 ring-[#B89B7A]' : ''}`}>
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm font-medium">
+            {stage.title || `Etapa ${stage.order + 1}`}
+          </CardTitle>
+          {getStageTypeBadge(stage.type)}
+        </div>
+      </CardHeader>
+      
+      <CardContent className="space-y-3">
+        <div className="text-xs text-muted-foreground">
+          {components.length} componente{components.length !== 1 ? 's' : ''}
+        </div>
+        
+        <div className="flex gap-1">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onSelect}
+            className="h-8 px-2"
+          >
+            <Eye className="h-3 w-3" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onEdit}
+            className="h-8 px-2"
+          >
+            <Edit className="h-3 w-3" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onAddComponent}
+            className="h-8 px-2"
+          >
+            <Plus className="h-3 w-3" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onDelete}
+            className="h-8 px-2 text-red-500 hover:text-red-700"
+          >
+            <Trash2 className="h-3 w-3" />
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
-export const StageSection: React.FC<StageSectionProps> = ({
-  title,
-  isExpanded,
-  stages,
-  activeStageId,
-  onToggle,
-  onStageSelect,
-  onStageEdit,
-  onStageDelete
-}) => {
-    <div className="mb-4">
-      <Button
-        variant="ghost"
-        className="w-full flex items-center justify-between p-2 text-white hover:bg-[#333333]"
-        onClick={onToggle}
-      >
-        <span className="font-medium">{title}</span>
-        {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-      </Button>
-      {isExpanded && (
-        <div className="ml-2 mt-1 space-y-1">
-          {stages.length === 0 ? (
-            <p className="text-sm text-gray-400 p-2">Nenhuma etapa criada</p>
-          ) : (
-            stages.map((stage) => (
-              <StageItem
-                key={stage.id}
-                stage={stage}
-                isActive={stage.id === activeStageId}
-                onSelect={onStageSelect}
-                onEdit={onStageEdit}
-                onDelete={onStageDelete}
-              />
-            ))
-          )}
-        </div>
+
+export default StageSection;
