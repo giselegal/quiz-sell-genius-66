@@ -51,7 +51,7 @@ export default function QuizFlow() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, QuestionOption>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const { navigate } = useUniversalNavigation();
 
   const handleOptionClick = (option: QuestionOption) => {
     // Salva a resposta selecionada

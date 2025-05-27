@@ -1,9 +1,8 @@
 
 "use client";
 import React, { useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
 import { 
   BarChart, 
   Edit, 
@@ -33,13 +32,12 @@ const QuizOfferPageVisualEditor = React.lazy(() => import('@/components/visual-e
 
 const OldAdminDashboard = () => {
   const { user } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
+  const { navigate } = useUniversalNavigation();
   const [activeTab, setActiveTab] = useState('dashboard');
 
   // Determinar qual aba está ativa baseado na URL
   React.useEffect(() => {
-    const path = pathname;
+    const path = window.location.pathname;
     if (path.includes('/visual-editor')) setActiveTab('visual-editor');
     else if (path.includes('/editor')) setActiveTab('editor');
     else if (path.includes('/settings')) setActiveTab('settings');
@@ -48,7 +46,7 @@ const OldAdminDashboard = () => {
     else if (path.includes('/offer-editor')) setActiveTab('offer-editor');
     else if (path.includes('/prototype')) setActiveTab('prototype');
     else setActiveTab('dashboard');
-  }, [pathname]);
+  }, []);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -60,19 +58,22 @@ const OldAdminDashboard = () => {
       <header className="bg-white border-b px-6 py-3 shadow-sm">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <Link href="/admin" className="text-xl font-bold text-[#432818]">
+            <button 
+              onClick={() => navigate('/admin')} 
+              className="text-xl font-bold text-[#432818] hover:underline cursor-pointer"
+            >
               Dashboard Administrativo
-            </Link>
+            </button>
             <div className="text-sm text-[#8F7A6A] hidden md:block">
               Central de controle administrativo
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/admin/new">
+            <button onClick={() => navigate('/admin/new')}>
               <Button variant="outline" size="sm">
                 Novo Dashboard
               </Button>
-            </Link>
+            </button>
             {user && (
               <div className="flex items-center gap-3">
                 <div className="text-sm text-[#8F7A6A]">
@@ -140,7 +141,12 @@ const OldAdminDashboard = () => {
                   </div>
                   <p className="text-amber-700 text-sm mt-1">
                     Esta é a interface principal do dashboard. Para uma experiência alternativa, 
-                    <Link href="/admin/new" className="underline font-medium ml-1">acesse o novo dashboard</Link>.
+                    <button 
+                      onClick={() => navigate('/admin/new')} 
+                      className="underline font-medium ml-1 hover:text-amber-800 cursor-pointer"
+                    >
+                      acesse o novo dashboard
+                    </button>.
                   </p>
                 </div>
               </div>
@@ -308,6 +314,20 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   linkTo,
   isExternal = false
 }) => {
+  const { navigate } = useUniversalNavigation();
+  
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else if (linkTo) {
+      if (isExternal || linkTo.startsWith('http')) {
+        window.open(linkTo, '_blank', 'noopener,noreferrer');
+      } else {
+        navigate(linkTo);
+      }
+    }
+  };
+
   const cardContent = (
     <Card className="hover:shadow-lg transition-shadow cursor-pointer border border-[#B89B7A]/20">
       <CardHeader>
@@ -321,7 +341,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
       </CardHeader>
       <CardContent>
         <Button 
-          onClick={onClick}
+          onClick={handleClick}
           className="w-full bg-[#B89B7A] text-white hover:bg-[#8F7A6A] transition-colors"
         >
           {buttonText}
@@ -330,14 +350,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
       </CardContent>
     </Card>
   );
-
-  if (linkTo && isExternal) {
-    return (
-      <Link href={linkTo} target={linkTo.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer">
-        {cardContent}
-      </Link>
-    );
-  }
 
   return cardContent;
 };
