@@ -34,42 +34,29 @@ export default function EditQuizPage() {
     url.searchParams.set('tab', activeTab);
     window.history.replaceState({}, '', url.toString());
   }, [activeTab]);
+
   const handleSave = async (config: any, mode: string) => {
     setIsLoading(true);
     try {
       const response = await fetch(`/api/quiz/${quizId}/config`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...config, mode }),
       });
-      if (response.ok) {
-        console.log(`Configuração de ${mode} salva com sucesso!`);
-        setSavedConfigs(prev => ({ ...prev, [mode]: config }));
-        
-        // Notificação de sucesso
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
-        notification.textContent = `${mode.toUpperCase()} salvo com sucesso!`;
-        document.body.appendChild(notification);
-        setTimeout(() => {
-          document.body.removeChild(notification);
-        }, 3000);
-      } else {
-        throw new Error(`Erro ao salvar configuração de ${mode}`);
-      }
+      if (!response.ok) throw new Error(`Erro ao salvar configuração de ${mode}`);
+      setSavedConfigs(prev => ({ ...prev, [mode]: config }));
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+      notification.textContent = `${mode.toUpperCase()} salvo com sucesso!`;
+      document.body.appendChild(notification);
+      setTimeout(() => document.body.removeChild(notification), 3000);
     } catch (error) {
       console.error('Erro:', error);
-      
-      // Notificação de erro
       const notification = document.createElement('div');
       notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
       notification.textContent = `Erro ao salvar ${mode}`;
       document.body.appendChild(notification);
-      setTimeout(() => {
-        document.body.removeChild(notification);
-      }, 3000);
+      setTimeout(() => document.body.removeChild(notification), 3000);
     } finally {
       setIsLoading(false);
     }
