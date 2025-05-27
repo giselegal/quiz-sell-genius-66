@@ -1,44 +1,51 @@
 
-import { QuizTemplate } from '@/types/quizTemplate';
-import { clothingQuestions } from '@/data/questions/clothingQuestions';
-import { personalityQuestions } from '@/data/questions/personalityQuestions';
-import { accessoriesQuestions } from '@/data/questions/accessoriesQuestions';
-import { strategicQuestions } from '@/data/strategicQuestions';
-// Template padrão para quiz de estilo pessoal
-export const styleQuizTemplate: QuizTemplate = {
-  id: 'style-quiz-default',
-  name: 'Quiz de Estilo Pessoal',
-  description: 'Quiz completo para descobrir o estilo pessoal predominante.',
+export const styleQuizTemplate = {
+  id: 'style-quiz-template',
+  name: 'Quiz de Estilo',
+  description: 'Template para quiz de descoberta de estilo pessoal',
   questions: [
-    ...clothingQuestions,
-    ...personalityQuestions,
-    ...accessoriesQuestions,
-    ...strategicQuestions
-  ],
-  resultPageSettings: {
-    styleType: 'default',
-    blocks: [],
-    headerConfig: {
-      title: 'Seu Resultado de Estilo Pessoal',
-      subtitle: 'Descubra como valorizar seu estilo único'
+    {
+      id: 'q1',
+      text: 'Qual dessas peças você usaria em um encontro especial?',
+      type: 'multiple-choice',
+      options: [
+        { id: 'o1', text: 'Vestido clássico preto', value: 'classico', image: '/images/dress-classic.jpg' },
+        { id: 'o2', text: 'Look moderno e estruturado', value: 'moderno', image: '/images/look-modern.jpg' },
+        { id: 'o3', text: 'Peças fluidas e naturais', value: 'natural', image: '/images/look-natural.jpg' },
+        { id: 'o4', text: 'Conjunto elegante e sofisticado', value: 'elegante', image: '/images/look-elegant.jpg' }
+      ]
     },
-    mainContentConfig: {
-      description: 'Seu estilo predominante reflete sua personalidade e preferências únicas. Use essas informações para criar looks que expressem quem você é.',
-      customImage: '/styles/default-style.jpg'
-    offerConfig: {
-      title: 'Aprimore seu Estilo',
-      subtitle: 'Consultoria personalizada para valorizar suas características',
-      buttonText: 'Quero Saber Mais',
-      buttonUrl: '#oferta',
-      benefits: [
-        'Análise completa do seu perfil de estilo',
-        'Sugestões de peças que valorizam seu tipo físico',
-        'Paleta de cores personalizada',
-        'E-book com dicas específicas para seu estilo'
+    {
+      id: 'q2',
+      text: 'Qual ambiente reflete melhor sua personalidade?',
+      type: 'multiple-choice',
+      options: [
+        { id: 'o5', text: 'Casa aconchegante com elementos naturais', value: 'natural' },
+        { id: 'o6', text: 'Apartamento moderno e minimalista', value: 'moderno' },
+        { id: 'o7', text: 'Espaço clássico e atemporal', value: 'classico' },
+        { id: 'o8', text: 'Ambiente sofisticado e luxuoso', value: 'elegante' }
       ]
     }
+  ],
+  styles: {
+    primaryColor: '#B89B7A',
+    secondaryColor: '#432818',
+    backgroundColor: '#FAF9F7',
+    textColor: '#432818',
+    fontFamily: 'Playfair Display, serif'
   },
-  isPublished: true,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString()
+  results: [
+    {
+      id: 'natural',
+      name: 'Natural',
+      description: 'Você tem um estilo autêntico e conectado com a natureza',
+      characteristics: ['Autenticidade', 'Simplicidade', 'Conforto', 'Naturalidade']
+    },
+    {
+      id: 'classico',
+      name: 'Clássico',
+      description: 'Seu estilo é atemporal e sempre elegante',
+      characteristics: ['Atemporalidade', 'Elegância', 'Sofisticação', 'Tradição']
+    }
+  ]
 };
