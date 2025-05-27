@@ -70,7 +70,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
 
   return (
     <main
-      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-white to-gray-50 py-8"
+      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-white to-gray-50 py-8 quiz-intro-transition"
       data-section="intro"
     >
       <a 

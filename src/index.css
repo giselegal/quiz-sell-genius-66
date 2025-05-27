@@ -8,15 +8,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Melhorar performance desativando todas as animações não críticas */
+/* Melhorar performance desativando algumas animações não críticas */
 * {
   will-change: auto !important;
-  transition: none !important; /* Desativar todas as transições por padrão */
 }
 
-/* Permitir apenas animações realmente essenciais */
-.critical-animation {
-  transition: opacity 300ms ease-in-out !important;
+/* Permitir transições essenciais para UX */
+.critical-animation,
+.quiz-transition,
+.quiz-question-transition,
+button,
+.btn-hover-effect,
+input,
+.quiz-option {
+  transition: all 300ms ease-in-out !important;
+}
+
+/* Desabilitar apenas animações pesadas desnecessárias */
+.no-transition {
+  transition: none !important;
 }
 
 /* Desabilitar efeitos hover de escala para melhorar performance */
