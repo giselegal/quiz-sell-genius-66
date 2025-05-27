@@ -21,6 +21,10 @@ const ResultPage = loadable(() => import('./components/ResultPage'), {
   fallback: <div className="flex h-screen w-full items-center justify-center">Carregando resultados...</div>
 });
 
+const QuizOfferPage = loadable(() => import('./pages/QuizOfferPage'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando oferta...</div>
+});
+
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
@@ -32,6 +36,8 @@ function App() {
             {/* Rota para a página de resultados */}
             <Route path="/resultado" element={<ResultPage />} />
             <Route path="/resultado/:id" element={<ResultPage />} />
+            {/* Rota para página de oferta/venda */}
+            <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
             {/* Rotas administrativas aninhadas */}
             <Route path="/admin" element={<AdminLayout />}>
               {/* Dashboard padrão do admin */}
@@ -45,6 +51,8 @@ function App() {
               <Route path="editor" element={<EditorPage />} />
               <Route path="editor/:id" element={<EditorPage />} />
             </Route>
+            {/* Rota de fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
         <Toaster />
