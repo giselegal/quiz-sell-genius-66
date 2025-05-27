@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Plus, Trash2 } from 'lucide-react';
 import { QuizStage } from '@/types/quizBuilder';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+
 interface StageListProps {
   stages: QuizStage[];
   activeStageId: string | null;
@@ -15,6 +16,7 @@ interface StageListProps {
   onStageDelete: (id: string) => void;
   onStageMove: (sourceId: string, targetId: string) => void;
 }
+
 export const StageList: React.FC<StageListProps> = ({
   stages,
   activeStageId,
@@ -27,7 +29,8 @@ export const StageList: React.FC<StageListProps> = ({
   const handleTitleChange = (id: string, title: string) => {
     onStageUpdate(id, { title });
   };
-  const handleDragEnd = (result) => {
+
+  const handleDragEnd = (result: any) => {
     if (!result.destination) return;
     
     const sourceId = stages[result.source.index].id;
@@ -35,7 +38,10 @@ export const StageList: React.FC<StageListProps> = ({
     if (sourceId !== destinationId) {
       onStageMove(sourceId, destinationId);
     }
+  };
+
   const sortedStages = [...stages].sort((a, b) => a.order - b.order);
+
   return (
     <div className="space-y-4">
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -86,6 +92,7 @@ export const StageList: React.FC<StageListProps> = ({
           )}
         </Droppable>
       </DragDropContext>
+      
       <div className="grid grid-cols-2 gap-2 pt-2">
         <Button
           variant="outline"
@@ -95,8 +102,14 @@ export const StageList: React.FC<StageListProps> = ({
         >
           <Plus className="h-4 w-4 mr-2" /> Pergunta
         </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full"
           onClick={() => onStageAdd('result')}
+        >
           <Plus className="h-4 w-4 mr-2" /> Resultado
+        </Button>
       </div>
     </div>
   );

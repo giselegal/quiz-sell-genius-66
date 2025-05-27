@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+
 interface QuizResultComponentProps {
   data: {
     primaryStyleTitle?: string;
@@ -14,8 +15,11 @@ interface QuizResultComponentProps {
     backgroundColor?: string;
     textColor?: string;
     accentColor?: string;
+    [key: string]: any;
+  };
   isSelected?: boolean;
 }
+
 const QuizResultComponent: React.FC<QuizResultComponentProps> = ({ data, style, isSelected }) => {
   const accentColor = style?.accentColor || '#B89B7A';
   
@@ -48,6 +52,7 @@ const QuizResultComponent: React.FC<QuizResultComponentProps> = ({ data, style, 
           <p className="mt-3 text-gray-600">
             Você se destaca pela sofisticação e refinamento em suas escolhas.
           </p>
+        )}
       </div>
       
       <div className="mt-8">
@@ -63,7 +68,10 @@ const QuizResultComponent: React.FC<QuizResultComponentProps> = ({ data, style, 
               )}
             </div>
           ))}
+        </div>
+      </div>
     </div>
   );
 };
+
 export default QuizResultComponent;

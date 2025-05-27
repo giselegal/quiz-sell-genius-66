@@ -3,11 +3,13 @@ import React from 'react';
 import { QuizComponentData } from '@/types/quizBuilder';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+
 interface StageCoverComponentProps {
   data: QuizComponentData['data'];
   style: QuizComponentData['style'];
   isSelected: boolean;
 }
+
 const StageCoverComponent: React.FC<StageCoverComponentProps> = ({ data, style, isSelected }) => {
   return (
     <div 
@@ -30,6 +32,7 @@ const StageCoverComponent: React.FC<StageCoverComponentProps> = ({ data, style, 
             className="max-w-full mx-auto rounded-lg shadow-lg max-h-64 object-cover"
           />
         </div>
+      )}
       
       <h1 className="text-3xl md:text-4xl font-playfair mb-3">
         {data.title || 'Quiz de Estilo Pessoal'}
@@ -48,4 +51,5 @@ const StageCoverComponent: React.FC<StageCoverComponentProps> = ({ data, style, 
     </div>
   );
 };
+
 export default StageCoverComponent;
