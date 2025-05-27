@@ -1,63 +1,51 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { EditableContent } from '@/types/editor';
-import { Trash2 } from 'lucide-react';
+import { X } from 'lucide-react';
+
 interface PropertiesPanelProps {
   selectedComponentId: string | null;
   onClose: () => void;
-  onUpdate: (content: Partial<EditableContent>) => void;
+  onUpdate: (content: any) => void;
   onDelete: () => void;
 }
+
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   selectedComponentId,
   onClose,
   onUpdate,
-  onDelete,
+  onDelete
 }) => {
   if (!selectedComponentId) {
     return (
-      <div className="p-4 text-center text-[#432818]/60">
-        Selecione um componente para editar suas propriedades
+      <div className="h-full bg-white border-l border-[#B89B7A]/20 p-4">
+        <div className="text-center text-[#8F7A6A]">
+          <p>Selecione um componente para editar</p>
+        </div>
       </div>
     );
   }
+
   return (
-    <div className="h-full p-4 space-y-4 bg-white">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium text-[#432818]">Propriedades</h3>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-red-500"
-          onClick={onDelete}
-        >
-          <Trash2 className="w-4 h-4" />
-        </Button>
-      <Card className="p-4 space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="title">Título</Label>
-          <Input
-            id="title"
-            placeholder="Digite o título"
-            onChange={(e) => onUpdate({ title: e.target.value })}
-          />
+    <div className="h-full bg-white border-l border-[#B89B7A]/20 flex flex-col">
+      <div className="border-b border-[#B89B7A]/20 p-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-medium text-[#432818]">Propriedades</h3>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+          >
+            <X className="w-4 h-4" />
+          </Button>
         </div>
-          <Label htmlFor="subtitle">Subtítulo</Label>
-            id="subtitle"
-            placeholder="Digite o subtítulo"
-            onChange={(e) => onUpdate({ subtitle: e.target.value })}
-          <Label htmlFor="text">Texto</Label>
-          <Textarea
-            id="text"
-            placeholder="Digite o texto"
-            className="min-h-[100px]"
-            onChange={(e) => onUpdate({ text: e.target.value })}
-      </Card>
+      </div>
+
+      <div className="flex-1 p-4">
+        <div className="text-center text-[#8F7A6A]">
+          <p>Painel de propriedades em desenvolvimento</p>
+        </div>
+      </div>
     </div>
   );
 };

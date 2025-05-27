@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -6,12 +7,14 @@ import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Button } from '@/components/ui/button';
 import { Monitor, Smartphone, Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
 interface ResultPagePreviewProps {
   primaryStyle: StyleResult;
   config: ResultPageConfig;
   onSectionSelect: (sectionId: string) => void;
   selectedSection: string | null;
 }
+
 export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
   primaryStyle,
   config,
@@ -20,6 +23,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
 }) => {
   const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
   const [isPreviewing, setIsPreviewing] = React.useState(false);
+
   return (
     <div className="h-full flex flex-col bg-[#FAF9F7]">
       {/* Preview Toolbar */}
@@ -34,10 +38,15 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
             <Monitor className="w-4 h-4 mr-2" />
             Desktop
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setViewMode('mobile')}
             className={viewMode === 'mobile' ? 'bg-[#FAF9F7]' : ''}
+          >
             <Smartphone className="w-4 h-4 mr-2" />
             Mobile
+          </Button>
         </div>
         <Button
           variant="outline"
@@ -48,6 +57,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
           {isPreviewing ? 'Editar' : 'Visualizar'}
         </Button>
       </div>
+
       {/* Preview Content */}
       <div className={cn(
         "flex-1 overflow-auto p-8",
@@ -63,18 +73,41 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
               !isPreviewing && !selectedSection && "border-[#B89B7A]/20"
             )}
             onClick={() => !isPreviewing && onSectionSelect('header')}
+          >
             <h1 className="text-2xl font-playfair text-center text-[#432818]">
               {config.header.content.title || 'Seu Resultado'}
             </h1>
           </section>
+
           {/* Main Content Section */}
+          <section
+            className={cn(
+              "p-6 bg-white rounded-lg border-2",
+              !isPreviewing && "border-dashed cursor-pointer hover:bg-[#FAF9F7]",
               !isPreviewing && selectedSection === 'mainContent' && "border-[#B89B7A]",
+              !isPreviewing && !selectedSection && "border-[#B89B7A]/20"
+            )}
             onClick={() => !isPreviewing && onSectionSelect('mainContent')}
+          >
             {/* Style preview content */}
+            <p>Conteúdo principal da página de resultado</p>
+          </section>
+
           {/* Sales Offer Section */}
+          <section
+            className={cn(
+              "p-6 bg-white rounded-lg border-2",
+              !isPreviewing && "border-dashed cursor-pointer hover:bg-[#FAF9F7]",
               !isPreviewing && selectedSection === 'offer' && "border-[#B89B7A]",
+              !isPreviewing && !selectedSection && "border-[#B89B7A]/20"
+            )}
             onClick={() => !isPreviewing && onSectionSelect('offer')}
+          >
             {/* Offer content preview */}
+            <p>Seção de oferta</p>
+          </section>
+        </div>
+      </div>
     </div>
   );
 };

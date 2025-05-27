@@ -1,90 +1,79 @@
 
 import React from 'react';
-import { X } from 'lucide-react';
+import { EditorBlock } from '@/types/editor';
 import { Button } from '@/components/ui/button';
-import { EditorBlock, EditableContent } from '@/types/editor';
-import { StyleControls } from '@/components/editor/controls/StyleControls';
+import { X, Trash2 } from 'lucide-react';
+import { EditBlockContent } from '../EditBlockContent';
+
 interface PropertiesPanelProps {
   selectedComponentId: string | null;
   onClose: () => void;
-  onUpdate?: (content: Partial<EditableContent>) => void;
-  onDelete?: () => void;
-  blocks?: EditorBlock[];
+  blocks: EditorBlock[];
+  onUpdate: (content: any) => void;
+  onDelete: () => void;
 }
-const PropertiesPanel = ({ 
-  selectedComponentId, 
-  onClose, 
+
+const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
+  selectedComponentId,
+  onClose,
+  blocks,
   onUpdate,
-  onDelete,
-  blocks 
-}: PropertiesPanelProps) => {
-  const selectedBlock = blocks?.find(block => block.id === selectedComponentId);
-  if (!selectedComponentId || !selectedBlock) {
+  onDelete
+}) => {
+  const selectedBlock = blocks.find(block => block.id === selectedComponentId);
+
+  if (!selectedBlock) {
     return (
-      <div className="h-full p-4 bg-white">
-        <div className="flex justify-between items-center border-b pb-4 mb-4">
-          <h2 className="text-lg font-playfair text-[#432818]">Propriedades</h2>
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            <X className="w-4 h-4" />
-          </Button>
+      <div className="h-full bg-white border-l border-[#B89B7A]/20 p-4">
+        <div className="text-center text-[#8F7A6A]">
+          <p>Selecione um componente para editar</p>
         </div>
-        <div className="flex flex-col items-center justify-center h-64 text-[#8F7A6A] text-sm">
-          <p>Selecione um componente para editar suas propriedades</p>
       </div>
     );
   }
+
   return (
-    <div className="h-full p-4 bg-white overflow-y-auto">
-      <div className="flex justify-between items-center border-b pb-4 mb-4">
-        <h2 className="text-lg font-playfair text-[#432818]">Propriedades</h2>
-        <Button variant="ghost" size="sm" onClick={onClose}>
-          <X className="w-4 h-4" />
-        </Button>
-      
-      <div className="space-y-6">
-        {/* Content Properties */}
-        <div className="space-y-4">
-          <h3 className="text-sm font-medium text-[#432818]">Conteúdo</h3>
-          {selectedBlock.type === 'image' && (
-            <>
-              <div>
-                <label className="text-sm text-[#8F7A6A]">URL da Imagem</label>
-                <input 
-                  type="text"
-                  className="w-full mt-1 p-2 border rounded"
-                  value={selectedBlock.content.imageUrl || ''}
-                  onChange={(e) => onUpdate?.({ imageUrl: e.target.value })}
-                  placeholder="https://exemplo.com/imagem.jpg"
-                />
-              </div>
-                <label className="text-sm text-[#8F7A6A]">Texto Alternativo</label>
-                <input
-                  value={selectedBlock.content.imageAlt || ''}
-                  onChange={(e) => onUpdate?.({ imageAlt: e.target.value })}
-                  placeholder="Descrição da imagem"
-            </>
-          )}
-        {/* Style Properties */}
-          <h3 className="text-sm font-medium text-[#432818]">Estilos</h3>
-          <StyleControls
-            style={selectedBlock.content.style || {}}
-            onUpdate={(newStyle) => {
-              onUpdate?.({
-                ...selectedBlock.content,
-                style: newStyle
-              });
-            }}
-          />
-        {/* Delete button */}
-        <div className="pt-4 border-t">
-          <Button 
-            variant="destructive" 
-            size="sm" 
-            className="w-full"
-            onClick={onDelete}
+    <div className="h-full bg-white border-l border-[#B89B7A]/20 flex flex-col">
+      <div className="border-b border-[#B89B7A]/20 p-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-medium text-[#432818]">Propriedades</h3>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
           >
-            Excluir Componente
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex-1 p-4 overflow-y-auto">
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm text-[#8F7A6A]">Tipo de Bloco</label>
+            <p className="font-medium text-[#432818] capitalize">{selectedBlock.type}</p>
+          </div>
+
+          <EditBlockContent
+            block={selectedBlock}
+            onUpdate={onUpdate}
+          />
+        </div>
+      </div>
+
+      <div className="border-t border-[#B89B7A]/20 p-4">
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={onDelete}
+          className="w-full"
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Excluir Bloco
+        </Button>
+      </div>
     </div>
   );
 };
+
 export default PropertiesPanel;
