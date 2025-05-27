@@ -4,10 +4,10 @@ import React from 'react';
 import QuizResult from '@/components/QuizResult';
 import { QuizOfferHero } from '@/components/quiz-offer/QuizOfferHero';
 import { QuizOfferCTA } from '@/components/quiz-offer/QuizOfferCTA';
-import { useRouter } from 'next/navigation';
+import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
 
 export default function ResultPage() {
-  const router = useRouter();
+  const { navigate } = useUniversalNavigation();
 
   // Mock result data - em app real viria do quiz state
   const mockResult = {

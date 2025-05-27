@@ -3,7 +3,7 @@
 import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { useToast } from "@/components/ui/use-toast";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
 import { ABTest, ABTestVariation } from '@/hooks/useABTest';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -20,7 +20,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 
 const ABTestManagerPage: React.FC = (): JSX.Element => {
-  const router = useRouter();
+  const { navigate } = useUniversalNavigation();
   const { toast } = useToast();
   const [tests, setTests] = useState<ABTest[]>([]);
   const [selectedTest, setSelectedTest] = useState<ABTest | null>(null);
@@ -298,7 +298,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
   return (
     <div className="container mx-auto p-6">
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="outline" size="sm" onClick={() => router.push('/admin')}>
+        <Button variant="outline" size="sm" onClick={() => navigate('/admin')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar
         </Button>

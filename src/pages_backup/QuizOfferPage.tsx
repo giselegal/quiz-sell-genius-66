@@ -3,14 +3,14 @@
 import React from 'react';
 import { QuizOfferHero } from '@/components/quiz-offer/QuizOfferHero';
 import { QuizOfferCTA } from '@/components/quiz-offer/QuizOfferCTA';
-import { useRouter } from 'next/navigation';
+import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
 
 export default function QuizOfferPage() {
-  const router = useRouter();
+  const { navigate } = useUniversalNavigation();
 
   return (
     <div className="min-h-screen bg-[#FAF9F7]">
-      <QuizOfferHero onStartQuizClick={() => router.push('/')} />
+      <QuizOfferHero onStartQuizClick={() => navigate('/')} />
       <QuizOfferCTA />
     </div>
   );

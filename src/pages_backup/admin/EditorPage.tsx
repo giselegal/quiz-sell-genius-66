@@ -1,20 +1,13 @@
 
 import React from 'react';
-import { useSearchParams } from 'next/navigation';
 import AdminLayout from '../../components/admin/AdminLayout';
 import QuizOfferPageEditor from './editors/QuizOfferPageEditor';
 import ResultPageEditor from './editors/ResultPageEditor';
 
 const EditorPage = () => {
-  const [searchParams] = useSearchParams();
-  // Define 'funil2' como padrão se nenhuma aba for especificada ou se a aba for inválida
+  // Define 'funil2' como padrão
   const validTabs = ['funil1', 'funil2'];
-  let tabParam = searchParams.get('tab');
-  if (!tabParam || !validTabs.includes(tabParam)) {
-    tabParam = 'funil2'; 
-    // Opcional: Adicionar lógica para atualizar a URL se desejar que a aba padrão reflita na URL
-    // Ex: window.history.replaceState(null, '', `/admin/editor?tab=${tabParam}`);
-  }
+  let tabParam = 'funil2'; // Valor padrão sem dependência de URL
   
   return (
     <AdminLayout>
