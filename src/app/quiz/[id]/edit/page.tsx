@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -24,7 +23,7 @@ export default function EditQuizPage() {
   const params = useParams();
   const quizId = params?.id as string;
   const searchParams = useSearchParams();
-  const initialTab = searchParams?.get('tab') || 'quiz';
+  const initialTab = searchParams.get('tab') || 'quiz';
   
   const [activeTab, setActiveTab] = useState<'quiz' | 'result' | 'offer'>(initialTab as any);
   const [savedConfigs, setSavedConfigs] = useState({
@@ -44,7 +43,7 @@ export default function EditQuizPage() {
   const handleSave = async (config: any, mode: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/quiz/${quizId}/config`, {
+      const response = await fetch(`/api/quiz/${params.id}/config`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,6 +60,7 @@ export default function EditQuizPage() {
         notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
         notification.textContent = `${mode.toUpperCase()} salvo com sucesso!`;
         document.body.appendChild(notification);
+        
         setTimeout(() => {
           document.body.removeChild(notification);
         }, 3000);
@@ -75,6 +75,7 @@ export default function EditQuizPage() {
       notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
       notification.textContent = `Erro ao salvar ${mode}`;
       document.body.appendChild(notification);
+      
       setTimeout(() => {
         document.body.removeChild(notification);
       }, 3000);
@@ -92,7 +93,7 @@ export default function EditQuizPage() {
             
             {/* Breadcrumb */}
             <div className="flex items-center gap-4">
-              <Link href={`/dashboard/quizzes/${quizId}`}>
+              <Link href={`/dashboard/quizzes/${params.id}`}>
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Voltar ao Painel
@@ -136,27 +137,27 @@ export default function EditQuizPage() {
           <Suspense fallback={<LoadingSpinner />}>
             <DragDropEditor
               mode="quiz"
-              quizId={quizId}
+              quizId={params.id}
               onSave={(config) => handleSave(config, 'quiz')}
             />
           </Suspense>
         </TabsContent>
-        
+
         <TabsContent value="result" className="h-full m-0">
           <Suspense fallback={<LoadingSpinner />}>
             <DragDropEditor
               mode="result"
-              quizId={quizId}
+              quizId={params.id}
               onSave={(config) => handleSave(config, 'result')}
             />
           </Suspense>
         </TabsContent>
-        
+
         <TabsContent value="offer" className="h-full m-0">
           <Suspense fallback={<LoadingSpinner />}>
             <DragDropEditor
               mode="offer"
-              quizId={quizId}
+              quizId={params.id}
               onSave={(config) => handleSave(config, 'offer')}
             />
           </Suspense>

@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = { 
+  experimental: {
+    appDir: false // Desabilita o App Router para ignorar arquivos em src/app
+  },
   reactStrictMode: false, // Desabilitando modo estrito para ignorar warnings não críticos
   // Desabilitando todas as verificações de tipos, ESLint e erros não críticos durante a compilação
   typescript: {
