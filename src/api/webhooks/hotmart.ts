@@ -1,3 +1,4 @@
+
 import { hotmart } from '../../utils/hotmartIntegration';
 
 // Função para processar webhook da Hotmart (simulação para frontend)
@@ -18,6 +19,7 @@ export async function handleHotmartWebhook(webhookData: any): Promise<boolean> {
     return false;
   }
 }
+
 // Simulador de webhook para desenvolvimento/testes
 export function simulateHotmartWebhook(eventType: string, productData: any) {
   const mockWebhookData = {
@@ -32,6 +34,7 @@ export function simulateHotmartWebhook(eventType: string, productData: any) {
       buyer: {
         email: 'teste@exemplo.com',
         name: 'Cliente Teste'
+      },
       purchase: {
         transaction: `txn_${Date.now()}`,
         status: eventType === 'PURCHASE_COMPLETE' ? 'APPROVED' : 'CANCELLED',
@@ -40,7 +43,11 @@ export function simulateHotmartWebhook(eventType: string, productData: any) {
           value: productData.price || 297,
           currency_value: 'BRL'
         }
+      },
       affiliates: productData.affiliates || [],
       custom_fields: productData.customFields || {}
+    }
   };
+  
   return handleHotmartWebhook(mockWebhookData);
+}

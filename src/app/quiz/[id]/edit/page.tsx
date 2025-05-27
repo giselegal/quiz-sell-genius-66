@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -7,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+
 // Importando configuração estática
 export { dynamic } from './static';
+
 function LoadingSpinner() {
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -16,6 +19,7 @@ function LoadingSpinner() {
     </div>
   );
 }
+
 export default function EditQuizPage() {
   const params = useParams();
   const quizId = params?.id as string;
@@ -29,12 +33,14 @@ export default function EditQuizPage() {
     offer: null
   });
   const [isLoading, setIsLoading] = useState(false);
+
   // Atualizar URL quando tab muda
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set('tab', activeTab);
     window.history.replaceState({}, '', url.toString());
   }, [activeTab]);
+
   const handleSave = async (config: any, mode: string) => {
     setIsLoading(true);
     try {
@@ -45,6 +51,7 @@ export default function EditQuizPage() {
         },
         body: JSON.stringify({ ...config, mode }),
       });
+
       if (response.ok) {
         console.log(`Configuração de ${mode} salva com sucesso!`);
         setSavedConfigs(prev => ({ ...prev, [mode]: config }));
@@ -94,6 +101,7 @@ export default function EditQuizPage() {
               <div className="text-gray-300">|</div>
               <h1 className="text-lg font-semibold">Editor Visual</h1>
             </div>
+
             {/* Tabs de Navegação */}
             <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
               <TabsList className="grid w-full grid-cols-3 max-w-md">
@@ -108,6 +116,7 @@ export default function EditQuizPage() {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
+
             {/* Status de Salvamento */}
             <div className="flex items-center gap-2 text-sm text-gray-600">
               {isLoading && (
@@ -116,9 +125,11 @@ export default function EditQuizPage() {
                   Salvando...
                 </div>
               )}
+            </div>
           </div>
         </div>
       </div>
+
       {/* Editor Content */}
       <Tabs value={activeTab} className="h-full">
         <TabsContent value="quiz" className="h-full m-0">
@@ -130,6 +141,7 @@ export default function EditQuizPage() {
             />
           </Suspense>
         </TabsContent>
+        
         <TabsContent value="result" className="h-full m-0">
           <Suspense fallback={<LoadingSpinner />}>
             <DragDropEditor
@@ -139,6 +151,7 @@ export default function EditQuizPage() {
             />
           </Suspense>
         </TabsContent>
+        
         <TabsContent value="offer" className="h-full m-0">
           <Suspense fallback={<LoadingSpinner />}>
             <DragDropEditor
@@ -149,6 +162,7 @@ export default function EditQuizPage() {
           </Suspense>
         </TabsContent>
       </Tabs>
+
       {/* Status Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
