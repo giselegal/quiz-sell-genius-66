@@ -14,6 +14,7 @@ import { useAuth } from '../context/AuthContext';
 import QuizResult from './QuizResult';
 import { QuizOfferHero } from './quiz-offer/QuizOfferHero';
 import { QuizOfferCTA } from './quiz-offer/QuizOfferCTA';
+import { useRouter } from 'next/navigation';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
@@ -39,11 +40,24 @@ const QuizPage: React.FC = () => {
     handleNext,
     handlePrevious,
     totalQuestions,
-    calculateResults,
-    handleStrategicAnswer: saveStrategicAnswer,
-    submitQuizIfComplete,
-    isInitialLoadComplete
+    calculateResults
+    // submitQuizIfComplete removido
+    // ...outros retornos se necessário...
   } = quizLogic;
+
+  // Função para iniciar o quiz após o nome
+  const handleStartQuiz = (nome: string) => {
+    if (nome && nome.trim()) {
+      safeLocalStorage.setItem('userName', nome.trim());
+      setShowIntro(false);
+    }
+  };
+
+  // Wrapper para adaptar a assinatura do QuizContent
+  const handleAnswerSubmit = (response: UserResponse) => {
+    handleAnswer(response.questionId, response.selectedOptions);
+  };
+
   // Removida a verificação de sessionStorage - o quiz sempre iniciará com o QuizIntro
   // Garante que sem nome salvo, sempre exibe a intro
   useEffect(() => {
@@ -78,10 +92,9 @@ const QuizPage: React.FC = () => {
   return (
     <div>
       {/* Intro do Quiz */}
-      <QuizIntro 
-        showIntro={showIntro} 
-        setShowIntro={setShowIntro}
-      />
+      {showIntro && (
+        <QuizIntro onStart={handleStartQuiz} />
+      )}
       {/* Perguntas do Quiz */}
       {!showIntro && !showResult && currentQuestion && (
         <QuizContainer>
@@ -93,7 +106,7 @@ const QuizPage: React.FC = () => {
             currentStrategicQuestionIndex={currentStrategicQuestionIndex}
             currentQuestion={currentQuestion}
             currentAnswers={currentAnswers}
-            handleAnswerSubmit={handleAnswer}
+            handleAnswerSubmit={handleAnswerSubmit}
           />
           <QuizNavigation 
             canProceed={currentAnswers.length > 0}

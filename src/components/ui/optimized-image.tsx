@@ -5,6 +5,12 @@ import { cn } from '@/lib/utils';
 import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
 import { getImageMetadata, isImagePreloaded, getOptimizedImage } from '@/utils/imageManager';
 
+export interface ImageOptimizationOptions {
+  quality?: number;
+  height?: number;
+  width?: number;
+}
+
 interface OptimizedImageProps {
   src: string;
   alt: string;
@@ -44,19 +50,17 @@ export const OptimizedImage = ({
   const [blurredLoaded, setBlurredLoaded] = useState(false);
   // Obter metadados da imagem do banco de imagens
   const imageMetadata = useMemo(() => src ? getImageMetadata(src) : undefined, [src]);
-  // Gerar placeholder manualmente (fallback)
+  // Gerar placeholder manualmente (blur de baixa qualidade)
   const placeholderSrc = useMemo(() => {
     if (!src) return '';
-    // fallback: retorna a própria imagem ou uma cor sólida
-    return '';
+    // Gera uma versão extremamente pequena para efeito blur
+    return getOptimizedImage(src, { width: 16, quality: 10 });
   }, [src]);
   // Otimizar URLs do Cloudinary automaticamente
   const optimizedSrc = useMemo(() => {
     const imgWidth = width || (imageMetadata?.width || undefined);
     const imgHeight = height || (imageMetadata?.height || undefined);
     return getOptimizedImage(src, {
-      quality: quality,
-      format: 'auto',
       width: imgWidth,
       height: imgHeight
     });
@@ -100,12 +104,13 @@ export const OptimizedImage = ({
       {!loaded && !error && (
         <>
           {/* Placeholder de carregamento */}
-          {blurredLoaded && (
-            <div
-              className={cn(
-                "absolute inset-0 w-full h-full bg-gray-100 blur-sm scale-105"
-              )}
+          {placeholderSrc && (
+            <img
+              src={placeholderSrc}
+              alt=""
               aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover blur-lg scale-105 transition-opacity duration-300"
+              style={{ backgroundColor: placeholderColor }}
             />
           )}
           <div

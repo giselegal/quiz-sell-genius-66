@@ -49,12 +49,16 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={showingStrategicQuestions ? currentAnswers.reduce((acc, optionId) => {
-              if (currentQuestion?.id) {
-                acc[currentQuestion.id] = [optionId];
-              }
-              return acc;
-            }, {}) : {}}
+            answers={
+              showingStrategicQuestions
+                ? currentAnswers.reduce<Record<string, string[]>>((acc, optionId) => {
+                    if (currentQuestion?.id) {
+                      acc[currentQuestion.id] = [optionId];
+                    }
+                    return acc;
+                  }, {})
+                : {} as Record<string, string[]>
+            }
             onAnswer={handleAnswerSubmit}
           />
         ) : (
@@ -62,6 +66,8 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             question={currentQuestion}
             currentAnswers={currentAnswers || []}
             showQuestionImage={true}
+            onAnswer={handleAnswerSubmit}
+          />
         )}
       </div>
     </>
