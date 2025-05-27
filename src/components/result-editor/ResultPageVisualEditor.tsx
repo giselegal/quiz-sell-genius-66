@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -14,9 +15,11 @@ import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { StyleResult } from '@/types/quiz';
+
 interface ResultPageVisualEditorProps extends EditorProps {
   initialConfig?: ResultPageConfig;
 }
+
 export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({ 
   selectedStyle,
   onShowTemplates,
@@ -36,32 +39,36 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
       importConfig
     }
   } = useResultPageEditor(selectedStyle.category);
+
+  const {
     blocks,
     selectedBlockId,
     setSelectedBlockId,
     updateBlocks,
     actions: blockActions
   } = useBlockOperations();
-  // Apply initial config if provided
+
   useEffect(() => {
     if (initialConfig && importConfig) {
       importConfig(initialConfig);
+    }
   }, [initialConfig, importConfig]);
-  // Sync blocks with config when needed
+
+  useEffect(() => {
     if (resultPageConfig?.blocks) {
       updateBlocks(resultPageConfig.blocks);
     } else {
-      // Initialize with empty blocks if not present
       updateSection('blocks', []);
+    }
   }, [resultPageConfig, updateBlocks, updateSection]);
-  const handleUpdateConfig = (newConfig) => {
+
+  const handleUpdateConfig = (newConfig: any) => {
     if (newConfig) {
       try {
         importConfig(newConfig);
         if (newConfig.blocks) {
           updateBlocks(newConfig.blocks);
         } else {
-          // Initialize with empty blocks if not present
           updateBlocks([]);
         }
         toast({
@@ -71,12 +78,16 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
         });
       } catch (error) {
         console.error('Error updating config:', error);
+        toast({
           title: "Erro ao atualizar configuração",
           description: "Ocorreu um erro ao aplicar a configuração",
           variant: "destructive",
           duration: 5000
+        });
       }
+    }
   };
+
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -84,11 +95,13 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
       </div>
     );
   }
-  // Cast do tipo para garantir compatibilidade com o componente EditorPreview
+
   const primaryStyle: StyleResult = {
     category: selectedStyle.category as any,
     score: selectedStyle.score,
     percentage: selectedStyle.percentage
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <EditorToolbar 
@@ -122,14 +135,19 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 primaryStyle={primaryStyle}
                 onReorderBlocks={blockActions.handleReorderBlocks}
               />
+            </ResizablePanel>
+            <ResizableHandle withHandle />
             <ResizablePanel defaultSize={25}>
               <PropertiesPanel
                 onClose={() => setSelectedBlockId(null)}
                 onUpdate={blockActions.handleUpdateBlock}
                 onDelete={blockActions.handleDeleteBlock}
+              />
+            </ResizablePanel>
           </ResizablePanelGroup>
         </TabsContent>
       </Tabs>
+      
       {isGlobalStylesOpen && (
         <GlobalStylesEditor
           globalStyles={resultPageConfig.globalStyles || {}}
