@@ -1,8 +1,10 @@
+
 "use client";
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
+
 interface ImageComponentProps {
   data: {
     imageUrl?: string;
@@ -13,8 +15,11 @@ interface ImageComponentProps {
   style?: {
     backgroundColor?: string;
     textColor?: string;
+    [key: string]: any;
+  };
   isSelected?: boolean;
 }
+
 const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -22,6 +27,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected
   const optimizedImageUrl = data.imageUrl 
     ? optimizeCloudinaryUrl(data.imageUrl, { quality: 95, format: 'auto' })
     : '';
+
   return (
     <div 
       className={cn(
@@ -36,14 +42,12 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected
       <div className="relative">
         {data.imageUrl && !imageError ? (
           <>
-            {/* Loading placeholder */}
             {!imageLoaded && (
               <div className="bg-gray-200 animate-pulse w-full aspect-[4/3] rounded-md flex items-center justify-center">
                 <span className="text-gray-400 text-sm">Carregando...</span>
               </div>
             )}
             
-            {/* Actual image */}
             <img 
               src={optimizedImageUrl} 
               alt={data.alt || 'Imagem do quiz'} 
@@ -64,7 +68,9 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected
       </div>
       {data.caption && (
         <p className="text-sm mt-2 opacity-75">{data.caption}</p>
+      )}
     </div>
   );
 };
+
 export default ImageComponent;

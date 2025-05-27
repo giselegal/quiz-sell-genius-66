@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -8,12 +9,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { Image, Upload } from 'lucide-react';
+
 interface EnhancedImagePropertiesProps {
   data: any;
   onUpdate: (data: any) => void;
 }
+
 const EnhancedImageProperties: React.FC<EnhancedImagePropertiesProps> = ({ data, onUpdate }) => {
   const [activeTab, setActiveTab] = useState('url');
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -39,6 +43,7 @@ const EnhancedImageProperties: React.FC<EnhancedImagePropertiesProps> = ({ data,
               />
             </div>
           </TabsContent>
+
           <TabsContent value="upload" className="pt-4">
             <Card className="border border-dashed p-6 text-center">
               <div className="flex flex-col items-center gap-2">
@@ -48,18 +53,20 @@ const EnhancedImageProperties: React.FC<EnhancedImagePropertiesProps> = ({ data,
                   Selecionar arquivo
                 </Button>
               </div>
+              <input 
                 type="file" 
                 accept="image/*" 
                 className="hidden" 
                 id="image-upload"
                 onChange={(e) => {
-                  // Implementar lógica de upload
                   console.log("Implementar lógica de upload", e.target.files);
                 }}
+              />
             </Card>
+          </TabsContent>
+
           <TabsContent value="gallery" className="pt-4">
             <div className="grid grid-cols-3 gap-2">
-              {/* Exemplo de imagens da galeria */}
               {[1,2,3,4,5,6].map((i) => (
                 <div 
                   key={i} 
@@ -72,8 +79,11 @@ const EnhancedImageProperties: React.FC<EnhancedImagePropertiesProps> = ({ data,
                   <Image className="h-6 w-6 text-gray-400" />
                 </div>
               ))}
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
+
       {data.imageUrl && activeTab === 'url' && (
         <div className="border rounded-md p-4">
           <img 
@@ -87,6 +97,7 @@ const EnhancedImageProperties: React.FC<EnhancedImagePropertiesProps> = ({ data,
         </div>
       )}
       
+      <div className="space-y-2">
         <Label>Texto Alternativo</Label>
         <Input 
           value={data.alt || ''} 
@@ -96,11 +107,16 @@ const EnhancedImageProperties: React.FC<EnhancedImagePropertiesProps> = ({ data,
           })}
           placeholder="Descrição da imagem para acessibilidade"
         />
+      </div>
+
+      <div className="space-y-2">
         <Label>Tamanho da Imagem</Label>
         <Select 
           value={data.imageSize || 'medium'} 
           onValueChange={(value) => onUpdate({ 
+            ...data,
             imageSize: value 
+          })}
         >
           <SelectTrigger>
             <SelectValue />
@@ -112,7 +128,9 @@ const EnhancedImageProperties: React.FC<EnhancedImagePropertiesProps> = ({ data,
             <SelectItem value="full">Largura Total</SelectItem>
           </SelectContent>
         </Select>
+      </div>
     </div>
   );
 };
+
 export default EnhancedImageProperties;
