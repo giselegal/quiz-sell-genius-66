@@ -16,6 +16,7 @@ interface Window {
   isPreview?: boolean;
   isProduction?: boolean;
 }
+
 // Extend EventTarget to include DOM-specific properties
 interface EventTarget {
   tagName?: string;
@@ -23,3 +24,4 @@ interface EventTarget {
   href?: string;
   getAttribute?: (name: string) => string | null;
   textContent?: string | null;
+}
