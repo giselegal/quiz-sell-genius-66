@@ -1,54 +1,44 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { ImageUploader } from '@/components/ui/image-uploader';
-import { toast } from '@/components/ui/use-toast';
-import { useGlobalStyles } from '@/hooks/useGlobalStyles';
+import { Input } from '@/components/ui/input';
+
 export const AppearanceTab: React.FC = () => {
-  const { globalStyles, updateGlobalStyles } = useGlobalStyles();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Global Appearance</CardTitle>
-        <CardDescription>
-          Customize the global appearance of your site
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="backgroundColor">Background Color</Label>
-          <Input 
-            id="backgroundColor" 
-            type="color" 
-            value={globalStyles.backgroundColor || '#fff'} 
-            onChange={(e) => updateGlobalStyles({ backgroundColor: e.target.value })}
-            className="h-10 w-20"
-          />
-        </div>
-        
-          <Label htmlFor="textColor">Text Color</Label>
-            id="textColor" 
-            value={globalStyles.textColor || '#432818'} 
-            onChange={(e) => updateGlobalStyles({ textColor: e.target.value })}
-          <Label htmlFor="logo">Logo</Label>
-          <ImageUploader 
-            currentImage={globalStyles.logo}
-            onImageUpload={(url) => updateGlobalStyles({ logo: url })}
-        <Button 
-          className="bg-[#B89B7A] hover:bg-[#A38A69]"
-          onClick={() => {
-            toast({
-              title: "Settings saved",
-              description: "Appearance settings have been updated successfully."
-            });
-          }}
-        >
-          Save Settings
-        </Button>
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Theme Settings</CardTitle>
+          <CardDescription>
+            Customize the appearance of your application
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="primary-color">Primary Color</Label>
+            <Input 
+              id="primary-color" 
+              type="color"
+              defaultValue="#B89B7A"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="secondary-color">Secondary Color</Label>
+            <Input 
+              id="secondary-color" 
+              type="color"
+              defaultValue="#aa6b5d"
+            />
+          </div>
+
+          <Button className="bg-[#B89B7A] hover:bg-[#A38A69]">
+            Save Appearance Settings
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
   );
 };

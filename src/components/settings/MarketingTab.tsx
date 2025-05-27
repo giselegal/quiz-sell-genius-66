@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+
 export const MarketingTab: React.FC = () => {
   return (
     <Card>
@@ -29,32 +30,49 @@ export const MarketingTab: React.FC = () => {
                 <Switch id="utm-google" defaultChecked={true} />
                 <Label htmlFor="utm-google">Google (utm_source=google)</Label>
               </div>
+              <div className="flex items-center space-x-2">
                 <Switch id="utm-facebook" defaultChecked={true} />
                 <Label htmlFor="utm-facebook">Facebook (utm_source=facebook)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
                 <Switch id="utm-instagram" defaultChecked={true} />
                 <Label htmlFor="utm-instagram">Instagram (utm_source=instagram)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
                 <Switch id="utm-email" defaultChecked={true} />
                 <Label htmlFor="utm-email">Email (utm_source=email)</Label>
+              </div>
             </div>
           </div>
           
           <Separator />
+          
+          <div>
             <Label className="text-base">Analytics Integration</Label>
-            <div className="flex items-center space-x-2 mt-2">
-              <Switch id="utm-to-ga" defaultChecked={true} />
-              <Label htmlFor="utm-to-ga">Send UTM data to Google Analytics</Label>
-              <Switch id="utm-to-fb" defaultChecked={true} />
-              <Label htmlFor="utm-to-fb">Send UTM data to Facebook Pixel</Label>
+            <div className="flex flex-col gap-2 mt-2">
+              <div className="flex items-center space-x-2">
+                <Switch id="utm-to-ga" defaultChecked={true} />
+                <Label htmlFor="utm-to-ga">Send UTM data to Google Analytics</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch id="utm-to-fb" defaultChecked={true} />
+                <Label htmlFor="utm-to-fb">Send UTM data to Facebook Pixel</Label>
+              </div>
+            </div>
+          </div>
         </div>
+
         <Button className="mt-4 bg-[#B89B7A] hover:bg-[#A38A69]">
           Save UTM Settings
         </Button>
+
         <div className="mt-6">
           <Button variant="outline" asChild>
             <Link href="/admin/analytics?tab=utm">
               View UTM Analytics
             </Link>
           </Button>
+        </div>
       </CardContent>
     </Card>
   );
