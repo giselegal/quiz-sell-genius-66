@@ -25,7 +25,12 @@ export const exportProjectAsJson = (config: any) => {
     return false;
   }
 };
+
 export const parseJsonConfig = (jsonText: string): any => {
+  try {
     return JSON.parse(jsonText);
+  } catch (error) {
     console.error('Error parsing JSON:', error);
     throw new Error('Invalid JSON format');
+  }
+};
