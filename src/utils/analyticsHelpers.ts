@@ -1,4 +1,3 @@
-
 export interface AnalyticsEvent {
   name: string;
   properties: Record<string, any>;
@@ -97,4 +96,78 @@ export const analyticsHelpers = {
   clearAnalytics: (): void => {
     localStorage.removeItem('analytics_events');
   }
+};
+
+// Exported functions for direct import
+export const getCachedMetrics = () => {
+  const cacheKey = 'analytics_metrics_cache';
+  const cacheTime = 5 * 60 * 1000; // 5 minutes
+  
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached);
+      if (Date.now() - timestamp < cacheTime) {
+        return data;
+      }
+    }
+  } catch (error) {
+    console.error('Error reading cached metrics:', error);
+  }
+
+  // Generate fresh metrics
+  const metrics = {
+    userMetrics: analyticsHelpers.getUserMetrics(),
+    conversionFunnel: analyticsHelpers.calculateConversionFunnel(),
+    events: analyticsHelpers.getEvents()
+  };
+
+  // Cache the metrics
+  try {
+    localStorage.setItem(cacheKey, JSON.stringify({
+      data: metrics,
+      timestamp: Date.now()
+    }));
+  } catch (error) {
+    console.error('Error caching metrics:', error);
+  }
+
+  return metrics;
+};
+
+export const resetMetricsCache = () => {
+  try {
+    localStorage.removeItem('analytics_metrics_cache');
+  } catch (error) {
+    console.error('Error resetting metrics cache:', error);
+  }
+};
+
+export const filterEventsByTimeRange = (events: AnalyticsEvent[], startDate: Date, endDate: Date): AnalyticsEvent[] => {
+  const startTime = startDate.getTime();
+  const endTime = endDate.getTime();
+  
+  return events.filter(event => 
+    event.timestamp >= startTime && event.timestamp <= endTime
+  );
+};
+
+export const getUserProgressData = () => {
+  const events = analyticsHelpers.getEvents();
+  
+  // Simular dados de progresso do usuário baseado nos eventos
+  const progressSteps = [
+    { step: 'Quiz Started', count: events.filter(e => e.name === 'quiz_start').length },
+    { step: 'Questions Answered', count: events.filter(e => e.name === 'question_answered').length },
+    { step: 'Quiz Completed', count: events.filter(e => e.name === 'quiz_complete').length },
+    { step: 'Result Viewed', count: events.filter(e => e.name === 'result_view').length },
+    { step: 'Offer Clicked', count: events.filter(e => e.name === 'offer_click').length }
+  ];
+
+  return {
+    progressSteps,
+    totalUsers: new Set(events.map(e => e.properties.userId || 'anonymous')).size,
+    averageCompletionRate: progressSteps.length > 0 ? 
+      (progressSteps[progressSteps.length - 1].count / Math.max(progressSteps[0].count, 1)) * 100 : 0
+  };
 };

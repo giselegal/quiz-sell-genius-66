@@ -14,11 +14,11 @@ import { useAuth } from '../context/AuthContext';
 import QuizResult from './QuizResult';
 import { QuizOfferHero } from './quiz-offer/QuizOfferHero';
 import { QuizOfferCTA } from './quiz-offer/QuizOfferCTA';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
   
   // Modificado: Sempre exibir o QuizIntro primeiro, independente do histórico
   const [showIntro, setShowIntro] = useState(true);
@@ -120,13 +120,14 @@ const QuizPage: React.FC = () => {
   // Novo estado para controlar exibição do resultado e oferta
   const [showResult, setShowResult] = useState(false);
   const [showOffer, setShowOffer] = useState(false);
-  const [quizResult, setQuizResult] = useState<any>(null);
+  const [localQuizResult, setLocalQuizResult] = useState<any>(null);
 
   // Função para finalizar quiz e mostrar resultado
   const handleQuizComplete = () => {
     const result = calculateResults();
-    setQuizResult(result);
+    setLocalQuizResult(result);
     setShowResult(true);
+    navigate('/resultado');
   };
 
   // Quando resultado for exibido, mostrar oferta após X segundos
@@ -167,13 +168,13 @@ const QuizPage: React.FC = () => {
         </QuizContainer>
       )}
       {/* Resultado do Quiz */}
-      {showResult && quizResult && (
+      {showResult && localQuizResult && (
         <>
-          <QuizResult {...quizResult} />
+          <QuizResult {...localQuizResult} />
           {/* Oferta aparece após resultado */}
           {showOffer && (
             <div className="mt-8">
-              <QuizOfferHero onStartQuizClick={() => router.push('/')} />
+              <QuizOfferHero onStartQuizClick={() => navigate('/')} />
               <QuizOfferCTA />
             </div>
           )}
