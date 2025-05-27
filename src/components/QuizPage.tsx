@@ -139,46 +139,50 @@ const QuizPage: React.FC = () => {
   }, [showResult]);
 
   return (
-    <div>
+    <div className="quiz-page-container">
       {/* Intro do Quiz */}
       {showIntro && (
-        <QuizIntro onStart={handleStartQuiz} />
+        <div className="quiz-intro-transition animate-fade-in-up">
+          <QuizIntro onStart={handleStartQuiz} />
+        </div>
       )}
       {/* Perguntas do Quiz */}
       {!showIntro && !showResult && currentQuestion && (
-        <QuizContainer>
-          <QuizContent 
-            user={user}
-            currentQuestionIndex={currentQuestionIndex}
-            totalQuestions={totalQuestions}
-            showingStrategicQuestions={showingStrategicQuestions}
-            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-            currentQuestion={currentQuestion}
-            currentAnswers={currentAnswers}
-            handleAnswerSubmit={handleAnswerSubmit}
-          />
-          <QuizNavigation 
-            canProceed={currentAnswers.length > 0}
-            onNext={isLastQuestion ? handleQuizComplete : handleNext}
-            onPrevious={handlePrevious}
-            currentQuestionType={showingStrategicQuestions ? 'strategic' : 'normal'}
-            selectedOptionsCount={currentAnswers.length}
-            isLastQuestion={isLastQuestion}
-          />
-        </QuizContainer>
+        <div className="quiz-question-transition animate-fade-in-up">
+          <QuizContainer>
+            <QuizContent 
+              user={user}
+              currentQuestionIndex={currentQuestionIndex}
+              totalQuestions={totalQuestions}
+              showingStrategicQuestions={showingStrategicQuestions}
+              currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+              currentQuestion={currentQuestion}
+              currentAnswers={currentAnswers}
+              handleAnswerSubmit={handleAnswerSubmit}
+            />
+            <QuizNavigation 
+              canProceed={currentAnswers.length > 0}
+              onNext={isLastQuestion ? handleQuizComplete : handleNext}
+              onPrevious={handlePrevious}
+              currentQuestionType={showingStrategicQuestions ? 'strategic' : 'normal'}
+              selectedOptionsCount={currentAnswers.length}
+              isLastQuestion={isLastQuestion}
+            />
+          </QuizContainer>
+        </div>
       )}
       {/* Resultado do Quiz */}
       {showResult && localQuizResult && (
-        <>
+        <div className="quiz-result-transition animate-fade-in-up">
           <QuizResult {...localQuizResult} />
           {/* Oferta aparece após resultado */}
           {showOffer && (
-            <div className="mt-8">
+            <div className="mt-8 quiz-transition animate-fade-in-up">
               <QuizOfferHero onStartQuizClick={() => navigate('/')} />
               <QuizOfferCTA />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

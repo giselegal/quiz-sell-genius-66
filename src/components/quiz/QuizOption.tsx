@@ -31,6 +31,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 
   useEffect(() => {
     if (optionRef.current) {
+      // Adicionar classe de transição
+      optionRef.current.style.transition = 'all 300ms ease-in-out';
+      
       if (isSelected) {
         if (type === 'text') {
           optionRef.current.style.borderColor = '#b29670';
@@ -79,11 +82,12 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div
         ref={optionRef}
         className={cn(
-          "relative h-full flex flex-col rounded-lg overflow-hidden",
+          "relative h-full flex flex-col rounded-lg overflow-hidden quiz-option",
           "cursor-pointer",
           type === 'text' && "p-4 border",
           type !== 'text' && "border-0",
-          "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300"
+          "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300",
+          isSelected && "selected"
         )}
       >
         {type !== 'text' && option.imageUrl && (

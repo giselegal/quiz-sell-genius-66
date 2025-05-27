@@ -45,6 +45,37 @@ img:hover, .hover-scale:hover {
   transform: scale(1.1) !important;
 }
 
+/* Animações de entrada e saída */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 500ms ease-out forwards;
+}
+
+.animate-fade-out-down {
+  animation: fadeOutDown 300ms ease-in forwards;
+}
+
 /* Adicionar animação de loading bar */
 @keyframes loading-bar {
   0% { transform: translateX(-100%); }
@@ -170,10 +201,14 @@ img:hover, .hover-scale:hover {
     font-family: 'Playfair Display', serif;
   }
 
-  /* Questões só com texto – aumentar fonte */
+  /* Questões só com texto – aumentar fonte e melhorar layout */
   .text-only-question .question-text,
   .text-only-question .options {
     font-size: 1.35rem;
+  }
+
+  .text-question-grid {
+    min-height: 200px;
   }
 
   /* Questões Estratégicas – títulos e opções maiores e destacados */
@@ -184,12 +219,53 @@ img:hover, .hover-scale:hover {
     font-weight: 600;
   }
 
+  /* Transições específicas */
+  .quiz-intro-transition {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms ease-in-out, transform 500ms ease-in-out !important;
+  }
+
+  .quiz-question-transition {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms ease-in-out, transform 400ms ease-in-out !important;
+  }
+
+  .quiz-result-transition {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 600ms ease-in-out, transform 600ms ease-in-out !important;
+  }
+
+  .quiz-transition {
+    transition: all 300ms ease-in-out !important;
+  }
+
+  .quiz-option {
+    transition: all 300ms ease-in-out !important;
+  }
+
+  .quiz-option:hover {
+    transform: translateY(-1px);
+  }
+
+  .quiz-option.selected {
+    transition: all 200ms ease-in-out !important;
+  }
+
+  .quiz-page-container {
+    min-height: 100vh;
+    position: relative;
+  }
+
   /* Destaque de termos estratégicos */
   .highlight-strategic {
     background-color: rgba(240, 240, 245, 0.3); /* Versão mais segura do hsl(var(--accent) / 0.3) */
     padding: 0.1em 0.2em;
     border-radius: 0.2em;
     font-weight: 600;
+    transition: background-color 200ms ease-in-out !important;
   }
 }
 
