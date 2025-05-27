@@ -1,46 +1,59 @@
+
 "use client";
 
-import { useState, useEffect } from 'react';
-/**
- * Hook para carregar dados de transformação com base no estilo
- * @param style Nome do estilo para buscar transformações
- * @returns Objeto com dados da transformação e estado de carregamento
- */
-export const useTransformation = (style?: string) => {
-  const [transformation, setTransformation] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    if (!style) {
-      setIsLoading(false);
-      return;
-    }
-    // Simular carregamento de dados
-    setIsLoading(true);
-    // Mock de dados para demonstração
-    setTimeout(() => {
-      try {
-        // Mock de dados de transformação
-        const mockTransformations = [
-          {
-            id: '1',
-            imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1631714345/samples/people/kitchen-bar.jpg',
-            caption: 'Transformação 1'
-          },
-            id: '2',
-            imageUrl: 'https://res.cloudinary.com/demo/image/upload/v1631714345/samples/people/smiling-man.jpg',
-            caption: 'Transformação 2'
-          }
-        ];
-        
-        setTransformation(mockTransformations);
-        setIsLoading(false);
-        setError(null);
-      } catch (err) {
-        setError('Erro ao carregar transformações');
-      }
-    }, 800);
-  }, [style]);
-  return { transformation, isLoading, error };
+import { useState, useCallback } from 'react';
+
+interface TransformationState {
+  isVisible: boolean;
+  isAnimating: boolean;
+  currentStep: number;
+}
+
+export const useTransformation = () => {
+  const [state, setState] = useState<TransformationState>({
+    isVisible: false,
+    isAnimating: false,
+    currentStep: 0
+  });
+
+  const showTransformation = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      isVisible: true,
+      isAnimating: true,
+      currentStep: 0
+    }));
+  }, []);
+
+  const hideTransformation = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      isVisible: false,
+      isAnimating: false,
+      currentStep: 0
+    }));
+  }, []);
+
+  const nextStep = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      currentStep: prev.currentStep + 1
+    }));
+  }, []);
+
+  const resetTransformation = useCallback(() => {
+    setState({
+      isVisible: false,
+      isAnimating: false,
+      currentStep: 0
+    });
+  }, []);
+
+  return {
+    ...state,
+    showTransformation,
+    hideTransformation,
+    nextStep,
+    resetTransformation
+  };
 };
-export default useTransformation;
