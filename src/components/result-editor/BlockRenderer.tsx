@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Block } from '@/types/editor';
 import { cn } from '@/lib/utils';
@@ -33,6 +32,7 @@ interface BlockRendererProps {
   onUpdate?: (content: any) => void;
   isDragging?: boolean;
 }
+
 export const BlockRenderer: React.FC<BlockRendererProps> = ({
   block,
   primaryStyle,
@@ -90,6 +90,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
         return <p>Bloco não reconhecido: {block.type}</p>;
     }
   };
+
   return (
     <div
       onClick={onSelect}
@@ -113,7 +114,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             }}
           />
         </div>
+      )}
     </div>
   );
 };
+
 export default BlockRenderer;
