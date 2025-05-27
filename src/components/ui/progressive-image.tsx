@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useEffect } from 'react';
 import { getLowQualityPlaceholder } from '@/utils/imageUtils';
@@ -17,6 +18,7 @@ interface ProgressiveImageProps {
   style?: React.CSSProperties;
   fit?: 'cover' | 'contain' | 'fill';
 }
+
 const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   src,
   lowQualitySrc,
@@ -34,8 +36,10 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [loadStartTime] = useState(Date.now());
+
   // Gerar placeholder de baixa qualidade se não for fornecido
   const placeholder = lowQualitySrc || getLowQualityPlaceholder(src, { width: 30, quality: 15 });
+
   // Controlar o carregamento da imagem
   const handleLoad = () => {
     // Log do tempo de carregamento para otimizações futuras
@@ -45,12 +49,13 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     setLoaded(true);
     if (onLoad) onLoad();
   };
+
   // Lidar com erro de carregamento
   const handleError = () => {
     console.warn(`[Image] Erro ao carregar: ${src}`);
     setError(true);
-    // Garantir que o callback onLoad seja chamado mesmo em erro
-    // para não travar a progressão do carregamento
+  };
+
   // Iniciar temporizador para garantir eventual carregamento
   useEffect(() => {
     // Timeout de 3 segundos para garantir que a imagem seja considerada carregada
@@ -62,8 +67,10 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         if (onLoad) onLoad();
       }
     }, 3000);
+
     return () => clearTimeout(safetyTimer);
   }, [loaded, error, src, onLoad]);
+
   return (
     <div className={`progressive-image-container relative overflow-hidden ${className}`} style={style}>
       {/* Imagem de baixa qualidade para carregamento progressivo */}
@@ -81,6 +88,7 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
           <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
         </div>
       )}
+
       {/* Imagem principal com efeito de fade-in */}
       <AnimatePresence>
         {!error ? (
@@ -96,6 +104,10 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
             transition={{ duration: 0.3 }}
             className="w-full h-full transition-all"
             style={{ objectFit: fit }}
+            alt={alt}
+            width={width}
+            height={height}
+          />
         ) : (
           <div className="flex items-center justify-center w-full h-full bg-gray-100 text-gray-400 text-sm py-4">
             Não foi possível carregar a imagem
@@ -105,4 +117,5 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     </div>
   );
 };
+
 export default ProgressiveImage;
