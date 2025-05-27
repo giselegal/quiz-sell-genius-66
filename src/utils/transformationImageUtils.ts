@@ -51,6 +51,7 @@ export const preloadTransformationImages = (transformations) => {
  * Melhora a qualidade da URL de uma imagem do Cloudinary
  * @param url URL da imagem do Cloudinary
  * @returns URL otimizada
+ */
 export const getHighQualityImageUrl = (url) => {
   if (!url || !url.includes('cloudinary.com')) return url;
   
@@ -65,9 +66,15 @@ export const getHighQualityImageUrl = (url) => {
       const path = version ? parts[1].substring(version.length) : parts[1];
       // Aplicar transformações de alta qualidade
       return `${parts[0]}/upload/${version}f_auto,q_85,e_sharpen:60/${path}`;
+    }
+  }
   return url;
+};
+
+/**
  * Corrige problemas comuns em imagens embaçadas
  * @param imageElement Elemento DOM da imagem
+ */
 export const fixBlurryImage = (imageElement) => {
   if (!imageElement || !imageElement.src) return;
   const currentSrc = imageElement.src;
@@ -79,3 +86,5 @@ export const fixBlurryImage = (imageElement) => {
       console.log('Imagem corrigida:', newSrc);
     };
     tempImg.src = newSrc;
+  }
+};

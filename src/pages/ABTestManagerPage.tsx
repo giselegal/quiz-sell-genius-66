@@ -1,6 +1,5 @@
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 "use client";
-import { safeLocalStorage } from @/utils/safeLocalStorage;
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import { useToast } from "@/components/ui/use-toast";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -18,9 +17,8 @@ import {
   Plus, Save, Trash2, PieChart
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/components/ui/use-toast';
 
-const ABTestManagerPage: React.FC = () => {
+const ABTestManagerPage: React.FC = (): JSX.Element => {
   const router = useRouter();
   const { toast } = useToast();
   const [tests, setTests] = useState<ABTest[]>([]);
@@ -55,13 +53,21 @@ const ABTestManagerPage: React.FC = () => {
     }
   };
   const handleSaveTests = (updatedTests: ABTest[]) => {
+    try {
       safeLocalStorage.setItem('ab_tests', JSON.stringify(updatedTests));
       setTests(updatedTests);
+      toast({
         title: 'Testes salvos',
-        description: 'Os testes A/B foram salvos com sucesso.',
+        description: 'Os testes A/B foram salvos com sucesso.'
+      });
+    } catch (error) {
       console.error('Erro ao salvar testes:', error);
+      toast({
         title: 'Erro ao salvar testes',
         description: 'Não foi possível salvar os testes A/B.',
+        variant: 'destructive'
+      });
+    }
   const handleCreateTest = () => {
     const newTest: ABTest = {
       id: `test_${Date.now()}`,

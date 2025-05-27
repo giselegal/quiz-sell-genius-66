@@ -75,6 +75,8 @@ export default function EditQuizPage() {
       setIsLoading(false);
     }
   };
+
+  return (
     <div className="min-h-screen bg-gray-50">
       {/* Header de Navegação */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-20">
@@ -100,8 +102,10 @@ export default function EditQuizPage() {
                 </TabsTrigger>
                 <TabsTrigger value="result" className="text-sm">
                   🎯 Resultado
+                </TabsTrigger>
                 <TabsTrigger value="offer" className="text-sm">
                   💰 Oferta
+                </TabsTrigger>
               </TabsList>
             </Tabs>
             {/* Status de Salvamento */}
@@ -127,11 +131,23 @@ export default function EditQuizPage() {
           </Suspense>
         </TabsContent>
         <TabsContent value="result" className="h-full m-0">
+          <Suspense fallback={<LoadingSpinner />}>
+            <DragDropEditor
               mode="result"
+              quizId={quizId}
               onSave={(config) => handleSave(config, 'result')}
+            />
+          </Suspense>
+        </TabsContent>
         <TabsContent value="offer" className="h-full m-0">
+          <Suspense fallback={<LoadingSpinner />}>
+            <DragDropEditor
               mode="offer"
+              quizId={quizId}
               onSave={(config) => handleSave(config, 'offer')}
+            />
+          </Suspense>
+        </TabsContent>
       </Tabs>
       {/* Status Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 z-10">
@@ -140,10 +156,16 @@ export default function EditQuizPage() {
             <div className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${savedConfigs.quiz ? 'bg-green-500' : 'bg-gray-300'}`} />
               <span className="text-sm text-gray-600">Quiz</span>
+            </div>
+            <div className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${savedConfigs.result ? 'bg-green-500' : 'bg-gray-300'}`} />
               <span className="text-sm text-gray-600">Resultado</span>
+            </div>
+            <div className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${savedConfigs.offer ? 'bg-green-500' : 'bg-gray-300'}`} />
               <span className="text-sm text-gray-600">Oferta</span>
+            </div>
+          </div>
           
           <div className="flex items-center gap-3">
             <Button variant="outline" size="sm">
@@ -155,3 +177,10 @@ export default function EditQuizPage() {
               className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
             >
               🚀 Publicar Tudo
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
