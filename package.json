@@ -8,7 +8,7 @@
     "build:vite": "vite build",
     "preview": "vite preview",
     "build": "vite build",
-    "build:dev": "next build",
+    "build:dev": "vite build --mode development",
     "build:ignore-errors": "NODE_OPTIONS=\"--max-old-space-size=4096 --no-warnings\" CI=false NEXT_PLUGIN_IGNORE_PRERENDER_ERRORS=true next build",
     "build:emergency": "bash emergency-build.sh",
     "build:static": "next build",
