@@ -12,6 +12,7 @@ import QuestionOptionEditor from '../quiz-editor/QuestionOptionEditor';
 import { QuizOption as QuizOptionComponent } from '../quiz/QuizOption';
 
 type ItemType = 'QUESTION' | 'OPTION';
+
 interface DraggableItemProps {
   id: string;
   index: number;
@@ -20,6 +21,7 @@ interface DraggableItemProps {
   children: React.ReactNode;
   parentId?: string;
 }
+
 const DraggableItem: React.FC<DraggableItemProps> = ({ 
   id, 
   index, 
@@ -37,6 +39,7 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       isDragging: monitor.isDragging(),
     }),
   });
+
   const [, drop] = useDrop({
     accept: type,
     hover: (item: { id: string; index: number; type: ItemType; parentId?: string }, monitor) => {
@@ -44,30 +47,23 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       const dragIndex = item.index;
       const hoverIndex = index;
       
-      // Don't replace items with themselves
       if (dragIndex === hoverIndex && item.parentId === parentId) return;
-      // Determine rectangle on screen
+      
       const hoverBoundingRect = ref.current.getBoundingClientRect();
-      // Get vertical middle
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      // Determine mouse position
       const clientOffset = monitor.getClientOffset();
-      // Get pixels to the top
       const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
+      
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-      // Time to actually perform the action
+      
       moveItem(dragIndex, hoverIndex, type, parentId);
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
       item.index = hoverIndex;
     },
+  });
+
   drag(drop(ref));
+
   return (
     <div 
       ref={ref} 
@@ -80,8 +76,10 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
     </div>
   );
 };
+
 interface QuestionBlockProps {
   question: QuizQuestion;
+  index: number;
   moveQuestion: (dragIndex: number, hoverIndex: number) => void;
   updateQuestion: (id: string, updates: Partial<QuizQuestion>) => void;
   deleteQuestion: (id: string) => void;
@@ -92,6 +90,7 @@ interface QuestionBlockProps {
   deleteOption: (questionId: string, optionId: string) => void;
   previewMode: boolean;
 }
+
 const QuestionBlock: React.FC<QuestionBlockProps> = ({
   question,
   index,
@@ -277,6 +276,7 @@ interface DraggableQuizEditorProps {
   questions: QuizQuestion[];
   onQuestionsChange: (questions: QuizQuestion[]) => void;
 }
+
 const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ 
   questions, 
   onQuestionsChange 
