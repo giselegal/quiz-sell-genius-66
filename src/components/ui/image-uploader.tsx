@@ -1,14 +1,17 @@
+
 "use client";
 
 import React, { useState } from 'react';
 import { Button } from './button';
 import { ImagePlus, Trash } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
 interface ImageUploaderProps {
   currentImage?: string;
   onImageUpload: (url: string) => void;
   className?: string;
 }
+
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
   currentImage,
   onImageUpload,
@@ -16,9 +19,11 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentImage || null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
     // For now, just create a local preview URL and simulate upload
     setIsUploading(true);
     const reader = new FileReader();
@@ -30,9 +35,12 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     };
     reader.readAsDataURL(file);
   };
+
   const handleRemoveImage = () => {
     setPreviewUrl(null);
     onImageUpload('');
+  };
+
   return (
     <div className={cn("flex flex-col items-center gap-2", className)}>
       {previewUrl ? (
@@ -63,11 +71,17 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             id="image-upload"
             onChange={handleFileChange}
             disabled={isUploading}
+          />
+          <Button
+            type="button"
             variant="outline"
             size="sm"
             className="text-xs"
             onClick={() => document.getElementById('image-upload')?.click()}
+          >
             {isUploading ? 'Enviando...' : 'Procurar imagens'}
+          </Button>
+        </div>
       )}
     </div>
   );
