@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -16,3 +15,5 @@ export default function QuizOfferPage() {
     </div>
   );
 }
+
+// Esta página está disponível em /quiz-descubra-seu-estilo

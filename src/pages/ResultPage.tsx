@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -10,23 +9,26 @@ import { useRouter } from 'next/navigation';
 export default function ResultPage() {
   const router = useRouter();
 
-  // Mock result data - in real app this would come from quiz state
+  // Mock result data - em app real viria do quiz state
   const mockResult = {
     primaryStyle: {
-      id: 'elegante',
+      category: 'elegante',
       name: 'Elegante',
-      description: 'Seu estilo é sofisticado e atemporal.',
-      characteristics: [
-        'Preferência por peças clássicas',
-        'Cores neutras e elegantes',
-        'Qualidade sobre quantidade'
-      ],
-      recommendations: [
-        'Invista em peças básicas de qualidade',
-        'Prefira cortes clássicos',
-        'Mantenha um guarda-roupa atemporal'
-      ]
-    }
+      score: 10,
+      percentage: 80,
+      colorPalette: ['#fff', '#000'],
+      attributes: ['Preferência por peças clássicas', 'Cores neutras e elegantes']
+    },
+    secondaryStyles: [
+      {
+        category: 'casual',
+        name: 'Casual',
+        score: 7,
+        percentage: 20,
+        colorPalette: ['#ccc', '#333'],
+        attributes: ['Conforto', 'Praticidade']
+      }
+    ]
   };
 
   return (
@@ -40,3 +42,5 @@ export default function ResultPage() {
     </div>
   );
 }
+
+// Esta página está disponível em /resultado

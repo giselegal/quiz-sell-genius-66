@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -29,6 +28,16 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>
         </header>
+        
+        <nav className="mb-8 flex gap-4">
+          <a href="/" className="text-blue-600 hover:underline">Quiz</a>
+          <a href="/resultado" className="text-blue-600 hover:underline">Resultado + Oferta</a>
+          <a href="/quiz-descubra-seu-estilo" className="text-blue-600 hover:underline">Quiz Descubra Seu Estilo</a>
+          <a href="/admin/editor" className="text-blue-600 hover:underline">Editor Visual</a>
+          <a href="/admin/analytics" className="text-blue-600 hover:underline">Métricas</a>
+          <a href="/admin/abtest" className="text-blue-600 hover:underline">Teste A/B</a>
+          <a href="/admin/settings" className="text-blue-600 hover:underline">Configurações</a>
+        </nav>
         
         <main>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
