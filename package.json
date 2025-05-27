@@ -18,7 +18,8 @@
     "start": "next start",
     "install-deps": "npm install",
     "prepare-deploy": "bash clean-before-commit.sh",
-    "full-build": "npm run clean && npm run build:ignore-errors || npm run build:emergency"
+    "full-build": "npm run clean && npm run build:ignore-errors || npm run build:emergency",
+    "lovable:prepare": "lovable-tagger"
   },
   "keywords": [],
   "author": "",
@@ -75,6 +76,7 @@
     "eslint-plugin-next": "^0.0.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "lovable-tagger": "^1.1.8",
     "postcss": "^8.4.14",
     "tailwindcss": "^3.3.0",
     "terser": "^5.40.0",
