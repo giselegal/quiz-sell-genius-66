@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -6,21 +7,25 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Monitor, Tablet, Smartphone } from 'lucide-react';
 import { ComponentRenderers } from './ComponentRenderers';
 import { SortableCanvasItem } from './SortableCanvasItem';
+
 interface CanvasItem {
   id: string;
   type: string;
   props: Record<string, any>;
   position: number;
 }
+
 interface DropZoneCanvasProps {
   items: CanvasItem[];
   previewMode: 'desktop' | 'tablet' | 'mobile';
   selectedItemId?: string | null;
   onSelectItem: (id: string) => void;
   onDeleteItem: (id: string) => void;
-// Componente básico de renderização para fallback
+}
+
 const BasicComponentRenderer: React.FC<{ 
   type: string; 
+  props: Record<string, any>;
   isSelected?: boolean;
   onSelect?: () => void;
 }> = ({ type, props, isSelected, onSelect }) => {
@@ -28,7 +33,7 @@ const BasicComponentRenderer: React.FC<{
     e.stopPropagation();
     onSelect?.();
   };
-  // Renderizadores básicos para componentes simples
+
   switch (type) {
     case 'heading':
       return (
@@ -51,17 +56,34 @@ const BasicComponentRenderer: React.FC<{
         </div>
       );
     case 'text':
+      return (
+        <div 
+          className={`cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
+          onClick={handleClick}
           style={{ marginBottom: props.marginBottom || 16 }}
+        >
           <p 
+            style={{
               fontSize: props.fontSize || 16,
               lineHeight: props.lineHeight || 1.6,
               textAlign: props.textAlign || 'left',
               color: props.color || '#4a4a4a',
+              margin: 0
+            }}
+          >
             {props.content || 'Adicione seu texto aqui...'}
           </p>
+        </div>
+      );
     case 'button':
+      return (
+        <div 
+          className={`cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
+          onClick={handleClick}
           style={{ marginTop: props.marginTop || 20 }}
+        >
           <button
+            style={{
               backgroundColor: props.backgroundColor || '#3b82f6',
               color: props.textColor || '#ffffff',
               borderRadius: props.borderRadius || 8,
@@ -71,25 +93,46 @@ const BasicComponentRenderer: React.FC<{
               cursor: 'pointer',
               display: 'block',
               margin: props.textAlign === 'center' ? '0 auto' : 0
+            }}
+          >
             {props.text || 'Clique Aqui'}
           </button>
+        </div>
+      );
     case 'image':
+      return (
+        <div 
+          className={`cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
+          onClick={handleClick}
+        >
           <img
             src={props.src || 'https://via.placeholder.com/400x200'}
             alt={props.alt || 'Imagem'}
+            style={{
               width: props.width || 400,
               height: props.height || 200,
               objectFit: props.objectFit || 'cover',
+              borderRadius: props.borderRadius || 8,
               display: 'block'
+            }}
           />
+        </div>
+      );
     default:
+      return (
+        <div
           className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer ${
             isSelected ? 'ring-2 ring-blue-500 ring-offset-2' : ''
           }`}
+          onClick={handleClick}
+        >
           <p className="text-gray-500">Componente: {type}</p>
           <p className="text-xs text-gray-400 mt-1">Renderizador não encontrado</p>
+        </div>
+      );
   }
 };
+
 export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
   items,
   previewMode,
@@ -103,6 +146,7 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
       type: 'canvas'
     }
   });
+
   const getPreviewStyles = () => {
     switch (previewMode) {
       case 'mobile':
@@ -111,22 +155,34 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
         return { maxWidth: '768px', margin: '0 auto' };
       default:
         return { maxWidth: '1200px', margin: '0 auto' };
+    }
+  };
+
   const getPreviewIcon = () => {
+    switch (previewMode) {
+      case 'mobile':
         return <Smartphone className="w-4 h-4" />;
+      case 'tablet':
         return <Tablet className="w-4 h-4" />;
+      default:
         return <Monitor className="w-4 h-4" />;
+    }
+  };
+
   const renderComponent = (item: CanvasItem) => {
     const isSelected = selectedItemId === item.id;
     
-    // Tentar usar o renderizador específico primeiro
     const SpecificRenderer = ComponentRenderers[item.type as keyof typeof ComponentRenderers];
     if (SpecificRenderer) {
+      return (
         <SpecificRenderer
           props={item.props}
           isSelected={isSelected}
           onSelect={() => onSelectItem(item.id)}
         />
-    // Fallback para renderizador básico
+      );
+    }
+
     return (
       <BasicComponentRenderer
         type={item.type}
@@ -135,9 +191,10 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
         onSelect={() => onSelectItem(item.id)}
       />
     );
+  };
+
   return (
     <div className="h-full bg-[#F5F2E9] relative">
-      {/* Header do Preview */}
       <div className="bg-white border-b border-[#D4C4A0] p-4 sticky top-0 z-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-[#432818]">
@@ -146,8 +203,10 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
           </div>
           <div className="text-sm text-[#B89B7A]">
             {items.length} {items.length === 1 ? 'componente' : 'componentes'}
+          </div>
+        </div>
       </div>
-      {/* Canvas Area */}
+
       <div 
         ref={setNodeRef}
         className={`min-h-[calc(100vh-200px)] p-6 transition-all duration-200 ${
@@ -169,7 +228,9 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
               </p>
               <div className="text-sm text-[#B89B7A]">
                 💡 Dica: Comece com um título chamativo
+              </div>
             </div>
+          </div>
         ) : (
           <SortableContext items={items.map(item => item.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-4">
@@ -186,7 +247,10 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
                     {renderComponent(item)}
                   </SortableCanvasItem>
                 ))}
+            </div>
           </SortableContext>
         )}
+      </div>
     </div>
   );
+};
