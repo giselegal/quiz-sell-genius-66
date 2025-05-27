@@ -1,72 +1,69 @@
 
 import React from 'react';
-import { QuizStage, QuizComponentType } from '@/types/quizBuilder';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Eye, EyeOff, Heading, Text, Image, ListOrdered, CheckCircle, LayoutGrid } from 'lucide-react';
+import { Eye, Settings, Trash2, Copy, Move } from 'lucide-react';
+import { QuizComponentData } from '@/types/quizBuilder';
+
 interface ComponentToolbarProps {
-  activeStage: QuizStage | null;
-  onComponentSelect: (type: string) => void;
-  isPreviewing: boolean;
+  component: QuizComponentData;
+  onEdit: () => void;
+  onDuplicate: () => void;
+  onDelete: () => void;
+  onPreview: () => void;
 }
-export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
-  activeStage,
-  onComponentSelect,
-  isPreviewing
+
+const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
+  component,
+  onEdit,
+  onDuplicate,
+  onDelete,
+  onPreview
 }) => {
-  if (!activeStage) {
-    return (
-      <div className="border-b bg-white p-3 flex items-center justify-between opacity-50">
-        <div className="flex items-center space-x-2">
-          <p className="text-sm text-gray-500">Selecione uma etapa para adicionar componentes</p>
-        </div>
-      </div>
-    );
-  }
-  const componentTypes: { type: QuizComponentType; label: string; icon: React.ElementType }[] = [
-    { type: 'header', label: 'Cabeçalho', icon: Heading },
-    { type: 'text', label: 'Texto', icon: Text },
-    { type: 'image', label: 'Imagem', icon: Image },
-    { type: 'multipleChoice', label: 'Múltipla Escolha', icon: ListOrdered },
-    { type: 'singleChoice', label: 'Escolha Única', icon: CheckCircle },
-    { type: 'columns', label: 'Colunas', icon: LayoutGrid },
-  ];
   return (
-    <div className="border-b bg-white p-3 flex items-center justify-between">
-      <div className="flex items-center space-x-2">
-        <TooltipProvider>
-          {!isPreviewing && componentTypes.map((component) => (
-            <Tooltip key={component.type}>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  onClick={() => onComponentSelect(component.type)}
-                >
-                  <component.icon className="w-4 h-4 mr-1" />
-                  {component.label}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Adicionar {component.label}</p>
-              </TooltipContent>
-            </Tooltip>
-          ))}
-        </TooltipProvider>
-      
-      <div className="flex items-center">
-        <Button variant="ghost" size="sm" className="text-gray-500">
-          {isPreviewing ? (
-            <>
-              <EyeOff className="w-4 h-4 mr-1" />
-              <span>Editando</span>
-            </>
-          ) : (
-              <Eye className="w-4 h-4 mr-1" />
-              <span>Visualizando</span>
-          )}
+    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="flex items-center gap-1 bg-white rounded-md shadow-lg border p-1">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onPreview}
+          className="h-6 w-6 p-0"
+          title="Visualizar"
+        >
+          <Eye className="h-3 w-3" />
         </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onEdit}
+          className="h-6 w-6 p-0"
+          title="Editar"
+        >
+          <Settings className="h-3 w-3" />
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onDuplicate}
+          className="h-6 w-6 p-0"
+          title="Duplicar"
+        >
+          <Copy className="h-3 w-3" />
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onDelete}
+          className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+          title="Excluir"
+        >
+          <Trash2 className="h-3 w-3" />
+        </Button>
+      </div>
     </div>
   );
 };
+
+export default ComponentToolbar;
