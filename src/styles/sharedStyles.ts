@@ -32,6 +32,7 @@ export const sharedStyles = {
     sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
     md: '0 4px 6px rgba(0, 0, 0, 0.05)',
     lg: '0 10px 15px rgba(0, 0, 0, 0.05)',
+  },
   typography: {
     fontFamily: {
       primary: 'Inter, sans-serif',
@@ -46,5 +47,6 @@ export const sharedStyles = {
       '2xl': '1.5rem',
       '3xl': '1.875rem',
       '4xl': '2.25rem',
+    }
   }
 };

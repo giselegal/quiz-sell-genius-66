@@ -26,15 +26,20 @@ export default function AnalyticsPage() {
       changeType: 'positive',
       icon: Users
     },
+    {
       title: 'Quizzes Iniciados',
       value: '8,956',
       change: '+8.7%',
       icon: Target
+    },
+    {
       title: 'Taxa de Conclusão',
       value: '68.4%',
       change: '-2.1%',
       changeType: 'negative',
       icon: BarChart3
+    },
+    {
       title: 'Conversões Totais',
       value: '1,247',
       change: '+15.8%',
@@ -46,12 +51,14 @@ export default function AnalyticsPage() {
     { name: 'Produto Ideal', views: 2840, conversions: 98, rate: 3.4 },
     { name: 'Personalidade Emp.', views: 2150, conversions: 87, rate: 4.0 },
     { name: 'Marketing Digital', views: 1680, conversions: 52, rate: 3.1 }
+  ];
   const trafficSources = [
     { source: 'Orgânico', visitors: 5240, percentage: 40.8 },
     { source: 'Facebook Ads', visitors: 3180, percentage: 24.8 },
     { source: 'Google Ads', visitors: 2450, percentage: 19.1 },
     { source: 'Instagram', visitors: 1320, percentage: 10.3 },
     { source: 'Direto', visitors: 657, percentage: 5.1 }
+  ];
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -62,14 +69,15 @@ export default function AnalyticsPage() {
             Acompanhe o desempenho geral dos seus quizzes
           </p>
         </div>
-        
         <div className="flex gap-3">
           <Button variant="outline" className="border-[#B89B7A] text-[#432818]">
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
           </Button>
+          <Button variant="outline" className="border-[#B89B7A] text-[#432818]">
             <Download className="w-4 h-4 mr-2" />
             Exportar
+          </Button>
           <select 
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
@@ -79,6 +87,7 @@ export default function AnalyticsPage() {
             <option value="30d">Últimos 30 dias</option>
             <option value="90d">Últimos 90 dias</option>
           </select>
+        </div>
       </div>
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -106,11 +115,13 @@ export default function AnalyticsPage() {
                   </div>
                   <div className="p-3 bg-[#F5F2E9] rounded-full">
                     <Icon className="w-6 h-6 text-[#B89B7A]" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
           );
         })}
+      </div>
       {/* Detailed Analytics */}
       <Tabs defaultValue="performance" className="space-y-6">
         <TabsList className="bg-[#F5F2E9] border border-[#D4C4A0]">
@@ -132,6 +143,7 @@ export default function AnalyticsPage() {
                       <p className="text-sm text-[#B89B7A]">
                         {quiz.views.toLocaleString()} visualizações
                       </p>
+                    </div>
                     <div className="text-right">
                       <p className="font-bold text-[#432818]">{quiz.conversions} conversões</p>
                       <Badge 
@@ -144,26 +156,46 @@ export default function AnalyticsPage() {
                       >
                         {quiz.rate}%
                       </Badge>
+                    </div>
+                  </div>
                 ))}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="traffic" className="space-y-6">
+          <Card className="border-[#D4C4A0]">
+            <CardHeader>
               <CardTitle className="text-[#432818]">Fontes de Tráfego</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
                 {trafficSources.map((source, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="font-medium text-[#432818]">{source.source}</span>
                       <span className="text-sm text-[#B89B7A]">
                         {source.visitors.toLocaleString()} ({source.percentage}%)
+                      </span>
+                    </div>
                     <div className="w-full bg-[#F5F2E9] rounded-full h-2">
                       <div 
                         className="bg-[#B89B7A] h-2 rounded-full transition-all duration-500"
                         style={{ width: `${source.percentage}%` }}
                       />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
         <TabsContent value="conversions" className="space-y-6">
+          <Card className="border-[#D4C4A0]">
+            <CardHeader>
               <CardTitle className="text-[#432818]">Funil de Conversão Geral</CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="space-y-6">
                 {[
                   { step: 'Visitantes', value: 12847, percentage: 100 },
@@ -175,10 +207,20 @@ export default function AnalyticsPage() {
                   <div key={index} className="relative">
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium text-[#432818]">{step.step}</span>
-                        {step.value.toLocaleString()} ({step.percentage}%)
+                      <span>{step.value.toLocaleString()} ({step.percentage}%)</span>
+                    </div>
                     <div className="w-full bg-[#F5F2E9] rounded-full h-4">
+                      <div
                         className="bg-gradient-to-r from-[#B89B7A] to-[#D4C4A0] h-4 rounded-full transition-all duration-500"
                         style={{ width: `${step.percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </div>
   );

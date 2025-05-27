@@ -35,5 +35,3 @@ export {
 };
 
 export type { BankImage, PreloadOptions };
-
-export default {

@@ -27,27 +27,30 @@ function getHighQualityUrl(url: string): string {
   const uploadMarker = '/image/upload/';
   const parts = url.split(uploadMarker);
   if (parts.length !== 2) {
+    return url;
+  }
   const baseUrl = parts[0] + uploadMarker;
   let pathAfterUpload = parts[1];
   // Regex para encontrar a versão e o public_id, ignorando TODAS as transformações
   const versionAndPublicIdPattern = /^(?:.*?\/)*?(v\d+\/)?([^/]+(?:\/[^/]+)*)$/;
   const match = pathAfterUpload.match(versionAndPublicIdPattern);
   if (!match) {
-  const version = match[1] || ''; // Inclui o 'v' e a barra se existir
+    return url;
+  }
+  const version = match[1] || '';
   const publicId = match[2];
-  // Aplicar apenas nossas transformações otimizadas
   const transforms = [
-    'f_auto',         // Formato automático (webp/avif)
-    'q_95',           // Qualidade alta (95%)
-    'dpr_auto',       // Densidade de pixel automática para telas de alta resolução
-    'w_auto',         // Largura automática baseada no contêiner
-    'c_limit',        // Limitar redimensionamento para manter qualidade
-    'e_sharpen:60'    // Nitidez aumentada para compensar qualquer compressão
+    'f_auto',
+    'q_95',
+    'dpr_auto',
+    'w_auto',
+    'c_limit',
+    'e_sharpen:60'
   ].join(',');
-  // Construir URL final: baseUrl + transformações + versão (se existir) + publicId
   const finalUrl = `${baseUrl}${transforms}/${version}${publicId}`;
   return finalUrl;
- * Componente de imagem de alta qualidade sem embaçamento para a introdução
+}
+
 const FixedIntroImage: React.FC<FixedIntroImageProps> = ({
   src,
   alt,
@@ -57,10 +60,7 @@ const FixedIntroImage: React.FC<FixedIntroImageProps> = ({
   priority = true
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  
-  // Obter URL de alta qualidade
   const highQualitySrc = getHighQualityUrl(src);
-  // Calcular a proporção para o estilo
   const aspectRatio = height / width;
   const paddingBottom = `${aspectRatio * 100}%`;
   return (
@@ -72,7 +72,6 @@ const FixedIntroImage: React.FC<FixedIntroImageProps> = ({
       {!imageLoaded && (
         <div className="absolute inset-0 bg-[#F8F5F0] animate-pulse" />
       )}
-      
       <img
         src={highQualitySrc}
         alt={alt}
@@ -85,7 +84,6 @@ const FixedIntroImage: React.FC<FixedIntroImageProps> = ({
         style={{imageRendering: 'crisp-edges'}}
         onLoad={() => {
           setImageLoaded(true);
-          // Reportar LCP carregado
           if (priority && typeof window !== 'undefined' && 'performance' in window) {
             window.performance.mark('lcp-image-loaded');
           }
