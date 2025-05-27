@@ -21,7 +21,7 @@ const ResultPage = loadable(() => import('./components/ResultPage'), {
   fallback: <div className="flex h-screen w-full items-center justify-center">Carregando resultados...</div>
 });
 
-const QuizOfferPage = loadable(() => import('./pages/QuizOfferPage'), {
+const QuizOfferPage = loadable(() => import('./components/QuizOfferPage'), {
   fallback: <div className="flex h-screen w-full items-center justify-center">Carregando oferta...</div>
 });
 
