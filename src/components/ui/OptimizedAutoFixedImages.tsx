@@ -1,83 +1,94 @@
-"use client";
 
-import React, { useEffect } from 'react';
-import { fixBlurryImages } from '@/utils/enhancedFixBlurryImages';
-interface AutoFixedImagesProps {
-  children: React.ReactNode;
-  fixOnMount?: boolean;
-  fixOnUpdate?: boolean;
+import React, { useState, useCallback } from 'react';
+import { cn } from '@/lib/utils';
+
+interface OptimizedAutoFixedImageProps {
+  src: string;
+  alt: string;
   className?: string;
+  width?: number;
+  height?: number;
+  loading?: 'lazy' | 'eager';
+  priority?: boolean;
+  fallbackSrc?: string;
+  onError?: () => void;
+  onLoad?: () => void;
 }
-/**
- * Versão otimizada do componente AutoFixedImages
- * Este componente aplica correções de imagens borradas de forma mais eficiente
- * usando requestIdleCallback e limitando as observações DOM
- */
-const OptimizedAutoFixedImages: React.FC<AutoFixedImagesProps> = ({
-  children,
-  fixOnMount = true, 
-  fixOnUpdate = false, // Reduzido para false por padrão para evitar observação contínua
-  className = ''
+
+const OptimizedAutoFixedImage: React.FC<OptimizedAutoFixedImageProps> = ({
+  src,
+  alt,
+  className,
+  width,
+  height,
+  loading = 'lazy',
+  priority = false,
+  fallbackSrc,
+  onError,
+  onLoad
 }) => {
-  // Aplicar correção na montagem inicial - com performance melhorada
-  useEffect(() => {
-    if (fixOnMount) {
-      // Adiar execução para um momento com baixo impacto na performance
-      if ('requestIdleCallback' in window) {
-        const timeoutId = window.setTimeout(() => {
-          // @ts-ignore
-          window.requestIdleCallback(() => {
-            fixBlurryImages();
-          }, { timeout: 3000 }); // Timeout aumentado para garantir que o LCP já ocorreu
-        }, 2000); // Atraso adicional para priorizar renderização e interatividade iniciais
-        
-        return () => window.clearTimeout(timeoutId);
-      } else {
-        const timeoutId = setTimeout(fixBlurryImages, 2500);
-        return () => clearTimeout(timeoutId);
-      }
-    }
-  }, [fixOnMount]);
-  
-  // Observer otimizado - usa IntersectionObserver para detectar quando elementos
-  // estão visíveis antes de aplicar correções
-    if (!fixOnUpdate) return;
+  const [currentSrc, setCurrentSrc] = useState(src);
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const maxRetries = 2;
+
+  const handleImageError = useCallback(() => {
+    console.error(`Failed to load image: ${currentSrc}`);
     
-    let debounceTimer: number | null = null;
-    let mutationCount = 0;
-    // Observador de mutações mais eficiente
-    const observer = new MutationObserver((mutations) => {
-      // Incrementar contador para limitar frequência de correções
-      mutationCount++;
-      
-      // Limitar processamento a um máximo de uma correção a cada 10 mutações
-      if (mutationCount % 10 !== 0) return;
-      // Debounce com clear do timer anterior
-      if (debounceTimer) {
-        clearTimeout(debounceTimer);
-      // Agendar próxima correção com baixa prioridade
-      debounceTimer = window.setTimeout(() => {
-        if ('requestIdleCallback' in window) {
-          }, { timeout: 2000 });
-        } else {
-          setTimeout(fixBlurryImages, 1000);
-        }
-      }, 1500);
-    });
-    // Opções de observação mais seletivas
-    observer.observe(document.body, { 
-      childList: true,
-      subtree: true,
-      attributes: false,
-      characterData: false
-    return () => {
-      observer.disconnect();
-    };
-  }, [fixOnUpdate]);
+    if (retryCount < maxRetries && fallbackSrc) {
+      setRetryCount(prev => prev + 1);
+      setCurrentSrc(fallbackSrc);
+    } else {
+      setImageError(true);
+      onError?.();
+    }
+  }, [currentSrc, retryCount, fallbackSrc, onError]);
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+    onLoad?.();
+  }, [onLoad]);
+
+  if (imageError) {
+    return (
+      <div className={cn(
+        "bg-gray-200 flex items-center justify-center rounded",
+        className
+      )} style={{ width, height }}>
+        <div className="text-center p-4">
+          <div className="text-gray-400 mb-2">📷</div>
+          <span className="text-gray-500 text-xs">Imagem não disponível</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={className}>
-      {children}
+    <div className={cn("relative overflow-hidden", className)}>
+      {!imageLoaded && (
+        <div 
+          className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse"
+          style={{ width, height }}
+        />
+      )}
+      <img
+        src={currentSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={loading}
+        onError={handleImageError}
+        onLoad={handleImageLoad}
+        className={cn(
+          "transition-all duration-300 ease-in-out",
+          imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95",
+          className
+        )}
+      />
     </div>
   );
 };
-export default OptimizedAutoFixedImages;
+
+export default OptimizedAutoFixedImage;
