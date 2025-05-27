@@ -4,10 +4,10 @@
 import React from 'react';
 import { QuizOfferHero } from '@/components/quiz-offer/QuizOfferHero';
 import { QuizOfferCTA } from '@/components/quiz-offer/QuizOfferCTA';
-import { useNavigate } from 'react-router-dom';
+import { useUniversalNavigation } from '../hooks/useUniversalNavigation';
 
 export default function QuizOfferPage() {
-  const navigate = useNavigate();
+  const { navigate } = useUniversalNavigation();
 
   return (
     <div className="min-h-screen bg-[#FAF9F7]">

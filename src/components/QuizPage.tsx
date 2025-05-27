@@ -14,11 +14,11 @@ import { useAuth } from '../context/AuthContext';
 import QuizResult from './QuizResult';
 import { QuizOfferHero } from './quiz-offer/QuizOfferHero';
 import { QuizOfferCTA } from './quiz-offer/QuizOfferCTA';
-import { useNavigate } from 'react-router-dom';
+import { useUniversalNavigation } from '../hooks/useUniversalNavigation';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
-  const navigate = useNavigate();
+  const { navigate } = useUniversalNavigation();
   
   // Modificado: Sempre exibir o QuizIntro primeiro, independente do histórico
   const [showIntro, setShowIntro] = useState(true);
