@@ -8,6 +8,7 @@ import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { Monitor, Smartphone, Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
 interface EditorPreviewProps {
   blocks: Block[];
   selectedBlockId: string | null;
@@ -16,6 +17,7 @@ interface EditorPreviewProps {
   primaryStyle: StyleResult;
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
 }
+
 export const EditorPreview: React.FC<EditorPreviewProps> = ({
   blocks,
   selectedBlockId,
@@ -29,10 +31,11 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5, // 5px
+        distance: 5,
       },
     })
   );
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     
@@ -43,9 +46,9 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
       onReorderBlocks(activeIndex, overIndex);
     }
   };
+
   return (
     <div className="h-full flex flex-col">
-      {/* Preview Controls */}
       <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
         <div className="flex gap-2">
           <Button
@@ -57,10 +60,15 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
             <Monitor className="w-4 h-4 mr-2" />
             Desktop
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setViewMode('mobile')}
             className={viewMode === 'mobile' ? 'bg-[#FAF9F7]' : ''}
+          >
             <Smartphone className="w-4 h-4 mr-2" />
             Mobile
+          </Button>
         </div>
         <div className="flex items-center text-sm text-[#8F7A6A]">
           {isPreviewing ? (
@@ -69,11 +77,14 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
               <span>Modo de visualização</span>
             </div>
           ) : (
+            <div className="flex items-center gap-1">
               <EyeOff className="w-4 h-4" />
               <span>Modo de edição</span>
+            </div>
           )}
+        </div>
       </div>
-      {/* Preview Content */}
+
       <div className={cn(
         "flex-1 overflow-auto p-4 bg-[#FAF9F7]",
         viewMode === 'mobile' && 'flex justify-center'
@@ -86,6 +97,8 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
             <div className="h-64 flex flex-col items-center justify-center text-[#8F7A6A] border-2 border-dashed border-[#B89B7A]/20 rounded-lg">
               <p className="mb-2">Nenhum bloco adicionado.</p>
               <p>Use o painel da esquerda para adicionar blocos à página.</p>
+            </div>
+          ) : (
             <DndContext 
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -113,5 +126,9 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
                 </div>
               </SortableContext>
             </DndContext>
+          )}
+        </div>
+      </div>
     </div>
+  );
 };
