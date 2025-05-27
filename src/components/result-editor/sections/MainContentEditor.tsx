@@ -1,74 +1,80 @@
 
 import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+
 interface MainContentEditorProps {
-  content: {
-    introText?: string;
-    benefits?: string[];
-    tabletImage?: string;
-    styleImages?: Record<string, string>;
+  config: {
+    mainContent: {
+      description?: string;
+      customImage?: string;
+    };
   };
-  visible: boolean;
-  onUpdate: (content: any) => void;
-  onToggleVisibility: (visible: boolean) => void;
+  onUpdate: (section: string, content: any) => void;
 }
-export const MainContentEditor: React.FC<MainContentEditorProps> = ({
-  content,
-  visible,
-  onUpdate,
-  onToggleVisibility
-}) => {
+
+const MainContentEditor: React.FC<MainContentEditorProps> = ({ config, onUpdate }) => {
+  const handleDescriptionChange = (value: string) => {
+    onUpdate('mainContent', {
+      ...config.mainContent,
+      description: value
+    });
+  };
+
+  const handleImageChange = (value: string) => {
+    onUpdate('mainContent', {
+      ...config.mainContent,
+      customImage: value
+    });
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium">Conteúdo Principal</h3>
-        <Switch
-          checked={visible}
-          onCheckedChange={onToggleVisibility}
-        />
-      </div>
-      
-      {visible && (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="introText">Texto de Introdução</Label>
-            <Textarea
-              id="introText"
-              value={content.introText || ''}
-              onChange={(e) => onUpdate({ ...content, introText: e.target.value })}
-              rows={4}
-            />
-          </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Conteúdo Principal</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="description">Descrição do Estilo</Label>
+          <Textarea
+            id="description"
+            value={config.mainContent.description || ''}
+            onChange={(e) => handleDescriptionChange(e.target.value)}
+            placeholder="Descrição personalizada para o estilo predominante"
+            rows={5}
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="customImage">URL da Imagem Personalizada</Label>
+          <Input
+            id="customImage"
+            value={config.mainContent.customImage || ''}
+            onChange={(e) => handleImageChange(e.target.value)}
+            placeholder="https://exemplo.com/imagem.jpg"
+          />
           
-            <Label>Benefícios</Label>
-            {content.benefits?.map((benefit, index) => (
-              <Input
-                key={index}
-                value={benefit}
-                onChange={(e) => {
-                  const newBenefits = [...(content.benefits || [])];
-                  newBenefits[index] = e.target.value;
-                  onUpdate({ ...content, benefits: newBenefits });
-                }}
-                className="mb-2"
-              />
-            ))}
-            <Label htmlFor="tabletImage">Imagem do Tablet</Label>
-            <Input
-              id="tabletImage"
-              value={content.tabletImage || ''}
-              onChange={(e) => onUpdate({ ...content, tabletImage: e.target.value })}
-            {content.tabletImage && (
-              <img 
-                src={content.tabletImage} 
-                alt="Preview do tablet" 
-                className="h-32 object-contain mt-2"
-            )}
-        </>
-      )}
-    </div>
+          {config.mainContent.customImage && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-600 mb-1">Pré-visualização:</p>
+              <div className="p-2 bg-gray-50 rounded">
+                <img 
+                  src={config.mainContent.customImage} 
+                  alt="Imagem do estilo" 
+                  className="h-40 object-contain mx-auto" 
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://placehold.co/400x300?text=Imagem+Inválida';
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
+
+export default MainContentEditor;

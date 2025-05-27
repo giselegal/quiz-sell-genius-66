@@ -2,6 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { dynamicIconImport } from '@/utils/dynamicIconImport';
+
 interface IconBlockPreviewProps {
   content: {
     icon?: string;
@@ -12,6 +13,7 @@ interface IconBlockPreviewProps {
     style?: any;
   };
 }
+
 const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
   const { 
     icon = 'star', 
@@ -21,6 +23,7 @@ const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
     position = 'top',
     style = {} 
   } = content;
+
   // Get the icon component as a React ElementType
   const IconComponent = dynamicIconImport(icon);
   
@@ -33,7 +36,10 @@ const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '0.5rem'
+  };
+  
   const sizeInPixels = parseInt(size) || 24;
+
   return (
     <div className="w-full" style={containerStyle as React.CSSProperties}>
       <div className="flex items-center justify-center">
@@ -55,4 +61,5 @@ const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
     </div>
   );
 };
+
 export default IconBlockPreview;

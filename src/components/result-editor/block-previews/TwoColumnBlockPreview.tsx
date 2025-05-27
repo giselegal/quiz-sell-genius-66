@@ -1,5 +1,6 @@
 
 import React from 'react';
+
 interface TwoColumnBlockPreviewProps {
   content: {
     leftColumn?: {
@@ -8,10 +9,15 @@ interface TwoColumnBlockPreviewProps {
       style?: any;
     };
     rightColumn?: {
+      content?: string;
+      width?: string;
+      style?: any;
+    };
     columnGap?: string;
     style?: any;
   };
 }
+
 const TwoColumnBlockPreview: React.FC<TwoColumnBlockPreviewProps> = ({ content }) => {
   const leftWidth = content.leftColumn?.width || '50%';
   const rightWidth = content.rightColumn?.width || '50%';
@@ -36,13 +42,24 @@ const TwoColumnBlockPreview: React.FC<TwoColumnBlockPreviewProps> = ({ content }
           )}
         </div>
         
+        <div 
+          style={{ 
             width: rightWidth,
             ...content.rightColumn?.style
+          }} 
+          className="w-full md:w-auto bg-[#f9f9f9] p-4 rounded-lg"
+        >
           {content.rightColumn?.content ? (
             <div dangerouslySetInnerHTML={{ __html: content.rightColumn.content }} />
+          ) : (
+            <div className="h-20 flex items-center justify-center text-gray-400">
               Coluna Direita
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
+
 export default TwoColumnBlockPreview;
