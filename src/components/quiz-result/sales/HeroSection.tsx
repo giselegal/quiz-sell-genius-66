@@ -1,47 +1,64 @@
 
+"use client";
+
 import React from 'react';
+import { motion } from 'framer-motion';
 import { StyleResult } from '@/types/quiz';
+
 interface HeroSectionProps {
   primaryStyle: StyleResult;
-  title: any;
-  subtitle: any;
-  imageUrl?: any;
-  ctaText?: any;
-  onCtaClick?: () => void;
+  className?: string;
 }
+
 const HeroSection: React.FC<HeroSectionProps> = ({
   primaryStyle,
-  title,
-  subtitle,
-  imageUrl,
-  ctaText,
-  onCtaClick
+  className = ""
 }) => {
   return (
-    <section className="py-12 px-4">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className={`bg-gradient-to-br from-[#FAF9F7] to-[#F5F2ED] py-16 px-4 ${className}`}
+    >
       <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-4 text-[#aa6b5d]">
-          {title || `Seu Estilo é ${primaryStyle.category}!`}
-        </h1>
-        <p className="text-xl mb-8 text-gray-600">
-          {subtitle || `Descubra como aplicar seu estilo ${primaryStyle.category} no dia a dia.`}
-        </p>
-        {imageUrl && (
-          <img 
-            src={imageUrl} 
-            alt="Hero" 
-            className="mx-auto mb-8 rounded-lg shadow-lg max-w-full h-auto"
-          />
-        )}
-        {ctaText && onCtaClick && (
-          <button 
-            onClick={onCtaClick}
-            className="bg-[#aa6b5d] text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-[#8a5a4d] transition-colors"
-          >
-            {ctaText}
-          </button>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-4xl md:text-6xl font-playfair text-[#432818] mb-6"
+        >
+          Parabéns!
+        </motion.h1>
+        
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-xl md:text-2xl text-[#8F7A6A] mb-8"
+        >
+          Descobrimos seu estilo único
+        </motion.p>
+        
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="bg-white rounded-lg p-8 shadow-lg"
+        >
+          <h2 className="text-2xl font-medium text-[#432818] mb-4">
+            Seu estilo predominante é
+          </h2>
+          <div className="text-4xl font-bold text-[#B89B7A] mb-4">
+            {primaryStyle?.name || 'Elegante'}
+          </div>
+          <div className="text-xl text-[#8F7A6A]">
+            {primaryStyle?.percentage || 65}%
+          </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.div>
   );
 };
+
 export default HeroSection;
