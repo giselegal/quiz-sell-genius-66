@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { ChevronLeft } from 'lucide-react';
 
@@ -18,7 +18,7 @@ export function AdminHeader({
       <div className="flex items-center gap-2">
         {showBackButton && (
           <Button variant="ghost" size="icon" asChild>
-            <Link href={backTo}>
+            <Link to={backTo}>
               <ChevronLeft className="h-5 w-5" />
               <span className="sr-only">Voltar</span>
             </Link>
@@ -29,10 +29,10 @@ export function AdminHeader({
       
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
-          <Link href="/admin">Painel</Link>
+          <Link to="/admin">Painel</Link>
         </Button>
         <Button variant="outline" size="sm" asChild>
-          <Link href="/">Ver Site</Link>
+          <Link to="/">Ver Site</Link>
         </Button>
       </div>
     </div>

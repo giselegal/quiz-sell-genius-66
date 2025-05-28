@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useNavigate } from 'react-router-dom';
 import { Edit, Settings, Users, BarChart, Eye, Palette } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
@@ -21,7 +20,7 @@ export const AdminDashboard: React.FC = () => {
           
           {/* Botão de acesso ao Dashboard Antigo */}
           <div className="mb-8">
-            <Link href="/admin/old">
+            <Link to="/admin/old">
               <button className="px-4 py-2 border border-amber-500 text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors rounded-md font-medium">
                 🔙 Dashboard Antigo
               </button>

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
@@ -8,9 +7,12 @@ import ResultHeader from './quiz-result/ResultHeader';
 import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
+import BeforeAfterTransformation from './result/BeforeAfterTransformation4';
+import { CheckCircle } from 'lucide-react';
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { cn } from '@/lib/utils';
+import GuaranteeSection from './result/GuaranteeSection';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -91,7 +93,14 @@ const QuizResult: React.FC<QuizResultProps> = ({
           <PrimaryStyleCard primaryStyle={primaryStyle} />
           <SecondaryStylesSection secondaryStyles={secondaryStyles} />
           <OfferCard primaryStyle={primaryStyle} config={config?.offer?.hero?.content || {}} />
-        </div>
+          {/* Bloco de transformação Antes e Depois */}
+          <BeforeAfterTransformation />
+          
+          {/* Importar componente GuaranteeSection em vez de usar o simples */}
+          <div className="mt-12 mb-8">
+            <GuaranteeSection />
+          </div>
+        </div>            
       </ContentContainer>
     </div>
   );

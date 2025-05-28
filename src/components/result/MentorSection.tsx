@@ -9,17 +9,19 @@ const MentorSection: React.FC = () => {
       <div className="grid md:grid-cols-2 gap-8 items-center relative z-10">
         <div>
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-            Conheça sua Mentora
+    
           </h2>
           <p className="text-[#432818] mb-4">
-            <strong>Gisele Galvão</strong> é uma consultora de imagem especializada em 
-            estilo pessoal e inteligência estética, ajudando mulheres a expressarem 
-            sua autenticidade através da imagem.
+            <strong>Gisele Galvão</strong> — Consultora de Imagem e Estilo, Persona Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.
           </p>
-          <p className="text-[#432818]">
-            Com mais de 7 anos de experiência, já transformou o guarda-roupa e a confiança 
-            de centenas de mulheres, utilizando técnicas baseadas em psicologia da moda 
-            e harmonização visual.
+          <p className="text-[#432818] mb-4">
+            Advogada de formação. Mãe da Victória, esposa do Fabrício.
+          </p>
+          <p className="text-[#432818] mb-4">
+            Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano. Colérica, virginiana, paciente, pacificadora e muito empata.
+          </p>
+          <p className="text-[#432818] mb-4">
+            Amo receber, atos de serviços e tempo de qualidade são minha linguagem de amor. Amo vinho, chás e café. Meus maiores valores são minha família, justiça, honestidade, ética e liberdade.
           </p>
         </div>
         

@@ -1,9 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AspectRatio } from '../ui/aspect-ratio';
 import { getFallbackStyle } from '@/utils/styleUtils';
+import { isImagePreloaded, getOptimizedImage, getImageMetadata } from '@/utils/imageManager';
+import OptimizedImage from '../ui/OptimizedImage';
 
 interface QuizOptionImageProps {
   imageUrl: string;
@@ -24,6 +26,30 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
+  // Get image metadata from our bank if available
+  const imageMetadata = useMemo(() => 
+    getImageMetadata(imageUrl),
+    [imageUrl]
+  );
+  
+  // Use memoization to avoid recalculating the URL on each render
+  const optimizedImageUrl = useMemo(() => 
+    getOptimizedImage(imageUrl, {
+      quality: 95,
+      format: 'auto',
+      width: imageUrl.includes('sapatos') ? 400 : 500
+    }),
+    [imageUrl]
+  );
+  
+  // Check if image is already preloaded on mount
+  useEffect(() => {
+    if (isImagePreloaded(imageUrl)) {
+      setImageLoaded(true);
+    }
+  }, [imageUrl]);
 
   if (imageError) {
     return (
@@ -37,28 +63,30 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
       "md:mx-auto", // Center on desktop
-      !isMobile && "md:max-w-[40%]", // Reduced from 50% to 40% on desktop
-      is3DQuestion && "transform-gpu"
+      !isMobile && "md:max-w-[40%]" // Reduced from 50% to 40% on desktop
     )}>
       <AspectRatio 
         ratio={imageUrl.includes('sapatos') ? 1 : 3/4} 
         className="w-full h-full"
       >
-        <div className="w-full h-full flex items-center justify-center overflow-hidden">
-          <img
-            src={imageUrl}
-            alt={altText}
+        <div className={cn(
+          "w-full h-full flex items-center justify-center overflow-hidden transform-gpu",
+          isSelected && "scale-[1.03] transition-all duration-300"
+        )}>
+          {/* Use OptimizedImage component instead of img tag */}
+          <OptimizedImage 
+            src={optimizedImageUrl}
+            alt={imageMetadata?.alt || altText}
             className={cn(
               "object-cover w-full h-full",
-              "transition-all duration-300 ease-in-out",
-              "scale-110",
-              isSelected && "shadow-lg border-2 border-brand-gold/40 z-10"
+              isSelected 
+                ? "shadow-3d" 
+                : "shadow-sm hover:shadow-md",
+              // Enhanced 3D effect
+              isSelected && is3DQuestion && "transform-3d rotate-y-12"
             )}
-            onError={() => setImageError(true)}
-            style={{
-              willChange: 'transform',
-              transformOrigin: 'center center',
-            }}
+            onLoad={() => setImageLoaded(true)}
+            priority={true}
           />
         </div>
       </AspectRatio>

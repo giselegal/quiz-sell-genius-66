@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
 export const Navbar: React.FC = () => {
@@ -11,14 +11,14 @@ export const Navbar: React.FC = () => {
         <div className="flex justify-between h-16">
           {/* Logo e Nome do Site */}
           <div className="text-xl font-bold text-gray-800">
-            <Link href="/">SeuSite</Link>
+            <Link to="/">SeuSite</Link>
           </div>
           
           {/* Links da Navbar */}
           <div className="flex space-x-4">
-            <Link href="/" className="text-gray-600 hover:text-gray-900">Início</Link>
-            <Link href="/sobre" className="text-gray-600 hover:text-gray-900">Sobre</Link>
-            <Link href="/contato" className="text-gray-600 hover:text-gray-900">Contato</Link>
+            <Link to="/" className="text-gray-600 hover:text-gray-900">Início</Link>
+            <Link to="/sobre" className="text-gray-600 hover:text-gray-900">Sobre</Link>
+            <Link to="/contato" className="text-gray-600 hover:text-gray-900">Contato</Link>
           </div>
           
           {/* Link direto para o admin - sem autenticação */}

@@ -162,8 +162,8 @@ const EditorCompleto: React.FC = () => {
     
     try {
       // Salvar no localStorage
-      safeLocalStorage.setItem('editorConfig', JSON.stringify(config));
-      safeLocalStorage.setItem('pageEditorConfig', JSON.stringify(config));
+      localStorage.setItem('editorConfig', JSON.stringify(config));
+      localStorage.setItem('pageEditorConfig', JSON.stringify(config));
       
       toast({
         title: "Configuração salva!",

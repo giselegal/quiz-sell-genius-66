@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -69,9 +70,41 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
     },
     resultEditorState: {
       config: {
-        title: '',
-        description: '',
-        sections: [],
+        styleType: '',
+        header: {
+          visible: true,
+          content: {}
+        },
+        mainContent: {
+          visible: true,
+          content: {}
+        },
+        offer: {
+          hero: {
+            visible: true,
+            content: {}
+          },
+          benefits: {
+            visible: true,
+            content: {}
+          },
+          products: {
+            visible: true,
+            content: {}
+          },
+          pricing: {
+            visible: true,
+            content: {}
+          },
+          testimonials: {
+            visible: true,
+            content: {}
+          },
+          guarantee: {
+            visible: true,
+            content: {}
+          }
+        }
       },
       blocks: [],
     },
@@ -95,13 +128,19 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
     }));
   };
 
+  // Helper function to handle component selection
+  const handleComponentSelect = (type: string) => {
+    console.log('Component selected:', type);
+    // Implementation would go here
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-background">
       <EditorToolbar
         isPreviewing={editorState.isPreviewing}
         onPreviewToggle={togglePreview}
         onSave={handleSave}
-        isSaving={isSaving}
+        activeTab={editorState.activeTab}
       />
 
       <div className="flex-1 overflow-hidden">
@@ -121,7 +160,11 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
               <ResizablePanelGroup direction="horizontal" className="h-full">
                 <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
                   <div className="h-full border-r bg-white overflow-y-auto">
-                    <UnifiedComponentsSidebar onComponentSelect={() => {}} />
+                    <UnifiedComponentsSidebar 
+                      onComponentSelect={handleComponentSelect}
+                      activeTab="quiz" 
+                      activeStageType={null}
+                    />
                   </div>
                 </ResizablePanel>
                 
@@ -164,7 +207,11 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
               <ResizablePanelGroup direction="horizontal" className="h-full">
                 <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
                   <div className="h-full border-r bg-white overflow-y-auto">
-                    <UnifiedComponentsSidebar onComponentSelect={() => {}} />
+                    <UnifiedComponentsSidebar 
+                      onComponentSelect={handleComponentSelect}
+                      activeTab="result"
+                      activeStageType={null}
+                    />
                   </div>
                 </ResizablePanel>
                 
@@ -200,7 +247,11 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
               <ResizablePanelGroup direction="horizontal" className="h-full">
                 <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
                   <div className="h-full border-r bg-white overflow-y-auto">
-                    <UnifiedComponentsSidebar onComponentSelect={() => {}} />
+                    <UnifiedComponentsSidebar 
+                      onComponentSelect={handleComponentSelect}
+                      activeTab="sales"
+                      activeStageType={null}
+                    />
                   </div>
                 </ResizablePanel>
                 

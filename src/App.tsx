@@ -1,99 +1,57 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { QuizProvider } from './context/QuizContext';
-import HomePage from './pages/HomePage';
-import QuizPage from './components/QuizPage';
-import ResultPage from './pages/ResultPage';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import EditorPage from './pages/admin/EditorPage';
-import SettingsPage from './pages/admin/SettingsPage';
-import AnalyticsPage from './pages/admin/AnalyticsPage';
-import NotFoundPage from './pages/NotFoundPage';
-import EditorNotFoundPage from './pages/EditorNotFoundPage';
-import EnhancedResultPageEditor from './pages/EnhancedResultPageEditorPage';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { initFacebookPixel, captureUTMParameters } from './utils/analytics';
-import { Toaster } from '@/components/ui/toaster';
-import ABTestPage from './pages/admin/ABTestPage';
-import ABTestManagerPage from './pages/ABTestManagerPage';
+/**
+ * @fileoverview Main application file that sets up the router, theme provider, and lazy-loaded components.
+ */
 
-// Avalia se o dispositivo tem performance limitada
-const isLowPerformanceDevice = () => {
-  const memory = (navigator as any).deviceMemory;
-  if (memory && memory < 4) return true;
-  
-  // Se o dispositivo tem menos de 4GB de RAM ou não tem informação disponível, verificar CPU cores
-  const cpuCores = navigator.hardwareConcurrency;
-  if (cpuCores && cpuCores < 4) return true;
-  
-  return false;
-};
+import React, { Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import loadable from '@loadable/component';
+import { Toaster } from './components/ui/toaster';
+import { ThemeProvider } from './components/theme-provider';
 
-const App = () => {
-  const lowPerformance = isLowPerformanceDevice();
+// Lazy-loaded components
+const QuizFlow = loadable(() => import('./components/QuizFlow'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando quiz...</div>
+});
 
-  // Inicializar analytics na montagem do componente
-  React.useEffect(() => {
-    // Inicializar Facebook Pixel
-    initFacebookPixel();
-    
-    // Capturar UTM parameters para analytics de marketing
-    captureUTMParameters();
-    
-    console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
-  }, [lowPerformance]);
+const AdminLayout = loadable(() => import('./components/admin/AdminLayout'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando painel...</div>
+});
 
-  // Reinicializar Facebook Pixel em mudanças de rota
-  React.useEffect(() => {    
-    // Função para lidar com mudanças de rota
-    const handleRouteChange = () => {
-      if (typeof window !== 'undefined' && window.fbq) {
-        window.fbq('track', 'PageView');
-        console.log('PageView tracked on route change');
-      }
-    };
-    
-    // Adicionar listener para mudanças de rota
-    window.addEventListener('popstate', handleRouteChange);
-    
-    // Limpar o listener
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-    };
-  }, []);
+const EditorPage = loadable(() => import('./components/admin/editor/EnhancedResultPageEditorPage'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando editor...</div>
+});
 
+const ResultPage = loadable(() => import('./components/ResultPage'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando resultados...</div>
+});
+
+function App() {
   return (
-    <AuthProvider>
-      <QuizProvider>
-        <TooltipProvider>
-          <Router>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/resultado" element={<ResultPage />} />
-              {/* Editor visual aprimorado para página de resultados */}
-              <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
-              {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
-              <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              {/* Manter apenas uma rota principal para o editor unificado */}
-              <Route path="/admin/editor" element={<EditorPage />} />
-              <Route path="/admin/editor/error" element={<EditorNotFoundPage />} />
-              {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
-              <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
-              <Route path="/admin/settings" element={<SettingsPage />} />
-              <Route path="/admin/analytics" element={<AnalyticsPage />} />
-              <Route path="/admin/ab-test" element={<ABTestPage />} />
-              <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Router>
-          <Toaster />
-        </TooltipProvider>
-      </QuizProvider>
-    </AuthProvider>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <BrowserRouter>
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Carregando...</div>}>
+          <Routes>
+            {/* Rota principal para o quiz */}
+            <Route path="/" element={<QuizFlow />} />
+            
+            {/* Rota para a página de resultados */}
+            <Route path="/resultado" element={<ResultPage />} />
+            <Route path="/resultado/:id" element={<ResultPage />} />
+            
+            {/* Rotas administrativas */}
+            <Route path="/admin" element={<AdminLayout />} />
+            <Route path="/admin/editor" element={<EditorPage />} />
+            <Route path="/admin/editor/:id" element={<EditorPage />} />
+            
+            {/* Rota de fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+        <Toaster />
+      </BrowserRouter>
+    </ThemeProvider>
   );
-};
+}
 
 export default App;
+

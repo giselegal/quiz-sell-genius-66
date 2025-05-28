@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../../ui/button';
 import { toast } from '../../ui/use-toast';
 import { DndProvider } from 'react-dnd';

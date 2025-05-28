@@ -4,7 +4,6 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
-import ClientLayout from '@/components/ClientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,9 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
           <AuthProvider>
-            <ClientLayout>
-              {children}
-            </ClientLayout>
+            {children}
           </AuthProvider>
           <Toaster />
         </ThemeProvider>

@@ -22,7 +22,7 @@ const EditorSimples: React.FC = () => {
   });
 
   const salvar = () => {
-    safeLocalStorage.setItem('editorConfig', JSON.stringify({ cores, texto }));
+    localStorage.setItem('editorConfig', JSON.stringify({ cores, texto }));
     toast({
       title: "Salvo!",
       description: "Configurações foram salvas com sucesso.",

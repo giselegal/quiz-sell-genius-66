@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { AnimatedWrapper } from './ui/animated-wrapper';
 import { cn } from '@/lib/utils';
 import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -16,9 +15,8 @@ interface QuizQuestionProps {
   currentAnswers: string[];
   autoAdvance?: boolean;
   hideTitle?: boolean;
-  onNextClick?: () => void;
-  onPreviousClick?: () => void;
   showQuestionImage?: boolean;
+  isStrategicQuestion?: boolean; // Nova prop
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -27,27 +25,30 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   currentAnswers,
   autoAdvance = false,
   hideTitle = false,
-  onNextClick,
-  onPreviousClick,
-  showQuestionImage = false
+  showQuestionImage = false,
+  isStrategicQuestion = false
 }) => {
   const isMobile = useIsMobile();
-  const isStrategicQuestion = question.id.startsWith('strategic');
   const hasImageOptions = question.type !== 'text';
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
-  
+
   useEffect(() => {
     scrollToQuestion(question.id);
   }, [question.id, scrollToQuestion]);
-  
+
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
     
     if (currentAnswers.includes(optionId)) {
+      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
+      if (isStrategicQuestion) {
+        return; // Não permite desmarcar a opção em questões estratégicas
+      }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
       if (isStrategicQuestion) {
+        // Para questões estratégicas, substituímos qualquer seleção anterior
         newSelectedOptions = [optionId];
       } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
@@ -56,22 +57,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       }
     }
     
-    onAnswer({
+    onAnswer({ 
       questionId: question.id,
       selectedOptions: newSelectedOptions
     });
-
-    // Auto advance if:
-    // 1. It's a strategic question and we have a selection
-    // 2. Auto advance is enabled and we've reached the required number of selections
-    // 3. onNextClick function is provided
-    const shouldAutoAdvance = 
-      (isStrategicQuestion && newSelectedOptions.length > 0) || 
-      (autoAdvance && newSelectedOptions.length === question.multiSelect);
-    
-    if (shouldAutoAdvance && onNextClick) {
-      setTimeout(() => onNextClick(), 500); // Small delay for better UX
-    }
   };
   
   const getGridColumns = () => {
@@ -85,78 +74,63 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
   
   return (
-    <AnimatedWrapper>
-      <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
-        isMobile && "px-2", 
-        isStrategicQuestion && "max-w-3xl"
-      )} id={`question-${question.id}`}>
-        {!hideTitle && (
-          <>
-            <h2 className={cn(
-              "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
-              isMobile ? "text-base" : "text-base sm:text-xl",
-              isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
-            )}>
-              {highlightStrategicWords(question.title)}
-            </h2>
-            
-            {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
-              <div className="w-full mb-6">
-                <img 
-                  src={question.imageUrl} 
-                  alt="Question visual" 
-                  className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
-                  onError={() => {
-                    console.error(`Failed to load image: ${question.imageUrl}`);
-                    setImageError(true);
-                  }}
-                />
-              </div>
-            )}
-            
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
-              {isStrategicQuestion 
-                ? "Selecione 1 opção para avançar"
-                : `Selecione ${question.multiSelect} opções para avançar`
-              }
-            </p>
-          </>
-        )}
-        
-        <div className={cn(
-          "grid h-full",
-          getGridColumns(),
-          hasImageOptions && "mb-4 relative",
-          isStrategicQuestion && "gap-4"
-        )}>
-          {question.options.map(option => (
-            <QuizOption 
-              key={option.id} 
-              option={option} 
-              isSelected={currentAnswers.includes(option.id)} 
-              onSelect={handleOptionSelect}
-              type={question.type}
-              questionId={question.id}
-              isDisabled={!currentAnswers.includes(option.id) && 
-                !isStrategicQuestion && 
-                currentAnswers.length >= question.multiSelect}
-            />
-          ))}
-        </div>
-        
-        <div className="flex justify-between items-center gap-3 mt-6">
-          {!autoAdvance && (
-            <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
-              Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
-            </p>
-          )}
+    <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
+      isMobile && "px-2", 
+      isStrategicQuestion && "max-w-3xl strategic-question",
+      question.type === 'text' && !isStrategicQuestion && "text-only-question"
+    )} id={`question-${question.id}`}>
+      {!hideTitle && (
+        <>
+          <h2 className={cn(
+            "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
+            isMobile ? "text-base" : "text-base sm:text-xl",
+            isStrategicQuestion && "strategic-question-title text-[#432818] mb-6 font-bold whitespace-pre-line",
+            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl", // Texto maior para questões estratégicas em mobile
+            question.type === 'text' && !isStrategicQuestion && ".text-only-question & " && "text-[1.15rem] sm:text-xl" // Texto maior para títulos em questões só texto
+          )}>
+            {highlightStrategicWords(question.title)}
+          </h2>
           
-          <div className="ml-auto">
-            {/* Navigation buttons would go here if needed */}
-          </div>
-        </div>
+          {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
+            <div className="w-full mb-6">
+              <img 
+                src={question.imageUrl} 
+                alt="Question visual" 
+                className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+                onError={() => {
+                  console.error(`Failed to load image: ${question.imageUrl}`);
+                  setImageError(true);
+                }}
+              />
+            </div>
+          )}
+        </>
+      )}
+      
+      <div className={cn(
+        "grid h-full",
+        getGridColumns(),
+        hasImageOptions && "mb-4 relative",
+        isStrategicQuestion && "gap-4"
+      )}>
+        {question.options.map(option => (
+          <QuizOption 
+            key={option.id} 
+            option={option} 
+            isSelected={currentAnswers.includes(option.id)} 
+            onSelect={handleOptionSelect}
+            type={question.type}
+            questionId={question.id}
+            isDisabled={
+              (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
+              (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
+                currentAnswers.length >= question.multiSelect)
+            }
+            isStrategicOption={isStrategicQuestion}
+          />
+        ))}
       </div>
-    </AnimatedWrapper>
+    </div>
   );
 };
 

@@ -3,21 +3,30 @@ import React from 'react';
 import { Block } from '@/types/editor';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { GripVertical, Copy, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { GripVertical } from 'lucide-react';
 
-interface SortableBlockProps {
+// Define the allowed block types to match what's being used
+type AllowedBlockType = 'heading' | 'paragraph' | 'image' | 'button';
+
+export interface SortableBlockProps {
   block: Block;
   isSelected: boolean;
   isPreviewing: boolean;
   onSelect: () => void;
+  onDuplicate?: () => void;
+  onDelete?: () => void;
 }
 
 export const SortableBlock: React.FC<SortableBlockProps> = ({
   block,
   isSelected,
   isPreviewing,
-  onSelect
+  onSelect,
+  onDuplicate,
+  onDelete
 }) => {
   const {
     attributes,
@@ -29,90 +38,98 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition
+    transition,
   };
 
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={cn(
-        "p-4 rounded-md transition-colors",
-        isSelected && !isPreviewing ? "bg-[#FAF9F7] border border-dashed border-[#B89B7A]" : "",
-        !isPreviewing && "hover:bg-[#FAF9F7]/50"
-      )}
-      onClick={() => !isPreviewing && onSelect()}
-    >
-      {!isPreviewing && (
-        <div
-          {...attributes}
-          {...listeners}
-          className="absolute top-2 right-2 z-10 cursor-grab w-6 h-6 rounded-full bg-white/80 flex items-center justify-center shadow-sm"
-        >
-          <GripVertical className="w-4 h-4 text-gray-500" />
-        </div>
-      )}
-
-      {renderBlockContent(block)}
-    </div>
-  );
-};
-
-const renderBlockContent = (block: Block) => {
-  const contentStyle = block.content.style as React.CSSProperties || {};
-  
-  switch (block.type) {
-    case 'headline':
-      return (
-        <div className="space-y-2" style={contentStyle}>
-          <h2 className="text-2xl font-bold">{block.content.title || 'Título Principal'}</h2>
-          <p>{block.content.subtitle || 'Subtítulo da oferta'}</p>
-        </div>
-      );
-      
-    case 'text':
-      return (
-        <div className="prose" style={contentStyle}>
-          {block.content.text || 'Texto do conteúdo'}
-        </div>
-      );
-      
-    case 'image':
-      return (
-        <div className="flex justify-center" style={contentStyle}>
-          {block.content.imageUrl ? (
+  const getBlockPreview = () => {
+    const blockType = block.type as AllowedBlockType;
+    
+    switch (blockType) {
+      case 'heading':
+        return <h2 className="text-xl font-medium">{block.content.text || 'Título'}</h2>;
+      case 'paragraph':
+        return <p className="text-sm line-clamp-2">{block.content.text || 'Parágrafo de texto'}</p>;
+      case 'image':
+        return block.content.imageUrl ? (
+          <div className="h-20 bg-gray-100 flex items-center justify-center overflow-hidden">
             <img 
               src={block.content.imageUrl} 
-              alt={block.content.imageAlt || 'Imagem'} 
-              className="max-w-full h-auto"
+              alt={block.content.alt || 'Imagem'} 
+              className="max-h-full object-cover"
             />
-          ) : (
-            <div className="bg-gray-200 h-40 w-full flex items-center justify-center">
-              <p className="text-gray-500">Imagem não definida</p>
-            </div>
-          )}
-        </div>
-      );
-      
-    case 'pricing':
-      return (
-        <div className="bg-[#FAF9F7] p-4 rounded-lg border border-[#B89B7A]/20">
-          <div className="text-center space-y-4">
-            <h3 className="text-xl font-bold">{block.content.title || 'Nome do Produto'}</h3>
-            <div className="flex justify-center items-center gap-2">
-              <span className="text-2xl font-bold">{block.content.price || 'R$ 97,00'}</span>
-              {block.content.regularPrice && (
-                <span className="line-through text-gray-500">{block.content.regularPrice}</span>
-              )}
-            </div>
-            <button className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white px-4 py-2 rounded w-full">
-              {block.content.ctaText || 'Comprar Agora'}
-            </button>
+          </div>
+        ) : (
+          <div className="h-20 bg-gray-100 flex items-center justify-center text-gray-400">
+            Imagem
+          </div>
+        );
+      case 'button':
+        return (
+          <div className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-md">
+            {block.content.text || 'Botão'}
+          </div>
+        );
+      default:
+        return <div className="text-sm text-gray-500">{block.type}</div>;
+    }
+  };
+
+  if (isPreviewing) {
+    return (
+      <div ref={setNodeRef} style={style}>
+        {getBlockPreview()}
+      </div>
+    );
+  }
+
+  return (
+    <Card 
+      ref={setNodeRef} 
+      style={style}
+      className={cn(
+        'relative', 
+        isSelected ? 'border-primary' : 'border-muted'
+      )}
+      onClick={onSelect}
+    >
+      <div className="absolute left-0 top-0 bottom-0 px-1 flex items-center cursor-grab" {...attributes} {...listeners}>
+        <GripVertical className="h-4 w-4 text-muted-foreground" />
+      </div>
+
+      <CardContent className="p-4 pl-8">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-sm font-medium capitalize">{block.type}</h4>
+          
+          <div className="flex space-x-1">
+            {onDuplicate && (
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="sm" 
+                className="h-7 w-7 p-0"
+                onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
+              >
+                <Copy className="h-3.5 w-3.5" />
+              </Button>
+            )}
+            {onDelete && (
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="sm" 
+                className="h-7 w-7 p-0"
+                onClick={(e) => { e.stopPropagation(); onDelete(); }}
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            )}
           </div>
         </div>
-      );
-      
-    default:
-      return <div>Tipo de bloco desconhecido: {block.type}</div>;
-  }
+
+        <div className="mt-2">
+          {getBlockPreview()}
+        </div>
+      </CardContent>
+    </Card>
+  );
 };

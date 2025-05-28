@@ -93,7 +93,6 @@ const CheckItem = React.memo<{ children: React.ReactNode }>(({ children }) => (
     <span className="group-hover:text-[#432818] transition-colors">{children}</span>
   </li>
 ));
-CheckItem.displayName = 'CheckItem';
 
 const NavButton = React.memo<{
   direction: 'prev' | 'next';

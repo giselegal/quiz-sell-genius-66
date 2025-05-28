@@ -1,169 +1,108 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Eye, EyeOff, Save, BookTemplate, ChevronLeft, Monitor, Tablet, Smartphone } from 'lucide-react';
 import { EditorTab } from '../UnifiedVisualEditor';
-import {
-  Eye,
-  EyeOff,
-  Save,
-  Undo,
-  Redo,
-  LayoutTemplate,
-  Monitor,
-  Tablet,
-  Smartphone
-} from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-interface EditorToolbarProps {
-  activeTab?: EditorTab;
+export interface EditorToolbarProps {
   isPreviewing: boolean;
   onPreviewToggle: () => void;
   onSave: () => void;
-  onOpenTemplateModal: () => void;
+  onOpenTemplateModal?: () => void;
   viewportSize?: 'sm' | 'md' | 'lg' | 'xl';
   onViewportSizeChange?: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
+  isSaving?: boolean;
+  activeTab?: EditorTab;
+  canUndo?: boolean;
+  canRedo?: boolean;
+  onUndo?: () => void;
+  onRedo?: () => void;
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
-  activeTab,
   isPreviewing,
   onPreviewToggle,
   onSave,
   onOpenTemplateModal,
   viewportSize = 'lg',
-  onViewportSizeChange
+  onViewportSizeChange,
+  isSaving = false,
+  activeTab,
 }) => {
   return (
-    <div className="h-14 border-b bg-white flex items-center justify-between px-4">
-      <div className="flex items-center space-x-2">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={onPreviewToggle}
-              >
-                {isPreviewing ? (
-                  <>
-                    <EyeOff className="h-4 w-4 mr-2" />
-                    <span>Editar</span>
-                  </>
-                ) : (
-                  <>
-                    <Eye className="h-4 w-4 mr-2" />
-                    <span>Visualizar</span>
-                  </>
-                )}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {isPreviewing ? 'Voltar ao modo de edição' : 'Visualizar a página final'}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <div className="h-6 border-r border-gray-200" />
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={onSave}
-              >
-                <Save className="h-4 w-4 mr-2" />
-                <span>Salvar</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              Salvar alterações
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+    <div className="border-b bg-white px-4 py-2 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <Button variant="outline" size="sm" asChild>
+          <a href="/admin/dashboard">
+            <ChevronLeft className="w-4 h-4 mr-1" />
+            Voltar
+          </a>
+        </Button>
         
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={onOpenTemplateModal}
-              >
-                <LayoutTemplate className="h-4 w-4 mr-2" />
-                <span>Templates</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              Escolher um template
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        
-        <div className="h-6 border-r border-gray-200" />
-        
-        <TooltipProvider>
-          <div className="flex items-center space-x-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant={viewportSize === 'xl' ? 'secondary' : 'ghost'}
-                  size="icon" 
-                  className="w-8 h-8"
-                  onClick={() => onViewportSizeChange?.('xl')}
-                >
-                  <Monitor className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                Desktop
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant={viewportSize === 'md' ? 'secondary' : 'ghost'}
-                  size="icon" 
-                  className="w-8 h-8"
-                  onClick={() => onViewportSizeChange?.('md')}
-                >
-                  <Tablet className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                Tablet
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant={viewportSize === 'sm' ? 'secondary' : 'ghost'}
-                  size="icon" 
-                  className="w-8 h-8"
-                  onClick={() => onViewportSizeChange?.('sm')}
-                >
-                  <Smartphone className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                Mobile
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </TooltipProvider>
-      </div>
-
-      <div className="flex items-center space-x-2">
         {activeTab && (
-          <div className="bg-gray-100 px-3 py-1 rounded-md text-sm text-gray-600 font-medium">
-            Editor de {activeTab === 'quiz' ? 'Quiz' : activeTab === 'result' ? 'Resultado' : 'Página de Vendas'}
+          <div className="text-sm font-medium ml-2 text-[#432818]">
+            {activeTab === 'quiz' ? 'Editor de Quiz' : 
+             activeTab === 'result' ? 'Editor de Resultados' : 
+             'Editor de Página de Vendas'}
           </div>
         )}
+      </div>
+      
+      <div className="flex items-center gap-2">
+        {onViewportSizeChange && (
+          <div className="border rounded-md p-0.5 flex mr-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`px-2 ${viewportSize === 'xl' ? 'bg-gray-100' : ''}`}
+              onClick={() => onViewportSizeChange('xl')}
+            >
+              <Monitor className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`px-2 ${viewportSize === 'md' ? 'bg-gray-100' : ''}`}
+              onClick={() => onViewportSizeChange('md')}
+            >
+              <Tablet className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`px-2 ${viewportSize === 'sm' ? 'bg-gray-100' : ''}`}
+              onClick={() => onViewportSizeChange('sm')}
+            >
+              <Smartphone className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
+        
+        {onOpenTemplateModal && (
+          <Button variant="outline" size="sm" onClick={onOpenTemplateModal}>
+            <BookTemplate className="w-4 h-4 mr-1" />
+            Modelos
+          </Button>
+        )}
+        
+        <Button variant="outline" size="sm" onClick={onPreviewToggle}>
+          {isPreviewing ? (
+            <>
+              <EyeOff className="w-4 h-4 mr-1" />
+              Editar
+            </>
+          ) : (
+            <>
+              <Eye className="w-4 h-4 mr-1" />
+              Visualizar
+            </>
+          )}
+        </Button>
+        
+        <Button onClick={onSave} size="sm" disabled={isSaving}>
+          <Save className="w-4 h-4 mr-1" />
+          {isSaving ? 'Salvando...' : 'Salvar'}
+        </Button>
       </div>
     </div>
   );

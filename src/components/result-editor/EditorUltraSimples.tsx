@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Save, Palette } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 const EditorUltraSimples: React.FC = () => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const EditorUltraSimples: React.FC = () => {
   const [titulo, setTitulo] = useState('Descubra Seu Estilo Único');
 
   const salvar = () => {
-    safeLocalStorage.setItem('editorUltraSimples', JSON.stringify({ cor, titulo }));
+    localStorage.setItem('editorUltraSimples', JSON.stringify({ cor, titulo }));
     alert('Configurações salvas!');
   };
 

@@ -1,6 +1,3 @@
-// Importando configuração estática
-export { dynamic } from './static';
-
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,14 +17,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-interface QuizDetailPageProps {
-  params: Promise<{ id: string }>;
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
-// @ts-ignore - Ignorando conflito de tipos com o sistema do Next.js
-export default async function QuizDetailPage({ params }: QuizDetailPageProps) {
-  const { id } = await params;
+export default function QuizDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="container mx-auto py-6">
       {/* Header com ações rápidas */}

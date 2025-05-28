@@ -17,7 +17,7 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { User as UserType, UserWithRole } from '@/types/user';
 import { useABTest } from '@/hooks/useABTest';
 
@@ -131,7 +131,7 @@ const ResultPagePrototype: React.FC = () => {
       {/* Botão de Edição para Administradores */}
       {isAdmin && (
         <div className="container mx-auto px-4 py-2 max-w-4xl">
-          <Link href="/resultado/editor" className="inline-flex items-center gap-1.5 text-sm py-1.5 px-3 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors">
+          <Link to="/resultado/editor" className="inline-flex items-center gap-1.5 text-sm py-1.5 px-3 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors">
             <Edit className="h-3.5 w-3.5" />
             <span>Editar Página</span>
           </Link>

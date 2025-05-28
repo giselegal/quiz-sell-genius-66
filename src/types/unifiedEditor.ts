@@ -1,46 +1,59 @@
 
+import { QuizComponentData } from './quiz';
 import { Block } from './editor';
-import { QuizBuilderState, QuizComponentData, QuizStage } from './quizBuilder';
-import { ResultPageConfig } from './resultPageConfig';
-
-export interface EditorHistory {
-  past: Array<any>;
-  present: any;
-  future: Array<any>;
-}
 
 export interface UnifiedEditorState {
   activeTab: 'quiz' | 'result' | 'sales';
   isPreviewing: boolean;
   quizEditorState: {
     components: QuizComponentData[];
-    stages: QuizStage[];
-    activeStageId?: string;
-    selectedComponentId?: string;
+    stages: any[];
+    previewMode?: boolean;
   };
   resultEditorState: {
-    config: ResultPageConfig;
+    config: any;
     blocks: Block[];
-    selectedBlockId?: string;
   };
   salesEditorState: {
     blocks: Block[];
-    selectedBlockId?: string;
   };
 }
 
-export interface UnifiedTemplateConfig {
-  quiz?: QuizBuilderState;
-  result?: ResultPageConfig;
-  sales?: {
-    blocks: Block[];
+export interface ResultPageConfig {
+  styleType: string;
+  title?: string;
+  header: {
+    visible: boolean;
+    content: Record<string, any>;
   };
-}
-
-export interface EditorConfig {
-  theme: 'light' | 'dark';
-  sidebarWidth: number;
-  propertiesPanelWidth: number;
-  autoSave: boolean;
-  autoSaveInterval: number;
+  mainContent: {
+    visible: boolean;
+    content: Record<string, any>;
+  };
+  offer: {
+    hero: {
+      visible: boolean;
+      content: Record<string, any>;
+    };
+    benefits: {
+      visible: boolean;
+      content: Record<string, any>;
+    };
+    products: {
+      visible: boolean;
+      content: Record<string, any>;
+    };
+    pricing: {
+      visible: boolean;
+      content: Record<string, any>;
+    };
+    testimonials: {
+      visible: boolean;
+      content: Record<string, any>;
+    };
+    guarantee: {
+      visible: boolean;
+      content: Record<string, any>;
+    };
+  };
 }

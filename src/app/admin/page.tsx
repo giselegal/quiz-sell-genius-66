@@ -1,8 +1,6 @@
-'use client';
-
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
   BarChart3,
   Users,
@@ -19,7 +17,7 @@ import {
 } from 'lucide-react';
 
 export default function AdminDashboard() {
-  const router = useRouter();
+  const navigate = useNavigate();
   
   // Removido o redirecionamento automático para permitir acesso ao dashboard
 
@@ -35,7 +33,7 @@ export default function AdminDashboard() {
         </div>
         
         <div className="flex gap-3">
-          <Link href="/admin/old">
+          <Link to="/admin/old">
             <button className="px-4 py-2 border border-amber-500 text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
               <Eye className="w-4 h-4 mr-2 inline" />
               Dashboard Antigo
@@ -45,7 +43,7 @@ export default function AdminDashboard() {
             <Eye className="w-4 h-4 mr-2 inline" />
             Visualizar Site
           </button>
-          <Link href="/admin/editor">
+          <Link to="/admin/editor">
             <button className="px-4 py-2 bg-gradient-to-r from-[#432818] to-[#5C3B2A] text-white rounded-lg hover:from-[#5C3B2A] hover:to-[#6D4C37] transition-colors">
               <Plus className="w-4 h-4 mr-2 inline" />
               Novo Quiz
@@ -162,7 +160,7 @@ export default function AdminDashboard() {
             ].map((action, index) => {
               const Icon = action.icon;
               return (
-                <Link key={index} href={action.to}>
+                <Link key={index} to={action.to}>
                   <div className="p-4 border border-[#D4C4A0] rounded-lg hover:shadow-md transition-all duration-200 hover:border-[#B89B7A] cursor-pointer group">
                     <div className="flex items-center gap-3 mb-3">
                       <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -195,7 +193,7 @@ export default function AdminDashboard() {
           <div className="p-6 border-b border-[#D4C4A0]">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-[#432818]">Quizzes Recentes</h2>
-              <Link href="/admin/quizzes">
+              <Link to="/admin/quizzes">
                 <button className="px-3 py-1 border border-[#B89B7A] text-[#432818] rounded text-sm hover:bg-[#F5F2E9] transition-colors">
                   Ver Todos
                 </button>
@@ -251,7 +249,7 @@ export default function AdminDashboard() {
                       )}
                     </div>
                   </div>
-                  <Link href={`/admin/quizzes/${quiz.id}`}>
+                  <Link to={`/admin/quizzes/${quiz.id}`}>
                     <button className="p-2 text-[#B89B7A] hover:text-[#432818] hover:bg-white rounded transition-colors">
                       <Eye className="w-4 h-4" />
                     </button>

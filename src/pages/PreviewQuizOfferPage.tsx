@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Shield, Star, Clock, Zap, Award, CheckCircle, ArrowDown } from 'lucide-react';
