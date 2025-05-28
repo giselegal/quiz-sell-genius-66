@@ -1,20 +1,19 @@
+"use client";
 
 import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeOff, Save, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { toast } from '@/components/ui/use-toast';
 import QuizResult from '../QuizResult';
 import EditableComponent from './EditableComponent';
 import { useQuizResultConfig } from '@/hooks/useQuizResultConfig';
 import { useAutosave } from '@/hooks/useAutosave';
-
 interface ResultPageEditorWithControlsProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
 }
-
 export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControlsProps> = ({
   primaryStyle,
   secondaryStyles
@@ -29,26 +28,22 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
     interval: 5000,
     enabled: !isPreviewMode // Only enable autosave when not in preview mode
   });
-
   const handleConfigUpdate = (sectionKey: string, data: any) => {
     updateConfig(sectionKey, data);
     // No need to call save here, autosave will handle it
   };
-  
   const togglePreviewMode = () => {
     // If we're switching from edit to preview, save immediately
     if (!isPreviewMode) {
       saveNow();
     }
     setIsPreviewMode(!isPreviewMode);
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       {/* Barra de ferramentas do editor */}
       <div className="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <Link to="/resultado">
+          <Link href="/resultado">
             <Button variant="outline" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar
@@ -57,7 +52,6 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
           <h1 className="text-2xl font-playfair text-[#432818]">Editor da Página de Resultados</h1>
         </div>
         
-        <div className="flex items-center gap-3">
           {!isPreviewMode && (
             <div className="text-sm text-muted-foreground">
               {isSaving ? (
@@ -80,22 +74,16 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
                 Editar
               </>
             ) : (
-              <>
                 <Eye className="w-4 h-4 mr-2" />
                 Visualizar
-              </>
             )}
           </Button>
-          
           <Button 
             className="bg-[#B89B7A] hover:bg-[#A38A69]" 
             onClick={saveNow}
             disabled={isSaving}
-          >
             <Save className="w-4 h-4 mr-2" />
             {isSaving ? 'Salvando...' : 'Salvar'}
-          </Button>
-        </div>
       </div>
       
       {/* Conteúdo da página */}
@@ -115,9 +103,7 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
               config
             }}
             onUpdate={handleConfigUpdate}
-          />
         )}
-      </div>
     </div>
   );
 };

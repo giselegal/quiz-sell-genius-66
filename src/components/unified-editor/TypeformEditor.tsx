@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -7,13 +6,11 @@ import { Button } from '@/components/ui/button';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UnifiedEditorState } from '@/types/unifiedEditor';
-
 interface TypeformEditorProps {
   editorState: UnifiedEditorState;
   onStateChange: (newState: UnifiedEditorState) => void;
   isPreviewing: boolean;
 }
-
 const TypeformEditor: React.FC<TypeformEditorProps> = ({
   editorState,
   onStateChange,
@@ -21,29 +18,21 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
 }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const questions = editorState.quizEditorState.components || [];
-
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     }
   };
-
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1);
-    }
-  };
-
   const handleOptionSelect = (optionId: string) => {
     // Safely access questions and options with proper type checking
     const newQuestions = [...questions];
     if (!newQuestions[currentQuestionIndex]) return;
-
     const currentQuestion = newQuestions[currentQuestionIndex];
-    
     // Check if data.options property exists instead of direct options
     if (!currentQuestion?.data?.options) return;
-
     const selectedOption = currentQuestion.data.options.find((option: any) => option.id === optionId);
     if (selectedOption) {
       selectedOption.isSelected = !selectedOption.isSelected;
@@ -54,13 +43,8 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
           components: newQuestions
         }
       });
-    }
-  };
-
   const handleSaveChanges = () => {
     console.log('Salvando alterações...', editorState);
-  };
-
   const slideVariants = {
     enter: (direction: number) => ({
       y: direction > 0 ? 100 : -100,
@@ -74,10 +58,7 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
     exit: (direction: number) => ({
       zIndex: 0,
       y: direction < 0 ? 100 : -100,
-      opacity: 0
     })
-  };
-
   const handleLiveEdit = (changes: any) => {
     const updatedQuestions = questions.map((question, index) => {
       if (index === currentQuestionIndex) {
@@ -88,16 +69,11 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
       }
       return question;
     });
-
     onStateChange({
       ...editorState,
       quizEditorState: {
         ...editorState.quizEditorState,
         components: updatedQuestions
-      }
-    });
-  };
-
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-indigo-50 to-white">
       <div className="w-full h-1 bg-gray-200">
@@ -108,7 +84,6 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
           }}
         />
       </div>
-
       <div className="flex-1 flex flex-col items-center justify-center p-8 relative overflow-hidden">
         <AnimatePresence initial={false} custom={currentQuestionIndex}>
           <motion.div
@@ -157,32 +132,21 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
             )}
           </motion.div>
         </AnimatePresence>
-
         <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-4">
           <Button
             variant="ghost"
             onClick={handlePreviousQuestion}
             disabled={currentQuestionIndex === 0}
             className="opacity-50 hover:opacity-100 transition-opacity"
-          >
             <ChevronUp className="h-6 w-6" />
           </Button>
-          <Button
-            variant="ghost"
             onClick={handleNextQuestion}
             disabled={currentQuestionIndex === questions.length - 1}
-            className="opacity-50 hover:opacity-100 transition-opacity"
-          >
             <ChevronDown className="h-6 w-6" />
-          </Button>
         </div>
-      </div>
-
       <div className="p-4 text-center text-sm text-gray-500">
         {currentQuestionIndex + 1} de {questions.length}
-      </div>
     </div>
   );
 };
-
 export default TypeformEditor;

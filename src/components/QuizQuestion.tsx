@@ -57,28 +57,19 @@ const QuizQuestionComponent: React.FC<QuizQuestionProps> = ({
   };
   
   const getGridColumns = () => {
-    // Para questões só texto, sempre usar coluna única
     if (question.type === 'text') {
-      return "grid-cols-1 gap-4 px-2";
+      return "grid-cols-1 gap-3 px-2";
     }
-    
-    // Para questões estratégicas, usar layout otimizado
-    if (isStrategicQuestion) {
-      return isMobile ? "grid-cols-1 gap-4 px-2" : "grid-cols-1 gap-4 px-4 max-w-2xl mx-auto";
-    }
-    
-    // Para outras questões com imagens
     if (isMobile) {
       return "grid-cols-1 gap-3 px-2";
     }
-    return "grid-cols-2 gap-4 px-2";
+    return "grid-cols-2 gap-3 px-2";
   }
   return (
-    <div className={cn(
-      "w-full max-w-6xl mx-auto pb-5 relative quiz-question-transition", 
+    <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
       isMobile && "px-2", 
       isStrategicQuestion && "max-w-3xl strategic-question",
-      question.type === 'text' && !isStrategicQuestion && "text-only-question max-w-4xl"
+      question.type === 'text' && !isStrategicQuestion && "text-only-question"
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
@@ -109,11 +100,10 @@ const QuizQuestionComponent: React.FC<QuizQuestionProps> = ({
       )}
       
       <div className={cn(
-        "grid h-full quiz-transition",
+        "grid h-full",
         getGridColumns(),
         hasImageOptions && "mb-4 relative",
-        isStrategicQuestion && "gap-4",
-        question.type === 'text' && "text-question-grid"
+        isStrategicQuestion && "gap-4"
       )}>
         {question.options.map(option => (
           <QuizOption 

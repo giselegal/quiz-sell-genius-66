@@ -11,12 +11,10 @@ import {
   CheckSquare,
   FileQuestion
 } from 'lucide-react';
-
 interface ComponentsSidebarProps {
   onComponentSelect: (type: QuizComponentType) => void;
   activeStage?: QuizStage | null;
 }
-
 export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
   onComponentSelect,
   activeStage
@@ -28,7 +26,6 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       </div>
     );
   }
-
   // Define components based on stage type
   const getComponentsForStageType = () => {
     switch (activeStage.type) {
@@ -39,45 +36,33 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
           { type: 'image', icon: <ImageIcon className="h-4 w-4 mr-2" />, label: 'Imagem' }
         ];
       case 'question':
-        return [
           { type: 'stageQuestion', icon: <FileQuestion className="h-4 w-4 mr-2" />, label: 'Pergunta' },
           { type: 'multipleChoice', icon: <ListChecks className="h-4 w-4 mr-2" />, label: 'Múltipla Escolha' },
-          { type: 'singleChoice', icon: <CheckSquare className="h-4 w-4 mr-2" />, label: 'Escolha Única' }
-        ];
+          { type: 'singleChoice', icon: <CheckSquare className="h-4 w-4 mr-2" />, label: 'Escolha Única' },
       case 'result':
-        return [
           { type: 'quizResult', icon: <ListChecks className="h-4 w-4 mr-2" />, label: 'Resultado' },
-          { type: 'text', icon: <FileText className="h-4 w-4 mr-2" />, label: 'Texto' },
-          { type: 'image', icon: <ImageIcon className="h-4 w-4 mr-2" />, label: 'Imagem' }
-        ];
       default:
-        return [];
     }
   };
-
   const components = getComponentsForStageType();
-
   return (
-    <div className="h-full flex flex-col border-r border-[#333333] text-white">
-      <ScrollArea className="h-full p-4">
-        <div className="space-y-4">
-          <h3 className="font-medium text-[#432818]">Componentes disponíveis</h3>
-          
-          <div className="grid gap-2">
-            {components.map((component) => (
-              <Button
-                key={component.type}
-                variant="outline"
-                className="justify-start text-left"
-                onClick={() => onComponentSelect(component.type as QuizComponentType)}
-              >
-                {component.icon}
-                {component.label}
-              </Button>
-            ))}
-          </div>
+    <ScrollArea className="h-full p-4">
+      <div className="space-y-4">
+        <h3 className="font-medium text-[#432818]">Componentes disponíveis</h3>
+        
+        <div className="grid gap-2">
+          {components.map((component) => (
+            <Button
+              key={component.type}
+              variant="outline"
+              className="justify-start text-left"
+              onClick={() => onComponentSelect(component.type as QuizComponentType)}
+            >
+              {component.icon}
+              {component.label}
+            </Button>
+          ))}
         </div>
-      </ScrollArea>
-    </div>
+    </ScrollArea>
   );
 };

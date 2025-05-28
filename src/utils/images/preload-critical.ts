@@ -1,14 +1,5 @@
 
-// Interface for preload options
-interface PreloadOptions {
-  quality?: number;
-  format?: 'auto' | 'webp' | 'jpg' | 'png';
-  timeout?: number;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
-  batchSize?: number;
-}
-
+import { PreloadOptions, PreloadImageDefinition } from './types';
 /**
  * Preloads a set of critical images that should be loaded before rendering
  * @param imageUrls Array of image URLs to preload
@@ -22,22 +13,19 @@ export const preloadCriticalImages = (
   const {
     quality = 90,
     format = 'auto',
-    timeout = 3000,
+    timeout = 3000, // Now properly typed in PreloadOptions
     onProgress,
     onComplete,
     batchSize = 4,
   } = options;
-
   if (imageUrls.length === 0) {
     if (onComplete) onComplete();
     return Promise.resolve();
   }
-
   // Performance measurement
   const startTime = performance.now();
   let loaded = 0;
   const total = imageUrls.length;
-
   // Create optimized URLs for preloading
   const optimizedUrls = imageUrls.map(url => {
     if (!url.includes('cloudinary.com')) return url;
@@ -45,17 +33,14 @@ export const preloadCriticalImages = (
     // Extract base URL parts
     const baseUrlParts = url.split('/upload/');
     if (baseUrlParts.length !== 2) return url;
-
     // Add optimization parameters
     return `${baseUrlParts[0]}/upload/f_${format},q_${quality},dpr_auto/${baseUrlParts[1]}`;
   });
-
   return new Promise((resolve, reject) => {
     // Helper to update progress
     const updateProgress = () => {
       loaded++;
       if (onProgress) onProgress(loaded, total);
-      
       if (loaded === total) {
         const endTime = performance.now();
         const loadTime = (endTime - startTime) / 1000;
@@ -65,14 +50,12 @@ export const preloadCriticalImages = (
         resolve();
       }
     };
-
     // Create a timeout for the entire batch
     const timeoutId = setTimeout(() => {
       console.warn(`[Preload] Timeout reached after ${timeout}ms with ${loaded}/${total} images loaded`);
       if (onComplete) onComplete();
       resolve(); // Resolve anyway to not block rendering
     }, timeout);
-
     // Load images in parallel
     optimizedUrls.forEach(url => {
       // Create a new image element
@@ -85,33 +68,23 @@ export const preloadCriticalImages = (
           clearTimeout(timeoutId);
         }
       };
-
       // Handle loading error
       img.onerror = (err) => {
         console.error(`[Preload] Failed to preload image: ${url.substring(0, 50)}...`, err);
         updateProgress(); // Still count as processed
-      };
-      
       // Start loading
       img.src = url;
     });
-  });
 };
-
-/**
  * Preloads only the most critical image on the page for LCP optimization
  * @param imageUrl The URL of the LCP image
- * @param options Preload options
- */
 export const preloadLCPImage = (
   imageUrl: string,
-  options: PreloadOptions = {}
-) => {
   // Higher quality and priority for LCP image
   const lcpOptions: PreloadOptions = {
     quality: 95,
     format: 'auto',
-    timeout: 2000,
+    timeout: 2000, // Now properly defined in PreloadOptions
     ...options
   };
   
@@ -123,12 +96,7 @@ export const preloadLCPImage = (
     linkEl.href = imageUrl;
     linkEl.setAttribute('fetchpriority', 'high');
     document.head.appendChild(linkEl);
-  }
-  
   return preloadCriticalImages([imageUrl], lcpOptions);
-};
-
 export default {
   preloadCriticalImages,
   preloadLCPImage
-};

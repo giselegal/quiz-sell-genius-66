@@ -1,90 +1,101 @@
 
-export interface ImageDiagnostics {
-  totalImages: number;
-  blurryImages: number;
-  missingImages: number;
-  optimizedImages: number;
-  issues: string[];
-}
-
-export class ImageChecker {
-  static checkImageQuality(img: HTMLImageElement): boolean {
-    try {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+// Image checking and analysis utilities
+/**
+ * Analyzes an image URL to extract optimization parameters and provide suggestions
+ * @param url The image URL to analyze
+ * @returns Analysis details including format, quality, width, and suggestions
+ */
+export const analyzeImageUrl = (url: string) => {
+  // Default return structure
+  const result = {
+    url,
+    format: 'unknown',
+    quality: 'unknown',
+    width: 'unknown',
+    height: 'unknown',
+    transformations: [] as string[],
+    suggestions: [] as string[]
+  };
+  
+  // Validate URL
+  if (!url || typeof url !== 'string') {
+    result.suggestions.push('Invalid URL provided');
+    return result;
+  }
+  // Check if it's a Cloudinary URL
+  if (url.includes('cloudinary.com')) {
+    // Extract transformations from URL
+    const transformMatch = url.match(/\/upload\/([^\/]+)\//);
+    if (transformMatch && transformMatch[1]) {
+      // Split the transformation string by commas
+      const transforms = transformMatch[1].split(',');
+      result.transformations = transforms;
       
-      if (!ctx) return false;
-      
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      
-      ctx.drawImage(img, 0, 0);
-      
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      
-      // Simple blur detection based on edge detection
-      let edgeCount = 0;
-      const threshold = 50;
-      
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        
-        // Calculate luminance
-        const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-        
-        // Check neighboring pixels for edges
-        if (i > canvas.width * 4) {
-          const prevR = data[i - canvas.width * 4];
-          const prevG = data[i - canvas.width * 4 + 1];
-          const prevB = data[i - canvas.width * 4 + 2];
-          const prevLuminance = 0.299 * prevR + 0.587 * prevG + 0.114 * prevB;
-          
-          if (Math.abs(luminance - prevLuminance) > threshold) {
-            edgeCount++;
-          }
-        }
+      // Extract format information
+      const formatTransform = transforms.find(t => t.startsWith('f_'));
+      if (formatTransform) {
+        result.format = formatTransform.replace('f_', '');
+      } else {
+        result.suggestions.push('Add f_auto parameter for automatic format optimization');
       }
-      
-      // If edge count is below threshold, image might be blurry
-      const edgeRatio = edgeCount / (canvas.width * canvas.height);
-      return edgeRatio > 0.01; // Adjust threshold as needed
-      
-    } catch (error) {
-      console.error('Error checking image quality:', error);
-      return true; // Assume it's fine if we can't check
+      // Extract quality information
+      const qualityTransform = transforms.find(t => t.startsWith('q_'));
+      if (qualityTransform) {
+        result.quality = qualityTransform.replace('q_', '');
+        
+        // Check if quality is too high
+        if (result.quality !== 'auto' && parseInt(result.quality as string, 10) > 85) {
+          result.suggestions.push('Consider using q_auto or reducing quality to 85 for better performance');
+        }
+        result.suggestions.push('Add q_auto parameter for automatic quality optimization');
+      // Extract width information
+      const widthTransform = transforms.find(t => t.startsWith('w_'));
+      if (widthTransform) {
+        result.width = widthTransform.replace('w_', '');
+        result.suggestions.push('Add width parameter to avoid loading unnecessarily large images');
+      // Check for other optimal parameters
+      if (!transforms.some(t => t.startsWith('dpr_'))) {
+        result.suggestions.push('Add dpr_auto for responsive device pixel ratio handling');
+    } else {
+      result.suggestions.push('No transformations found in URL. Add optimization parameters.');
     }
-  }
-
-  static diagnoseImages(): ImageDiagnostics {
-    const images = document.querySelectorAll('img');
-    const diagnostics: ImageDiagnostics = {
-      totalImages: images.length,
-      blurryImages: 0,
-      missingImages: 0,
-      optimizedImages: 0,
-      issues: []
-    };
-
-    images.forEach((img, index) => {
-      if (!img.src || img.src === '') {
-        diagnostics.missingImages++;
-        diagnostics.issues.push(`Image ${index + 1}: Missing src attribute`);
-        return;
-      }
-
-      if (img.complete && img.naturalHeight !== 0) {
-        if (!this.checkImageQuality(img)) {
-          diagnostics.blurryImages++;
-          diagnostics.issues.push(`Image ${index + 1}: Potentially blurry (${img.src})`);
-        } else {
-          diagnostics.optimizedImages++;
-        }
-      }
-    });
-
-    return diagnostics;
-  }
-}
+  } else {
+    // Not a Cloudinary URL
+    result.suggestions.push('Not a Cloudinary URL. Consider using Cloudinary for better optimization.');
+    
+    // Check for common image formats in the URL
+    if (url.includes('.jpg') || url.includes('.jpeg')) {
+      result.format = 'jpg';
+    } else if (url.includes('.png')) {
+      result.format = 'png';
+      result.suggestions.push('PNG format detected. Consider using WebP or AVIF for better compression.');
+    } else if (url.includes('.gif')) {
+      result.format = 'gif';
+      result.suggestions.push('GIF format detected. Consider using video formats for animated content.');
+    } else if (url.includes('.webp')) {
+      result.format = 'webp';
+    } else if (url.includes('.svg')) {
+      result.format = 'svg';
+  return result;
+};
+ * Checks if an image is likely too large for its display size
+ * @param naturalWidth Natural width of the image
+ * @param naturalHeight Natural height of the image
+ * @param displayWidth Display width of the image
+ * @param displayHeight Display height of the image
+ * @returns Boolean indicating if the image is oversized
+export const isOversizedImage = (
+  naturalWidth: number,
+  naturalHeight: number,
+  displayWidth: number,
+  displayHeight: number
+): boolean => {
+  // Consider device pixel ratio for retina displays
+  const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+  // Allow for images up to 1.5x the display size (accounting for DPR)
+  const optimalWidth = displayWidth * dpr * 1.5;
+  const optimalHeight = displayHeight * dpr * 1.5;
+  return naturalWidth > optimalWidth || naturalHeight > optimalHeight;
+export default {
+  analyzeImageUrl,
+  isOversizedImage

@@ -1,78 +1,115 @@
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-
 interface ProgressiveImageProps {
   src: string;
+  lowQualitySrc?: string; 
   alt: string;
-  width?: number;
-  height?: number;
   className?: string;
-  loading?: 'lazy' | 'eager';
-  fetchPriority?: 'high' | 'low' | 'auto';
-  onLoad?: () => void;
-  onError?: () => void;
   style?: React.CSSProperties;
+  width?: number | string;
+  height?: number | string;
+  priority?: boolean;
+  onLoad?: () => void;
 }
-
 const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   src,
+  lowQualitySrc,
   alt,
+  className,
+  style,
   width,
   height,
-  className,
-  loading = 'lazy',
-  fetchPriority = 'auto',
+  priority = false,
   onLoad,
-  onError,
-  style
 }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [isLowQualityLoaded, setIsLowQualityLoaded] = useState(false);
+  useEffect(() => {
+    // Reset state when src changes
+    setIsLoaded(false);
+    setHasError(false);
+    
+    // Check if image is already in browser cache
+    if (imageRef.current?.complete && imageRef.current?.naturalWidth > 0) {
+      setIsLoaded(true);
+      if (onLoad) onLoad();
+    }
+  }, [src, onLoad]);
   const handleLoad = () => {
-    setImageLoaded(true);
-    onLoad?.();
+    setIsLoaded(true);
+    if (onLoad) onLoad();
+    // Log performance metrics for priority images only
+    if (priority) {
+      console.log(`Priority image loaded: ${src.substring(0, 50)}...`);
+      
+      // Report to performance observer if available
+      if ('performance' in window && 'mark' in performance) {
+        try {
+          performance.mark(`img-loaded-${src.substring(0, 20)}`);
+          
+          // If we have the PerformanceObserver API available, use it to track LCP
+          if ('PerformanceObserver' in window) {
+            // This is just for monitoring, no actual dependency
+            console.log('Image loaded that might affect LCP');
+          }
+        } catch (e) {
+          // Ignore errors with performance marking
+        }
+      }
   };
-
+  const handleLowQualityLoad = () => {
+    setIsLowQualityLoaded(true);
   const handleError = () => {
-    setImageError(true);
-    onError?.();
-  };
-
-  if (imageError) {
-    return (
-      <div 
-        className={cn("bg-gray-200 flex items-center justify-center", className)}
-        style={{ width, height, ...style }}
-      >
-        <span className="text-gray-500 text-sm">Image not available</span>
-      </div>
-    );
-  }
-
+    setHasError(true);
+    console.error(`Failed to load image: ${src.substring(0, 50)}...`);
   return (
     <div className={cn("relative overflow-hidden", className)} style={style}>
-      {!imageLoaded && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+      {/* Low quality placeholder - improved for faster loading */}
+      {lowQualitySrc && !isLoaded && (
+        <img
+          src={lowQualitySrc}
+          alt={`Carregando ${alt}`}
+          className={cn(
+            "w-full h-full object-cover absolute inset-0 blur-sm transition-opacity duration-300",
+            isLowQualityLoaded ? "opacity-100" : "opacity-0"
+          )}
+          width={width || "100%"}
+          height={height || "auto"}
+          onLoad={handleLowQualityLoad}
+          loading="eager"
+          decoding="sync"
+        />
       )}
+      {/* Actual image with improved loading attributes */}
       <img
+        ref={imageRef}
         src={src}
         alt={alt}
-        width={width}
-        height={height}
-        loading={loading}
+        className={cn(
+          "w-full h-full object-cover transition-all duration-500",
+          isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-[1.02]"
+        )}
+        width={width || "100%"}
+        height={height || "auto"}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
+        fetchPriority={priority ? "high" : "auto"}
         onLoad={handleLoad}
         onError={handleError}
-        className={cn(
-          "transition-opacity duration-300",
-          imageLoaded ? "opacity-100" : "opacity-0",
-          className
-        )}
-        style={{ width: '100%', height: 'auto' }}
       />
+      {/* Error fallback */}
+      {hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+          <span className="text-gray-500">Imagem indisponível</span>
+        </div>
+      {/* Loading skeleton when neither image is loaded */}
+      {!isLoaded && !isLowQualityLoaded && (
+        <div className="absolute inset-0 bg-gray-100 animate-pulse" />
     </div>
   );
 };
-
 export default ProgressiveImage;

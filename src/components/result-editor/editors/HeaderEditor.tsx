@@ -3,7 +3,6 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-
 interface HeaderEditorProps {
   content: {
     title?: string;
@@ -14,15 +13,12 @@ interface HeaderEditorProps {
   };
   onUpdate: (content: any) => void;
 }
-
 const HeaderEditor: React.FC<HeaderEditorProps> = ({ content, onUpdate }) => {
   const handleChange = (key: string, value: any) => {
     onUpdate({
       ...content,
       [key]: value
     });
-  };
-
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -36,24 +32,17 @@ const HeaderEditor: React.FC<HeaderEditorProps> = ({ content, onUpdate }) => {
         />
       </div>
       
-      <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo (opcional)</Label>
-        <Input
           id="subtitle"
           value={content.subtitle || ''}
           onChange={(e) => handleChange('subtitle', e.target.value)}
           placeholder="Subtítulo personalizado"
-        />
-      </div>
-      
-      <div className="space-y-2">
         <Label htmlFor="logoUrl">URL do Logo</Label>
         <Input
           id="logoUrl"
           value={content.logoUrl || ''}
           onChange={(e) => handleChange('logoUrl', e.target.value)}
           placeholder="https://exemplo.com/seu-logo.png"
-        />
         
         {content.logoUrl && (
           <div className="mt-2">
@@ -70,19 +59,12 @@ const HeaderEditor: React.FC<HeaderEditorProps> = ({ content, onUpdate }) => {
             </div>
           </div>
         )}
-      </div>
-      
-      <div className="space-y-2">
         <Label htmlFor="userName">Nome Padrão (se o usuário não fornecer)</Label>
-        <Input
           id="userName"
           value={content.userName || ''}
           onChange={(e) => handleChange('userName', e.target.value)}
           placeholder="Visitante"
-        />
-      </div>
     </div>
   );
 };
-
 export default HeaderEditor;

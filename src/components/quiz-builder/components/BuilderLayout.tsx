@@ -1,12 +1,11 @@
 
 import React from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { StagesPanel } from '../StagesPanel';
-import { ComponentsSidebar } from '../ComponentsSidebar';
-import { PreviewPanel } from '../PreviewPanel';
 import { PropertiesPanel } from '../PropertiesPanel';
-
+import { ComponentPreviewPanel } from '../preview/ComponentPreviewPanel';
+import { ComponentToolbar } from './ComponentToolbar';
+import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 interface BuilderLayoutProps {
   components: QuizComponentData[];
   stages: QuizStage[];
@@ -14,18 +13,17 @@ interface BuilderLayoutProps {
   selectedComponentId: string | null;
   activeStage: QuizStage | null;
   isPreviewing: boolean;
-  onComponentSelect: (type: any) => void;
+  onComponentSelect: (type: string) => void;
   onStageAdd: (type: QuizStage['type']) => void;
-  onStageSelect: (stageId: string) => void;
+  onStageSelect: (id: string) => void;
   onComponentMove: (draggedId: string, targetId: string) => void;
   onStageMove: (draggedId: string, targetId: string) => void;
   onStageUpdate: (id: string, updates: Partial<QuizStage>) => void;
   onStageDelete: (id: string) => void;
   onComponentUpdate: (id: string, updates: Partial<QuizComponentData>) => void;
   onComponentDelete: (id: string) => void;
-  onSelectComponent: (id: string | null) => void;
+  onSelectComponent: (id: string) => void;
 }
-
 const BuilderLayout: React.FC<BuilderLayoutProps> = ({
   components,
   stages,
@@ -44,61 +42,57 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
   onComponentDelete,
   onSelectComponent
 }) => {
-  const activeStageComponents = components.filter(c => c.stageId === activeStageId);
-  const selectedComponent = selectedComponentId ? components.find(c => c.id === selectedComponentId) : null;
-
+  const activeStageComponents = activeStageId 
+    ? components.filter(c => c.stageId === activeStageId)
+    : [];
+  const selectedComponent = selectedComponentId 
+    ? components.find(c => c.id === selectedComponentId) 
+    : null;
   return (
-    <div className="flex-1 overflow-hidden">
-      <ResizablePanelGroup direction="horizontal" className="h-full">
-        <ResizablePanel defaultSize={15} minSize={10} maxSize={25}>
-          <StagesPanel
-            stages={stages}
-            activeStageId={activeStageId}
-            onStageSelect={onStageSelect}
-            onStageAdd={onStageAdd}
-            onStageMove={onStageMove}
-            onStageUpdate={onStageUpdate}
-            onStageDelete={onStageDelete}
-          />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        <ResizablePanel defaultSize={15} minSize={10} maxSize={25}>
-          <ComponentsSidebar
+    <ResizablePanelGroup direction="horizontal" className="h-full">
+      {/* Left Panel - Stages Sidebar */}
+      <ResizablePanel defaultSize={18} minSize={15} maxSize={25} className="bg-[#F9F6F2]">
+        <StagesPanel 
+          stages={stages} 
+          activeStageId={activeStageId}
+          onStageSelect={onStageSelect}
+          onStageAdd={onStageAdd}
+          onStageMove={onStageMove}
+          onStageUpdate={onStageUpdate}
+          onStageDelete={onStageDelete}
+        />
+      </ResizablePanel>
+      
+      <ResizableHandle withHandle />
+      {/* Center Panel - Preview */}
+      <ResizablePanel defaultSize={57}>
+        <div className="h-full flex flex-col">
+          <ComponentToolbar
+            activeStage={activeStage} 
             onComponentSelect={onComponentSelect}
-            activeStage={activeStage}
-          />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        <ResizablePanel defaultSize={50} minSize={30}>
-          <PreviewPanel
-            components={activeStageComponents}
-            selectedComponentId={selectedComponentId}
-            onSelectComponent={onSelectComponent}
-            onMoveComponent={onComponentMove}
-            activeStage={activeStage}
             isPreviewing={isPreviewing}
           />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-          <PropertiesPanel
-            component={selectedComponent}
-            stage={!selectedComponent ? activeStage : null}
-            onClose={() => onSelectComponent(null)}
-            onUpdate={onComponentUpdate}
-            onUpdateStage={onStageUpdate}
-            onDelete={onComponentDelete}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </div>
+          <div className="flex-1 bg-[#FAF9F7]">
+            <ComponentPreviewPanel 
+              components={activeStageComponents}
+              selectedComponentId={selectedComponentId}
+              onSelectComponent={onSelectComponent}
+              onMoveComponent={onComponentMove}
+              activeStage={activeStage}
+              isPreviewing={isPreviewing}
+            />
+          </div>
+        </div>
+      {/* Right Panel - Properties */}
+      <ResizablePanel defaultSize={25} className="bg-[#F9F6F2]">
+        <PropertiesPanel 
+          component={selectedComponent}
+          stage={activeStage}
+          onClose={() => onSelectComponent('')}
+          onUpdate={onComponentUpdate}
+          onUpdateStage={onStageUpdate}
+          onDelete={onComponentDelete}
+    </ResizablePanelGroup>
   );
 };
-
 export default BuilderLayout;

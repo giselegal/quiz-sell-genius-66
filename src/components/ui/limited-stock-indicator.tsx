@@ -1,13 +1,10 @@
-
 "use client";
-
 import React, { useEffect, useState } from 'react';
 
 interface LimitedStockIndicatorProps {
   initialStock?: number;
   className?: string;
 }
-
 export const LimitedStockIndicator: React.FC<LimitedStockIndicatorProps> = ({
   initialStock = 12,
   className = ''
@@ -32,9 +29,7 @@ export const LimitedStockIndicator: React.FC<LimitedStockIndicatorProps> = ({
     
     return () => clearInterval(stockInterval);
   }, [stockLeft]);
-
   const percentLeft = Math.round((stockLeft / initialStock) * 100);
-
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="flex items-center justify-between text-xs mb-1">
@@ -48,9 +43,7 @@ export const LimitedStockIndicator: React.FC<LimitedStockIndicatorProps> = ({
           className="h-full bg-gradient-to-r from-red-500 to-[#D68047] transition-all duration-500"
           style={{ width: `${percentLeft}%` }}
         ></div>
-      </div>
     </div>
   );
 };
-
 export default LimitedStockIndicator;

@@ -1,27 +1,22 @@
-
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { redirect } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 interface AdminRouteProps {
   children: React.ReactNode;
   requireEditor?: boolean;
 }
-
 export const AdminRoute: React.FC<AdminRouteProps> = ({ 
   children, 
   requireEditor = false 
 }) => {
   const { user, isAdmin, hasEditorAccess } = useAuth();
-  
   if (!user) {
-    return <Navigate to="/login" replace />;
+    redirect('/login');
+    return null;
   }
-  
   if (!isAdmin) {
-    return <Navigate to="/" replace />;
-  }
-  
+    redirect('/');
   if (requireEditor && !hasEditorAccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -41,7 +36,5 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
         </div>
       </div>
     );
-  }
-  
   return <>{children}</>;
 };

@@ -1,14 +1,21 @@
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-
+import React from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { cn } from '@/lib/utils';
 interface CarouselBlockPreviewProps {
   content: {
-    carouselImages?: Array<{
+    carouselImages?: {
       url: string;
       alt: string;
       caption?: string;
-    }>;
+    }[];
     autoPlay?: boolean;
     interval?: number;
     showArrows?: boolean;
@@ -16,109 +23,75 @@ interface CarouselBlockPreviewProps {
     style?: any;
   };
 }
-
 const CarouselBlockPreview: React.FC<CarouselBlockPreviewProps> = ({ content }) => {
-  const {
-    carouselImages = [],
-    autoPlay = false,
-    interval = 5000,
-    showArrows = true,
+  const { 
+    carouselImages = [], 
+    autoPlay = false, 
+    interval = 5000, 
+    showArrows = true, 
     showDots = true,
-    style = {}
+    style = {} 
   } = content;
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (!autoPlay || carouselImages.length <= 1) return;
-
-    const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => 
-        prevIndex === carouselImages.length - 1 ? 0 : prevIndex + 1
-      );
+  // Referência para o API do carrossel para autoplay
+  const [api, setApi] = React.useState<any>(null);
+  
+  // Configurar autoplay
+  React.useEffect(() => {
+    if (!api || !autoPlay) return;
+    
+    // Função para avançar para o próximo slide
+    const autoPlayInterval = setInterval(() => {
+      api.scrollNext();
     }, interval);
-
-    return () => clearInterval(timer);
-  }, [autoPlay, interval, carouselImages.length]);
-
-  const goToPrevious = () => {
-    setCurrentIndex(currentIndex === 0 ? carouselImages.length - 1 : currentIndex - 1);
-  };
-
-  const goToNext = () => {
-    setCurrentIndex(currentIndex === carouselImages.length - 1 ? 0 : currentIndex + 1);
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  if (carouselImages.length === 0) {
-    return (
-      <div className="bg-gray-100 h-64 flex items-center justify-center rounded-lg" style={style}>
-        <p className="text-gray-400">Adicione imagens ao carrossel</p>
-      </div>
-    );
-  }
-
+    // Limpar intervalo quando o componente é desmontado
+    return () => clearInterval(autoPlayInterval);
+  }, [api, autoPlay, interval]);
   return (
-    <div className="relative w-full" style={style}>
-      <div className="relative h-64 md:h-96 overflow-hidden rounded-lg">
-        {carouselImages.map((image, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-500 ${
-              index === currentIndex ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <img
-              src={image.url}
-              alt={image.alt}
-              className="w-full h-full object-cover"
-            />
-            {image.caption && (
-              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                <p className="text-sm">{image.caption}</p>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {showArrows && carouselImages.length > 1 && (
-        <>
-          <button
-            onClick={goToPrevious}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all"
-          >
-            <ChevronLeft className="h-5 w-5 text-gray-800" />
-          </button>
-          <button
-            onClick={goToNext}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all"
-          >
-            <ChevronRight className="h-5 w-5 text-gray-800" />
-          </button>
-        </>
-      )}
-
-      {showDots && carouselImages.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {carouselImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                index === currentIndex
-                  ? 'bg-white'
-                  : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-              }`}
-            />
-          ))}
+    <div style={style} className="w-full">
+      {carouselImages.length === 0 ? (
+        <div className="p-6 text-center text-gray-400 border border-dashed rounded-md">
+          Adicione imagens ao seu carrossel
         </div>
+      ) : (
+        <Carousel setApi={setApi} className="w-full relative">
+          <CarouselContent>
+            {carouselImages.map((image, index) => (
+              <CarouselItem key={index}>
+                <div className="p-1">
+                  <div className="overflow-hidden rounded-lg">
+                    <img
+                      src={image.url || '/placeholder.svg'}
+                      alt={image.alt}
+                      className="w-full h-auto aspect-[16/9] object-cover"
+                    />
+                    {image.caption && (
+                      <div className="p-2 text-center text-sm">{image.caption}</div>
+                    )}
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          
+          {showArrows && carouselImages.length > 1 && (
+            <>
+              <CarouselPrevious className={cn("absolute left-2 top-1/2 transform -translate-y-1/2")} />
+              <CarouselNext className={cn("absolute right-2 top-1/2 transform -translate-y-1/2")} />
+            </>
+          )}
+          {showDots && carouselImages.length > 1 && (
+            <div className="flex justify-center gap-1 mt-2">
+              {carouselImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => api?.scrollTo(index)}
+                  className="w-2 h-2 rounded-full bg-gray-300 focus:outline-none"
+                />
+              ))}
+            </div>
+        </Carousel>
       )}
     </div>
   );
 };
-
 export default CarouselBlockPreview;

@@ -1,6 +1,4 @@
-
 "use client";
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QuizEditorState, QUIZ_CATEGORIES, QuizCategory } from '@/types/quizEditor';
@@ -18,7 +16,6 @@ interface QuizEditorProps {
   onQuestionsUpdate?: (questions: QuizQuestion[]) => void;
   isPreviewing?: boolean;
 }
-
 const QuizEditor: React.FC<QuizEditorProps> = ({ 
   initialTemplate, 
   onQuestionsUpdate, 
@@ -30,7 +27,6 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
     editingQuestionId: null,
     selectedCategory: null
   });
-
   // Inicializar com as perguntas do template, se fornecido
   useEffect(() => {
     if (initialTemplate?.questions) {
@@ -41,20 +37,13 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
       }));
     }
   }, [initialTemplate]);
-
   // Carregar perguntas quando a categoria muda
-  useEffect(() => {
     if (initialTemplate) {
       // Filtrar as perguntas pela categoria ativa
-      setEditorState(prevState => ({
-        ...prevState,
         questions: initialTemplate.questions.filter(q => 
           q.id.includes(activeTab) || activeTab === 'clothingQuestions'
         ),
-      }));
-    }
   }, [activeTab, initialTemplate]);
-
   const handleAddQuestion = () => {
     const newQuestion: QuizQuestion = {
       id: generateId(),
@@ -70,25 +59,14 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
       editingQuestionId: newQuestion.id
     }));
   };
-
   const handleEditQuestion = (questionId: string) => {
-    setEditorState(prevState => ({
-      ...prevState,
       editingQuestionId: questionId
-    }));
-  };
-
   const handleSaveQuestion = (updatedQuestion: QuizQuestion) => {
     const updatedQuestions = editorState.questions.map(q => 
       q.id === updatedQuestion.id ? updatedQuestion : q
     );
-
-    setEditorState(prevState => ({
-      ...prevState,
       questions: updatedQuestions,
       editingQuestionId: null
-    }));
-
     // Atualizar todas as perguntas do template
     if (initialTemplate && onQuestionsUpdate) {
       const allQuestions = [...initialTemplate.questions];
@@ -100,40 +78,19 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
         allQuestions.push(updatedQuestion);
       }
       onQuestionsUpdate(allQuestions);
-    }
-
     toast({
       title: 'Pergunta salva com sucesso',
       description: 'As alterações foram salvas.',
     });
-  };
-
   const handleDeleteQuestion = (questionId: string) => {
     const updatedQuestions = editorState.questions.filter(q => q.id !== questionId);
-    
-    setEditorState(prevState => ({
-      ...prevState,
-      questions: updatedQuestions,
-      editingQuestionId: null
-    }));
-
-    if (initialTemplate && onQuestionsUpdate) {
       const allQuestions = initialTemplate.questions.filter(q => q.id !== questionId);
-      onQuestionsUpdate(allQuestions);
-    }
-
-    toast({
       title: 'Pergunta removida',
       description: 'A pergunta foi removida com sucesso.',
-    });
-  };
-
   const currentQuestion = editorState.editingQuestionId 
     ? editorState.questions.find(q => q.id === editorState.editingQuestionId)
     : null;
-
   const isEditingQuestion = !!currentQuestion;
-
   // Modo de visualização
   if (isPreviewing) {
     return (
@@ -172,9 +129,7 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
           </div>
         </div>
       </div>
-    );
   }
-
   return (
     <div className="flex flex-1 overflow-hidden">
       {/* Left side - Category selection and question list */}
@@ -184,7 +139,6 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
             <TabsTrigger value="styleQuestions">Estilo</TabsTrigger>
             <TabsTrigger value="strategicQuestions">Estratégicas</TabsTrigger>
           </TabsList>
-          
           <TabsContent value="styleQuestions" className="space-y-4">
             {QUIZ_CATEGORIES.filter(cat => !cat.isStrategic).map(category => (
               <QuizCategoryTab 
@@ -201,27 +155,9 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
                 }
                 onEditQuestion={handleEditQuestion}
               />
-            ))}
           </TabsContent>
-          
           <TabsContent value="strategicQuestions" className="space-y-4">
             {QUIZ_CATEGORIES.filter(cat => cat.isStrategic).map(category => (
-              <QuizCategoryTab 
-                key={category.id}
-                category={category}
-                isActive={activeTab === category.id}
-                onClick={() => setActiveTab(category.id)}
-                questions={
-                  category.id === activeTab 
-                    ? editorState.questions 
-                    : initialTemplate?.questions.filter(
-                        q => q.id.includes(category.id)
-                      ) || []
-                }
-                onEditQuestion={handleEditQuestion}
-              />
-            ))}
-          </TabsContent>
         </Tabs>
         
         <div className="mt-6">
@@ -232,9 +168,6 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
             <Plus className="w-4 h-4 mr-2" />
             Adicionar Pergunta
           </Button>
-        </div>
-      </div>
-
       {/* Right side - Question editor */}
       <div className="flex-1 overflow-auto p-4">
         {isEditingQuestion ? (
@@ -255,11 +188,8 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
               <Plus className="w-4 h-4 mr-2" />
               Nova Pergunta
             </Button>
-          </div>
         )}
-      </div>
     </div>
   );
 };
-
 export default QuizEditor;

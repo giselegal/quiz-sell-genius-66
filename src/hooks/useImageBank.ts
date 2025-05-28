@@ -1,77 +1,97 @@
-
 "use client";
 
-import { useState, useCallback } from 'react';
-import { BankImage, getAllImages, getImagesByCategory, addImage } from '@/data/imageBank';
-
-export const useImageBank = () => {
+import { useState, useEffect, useCallback } from 'react';
+import { 
+  getAllImages, 
+  getImagesByCategory, 
+  getImageById,
+  type BankImage
+} from '@/data/imageBank';
+  preloadImages, 
+  preloadImagesByIds, 
+  preloadImagesByUrls, 
+  preloadCriticalImages,
+  preloadImagesByCategory
+} from '@/utils/imageManager';
+import type { PreloadOptions } from '@/utils/images/types';
+interface UseImageBankProps {
+  initialCategory?: string;
+  autoPreload?: boolean;
+  preloadPriority?: number;
+}
+export const useImageBank = ({ 
+  initialCategory,
+  autoPreload = false,
+  preloadPriority = 3
+}: UseImageBankProps = {}) => {
+  const [isLoading, setIsLoading] = useState(autoPreload);
   const [images, setImages] = useState<BankImage[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const loadAllImages = useCallback(() => {
-    setLoading(true);
+  const [currentCategory, setCurrentCategory] = useState<string | undefined>(initialCategory);
+  const [error, setError] = useState<string | null>(null);
+  // Load images based on category
+  const loadImages = useCallback((category?: string) => {
     try {
-      const allImages = getAllImages();
-      setImages(allImages);
-    } catch (error) {
-      console.error('Error loading images:', error);
-    } finally {
-      setLoading(false);
+      let resultImages: BankImage[];
+      
+      if (!category) {
+        resultImages = getAllImages();
+      } else {
+        resultImages = getImagesByCategory(category);
+      }
+      setImages(resultImages);
+      setCurrentCategory(category);
+      setError(null);
+    } catch (err) {
+      console.error('Error loading images:', err);
+      setError('Failed to load images');
     }
   }, []);
-
-  const loadImagesByCategory = useCallback((category: string) => {
-    setLoading(true);
-    try {
-      const categoryImages = getImagesByCategory(category);
-      setImages(categoryImages);
-    } catch (error) {
-      console.error('Error loading category images:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const uploadImage = useCallback((image: BankImage) => {
-    try {
-      const uploadedImage = addImage(image);
-      setImages(prev => [...prev, uploadedImage]);
-      return uploadedImage;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      throw error;
-    }
-  }, []);
-
-  const searchImages = useCallback((query: string) => {
-    setLoading(true);
-    try {
-      const allImages = getAllImages();
-      const filteredImages = allImages.filter(image =>
-        image.alt.toLowerCase().includes(query.toLowerCase()) ||
-        image.category.toLowerCase().includes(query.toLowerCase())
-      );
-      setImages(filteredImages);
-    } catch (error) {
-      console.error('Error searching images:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const getImageUrl = useCallback((imageId: string) => {
-    const allImages = getAllImages();
-    const image = allImages.find(img => img.id === imageId);
-    return image?.url || '';
-  }, []);
-
+  // Load images by style category
+  const loadImagesByStyle = useCallback((styleCategory: string) => {
+      const resultImages = getImagesByCategory(styleCategory);
+      setCurrentCategory(undefined); // Not a standard category
+      console.error('Error loading images by style:', err);
+      setError('Failed to load images by style');
+  // Get a single image by ID
+  const getImage = useCallback((id: string): BankImage | undefined => {
+    return getImageById(id);
+  // Preload specific images
+  const preloadSelectedImages = useCallback((imageIds: string[]) => {
+    setIsLoading(true);
+    
+    preloadImagesByIds(imageIds, {
+      onComplete: () => {
+        setIsLoading(false);
+    });
+  // Preload images by category
+  const preloadByCategory = useCallback((category: string) => {
+    preloadImagesByCategory(category, {
+  // Initialize with category if provided
+  useEffect(() => {
+    loadImages(initialCategory);
+    // Auto preload if enabled
+    if (autoPreload && initialCategory) {
+      setIsLoading(true);
+      const images = getImagesByCategory(initialCategory);
+      preloadImages(images, {
+        onComplete: () => {
+          setIsLoading(false);
+        },
+        batchSize: 4
+      });
+  }, [initialCategory, autoPreload, loadImages]);
   return {
     images,
-    loading,
-    loadAllImages,
-    loadImagesByCategory,
-    uploadImage,
-    searchImages,
-    getImageUrl
+    isLoading,
+    error,
+    currentCategory,
+    loadImages,
+    loadImagesByStyle,
+    getImage,
+    preloadImages: preloadSelectedImages,
+    preloadCriticalImages,
+    preloadByUrls: preloadImagesByUrls,
+    preloadByCategory
   };
 };
+export default useImageBank;

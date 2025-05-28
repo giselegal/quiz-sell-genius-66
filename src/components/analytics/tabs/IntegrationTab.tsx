@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -10,18 +9,15 @@ import { ApiTokensCard } from '@/components/analytics/integrations/ApiTokensCard
 import { WebhookCard } from '@/components/analytics/integrations/WebhookCard';
 import { MarketingPlatformsCard } from '@/components/analytics/integrations/MarketingPlatformsCard';
 import EventLogger from '@/components/analytics/EventLogger';
-
 interface IntegrationTabProps {
   analyticsData: any;
   testFunction: () => boolean;
 }
-
 export const IntegrationTab: React.FC<IntegrationTabProps> = ({
   analyticsData,
   testFunction
 }) => {
   const [activeTab, setActiveTab] = useState('tracking');
-
   return (
     <div className="space-y-6">
       <Card>
@@ -47,31 +43,20 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({
                 <FacebookPixelCard testFunction={testFunction} />
               </div>
             </TabsContent>
-            
             <TabsContent value="analytics">
-              <GoogleAnalyticsCard />
-            </TabsContent>
-            
+                <GoogleAnalyticsCard />
             <TabsContent value="marketing">
-              <MarketingPlatformsCard />
-            </TabsContent>
-            
+                <MarketingPlatformsCard />
             <TabsContent value="api">
-              <ApiTokensCard />
-            </TabsContent>
-            
+                <ApiTokensCard />
             <TabsContent value="webhooks">
-              <WebhookCard />
-            </TabsContent>
-            
+                <WebhookCard />
             <TabsContent value="eventlog">
-              <EventLogger />
-            </TabsContent>
+                <EventLogger />
           </Tabs>
         </CardContent>
       </Card>
     </div>
   );
 };
-
 export default IntegrationTab;

@@ -2,7 +2,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { ColorPicker } from './ColorPicker';
-
 interface GlobalStyleEditorProps {
   globalStyles: {
     primaryColor?: string;
@@ -13,7 +12,6 @@ interface GlobalStyleEditorProps {
   };
   onUpdate: (styles: any) => void;
 }
-
 const GlobalStyleEditor: React.FC<GlobalStyleEditorProps> = ({
   globalStyles,
   onUpdate
@@ -23,8 +21,6 @@ const GlobalStyleEditor: React.FC<GlobalStyleEditorProps> = ({
       ...globalStyles,
       [key]: value
     });
-  };
-
   return (
     <div className="space-y-6">
       <div>
@@ -40,34 +36,19 @@ const GlobalStyleEditor: React.FC<GlobalStyleEditorProps> = ({
             <p className="text-xs text-[#8F7A6A]">Usada em títulos, botões e destaques</p>
           </div>
           
-          <div className="space-y-2">
             <Label>Cor Secundária</Label>
-            <ColorPicker
               color={globalStyles.secondaryColor || '#432818'}
               onChange={(color) => handleChange('secondaryColor', color)}
-            />
             <p className="text-xs text-[#8F7A6A]">Usada em subtítulos e elementos secundários</p>
-          </div>
-
-          <div className="space-y-2">
             <Label>Cor do Texto</Label>
-            <ColorPicker
               color={globalStyles.textColor || '#1A1818'}
               onChange={(color) => handleChange('textColor', color)}
-            />
-          </div>
-
-          <div className="space-y-2">
             <Label>Cor de Fundo</Label>
-            <ColorPicker
               color={globalStyles.backgroundColor || '#fffaf7'}
               onChange={(color) => handleChange('backgroundColor', color)}
-            />
-          </div>
         </div>
       </div>
       
-      <div>
         <h3 className="text-lg font-medium mb-4">Tipografia</h3>
         <div className="space-y-2">
           <Label htmlFor="fontFamily">Fonte Principal</Label>
@@ -83,10 +64,7 @@ const GlobalStyleEditor: React.FC<GlobalStyleEditorProps> = ({
             <option value="'Georgia', serif">Georgia</option>
             <option value="'Arial', sans-serif">Arial</option>
           </select>
-        </div>
-      </div>
     </div>
   );
 };
-
 export default GlobalStyleEditor;

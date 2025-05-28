@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -15,28 +14,23 @@ import { ptBR } from 'date-fns/locale';
 import { Plus, Copy, Trash2, Edit, Check, X } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { styleQuizTemplate } from '@/services/templates/styleQuizTemplate';
-
 interface TemplateSelectorProps {
   onSelectTemplate: (templateId: string) => void;
 }
-
 const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate }) => {
   const [templates, setTemplates] = useState<TemplateListItem[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newTemplateName, setNewTemplateName] = useState('');
   const [newTemplateDescription, setNewTemplateDescription] = useState('');
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<string | null>(null);
-
   // Carregar templates ao iniciar
   useEffect(() => {
     loadTemplates();
   }, []);
-
   const loadTemplates = () => {
     const loadedTemplates = getAllTemplates();
     setTemplates(loadedTemplates);
   };
-
   // Criar novo template
   const handleCreateTemplate = () => {
     if (!newTemplateName.trim()) {
@@ -47,7 +41,6 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
       });
       return;
     }
-
     try {
       const newTemplate = {
         ...styleQuizTemplate,
@@ -62,24 +55,14 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
       setNewTemplateName('');
       setNewTemplateDescription('');
       loadTemplates();
-
-      toast({
         title: 'Template criado',
         description: 'O novo template foi criado com sucesso.'
-      });
     } catch (error) {
       console.error('Erro ao criar template:', error);
-      toast({
         title: 'Erro ao criar template',
         description: 'Não foi possível criar o novo template.',
-        variant: 'destructive'
-      });
-    }
-  };
-
   // Duplicar template
   const handleDuplicateTemplate = (id: string) => {
-    try {
       const duplicatedId = duplicateTemplate(id);
       if (duplicatedId) {
         loadTemplates();
@@ -88,38 +71,19 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
           description: 'O template foi duplicado com sucesso.'
         });
       }
-    } catch (error) {
       console.error('Erro ao duplicar template:', error);
-      toast({
         title: 'Erro ao duplicar',
         description: 'Não foi possível duplicar o template.',
-        variant: 'destructive'
-      });
-    }
-  };
-
   // Excluir template
   const handleDeleteTemplate = (id: string) => {
-    try {
       const success = deleteTemplate(id);
       if (success) {
         setIsDeleteConfirmOpen(null);
-        loadTemplates();
-        toast({
           title: 'Template excluído',
           description: 'O template foi excluído com sucesso.'
-        });
-      }
-    } catch (error) {
       console.error('Erro ao excluir template:', error);
-      toast({
         title: 'Erro ao excluir',
         description: 'Não foi possível excluir o template.',
-        variant: 'destructive'
-      });
-    }
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -151,7 +115,6 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
                 />
               </div>
               
-              <div className="space-y-2">
                 <Label htmlFor="description">Descrição</Label>
                 <Textarea
                   id="description"
@@ -159,10 +122,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
                   onChange={(e) => setNewTemplateDescription(e.target.value)}
                   placeholder="Uma breve descrição sobre este template..."
                   rows={3}
-                />
-              </div>
             </div>
-            
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>Cancelar</Button>
               <Button className="bg-[#B89B7A] hover:bg-[#A38A69]" onClick={handleCreateTemplate}>Criar Template</Button>
@@ -170,7 +130,6 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
           </DialogContent>
         </Dialog>
       </div>
-
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {templates.map((template) => (
           <Card key={template.id} className="overflow-hidden border border-[#B89B7A]/20">
@@ -188,8 +147,6 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
                 </p>
                 <p className="mt-1">
                   Atualizado {formatDistanceToNow(new Date(template.updatedAt), { locale: ptBR, addSuffix: true })}
-                </p>
-              </div>
             </CardContent>
             <CardFooter className="border-t bg-[#FAF9F7] flex justify-between">
               <div className="flex gap-2">
@@ -212,13 +169,9 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
                     >
                       <Check className="w-3 h-3" />
                     </Button>
-                    <Button 
-                      size="sm" 
                       variant="outline"
                       onClick={() => setIsDeleteConfirmOpen(null)}
-                    >
                       <X className="w-3 h-3" />
-                    </Button>
                   </div>
                 ) : (
                   <Button 
@@ -231,8 +184,6 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
                     Excluir
                   </Button>
                 )}
-              </div>
-              
               <Button 
                 size="sm" 
                 className="bg-[#B89B7A] hover:bg-[#A38A69]"
@@ -244,19 +195,16 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
             </CardFooter>
           </Card>
         ))}
-
-        {templates.length === 0 && (
-          <Card className="p-6 text-center">
-            <p className="text-muted-foreground mb-4">Nenhum template disponível. Crie um novo para começar.</p>
-            <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-[#B89B7A] hover:bg-[#A38A69]">
-              <Plus className="w-4 h-4 mr-2" />
-              Criar Primeiro Template
-            </Button>
-          </Card>
-        )}
-      </div>
+      {templates.length === 0 && (
+        <Card className="p-6 text-center">
+          <p className="text-muted-foreground mb-4">Nenhum template disponível. Crie um novo para começar.</p>
+          <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-[#B89B7A] hover:bg-[#A38A69]">
+            <Plus className="w-4 h-4 mr-2" />
+            Criar Primeiro Template
+          </Button>
+        </Card>
+      )}
     </div>
   );
 };
-
 export default TemplateSelector;

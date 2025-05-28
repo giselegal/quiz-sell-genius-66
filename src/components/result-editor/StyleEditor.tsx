@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,12 +10,10 @@ interface StyleEditorProps {
   style: EditableContent['style'];
   onUpdate: (style: any) => void;
 }
-
 const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
   const updateStyle = (key: string, value: any) => {
     onUpdate({ ...style, [key]: value });
   };
-
   return (
     <div className="space-y-4">
       <Tabs defaultValue="typography" className="w-full">
@@ -25,7 +22,6 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
           <TabsTrigger value="layout" className="flex-1">Layout</TabsTrigger>
           <TabsTrigger value="colors" className="flex-1">Cores</TabsTrigger>
         </TabsList>
-        
         <TabsContent value="typography" className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="fontFamily">Família da Fonte</Label>
@@ -48,7 +44,6 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
             </Select>
           </div>
           
-          <div className="space-y-2">
             <Label htmlFor="fontSize">Tamanho da Fonte</Label>
             <Input
               id="fontSize"
@@ -56,29 +51,37 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
               onChange={(e) => updateStyle('fontSize', e.target.value)}
               placeholder="ex: 16px ou 1.2rem"
             />
-          </div>
-          
-          <div className="space-y-2">
             <Label htmlFor="fontWeight">Peso da Fonte</Label>
-            <Select
               value={style.fontWeight || ''} 
               onValueChange={(value) => updateStyle('fontWeight', value)}
-            >
               <SelectTrigger id="fontWeight">
                 <SelectValue placeholder="Selecione um peso" />
-              </SelectTrigger>
-              <SelectContent>
                 <SelectItem value="300">Leve (300)</SelectItem>
                 <SelectItem value="400">Normal (400)</SelectItem>
                 <SelectItem value="500">Médio (500)</SelectItem>
                 <SelectItem value="600">Semi-Negrito (600)</SelectItem>
                 <SelectItem value="700">Negrito (700)</SelectItem>
                 <SelectItem value="800">Extra-Negrito (800)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+            <Label htmlFor="lineHeight">Altura da Linha</Label>
+              id="lineHeight"
+              value={style.lineHeight || ''}
+              onChange={(e) => updateStyle('lineHeight', e.target.value)}
+              placeholder="ex: 1.5 ou 24px"
+            <Label htmlFor="textAlign">Alinhamento do Texto</Label>
+              value={style.textAlign || 'left'} 
+              onValueChange={(value) => updateStyle('textAlign', value)}
+              <SelectTrigger id="textAlign">
+                <SelectValue placeholder="Selecione um alinhamento" />
+                <SelectItem value="left">Esquerda</SelectItem>
+                <SelectItem value="center">Centro</SelectItem>
+                <SelectItem value="right">Direita</SelectItem>
+                <SelectItem value="justify">Justificado</SelectItem>
+            <Label htmlFor="letterSpacing">Espaçamento entre Letras</Label>
+              id="letterSpacing"
+              value={style.letterSpacing || ''}
+              onChange={(e) => updateStyle('letterSpacing', e.target.value)}
+              placeholder="ex: 1px ou 0.05em"
         </TabsContent>
-        
         <TabsContent value="layout" className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -90,59 +93,137 @@ const StyleEditor: React.FC<StyleEditorProps> = ({ style = {}, onUpdate }) => {
                 placeholder="ex: 1rem ou 16px"
               />
             </div>
-            
-            <div className="space-y-2">
               <Label htmlFor="padding">Padding</Label>
-              <Input
                 id="padding"
                 value={style.padding || ''}
                 onChange={(e) => updateStyle('padding', e.target.value)}
-                placeholder="ex: 1rem ou 16px"
-              />
-            </div>
-          </div>
-          
-          <div className="space-y-2">
+              <Label htmlFor="width">Largura</Label>
+                id="width"
+                value={style.width || ''}
+                onChange={(e) => updateStyle('width', e.target.value)}
+                placeholder="ex: 100% ou 300px"
+              <Label htmlFor="height">Altura</Label>
+                id="height"
+                value={style.height || ''}
+                onChange={(e) => updateStyle('height', e.target.value)}
+                placeholder="ex: auto ou 300px"
             <Label htmlFor="display">Display</Label>
-            <Select
               value={style.display || ''} 
               onValueChange={(value) => updateStyle('display', value)}
-            >
               <SelectTrigger id="display">
                 <SelectValue placeholder="Selecione um valor" />
-              </SelectTrigger>
-              <SelectContent>
                 <SelectItem value="block">Block</SelectItem>
                 <SelectItem value="inline-block">Inline Block</SelectItem>
                 <SelectItem value="flex">Flex</SelectItem>
                 <SelectItem value="inline-flex">Inline Flex</SelectItem>
                 <SelectItem value="grid">Grid</SelectItem>
                 <SelectItem value="none">None</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </TabsContent>
-        
+          {style.display === 'flex' && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="flexDirection">Direção do Flex</Label>
+                <Select 
+                  value={style.flexDirection || 'row'} 
+                  onValueChange={(value) => updateStyle('flexDirection', value)}
+                >
+                  <SelectTrigger id="flexDirection">
+                    <SelectValue placeholder="Selecione uma direção" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="row">Row</SelectItem>
+                    <SelectItem value="column">Column</SelectItem>
+                    <SelectItem value="row-reverse">Row Reverse</SelectItem>
+                    <SelectItem value="column-reverse">Column Reverse</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+                <Label htmlFor="justifyContent">Justify Content</Label>
+                  value={style.justifyContent || 'flex-start'} 
+                  onValueChange={(value) => updateStyle('justifyContent', value)}
+                  <SelectTrigger id="justifyContent">
+                    <SelectValue placeholder="Selecione uma opção" />
+                    <SelectItem value="flex-start">Flex Start</SelectItem>
+                    <SelectItem value="center">Center</SelectItem>
+                    <SelectItem value="flex-end">Flex End</SelectItem>
+                    <SelectItem value="space-between">Space Between</SelectItem>
+                    <SelectItem value="space-around">Space Around</SelectItem>
+                    <SelectItem value="space-evenly">Space Evenly</SelectItem>
+                <Label htmlFor="alignItems">Align Items</Label>
+                  value={style.alignItems || 'stretch'} 
+                  onValueChange={(value) => updateStyle('alignItems', value)}
+                  <SelectTrigger id="alignItems">
+                    <SelectItem value="stretch">Stretch</SelectItem>
+                    <SelectItem value="baseline">Baseline</SelectItem>
+                <Label htmlFor="gap">Gap</Label>
+                <Input
+                  id="gap"
+                  value={style.gap || ''}
+                  onChange={(e) => updateStyle('gap', e.target.value)}
+                  placeholder="ex: 10px ou 1rem"
+                />
+          )}
+            <Label htmlFor="borderRadius">Arredondamento das Bordas</Label>
+              id="borderRadius"
+              value={style.borderRadius || ''}
+              onChange={(e) => updateStyle('borderRadius', e.target.value)}
+              placeholder="ex: 8px ou 0.5rem"
+            <Label htmlFor="boxShadow">Sombra</Label>
+              id="boxShadow"
+              value={style.boxShadow || ''}
+              onChange={(e) => updateStyle('boxShadow', e.target.value)}
+              placeholder="ex: 0 2px 4px rgba(0,0,0,0.1)"
         <TabsContent value="colors" className="space-y-4">
-          <div className="space-y-2">
             <Label htmlFor="color">Cor do Texto</Label>
             <ColorPicker
               color={style.color || '#000000'}
               onChange={(color) => updateStyle('color', color)}
-            />
-          </div>
-          
-          <div className="space-y-2">
             <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-            <ColorPicker
               color={style.backgroundColor || '#ffffff'}
               onChange={(color) => updateStyle('backgroundColor', color)}
-            />
-          </div>
-        </TabsContent>
+          <div className="space-y-2 border-t pt-4">
+            <Label>Bordas</Label>
+            <div className="grid grid-cols-2 gap-4">
+                <Label htmlFor="borderWidth">Largura</Label>
+                  id="borderWidth"
+                  value={style.borderWidth || ''}
+                  onChange={(e) => updateStyle('borderWidth', e.target.value)}
+                  placeholder="ex: 1px"
+                <Label htmlFor="borderStyle">Estilo</Label>
+                  value={style.borderStyle || ''} 
+                  onValueChange={(value) => updateStyle('borderStyle', value)}
+                  <SelectTrigger id="borderStyle">
+                    <SelectValue placeholder="Selecione um estilo" />
+                    <SelectItem value="none">Nenhum</SelectItem>
+                    <SelectItem value="solid">Sólido</SelectItem>
+                    <SelectItem value="dashed">Tracejado</SelectItem>
+                    <SelectItem value="dotted">Pontilhado</SelectItem>
+                    <SelectItem value="double">Duplo</SelectItem>
+            
+            <div className="space-y-2 mt-2">
+              <Label htmlFor="borderColor">Cor da Borda</Label>
+              <ColorPicker
+                color={style.borderColor || '#000000'}
+                onChange={(color) => updateStyle('borderColor', color)}
+          {(style.objectFit !== undefined || style.type === 'image') && (
+            <div className="space-y-2 border-t pt-4">
+              <Label htmlFor="objectFit">Ajuste de Imagem</Label>
+              <Select 
+                value={style.objectFit || 'cover'} 
+                onValueChange={(value) => updateStyle('objectFit', value)}
+              >
+                <SelectTrigger id="objectFit">
+                  <SelectValue placeholder="Selecione um ajuste" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cover">Cover</SelectItem>
+                  <SelectItem value="contain">Contain</SelectItem>
+                  <SelectItem value="fill">Fill</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
+                  <SelectItem value="scale-down">Scale Down</SelectItem>
+                </SelectContent>
+              </Select>
       </Tabs>
     </div>
   );
 };
-
 export default StyleEditor;

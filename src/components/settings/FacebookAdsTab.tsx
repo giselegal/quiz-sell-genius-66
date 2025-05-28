@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-
 export const FacebookAdsTab = () => {
   // Exemplo de URL do quiz com parâmetros UTM
   const exampleUrl = `${window.location.origin}?utm_source=facebook&utm_medium=cpc&utm_campaign=estilo_quiz&utm_content=ad1`;
@@ -17,7 +16,6 @@ export const FacebookAdsTab = () => {
     consideration: "estilo_quiz_consideration",
     conversion: "estilo_quiz_conversion"
   };
-
   return (
     <div className="space-y-6">
       <Card>
@@ -67,7 +65,6 @@ export const FacebookAdsTab = () => {
                 </div>
               </div>
             </TabsContent>
-
             <TabsContent value="examples" className="space-y-4">
               <div className="space-y-4">
                 <div>
@@ -84,42 +81,13 @@ export const FacebookAdsTab = () => {
                   >
                     Copiar
                   </Button>
-                </div>
                 
-                <div>
                   <h3 className="text-sm font-semibold mb-2">Campanha de Consideração</h3>
-                  <Input 
                     value={`${window.location.origin}?utm_source=facebook&utm_medium=cpc&utm_campaign=${campaignExamples.consideration}&utm_content=video_ad`} 
-                    readOnly 
-                    className="w-full font-mono text-xs"
-                  />
-                  <Button 
                     onClick={() => navigator.clipboard.writeText(`${window.location.origin}?utm_source=facebook&utm_medium=cpc&utm_campaign=${campaignExamples.consideration}&utm_content=video_ad`)}
-                    variant="link"
-                    className="text-xs px-0 h-6"
-                  >
-                    Copiar
-                  </Button>
-                </div>
-
-                <div>
                   <h3 className="text-sm font-semibold mb-2">Campanha de Conversão</h3>
-                  <Input 
                     value={`${window.location.origin}?utm_source=facebook&utm_medium=cpc&utm_campaign=${campaignExamples.conversion}&utm_content=image_ad`} 
-                    readOnly 
-                    className="w-full font-mono text-xs"
-                  />
-                  <Button 
                     onClick={() => navigator.clipboard.writeText(`${window.location.origin}?utm_source=facebook&utm_medium=cpc&utm_campaign=${campaignExamples.conversion}&utm_content=image_ad`)}
-                    variant="link"
-                    className="text-xs px-0 h-6"
-                  >
-                    Copiar
-                  </Button>
-                </div>
-              </div>
-            </TabsContent>
-
             <TabsContent value="generator" className="space-y-4">
               <div className="grid gap-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -127,52 +95,34 @@ export const FacebookAdsTab = () => {
                     <Label htmlFor="utm_source">UTM Source</Label>
                     <Input id="utm_source" defaultValue="facebook" />
                   </div>
-                  <div className="space-y-2">
                     <Label htmlFor="utm_medium">UTM Medium</Label>
                     <Input id="utm_medium" defaultValue="cpc" />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="utm_campaign">UTM Campaign</Label>
                     <Input id="utm_campaign" defaultValue="estilo_quiz" />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="utm_content">UTM Content</Label>
                     <Input id="utm_content" defaultValue="ad_version_1" />
-                  </div>
-                </div>
                 <div className="space-y-2">
                   <Label htmlFor="utm_term">UTM Term (opcional)</Label>
                   <Input id="utm_term" placeholder="Palavras-chave (opcional)" />
-                </div>
-                <div className="space-y-2">
                   <Label htmlFor="generated_url">URL Gerada</Label>
                   <Textarea 
                     id="generated_url" 
                     className="font-mono text-xs" 
                     rows={3}
                     value={`${window.location.origin}?utm_source=facebook&utm_medium=cpc&utm_campaign=estilo_quiz&utm_content=ad_version_1`}
-                    readOnly
-                  />
-                </div>
                 <Button className="bg-[#B89B7A] hover:bg-[#A38A69]">
                   Gerar e Copiar URL
                 </Button>
-              </div>
-            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
       
-      <Card>
-        <CardHeader>
           <CardTitle>Pixel do Facebook e Parâmetros UTM</CardTitle>
           <CardDescription>Como o Facebook Pixel usa os parâmetros UTM</CardDescription>
-        </CardHeader>
         <CardContent>
           <div className="text-sm space-y-4">
             <p>
               Quando os parâmetros UTM estão presentes na URL, o Facebook Pixel automaticamente:
-            </p>
             <ol className="list-decimal ml-5 space-y-2">
               <li>Associa a conversão à campanha e anúncio específicos</li>
               <li>Melhora a atribuição de conversões no Facebook Ads Manager</li>
@@ -186,10 +136,6 @@ export const FacebookAdsTab = () => {
                 visite a página de Analytics do admin e selecione a aba "UTM". 
                 Lá você poderá ver todas as fontes de tráfego e suas respectivas conversões.
               </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };

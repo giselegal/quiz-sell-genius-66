@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,16 +7,13 @@ import { cn } from '@/lib/utils';
 interface AnimatedNameFormProps {
   onSubmit: (name: string) => void;
 }
-
 const AnimatedNameForm: React.FC<AnimatedNameFormProps> = ({ onSubmit }) => {
   const [nome, setNome] = useState('');
   const [touched, setTouched] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-
   const isValid = nome.trim().length > 0;
   const showError = (touched || formSubmitted) && !isValid;
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
@@ -26,7 +22,6 @@ const AnimatedNameForm: React.FC<AnimatedNameFormProps> = ({ onSubmit }) => {
       onSubmit(nome);
     }
   };
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -74,7 +69,6 @@ const AnimatedNameForm: React.FC<AnimatedNameFormProps> = ({ onSubmit }) => {
             >
               Por favor, digite seu nome para continuar
             </motion.p>
-          )}
         </AnimatePresence>
       </div>
       
@@ -97,22 +91,20 @@ const AnimatedNameForm: React.FC<AnimatedNameFormProps> = ({ onSubmit }) => {
           <motion.span
             animate={isButtonHovered ? { y: [-1, 1, -1] } : {}}
             transition={{ repeat: Infinity, duration: 1 }}
-          />
+          >
+          </motion.span>
           Quero Descobrir meu Estilo Agora!
         </span>
       </motion.button>
-      
       <p className="text-xs text-center text-gray-500 pt-1">
         Ao clicar, você concorda com nossa{' '}
         <a 
           href="#" 
           className="text-[#B89B7A] hover:text-[#A1835D] underline focus:outline-none focus:ring-1 focus:ring-[#B89B7A] rounded"
-        >
           política de privacidade
         </a>
       </p>
     </form>
   );
 };
-
 export default AnimatedNameForm;

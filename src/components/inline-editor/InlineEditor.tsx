@@ -1,125 +1,85 @@
-
 "use client";
-
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 interface InlineEditorProps {
   value: string;
-  onChange?: (value: string) => void;
+  onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
   multiline?: boolean;
+  element?: 'h1' | 'h2' | 'h3' | 'p' | 'div';
+  style?: React.CSSProperties;
 }
-
 const InlineEditor: React.FC<InlineEditorProps> = ({
   value,
   onChange,
-  placeholder,
-  className,
-  multiline = false
+  placeholder = 'Clique para editar...',
+  className = '',
+  multiline = false,
+  element = 'div',
+  style = {}
 }) => {
-  const [text, setText] = useState(value || '');
   const [isEditing, setIsEditing] = useState(false);
+  const [currentValue, setCurrentValue] = useState(value);
   const editorRef = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
-  
   useEffect(() => {
-    setText(value || '');
+    setCurrentValue(value);
   }, [value]);
-
-  useEffect(() => {
     if (isEditing && editorRef.current) {
       editorRef.current.focus();
-      
-      if ('setSelectionRange' in editorRef.current) {
-        const length = editorRef.current.value.length;
-        editorRef.current.setSelectionRange(length, length);
-      }
+      editorRef.current.select();
     }
   }, [isEditing]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setText(e.target.value);
-    onChange?.(e.target.value);
-  };
-
-  const handleBlur = () => {
-    setIsEditing(false);
-    onChange?.(text);
-  };
-
   const handleClick = () => {
     setIsEditing(true);
   };
-
+  const handleBlur = () => {
+    setIsEditing(false);
+    onChange(currentValue);
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey && !multiline) {
+    if (e.key === 'Enter' && !multiline) {
       e.preventDefault();
       setIsEditing(false);
-      onChange?.(text);
-    }
-  };
-
-  if (multiline) {
-    return (
-      <div className="relative">
-        {isEditing ? (
-          <textarea
-            ref={editorRef as React.RefObject<HTMLTextAreaElement>}
-            value={text}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            placeholder={placeholder}
-            className={cn(
-              "w-full min-h-[60px] resize-none",
-              className
-            )}
-            rows={Math.max(3, text.split('\n').length)}
-          />
-        ) : (
-          <div
-            onClick={handleClick}
-            className={cn(
-              "w-full cursor-text whitespace-pre-wrap",
-              !text && "text-gray-400",
-              className
-            )}
-          >
-            {text || placeholder}
-          </div>
+      onChange(currentValue);
+    if (e.key === 'Escape') {
+      setCurrentValue(value); // Reset to original value
+  const Element = element as keyof JSX.IntrinsicElements;
+  if (isEditing) {
+    return multiline ? (
+      <textarea
+        ref={editorRef as React.RefObject<HTMLTextAreaElement>}
+        value={currentValue}
+        onChange={(e) => setCurrentValue(e.target.value)}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        className={cn(
+          'w-full min-h-[60px] resize-none border border-blue-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500',
+          className
         )}
-      </div>
+        style={style}
+        rows={Math.max(3, currentValue.split('\n').length)}
+      />
+    ) : (
+      <input
+        ref={editorRef as React.RefObject<HTMLInputElement>}
+        type="text"
+          'w-full border border-blue-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500',
     );
   }
-
   return (
-    <div className="relative">
-      {isEditing ? (
-        <input
-          ref={editorRef as React.RefObject<HTMLInputElement>}
-          type="text"
-          value={text}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          className={cn("w-full", className)}
-        />
-      ) : (
-        <div
-          onClick={handleClick}
-          className={cn(
-            "w-full cursor-text",
-            !text && "text-gray-400",
-            className
-          )}
-        >
-          {text || placeholder}
-        </div>
+    <Element
+      onClick={handleClick}
+      className={cn(
+        'cursor-pointer hover:bg-blue-50 hover:border hover:border-blue-200 rounded p-1 transition-colors min-h-[1.5em]',
+        !currentValue && 'text-gray-400',
+        className
       )}
-    </div>
+      style={style}
+    >
+      {currentValue || placeholder}
+    </Element>
   );
 };
-
 export default InlineEditor;

@@ -1,70 +1,116 @@
+"use client";
 
-import React, { useState, useCallback } from 'react';
-import { cn } from '@/lib/utils';
-
-interface AutoFixedImageProps {
-  src: string;
-  alt: string;
+import React, { useEffect, useRef } from 'react';
+import { fixBlurryIntroQuizImages } from '@/utils/fixBlurryIntroQuizImages';
+interface AutoFixedImagesProps {
+  children: React.ReactNode;
+  fixOnMount?: boolean;
+  fixOnUpdate?: boolean;
   className?: string;
-  width?: number;
-  height?: number;
-  loading?: 'lazy' | 'eager';
-  priority?: boolean;
+  observeSelector?: string; // Novo: seletor específico para observar
 }
-
-const AutoFixedImage: React.FC<AutoFixedImageProps> = ({
-  src,
-  alt,
-  className,
-  width,
-  height,
-  loading = 'lazy',
-  priority = false
+/**
+ * Componente wrapper que aplica correções de imagens borradas automaticamente
+ * Versão otimizada para desempenho com observação seletiva de DOM
+ */
+const AutoFixedImages: React.FC<AutoFixedImagesProps> = ({
+  children,
+  fixOnMount = true,
+  fixOnUpdate = true,
+  className = '',
+  observeSelector = '.quiz-intro, [data-section="intro"]' // Observar apenas elementos relevantes
 }) => {
-  const [imageError, setImageError] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  const handleImageError = useCallback(() => {
-    console.error(`Failed to load image: ${src}`);
-    setImageError(true);
-  }, [src]);
-
-  const handleImageLoad = useCallback(() => {
-    setImageLoaded(true);
+  // Ref para o elemento contêiner para limitação de escopo do MutationObserver
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Debounce para evitar múltiplas chamadas
+  const debounceTimeoutRef = useRef<number | null>(null);
+  // Função de debounce otimizada
+  const debouncedFix = () => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    
+    // Usar requestIdleCallback se disponível
+    if ('requestIdleCallback' in window) {
+      debounceTimeoutRef.current = setTimeout(() => {
+        // @ts-ignore
+        window.requestIdleCallback(() => {
+          fixBlurryIntroQuizImages();
+          debounceTimeoutRef.current = null;
+        }, { timeout: 1000 });
+      }, 300) as unknown as number;
+    } else {
+        fixBlurryIntroQuizImages();
+        debounceTimeoutRef.current = null;
+      }, 500) as unknown as number;
+  };
+  // Aplicar correção na montagem inicial - otimizada para não interferir com LCP
+  useEffect(() => {
+    if (fixOnMount) {
+      // Detectar se o navegador suporta métricas de performance
+      const supportsPerformanceObserver = 
+        'PerformanceObserver' in window && 
+        PerformanceObserver.supportedEntryTypes?.includes('largest-contentful-paint');
+      
+      if (supportsPerformanceObserver) {
+        // Aguardar o LCP antes de executar otimizações
+        const lcpObserver = new PerformanceObserver((entryList) => {
+          const entries = entryList.getEntries();
+          if (entries.length > 0) {
+            // Executar após o LCP
+            requestAnimationFrame(() => {
+              fixBlurryIntroQuizImages();
+            });
+            lcpObserver.disconnect();
+          }
+        });
+        
+        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+      } else {
+        // Fallback para navegadores que não suportam PerformanceObserver
+        setTimeout(fixBlurryIntroQuizImages, 1000);
+      }
+  }, [fixOnMount]);
+  // Observar mudanças no DOM com escopo reduzido
+    if (fixOnUpdate) {
+      // Elementos a serem observados
+      const elementsToObserve = document.querySelectorAll(observeSelector);
+      if (elementsToObserve.length === 0) {
+        return; // Nada para observar
+      // Configurar MutationObserver otimizado
+      const observer = new MutationObserver((mutations) => {
+        // Verificar se alguma das mutações é relevante (adiciona imagens)
+        const hasImageChanges = mutations.some(mutation => 
+          Array.from(mutation.addedNodes).some(node => 
+            node.nodeName === 'IMG' || 
+            (node instanceof Element && node.querySelector('img'))
+          )
+        );
+        // Só processar se houver mudanças em imagens
+        if (hasImageChanges) {
+          debouncedFix();
+        }
+      });
+      // Observar apenas os elementos específicos, não todo o body
+      elementsToObserve.forEach(element => {
+        observer.observe(element, { 
+          childList: true, 
+          subtree: true,
+          attributes: false,
+          characterData: false
+      return () => observer.disconnect();
+  }, [fixOnUpdate, observeSelector]);
+  // Limpar o timeout quando o componente é desmontado
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+    };
   }, []);
-
-  if (imageError) {
-    return (
-      <div className={cn(
-        "bg-gray-200 flex items-center justify-center",
-        className
-      )}>
-        <span className="text-gray-500 text-sm">Imagem não disponível</span>
-      </div>
-    );
-  }
-
   return (
-    <div className={cn("relative overflow-hidden", className)}>
-      {!imageLoaded && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
-      )}
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        loading={loading}
-        onError={handleImageError}
-        onLoad={handleImageLoad}
-        className={cn(
-          "transition-opacity duration-300",
-          imageLoaded ? "opacity-100" : "opacity-0",
-          className
-        )}
-      />
+    <div ref={containerRef} className={className}>
+      {children}
     </div>
   );
 };
-
-export default AutoFixedImage;
+export default React.memo(AutoFixedImages);

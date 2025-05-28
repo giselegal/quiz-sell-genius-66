@@ -3,7 +3,6 @@ import React from 'react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Check, Info, AlertCircle } from 'lucide-react';
-
 interface EditorNotificationProps {
   type: 'info' | 'warning' | 'success';
   title: string;
@@ -12,7 +11,6 @@ interface EditorNotificationProps {
   onAction?: () => void;
   onDismiss?: () => void;
 }
-
 export const EditorNotification: React.FC<EditorNotificationProps> = ({
   type,
   title,
@@ -31,14 +29,10 @@ export const EditorNotification: React.FC<EditorNotificationProps> = ({
   };
   
   const getVariant = () => {
-    switch (type) {
       case 'info': return 'default';
       case 'warning': return 'destructive';
       case 'success': return 'default';
       default: return 'default';
-    }
-  };
-  
   return (
     <Alert variant={getVariant()} className="mb-4">
       <div className="flex items-start">
@@ -59,8 +53,6 @@ export const EditorNotification: React.FC<EditorNotificationProps> = ({
               {actionText}
             </Button>
           )}
-        </div>
-        
         {onDismiss && (
           <Button 
             variant="ghost" 
@@ -75,7 +67,6 @@ export const EditorNotification: React.FC<EditorNotificationProps> = ({
     </Alert>
   );
 };
-
 export const EditorNotifications: React.FC = () => {
   const [notifications, setNotifications] = React.useState<EditorNotificationProps[]>([
     {
@@ -84,12 +75,8 @@ export const EditorNotifications: React.FC = () => {
       message: 'Bem-vindo ao editor unificado de quiz e páginas. As alterações no quiz serão refletidas nas páginas de resultado e vendas.',
       actionText: 'Entendi',
       onAction: () => setNotifications(prev => prev.filter(n => n.title !== 'Editor Unificado')),
-    }
   ]);
-
   if (notifications.length === 0) return null;
-
-  return (
     <div className="fixed bottom-4 right-4 w-80 z-50 space-y-2">
       {notifications.map((notification, index) => (
         <EditorNotification 
@@ -97,9 +84,6 @@ export const EditorNotifications: React.FC = () => {
           {...notification}
           onDismiss={notification.onDismiss || (() => 
             setNotifications(prev => prev.filter((_, i) => i !== index))
-          )}
         />
       ))}
     </div>
-  );
-};

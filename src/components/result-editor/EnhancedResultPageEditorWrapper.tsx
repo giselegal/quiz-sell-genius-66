@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { EnhancedResultPageEditor } from './EnhancedResultPageEditor';
@@ -13,7 +12,6 @@ interface EnhancedResultPageEditorWrapperProps {
   secondaryStyles: StyleResult[];
   initialFunnel?: QuizFunnel;
 }
-
 export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorWrapperProps> = ({
   primaryStyle,
   secondaryStyles,
@@ -22,12 +20,16 @@ export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorW
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [savedFunnel, setSavedFunnel] = useState<QuizFunnel | null>(null);
-
+  // Função para salvar o funil no localStorage e potencialmente no backend
   const handleSaveFunnel = (funnel: QuizFunnel) => {
     setIsLoading(true);
     
     try {
+      // Salvar no localStorage para persistência local
       localStorage.setItem('currentQuizFunnel', JSON.stringify(funnel));
+      
+      // Aqui você pode adicionar código para salvar no backend
+      // Por exemplo: await api.saveFunnel(funnel);
       setSavedFunnel(funnel);
       toast({
         title: "Funil salvo com sucesso",
@@ -35,16 +37,14 @@ export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorW
       });
     } catch (error) {
       console.error('Erro ao salvar funil:', error);
-      toast({
         title: "Erro ao salvar",
         description: "Ocorreu um erro ao salvar as alterações. Tente novamente.",
         variant: "destructive"
-      });
     } finally {
       setIsLoading(false);
     }
   };
-
+  // Carregar funil salvo do localStorage ao iniciar
   useEffect(() => {
     if (!initialFunnel) {
       try {
@@ -56,9 +56,7 @@ export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorW
       } catch (error) {
         console.error('Erro ao carregar funil salvo:', error);
       }
-    }
   }, [initialFunnel]);
-
   return (
     <div className="h-screen flex flex-col">
       {isLoading && (
@@ -77,15 +75,12 @@ export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorW
     </div>
   );
 };
-
+// Componente para a página que utiliza o editor
 export const EnhancedResultPageEditorPage: React.FC = () => {
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    try {
+    // Tentativa de carregar os resultados do localStorage
       const savedResult = localStorage.getItem('quizResult');
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);
@@ -94,6 +89,8 @@ export const EnhancedResultPageEditorPage: React.FC = () => {
           setPrimaryStyle(parsedResult.primaryStyle);
           setSecondaryStyles(parsedResult.secondaryStyles || []);
         } else {
+          console.error("Formato de resultado inválido");
+          // Usar um resultado padrão em vez de redirecionar
           const defaultStyle: StyleResult = {
             category: 'Natural',
             score: 10,
@@ -102,8 +99,8 @@ export const EnhancedResultPageEditorPage: React.FC = () => {
           
           setPrimaryStyle(defaultStyle);
           setSecondaryStyles([]);
-        }
       } else {
+        // Se não houver resultado salvo, usar um resultado padrão para edição
         const defaultStyle: StyleResult = {
           category: 'Natural',
           score: 10,
@@ -111,9 +108,8 @@ export const EnhancedResultPageEditorPage: React.FC = () => {
         };
         setPrimaryStyle(defaultStyle);
         setSecondaryStyles([]);
-      }
-    } catch (error) {
       console.error("Erro ao carregar resultados:", error);
+      // Usar um resultado padrão em vez de redirecionar
       const defaultStyle: StyleResult = {
         category: 'Natural',
         score: 10,
@@ -121,11 +117,7 @@ export const EnhancedResultPageEditorPage: React.FC = () => {
       };
       setPrimaryStyle(defaultStyle);
       setSecondaryStyles([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
+  }, [navigate]);
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -133,26 +125,16 @@ export const EnhancedResultPageEditorPage: React.FC = () => {
       </div>
     );
   }
-
   if (!primaryStyle) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-lg mb-4">Erro: Nenhum resultado encontrado para editar</p>
-          <Button onClick={() => router.push('/resultado')}>
+          <Button 
+            onClick={() => router.push('/resultado')}
+          >
             Voltar para Resultados
           </Button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
     <EnhancedResultPageEditorWrapper 
       primaryStyle={primaryStyle} 
       secondaryStyles={secondaryStyles} 
     />
-  );
-};
-
 export default EnhancedResultPageEditorPage;

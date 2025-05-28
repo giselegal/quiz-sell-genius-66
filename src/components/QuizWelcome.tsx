@@ -1,4 +1,3 @@
-
 "use client";
 import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
@@ -7,15 +6,12 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
 import Logo from './ui/logo';
-
 interface QuizWelcomeProps {
   onStart: () => void;
 }
-
 export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const [name, setName] = useState('');
   const { login } = useAuth();
-
   const handleStart = () => {
     if (name.trim()) {
       login(name.trim());
@@ -23,7 +19,6 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
       onStart();
     }
   };
-
   return (
     <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="w-full max-w-xl mx-auto flex flex-col items-center px-4 py-8">
@@ -31,12 +26,10 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
         <Logo className="h-16 mb-4" />
         <div className="w-full max-w-[140px] h-[3px] bg-brand-gold mb-2" />
         <div className="w-full max-w-[500px] h-[1px] bg-[#E5E2DE]" />
-
         {/* Title */}
         <h1 className="font-playfair text-3xl font-medium text-[#1A1818] text-center mt-8 mb-10">
           Teste de Estilo Pessoal
         </h1>
-
         {/* Main Image */}
         <div className="w-full max-w-2xl mb-12">
           <img
@@ -45,7 +38,6 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
             className="w-full h-auto"
           />
         </div>
-
         {/* Form */}
         <div className="w-full max-w-md">
           <form
@@ -76,7 +68,6 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
               Continuar
             </Button>
           </form>
-        </div>
       </div>
     </div>
   );

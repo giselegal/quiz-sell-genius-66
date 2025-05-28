@@ -4,18 +4,15 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { FileText } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-
 interface DataTabProps {
   analyticsData: any;
   loading: boolean;
 }
-
 export const DataTab: React.FC<DataTabProps> = ({
   analyticsData,
   loading
 }) => {
   const events = analyticsData?.events?.slice(0, 50) || [];
-
   return (
     <div className="space-y-6">
       <Card>
@@ -57,8 +54,6 @@ export const DataTab: React.FC<DataTabProps> = ({
                   <TableRow>
                     <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">
                       {loading ? 'Carregando dados...' : 'Nenhum dado de analytics encontrado'}
-                    </TableCell>
-                  </TableRow>
                 )}
               </TableBody>
             </Table>

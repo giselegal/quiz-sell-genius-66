@@ -7,7 +7,6 @@ import { PropertiesPanel } from './properties/PropertiesPanel';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
-
 interface EnhancedEditorLayoutProps {
   blocks: Block[];
   selectedBlockId: string | null;
@@ -23,7 +22,6 @@ interface EnhancedEditorLayoutProps {
   onTogglePreview: () => void;
   onSave: () => void;
 }
-
 export const EnhancedEditorLayout: React.FC<EnhancedEditorLayoutProps> = ({
   blocks,
   selectedBlockId,
@@ -50,12 +48,13 @@ export const EnhancedEditorLayout: React.FC<EnhancedEditorLayoutProps> = ({
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
+        {/* Left Panel - Components */}
         <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
           <ComponentsSidebar onComponentSelect={onAddBlock} />
         </ResizablePanel>
         
         <ResizableHandle withHandle />
-        
+        {/* Center Panel - Preview */}
         <ResizablePanel defaultSize={55}>
           <PreviewPanel
             blocks={blocks}
@@ -66,20 +65,13 @@ export const EnhancedEditorLayout: React.FC<EnhancedEditorLayoutProps> = ({
             primaryStyle={primaryStyle}
             onReorderBlocks={onReorderBlocks}
           />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
+        {/* Right Panel - Properties */}
         <ResizablePanel defaultSize={25} minSize={20} maxSize={30}>
           <PropertiesPanel
-            selectedBlockId={selectedBlockId}
-            blocks={blocks}
             onClose={() => onSelectBlock(null)}
             onUpdate={onUpdateBlock}
             onDelete={onDeleteBlock}
             isMobile={viewportSize === 'sm'}
-          />
-        </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );

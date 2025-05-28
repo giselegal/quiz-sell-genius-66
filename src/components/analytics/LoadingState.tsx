@@ -3,7 +3,6 @@ import React from 'react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-
 export const AnalyticsLoadingState: React.FC = () => {
   return (
     <div className="space-y-6">
@@ -15,7 +14,6 @@ export const AnalyticsLoadingState: React.FC = () => {
         <div className="flex gap-2">
           <Skeleton className="h-9 w-32" />
           <Skeleton className="h-9 w-9" />
-        </div>
       </div>
       
       {/* Metrics Cards */}
@@ -31,8 +29,6 @@ export const AnalyticsLoadingState: React.FC = () => {
             </CardContent>
           </Card>
         ))}
-      </div>
-
       {/* Chart Skeleton */}
       <Card>
         <CardHeader>
@@ -45,13 +41,8 @@ export const AnalyticsLoadingState: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-
       {/* Data Grid Skeleton */}
-      <Card>
-        <CardHeader>
           <Skeleton className="h-5 w-32" />
-        </CardHeader>
-        <CardContent>
           <div className="space-y-2">
             {Array(5).fill(0).map((_, i) => (
               <div key={i} className="flex justify-between">
@@ -59,9 +50,6 @@ export const AnalyticsLoadingState: React.FC = () => {
                 <Skeleton className="h-5 w-20" />
               </div>
             ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };

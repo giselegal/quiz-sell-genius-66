@@ -6,32 +6,22 @@ interface LovableProviderProps {
   children: React.ReactNode;
 }
 
+// Este é um componente para integrar com o editor visual Lovable
 export function LovableClientProvider({ children }: LovableProviderProps) {
   const [isEditorMode, setIsEditorMode] = useState(false);
   
+  // Lógica para inicializar o editor quando estamos em modo de edição
   useEffect(() => {
+    // Só executa no cliente
     if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      const isEditor =
-        url.pathname.includes('/admin') ||
-        url.pathname === '/' ||
-        url.pathname.startsWith('/dashboard') ||
-        url.pathname.startsWith('/resultado/') ||
-        url.searchParams.has('lovable') ||
-        url.searchParams.has('editor');
-
+      const isEditor = window.location.pathname.includes('/admin') || 
+                      window.location.pathname === '/' ||
+                      window.location.pathname.startsWith('/resultado/') ||
+                      window.location.search.includes('lovable=true');
+      
       setIsEditorMode(isEditor);
-
       if (isEditor) {
-        // Corrigindo a configuração do script do Lovable
-        const scriptId = 'lovable-cdn-script';
-        if (!document.getElementById(scriptId)) {
-          const script = document.createElement('script');
-          script.id = scriptId;
-          script.src = 'https://cdn.gpteng.co/gptengineer.js';
-          script.type = 'module';
-          document.head.appendChild(script);
-        }
+        // Configuração global para o Lovable
         (window as any).LOVABLE_CONFIG = {
           projectId: 'quiz-sell-genius',
           apiBaseUrl: 'https://api.lovable.dev',
@@ -43,6 +33,7 @@ export function LovableClientProvider({ children }: LovableProviderProps) {
     }
   }, []);
   
+  // Em modo de edição, adicionamos classes e atributos para o editor
   return (
     <div className={isEditorMode ? 'lovable-editable-page' : ''} data-lovable-root={isEditorMode ? 'true' : undefined}>
       {children}

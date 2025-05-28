@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { GripVertical, Image, Trash2 } from 'lucide-react';
-
 interface QuestionOptionEditorProps {
   option: QuizOption;
   questionType: 'text' | 'image' | 'both';
@@ -21,7 +20,6 @@ interface QuestionOptionEditorProps {
   onDelete: () => void;
   index: number;
 }
-
 const styleCategories = [
   { value: 'Natural', label: 'Natural' },
   { value: 'Clássico', label: 'Clássico' },
@@ -32,7 +30,6 @@ const styleCategories = [
   { value: 'Dramático', label: 'Dramático' },
   { value: 'Criativo', label: 'Criativo' }
 ];
-
 const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
   option,
   questionType,
@@ -49,7 +46,6 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
       [field]: value
     });
   };
-
   return (
     <Card className="shadow-sm border-[#B89B7A]/20">
       <CardContent className="p-4">
@@ -87,11 +83,9 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
             </div>
             
             {(questionType === 'image' || questionType === 'both') && (
-              <div>
                 <Label htmlFor={`option-image-${option.id}`}>URL da imagem</Label>
                 <div className="flex gap-2">
                   <Input
@@ -116,30 +110,20 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
                     />
                   </div>
                 )}
-              </div>
             )}
-
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <Label htmlFor={`option-points-${option.id}`} className="mb-0">Pontos:</Label>
-                <Select
                   value={String(option.points)}
                   onValueChange={(value) => handleChange('points', parseInt(value))}
-                >
                   <SelectTrigger id={`option-points-${option.id}`} className="w-16">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
                     <SelectItem value="0">0</SelectItem>
                     <SelectItem value="1">1</SelectItem>
                     <SelectItem value="2">2</SelectItem>
                     <SelectItem value="3">3</SelectItem>
                     <SelectItem value="4">4</SelectItem>
                     <SelectItem value="5">5</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
               <Button 
                 type="button" 
                 variant="ghost" 
@@ -148,12 +132,9 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>
   );
 };
-
 export default QuestionOptionEditor;

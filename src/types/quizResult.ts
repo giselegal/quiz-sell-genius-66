@@ -1,6 +1,5 @@
 
 import { StyleResult } from './quiz';
-
 export interface ResultPageBlock {
   id: string;
   type: 'title' | 'subtitle' | 'styleResult' | 'image' | 'text' | 'cta' | 'testimonial' | 'bonus' | 'guarantee' | 'carousel';
@@ -29,32 +28,20 @@ export interface ResultPageBlock {
     caption?: string;
   }>;
 }
-
 export interface StyleResultBlock extends ResultPageBlock {
   type: 'styleResult';
   styleCategory: string;
-}
-
 export interface CTABlock extends ResultPageBlock {
   type: 'cta';
   buttonText: string;
   url: string;
-}
-
 export interface TestimonialBlock extends ResultPageBlock {
   type: 'testimonial';
   author: string;
-}
-
 export interface CarouselBlock extends ResultPageBlock {
   type: 'carousel';
   items: {
-    id: string;
-    imageUrl: string;
-    caption?: string;
   }[];
-}
-
 export interface ResultPage {
   title: string;
   blocks: ResultPageBlock[];
@@ -68,12 +55,7 @@ export interface ResultPage {
     abTestEnabled?: boolean;
     abTestVariants?: string[];
   };
-}
-
 export interface OfferPage {
-  // Define offer page structure
-}
-
 export interface QuizFunnel {
   name: string;
   quizQuestions: string[];
@@ -81,4 +63,3 @@ export interface QuizFunnel {
   offerPage?: OfferPage;
   createdAt: Date;
   updatedAt: Date;
-}

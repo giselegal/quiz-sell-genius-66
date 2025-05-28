@@ -1,5 +1,3 @@
-
-import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '../../ui/button';
@@ -14,7 +12,6 @@ interface SortableItemProps {
   onDuplicate: () => void;
   children: React.ReactNode;
 }
-
 export function SortableItem({
   id,
   component,
@@ -32,13 +29,10 @@ export function SortableItem({
     transition,
     isDragging,
   } = useSortable({ id });
-
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
     opacity: isDragging ? 0.5 : 1,
   };
-
   return (
     <div
       ref={setNodeRef}
@@ -63,7 +57,6 @@ export function SortableItem({
         <span className="text-xs text-gray-500 capitalize px-2">
           {component.type}
         </span>
-
         <Button
           variant="ghost"
           size="sm"
@@ -72,32 +65,18 @@ export function SortableItem({
             onDuplicate();
           }}
           className="h-6 w-6 p-0"
-        >
           <Copy className="h-3 w-3" />
         </Button>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
             onDelete();
-          }}
           className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
-        >
           <Trash2 className="h-3 w-3" />
-        </Button>
       </div>
-
       {/* Conteúdo do componente */}
       <div className="p-4">
         {children}
-      </div>
-
       {/* Indicador de seleção */}
       {isSelected && (
         <div className="absolute inset-0 pointer-events-none rounded-lg border-2 border-blue-500 bg-blue-500/5"></div>
       )}
     </div>
   );
-}

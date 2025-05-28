@@ -11,7 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { XCircle, Settings } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import EnhancedImageProperties from './components/EnhancedImageProperties';
-
 interface PropertiesPanelProps {
   component: QuizComponentData | null;
   stage: QuizStage | null;
@@ -20,7 +19,6 @@ interface PropertiesPanelProps {
   onUpdateStage: (id: string, updates: Partial<QuizStage>) => void;
   onDelete: (id: string) => void;
 }
-
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   component,
   stage,
@@ -40,9 +38,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
       </div>
     );
   }
-
   if (stage && !component) {
-    return (
       <div className="h-full flex flex-col border-l">
         <div className="p-4 border-b flex items-center justify-between">
           <h2 className="font-medium">Propriedades da Etapa</h2>
@@ -62,7 +58,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               />
             </div>
             
-            <div className="space-y-2">
               <Label>Tipo</Label>
               <Select 
                 value={stage.type} 
@@ -77,23 +72,10 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   <SelectItem value="result">Resultado</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
           </div>
         </ScrollArea>
-      </div>
-    );
-  }
-
   if (component) {
-    return (
-      <div className="h-full flex flex-col border-l">
-        <div className="p-4 border-b flex items-center justify-between">
           <h2 className="font-medium">Propriedades do Componente</h2>
-          <Button variant="ghost" size="sm" className="text-gray-400 hover:text-black" onClick={onClose}>
-            <XCircle className="h-5 w-5" />
-          </Button>
-        </div>
-        
         <Tabs defaultValue="content" className="flex-1 flex flex-col">
           <div className="border-b">
             <TabsList className="w-full">
@@ -102,9 +84,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               </TabsTrigger>
               <TabsTrigger value="style" className="flex-1">
                 Estilo
-              </TabsTrigger>
             </TabsList>
-          </div>
           
           <ScrollArea className="flex-1">
             <TabsContent value="content" className="mt-0 p-4">
@@ -121,71 +101,33 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     />
                   </div>
                   
-                  <div className="space-y-2">
                     <Label>Subtítulo</Label>
-                    <Input 
                       value={component.data.subtitle || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
                         data: { ...component.data, subtitle: e.target.value } 
-                      })}
                       placeholder="Subtítulo opcional"
-                    />
-                  </div>
                 </div>
               )}
               
               {component.type === 'headline' && (
-                <div className="space-y-4">
-                  <div className="space-y-2">
                     <Label>Texto do Título</Label>
-                    <Input 
-                      value={component.data.title || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
-                        data: { ...component.data, title: e.target.value } 
-                      })}
                       placeholder="Título da seção"
-                    />
-                  </div>
-                </div>
-              )}
-
               {component.type === 'text' && (
-                <div className="space-y-4">
-                  <div className="space-y-2">
                     <Label>Conteúdo do Texto</Label>
                     <Textarea 
                       value={component.data.text || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
                         data: { ...component.data, text: e.target.value } 
-                      })}
                       className="min-h-[200px]"
                       placeholder="Digite seu texto aqui"
-                    />
-                  </div>
-                </div>
-              )}
-
               {component.type === 'image' && (
                 <EnhancedImageProperties 
                   data={component.data}
                   onUpdate={(data) => onUpdate(component.id, { data })}
                 />
-              )}
-
               {(component.type === 'multipleChoice' || component.type === 'singleChoice') && (
-                <div className="space-y-4">
-                  <div className="space-y-2">
                     <Label>Pergunta</Label>
-                    <Input 
                       value={component.data.question || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
                         data: { ...component.data, question: e.target.value } 
-                      })}
                       placeholder="Digite a pergunta"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
                     <Label>Opções</Label>
                     {component.data.options && component.data.options.map((option, index) => (
                       <div key={index} className="flex gap-2 mb-2">
@@ -204,12 +146,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                           variant="destructive" 
                           size="icon"
                           onClick={() => {
-                            const newOptions = [...(component.data.options || [])];
                             newOptions.splice(index, 1);
-                            onUpdate(component.id, { 
-                              data: { ...component.data, options: newOptions } 
-                            });
-                          }}
                         >
                           <XCircle className="h-4 w-4" />
                         </Button>
@@ -226,10 +163,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     >
                       Adicionar Opção
                     </Button>
-                  </div>
-                </div>
-              )}
-
               <div className="mt-6 pt-4 border-t">
                 <Button 
                   variant="destructive" 
@@ -240,56 +173,25 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 </Button>
               </div>
             </TabsContent>
-
             <TabsContent value="style" className="mt-0 p-4">
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label>Cor de Fundo</Label>
                   <div className="flex gap-2">
-                    <Input 
                       type="color"
                       value={component.style?.backgroundColor || '#ffffff'} 
-                      onChange={(e) => onUpdate(component.id, { 
                         style: { ...component.style, backgroundColor: e.target.value } 
-                      })}
                       className="w-12 h-10 p-1"
-                    />
-                    <Input 
                       type="text"
                       value={component.style?.backgroundColor || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
-                        style: { ...component.style, backgroundColor: e.target.value } 
-                      })}
                       className="flex-1"
                       placeholder="#ffffff"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
+                
                   <Label>Cor do Texto</Label>
-                  <div className="flex gap-2">
-                    <Input 
-                      type="color"
                       value={component.style?.textColor || '#000000'} 
-                      onChange={(e) => onUpdate(component.id, { 
                         style: { ...component.style, textColor: e.target.value } 
-                      })}
-                      className="w-12 h-10 p-1"
-                    />
-                    <Input 
-                      type="text"
                       value={component.style?.textColor || ''} 
-                      onChange={(e) => onUpdate(component.id, { 
-                        style: { ...component.style, textColor: e.target.value } 
-                      })}
-                      className="flex-1"
                       placeholder="#000000"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
                   <Label>Arredondamento de Bordas</Label>
                   <Select 
                     value={component.style?.borderRadius || 'none'} 
@@ -308,58 +210,19 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <SelectItem value="full">Completo</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
-
-                <div className="space-y-2">
                   <Label>Padding Vertical</Label>
-                  <Select 
                     value={component.style?.paddingY || '4'} 
-                    onValueChange={(value) => onUpdate(component.id, { 
                       style: { ...component.style, paddingY: value } 
-                    })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
                       <SelectItem value="0">Nenhum</SelectItem>
                       <SelectItem value="2">Extra Pequeno (0.5rem)</SelectItem>
                       <SelectItem value="4">Pequeno (1rem)</SelectItem>
                       <SelectItem value="6">Médio (1.5rem)</SelectItem>
                       <SelectItem value="8">Grande (2rem)</SelectItem>
                       <SelectItem value="12">Extra Grande (3rem)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
                   <Label>Padding Horizontal</Label>
-                  <Select 
                     value={component.style?.paddingX || '4'} 
-                    onValueChange={(value) => onUpdate(component.id, { 
                       style: { ...component.style, paddingX: value } 
-                    })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">Nenhum</SelectItem>
-                      <SelectItem value="2">Extra Pequeno (0.5rem)</SelectItem>
-                      <SelectItem value="4">Pequeno (1rem)</SelectItem>
-                      <SelectItem value="6">Médio (1.5rem)</SelectItem>
-                      <SelectItem value="8">Grande (2rem)</SelectItem>
-                      <SelectItem value="12">Extra Grande (3rem)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </TabsContent>
           </ScrollArea>
         </Tabs>
-      </div>
-    );
-  }
-
   return null;
 };

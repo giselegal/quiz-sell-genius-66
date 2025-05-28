@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Type, 
@@ -37,7 +36,6 @@ export interface ComponentDefinition {
   requiredFeature?: string;
   isPremium?: boolean;
 }
-
 export const COMPONENT_CATEGORIES = [
   { id: 'basic', name: 'Básicos', icon: Type },
   { id: 'media', name: 'Mídia', icon: Play },
@@ -45,7 +43,6 @@ export const COMPONENT_CATEGORIES = [
   { id: 'advanced', name: 'Avançados', icon: Zap },
   { id: 'premium', name: 'Premium', icon: Star }
 ];
-
 export const COMPONENT_REGISTRY: ComponentDefinition[] = [
   // COMPONENTES BÁSICOS
   {
@@ -65,30 +62,21 @@ export const COMPONENT_REGISTRY: ComponentDefinition[] = [
       marginBottom: 20
     }
   },
-  {
     id: 'text',
     type: 'text',
     label: 'Texto',
-    icon: Type,
-    category: 'basic',
     description: 'Parágrafos e textos corridos',
-    defaultProps: {
       content: 'Adicione seu texto aqui...',
       fontSize: 16,
       lineHeight: 1.6,
       textAlign: 'left',
       color: '#4a4a4a',
       marginBottom: 16
-    }
-  },
-  {
     id: 'button',
     type: 'button',
     label: 'Botão',
     icon: MousePointer,
-    category: 'basic',
     description: 'Botões de ação e chamadas para ação',
-    defaultProps: {
       text: 'Clique Aqui',
       url: '#',
       backgroundColor: '#3b82f6',
@@ -97,26 +85,284 @@ export const COMPONENT_REGISTRY: ComponentDefinition[] = [
       padding: '12px 24px',
       fontWeight: 'semibold',
       marginTop: 20
-    }
-  },
-  {
     id: 'image',
     type: 'image',
     label: 'Imagem',
     icon: Image,
-    category: 'basic',
     description: 'Imagens estáticas simples',
-    defaultProps: {
       src: 'https://via.placeholder.com/400x200',
       alt: 'Imagem',
       width: 400,
       height: 200,
       objectFit: 'cover',
-      borderRadius: 8
-    }
+  // COMPONENTES DE MÍDIA (PREMIUM)
+    id: 'video',
+    type: 'video',
+    label: 'Vídeo',
+    icon: Play,
+    category: 'media',
+    description: 'Player de vídeo com controles personalizados',
+    isPremium: true,
+    requiredFeature: 'videos',
+      src: '',
+      poster: 'https://via.placeholder.com/640x360',
+      width: 640,
+      height: 360,
+      autoplay: false,
+      controls: true,
+      muted: false,
+      loop: false,
+      borderRadius: 12,
+    id: 'audio',
+    type: 'audio',
+    label: 'Áudio',
+    icon: Volume2,
+    description: 'Player de áudio personalizado',
+    requiredFeature: 'audio',
+      title: 'Áudio',
+      description: 'Descrição do áudio',
+      backgroundColor: '#f3f4f6',
+      accentColor: '#3b82f6',
+      showWaveform: true,
+    id: 'image-carousel',
+    type: 'image-carousel',
+    label: 'Carrossel de Imagens',
+    icon: ImageIcon,
+    description: 'Galeria de imagens navegável',
+    requiredFeature: 'carousels',
+      images: [
+        { src: 'https://via.placeholder.com/600x400', alt: 'Imagem 1', title: 'Título 1' },
+        { src: 'https://via.placeholder.com/600x400', alt: 'Imagem 2', title: 'Título 2' },
+        { src: 'https://via.placeholder.com/600x400', alt: 'Imagem 3', title: 'Título 3' }
+      ],
+      height: 400,
+      showDots: true,
+      showArrows: true,
+      autoplaySpeed: 3000,
+  // COMPONENTES INTERATIVOS
+    id: 'countdown',
+    type: 'countdown',
+    label: 'Countdown Timer',
+    icon: Clock,
+    category: 'interactive',
+    description: 'Timer regressivo para criar urgência',
+    requiredFeature: 'advanced-animations',
+      targetDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      title: 'Oferta Termina Em:',
+      showDays: true,
+      showHours: true,
+      showMinutes: true,
+      showSeconds: true,
+      backgroundColor: '#1f2937',
+      accentColor: '#ef4444',
+      fontSize: 24,
+    id: 'progress-bar',
+    type: 'progress-bar',
+    label: 'Barra de Progresso',
+    icon: TrendingUp,
+    description: 'Barra de progresso animada',
+      label: 'Progresso',
+      percentage: 75,
+      showPercentage: true,
+      animated: true,
+      backgroundColor: '#e5e7eb',
+      fillColor: '#10b981',
+      height: 20,
+      borderRadius: 10,
+      animationDuration: 2000,
+  // COMPONENTES AVANÇADOS (PREMIUM)
+    id: 'animated-text',
+    type: 'animated-text',
+    label: 'Texto Animado',
+    icon: Zap,
+    category: 'advanced',
+    description: 'Texto com efeitos de animação',
+      content: 'Texto Animado',
+      animation: 'typewriter',
+      speed: 100,
+      fontSize: 28,
+    id: 'gradient-box',
+    type: 'gradient-box',
+    label: 'Caixa com Gradiente',
+    icon: Palette,
+    description: 'Container com fundo gradiente personalizado',
+    requiredFeature: 'custom-css',
+      content: 'Conteúdo da caixa',
+      gradientFrom: '#3b82f6',
+      gradientTo: '#8b5cf6',
+      direction: 'to-r',
+      padding: 32,
+      borderRadius: 16,
+      fontSize: 18,
+    id: 'device-mockup',
+    type: 'device-mockup',
+    label: 'Mockup de Dispositivo',
+    icon: Monitor,
+    category: 'premium',
+    description: 'Exiba conteúdo dentro de mockups de dispositivos',
+    requiredFeature: 'all-features',
+      device: 'iphone',
+      content: 'https://via.placeholder.com/375x667',
+      scale: 1,
+      backgroundColor: '#f8fafc',
+  // COMPONENTES DE VENDAS E PREÇOS
+    id: 'price-box',
+    type: 'price-box',
+    label: 'Caixa de Preço',
+    icon: DollarSign,
+    description: 'Exibição de preços com destaque para ofertas',
+      originalPrice: 497,
+      currentPrice: 197,
+      currency: 'R$',
+      discount: 60,
+      showDiscount: true,
+      highlightSavings: true,
+      backgroundColor: '#ffffff',
+      borderColor: '#e5e7eb',
+      padding: 24,
+    id: 'value-anchor',
+    type: 'value-anchor',
+    label: 'Ancoragem de Valor',
+    icon: Anchor,
+    description: 'Componente para estabelecer valor percebido',
+      title: 'Valor Real do que Você Recebe:',
+      items: [
+        { name: 'Curso Completo', value: 297 },
+        { name: 'Templates Exclusivos', value: 97 },
+        { name: 'Suporte VIP', value: 197 },
+        { name: 'Bônus Especiais', value: 147 }
+      totalValue: 738,
+      yourPrice: 197,
+      showCalculation: true,
+      borderColor: '#10b981',
+      accentColor: '#10b981',
+    id: 'before-after',
+    type: 'before-after',
+    label: 'Antes e Depois',
+    icon: RefreshCw,
+    description: 'Comparação visual de transformação',
+      title: 'Sua Transformação',
+      beforeTitle: 'ANTES',
+      afterTitle: 'DEPOIS',
+      beforeItems: [
+        'Sem direção clara',
+        'Resultados inconsistentes',
+        'Baixa produtividade',
+        'Falta de sistema'
+      afterItems: [
+        'Foco total no objetivo',
+        'Resultados previsíveis',
+        'Alta performance',
+        'Sistema organizado'
+      beforeColor: '#ef4444',
+      afterColor: '#10b981',
+      showArrow: true,
+  // COMPONENTES DE GRÁFICOS
+    id: 'bar-chart',
+    type: 'bar-chart',
+    label: 'Gráfico de Barras',
+    icon: BarChart3,
+    description: 'Gráfico de barras customizável',
+      title: 'Resultados dos Nossos Alunos',
+      data: [
+        { label: 'Mês 1', value: 25, color: '#3b82f6' },
+        { label: 'Mês 2', value: 45, color: '#10b981' },
+        { label: 'Mês 3', value: 70, color: '#f59e0b' },
+        { label: 'Mês 4', value: 95, color: '#ef4444' }
+      maxValue: 100,
+      showValues: true,
+      gridColor: '#e5e7eb',
+    id: 'pie-chart',
+    type: 'pie-chart',
+    label: 'Gráfico de Pizza',
+    icon: PieChart,
+    description: 'Gráfico circular para percentuais',
+      title: 'Distribuição de Resultados',
+        { label: 'Excelente', value: 45, color: '#10b981' },
+        { label: 'Bom', value: 35, color: '#3b82f6' },
+        { label: 'Regular', value: 15, color: '#f59e0b' },
+        { label: 'Ruim', value: 5, color: '#ef4444' }
+      showPercentages: true,
+      showLegend: true,
+      size: 300,
+  // COMPONENTES DE SOCIAL PROOF
+    id: 'testimonial-card',
+    type: 'testimonial-card',
+    label: 'Depoimento',
+    icon: User,
+    description: 'Card de depoimento com foto e avaliação',
+      name: 'Maria Silva',
+      role: 'Empreendedora',
+      avatar: 'https://via.placeholder.com/80x80',
+      rating: 5,
+      testimonial: 'Este quiz mudou completamente minha perspectiva sobre negócios. Resultados incríveis em apenas 30 dias!',
+      showStars: true,
+    id: 'guarantee-badge',
+    type: 'guarantee-badge',
+    label: 'Selo de Garantia',
+    icon: Shield,
+    description: 'Badge de garantia para reduzir objeções',
+      title: 'Garantia de 30 Dias',
+      subtitle: '100% do seu dinheiro de volta',
+      description: 'Se não ficar satisfeito, devolvemos todo o valor investido.',
+      icon: 'shield',
+      backgroundColor: '#fef3c7',
+      borderColor: '#f59e0b',
+      textColor: '#92400e',
+      accentColor: '#f59e0b',
+      size: 'large',
+    id: 'benefits-list',
+    type: 'benefits-list',
+    label: 'Lista de Benefícios',
+    icon: CheckCircle,
+    description: 'Lista com checkmarks para destacar benefícios',
+      title: 'O que você vai receber:',
+      benefits: [
+        'Acesso vitalício ao conteúdo',
+        'Suporte direto com especialistas',
+        'Certificado de conclusão',
+        'Garantia de 30 dias',
+        'Bônus exclusivos',
+        'Comunidade VIP'
+      checkColor: '#10b981',
+      iconStyle: 'check',
+  // COMPONENTES DE URGÊNCIA
+    id: 'scarcity-counter',
+    type: 'scarcity-counter',
+    label: 'Contador de Escassez',
+    description: 'Contador de vagas ou tempo limitado',
+      type: 'spots', // 'spots' ou 'time'
+      title: 'Restam apenas',
+      totalSpots: 100,
+      remainingSpots: 23,
+      updateInterval: 30000, // 30 segundos
+      backgroundColor: '#fef2f2',
+      borderColor: '#ef4444',
+      textColor: '#991b1b',
+      showProgress: true,
+    id: 'bonus-stack',
+    type: 'bonus-stack',
+    label: 'Stack de Bônus',
+    icon: Award,
+    description: 'Empilhamento de bônus para aumentar valor',
+      title: 'Bônus Exclusivos Para Você:',
+      bonuses: [
+        {
+          name: 'E-book: Estratégias Avançadas',
+          value: 97,
+          description: 'Técnicas secretas dos experts'
+        },
+          name: 'Planilha de Controle',
+          value: 47,
+          description: 'Template pronto para usar'
+          name: 'Acesso ao Grupo VIP',
+          value: 197,
+          description: 'Networking com outros alunos'
+        }
+      animateReveal: true,
+      borderColor: '#d97706',
+      accentColor: '#d97706',
   }
-];
-
 // Função para filtrar componentes baseado nas permissões do usuário
 export const getAvailableComponents = (userFeatures: string[] = [], hasPremiumFeatures: boolean = false) => {
   return COMPONENT_REGISTRY.filter(component => {
@@ -130,10 +376,7 @@ export const getAvailableComponents = (userFeatures: string[] = [], hasPremiumFe
         return userFeatures.includes(component.requiredFeature) || userFeatures.includes('all-features');
       }
       return true;
-    }
-    
     return false;
   });
 };
-
 export default COMPONENT_REGISTRY;

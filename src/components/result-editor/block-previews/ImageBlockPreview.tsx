@@ -1,6 +1,5 @@
 
 import React from 'react';
-
 interface ImageBlockPreviewProps {
   content: {
     imageUrl?: string;
@@ -11,15 +10,12 @@ interface ImageBlockPreviewProps {
     style?: any;
   };
 }
-
 const ImageBlockPreview: React.FC<ImageBlockPreviewProps> = ({ content }) => {
   const imageStyle = {
     width: content.width || '100%',
     height: content.height || 'auto',
     borderRadius: content.borderRadius || '0.5rem',
     ...content.style
-  };
-
   return (
     <div className="text-center">
       {content.imageUrl ? (
@@ -37,5 +33,4 @@ const ImageBlockPreview: React.FC<ImageBlockPreviewProps> = ({ content }) => {
     </div>
   );
 };
-
 export default ImageBlockPreview;

@@ -1,75 +1,77 @@
 
 import React from 'react';
-import { QuizResult } from '@/types/quiz';
-
+import { QuizResult, StyleResult } from '@/types/quiz';
 interface ResultPreviewProps {
   result: QuizResult;
 }
-
 const ResultPreview: React.FC<ResultPreviewProps> = ({ result }) => {
+  // Use the correct properties from QuizResult interface
+  const primaryStyle = result.primaryStyle;
+  const secondaryStyles = result.secondaryStyles.slice(0, 2); // Get first two secondary styles
+  
   return (
-    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-sm">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl md:text-4xl font-playfair mb-4 text-[#432818]">
-          Seu Resultado
+    <div className="w-full max-w-4xl mx-auto bg-[#FFFAF0] rounded-lg shadow-sm p-6">
+      <div className="text-center space-y-6 mb-8">
+        <h1 className="text-2xl md:text-3xl font-playfair text-[#432818]">
+          Seu Resultado de Estilo Pessoal
         </h1>
-        <p className="text-lg text-[#8F7A6A]">
-          Baseado nas suas respostas, identificamos seu estilo predominante
-        </p>
+        
+        <h2 className="text-xl font-medium text-[#432818]">
+          Olá, seu Estilo Predominante é:
+        </h2>
+        <div className="inline-block bg-[#ffefec] px-6 py-4 rounded-lg">
+          <h3 className="text-2xl font-playfair text-[#aa6b5d]">
+            {primaryStyle.category.toUpperCase()}
+          </h3>
+          <p className="text-[#432818]/80 mt-2">
+            {getStyleDescription(primaryStyle.category)}
+          </p>
+        </div>
       </div>
-
+      
       <div className="mb-8">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-medium mb-2 text-[#432818]">
-            Seu estilo predominante é
-          </h2>
-          <div className="text-4xl font-bold text-[#B89B7A] mb-4">
-            {result.primaryStyle?.name || 'Elegante'}
-          </div>
-          <div className="text-xl text-[#8F7A6A]">
-            {result.primaryStyle?.percentage || 65}%
-          </div>
-          
-          {result.primaryStyle?.description && (
-            <div className="mt-4 p-4 bg-[#FAF9F7] rounded-lg">
-              <p className="text-[#432818] leading-relaxed">
-                {result.primaryStyle.description}
-              </p>
+        <h2 className="text-xl font-medium text-center mb-4 text-[#432818]">
+          Seus Estilos Complementares:
+        <div className="grid md:grid-cols-2 gap-4">
+          {secondaryStyles.map((style, index) => (
+            <div key={index} className="bg-white p-4 rounded-lg border border-[#B89B7A]/20">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-[#432818]">{style.category}</span>
+                <span className="text-[#B89B7A]">{Math.round(style.percentage)}%</span>
+              </div>
+              <div className="w-full h-2 bg-[#B89B7A]/20 mt-2 rounded-full">
+                <div 
+                  className="h-full bg-[#B89B7A] rounded-full" 
+                  style={{ width: `${style.percentage}%` }}
+                ></div>
             </div>
-          )}
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <h3 className="text-xl font-medium mb-4 text-center text-[#432818]">
-          Seus estilos secundários
-        </h3>
-        <div className="space-y-4">
-          {result.secondaryStyles?.map((style, index) => (
-            <div key={index} className="flex items-center justify-between p-3 bg-[#FAF9F7] rounded-lg">
-              <span className="font-medium text-[#432818]">{style.name}</span>
-              <span className="text-[#8F7A6A]">{style.percentage}%</span>
-            </div>
-          )) || (
-            <>
-              <div className="flex items-center justify-between p-3 bg-[#FAF9F7] rounded-lg">
-                <span className="font-medium text-[#432818]">Clássico</span>
-                <span className="text-[#8F7A6A]">25%</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-[#FAF9F7] rounded-lg">
-                <span className="font-medium text-[#432818]">Natural</span>
-                <span className="text-[#8F7A6A]">20%</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-[#FAF9F7] rounded-lg">
-                <span className="font-medium text-[#432818]">Contemporâneo</span>
-                <span className="text-[#8F7A6A]">15%</span>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+          ))}
+      <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div>
+          <img
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+            alt="Guia Completo de Estilo"
+            className="w-full rounded-lg shadow-lg"
+          />
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
+            alt="Gisele Galvão"
+      <div className="flex justify-center">
+        <button className="bg-[#B89B7A] hover:bg-[#A38A69] text-white px-6 py-3 rounded-md text-lg transition-colors">
+          Conhecer o Guia Completo
+        </button>
     </div>
   );
 };
-
+function getStyleDescription(style: string): string {
+  const descriptions: Record<string, string> = {
+    'Natural': 'Você valoriza o conforto e a praticidade, com um visual descontraído e autêntico.',
+    'Clássico': 'Você aprecia a elegância atemporal, com peças de qualidade e caimento perfeito.',
+    'Contemporâneo': 'Você busca um equilíbrio entre o clássico e o moderno, com peças práticas e atuais.',
+    'Elegante': 'Você tem um olhar refinado para detalhes sofisticados e peças de alta qualidade.',
+    'Romântico': 'Você valoriza a delicadeza e os detalhes femininos, com muita suavidade.',
+    'Sexy': 'Você gosta de valorizar suas curvas e exibir sua sensualidade com confiança.',
+    'Dramático': 'Você tem personalidade forte e gosta de causar impacto com seu visual.',
+    'Criativo': 'Você aprecia a originalidade e não tem medo de ousar em combinações únicas.'
+  };
+  return descriptions[style] || 'Você tem um estilo único que combina várias características.';
 export default ResultPreview;

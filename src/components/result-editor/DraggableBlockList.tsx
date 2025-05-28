@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Block } from '@/types/editor';
 import { SortableBlock } from './SortableBlock';
@@ -16,7 +15,6 @@ interface DraggableBlockListProps {
   onDuplicateBlock?: (id: string) => void;
   onDeleteBlock?: (id: string) => void;
 }
-
 export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
   blocks,
   selectedBlockId,
@@ -36,7 +34,6 @@ export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
@@ -49,7 +46,6 @@ export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
       }
     }
   };
-
   return (
     <DndContext
       sensors={sensors}
@@ -76,5 +72,4 @@ export const DraggableBlockList: React.FC<DraggableBlockListProps> = ({
         </div>
       </SortableContext>
     </DndContext>
-  );
 };

@@ -1,6 +1,4 @@
-
 "use client";
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
@@ -17,12 +15,10 @@ type UtmData = {
   conversions: number;
   conversionRate: number;
 };
-
 interface UtmTabProps {
   analyticsData: any;
   loading: boolean;
 }
-
 export const UtmTab: React.FC<UtmTabProps> = ({
   analyticsData,
   loading: initialLoading
@@ -44,7 +40,6 @@ export const UtmTab: React.FC<UtmTabProps> = ({
           console.error('Error fetching UTM data:', error);
           return;
         }
-
         // Process the data to format it for our charts
         const processedData = processUtmData(data || []);
         setUtmData(processedData);
@@ -57,7 +52,6 @@ export const UtmTab: React.FC<UtmTabProps> = ({
     
     fetchUtmData();
   }, [analyticsData]);
-
   // Process the UTM data from Supabase into the format we need
   const processUtmData = (data: any[]): UtmData[] => {
     // If there's no data yet, provide some sample data
@@ -69,11 +63,8 @@ export const UtmTab: React.FC<UtmTabProps> = ({
         { source: 'direct', medium: 'none', campaign: 'none', users: 350, conversions: 22, conversionRate: 6.3 },
         { source: 'email', medium: 'email', campaign: 'newsletter', users: 85, conversions: 19, conversionRate: 22.3 }
       ];
-    }
-
     // Group the data by source, medium, and campaign
     const groupedData: Record<string, UtmData> = {};
-
     data.forEach(item => {
       const key = `${item.utm_source || 'direct'}-${item.utm_medium || 'none'}-${item.utm_campaign || 'none'}`;
       
@@ -88,9 +79,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
         };
       } else {
         groupedData[key].users += 1;
-      }
     });
-
     // Calculate conversion rates (in a real scenario, you would track actual conversions)
     Object.values(groupedData).forEach(item => {
       // This is just a placeholder - in a real scenario, you would track actual conversions
@@ -98,41 +87,29 @@ export const UtmTab: React.FC<UtmTabProps> = ({
       const randomConversionRate = Math.floor(Math.random() * 20) + 5;
       item.conversionRate = randomConversionRate;
       item.conversions = Math.round(item.users * (randomConversionRate / 100));
-    });
-
     return Object.values(groupedData);
   };
-
   // Group data by source for pie chart
   const sourceData = React.useMemo(() => {
     return utmData.reduce((acc, item) => {
       const existingSource = acc.find(s => s.name === item.source);
       if (existingSource) {
         existingSource.value += item.users;
-      } else {
         acc.push({ name: item.source || 'direct', value: item.users });
-      }
       return acc;
     }, [] as { name: string; value: number; }[]);
   }, [utmData]);
-
   // Colors for the pie chart
   const COLORS = ['#8B5CF6', '#10b981', '#f59e0b', '#ef4444', '#0ea5e9', '#ec4899'];
-
   // Chart configuration
   const chartConfig: ChartConfig = {
     conversionRate: { 
       label: 'Taxa de Conversão (%)',
       theme: { light: '#8B5CF6', dark: '#A78BFA' }
-    }
-  };
-
   // Custom tooltip renderer
   const renderTooltipContent = (props: any) => {
     if (!props.active || !props.payload?.[0]) {
       return null;
-    }
-
     const data = props.payload[0];
     return (
       <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md">
@@ -141,19 +118,12 @@ export const UtmTab: React.FC<UtmTabProps> = ({
         </p>
         <p className="text-[7px] font-semibold">
           {data.value} {data.name === 'conversionRate' ? '%' : ''}
-        </p>
       </div>
     );
-  };
-
   if (loading) {
-    return (
       <div className="flex justify-center items-center py-12">
         <p className="text-muted-foreground">Carregando dados de campanha...</p>
-      </div>
-    );
   }
-
   return (
     <div className="space-y-4">
       <GridLayout columns={2} gap="md">
@@ -169,8 +139,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
                   <Pie
                     data={sourceData}
                     cx="50%"
-                    cy="50%"
-                    labelLine={false}
+                    cy="50%"                    labelLine={false}
                     outerRadius={50}
                     fill="#8884d8"
                     dataKey="value"
@@ -186,13 +155,8 @@ export const UtmTab: React.FC<UtmTabProps> = ({
             </div>
           </CardContent>
         </Card>
-
-        <Card className="border border-border/40 shadow-sm">
-          <CardHeader className="pb-1.5">
             <CardTitle>Conversão por Campanha</CardTitle>
             <CardDescription className="text-xs">Taxas de conversão por campanha de marketing</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-1 px-2">
             <div className="h-[55px]">
               <ChartContainer config={chartConfig}>
                 <BarChart
@@ -202,29 +166,18 @@ export const UtmTab: React.FC<UtmTabProps> = ({
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis 
                     dataKey="campaign"
-                    stroke="#888888"
                     tick={{ fill: '#888888', fontSize: 7 }}
                     tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <YAxis 
-                    stroke="#888888"
-                    tick={{ fill: '#888888', fontSize: 7 }}
-                    tickLine={{ stroke: '#e0e0e0' }}
-                  />
-                  <Tooltip content={renderTooltipContent} />
                   <Bar 
                     dataKey="conversionRate" 
                     name="Taxa de Conversão (%)" 
                     radius={[2, 2, 0, 0]}
                     fill="#8B5CF6"
-                  />
                 </BarChart>
               </ChartContainer>
-            </div>
-          </CardContent>
-        </Card>
       </GridLayout>
-
       <Card className="border border-border/40 shadow-sm">
         <CardHeader className="pb-1.5">
           <CardTitle>Detalhes UTM</CardTitle>
@@ -269,4 +222,3 @@ export const UtmTab: React.FC<UtmTabProps> = ({
       </Card>
     </div>
   );
-};

@@ -1,56 +1,55 @@
 
 import React from 'react';
+import { QuizComponentData } from '@/types/quizBuilder';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { QuizComponentData } from '@/types/quizBuilder';
-
 interface TextPropertiesProps {
   data: QuizComponentData['data'];
-  onUpdate: (id: string, updates: Partial<QuizComponentData>) => void;
-  componentId: string;
+  onUpdate: (data: any) => void;
+  isHeadline?: boolean;
 }
-
-export const TextProperties: React.FC<TextPropertiesProps> = ({
-  data,
+const TextProperties: React.FC<TextPropertiesProps> = ({ 
+  data, 
   onUpdate,
-  componentId
+  isHeadline = false
 }) => {
+  if (isHeadline) {
+    return (
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="title">Título</Label>
+          <Input
+            id="title"
+            value={data.title || ''}
+            onChange={(e) => onUpdate({ ...data, title: e.target.value })}
+            placeholder="Título da Seção"
+          />
+        </div>
+        
+          <Label htmlFor="subtitle">Subtítulo</Label>
+          <Textarea
+            id="subtitle"
+            value={data.subtitle || ''}
+            onChange={(e) => onUpdate({ ...data, subtitle: e.target.value })}
+            placeholder="Subtítulo opcional"
+            rows={2}
+      </div>
+    );
+  }
+  
   return (
     <div className="space-y-4">
-      <div>
-        <Label>Texto</Label>
+      <div className="space-y-2">
+        <Label htmlFor="text">Texto</Label>
         <Textarea
+          id="text"
           value={data.text || ''}
-          onChange={(e) => onUpdate(componentId, { 
-            data: { ...data, text: e.target.value } 
-          })}
-          placeholder="Digite o texto"
-          className="min-h-[100px]"
+          onChange={(e) => onUpdate({ ...data, text: e.target.value })}
+          placeholder="Insira seu texto aqui..."
+          rows={6}
         />
-      </div>
-
-      <div>
-        <Label>Título</Label>
-        <Input
-          value={data.title || ''}
-          onChange={(e) => onUpdate(componentId, { 
-            data: { ...data, title: e.target.value } 
-          })}
-          placeholder="Digite o título"
-        />
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Switch
-          checked={data.isHeadline || false}
-          onCheckedChange={(checked) => onUpdate(componentId, { 
-            data: { ...data, isHeadline: checked } 
-          })}
-        />
-        <Label>É um título principal</Label>
-      </div>
     </div>
   );
 };
+export default TextProperties;

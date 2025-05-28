@@ -3,15 +3,12 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Block } from '@/types/editor';
-
 interface SecondaryStylesBlockEditorProps {
   block: Block;
   onUpdate: (content: any) => void;
 }
-
 const SecondaryStylesBlockEditor: React.FC<SecondaryStylesBlockEditorProps> = ({ block, onUpdate }) => {
   const content = block.content;
-
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -29,9 +26,7 @@ const SecondaryStylesBlockEditor: React.FC<SecondaryStylesBlockEditorProps> = ({
           <strong>Nota:</strong> Este componente exibirá automaticamente os estilos secundários do usuário.
           Você pode personalizar o título aqui.
         </p>
-      </div>
     </div>
   );
 };
-
 export default SecondaryStylesBlockEditor;

@@ -1,6 +1,5 @@
 
 import React from 'react';
-
 interface ProductsBlockPreviewProps {
   content: {
     title?: string;
@@ -8,21 +7,17 @@ interface ProductsBlockPreviewProps {
     style?: any;
   };
 }
-
 const ProductsBlockPreview: React.FC<ProductsBlockPreviewProps> = ({ content }) => {
   const defaultImages = [
     {
       url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp',
       alt: 'Guia de Estilo - 3 Revistas'
     },
-    {
       url: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp',
       alt: 'Todos os produtos e bônus'
     }
   ];
-  
   const images = content.images || defaultImages;
-
   return (
     <div style={content.style}>
       <h3 className="text-xl font-bold mb-6 text-[#aa6b5d] text-center">
@@ -46,5 +41,4 @@ const ProductsBlockPreview: React.FC<ProductsBlockPreviewProps> = ({ content }) 
     </div>
   );
 };
-
 export default ProductsBlockPreview;

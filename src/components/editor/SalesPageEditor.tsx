@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -9,12 +8,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { EyeIcon, MoveIcon, Trash2Icon, X } from 'lucide-react';
 import { StyleResult } from '@/types/quiz';
 import { useEditor } from '@/hooks/useEditor';
-
 interface SalesPageEditorProps {
   primaryStyle: StyleResult;
-  onClose?: () => void;
+  onClose?: () => void; // Made this optional to maintain compatibility
 }
-
 const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle, onClose }) => {
   const { 
     config, 
@@ -24,7 +21,6 @@ const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle, onClose
     reorderBlocks 
   } = useEditor();
   const [isPreviewing, setIsPreviewing] = useState(false);
-
   return (
     <div className="min-h-screen bg-[#fffaf7] p-4">
       <div className="max-w-4xl mx-auto">
@@ -65,14 +61,9 @@ const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle, onClose
                   >
                     <MoveIcon className="w-4 h-4 text-[#8F7A6A]" />
                   </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
                     onClick={() => deleteBlock(block.id)}
                     className="w-8 h-8 text-red-500"
-                  >
                     <Trash2Icon className="w-4 h-4" />
-                  </Button>
                 </div>
                 
                 {block.type === 'headline' && (
@@ -89,48 +80,27 @@ const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle, onClose
                     <Textarea
                       placeholder="Subtítulo"
                       value={block.content.subtitle || ''}
-                      onChange={(e) => updateBlock(block.id, {
-                        ...block.content,
                         subtitle: e.target.value
-                      })}
-                      className="border-[#B89B7A]/20"
-                    />
                   </div>
                 )}
               </Card>
             ))}
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-              <Button
-                onClick={() => addBlock('headline')}
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              >
-                + Headline
-              </Button>
-              <Button
-                onClick={() => addBlock('image')}
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              >
-                + Imagem
-              </Button>
-              <Button
-                onClick={() => addBlock('benefits')}
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              >
-                + Benefícios
-              </Button>
-              <Button
-                onClick={() => addBlock('testimonials')}
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              >
-                + Depoimentos
-              </Button>
-            </div>
-          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <Button
+              onClick={() => addBlock('headline')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Headline
+            </Button>
+              onClick={() => addBlock('image')}
+              + Imagem
+              onClick={() => addBlock('benefits')}
+              + Benefícios
+              onClick={() => addBlock('testimonials')}
+              + Depoimentos
         </Card>
       </div>
     </div>
   );
 };
-
 export default SalesPageEditor;

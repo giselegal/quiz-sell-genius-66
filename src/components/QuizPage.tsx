@@ -14,11 +14,11 @@ import { useAuth } from '../context/AuthContext';
 import QuizResult from './QuizResult';
 import { QuizOfferHero } from './quiz-offer/QuizOfferHero';
 import { QuizOfferCTA } from './quiz-offer/QuizOfferCTA';
-import { useUniversalNavigation } from '../hooks/useUniversalNavigation';
+import { useRouter } from 'next/navigation';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
-  const { navigate } = useUniversalNavigation();
+  const router = useRouter();
   
   // Modificado: Sempre exibir o QuizIntro primeiro, independente do histórico
   const [showIntro, setShowIntro] = useState(true);
@@ -37,61 +37,13 @@ const QuizPage: React.FC = () => {
     currentAnswers,
     isLastQuestion,
     handleAnswer,
-    totalQuestions
+    handleNext,
+    handlePrevious,
+    totalQuestions,
+    calculateResults
+    // submitQuizIfComplete removido
+    // ...outros retornos se necessário...
   } = quizLogic;
-
-  // Implementar as funções que estavam faltando
-  const handleNext = () => {
-    if (currentQuestionIndex < totalQuestions - 1) {
-      quizLogic.setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      quizLogic.setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
-  };
-
-  const calculateResults = () => {
-    // Implementar lógica de cálculo de resultados
-    const styleCounter: Record<string, number> = {
-      'Natural': 0,
-      'Clássico': 0,
-      'Contemporâneo': 0,
-      'Elegante': 0,
-      'Romântico': 0,
-      'Sexy': 0,
-      'Dramático': 0,
-      'Criativo': 0
-    };
-
-    Object.entries(quizLogic.answers).forEach(([questionId, optionIds]) => {
-      const question = quizLogic.allQuestions.find(q => q.id === questionId);
-      if (!question) return;
-
-      optionIds.forEach(optionId => {
-        const option = question.options.find(o => o.id === optionId);
-        if (option && option.styleCategory) {
-          styleCounter[option.styleCategory] = (styleCounter[option.styleCategory] || 0) + 1;
-        }
-      });
-    });
-
-    // Encontrar o estilo com maior pontuação
-    const topStyle = Object.entries(styleCounter).reduce((a, b) => 
-      styleCounter[a[0]] > styleCounter[b[0]] ? a : b
-    );
-
-    const result = {
-      styleResult: topStyle[0],
-      styleScores: styleCounter,
-      personalizedRecommendations: [],
-      completedAt: new Date().toISOString()
-    };
-
-    return result;
-  };
 
   // Função para iniciar o quiz após o nome
   const handleStartQuiz = (nome: string) => {
@@ -120,14 +72,13 @@ const QuizPage: React.FC = () => {
   // Novo estado para controlar exibição do resultado e oferta
   const [showResult, setShowResult] = useState(false);
   const [showOffer, setShowOffer] = useState(false);
-  const [localQuizResult, setLocalQuizResult] = useState<any>(null);
+  const [quizResult, setQuizResult] = useState<any>(null);
 
   // Função para finalizar quiz e mostrar resultado
   const handleQuizComplete = () => {
     const result = calculateResults();
-    setLocalQuizResult(result);
+    setQuizResult(result);
     setShowResult(true);
-    navigate('/resultado');
   };
 
   // Quando resultado for exibido, mostrar oferta após X segundos
@@ -139,50 +90,46 @@ const QuizPage: React.FC = () => {
   }, [showResult]);
 
   return (
-    <div className="quiz-page-container">
+    <div>
       {/* Intro do Quiz */}
       {showIntro && (
-        <div className="quiz-intro-transition animate-fade-in-up">
-          <QuizIntro onStart={handleStartQuiz} />
-        </div>
+        <QuizIntro onStart={handleStartQuiz} />
       )}
       {/* Perguntas do Quiz */}
       {!showIntro && !showResult && currentQuestion && (
-        <div className="quiz-question-transition animate-fade-in-up">
-          <QuizContainer>
-            <QuizContent 
-              user={user}
-              currentQuestionIndex={currentQuestionIndex}
-              totalQuestions={totalQuestions}
-              showingStrategicQuestions={showingStrategicQuestions}
-              currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-              currentQuestion={currentQuestion}
-              currentAnswers={currentAnswers}
-              handleAnswerSubmit={handleAnswerSubmit}
-            />
-            <QuizNavigation 
-              canProceed={currentAnswers.length > 0}
-              onNext={isLastQuestion ? handleQuizComplete : handleNext}
-              onPrevious={handlePrevious}
-              currentQuestionType={showingStrategicQuestions ? 'strategic' : 'normal'}
-              selectedOptionsCount={currentAnswers.length}
-              isLastQuestion={isLastQuestion}
-            />
-          </QuizContainer>
-        </div>
+        <QuizContainer>
+          <QuizContent 
+            user={user}
+            currentQuestionIndex={currentQuestionIndex}
+            totalQuestions={totalQuestions}
+            showingStrategicQuestions={showingStrategicQuestions}
+            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+            currentQuestion={currentQuestion}
+            currentAnswers={currentAnswers}
+            handleAnswerSubmit={handleAnswerSubmit}
+          />
+          <QuizNavigation 
+            canProceed={currentAnswers.length > 0}
+            onNext={isLastQuestion ? handleQuizComplete : handleNext}
+            onPrevious={handlePrevious}
+            currentQuestionType={showingStrategicQuestions ? 'strategic' : 'normal'}
+            selectedOptionsCount={currentAnswers.length}
+            isLastQuestion={isLastQuestion}
+          />
+        </QuizContainer>
       )}
       {/* Resultado do Quiz */}
-      {showResult && localQuizResult && (
-        <div className="quiz-result-transition animate-fade-in-up">
-          <QuizResult {...localQuizResult} />
+      {showResult && quizResult && (
+        <>
+          <QuizResult {...quizResult} />
           {/* Oferta aparece após resultado */}
           {showOffer && (
-            <div className="mt-8 quiz-transition animate-fade-in-up">
-              <QuizOfferHero onStartQuizClick={() => navigate('/')} />
+            <div className="mt-8">
+              <QuizOfferHero onStartQuizClick={() => router.push('/')} />
               <QuizOfferCTA />
             </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );

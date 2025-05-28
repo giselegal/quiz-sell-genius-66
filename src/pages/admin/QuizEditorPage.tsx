@@ -1,42 +1,39 @@
+"use client";
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import AdminLayout from '@/components/admin/AdminLayout';
 import QuizEditor from '@/components/quiz-editor/QuizEditor';
 import { LoadingState } from '@/components/ui/loading-state';
 import { getTemplateById } from '@/services/templates/templateService';
 import { QuizTemplate } from '@/types/quizTemplate';
-
 const QuizEditorPage = () => {
-  const { templateId } = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const { templateId } = router.query;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [template, setTemplate] = useState<QuizTemplate | null>(null);
-
   useEffect(() => {
     const loadTemplate = async () => {
-      if (templateId) {
+      if (templateId && typeof templateId === 'string') {
         try {
           const template = await getTemplateById(templateId);
           if (!template) {
             setError('Template não encontrado');
-            navigate('/admin/quiz-editor');
+            router.push('/admin/quiz-editor');
             return;
           }
           setTemplate(template);
         } catch (err) {
           console.error('Error loading template:', err);
           setError('Erro ao carregar template');
-          navigate('/admin/quiz-editor');
+          router.push('/admin/quiz-editor');
         }
       }
       setLoading(false);
     };
-
     loadTemplate();
-  }, [templateId, navigate]);
-
+  }, [templateId, router]);
   if (loading) {
     return (
       <AdminLayout>
@@ -44,17 +41,10 @@ const QuizEditorPage = () => {
       </AdminLayout>
     );
   }
-
   if (error) {
-    return (
-      <AdminLayout>
         <div className="p-6">
           <p className="text-red-500">{error}</p>
         </div>
-      </AdminLayout>
-    );
-  }
-
   return (
     <AdminLayout>
       <div className="h-full bg-[#FAF9F7] p-6">
@@ -63,5 +53,4 @@ const QuizEditorPage = () => {
     </AdminLayout>
   );
 };
-
 export default QuizEditorPage;

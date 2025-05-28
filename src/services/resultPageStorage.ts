@@ -1,60 +1,50 @@
 
-export interface ResultPageConfig {
-  styleType: string;
-  header: any;
-  mainContent: any;
-  offer: any;
-  globalStyles: any;
-  blocks: any[];
-}
-
-const STORAGE_KEY = 'result-page-config';
-
+import { ResultPageConfig } from '@/types/resultPageConfig';
+const STORAGE_KEY_PREFIX = 'result_page_config_';
 export const resultPageStorage = {
-  save: (config: ResultPageConfig): void => {
+  save: (config: ResultPageConfig): boolean => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-    } catch (error) {
-      console.error('Error saving result page config:', error);
-    }
-  },
-
-  load: (): ResultPageConfig | null => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : null;
-    } catch (error) {
-      console.error('Error loading result page config:', error);
-      return null;
-    }
-  },
-
-  clear: (): void => {
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (error) {
-      console.error('Error clearing result page config:', error);
-    }
-  },
-
-  export: (): string => {
-    try {
-      const config = resultPageStorage.load();
-      return JSON.stringify(config, null, 2);
-    } catch (error) {
-      console.error('Error exporting result page config:', error);
-      return '{}';
-    }
-  },
-
-  import: (jsonString: string): boolean => {
-    try {
-      const config = JSON.parse(jsonString);
-      resultPageStorage.save(config);
+      if (!config || !config.styleType) {
+        console.error('Configuração inválida ou styleType não definido');
+        return false;
+      }
+      
+      const key = `${STORAGE_KEY_PREFIX}${config.styleType}`;
+      localStorage.setItem(key, JSON.stringify(config));
+      console.log(`Configuração salva para ${config.styleType}`);
       return true;
     } catch (error) {
-      console.error('Error importing result page config:', error);
+      console.error('Erro ao salvar configuração:', error);
       return false;
     }
+  },
+  
+  load: (styleType: string): ResultPageConfig | null => {
+      if (!styleType) {
+        console.error('styleType não definido');
+        return null;
+      const key = `${STORAGE_KEY_PREFIX}${styleType}`;
+      const storedConfig = localStorage.getItem(key);
+      if (storedConfig) {
+        console.log(`Configuração carregada para ${styleType}`);
+        return JSON.parse(storedConfig);
+      } else {
+        console.log(`Nenhuma configuração encontrada para ${styleType}`);
+      console.error('Erro ao carregar configuração:', error);
+      return null;
+  delete: (styleType: string): boolean => {
+      localStorage.removeItem(key);
+      console.log(`Configuração excluída para ${styleType}`);
+      console.error('Erro ao excluir configuração:', error);
+  getAllStyles: (): string[] => {
+      const styles: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(STORAGE_KEY_PREFIX)) {
+          styles.push(key.replace(STORAGE_KEY_PREFIX, ''));
+        }
+      return styles;
+      console.error('Erro ao obter estilos:', error);
+      return [];
   }
 };

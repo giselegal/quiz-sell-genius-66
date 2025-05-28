@@ -32,9 +32,6 @@ export {
   isImagePreloaded,
   preloadImagesByIds,
   preloadImagesByUrls,
-  preloadCriticalImages,
-  preloadImagesByCategory,
-  getLowQualityImage
 };
 
 export type { BankImage, PreloadOptions };
