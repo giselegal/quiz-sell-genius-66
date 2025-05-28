@@ -26,3 +26,4 @@ dist-ssr
 # Ensure Lovable uploads are tracked
 !public/lovable-uploads/**
 !public/lovable-uploads/**
+.next/
