@@ -13,3 +13,4 @@ export const displayVersion = () => {
   console.info(`Last Updated: ${new Date(VERSION.lastUpdated).toLocaleDateString()}`);
   console.info(`Environment: ${VERSION.environment}`);
 };
+};
