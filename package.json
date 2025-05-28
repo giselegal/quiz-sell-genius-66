@@ -8,6 +8,7 @@
     "dev": "npm run predev && vite",
     "prebuild": "node mark-lovable-components.js",
     "build": "npm run prebuild && vite build",
+    "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "install-deps": "npm install",
