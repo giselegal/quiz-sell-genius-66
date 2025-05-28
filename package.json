@@ -4,8 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite",
-    "build": "vite build",
+    "predev": "node mark-lovable-components.js",
+    "dev": "npm run predev && vite",
+    "prebuild": "node mark-lovable-components.js",
+    "build": "npm run prebuild && vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "install-deps": "npm install",
