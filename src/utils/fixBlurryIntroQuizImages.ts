@@ -1,106 +1,201 @@
 
 /**
  * Utilitário otimizado para corrigir imagens borradas na seção de introdução do quiz
+ * Versão 2.0 - Otimizada para desempenho
  */
 
-// Função principal para corrigir imagens borradas
-export const fixBlurryIntroQuizImages = (): number => {
-  console.log('Iniciando correção de imagens borradas na seção de introdução do quiz...');
-  
-  // 1. Identificar todas as imagens na seção de introdução do quiz com seletores precisos
-  const quizIntroImages = document.querySelectorAll('.quiz-intro img, [data-section="intro"] img, .quiz-intro-image');
-  let count = 0;
-  
-  if (quizIntroImages.length === 0) {
-    console.log("Nenhuma imagem encontrada para correção");
-    return 0;
+// Interface para armazenamento de cache para evitar processamento repetido
+interface ImageCacheRecord {
+  original: string;
+  optimized: string;
+  processed: boolean;
+}
+
+// Cache para evitar processamento repetitivo de URLs já otimizadas
+const processedImagesCache: Record<string, ImageCacheRecord> = {};
+
+/**
+ * Otimiza URL da imagem Cloudinary sem manipulação DOM repetitiva
+ * @param originalUrl URL original da imagem
+ * @returns URL otimizada
+ */
+const optimizeCloudinaryUrl = (originalUrl: string): string => {
+  // Verificar cache para evitar reprocessamento
+  if (processedImagesCache[originalUrl]?.optimized) {
+    return processedImagesCache[originalUrl].optimized;
   }
   
-  console.log(`Encontradas ${quizIntroImages.length} imagens para verificação`);
+  let optimizedUrl = originalUrl;
   
-  quizIntroImages.forEach(imgElement => {
-    // Converter para HTMLImageElement para ter acesso às propriedades de imagem
-    const img = imgElement as HTMLImageElement;
-    const src = img.src;
-    
-    // 2. Verificar se é uma imagem do Cloudinary que pode estar borrada
-    if (src && src.includes('cloudinary.com')) {
-      // 3. Criar uma URL de alta qualidade com algoritmo melhorado
-      let highQualitySrc = src;
-      
-      // Remover parâmetros de blur
-      if (highQualitySrc.includes('e_blur')) {
-        highQualitySrc = highQualitySrc.replace(/[,/]e_blur:[0-9]+/g, '');
-      }
-      
-      // Substituir qualidade baixa por alta
-      if (highQualitySrc.includes('q_')) {
-        highQualitySrc = highQualitySrc.replace(/q_[0-9]+/g, 'q_95');
-      } else if (highQualitySrc.includes('/upload/')) {
-        highQualitySrc = highQualitySrc.replace('/upload/', '/upload/q_95,');
-      }
-      
-      // Garantir formato automático para melhor compatibilidade
-      if (!highQualitySrc.includes('f_auto')) {
-        highQualitySrc = highQualitySrc.replace('/upload/', '/upload/f_auto,');
-      }
-      
-      // Adicionar DPR automático para telas de alta resolução
-      if (!highQualitySrc.includes('dpr_')) {
-        highQualitySrc = highQualitySrc.replace('/upload/', '/upload/dpr_auto,');
-      }
-      
-      // Adicionar nitidez avançada para imagens mais nítidas
-      if (!highQualitySrc.includes('e_sharpen')) {
-        highQualitySrc = highQualitySrc.replace('/upload/', '/upload/e_sharpen:80,');
-      }
-      
-      // 4. Substituir a URL somente se for diferente e aplicar otimizações adicionais
-      if (highQualitySrc !== src) {
-        img.src = highQualitySrc;
-        
-        // 5. Remover filtros CSS e classes que podem causar embaçamento
-        img.style.filter = 'none';
-        img.classList.remove('blur', 'placeholder', 'lazy-load');
-        
-        // 6. Adicionar atributos de renderização para melhorar a qualidade
-        img.style.imageRendering = 'crisp-edges';
-        if (!img.hasAttribute('decoding')) {
-          img.decoding = 'sync';
-        }
-        
-        console.log(`Imagem corrigida: ${img.alt || 'sem-alt'}`);
-        count++;
-      }
+  // Remover parâmetros de blur que possam existir
+  if (optimizedUrl.includes('e_blur')) {
+    optimizedUrl = optimizedUrl.replace(/[,/]e_blur:[0-9]+/g, '');
+  }
+  
+  // Otimizar nível de qualidade (equilíbrio entre qualidade e desempenho)
+  if (optimizedUrl.includes('q_')) {
+    optimizedUrl = optimizedUrl.replace(/q_[0-9]+/g, 'q_75'); 
+  } else if (optimizedUrl.includes('/upload/')) {
+    optimizedUrl = optimizedUrl.replace('/upload/', '/upload/q_75,'); 
+  }
+  
+  // Aplicar otimizações de formato e resolução em lote
+  const optimizations: {[key: string]: string} = {
+    'f_auto': '/upload/f_auto,',
+    'dpr_auto': '/upload/dpr_auto,',
+    'e_sharpen:50': '/upload/e_sharpen:50,'
+  };
+  
+  // Aplicar cada otimização apenas se necessária
+  Object.entries(optimizations).forEach(([key, replacement]) => {
+    if (!optimizedUrl.includes(key)) {
+      optimizedUrl = optimizedUrl.replace('/upload/', replacement);
     }
   });
   
-  console.log(`Correção finalizada: ${count} imagens corrigidas de ${quizIntroImages.length} total`);
+  // Salvar no cache para uso futuro
+  processedImagesCache[originalUrl] = {
+    original: originalUrl,
+    optimized: optimizedUrl,
+    processed: true
+  };
+  
+  return optimizedUrl;
+};
+
+// Função principal para corrigir imagens borradas - versão otimizada
+export const fixBlurryIntroQuizImages = (): number => {
+  // Evitar logs desnecessários em produção 
+  const isDevEnvironment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost';
+  
+  if (isDevEnvironment) {
+    console.log('Iniciando correção de imagens...');
+  }
+  
+  // Usar seletores específicos e limitar escopo para melhor desempenho
+  const quizIntroImages = document.querySelectorAll<HTMLImageElement>('.quiz-intro img, [data-section="intro"] img, .quiz-intro-image');
+  let count = 0;
+  
+  if (quizIntroImages.length === 0) {
+    return 0;
+  }
+  
+  // Processar em lotes para evitar bloqueio do thread principal
+  const processImageBatch = (images: NodeListOf<HTMLImageElement>, startIdx: number, batchSize: number): void => {
+    const endIdx = Math.min(startIdx + batchSize, images.length);
+    
+    for (let i = startIdx; i < endIdx; i++) {
+      const img = images[i];
+      const src = img.src;
+      
+      // Processar apenas imagens Cloudinary não otimizadas
+      if (src && src.includes('cloudinary.com') && !processedImagesCache[src]?.processed) {
+        const highQualitySrc = optimizeCloudinaryUrl(src);
+        
+        // Aplicar mudanças apenas se necessário
+        if (highQualitySrc !== src) {
+          img.src = highQualitySrc;
+          
+          // Remover filtros CSS causando embaçamento
+          img.style.filter = '';
+          img.classList.remove('blur', 'placeholder', 'lazy-load');
+          
+          // Usar decoding="async" em vez de sync para não bloquear o thread principal
+          if (!img.hasAttribute('decoding')) {
+            img.decoding = 'async';
+          }
+          
+          count++;
+        }
+      }
+    }
+    
+    // Processar o próximo lote se houver mais imagens
+    if (endIdx < images.length) {
+      requestAnimationFrame(() => {
+        processImageBatch(images, endIdx, batchSize);
+      });
+    } else if (isDevEnvironment) {
+      console.log(`Correção finalizada: ${count} imagens otimizadas`);
+    }
+  };
+  
+  // Iniciar processamento com lotes de 5 imagens para não bloquear o thread
+  processImageBatch(quizIntroImages, 0, 5);
+  
   return count;
 };
 
-// Expor a função globalmente para acesso externo
+/**
+ * Função para determinar se o dispositivo tem limitações de desempenho
+ * Ajusta o comportamento para economizar recursos em dispositivos menos potentes
+ */
+const isLowPerformanceDevice = (): boolean => {
+  const memory = (navigator as any).deviceMemory;
+  if (memory && memory < 4) return true;
+  
+  const cpuCores = navigator.hardwareConcurrency;
+  if (cpuCores && cpuCores < 4) return true;
+  
+  return false;
+};
+
+/**
+ * Função otimizada para inicializar a correção de imagens
+ * no momento mais apropriado do ciclo de vida da página
+ */
+export const initializeImageFixer = (): void => {
+  // Verificar se devemos aplicar otimização com base no dispositivo
+  const isLowPerformance = isLowPerformanceDevice();
+  
+  // Função que será chamada para iniciar a correção
+  const runFixer = () => {
+    // Em dispositivos de baixo desempenho, atrasar ainda mais para priorizar interatividade
+    if (isLowPerformance) {
+      // Usar requestIdleCallback se disponível, com fallback para setTimeout
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(() => {
+          fixBlurryIntroQuizImages();
+        }, { timeout: 3000 });
+      } else {
+        setTimeout(fixBlurryIntroQuizImages, 2000);
+      }
+    } else {
+      // Em dispositivos normais, usar requestAnimationFrame para o próximo frame disponível
+      requestAnimationFrame(() => {
+        fixBlurryIntroQuizImages();
+      });
+    }
+  };
+  
+  // Estratégia de inicialização baseada no estado do documento
+  if (document.readyState === 'loading') {
+    // Executar apenas após o carregamento do DOM, não durante o parsing
+    window.addEventListener('DOMContentLoaded', () => {
+      // Adiar para não competir com renderização inicial
+      setTimeout(runFixer, isLowPerformance ? 1500 : 500);
+    });
+  } else if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    // Caso já esteja carregado, adiar para priorizar interatividade
+    setTimeout(runFixer, isLowPerformance ? 1000 : 300);
+  }
+};
+
+// Expor a função globalmente para acesso externo, mas com nome mais descritivo
 declare global {
   interface Window {
-    fixBlurryIntroQuizImages: typeof fixBlurryIntroQuizImages;
+    optimizeQuizImages: typeof fixBlurryIntroQuizImages;
   }
 }
 
-// Registrar a função no objeto window
+// Registrar função com nome mais descritivo no objeto window
 if (typeof window !== 'undefined') {
-  window.fixBlurryIntroQuizImages = fixBlurryIntroQuizImages;
+  window.optimizeQuizImages = fixBlurryIntroQuizImages;
 }
 
-// Executar a correção automaticamente quando o documento for carregado
-if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(fixBlurryIntroQuizImages, 100);
-    });
-  } else {
-    // Executar uma única vez após o carregamento completo
-    setTimeout(fixBlurryIntroQuizImages, 100);
-  }
+// Iniciar o processo apenas se estivermos no navegador
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  initializeImageFixer();
 }
 
 export default fixBlurryIntroQuizImages;

@@ -15,28 +15,31 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   thickness = 'normal'
 }) => {
   const sizeMap = {
-    xs: 'w-3 h-3',
-    sm: 'w-5 h-5',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12',
-    xl: 'w-16 h-16'
+    xs: 'w-2 h-2',
+    sm: 'w-4 h-4',
+    md: 'w-6 h-6',
+    lg: 'w-10 h-10',
+    xl: 'w-14 h-14'
   };
-
+  
   const thicknessMap = {
     thin: 'border-2',
-    normal: 'border-4',
-    thick: 'border-[6px]'
+    normal: 'border-3',
+    thick: 'border-[5px]'
   };
-
+  
   const sizeClass = sizeMap[size] || sizeMap.md;
   const thicknessClass = thicknessMap[thickness] || thicknessMap.normal;
-
+  
   return (
     <div className={`flex justify-center items-center ${className}`} role="status" aria-label="Loading">
       <div
-        className={`${sizeClass} ${thicknessClass} rounded-full animate-spin`}
+        className={`${sizeClass} ${thicknessClass} rounded-full elegant-spinner`}
         style={{
-          borderColor: `${color} transparent transparent transparent`
+          borderColor: `${color} transparent transparent transparent`,
+          willChange: 'transform',
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden'
         }}
       />
     </div>

@@ -1,76 +1,70 @@
 
-import React, { useEffect } from 'react';
-import { fixBlurryIntroQuizImages } from '@/utils/fixBlurryIntroQuizImages';
+import React, { useState, useCallback } from 'react';
+import { cn } from '@/lib/utils';
 
-interface AutoFixedImagesProps {
-  children: React.ReactNode;
-  fixOnMount?: boolean;
-  fixOnUpdate?: boolean;
+interface AutoFixedImageProps {
+  src: string;
+  alt: string;
   className?: string;
+  width?: number;
+  height?: number;
+  loading?: 'lazy' | 'eager';
+  priority?: boolean;
 }
 
-/**
- * Componente wrapper que aplica correções de imagens borradas automaticamente
- * Este componente observa mudanças no DOM para corrigir imagens adicionadas dinamicamente
- */
-const AutoFixedImages: React.FC<AutoFixedImagesProps> = ({
-  children,
-  fixOnMount = true,
-  fixOnUpdate = true,
-  className = ''
+const AutoFixedImage: React.FC<AutoFixedImageProps> = ({
+  src,
+  alt,
+  className,
+  width,
+  height,
+  loading = 'lazy',
+  priority = false
 }) => {
-  // Aplicar correção na montagem inicial
-  useEffect(() => {
-    if (fixOnMount) {
-      // Pequeno atraso para permitir que a renderização seja completada
-      const timer = setTimeout(() => {
-        fixBlurryIntroQuizImages();
-      }, 100);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [fixOnMount]);
-  
-  // Observar mudanças no DOM para corrigir imagens adicionadas dinamicamente
-  useEffect(() => {
-    if (fixOnUpdate) {
-      // Configurar MutationObserver para detectar mudanças no DOM
-      const observer = new MutationObserver((mutations) => {
-        let needsFix = false;
-        
-        // Verificar se alguma mutação adicionou imagens
-        mutations.forEach(mutation => {
-          if (mutation.type === 'childList') {
-            mutation.addedNodes.forEach(node => {
-              if ((node as Element).tagName === 'IMG' || 
-                  (node as Element).querySelector?.('img')) {
-                needsFix = true;
-              }
-            });
-          }
-        });
-        
-        // Aplicar correção apenas se novas imagens foram adicionadas
-        if (needsFix) {
-          fixBlurryIntroQuizImages();
-        }
-      });
-      
-      // Iniciar observação
-      observer.observe(document.body, { 
-        childList: true, 
-        subtree: true 
-      });
-      
-      return () => observer.disconnect();
-    }
-  }, [fixOnUpdate]);
-  
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageError = useCallback(() => {
+    console.error(`Failed to load image: ${src}`);
+    setImageError(true);
+  }, [src]);
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, []);
+
+  if (imageError) {
+    return (
+      <div className={cn(
+        "bg-gray-200 flex items-center justify-center",
+        className
+      )}>
+        <span className="text-gray-500 text-sm">Imagem não disponível</span>
+      </div>
+    );
+  }
+
   return (
-    <div className={className}>
-      {children}
+    <div className={cn("relative overflow-hidden", className)}>
+      {!imageLoaded && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={loading}
+        onError={handleImageError}
+        onLoad={handleImageLoad}
+        className={cn(
+          "transition-opacity duration-300",
+          imageLoaded ? "opacity-100" : "opacity-0",
+          className
+        )}
+      />
     </div>
   );
 };
 
-export default AutoFixedImages;
+export default AutoFixedImage;

@@ -1,114 +1,90 @@
 
-import { StyleResult, QuizResult } from '@/types/quiz';
-import { useState, useEffect } from 'react';
-import { toast } from '@/components/ui/use-toast';
+"use client";
+
+import { useState, useCallback } from 'react';
+import { QuizQuestion, QuizAnswer, StyleResult } from '@/types/quiz';
 
 export const useQuiz = () => {
-  const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
-  const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
-  
-  useEffect(() => {
-    try {
-      const savedResult = localStorage.getItem('quizResult');
-      if (savedResult) {
-        const parsedResult = JSON.parse(savedResult) as QuizResult;
-        setPrimaryStyle(parsedResult.primaryStyle);
-        setSecondaryStyles(parsedResult.secondaryStyles || []);
-      } else {
-        console.log('No quiz result found in localStorage');
-        // If we're in development or on the editor page, use mock data
-        if (window.location.href.includes('/admin/editor') || process.env.NODE_ENV === 'development') {
-          console.log('Using mock data for editor');
-          setPrimaryStyle({
-            category: 'Romântico',
-            score: 8,
-            percentage: 30
-          });
-          setSecondaryStyles([
-            {
-              category: 'Sexy',
-              score: 7,
-              percentage: 26
-            },
-            {
-              category: 'Dramático',
-              score: 4,
-              percentage: 15
-            }
-          ]);
-        }
-      }
-    } catch (error) {
-      console.error('Error loading quiz result:', error);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<QuizAnswer[]>([]);
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [result, setResult] = useState<StyleResult | null>(null);
+
+  const nextQuestion = useCallback(() => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
     }
+  }, [currentQuestionIndex, questions.length]);
+
+  const previousQuestion = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
+  }, [currentQuestionIndex]);
+
+  const addAnswer = useCallback((answer: QuizAnswer) => {
+    setAnswers(prev => [...prev, answer]);
   }, []);
 
-  const startQuiz = async (name: string, email: string, quizId: string) => {
-    try {
-      console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
-      return { id: '1', name, email };
-    } catch (error) {
-      toast({
-        title: "Erro ao iniciar o quiz",
-        description: "Por favor, tente novamente.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
+  const completeQuiz = useCallback(() => {
+    setIsCompleted(true);
+  }, []);
 
-  const submitAnswers = async (
-    answers: Array<{ questionId: string; optionId: string; points: number }>
-  ) => {
-    try {
-      console.log('Submitting answers:', answers);
-    } catch (error) {
-      toast({
-        title: "Erro ao salvar respostas",
-        description: "Por favor, tente novamente.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-  
-  const submitResults = async (results: QuizResult, clickOrder: string[]) => {
-    try {
-      console.log("Results submitted:", results);
-      // Save results to localStorage
-      localStorage.setItem('quizResult', JSON.stringify(results));
-      // Update state
-      setPrimaryStyle(results.primaryStyle);
-      setSecondaryStyles(results.secondaryStyles || []);
-      
-      // Implement tie-breaking logic based on click order
-      if (results.secondaryStyles.length > 1) {
-        results.secondaryStyles.sort((a, b) => {
-          if (a.score === b.score) {
-            return clickOrder.indexOf(a.category) - clickOrder.indexOf(b.category);
-          }
-          return b.score - a.score;
-        });
+  const resetQuiz = useCallback(() => {
+    setCurrentQuestionIndex(0);
+    setAnswers([]);
+    setIsCompleted(false);
+    setResult(null);
+  }, []);
+
+  const loadQuestions = useCallback((newQuestions: QuizQuestion[]) => {
+    setQuestions(newQuestions);
+    setCurrentQuestionIndex(0);
+    setAnswers([]);
+    setIsCompleted(false);
+    setResult(null);
+  }, []);
+
+  const calculateResult = useCallback(() => {
+    // Logic to calculate result based on answers
+    const styleResults: { [key: string]: number } = {};
+    
+    answers.forEach(answer => {
+      if (answer.styleCategory) {
+        styleResults[answer.styleCategory] = (styleResults[answer.styleCategory] || 0) + 1;
       }
-      
-      return window.location.href = '/resultado';
-    } catch (error) {
-      toast({
-        title: "Erro ao salvar resultados",
-        description: "Por favor, tente novamente.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-  
+    });
+
+    const dominantStyle = Object.keys(styleResults).reduce((a, b) => 
+      styleResults[a] > styleResults[b] ? a : b
+    );
+
+    const total = answers.length;
+    const percentage = Math.round((styleResults[dominantStyle] / total) * 100);
+
+    const calculatedResult: StyleResult = {
+      category: dominantStyle,
+      percentage,
+      description: `Você tem ${percentage}% de afinidade com o estilo ${dominantStyle}`
+    };
+
+    setResult(calculatedResult);
+    return calculatedResult;
+  }, [answers]);
+
   return {
-    primaryStyle,
-    secondaryStyles,
-    startQuiz,
-    submitAnswers,
-    submitResults
+    currentQuestionIndex,
+    answers,
+    questions,
+    isCompleted,
+    result,
+    nextQuestion,
+    previousQuestion,
+    addAnswer,
+    completeQuiz,
+    resetQuiz,
+    loadQuestions,
+    calculateResult
   };
 };
-
-export default useQuiz;

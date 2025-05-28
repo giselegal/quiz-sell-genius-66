@@ -1,326 +1,163 @@
 
+"use client";
+
 import React, { useEffect, useState } from 'react';
-import { useQuiz } from '@/hooks/useQuiz';
-import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { Header } from '@/components/result/Header';
-import { styleConfig } from '@/config/styleConfig';
-import { Progress } from '@/components/ui/progress';
-import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
-import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
-import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-import ErrorState from '@/components/result/ErrorState';
-import MotivationSection from '@/components/result/MotivationSection';
-import MentorSection from '@/components/result/MentorSection';
-import GuaranteeSection from '@/components/result/GuaranteeSection';
-import Testimonials from '@/components/quiz-result/sales/Testimonials';
-import { ShoppingCart, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
-import BonusSection from '@/components/result/BonusSection';
 import { Button } from '@/components/ui/button';
-import { useLoadingState } from '@/hooks/useLoadingState';
-import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
-import ResultSkeleton from '@/components/result/ResultSkeleton';
-import { trackButtonClick } from '@/utils/analytics';
-import BuildInfo from '@/components/BuildInfo';
-import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
-import { useAuth } from '@/context/AuthContext';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 
-const ResultPage: React.FC = () => {
-  const {
-    primaryStyle,
-    secondaryStyles
-  } = useQuiz();
-  const {
-    globalStyles
-  } = useGlobalStyles();
-  const {
-    user
-  } = useAuth(); // Get user from auth context
-  const [imagesLoaded, setImagesLoaded] = useState({
-    style: false,
-    guide: false
-  });
-  const isLowPerformance = useIsLowPerformanceDevice();
-  const {
-    isLoading,
-    completeLoading
-  } = useLoadingState({
-    minDuration: isLowPerformance ? 400 : 800,
-    disableTransitions: isLowPerformance
-  });
+const tokens = {
+  colors: {
+    primary: '#B89B7A',
+    primaryDark: '#A1835D',
+    secondary: '#aa6b5d',
+    background: '#fffaf7',
+    backgroundCard: '#ffffff',
+    text: '#432818',
+    textSecondary: '#6B5B4E',
+    textMuted: '#8F7A6A',
+    border: '#E5D5C8',
+  },
+  gradients: {
+    primary: 'linear-gradient(135deg, #B89B7A 0%, #aa6b5d 100%)',
+  },
+  shadows: {
+    md: '0 4px 8px rgba(184, 155, 122, 0.12)',
+    lg: '0 8px 16px rgba(184, 155, 122, 0.16)',
+  },
+};
 
-  // Button hover state
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
-  
+interface StyleResult {
+  category: string;
+  percentage: number;
+}
+
+interface ResultPageProps {
+  primaryStyle?: StyleResult;
+  secondaryStyles?: StyleResult[];
+}
+
+const ResultPage: React.FC<ResultPageProps> = ({ 
+  primaryStyle = { category: 'Elegante', percentage: 85 },
+  secondaryStyles = []
+}) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    if (!primaryStyle) return;
-    window.scrollTo(0, 0);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
-    // Pré-carregar imagens críticas primeiro
-    const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
-    criticalImages.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
-
-    // Depois carregar as imagens específicas do estilo
-    const {
-      category
-    } = primaryStyle;
-    const {
-      image,
-      guideImage
-    } = styleConfig[category];
-    const styleImg = new Image();
-    styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
-    styleImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      style: true
-    }));
-    const guideImg = new Image();
-    guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
-    guideImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      guide: true
-    }));
-  }, [primaryStyle, globalStyles.logo]);
-  
-  useEffect(() => {
-    if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
-  }, [imagesLoaded, completeLoading]);
-  
-  if (!primaryStyle) return <ErrorState />;
-  if (isLoading) return <ResultSkeleton />;
-  
-  const {
-    category
-  } = primaryStyle;
-  const {
-    image,
-    guideImage,
-    description
-  } = styleConfig[category];
-  
   const handleCTAClick = () => {
-    // Track checkout initiation
-    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    console.log('CTA clicked');
   };
-  
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
+          <p>Carregando seu resultado...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-      color: globalStyles.textColor || '#432818',
-      fontFamily: globalStyles.fontFamily || 'inherit'
+      backgroundColor: tokens.colors.background,
+      color: tokens.colors.text,
     }}>
-      {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-      
-      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
-
-      <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
-        {/* ATTENTION: Primary Style Card */}
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
+      <div className="container mx-auto px-6 lg:px-8 py-8 max-w-4xl relative z-10">
+        <Card className="p-6 lg:p-8 mb-12 rounded-xl overflow-hidden relative" 
+              style={{ 
+                backgroundColor: tokens.colors.backgroundCard,
+                border: `1px solid ${tokens.colors.border}`,
+                boxShadow: tokens.shadows.lg 
+              }}>
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
+              <h1 className="text-xl lg:text-3xl font-playfair mb-6 leading-tight" 
+                  style={{ color: tokens.colors.text }}>
+                Descobrimos Seu Estilo Predominante:
+                <br />
+                <span className="text-2xl lg:text-4xl font-bold" 
+                      style={{ 
+                        background: tokens.gradients.primary, 
+                        backgroundClip: 'text', 
+                        WebkitBackgroundClip: 'text', 
+                        color: 'transparent' 
+                      }}>
+                  {primaryStyle.category}
+                </span>
+              </h1>
+              
               <div className="max-w-md mx-auto mb-6">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-[#8F7A6A]">
-                    Seu estilo predominante
+                <div className="flex items-center justify-end text-sm mb-2">
+                  <span className="font-medium" style={{ color: tokens.colors.textMuted }}>
+                    {primaryStyle.percentage}%
                   </span>
-                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
                 </div>
-                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
+                <Progress 
+                  value={primaryStyle.percentage} 
+                  className="h-2 rounded-full overflow-hidden" 
+                  style={{ backgroundColor: tokens.colors.border }}
+                />
               </div>
             </div>
-
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="space-y-4">
-                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
-                  <p className="text-[#432818] leading-relaxed">{description}</p>
-                </AnimatedWrapper>
-                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={600}>
-                  <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 glass-panel">
-                    <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
-                    <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+            
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div className="space-y-6 order-2 lg:order-1">
+                <div className="space-y-4">
+                  <p className="leading-relaxed text-base lg:text-lg font-medium" 
+                     style={{ color: tokens.colors.text }}>
+                    <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
+                  </p>
+                  
+                  <div className="rounded-lg p-4" 
+                       style={{ 
+                         backgroundColor: tokens.colors.background,
+                         border: `1px solid ${tokens.colors.border}`,
+                         boxShadow: tokens.shadows.md 
+                       }}>
+                    <p className="text-sm lg:text-base leading-relaxed" style={{ color: tokens.colors.text }}>
+                      <strong>Seu estilo {primaryStyle.category}</strong> revela uma mulher que expressa elegância e sofisticação em cada detalhe.
+                    </p>
                   </div>
-                </AnimatedWrapper>
-              </div>
-              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
-                <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
-                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
-                  {/* Elegant decorative corner */}
-                  <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
-                  <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
+                  
+                  <p className="text-sm lg:text-base" style={{ color: tokens.colors.textSecondary }}>
+                    <strong>Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!</strong>
+                  </p>
                 </div>
-              </AnimatedWrapper>
+              </div>
+              
+              <div className="order-1 lg:order-2">
+                <div className="w-full max-w-xs lg:max-w-sm mx-auto relative">
+                  <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
+                    <p className="text-gray-500">Imagem do Estilo</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-              <div className="mt-8 max-w-[540px] mx-auto relative">
-                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" width="540" height="auto" />
-                {/* Elegant badge */}
-                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
-                  Exclusivo
-                </div>
-              </div>
-            </AnimatedWrapper>
+            
+            <div className="mt-12 text-center">
+              <Button 
+                onClick={handleCTAClick}
+                className="px-8 py-3 text-lg rounded-md transition-all duration-300"
+                style={{
+                  background: tokens.gradients.primary,
+                  color: '#ffffff'
+                }}
+              >
+                Descobrir Meu Guia Completo
+              </Button>
+            </div>
           </AnimatedWrapper>
         </Card>
-
-        {/* INTEREST: Before/After Transformation Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
-          <BeforeAfterTransformation />
-        </AnimatedWrapper>
-
-        {/* INTEREST: Motivation Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-          <MotivationSection />
-        </AnimatedWrapper>
-
-        {/* INTEREST: Bonus Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
-          <BonusSection />
-        </AnimatedWrapper>
-
-        {/* DESIRE: Testimonials */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
-          <Testimonials />
-        </AnimatedWrapper>
-
-        {/* DESIRE: Featured CTA (Green) */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
-          <div className="text-center my-10">
-            <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
-              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
-                Descubra Como Aplicar Seu Estilo na Prática
-              </h3>
-              <div className="flex justify-center">
-                <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
-              </div>
-            </div>
-            
-            <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
-              background: "linear-gradient(to right, #4CAF50, #45a049)",
-              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-            }}>
-              <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                Quero meu Guia de Estilo Agora
-              </span>
-            </Button>
-            
-            <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
-              <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
-                
-                
-              </p>
-            </div>
-            
-            <SecurePurchaseElement />
-          </div>
-        </AnimatedWrapper>
-
-        {/* DESIRE: Guarantee Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
-          <GuaranteeSection />
-        </AnimatedWrapper>
-
-        {/* DESIRE: Mentor and Trust Elements */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
-          <MentorSection />
-        </AnimatedWrapper>
-
-        {/* ACTION: Final Value Proposition and CTA */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
-          <div className="text-center mt-10">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
-              Vista-se de Você — na Prática
-            </h2>
-            <div className="elegant-divider"></div>
-            <p className="text-[#432818] mb-6 max-w-xl mx-auto">
-              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. 
-              O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir 
-              com autenticidade e transformar sua imagem em ferramenta de poder.
-            </p>
-
-            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
-              <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
-              <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
-                {["Looks com intenção e identidade", "Cores, modelagens e tecidos a seu favor", "Imagem alinhada aos seus objetivos", "Guarda-roupa funcional, sem compras por impulso"].map((item, index) => (
-                  <li key={index} className="flex items-start">
-                    <div className="flex-shrink-0 h-5 w-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white mr-2 mt-0.5">
-                      <CheckCircle className="h-3 w-3" />
-                    </div>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="bg-[#fffaf7] px-4 py-8 rounded-lg text-center mb-8">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-3">
-                  Guia de Estilo e Imagem + Bônus Exclusivos
-                </h2>
-                <p className="text-[#3a3a3a]">
-                  Descubra seu estilo verdadeiro e aprenda a aplicá-lo
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
-                <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-                    <span>Guia Principal</span>
-                    <span className="font-medium">R$ 67,00</span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-                    <span>Bônus - Peças-chave</span>
-                    <span className="font-medium">R$ 79,00</span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
-                    <span>Bônus - Visagismo Facial</span>
-                    <span className="font-medium">R$ 29,00</span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 pt-3 font-bold">
-                    <span>Valor Total</span>
-                    <div className="relative">
-                      <span>R$ 175,00</span>
-                      <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
-                    </div>
-                  </div>
-                </div>
-                <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-                  <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-                  <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-                  <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
-                </div>
-              </div>
-            </div>
-
-            <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2" style={{
-            background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-            fontSize: "1rem" /* Smaller font size for button */
-            }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
-              <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                <span>Garantir Meu Guia + Bônus Especiais</span>
-              </span>
-            </Button>
-            
-            <SecurePurchaseElement />
-
-            <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
-              <Lock className="w-3 h-3" />
-              <span>Oferta exclusiva nesta página</span>
-            </p>
-          </div>
-        </AnimatedWrapper>
       </div>
-
-      <BuildInfo />
     </div>
   );
 };

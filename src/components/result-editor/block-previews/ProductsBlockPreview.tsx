@@ -20,7 +20,7 @@ const ProductsBlockPreview: React.FC<ProductsBlockPreviewProps> = ({ content }) 
       alt: 'Todos os produtos e bônus'
     }
   ];
-
+  
   const images = content.images || defaultImages;
 
   return (

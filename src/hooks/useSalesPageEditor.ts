@@ -1,4 +1,6 @@
 
+"use client";
+
 import { useState, useCallback } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { Block, BlockType } from '@/types/editor';
@@ -9,7 +11,6 @@ export const useSalesPageEditor = (styleType: string) => {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
 
-  // Add a new block of the specified type
   const addBlock = useCallback((type: BlockType) => {
     const newBlock: Block = {
       id: `block-${uuidv4()}`,
@@ -20,16 +21,13 @@ export const useSalesPageEditor = (styleType: string) => {
     
     setBlocks(prev => [...prev, newBlock]);
     setSelectedBlockId(newBlock.id);
-    
     toast({
       title: "Bloco adicionado",
       description: `Um novo bloco do tipo ${type} foi adicionado.`
     });
-    
     return newBlock.id;
   }, [blocks.length]);
 
-  // Update an existing block's content
   const updateBlock = useCallback((blockId: string, content: any) => {
     setBlocks(prevBlocks => 
       prevBlocks.map(block => 
@@ -38,20 +36,17 @@ export const useSalesPageEditor = (styleType: string) => {
     );
   }, []);
 
-  // Delete a block by ID
   const deleteBlock = useCallback((blockId: string) => {
     setBlocks(prevBlocks => prevBlocks.filter(block => block.id !== blockId));
     if (selectedBlockId === blockId) {
       setSelectedBlockId(null);
     }
-    
     toast({
       title: "Bloco removido",
       description: "O bloco foi removido com sucesso."
     });
   }, [selectedBlockId]);
 
-  // Move a block to a new position
   const moveBlock = useCallback((blockId: string, direction: 'up' | 'down') => {
     setBlocks(prevBlocks => {
       const blockIndex = prevBlocks.findIndex(block => block.id === blockId);
@@ -73,7 +68,6 @@ export const useSalesPageEditor = (styleType: string) => {
   }, []);
 
   const handleSave = useCallback(async () => {
-    // Placeholder for actual saving functionality
     toast({
       title: "Funcionalidade em desenvolvimento",
       description: "O salvamento de páginas de venda estará disponível em breve."
@@ -82,13 +76,11 @@ export const useSalesPageEditor = (styleType: string) => {
   }, []);
 
   const loadTemplate = useCallback((templateBlocks: Block[]) => {
-    // Placeholder for template loading functionality
     setBlocks(templateBlocks);
     toast({
       title: "Template carregado",
       description: "O template foi carregado com sucesso."
     });
-    return true;
   }, []);
 
   return {

@@ -60,6 +60,7 @@ export const EditorNotification: React.FC<EditorNotificationProps> = ({
             </Button>
           )}
         </div>
+        
         {onDismiss && (
           <Button 
             variant="ghost" 
@@ -85,9 +86,9 @@ export const EditorNotifications: React.FC = () => {
       onAction: () => setNotifications(prev => prev.filter(n => n.title !== 'Editor Unificado')),
     }
   ]);
-  
+
   if (notifications.length === 0) return null;
-  
+
   return (
     <div className="fixed bottom-4 right-4 w-80 z-50 space-y-2">
       {notifications.map((notification, index) => (

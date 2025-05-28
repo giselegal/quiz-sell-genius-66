@@ -31,15 +31,12 @@ const VideoBlockPreview: React.FC<VideoBlockPreviewProps> = ({ content }) => {
   };
 
   const getEmbedUrl = (url: string) => {
-    if (!url) return '';
     const videoId = getVideoId(url);
-    
     if (url.includes('youtube')) {
       return `https://www.youtube.com/embed/${videoId}`;
     } else if (url.includes('vimeo')) {
       return `https://player.vimeo.com/video/${videoId}`;
     }
-    
     return url;
   };
 

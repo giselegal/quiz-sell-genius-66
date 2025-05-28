@@ -1,3 +1,6 @@
+
+"use client";
+
 import React, { useEffect, useState } from 'react';
 
 interface LimitedStockIndicatorProps {
@@ -29,9 +32,9 @@ export const LimitedStockIndicator: React.FC<LimitedStockIndicatorProps> = ({
     
     return () => clearInterval(stockInterval);
   }, [stockLeft]);
-  
+
   const percentLeft = Math.round((stockLeft / initialStock) * 100);
-  
+
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="flex items-center justify-between text-xs mb-1">

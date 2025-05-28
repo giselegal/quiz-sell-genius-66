@@ -1,15 +1,14 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { displayVersion } from './utils/version';
 
-// Display version information in console
-displayVersion();
-
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+// Comentar ou remover qualquer função de manipulação de URL ou rotas aqui
+// function fixMainRoutes() { ... }
+// function checkMainRoutes() { ... }
+// function setupRouteChangePreloading() { ... }
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

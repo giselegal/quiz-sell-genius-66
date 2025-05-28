@@ -28,15 +28,14 @@ const HeroSectionBlockEditor: React.FC<HeroSectionBlockEditorProps> = ({ block, 
       
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo</Label>
-        <Textarea
+        <Input
           id="subtitle"
-          rows={2}
           value={content.subtitle || ''}
           onChange={(e) => onUpdate({ subtitle: e.target.value })}
           placeholder="Agora é hora de aplicar com clareza — e se vestir de você"
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="heroImage">Imagem Principal (URL)</Label>
         <Input
@@ -55,7 +54,7 @@ const HeroSectionBlockEditor: React.FC<HeroSectionBlockEditorProps> = ({ block, 
           </div>
         )}
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="heroImage2">Imagem Secundária (URL)</Label>
         <Input

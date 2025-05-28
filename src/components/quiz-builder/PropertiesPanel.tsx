@@ -148,7 +148,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   </div>
                 </div>
               )}
-              
+
               {component.type === 'text' && (
                 <div className="space-y-4">
                   <div className="space-y-2">
@@ -164,14 +164,14 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   </div>
                 </div>
               )}
-              
+
               {component.type === 'image' && (
                 <EnhancedImageProperties 
                   data={component.data}
                   onUpdate={(data) => onUpdate(component.id, { data })}
                 />
               )}
-              
+
               {(component.type === 'multipleChoice' || component.type === 'singleChoice') && (
                 <div className="space-y-4">
                   <div className="space-y-2">
@@ -229,7 +229,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   </div>
                 </div>
               )}
-              
+
               <div className="mt-6 pt-4 border-t">
                 <Button 
                   variant="destructive" 
@@ -240,7 +240,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 </Button>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="style" className="mt-0 p-4">
               <div className="space-y-4">
                 <div className="space-y-2">
@@ -265,7 +265,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Cor do Texto</Label>
                   <div className="flex gap-2">
@@ -288,7 +288,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Arredondamento de Bordas</Label>
                   <Select 
@@ -309,7 +309,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Padding Vertical</Label>
                   <Select 
@@ -331,7 +331,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Padding Horizontal</Label>
                   <Select 

@@ -1,3 +1,6 @@
+
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -29,25 +32,22 @@ const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
       onSave(questions);
     }
     
-    // Salvar localmente também
-    localStorage.setItem('quiz_editor_questions', JSON.stringify(questions));
-    
+    safeLocalStorage.setItem('quiz_editor_questions', JSON.stringify(questions));
     toast({
       title: "Alterações salvas",
       description: "Todas as alterações foram salvas com sucesso.",
     });
   };
-  
+
   const handleDuplicate = () => {
     toast({
       title: "Quiz duplicado",
       description: "Uma cópia do quiz foi criada com sucesso.",
     });
   };
-  
+
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-[#FAF9F7]">
-      {/* Barra de ferramentas superior */}
       <div className="border-b border-[#B89B7A]/20 bg-white p-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <LayoutGrid className="h-5 w-5 text-[#B89B7A]" />
@@ -76,7 +76,6 @@ const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
         </div>
       </div>
       
-      {/* Área principal */}
       <div className="flex-1 overflow-hidden">
         {previewMode ? (
           <div className="h-full overflow-auto p-4">
@@ -119,7 +118,6 @@ const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
           </div>
         ) : (
           <ResizablePanelGroup direction="horizontal">
-            {/* Painel de edição */}
             <ResizablePanel defaultSize={75} minSize={50}>
               <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
                 <div className="border-b border-[#B89B7A]/20 bg-white px-4">
@@ -172,8 +170,6 @@ const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
             {showProperties && (
               <>
                 <ResizableHandle withHandle />
-                
-                {/* Painel de propriedades */}
                 <ResizablePanel defaultSize={25} minSize={20}>
                   <motion.div 
                     initial={{ opacity: 0 }}
@@ -244,30 +240,29 @@ const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
                             </Button>
                           </div>
                         </div>
-                      </div>
-                      
-                      <Separator className="my-4" />
-                      
-                      <div className="space-y-4">
-                        <h4 className="font-medium text-[#432818]">Configurações Avançadas</h4>
                         
                         <div>
-                          <label className="block text-sm text-[#8F7A6A] mb-1">Método de cálculo</label>
-                          <select
-                            className="w-full p-2 border border-[#B89B7A]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/30"
-                            defaultValue="points"
-                          >
-                            <option value="points">Pontuação</option>
-                            <option value="points_click">Pontuação + Ordem de Clique</option>
-                            <option value="percentage">Porcentagem</option>
-                          </select>
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm text-[#8F7A6A] mb-1">Teste A/B</label>
-                          <div className="flex items-center gap-2">
-                            <input type="checkbox" id="ab-testing" />
-                            <label htmlFor="ab-testing" className="text-sm text-[#432818]">Ativar teste A/B</label>
+                          <h4 className="font-medium text-[#432818]">Configurações Avançadas</h4>
+                          <div className="space-y-2 mt-2">
+                            <div>
+                              <label className="block text-sm text-[#8F7A6A] mb-1">Método de cálculo</label>
+                              <select
+                                className="w-full p-2 border border-[#B89B7A]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/30"
+                                defaultValue="points"
+                              >
+                                <option value="points">Pontuação</option>
+                                <option value="points_click">Pontuação + Ordem de Clique</option>
+                                <option value="percentage">Porcentagem</option>
+                              </select>
+                            </div>
+                            
+                            <div>
+                              <label className="block text-sm text-[#8F7A6A] mb-1">Teste A/B</label>
+                              <div className="flex items-center gap-2">
+                                <input type="checkbox" id="ab-testing" />
+                                <label htmlFor="ab-testing" className="text-sm text-[#432818]">Ativar teste A/B</label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

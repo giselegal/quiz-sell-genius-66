@@ -1,86 +1,52 @@
 
-import { useState, useEffect, useCallback } from 'react';
+"use client";
 
-interface LoadingOptions {
-  initialState?: boolean;
-  minDuration?: number;
-  maxDuration?: number;
-  disableTransitions?: boolean;
+import { useState, useCallback } from 'react';
+
+interface LoadingState {
+  [key: string]: boolean;
 }
 
-export const useLoadingState = ({
-  initialState = true,
-  minDuration = 800,
-  maxDuration = 5000,
-  disableTransitions = false
-}: LoadingOptions = {}) => {
-  const [isLoading, setIsLoading] = useState(initialState);
-  const [isTimedOut, setIsTimedOut] = useState(false);
-  const [startTime] = useState<number>(Date.now());
+export const useLoadingState = () => {
+  const [loadingStates, setLoadingStates] = useState<LoadingState>({});
 
-  // Handle loading completion with minimum duration
-  const completeLoading = useCallback(() => {
-    if (disableTransitions) {
-      setIsLoading(false);
-      return;
-    }
-    
-    const elapsedTime = Date.now() - startTime;
-    
-    // If less time has passed than minDuration, wait before completing
-    if (elapsedTime < minDuration) {
-      const remainingTime = minDuration - elapsedTime;
-      setTimeout(() => {
-        setIsLoading(false);
-      }, remainingTime);
-    } else {
-      // If enough time has passed, complete immediately
-      setIsLoading(false);
-    }
-  }, [startTime, minDuration, disableTransitions]);
+  const setLoading = useCallback((key: string, loading: boolean) => {
+    setLoadingStates(prev => ({
+      ...prev,
+      [key]: loading
+    }));
+  }, []);
 
-  // Provide manual control over loading state
-  const setLoading = useCallback((state: boolean) => {
-    if (state === false) {
-      completeLoading();
-    } else {
-      setIsLoading(true);
-    }
-  }, [completeLoading]);
+  const isLoading = useCallback((key: string) => {
+    return loadingStates[key] || false;
+  }, [loadingStates]);
 
-  // Set up timeout for maximum loading duration
-  useEffect(() => {
-    if (isLoading && maxDuration) {
-      const timeoutId = setTimeout(() => {
-        setIsLoading(false);
-        setIsTimedOut(true);
-        console.warn('Loading timed out after', maxDuration, 'ms');
-      }, maxDuration);
-      
-      return () => {
-        clearTimeout(timeoutId);
-      };
+  const withLoading = useCallback(async <T>(
+    key: string,
+    asyncFunction: () => Promise<T>
+  ): Promise<T> => {
+    setLoading(key, true);
+    try {
+      const result = await asyncFunction();
+      return result;
+    } finally {
+      setLoading(key, false);
     }
-  }, [isLoading, maxDuration]);
+  }, [setLoading]);
 
-  // Detect slow loading based on device capabilities
-  useEffect(() => {
-    if (isLoading) {
-      // Check if device seems to be low-performance
-      const memory = (navigator as any).deviceMemory;
-      const cpuCores = navigator.hardwareConcurrency;
-      
-      if ((memory && memory < 2) || (cpuCores && cpuCores < 2)) {
-        // For very low-end devices, skip animations to improve performance
-        console.info('Low performance device detected, optimizing loading experience');
-      }
-    }
-  }, [isLoading]);
+  const isAnyLoading = useCallback(() => {
+    return Object.values(loadingStates).some(loading => loading);
+  }, [loadingStates]);
+
+  const clearLoading = useCallback(() => {
+    setLoadingStates({});
+  }, []);
 
   return {
-    isLoading,
     setLoading,
-    isTimedOut,
-    completeLoading
+    isLoading,
+    withLoading,
+    isAnyLoading,
+    clearLoading
   };
 };

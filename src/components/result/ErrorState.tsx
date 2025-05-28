@@ -1,10 +1,10 @@
+"use client";
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-
+// import { useRouter } from 'next/navigation';
 const ErrorState: React.FC = () => {
-  const navigate = useNavigate();
+  // const router = useRouter();
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-[#fff9f7]">
@@ -16,7 +16,7 @@ const ErrorState: React.FC = () => {
           Não conseguimos carregar seu resultado do quiz. Por favor, tente novamente.
         </p>
         <Button 
-          onClick={() => navigate('/quiz')}
+          onClick={() => router.push('/quiz')}
           className="bg-[#aa6b5d] hover:bg-[#9a5b4d] text-white"
         >
           Refazer o Quiz
@@ -25,5 +25,4 @@ const ErrorState: React.FC = () => {
     </div>
   );
 };
-
 export default ErrorState;

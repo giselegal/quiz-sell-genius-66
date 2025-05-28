@@ -1,3 +1,6 @@
+
+"use client";
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -31,6 +34,7 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+
     if (!over) return;
 
     if (active.id !== over.id) {
@@ -60,6 +64,7 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
       });
     }
   };
+
   const [editorState, setEditorState] = useState<UnifiedEditorState>({
     activeTab: 'quiz',
     isPreviewing: false,
@@ -69,15 +74,30 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
     },
     resultEditorState: {
       config: {
-        title: '',
-        description: '',
-        sections: [],
+        styleType: '',
+        header: {
+          visible: true,
+          content: {}
+        },
+        mainContent: {},
+        offer: {
+          hero: {
+            visible: true,
+            content: {}
+          },
+          benefits: {},
+          products: {},
+          pricing: {},
+          testimonials: {},
+          guarantee: {},
+        }
       },
       blocks: [],
     },
     salesEditorState: {
+      config: {},
       blocks: [],
-    },
+    }
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -95,15 +115,21 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
     }));
   };
 
+  // Helper function to handle component selection
+  const handleComponentSelect = (type: string) => {
+    console.log('Component selected:', type);
+    // Implementation would go here
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-background">
       <EditorToolbar
         isPreviewing={editorState.isPreviewing}
         onPreviewToggle={togglePreview}
         onSave={handleSave}
-        isSaving={isSaving}
+        activeTab={editorState.activeTab}
       />
-
+      
       <div className="flex-1 overflow-hidden">
         <Tabs
           defaultValue="quiz"
@@ -115,13 +141,17 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
             <TabsTrigger value="result">Página de Resultado</TabsTrigger>
             <TabsTrigger value="sales">Página de Vendas</TabsTrigger>
           </TabsList>
-
+          
           <TabsContent value="quiz" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
             <TooltipProvider>
               <ResizablePanelGroup direction="horizontal" className="h-full">
                 <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
                   <div className="h-full border-r bg-white overflow-y-auto">
-                    <UnifiedComponentsSidebar onComponentSelect={() => {}} />
+                    <UnifiedComponentsSidebar 
+                      onComponentSelect={handleComponentSelect}
+                      activeTab="quiz" 
+                      activeStageType={null}
+                    />
                   </div>
                 </ResizablePanel>
                 
@@ -158,77 +188,77 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
               </ResizablePanelGroup>
             </TooltipProvider>
           </TabsContent>
-
+          
           <TabsContent value="result" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
-            <TooltipProvider>
-              <ResizablePanelGroup direction="horizontal" className="h-full">
-                <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-                  <div className="h-full border-r bg-white overflow-y-auto">
-                    <UnifiedComponentsSidebar onComponentSelect={() => {}} />
+            <ResizablePanelGroup direction="horizontal" className="h-full">
+              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                <div className="h-full border-r bg-white overflow-y-auto">
+                  <UnifiedComponentsSidebar 
+                    onComponentSelect={handleComponentSelect}
+                    activeTab="result" 
+                    activeStageType={null}
+                  />
+                </div>
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              <ResizablePanel defaultSize={55}>
+                <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
+                  <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
+                    {editorState.isPreviewing ? (
+                      <div>Preview da Página de Resultado</div>
+                    ) : (
+                      <div>Editor da Página de Resultado</div>
+                    )}
                   </div>
-                </ResizablePanel>
-                
-                <ResizableHandle withHandle />
-                
-                <ResizablePanel defaultSize={55}>
-                  <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
-                    {/* Área de Preview/Edição */}
-                    <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
-                      {editorState.isPreviewing ? (
-                        <div>Preview da Página de Resultado</div>
-                      ) : (
-                        <div>Editor da Página de Resultado</div>
-                      )}
-                    </div>
-                  </div>
-                </ResizablePanel>
-                
-                <ResizableHandle withHandle />
-                
-                <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
-                  <div className="h-full border-l bg-white overflow-y-auto p-4">
-                    <h3 className="font-medium mb-4">Propriedades</h3>
-                    {/* Painel de Propriedades */}
-                  </div>
-                </ResizablePanel>
-              </ResizablePanelGroup>
-            </TooltipProvider>
+                </div>
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+                <div className="h-full border-l bg-white overflow-y-auto p-4">
+                  <h3 className="font-medium mb-4">Propriedades</h3>
+                </div>
+              </ResizablePanel>
+            </ResizablePanelGroup>
           </TabsContent>
-
+          
           <TabsContent value="sales" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
-            <TooltipProvider>
-              <ResizablePanelGroup direction="horizontal" className="h-full">
-                <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-                  <div className="h-full border-r bg-white overflow-y-auto">
-                    <UnifiedComponentsSidebar onComponentSelect={() => {}} />
+            <ResizablePanelGroup direction="horizontal" className="h-full">
+              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                <div className="h-full border-r bg-white overflow-y-auto">
+                  <UnifiedComponentsSidebar 
+                    onComponentSelect={handleComponentSelect}
+                    activeTab="sales" 
+                    activeStageType={null}
+                  />
+                </div>
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              <ResizablePanel defaultSize={55}>
+                <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
+                  <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
+                    {editorState.isPreviewing ? (
+                      <div>Preview da Página de Vendas</div>
+                    ) : (
+                      <div>Editor da Página de Vendas</div>
+                    )}
                   </div>
-                </ResizablePanel>
-                
-                <ResizableHandle withHandle />
-                
-                <ResizablePanel defaultSize={55}>
-                  <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
-                    {/* Área de Preview/Edição */}
-                    <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
-                      {editorState.isPreviewing ? (
-                        <div>Preview da Página de Vendas</div>
-                      ) : (
-                        <div>Editor da Página de Vendas</div>
-                      )}
-                    </div>
-                  </div>
-                </ResizablePanel>
-                
-                <ResizableHandle withHandle />
-                
-                <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
-                  <div className="h-full border-l bg-white overflow-y-auto p-4">
-                    <h3 className="font-medium mb-4">Propriedades</h3>
-                    {/* Painel de Propriedades */}
-                  </div>
-                </ResizablePanel>
-              </ResizablePanelGroup>
-            </TooltipProvider>
+                </div>
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+                <div className="h-full border-l bg-white overflow-y-auto p-4">
+                  <h3 className="font-medium mb-4">Propriedades</h3>
+                </div>
+              </ResizablePanel>
+            </ResizablePanelGroup>
           </TabsContent>
         </Tabs>
       </div>

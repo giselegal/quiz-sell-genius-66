@@ -1,3 +1,4 @@
+"use client";
 
 import { useEffect, useRef, useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
@@ -30,18 +31,18 @@ export function useAutosave<T>({
     // Compare JSON stringified versions to detect changes
     const currentDataStr = JSON.stringify(data);
     const lastDataStr = JSON.stringify(lastDataRef.current);
-    
+
     // Don't save if the data hasn't changed
     if (currentDataStr === lastDataStr && !forceShowToast) {
       return;
     }
-    
+
     // If already saving, mark as pending and return
     if (isSaving) {
       pendingSaveRef.current = true;
       return;
     }
-    
+
     setIsSaving(true);
     try {
       const success = await onSave(data);
@@ -79,18 +80,16 @@ export function useAutosave<T>({
 
   // Setup autosave
   useEffect(() => {
-    if (!enabled) return;
-    
     // Clear existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    
+
     // Set new timeout
     timeoutRef.current = setTimeout(() => {
       save(false);
     }, interval);
-    
+
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);

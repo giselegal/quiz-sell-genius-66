@@ -1,38 +1,41 @@
 
+"use client";
+
 import { useState, useCallback } from 'react';
 
 export const useHistory = <T>(initialState: T) => {
-  const [past, setPast] = useState<T[]>([]);
-  const [present, setPresent] = useState<T>(initialState);
-  const [future, setFuture] = useState<T[]>([]);
+  const [history, setHistory] = useState<T[]>([initialState]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const saveState = useCallback((newState: T) => {
-    setPast(prev => [...prev, present]);
-    setPresent(newState);
-    setFuture([]);
-  }, [present]);
+  const addToHistory = useCallback((newState: T) => {
+    const newHistory = history.slice(0, currentIndex + 1);
+    newHistory.push(newState);
+    setHistory(newHistory);
+    setCurrentIndex(newHistory.length - 1);
+  }, [history, currentIndex]);
 
   const undo = useCallback(() => {
-    if (past.length === 0) return;
-
-    const previous = past[past.length - 1];
-    const newPast = past.slice(0, past.length - 1);
-
-    setPast(newPast);
-    setPresent(previous);
-    setFuture([present, ...future]);
-  }, [past, present, future]);
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+      return history[currentIndex - 1];
+    }
+    return history[currentIndex];
+  }, [history, currentIndex]);
 
   const redo = useCallback(() => {
-    if (future.length === 0) return;
+    if (currentIndex < history.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      return history[currentIndex + 1];
+    }
+    return history[currentIndex];
+  }, [history, currentIndex]);
 
-    const next = future[0];
-    const newFuture = future.slice(1);
-
-    setPast([...past, present]);
-    setPresent(next);
-    setFuture(newFuture);
-  }, [past, present, future]);
-
-  return { past, present, future, saveState, undo, redo };
+  return {
+    current: history[currentIndex],
+    addToHistory,
+    undo,
+    redo,
+    canUndo: currentIndex > 0,
+    canRedo: currentIndex < history.length - 1
+  };
 };

@@ -4,7 +4,6 @@ interface GeminiStyleAdvisorProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
 const GeminiStyleAdvisor: React.FC<GeminiStyleAdvisorProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
   return (
@@ -25,5 +24,4 @@ const GeminiStyleAdvisor: React.FC<GeminiStyleAdvisorProps> = ({ isOpen, onClose
     </div>
   );
 };
-
 export default GeminiStyleAdvisor;

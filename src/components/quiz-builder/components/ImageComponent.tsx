@@ -1,6 +1,9 @@
 
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
 
 interface ImageComponentProps {
   data: {
@@ -18,6 +21,13 @@ interface ImageComponentProps {
 }
 
 const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  
+  const optimizedImageUrl = data.imageUrl 
+    ? optimizeCloudinaryUrl(data.imageUrl, { quality: 95, format: 'auto' })
+    : '';
+
   return (
     <div 
       className={cn(
@@ -30,12 +40,26 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected
       }}
     >
       <div className="relative">
-        {data.imageUrl ? (
-          <img 
-            src={data.imageUrl} 
-            alt={data.alt || 'Imagem do quiz'} 
-            className="max-w-full mx-auto rounded-md"
-          />
+        {data.imageUrl && !imageError ? (
+          <>
+            {!imageLoaded && (
+              <div className="bg-gray-200 animate-pulse w-full aspect-[4/3] rounded-md flex items-center justify-center">
+                <span className="text-gray-400 text-sm">Carregando...</span>
+              </div>
+            )}
+            
+            <img 
+              src={optimizedImageUrl} 
+              alt={data.alt || 'Imagem do quiz'} 
+              className={cn(
+                "max-w-full mx-auto rounded-md",
+                imageLoaded ? "opacity-100" : "opacity-0",
+                "transition-opacity duration-300"
+              )}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+            />
+          </>
         ) : (
           <div className="bg-gray-200 text-gray-500 flex items-center justify-center h-40 rounded-md">
             <p>Imagem não disponível</p>

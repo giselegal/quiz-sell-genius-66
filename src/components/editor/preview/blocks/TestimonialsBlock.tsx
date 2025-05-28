@@ -1,12 +1,10 @@
 
 import React from 'react';
 import { EditableContent } from '@/types/editor';
-
 interface TestimonialsBlockProps {
   content: EditableContent;
   onClick: () => void;
 }
-
 export const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({ content, onClick }) => {
   return (
     <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={onClick}>

@@ -10,7 +10,6 @@ interface PreviewPanelProps {
 }
 
 const PreviewPanel: React.FC<PreviewPanelProps> = ({ resultPageConfig, selectedStyle }) => {
-  // Create secondary styles to simulate the real result
   const secondaryStyles: StyleResult[] = [
     {
       category: selectedStyle.category === 'Natural' ? 'Clássico' : 'Natural',

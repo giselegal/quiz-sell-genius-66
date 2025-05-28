@@ -1,45 +1,71 @@
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
+import { preloadImagesByUrls } from '@/utils/imageManager';
+import OptimizedImage from '../ui/OptimizedImage';
+import { getAllImages } from '@/data/imageBank';
+
+const RESULT_CRITICAL_IMAGES = [
+  'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp',
+  'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp',
+  'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp'
+];
 
 interface StrategicQuestionsProps {
   currentQuestionIndex: number;
   answers: Record<string, string[]>;
   onAnswer: (response: UserResponse) => void;
-  onNextClick?: () => void;
 }
 
 export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   currentQuestionIndex,
   answers,
-  onAnswer,
-  onNextClick
+  onAnswer
 }) => {
   const [mountKey, setMountKey] = useState(Date.now());
-  
-  console.log('Rendering strategic question:', strategicQuestions[currentQuestionIndex]?.id);
-  console.log('Question has image:', !!strategicQuestions[currentQuestionIndex]?.imageUrl);
-  
-  // Remount component when question changes to ensure clean state
+  const [imagesPreloaded, setImagesPreloaded] = useState(false);
+  const resultImagesPreloadStarted = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!imagesPreloaded) {
+      // Preload da questão estratégica atual
+      // preloadCriticalImages(["strategic"]); // Removido para evitar erro de import
+      setImagesPreloaded(true);
+    }
+    if (!resultImagesPreloadStarted.current) {
+      resultImagesPreloadStarted.current = true;
+      setTimeout(() => {
+        // preloadCriticalImages(['results'], { quality: 80, batchSize: 2 }); // Removido para evitar erro de import
+      }, 500);
+    }
+  }, [imagesPreloaded]);
+
   useEffect(() => {
     setMountKey(Date.now());
+    // Carrega diferentes conjuntos de imagens com base no progresso
+    // Funções removidas para evitar erro de import
+    preloadImagesByUrls(RESULT_CRITICAL_IMAGES, {
+      batchSize: 1
+    });
   }, [currentQuestionIndex]);
 
   if (currentQuestionIndex >= strategicQuestions.length) return null;
-
   return (
     <AnimatedWrapper key={mountKey}>
       <QuizQuestion
         question={strategicQuestions[currentQuestionIndex]}
         onAnswer={onAnswer}
         currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
-        autoAdvance={true}
-        onNextClick={onNextClick}
+        autoAdvance={false}
         showQuestionImage={true}
+        isStrategicQuestion={true}
       />
     </AnimatedWrapper>
   );
 };
+
+export default StrategicQuestions;

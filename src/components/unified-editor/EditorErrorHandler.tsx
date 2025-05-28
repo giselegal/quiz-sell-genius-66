@@ -1,7 +1,11 @@
+
+"use client";
+
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface EditorErrorHandlerProps {
   children: React.ReactNode;
@@ -10,7 +14,7 @@ interface EditorErrorHandlerProps {
 const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     // Simular verificação de carregamento
@@ -39,14 +43,14 @@ const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => 
 
   const handleGoBack = () => {
     // Voltar para o dashboard
-    navigate('/admin');
+    router.push('/admin');
   };
 
   if (isLoading) {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-[#B89B7A]" />
+          <LoadingSpinner size="lg" color="#B89B7A" />
           <p className="text-[#8F7A6A]">Carregando editor...</p>
         </div>
       </div>

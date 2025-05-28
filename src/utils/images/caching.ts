@@ -1,90 +1,85 @@
-
-import { BankImage, getAllImages, getImageBySrc, getImageById } from '@/data/imageBank';
-import { ImageCacheEntry } from './types';
-
-// Cache to store loaded image statuses
+import { ImageMetadata, ImageCacheEntry } from './types';
+// Singleton cache for images
 const imageCache = new Map<string, ImageCacheEntry>();
-
-// Cache to store bank image metadata by URL
-const urlToMetadataCache = new Map<string, BankImage>();
-
 /**
- * Initialize the image bank cache for faster lookups
+ * Inicializa o cache de imagens
  */
-export const initializeImageCache = () => {
-  const allImages = getAllImages();
-  
-  // Populate the URL to metadata cache
-  allImages.forEach(image => {
-    const normalizedSrc = image.src.split('?')[0]; // Remove query parameters
-    urlToMetadataCache.set(normalizedSrc, image);
-  });
-  
-  console.log(`Image manager initialized with ${allImages.length} images`);
-};
-
-/**
- * Get metadata for an image by URL
- * @param url Image URL
- */
-export const getImageMetadata = (url: string): BankImage | undefined => {
-  if (!url) return undefined;
-  
-  // First check cache
-  const normalizedUrl = url.split('?')[0];
-  if (urlToMetadataCache.has(normalizedUrl)) {
-    return urlToMetadataCache.get(normalizedUrl);
+export const initializeImageCache = (): void => {
+  if (imageCache.size === 0) {
+    console.log('[Image Cache] Initialized');
   }
-  
-  // If not in cache, try to find in bank
-  const image = getImageBySrc(url);
-  if (image) {
-    urlToMetadataCache.set(normalizedUrl, image);
-    return image;
-  }
-  
-  return undefined;
 };
-
 /**
- * Update the image cache with new entry
+ * Verifica se uma imagem existe no cache com o status especificado
+ * @param url URL da imagem
+ * @param status Status de carregamento
+ * @returns Booleano indicando se a imagem existe no cache com o status
  */
-export const updateImageCache = (
-  url: string, 
-  entry: Partial<ImageCacheEntry> & { url: string }
-): void => {
-  if (imageCache.has(url)) {
-    const existingEntry = imageCache.get(url)!;
-    imageCache.set(url, { ...existingEntry, ...entry });
+export const hasImageWithStatus = (url: string, status: 'loading' | 'loaded' | 'error'): boolean => {
+  if (!url) return false;
+  const cacheEntry = imageCache.get(url);
+  return cacheEntry !== undefined && cacheEntry.loadStatus === status;
+};
+/**
+ * Obtém metadados de uma imagem
+ * @returns Metadados ou undefined se não encontrado
+ */
+export const getImageMetadata = (url: string): ImageMetadata | undefined => {
+  const cacheEntry = imageCache.get(url);
+  return cacheEntry?.metadata;
+};
+/**
+ * Atualiza o cache de imagens
+ * @param entry Nova entrada de cache ou propriedades parciais
+ */
+export const updateImageCache = (url: string, entry: Partial<ImageCacheEntry>): void => {
+  if (!url) return;
+  const now = Date.now();
+  const existing = imageCache.get(url);
+  if (existing) {
+    imageCache.set(url, {
+      ...existing,
+      ...entry,
+      lastAccessed: now,
+    });
   } else {
     imageCache.set(url, {
-      url: entry.url,
-      lastAccessed: Date.now(),
-      ...entry
+      url,
+      metadata: {
+        width: 0,
+        height: 0,
+        format: 'unknown',
+        size: 0,
+        url: url
+      },
+      timestamp: now,
+      loadStatus: 'loading',
+      lastAccessed: now,
+      ...entry,
     });
   }
 };
-
 /**
- * Get an image entry from cache
+ * Limpa imagens antigas do cache
+ * @param olderThanMs Tempo em ms para considerar imagens antigas
+ * @param preserveStatuses Estatutos de carregamento que devem ser preservados
  */
-export const getImageFromCache = (url: string): ImageCacheEntry | undefined => {
-  return imageCache.get(url);
-};
-
-/**
- * Check if an image is in cache with specified status
- */
-export const hasImageWithStatus = (url: string, status: 'idle' | 'loading' | 'loaded' | 'error'): boolean => {
-  if (imageCache.has(url)) {
-    const entry = imageCache.get(url);
-    return entry?.loadStatus === status;
+export const cleanImageCache = (
+  olderThanMs = 60 * 60 * 1000, // 1 hora
+  preserveStatuses: Array<'loading' | 'loaded' | 'error'> = ['loaded']
+): void => {
+  let removed = 0;
+  const now = Date.now();
+  imageCache.forEach((entry, url) => {
+    if (
+      now - entry.lastAccessed > olderThanMs &&
+      !preserveStatuses.includes(entry.loadStatus as 'loading' | 'loaded' | 'error')
+    ) {
+      imageCache.delete(url);
+      removed++;
+    }
+  });
+  if (removed > 0) {
+    console.log(`[Image Cache] Removed ${removed} stale entries. Current size: ${imageCache.size}`);
   }
-  return false;
 };
-
-// Initialize the cache on module load
-initializeImageCache();
-
-// Export the cache for use in other modules
-export { imageCache, urlToMetadataCache };

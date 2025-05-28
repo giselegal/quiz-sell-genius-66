@@ -1,3 +1,5 @@
+
+"use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
@@ -95,12 +97,11 @@ const AnimatedNameForm: React.FC<AnimatedNameFormProps> = ({ onSubmit }) => {
           <motion.span
             animate={isButtonHovered ? { y: [-1, 1, -1] } : {}}
             transition={{ repeat: Infinity, duration: 1 }}
-          >
-          </motion.span>
+          />
           Quero Descobrir meu Estilo Agora!
         </span>
       </motion.button>
-
+      
       <p className="text-xs text-center text-gray-500 pt-1">
         Ao clicar, você concorda com nossa{' '}
         <a 

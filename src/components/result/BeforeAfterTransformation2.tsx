@@ -1,3 +1,5 @@
+
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '../ui/button';
@@ -11,9 +13,9 @@ interface BeforeAfterTransformationProps {
 }
 
 interface TransformationItem {
-  image: string; 
+  image: string;
   name: string;
-  id: string; 
+  id: string;
   width?: number;
   height?: number;
 }
@@ -25,13 +27,11 @@ const transformations: TransformationItem[] = [
     id: "transformation-adriana",
     width: 800,
     height: 1000
-  }, 
+  },
   {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
     name: "Mariangela",
     id: "transformation-mariangela",
-    width: 800,
-    height: 1000
   }
 ];
 
@@ -54,7 +54,6 @@ const BeforeAfterTransformation2: React.FC<BeforeAfterTransformationProps> = ({ 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
   const activeTransformation = transformations[activeIndex];
 
   useEffect(() => {
@@ -64,23 +63,19 @@ const BeforeAfterTransformation2: React.FC<BeforeAfterTransformationProps> = ({ 
         setIsLoading(false);
       }
     }, 2500);
-
     return () => clearTimeout(fallbackLoadingTimer);
   }, []);
 
   if (isLoading) {
     return (
       <div className="my-6 sm:my-8 md:my-10">
-        {/* Título acima das imagens */}
         <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-4 text-center">Descubra o poder da imagem intencional</h3>
         <Card className="relative overflow-hidden p-6 max-w-3xl mx-auto flex flex-col gap-4 items-center">
-          {/* Imagem placeholder */}
           <div className="flex flex-col items-center w-full">
             <div className="relative w-full min-h-[220px] bg-[#f8f5f0] rounded-lg animate-pulse max-w-[320px] mx-auto">
               <span className="absolute top-2 right-10 z-20 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1 rounded-full shadow">Resultados Reais</span>
             </div>
           </div>
-          {/* Coluna de texto e CTA */}
           <div className="flex flex-col justify-center w-full md:pl-6 max-w-xl mx-auto">
             <p className="text-gray-700 mb-4 text-base md:text-lg text-center">Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.</p>
             <ul className="mb-6 space-y-2">
@@ -109,13 +104,10 @@ const BeforeAfterTransformation2: React.FC<BeforeAfterTransformationProps> = ({ 
     );
   }
 
-  // Ajuste: prioriza o carregamento da imagem ativa
   return (
     <div className="my-6 sm:my-8 md:my-10">
-      {/* Título acima das imagens */}
       <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-4 text-center">NOVA VERSÃO - Descubra o poder da imagem intencional</h3>
       <Card className="relative overflow-hidden p-6 max-w-3xl mx-auto flex flex-col gap-4 items-center">
-        {/* 'Resultados Reais' acima do nome da pessoa */}
         <div className="flex flex-col items-center w-full">
           <div className="relative w-full max-w-[320px] mx-auto">
             <OptimizedImage
@@ -129,7 +121,6 @@ const BeforeAfterTransformation2: React.FC<BeforeAfterTransformationProps> = ({ 
             />
             <span className="absolute top-2 right-2 z-10 text-xs text-gray-700 bg-white/80 px-2 py-0.5 rounded">{activeTransformation.name}</span>
             <span className="absolute top-2 right-10 z-20 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1 rounded-full shadow">Resultados Reais</span>
-            {/* Navegação */}
             <button
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-[#B89B7A]/20 transition"
               onClick={() => setActiveIndex((activeIndex - 1 + transformations.length) % transformations.length)}
@@ -146,7 +137,6 @@ const BeforeAfterTransformation2: React.FC<BeforeAfterTransformationProps> = ({ 
             </button>
           </div>
         </div>
-        {/* Coluna de texto e CTA */}
         <div className="flex flex-col justify-center w-full md:pl-6 max-w-xl mx-auto">
           <p className="text-gray-700 mb-4 text-base md:text-lg text-center">Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.</p>
           <ul className="mb-6 space-y-2">

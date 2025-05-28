@@ -1,109 +1,112 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Componente placeholder para a grade de métricas
-const EnhancedEditorMetricsGrid = () => (
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div className="bg-gray-100 p-4 rounded-lg">
-      <h3 className="font-medium">Edições totais</h3>
-      <p className="text-2xl font-bold">238</p>
-    </div>
-    <div className="bg-gray-100 p-4 rounded-lg">
-      <h3 className="font-medium">Tempo médio de edição</h3>
-      <p className="text-2xl font-bold">12m 30s</p>
-    </div>
-    <div className="bg-gray-100 p-4 rounded-lg">
-      <h3 className="font-medium">Taxa de conclusão</h3>
-      <p className="text-2xl font-bold">87%</p>
-    </div>
-  </div>
-);
+import React, { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BarChart3, FileText, Users, Settings } from 'lucide-react';
 
-// Componente placeholder para o cabeçalho do dashboard
-const EnhancedEditorDashboardHeader = ({ title, description }) => (
-  <div className="mb-4">
-    <h1 className="text-2xl font-bold">{title}</h1>
-    <p className="text-gray-500">{description}</p>
-  </div>
-);
+interface EnhancedEditorDashboardProps {
+  onNavigateToEditor: () => void;
+}
 
-// Componentes placeholder para as abas
-const UsageTab = () => (
-  <Card>
-    <CardHeader>
-      <CardTitle>Estatísticas de Uso</CardTitle>
-      <CardDescription>Análise de como os usuários estão utilizando o editor</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <p>Conteúdo detalhado das estatísticas de uso será implementado aqui.</p>
-    </CardContent>
-  </Card>
-);
+export const EnhancedEditorDashboard: React.FC<EnhancedEditorDashboardProps> = ({
+  onNavigateToEditor
+}) => {
+  const [activeTab, setActiveTab] = useState('overview');
 
-const CompletionTab = () => (
-  <Card>
-    <CardHeader>
-      <CardTitle>Taxas de Conclusão</CardTitle>
-      <CardDescription>Análise de conclusão de quizzes pelos usuários</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <p>Conteúdo detalhado das taxas de conclusão será implementado aqui.</p>
-    </CardContent>
-  </Card>
-);
-
-const PerformanceTab = () => (
-  <Card>
-    <CardHeader>
-      <CardTitle>Desempenho</CardTitle>
-      <CardDescription>Métricas de desempenho do editor</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <p>Conteúdo detalhado das métricas de desempenho será implementado aqui.</p>
-    </CardContent>
-  </Card>
-);
-
-export function EnhancedEditorDashboard() {
   return (
-    <div className="space-y-4">
-      <EnhancedEditorDashboardHeader
-        title="Dashboard do Editor Avançado"
-        description="Monitore e analise o uso do editor avançado"
-      />
+    <div className="h-full p-6 bg-[#FAF9F7]">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-[#432818] mb-2">Dashboard do Editor</h1>
+          <p className="text-[#8F7A6A]">Gerencie seus projetos e conteúdo</p>
+        </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Métricas do Editor Avançado</CardTitle>
-          <CardDescription>
-            Métricas-chave para uso e desempenho do editor avançado
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <EnhancedEditorMetricsGrid />
-        </CardContent>
-      </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-[#B89B7A]/10 rounded-lg">
+                <FileText className="w-6 h-6 text-[#B89B7A]" />
+              </div>
+              <div>
+                <p className="text-sm text-[#8F7A6A]">Páginas Criadas</p>
+                <p className="text-2xl font-bold text-[#432818]">12</p>
+              </div>
+            </div>
+          </Card>
 
-      <Tabs defaultValue="usage">
-        <TabsList className="mb-4">
-          <TabsTrigger value="usage">Uso</TabsTrigger>
-          <TabsTrigger value="completion">Conclusão</TabsTrigger>
-          <TabsTrigger value="performance">Desempenho</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="usage">
-          <UsageTab />
-        </TabsContent>
-        
-        <TabsContent value="completion">
-          <CompletionTab />
-        </TabsContent>
-        
-        <TabsContent value="performance">
-          <PerformanceTab />
-        </TabsContent>
-      </Tabs>
+          <Card className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-[#B89B7A]/10 rounded-lg">
+                <Users className="w-6 h-6 text-[#B89B7A]" />
+              </div>
+              <div>
+                <p className="text-sm text-[#8F7A6A]">Visitantes</p>
+                <p className="text-2xl font-bold text-[#432818]">1,234</p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-[#B89B7A]/10 rounded-lg">
+                <BarChart3 className="w-6 h-6 text-[#B89B7A]" />
+              </div>
+              <div>
+                <p className="text-sm text-[#8F7A6A]">Conversões</p>
+                <p className="text-2xl font-bold text-[#432818]">45</p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-[#B89B7A]/10 rounded-lg">
+                <Settings className="w-6 h-6 text-[#B89B7A]" />
+              </div>
+              <div>
+                <p className="text-sm text-[#8F7A6A]">Templates</p>
+                <p className="text-2xl font-bold text-[#432818]">8</p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+            <TabsTrigger value="projects">Projetos</TabsTrigger>
+            <TabsTrigger value="templates">Templates</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-[#432818] mb-4">Ações Rápidas</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Button onClick={onNavigateToEditor} className="bg-[#B89B7A] hover:bg-[#8F7A6A]">
+                  Criar Nova Página
+                </Button>
+                <Button variant="outline">Importar Template</Button>
+                <Button variant="outline">Ver Relatórios</Button>
+              </div>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="projects" className="space-y-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-[#432818] mb-4">Projetos Recentes</h3>
+              <p className="text-[#8F7A6A]">Nenhum projeto encontrado.</p>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="templates" className="space-y-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold text-[#432818] mb-4">Templates Disponíveis</h3>
+              <p className="text-[#8F7A6A]">Templates serão listados aqui.</p>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
-}
+};

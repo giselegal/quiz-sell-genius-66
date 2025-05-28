@@ -44,7 +44,7 @@ const StyleResultBlockEditor: React.FC<StyleResultBlockEditorProps> = ({ block, 
           </div>
         )}
       </div>
-      
+
       <div className="p-4 bg-gray-50 rounded-lg">
         <p className="text-sm text-[#8F7A6A]">
           <strong>Nota:</strong> Este componente exibirá automaticamente o estilo predominante do usuário.

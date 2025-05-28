@@ -71,7 +71,6 @@ export const getStyleConfig = (category: StyleCategory) => {
 // Add the missing getFallbackStyle function
 export const getFallbackStyle = (styleCategory: string): React.CSSProperties => {
   const backgroundColor = getStyleColor(styleCategory as StyleCategory);
-  
   return {
     backgroundColor,
     color: '#fff',
@@ -91,6 +90,8 @@ export const getFallbackStyle = (styleCategory: string): React.CSSProperties => 
 export const getDefaultStyle = (): StyleResult => {
   return {
     category: 'Natural',
+    name: 'Natural',
+    description: 'Seu estilo é caracterizado pela simplicidade e conforto.',
     score: 100,
     percentage: 100
   };

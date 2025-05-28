@@ -1,3 +1,4 @@
+
 "use client";
 import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
@@ -8,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
+import { getCachedMetrics, resetMetricsCache, filterEventsByTimeRange } from '@/utils/analyticsHelpers';
+import { getAnalyticsEvents, clearAnalyticsData, testFacebookPixel } from '@/utils/analytics';
 import { toast } from '@/components/ui/use-toast';
 
 // Lazy loaded tab components for better performance
@@ -40,10 +43,13 @@ const AnalyticsPage: React.FC = () => {
     setLoading(true);
     
     try {
+      // Get metrics from cache or calculate new ones
+      const metrics = getCachedMetrics(timeRange);
+      
       // Get events from localStorage
-      const events = [];
+      const events = getAnalyticsEvents();
       // Apply time range filter
-      const filteredEvents = events; // No filtering applied as per the latest changes
+      const filteredEvents = filterEventsByTimeRange(events, timeRange);
       // Filter events by selected types
       const filteredByType = selectedEvents.length > 0
         ? filteredEvents.filter(event => selectedEvents.includes(event.type))
@@ -51,7 +57,7 @@ const AnalyticsPage: React.FC = () => {
 
       setAnalyticsData({ 
         events: filteredByType,
-        metrics: {}, // Metrics are not calculated as per the latest changes
+        metrics,
         timeRange,
         selectedEvents,
         compactView,
@@ -70,6 +76,8 @@ const AnalyticsPage: React.FC = () => {
   }, [timeRange, selectedEvents, compactView, setLoading, completeLoading]);
 
   const handleRefresh = () => {
+    // Reset cache to ensure fresh data
+    resetMetricsCache();
     // Re-fetch analytics data
     setTimeout(() => {
       toast({
@@ -104,6 +112,7 @@ const AnalyticsPage: React.FC = () => {
 
   const handleClearData = () => {
     if (confirm('Tem certeza que deseja limpar todos os dados de analytics? Esta ação não pode ser desfeita.')) {
+      clearAnalyticsData();
       toast({
         title: 'Dados limpos',
         description: 'Todos os dados de analytics foram excluídos.',
@@ -216,7 +225,7 @@ const AnalyticsPage: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="integration" className="mt-6">
-            <IntegrationTab analyticsData={analyticsData} />
+            <IntegrationTab analyticsData={analyticsData} testFunction={testFacebookPixel} />
           </TabsContent>
           
           <TabsContent value="data" className="mt-6">

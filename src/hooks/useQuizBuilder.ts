@@ -1,4 +1,6 @@
 
+"use client";
+
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { useQuizStages } from './useQuizStages';
@@ -22,7 +24,7 @@ export const useQuizBuilder = () => {
     setActiveStage,
     initializeStages
   } = useQuizStages();
-  
+
   const {
     components,
     addComponent,
@@ -51,7 +53,6 @@ export const useQuizBuilder = () => {
           const { stages: initialStages, components: initialComponents } = createBuilderStateFromQuiz(
             quizQuestions
           );
-          
           initializeStages(initialStages);
           initializeComponents(initialComponents);
           if (initialStages.length > 0) {
@@ -118,19 +119,19 @@ export const useQuizBuilder = () => {
   }, [components, stages]);
 
   return {
-    components,
     stages,
     activeStageId,
-    selectedComponentId,
-    addComponent,
-    updateComponent,
-    deleteComponent,
-    moveComponent,
     addStage,
     updateStage,
     deleteStage,
     moveStage,
     setActiveStage,
+    components,
+    addComponent,
+    updateComponent,
+    deleteComponent,
+    moveComponent,
+    selectedComponentId,
     setSelectedComponentId,
     saveCurrentState,
     initializeStages,

@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -54,7 +56,6 @@ export const EditorBlockItem: React.FC<EditorBlockItemProps> = ({
   };
 
   const handleDuplicate = () => {
-    // This would be handled by the parent component
     alert('Duplicar bloco não implementado ainda');
   };
 
@@ -67,7 +68,6 @@ export const EditorBlockItem: React.FC<EditorBlockItemProps> = ({
         isDragging ? "border-[#B89B7A]" : "border-[#B89B7A]/20"
       )}
     >
-      {/* Block Header */}
       <div className="bg-[#FAF9F7] border-b border-[#B89B7A]/20 p-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button
@@ -110,7 +110,6 @@ export const EditorBlockItem: React.FC<EditorBlockItemProps> = ({
         </div>
       </div>
       
-      {/* Block Content */}
       {isExpanded && (
         <div className="p-4 bg-white">
           <EditBlockContent
