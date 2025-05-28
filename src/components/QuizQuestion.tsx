@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
@@ -15,6 +14,8 @@ interface QuizQuestionProps {
   currentAnswers: string[];
   autoAdvance?: boolean;
   hideTitle?: boolean;
+  onNextClick?: () => void;
+  onPreviousClick?: () => void;
   showQuestionImage?: boolean;
   isStrategicQuestion?: boolean; // Nova prop
 }
@@ -25,30 +26,39 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   currentAnswers,
   autoAdvance = false,
   hideTitle = false,
+  onNextClick,
+  onPreviousClick,
   showQuestionImage = false,
-  isStrategicQuestion = false
+  isStrategicQuestion = false // Padrão para false
 }) => {
   const isMobile = useIsMobile();
+  // const isStrategicQuestion = question.id.startsWith('strategic'); // Removido para usar a prop
   const hasImageOptions = question.type !== 'text';
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
+  const [isButtonActive, setIsButtonActive] = useState(false); // Novo estado para efeito visual
 
   useEffect(() => {
     scrollToQuestion(question.id);
   }, [question.id, scrollToQuestion]);
 
+  // Efeito para o botão de questões estratégicas
+  useEffect(() => {
+    if (isStrategicQuestion) {
+      const isActive = currentAnswers.length > 0;
+      if (isActive !== isButtonActive) { // Apenas atualiza se o estado mudar
+        setIsButtonActive(isActive);
+      }
+    }
+  }, [currentAnswers, isStrategicQuestion, isButtonActive]); // Adicionado isButtonActive às dependências
+  
   const handleOptionSelect = (optionId: string) => {
     let newSelectedOptions: string[];
     
     if (currentAnswers.includes(optionId)) {
-      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
-      if (isStrategicQuestion) {
-        return; // Não permite desmarcar a opção em questões estratégicas
-      }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
       if (isStrategicQuestion) {
-        // Para questões estratégicas, substituímos qualquer seleção anterior
         newSelectedOptions = [optionId];
       } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
@@ -57,10 +67,19 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
       }
     }
     
-    onAnswer({ 
+    onAnswer({ // Movido onAnswer para fora do bloco condicional de auto-avanço
       questionId: question.id,
       selectedOptions: newSelectedOptions
     });
+
+    const shouldAutoAdvance = 
+      !isStrategicQuestion &&
+      autoAdvance && 
+      newSelectedOptions.length === question.multiSelect;
+    
+    if (shouldAutoAdvance && onNextClick) {
+      onNextClick();
+    }
   };
   
   const getGridColumns = () => {
@@ -76,17 +95,14 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   return (
     <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
       isMobile && "px-2", 
-      isStrategicQuestion && "max-w-3xl strategic-question",
-      question.type === 'text' && !isStrategicQuestion && "text-only-question"
+      isStrategicQuestion && "max-w-3xl"
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
           <h2 className={cn(
             "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
             isMobile ? "text-base" : "text-base sm:text-xl",
-            isStrategicQuestion && "strategic-question-title text-[#432818] mb-6 font-bold whitespace-pre-line",
-            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl", // Texto maior para questões estratégicas em mobile
-            question.type === 'text' && !isStrategicQuestion && ".text-only-question & " && "text-[1.15rem] sm:text-xl" // Texto maior para títulos em questões só texto
+            isStrategicQuestion && "text-[#432818] mb-6 font-medium whitespace-pre-line"
           )}>
             {highlightStrategicWords(question.title)}
           </h2>
@@ -104,6 +120,13 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               />
             </div>
           )}
+          
+          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
+            {isStrategicQuestion 
+              ? "Selecione 1 opção para avançar"
+              : `Selecione ${question.multiSelect} opções para avançar`
+            }
+          </p>
         </>
       )}
       
@@ -121,14 +144,44 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             onSelect={handleOptionSelect}
             type={question.type}
             questionId={question.id}
-            isDisabled={
-              (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
-              (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                currentAnswers.length >= question.multiSelect)
-            }
-            isStrategicOption={isStrategicQuestion}
+            isDisabled={!currentAnswers.includes(option.id) && 
+              !isStrategicQuestion && 
+              currentAnswers.length >= question.multiSelect}
+            isStrategicOption={isStrategicQuestion} // Passar para QuizOption
           />
         ))}
+      </div>
+      
+      {/* Botão Continuar para Questões Estratégicas */}
+      {isStrategicQuestion && onNextClick && (
+        <div className="mt-8 text-center">
+          <Button 
+            onClick={onNextClick}
+            disabled={currentAnswers.length === 0}
+            className={cn(
+              "text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-opacity-50",
+              "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none",
+              isButtonActive && !(currentAnswers.length === 0) // Aplicar efeito apenas se ativo e não desabilitado
+                ? "bg-brand-primary hover:bg-brand-primary/90 transform hover:scale-105 focus:ring-brand-primary hover:shadow-lg" 
+                : "bg-brand-primary", // Estilo base quando não está no efeito "ativo" mas pode estar habilitado
+              currentAnswers.length === 0 && "bg-gray-300 hover:bg-gray-300" // Estilo para desabilitado
+            )}
+          >
+            Continuar <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+        </div>
+      )}
+
+      <div className="flex justify-between items-center gap-3 mt-6">
+        {!autoAdvance && !isStrategicQuestion && ( // Não mostrar para estratégicas
+          <p className="text-xs sm:text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
+            Selecione {question.multiSelect} {question.multiSelect === 1 ? 'Opção' : 'Opções'} para avançar
+          </p>
+        )}
+        
+        <div className="ml-auto">
+          {/* Navigation buttons would go here if needed */}
+        </div>
       </div>
     </div>
   );

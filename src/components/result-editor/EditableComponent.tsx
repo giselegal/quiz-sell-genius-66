@@ -155,7 +155,7 @@ function getSectionData(config: any, path: string): any {
   
   for (const part of parts) {
     if (!current || current[part] === undefined) {
-      console.warn("Caminho " + path + " não encontrado no config:", current);
+      console.warn(`Caminho ${path} não encontrado no config:`, current);
       return {};
     }
     current = current[part];

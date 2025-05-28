@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -10,8 +9,6 @@ import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import CriticalCSSLoader from './components/CriticalCSSLoader';
 import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
-import LovableRoutes from './lovable-routes';
-import { fixMainRoutes } from './utils/fixMainRoutes';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -23,66 +20,66 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Lazy loading das páginas principais
+// Lazy loading das páginas principais para melhorar performance
+const HomePage = lazy(() => import('./pages/HomePage'));
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
+const ResultPagePrototype = lazy(() => import('./pages/ResultPagePrototype'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
+const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
+const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const EditorNotFoundPage = lazy(() => import('./pages/EditorNotFoundPage'));
+const EnhancedResultPageEditor = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
+const ABTestPage = lazy(() => import('./pages/admin/ABTestPage'));
+const ABTestManagerPage = lazy(() => import('./pages/ABTestManagerPage'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
   const memory = (navigator as any).deviceMemory;
   if (memory && memory < 4) return true;
   
+  // Se o dispositivo tem menos de 4GB de RAM ou não tem informação disponível, verificar CPU cores
   const cpuCores = navigator.hardwareConcurrency;
   if (cpuCores && cpuCores < 4) return true;
   
   return false;
 };
 
-// Detecta se o aplicativo está rodando dentro do ambiente Lovable.dev
-const isRunningInLovable = () => {
-  return typeof window !== 'undefined' && (
-    window.location.hostname.includes('lovableproject.com') || 
-    window.location.hostname.includes('lovable.dev') ||
-    window.location.search.includes('lovable=true')
-  );
-};
-
 const App = () => {
   const lowPerformance = isLowPerformanceDevice();
-  const isLovableEnv = isRunningInLovable();
 
-  // Inicializar analytics e corrigir rotas na montagem do componente
+  // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
+      // Inicializar Facebook Pixel
       loadFacebookPixel();
+      
+      // Capturar UTM parameters para analytics de marketing
       captureUTMParameters();
-      fixMainRoutes();
       
       console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
-      console.log('✅ Main routes activated');
     } catch (error) {
-      console.error('Erro ao inicializar aplicativo:', error);
+      console.error('Erro ao inicializar analytics:', error);
     }
   }, [lowPerformance]);
 
-  // Reinicializar Facebook Pixel e correção de rotas em mudanças de rota
+  // Reinicializar Facebook Pixel em mudanças de rota
   useEffect(() => {    
+    // Função para lidar com mudanças de rota
     const handleRouteChange = () => {
-      if (typeof window !== 'undefined') {
-        fixMainRoutes();
-        
-        if (window.fbq) {
-          window.fbq('track', 'PageView');
-          console.log('PageView tracked on route change');
-        }
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'PageView');
+        console.log('PageView tracked on route change');
       }
     };
     
+    // Adicionar listener para mudanças de rota
     window.addEventListener('popstate', handleRouteChange);
     
+    // Limpar o listener
     return () => {
       window.removeEventListener('popstate', handleRouteChange);
     };
@@ -93,35 +90,37 @@ const App = () => {
       <QuizProvider>
         <TooltipProvider>
           <Router>
+            {/* Injetar CSS crítico para melhorar o First Contentful Paint */}
             <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
             <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
             
-            {isLovableEnv ? (
-              <LovableRoutes />
-            ) : (
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  {/* ROTA PRINCIPAL - Quiz com introdução */}
-                  <Route path="/" element={<QuizPage />} />
-                  
-                  {/* ADMIN - Dashboard centralizado com todas as funcionalidades administrativas */}
-                  <Route path="/admin/*" element={<AdminDashboard />} />
-                  
-                  {/* RESULTADO - Página de resultados do quiz */}
-                  <Route path="/resultado" element={<ResultPage />} />
-                  
-                  {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
-                  <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                  
-                  {/* Redirecionamentos para manter compatibilidade */}
-                  <Route path="/home" element={<Navigate to="/" replace />} />
-                  <Route path="/quiz" element={<Navigate to="/" replace />} />
-                  
-                  {/* 404 - Página não encontrada */}
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </Suspense>
-            )}
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/resultado" element={<ResultPage />} />
+                <Route path="/prototipo" element={<ResultPagePrototype />} />
+                {/* Nova página de oferta com quiz embutido */}
+                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                {/* Editor visual aprimorado para página de resultados */}
+                <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
+                {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
+                <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                {/* Manter apenas uma rota principal para o editor unificado */}
+                <Route path="/admin/editor" element={<EditorPage />} />
+                <Route path="/admin/editor/error" element={<EditorNotFoundPage />} />
+                {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
+                <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
+                <Route path="/admin/settings" element={<SettingsPage />} />
+                <Route path="/admin/analytics" element={<AnalyticsPage />} />
+                <Route path="/admin/ab-test" element={<ABTestPage />} />
+                <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
+                {/* Adicionando acesso ao protótipo no painel admin */}
+                <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
           </Router>
           <Toaster />
         </TooltipProvider>

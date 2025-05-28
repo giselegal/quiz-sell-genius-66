@@ -277,12 +277,9 @@ export default defineLovable({
                   cursor-pointer rounded-lg overflow-hidden border-2 transition-all
                   bg-white
                   ${selectedOptions.includes(option.id) 
-                    ? 'shadow-lg transform scale-[1.01]' 
+                    ? `border-[${accentColor}] shadow-lg transform scale-[1.01]` 
                     : 'border-transparent shadow-sm hover:border-gray-300 hover:shadow-md hover:scale-[1.005]'}
                 `}
-                style={selectedOptions.includes(option.id) 
-                  ? { borderColor: accentColor } 
-                  : undefined}
               >
                 {(layout.displayType === 'both' || layout.displayType === 'image') && (
                   <div className="w-full">

@@ -53,20 +53,18 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={showingStrategicQuestions ? currentAnswers.reduce((acc, optionId) => {
-              if (currentQuestion?.id) {
-                acc[currentQuestion.id] = [optionId];
-              }
-              return acc;
-            }, {}) : {}}
+            answers={{}}
             onAnswer={handleAnswerSubmit}
+            onNextClick={handleNextClick}
           />
         ) : (
           <QuizQuestion
             question={currentQuestion}
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
+            onNextClick={handleNextClick}
             showQuestionImage={true}
+            onPreviousClick={handlePrevious}
           />
         )}
       </div>

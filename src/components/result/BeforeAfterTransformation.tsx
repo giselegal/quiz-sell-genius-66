@@ -1,315 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '../ui/button';
-import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
-import { trackButtonClick } from '@/utils/analytics';
-import OptimizedImage from '@/components/ui/optimized-image';
-import { preloadImagesByUrls } from '@/utils/imageManager';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useGlobalStyles } from '@/hooks/useGlobalStyles';
+import { preloadTransformationImages, getHighQualityImageUrl, fixBlurryImage } from '@/utils/transformationImageUtils';
+import { OptimizedImage } from '@/components/ui/optimized-image';
 
-interface BeforeAfterTransformationProps {
-  handleCTAClick?: () => void;
-}
-
-interface TransformationItem {
-  image: string; 
-  name: string;
-  id: string; 
-  width?: number;
-  height?: number;
-}
-
-const transformations: TransformationItem[] = [
+// Dados das transformações antes e depois
+const transformations = [
   {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
-    name: "Adriana",
-    id: "transformation-adriana",
-    width: 800,
-    height: 1000
-  }, 
+    title: "De Básico para Elegante",
+    description: "Transformação de look casual para elegante mantendo conforto e personalidade.",
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334752/antes-depois-1.webp",
+  },
   {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
-    name: "Mariangela",
-    id: "transformation-mariangela",
-    width: 800,
-    height: 1000
+    title: "Casual para Sofisticado",
+    description: "Um look despojado transformado com peças-chave que valorizam o tipo de corpo.",
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334752/antes-depois-2.webp",
+  },
+  {
+    title: "Moderno com Propósito",
+    description: "Look que transmite personalidade e impacto sem perder o conforto",
+    beforeImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334752/antes_3_xdz6iu.jpg",
+    afterImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334752/depois_3_dkeq62.jpg",
   }
 ];
 
-const preloadInitialTransformationImages = () => {
-  const imageUrls: string[] = [];
-  transformations.slice(0, 1).forEach(item => { 
-    imageUrls.push(item.image);
-  });
-  
-  if (imageUrls.length > 0) {
-    preloadImagesByUrls(imageUrls, {
-      quality: 90, 
-      batchSize: 1,
-    });
-  }
-};
+// Constantes para dimensões consistentes
+const IMAGE_WIDTH = 400;
+const IMAGE_HEIGHT = 533;
+const AUTOPLAY_INTERVAL = 5000; // 5 seconds for auto-play
+const TRANSITION_DURATION = 500; // 500ms para a transição
 
-const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ handleCTAClick }) => {
+const BeforeAfterTransformation: React.FC = () => {
+  const { globalStyles } = useGlobalStyles();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  
-  const activeTransformation = transformations[activeIndex];
-  const autoSlideInterval = 5000; // 5 segundos
+  const [previousIndex, setPreviousIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [direction, setDirection] = useState<'left' | 'right'>('right');
+  const slideRef = useRef<HTMLDivElement>(null);
 
+  const currentTransformation = transformations[activeIndex];
+
+  // Pré-carregar todas as imagens quando o componente montar
   useEffect(() => {
-    preloadInitialTransformationImages(); 
-    const fallbackLoadingTimer = setTimeout(() => {
-      if (isLoading) {
-        setIsLoading(false);
-      }
-    }, 2500);
-
-    return () => clearTimeout(fallbackLoadingTimer);
+    // Pré-carrega todas as imagens de transformação
+    preloadTransformationImages(transformations);
   }, []);
 
-  // Removido efeito de slide automático para melhorar desempenho
-  /*
+  // Próxima transformação
+  const nextTransformation = useCallback(() => {
+    if (isTransitioning) return;
+    setPreviousIndex(activeIndex);
+    setDirection('right');
+    setIsTransitioning(true);
+    setActiveIndex(prevIndex => (prevIndex + 1) % transformations.length);
+  }, [activeIndex, isTransitioning, transformations.length]);
+
+  // Transformação anterior
+  const prevTransformation = useCallback(() => {
+    if (isTransitioning) return;
+    setPreviousIndex(activeIndex);
+    setDirection('left');
+    setIsTransitioning(true);
+    setActiveIndex(prevIndex => (prevIndex - 1 + transformations.length) % transformations.length);
+  }, [activeIndex, isTransitioning, transformations.length]);
+
+  // Gerenciar transição
   useEffect(() => {
-    const slideTimer = setTimeout(() => {
-      const next = (activeIndex + 1) % transformations.length;
-      setActiveIndex(next);
-    }, autoSlideInterval);
-    return () => clearTimeout(slideTimer);
-  }, [activeIndex]);
-  */
+    if (isTransitioning) {
+      const timer = setTimeout(() => {
+        setIsTransitioning(false);
+      }, TRANSITION_DURATION);
+      return () => clearTimeout(timer);
+    }
+  }, [isTransitioning]);
 
-  if (isLoading) {
-    return (
-      <div className="my-6 sm:my-8 md:my-10">
-        {/* Título com decoração */}
-        <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-6 text-center relative inline-block mx-auto w-full">
-          Descubra o poder da imagem intencional
-          <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-0.5 bg-[#B89B7A]/30"></span>
-        </h3>
-        
-        {/* Card principal com skeleton */}
-        <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-all duration-300 max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 md:p-6">
-            {/* Coluna da imagem com skeleton */}
-            <div className="flex flex-col items-center">
-              <div className="relative w-full max-w-sm mx-auto">
-                <div className="w-full aspect-[4/5] bg-[#f8f5f0] rounded-lg animate-pulse"></div>
-                <span className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm">
-                  Resultados Reais
-                </span>
-              </div>
-              
-              {/* Indicadores de slides */}
-              <div className="flex justify-center space-x-3 mt-4">
-                {transformations.map((_, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`w-2.5 h-2.5 rounded-full ${idx === 0 ? 'bg-[#B89B7A]' : 'bg-gray-300'}`}
-                  />
-                ))}
-              </div>
-            </div>
-            
-            {/* Coluna de conteúdo com skeletons */}
-            <div className="flex flex-col justify-center">
-              <div className="h-7 bg-[#f8f5f0] rounded animate-pulse mb-4 w-3/4 mx-auto md:mx-0"></div>
-              
-              <div className="h-16 bg-[#f8f5f0] rounded animate-pulse mb-5"></div>
-              
-              {/* Lista de benefícios com skeletons */}
-              <div className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10">
-                <ul className="space-y-3.5">
-                  {Array(4).fill(0).map((_, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5 justify-center md:justify-start">
-                      <div className="min-w-[22px] h-[22px] bg-[#f8f5f0] rounded-full animate-pulse"></div>
-                      <div className="h-5 bg-[#f8f5f0] rounded animate-pulse w-3/4"></div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* CTA skeleton */}
-              <div className="flex flex-col items-center md:items-start">
-                <div className="w-full max-w-[280px] h-12 bg-[#f8f5f0] rounded animate-pulse mb-2"></div>
-                <div className="h-3 w-32 bg-[#f8f5f0] rounded animate-pulse mb-4"></div>
-                <div className="w-full max-w-[280px] h-[60px] bg-[#f8f5f0] rounded animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
-    );
-  }
+  // Auto-play carousel
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      nextTransformation();
+    }, AUTOPLAY_INTERVAL);
+    return () => clearTimeout(timer);
+  }, [activeIndex, nextTransformation]);
 
-  // Ajuste: prioriza o carregamento da imagem ativa
+  // Otimizar URL da imagem - versão melhorada
+  const getOptimizedImageUrl = (url) => {
+    const baseOptimized = getHighQualityImageUrl(url);
+    // Verifica se a URL já tem parâmetros
+    return baseOptimized.includes('?') 
+      ? `${baseOptimized}&q=85&f=auto&w=${IMAGE_WIDTH}&e_sharpen:60` 
+      : `${baseOptimized}?q=85&f=auto&w=${IMAGE_WIDTH}&e_sharpen:60`;
+  };
+
   return (
-    <div className="my-6 sm:my-8 md:my-10">
-      {/* Título com decoração */}
-      <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-6 text-center relative inline-block mx-auto w-full">
-        Descubra o poder da imagem intencional
-        <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-0.5 bg-[#B89B7A]/30"></span>
-      </h3>
-      
-      {/* Card principal com grid responsivo */}
-      <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-all duration-300 max-w-4xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 md:p-6">
-          {/* Coluna da imagem */}
-          <div className="flex flex-col items-center">
-            <div className="relative w-full max-w-sm mx-auto">
-              <OptimizedImage
-                src={activeTransformation.image}
-                alt={`Transformação de ${activeTransformation.name}`}
-                width={activeTransformation.width}
-                height={activeTransformation.height}
-                className="w-full h-auto rounded-lg shadow-md"
-                onLoad={() => setImageLoaded(true)}
-                priority={true}
-              />
-              
-              {/* Nome da pessoa */}
-              <span className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm text-[#432818] text-xs font-medium px-3 py-1 rounded-full shadow-sm">
-                {activeTransformation.name}
-              </span>
-              
-              {/* Selo 'Resultados Reais' */}
-              <span className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm">
-                Resultados Reais
-              </span>
-              
-              {/* Navegação */}
-              {transformations.length > 1 && (
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
-                  <button
-                    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => setActiveIndex((activeIndex - 1 + transformations.length) % transformations.length)}
-                    aria-label="Anterior"
-                  >
-                    <ChevronLeft size={22} className="text-[#432818]" />
-                  </button>
-                  <button
-                    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
-                    aria-label="Próxima"
-                  >
-                    <ChevronRight size={22} className="text-[#432818]" />
-                  </button>
-                </div>
-              )}
-            </div>
-            
-            {/* Indicadores de slides */}
-            {transformations.length > 1 && (
-              <div className="flex justify-center space-x-3 mt-4">
-                {transformations.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveIndex(idx)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                      idx === activeIndex 
-                        ? 'bg-[#B89B7A] scale-110' 
-                        : 'bg-gray-300 hover:bg-[#B89B7A]/50'
-                    }`}
-                    aria-label={`Ver transformação ${idx + 1}`}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-          
-          {/* Coluna de conteúdo */}
-          <div className="flex flex-col justify-center">
-            <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
-              Transformação Visual com Propósito
-            </h4>
-            
-            <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
-              Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.
-            </p>
-            
-            {/* Lista de benefícios */}
-            <div className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10 hover:border-[#B89B7A]/20 transition-all duration-300 hover:shadow-sm">
-              <ul className="space-y-3.5 text-center md:text-left">
-                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
-                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
-                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                  <span className="group-hover:text-[#432818] transition-colors">Looks com intenção e identidade</span>
-                </li>
-                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
-                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
-                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                  <span className="group-hover:text-[#432818] transition-colors">Cores, modelagens e tecidos a seu favor</span>
-                </li>
-                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
-                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
-                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                  <span className="group-hover:text-[#432818] transition-colors">Imagem alinhada aos seus objetivos</span>
-                </li>
-                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
-                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
-                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                  <span className="group-hover:text-[#432818] transition-colors">Guarda-roupa funcional, sem compras por impulso</span>
-                </li>
-              </ul>
-            </div>
-            
-            {/* CTA e informações */}
-            <div className="flex flex-col items-center md:items-start">
-              <Button
-                onClick={handleCTAClick ? handleCTAClick : () => {
-                  trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-                  window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-                }}
-                onMouseEnter={() => setIsButtonHovered(true)}
-                onMouseLeave={() => setIsButtonHovered(false)}
-                className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#45a049] focus:ring-offset-2"
-                style={{
-                  background: "linear-gradient(to right, #4CAF50, #45a049)",
-                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-                }}
-              >
-                <span className="flex items-center justify-center gap-2">
-                  <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                  Quero Meu Guia de Estilo
-                </span>
-              </Button>
-              
-              <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4">
-                Oferta por tempo limitado
-              </p>
-            
-              {/* Métodos de pagamento */}
-              <div className="w-full max-w-[280px] mx-auto md:mx-0 transition-transform duration-300 hover:scale-[1.02]">
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
-                  alt="Métodos de pagamento"
-                  className="w-full rounded-lg shadow-sm"
-                  loading="lazy"
-                  width="400"
-                  height="100"
-                />
-              </div>
-            </div>
-          </div>
+    <div className="my-6 sm:my-8 md:my-10 bg-white rounded-lg shadow-md border border-[#B89B7A]/20 p-4 sm:p-6 max-w-lg mx-auto">
+      <h2 className="text-xl sm:text-2xl font-playfair text-center text-[#aa6b5d] mb-4 sm:mb-6">
+        Transformações Reais com Conhecimento de Estilo
+      </h2>
+      <div className="flex flex-col items-center">
+        {/* Imagem composta (antes/depois) */}
+        <div className="relative w-full flex justify-center">
+          <OptimizedImage
+            src={currentTransformation.image}
+            alt={currentTransformation.title}
+            width={IMAGE_WIDTH}
+            height={IMAGE_HEIGHT}
+            className="rounded-lg shadow-md object-contain w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto bg-[#f9f4ef]"
+            priority={true}
+          />
+          {/* Botões de navegação */}
+          <button
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-[#B89B7A]/20 transition"
+            onClick={prevTransformation}
+            aria-label="Anterior"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <button
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-[#B89B7A]/20 transition"
+            onClick={nextTransformation}
+            aria-label="Próxima"
+          >
+            <ArrowRight size={20} />
+          </button>
         </div>
-      </Card>
+        {/* Dots indicator */}
+        <div className="flex justify-center gap-2 mt-4">
+          {transformations.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                if (isTransitioning) return;
+                setPreviousIndex(activeIndex);
+                setDirection(index > activeIndex ? 'right' : 'left');
+                setIsTransitioning(true);
+                setActiveIndex(index);
+              }}
+              className={`w-2 h-2 rounded-full transition-colors ${index === activeIndex ? 'bg-[#aa6b5d]' : 'bg-[#B89B7A]/30'}`}
+              aria-label={`Ver transformação ${index + 1}`}
+            />
+          ))}
+        </div>
+        {/* Título e descrição */}
+        <div className="text-center mt-6">
+          <h3 className="text-lg sm:text-xl font-medium text-[#432818] mb-2">{currentTransformation.title}</h3>
+          <p className="text-sm sm:text-base text-[#432818]/75 mb-4">{currentTransformation.description}</p>
+          <button
+            className={`${globalStyles.primaryButton} py-2.5 sm:py-3 px-6 sm:px-8 text-base sm:text-lg w-full sm:w-auto rounded-lg`}
+            onClick={() => window.open('https://pay.hotmart.com/N74003734E?checkoutMode=10', '_blank')}
+          >
+            Quero Minha Transformação!
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

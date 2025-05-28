@@ -120,7 +120,7 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
       />
       
       <div className="max-w-4xl mx-auto mt-8 px-4">
-        <div className={"transition-all duration-300 " + (previewMode ? '' : 'border-2 border-dashed border-gray-300 p-4 rounded-lg')}>
+        <div className={`transition-all duration-300 ${previewMode ? '' : 'border-2 border-dashed border-gray-300 p-4 rounded-lg'}`}>
           {/* Header Section */}
           <EditableSection
             title="Cabeçalho"

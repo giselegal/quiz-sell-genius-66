@@ -1,287 +1,397 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import React from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { preloadCriticalImages } from '@/utils/imageManager';
+import AutoFixedImages from './ui/AutoFixedImages';
+import { 
+  // getTinyBase64ImageUrl, // Parece não ser usado diretamente no JSX, mas loadTinyImageAsBase64 é.
+  loadTinyImageAsBase64, 
+  getOptimizedImageUrl, // Importado, mas localmente era sombreado. Manter para outras possíveis utilizações.
+  getTinyImageUrl        // Importado, mas localmente era sombreado. Manter para outras possíveis utilizações.
+} from '@/utils/inlineImageUtils';
 
-// Design tokens centralizados - apenas os essenciais
-const colors = {
-  primary: '#B89B7A',
-  primaryDark: '#A1835D',
-  secondary: '#432818',
-  background: '#FEFEFE',
-  backgroundAlt: '#F8F5F0',
-  text: '#432818',
-  textLight: '#6B7280',
-  border: '#E5E7EB',
+// --- Otimizações: Constantes e funções movidas para o escopo do módulo ---
+
+const LOGO_BASE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/";
+const LOGO_IMAGE_ID = "v1744911572/LOGO_DA_MARCA_GISELE_r14oz2";
+
+const INTRO_IMAGE_BASE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/";
+const INTRO_IMAGE_ID = "v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up";
+
+// Funções utilitárias renomeadas e movidas para fora do componente
+const buildOptimizedIntroImageUrl = (baseUrl: string, imageId: string, format: string, width: number, quality: number) => {
+  return `${baseUrl}f_${format},q_${quality},w_${width},c_limit,dpr_auto,fl_progressive,fl_lossy${width > 300 ? ',e_sharpen:30' : ''}/${imageId}.${format}`;
 };
 
-// --- Constantes e funções movidas para o escopo do módulo ---
-const LOGO_BASE_URL = 'https://res.cloudinary.com/dqljyf76t/image/upload/';
-const LOGO_IMAGE_ID = 'v1744911572/LOGO_DA_MARCA_GISELE_r14oz2';
+const buildTinyIntroImageUrl = (baseUrl: string, imageId: string, format: string, width: number) => {
+  return `${baseUrl}f_${format},q_60,w_${width},c_limit,dpr_1.0/${imageId}.${format}`;
+};
 
-const INTRO_IMAGE_BASE_URL = 'https://res.cloudinary.com/dqljyf76t/image/upload/';
-const INTRO_IMAGE_ID =
-  'v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up';
-
-// Otimizado para carregamento mais rápido - URLs pré-construídas
 const STATIC_LOGO_IMAGE_URLS = {
-  webp: `${LOGO_BASE_URL}f_webp,q_70,w_120,h_50,c_fit/${LOGO_IMAGE_ID}.webp`,
-  png: `${LOGO_BASE_URL}f_png,q_70,w_120,h_50,c_fit/${LOGO_IMAGE_ID}.png`,
+  webp: `${LOGO_BASE_URL}f_webp,q_auto,w_140,h_60,c_fit,dpr_auto,e_sharpen:100/${LOGO_IMAGE_ID}.webp`,
+  png: `${LOGO_BASE_URL}f_png,q_auto,w_140,h_60,c_fit,dpr_auto,e_sharpen:100/${LOGO_IMAGE_ID}.png`,
+  avif: `${LOGO_BASE_URL}f_avif,q_auto,w_140,h_60,c_fit,dpr_auto,e_sharpen:100/${LOGO_IMAGE_ID}.avif`
 };
 
-// Imagem LCP: Otimizada para carregamento mais rápido - URLs pré-construídas
 const STATIC_INTRO_IMAGE_URLS = {
-  avif: `${INTRO_IMAGE_BASE_URL}f_avif,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.avif`,
-  webp: `${INTRO_IMAGE_BASE_URL}f_webp,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.webp`,
-  png: `${INTRO_IMAGE_BASE_URL}f_png,q_85,w_300,c_limit/${INTRO_IMAGE_ID}.png`,
+  avif: {
+    tiny: buildTinyIntroImageUrl(INTRO_IMAGE_BASE_URL, INTRO_IMAGE_ID, 'avif', 200),
+    small: buildOptimizedIntroImageUrl(INTRO_IMAGE_BASE_URL, INTRO_IMAGE_ID, 'avif', 345, 75),
+    medium: buildOptimizedIntroImageUrl(INTRO_IMAGE_BASE_URL, INTRO_IMAGE_ID, 'avif', 400, 80),
+    large: buildOptimizedIntroImageUrl(INTRO_IMAGE_BASE_URL, INTRO_IMAGE_ID, 'avif', 450, 85)
+  },
+  webp: {
+    tiny: buildTinyIntroImageUrl(INTRO_IMAGE_BASE_URL, INTRO_IMAGE_ID, 'webp', 200),
+    small: buildOptimizedIntroImageUrl(INTRO_IMAGE_BASE_URL, INTRO_IMAGE_ID, 'webp', 345, 70),
+    medium: buildOptimizedIntroImageUrl(INTRO_IMAGE_BASE_URL, INTRO_IMAGE_ID, 'webp', 400, 75),
+    large: buildOptimizedIntroImageUrl(INTRO_IMAGE_BASE_URL, INTRO_IMAGE_ID, 'webp', 450, 80)
+  },
+  placeholder: `${INTRO_IMAGE_BASE_URL}f_webp,q_10,w_20,c_limit,e_blur:80/${INTRO_IMAGE_ID}.webp`,
+  png: `${INTRO_IMAGE_BASE_URL}f_png,q_75,w_345,c_limit,fl_progressive/${INTRO_IMAGE_ID}.png`
 };
+
+// --- Fim das otimizações de escopo do módulo ---
+
+/**
+ * QuizIntro - Componente da página inicial do quiz com layout melhorado e performance otimizada
+ * 
+ * Melhorias implementadas:
+ * 1. Layout com espaçamento vertical proporcional e consistente
+ * 2. Barra dourada com largura igual a imagem principal para uniformidade visual
+ * 3. Performance de carregamento otimizada 
+ * 4. Estrutura de componentes simplificada
+ * 5. Responsividade refinada para todos os dispositivos
+ * 6. Remoção de transições e animações desnecessárias
+ * 7. Carregamento imediato com estratégia de recursos otimizada
+ * 8. Logo otimizada com fundo transparente
+ */
 
 interface QuizIntroProps {
   onStart: (nome: string) => void;
 }
 
-/**
- * QuizIntro - Componente ultra-otimizado da página inicial do quiz
- * Renderização imediata sem estados de carregamento
- */
-type QuizIntroComponent = React.FC<QuizIntroProps>;
-const QuizIntro: QuizIntroComponent = ({ onStart }) => {
+export const QuizIntro: React.FC<QuizIntroProps> = ({
+  onStart
+}) => {
   const [nome, setNome] = useState('');
-  const [error, setError] = useState('');
+  const [mainImageWidth, setMainImageWidth] = useState(0);
+  const [tinyBase64, setTinyBase64] = useState<string>('');
   
-  // Função simplificada de submit
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Verificar se o nome foi preenchido
-    if (!nome.trim()) {
-      setError('Por favor, digite seu nome para continuar');
-      return;
-    }
-    
-    // Limpar qualquer erro anterior
-    setError('');
-    
-    // Iniciar o quiz com o nome fornecido
-    onStart(nome);
-    
-    // Reportar Web Vitals após interação do usuário
-    if (typeof window !== 'undefined' && 'performance' in window) {
-      window.performance.mark('user-interaction');
-    }
-  };
-
-  // Efeito de inicialização única - executa apenas uma vez
+  // Refs para medir e otimizar
+  const mainImageRef = useRef<HTMLDivElement>(null);
+  const imageLoaded = useRef<boolean>(false);
+  
+  // Efeito para capturar a largura da imagem principal
   useEffect(() => {
-    // Reportar Web Vitals
-    if (typeof window !== 'undefined' && 'performance' in window) {
-      window.performance.mark('component-mounted');
+    if (mainImageRef.current) {
+      const updateWidth = () => {
+        if (mainImageRef.current) {
+          setMainImageWidth(mainImageRef.current.offsetWidth);
+        }
+      };
+      
+      // Atualiza na montagem
+      updateWidth();
+      
+      // Atualiza no resize
+      window.addEventListener('resize', updateWidth);
+      
+      return () => {
+        window.removeEventListener('resize', updateWidth);
+      };
     }
+  }, []);
+
+  // Efeito único e simplificado para carregamento posterior de recursos
+  useEffect(() => {
+    // Carrega recursos adicionais após o componente estar visível
+    if (typeof requestIdleCallback === 'function') {
+      // Usa tempos ociosos do browser para carregar recursos não-críticos
+      requestIdleCallback(() => {
+        preloadCriticalImages('quiz');
+      }, { timeout: 2000 });
+    } else {
+      // Fallback para browsers que não suportam requestIdleCallback
+      const idleTimer = setTimeout(() => {
+        preloadCriticalImages('quiz');
+      }, 2000); // Tempo suficiente para garantir que o LCP ocorreu
+      
+      return () => clearTimeout(idleTimer);
+    }
+  }, []);
+  
+  // Pré-carregamento para LCP com estratégia otimizada - MELHORADO
+  useEffect(() => {
+    // Preconnect para o domínio Cloudinary para acelerar conexões futuras
+    const preconnectLink = document.createElement('link');
+    preconnectLink.rel = 'preconnect';
+    preconnectLink.href = 'https://res.cloudinary.com';
+    preconnectLink.crossOrigin = 'anonymous';
+    document.head.appendChild(preconnectLink);
+
+    // DNS Prefetch para melhorar resolução de nome
+    const dnsPrefetchLink = document.createElement('link');
+    dnsPrefetchLink.rel = 'dns-prefetch';
+    dnsPrefetchLink.href = 'https://res.cloudinary.com';
+    document.head.appendChild(dnsPrefetchLink);
+
+    // Preload APENAS a imagem principal - LCP crítico
+    const lcpCandidatePreload = document.createElement('link');
+    lcpCandidatePreload.rel = 'preload';
+    lcpCandidatePreload.as = 'image';
+    lcpCandidatePreload.href = STATIC_INTRO_IMAGE_URLS.avif.large;
+    lcpCandidatePreload.type = 'image/avif';
+    lcpCandidatePreload.setAttribute('fetchpriority', 'high');
+    document.head.appendChild(lcpCandidatePreload);
     
-    // Reportar que o LCP foi renderizado (para analytics)
-    const reportLcpRendered = () => {
-      if (typeof window !== 'undefined' && window.QUIZ_PERF) {
-        window.QUIZ_PERF.mark('lcp_rendered');
+    // Limpeza ao desmontar
+    return () => {
+      if (preconnectLink.parentNode) preconnectLink.parentNode.removeChild(preconnectLink);
+      if (dnsPrefetchLink.parentNode) dnsPrefetchLink.parentNode.removeChild(dnsPrefetchLink);
+      if (lcpCandidatePreload.parentNode) lcpCandidatePreload.parentNode.removeChild(lcpCandidatePreload);
+    };
+  }, []);
+
+
+
+// Novo arquivo otimizado para o useEffect de preload
+// Copie e cole este conteúdo no arquivo QuizIntro.tsx, substituindo o useEffect existente de preload
+
+  // Pré-carregamento para LCP com estratégia otimizada - MELHORADO
+  useEffect(() => {
+    // Preconnect para o domínio Cloudinary para acelerar conexões futuras
+    const preconnectLink = document.createElement('link');
+    preconnectLink.rel = 'preconnect';
+    preconnectLink.href = 'https://res.cloudinary.com';
+    preconnectLink.crossOrigin = 'anonymous';
+    document.head.appendChild(preconnectLink);
+
+    // DNS Prefetch para melhorar resolução de nome
+    const dnsPrefetchLink = document.createElement('link');
+    dnsPrefetchLink.rel = 'dns-prefetch';
+    dnsPrefetchLink.href = 'https://res.cloudinary.com';
+    document.head.appendChild(dnsPrefetchLink);
+
+    // Preload APENAS a imagem principal - LCP crítico
+    const lcpCandidatePreload = document.createElement('link');
+    lcpCandidatePreload.rel = 'preload';
+    lcpCandidatePreload.as = 'image';
+    lcpCandidatePreload.href = STATIC_INTRO_IMAGE_URLS.avif.large;
+    lcpCandidatePreload.type = 'image/avif';
+    lcpCandidatePreload.setAttribute('fetchpriority', 'high');
+    document.head.appendChild(lcpCandidatePreload);
+    
+    // Limpeza ao desmontar
+    return () => {
+      if (preconnectLink.parentNode) preconnectLink.parentNode.removeChild(preconnectLink);
+      if (dnsPrefetchLink.parentNode) dnsPrefetchLink.parentNode.removeChild(dnsPrefetchLink);
+      if (lcpCandidatePreload.parentNode) lcpCandidatePreload.parentNode.removeChild(lcpCandidatePreload);
+    };
+  }, []); // Dependências vazias = executa uma vez na montagem
+// Novo arquivo otimizado para o useEffect de carregamento base64
+// Copie e cole este conteúdo no arquivo QuizIntro.tsx, substituindo o useEffect existente
+
+  // Efeito para carregar a versão tiny da imagem como base64 para exibição instantânea - OTIMIZADO
+  useEffect(() => {
+    // Carrega a versão mais leve possível da imagem como base64 para exibição instantânea
+    const loadTinyBase64 = async () => {
+      try {
+        // Evita recarregamentos e usa cache quando possível
+        if (!tinyBase64 && !imageLoaded.current) {
+          // Verifica se já existe no sessionStorage para evitar refetch
+          const cachedImage = sessionStorage.getItem('quiz_intro_tiny_base64');
+          if (cachedImage) {
+            setTinyBase64(cachedImage);
+          } else {
+            const base64Data = await loadTinyImageAsBase64(STATIC_INTRO_IMAGE_URLS.placeholder);
+            if (base64Data) {
+              setTinyBase64(base64Data);
+              // Cache para evitar refetches na mesma sessão
+              try {
+                sessionStorage.setItem('quiz_intro_tiny_base64', base64Data);
+              } catch (e) {
+                // Ignora erros de storage (limite excedido, etc)
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('[QuizIntro] Erro ao carregar imagem tiny:', error);
       }
     };
     
-    // Usar requestAnimationFrame para garantir que o reporte aconteça após a renderização
-    requestAnimationFrame(() => {
-      requestAnimationFrame(reportLcpRendered);
-    });
-  }, []);
+    loadTinyBase64();
+  }, []); // Dependências vazias para executar apenas na montagem
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (nome.trim()) {
+      onStart(nome);
+    }
+  };
 
-  // Renderizar diretamente o conteúdo principal sem estados de carregamento
   return (
-    <main
-      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-white to-gray-50 py-8"
-      data-section="intro"
-    >
-      {/* Skip link para acessibilidade */}
-      <a 
-        href="#quiz-form" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-white text-[#432818] px-4 py-2 rounded-md shadow-md"
+    <AutoFixedImages>
+      <div 
+        className="quiz-intro flex flex-col items-center w-full"
+        style={{
+          background: 'linear-gradient(180deg, #FFFFFF 0%, #FBF8F4 100%)',
+          minHeight: '100vh'
+        }}
+        data-section="intro"
       >
-        Pular para o formulário
-      </a>
-      
-      <header className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-8 mx-auto">
-        {/* Logo centralizado - renderização imediata */}
-        <div className="flex flex-col items-center space-y-2">
-          <div className="relative">
-            <picture>
-              <source srcSet={STATIC_LOGO_IMAGE_URLS.webp} type="image/webp" />
-              <img
-                src={STATIC_LOGO_IMAGE_URLS.png}
-                alt="Logo Gisele Galvão"
-                className="h-auto mx-auto"
-                width={120}
-                height={50}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                style={{
-                  objectFit: 'contain',
-                  maxWidth: '100%',
-                  aspectRatio: '120 / 50',
-                }}
-              />
-            </picture>
-            {/* Barra dourada */}
-            <div
-              className="h-[3px] bg-[#B89B7A] rounded-full mt-1.5"
-              style={{
-                width: '300px',
-                maxWidth: '90%',
-                margin: '0 auto',
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Título principal com a fonte Playfair Display */}
-        <h1
-          className="text-2xl font-bold text-center leading-tight px-2 sm:text-3xl md:text-4xl playfair-display text-[#432818]"
-          style={{
-            fontFamily: '"Playfair Display", serif',
-            fontWeight: 400,
-          }}
-        >
-          <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com{' '}
-          <span className="text-[#B89B7A]">Você</span>.
-        </h1>
-      </header>
-
-      <section className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 md:space-y-8 mx-auto">
-        {/* Imagem principal - renderização imediata e LCP */}
-        <div className="mt-2 w-full max-w-xs sm:max-w-md md:max-w-lg mx-auto">
-          <div
-            className="w-full overflow-hidden rounded-lg shadow-sm"
-            style={{ aspectRatio: '1.47', maxHeight: '204px' }}
-          >
-            <div className="relative w-full h-full bg-[#F8F5F0]">
+        {/* Ajuste no espaçamento vertical para mobile: space-y-5, e mantendo sm:space-y-8 para telas maiores */}
+        <div className="w-full max-w-lg px-4 sm:px-6 pt-6 sm:pt-8 md:pt-10 pb-8 space-y-5 sm:space-y-8">
+          {/* Logo e barra dourada alinhadas */}
+          <div className="flex flex-col items-center">
+            <div className="relative">
               <picture>
-                <source
-                  srcSet={STATIC_INTRO_IMAGE_URLS.avif}
-                  type="image/avif"
-                />
-                <source
-                  srcSet={STATIC_INTRO_IMAGE_URLS.webp}
-                  type="image/webp"
-                />
-                <img
-                  src={STATIC_INTRO_IMAGE_URLS.png}
-                  alt="Descubra seu estilo predominante e transforme seu guarda-roupa"
-                  className="w-full h-full object-contain"
-                  width={300}
-                  height={204}
+                {/* Formatos modernos para melhor qualidade e tamanho */}
+                <source srcSet={STATIC_LOGO_IMAGE_URLS.avif} type="image/avif" />
+                <source srcSet={STATIC_LOGO_IMAGE_URLS.webp} type="image/webp" />
+                <img 
+                  src={STATIC_LOGO_IMAGE_URLS.png}
+                  alt="Logo Gisele Galvão"
+                  className="h-auto mx-auto"
+                  width={140}
+                  height={60}
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
-                  id="lcp-image"
+                  style={{
+                    objectFit: 'contain',
+                    imageRendering: 'crisp-edges',
+                    maxWidth: '100%',
+                    aspectRatio: '140/60',
+                    width: '140px',
+                    height: '60px',
+                    background: 'none'
+                  }}
                 />
               </picture>
+              
+              {/* Barra dourada com largura igual à imagem principal para visual mais equilibrado */}
+              <div 
+                className="h-[2px] bg-[#B89B7A] mt-2 rounded-full mx-auto" 
+                style={{ 
+                  width: mainImageWidth > 0 ? `${mainImageWidth}px` : '100%',
+                  maxWidth: '100%',
+                  transition: 'width 0.3s ease-in-out'
+                }}
+              ></div>
             </div>
           </div>
-        </div>
 
-        {/* Texto descritivo */}
-        <p className="text-sm text-center leading-relaxed px-2 sm:text-base text-gray-600">
-          Em poucos minutos, descubra seu{' '}
-          <span className="font-semibold text-[#B89B7A]">
-            Estilo Predominante
-          </span>{' '}
-          — e aprenda a montar looks que realmente refletem sua{' '}
-          <span className="font-semibold text-[#432818]">
-            essência
-          </span>, com
-          praticidade e{' '}
-          <span className="font-semibold text-[#432818]">
-            confiança
-          </span>.
-        </p>
+          {/* Título principal com espaçamento proporcional */}
+          <h1 className="font-playfair text-xl sm:text-2xl md:text-3xl font-bold text-center leading-tight text-[#432818] px-1">
+            Chega de um guarda-roupa lotado e da sensação de que nada combina com você.
+          </h1>
 
-        {/* Formulário - renderização imediata */}
-        <div id="quiz-form" className="mt-8">
-          <form
-            onSubmit={handleSubmit}
-            className="w-full space-y-6"
-            autoComplete="off"
+          {/* Container de imagem com dimensões fixas para evitar layout shift */}
+          {/* Ajuste no max-width para mobile: max-w-[300px], sm:max-w-[345px], md:max-w-sm */}
+          {/* Remoção do minHeight inline para permitir que aspectRatio e max-width controlem melhor as dimensões */}
+          <div 
+            ref={mainImageRef}
+            className="w-full max-w-[300px] sm:max-w-[345px] md:max-w-sm mx-auto relative overflow-hidden rounded-lg shadow-md" 
+            style={{
+              // minHeight: 320, // Removido para melhor responsividade com aspectRatio
+              height: 'auto',
+              aspectRatio: '1 / 1.05',
+              background: '#f8f6f2',
+              contain: 'layout',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundImage: tinyBase64 ? `url('${tinyBase64}')` : `url('${STATIC_INTRO_IMAGE_URLS.placeholder}')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
           >
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-xs font-semibold text-[#432818] mb-1.5"
-              >
-                NOME <span className="text-red-500">*</span>
-              </label>
-              <Input
-                id="name"
-                placeholder="Digite seu nome"
-                value={nome}
-                onChange={(e) => {
-                  setNome(e.target.value);
-                  if (error) setError('');
+            <picture>
+              {/* Formatos modernos para browsers que suportam, com preload da versão tiny primeiro */}
+              <source 
+                srcSet={`${STATIC_INTRO_IMAGE_URLS.avif.tiny} 200w, ${STATIC_INTRO_IMAGE_URLS.avif.small} 345w, ${STATIC_INTRO_IMAGE_URLS.avif.medium} 400w, ${STATIC_INTRO_IMAGE_URLS.avif.large} 450w`} 
+                type="image/avif" 
+                sizes="(max-width: 640px) 345px, (max-width: 768px) 400px, 450px"
+              />
+              <source 
+                srcSet={`${STATIC_INTRO_IMAGE_URLS.webp.tiny} 200w, ${STATIC_INTRO_IMAGE_URLS.webp.small} 345w, ${STATIC_INTRO_IMAGE_URLS.webp.medium} 400w, ${STATIC_INTRO_IMAGE_URLS.webp.large} 450w`} 
+                type="image/webp" 
+                sizes="(max-width: 640px) 345px, (max-width: 768px) 400px, 450px"
+              />
+              {/* Fallback para navegadores sem suporte a formatos modernos */}
+              {/* O src agora usa uma URL otimizada do mesmo introImageId */}
+              <img
+                src={STATIC_INTRO_IMAGE_URLS.png} // Alterado para usar a URL PNG otimizada do introImageId correto
+                alt="Descubra seu estilo predominante"
+                className="w-full h-auto object-contain quiz-intro-image"
+                width={345}
+                height={360}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                onLoad={() => { imageLoaded.current = true; }}
+                style={{
+                  background: '#f8f6f2', 
+                  display: 'block', 
+                  margin: '0 auto',
+                  objectFit: 'contain',
+                  aspectRatio: '345/360',
+                  backgroundImage: `url('${STATIC_INTRO_IMAGE_URLS.placeholder}')`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  imageRendering: 'auto',
+                  contain: 'paint'
                 }}
-                className={cn(
-                  "w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-offset-2 focus-visible:ring-offset-2 focus:ring-offset-[#FEFEFE] focus-visible:ring-offset-[#FEFEFE]",
-                  error 
-                    ? "border-red-500 focus:ring-red-500 focus-visible:ring-red-500" 
-                    : "border-[#B89B7A] focus:ring-[#A1835D] focus-visible:ring-[#A1835D]"
-                )}
-                autoFocus
-                aria-required="true"
+                sizes="(max-width: 640px) 345px, (max-width: 768px) 400px, 450px"
+              />
+            </picture>
+          </div>
+
+          {/* Texto descritivo com espaçamento consistente */}
+          <p className="text-sm md:text-base text-[#433830] text-center leading-relaxed max-w-md mx-auto px-2">
+            Em poucos minutos, descubra seu <span className="font-semibold text-[#B89B7A]">Estilo Predominante</span> — e aprenda a montar
+            looks que realmente refletem sua <span className="font-semibold text-[#432818]">essência</span>, com
+            praticidade e <span className="font-semibold text-[#432818]">confiança</span>.
+          </p>
+
+          {/* Formulário com espaçamento interno consistente */}
+          <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-4" aria-live="polite" autoComplete="off">
+            <div>
+              <label htmlFor="name" className="block text-xs font-semibold text-[#432818] mb-1.5">
+                NOME
+              </label>
+              <Input 
+                id="name" 
+                placeholder="Digite seu nome" 
+                value={nome} 
+                onChange={e => setNome(e.target.value)} 
+                className="w-full p-2.5 border-[#B89B7A] focus:border-[#A1835D] focus:ring-[#A1835D] bg-[#FEFEFE] rounded-md" 
+                autoFocus 
+                aria-required="true" 
                 autoComplete="off"
                 inputMode="text"
                 maxLength={32}
-                aria-invalid={!!error}
-                aria-describedby={error ? "name-error" : undefined}
-                required
               />
-              {error && (
-                <p id="name-error" className="mt-1.5 text-sm text-red-500 font-medium">{error}</p>
-              )}
             </div>
             
-            <button
-              type="submit"
-              className={cn(
-                'w-full py-2 px-3 text-sm font-semibold rounded-md shadow-md transition-all duration-300',
-                'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
-                'sm:py-3 sm:px-4 sm:text-base',
-                'md:py-3.5 md:text-lg',
-                nome.trim() 
-                  ? 'bg-[#B89B7A] text-white hover:bg-[#A1835D] active:bg-[#947645] hover:shadow-lg transform hover:scale-[1.01]' 
-                  : 'bg-[#B89B7A]/50 text-white/90 cursor-not-allowed'
-              )}
-              aria-disabled={!nome.trim()}
+            <Button 
+              type="submit" 
+              className="w-full bg-[#B89B7A] hover:bg-[#A1835D] text-white py-2.5 sm:py-3 px-4 text-base sm:text-lg font-semibold rounded-md shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
+              disabled={!nome.trim()}
             >
-              <span className="flex items-center justify-center gap-2">
-                {nome.trim() ? 'Quero Descobrir meu Estilo Agora!' : 'Digite seu nome para continuar'}
-              </span>
-            </button>
-
-            <p className="text-xs text-center text-gray-500 pt-1">
-              Seu nome é necessário para personalizar sua experiência. Ao clicar, você concorda com nossa{' '}
-              <a 
-                href="#" 
-                className="text-[#B89B7A] hover:text-[#A1835D] underline focus:outline-none focus:ring-1 focus:ring-[#B89B7A] rounded"
-              >
-                política de privacidade
-              </a>
+              Quero Descobrir meu Estilo Agora!
+            </Button>
+            
+            <p className="text-xs text-center text-gray-500 pt-1"> 
+              Ao clicar, você concorda com nossa política de privacidade
             </p>
           </form>
         </div>
-      </section>
-      
-      {/* Rodapé */}
-      <footer className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 mt-auto pt-6 text-center mx-auto">
-        <p className="text-xs text-gray-500">
-          © {new Date().getFullYear()} Gisele Galvão - Todos os direitos reservados
-        </p>
-      </footer>
-    </main>
+      </div>
+    </AutoFixedImages>
   );
 };
 

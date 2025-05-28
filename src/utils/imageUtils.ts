@@ -1,4 +1,3 @@
-
 /**
  * Funções utilitárias para otimização, gerenciamento e manipulação de imagens
  */
@@ -28,8 +27,8 @@ export const optimizeCloudinaryUrl = (
     width: 0,
     height: 0,
     quality: 85,
-    format: 'auto' as const,
-    crop: 'fill' as const
+    format: 'auto',
+    crop: 'fill'
   };
 
   const settings = { ...defaults, ...options };
@@ -95,14 +94,6 @@ export const getLowQualityPlaceholder = (
 };
 
 /**
- * Interface para fontes de imagem responsiva
- */
-interface ResponsiveImageSource {
-  srcSet: string;
-  sizes: string;
-}
-
-/**
  * Gera fontes de imagem responsivas com diferentes tamanhos
  * @param url URL base da imagem
  * @param sizes Array de tamanhos de largura para gerar
@@ -111,7 +102,7 @@ interface ResponsiveImageSource {
 export const getResponsiveImageSources = (
   url: string,
   sizes: number[] = [320, 640, 960, 1280]
-): ResponsiveImageSource => {
+): { srcSet: string, sizes: string } => {
   if (!url || !url.includes('cloudinary.com')) {
     return { srcSet: url, sizes: '100vw' };
   }
@@ -138,7 +129,7 @@ const preloadedImages = new Set<string>();
 
 /**
  * Verifica se uma imagem já foi pré-carregada
- * @param url URL da imagem para verificar
+ * @param url A URL da imagem para verificar
  * @returns Booleano indicando se a imagem já está pré-carregada
  */
 export const isImagePreloaded = (url: string): boolean => {
@@ -187,11 +178,10 @@ export const checkImageFormatSupport = (): { webp: boolean, avif: boolean } => {
  * Obtém o formato ideal com base no suporte do navegador
  * @returns Melhor formato disponível
  */
-export const getOptimalImageFormat = (): 'auto' | 'webp' | 'avif' => {
+export const getOptimalImageFormat = (): 'auto' | 'webp' | 'jpg' => {
   const support = checkImageFormatSupport();
   
-  if (support.avif) return 'avif'; 
+  if (support.avif) return 'auto'; // Cloudinary servirá AVIF se disponível
   if (support.webp) return 'webp';
   return 'auto'; // Padrão para auto que normalmente servirá JPEG
 };
-
