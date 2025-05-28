@@ -103,7 +103,13 @@ const QuizPage: React.FC = () => {
 
   // Wrapper para adaptar a assinatura do QuizContent
   const handleAnswerSubmit = (response: UserResponse) => {
+    console.log('[QuizPage] Resposta recebida:', response);
     handleAnswer(response.questionId, response.selectedOptions);
+    // Forçar atualização do estado para garantir avanço
+    setTimeout(() => {
+      console.log('[QuizPage] currentQuestionIndex após resposta:', quizLogic.currentQuestionIndex);
+      console.log('[QuizPage] currentAnswers:', quizLogic.currentAnswers);
+    }, 100);
   };
 
   // Removida a verificação de sessionStorage - o quiz sempre iniciará com o QuizIntro
