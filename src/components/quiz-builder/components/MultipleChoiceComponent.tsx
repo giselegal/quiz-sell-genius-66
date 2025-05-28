@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+
 interface MultipleChoiceComponentProps {
   data: {
     question?: string;
@@ -14,8 +15,11 @@ interface MultipleChoiceComponentProps {
   style?: {
     backgroundColor?: string;
     textColor?: string;
+    [key: string]: any;
+  };
   isSelected?: boolean;
 }
+
 const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({ data, style, isSelected }) => {
   const options = data.options || ['Opção 1', 'Opção 2', 'Opção 3'];
   const displayType = data.displayType || 'text';
@@ -39,6 +43,7 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({ data,
             "Selecione uma ou mais opções"}
         </p>
       </div>
+
       <div className="space-y-2">
         {options.map((option, index) => (
           <div 
@@ -65,9 +70,13 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({ data,
               <div className="flex items-center">
                 <div className="w-5 h-5 border border-gray-300 rounded mr-3"></div>
                 <span>{option}</span>
+              </div>
+            )}
           </div>
         ))}
+      </div>
     </div>
   );
 };
+
 export default MultipleChoiceComponent;

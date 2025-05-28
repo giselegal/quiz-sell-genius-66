@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -8,10 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
+
 interface GoogleAnalyticsCardProps {
   initialId?: string;
   initialEnabled?: boolean;
 }
+
 export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
   initialId = '',
   initialEnabled = false
@@ -28,17 +29,22 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
         description: "Your Google Analytics integration settings have been updated."
       });
     } catch (error) {
+      toast({
         title: "Error saving settings",
         description: "There was an error saving your settings. Please try again.",
         variant: "destructive"
+      });
     }
   };
+
   const handleTestConnection = () => {
     toast({
       title: "Testing Google Analytics connection",
       description: "Connection test initiated. Please check the console for results."
     });
     console.log("Testing connection to Google Analytics...");
+  };
+  
   return (
     <Card>
       <CardHeader>
@@ -62,15 +68,18 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
             onChange={(e) => setGoogleAnalyticsId(e.target.value)}
           />
           <p className="text-sm text-muted-foreground">
-            Found in your Google Analytics property settings under &ldquo;Data Streams&rdquo;
+            Found in your Google Analytics property settings under "Data Streams"
           </p>
+        </div>
         
         <div className="flex items-center space-x-2">
           <Switch 
             id="ga-tracking"
             checked={googleAnalyticsEnabled}
             onCheckedChange={setGoogleAnalyticsEnabled}
+          />
           <Label htmlFor="ga-tracking">Enable Google Analytics tracking</Label>
+        </div>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline" onClick={handleTestConnection}>
@@ -78,6 +87,7 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
         </Button>
         <Button onClick={handleSaveGoogleAnalytics}>
           Save Settings
+        </Button>
       </CardFooter>
     </Card>
   );

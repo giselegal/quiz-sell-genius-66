@@ -4,11 +4,13 @@ import { QuizComponentData } from '@/types/quizBuilder';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+
 interface TextPropertiesProps {
   data: QuizComponentData['data'];
   onUpdate: (data: any) => void;
   isHeadline?: boolean;
 }
+
 const TextProperties: React.FC<TextPropertiesProps> = ({ 
   data, 
   onUpdate,
@@ -27,6 +29,7 @@ const TextProperties: React.FC<TextPropertiesProps> = ({
           />
         </div>
         
+        <div className="space-y-2">
           <Label htmlFor="subtitle">Subtítulo</Label>
           <Textarea
             id="subtitle"
@@ -34,6 +37,8 @@ const TextProperties: React.FC<TextPropertiesProps> = ({
             onChange={(e) => onUpdate({ ...data, subtitle: e.target.value })}
             placeholder="Subtítulo opcional"
             rows={2}
+          />
+        </div>
       </div>
     );
   }
@@ -49,7 +54,9 @@ const TextProperties: React.FC<TextPropertiesProps> = ({
           placeholder="Insira seu texto aqui..."
           rows={6}
         />
+      </div>
     </div>
   );
 };
+
 export default TextProperties;

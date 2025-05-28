@@ -5,10 +5,12 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { Progress } from '@/components/ui/progress';
 import { GridLayout } from '@/components/shared/GridLayout';
+
 interface FunnelTabProps {
   analyticsData: any;
   loading: boolean;
 }
+
 export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) => {
   const metrics = analyticsData?.metrics;
   
@@ -25,6 +27,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
       { name: 'Venda', value: metrics.totalSales, text: 'Compras realizadas' }
     ];
   }, [metrics]);
+  
   // Chart configuration
   const chartConfig: ChartConfig = {
     value: { 
@@ -32,13 +35,18 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
       theme: { light: '#4f46e5', dark: '#818cf8' }
     }
   };
+  
   // Define colors with gradients for funnel steps
   const FUNNEL_COLORS = ['#4f46e5', '#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899'];
+  
   // Custom tooltip renderer
   const renderTooltipContent = (props: any) => {
     if (!props.active || !props.payload) {
       return null;
+    }
+    
     const data = props.payload[0].payload;
+    
     return (
       <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md">
         <p className="text-[7px] font-medium mb-0.5">{data.name}</p>
@@ -46,12 +54,20 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
         <p className="text-[6px] text-gray-500 mt-0.5">{data.text}</p>
       </div>
     );
+  };
+  
   const renderLegendContent = (props: any) => {
     return null; // Hide default legend
+  };
+  
   if (loading || !metrics) {
+    return (
       <div className="flex justify-center items-center py-12">
         <p className="text-muted-foreground">Carregando dados do funil...</p>
+      </div>
+    );
   }
+
   return (
     <div className="space-y-4">
       <Card className="border border-border/40 shadow-sm">
@@ -77,7 +93,11 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
                 <YAxis 
                   dataKey="name" 
                   type="category" 
+                  stroke="#888888"
+                  tick={{ fill: '#888888', fontSize: 7 }}
+                  tickLine={{ stroke: '#e0e0e0' }}
                   width={35}
+                />
                 <Tooltip content={renderTooltipContent} />
                 <Legend content={renderLegendContent} />
                 <Bar 
@@ -108,21 +128,47 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
                   value={funnelData[1]?.value ? (funnelData[1].value / funnelData[0].value) * 100 : 0} 
                   indicatorClassName="bg-gradient-to-r from-blue-500 to-indigo-700" 
                   className="h-1 bg-muted/50"
+                />
               </CardContent>
             </Card>
             
+            <Card className="border border-border/60">
+              <CardHeader className="pb-1 pt-2">
                 <CardTitle className="text-sm font-medium">Meio → Resultado</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-1 pt-0 pb-2">
+                <div className="flex justify-between items-baseline">
                   <p className="text-xs font-bold">
                     {funnelData[3]?.value && funnelData[1]?.value ? ((funnelData[3].value / funnelData[1].value) * 100).toFixed(1) : 0}%
                   </p>
                   <p className="text-[10px] text-muted-foreground">de {funnelData[1]?.value || 0}</p>
+                </div>
+                <Progress 
                   value={funnelData[3]?.value && funnelData[1]?.value ? (funnelData[3].value / funnelData[1].value) * 100 : 0} 
                   indicatorClassName="bg-gradient-to-r from-green-500 to-emerald-700" 
+                  className="h-1 bg-muted/50"
+                />
+              </CardContent>
+            </Card>
+            
+            <Card className="border border-border/60">
+              <CardHeader className="pb-1 pt-2">
                 <CardTitle className="text-sm font-medium">Resultado → Venda</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-1 pt-0 pb-2">
+                <div className="flex justify-between items-baseline">
+                  <p className="text-xs font-bold">
                     {funnelData[5]?.value && funnelData[3]?.value ? ((funnelData[5].value / funnelData[3].value) * 100).toFixed(1) : 0}%
+                  </p>
                   <p className="text-[10px] text-muted-foreground">de {funnelData[3]?.value || 0}</p>
+                </div>
+                <Progress 
                   value={funnelData[5]?.value && funnelData[3]?.value ? (funnelData[5].value / funnelData[3].value) * 100 : 0} 
                   indicatorClassName="bg-gradient-to-r from-red-500 to-pink-700" 
+                  className="h-1 bg-muted/50"
+                />
+              </CardContent>
+            </Card>
           </GridLayout>
         </CardContent>
       </Card>

@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from 'react';
 import { quizTemplates, QuizTemplate } from '@/data/quizTemplates';
 import { Button } from '@/components/ui/button';
@@ -10,18 +9,23 @@ import { Check, Plus } from 'lucide-react';
 interface TemplateSelectorProps {
   onSelectTemplate: (template: QuizTemplate) => void;
 }
+
 const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate }) => {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+
   const handleSelectTemplate = (template: QuizTemplate) => {
     setSelectedTemplateId(template.id);
   };
+
   const handleConfirmSelection = () => {
     const selectedTemplate = quizTemplates.find(template => template.id === selectedTemplateId);
     if (selectedTemplate) {
       onSelectTemplate(selectedTemplate);
       setDialogOpen(false);
     }
+  };
+
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
@@ -65,6 +69,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
             ))}
           </div>
         </ScrollArea>
+        
         <div className="flex justify-end gap-2 mt-4 pt-2 border-t">
           <Button variant="outline" onClick={() => setDialogOpen(false)}>
             Cancelar
@@ -74,9 +79,11 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
             disabled={!selectedTemplateId}
           >
             Usar Template
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
 };
+
 export default TemplateSelector;

@@ -1,8 +1,8 @@
-"use client";
 
 import React, { useState, useEffect } from 'react';
 import getOptimizedImageUrl from '@/utils/imageOptimizer/getOptimizedImageUrl';
 import getLowQualityPlaceholder from '@/utils/imageOptimizer/getLowQualityPlaceholder';
+
 interface OptimizedImageProps {
   src: string;
   alt: string;
@@ -17,6 +17,7 @@ interface OptimizedImageProps {
   lazy?: boolean;
   sizes?: string;
 }
+
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
@@ -37,23 +38,29 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   // Get optimized image URLs
   const optimizedSrc = src ? getOptimizedImageUrl(src, { width, height, quality }) : '';
   const placeholderSrc = src ? getLowQualityPlaceholder(src) : '';
+  
   // Handle image loading completion
   const handleImageLoaded = () => {
     setLoaded(true);
     if (onLoad) onLoad();
   };
+  
   // Report load error
   const handleImageError = () => {
     console.error('Error loading image:', optimizedSrc);
     setError(true);
+  };
+  
   // Reset state on src change
   useEffect(() => {
     setLoaded(false);
     setError(false);
   }, [src]);
+
   // Calculate aspect ratio for placeholder
   const aspectRatio = height && width ? (height / width) : undefined;
   const paddingBottom = aspectRatio ? `${aspectRatio * 100}%` : undefined;
+  
   return (
     <div 
       className={`relative overflow-hidden ${className}`} 
@@ -74,6 +81,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       
       {/* Main image */}
       {!error ? (
+        <img
           src={optimizedSrc}
           alt={alt}
           width={width}
@@ -87,11 +95,14 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
             loaded ? 'opacity-100' : 'opacity-0'
           }`}
           style={{ width: '100%', height: '100%' }}
+        />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
           <span className="text-sm text-gray-500">Imagem indisponível</span>
         </div>
+      )}
     </div>
   );
 };
+
 export default OptimizedImage;

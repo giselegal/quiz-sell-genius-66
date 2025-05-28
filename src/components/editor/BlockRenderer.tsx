@@ -2,11 +2,13 @@
 import React from 'react';
 import { EditorBlock } from '@/types/editor';
 import { EditorBlockItem } from './EditorBlockItem';
+
 interface BlockRendererProps {
   blocks: EditorBlock[];
   onUpdate: (id: string, content: any) => void;
   onDelete: (id: string) => void;
 }
+
 export const BlockRenderer: React.FC<BlockRendererProps> = ({
   blocks,
   onUpdate,

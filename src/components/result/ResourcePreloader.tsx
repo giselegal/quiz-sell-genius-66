@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect } from 'react';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { preloadImagesByUrls } from '@/utils/imageManager';
@@ -8,6 +7,7 @@ const IMAGE_CDNS = [
   'https://res.cloudinary.com',
   'https://images.unsplash.com',
 ];
+
 // Lista de imagens críticas para pré-carregar
 const CRITICAL_IMAGES = [
   // Logo do site (será substituído pela logo real do contexto)
@@ -16,19 +16,24 @@ const CRITICAL_IMAGES = [
   // Recursos de UI comumente usados
   'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp',
   'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp',
+  
   // Imagens de transformação comuns
   'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp',
+];
+
 /**
  * Componente invisível que gerencia o pré-carregamento de recursos críticos
  * e otimiza a conexão com CDNs de imagem
  */
 const ResourcePreloader: React.FC = () => {
   const { globalStyles } = useGlobalStyles();
+  
   // Lista dinâmica que inclui logo personalizada se disponível
   const criticalImages = [...CRITICAL_IMAGES];
   if (globalStyles.logo && !CRITICAL_IMAGES.includes(globalStyles.logo)) {
     criticalImages.unshift(globalStyles.logo);
   }
+  
   useEffect(() => {
     // Pré-carregar imagens em baixa prioridade
     preloadImagesByUrls(criticalImages, {
@@ -52,6 +57,8 @@ const ResourcePreloader: React.FC = () => {
       dnsPrefetch.rel = 'dns-prefetch';
       dnsPrefetch.href = cdnUrl;
       document.head.appendChild(dnsPrefetch);
+    });
+    
     // Adicionar preload de imagens críticas ao head
     criticalImages.forEach((imgSrc, index) => {
       const preloadLink = document.createElement('link');
@@ -60,6 +67,8 @@ const ResourcePreloader: React.FC = () => {
       preloadLink.href = `${imgSrc}?q=80&f=auto&w=32`; // Versão pequena para preload
       preloadLink.type = 'image/webp';
       document.head.appendChild(preloadLink);
+    });
+    
     return () => {
       // Limpar links de preconnect quando componente desmontar
       document.querySelectorAll('link[rel="preconnect"], link[rel="dns-prefetch"], link[rel="preload"][as="image"]').forEach(el => {
@@ -73,6 +82,8 @@ const ResourcePreloader: React.FC = () => {
       });
     };
   }, []);
+  
   return null; // Este componente não renderiza nada visualmente, apenas manipula o DOM
 };
+
 export default ResourcePreloader;

@@ -21,6 +21,7 @@ import { EditorBlock } from '@/types/editor';
 interface ComponentsSidebarProps {
   onComponentSelect: (type: EditorBlock['type']) => void;
 }
+
 export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ 
   onComponentSelect 
 }) => {
@@ -40,6 +41,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
     { type: 'secondary-styles', label: 'Estilos Secundários', icon: Layout },
     { type: 'bonus', label: 'Bônus', icon: Gift }
   ];
+
   return (
     <div className="h-full flex flex-col">
       <div className="p-4 border-b">

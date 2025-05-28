@@ -1,6 +1,7 @@
 
 import { UnifiedVisualEditor, EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
 import { StyleResult } from '@/types/quiz';
+
 export default {
   name: "unified-editor",
   displayName: "Editor Unificado",
@@ -23,15 +24,18 @@ export default {
       type: "string", 
       default: "Elegante",
       description: "Categoria de estilo principal"
+    },
     styleScore: {
       type: "number",
       default: 10,
       description: "Pontuação do estilo principal"
+    },
     stylePercentage: {
       type: "number", 
       default: 60,
       description: "Porcentagem do estilo principal"
     }
+  },
   render: (props) => {
     const primaryStyle: StyleResult = {
       category: props.styleCategory,

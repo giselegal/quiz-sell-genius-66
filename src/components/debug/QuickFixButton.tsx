@@ -1,4 +1,3 @@
-"use client";
 /**
  * Botão de correção rápida para imagens embaçadas
  * Adicione este componente em qualquer local da introdução do quiz 
@@ -24,6 +23,7 @@ const QuickFixButton = () => {
       }
     }, 2000);
   }, []);
+  
   const fixImages = () => {
     setIsFixing(true);
     
@@ -33,12 +33,16 @@ const QuickFixButton = () => {
       fixed: result.replaced,
       total: result.total
     });
+    
+    setTimeout(() => {
       setIsFixing(false);
     }, 3000);
   };
+  
   if (!showButton && process.env.NODE_ENV !== 'development') {
     return null;
   }
+  
   return (
     <div style={{
       position: 'fixed',
@@ -62,10 +66,13 @@ const QuickFixButton = () => {
           <span>Corrigindo imagens... ({stats.fixed}/{stats.total})</span>
         </>
       ) : (
+        <>
           <span style={{ marginRight: '10px' }}>🔍</span>
           <span>Corrigir imagens embaçadas</span>
+        </>
       )}
     </div>
   );
 };
+
 export default QuickFixButton;

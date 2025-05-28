@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash } from 'lucide-react';
 import { BlockEditorProps } from './types';
+
 export const BenefitsBlockEditor: React.FC<BlockEditorProps> = ({
   block,
   onUpdate
@@ -13,11 +14,19 @@ export const BenefitsBlockEditor: React.FC<BlockEditorProps> = ({
     const items = [...(block.content.items || []), ''];
     onUpdate({ items });
   };
+
   const removeItem = (index: number) => {
     const items = [...(block.content.items || [])];
     items.splice(index, 1);
+    onUpdate({ items });
+  };
+
   const updateItem = (index: number, value: string) => {
+    const items = [...(block.content.items || [])];
     items[index] = value;
+    onUpdate({ items });
+  };
+
   return (
     <div className="space-y-4">
       <div>
@@ -30,6 +39,7 @@ export const BenefitsBlockEditor: React.FC<BlockEditorProps> = ({
         />
       </div>
       
+      <div>
         <Label>Benefícios</Label>
         <div className="space-y-2 mt-2">
           {(block.content.items || []).map((item: string, index: number) => (
@@ -59,6 +69,7 @@ export const BenefitsBlockEditor: React.FC<BlockEditorProps> = ({
             Adicionar Benefício
           </Button>
         </div>
+      </div>
     </div>
   );
 };

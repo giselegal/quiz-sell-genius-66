@@ -1,5 +1,6 @@
 
 import { StyleResult } from '@/types/quiz';
+
 export interface SalesPageConfig {
   title: string;
   subtitle: string;
@@ -11,6 +12,7 @@ export interface SalesPageConfig {
   bonuses: string[];
   guaranteeDays: number;
 }
+
 export const getSalesPageConfig = (style: StyleResult): SalesPageConfig => {
   // Base configuration
   const baseConfig: SalesPageConfig = {
@@ -31,8 +33,10 @@ export const getSalesPageConfig = (style: StyleResult): SalesPageConfig => {
       "Cartela de Cores Digital",
       "Planilha de Guarda-Roupa Cápsula",
       "Acesso ao Grupo VIP no Telegram"
+    ],
     guaranteeDays: 7
   };
+
   // You can add style-specific customizations here if needed
   // For example:
   switch(style.category) {
@@ -42,7 +46,10 @@ export const getSalesPageConfig = (style: StyleResult): SalesPageConfig => {
         subtitle: "Aprenda a expressar seu estilo Natural com autenticidade e conforto",
       };
     case 'Elegante':
+      return {
+        ...baseConfig,
         subtitle: "Eleve seu estilo Elegante a um novo patamar de sofisticação",
+      };
     // Add other style cases as needed
     default:
       return baseConfig;

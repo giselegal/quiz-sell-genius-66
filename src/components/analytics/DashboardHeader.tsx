@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { RefreshCcw, Download, Trash2, Filter, LayoutGrid, LayoutList } from 'lu
 import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 interface DashboardHeaderProps {
   timeRange: '7d' | '30d' | 'all';
   onTimeRangeChange: (range: '7d' | '30d' | 'all') => void;
@@ -18,6 +18,7 @@ interface DashboardHeaderProps {
   compactView?: boolean;
   onToggleCompactView?: () => void;
 }
+
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   timeRange,
   onTimeRangeChange,
@@ -30,6 +31,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   onToggleCompactView
 }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
+
   const handleRefresh = () => {
     setIsRefreshing(true);
     onRefresh();
@@ -37,14 +39,19 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       setIsRefreshing(false);
     }, 1000);
   };
+
   const handleTimeRangeChange = (value: string) => {
     onTimeRangeChange(value as '7d' | '30d' | 'all');
+  };
+
   const toggleEvent = (eventType: string) => {
     if (selectedEvents.includes(eventType)) {
       onEventSelectionChange(selectedEvents.filter(e => e !== eventType));
     } else {
       onEventSelectionChange([...selectedEvents, eventType]);
     }
+  };
+
   const eventLabels: Record<string, string> = {
     quiz_start: 'Início do Quiz',
     quiz_complete: 'Quiz Completo',
@@ -53,6 +60,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     lead_generated: 'Leads Gerados',
     sale: 'Vendas',
     button_click: 'Cliques em Botões'
+  };
+
   return (
     <Card className="mb-6 border-none shadow-sm">
       <CardContent className="p-4">
@@ -96,6 +105,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 <SelectItem value="all">Todo o período</SelectItem>
               </SelectContent>
             </Select>
+            
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="h-8">
@@ -111,27 +121,44 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                     key={key}
                     checked={selectedEvents.includes(key)}
                     onCheckedChange={() => toggleEvent(key)}
+                  >
                     {label}
                   </DropdownMenuCheckboxItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+            
             <Button
               variant="outline"
               size="sm"
               className="h-8"
               onClick={handleRefresh}
               disabled={isRefreshing}
+            >
               <RefreshCcw className={`h-3.5 w-3.5 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
               <span className="text-xs">Atualizar</span>
             </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8"
               onClick={onExportData}
+            >
               <Download className="h-3.5 w-3.5 mr-2" />
               <span className="text-xs">Exportar</span>
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
               className="h-8 border-red-200 hover:bg-red-50 hover:text-red-600 text-red-500"
               onClick={onClearData}
+            >
               <Trash2 className="h-3.5 w-3.5 mr-2" />
               <span className="text-xs">Limpar Dados</span>
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

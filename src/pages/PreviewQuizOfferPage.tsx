@@ -1,12 +1,12 @@
-"use client";
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useParams } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Shield, Star, Clock, Zap, Award, CheckCircle, ArrowDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackButtonClick } from '@/utils/analytics';
+
 // Design tokens para consistência
 const designTokens = {
   colors: {
@@ -28,6 +28,7 @@ const designTokens = {
     lg: '0 8px 16px rgba(184, 155, 122, 0.16)',
     xl: '0 12px 24px rgba(184, 155, 122, 0.20)',
     cta: '0 8px 32px rgba(76, 175, 80, 0.4)',
+  },
   spacing: {
     xs: '0.5rem',
     sm: '1rem',
@@ -42,23 +43,26 @@ const designTokens = {
     xl: '1.5rem',
   }
 };
+
 const PreviewQuizOfferPage: React.FC = () => {
-  const router = useRouter();
-  const { styleType } = router.query;
+  const { styleType } = useParams<{ styleType: string }>();
   const [isHovered, setIsHovered] = useState(false);
   const [countdown, setCountdown] = useState({ hours: 2, minutes: 30, seconds: 45 });
+
   // CTA handler otimizado
   const handleCTAClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
     trackButtonClick('checkout_button', 'Preview CTA Click', 'preview_page');
+    
     if (window.innerWidth >= 768) {
       window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
     } else {
       window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
     }
   };
+
   return (
     <div 
       className="min-h-screen py-8 px-4"
@@ -83,6 +87,7 @@ const PreviewQuizOfferPage: React.FC = () => {
             Estilo: <span className="font-semibold">{styleType || 'Natural'}</span>
           </p>
         </div>
+
         {/* SEÇÃO VALOR REDESENHADA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -100,6 +105,7 @@ const PreviewQuizOfferPage: React.FC = () => {
             >
               <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
               <Star className="w-6 h-6 text-[#B89B7A]" />
+              <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
             </motion.div>
             
             <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: designTokens.colors.textPrimary }}>
@@ -109,6 +115,7 @@ const PreviewQuizOfferPage: React.FC = () => {
               Transforme seu estilo hoje mesmo
             </p>
           </div>
+
           {/* Card Principal de Valor */}
           <Card 
             className="relative overflow-hidden border-2 p-8 md:p-12"
@@ -119,12 +126,16 @@ const PreviewQuizOfferPage: React.FC = () => {
             }}
           >
             {/* Badge de Urgência */}
+            <motion.div
               className="absolute -top-3 -right-3 px-4 py-2 text-white text-sm font-bold rounded-full shadow-lg transform rotate-12"
               style={{ backgroundColor: designTokens.colors.warning }}
               animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
+            >
               <Clock className="w-4 h-4 inline mr-1" />
               OFERTA LIMITADA
+            </motion.div>
+
             {/* Decoração de Fundo */}
             <div 
               className="absolute top-0 right-0 w-1/3 h-full opacity-5 pointer-events-none"
@@ -132,6 +143,7 @@ const PreviewQuizOfferPage: React.FC = () => {
                 background: `radial-gradient(circle, ${designTokens.colors.primary} 0%, transparent 70%)`
               }}
             />
+
             <div className="relative z-10">
               {/* Breakdown de Valor */}
               <div 
@@ -178,10 +190,12 @@ const PreviewQuizOfferPage: React.FC = () => {
                         >
                           R$ 175,00
                         </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
               {/* Seção de Preço Principal */}
               <div className="text-center mb-8">
                 <motion.div
@@ -198,30 +212,47 @@ const PreviewQuizOfferPage: React.FC = () => {
                       >
                         R$ 175,00
                       </p>
+                    </div>
                     
                     <ArrowDown className="w-6 h-6 text-green-500" />
+                    
+                    <div className="text-center">
                       <p className="text-sm font-medium mb-1" style={{ color: designTokens.colors.secondary }}>
                         Por apenas
+                      </p>
                       <div className="flex items-baseline gap-1">
                         <span className="text-lg">R$</span>
+                        <span 
                           className="text-5xl md:text-6xl font-bold"
                           style={{ color: designTokens.colors.accent }}
+                        >
                           39
+                        </span>
                         <span className="text-2xl">,90</span>
+                      </div>
+                    </div>
+                  </div>
+                  
                   <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-center">
                     <div 
                       className="px-4 py-2 rounded-full text-sm font-bold text-white"
                       style={{ backgroundColor: designTokens.colors.accent }}
+                    >
                       💰 Economia de R$ 135,10 (77% OFF)
+                    </div>
                     <p className="text-sm" style={{ color: designTokens.colors.textSecondary }}>
                       ou <strong>5x de R$ 8,83</strong> sem juros
                     </p>
+                  </div>
                 </motion.div>
+              </div>
+
               {/* CTA Button */}
               <motion.div
                 className="text-center mb-6"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+              >
                 <Button
                   onClick={handleCTAClick}
                   onMouseEnter={() => setIsHovered(true)}
@@ -232,6 +263,7 @@ const PreviewQuizOfferPage: React.FC = () => {
                     boxShadow: designTokens.shadows.cta,
                     transform: isHovered ? 'translateY(-2px)' : 'translateY(0)'
                   }}
+                >
                   <motion.div
                     className="flex items-center gap-3"
                     animate={isHovered ? { x: [0, 5, 0] } : {}}
@@ -242,15 +274,23 @@ const PreviewQuizOfferPage: React.FC = () => {
                   </motion.div>
                 </Button>
               </motion.div>
+
               {/* Elementos de Confiança */}
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-green-500" />
                   <span>Pagamento 100% Seguro</span>
+                </div>
+                <div className="flex items-center gap-2">
                   <Award className="w-4 h-4 text-yellow-500" />
                   <span>Garantia de 7 dias</span>
+                </div>
+                <div className="flex items-center gap-2">
                   <Zap className="w-4 h-4 text-blue-500" />
                   <span>Acesso Imediato</span>
+                </div>
+              </div>
+
               {/* Métodos de Pagamento */}
               <div className="mt-8 text-center">
                 <img
@@ -259,21 +299,30 @@ const PreviewQuizOfferPage: React.FC = () => {
                   className="w-full max-w-md mx-auto rounded-lg"
                   style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))' }}
                 />
+              </div>
             </div>
           </Card>
         </motion.div>
+
         {/* Seção de Benefícios Adicionais */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="grid md:grid-cols-3 gap-6 mb-12"
+        >
           {[
             {
               icon: <Star className="w-8 h-8" />,
               title: 'Resultado Garantido',
               description: 'Transformação visível ou seu dinheiro de volta'
             },
+            {
               icon: <Zap className="w-8 h-8" />,
               title: 'Acesso Imediato',
               description: 'Receba todo o conteúdo na hora, direto no seu email'
+            },
+            {
               icon: <Award className="w-8 h-8" />,
               title: 'Suporte Especializado',
               description: 'Tire dúvidas com nossa equipe de consultoras'
@@ -285,22 +334,34 @@ const PreviewQuizOfferPage: React.FC = () => {
               style={{ 
                 borderColor: designTokens.colors.border,
                 boxShadow: designTokens.shadows.md 
+              }}
+            >
+              <div 
                 className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: `${designTokens.colors.primary}20` }}
+              >
                 <span style={{ color: designTokens.colors.primary }}>
                   {benefit.icon}
                 </span>
+              </div>
               <h3 className="font-bold mb-2">{benefit.title}</h3>
               <p className="text-sm" style={{ color: designTokens.colors.textSecondary }}>
                 {benefit.description}
               </p>
             </Card>
           ))}
+        </motion.div>
+
         {/* Footer */}
         <div className="text-center py-8 border-t" style={{ borderColor: designTokens.colors.border }}>
           <p className="text-sm" style={{ color: designTokens.colors.textMuted }}>
             Esta é uma visualização da página de resultados do quiz de estilo.
+          </p>
+        </div>
+
       </div>
     </div>
   );
+};
+
 export default PreviewQuizOfferPage;

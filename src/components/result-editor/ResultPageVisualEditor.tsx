@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -14,9 +13,11 @@ import { toast } from '@/components/ui/use-toast';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { StyleResult } from '@/types/quiz';
+
 interface ResultPageVisualEditorProps extends EditorProps {
   initialConfig?: ResultPageConfig;
 }
+
 export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({ 
   selectedStyle,
   onShowTemplates,
@@ -36,7 +37,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
       importConfig
     }
   } = useResultPageEditor(selectedStyle.category);
-  
+
   const {
     blocks,
     selectedBlockId,
@@ -44,13 +45,14 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     updateBlocks,
     actions: blockActions
   } = useBlockOperations();
+
   // Apply initial config if provided
   useEffect(() => {
     if (initialConfig && importConfig) {
       importConfig(initialConfig);
     }
   }, [initialConfig, importConfig]);
-  
+
   // Sync blocks with config when needed
   useEffect(() => {
     if (resultPageConfig?.blocks) {
@@ -60,7 +62,8 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
       updateSection('blocks', []);
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
-  const handleUpdateConfig = (newConfig: any) => {
+
+  const handleUpdateConfig = (newConfig) => {
     if (newConfig) {
       try {
         importConfig(newConfig);
@@ -86,6 +89,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
       }
     }
   };
+
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -93,6 +97,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
       </div>
     );
   }
+
   // Cast do tipo para garantir compatibilidade com o componente EditorPreview
   const primaryStyle: StyleResult = {
     category: selectedStyle.category as any,
@@ -123,7 +128,9 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
             <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
               <ComponentsSidebar onComponentSelect={blockActions.handleAddBlock} />
             </ResizablePanel>
+
             <ResizableHandle withHandle />
+
             <ResizablePanel defaultSize={55}>
               <EditorPreview
                 blocks={blocks}
@@ -134,9 +141,13 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 onReorderBlocks={blockActions.handleReorderBlocks}
               />
             </ResizablePanel>
+
             <ResizableHandle withHandle />
+
             <ResizablePanel defaultSize={25}>
               <PropertiesPanel
+                selectedBlockId={selectedBlockId}
+                blocks={blocks}
                 onClose={() => setSelectedBlockId(null)}
                 onUpdate={blockActions.handleUpdateBlock}
                 onDelete={blockActions.handleDeleteBlock}
@@ -145,6 +156,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
           </ResizablePanelGroup>
         </TabsContent>
       </Tabs>
+      
       {isGlobalStylesOpen && (
         <GlobalStylesEditor
           globalStyles={resultPageConfig.globalStyles || {}}

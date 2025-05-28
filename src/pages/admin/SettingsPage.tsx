@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -10,17 +9,19 @@ import { ApiIntegrationsTab } from '@/components/settings/ApiIntegrationsTab';
 import { AdvancedTab } from '@/components/settings/AdvancedTab';
 import { FacebookAdsTab } from '@/components/settings/FacebookAdsTab';
 import { UtmSettingsTab } from '@/components/settings/UtmSettingsTab';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+
 const SettingsPage = () => {
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get('tab') || 'appearance';
   const [activeTab, setActiveTab] = useState(defaultTab);
-  const router = useRouter();
+  const navigate = useNavigate();
   
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    router.push(`/admin/settings?tab=${value}`);
+    navigate(`/admin/settings?tab=${value}`, { replace: true });
   };
+  
   return (
     <AdminLayout>
       <div className="container p-6">
@@ -40,21 +41,34 @@ const SettingsPage = () => {
           <TabsContent value="appearance">
             <AppearanceTab />
           </TabsContent>
+          
           <TabsContent value="analytics">
             <AnalyticsTab />
+          </TabsContent>
+          
           <TabsContent value="utm">
             <UtmSettingsTab />
+          </TabsContent>
+          
           <TabsContent value="marketing">
             <MarketingTab />
+          </TabsContent>
+          
           <TabsContent value="facebook-ads">
             <FacebookAdsTab />
+          </TabsContent>
+          
           <TabsContent value="integrations">
             <ApiIntegrationsTab />
+          </TabsContent>
+          
           <TabsContent value="advanced">
             <AdvancedTab />
+          </TabsContent>
         </Tabs>
       </div>
     </AdminLayout>
   );
 };
+
 export default SettingsPage;

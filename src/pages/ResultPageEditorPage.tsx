@@ -1,28 +1,29 @@
-"use client";
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 const ResultPageEditorPage: React.FC = () => {
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
   const [customDomain, setCustomDomain] = useState(''); // Novo estado para domínio personalizado
-  const router = useRouter();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     try {
-      const savedResult = safeLocalStorage.getItem('quizResult');
-      const savedDomain = safeLocalStorage.getItem('customDomain'); // Carregar domínio salvo
+      const savedResult = localStorage.getItem('quizResult');
+      const savedDomain = localStorage.getItem('customDomain'); // Carregar domínio salvo
+
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);
+
         if (parsedResult?.primaryStyle) {
           setPrimaryStyle(parsedResult.primaryStyle);
           setSecondaryStyles(parsedResult.secondaryStyles || []);
         } else {
           console.error("Formato de resultado inválido");
-          router.push('/resultado');
+          navigate('/resultado');
         }
       } else {
         const defaultStyle: StyleResult = {
@@ -30,29 +31,37 @@ const ResultPageEditorPage: React.FC = () => {
           score: 10,
           percentage: 100
         };
+
         setPrimaryStyle(defaultStyle);
         setSecondaryStyles([]);
       }
+
       if (savedDomain) {
         setCustomDomain(savedDomain);
+      }
     } catch (error) {
       console.error("Erro ao carregar resultados:", error);
-      router.push('/resultado');
+      navigate('/resultado');
     } finally {
       setIsLoading(false);
     }
-  }, [router]);
+  }, [navigate]);
+
   const handleSave = () => {
+    try {
       const resultToSave = {
         primaryStyle,
         secondaryStyles
       };
-      safeLocalStorage.setItem('quizResult', JSON.stringify(resultToSave));
-      safeLocalStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
+      localStorage.setItem('quizResult', JSON.stringify(resultToSave));
+      localStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
       alert('Configurações salvas com sucesso!');
+    } catch (error) {
       console.error("Erro ao salvar configurações:", error);
       alert('Erro ao salvar configurações. Verifique o console para mais detalhes.');
+    }
   };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -60,16 +69,23 @@ const ResultPageEditorPage: React.FC = () => {
       </div>
     );
   }
+
   if (!primaryStyle) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-lg mb-4">Erro: Nenhum resultado encontrado para editar</p>
           <button 
             className="bg-primary text-white px-4 py-2 rounded"
-            onClick={() => router.push('/resultado')}
+            onClick={() => navigate('/resultado')}
           >
             Voltar para Resultados
           </button>
         </div>
+      </div>
+    );
+  }
+
   return (
     <div className="editor-container">
       <ResultPageEditorWithControls 
@@ -91,7 +107,9 @@ const ResultPageEditorPage: React.FC = () => {
         >
           Salvar Configurações
         </button>
+      </div>
     </div>
   );
 };
+
 export default ResultPageEditorPage;

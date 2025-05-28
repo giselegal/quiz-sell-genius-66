@@ -7,8 +7,10 @@ import { Button } from '@/components/ui/button';
 import { ImageUploader } from '@/components/ui/image-uploader';
 import { toast } from '@/components/ui/use-toast';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
+
 export const AppearanceTab: React.FC = () => {
   const { globalStyles, updateGlobalStyles } = useGlobalStyles();
+
   return (
     <Card>
       <CardHeader>
@@ -29,14 +31,25 @@ export const AppearanceTab: React.FC = () => {
           />
         </div>
         
+        <div className="space-y-2">
           <Label htmlFor="textColor">Text Color</Label>
+          <Input 
             id="textColor" 
+            type="color" 
             value={globalStyles.textColor || '#432818'} 
             onChange={(e) => updateGlobalStyles({ textColor: e.target.value })}
+            className="h-10 w-20"
+          />
+        </div>
+        
+        <div className="space-y-2">
           <Label htmlFor="logo">Logo</Label>
           <ImageUploader 
             currentImage={globalStyles.logo}
             onImageUpload={(url) => updateGlobalStyles({ logo: url })}
+          />
+        </div>
+        
         <Button 
           className="bg-[#B89B7A] hover:bg-[#A38A69]"
           onClick={() => {

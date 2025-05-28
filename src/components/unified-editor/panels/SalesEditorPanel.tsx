@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -13,10 +12,12 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/components/ui/use-toast';
 import { AlertCircle, Palette, Image, Type } from 'lucide-react';
 import { Block, BlockType } from '@/types/editor';
+
 interface SalesEditorPanelProps {
   isPreviewing: boolean;
   primaryStyle: StyleResult;
 }
+
 const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({ 
   isPreviewing, 
   primaryStyle 
@@ -24,6 +25,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<'hero' | 'content' | 'offer'>('hero');
+
   // Load mock blocks when component mounts
   useEffect(() => {
     setBlocks([
@@ -43,6 +45,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
       }
     ]);
   }, []);
+
   const handleAddBlock = (type: string) => {
     // Make sure the type is a valid BlockType
     const blockType = type as BlockType;
@@ -58,20 +61,27 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
       },
       order: blocks.length
     };
+
     setBlocks([...blocks, newBlock]);
     setSelectedBlockId(newBlock.id);
+    
     toast({
       title: "Componente adicionado",
       description: `Um novo componente do tipo ${type} foi adicionado.`,
     });
   };
+
   const handleUpdateBlock = (id: string, content: any) => {
     setBlocks(blocks.map(block => 
       block.id === id ? { ...block, content: { ...block.content, ...content } } : block
     ));
+  };
+
   const handleDeleteBlock = (id: string) => {
     setBlocks(blocks.filter(block => block.id !== id));
     setSelectedBlockId(null);
+  };
+
   const renderSalesPreview = () => {
     if (blocks.length === 0) {
       return (
@@ -88,6 +98,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
         </div>
       );
     }
+
     return (
       <div className="space-y-8 mb-12 max-w-3xl mx-auto">
         {blocks.map(block => (
@@ -122,6 +133,7 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
                 )}
               </div>
             )}
+
             {block.type === 'benefits' && (
               <div className="py-8 px-6 bg-white rounded-lg">
                 <h2 className="text-2xl font-semibold mb-6 text-center">
@@ -138,30 +150,48 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
             {block.type === 'pricing' && (
               <div className="py-8 px-6 bg-white rounded-lg text-center">
                 <h2 className="text-2xl font-semibold mb-2">
                   {block.content.title || 'Preço Especial'}
+                </h2>
                 <div className="mb-6">
                   <span className="text-3xl font-bold">{block.content.price || 'R$ 97,00'}</span>
                   {block.content.regularPrice && (
                     <span className="text-gray-500 line-through ml-2">{block.content.regularPrice}</span>
                   )}
+                </div>
                 <Button size="lg" className="bg-[#B89B7A] hover:bg-[#8F7A6A]">
                   {block.content.buttonText || 'Comprar Agora'}
                 </Button>
+              </div>
+            )}
+
             {/* More block types can be added here */}
           </div>
         ))}
       </div>
     );
+  };
+
   const renderPropertiesPanel = () => {
     if (!selectedBlockId) {
+      return (
         <div className="p-4 text-center">
           <p className="text-gray-500">
             Selecione um componente para editar suas propriedades
+          </p>
+        </div>
+      );
+    }
+
     const selectedBlock = blocks.find(block => block.id === selectedBlockId);
     if (!selectedBlock) return null;
+
+    return (
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-medium text-lg">Propriedades</h3>
@@ -169,7 +199,10 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
             onClick={() => setSelectedBlockId(null)} 
             size="sm" 
             variant="ghost"
+          >
             Fechar
+          </Button>
+        </div>
           
         <Tabs defaultValue="content" className="w-full">
           <TabsList className="w-full mb-4">
@@ -188,16 +221,25 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
               />
             </div>
               
+            <div>
               <label className="block text-sm font-medium mb-1">Subtítulo</label>
+              <Input 
                 value={selectedBlock.content.subtitle || ''} 
                 onChange={(e) => handleUpdateBlock(selectedBlockId, { subtitle: e.target.value })}
                 placeholder="Subtítulo" 
+              />
+            </div>
+              
+            <div>
               <label className="block text-sm font-medium mb-1">Descrição</label>
               <Textarea 
                 value={selectedBlock.content.description || ''} 
                 onChange={(e) => handleUpdateBlock(selectedBlockId, { description: e.target.value })}
                 placeholder="Descrição" 
                 rows={4}
+              />
+            </div>
+              
             {selectedBlock.type === 'hero-section' && (
               <div>
                 <label className="block text-sm font-medium mb-1">URL da Imagem</label>
@@ -206,6 +248,9 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
                   onChange={(e) => handleUpdateBlock(selectedBlockId, { imageUrl: e.target.value })}
                   placeholder="https://example.com/image.jpg" 
                 />
+              </div>
+            )}
+              
             {selectedBlock.type === 'pricing' && (
               <>
                 <div>
@@ -214,21 +259,42 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
                     value={selectedBlock.content.price || ''} 
                     onChange={(e) => handleUpdateBlock(selectedBlockId, { price: e.target.value })}
                     placeholder="R$ 97,00" 
+                  />
+                </div>
+                <div>
                   <label className="block text-sm font-medium mb-1">Preço Regular</label>
+                  <Input 
                     value={selectedBlock.content.regularPrice || ''} 
                     onChange={(e) => handleUpdateBlock(selectedBlockId, { regularPrice: e.target.value })}
                     placeholder="R$ 197,00" 
+                  />
+                </div>
+                <div>
                   <label className="block text-sm font-medium mb-1">Texto do Botão</label>
+                  <Input 
                     value={selectedBlock.content.buttonText || ''} 
                     onChange={(e) => handleUpdateBlock(selectedBlockId, { buttonText: e.target.value })}
                     placeholder="Comprar Agora" 
+                  />
+                </div>
               </>
+            )}
+          </div>
         </Tabs>
+          
         <div className="mt-6 pt-4 border-t">
+          <Button 
             onClick={() => handleDeleteBlock(selectedBlockId)} 
             variant="destructive" 
             size="sm"
+          >
             Remover Bloco
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
@@ -238,17 +304,28 @@ const SalesEditorPanel: React.FC<SalesEditorPanelProps> = ({
           activeStageType={null}
         />
       </ResizablePanel>
+
       <ResizableHandle withHandle />
+
       <ResizablePanel defaultSize={55}>
         <div className="h-full bg-gray-100 overflow-auto">
           <ScrollArea className="h-full">
             <div className="p-8 min-h-full">
               {renderSalesPreview()}
+            </div>
           </ScrollArea>
+        </div>
+      </ResizablePanel>
+
+      <ResizableHandle withHandle />
+
       <ResizablePanel defaultSize={25}>
         <div className="h-full border-l border-gray-200 bg-white overflow-auto">
           {renderPropertiesPanel()}
+        </div>
+      </ResizablePanel>
     </ResizablePanelGroup>
   );
 };
+
 export default SalesEditorPanel;

@@ -1,8 +1,8 @@
-"use client";
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { toast } from '../ui/use-toast';
+
 interface QuestionProps {
   question: {
     id: string;
@@ -16,6 +16,7 @@ interface QuestionProps {
   onNext: () => void;
   onSelect: (optionIds: string[]) => void;
 }
+
 const QuestionComponent: React.FC<QuestionProps> = ({
   question,
   onNext,
@@ -23,10 +24,12 @@ const QuestionComponent: React.FC<QuestionProps> = ({
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const requiredSelections = question.isStrategic ? 1 : 3;
+
   // Reset selections when question changes
   useEffect(() => {
     setSelectedOptions([]);
   }, [question.id]);
+
   const handleOptionSelect = (optionId: string) => {
     setSelectedOptions((prev) => {
       // If the option is already selected, remove it
@@ -42,16 +45,26 @@ const QuestionComponent: React.FC<QuestionProps> = ({
           variant: "destructive"
         });
         return prev;
+      }
+
       // Add the new selection
       const newSelections = [...prev, optionId];
+      
       // Call onSelect to propagate the change up
       onSelect(newSelections);
+      
       // If completed the required selections, show success message
       if (newSelections.length === requiredSelections) {
+        toast({
           title: "Seleções completas!",
           description: "Agora você pode avançar para a próxima questão",
+        });
+      }
+
       return newSelections;
     });
+  };
+
   const handleNext = () => {
     if (selectedOptions.length !== requiredSelections) {
       toast({
@@ -61,10 +74,14 @@ const QuestionComponent: React.FC<QuestionProps> = ({
       });
       return;
     }
+
     onNext();
+  };
+
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-[#432818]">{question.text}</h2>
+      
       <div className="space-y-3">
         {question.options.map((option) => (
           <button
@@ -83,6 +100,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
           </button>
         ))}
       </div>
+
       <div className="flex items-center justify-between">
         <div className="text-sm text-[#8F7A6A]">
           <p>Selecionadas: {selectedOptions.length} de {requiredSelections}</p>
@@ -104,7 +122,9 @@ const QuestionComponent: React.FC<QuestionProps> = ({
         >
           Avançar
         </Button>
+      </div>
     </div>
   );
 };
+
 export default QuestionComponent;

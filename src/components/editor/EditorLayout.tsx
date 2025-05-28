@@ -7,20 +7,26 @@ import PagePreview from './preview/PagePreview';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { EditorBlock } from '@/types/editor';
 import { useEditor } from '@/hooks/useEditor';
+
 interface EditorLayoutProps {
   primaryStyle?: StyleResult;
 }
+
 const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const { config, addBlock, updateBlock, deleteBlock } = useEditor();
+
   // Função para adicionar um bloco quando um componente é selecionado do sidebar
   const handleComponentSelect = (componentType: EditorBlock['type']) => {
     const newBlockId = addBlock(componentType);
     setSelectedComponent(newBlockId);
   };
+
   // Função para mostrar as propriedades de um bloco
   const handleSelectComponent = (blockId: string) => {
     setSelectedComponent(blockId);
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <ResizablePanelGroup direction="horizontal" className="flex-1">
@@ -32,6 +38,7 @@ const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
         </ResizablePanel>
         
         <ResizableHandle withHandle />
+        
         {/* Central Area - Page Preview */}
         <ResizablePanel defaultSize={55}>
           <PagePreview
@@ -44,6 +51,10 @@ const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
             blocks={config.blocks}
             onAddBlock={() => handleComponentSelect('headline')}
           />
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
         {/* Right Sidebar - Properties */}
         <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
           <div className="h-full border-l border-[#B89B7A]/20 bg-white overflow-y-auto">
@@ -51,8 +62,11 @@ const EditorLayout = ({ primaryStyle }: EditorLayoutProps) => {
               selectedComponentId={selectedComponent}
               onClose={() => setSelectedComponent(null)}
             />
+          </div>
+        </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );
 };
+
 export default EditorLayout;

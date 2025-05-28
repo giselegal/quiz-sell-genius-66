@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '../ui/button';
@@ -10,12 +9,15 @@ import { preloadImagesByUrls } from '@/utils/imageManager';
 interface BeforeAfterTransformationProps {
   handleCTAClick?: () => void;
 }
+
 interface TransformationItem {
   image: string; 
   name: string;
   id: string; 
   width?: number;
   height?: number;
+}
+
 const transformations: TransformationItem[] = [
   {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
@@ -24,11 +26,15 @@ const transformations: TransformationItem[] = [
     width: 800,
     height: 1000
   }, 
+  {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
     name: "Mariangela",
     id: "transformation-mariangela",
+    width: 800,
+    height: 1000
   }
 ];
+
 const preloadInitialTransformationImages = () => {
   const imageUrls: string[] = [];
   transformations.slice(0, 1).forEach(item => { 
@@ -40,13 +46,17 @@ const preloadInitialTransformationImages = () => {
       quality: 90, 
       batchSize: 1,
     });
+  }
 };
+
 const BeforeAfterTransformation3: React.FC<BeforeAfterTransformationProps> = ({ handleCTAClick }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  
   const activeTransformation = transformations[activeIndex];
+
   useEffect(() => {
     preloadInitialTransformationImages(); 
     const fallbackLoadingTimer = setTimeout(() => {
@@ -54,8 +64,10 @@ const BeforeAfterTransformation3: React.FC<BeforeAfterTransformationProps> = ({ 
         setIsLoading(false);
       }
     }, 2500);
+
     return () => clearTimeout(fallbackLoadingTimer);
   }, []);
+
   if (isLoading) {
     return (
       <div className="my-6 sm:my-8 md:my-10">
@@ -91,9 +103,12 @@ const BeforeAfterTransformation3: React.FC<BeforeAfterTransformationProps> = ({ 
               </span>
             </Button>
             <p className="text-xs text-[#aa6b5d] text-center mt-1">Oferta por tempo limitado</p>
+          </div>
         </Card>
       </div>
     );
+  }
+
   // Ajuste: prioriza o carregamento da imagem ativa
   return (
     <div className="my-6 sm:my-8 md:my-10">
@@ -119,12 +134,17 @@ const BeforeAfterTransformation3: React.FC<BeforeAfterTransformationProps> = ({ 
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-[#B89B7A]/20 transition"
               onClick={() => setActiveIndex((activeIndex - 1 + transformations.length) % transformations.length)}
               aria-label="Anterior"
+            >
               <ChevronLeft size={20} />
             </button>
+            <button
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-[#B89B7A]/20 transition"
               onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
               aria-label="Próxima"
+            >
               <ChevronRight size={20} />
+            </button>
+          </div>
         </div>
         {/* Coluna de texto e CTA */}
         <div className="flex flex-col justify-center w-full md:pl-6 max-w-xl mx-auto">
@@ -151,7 +171,10 @@ const BeforeAfterTransformation3: React.FC<BeforeAfterTransformationProps> = ({ 
             </span>
           </Button>
           <p className="text-xs text-[#aa6b5d] text-center mt-1">Oferta por tempo limitado</p>
+        </div>
       </Card>
     </div>
   );
+};
+
 export default BeforeAfterTransformation3;

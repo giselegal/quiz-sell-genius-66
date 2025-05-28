@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Check, CheckCircle, CircleCheck, BadgeCheck, Star, Award, Shield, Sparkles } from 'lucide-react';
+
 interface BenefitsBlockPreviewProps {
   content: {
     title?: string;
@@ -11,6 +12,7 @@ interface BenefitsBlockPreviewProps {
     style?: any;
   };
 }
+
 const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) => {
   const renderIcon = (iconName: string) => {
     const iconColor = content.iconColor || '#aa6b5d';
@@ -35,6 +37,8 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
       default:
         return <Check {...iconProps} />;
     }
+  };
+
   return (
     <div style={content.style}>
       <h3 className="text-xl font-bold mb-4 text-[#aa6b5d]">
@@ -62,4 +66,5 @@ const BenefitsBlockPreview: React.FC<BenefitsBlockPreviewProps> = ({ content }) 
     </div>
   );
 };
+
 export default BenefitsBlockPreview;

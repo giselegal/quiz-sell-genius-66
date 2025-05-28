@@ -4,6 +4,7 @@ import { clothingQuestions } from '@/data/questions/clothingQuestions';
 import { personalityQuestions } from '@/data/questions/personalityQuestions';
 import { accessoriesQuestions } from '@/data/questions/accessoriesQuestions';
 import { strategicQuestions } from '@/data/strategicQuestions';
+
 // Template padrão para quiz de estilo pessoal
 export const styleQuizTemplate: QuizTemplate = {
   id: 'style-quiz-default',
@@ -25,6 +26,7 @@ export const styleQuizTemplate: QuizTemplate = {
     mainContentConfig: {
       description: 'Seu estilo predominante reflete sua personalidade e preferências únicas. Use essas informações para criar looks que expressem quem você é.',
       customImage: '/styles/default-style.jpg'
+    },
     offerConfig: {
       title: 'Aprimore seu Estilo',
       subtitle: 'Consultoria personalizada para valorizar suas características',

@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,15 +9,17 @@ import { EditorToolbar } from './toolbar/EditorToolbar';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { UnifiedTemplateModal } from './modals/UnifiedTemplateModal';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 export type EditorTab = 'quiz' | 'result' | 'sales';
+
 interface UnifiedVisualEditorProps {
   primaryStyle: StyleResult;
   initialActiveTab?: EditorTab;
 }
+
 export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({ 
   primaryStyle, 
   initialActiveTab = 'quiz' 
@@ -26,7 +27,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
   const [activeTab, setActiveTab] = useState<EditorTab>(initialActiveTab);
   const [isLoading, setIsLoading] = useState(false);
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('lg');
-  const router = useRouter();
+  const navigate = useNavigate();
   
   const {
     isPreviewing,
@@ -38,12 +39,14 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     loadTemplateForCurrentEditor,
     setActiveMode
   } = useUnifiedEditor(primaryStyle);
+
   useEffect(() => {
     // Update the active mode in the unified editor hook
     setActiveMode(activeTab);
     // Update URL when tab changes
-    router.push(`/admin/editor?tab=${activeTab}`);
-  }, [activeTab, router, setActiveMode]);
+    navigate(`/admin/editor?tab=${activeTab}`, { replace: true });
+  }, [activeTab, navigate, setActiveMode]);
+  
   const handleTabChange = (value: string) => {
     const newTab = value as EditorTab;
     setActiveTab(newTab);
@@ -52,10 +55,14 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
       duration: 2000,
     });
   };
+
   const handleSave = async () => {
     setIsLoading(true);
+    toast({
       title: "Salvando alterações",
       description: "Por favor, aguarde...",
+      duration: 2000,
+    });
     
     try {
       const success = await saveAll();
@@ -67,14 +74,18 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
           duration: 3000,
         });
       } else {
+        toast({
           title: "Erro ao salvar",
           description: "Ocorreu um erro ao salvar as alterações. Por favor, tente novamente.",
           variant: "destructive",
           duration: 5000,
+        });
       }
     } finally {
       setIsLoading(false);
     }
+  };
+
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <EditorToolbar
@@ -85,6 +96,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         viewportSize={viewportSize}
         onViewportSizeChange={setViewportSize}
       />
+      
       <Tabs
         value={activeTab}
         onValueChange={handleTabChange}
@@ -101,11 +113,20 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
             <QuizEditorPanel isPreviewing={isPreviewing} />
           </TooltipProvider>
         </TabsContent>
+        
         <TabsContent value="result" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
+          <TooltipProvider>
             <ResultEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
+          </TooltipProvider>
+        </TabsContent>
+        
         <TabsContent value="sales" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
+          <TooltipProvider>
             <SalesEditorPanel isPreviewing={isPreviewing} primaryStyle={primaryStyle} />
+          </TooltipProvider>
+        </TabsContent>
       </Tabs>
+
       {isTemplateModalOpen && (
         <UnifiedTemplateModal
           activeTab={activeTab}
@@ -113,6 +134,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
           onApplyTemplate={loadTemplateForCurrentEditor}
         />
       )}
+      
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white rounded-lg p-6 flex items-center gap-3">
@@ -120,6 +142,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
             <span>Salvando alterações...</span>
           </div>
         </div>
+      )}
     </div>
   );
 };

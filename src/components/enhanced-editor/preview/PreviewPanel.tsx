@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { BlockPreviewRenderer } from './BlockPreviewRenderer';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+
 interface PreviewPanelProps {
   blocks: Block[];
   selectedBlockId: string | null;
@@ -16,12 +17,14 @@ interface PreviewPanelProps {
   primaryStyle?: StyleResult;
   onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
 }
+
 const viewportWidths = {
   sm: 375, // Mobile
   md: 768, // Tablet
   lg: 1024, // Desktop
   xl: 1280, // Large Desktop
 };
+
 export function PreviewPanel({
   blocks,
   selectedBlockId,
@@ -35,10 +38,13 @@ export function PreviewPanel({
     const { active, over } = event;
     
     if (!over || active.id === over.id) return;
+    
     const oldIndex = blocks.findIndex(block => block.id === active.id);
     const newIndex = blocks.findIndex(block => block.id === over.id);
+    
     onReorderBlocks(oldIndex, newIndex);
   };
+
   return (
     <div className="h-full flex flex-col bg-[#FAF9F7] overflow-hidden">
       <div className="flex-1 overflow-hidden p-4">
@@ -88,3 +94,4 @@ export function PreviewPanel({
       </div>
     </div>
   );
+}

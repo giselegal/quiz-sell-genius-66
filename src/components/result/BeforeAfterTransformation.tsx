@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '../ui/button';
@@ -10,12 +9,15 @@ import { preloadImagesByUrls } from '@/utils/imageManager';
 interface BeforeAfterTransformationProps {
   handleCTAClick?: () => void;
 }
+
 interface TransformationItem {
   image: string; 
   name: string;
   id: string; 
   width?: number;
   height?: number;
+}
+
 const transformations: TransformationItem[] = [
   {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
@@ -24,11 +26,15 @@ const transformations: TransformationItem[] = [
     width: 800,
     height: 1000
   }, 
+  {
     image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
     name: "Mariangela",
     id: "transformation-mariangela",
+    width: 800,
+    height: 1000
   }
 ];
+
 const preloadInitialTransformationImages = () => {
   const imageUrls: string[] = [];
   transformations.slice(0, 1).forEach(item => { 
@@ -40,14 +46,18 @@ const preloadInitialTransformationImages = () => {
       quality: 90, 
       batchSize: 1,
     });
+  }
 };
+
 const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ handleCTAClick }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  
   const activeTransformation = transformations[activeIndex];
   const autoSlideInterval = 5000; // 5 segundos
+
   useEffect(() => {
     preloadInitialTransformationImages(); 
     const fallbackLoadingTimer = setTimeout(() => {
@@ -55,10 +65,13 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
         setIsLoading(false);
       }
     }, 2500);
+
     return () => clearTimeout(fallbackLoadingTimer);
   }, []);
+
   // Removido efeito de slide automático para melhorar desempenho
   /*
+  useEffect(() => {
     const slideTimer = setTimeout(() => {
       const next = (activeIndex + 1) % transformations.length;
       setActiveIndex(next);
@@ -66,6 +79,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     return () => clearTimeout(slideTimer);
   }, [activeIndex]);
   */
+
   if (isLoading) {
     return (
       <div className="my-6 sm:my-8 md:my-10">
@@ -95,12 +109,15 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     className={`w-2.5 h-2.5 rounded-full ${idx === 0 ? 'bg-[#B89B7A]' : 'bg-gray-300'}`}
                   />
                 ))}
+              </div>
             </div>
             
             {/* Coluna de conteúdo com skeletons */}
             <div className="flex flex-col justify-center">
               <div className="h-7 bg-[#f8f5f0] rounded animate-pulse mb-4 w-3/4 mx-auto md:mx-0"></div>
+              
               <div className="h-16 bg-[#f8f5f0] rounded animate-pulse mb-5"></div>
+              
               {/* Lista de benefícios com skeletons */}
               <div className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10">
                 <ul className="space-y-3.5">
@@ -111,15 +128,21 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     </li>
                   ))}
                 </ul>
+              </div>
+              
               {/* CTA skeleton */}
               <div className="flex flex-col items-center md:items-start">
                 <div className="w-full max-w-[280px] h-12 bg-[#f8f5f0] rounded animate-pulse mb-2"></div>
                 <div className="h-3 w-32 bg-[#f8f5f0] rounded animate-pulse mb-4"></div>
                 <div className="w-full max-w-[280px] h-[60px] bg-[#f8f5f0] rounded animate-pulse"></div>
+              </div>
+            </div>
           </div>
         </Card>
       </div>
     );
+  }
+
   // Ajuste: prioriza o carregamento da imagem ativa
   return (
     <div className="my-6 sm:my-8 md:my-10">
@@ -144,13 +167,17 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 onLoad={() => setImageLoaded(true)}
                 priority={true}
               />
+              
               {/* Nome da pessoa */}
               <span className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm text-[#432818] text-xs font-medium px-3 py-1 rounded-full shadow-sm">
                 {activeTransformation.name}
               </span>
+              
               {/* Selo 'Resultados Reais' */}
               <span className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm">
                 Resultados Reais
+              </span>
+              
               {/* Navegação */}
               {transformations.length > 1 && (
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
@@ -161,13 +188,22 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   >
                     <ChevronLeft size={22} className="text-[#432818]" />
                   </button>
+                  <button
+                    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
                     onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
                     aria-label="Próxima"
+                  >
                     <ChevronRight size={22} className="text-[#432818]" />
+                  </button>
                 </div>
               )}
+            </div>
+            
             {/* Indicadores de slides */}
             {transformations.length > 1 && (
+              <div className="flex justify-center space-x-3 mt-4">
+                {transformations.map((_, idx) => (
+                  <button
                     key={idx}
                     onClick={() => setActiveIndex(idx)}
                     className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
@@ -176,16 +212,22 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         : 'bg-gray-300 hover:bg-[#B89B7A]/50'
                     }`}
                     aria-label={`Ver transformação ${idx + 1}`}
+                  />
+                ))}
+              </div>
             )}
+          </div>
           
           {/* Coluna de conteúdo */}
           <div className="flex flex-col justify-center">
             <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
               Transformação Visual com Propósito
             </h4>
+            
             <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
               Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.
             </p>
+            
             {/* Lista de benefícios */}
             <div className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10 hover:border-[#B89B7A]/20 transition-all duration-300 hover:shadow-sm">
               <ul className="space-y-3.5 text-center md:text-left">
@@ -198,10 +240,36 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   </span>
                   <span className="group-hover:text-[#432818] transition-colors">Looks com intenção e identidade</span>
                 </li>
+                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
+                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
+                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
                   <span className="group-hover:text-[#432818] transition-colors">Cores, modelagens e tecidos a seu favor</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
+                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
+                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
                   <span className="group-hover:text-[#432818] transition-colors">Imagem alinhada aos seus objetivos</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
+                  <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
+                      <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
                   <span className="group-hover:text-[#432818] transition-colors">Guarda-roupa funcional, sem compras por impulso</span>
+                </li>
               </ul>
+            </div>
+            
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
               <Button
@@ -215,14 +283,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 style={{
                   background: "linear-gradient(to right, #4CAF50, #45a049)",
                   boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+                }}
               >
                 <span className="flex items-center justify-center gap-2">
                   <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                   Quero Meu Guia de Estilo
+                </span>
               </Button>
+              
               <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4">
                 Oferta por tempo limitado
               </p>
+            
               {/* Métodos de pagamento */}
               <div className="w-full max-w-[280px] mx-auto md:mx-0 transition-transform duration-300 hover:scale-[1.02]">
                 <img
@@ -233,8 +305,13 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   width="400"
                   height="100"
                 />
+              </div>
+            </div>
+          </div>
         </div>
       </Card>
     </div>
   );
+};
+
 export default BeforeAfterTransformation;

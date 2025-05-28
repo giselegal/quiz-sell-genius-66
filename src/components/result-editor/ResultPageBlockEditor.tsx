@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from 'react';
 import { ResultPageBlock, StyleResultBlock, CTABlock, TestimonialBlock, CarouselBlock } from '@/types/quizResult';
 import { Button } from '@/components/ui/button';
@@ -21,6 +20,7 @@ interface ResultPageBlockEditorProps {
   abTestVariants?: string[];
   abTestEnabled?: boolean;
 }
+
 export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
   block,
   onUpdate,
@@ -30,21 +30,38 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
   abTestEnabled = false
 }) => {
   const [activeTab, setActiveTab] = useState('content');
+
   const handleContentChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     onUpdate({
       ...block,
       content: e.target.value
     });
   };
+
   const handleSettingChange = (key: string, value: any) => {
+    onUpdate({
+      ...block,
       settings: {
         ...block.settings,
         [key]: value
       }
+    });
+  };
+
   const handleVisibilityToggle = () => {
+    onUpdate({
+      ...block,
       isVisible: block.isVisible === undefined ? false : !block.isVisible
+    });
+  };
+
   const handleAbTestVariantChange = (variant: string) => {
+    onUpdate({
+      ...block,
       abTestVariant: variant
+    });
+  };
+
   const renderSpecificBlockEditor = () => {
     switch (block.type) {
       case 'styleResult':
@@ -58,6 +75,8 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
       default:
         return renderDefaultEditor();
     }
+  };
+
   const renderStyleResultEditor = (styleBlock: StyleResultBlock) => (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -81,6 +100,8 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           </SelectContent>
         </Select>
       </div>
+
+      <div className="space-y-2">
         <Label htmlFor="percentage">Porcentagem</Label>
         <Input
           id="percentage"
@@ -90,27 +111,50 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           value={styleBlock.percentage || 0}
           onChange={(e) => onUpdate({ ...styleBlock, percentage: Number(e.target.value) })}
         />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="description">Descrição</Label>
         <Textarea
           id="description"
           value={styleBlock.description || ''}
           onChange={(e) => onUpdate({ ...styleBlock, description: e.target.value })}
           rows={4}
+        />
+      </div>
     </div>
   );
+
   const renderCTAEditor = (ctaBlock: CTABlock) => (
+    <div className="space-y-4">
+      <div className="space-y-2">
         <Label htmlFor="buttonText">Texto do Botão</Label>
+        <Input
           id="buttonText"
           value={ctaBlock.buttonText}
           onChange={(e) => onUpdate({ ...ctaBlock, buttonText: e.target.value })}
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="url">URL</Label>
+        <Input
           id="url"
           value={ctaBlock.url}
           onChange={(e) => onUpdate({ ...ctaBlock, url: e.target.value })}
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="pixelId">ID do Pixel (opcional)</Label>
+        <Input
           id="pixelId"
           value={ctaBlock.pixelId || ''}
           onChange={(e) => onUpdate({ ...ctaBlock, pixelId: e.target.value })}
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="backgroundColor">Cor de Fundo</Label>
         <div className="flex items-center gap-2">
           <Input
@@ -120,31 +164,78 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
             value={ctaBlock.backgroundColor || '#000000'}
             onChange={(e) => onUpdate({ ...ctaBlock, backgroundColor: e.target.value })}
           />
+          <Input
+            value={ctaBlock.backgroundColor || '#000000'}
+            onChange={(e) => onUpdate({ ...ctaBlock, backgroundColor: e.target.value })}
             className="flex-1"
+          />
         </div>
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="textColor">Cor do Texto</Label>
+        <div className="flex items-center gap-2">
+          <Input
             id="textColor"
+            type="color"
+            className="w-12 h-10 p-1"
             value={ctaBlock.textColor || '#ffffff'}
             onChange={(e) => onUpdate({ ...ctaBlock, textColor: e.target.value })}
+          />
+          <Input
+            value={ctaBlock.textColor || '#ffffff'}
+            onChange={(e) => onUpdate({ ...ctaBlock, textColor: e.target.value })}
+            className="flex-1"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
   const renderTestimonialEditor = (testimonialBlock: TestimonialBlock) => (
+    <div className="space-y-4">
+      <div className="space-y-2">
         <Label htmlFor="content">Depoimento</Label>
+        <Textarea
           id="content"
           value={testimonialBlock.content}
           onChange={handleContentChange}
+          rows={4}
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="author">Autor</Label>
+        <Input
           id="author"
           value={testimonialBlock.author}
           onChange={(e) => onUpdate({ ...testimonialBlock, author: e.target.value })}
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="authorImage">Imagem do Autor (URL)</Label>
+        <Input
           id="authorImage"
           value={testimonialBlock.authorImage || ''}
           onChange={(e) => onUpdate({ ...testimonialBlock, authorImage: e.target.value })}
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="rating">Avaliação (1-5)</Label>
+        <Input
           id="rating"
+          type="number"
           min="1"
           max="5"
           value={testimonialBlock.rating || 5}
           onChange={(e) => onUpdate({ ...testimonialBlock, rating: Number(e.target.value) })}
+        />
+      </div>
+    </div>
+  );
+
   const renderCarouselEditor = (carouselBlock: CarouselBlock) => {
     const addCarouselItem = () => {
       const newItem = {
@@ -158,13 +249,30 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
         items: [...(carouselBlock.items || []), newItem]
       });
     };
+
     const updateCarouselItem = (index: number, key: string, value: string) => {
       const updatedItems = [...(carouselBlock.items || [])];
       updatedItems[index] = {
         ...updatedItems[index],
+        [key]: value
+      };
+      
+      onUpdate({
+        ...carouselBlock,
         items: updatedItems
+      });
+    };
+
     const removeCarouselItem = (index: number) => {
+      const updatedItems = [...(carouselBlock.items || [])];
       updatedItems.splice(index, 1);
+      
+      onUpdate({
+        ...carouselBlock,
+        items: updatedItems
+      });
+    };
+
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -172,6 +280,8 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           <Button size="sm" variant="outline" onClick={addCarouselItem}>
             <PlusCircle className="h-4 w-4 mr-1" /> Adicionar Item
           </Button>
+        </div>
+
         <ScrollArea className="h-[300px] pr-4">
           <div className="space-y-4">
             {(carouselBlock.items || []).map((item, index) => (
@@ -186,6 +296,7 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
+
                 <div className="space-y-3">
                   <div className="space-y-1">
                     <Label htmlFor={`item-${index}-image`}>URL da Imagem</Label>
@@ -195,27 +306,51 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
                       onChange={(e) => updateCarouselItem(index, 'imageUrl', e.target.value)}
                     />
                   </div>
+
+                  <div className="space-y-1">
                     <Label htmlFor={`item-${index}-caption`}>Legenda</Label>
+                    <Input
                       id={`item-${index}-caption`}
                       value={item.caption || ''}
                       onChange={(e) => updateCarouselItem(index, 'caption', e.target.value)}
+                    />
+                  </div>
+                </div>
               </Card>
             ))}
           </div>
         </ScrollArea>
+      </div>
     );
+  };
+
   const renderDefaultEditor = () => (
+    <div className="space-y-4">
+      <div className="space-y-2">
         <Label htmlFor="content">Conteúdo</Label>
+        <Textarea
+          id="content"
           value={block.content}
+          onChange={handleContentChange}
           rows={6}
+        />
+      </div>
+
       {block.type === 'image' && (
         <div className="space-y-2">
           <Label htmlFor="imageUrl">URL da Imagem</Label>
+          <Input
             id="imageUrl"
             value={block.imageUrl || ''}
             onChange={(e) => onUpdate({ ...block, imageUrl: e.target.value })}
+          />
+        </div>
       )}
+    </div>
+  );
+
   return (
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <h3 className="text-lg font-medium capitalize">{block.type}</h3>
@@ -230,20 +365,30 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
             ) : (
               <Eye className="h-4 w-4" />
             )}
+          </Button>
+        </div>
         <div className="flex space-x-2">
           <Button size="sm" variant="outline" onClick={onDuplicate}>
             <Copy className="h-4 w-4" />
+          </Button>
           <Button size="sm" variant="outline" onClick={onDelete}>
             <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="content">Conteúdo</TabsTrigger>
           <TabsTrigger value="settings">Configurações</TabsTrigger>
         </TabsList>
+
         <TabsContent value="content" className="pt-4">
           {renderSpecificBlockEditor()}
         </TabsContent>
+
         <TabsContent value="settings" className="pt-4">
+          <div className="space-y-4">
             {abTestEnabled && (
               <div className="space-y-2">
                 <Label htmlFor="abTestVariant">Variante de Teste A/B</Label>
@@ -264,6 +409,8 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
                   </SelectContent>
                 </Select>
               </div>
+            )}
+
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="isVisible">Visibilidade</Label>
@@ -272,9 +419,14 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
                   checked={block.isVisible !== false}
                   onCheckedChange={() => handleVisibilityToggle()}
                 />
+              </div>
               <p className="text-sm text-gray-500">
                 Controle se este bloco deve ser exibido na página de resultados
               </p>
             </div>
+          </div>
+        </TabsContent>
       </Tabs>
+    </div>
+  );
 };

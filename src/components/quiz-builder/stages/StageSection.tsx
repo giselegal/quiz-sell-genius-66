@@ -6,6 +6,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+
 interface StageSectionProps {
   title: string;
   isExpanded: boolean;
@@ -16,14 +17,17 @@ interface StageSectionProps {
   onStageEdit: (id: string) => void;
   onStageDelete: (id: string) => void;
 }
+
 const StageItem = ({ stage, isActive, onSelect, onEdit, onDelete }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: stage.id
   });
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition
   };
+
   const getStageIcon = () => {
     switch (stage.type) {
       case 'cover':
@@ -37,6 +41,8 @@ const StageItem = ({ stage, isActive, onSelect, onEdit, onDelete }) => {
       default:
         return '📄';
     }
+  };
+
   return (
     <div
       ref={setNodeRef}
@@ -56,6 +62,7 @@ const StageItem = ({ stage, isActive, onSelect, onEdit, onDelete }) => {
     </div>
   );
 };
+
 export const StageSection: React.FC<StageSectionProps> = ({
   title,
   isExpanded,
@@ -66,6 +73,7 @@ export const StageSection: React.FC<StageSectionProps> = ({
   onStageEdit,
   onStageDelete
 }) => {
+  return (
     <div className="mb-4">
       <Button
         variant="ghost"
@@ -75,6 +83,7 @@ export const StageSection: React.FC<StageSectionProps> = ({
         <span className="font-medium">{title}</span>
         {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
       </Button>
+
       {isExpanded && (
         <div className="ml-2 mt-1 space-y-1">
           {stages.length === 0 ? (
@@ -92,3 +101,7 @@ export const StageSection: React.FC<StageSectionProps> = ({
             ))
           )}
         </div>
+      )}
+    </div>
+  );
+};

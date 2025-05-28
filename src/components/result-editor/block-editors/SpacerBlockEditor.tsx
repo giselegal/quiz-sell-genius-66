@@ -4,16 +4,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Block } from '@/types/editor';
 import { Slider } from '@/components/ui/slider';
+
 interface SpacerBlockEditorProps {
   block: Block;
   onUpdate: (content: any) => void;
 }
+
 const SpacerBlockEditor: React.FC<SpacerBlockEditorProps> = ({ block, onUpdate }) => {
   const content = block.content;
   const spacerHeight = parseInt(content.height?.replace('px', '') || '40');
+
   const handleSliderChange = (value: number[]) => {
     onUpdate({ height: `${value[0]}px` });
   };
+
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -31,14 +35,17 @@ const SpacerBlockEditor: React.FC<SpacerBlockEditorProps> = ({ block, onUpdate }
             value={content.height || '40px'}
             onChange={(e) => onUpdate({ height: e.target.value })}
             className="w-20"
+          />
         </div>
         
         <div className="mt-4 bg-gray-50 rounded p-2" style={{ height: content.height || '40px' }}>
           <div className="text-xs text-center text-gray-400">
             Visualização do espaçamento
           </div>
+        </div>
       </div>
     </div>
   );
 };
+
 export default SpacerBlockEditor;

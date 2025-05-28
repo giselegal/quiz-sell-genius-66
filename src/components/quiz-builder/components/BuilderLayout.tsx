@@ -6,6 +6,7 @@ import { PropertiesPanel } from '../PropertiesPanel';
 import { ComponentPreviewPanel } from '../preview/ComponentPreviewPanel';
 import { ComponentToolbar } from './ComponentToolbar';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
+
 interface BuilderLayoutProps {
   components: QuizComponentData[];
   stages: QuizStage[];
@@ -24,6 +25,7 @@ interface BuilderLayoutProps {
   onComponentDelete: (id: string) => void;
   onSelectComponent: (id: string) => void;
 }
+
 const BuilderLayout: React.FC<BuilderLayoutProps> = ({
   components,
   stages,
@@ -45,9 +47,11 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
   const activeStageComponents = activeStageId 
     ? components.filter(c => c.stageId === activeStageId)
     : [];
+
   const selectedComponent = selectedComponentId 
     ? components.find(c => c.id === selectedComponentId) 
     : null;
+
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       {/* Left Panel - Stages Sidebar */}
@@ -64,6 +68,7 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
       </ResizablePanel>
       
       <ResizableHandle withHandle />
+      
       {/* Center Panel - Preview */}
       <ResizablePanel defaultSize={57}>
         <div className="h-full flex flex-col">
@@ -83,6 +88,10 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
             />
           </div>
         </div>
+      </ResizablePanel>
+      
+      <ResizableHandle withHandle />
+      
       {/* Right Panel - Properties */}
       <ResizablePanel defaultSize={25} className="bg-[#F9F6F2]">
         <PropertiesPanel 
@@ -92,7 +101,10 @@ const BuilderLayout: React.FC<BuilderLayoutProps> = ({
           onUpdate={onComponentUpdate}
           onUpdateStage={onStageUpdate}
           onDelete={onComponentDelete}
+        />
+      </ResizablePanel>
     </ResizablePanelGroup>
   );
 };
+
 export default BuilderLayout;

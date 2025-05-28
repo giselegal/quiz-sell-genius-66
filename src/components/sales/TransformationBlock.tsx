@@ -29,14 +29,22 @@ const TransformationBlock: React.FC = () => {
               <p className="text-[#3a3a3a]">
                 Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar. Aprenda a transmitir confiança, autoridade e autenticidade através das suas escolhas.
               </p>
+              
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="text-[#aa6b5d] flex-shrink-0 mt-1" size={20} />
                   <span>Looks com propósito e intenção</span>
                 </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="text-[#aa6b5d] flex-shrink-0 mt-1" size={20} />
                   <span>Valorização da sua forma física natural</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="text-[#aa6b5d] flex-shrink-0 mt-1" size={20} />
                   <span>Expressão autêntica da sua personalidade</span>
+                </div>
               </div>
+              
               <Button 
                 className="btn-cta-green w-full py-3 text-lg font-medium"
                 onClick={() => window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912'}
@@ -44,10 +52,12 @@ const TransformationBlock: React.FC = () => {
                 <ShoppingCart className="mr-2" />
                 <span>Quero Meu Guia de Estilo</span>
               </Button>
+            </div>
           </div>
         </Card>
       </div>
     </div>
   );
 };
+
 export default TransformationBlock;

@@ -30,14 +30,22 @@ export interface StyleOptions {
   type?: string;
   buttonColor?: string;
 }
+
 export interface ImageOptions {
   url: string;
   alt: string;
+  width?: string;
+  height?: string;
   borderRadius?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+}
+
 export interface SectionContent {
   [key: string]: any;
   style?: StyleOptions;
   images?: ImageOptions[];
+}
+
 export interface OfferContent {
   title?: string;
   subtitle?: string;
@@ -62,19 +70,30 @@ export interface OfferContent {
   table?: Array<{
     item: string;
     value: string;
+  }>;
   productImages?: Array<{
     url: string;
     alt: string;
+  }>;
   items?: Array<{
+    title: string;
+    description: string;
+  }>;
   testimonials?: Array<{
     name: string;
     role: string;
     text: string;
+  }>;
   image?: string;
+}
+
 export interface Section {
   visible: boolean;
   content: SectionContent;
   appearance?: Record<string, any>;
+  style?: StyleOptions;
+}
+
 export interface OfferSection {
   hero: {
     visible: boolean;
@@ -87,7 +106,10 @@ export interface OfferSection {
   pricing: Section;
   testimonials: Section;
   guarantee: Section;
+}
+
 export interface MentorSection {
+  visible: boolean;
   content: {
     title?: string;
     name?: string;
@@ -95,6 +117,10 @@ export interface MentorSection {
     beforeAfterImage?: string;
     stylesImage?: string;
     bio?: string[];
+  };
+  style?: StyleOptions;
+}
+
 export interface ResultPageConfig {
   styleType: string;
   header: Section;
@@ -108,6 +134,10 @@ export interface ResultPageConfig {
     textColor?: string;
     backgroundColor?: string;
     fontFamily?: string;
+  };
   blocks?: Block[];
+}
+
 export interface ResultPageConfigsStore {
   configs: Record<string, ResultPageConfig>;
+}

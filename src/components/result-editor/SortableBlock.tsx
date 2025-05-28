@@ -7,8 +7,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { GripVertical, Copy, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
 // Define the allowed block types to match what's being used
 type AllowedBlockType = 'heading' | 'paragraph' | 'image' | 'button';
+
 export interface SortableBlockProps {
   block: Block;
   isSelected: boolean;
@@ -17,6 +19,7 @@ export interface SortableBlockProps {
   onDuplicate?: () => void;
   onDelete?: () => void;
 }
+
 export const SortableBlock: React.FC<SortableBlockProps> = ({
   block,
   isSelected,
@@ -32,10 +35,12 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
     transform,
     transition
   } = useSortable({ id: block.id });
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
   const getBlockPreview = () => {
     const blockType = block.type as AllowedBlockType;
     
@@ -56,14 +61,19 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
         ) : (
           <div className="h-20 bg-gray-100 flex items-center justify-center text-gray-400">
             Imagem
+          </div>
         );
       case 'button':
         return (
           <div className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-md">
             {block.content.text || 'Botão'}
+          </div>
+        );
       default:
         return <div className="text-sm text-gray-500">{block.type}</div>;
     }
+  };
+
   if (isPreviewing) {
     return (
       <div ref={setNodeRef} style={style}>
@@ -71,6 +81,7 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
       </div>
     );
   }
+
   return (
     <Card 
       ref={setNodeRef} 
@@ -83,6 +94,8 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
     >
       <div className="absolute left-0 top-0 bottom-0 px-1 flex items-center cursor-grab" {...attributes} {...listeners}>
         <GripVertical className="h-4 w-4 text-muted-foreground" />
+      </div>
+
       <CardContent className="p-4 pl-8">
         <div className="flex items-center justify-between mb-2">
           <h4 className="text-sm font-medium capitalize">{block.type}</h4>
@@ -100,11 +113,22 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
               </Button>
             )}
             {onDelete && (
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="sm" 
+                className="h-7 w-7 p-0"
                 onClick={(e) => { e.stopPropagation(); onDelete(); }}
+              >
                 <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            )}
+          </div>
         </div>
+
         <div className="mt-2">
           {getBlockPreview()}
+        </div>
       </CardContent>
     </Card>
   );

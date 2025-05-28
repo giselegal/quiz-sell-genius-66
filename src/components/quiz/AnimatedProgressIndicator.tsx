@@ -10,6 +10,9 @@ const AnimatedProgressIndicator: React.FC = () => (
       transition={{ duration: 0.5 }}
     />
     <div className="w-8 h-1.5 rounded-full bg-gray-200"></div>
+    <div className="w-8 h-1.5 rounded-full bg-gray-200"></div>
+    <div className="w-8 h-1.5 rounded-full bg-gray-200"></div>
   </div>
 );
+
 export default AnimatedProgressIndicator;

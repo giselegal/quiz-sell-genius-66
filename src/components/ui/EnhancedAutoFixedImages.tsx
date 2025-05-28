@@ -1,13 +1,14 @@
-"use client";
 
 import React, { useEffect, useRef } from 'react';
 import { fixBlurryImages } from '@/utils/enhancedFixBlurryImages';
+
 interface AutoFixedImagesProps {
   children: React.ReactNode;
   fixOnMount?: boolean;
   fixOnUpdate?: boolean;
   className?: string;
 }
+
 /**
  * Componente wrapper que aplica correções de imagens borradas automaticamente
  * Versão aprimorada com escopo reduzido e melhor gerenciamento de performance
@@ -24,6 +25,7 @@ const EnhancedAutoFixedImages: React.FC<AutoFixedImagesProps> = ({
   // Aplicar correção na montagem inicial - com timing baseado em performance
   useEffect(() => {
     if (!fixOnMount) return;
+
     // Preparar para detectar quando o LCP realmente ocorreu usando PerformanceObserver
     let lcpOccurred = false;
     
@@ -47,9 +49,13 @@ const EnhancedAutoFixedImages: React.FC<AutoFixedImagesProps> = ({
               }, { timeout: 1000 });
             } else {
               setTimeout(() => {
+                if (wrapperRef.current) {
                   console.log('Executando correção após LCP (via setTimeout)');
+                  fixBlurryImages(wrapperRef.current);
+                }
               }, 800);
             }
+            
             // Desconectar o observer após identificar o LCP
             lcpObserver.disconnect();
           }
@@ -57,16 +63,22 @@ const EnhancedAutoFixedImages: React.FC<AutoFixedImagesProps> = ({
         
         // Observar eventos de LCP
         lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+        
         // Fallback: Se após 3 segundos o LCP ainda não ocorreu, executar mesmo assim
         setTimeout(() => {
           if (!lcpOccurred && wrapperRef.current) {
             console.log('Fallback: Executando correção após timeout sem LCP detectado');
             fixBlurryImages(wrapperRef.current);
+            lcpObserver.disconnect();
+          }
         }, 3000);
       } else {
         // Fallback para navegadores sem suporte a PerformanceObserver
+        setTimeout(() => {
           if (wrapperRef.current) {
             console.log('Fallback: Executando correção após timeout (sem suporte a PerformanceObserver)');
+            fixBlurryImages(wrapperRef.current);
+          }
         }, 2000);
       }
     } catch (error) {
@@ -80,11 +92,15 @@ const EnhancedAutoFixedImages: React.FC<AutoFixedImagesProps> = ({
       }, 2000);
     }
   }, [fixOnMount]);
+  
   // Observar mudanças no DOM do wrapper (não todo o document.body)
+  useEffect(() => {
     if (!fixOnUpdate || !wrapperRef.current) return;
+    
     // Variáveis para gerenciar debounce
     let debounceTimer: number | null = null;
     let pendingCorrection = false;
+    
     // Configurar MutationObserver de escopo limitado
     const observer = new MutationObserver((mutations) => {
       // Verificar se alguma das mutações realmente adicionou imagens
@@ -95,15 +111,20 @@ const EnhancedAutoFixedImages: React.FC<AutoFixedImagesProps> = ({
             const element = node as Element;
             if (element.tagName === 'IMG') return true;
             return element.querySelectorAll('img').length > 0;
+          }
           return false;
+        });
       });
       
       // Executar a correção apenas se foram adicionadas imagens
       if (hasNewImages && !pendingCorrection) {
         pendingCorrection = true;
+        
         // Limpar timer anterior de debounce, se existir
         if (debounceTimer !== null) {
           clearTimeout(debounceTimer);
+        }
+        
         // Debounce: Adiar a correção para evitar múltiplas execuções
         debounceTimer = window.setTimeout(() => {
           if ('requestIdleCallback' in window) {
@@ -117,27 +138,39 @@ const EnhancedAutoFixedImages: React.FC<AutoFixedImagesProps> = ({
             }, { timeout: 1000 });
           } else {
             setTimeout(() => {
+              if (wrapperRef.current) {
                 console.log('Executando correção após mutações (via setTimeout)');
+                fixBlurryImages(wrapperRef.current);
+                pendingCorrection = false;
+              }
             }, 500);
+          }
         }, 800); // Debounce de 800ms
+      }
     });
+    
     // Observar apenas o wrapper e suas subárvores
     observer.observe(wrapperRef.current, { 
       childList: true, 
       subtree: true,
       attributes: false,
       characterData: false
+    });
+    
     // Cleanup
     return () => {
       observer.disconnect();
       if (debounceTimer !== null) {
         clearTimeout(debounceTimer);
+      }
     };
   }, [fixOnUpdate]);
+  
   return (
     <div ref={wrapperRef} className={className}>
       {children}
     </div>
   );
 };
+
 export default EnhancedAutoFixedImages;

@@ -1,5 +1,6 @@
 
 import React from 'react';
+
 interface HeadlineBlockPreviewProps {
   content: {
     title?: string;
@@ -7,6 +8,7 @@ interface HeadlineBlockPreviewProps {
     style?: any;
   };
 }
+
 const HeadlineBlockPreview: React.FC<HeadlineBlockPreviewProps> = ({ content }) => {
   const { title, subtitle, style = {} } = content;
   
@@ -17,9 +19,14 @@ const HeadlineBlockPreview: React.FC<HeadlineBlockPreviewProps> = ({ content }) 
     color: style.color || '#432818',
     textAlign: style.textAlign || 'left',
     ...style
+  };
+  
   const subtitleStyle = {
     fontSize: '1rem',
     color: '#8F7A6A',
+    textAlign: style.textAlign || 'left',
+  };
+
   return (
     <div className="mb-4">
       {title && <h2 style={titleStyle} className="font-playfair">{title}</h2>}
@@ -27,4 +34,5 @@ const HeadlineBlockPreview: React.FC<HeadlineBlockPreviewProps> = ({ content }) 
     </div>
   );
 };
+
 export default HeadlineBlockPreview;

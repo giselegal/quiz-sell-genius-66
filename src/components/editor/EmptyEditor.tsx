@@ -2,9 +2,11 @@
 import React from 'react';
 import { AddBlockButton } from './AddBlockButton';
 import { EditorBlock } from '@/types/editor';
+
 interface EmptyEditorProps {
   onAddBlock: (type: EditorBlock['type']) => void;
 }
+
 export const EmptyEditor: React.FC<EmptyEditorProps> = ({ onAddBlock }) => {
   return (
     <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-[#B89B7A]/40">

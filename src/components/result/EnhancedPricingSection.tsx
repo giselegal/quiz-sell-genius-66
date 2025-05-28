@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, Clock, Shield, Star, Award, CheckCircle, ArrowDown, Zap, Gift } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackButtonClick } from '@/utils/analytics';
+
 // Design tokens otimizados
 const tokens = {
   colors: {
@@ -32,6 +32,7 @@ const tokens = {
     xl: '0 12px 24px rgba(184, 155, 122, 0.20)',
     cta: '0 8px 32px rgba(76, 175, 80, 0.4)',
     glow: '0 0 20px rgba(184, 155, 122, 0.3)',
+  },
   radius: {
     sm: '0.5rem',
     md: '0.75rem',
@@ -40,28 +41,35 @@ const tokens = {
     full: '9999px',
   }
 };
+
 interface EnhancedPricingSectionProps {
   className?: string;
 }
+
 const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ className = '' }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [activeTab, setActiveTab] = useState<'avista' | 'parcelado'>('parcelado');
+
   const handleCTAClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
     if (window.ctaClickProcessing) return;
     window.ctaClickProcessing = true;
+    
     trackButtonClick('checkout_button', 'Enhanced Pricing CTA', 'pricing_section');
+    
     if (window.innerWidth >= 768) {
       window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
     } else {
       window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
     }
+    
     setTimeout(() => {
       window.ctaClickProcessing = false;
     }, 1000);
   };
+
   return (
     <div className={`my-16 ${className}`}>
       {/* Título da Seção */}
@@ -75,6 +83,7 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
         <div className="inline-flex items-center gap-3 mb-6">
           <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
           <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
         </div>
         
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#432818] mb-4">
@@ -84,11 +93,15 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
           Transforme seu estilo com um investimento que vale por uma vida inteira de confiança
         </p>
       </motion.div>
+
       {/* Card Principal de Pricing */}
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.7 }}
         className="max-w-4xl mx-auto"
+      >
         <Card 
           className="relative overflow-hidden border-2 p-8 md:p-12"
           style={{ 
@@ -111,6 +124,7 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
               OFERTA POR TEMPO LIMITADO
             </div>
           </motion.div>
+
           {/* Elementos Decorativos */}
           <div 
             className="absolute top-0 left-0 w-32 h-32 opacity-5 pointer-events-none"
@@ -118,8 +132,13 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
               background: `radial-gradient(circle, ${tokens.colors.primary} 0%, transparent 70%)`
             }}
           />
+          <div 
             className="absolute bottom-0 right-0 w-40 h-40 opacity-5 pointer-events-none"
+            style={{
               background: `radial-gradient(circle, ${tokens.colors.secondary} 0%, transparent 70%)`
+            }}
+          />
+
           <div className="relative z-10">
             {/* Breakdown de Produtos */}
             <motion.div 
@@ -132,6 +151,7 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
+            >
               <div className="text-center mb-8">
                 <h3 className="text-2xl md:text-3xl font-bold mb-4 text-[#432818]">
                   Tudo que Você Vai Receber
@@ -149,13 +169,17 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                     value: 'R$ 97,00',
                     badge: 'PRINCIPAL'
                   },
+                  { 
                     item: 'Bônus: Manual de Peças Estratégicas', 
                     description: 'Descubra as peças-chave do seu guarda-roupa',
                     value: 'R$ 47,00',
                     badge: 'BÔNUS'
+                  },
+                  { 
                     item: 'Bônus: Guia de Visagismo Facial', 
                     description: 'Cortes e acessórios ideais para seu rosto',
                     value: 'R$ 31,00',
+                    badge: 'BÔNUS'
                   }
                 ].map((product, index) => (
                   <motion.div
@@ -193,6 +217,7 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                       >
                         {product.value}
                       </span>
+                    </div>
                   </motion.div>
                 ))}
                 
@@ -208,9 +233,12 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                   <div className="flex justify-between items-center text-xl md:text-2xl">
                     <span className="font-bold text-[#432818]">Valor Total:</span>
                     <div className="relative">
+                      <span 
                         className="text-3xl font-bold line-through opacity-60"
                         style={{ color: tokens.colors.textMuted }}
+                      >
                         R$ 175,00
+                      </span>
                       <motion.div 
                         className="absolute top-1/2 left-0 right-0 h-1 bg-red-500 transform -translate-y-1/2 -rotate-12"
                         initial={{ width: 0 }}
@@ -218,19 +246,26 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 1 }}
                       />
+                    </div>
                   </div>
                 </motion.div>
+              </div>
             </motion.div>
+
             {/* Seção de Preço */}
             <motion.div
               className="text-center mb-8"
               initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
+            >
               {/* Tabs de Pagamento */}
               <div className="flex justify-center mb-6">
                 <div 
                   className="flex bg-gray-100 rounded-full p-1"
                   style={{ backgroundColor: tokens.colors.backgroundAccent }}
+                >
                   {[
                     { key: 'parcelado', label: 'Parcelado' },
                     { key: 'avista', label: 'À Vista' }
@@ -248,15 +283,19 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                     </button>
                   ))}
                 </div>
+              </div>
+
               {/* Preço Dinâmico */}
               <AnimatePresence mode="wait">
                 {activeTab === 'parcelado' ? (
+                  <motion.div
                     key="parcelado"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
                     className="mb-6"
+                  >
                     <div className="flex items-center justify-center gap-6 mb-4">
                       <div className="text-center">
                         <p className="text-sm text-gray-500 mb-1">De</p>
@@ -266,26 +305,72 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                         >
                           R$ 175,00
                         </p>
+                      </div>
                       
                       <ArrowDown className="w-8 h-8 text-green-500" />
+                      
+                      <div className="text-center">
                         <p className="text-sm font-medium mb-1" style={{ color: tokens.colors.secondary }}>
                           Por apenas
+                        </p>
                         <div className="flex items-baseline gap-1 justify-center">
                           <span className="text-2xl font-bold" style={{ color: tokens.colors.accent }}>
                             5x R$
+                          </span>
+                          <span 
                             className="text-4xl md:text-5xl font-bold"
                             style={{ color: tokens.colors.accent }}
+                          >
                             8,83
+                          </span>
+                        </div>
                         <p className="text-sm text-[#8F7A6A] mt-1">sem juros no cartão</p>
+                      </div>
+                    </div>
+                  </motion.div>
                 ) : (
+                  <motion.div
                     key="avista"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="mb-6"
+                  >
+                    <div className="flex items-center justify-center gap-6 mb-4">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-500 mb-1">De</p>
+                        <p 
+                          className="text-2xl md:text-3xl line-through"
+                          style={{ color: tokens.colors.textMuted }}
+                        >
+                          R$ 175,00
+                        </p>
+                      </div>
+                      
+                      <ArrowDown className="w-8 h-8 text-green-500" />
+                      
+                      <div className="text-center">
+                        <p className="text-sm font-medium mb-1" style={{ color: tokens.colors.secondary }}>
+                          Por apenas
+                        </p>
+                        <div className="flex items-baseline gap-1 justify-center">
                           <span className="text-lg">R$</span>
+                          <span 
                             className="text-5xl md:text-6xl font-bold"
+                            style={{ color: tokens.colors.accent }}
+                          >
                             39
+                          </span>
                           <span className="text-2xl">,90</span>
+                        </div>
                         <p className="text-sm text-[#8F7A6A] mt-1">pagamento único</p>
+                      </div>
+                    </div>
+                  </motion.div>
                 )}
               </AnimatePresence>
+              
               {/* Badge de Economia */}
               <motion.div 
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold mb-6"
@@ -296,11 +381,20 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                 <Gift className="w-5 h-5" />
                 <span>💰 Economia de R$ 135,10 (77% OFF)</span>
               </motion.div>
+            </motion.div>
+
             {/* CTA Button */}
+            <motion.div
+              className="text-center mb-8"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.6 }}
+            >
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+              >
                 <Button
                   onClick={handleCTAClick}
                   onMouseEnter={() => setIsHovered(true)}
@@ -311,21 +405,32 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                     boxShadow: isHovered ? tokens.shadows.cta : tokens.shadows.lg,
                     transform: isHovered ? 'translateY(-2px)' : 'translateY(0)'
                   }}
+                >
+                  <motion.div
                     className="flex items-center gap-3"
                     animate={isHovered ? { x: [0, 5, 0] } : {}}
                     transition={{ duration: 0.5 }}
+                  >
                     <ShoppingCart className="w-6 h-6" />
                     Transformar Meu Estilo Agora
+                  </motion.div>
                 </Button>
+              </motion.div>
+              
               <p className="text-sm text-[#aa6b5d] font-medium mt-3">
                 <Clock className="w-4 h-4 inline mr-1" />
                 Oferta expira quando você sair desta página
               </p>
+            </motion.div>
+
             {/* Elementos de Confiança */}
+            <motion.div 
               className="flex flex-wrap items-center justify-center gap-6 text-sm mb-8"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.8 }}
+            >
               {[
                 { icon: <Shield className="w-4 h-4" />, text: 'Pagamento 100% Seguro', color: 'text-green-500' },
                 { icon: <Award className="w-4 h-4" />, text: 'Garantia de 7 dias', color: 'text-yellow-500' },
@@ -337,14 +442,21 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                   className="flex items-center gap-2 text-[#432818]"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.2 }}
+                >
                   <span className={item.color}>{item.icon}</span>
                   <span>{item.text}</span>
+                </motion.div>
               ))}
+            </motion.div>
+
             {/* Métodos de Pagamento */}
+            <motion.div 
               className="text-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 1 }}
+            >
               <p className="text-sm text-[#8F7A6A] mb-4">Métodos de pagamento aceitos:</p>
               <img
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
@@ -353,8 +465,12 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                 style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))' }}
                 loading="lazy"
               />
+            </motion.div>
           </div>
         </Card>
+      </motion.div>
     </div>
   );
+};
+
 export default EnhancedPricingSection;

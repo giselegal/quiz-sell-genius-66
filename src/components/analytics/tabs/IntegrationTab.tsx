@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,15 +8,18 @@ import { ApiTokensCard } from '@/components/analytics/integrations/ApiTokensCard
 import { WebhookCard } from '@/components/analytics/integrations/WebhookCard';
 import { MarketingPlatformsCard } from '@/components/analytics/integrations/MarketingPlatformsCard';
 import EventLogger from '@/components/analytics/EventLogger';
+
 interface IntegrationTabProps {
   analyticsData: any;
   testFunction: () => boolean;
 }
+
 export const IntegrationTab: React.FC<IntegrationTabProps> = ({
   analyticsData,
   testFunction
 }) => {
   const [activeTab, setActiveTab] = useState('tracking');
+
   return (
     <div className="space-y-6">
       <Card>
@@ -43,20 +45,41 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({
                 <FacebookPixelCard testFunction={testFunction} />
               </div>
             </TabsContent>
+            
             <TabsContent value="analytics">
+              <div className="space-y-4">
                 <GoogleAnalyticsCard />
+              </div>
+            </TabsContent>
+            
             <TabsContent value="marketing">
+              <div className="space-y-4">
                 <MarketingPlatformsCard />
+              </div>
+            </TabsContent>
+            
             <TabsContent value="api">
+              <div className="space-y-4">
                 <ApiTokensCard />
+              </div>
+            </TabsContent>
+            
             <TabsContent value="webhooks">
+              <div className="space-y-4">
                 <WebhookCard />
+              </div>
+            </TabsContent>
+            
             <TabsContent value="eventlog">
+              <div className="space-y-4">
                 <EventLogger />
+              </div>
+            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
     </div>
   );
 };
+
 export default IntegrationTab;

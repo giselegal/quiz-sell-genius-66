@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,8 +6,9 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/components/ui/use-toast';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { BarChartHorizontal } from 'lucide-react';
+
 export const AnalyticsTab: React.FC = () => {
   const [pixelId, setPixelId] = useState(() => {
     try {
@@ -22,6 +22,7 @@ export const AnalyticsTab: React.FC = () => {
     }
   });
   const [trackingEnabled, setTrackingEnabled] = useState(true);
+
   const handleSavePixelSettings = () => {
     // In a real application, this would save to a backend
     // Here we're just simulating with localStorage
@@ -33,6 +34,7 @@ export const AnalyticsTab: React.FC = () => {
       description: "Pixel settings have been updated successfully.",
     });
   };
+
   return (
     <>
       <Card className="mb-6">
@@ -59,7 +61,10 @@ export const AnalyticsTab: React.FC = () => {
               id="trackingEnabled"
               checked={trackingEnabled}
               onCheckedChange={setTrackingEnabled}
+            />
             <Label htmlFor="trackingEnabled">Enable event tracking</Label>
+          </div>
+          
           <Button 
             className="bg-[#B89B7A] hover:bg-[#A38A69]"
             onClick={handleSavePixelSettings}
@@ -69,26 +74,44 @@ export const AnalyticsTab: React.FC = () => {
         </CardContent>
       </Card>
       
+      <Card className="mb-6">
+        <CardHeader>
           <CardTitle>Teste A/B</CardTitle>
           <CardDescription>Compare diferentes versões da página de resultado</CardDescription>
+        </CardHeader>
         <CardContent className="space-y-4">
           <p>
             Use o teste A/B para comparar diferentes layouts, estruturas e apelos visuais
             da página de resultados e medir qual versão converte melhor.
           </p>
+          
           <Button asChild variant="outline" className="w-full">
-            <Link href="/admin/ab-test" className="flex items-center justify-center gap-2">
+            <Link to="/admin/ab-test" className="flex items-center justify-center gap-2">
               <BarChartHorizontal className="h-4 w-4" />
               Acessar Teste A/B
             </Link>
+          </Button>
+        </CardContent>
+      </Card>
+      
       <Card>
+        <CardHeader>
           <CardTitle>Analytics Dashboard</CardTitle>
           <CardDescription>View metrics and quiz performance</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <p>
             Use the analytics dashboard to track important metrics such as conversions, 
             completion rates, and conversion funnel.
+          </p>
+          
           <Button asChild>
-            <Link href="/admin/analytics">
+            <Link to="/admin/analytics">
               View Analytics Dashboard
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
     </>
   );
 };

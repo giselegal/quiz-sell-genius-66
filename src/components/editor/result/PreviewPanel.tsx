@@ -1,15 +1,16 @@
-"use client";
 
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Monitor, Smartphone, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
 interface PreviewPanelProps {
   primaryStyle: StyleResult;
   onSelectComponent: (id: string | null) => void;
   selectedComponentId: string | null;
 }
+
 export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   primaryStyle,
   onSelectComponent,
@@ -17,6 +18,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
 }) => {
   const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
   const [isPreviewing, setIsPreviewing] = React.useState(false);
+
   return (
     <div className="h-full flex flex-col bg-[#FAF9F7]">
       {/* Preview Controls */}
@@ -31,11 +33,17 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
             <Monitor className="w-4 h-4 mr-2" />
             Desktop
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setViewMode('mobile')}
             className={viewMode === 'mobile' ? 'bg-[#FAF9F7]' : ''}
+          >
             <Smartphone className="w-4 h-4 mr-2" />
             Mobile
+          </Button>
         </div>
+
         <Button
           variant="outline"
           size="sm"
@@ -45,6 +53,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           {isPreviewing ? 'Editar' : 'Visualizar'}
         </Button>
       </div>
+
       {/* Preview Content */}
       <div className={cn(
         "flex-1 overflow-auto p-8",
@@ -62,14 +71,21 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               Seu estilo predominante é {primaryStyle.category}
             </div>
           </div>
+
           <div className="grid md:grid-cols-2 gap-8 mt-12">
             <img
               src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
               alt="Guia Completo de Estilo"
               className="w-full rounded-lg shadow-lg"
             />
+            <img
               src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"
               alt="Gisele Galvão"
+              className="w-full rounded-lg shadow-lg"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

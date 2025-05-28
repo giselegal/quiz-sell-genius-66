@@ -1,22 +1,23 @@
-"use client";
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Trash2, RefreshCcw, Info, Play, CheckCircle, Eye, Users, ShoppingCart, MousePointer } from 'lucide-react';
+
 interface LoggedEvent {
   type: string;
   timestamp: string;
   details?: any;
 }
+
 export const EventLogger: React.FC = () => {
   const [events, setEvents] = useState<LoggedEvent[]>([]);
   const [filter, setFilter] = useState<string | null>(null);
+
   const loadEvents = () => {
     try {
-      const eventsJson = safeLocalStorage.getItem('fb_pixel_event_log');
+      const eventsJson = localStorage.getItem('fb_pixel_event_log');
       const loadedEvents = eventsJson ? JSON.parse(eventsJson) : [];
       setEvents(loadedEvents);
     } catch (error) {
@@ -24,17 +25,23 @@ export const EventLogger: React.FC = () => {
       setEvents([]);
     }
   };
+
   useEffect(() => {
     loadEvents();
+
     // Configurar atualização automática a cada 5 segundos
     const interval = setInterval(() => {
       loadEvents();
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
+
   const clearEvents = () => {
-    safeLocalStorage.removeItem('fb_pixel_event_log');
+    localStorage.removeItem('fb_pixel_event_log');
     setEvents([]);
+  };
+
   const getEventIcon = (type: string) => {
     switch (type) {
       case 'QuizStart':
@@ -52,18 +59,35 @@ export const EventLogger: React.FC = () => {
       case 'ButtonClick':
         return <MousePointer className="h-4 w-4" />;
       default:
+        return <Info className="h-4 w-4" />;
+    }
+  };
+
   const getEventColor = (type: string) => {
+    switch (type) {
+      case 'QuizStart':
         return 'bg-blue-500';
+      case 'QuizAnswer':
         return 'bg-purple-500';
+      case 'QuizComplete':
         return 'bg-green-500';
+      case 'ResultView':
         return 'bg-yellow-500';
+      case 'Lead':
         return 'bg-indigo-500';
+      case 'Purchase':
         return 'bg-red-500';
+      case 'ButtonClick':
         return 'bg-orange-500';
+      default:
         return 'bg-gray-500';
+    }
+  };
+
   const filteredEvents = filter 
     ? events.filter(event => event.type === filter)
     : events;
+
   return (
     <Card className="border-border/40 shadow-sm">
       <CardHeader className="pb-3">
@@ -84,9 +108,16 @@ export const EventLogger: React.FC = () => {
               <RefreshCcw className="h-3.5 w-3.5 mr-1" />
               Atualizar
             </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-7 text-xs"
               onClick={() => clearEvents()}
+            >
               <Trash2 className="h-3.5 w-3.5 mr-1" />
               Limpar
+            </Button>
+          </div>
         </div>
         <div className="flex flex-wrap gap-1 mt-2">
           <Badge 
@@ -96,27 +127,56 @@ export const EventLogger: React.FC = () => {
           >
             Todos
           </Badge>
+          <Badge 
             variant={filter === 'QuizStart' ? "default" : "outline"}
+            className="cursor-pointer text-[10px] h-5"
             onClick={() => setFilter('QuizStart')}
+          >
             Início Quiz
+          </Badge>
+          <Badge 
             variant={filter === 'QuizAnswer' ? "default" : "outline"}
+            className="cursor-pointer text-[10px] h-5"
             onClick={() => setFilter('QuizAnswer')}
+          >
             Respostas
+          </Badge>
+          <Badge 
             variant={filter === 'QuizComplete' ? "default" : "outline"}
+            className="cursor-pointer text-[10px] h-5"
             onClick={() => setFilter('QuizComplete')}
+          >
             Conclusão
+          </Badge>
+          <Badge 
             variant={filter === 'ResultView' ? "default" : "outline"}
+            className="cursor-pointer text-[10px] h-5"
             onClick={() => setFilter('ResultView')}
+          >
             Resultados
+          </Badge>
+          <Badge 
             variant={filter === 'Lead' ? "default" : "outline"}
+            className="cursor-pointer text-[10px] h-5"
             onClick={() => setFilter('Lead')}
+          >
             Leads
+          </Badge>
+          <Badge 
             variant={filter === 'Purchase' ? "default" : "outline"}
+            className="cursor-pointer text-[10px] h-5"
             onClick={() => setFilter('Purchase')}
+          >
             Compras
+          </Badge>
+          <Badge 
             variant={filter === 'ButtonClick' ? "default" : "outline"}
+            className="cursor-pointer text-[10px] h-5"
             onClick={() => setFilter('ButtonClick')}
+          >
             Cliques
+          </Badge>
+        </div>
       </CardHeader>
       <CardContent className="max-h-[400px] overflow-y-auto pb-0">
         <div className="space-y-2">
@@ -140,6 +200,7 @@ export const EventLogger: React.FC = () => {
                       <div className="text-[10px] text-muted-foreground">
                         {new Date(event.timestamp).toLocaleString('pt-BR')}
                       </div>
+                    </div>
                   </div>
                 </div>
                 {event.details && (
@@ -147,12 +208,15 @@ export const EventLogger: React.FC = () => {
                     <pre className="whitespace-pre-wrap">
                       {JSON.stringify(event.details, null, 2)}
                     </pre>
+                  </div>
                 )}
               </div>
             ))
           )}
+        </div>
       </CardContent>
     </Card>
   );
 };
+
 export default EventLogger;

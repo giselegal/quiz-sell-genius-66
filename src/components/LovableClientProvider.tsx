@@ -1,42 +1,81 @@
-"use client";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import React, { useEffect, useState } from 'react';
+// Interface para o contexto
+interface LovableContextType {
+  isLovableMode: boolean;
+  isEditable: boolean;
+}
 
-interface LovableProviderProps {
+// Valor default para o contexto
+const defaultContextValue: LovableContextType = {
+  isLovableMode: false,
+  isEditable: false
+};
+
+// Criação do contexto
+const LovableContext = createContext<LovableContextType>(defaultContextValue);
+
+// Hook personalizado para usar o contexto
+export const useLovable = () => useContext(LovableContext);
+
+interface LovableClientProviderProps {
   children: React.ReactNode;
 }
 
-// Este é um componente para integrar com o editor visual Lovable
-export function LovableClientProvider({ children }: LovableProviderProps) {
-  const [isEditorMode, setIsEditorMode] = useState(false);
-  
-  // Lógica para inicializar o editor quando estamos em modo de edição
+export const LovableClientProvider: React.FC<LovableClientProviderProps> = ({ children }) => {
+  const location = useLocation();
+  const [isLovableMode, setIsLovableMode] = useState(false);
+  const [isEditable, setIsEditable] = useState(false);
+
   useEffect(() => {
-    // Só executa no cliente
-    if (typeof window !== 'undefined') {
-      const isEditor = window.location.pathname.includes('/admin') || 
-                      window.location.pathname === '/' ||
-                      window.location.pathname.startsWith('/resultado/') ||
-                      window.location.search.includes('lovable=true');
+    // Verifica se está rodando no ambiente Lovable
+    const checkLovableMode = () => {
+      const isLovableDomain = 
+        typeof window !== 'undefined' &&
+        (window.location.hostname.includes('lovable.dev') || 
+         window.location.hostname.includes('lovableproject.com'));
       
-      setIsEditorMode(isEditor);
-      if (isEditor) {
-        // Configuração global para o Lovable
-        (window as any).LOVABLE_CONFIG = {
-          projectId: 'quiz-sell-genius',
-          apiBaseUrl: 'https://api.lovable.dev',
-        };
-        return () => {
-          delete (window as any).LOVABLE_CONFIG;
-        };
+      const hasLovableParam = 
+        typeof window !== 'undefined' &&
+        (window.location.search.includes('lovable=true') ||
+         window.location.search.includes('lovable_edit=true'));
+      
+      return isLovableDomain || hasLovableParam;
+    };
+
+    // Verifica se a rota atual é editável
+    const checkEditableRoute = () => {
+      // Rota principal (quiz)
+      if (location.pathname === '/') {
+        return true;
       }
-    }
-  }, []);
-  
-  // Em modo de edição, adicionamos classes e atributos para o editor
+      
+      // Rota de resultado ou subpáginas de resultado
+      if (location.pathname === '/resultado' || location.pathname.startsWith('/resultado/')) {
+        return true;
+      }
+      
+      // Rota de oferta de quiz
+      if (location.pathname === '/quiz-descubra-seu-estilo') {
+        return true;
+      }
+      
+      return false;
+    };
+
+    setIsLovableMode(checkLovableMode());
+    setIsEditable(checkEditableRoute());
+    
+    // Log para debug
+    console.log(`Lovable status: mode=${checkLovableMode()}, editable=${checkEditableRoute()}, path=${location.pathname}`);
+  }, [location]);
+
   return (
-    <div className={isEditorMode ? 'lovable-editable-page' : ''} data-lovable-root={isEditorMode ? 'true' : undefined}>
+    <LovableContext.Provider value={{ isLovableMode, isEditable }}>
       {children}
-    </div>
+    </LovableContext.Provider>
   );
-}
+};
+
+export default LovableClientProvider;

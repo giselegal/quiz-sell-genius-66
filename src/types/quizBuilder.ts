@@ -24,6 +24,7 @@ export type QuizComponentType =
   | 'spacer'
   | 'video'
   | 'cta';
+
 export interface QuizComponentStyle {
   backgroundColor?: string;
   textColor?: string;
@@ -32,6 +33,7 @@ export interface QuizComponentStyle {
   paddingX?: string;
   // Add any other style properties here
 }
+
 export interface QuizStage {
   id: string;
   title: string;
@@ -40,9 +42,13 @@ export interface QuizStage {
   isEnabled?: boolean;
   componentId?: string;
   config?: Record<string, any>; // Add config property to fix errors
+}
+
 export interface QuizComponentLayout {
   columns: 1 | 2 | 3 | 4;
   direction: 'vertical' | 'horizontal';
+}
+
 export interface QuizComponentData {
   id: string;
   type: QuizComponentType;
@@ -75,10 +81,12 @@ export interface QuizComponentData {
     backgroundColorQuestion?: string;
     textColorQuestion?: string;
     selectionIndicator?: 'border' | 'checkbox' | 'highlight';
+    
     // Cover properties
     buttonText?: string;
     backgroundColor?: string;
     textColor?: string;
+    
     // Result properties
     resultLayout?: 'classic' | 'modern' | 'minimal';
     primaryStyleTitle?: string;
@@ -92,7 +100,10 @@ export interface QuizComponentData {
     accentColor?: string;
   };
   style?: QuizComponentStyle;
+}
+
 export interface QuizBuilderState {
   components: QuizComponentData[];
   stages: QuizStage[];
   activeStageId?: string;
+}

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+
 interface HeaderComponentProps {
   data: {
     title?: string;
@@ -10,8 +11,11 @@ interface HeaderComponentProps {
   style?: {
     backgroundColor?: string;
     textColor?: string;
+    [key: string]: any;
+  };
   isSelected?: boolean;
 }
+
 const HeaderComponent: React.FC<HeaderComponentProps> = ({ data, style, isSelected }) => {
   return (
     <div 
@@ -27,7 +31,9 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ data, style, isSelect
       <h1 className="text-2xl md:text-3xl font-bold mb-2">{data.title || "Título Principal"}</h1>
       {data.subtitle && (
         <p className="text-sm md:text-base opacity-75">{data.subtitle}</p>
+      )}
     </div>
   );
 };
+
 export default HeaderComponent;

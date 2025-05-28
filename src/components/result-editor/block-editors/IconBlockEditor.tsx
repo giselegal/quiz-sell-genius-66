@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -8,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ColorPicker } from '@/components/result-editor/ColorPicker';
 import StyleEditor from '../style-editors/StyleEditor';
+
 // Lista de ícones disponíveis
 const availableIcons = [
   { name: '✓', label: 'Marca de seleção' },
@@ -36,10 +36,12 @@ const availableIcons = [
   { name: '👉', label: 'Apontar direita' },
   { name: '⏰', label: 'Relógio' },
 ];
+
 interface IconBlockEditorProps {
   block: Block;
   onUpdate: (content: any) => void;
 }
+
 const IconBlockEditor: React.FC<IconBlockEditorProps> = ({ block, onUpdate }) => {
   const content = block.content || { icon: '✓', size: '48px', color: '#B89B7A', style: {} };
   const [searchTerm, setSearchTerm] = useState('');
@@ -50,6 +52,7 @@ const IconBlockEditor: React.FC<IconBlockEditorProps> = ({ block, onUpdate }) =>
         item.label.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : availableIcons;
+  
   return (
     <div className="space-y-6">
       <Card className="p-4">
@@ -81,6 +84,9 @@ const IconBlockEditor: React.FC<IconBlockEditorProps> = ({ block, onUpdate }) =>
                   {item.name}
                 </div>
               ))}
+            </div>
+            
+            <div className="space-y-2">
               <Label htmlFor="iconText">Ícone selecionado</Label>
               <div className="p-4 text-center bg-gray-50 rounded-md">
                 <span style={{ 
@@ -90,22 +96,39 @@ const IconBlockEditor: React.FC<IconBlockEditorProps> = ({ block, onUpdate }) =>
                   {content.icon || '✓'}
                 </span>
               </div>
+            </div>
           </TabsContent>
+          
           <TabsContent value="appearance" className="space-y-4">
+            <div className="space-y-2">
               <Label htmlFor="iconSize">Tamanho do Ícone</Label>
+              <Input
                 id="iconSize"
                 value={content.size || '48px'}
                 onChange={(e) => onUpdate({ ...content, size: e.target.value })}
                 placeholder="ex: 48px ou 3rem"
+              />
+            </div>
+            
+            <div className="space-y-2">
               <Label htmlFor="iconColor">Cor do Ícone</Label>
               <ColorPicker
                 color={content.color || '#B89B7A'}
                 onChange={(color) => onUpdate({ ...content, color })}
+              />
+            </div>
+            
+            <div className="space-y-2">
               <Label htmlFor="iconTitle">Texto do Ícone (opcional)</Label>
+              <Input
                 id="iconTitle"
                 value={content.title || ''}
                 onChange={(e) => onUpdate({ ...content, title: e.target.value })}
                 placeholder="Texto que aparece ao lado ou abaixo do ícone"
+              />
+            </div>
+            
+            <div className="space-y-2">
               <Label htmlFor="iconPosition">Posição do Texto</Label>
               <select
                 id="iconPosition"
@@ -118,6 +141,8 @@ const IconBlockEditor: React.FC<IconBlockEditorProps> = ({ block, onUpdate }) =>
                 <option value="bottom">Texto abaixo</option>
                 <option value="left">Texto à esquerda</option>
               </select>
+            </div>
+          </TabsContent>
         </Tabs>
       </Card>
       
@@ -131,4 +156,5 @@ const IconBlockEditor: React.FC<IconBlockEditorProps> = ({ block, onUpdate }) =>
     </div>
   );
 };
+
 export default IconBlockEditor;

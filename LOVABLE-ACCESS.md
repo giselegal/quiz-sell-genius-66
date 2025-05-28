@@ -14,7 +14,7 @@ Existem duas maneiras principais de acessar o ambiente Lovable.dev:
 
 Acesse diretamente pela URL:
 ```
-https://novo-link-para-ambiente.lovableproject.com
+https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com
 ```
 
 ### 2. Usando Bookmarklets
@@ -23,12 +23,12 @@ Para facilitar o acesso, foram criados bookmarklets que você pode adicionar à 
 
 - **Acesso Admin (Lovable.dev)**:
   ```javascript
-  javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/admin';return;}const lovableUrl='https://novo-link-para-ambiente.lovableproject.com/admin';window.open(lovableUrl,'_blank');})()
+  javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/admin';return;}const lovableUrl='https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com/admin';window.open(lovableUrl,'_blank');})()
   ```
 
 - **Acesso Editor Visual (Lovable.dev)**:
   ```javascript
-  javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/resultado/editor';return;}const lovableUrl='https://novo-link-para-ambiente.lovableproject.com/resultado/editor';window.open(lovableUrl,'_blank');})()
+  javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/resultado/editor';return;}const lovableUrl='https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com/resultado/editor';window.open(lovableUrl,'_blank');})()
   ```
 
 Para instalar os bookmarklets:

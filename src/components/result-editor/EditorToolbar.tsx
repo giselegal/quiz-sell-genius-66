@@ -13,6 +13,7 @@ interface EditorToolbarProps {
   onUpdateConfig: (config: any) => void;
   onShowTemplates?: () => void;
 }
+
 const EditorToolbar: React.FC<EditorToolbarProps> = ({
   onSave,
   isPreviewMode,
@@ -44,25 +45,44 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
           {isPreviewMode ? 'Modo Edição' : 'Visualizar'}
         </Button>
         
+        <Button
+          variant="outline"
+          size="sm"
           onClick={onEditGlobalStyles}
+        >
           <Palette className="w-4 h-4 mr-2" />
           Estilos Globais
+        </Button>
+
         {resultPageConfig && onUpdateConfig && (
           <JsonConfigEditor 
             config={resultPageConfig}
             onUpdate={onUpdateConfig}
           />
+        )}
+        
+        <Button
+          variant="outline"
+          size="sm"
           onClick={onReset}
           className="text-amber-600 hover:text-amber-700"
+        >
           <RefreshCw className="w-4 h-4 mr-2" />
           Resetar
+        </Button>
+        
+        <Button
           variant="default"
+          size="sm"
           onClick={onSave}
           className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+        >
           <Save className="w-4 h-4 mr-2" />
           Salvar
+        </Button>
       </div>
     </div>
   );
 };
+
 export default EditorToolbar;

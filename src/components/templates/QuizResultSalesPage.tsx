@@ -1,8 +1,10 @@
-"use client";
+
 import React, { lazy, Suspense, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { 
   Carousel, 
   CarouselContent, 
@@ -18,12 +20,14 @@ import {
 } from '@/components/ui/accordion';
 import { ShoppingCart, Heart, Award, CheckCircle, Star, XCircle } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
+
 // Types
 interface StyleResult {
   category: string;
   score: number;
   percentage: number;
 }
+
 // Helper function to get style descriptions
 const getStyleDescription = (styleType: string): string => {
   switch (styleType) {
@@ -47,21 +51,26 @@ const getStyleDescription = (styleType: string): string => {
       return 'Seu estilo pessoal reflete sua personalidade e preferências únicas.';
   }
 };
+
 // Lazy load componentes menos críticos
 const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
+
 interface QuizResultSalesPageProps {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
   userName?: string;
+}
+
 const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
   primaryStyle,
   secondaryStyles,
   userName = 'Visitante'
 }) => {
   const { toast } = useToast();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [criticalImagesLoaded, setCriticalImagesLoaded] = useState(false);
+
   // Pré-carregar imagens críticas
   useEffect(() => {
     const criticalImages = [
@@ -70,6 +79,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
     
     let loadedCount = 0;
     const totalImages = criticalImages.length;
+    
     criticalImages.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -80,23 +90,35 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
         }
       };
       img.onerror = () => {
+        loadedCount++;
         console.error(`Failed to load image: ${src}`);
+        if (loadedCount === totalImages) {
+          setCriticalImagesLoaded(true);
+        }
+      };
     });
+    
     // Timeout para garantir que não ficará travado mesmo se alguma imagem falhar
     const timeout = setTimeout(() => {
       setCriticalImagesLoaded(true);
     }, 3000);
+    
     return () => clearTimeout(timeout);
   }, []);
+
   const handleBuyNow = () => {
     // Rastrear evento de clique no botão
     trackButtonClick('buy_now_button', 'Quero Comprar', 'result_page_main_cta');
+    
     toast({
       title: "Redirecionando para o checkout",
       description: "Você será redirecionado para a página de pagamento.",
+    });
+    
     // URL do checkout
     window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912";
   };
+
   // Loading state quando imagens críticas estão carregando
   if (!criticalImagesLoaded) {
     return (
@@ -105,6 +127,8 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
         <p className="mt-4 text-[#432818]">Carregando seu resultado personalizado...</p>
       </div>
     );
+  }
+
   return (
     <div className="min-h-screen bg-[#fffaf7]">
       {/* Header */}
@@ -123,6 +147,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
           </div>
         </div>
       </header>
+
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
@@ -162,14 +187,18 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                           </span>
                           <span className="text-sm font-semibold text-[#aa6b5d]">
                             {style.percentage}%
+                          </span>
                         </div>
                         <div className="w-full h-2 bg-[#FAF9F7] rounded-full mt-2 overflow-hidden">
                           <div
                             className="h-2 bg-[#B89B7A] rounded-full"
                             style={{ width: `${style.percentage}%` }}
                           />
+                        </div>
                       </div>
                     ))}
+                  </div>
+                </div>
               )}
             </div>
             <div className="order-1 md:order-2">
@@ -181,8 +210,12 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 width="600"
                 height="400"
               />
+            </div>
+          </div>
         </section>
+
         {/* Seção Antes e Depois */}
+        <section className="mb-16">
           <h2 className="text-3xl font-playfair text-[#aa6b5d] text-center mb-6">
             Quando você não conhece seu estilo...
           </h2>
@@ -191,26 +224,59 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
               <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
               <span>Compra peças por impulso que não combinam entre si</span>
             </li>
+            <li className="flex items-start gap-3">
+              <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
               <span>Sente que tem um guarda-roupa cheio, mas "nada para vestir"</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
               <span>Investe em tendências que não valorizam sua imagem</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
               <span>Tem dificuldade em criar uma imagem coerente e autêntica</span>
+            </li>
           </ul>
           <h2 className="text-3xl font-playfair text-[#B89B7A] text-center mt-12 mb-6">
             Quando você domina seu estilo...
+          </h2>
+          <ul className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+            <li className="flex items-start gap-3">
               <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
               <span>Economiza tempo e dinheiro em compras conscientes</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
               <span>Projeta a imagem que realmente representa você</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
               <span>Aumenta sua confiança em qualquer ambiente</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <CheckCircle className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
               <span>Cria looks harmoniosos com menos peças</span>
+            </li>
+          </ul>
+        </section>
+
         {/* Offer Card */}
         <Card className="p-6 md:p-8 border-[#aa6b5d]/20 mb-16">
           <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-6 text-center">
             Guia de Estilo Personalizado + Bônus Exclusivos
+          </h2>
+
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div>
+              <img
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
                 alt="Mockup do Guia de Estilo"
                 className="rounded-lg shadow-md w-full"
+                loading="lazy"
+                width="600"
+                height="400"
+              />
+            </div>
             <div className="flex flex-col justify-center">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">
                 O que você vai receber:
@@ -229,22 +295,34 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                   </li>
                 ))}
               </ul>
+
               <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
                 <div className="text-center">
                   <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor original</p>
                   <p className="text-lg line-through text-[#3a3a3a]/70">
                     R$ 175,00
                   </p>
+                </div>
+                <div className="text-center">
                   <p className="text-sm text-[#aa6b5d] mb-1">Por apenas</p>
                   <p className="text-3xl font-bold text-[#aa6b5d]">
                     R$ 39,00
+                  </p>
+                </div>
+              </div>
               <div className="text-center md:text-right mb-4">
                 <p className="text-sm text-[#432818]">Parcelamento: 5x de R$ 8,83*</p>
                 <p className="text-sm text-[#432818]">ou R$ 39,90 à vista</p>
+              </div>
+            </div>
+          </div>
         </Card>
+
         {/* Bonus Carousel */}
+        <section className="mb-16">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             Bônus Exclusivos
+          </h2>
           <Carousel className="w-full">
             <CarouselContent>
               {[
@@ -252,8 +330,11 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                   title: "Guia de Maquiagem",
                   img: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
                 },
+                {
                   title: "Guia de Acessórios",
                   img: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp"
+                },
+                {
                   title: "Checklist de Compras",
                   img: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
                 }
@@ -271,37 +352,63 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                       />
                       <div className="p-4 text-center">
                         <h3 className="font-medium">{bonus.title}</h3>
+                      </div>
                     </Card>
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
             <CarouselPrevious className="left-2" />
             <CarouselNext className="right-2" />
           </Carousel>
+        </section>
+
         {/* Two Columns: About Author */}
+        <section className="mb-16">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <img
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
                 alt="Foto da Autora"
+                className="rounded-lg shadow-md w-full"
+                loading="lazy"
                 width="500"
                 height="375"
+              />
+            </div>
+            <div>
               <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
                 Sobre a Autora
               </h2>
               <p className="mb-4">
                 Com mais de 10 anos de experiência em consultoria de imagem e estilo pessoal, 
                 ajudei centenas de mulheres a descobrirem sua verdadeira essência através das roupas.
+              </p>
               <p>
                 Minha missão é ajudar você a construir um guarda-roupa que reflita sua personalidade, 
                 valorize seu tipo físico e simplifique sua rotina, permitindo que você se vista com 
                 confiança todos os dias.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Testimonials - Lazy loaded */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             O que Dizem As Alunas
+          </h2>
           <Suspense fallback={
             <div className="text-center p-8">
               <LoadingSpinner />
+            </div>
           }>
             <Testimonials />
           </Suspense>
+        </section>
+
         {/* Guarantee */}
+        <section className="mb-16">
           <Card className="p-6 border-[#aa6b5d]/20 bg-[#fff7f3]">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="md:w-1/4 flex justify-center">
@@ -309,6 +416,9 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                   <div className="text-center">
                     <Award className="w-12 h-12 mx-auto" />
                     <span className="block font-bold text-xl">7 Dias</span>
+                  </div>
+                </div>
+              </div>
               <div className="md:w-3/4">
                 <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
                   Garantia de Satisfação
@@ -319,17 +429,28 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
                 </p>
                 <p>
                   Sem perguntas, sem complicações. Sua satisfação é nossa prioridade!
+                </p>
+              </div>
+            </div>
           </Card>
+        </section>
+
         {/* FAQ */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             Perguntas Frequentes
+          </h2>
           <Accordion type="single" collapsible className="w-full max-w-2xl mx-auto">
             {[
               {
                 question: "Como recebo o guia após a compra?",
                 answer: "Após confirmar o pagamento, você receberá por email o acesso imediato ao seu guia personalizado."
               },
+              {
                 question: "O guia funciona para qualquer tipo físico?",
                 answer: "Sim! Nosso método considera não apenas seu estilo, mas também suas características físicas únicas."
+              },
+              {
                 question: "Posso acessar o conteúdo pelo celular?",
                 answer: "Sim, todo o conteúdo é otimizado para visualização em qualquer dispositivo."
               }
@@ -344,6 +465,8 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
               </AccordionItem>
             ))}
           </Accordion>
+        </section>
+
         {/* Final CTA */}
         <section className="text-center">
           <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white p-8 rounded-lg">
@@ -361,7 +484,11 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
               <ShoppingCart className="mr-2 h-5 w-5" />
               Quero Meu Guia Agora
             </Button>
+          </div>
+        </section>
       </main>
     </div>
   );
+};
+
 export default QuizResultSalesPage;

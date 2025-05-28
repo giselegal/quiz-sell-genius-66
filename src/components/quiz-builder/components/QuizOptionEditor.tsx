@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Trash2, Image, Plus } from 'lucide-react';
+
 interface QuizOptionEditorProps {
   option: {
     text: string;
@@ -15,6 +16,7 @@ interface QuizOptionEditorProps {
   onRemove: (index: number) => void;
   showImage?: boolean;
 }
+
 const QuizOptionEditor: React.FC<QuizOptionEditorProps> = ({
   option,
   index,
@@ -35,6 +37,7 @@ const QuizOptionEditor: React.FC<QuizOptionEditorProps> = ({
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
+
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor={`option-text-${index}`} className="text-[#432818]">Texto</Label>
@@ -46,6 +49,7 @@ const QuizOptionEditor: React.FC<QuizOptionEditorProps> = ({
             className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]"
           />
         </div>
+
         {showImage && (
           <div className="space-y-2">
             <Label htmlFor={`option-image-${index}`} className="text-[#432818]">Imagem</Label>
@@ -63,12 +67,20 @@ const QuizOptionEditor: React.FC<QuizOptionEditorProps> = ({
             </div>
           </div>
         )}
+
+        <div className="space-y-2">
           <Label htmlFor={`option-category-${index}`} className="text-[#432818]">Categoria de Estilo</Label>
+          <Input
             id={`option-category-${index}`}
             value={option.styleCategory || ''}
             onChange={(e) => onUpdate(index, 'styleCategory', e.target.value)}
             placeholder="Categoria de estilo"
+            className="border-[#B89B7A]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]"
+          />
+        </div>
+      </div>
     </div>
   );
 };
+
 export default QuizOptionEditor;

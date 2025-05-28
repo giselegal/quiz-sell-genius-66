@@ -8,7 +8,12 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
       visible: true,
       content: {
         title: 'Seu Resultado de Estilo Pessoal',
-        logo: ''
+        logo: '',
+      },
+      style: {
+        backgroundColor: '#FAF9F7',
+        padding: '1rem',
+        textAlign: 'center'
       }
     },
     mainContent: {
@@ -20,6 +25,10 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           'Aprenda a montar looks que expressam quem você é',
           'Elimine as compras por impulso e crie um guarda-roupa funcional'
         ]
+      },
+      style: {
+        padding: '2rem 1rem',
+        backgroundColor: '#FFFFFF'
       }
     },
     secondaryStyles: {
@@ -27,6 +36,10 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
       content: {
         title: 'Seus Estilos Complementares',
         description: 'Estes estilos secundários ajudam a complementar seu estilo predominante, criando uma expressão visual única e personalizada.'
+      },
+      style: {
+        padding: '2rem 1rem',
+        backgroundColor: '#FAF9F7'
       }
     },
     offer: {
@@ -52,6 +65,10 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
             { title: 'Técnicas práticas', description: 'Aprenda métodos simples para criar looks incríveis' },
             { title: 'Economia', description: 'Elimine compras por impulso e desperdício de dinheiro' }
           ]
+        },
+        style: {
+          padding: '2rem 1rem',
+          backgroundColor: '#FAF9F7'
         }
       },
       products: {
@@ -63,6 +80,10 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
             { title: 'Vídeos Tutoriais', description: 'Aulas em vídeo para aplicação prática' },
             { title: 'Planilhas', description: 'Ferramentas para organizar seu guarda-roupa' }
           ]
+        },
+        style: {
+          padding: '2rem 1rem',
+          backgroundColor: '#FFFFFF'
         }
       },
       pricing: {
@@ -75,6 +96,11 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           ctaText: 'Quero Transformar Meu Estilo',
           ctaUrl: '#comprar-agora',
           urgencyText: 'Promoção por tempo limitado'
+        },
+        style: {
+          padding: '2rem 1rem',
+          backgroundColor: '#FAF9F7',
+          textAlign: 'center'
         }
       },
       testimonials: {
@@ -93,6 +119,10 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
               text: 'Economizei tanto dinheiro depois de entender meu estilo! Não compro mais roupas que vão ficar paradas no armário.'
             }
           ]
+        },
+        style: {
+          padding: '2rem 1rem',
+          backgroundColor: '#FFFFFF'
         }
       },
       guarantee: {
@@ -101,10 +131,16 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           title: 'Garantia de 7 dias',
           description: 'Se você não ficar satisfeito com o material, devolvemos seu dinheiro integralmente em até 7 dias após a compra.',
           image: 'https://placehold.co/200x200/png'
+        },
+        style: {
+          padding: '2rem 1rem',
+          backgroundColor: '#FAF9F7',
+          textAlign: 'center'
         }
       }
     },
     mentor: {
+      visible: true,
       content: {
         title: 'Conheça sua mentora',
         name: 'Gisele Galvão',
@@ -114,6 +150,10 @@ export const createDefaultConfig = (styleType: string): ResultPageConfig => {
           'Especialista em estilo pessoal e autoconhecimento',
           'Já ajudou mais de 1.000 pessoas a transformarem seu visual'
         ]
+      },
+      style: {
+        padding: '2rem 1rem',
+        backgroundColor: '#FFFFFF'
       }
     },
     globalStyles: {

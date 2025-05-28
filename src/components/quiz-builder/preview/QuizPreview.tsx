@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { QuizStage, QuizComponentData } from '@/types/quizBuilder';
@@ -8,11 +7,13 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { QuizResult } from '@/types/quiz';
 import ResultPreview from './ResultPreview';
 import StagePreview from './StagePreview';
+
 interface QuizPreviewProps {
   stages: QuizStage[];
   components: QuizComponentData[];
   previewResult?: QuizResult | null;
 }
+
 const QuizPreview: React.FC<QuizPreviewProps> = ({ 
   stages, 
   components,
@@ -29,20 +30,30 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
       setShowingResult(false);
     }
   }, [previewResult]);
+  
   const sortedStages = [...stages].sort((a, b) => a.order - b.order);
   const currentStage = sortedStages[currentStageIndex];
+  
   const handleNext = () => {
     if (currentStageIndex < sortedStages.length - 1) {
       setCurrentStageIndex(prev => prev + 1);
+    }
   };
+  
   const handlePrevious = () => {
     if (currentStageIndex > 0) {
       setCurrentStageIndex(prev => prev - 1);
+    }
+  };
+  
   // Handle back from result view
   const handleBackFromResult = () => {
     setShowingResult(false);
+  };
+  
   const totalStages = sortedStages.length;
   const progressPercent = totalStages > 1 ? (currentStageIndex / (totalStages - 1)) * 100 : 0;
+  
   if (stages.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -53,7 +64,9 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
       </div>
     );
   }
+  
   if (showingResult && previewResult) {
+    return (
       <QuizContainer>
         <div className="mb-4">
           <Button
@@ -64,10 +77,15 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar para o Quiz
           </Button>
+        </div>
         <ResultPreview result={previewResult} />
       </QuizContainer>
+    );
+  }
+  
   const stageComponents = components.filter(c => c.stageId === currentStage?.id)
     .sort((a, b) => a.order - b.order);
+  
   return (
     <QuizContainer>
       <div className="space-y-6">
@@ -78,27 +96,43 @@ const QuizPreview: React.FC<QuizPreviewProps> = ({
           <div className="text-sm text-gray-500">
             Etapa {currentStageIndex + 1} de {sortedStages.length}
           </div>
+        </div>
         
         <StagePreview 
           stage={currentStage} 
           components={stageComponents} 
         />
+        
         <div className="w-full h-1 bg-[#B89B7A]/20 rounded-full overflow-hidden">
           <div 
             className="h-full bg-[#B89B7A]" 
             style={{ width: `${progressPercent}%` }}
           ></div>
+        </div>
+        
         <div className="flex justify-between pt-4">
+          <Button
+            variant="outline"
             onClick={handlePrevious}
             disabled={currentStageIndex === 0}
+            className="border-[#B89B7A]/30 text-[#432818] transition-all duration-200 hover:border-[#B89B7A]"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
             Anterior
+          </Button>
           
+          <Button
             onClick={handleNext}
             disabled={currentStageIndex === sortedStages.length - 1}
             className="bg-[#B89B7A] hover:bg-[#9F836A] text-white transition-all duration-200"
+          >
             Próxima
             <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
+      </div>
     </QuizContainer>
   );
 };
+
 export default QuizPreview;

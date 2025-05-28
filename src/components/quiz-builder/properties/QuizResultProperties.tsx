@@ -5,10 +5,12 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
+
 interface QuizResultPropertiesProps {
   data: QuizComponentData['data'];
   onUpdate: (data: any) => void;
 }
+
 const QuizResultProperties: React.FC<QuizResultPropertiesProps> = ({ data, onUpdate }) => {
   return (
     <div className="space-y-5">
@@ -22,6 +24,7 @@ const QuizResultProperties: React.FC<QuizResultPropertiesProps> = ({ data, onUpd
         />
       </div>
       
+      <div className="space-y-2">
         <Label htmlFor="description">Descrição</Label>
         <Textarea
           id="description"
@@ -29,6 +32,9 @@ const QuizResultProperties: React.FC<QuizResultPropertiesProps> = ({ data, onUpd
           onChange={(e) => onUpdate({ ...data, description: e.target.value })}
           placeholder="Descrição do resultado"
           rows={3}
+        />
+      </div>
+      
       <div className="border p-4 rounded-md space-y-4">
         <h3 className="font-medium">Seções Visíveis</h3>
         
@@ -40,15 +46,27 @@ const QuizResultProperties: React.FC<QuizResultPropertiesProps> = ({ data, onUpd
             onCheckedChange={(checked) => onUpdate({ ...data, showPrimaryStyle: checked })}
           />
         </div>
+        
+        <div className="flex items-center justify-between">
           <Label htmlFor="showSecondaryStyles">Estilos Secundários</Label>
+          <Switch
             id="showSecondaryStyles"
             checked={data.showSecondaryStyles !== false}
             onCheckedChange={(checked) => onUpdate({ ...data, showSecondaryStyles: checked })}
+          />
+        </div>
+        
+        <div className="flex items-center justify-between">
           <Label htmlFor="showOfferSection">Seção de Oferta</Label>
+          <Switch
             id="showOfferSection"
             checked={data.showOfferSection !== false}
             onCheckedChange={(checked) => onUpdate({ ...data, showOfferSection: checked })}
+          />
+        </div>
+      </div>
     </div>
   );
 };
+
 export default QuizResultProperties;

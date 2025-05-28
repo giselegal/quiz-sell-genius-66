@@ -3,6 +3,7 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Check, Sparkles, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+
 const benefits = [
   {
     title: "Guia de Estilo e Imagem",
@@ -13,13 +14,17 @@ const benefits = [
       "Técnicas de composição visual"
     ]
   },
+  {
     title: "Bônus Exclusivos",
     icon: <Star className="w-5 h-5 text-amber-500" />,
+    items: [
       "Visagismo Facial Estratégico",
       "Peças-Chave do Guarda-Roupa",
       "Consultoria em Grupo"
+    ]
   }
 ];
+
 const ProductShowcase = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -31,12 +36,17 @@ const ProductShowcase = () => {
       }
     }
   };
+
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1 }
+  };
+
   const checkItemVariants = {
     hidden: { opacity: 0, x: -10 },
     visible: { opacity: 1, x: 0 }
+  };
+
   return (
     <motion.div 
       className="space-y-10 py-4"
@@ -63,6 +73,8 @@ const ProductShowcase = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.3 }}
             transition={{ delay: 0.5, duration: 0.8 }}
+          />
+          <motion.div 
             className="absolute top-4 right-4 bg-amber-100 text-amber-700 rounded-full px-3 py-1 text-xs font-bold"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -74,6 +86,8 @@ const ProductShowcase = () => {
         
         <motion.div 
           className="space-y-7"
+          variants={itemVariants}
+        >
           <motion.div className="space-y-2">
             <motion.h2 
               className="text-3xl font-playfair text-[#aa6b5d] relative inline-block"
@@ -92,14 +106,19 @@ const ProductShowcase = () => {
             </motion.h2>
             <motion.p 
               className="text-[#8F7A6A] text-lg"
+              variants={itemVariants}
+            >
               Tudo o que você precisa para transformar seu visual
             </motion.p>
+          </motion.div>
           
           {benefits.map((section, index) => (
             <motion.div
               key={index}
+              variants={itemVariants}
               whileHover={{ y: -5 }}
               transition={{ type: "spring", stiffness: 300 }}
+            >
               <Card className="p-6 bg-white border-[#aa6b5d]/20 hover:shadow-lg transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
                   <motion.div 
@@ -141,8 +160,10 @@ const ProductShowcase = () => {
               </Card>
             </motion.div>
           ))}
+        </motion.div>
       </div>
     </motion.div>
   );
 };
+
 export default ProductShowcase;

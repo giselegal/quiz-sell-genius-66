@@ -1,4 +1,5 @@
 
+
 export interface Block {
   id: string;
   type: string;
@@ -7,6 +8,7 @@ export interface Block {
   settings?: Record<string, any>;
   [key: string]: any;
 }
+
 export type BlockType = 
   | 'heading'
   | 'paragraph'
@@ -22,11 +24,16 @@ export type BlockType =
   | 'bonus'
   | 'guarantee'
   | string;
+
 // Add missing EditorBlock type which was imported across many files
 export interface EditorBlock extends Block {
+  id: string;
   type: BlockType;
   content: EditableContent;
   order: number;
+  settings?: Record<string, any>;
+}
+
 // Add missing EditableContent type
 export interface EditableContent {
   title?: string;
@@ -65,17 +72,28 @@ export interface EditableContent {
     objectFit?: string;
     [key: string]: any;
   };
+  [key: string]: any;
+}
+
 // Add missing EditorConfig type
 export interface EditorConfig {
   blocks: EditorBlock[];
   globalStyles?: {
+    backgroundColor?: string;
+    fontFamily?: string;
     textColor?: string;
     accentColor?: string;
     secondaryColor?: string;
     buttonStyle?: string;
     headingStyle?: string;
     spacing?: string;
+    borderRadius?: string;
+    [key: string]: any;
+  };
   settings?: {
     showLogo?: boolean;
     showNavigation?: boolean;
     showFooter?: boolean;
+    [key: string]: any;
+  };
+}
