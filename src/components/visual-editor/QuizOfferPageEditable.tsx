@@ -1,9 +1,7 @@
-
 "use client";
 import React, { useEffect } from 'react';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import { CountdownTimer } from '@/components/ui/countdown-timer';
-import { trackButtonClick } from '@/utils/analytics';
 import { 
     BadgeCheck, 
     Check, 
@@ -41,10 +39,6 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
       window.performance.mark('offer-page-mounted');
     }
   }, [data]);
-
-  const handleCtaClick = (buttonId: string, action: string = 'Comprar Agora') => {
-    trackButtonClick(buttonId, action, 'quiz_offer_page');
-  };
 
   return (
     <div 
@@ -91,7 +85,6 @@ const QuizOfferPageEditable: React.FC<QuizOfferPageEditableProps> = ({ data }) =
 
             <a
               href={data.ctaUrl}
-              onClick={() => handleCtaClick('hero_cta', data.heroCtaText)}
               className="inline-block text-white text-xl md:text-2xl py-4 px-10 rounded-full shadow-lg transition-all duration-300 ease-in-out font-bold"
               style={{
                 background: `linear-gradient(to right, ${data.primaryColor}, ${data.secondaryColor})`,

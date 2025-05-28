@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
-import { trackButtonClick, trackSaleConversion } from '@/utils/analytics';
 import { getCtaUrl } from '@/services/pixelManager';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 interface QuizOfferCTAProps {
@@ -18,14 +17,6 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   
   const handleCTAClick = () => {
-    trackButtonClick('main-cta', 'Comprar Quiz Completo', 'cta-section', 'purchase');
-    
-    // Converte o preço de string para número para o analytics
-    const numericPrice = parseFloat(price.replace(',', '.'));
-    
-    // Registrar início de checkout com o preço dinâmico
-    trackSaleConversion(numericPrice, 'Quiz de Estilo Completo');
-    
     // Redirecionar para checkout
     window.location.href = getCtaUrl();
   };
