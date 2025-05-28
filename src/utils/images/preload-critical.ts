@@ -22,19 +22,22 @@ export const preloadCriticalImages = (
   const {
     quality = 90,
     format = 'auto',
-    timeout = 3000, // Now properly typed in PreloadOptions
+    timeout = 3000,
     onProgress,
     onComplete,
     batchSize = 4,
   } = options;
+
   if (imageUrls.length === 0) {
     if (onComplete) onComplete();
     return Promise.resolve();
   }
+
   // Performance measurement
   const startTime = performance.now();
   let loaded = 0;
   const total = imageUrls.length;
+
   // Create optimized URLs for preloading
   const optimizedUrls = imageUrls.map(url => {
     if (!url.includes('cloudinary.com')) return url;
@@ -42,14 +45,17 @@ export const preloadCriticalImages = (
     // Extract base URL parts
     const baseUrlParts = url.split('/upload/');
     if (baseUrlParts.length !== 2) return url;
+
     // Add optimization parameters
     return `${baseUrlParts[0]}/upload/f_${format},q_${quality},dpr_auto/${baseUrlParts[1]}`;
   });
+
   return new Promise((resolve, reject) => {
     // Helper to update progress
     const updateProgress = () => {
       loaded++;
       if (onProgress) onProgress(loaded, total);
+      
       if (loaded === total) {
         const endTime = performance.now();
         const loadTime = (endTime - startTime) / 1000;
@@ -59,12 +65,14 @@ export const preloadCriticalImages = (
         resolve();
       }
     };
+
     // Create a timeout for the entire batch
     const timeoutId = setTimeout(() => {
       console.warn(`[Preload] Timeout reached after ${timeout}ms with ${loaded}/${total} images loaded`);
       if (onComplete) onComplete();
       resolve(); // Resolve anyway to not block rendering
     }, timeout);
+
     // Load images in parallel
     optimizedUrls.forEach(url => {
       // Create a new image element
@@ -77,6 +85,7 @@ export const preloadCriticalImages = (
           clearTimeout(timeoutId);
         }
       };
+
       // Handle loading error
       img.onerror = (err) => {
         console.error(`[Preload] Failed to preload image: ${url.substring(0, 50)}...`, err);
