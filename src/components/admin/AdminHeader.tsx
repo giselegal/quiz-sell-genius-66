@@ -1,43 +1,40 @@
-
-'use client';
-
-import React from 'react';
-import { Bell, Search, User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Link } from 'react-router-dom';
+import { Button } from '../ui/button';
+import { ChevronLeft } from 'lucide-react';
 
 interface AdminHeaderProps {
-  title?: string;
+  title: string;
+  showBackButton?: boolean;
+  backTo?: string;
 }
 
-export function AdminHeader({ title }: AdminHeaderProps) {
+export function AdminHeader({ 
+  title, 
+  showBackButton = true, 
+  backTo = '/admin' 
+}: AdminHeaderProps) {
   return (
-    <header className="bg-white border-b border-[#D4C4A0] px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-[#432818]">
-            {title || 'Quiz Sell Genius'}
-          </h1>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#B89B7A]" />
-            <Input
-              placeholder="Buscar..."
-              className="pl-10 w-64 border-[#D4C4A0]"
-            />
-          </div>
-          
-          <Button variant="ghost" size="sm">
-            <Bell className="w-5 h-5 text-[#B89B7A]" />
+    <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-background p-4">
+      <div className="flex items-center gap-2">
+        {showBackButton && (
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={backTo}>
+              <ChevronLeft className="h-5 w-5" />
+              <span className="sr-only">Voltar</span>
+            </Link>
           </Button>
-          
-          <Button variant="ghost" size="sm">
-            <User className="w-5 h-5 text-[#B89B7A]" />
-          </Button>
-        </div>
+        )}
+        <h1 className="text-xl font-semibold">{title}</h1>
       </div>
-    </header>
+      
+      <div className="flex items-center gap-4">
+        <Button variant="outline" size="sm" asChild>
+          <Link to="/admin">Painel</Link>
+        </Button>
+        <Button variant="outline" size="sm" asChild>
+          <Link to="/">Ver Site</Link>
+        </Button>
+      </div>
+    </div>
   );
 }

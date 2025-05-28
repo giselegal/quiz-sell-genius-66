@@ -1,5 +1,3 @@
-
-import React from 'react';
 import { Button } from '../../ui/button';
 
 interface Component {
@@ -17,16 +15,14 @@ export function ComponentRenderer({ component }: ComponentRendererProps) {
 
   switch (type) {
     case 'heading':
-      const level = props.level || 1;
-      const headingProps = {
-        className: `font-bold ${getHeadingClasses(level)} ${props.className || ''}`,
-        style: props.style
-      };
-      
-      return React.createElement(
-        `h${level}`,
-        headingProps,
-        props.text || 'Título'
+      const HeadingTag = `h${props.level || 1}` as keyof JSX.IntrinsicElements;
+      return (
+        <HeadingTag 
+          className={`font-bold ${getHeadingClasses(props.level)} ${props.className || ''}`}
+          style={props.style}
+        >
+          {props.text || 'Título'}
+        </HeadingTag>
       );
 
     case 'paragraph':
@@ -45,6 +41,7 @@ export function ComponentRenderer({ component }: ComponentRendererProps) {
           variant={props.variant || 'default'}
           size={props.size || 'default'}
           className={props.className}
+          style={props.style}
           onClick={(e) => e.preventDefault()}
         >
           {props.text || 'Botão'}

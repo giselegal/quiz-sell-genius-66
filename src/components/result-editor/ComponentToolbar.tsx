@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -81,8 +80,10 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const { hasPremiumFeatures, hasFeature, user } = useAuth();
 
+  // Filtrar componentes disponíveis baseado no plano do usuário
   const availableComponents = getAvailableComponents(user?.features || [], hasPremiumFeatures);
   
+  // Separar componentes disponíveis dos bloqueados
   const { available, locked } = components.reduce((acc, component) => {
     const isAvailable = availableComponents.find(c => c.id === component.id);
     if (isAvailable) {
@@ -93,6 +94,7 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
     return acc;
   }, { available: [] as ComponentDefinition[], locked: [] as ComponentDefinition[] });
 
+  // Filtrar por categoria e busca
   const filteredComponents = [...available, ...locked].filter(component => {
     const matchesCategory = selectedCategory === 'all' || component.category === selectedCategory;
     const matchesSearch = component.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -114,6 +116,7 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
 
   return (
     <div className="h-full flex flex-col">
+      {/* Header com busca */}
       <div className="p-4 border-b border-[#D4C4A0]">
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#B89B7A] w-4 h-4" />
@@ -125,6 +128,7 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
           />
         </div>
 
+        {/* Status do usuário */}
         <div className="mb-4 p-3 bg-[#F5F2E9] rounded-lg">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-[#432818]">
@@ -145,7 +149,10 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
             {available.length} componentes disponíveis
           </p>
         </div>
+      </div>
 
+      {/* Filtros de categoria */}
+      <div className="p-4 border-b border-[#D4C4A0]">
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedCategory('all')}
@@ -178,6 +185,7 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
         </div>
       </div>
 
+      {/* Lista de componentes */}
       <div className="flex-1 overflow-y-auto p-4">
         {filteredComponents.length === 0 ? (
           <div className="text-center py-8 text-[#B89B7A]">
@@ -186,12 +194,14 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
           </div>
         ) : (
           <div className="space-y-3">
+            {/* Componentes disponíveis */}
             {filteredComponents
               .filter(c => available.find(a => a.id === c.id))
               .map((component) => (
                 <DraggableComponent key={component.id} component={component} />
               ))}
             
+            {/* Componentes bloqueados */}
             {filteredComponents
               .filter(c => locked.find(l => l.id === c.id))
               .map((component) => (
@@ -200,6 +210,7 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
           </div>
         )}
 
+        {/* Upgrade prompt para usuários não premium */}
         {locked.length > 0 && !hasPremiumFeatures && (
           <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg">
             <h4 className="font-semibold text-yellow-800 mb-2">🚀 Desbloqueie Mais Componentes</h4>

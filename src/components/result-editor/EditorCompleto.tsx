@@ -1,6 +1,3 @@
-
-"use client";
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -73,10 +70,11 @@ const EditorCompleto: React.FC = () => {
       buttonText: 'Adquirir Agora'
     }
   });
-  
+
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Aplicar estilos em tempo real
   useEffect(() => {
     const style = document.createElement('style');
     style.id = 'editor-live-styles';
@@ -106,6 +104,7 @@ const EditorCompleto: React.FC = () => {
       
       .live-preview p {
         font-size: ${config.typography.bodySize}px;
+        color: ${config.colors.text};
         line-height: 1.6;
         margin-bottom: ${config.layout.spacing * 1.5}px;
       }
@@ -115,6 +114,7 @@ const EditorCompleto: React.FC = () => {
         border-radius: ${config.layout.borderRadius}px;
         padding: ${config.layout.padding}px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: ${config.layout.spacing}px;
       }
       
       .live-preview .btn {
@@ -123,6 +123,7 @@ const EditorCompleto: React.FC = () => {
         padding: ${config.layout.padding / 2}px ${config.layout.padding}px;
         border-radius: ${config.layout.borderRadius / 2}px;
         border: none;
+        font-size: ${config.typography.bodySize}px;
         cursor: pointer;
         transition: all 0.3s ease;
       }
@@ -132,7 +133,8 @@ const EditorCompleto: React.FC = () => {
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       }
     `;
-
+    
+    // Remove estilo anterior se existir
     const oldStyle = document.getElementById('editor-live-styles');
     if (oldStyle) {
       oldStyle.remove();
@@ -157,9 +159,12 @@ const EditorCompleto: React.FC = () => {
 
   const handleSave = () => {
     setIsLoading(true);
+    
     try {
-      safeLocalStorage.setItem('editorConfig', JSON.stringify(config));
-      safeLocalStorage.setItem('pageEditorConfig', JSON.stringify(config));
+      // Salvar no localStorage
+      localStorage.setItem('editorConfig', JSON.stringify(config));
+      localStorage.setItem('pageEditorConfig', JSON.stringify(config));
+      
       toast({
         title: "Configuração salva!",
         description: "As alterações foram aplicadas com sucesso.",
@@ -206,6 +211,7 @@ const EditorCompleto: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Header do Editor */}
       <div className="bg-white border-b px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
@@ -236,6 +242,7 @@ const EditorCompleto: React.FC = () => {
       </div>
 
       <div className="flex flex-1">
+        {/* Painel de Controles */}
         <div className="w-80 bg-white border-r p-6 overflow-y-auto max-h-screen">
           <Tabs defaultValue="colors" className="w-full">
             <TabsList className="grid w-full grid-cols-4">
@@ -253,6 +260,7 @@ const EditorCompleto: React.FC = () => {
               </TabsTrigger>
             </TabsList>
 
+            {/* Cores */}
             <TabsContent value="colors" className="space-y-4">
               <div>
                 <Label>Cor Primária</Label>
@@ -264,15 +272,83 @@ const EditorCompleto: React.FC = () => {
                     className="w-16 h-10"
                   />
                   <Input
-                    type="text"
                     value={config.colors.primary}
                     onChange={(e) => updateConfig('colors', 'primary', e.target.value)}
                     className="flex-1"
                   />
                 </div>
               </div>
+
+              <div>
+                <Label>Cor Secundária</Label>
+                <div className="flex gap-2 mt-1">
+                  <Input
+                    type="color"
+                    value={config.colors.secondary}
+                    onChange={(e) => updateConfig('colors', 'secondary', e.target.value)}
+                    className="w-16 h-10"
+                  />
+                  <Input
+                    value={config.colors.secondary}
+                    onChange={(e) => updateConfig('colors', 'secondary', e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>Fundo</Label>
+                <div className="flex gap-2 mt-1">
+                  <Input
+                    type="color"
+                    value={config.colors.background}
+                    onChange={(e) => updateConfig('colors', 'background', e.target.value)}
+                    className="w-16 h-10"
+                  />
+                  <Input
+                    value={config.colors.background}
+                    onChange={(e) => updateConfig('colors', 'background', e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>Texto</Label>
+                <div className="flex gap-2 mt-1">
+                  <Input
+                    type="color"
+                    value={config.colors.text}
+                    onChange={(e) => updateConfig('colors', 'text', e.target.value)}
+                    className="w-16 h-10"
+                  />
+                  <Input
+                    value={config.colors.text}
+                    onChange={(e) => updateConfig('colors', 'text', e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>Fundo do Card</Label>
+                <div className="flex gap-2 mt-1">
+                  <Input
+                    type="color"
+                    value={config.colors.cardBg}
+                    onChange={(e) => updateConfig('colors', 'cardBg', e.target.value)}
+                    className="w-16 h-10"
+                  />
+                  <Input
+                    value={config.colors.cardBg}
+                    onChange={(e) => updateConfig('colors', 'cardBg', e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
             </TabsContent>
 
+            {/* Tipografia */}
             <TabsContent value="typography" className="space-y-4">
               <div>
                 <Label>Tamanho do Título: {config.typography.titleSize}px</Label>
@@ -285,8 +361,33 @@ const EditorCompleto: React.FC = () => {
                   className="mt-2"
                 />
               </div>
+
+              <div>
+                <Label>Tamanho do Subtítulo: {config.typography.subtitleSize}px</Label>
+                <Slider
+                  value={[config.typography.subtitleSize]}
+                  onValueChange={([value]) => updateConfig('typography', 'subtitleSize', value)}
+                  min={18}
+                  max={48}
+                  step={2}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label>Tamanho do Texto: {config.typography.bodySize}px</Label>
+                <Slider
+                  value={[config.typography.bodySize]}
+                  onValueChange={([value]) => updateConfig('typography', 'bodySize', value)}
+                  min={12}
+                  max={24}
+                  step={1}
+                  className="mt-2"
+                />
+              </div>
             </TabsContent>
 
+            {/* Layout */}
             <TabsContent value="layout" className="space-y-4">
               <div>
                 <Label>Padding: {config.layout.padding}px</Label>
@@ -294,13 +395,38 @@ const EditorCompleto: React.FC = () => {
                   value={[config.layout.padding]}
                   onValueChange={([value]) => updateConfig('layout', 'padding', value)}
                   min={8}
-                  max={64}
+                  max={48}
                   step={4}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label>Bordas Arredondadas: {config.layout.borderRadius}px</Label>
+                <Slider
+                  value={[config.layout.borderRadius]}
+                  onValueChange={([value]) => updateConfig('layout', 'borderRadius', value)}
+                  min={0}
+                  max={32}
+                  step={2}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label>Espaçamento: {config.layout.spacing}px</Label>
+                <Slider
+                  value={[config.layout.spacing]}
+                  onValueChange={([value]) => updateConfig('layout', 'spacing', value)}
+                  min={8}
+                  max={32}
+                  step={2}
                   className="mt-2"
                 />
               </div>
             </TabsContent>
 
+            {/* Conteúdo */}
             <TabsContent value="content" className="space-y-4">
               <div>
                 <Label>Título</Label>
@@ -310,10 +436,39 @@ const EditorCompleto: React.FC = () => {
                   className="mt-1"
                 />
               </div>
+
+              <div>
+                <Label>Subtítulo</Label>
+                <Input
+                  value={config.content.subtitle}
+                  onChange={(e) => updateConfig('content', 'subtitle', e.target.value)}
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label>Descrição</Label>
+                <textarea
+                  value={config.content.description}
+                  onChange={(e) => updateConfig('content', 'description', e.target.value)}
+                  className="w-full p-2 border rounded-md mt-1"
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label>Texto do Botão</Label>
+                <Input
+                  value={config.content.buttonText}
+                  onChange={(e) => updateConfig('content', 'buttonText', e.target.value)}
+                  className="mt-1"
+                />
+              </div>
             </TabsContent>
           </Tabs>
         </div>
 
+        {/* Preview */}
         <div className="flex-1 p-6">
           <div className={`mx-auto ${previewMode === 'mobile' ? 'max-w-sm' : 'max-w-4xl'}`}>
             <div className="live-preview">
@@ -321,6 +476,17 @@ const EditorCompleto: React.FC = () => {
                 <h1 className="font-bold">{config.content.title}</h1>
                 <h2 className="font-semibold">{config.content.subtitle}</h2>
                 <p>{config.content.description}</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="card">
+                    <h3 className="font-medium mb-2">Seu Estilo</h3>
+                    <p className="text-sm">Descubra o estilo que combina perfeitamente com você.</p>
+                  </div>
+                  <div className="card">
+                    <h3 className="font-medium mb-2">Guia Personalizado</h3>
+                    <p className="text-sm">Receba dicas exclusivas baseadas no seu perfil.</p>
+                  </div>
+                </div>
                 
                 <button className="btn w-full md:w-auto">
                   {config.content.buttonText}

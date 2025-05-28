@@ -54,11 +54,8 @@ export interface StyleResult {
 export interface QuizResult {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
-  userName: string;
-  answers?: Record<string, UserAnswer[]>;
-  strategicAnswers?: Record<string, string[]>;
-  timestamp?: number;
-  totalSelections?: number; // Added totalSelections property
+  totalSelections: number;
+  userName?: string;
 }
 
 export interface BlockType {
@@ -66,4 +63,25 @@ export interface BlockType {
   type: string;
   content: any;
   settings?: Record<string, any>;
+}
+
+export interface QuizComponentData {
+  id: string;
+  type: string;
+  content: any;
+  style?: any;
+  data?: {
+    [key: string]: any;
+    title?: string;
+    subtitle?: string;
+    text?: string;
+    imageUrl?: string;
+    alt?: string;
+    question?: string;
+    options?: Array<{
+      id: string;
+      text: string;
+      isSelected?: boolean;
+    }>;
+  };
 }

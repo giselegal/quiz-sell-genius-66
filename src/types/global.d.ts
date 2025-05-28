@@ -1,4 +1,3 @@
-
 // Global type declarations
 
 interface Window {
@@ -6,6 +5,11 @@ interface Window {
   fbq?: (event: string, eventName: string, params?: any) => void;
   _fbq?: any;
   gtag?: (event: string, eventName: string, params?: any) => void;
+  analytics?: {
+    track: (event: string, properties?: Record<string, any>) => void;
+    identify: (userId: string, traits?: Record<string, any>) => void;
+    page: (name?: string, properties?: Record<string, any>) => void;
+  };
 
   // Custom utility functions exposed to the global scope
   checkMainRoutes?: () => any;

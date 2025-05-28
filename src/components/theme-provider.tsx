@@ -1,13 +1,13 @@
-"use client"
-
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { safeLocalStorage } from "@/utils/safeLocalStorage"
+
 type Theme = "dark" | "light" | "system"
+
 type ThemeProviderProps = {
   children: React.ReactNode
   defaultTheme?: Theme
   storageKey?: string
 }
+
 type ThemeProviderState = {
   theme: Theme
   setTheme: (theme: Theme) => void
@@ -19,6 +19,7 @@ const initialState: ThemeProviderState = {
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
@@ -26,29 +27,36 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
-    () => (safeLocalStorage.getItem(storageKey) as Theme) || defaultTheme
+    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
+
   useEffect(() => {
     const root = window.document.documentElement
+
     root.classList.remove("light", "dark")
+
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
         .matches
         ? "dark"
         : "light"
+
       root.classList.add(systemTheme)
       return
     }
+
     root.classList.add(theme)
   }, [theme])
+
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      safeLocalStorage.setItem(storageKey, theme)
+      localStorage.setItem(storageKey, theme)
       setTheme(theme)
     },
   }
-    return (
+
+  return (
     <ThemeProviderContext.Provider {...props} value={value}>
       {children}
     </ThemeProviderContext.Provider>
@@ -57,7 +65,9 @@ export function ThemeProvider({
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext)
+
   if (context === undefined)
     throw new Error("useTheme must be used within a ThemeProvider")
+
   return context
 }

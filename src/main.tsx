@@ -7,6 +7,7 @@ import './index.css';
 // function fixMainRoutes() { ... }
 // function checkMainRoutes() { ... }
 // function setupRouteChangePreloading() { ... }
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />

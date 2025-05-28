@@ -1,7 +1,6 @@
-'use client';
-
-import ResultPage from '@/components/ResultPage';
+// Rota /resultado
+import ResultPageContent from '@/components/ResultPage';
 
 export default function ResultadoPage() {
-  return <ResultPage />;
+  return <ResultPageContent />;
 }

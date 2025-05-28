@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -13,15 +12,15 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
   requireEditor = false 
 }) => {
   const { user, isAdmin, hasEditorAccess } = useAuth();
-  
+
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-  
+
   if (!isAdmin) {
     return <Navigate to="/" replace />;
   }
-  
+
   if (requireEditor && !hasEditorAccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -42,6 +41,6 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
       </div>
     );
   }
-  
+
   return <>{children}</>;
 };

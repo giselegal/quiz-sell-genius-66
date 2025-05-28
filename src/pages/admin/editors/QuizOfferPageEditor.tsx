@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { QuizOfferPage } from '@/pages/QuizOfferPage'; // Importando a página para possível preview
 
 // Mock de dados da página (eventualmente viria de um backend ou config)
 const initialPageData = {
