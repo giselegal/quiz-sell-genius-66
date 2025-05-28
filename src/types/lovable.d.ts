@@ -1,9 +1,19 @@
-
 declare module '@lovable/react' {
   import React from 'react';
-  export const LovableProvider: React.FC<{ children: React.ReactNode }>;
-  export const EditorScript: React.FC;
-  export const Editable: React.FC<{ id: string; children: React.ReactNode }>;
+
+  interface LovableProviderProps {
+    children: React.ReactNode;
+  }
+  export const LovableProvider: (props: LovableProviderProps) => JSX.Element;
+
+  // Assuming EditorScript takes no props
+  export const EditorScript: () => JSX.Element;
+
+  interface EditableProps {
+    id: string;
+    children: React.ReactNode;
+  }
+  export const Editable: (props: EditableProps) => JSX.Element;
 }
 
 declare module '@lovable/editor' {
