@@ -17,14 +17,16 @@ export function ComponentRenderer({ component }: ComponentRendererProps) {
 
   switch (type) {
     case 'heading':
-      const HeadingTag = `h${props.level || 1}` as keyof JSX.IntrinsicElements;
-      return (
-        <HeadingTag 
-          className={`font-bold ${getHeadingClasses(props.level)} ${props.className || ''}`}
-          style={props.style}
-        >
-          {props.text || 'Título'}
-        </HeadingTag>
+      const level = props.level || 1;
+      const headingProps = {
+        className: `font-bold ${getHeadingClasses(level)} ${props.className || ''}`,
+        style: props.style
+      };
+      
+      return React.createElement(
+        `h${level}`,
+        headingProps,
+        props.text || 'Título'
       );
 
     case 'paragraph':

@@ -1,4 +1,23 @@
 
+export const injectCriticalCSS = (cssContent: string, id: string = 'critical-css'): void => {
+  // Check if already injected
+  if (document.getElementById(id)) {
+    return;
+  }
+
+  const style = document.createElement('style');
+  style.id = id;
+  style.textContent = cssContent;
+  document.head.appendChild(style);
+};
+
+export const removeCriticalCSS = (id: string = 'critical-css'): void => {
+  const existingStyle = document.getElementById(id);
+  if (existingStyle) {
+    existingStyle.remove();
+  }
+};
+
 export const criticalCSS = {
   generateCriticalCSS: (): string => {
     return `
