@@ -1,3 +1,5 @@
+
+"use client";
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -35,7 +37,7 @@ const FloatingCTA: React.FC<FloatingCTAProps> = ({ onClickCTA }) => {
     };
 
     window.addEventListener('scroll', throttledScrollHandler);
-    
+
     // Limpar listener
     return () => {
       window.removeEventListener('scroll', throttledScrollHandler);

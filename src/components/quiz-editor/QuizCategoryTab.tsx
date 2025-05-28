@@ -1,4 +1,6 @@
 
+"use client";
+
 import React from 'react';
 import { ChevronDown, ChevronRight, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';

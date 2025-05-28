@@ -21,25 +21,22 @@ const VideoBlockEditor: React.FC<VideoBlockEditorProps> = ({ block, onUpdate }) 
     const youtubeRegex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const youtubeMatch = url.match(youtubeRegex);
     if (youtubeMatch) return youtubeMatch[1];
-    
+
     // For Vimeo URLs
     const vimeoRegex = /(?:vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|)(\d+)(?:$|\/|\?))/;
     const vimeoMatch = url.match(vimeoRegex);
     if (vimeoMatch) return vimeoMatch[1];
-    
+
     return '';
   };
 
   const getEmbedUrl = (url: string) => {
-    if (!url) return '';
     const videoId = getVideoId(url);
-    
     if (url.includes('youtube')) {
       return `https://www.youtube.com/embed/${videoId}`;
     } else if (url.includes('vimeo')) {
       return `https://player.vimeo.com/video/${videoId}`;
     }
-    
     return url;
   };
 
@@ -64,7 +61,7 @@ const VideoBlockEditor: React.FC<VideoBlockEditorProps> = ({ block, onUpdate }) 
           placeholder="Título do vídeo"
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="videoDescription">Descrição do Vídeo</Label>
         <Textarea
@@ -75,7 +72,7 @@ const VideoBlockEditor: React.FC<VideoBlockEditorProps> = ({ block, onUpdate }) 
           placeholder="Descrição do vídeo"
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="videoThumbnail">URL da Miniatura</Label>
         <Input
@@ -85,7 +82,7 @@ const VideoBlockEditor: React.FC<VideoBlockEditorProps> = ({ block, onUpdate }) 
           placeholder="https://exemplo.com/miniatura.jpg"
         />
       </div>
-      
+
       <div className="flex items-center justify-between">
         <Label htmlFor="videoAutoplay">Reprodução Automática</Label>
         <Switch
@@ -94,7 +91,7 @@ const VideoBlockEditor: React.FC<VideoBlockEditorProps> = ({ block, onUpdate }) 
           onCheckedChange={(checked) => onUpdate({ videoAutoplay: checked })}
         />
       </div>
-      
+
       <div className="flex items-center justify-between">
         <Label htmlFor="videoControls">Mostrar Controles</Label>
         <Switch
@@ -103,7 +100,7 @@ const VideoBlockEditor: React.FC<VideoBlockEditorProps> = ({ block, onUpdate }) 
           onCheckedChange={(checked) => onUpdate({ videoControls: checked })}
         />
       </div>
-      
+
       {content.videoUrl && (
         <div className="mt-4 border p-2 rounded">
           <div className="aspect-video w-full">

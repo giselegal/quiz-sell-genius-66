@@ -71,7 +71,6 @@ export const getStyleConfig = (category: StyleCategory) => {
 // Add the missing getFallbackStyle function
 export const getFallbackStyle = (styleCategory: string): React.CSSProperties => {
   const backgroundColor = getStyleColor(styleCategory as StyleCategory);
-  
   return {
     backgroundColor,
     color: '#fff',

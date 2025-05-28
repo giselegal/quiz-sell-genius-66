@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +28,7 @@ const ProductsBlockEditor: React.FC<ProductsBlockEditorProps> = ({ block, onUpda
       alt: 'Todos os produtos e bônus'
     }
   ];
-  
+
   const handleAddImage = () => {
     if (newImageUrl.trim() && newImageAlt.trim()) {
       onUpdate({ 
@@ -36,7 +38,7 @@ const ProductsBlockEditor: React.FC<ProductsBlockEditorProps> = ({ block, onUpda
       setNewImageAlt('');
     }
   };
-  
+
   const handleRemoveImage = (index: number) => {
     const newImages = [...images];
     newImages.splice(index, 1);
@@ -84,9 +86,6 @@ const ProductsBlockEditor: React.FC<ProductsBlockEditorProps> = ({ block, onUpda
                     onUpdate({ images: newImages });
                   }}
                 />
-              </div>
-              
-              <div className="space-y-2">
                 <Label htmlFor={`image-alt-${index}`}>Descrição</Label>
                 <Input
                   id={`image-alt-${index}`}
@@ -97,22 +96,21 @@ const ProductsBlockEditor: React.FC<ProductsBlockEditorProps> = ({ block, onUpda
                     onUpdate({ images: newImages });
                   }}
                 />
+                {image.url && (
+                  <div className="mt-2 p-2 bg-gray-50 rounded">
+                    <img 
+                      src={image.url} 
+                      alt={image.alt} 
+                      className="h-20 object-contain mx-auto"
+                    />
+                  </div>
+                )}
               </div>
-              
-              {image.url && (
-                <div className="mt-2 p-2 bg-gray-50 rounded">
-                  <img 
-                    src={image.url} 
-                    alt={image.alt} 
-                    className="h-20 object-contain mx-auto"
-                  />
-                </div>
-              )}
             </div>
           ))}
         </div>
       </div>
-      
+
       <div className="p-4 border rounded-md space-y-4">
         <h4 className="font-medium">Adicionar Novo Produto</h4>
         
@@ -124,9 +122,6 @@ const ProductsBlockEditor: React.FC<ProductsBlockEditorProps> = ({ block, onUpda
             onChange={(e) => setNewImageUrl(e.target.value)}
             placeholder="https://exemplo.com/produto.jpg"
           />
-        </div>
-        
-        <div className="space-y-2">
           <Label htmlFor="new-image-alt">Descrição</Label>
           <Input
             id="new-image-alt"

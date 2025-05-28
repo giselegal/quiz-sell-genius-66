@@ -1,12 +1,11 @@
+"use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AspectRatio } from '../ui/aspect-ratio';
-import { getFallbackStyle } from '@/utils/styleUtils';
 import { isImagePreloaded, getOptimizedImage, getImageMetadata } from '@/utils/imageManager';
 import OptimizedImage from '../ui/OptimizedImage';
-
 interface QuizOptionImageProps {
   imageUrl: string;
   altText: string;
@@ -15,7 +14,6 @@ interface QuizOptionImageProps {
   is3DQuestion: boolean;
   questionId: string;
 }
-
 export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
   imageUrl,
   altText,
@@ -33,17 +31,15 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     getImageMetadata(imageUrl),
     [imageUrl]
   );
-  
   // Use memoization to avoid recalculating the URL on each render
   const optimizedImageUrl = useMemo(() => 
     getOptimizedImage(imageUrl, {
       quality: 95,
       format: 'auto',
       width: imageUrl.includes('sapatos') ? 400 : 500
-    }),
-    [imageUrl]
-  );
-  
+    })
+  , [imageUrl]);
+
   // Check if image is already preloaded on mount
   useEffect(() => {
     if (isImagePreloaded(imageUrl)) {
@@ -53,12 +49,11 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
 
   if (imageError) {
     return (
-      <div className="w-full h-full" style={getFallbackStyle(styleCategory)}>
-        <span>{styleCategory}</span>
+      <div className="w-full h-full bg-gray-100 rounded flex items-center justify-center">
+        <span className="text-xs text-gray-400">Erro ao carregar imagem</span>
       </div>
     );
   }
-
   return (
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",

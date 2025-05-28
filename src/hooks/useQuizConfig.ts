@@ -1,11 +1,10 @@
+"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';
-
 // Storage keys
 const QUIZ_CONFIG_KEY = 'quiz_config';
-
 interface QuizConfig {
   questions: QuizQuestion[];
   title: string;
@@ -13,11 +12,9 @@ interface QuizConfig {
   version: number;
   updatedAt: string;
 }
-
 export const useQuizConfig = () => {
   const [config, setConfig] = useState<QuizConfig | null>(null);
   const [loading, setLoading] = useState(true);
-
   // Load config from localStorage
   useEffect(() => {
     const loadConfig = () => {
@@ -49,10 +46,8 @@ export const useQuizConfig = () => {
         setLoading(false);
       }
     };
-
     loadConfig();
   }, []);
-
   // Save config to localStorage
   const saveConfig = useCallback((newConfig: QuizConfig) => {
     try {
@@ -73,8 +68,6 @@ export const useQuizConfig = () => {
       });
       return false;
     }
-  }, []);
-
   // Update questions
   const updateQuestions = useCallback((questions: QuizQuestion[]) => {
     if (!config) return false;
@@ -83,28 +76,19 @@ export const useQuizConfig = () => {
       questions
     });
   }, [config, saveConfig]);
-
   // Add a question
   const addQuestion = useCallback((question: QuizQuestion) => {
-    if (!config) return false;
     return updateQuestions([...config.questions, question]);
   }, [config, updateQuestions]);
-
   // Update a question
   const updateQuestion = useCallback((questionId: string, updates: Partial<QuizQuestion>) => {
-    if (!config) return false;
     const updatedQuestions = config.questions.map(q => 
       q.id === questionId ? { ...q, ...updates } : q
     );
     return updateQuestions(updatedQuestions);
-  }, [config, updateQuestions]);
-
   // Delete a question
   const deleteQuestion = useCallback((questionId: string) => {
-    if (!config) return false;
     return updateQuestions(config.questions.filter(q => q.id !== questionId));
-  }, [config, updateQuestions]);
-
   return {
     config,
     loading,

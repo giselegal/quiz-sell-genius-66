@@ -59,7 +59,6 @@ const QuizResultComponent: React.FC<QuizResultComponentProps> = ({ data, style, 
         <h3 className="text-lg font-medium mb-4 text-center">
           {data.secondaryStylesTitle || "Seus estilos secundários"}
         </h3>
-        
         <div className="space-y-3">
           {['Clássico', 'Natural', 'Contemporâneo'].map((style, index) => (
             <div key={index} className="flex items-center justify-between">

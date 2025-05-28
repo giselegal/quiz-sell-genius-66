@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { QuizComponentData, QuizStage } from '@/types/quizBuilder';
 import { ScrollArea } from '@/components/ui/scroll-area';

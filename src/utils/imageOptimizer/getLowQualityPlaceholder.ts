@@ -18,7 +18,6 @@ const getLowQualityPlaceholder = (originalUrl: string): string => {
     // Improved transformation for better placeholders
     // Better quality/size balance for placeholder
     const transformations = 'f_auto,q_10,w_30,e_blur:800';
-    
     // Return low quality placeholder URL
     return `${baseUrlParts[0]}/upload/${transformations}/${baseUrlParts[1]}`;
   } 
@@ -27,9 +26,7 @@ const getLowQualityPlaceholder = (originalUrl: string): string => {
     // Enhanced parameter approach for local images
     return `${originalUrl}?w=30&q=10&blur=800`;
   }
-  
   // For other URLs (fallback)
   return originalUrl;
 };
-
 export default getLowQualityPlaceholder;

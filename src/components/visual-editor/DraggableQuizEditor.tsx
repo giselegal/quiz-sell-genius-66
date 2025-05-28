@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -11,7 +12,6 @@ import QuestionOptionEditor from '../quiz-editor/QuestionOptionEditor';
 import { QuizOption as QuizOptionComponent } from '../quiz/QuizOption';
 
 type ItemType = 'QUESTION' | 'OPTION';
-
 interface DraggableItemProps {
   id: string;
   index: number;
@@ -20,7 +20,6 @@ interface DraggableItemProps {
   children: React.ReactNode;
   parentId?: string;
 }
-
 const DraggableItem: React.FC<DraggableItemProps> = ({ 
   id, 
   index, 
@@ -38,7 +37,6 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       isDragging: monitor.isDragging(),
     }),
   });
-
   const [, drop] = useDrop({
     accept: type,
     hover: (item: { id: string; index: number; type: ItemType; parentId?: string }, monitor) => {
@@ -48,7 +46,6 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       
       // Don't replace items with themselves
       if (dragIndex === hoverIndex && item.parentId === parentId) return;
-
       // Determine rectangle on screen
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       // Get vertical middle
@@ -57,13 +54,11 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       const clientOffset = monitor.getClientOffset();
       // Get pixels to the top
       const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
-
       // Only perform the move when the mouse has crossed half of the items height
       // When dragging downwards, only move when the cursor is below 50%
       // When dragging upwards, only move when the cursor is above 50%
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-
       // Time to actually perform the action
       moveItem(dragIndex, hoverIndex, type, parentId);
       // Note: we're mutating the monitor item here!
@@ -72,10 +67,7 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       // to avoid expensive index searches.
       item.index = hoverIndex;
     },
-  });
-
   drag(drop(ref));
-
   return (
     <div 
       ref={ref} 
@@ -88,10 +80,8 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
     </div>
   );
 };
-
 interface QuestionBlockProps {
   question: QuizQuestion;
-  index: number;
   moveQuestion: (dragIndex: number, hoverIndex: number) => void;
   updateQuestion: (id: string, updates: Partial<QuizQuestion>) => void;
   deleteQuestion: (id: string) => void;
@@ -101,8 +91,6 @@ interface QuestionBlockProps {
   updateOption: (questionId: string, optionId: string, updates: Partial<QuizOption>) => void;
   deleteOption: (questionId: string, optionId: string) => void;
   previewMode: boolean;
-}
-
 const QuestionBlock: React.FC<QuestionBlockProps> = ({
   question,
   index,
@@ -115,19 +103,14 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
   updateOption,
   deleteOption,
   previewMode
-}) => {
   const [expanded, setExpanded] = useState(true);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-
   const handleMoveOption = useCallback(
     (dragIndex: number, hoverIndex: number, type: ItemType, parentId?: string) => {
       if (type === 'OPTION' && parentId === question.id) {
         moveOption(question.id, dragIndex, hoverIndex);
       }
-    },
     [moveOption, question.id]
-  );
-
   if (previewMode) {
     return (
       <div className="mb-8 p-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-[#B89B7A]/20">
@@ -152,14 +135,11 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
       </div>
     );
   }
-
-  return (
     <DraggableItem
       id={question.id}
       index={index}
       type="QUESTION"
       moveItem={moveQuestion}
-    >
       <Card className="mb-6 border-[#B89B7A]/20 shadow-sm overflow-hidden">
         <div className="bg-[#FAF9F7] p-3 border-b border-[#B89B7A]/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -177,25 +157,11 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
             >
               <Settings className="h-4 w-4 text-[#8F7A6A]" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
               onClick={() => duplicateQuestion(question.id)}
-              className="h-8 w-8"
-            >
               <Copy className="h-4 w-4 text-[#8F7A6A]" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
               onClick={() => deleteQuestion(question.id)}
               className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
-            >
               <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-
         <AnimatePresence>
           {expanded && (
             <motion.div
@@ -203,7 +169,6 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
-            >
               <CardContent className="p-4">
                 <div className="mb-4">
                   <input
@@ -214,7 +179,6 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
                     placeholder="Título da pergunta"
                   />
                 </div>
-
                 <div className="mb-4 flex gap-4">
                   <div>
                     <label className="block text-sm text-[#8F7A6A] mb-1">Tipo de pergunta</label>
@@ -228,23 +192,13 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
                       <option value="both">Texto e Imagem</option>
                     </select>
                   </div>
-
-                  <div>
                     <label className="block text-sm text-[#8F7A6A] mb-1">Seleção múltipla</label>
-                    <select
                       value={question.multiSelect}
                       onChange={(e) => updateQuestion(question.id, { multiSelect: parseInt(e.target.value) })}
-                      className="p-2 border border-[#B89B7A]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/30"
-                    >
                       <option value="1">Única (1)</option>
                       <option value="2">Até 2 opções</option>
                       <option value="3">Até 3 opções</option>
                       <option value="4">Até 4 opções</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mb-4">
                   <h4 className="font-medium text-[#432818] mb-2">Opções</h4>
                   <div className="space-y-3">
                     {question.options.map((option, optionIndex) => (
@@ -265,9 +219,6 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
                         />
                       </DraggableItem>
                     ))}
-                  </div>
-                </div>
-
                 <Button
                   variant="outline"
                   onClick={() => addOption(question.id)}
@@ -282,17 +233,11 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
         </AnimatePresence>
       </Card>
     </DraggableItem>
-  );
-};
-
 interface DraggableQuizEditorProps {
   questions: QuizQuestion[];
   onQuestionsChange: (questions: QuizQuestion[]) => void;
-}
-
 const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, onQuestionsChange }) => {
   const [previewMode, setPreviewMode] = useState(false);
-
   const moveQuestion = useCallback(
     (dragIndex: number, hoverIndex: number) => {
       const draggedQuestion = questions[dragIndex];
@@ -300,30 +245,16 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
       newQuestions.splice(dragIndex, 1);
       newQuestions.splice(hoverIndex, 0, draggedQuestion);
       onQuestionsChange(newQuestions);
-    },
     [questions, onQuestionsChange]
-  );
-
   const updateQuestion = useCallback(
     (id: string, updates: Partial<QuizQuestion>) => {
       const newQuestions = questions.map((q) =>
         q.id === id ? { ...q, ...updates } : q
       );
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
-
   const deleteQuestion = useCallback(
     (id: string) => {
       const newQuestions = questions.filter((q) => q.id !== id);
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
-
   const duplicateQuestion = useCallback(
-    (id: string) => {
       const questionToDuplicate = questions.find((q) => q.id === id);
       if (questionToDuplicate) {
         const duplicatedQuestion = {
@@ -335,11 +266,6 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
           })),
         };
         onQuestionsChange([...questions, duplicatedQuestion]);
-      }
-    },
-    [questions, onQuestionsChange]
-  );
-
   const moveOption = useCallback(
     (questionId: string, dragIndex: number, hoverIndex: number) => {
       const newQuestions = questions.map((q) => {
@@ -352,15 +278,8 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
         }
         return q;
       });
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
-
   const addOption = useCallback(
     (questionId: string) => {
-      const newQuestions = questions.map((q) => {
-        if (q.id === questionId) {
           return {
             ...q,
             options: [
@@ -373,48 +292,14 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
               },
             ],
           };
-        }
-        return q;
-      });
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
-
   const updateOption = useCallback(
     (questionId: string, optionId: string, updates: Partial<QuizOption>) => {
-      const newQuestions = questions.map((q) => {
-        if (q.id === questionId) {
-          return {
-            ...q,
             options: q.options.map((opt) =>
               opt.id === optionId ? { ...opt, ...updates } : opt
             ),
-          };
-        }
-        return q;
-      });
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
-
   const deleteOption = useCallback(
     (questionId: string, optionId: string) => {
-      const newQuestions = questions.map((q) => {
-        if (q.id === questionId) {
-          return {
-            ...q,
             options: q.options.filter((opt) => opt.id !== optionId),
-          };
-        }
-        return q;
-      });
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
-
   const addQuestion = useCallback(() => {
     const newQuestion: QuizQuestion = {
       id: `question-${Date.now()}`,
@@ -428,34 +313,23 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
           styleCategory: 'Natural',
           points: 1,
         },
-        {
           id: `option-${Date.now()}-2`,
           text: 'Opção 2',
           styleCategory: 'Clássico',
-          points: 1,
-        },
       ],
     };
     onQuestionsChange([...questions, newQuestion]);
   }, [questions, onQuestionsChange]);
-
-  return (
     <DndProvider backend={HTML5Backend}>
       <div className="p-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-playfair text-[#432818]">Editor de Quiz</h2>
           <div className="flex gap-2">
-            <Button
               variant="outline"
               onClick={() => setPreviewMode(!previewMode)}
               className="flex items-center gap-2"
-            >
               <Eye className="h-4 w-4" />
               {previewMode ? 'Modo Edição' : 'Pré-visualizar'}
-            </Button>
-          </div>
-        </div>
-
         <div className="space-y-4">
           {questions.map((question, index) => (
             <QuestionBlock
@@ -471,10 +345,6 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
               updateOption={updateOption}
               deleteOption={deleteOption}
               previewMode={previewMode}
-            />
-          ))}
-        </div>
-
         <Button
           onClick={addQuestion}
           className="mt-6 bg-[#B89B7A] hover:bg-[#A38A69] text-white"
@@ -482,9 +352,5 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
           <PlusCircle className="h-4 w-4 mr-2" />
           Adicionar Pergunta
         </Button>
-      </div>
     </DndProvider>
-  );
-};
-
 export default DraggableQuizEditor;

@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-
 interface HeroSectionProps {
   title: string;
   subtitle: string;
@@ -12,7 +11,6 @@ interface HeroSectionProps {
     url: string;
   };
 }
-
 export const HeroSection: React.FC<HeroSectionProps> = ({
   title,
   subtitle,

@@ -1,16 +1,15 @@
 /**
  * Inicializa o Pixel do Facebook
  */
-import { getPixelId, getCurrentFunnelConfig, getFacebookToken, getCtaUrl, getUtmCampaign, trackFunnelEvent } from '@/services/pixelManager';
+import { getPixelId, getCurrentFunnelConfig, trackFunnelEvent } from '@/services/pixelManager';
 
 export const initFacebookPixel = () => {
   if (typeof window === 'undefined') return;
-
   try {
     // Verifica se o objeto fbq já existe
     if (!window.fbq) {
       // Se não existir, criamos o script do Facebook Pixel manualmente
-      (function(f,b,e,v,n,t,s) {
+      (function(f: any,b: any,e: any,v: any,n: any,t: any,s: any) {
         if (f.fbq) return; n=f.fbq=function() {
           n.callMethod ? n.callMethod.apply(n,arguments) : n.queue.push(arguments)
         };
@@ -18,29 +17,34 @@ export const initFacebookPixel = () => {
         n.queue=[]; t=b.createElement(e); t.async=!0;
         t.src=v; s=b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t,s)
-      })(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      })(
+        window, 
+        document,
+        'script',
+        'https://connect.facebook.net/en_US/fbevents.js',
+        undefined,
+        undefined,
+        undefined
+      );
       
       console.log('Facebook Pixel script carregado manualmente');
     }
-
     // Obtém o ID do pixel para o funil atual
     const pixelId = getPixelId();
     console.log('Inicializando Facebook Pixel com ID:', pixelId);
-
     // Inicializa o Pixel
-    window.fbq('init', pixelId);
-    window.fbq('track', 'PageView');
+    if (window.fbq) {
+      window.fbq('init', pixelId);
+      window.fbq('track', 'PageView');
+    }
     
     // Registra adicionalmente o funil atual para análises
     const funnelConfig = getCurrentFunnelConfig();
     console.log('Funil atual:', funnelConfig.funnelName, '(', funnelConfig.utmCampaign, ')');
-
   } catch (error) {
     console.error('Erro ao inicializar o Facebook Pixel:', error);
   }
 };
-
-// Utilitário para adicionar parâmetros UTM aos eventos - REMOVIDO - duplicado abaixo
 
 /**
  * Rastreia um evento de geração de lead
@@ -74,6 +78,7 @@ export const captureUTMParameters = (): Record<string, string> => {
     
     // Parâmetros UTM padrão
     const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id'];
+    
     utmKeys.forEach(key => {
       if (urlParams.has(key)) {
         const value = urlParams.get(key);
@@ -82,17 +87,17 @@ export const captureUTMParameters = (): Record<string, string> => {
         }
       }
     });
-    
+
     // Parâmetro específico do Facebook
     if (urlParams.has('fbclid')) {
       utmParams['fbclid'] = urlParams.get('fbclid') || '';
     }
-    
+
     // Gclid para Google Ads
     if (urlParams.has('gclid')) {
       utmParams['gclid'] = urlParams.get('gclid') || '';
     }
-    
+
     // Se encontrou algum parâmetro UTM, armazena no localStorage
     if (Object.keys(utmParams).length > 0) {
       localStorage.setItem('utm_parameters', JSON.stringify(utmParams));
@@ -144,30 +149,32 @@ export const addUtmParamsToEvent = (eventData: Record<string, any> = {}): Record
  * @param userEmail Email do usuário (opcional)
  */
 export const trackQuizStart = (userName?: string, userEmail?: string) => {
-  if (window.fbq) {
+  try {
     const eventData = addUtmParamsToEvent({
       username: userName || 'Anônimo',
       user_email: userEmail || '',
       funnel: getCurrentFunnelConfig().funnelName
     });
-    window.fbq('trackCustom', 'QuizStart', eventData);
+
+    if (window.fbq) {
+      window.fbq('trackCustom', 'QuizStart', eventData);
+    }
     
     // Adicionar tracking específico para análises de funil
     trackFunnelEvent('FunnelQuizStart', {
-      username: userName || 'Anônimo',
       has_email: !!userEmail
     });
-    
+
     console.log('QuizStart tracked with UTM data');
-  }
-  
-  // Track in Google Analytics, if available
-  if (window.gtag) {
-    window.gtag('event', 'quiz_start', {
-      event_category: 'quiz',
-      event_label: userEmail ? 'with_email' : 'anonymous',
-      funnel: getCurrentFunnelConfig().funnelName
-    });
+    
+    if (window.gtag) {
+      window.gtag('event', 'quiz_start', {
+        event_category: 'quiz',
+        event_label: userEmail ? 'with_email' : 'anonymous',
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking quiz start:', error);
   }
 };
 
@@ -179,26 +186,28 @@ export const trackQuizStart = (userName?: string, userEmail?: string) => {
  * @param totalQuestions Número total de perguntas
  */
 export const trackQuizAnswer = (questionId: string, selectedOptions: string[], currentQuestionIndex: number, totalQuestions: number) => {
-  if (window.fbq) {
+  try {
     const eventData = addUtmParamsToEvent({
       question_id: questionId,
       selected_options: selectedOptions.join(', '),
       current_question_index: currentQuestionIndex,
       total_questions: totalQuestions
     });
-    window.fbq('trackCustom', 'QuizAnswer', eventData);
+
+    if (window.fbq) {
+      window.fbq('trackCustom', 'QuizAnswer', eventData);
+    }
+    
     console.log(`QuizAnswer tracked for question ${questionId} with options ${selectedOptions.join(', ')}`);
-  }
-  
-  // Track in Google Analytics, if available
-  if (window.gtag) {
-    window.gtag('event', 'quiz_answer', {
-      event_category: 'quiz',
-      question_id: questionId,
-      selected_options: selectedOptions.join(', '),
-      current_question_index: currentQuestionIndex,
-      total_questions: totalQuestions
-    });
+    
+    if (window.gtag) {
+      window.gtag('event', 'quiz_answer', {
+        event_category: 'quiz',
+        event_label: questionId
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking quiz answer:', error);
   }
 };
 
@@ -206,25 +215,30 @@ export const trackQuizAnswer = (questionId: string, selectedOptions: string[], c
  * Rastreia a conclusão do quiz
  */
 export const trackQuizComplete = () => {
-  // Calcular o tempo decorrido desde o início do quiz
-  const startTime = localStorage.getItem('quiz_start_time');
-  const endTime = Date.now();
-  const duration = startTime ? (endTime - parseInt(startTime, 10)) / 1000 : 0; // em segundos
-  
-  if (window.fbq) {
+  try {
+    // Calcular o tempo decorrido desde o início do quiz
+    const startTime = localStorage.getItem('quiz_start_time');
+    const endTime = Date.now();
+    const duration = startTime ? (endTime - parseInt(startTime, 10)) / 1000 : 0; // em segundos
+
     const eventData = addUtmParamsToEvent({
       quiz_duration: duration
     });
-    window.fbq('trackCustom', 'QuizComplete', eventData);
+
+    if (window.fbq) {
+      window.fbq('trackCustom', 'QuizComplete', eventData);
+    }
+    
     console.log('QuizComplete tracked');
-  }
-  
-  // Track in Google Analytics, if available
-  if (window.gtag) {
-    window.gtag('event', 'quiz_complete', {
-      event_category: 'quiz',
-      quiz_duration: duration
-    });
+    
+    if (window.gtag) {
+      window.gtag('event', 'quiz_complete', {
+        event_category: 'quiz',
+        value: duration
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking quiz complete:', error);
   }
 };
 
@@ -233,20 +247,25 @@ export const trackQuizComplete = () => {
  * @param styleCategory Categoria do estilo predominante
  */
 export const trackResultView = (styleCategory: string) => {
-  if (window.fbq) {
+  try {
     const eventData = addUtmParamsToEvent({
       style_category: styleCategory
     });
-    window.fbq('trackCustom', 'ResultView', eventData);
+
+    if (window.fbq) {
+      window.fbq('trackCustom', 'ResultView', eventData);
+    }
+    
     console.log('ResultView tracked with UTM data for style:', styleCategory);
-  }
-  
-  // Track in Google Analytics, if available
-  if (window.gtag) {
-    window.gtag('event', 'result_view', {
-      event_category: 'quiz',
-      event_label: styleCategory
-    });
+    
+    if (window.gtag) {
+      window.gtag('event', 'result_view', {
+        event_category: 'quiz',
+        event_label: styleCategory
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking result view:', error);
   }
 };
 
@@ -263,27 +282,29 @@ export const trackButtonClick = (
   buttonLocation?: string,
   actionType?: string
 ) => {
-  if (window.fbq) {
+  try {
     const eventData = addUtmParamsToEvent({
       button_id: buttonId || 'unknown',
       button_text: buttonText || 'unknown',
       button_location: buttonLocation || 'unknown',
       action_type: actionType || 'click',
-      funnel: getCurrentFunnelConfig().funnelName
     });
+
+    if (window.fbq) {
+      window.fbq('trackCustom', 'ButtonClick', eventData);
+    }
     
-    window.fbq('trackCustom', 'ButtonClick', eventData);
     console.log(`Button click tracked: ${buttonText || buttonId}`);
-  }
-  
-  // Track in Google Analytics, if available
-  if (window.gtag) {
-    window.gtag('event', 'button_click', {
-      event_category: 'interaction',
-      event_label: buttonText || buttonId,
-      button_location: buttonLocation,
-      funnel: getCurrentFunnelConfig().funnelName
-    });
+    
+    if (window.gtag) {
+      window.gtag('event', 'button_click', {
+        event_category: 'interaction',
+        event_label: buttonText || buttonId,
+        button_location: buttonLocation,
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking button click:', error);
   }
 };
 
@@ -293,39 +314,41 @@ export const trackButtonClick = (
  * @param productName Nome do produto (opcional)
  */
 export const trackSaleConversion = (value: number, productName?: string) => {
-  if (window.fbq) {
+  try {
     const eventData = addUtmParamsToEvent({
       value: value,
       currency: 'BRL',
       content_name: productName || 'Guia de Estilo',
       content_type: 'product',
-      funnel: getCurrentFunnelConfig().funnelName
     });
-    
+
     // Standard Purchase event
-    window.fbq('track', 'Purchase', eventData);
+    if (window.fbq) {
+      window.fbq('track', 'Purchase', eventData);
+    }
     
-    // Adicionar tracking específico para análises de funil
     trackFunnelEvent('FunnelPurchase', {
       value: value,
       product_name: productName || 'Guia de Estilo'
     });
-    
+
     console.log(`Sale conversion tracked: ${value} BRL for ${productName || 'Guia de Estilo'}`);
-  }
-  
-  // Track in Google Analytics, if available
-  if (window.gtag) {
-    window.gtag('event', 'purchase', {
-      transaction_id: 'T_' + Date.now(),
-      value: value,
-      currency: 'BRL',
-      items: [{
-        name: productName || 'Guia de Estilo',
-        price: value,
-        funnel: getCurrentFunnelConfig().funnelName
-      }]
-    });
+    
+    if (window.gtag) {
+      window.gtag('event', 'purchase', {
+        transaction_id: 'T_' + Date.now(),
+        value: value,
+        currency: 'BRL',
+        items: [{
+          item_name: productName || 'Guia de Estilo',
+          price: value,
+          quantity: 1,
+          funnel: getCurrentFunnelConfig().funnelName
+        }]
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking sale conversion:', error);
   }
 };
 
@@ -365,9 +388,9 @@ export const testFacebookPixel = () => {
   if (window.fbq) {
     window.fbq('trackCustom', 'TestEvent', { test_value: 'test' });
     console.log('Test event sent to Facebook Pixel');
-    return true;
   } else {
     console.error('Facebook Pixel not initialized');
-    return false;
   }
 };
+
+export const trackPageView = () => {};

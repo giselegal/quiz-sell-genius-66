@@ -6,7 +6,6 @@ import { accessoriesQuestions } from './questions/accessoriesQuestions';
 import { stylePreferencesQuestions } from './questions/stylePreferencesQuestions';
 import { outerwearQuestions } from './questions/outerwearQuestions';
 import { accessoryStyleQuestions } from './questions/accessoryStyleQuestions';
-
 export const quizQuestions: QuizQuestion[] = [
   ...clothingQuestions,         // Questões 1 e 3
   ...personalityQuestions,      // Questões 2 e 4
@@ -15,4 +14,3 @@ export const quizQuestions: QuizQuestion[] = [
   ...accessoriesQuestions,     // Questão 8
   ...accessoryStyleQuestions   // Questão 9
 ];
-

@@ -12,7 +12,6 @@ interface QuizTransitionManagerProps {
   handleShowResult: () => void;
   // hideCounter?: boolean; // Removido, pois MainTransition não está mais aqui
 }
-
 const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
   // showingTransition, // Removido
   showingFinalTransition,
@@ -24,7 +23,6 @@ const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
   if (showingFinalTransition) {
     return <QuizFinalTransition onShowResult={handleShowResult} />;
   }
-
   // if (showingTransition) { // Lógica removida, MainTransition é renderizada diretamente em QuizPage
   //   return (
   //     <div className="flex flex-col items-center justify-center h-full">
@@ -38,12 +36,9 @@ const QuizTransitionManager: React.FC<QuizTransitionManagerProps> = ({
   //         </div>
   //       )}
   //       <Spinner /> 
-  //       <Spinner /> 
   //     </div>
   //   );
   // }
-
   return null; // Se não for a transição final, não renderiza nada daqui
 };
-
 export { QuizTransitionManager };

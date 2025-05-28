@@ -2,13 +2,11 @@
 import React from 'react';
 import { LoadingState } from '../ui/loading-state';
 import { motion } from 'framer-motion';
-
 interface LoadingManagerProps {
   isLoading: boolean;
   children: React.ReactNode;
   message?: string;
 }
-
 const LoadingManager: React.FC<LoadingManagerProps> = ({
   isLoading,
   children,
@@ -18,7 +16,6 @@ const LoadingManager: React.FC<LoadingManagerProps> = ({
   if (isLoading) {
     return <LoadingState message={message} />;
   }
-
   // When loaded, use framer-motion to smoothly fade in content
   return (
     <motion.div
@@ -31,5 +28,4 @@ const LoadingManager: React.FC<LoadingManagerProps> = ({
     </motion.div>
   );
 };
-
 export default LoadingManager;

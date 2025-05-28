@@ -1,7 +1,7 @@
+"use client";
 
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-
 interface ProgressiveImageProps {
   src: string;
   lowQualitySrc?: string; 
@@ -13,7 +13,6 @@ interface ProgressiveImageProps {
   priority?: boolean;
   onLoad?: () => void;
 }
-
 const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   src,
   lowQualitySrc,
@@ -29,7 +28,6 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   const [hasError, setHasError] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
   const [isLowQualityLoaded, setIsLowQualityLoaded] = useState(false);
-
   useEffect(() => {
     // Reset state when src changes
     setIsLoaded(false);
@@ -41,11 +39,9 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
       if (onLoad) onLoad();
     }
   }, [src, onLoad]);
-
   const handleLoad = () => {
     setIsLoaded(true);
     if (onLoad) onLoad();
-    
     // Log performance metrics for priority images only
     if (priority) {
       console.log(`Priority image loaded: ${src.substring(0, 50)}...`);
@@ -64,18 +60,12 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
           // Ignore errors with performance marking
         }
       }
-    }
   };
-
   const handleLowQualityLoad = () => {
     setIsLowQualityLoaded(true);
-  };
-
   const handleError = () => {
     setHasError(true);
     console.error(`Failed to load image: ${src.substring(0, 50)}...`);
-  };
-
   return (
     <div className={cn("relative overflow-hidden", className)} style={style}>
       {/* Low quality placeholder - improved for faster loading */}
@@ -94,7 +84,6 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
           decoding="sync"
         />
       )}
-      
       {/* Actual image with improved loading attributes */}
       <img
         ref={imageRef}
@@ -112,20 +101,15 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         onLoad={handleLoad}
         onError={handleError}
       />
-      
       {/* Error fallback */}
       {hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
           <span className="text-gray-500">Imagem indisponível</span>
         </div>
-      )}
-      
       {/* Loading skeleton when neither image is loaded */}
       {!isLoaded && !isLowQualityLoaded && (
         <div className="absolute inset-0 bg-gray-100 animate-pulse" />
-      )}
     </div>
   );
 };
-
 export default ProgressiveImage;

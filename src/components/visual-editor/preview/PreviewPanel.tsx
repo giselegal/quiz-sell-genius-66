@@ -5,20 +5,17 @@ import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Monitor, Smartphone } from 'lucide-react';
-
 interface PreviewPanelProps {
   blocks: EditorBlock[];
   selectedBlockId: string | null;
   onSelect: (blockId: string) => void;
 }
-
 export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   blocks,
   selectedBlockId,
   onSelect,
 }) => {
   const [viewMode, setViewMode] = React.useState<'desktop' | 'mobile'>('desktop');
-
   const renderBlock = (block: EditorBlock) => {
     switch (block.type) {
       case 'headline':
@@ -38,30 +35,8 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         );
         
       case 'text':
-        return (
-          <div 
-            key={block.id}
-            className={cn(
-              'py-4 cursor-pointer', 
-              selectedBlockId === block.id && 'border-2 border-blue-400 rounded'
-            )}
-            onClick={() => onSelect(block.id)}
-            style={block.content.style as React.CSSProperties}
-          >
             <p>{block.content.text || 'Texto de exemplo...'}</p>
-          </div>
-        );
-        
       case 'image':
-        return (
-          <div 
-            key={block.id}
-            className={cn(
-              'py-4 cursor-pointer', 
-              selectedBlockId === block.id && 'border-2 border-blue-400 rounded'
-            )}
-            onClick={() => onSelect(block.id)}
-          >
             {block.content.imageUrl ? (
               <img 
                 src={block.content.imageUrl} 
@@ -73,28 +48,14 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               <div className="bg-gray-200 text-gray-500 p-8 text-center">
                 Imagem será exibida aqui
               </div>
-            )}
-          </div>
-        );
-        
       default:
-        return (
-          <div 
-            key={block.id}
-            className={cn(
               'py-4 border border-gray-200 rounded cursor-pointer', 
               selectedBlockId === block.id && 'border-2 border-blue-400'
-            )}
-            onClick={() => onSelect(block.id)}
-          >
             <p className="text-gray-500 text-center">
               Componente do tipo: {block.type}
             </p>
-          </div>
-        );
     }
   };
-
   return (
     <div className="h-full flex flex-col">
       <div className="p-4 bg-white border-b border-gray-200 flex items-center justify-between">
@@ -104,18 +65,13 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
             size="sm"
             variant={viewMode === 'desktop' ? 'default' : 'outline'}
             onClick={() => setViewMode('desktop')}
-          >
             <Monitor className="w-4 h-4 mr-2" />
             Desktop
           </Button>
-          <Button
-            size="sm"
             variant={viewMode === 'mobile' ? 'default' : 'outline'}
             onClick={() => setViewMode('mobile')}
-          >
             <Smartphone className="w-4 h-4 mr-2" />
             Mobile
-          </Button>
         </div>
       </div>
       <ScrollArea className="flex-1 p-4 bg-gray-50">
@@ -137,9 +93,6 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           ) : (
             <div>
               {blocks.sort((a, b) => a.order - b.order).map(renderBlock)}
-            </div>
-          )}
-        </div>
       </ScrollArea>
     </div>
   );

@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+
+import React, { useState, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { DragEndEvent } from '@dnd-kit/core';
 import { DndContext, closestCenter } from '@dnd-kit/core';
@@ -11,6 +12,7 @@ interface Component {
   type: string;
   props: Record<string, any>;
 }
+
 interface EditorCanvasProps {
   components: Component[];
   onSelectComponent: (component: Component | null) => void;
@@ -41,6 +43,7 @@ export default function EditorCanvas({
       isOver: !!monitor.isOver(),
     }),
   }));
+
   const getDefaultProps = (type: string): Record<string, any> => {
     switch (type) {
       case 'heading':
@@ -59,14 +62,20 @@ export default function EditorCanvas({
         return { style: {} };
     }
   };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
       const oldIndex = components.findIndex((item) => item.id === active.id);
       const newIndex = components.findIndex((item) => item.id === over.id);
       onChange(arrayMove(components, oldIndex, newIndex));
+    }
+  };
+
   const handleComponentClick = (component: Component) => {
     onSelectComponent(component);
+  };
+
   const handleComponentDelete = (componentId: string) => {
     const updatedComponents = components.filter(comp => comp.id !== componentId);
     onChange(updatedComponents);
@@ -87,6 +96,8 @@ export default function EditorCanvas({
     newComponents.splice(componentIndex + 1, 0, duplicatedComponent);
     onChange(newComponents);
     onSelectComponent(duplicatedComponent);
+  };
+
   return (
     <div 
       ref={dropRef}
@@ -129,6 +140,7 @@ export default function EditorCanvas({
           </SortableContext>
         </DndContext>
       )}
+
       {isOver && (
         <div className="flex h-full items-center justify-center">
           <div className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-lg">
@@ -138,3 +150,4 @@ export default function EditorCanvas({
       )}
     </div>
   );
+}

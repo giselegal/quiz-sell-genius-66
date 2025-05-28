@@ -59,9 +59,12 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
             <div className="absolute bottom-2 right-2 w-48 bg-white/90 rounded-lg p-2 shadow-md">
               <SecondaryStylesSection secondaryStyles={secondaryStyles} />
             </div>
+            <p className="text-base text-[#432818] leading-relaxed mt-4">
+              {description}
+            </p>
           </div>
         )}
-
+        
         {/* Show secondary styles below on mobile */}
         {isMobile && (
           <div className="bg-white rounded-lg p-3 shadow-sm border border-[#B89B7A]/10">

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
@@ -12,7 +13,6 @@ interface ResultEditorPanelProps {
   isPreviewing: boolean;
   primaryStyle: StyleResult;
 }
-
 const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({ 
   isPreviewing, 
   primaryStyle 
@@ -26,25 +26,19 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
       updateSection
     }
   } = useResultPageEditor(primaryStyle.category);
-
-  const {
     blocks,
     updateBlocks,
     actions: blockActions
   } = useBlockOperations();
-
   // Sync blocks with config when needed
   useEffect(() => {
     if (resultPageConfig?.blocks) {
       updateBlocks(resultPageConfig.blocks);
-    }
   }, [resultPageConfig, updateBlocks]);
-
   // Update when a block is selected
   const handleBlockSelect = (blockId: string) => {
     setSelectedBlockId(blockId);
   };
-
   // Update block content and sync with result page config
   const handleUpdateBlock = (content: any) => {
     if (selectedBlockId) {
@@ -56,23 +50,12 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
           ? { ...block, content: { ...block.content, ...content } }
           : block
       );
-      
       updateSection('blocks', updatedBlocks);
-    }
-  };
-
   // Delete block and sync with result page config
   const handleDeleteBlock = () => {
-    if (selectedBlockId) {
       blockActions.handleDeleteBlock(selectedBlockId);
       setSelectedBlockId(null);
-      
-      // Update resultPageConfig blocks to match
       const updatedBlocks = blocks.filter(block => block.id !== selectedBlockId);
-      updateSection('blocks', updatedBlocks);
-    }
-  };
-
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -80,7 +63,6 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
       </div>
     );
   }
-
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
@@ -90,9 +72,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
           activeStageType={null}
         />
       </ResizablePanel>
-
       <ResizableHandle withHandle />
-
       <ResizablePanel defaultSize={55}>
         <EditorPreview
           blocks={blocks}
@@ -101,11 +81,6 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
           isPreviewing={isPreviewing}
           primaryStyle={primaryStyle}
           onReorderBlocks={blockActions.handleReorderBlocks}
-        />
-      </ResizablePanel>
-
-      <ResizableHandle withHandle />
-
       <ResizablePanel defaultSize={25}>
         <div className="h-full border-l border-gray-200 bg-white overflow-auto">
           {selectedBlockId ? (
@@ -126,26 +101,18 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
                 style={blocks.find(b => b.id === selectedBlockId)?.content?.style || {}}
                 onUpdate={(style) => handleUpdateBlock({ style })}
               />
-              
               <div className="mt-4 pt-4 border-t">
-                <Button 
                   onClick={handleDeleteBlock} 
                   variant="destructive" 
                   size="sm"
-                >
                   Remover Bloco
-                </Button>
-              </div>
             </div>
           ) : (
             <div className="p-4 text-center text-gray-500">
               Selecione um componente para editar suas propriedades
-            </div>
           )}
         </div>
-      </ResizablePanel>
     </ResizablePanelGroup>
   );
 };
-
 export default ResultEditorPanel;

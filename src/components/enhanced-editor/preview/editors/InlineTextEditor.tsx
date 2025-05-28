@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -24,7 +26,7 @@ const InlineTextEditor: React.FC<InlineTextEditorProps> = ({
   useEffect(() => {
     setText(value || '');
   }, [value]);
-  
+
   useEffect(() => {
     if (isEditing && editorRef.current) {
       editorRef.current.focus();
@@ -35,21 +37,21 @@ const InlineTextEditor: React.FC<InlineTextEditorProps> = ({
       }
     }
   }, [isEditing]);
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setText(e.target.value);
     onChange?.(e.target.value);
   };
-  
+
   const handleBlur = () => {
     setIsEditing(false);
     onChange?.(text);
   };
-  
+
   const handleClick = () => {
     setIsEditing(true);
   };
-  
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && !multiline) {
       e.preventDefault();
@@ -57,7 +59,7 @@ const InlineTextEditor: React.FC<InlineTextEditorProps> = ({
       onChange?.(text);
     }
   };
-  
+
   if (multiline) {
     return (
       <div className="relative">
@@ -90,7 +92,7 @@ const InlineTextEditor: React.FC<InlineTextEditorProps> = ({
       </div>
     );
   }
-  
+
   return (
     <div className="relative">
       {isEditing ? (

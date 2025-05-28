@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -24,20 +26,20 @@ const BenefitsBlockEditor: React.FC<BenefitsBlockEditorProps> = ({ block, onUpda
     'Usar cores e modelagens que valorizam quem você é',
     'Parar de errar nas compras e economizar tempo'
   ];
-  
+
   const handleAddItem = () => {
     if (newItem.trim()) {
       onUpdate({ items: [...items, newItem.trim()] });
       setNewItem('');
     }
   };
-  
+
   const handleRemoveItem = (index: number) => {
     const newItems = [...items];
     newItems.splice(index, 1);
     onUpdate({ items: newItems });
   };
-  
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -76,7 +78,7 @@ const BenefitsBlockEditor: React.FC<BenefitsBlockEditorProps> = ({ block, onUpda
           onCheckedChange={(checked) => onUpdate({ useIcons: checked })}
         />
       </div>
-      
+
       {content.useIcons !== false && (
         <>
           <div className="space-y-2">
@@ -116,7 +118,7 @@ const BenefitsBlockEditor: React.FC<BenefitsBlockEditorProps> = ({ block, onUpda
           </div>
         </>
       )}
-      
+
       <div className="space-y-2">
         <Label>Itens de Benefícios</Label>
         <div className="space-y-2">
@@ -143,7 +145,7 @@ const BenefitsBlockEditor: React.FC<BenefitsBlockEditorProps> = ({ block, onUpda
           ))}
         </div>
       </div>
-      
+
       <div className="flex gap-2">
         <Input
           placeholder="Adicionar novo benefício"

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -9,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LogIn, Palette } from 'lucide-react';
+
 export default function LoginPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -16,15 +18,18 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const { login, user } = useAuth();
   const router = useRouter();
+
   // Se já estiver logado, redirecionar
   React.useEffect(() => {
     if (user) {
       router.push('/admin');
     }
   }, [user, router]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
     if (!name.trim()) {
       setError('Nome é obrigatório');
       return;
@@ -36,7 +41,8 @@ export default function LoginPage() {
       setError('Erro ao fazer login');
     }
   };
-    const handleQuickLogin = (type: 'admin' | 'user') => {
+
+  const handleQuickLogin = (type: 'admin' | 'user') => {
     if (type === 'admin') {
       login('Admin User');
     } else {
@@ -64,6 +70,7 @@ export default function LoginPage() {
               <AlertDescription className="text-red-700">{error}</AlertDescription>
             </Alert>
           )}
+
           {/* Login Rápido para Desenvolvimento */}
           <div className="space-y-3">
             <h3 className="font-semibold text-[#432818] text-sm">🚀 Acesso Rápido (Desenvolvimento)</h3>
@@ -93,6 +100,7 @@ export default function LoginPage() {
               <span className="bg-white px-2 text-[#B89B7A]">ou</span>
             </div>
           </div>
+
           {/* Formulário Manual */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -137,6 +145,7 @@ export default function LoginPage() {
               Entrar
             </Button>
           </form>
+
           {/* Informações de Desenvolvimento */}
           <div className="bg-[#F5F2E9] p-4 rounded-lg text-sm">
             <h4 className="font-semibold text-[#432818] mb-2">💡 Para Desenvolvedores:</h4>

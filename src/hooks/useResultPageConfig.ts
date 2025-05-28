@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';
@@ -9,14 +10,11 @@ const createDefaultConfig = (styleType: string): ResultPageConfig => {
   // Use the full default config utility to ensure all required fields are present
   return createFullDefaultConfig(styleType);
 };
-
 // Storage key based on style type
 const getStorageKey = (styleType: string) => `result_page_config_${styleType}`;
-
 export const useResultPageConfig = (styleType: string) => {
   const [resultPageConfig, setResultPageConfig] = useState<ResultPageConfig>(createDefaultConfig(styleType));
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const loadConfig = async () => {
       setLoading(true);
@@ -59,7 +57,6 @@ export const useResultPageConfig = (styleType: string) => {
     
     loadConfig();
   }, [styleType]);
-
   const updateSection = useCallback((path: string, newContent: any) => {
     setResultPageConfig(prevConfig => {
       const newConfig = { ...prevConfig };
@@ -67,13 +64,10 @@ export const useResultPageConfig = (styleType: string) => {
       return newConfig;
     });
   }, []);
-
   const resetConfig = useCallback((styleType: string) => {
     const defaultConfig = createDefaultConfig(styleType);
     setResultPageConfig(defaultConfig);
     return true;
-  }, []);
-
   const saveConfig = useCallback(async () => {
     try {
       const key = getStorageKey(resultPageConfig.styleType || styleType);
@@ -90,33 +84,20 @@ export const useResultPageConfig = (styleType: string) => {
       return false;
     }
   }, [resultPageConfig, styleType]);
-
   const importConfig = useCallback((importedConfig: any) => {
-    try {
       if (!importedConfig) {
         console.warn("Tentativa de importar configuração nula ou indefinida");
         return false;
-      }
       
       // Ensure the imported config has the correct styleType
       const configToImport = {
         ...importedConfig,
         styleType: styleType
       };
-      
       setResultPageConfig(configToImport);
-      return true;
-    } catch (error) {
       console.error('Error importing config:', error);
-      toast({
         title: 'Erro ao importar configuração',
         description: 'O formato da configuração importada não é válido',
-        variant: 'destructive'
-      });
-      return false;
-    }
-  }, [styleType]);
-
   return {
     resultPageConfig,
     updateSection,
@@ -125,4 +106,3 @@ export const useResultPageConfig = (styleType: string) => {
     importConfig,
     loading
   };
-};
