@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '../ui/button';
-import { ChevronLeft, ChevronRight, Check, AlertTriangle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle, AlertTriangle } from 'lucide-react';
 
 interface QuizNavigationProps {
   canProceed: boolean;
@@ -26,30 +26,40 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     if (!canProceed) {
       return false;
     }
-    // Auto-avanço só para questões normais, não estratégicas
+    
+    // Testar condições específicas com maior detalhe para debugging
     const normalCondition = currentQuestionType === 'normal' && selectedOptionsCount === 3;
-    return normalCondition;
+    const strategicCondition = currentQuestionType === 'strategic' && selectedOptionsCount >= 1;
+    
+    // Log detalhado para debugging
+    console.log(`Verificando auto-avanço: canProceed=${canProceed}, tipo=${currentQuestionType}, selecionadas=${selectedOptionsCount}`);
+    console.log(`Condições de auto-avanço: normal=${normalCondition}, estratégica=${strategicCondition}`);
+    
+    return normalCondition || strategicCondition;
   }, [canProceed, currentQuestionType, selectedOptionsCount]);
 
   useEffect(() => {
+    // Limpar timer anterior para evitar avanços múltiplos
     if (autoAdvanceTimer) {
       clearTimeout(autoAdvanceTimer);
       setAutoAdvanceTimer(null);
     }
 
-    if (canProceed) { // Efeito de ativação se puder prosseguir (normal ou estratégico)
+    if (canProceed) {
+      // Mostrar efeito de ativação
       setShowActivationEffect(true);
       const visualTimer = setTimeout(() => {
         setShowActivationEffect(false);
-      }, 2000); // Duração do efeito visual
+      }, 2000);
 
-      // Auto-avanço apenas para questões normais
-      if (currentQuestionType === 'normal' && shouldAutoAdvance()) {
+      // Configurar avanço automático quando apropriado
+      if (shouldAutoAdvance()) {
         console.log('Configurando avanço automático em 45ms');
+        // Utilizar setTimeout diretamente para garantir execução precisa
         const newTimer = setTimeout(() => {
           console.log('Executando avanço automático agora');
           onNext();
-        }, 45); // Tempo para auto-avanço
+        }, 45);
         setAutoAdvanceTimer(newTimer);
       }
 
@@ -59,10 +69,10 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
           clearTimeout(autoAdvanceTimer);
         }
       };
-    } else { // Se não puder prosseguir
+    } else {
       setShowActivationEffect(false);
     }
-  }, [canProceed, onNext, shouldAutoAdvance, currentQuestionType]);
+  }, [canProceed, onNext, shouldAutoAdvance]);
 
   const getHelperText = useCallback((): string => {
     if (!canProceed) {
@@ -73,13 +83,19 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     return '';
   }, [canProceed, currentQuestionType]);
 
-  const nextButtonText = 'Avançar';
+  const nextButtonText = isLastQuestion
+    ? 'Ver Resultado'
+    : currentQuestionType === 'strategic'
+      ? 'Avançar'
+      : 'Avançar';
+
+  const previousButtonText =
+    currentQuestionType === 'strategic' ? 'Pergunta Estratégica Anterior' : 'Pergunta Anterior';
 
   return (
     <div className="mt-6 w-full px-4 md:px-0">
       <div className="flex flex-col items-center w-full">
-        {/* O helper text para questões estratégicas agora é exibido */}
-        {!canProceed && (
+        {!canProceed && currentQuestionType !== 'strategic' && (
           <p className="text-sm text-[#8F7A6A] mb-3">{getHelperText()}</p>
         )}
 
@@ -94,25 +110,25 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
             </Button>
           )}
 
-          {/* Botão Avançar/Ver Resultado agora é exibido para todos os tipos de questão */}
-          <Button
-            onClick={onNext}
-            disabled={!canProceed}
-            variant="outline"
-            className={`text-lg px-6 py-3 flex items-center transition-all duration-300 ease-in-out rounded-lg shadow-sm hover:shadow-md transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#b29670]
-              ${
-                canProceed
+          {currentQuestionType !== 'strategic' && (
+            <Button
+              onClick={onNext}
+              disabled={!canProceed}
+              variant="outline"
+              className={`text-lg px-6 py-3 flex items-center transition-all duration-300 ease-in-out
+                ${canProceed
                   ? `bg-[#b29670] text-white hover:bg-[#a0845c] border-[#b29670] ${
-                      showActivationEffect ? 'scale-105 shadow-lg' : '' // Aplicar efeito se showActivationEffect for true
+                      showActivationEffect ? 'scale-105 shadow-lg' : ''
                     }`
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300'
-              }`}
-            aria-label={nextButtonText}
-            aria-disabled={!canProceed}
-          >
-            {nextButtonText}
-            {isLastQuestion ? <Check className="ml-2 h-5 w-5" /> : <ChevronRight className="ml-2 h-5 w-5" />}
-          </Button>
+                } focus:ring-2 focus:ring-offset-2 focus:ring-[#b29670]`}
+              aria-label={nextButtonText}
+              aria-disabled={!canProceed}
+            >
+              {nextButtonText}
+              {isLastQuestion ? <CheckCircle className="ml-2 h-5 w-5" /> : <ChevronRight className="ml-2 h-5 w-5" />}
+            </Button>
+          )}
         </div>
       </div>
     </div>

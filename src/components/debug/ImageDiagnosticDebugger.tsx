@@ -174,7 +174,7 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
       }
 
       if (issues.length > 0) {
-        detailedIssues?.push({
+        detailedIssues.push({
           url,
           element: imageEl,
           issues,

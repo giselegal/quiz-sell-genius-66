@@ -125,55 +125,12 @@ export const useQuizLogic = () => {
   }, [nextQuestion, nextNextQuestion]);
 
   const handleStrategicAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
-    // Para questões estratégicas, garantimos que SEMPRE haja apenas UMA opção selecionada
-    // Se houver múltiplas, usamos apenas a última selecionada
-    const finalOptions = selectedOptions.length > 0 ? [selectedOptions[selectedOptions.length - 1]] : selectedOptions;
-    
-    // Não permitimos que o usuário desmarque uma opção em questões estratégicas
-    // Se o array estiver vazio e já tiver uma seleção anterior, mantemos a seleção anterior
-    if (finalOptions.length === 0) {
-      const previousAnswer = strategicAnswers[questionId];
-      if (previousAnswer && previousAnswer.length > 0) {
-        return; // Mantém a seleção anterior, não permite desmarcar
-      }
-    }
-    
     setStrategicAnswers(prev => {
       const newAnswers = {
         ...prev,
-        [questionId]: finalOptions
+        [questionId]: selectedOptions
       };
       localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers)); // Salvar imediatamente
-      
-      // Aproveitar questões estratégicas para pré-carregar imagens da página de resultados
-      // Isso melhora significativamente o tempo de carregamento dos resultados
-      const strategicQuestionsProgress = Object.keys(newAnswers).length;
-      
-      // A cada resposta estratégica, carregamos um novo conjunto de imagens da página de resultados
-      // Isso distribui a carga de rede durante as questões que não pontuam
-      if (strategicQuestionsProgress === 1) {
-        // Na primeira questão estratégica, iniciamos o preload das imagens principais de resultado
-        preloadCriticalImages(['results'], { 
-          quality: 80, 
-          batchSize: 2 
-        });
-        console.log('[Otimização] Iniciando pré-carregamento das imagens principais de resultado');
-      } else if (strategicQuestionsProgress === 2) {
-        // Na segunda questão, carregamos imagens de transformação
-        preloadCriticalImages(['transformation'], { 
-          quality: 75, 
-          batchSize: 2 
-        });
-        console.log('[Otimização] Pré-carregando imagens de transformação');
-      } else if (strategicQuestionsProgress >= 3) {
-        // Na terceira ou posterior, começamos a carregar imagens de bônus e depoimentos
-        preloadCriticalImages(['bonus', 'testimonials'], { 
-          quality: 75,
-          batchSize: 2 
-        });
-        console.log('[Otimização] Pré-carregando imagens de bônus e depoimentos');
-      }
-      
       return newAnswers;
     });
   }, []);
@@ -248,11 +205,11 @@ export const useQuizLogic = () => {
     const primaryStyle = styleResults[0] || null;
     const secondaryStyles = styleResults.slice(1);
 
-    const result: QuizResult = {
+    const result: QuizResult = { // Explicitly type QuizResult
       primaryStyle,
       secondaryStyles,
       totalSelections,
-      userName: 'Usuário' // Default username
+      // clickOrder: clickOrderInternal // Optional: save the click order used
     };
 
     setQuizResult(result);

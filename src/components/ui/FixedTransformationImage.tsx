@@ -1,6 +1,6 @@
 
 import React from 'react';
-import OptimizedImageV2 from './optimized-image-v2';
+import { OptimizedImage } from './optimized-image-v2';
 
 interface FixedTransformationImageProps {
   src: string;
@@ -24,14 +24,16 @@ export const FixedTransformationImage: React.FC<FixedTransformationImageProps> =
   priority = false
 }) => {
   return (
-    <OptimizedImageV2
+    <OptimizedImage
       src={src}
       alt={alt}
       width={width}
       height={height}
       className={className}
+      priority={priority}
       quality={90} // Qualidade específica para transformações
-      placeholder="#f8f5f2" // Cor de fundo que combina com interface
+      placeholderColor="#f8f5f2" // Cor de fundo que combina com interface
+      objectFit="cover"
     />
   );
 };

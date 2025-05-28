@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import getOptimizedImageUrl from '@/utils/imageOptimizer/getOptimizedImageUrl';
-import getLowQualityPlaceholder from '@/utils/imageOptimizer/getLowQualityPlaceholder';
+import { getOptimizedImageUrl, getLowQualityPlaceholder } from '@/utils/imageOptimizer';
 
 interface OptimizedImageProps {
   src: string;
@@ -15,7 +14,6 @@ interface OptimizedImageProps {
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   onLoad?: () => void;
   lazy?: boolean;
-  sizes?: string;
 }
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -29,8 +27,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   placeholderColor = '#f8f5f2',
   objectFit = 'cover',
   onLoad,
-  lazy = !priority,
-  sizes = '100vw'
+  lazy = !priority
 }) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -90,7 +87,6 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
           fetchPriority={priority ? 'high' : 'auto'}
           onLoad={handleImageLoaded}
           onError={handleImageError}
-          sizes={sizes}
           className={`absolute inset-0 w-full h-full object-${objectFit} transition-opacity duration-300 ${
             loaded ? 'opacity-100' : 'opacity-0'
           }`}

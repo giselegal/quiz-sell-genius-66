@@ -12,7 +12,6 @@ import { CheckCircle } from 'lucide-react';
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { cn } from '@/lib/utils';
-import GuaranteeSection from './result/GuaranteeSection';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -95,10 +94,10 @@ const QuizResult: React.FC<QuizResultProps> = ({
           <OfferCard primaryStyle={primaryStyle} config={config?.offer?.hero?.content || {}} />
           {/* Bloco de transformação Antes e Depois */}
           <BeforeAfterTransformation />
-          
-          {/* Importar componente GuaranteeSection em vez de usar o simples */}
-          <div className="mt-12 mb-8">
-            <GuaranteeSection />
+          {/* Seção de Garantia animada */}
+          <div className="mt-8 flex items-center justify-center gap-2 animate-pulse">
+            <CheckCircle className="h-6 w-6 text-green-500" />
+            <span className="text-lg font-semibold text-gray-800">Garantia de Satisfação 7 dias</span>
           </div>
         </div>            
       </ContentContainer>

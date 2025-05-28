@@ -24,17 +24,16 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
         <Card className="p-4 sm:p-6 mb-4 sm:mb-6 bg-white relative overflow-hidden" aria-busy="true" role="status">
           <div className="flex flex-col items-center gap-4 sm:gap-5">
             <LoadingSpinner size="md" color="#aa6b5d" className="mb-2" />
+            <div className="w-36 sm:w-48 h-16 sm:h-20 relative flex justify-center items-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
+              <div className="flex justify-center w-full">
+                {/* Logo removido para acelerar o carregamento do skeleton */}
+                <div className="h-12 sm:h-16 w-36 sm:w-48 bg-gray-100 animate-pulse rounded-md mx-auto" />
+              </div>
+            </div>
             <div className="w-full max-w-xs sm:max-w-md h-6 sm:h-8 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md" />
           </div>
         </Card>
-        
-        {/* Substituímos a barra de progresso por uma mensagem simples de carregamento */}
-        <div className="mb-4 sm:mb-6 text-center">
-          <div className="flex flex-col items-center justify-center space-y-3">
-            <LoadingSpinner size="sm" color="#aa6b5d" />
-            <span className="text-sm text-[#8F7A6A]">Preparando seu resultado personalizado...</span>
-          </div>
-        </div>
         
         {/* Main content skeleton */}
         <Card className="p-4 sm:p-6 mb-6 sm:mb-10 bg-white relative overflow-hidden">
@@ -43,8 +42,28 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
             <div className="w-full h-6 sm:h-8 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md relative z-10" />
             <div className="flex flex-col items-center w-full">
               <div className="flex justify-center w-full">
-                {/* Placeholder de imagem para o skeleton principal, evitando carregamento de imagens pesadas */}
-                <div className="w-full max-w-xs sm:max-w-sm md:max-w-md aspect-[4/5] bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md mx-auto" />
+                {mainImageSrc ? (
+                  <OptimizedImage
+                    src={mainImageSrc}
+                    alt={`Estilo ${primaryStyle?.category}`}
+                    width={BASE_WIDTH}
+                    height={BASE_HEIGHT}
+                    className="w-full max-w-xs sm:max-w-sm md:max-w-md aspect-[4/5] object-cover rounded-md shadow-sm opacity-50 mx-auto"
+                    priority={true}
+                  />
+                ) : (
+                  <div className="w-full max-w-xs sm:max-w-sm md:max-w-md aspect-[4/5] flex items-center justify-center bg-gray-100/50 rounded-md shadow-sm mx-auto">
+                    <OptimizedImage
+                      src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+                      alt="Carregando..."
+                      width={140}
+                      height={70}
+                      className="opacity-75 max-w-[70%]"
+                      objectFit="contain"
+                      priority={true}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

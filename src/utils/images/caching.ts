@@ -55,18 +55,10 @@ export const updateImageCache = (url: string, entry: Partial<ImageCacheEntry>): 
       lastAccessed: now,
     });
   } else {
-    // Cria uma nova entrada com status padrão 'loading'
+    // Cria uma nova entrada
     imageCache.set(url, {
       url,
-      metadata: {
-        width: 0,
-        height: 0,
-        format: 'unknown',
-        size: 0,
-        url: url
-      },
-      timestamp: now,
-      loadStatus: 'loading',
+      loadStatus: 'idle',
       lastAccessed: now,
       ...entry,
     });

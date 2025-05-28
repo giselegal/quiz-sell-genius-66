@@ -327,7 +327,6 @@ const ResultPagePrototype: React.FC = () => {
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 <span>Garantir Meu Guia + Bônus Especiais</span>
-                
               </span>
             </Button>
             

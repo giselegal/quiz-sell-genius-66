@@ -15,29 +15,14 @@ export default defineConfig(({ mode }) => ({
     // Configurações CORS e mime-types para desenvolvimento
     headers: {
       'X-Content-Type-Options': 'nosniff',
-      // Limitando CORS para hosts específicos
-      'Access-Control-Allow-Origin': [
-        'http://localhost:8080',
-        'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com'
-      ].join(', '),
+      'Access-Control-Allow-Origin': '*',
     },
     fs: {
       allow: ['../']
     },
     allowedHosts: [
       "a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com"
-    ],
-    // CORREÇÃO CRÍTICA: Configuração de fallback para SPA
-    // Isso garante que todas as rotas retornem o index.html
-    historyApiFallback: {
-      rewrites: [
-        { from: /\/admin\/editor/, to: '/index.html' },
-        { from: /\/admin\/.*/, to: '/index.html' },
-        { from: /\/resultado/, to: '/index.html' },
-        { from: /\/quiz-.*/, to: '/index.html' },
-        { from: /.*/, to: '/index.html' }
-      ]
-    }
+    ]
   },
   
   plugins: [
@@ -66,16 +51,31 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist',
     assetsDir: 'assets',
     emptyOutDir: true,
-    sourcemap: true,
+    sourcemap: false,
     // Configurações para evitar problemas de MIME type
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          ui: ['lucide-react'],
-          utils: ['date-fns', 'clsx']
-        }
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          'vendor-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-tooltip'
+          ],
+          'vendor-utils': [
+            'clsx', 
+            'tailwind-merge'
+          ],
+          'analytics': [
+            './src/utils/analytics.ts',
+            './src/utils/facebookPixel.ts'
+          ]
+        },
+        // Garantir que os assets sejam carregados corretamente para as rotas específicas
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     },
     chunkSizeWarningLimit: 1000,

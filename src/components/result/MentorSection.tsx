@@ -9,7 +9,7 @@ const MentorSection: React.FC = () => {
       <div className="grid md:grid-cols-2 gap-8 items-center relative z-10">
         <div>
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-    
+            Conheça sua Mentora
           </h2>
           <p className="text-[#432818] mb-4">
             <strong>Gisele Galvão</strong> — Consultora de Imagem e Estilo, Persona Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.
