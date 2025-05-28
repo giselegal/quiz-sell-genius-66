@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import QuizEditor from '@/components/quiz-editor/QuizEditor';
 import { LoadingState } from '@/components/ui/loading-state';
@@ -9,33 +9,33 @@ import { QuizTemplate } from '@/types/quizTemplate';
 
 const QuizEditorPage = () => {
   const { templateId } = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [template, setTemplate] = useState<QuizTemplate | null>(null);
 
   useEffect(() => {
     const loadTemplate = async () => {
-      if (templateId && typeof templateId === 'string') {
+      if (templateId) {
         try {
           const template = await getTemplateById(templateId);
           if (!template) {
             setError('Template não encontrado');
-            router.push('/admin/quiz-editor');
+            navigate('/admin/quiz-editor');
             return;
           }
           setTemplate(template);
         } catch (err) {
           console.error('Error loading template:', err);
           setError('Erro ao carregar template');
-          router.push('/admin/quiz-editor');
+          navigate('/admin/quiz-editor');
         }
       }
       setLoading(false);
     };
 
     loadTemplate();
-  }, [templateId, router]);
+  }, [templateId, navigate]);
 
   if (loading) {
     return (

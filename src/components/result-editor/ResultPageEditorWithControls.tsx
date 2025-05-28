@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeOff, Save, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
 import QuizResult from '../QuizResult';
 import EditableComponent from './EditableComponent';
@@ -48,7 +48,7 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
       {/* Barra de ferramentas do editor */}
       <div className="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <Link href="/resultado">
+          <Link to="/resultado">
             <Button variant="outline" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar

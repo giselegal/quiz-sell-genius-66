@@ -1,6 +1,5 @@
 
 import { useState } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
@@ -17,7 +16,7 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const handleStart = () => {
     if (name.trim()) {
       login(name.trim());
-      safeLocalStorage.setItem('userName', name.trim());
+      localStorage.setItem('userName', name.trim());
       onStart();
     }
   };

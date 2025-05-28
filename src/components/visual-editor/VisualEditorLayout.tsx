@@ -30,7 +30,7 @@ const VisualEditorLayout: React.FC<VisualEditorLayoutProps> = ({
     }
     
     // Salvar localmente também
-    safeLocalStorage.setItem('quiz_editor_questions', JSON.stringify(questions));
+    localStorage.setItem('quiz_editor_questions', JSON.stringify(questions));
     
     toast({
       title: "Alterações salvas",

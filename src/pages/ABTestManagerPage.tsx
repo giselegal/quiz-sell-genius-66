@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { ABTest, ABTestVariation } from '@/hooks/useABTest';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,15 +9,15 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { 
   ArrowLeft, 
-  BarChart, Copy, 
+  Bar, BarChart, Copy, 
   Edit, ExternalLink, Globe, LineChart, 
-  Plus, Save, Trash2, PieChart
+  Plus, Save, Trash2
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
 
 const ABTestManagerPage: React.FC = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [tests, setTests] = useState<ABTest[]>([]);
   const [selectedTest, setSelectedTest] = useState<ABTest | null>(null);
@@ -35,7 +34,7 @@ const ABTestManagerPage: React.FC = () => {
 
   const loadTests = () => {
     try {
-      const savedTests = safeLocalStorage.getItem('ab_tests');
+      const savedTests = localStorage.getItem('ab_tests');
       if (savedTests) {
         const parsedTests = JSON.parse(savedTests);
         setTests(parsedTests);
@@ -57,7 +56,7 @@ const ABTestManagerPage: React.FC = () => {
 
   const handleSaveTests = (updatedTests: ABTest[]) => {
     try {
-      safeLocalStorage.setItem('ab_tests', JSON.stringify(updatedTests));
+      localStorage.setItem('ab_tests', JSON.stringify(updatedTests));
       setTests(updatedTests);
       toast({
         title: 'Testes salvos',
@@ -322,12 +321,12 @@ const ABTestManagerPage: React.FC = () => {
     try {
       // Obter o número de visitantes
       const visitorKey = `ab_test_${testId}_visitor_count_${variationId}`;
-      const visitors = safeLocalStorage.getItem(visitorKey);
+      const visitors = localStorage.getItem(visitorKey);
       const visitorsCount = visitors ? parseInt(visitors, 10) : 0;
       
       // Obter o número de conversões
       const conversionKey = `ab_test_${testId}_${variationId}_conversions`;
-      const conversions = safeLocalStorage.getItem(conversionKey);
+      const conversions = localStorage.getItem(conversionKey);
       const conversionsCount = conversions ? parseInt(conversions, 10) : 0;
       
       if (visitorsCount === 0) return '0%';
@@ -343,7 +342,7 @@ const ABTestManagerPage: React.FC = () => {
   return (
     <div className="container mx-auto p-6">
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="outline" size="sm" onClick={() => router.push('/admin')}>
+        <Button variant="outline" size="sm" onClick={() => navigate('/admin')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar
         </Button>
@@ -589,7 +588,7 @@ const ABTestManagerPage: React.FC = () => {
                                       };
                                       handleUpdateVariationContent(variation.id, 'pricing', pricing);
                                     }}
-                                    placeholder="4X de R$ 10,86"
+                                    placeholder="4X de R$ 10,86 sem juros"
                                     className="mt-1"
                                   />
                                 </div>
@@ -715,7 +714,7 @@ const ABTestManagerPage: React.FC = () => {
                                 {selectedTest.variations.map(v => v.trafficPercentage || 0).reduce((a, b) => a + b, 0)}%
                               </p>
                             </div>
-                            <PieChart className="h-8 w-8 text-muted-foreground opacity-50" />
+                            <Bar className="h-8 w-8 text-muted-foreground opacity-50" />
                           </div>
                         </Card>
                       </div>

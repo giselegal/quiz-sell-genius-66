@@ -1,18 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEditor';
 import { LoadingState } from '@/components/ui/loading-state';
 import { StyleResult } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { EditorTab } from '@/components/unified-editor/UnifiedVisualEditor';
 
 const UnifiedEditorPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const router = useRouter();
+  const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   
@@ -34,7 +33,7 @@ const UnifiedEditorPage: React.FC = () => {
         };
 
         // Try to load from localStorage first
-        const savedResult = safeLocalStorage.getItem('quiz_result');
+        const savedResult = localStorage.getItem('quiz_result');
         if (savedResult) {
           try {
             const parsedResult = JSON.parse(savedResult);
@@ -63,7 +62,7 @@ const UnifiedEditorPage: React.FC = () => {
         try {
           const styleType = defaultPrimaryStyle.category;
           const resultConfigKey = `result_page_config_${styleType}`;
-          if (!safeLocalStorage.getItem(resultConfigKey)) {
+          if (!localStorage.getItem(resultConfigKey)) {
             const defaultConfig = {
               styleType,
               globalStyles: {
@@ -73,7 +72,7 @@ const UnifiedEditorPage: React.FC = () => {
               },
               blocks: []
             };
-            safeLocalStorage.setItem(resultConfigKey, JSON.stringify(defaultConfig));
+            localStorage.setItem(resultConfigKey, JSON.stringify(defaultConfig));
             console.info(`Configuração padrão criada para estilo: ${styleType}`);
           }
         } catch (error) {
@@ -103,7 +102,7 @@ const UnifiedEditorPage: React.FC = () => {
           <p className="text-[#8F7A6A] mb-6">{loadError}</p>
           <button 
             className="bg-[#B89B7A] text-white px-4 py-2 rounded hover:bg-[#8F7A6A]"
-            onClick={() => router.push('/admin')}
+            onClick={() => navigate('/admin')}
           >
             Voltar ao Painel
           </button>
@@ -123,7 +122,7 @@ const UnifiedEditorPage: React.FC = () => {
           </p>
           <button 
             className="bg-[#B89B7A] text-white px-4 py-2 rounded hover:bg-[#8F7A6A]"
-            onClick={() => router.push('/quiz')}
+            onClick={() => navigate('/quiz')}
           >
             Ir para o Quiz
           </button>

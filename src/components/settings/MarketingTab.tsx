@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 export const MarketingTab: React.FC = () => {
   return (
@@ -66,7 +66,7 @@ export const MarketingTab: React.FC = () => {
         
         <div className="mt-6">
           <Button variant="outline" asChild>
-            <Link href="/admin/analytics?tab=utm">
+            <Link to="/admin/analytics?tab=utm">
               View UTM Analytics
             </Link>
           </Button>

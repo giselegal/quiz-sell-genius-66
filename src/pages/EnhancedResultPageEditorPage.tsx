@@ -1,12 +1,10 @@
 import React from 'react';
+import { EnhancedResultPageEditorPage } from '@/components/result-editor/EnhancedResultPageEditorWrapper';
 
-const EnhancedResultPageEditorPage: React.FC = () => {
-  return (
-    <div style={{ padding: '50px', textAlign: 'center', backgroundColor: 'lightgreen', fontSize: '24px' }}>
-      <h1>PÁGINA DO EDITOR CARREGADA COM SUCESSO!</h1>
-      <p>Se você está vendo esta mensagem, o roteamento para EnhancedResultPageEditorPage está funcionando.</p>
-    </div>
-  );
+// Este componente serve como um ponto de entrada para o editor visual aprimorado
+// da página de resultados, permitindo acesso através do sistema de roteamento
+const EnhancedResultPageEditor: React.FC = () => {
+  return <EnhancedResultPageEditorPage />;
 };
 
-export default EnhancedResultPageEditorPage;
+export default EnhancedResultPageEditor;

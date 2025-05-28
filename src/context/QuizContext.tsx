@@ -3,7 +3,6 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
 import { useToast } from '@/components/ui/use-toast';
 import { QuizResult, StyleResult } from '@/types/quiz';
-import { safeLocalStorage } from '@/utils/localStorage';
 
 // Define the context type
 type QuizContextType = ReturnType<typeof useQuizLogic> & {
@@ -93,7 +92,7 @@ export const useQuiz = () => {
   
   const getQuizResult = (): { primaryStyle: StyleResult; secondaryStyles: StyleResult[] } | null => {
     try {
-      const savedResult = safeLocalStorage.getItem('quizResult');
+      const savedResult = localStorage.getItem('quizResult');
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);
         return {

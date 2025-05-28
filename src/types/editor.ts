@@ -1,99 +1,75 @@
 
+import { StyleOptions } from './resultPageConfig';
+
+export type BlockType =
+  | 'headline'
+  | 'text'
+  | 'image'
+  | 'pricing'
+  | 'benefits'
+  | 'testimonials'
+  | 'guarantee'
+  | 'faq'
+  | 'video'
+  | 'divider'
+  | 'spacer'
+  | 'button'
+  | 'form'
+  | 'countdown'
+  | 'header'
+  | 'cta'
+  | 'style-result'
+  | 'secondary-styles'
+  | 'hero-section'
+  | 'products'
+  | 'two-column'
+  | 'icon'
+  | 'carousel'
+  | 'custom-code'
+  | 'animation-block'
+  | 'bonus-carousel';
 
 export interface Block {
   id: string;
-  type: string;
-  content: Record<string, any>;
-  order: number; // Changed from optional to required to match EditorBlock
-  settings?: Record<string, any>;
-  [key: string]: any;
-}
-
-export type BlockType = 
-  | 'heading'
-  | 'paragraph'
-  | 'image'
-  | 'button'
-  | 'title'
-  | 'subtitle'
-  | 'text'
-  | 'styleResult'
-  | 'cta'
-  | 'testimonial'
-  | 'carousel'
-  | 'bonus'
-  | 'guarantee'
-  | string;
-
-// Add missing EditorBlock type which was imported across many files
-export interface EditorBlock extends Block {
-  id: string;
   type: BlockType;
-  content: EditableContent;
   order: number;
-  settings?: Record<string, any>;
+  content: EditableContent;
 }
 
-// Add missing EditableContent type
+// alias for components that were already using EditorBlock
+export type EditorBlock = Block;
+
 export interface EditableContent {
   title?: string;
   subtitle?: string;
   text?: string;
   imageUrl?: string;
   imageAlt?: string;
-  caption?: string;
-  buttonText?: string;
-  buttonUrl?: string;
+  price?: string;
+  regularPrice?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  style?: Partial<StyleOptions>;
+  // Used for style-result and others
   description?: string;
-  items?: any[];
-  style?: {
-    color?: string;
-    backgroundColor?: string;
-    padding?: string;
-    margin?: string;
-    textAlign?: string;
-    fontSize?: string;
-    fontWeight?: string;
-    fontFamily?: string;
-    lineHeight?: string;
-    width?: string;
-    height?: string;
-    borderRadius?: string;
-    display?: string;
-    flexDirection?: string;
-    justifyContent?: string;
-    alignItems?: string;
-    gap?: string;
-    boxShadow?: string;
-    letterSpacing?: string;
-    borderWidth?: string;
-    borderStyle?: string;
-    borderColor?: string;
-    objectFit?: string;
-    [key: string]: any;
-  };
+  customImage?: string;
+  // For benefits
+  benefits?: string[];
+  // For bonus carousel
+  bonusImages?: Array<{url: string; alt: string; title?: string}>;
+  // Alignment property with limited values
+  alignment?: 'left' | 'center' | 'right';
+  // Custom properties
   [key: string]: any;
 }
 
-// Add missing EditorConfig type
 export interface EditorConfig {
-  blocks: EditorBlock[];
+  blocks: Block[];
   globalStyles?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+    textColor?: string;
     backgroundColor?: string;
     fontFamily?: string;
-    textColor?: string;
-    accentColor?: string;
-    secondaryColor?: string;
-    buttonStyle?: string;
-    headingStyle?: string;
-    spacing?: string;
-    borderRadius?: string;
-    [key: string]: any;
-  };
-  settings?: {
-    showLogo?: boolean;
-    showNavigation?: boolean;
-    showFooter?: boolean;
-    [key: string]: any;
   };
 }

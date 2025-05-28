@@ -1,5 +1,5 @@
+
 import React, { useEffect, useState } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
 import { ContentContainer } from './shared/ContentContainer';
@@ -8,13 +8,9 @@ import ResultHeader from './quiz-result/ResultHeader';
 import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
-import BeforeAfterTransformation from './result/BeforeAfterTransformation4';
-import { CheckCircle } from 'lucide-react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { cn } from '@/lib/utils';
-import GuaranteeSection from './result/GuaranteeSection';
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -38,7 +34,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
     if (user && user.userName) {
       setUserName(user.userName);
     } else {
-      const storedName = safeLocalStorage.getItem('userName');
+      const storedName = localStorage.getItem('userName');
       if (storedName) {
         setUserName(storedName);
       }
@@ -53,7 +49,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
         setConfig(externalConfig);
       } else {
         const configKey = `quiz_result_config_${primaryStyle.category}`;
-        const savedConfig = safeLocalStorage.getItem(configKey);
+        const savedConfig = localStorage.getItem(configKey);
         
         if (savedConfig) {
           setConfig(JSON.parse(savedConfig));
@@ -95,14 +91,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
           <PrimaryStyleCard primaryStyle={primaryStyle} />
           <SecondaryStylesSection secondaryStyles={secondaryStyles} />
           <OfferCard primaryStyle={primaryStyle} config={config?.offer?.hero?.content || {}} />
-          {/* Bloco de transformação Antes e Depois */}
-          <BeforeAfterTransformation />
-          
-          {/* Importar componente GuaranteeSection em vez de usar o simples */}
-          <div className="mt-12 mb-8">
-            <GuaranteeSection />
-          </div>
-        </div>            
+        </div>
       </ContentContainer>
     </div>
   );

@@ -9,17 +9,17 @@ import { ApiIntegrationsTab } from '@/components/settings/ApiIntegrationsTab';
 import { AdvancedTab } from '@/components/settings/AdvancedTab';
 import { FacebookAdsTab } from '@/components/settings/FacebookAdsTab';
 import { UtmSettingsTab } from '@/components/settings/UtmSettingsTab';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 const SettingsPage = () => {
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get('tab') || 'appearance';
   const [activeTab, setActiveTab] = useState(defaultTab);
-  const router = useRouter();
+  const navigate = useNavigate();
   
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    router.push(`/admin/settings?tab=${value}`);
+    navigate(`/admin/settings?tab=${value}`, { replace: true });
   };
   
   return (

@@ -28,7 +28,7 @@ const EditableComponent: React.FC<EditableComponentProps> = ({
   
   useEffect(() => {
     // Carregar nome do usuário do localStorage se disponível
-    const storedName = safeLocalStorage.getItem('userName');
+    const storedName = localStorage.getItem('userName');
     if (storedName) {
       setUserName(storedName);
     }
@@ -155,7 +155,7 @@ function getSectionData(config: any, path: string): any {
   
   for (const part of parts) {
     if (!current || current[part] === undefined) {
-      console.warn("Caminho " + path + " não encontrado no config:", current);
+      console.warn(`Caminho ${path} não encontrado no config:`, current);
       return {};
     }
     current = current[part];

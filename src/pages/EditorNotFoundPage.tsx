@@ -1,14 +1,13 @@
 import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 
 const EditorNotFoundPage = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleRetry = () => {
     // Tenta recarregar a página do editor
-    router.push('/admin/editor');
+    navigate('/admin/editor', { replace: true });
   };
 
   return (
@@ -35,7 +34,7 @@ const EditorNotFoundPage = () => {
             Tentar novamente
           </Button>
           
-          <Link href="/admin">
+          <Link to="/admin">
             <Button variant="outline" className="border-[#B89B7A] text-[#B89B7A]">
               Voltar para o painel
             </Button>

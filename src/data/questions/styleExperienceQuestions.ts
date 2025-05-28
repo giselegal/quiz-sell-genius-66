@@ -1,61 +1,54 @@
+
 import { QuizQuestion } from '../../types/quiz';
 
 export const styleExperienceQuestions: QuizQuestion[] = [
   {
     id: 'strategic-3',
-    title: 'Como você aprende melhor sobre estilo e moda?',
+    title: 'Com que frequência você se pega pensando: "Com que roupa eu vou?" — mesmo com o guarda-roupa cheio?',
     type: 'text',
     multiSelect: 1,
-    // A questão 13 (strategic-3) não deve ter imagem
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/5702e50d-7785-426a-a0c6-3c47af176523_p9acfp.webp',
     options: [
       {
         id: 'strategic-3-1',
-        text: 'Vendo exemplos visuais e imagens de referência',
-        styleCategory: 'Strategic'
+        text: 'Quase todos os dias — é sempre uma indecisão'
       },
       {
         id: 'strategic-3-2',
-        text: 'Lendo guias detalhados com explicações passo-a-passo',
-        styleCategory: 'Strategic'
+        text: 'Sempre que tenho um compromisso importante'
       },
       {
         id: 'strategic-3-3',
-        text: 'Com exemplos práticos que posso aplicar no meu dia-a-dia',
-        styleCategory: 'Strategic'
+        text: 'Às vezes, mas me sinto limitada nas escolhas'
       },
       {
         id: 'strategic-3-4',
-        text: 'Com orientação personalizada para o meu caso específico',
-        styleCategory: 'Strategic'
+        text: 'Raramente — já me sinto segura ao me vestir'
       }
     ]
   },
   {
     id: 'strategic-4',
-    title: 'O que você mais valoriza em um guia de estilo?',
+    title: 'Qual desses objetivos mais representa o que você deseja com sua imagem pessoal?',
     type: 'text',
     multiSelect: 1,
-    // A questão 14 (strategic-4) não deve ter imagem
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515862/Sem_nome_1000_x_1000_px_1280_x_720_px_vmqk3j.webp',
     options: [
       {
         id: 'strategic-4-1',
-        text: 'Praticidade e facilidade de aplicação',
-        styleCategory: 'Strategic'
+        text: 'Me sentir confiante e com presença'
       },
       {
         id: 'strategic-4-2',
-        text: 'Exemplos de looks montados para diferentes ocasiões',
-        styleCategory: 'Strategic'
+        text: 'Ser percebida com mais elegância e autoridade'
       },
       {
         id: 'strategic-4-3',
-        text: 'Explicações detalhadas sobre o porquê das recomendações',
-        styleCategory: 'Strategic'
+        text: 'Vestir minha autenticidade com leveza'
       },
       {
         id: 'strategic-4-4',
-        text: 'Dicas para economizar e aproveitar melhor o que já tenho',
-        styleCategory: 'Strategic'
+        text: 'Ser reconhecida e admirada pela imagem que transmito'
       }
     ]
   }

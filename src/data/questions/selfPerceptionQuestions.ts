@@ -1,61 +1,54 @@
+
 import { QuizQuestion } from '../../types/quiz';
 
 export const selfPerceptionQuestions: QuizQuestion[] = [
   {
     id: 'strategic-1',
-    title: 'Como você se sente em relação ao seu estilo pessoal hoje?',
+    title: 'Como você se vê hoje?\nQuando você se olha no espelho, como se sente com sua imagem pessoal atualmente?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193439/2dd7e159-43a1-40b0-8075-ba6f591074c1_gpsauh.webp',
     options: [
       {
         id: 'strategic-1-1',
-        text: 'Completamente perdida, não sei o que combina comigo',
-        styleCategory: 'Strategic'
+        text: 'Me sinto desconectada da mulher que sou hoje'
       },
       {
         id: 'strategic-1-2',
-        text: 'Tenho algumas ideias, mas não sei como aplicar',
-        styleCategory: 'Strategic'
+        text: 'Tenho dúvidas sobre o que realmente me valoriza'
       },
       {
         id: 'strategic-1-3',
-        text: 'Conheço meu estilo, mas quero refiná-lo',
-        styleCategory: 'Strategic'
+        text: 'Às vezes acerto, às vezes erro'
       },
       {
         id: 'strategic-1-4',
-        text: 'Estou satisfeita, só buscando inspiração',
-        styleCategory: 'Strategic'
+        text: 'Me sinto segura, mas sei que posso evoluir'
       }
     ]
   },
   {
     id: 'strategic-2',
-    title: 'Qual é o maior desafio que você enfrenta ao se vestir?',
+    title: 'O que mais te desafia na hora de se vestir?',
     type: 'text',
     multiSelect: 1,
-    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp',
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745193438/6cceaaa9-9383-4890-95a4-da036f8421e3_u7tuaw.webp',
     options: [
       {
         id: 'strategic-2-1',
-        text: 'Nunca sei o que combina com o quê',
-        styleCategory: 'Strategic'
+        text: 'Tenho peças, mas não sei como combiná-las'
       },
       {
         id: 'strategic-2-2',
-        text: 'Tenho muitas roupas mas sempre sinto que não tenho nada para vestir',
-        styleCategory: 'Strategic'
+        text: 'Compro por impulso e me arrependo depois'
       },
       {
         id: 'strategic-2-3',
-        text: 'Não consigo criar looks diferentes com as peças que tenho',
-        styleCategory: 'Strategic'
+        text: 'Minha imagem não reflete quem eu sou'
       },
       {
         id: 'strategic-2-4',
-        text: 'Compro peças por impulso que depois não uso',
-        styleCategory: 'Strategic'
+        text: 'Perco tempo e acabo usando sempre os mesmos looks'
       }
     ]
   }

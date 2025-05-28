@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import { StyleResult } from '@/types/quiz';
 import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 const ResultPageEditorPage: React.FC = () => {
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
   const [customDomain, setCustomDomain] = useState(''); // Novo estado para domínio personalizado
-  const router = useRouter();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     try {
-      const savedResult = safeLocalStorage.getItem('quizResult');
-      const savedDomain = safeLocalStorage.getItem('customDomain'); // Carregar domínio salvo
+      const savedResult = localStorage.getItem('quizResult');
+      const savedDomain = localStorage.getItem('customDomain'); // Carregar domínio salvo
 
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);
@@ -24,7 +23,7 @@ const ResultPageEditorPage: React.FC = () => {
           setSecondaryStyles(parsedResult.secondaryStyles || []);
         } else {
           console.error("Formato de resultado inválido");
-          router.push('/resultado');
+          navigate('/resultado');
         }
       } else {
         const defaultStyle: StyleResult = {
@@ -42,11 +41,11 @@ const ResultPageEditorPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Erro ao carregar resultados:", error);
-      router.push('/resultado');
+      navigate('/resultado');
     } finally {
       setIsLoading(false);
     }
-  }, [router]);
+  }, [navigate]);
 
   const handleSave = () => {
     try {
@@ -54,8 +53,8 @@ const ResultPageEditorPage: React.FC = () => {
         primaryStyle,
         secondaryStyles
       };
-      safeLocalStorage.setItem('quizResult', JSON.stringify(resultToSave));
-      safeLocalStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
+      localStorage.setItem('quizResult', JSON.stringify(resultToSave));
+      localStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
       alert('Configurações salvas com sucesso!');
     } catch (error) {
       console.error("Erro ao salvar configurações:", error);
@@ -78,7 +77,7 @@ const ResultPageEditorPage: React.FC = () => {
           <p className="text-lg mb-4">Erro: Nenhum resultado encontrado para editar</p>
           <button 
             className="bg-primary text-white px-4 py-2 rounded"
-            onClick={() => router.push('/resultado')}
+            onClick={() => navigate('/resultado')}
           >
             Voltar para Resultados
           </button>

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,7 +13,6 @@ import { quizQuestions } from '@/data/quizQuestions';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface QuizTemplateImporterProps {
   isOpen: boolean;
@@ -141,7 +141,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
         
         // Try to load existing results from localStorage
         try {
-          const savedResultConfig = safeLocalStorage.getItem('quiz_result_config_Elegante');
+          const savedResultConfig = localStorage.getItem('quiz_result_config_Elegante');
           if (savedResultConfig) {
             console.log('Found existing result configuration, integrating with builder state');
             // In a real implementation, we would merge the result config with the builder state
@@ -264,9 +264,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
                     >
                       {isImporting && selectedTemplateId === template.id ? (
                         <>
-                          <div className="mr-2 inline-block">
-                            <LoadingSpinner size="xs" color="#FFFFFF" />
-                          </div>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Importando...
                         </>
                       ) : (
@@ -301,9 +299,7 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
                     >
                       {isImporting && selectedTemplateId === source.id ? (
                         <>
-                          <div className="mr-2 inline-block">
-                            <LoadingSpinner size="xs" color="#FFFFFF" />
-                          </div>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Importando...
                         </>
                       ) : (

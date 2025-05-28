@@ -4,7 +4,7 @@ import { StyleResult } from '@/types/quiz';
 import { QuizFunnel } from '@/types/quizResult';
 import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 interface EnhancedResultPageEditorWrapperProps {
   primaryStyle: StyleResult;
@@ -27,7 +27,7 @@ export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorW
     
     try {
       // Salvar no localStorage para persistência local
-      safeLocalStorage.setItem('currentQuizFunnel', JSON.stringify(funnel));
+      localStorage.setItem('currentQuizFunnel', JSON.stringify(funnel));
       
       // Aqui você pode adicionar código para salvar no backend
       // Por exemplo: await api.saveFunnel(funnel);
@@ -55,7 +55,7 @@ export const EnhancedResultPageEditorWrapper: React.FC<EnhancedResultPageEditorW
   useEffect(() => {
     if (!initialFunnel) {
       try {
-        const savedFunnelData = safeLocalStorage.getItem('currentQuizFunnel');
+        const savedFunnelData = localStorage.getItem('currentQuizFunnel');
         if (savedFunnelData) {
           const parsedFunnel = JSON.parse(savedFunnelData);
           setSavedFunnel(parsedFunnel);
@@ -96,7 +96,7 @@ export const EnhancedResultPageEditorPage: React.FC = () => {
   useEffect(() => {
     // Tentativa de carregar os resultados do localStorage
     try {
-      const savedResult = safeLocalStorage.getItem('quizResult');
+      const savedResult = localStorage.getItem('quizResult');
       
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult);

@@ -10,23 +10,23 @@ import { toast } from '@/components/ui/use-toast';
 export const ApiIntegrationsTab: React.FC = () => {
   // Google Analytics states
   const [googleAnalyticsId, setGoogleAnalyticsId] = useState(() => {
-    return safeLocalStorage.getItem('ga_id') || '';
+    return localStorage.getItem('ga_id') || '';
   });
   const [googleAnalyticsEnabled, setGoogleAnalyticsEnabled] = useState(() => {
-    return safeLocalStorage.getItem('ga_enabled') !== 'false';
+    return localStorage.getItem('ga_enabled') !== 'false';
   });
   
   // Webhook states
   const [webhookUrl, setWebhookUrl] = useState(() => {
-    return safeLocalStorage.getItem('webhook_url') || '';
+    return localStorage.getItem('webhook_url') || '';
   });
   const [webhookEnabled, setWebhookEnabled] = useState(() => {
-    return safeLocalStorage.getItem('webhook_enabled') === 'true';
+    return localStorage.getItem('webhook_enabled') === 'true';
   });
 
   const handleSaveGoogleAnalytics = () => {
-    safeLocalStorage.setItem('ga_id', googleAnalyticsId);
-    safeLocalStorage.setItem('ga_enabled', String(googleAnalyticsEnabled));
+    localStorage.setItem('ga_id', googleAnalyticsId);
+    localStorage.setItem('ga_enabled', String(googleAnalyticsEnabled));
     
     toast({
       title: "Settings saved",
@@ -35,8 +35,8 @@ export const ApiIntegrationsTab: React.FC = () => {
   };
   
   const handleSaveWebhook = () => {
-    safeLocalStorage.setItem('webhook_url', webhookUrl);
-    safeLocalStorage.setItem('webhook_enabled', String(webhookEnabled));
+    localStorage.setItem('webhook_url', webhookUrl);
+    localStorage.setItem('webhook_enabled', String(webhookEnabled));
     
     toast({
       title: "Settings saved",

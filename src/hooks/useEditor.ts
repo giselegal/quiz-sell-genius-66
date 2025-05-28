@@ -1,6 +1,6 @@
 
 import { useState, useCallback, useEffect } from 'react';
-import { Block, EditorConfig, EditableContent, BlockType, EditorBlock } from '@/types/editor';
+import { Block, EditorConfig, EditableContent, BlockType } from '@/types/editor';
 import { toast } from '@/components/ui/use-toast';
 import { useHistory } from './useHistory';
 import { getDefaultContentForType } from '@/utils/editorDefaults';
@@ -33,14 +33,14 @@ export const useEditor = () => {
   }, [present]);
 
   const addBlock = useCallback((type: BlockType) => {
-    const newBlock: EditorBlock = {
+    const newBlock: Block = {
       id: generateId(),
       type,
       content: getDefaultContentForType(type),
       order: config.blocks.length
     };
     
-    const newConfig: EditorConfig = {
+    const newConfig = {
       ...config,
       blocks: [...config.blocks, newBlock]
     };
@@ -51,11 +51,11 @@ export const useEditor = () => {
   }, [config, saveState]);
 
   const updateBlock = useCallback((id: string, content: Partial<EditableContent>) => {
-    const newConfig: EditorConfig = {
+    const newConfig = {
       ...config,
       blocks: config.blocks.map(block => 
         block.id === id ? { ...block, content: { ...block.content, ...content } } : block
-      ) as EditorBlock[]
+      )
     };
     
     setConfig(newConfig);
@@ -65,9 +65,9 @@ export const useEditor = () => {
   const deleteBlock = useCallback((id: string) => {
     const newBlocks = config.blocks.filter(block => block.id !== id);
     
-    const newConfig: EditorConfig = {
+    const newConfig = {
       ...config,
-      blocks: newBlocks.map((block, index) => ({ ...block, order: index })) as EditorBlock[]
+      blocks: newBlocks.map((block, index) => ({ ...block, order: index }))
     };
     
     setConfig(newConfig);
@@ -79,9 +79,9 @@ export const useEditor = () => {
     const [removed] = newBlocks.splice(sourceIndex, 1);
     newBlocks.splice(destinationIndex, 0, removed);
     
-    const newConfig: EditorConfig = {
+    const newConfig = {
       ...config,
-      blocks: newBlocks.map((block, index) => ({ ...block, order: index })) as EditorBlock[]
+      blocks: newBlocks.map((block, index) => ({ ...block, order: index }))
     };
     
     setConfig(newConfig);

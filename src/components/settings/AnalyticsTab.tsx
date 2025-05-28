@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/components/ui/use-toast';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { BarChartHorizontal } from 'lucide-react';
 
 export const AnalyticsTab: React.FC = () => {
@@ -26,8 +26,8 @@ export const AnalyticsTab: React.FC = () => {
   const handleSavePixelSettings = () => {
     // In a real application, this would save to a backend
     // Here we're just simulating with localStorage
-    safeLocalStorage.setItem('fb_pixel_id', pixelId);
-    safeLocalStorage.setItem('tracking_enabled', String(trackingEnabled));
+    localStorage.setItem('fb_pixel_id', pixelId);
+    localStorage.setItem('tracking_enabled', String(trackingEnabled));
     
     toast({
       title: "Settings saved",
@@ -86,7 +86,7 @@ export const AnalyticsTab: React.FC = () => {
           </p>
           
           <Button asChild variant="outline" className="w-full">
-            <Link href="/admin/ab-test" className="flex items-center justify-center gap-2">
+            <Link to="/admin/ab-test" className="flex items-center justify-center gap-2">
               <BarChartHorizontal className="h-4 w-4" />
               Acessar Teste A/B
             </Link>
@@ -106,7 +106,7 @@ export const AnalyticsTab: React.FC = () => {
           </p>
           
           <Button asChild>
-            <Link href="/admin/analytics">
+            <Link to="/admin/analytics">
               View Analytics Dashboard
             </Link>
           </Button>

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
 import VisualEditorLayout from '@/components/visual-editor/VisualEditorLayout';
 import { QuizQuestion } from '@/types/quiz';
 import { useToast } from '@/components/ui/use-toast';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Save } from 'lucide-react';
-import { safeLocalStorage } from "@/utils/localStorage";
 
 const VisualEditorPage: React.FC = () => {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -19,7 +17,7 @@ const VisualEditorPage: React.FC = () => {
     const loadQuestions = async () => {
       try {
         setLoading(true);
-        const savedQuestions = safeLocalStorage.getItem('quiz_editor_questions');
+        const savedQuestions = localStorage.getItem('quiz_editor_questions');
         
         if (savedQuestions) {
           setQuestions(JSON.parse(savedQuestions));
@@ -116,7 +114,7 @@ const VisualEditorPage: React.FC = () => {
   const handleSave = async (updatedQuestions: QuizQuestion[]) => {
     try {
       // Salvar no localStorage
-      safeLocalStorage.setItem('quiz_editor_questions', JSON.stringify(updatedQuestions));
+      localStorage.setItem('quiz_editor_questions', JSON.stringify(updatedQuestions));
       
       // Aqui você poderia salvar em uma API também
       
@@ -149,7 +147,7 @@ const VisualEditorPage: React.FC = () => {
     }));
     
     // Salvar o quiz duplicado com um novo nome
-    safeLocalStorage.setItem('quiz_editor_questions_duplicate', JSON.stringify(newQuiz));
+    localStorage.setItem('quiz_editor_questions_duplicate', JSON.stringify(newQuiz));
     
     toast({
       title: "Quiz duplicado",

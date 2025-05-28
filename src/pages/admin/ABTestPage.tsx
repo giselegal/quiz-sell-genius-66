@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import QuizResultSalesPage from '@/components/templates/QuizResultSalesPage';
 import ResultPage from '@/components/pages/ResultPage';
 
 const ABTestPage: React.FC = () => {
   const [activeVersion, setActiveVersion] = useState<'A' | 'B'>('A');
-  const router = useRouter();
+  const navigate = useNavigate();
 
   // Dados de exemplo para teste com score adicionado
   const mockData = {
@@ -30,7 +30,7 @@ const ABTestPage: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-[#432818]">Teste A/B - Páginas de Resultado</h1>
         <Button
-          onClick={() => router.push('/admin/analytics')}
+          onClick={() => navigate('/admin/analytics')}
           variant="outline"
           className="border-[#B89B7A]"
         >

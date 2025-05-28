@@ -120,7 +120,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
               : 'bg-gray-200 text-gray-500 cursor-not-allowed'
           }`}
         >
-          Avançar
+          Próxima Questão
         </Button>
       </div>
     </div>

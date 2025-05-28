@@ -22,8 +22,8 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
   
   const handleSaveGoogleAnalytics = () => {
     try {
-      safeLocalStorage.setItem('ga_id', googleAnalyticsId);
-      safeLocalStorage.setItem('ga_enabled', String(googleAnalyticsEnabled));
+      localStorage.setItem('ga_id', googleAnalyticsId);
+      localStorage.setItem('ga_enabled', String(googleAnalyticsEnabled));
       toast({
         title: "Google Analytics settings saved",
         description: "Your Google Analytics integration settings have been updated."
@@ -68,7 +68,7 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
             onChange={(e) => setGoogleAnalyticsId(e.target.value)}
           />
           <p className="text-sm text-muted-foreground">
-            Found in your Google Analytics property settings under &ldquo;Data Streams&rdquo;
+            Found in your Google Analytics property settings under "Data Streams"
           </p>
         </div>
         
