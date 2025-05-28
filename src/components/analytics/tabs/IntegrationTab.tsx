@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -49,23 +47,33 @@ export const IntegrationTab: React.FC<IntegrationTabProps> = ({
             </TabsContent>
             
             <TabsContent value="analytics">
-              <GoogleAnalyticsCard />
+              <div className="space-y-4">
+                <GoogleAnalyticsCard />
+              </div>
             </TabsContent>
             
             <TabsContent value="marketing">
-              <MarketingPlatformsCard />
+              <div className="space-y-4">
+                <MarketingPlatformsCard />
+              </div>
             </TabsContent>
             
             <TabsContent value="api">
-              <ApiTokensCard />
+              <div className="space-y-4">
+                <ApiTokensCard />
+              </div>
             </TabsContent>
             
             <TabsContent value="webhooks">
-              <WebhookCard />
+              <div className="space-y-4">
+                <WebhookCard />
+              </div>
             </TabsContent>
             
             <TabsContent value="eventlog">
-              <EventLogger />
+              <div className="space-y-4">
+                <EventLogger />
+              </div>
             </TabsContent>
           </Tabs>
         </CardContent>

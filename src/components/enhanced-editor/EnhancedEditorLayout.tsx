@@ -50,12 +50,14 @@ export const EnhancedEditorLayout: React.FC<EnhancedEditorLayoutProps> = ({
       />
       
       <ResizablePanelGroup direction="horizontal" className="flex-1">
+        {/* Left Panel - Components */}
         <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
           <ComponentsSidebar onComponentSelect={onAddBlock} />
         </ResizablePanel>
         
         <ResizableHandle withHandle />
         
+        {/* Center Panel - Preview */}
         <ResizablePanel defaultSize={55}>
           <PreviewPanel
             blocks={blocks}
@@ -70,6 +72,7 @@ export const EnhancedEditorLayout: React.FC<EnhancedEditorLayoutProps> = ({
         
         <ResizableHandle withHandle />
         
+        {/* Right Panel - Properties */}
         <ResizablePanel defaultSize={25} minSize={20} maxSize={30}>
           <PropertiesPanel
             selectedBlockId={selectedBlockId}

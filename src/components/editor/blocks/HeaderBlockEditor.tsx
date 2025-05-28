@@ -3,6 +3,7 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BlockEditorProps } from './types';
+
 export const HeaderBlockEditor: React.FC<BlockEditorProps> = ({
   block,
   onUpdate
@@ -20,17 +21,28 @@ export const HeaderBlockEditor: React.FC<BlockEditorProps> = ({
         />
       </div>
       
+      <div>
         <Label htmlFor={`${block.id}-logoHeight`}>Altura do Logo (px)</Label>
+        <Input
           id={`${block.id}-logoHeight`}
           type="number"
           value={block.content.logoHeight || '56'}
           onChange={(e) => onUpdate({ logoHeight: e.target.value })}
+          className="mt-1"
           placeholder="56"
+        />
+      </div>
+
+      <div>
         <Label htmlFor={`${block.id}-logoAlt`}>Texto Alternativo do Logo</Label>
+        <Input
           id={`${block.id}-logoAlt`}
           value={block.content.logoAlt || ''}
           onChange={(e) => onUpdate({ logoAlt: e.target.value })}
+          className="mt-1"
           placeholder="Logo Gisele Galvão"
+        />
+      </div>
     </div>
   );
 };

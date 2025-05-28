@@ -3,12 +3,14 @@ import React from 'react';
 import { EditorBlock } from '@/types/editor';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+
 interface BlockRendererProps {
   block: EditorBlock;
   isSelected: boolean;
   onSelect: () => void;
   isPreview: boolean;
 }
+
 export function BlockRenderer({
   block,
   isSelected,
@@ -27,6 +29,7 @@ export function BlockRenderer({
     >
       {/* Block Content */}
       {renderBlockContent(block)}
+
       {/* Edit Controls */}
       {!isPreview && isSelected && (
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -34,8 +37,11 @@ export function BlockRenderer({
             Editar
           </Button>
         </div>
+      )}
     </div>
   );
+}
+
 function renderBlockContent(block: EditorBlock) {
   switch (block.type) {
     case 'headline':
@@ -48,9 +54,14 @@ function renderBlockContent(block: EditorBlock) {
           )}
           {block.content.subtitle && (
             <p className="text-[#8F7A6A]">{block.content.subtitle}</p>
+          )}
+        </div>
       );
     case 'text':
       return <p className="text-[#432818]">{block.content.text}</p>;
     default:
+      return (
         <p className="text-[#8F7A6A]">Bloco tipo: {block.type}</p>
+      );
   }
+}

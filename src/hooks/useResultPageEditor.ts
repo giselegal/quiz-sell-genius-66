@@ -1,4 +1,3 @@
-"use client";
 
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
@@ -7,6 +6,7 @@ import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
 import { getDefaultContentForType } from '@/utils/editorDefaults';
 import { generateId } from '@/utils/idGenerator';
+
 export const useResultPageEditor = (styleType: string) => {
   const [state, setState] = useState<EditorState>({
     selectedBlockId: null,
@@ -14,6 +14,7 @@ export const useResultPageEditor = (styleType: string) => {
     blocks: [],
     isGlobalStylesOpen: false
   });
+
   const { 
     resultPageConfig, 
     updateSection, 
@@ -22,6 +23,7 @@ export const useResultPageEditor = (styleType: string) => {
     importConfig,
     loading 
   } = useResultPageConfig(styleType);
+
   // Initialize blocks from config when it's loaded
   useEffect(() => {
     if (resultPageConfig?.blocks) {
@@ -34,11 +36,15 @@ export const useResultPageEditor = (styleType: string) => {
       updateSection('blocks', []);
     }
   }, [resultPageConfig, updateSection]);
+
   const togglePreview = useCallback(() => {
     setState(prev => ({ ...prev, isPreviewing: !prev.isPreviewing }));
   }, []);
+
   const selectBlock = useCallback((blockId: string | null) => {
     setState(prev => ({ ...prev, selectedBlockId: blockId }));
+  }, []);
+
   const handleAddBlock = useCallback((type: Block['type']) => {
     const newBlock: Block = {
       id: generateId(),
@@ -48,44 +54,81 @@ export const useResultPageEditor = (styleType: string) => {
     };
     
     const newBlocks = [...state.blocks, newBlock];
+    
     setState(prev => ({
       ...prev,
       blocks: newBlocks,
       selectedBlockId: newBlock.id
     }));
+    
     // Sync with resultPageConfig
     updateSection('blocks', newBlocks);
+    
     return newBlock.id;
   }, [state.blocks, updateSection]);
+
   const handleUpdateBlock = useCallback((id: string, content: any) => {
     const updatedBlocks = state.blocks.map(block =>
       block.id === id ? { ...block, content: { ...block.content, ...content } } : block
     );
+    
+    setState(prev => ({
+      ...prev,
       blocks: updatedBlocks
+    }));
+    
+    // Sync with resultPageConfig
     updateSection('blocks', updatedBlocks);
+  }, [state.blocks, updateSection]);
+
   const handleDeleteBlock = useCallback((id: string) => {
     const filteredBlocks = state.blocks
       .filter(block => block.id !== id)
       .map((block, index) => ({ ...block, order: index }));
+    
+    setState(prev => ({
+      ...prev,
       blocks: filteredBlocks,
       selectedBlockId: null
+    }));
+    
+    // Sync with resultPageConfig
     updateSection('blocks', filteredBlocks);
+  }, [state.blocks, updateSection]);
+
   const handleReorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
     const result = Array.from(state.blocks);
     const [removed] = result.splice(sourceIndex, 1);
     result.splice(destinationIndex, 0, removed);
+    
     const reorderedBlocks = result.map((block, index) => ({
       ...block,
       order: index
+    }));
+    
+    setState(prev => ({
+      ...prev,
       blocks: reorderedBlocks
+    }));
+    
+    // Sync with resultPageConfig
     updateSection('blocks', reorderedBlocks);
+  }, [state.blocks, updateSection]);
+
   const toggleGlobalStyles = useCallback(() => {
+    setState(prev => ({
+      ...prev,
       isGlobalStylesOpen: !prev.isGlobalStylesOpen
+    }));
+  }, []);
+
   // Improved import config with error handling
   const handleImportConfig = useCallback((config: any) => {
     if (!config) {
       console.warn('Tentativa de importar configuração nula ou indefinida');
       return false;
+    }
+    
     try {
       if (importConfig) {
         importConfig(config);
@@ -97,11 +140,16 @@ export const useResultPageEditor = (styleType: string) => {
             blocks: config.blocks
           }));
         }
+        
         return true;
       }
+      return false;
     } catch (error) {
       console.error('Erro ao importar configuração:', error);
+      return false;
+    }
   }, [importConfig]);
+
   return {
     resultPageConfig,
     loading,
@@ -121,5 +169,6 @@ export const useResultPageEditor = (styleType: string) => {
       handleUpdateBlock,
       handleDeleteBlock,
       handleReorderBlocks
+    }
   };
 };

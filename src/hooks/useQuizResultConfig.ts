@@ -1,11 +1,12 @@
-"use client";
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { set, get } from 'lodash';
+
 interface ResultConfig {
   [key: string]: any;
 }
+
 // Função para obter a configuração padrão com base no tipo de estilo
 const getDefaultConfig = (styleType: string): ResultConfig => {
   return {
@@ -16,8 +17,11 @@ const getDefaultConfig = (styleType: string): ResultConfig => {
       }
     },
     mainContent: {
+      content: {
         description: getDefaultDescription(styleType),
         customImage: ''
+      }
+    },
     offer: {
       hero: {
         content: {
@@ -28,9 +32,11 @@ const getDefaultConfig = (styleType: string): ResultConfig => {
           ctaText: "Quero meu Guia + Bônus",
           ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
         }
+      }
     }
   };
 };
+
 // Função para obter config do localStorage
 const getStoredConfig = (styleType: string): ResultConfig | null => {
   try {
@@ -40,16 +46,24 @@ const getStoredConfig = (styleType: string): ResultConfig | null => {
     console.error('Erro ao carregar configuração:', error);
     return null;
   }
+};
+
 // Função para salvar config no localStorage
 const saveStoredConfig = (styleType: string, config: ResultConfig): boolean => {
+  try {
     localStorage.setItem(`quiz_result_config_${styleType}`, JSON.stringify(config));
     return true;
+  } catch (error) {
     console.error('Erro ao salvar configuração:', error);
     return false;
+  }
+};
+
 export const useQuizResultConfig = (styleType: string) => {
   const [config, setConfig] = useState<ResultConfig>({});
   const [loading, setLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
+
   // Carregar configuração na inicialização
   useEffect(() => {
     const loadConfig = async () => {
@@ -66,6 +80,7 @@ export const useQuizResultConfig = (styleType: string) => {
           const defaultConfig = getDefaultConfig(styleType);
           console.log('Usando configuração padrão:', defaultConfig);
           setConfig(defaultConfig);
+        }
       } catch (error) {
         console.error('Erro ao carregar configuração:', error);
         // Usar configuração padrão em caso de erro
@@ -77,13 +92,16 @@ export const useQuizResultConfig = (styleType: string) => {
         });
       } finally {
         setLoading(false);
+      }
     };
     
     loadConfig();
   }, [styleType]);
+
   // Atualizar uma seção da configuração
   const updateConfig = useCallback((sectionKey: string, data: any) => {
     console.log(`Atualizando seção: ${sectionKey}`, data);
+    
     setConfig(prev => {
       // Criar uma cópia profunda para evitar mutação
       const newConfig = JSON.parse(JSON.stringify(prev));
@@ -98,14 +116,18 @@ export const useQuizResultConfig = (styleType: string) => {
           ...newConfig[sectionKey],
           ...data
         };
+      }
+      
       setHasChanges(true);
       return newConfig;
     });
   }, []);
+
   // Salvar a configuração atual
   const saveConfig = useCallback(async (): Promise<boolean> => {
     console.log('Salvando configuração:', config);
     const success = saveStoredConfig(styleType, config);
+    
     if (success) {
       setHasChanges(false);
       toast({
@@ -115,17 +137,25 @@ export const useQuizResultConfig = (styleType: string) => {
       });
       return true;
     } else {
+      toast({
         title: "Erro ao salvar",
         description: "Não foi possível salvar as configurações.",
         variant: "destructive",
         duration: 5000,
+      });
       return false;
+    }
   }, [config, styleType]);
+
+  return {
     config,
     updateConfig,
     saveConfig,
     loading,
     hasChanges
+  };
+};
+
 // Descrições padrão com base no tipo de estilo
 function getDefaultDescription(styleType: string): string {
   switch (styleType) {
@@ -147,3 +177,5 @@ function getDefaultDescription(styleType: string): string {
       return "Você adora expressar sua individualidade. Seu estilo é único e original, combinando cores, texturas e elementos de forma não convencional.";
     default:
       return "Seu estilo pessoal reflete sua personalidade e preferências únicas.";
+  }
+}

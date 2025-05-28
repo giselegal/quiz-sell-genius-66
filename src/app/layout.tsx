@@ -3,14 +3,16 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/theme-provider';
-import ClientToaster from '@/components/ClientToaster';
+import { Toaster } from '@/components/ui/toaster';
 import ClientLayout from '@/components/ClientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
+
 export const metadata: Metadata = {
   title: 'Quiz Sell Genius',
   description: 'Plataforma de criação de quizzes de alta conversão',
 };
+
 export default function RootLayout({
   children,
 }: {
@@ -25,7 +27,7 @@ export default function RootLayout({
               {children}
             </ClientLayout>
           </AuthProvider>
-          <ClientToaster />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

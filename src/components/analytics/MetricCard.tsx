@@ -115,7 +115,7 @@ export interface MetricsGridComposition {
 export const MetricsGrid: React.FC<MetricsGridProps> & MetricsGridComposition = ({
   children,
   columns = 3,
-  className
+  className,
 }) => {
   return (
     <div

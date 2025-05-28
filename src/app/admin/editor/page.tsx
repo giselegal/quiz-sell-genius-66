@@ -18,6 +18,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+
 export default function EditorHub() {
   const editorOptions = [
     {
@@ -48,6 +49,7 @@ export default function EditorHub() {
       href: '/admin/editor/offer/new'
     }
   ];
+
   const templates = [
     {
       id: 1,
@@ -74,20 +76,24 @@ export default function EditorHub() {
       mode: 'offer'
     }
   ];
+
   const recentProjects = [
     {
+      id: 1,
       title: 'Quiz de Liderança',
       mode: 'quiz',
       lastEdited: '2 horas atrás',
       status: 'published'
     },
     {
+      id: 2,
       title: 'Resultado Personalidade',
       mode: 'result',
       lastEdited: '1 dia atrás',
       status: 'draft'
     }
   ];
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -111,11 +117,14 @@ export default function EditorHub() {
           <Badge variant="outline">
             <Zap className="w-3 h-3 mr-1" />
             Drag & Drop
-            <Rocket className="w-3 h-3 ml-1" />
+          </Badge>
+          <Badge variant="outline">
+            <Rocket className="w-3 h-3 mr-1" />
             Profissional
           </Badge>
         </div>
       </div>
+
       {/* Editor Options */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {editorOptions.map((option) => {
@@ -123,6 +132,7 @@ export default function EditorHub() {
           return (
             <Card key={option.id} className="relative overflow-hidden hover:shadow-xl transition-all duration-300 group">
               <div className={`absolute inset-0 bg-gradient-to-r ${option.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
+              
               <CardHeader className="relative">
                 <div className={`w-16 h-16 bg-gradient-to-r ${option.color} rounded-xl flex items-center justify-center mb-4`}>
                   <Icon className="w-8 h-8 text-white" />
@@ -130,6 +140,7 @@ export default function EditorHub() {
                 <CardTitle className="text-xl">{option.title}</CardTitle>
                 <p className="text-gray-600">{option.description}</p>
               </CardHeader>
+              
               <CardContent className="relative">
                 <ul className="space-y-2 mb-6">
                   {option.features.map((feature, index) => (
@@ -139,7 +150,8 @@ export default function EditorHub() {
                     </li>
                   ))}
                 </ul>
-                <Link href={option.href} legacyBehavior>
+                
+                <Link href={option.href}>
                   <Button className={`w-full bg-gradient-to-r ${option.color} hover:opacity-90 transition-opacity`}>
                     <Plus className="w-4 h-4 mr-2" />
                     Começar Agora
@@ -150,6 +162,7 @@ export default function EditorHub() {
           );
         })}
       </div>
+
       {/* Templates Section */}
       <Card>
         <CardHeader>
@@ -168,7 +181,7 @@ export default function EditorHub() {
                   <h3 className="font-semibold mb-1">{template.name}</h3>
                   <Badge variant="outline" className="mb-2">{template.category}</Badge>
                   <p className="text-sm text-gray-600 mb-4">{template.description}</p>
-                  <Link href={`/admin/editor/${template.mode}/template/${template.id}`} legacyBehavior>
+                  <Link href={`/admin/editor/${template.mode}/template/${template.id}`}>
                     <Button size="sm" variant="outline" className="w-full">
                       <Eye className="w-4 h-4 mr-1" />
                       Usar Template
@@ -180,6 +193,7 @@ export default function EditorHub() {
           </div>
         </CardContent>
       </Card>
+
       {/* Recent Projects */}
       <Card>
         <CardHeader>
@@ -191,8 +205,8 @@ export default function EditorHub() {
         <CardContent>
           {recentProjects.length > 0 ? (
             <div className="space-y-3">
-              {recentProjects.map((project, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              {recentProjects.map((project) => (
+                <div key={project.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                       <FileText className="w-5 h-5 text-white" />
@@ -203,6 +217,7 @@ export default function EditorHub() {
                         <Badge variant="outline" className="text-xs">{project.mode}</Badge>
                         <span>•</span>
                         <span>{project.lastEdited}</span>
+                        <span>•</span>
                         <Badge variant={project.status === 'published' ? 'default' : 'secondary'} className="text-xs">
                           {project.status === 'published' ? 'Publicado' : 'Rascunho'}
                         </Badge>
@@ -213,7 +228,7 @@ export default function EditorHub() {
                     <Button variant="outline" size="sm">
                       <Copy className="w-4 h-4" />
                     </Button>
-                    <Link href={`/admin/editor/${project.mode}/edit`} legacyBehavior>
+                    <Link href={`/admin/editor/${project.mode}/${project.id}`}>
                       <Button size="sm">
                         <Edit3 className="w-4 h-4 mr-1" />
                         Editar
@@ -232,6 +247,7 @@ export default function EditorHub() {
           )}
         </CardContent>
       </Card>
+
       {/* Call to Action */}
       <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
         <CardContent className="p-8 text-center">
@@ -241,13 +257,13 @@ export default function EditorHub() {
             Escolha um dos editores acima e crie experiências incríveis para seus usuários!
           </p>
           <div className="flex gap-4 justify-center">
-            <Link href="/admin/editor/quiz/new" legacyBehavior>
+            <Link href="/admin/editor/quiz/new">
               <Button variant="secondary" size="lg">
                 <FileText className="w-5 h-5 mr-2" />
                 Novo Quiz
               </Button>
             </Link>
-            <Link href="/admin/templates" legacyBehavior>
+            <Link href="/admin/templates">
               <Button variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-blue-600">
                 <Eye className="w-5 h-5 mr-2" />
                 Ver Templates

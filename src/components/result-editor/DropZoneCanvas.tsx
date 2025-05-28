@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -23,6 +22,7 @@ interface DropZoneCanvasProps {
   onDeleteItem: (id: string) => void;
 }
 
+// Componente básico de renderização para fallback
 const BasicComponentRenderer: React.FC<{ 
   type: string; 
   props: Record<string, any>;
@@ -34,6 +34,7 @@ const BasicComponentRenderer: React.FC<{
     onSelect?.();
   };
 
+  // Renderizadores básicos para componentes simples
   switch (type) {
     case 'heading':
       return (
@@ -55,6 +56,7 @@ const BasicComponentRenderer: React.FC<{
           </h1>
         </div>
       );
+
     case 'text':
       return (
         <div 
@@ -75,6 +77,7 @@ const BasicComponentRenderer: React.FC<{
           </p>
         </div>
       );
+
     case 'button':
       return (
         <div 
@@ -88,6 +91,7 @@ const BasicComponentRenderer: React.FC<{
               color: props.textColor || '#ffffff',
               borderRadius: props.borderRadius || 8,
               padding: props.padding || '12px 24px',
+              fontSize: props.fontSize || 16,
               fontWeight: props.fontWeight || 'semibold',
               border: 'none',
               cursor: 'pointer',
@@ -99,11 +103,13 @@ const BasicComponentRenderer: React.FC<{
           </button>
         </div>
       );
+
     case 'image':
       return (
         <div 
           className={`cursor-pointer ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
           onClick={handleClick}
+          style={{ marginBottom: props.marginBottom || 20 }}
         >
           <img
             src={props.src || 'https://via.placeholder.com/400x200'}
@@ -111,16 +117,17 @@ const BasicComponentRenderer: React.FC<{
             style={{
               width: props.width || 400,
               height: props.height || 200,
-              objectFit: props.objectFit || 'cover',
               borderRadius: props.borderRadius || 8,
+              objectFit: props.objectFit || 'cover',
               display: 'block'
             }}
           />
         </div>
       );
+
     default:
       return (
-        <div
+        <div 
           className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer ${
             isSelected ? 'ring-2 ring-blue-500 ring-offset-2' : ''
           }`}
@@ -172,7 +179,9 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
   const renderComponent = (item: CanvasItem) => {
     const isSelected = selectedItemId === item.id;
     
+    // Tentar usar o renderizador específico primeiro
     const SpecificRenderer = ComponentRenderers[item.type as keyof typeof ComponentRenderers];
+    
     if (SpecificRenderer) {
       return (
         <SpecificRenderer
@@ -182,7 +191,8 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
         />
       );
     }
-
+    
+    // Fallback para renderizador básico
     return (
       <BasicComponentRenderer
         type={item.type}
@@ -195,6 +205,7 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
 
   return (
     <div className="h-full bg-[#F5F2E9] relative">
+      {/* Header do Preview */}
       <div className="bg-white border-b border-[#D4C4A0] p-4 sticky top-0 z-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-[#432818]">
@@ -207,6 +218,7 @@ export const DropZoneCanvas: React.FC<DropZoneCanvasProps> = ({
         </div>
       </div>
 
+      {/* Canvas Area */}
       <div 
         ref={setNodeRef}
         className={`min-h-[calc(100vh-200px)] p-6 transition-all duration-200 ${

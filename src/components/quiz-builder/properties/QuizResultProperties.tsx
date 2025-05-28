@@ -1,84 +1,72 @@
 
 import React from 'react';
+import { QuizComponentData } from '@/types/quizBuilder';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { QuizComponentData } from '@/types/quizBuilder';
 
 interface QuizResultPropertiesProps {
   data: QuizComponentData['data'];
-  onUpdate: (id: string, updates: Partial<QuizComponentData>) => void;
-  componentId: string;
+  onUpdate: (data: any) => void;
 }
 
-export const QuizResultProperties: React.FC<QuizResultPropertiesProps> = ({
-  data,
-  onUpdate,
-  componentId
-}) => {
+const QuizResultProperties: React.FC<QuizResultPropertiesProps> = ({ data, onUpdate }) => {
   return (
-    <div className="space-y-4">
-      <div>
-        <Label>Título do estilo primário</Label>
+    <div className="space-y-5">
+      <div className="space-y-2">
+        <Label htmlFor="title">Título do Resultado</Label>
         <Input
-          value={data.primaryStyleTitle || ''}
-          onChange={(e) => onUpdate(componentId, { 
-            data: { ...data, primaryStyleTitle: e.target.value } 
-          })}
-          placeholder="Seu estilo predominante é"
+          id="title"
+          value={data.title || ''}
+          onChange={(e) => onUpdate({ ...data, title: e.target.value })}
+          placeholder="Seu Resultado"
         />
       </div>
-
-      <div>
-        <Label>Título dos estilos secundários</Label>
-        <Input
-          value={data.secondaryStylesTitle || ''}
-          onChange={(e) => onUpdate(componentId, { 
-            data: { ...data, secondaryStylesTitle: e.target.value } 
-          })}
-          placeholder="Seus estilos secundários"
+      
+      <div className="space-y-2">
+        <Label htmlFor="description">Descrição</Label>
+        <Textarea
+          id="description"
+          value={data.description || ''}
+          onChange={(e) => onUpdate({ ...data, description: e.target.value })}
+          placeholder="Descrição do resultado"
+          rows={3}
         />
       </div>
-
-      <div className="flex items-center space-x-2">
-        <Switch
-          checked={data.showPercentages || false}
-          onCheckedChange={(checked) => onUpdate(componentId, { 
-            data: { ...data, showPercentages: checked } 
-          })}
-        />
-        <Label>Mostrar percentuais</Label>
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Switch
-          checked={data.showDescriptions || false}
-          onCheckedChange={(checked) => onUpdate(componentId, { 
-            data: { ...data, showDescriptions: checked } 
-          })}
-        />
-        <Label>Mostrar descrições</Label>
-      </div>
-
-      <div>
-        <Label>Layout do resultado</Label>
-        <Select 
-          value={data.resultLayout || 'classic'}
-          onValueChange={(value) => onUpdate(componentId, { 
-            data: { ...data, resultLayout: value } 
-          })}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="classic">Clássico</SelectItem>
-            <SelectItem value="modern">Moderno</SelectItem>
-            <SelectItem value="minimal">Minimalista</SelectItem>
-          </SelectContent>
-        </Select>
+      
+      <div className="border p-4 rounded-md space-y-4">
+        <h3 className="font-medium">Seções Visíveis</h3>
+        
+        <div className="flex items-center justify-between">
+          <Label htmlFor="showPrimaryStyle">Estilo Principal</Label>
+          <Switch
+            id="showPrimaryStyle"
+            checked={data.showPrimaryStyle !== false}
+            onCheckedChange={(checked) => onUpdate({ ...data, showPrimaryStyle: checked })}
+          />
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <Label htmlFor="showSecondaryStyles">Estilos Secundários</Label>
+          <Switch
+            id="showSecondaryStyles"
+            checked={data.showSecondaryStyles !== false}
+            onCheckedChange={(checked) => onUpdate({ ...data, showSecondaryStyles: checked })}
+          />
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <Label htmlFor="showOfferSection">Seção de Oferta</Label>
+          <Switch
+            id="showOfferSection"
+            checked={data.showOfferSection !== false}
+            onCheckedChange={(checked) => onUpdate({ ...data, showOfferSection: checked })}
+          />
+        </div>
       </div>
     </div>
   );
 };
+
+export default QuizResultProperties;

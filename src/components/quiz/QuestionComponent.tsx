@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { toast } from '../ui/use-toast';
@@ -76,6 +74,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
       });
       return;
     }
+
     onNext();
   };
 
@@ -101,7 +100,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
           </button>
         ))}
       </div>
-      
+
       <div className="flex items-center justify-between">
         <div className="text-sm text-[#8F7A6A]">
           <p>Selecionadas: {selectedOptions.length} de {requiredSelections}</p>

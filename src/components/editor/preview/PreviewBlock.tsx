@@ -132,7 +132,8 @@ export function PreviewBlock({
               </TooltipTrigger>
               <TooltipContent>Arrastar</TooltipContent>
             </Tooltip>
-            
+          </TooltipProvider>
+          <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-red-500">
@@ -144,7 +145,6 @@ export function PreviewBlock({
           </TooltipProvider>
         </div>
       )}
-      
       {renderContent()}
     </div>
   );

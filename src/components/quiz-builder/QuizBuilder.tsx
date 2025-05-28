@@ -1,7 +1,4 @@
 
-"use client";
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
-
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
@@ -54,7 +51,9 @@ export const QuizBuilder: React.FC = () => {
         'Elegante', 'Contemporâneo', 'Natural', 'Clássico', 
         'Romântico', 'Sexy', 'Dramático', 'Criativo'
       ];
+      
       let foundConfig = false;
+      
       for (const styleType of styleTypes) {
         const config = loadQuizResultConfig(styleType);
         
@@ -77,6 +76,7 @@ export const QuizBuilder: React.FC = () => {
           break;
         }
       }
+      
       if (!foundConfig) {
         setIsImportingFromResult(false);
       }
@@ -136,15 +136,18 @@ export const QuizBuilder: React.FC = () => {
       totalSelections: 30,
       userName: 'Preview User'
     };
+    
     setPreviewResult(previewResult);
   };
 
   const handleImportTemplate = (template: QuizBuilderState) => {
     initializeStages(template.stages);
     initializeComponents(template.components);
+    
     if (template.stages.length > 0) {
       setActiveStage(template.stages[0].id);
     }
+    
     toast({
       title: "Template importado",
       description: "O template foi carregado com sucesso. Você pode começar a editar.",
@@ -152,26 +155,29 @@ export const QuizBuilder: React.FC = () => {
   };
 
   const handleImportResultPage = (config: ResultPageConfig) => {
+    // Create a new stage for the result page
     const resultStageId = `stage-${Date.now()}`;
+    
     const resultStage: QuizStage = {
       id: resultStageId,
       title: 'Página de Resultado',
       type: 'result',
       order: 0
     };
-
+    
+    // Create components based on blocks in the config
     const resultComponents = config.blocks?.map((block, index) => ({
       id: `component-${Date.now()}-${index}`,
-      type: 'headline' as QuizComponentType,
+      type: 'headline' as QuizComponentType, // Default to headline, modify as needed
       order: index,
       stageId: resultStageId,
-      data: {
+      content: {
         title: block.content.title || 'Sem título',
         subtitle: block.content.subtitle || '',
         alignment: block.content.alignment || 'center'
       }
     })) || [];
-
+    
     initializeStages([resultStage]);
     initializeComponents(resultComponents);
     setActiveStage(resultStage.id);
@@ -180,6 +186,7 @@ export const QuizBuilder: React.FC = () => {
       title: "Página de resultado importada",
       description: "A configuração da página de resultado foi importada com sucesso.",
     });
+    
     setIsImportingFromResult(false);
   };
 
@@ -207,6 +214,7 @@ export const QuizBuilder: React.FC = () => {
         onPreviewResultPage={handlePreviewQuizResult}
         onImportQuizTemplate={() => setIsTemplateImporterOpen(true)}
       />
+      
       <div className="flex-1 overflow-hidden">
         {activeView === 'editor' ? (
           <BuilderLayout
@@ -229,6 +237,8 @@ export const QuizBuilder: React.FC = () => {
           />
         ) : (
           <QuizPreview 
+            stages={stages}
+            components={components}
             previewResult={previewResult}
           />
         )}

@@ -1,4 +1,3 @@
-
 import React from 'react';
 // Update the import path if the file is located elsewhere, for example:
 import EnhancedAutoFixedImages from '../ui/EnhancedAutoFixedImages';
@@ -52,6 +51,7 @@ const ImageOptimizationDemo: React.FC = () => {
             Esta seção não usa o componente de correção, mostrando as imagens
             como seriam naturalmente carregadas sem otimização automática.
           </p>
+          
           <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>

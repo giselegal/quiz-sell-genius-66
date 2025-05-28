@@ -1,4 +1,5 @@
 
+
 export interface ImageAnalysis {
   url: string;
   element?: HTMLImageElement;
@@ -17,8 +18,10 @@ export interface ImageAnalysis {
   suggestedImprovements?: string[];
   estimatedSizeReduction?: number;
 }
+
 export interface ImageDiagnosticResult {
   url?: string;
+  issues?: string[];
   recommendations?: string[];
   optimizationPotential?: number;
   summary?: {
@@ -29,54 +32,73 @@ export interface ImageDiagnosticResult {
   };
   detailedIssues?: ImageAnalysis[];
 }
+
 export interface FixBlurryImagesOptions {
   quality?: number;
   format?: string;
+  skipOptimized?: boolean;
+  forceOptimize?: boolean;
   debug?: boolean;
   placeholderColor?: string;
 }
-export interface PreloadImageDefinition {
-  placeholderColor?: string;
+
 export interface PreloadImageDefinition {
   src: string;
+  id: string;
+  alt: string;
+  category: string;
   preloadPriority?: number;
   tags?: string[];
+  quality?: number;
 }
+
 export interface PreloadOptions {
-  preloadPriority?: number;
-  tags?: string[];
-export interface PreloadOptions {
+  quality?: number;
   priority?: 'high' | 'low' | 'auto';
   categories?: string[];
   limit?: number;
   timeout?: number;
   batchSize?: number;
+  format?: string;
   onProgress?: (loaded: number, total: number) => void;
   onComplete?: () => void;
+}
+
 // Additional missing types
 export interface ImageMetadata {
   width: number;
   height: number;
   format: string;
   size: number;
+  url: string;
   alt?: string;
+}
+
 export interface ImageCacheEntry {
+  url: string;
   metadata: ImageMetadata;
   timestamp: number;
   blob?: Blob;
   loadStatus?: 'loading' | 'loaded' | 'error';
   lastAccessed?: number;
+}
+
 export interface ImageSettings {
   quality: number;
+  format: string;
   width?: number;
   height?: number;
   responsive?: boolean;
   crop?: string;
+}
+
 export interface ImageOptimizationOptions {
+  quality?: number;
+  format?: string;
   width?: number;
   height?: number;
-  quality?: number;
-  format?: 'auto' | 'webp' | 'avif' | 'jpg' | 'png';
-  crop?: 'fill' | 'fit' | 'limit';
   progressive?: boolean;
   lossless?: boolean;
+  crop?: string;
+}
+

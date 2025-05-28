@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
@@ -7,9 +6,11 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import QuizResultSalesPage from '@/components/templates/QuizResultSalesPage';
 import ResultPage from '@/components/pages/ResultPage';
+
 const ABTestPage: React.FC = () => {
   const [activeVersion, setActiveVersion] = useState<'A' | 'B'>('A');
   const router = useRouter();
+
   // Dados de exemplo para teste com score adicionado
   const mockData = {
     primaryStyle: {
@@ -23,6 +24,7 @@ const ABTestPage: React.FC = () => {
     ],
     userName: 'Visitante'
   };
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-6">
@@ -35,11 +37,13 @@ const ABTestPage: React.FC = () => {
           Voltar para Analytics
         </Button>
       </div>
+
       <Card className="p-6 mb-6 bg-white shadow-md border border-[#B89B7A]/20">
         <div className="mb-4">
           <h2 className="text-lg font-medium text-[#432818] mb-2">Controles do Teste</h2>
           <p className="text-sm text-[#666]">Alterne entre as versões para comparar as diferentes implementações.</p>
         </div>
+
         <Tabs value={activeVersion} onValueChange={(value) => setActiveVersion(value as 'A' | 'B')}>
           <TabsList className="mb-4">
             <TabsTrigger value="A" className="data-[state=active]:bg-[#aa6b5d] data-[state=active]:text-white">
@@ -47,7 +51,9 @@ const ABTestPage: React.FC = () => {
             </TabsTrigger>
             <TabsTrigger value="B" className="data-[state=active]:bg-[#aa6b5d] data-[state=active]:text-white">
               Versão B
+            </TabsTrigger>
           </TabsList>
+
           <div className="bg-[#f9f4ef] p-4 rounded-lg mb-4">
             <p className="text-sm font-medium mb-2">
               Versão Atual: {activeVersion === 'A' ? 'Original (A)' : 'Nova (B)'}
@@ -56,9 +62,11 @@ const ABTestPage: React.FC = () => {
               {activeVersion === 'A' 
                 ? 'Versão original com foco em benefícios e social proof'
                 : 'Nova versão com design modernizado e foco em transformação'}
+            </p>
           </div>
         </Tabs>
       </Card>
+
       <div className="border-2 border-[#aa6b5d] rounded-lg overflow-hidden">
         {activeVersion === 'A' ? (
           <QuizResultSalesPage
@@ -69,7 +77,9 @@ const ABTestPage: React.FC = () => {
         ) : (
           <ResultPage />
         )}
+      </div>
     </div>
   );
 };
+
 export default ABTestPage;

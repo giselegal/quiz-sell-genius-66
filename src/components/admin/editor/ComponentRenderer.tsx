@@ -1,5 +1,3 @@
-
-import React from 'react';
 import { Button } from '../../ui/button';
 
 interface Component {
@@ -43,6 +41,7 @@ export function ComponentRenderer({ component }: ComponentRendererProps) {
           variant={props.variant || 'default'}
           size={props.size || 'default'}
           className={props.className}
+          style={props.style}
           onClick={(e) => e.preventDefault()}
         >
           {props.text || 'Botão'}

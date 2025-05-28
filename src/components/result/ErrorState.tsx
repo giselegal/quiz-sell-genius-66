@@ -1,8 +1,8 @@
-"use client";
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+
 const ErrorState: React.FC = () => {
   const router = useRouter();
   
@@ -25,4 +25,5 @@ const ErrorState: React.FC = () => {
     </div>
   );
 };
+
 export default ErrorState;

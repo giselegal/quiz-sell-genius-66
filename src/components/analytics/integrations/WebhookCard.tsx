@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -24,8 +22,8 @@ export const WebhookCard: React.FC<WebhookCardProps> = ({
 
   const handleSaveWebhook = () => {
     try {
-      localStorage.setItem('webhook_url', webhookUrl);
-      localStorage.setItem('webhook_enabled', String(webhookEnabled));
+      safeLocalStorage.setItem('webhook_url', webhookUrl);
+      safeLocalStorage.setItem('webhook_enabled', String(webhookEnabled));
       toast({
         title: "Webhook settings saved",
         description: "Your webhook integration settings have been updated."
@@ -46,7 +44,7 @@ export const WebhookCard: React.FC<WebhookCardProps> = ({
     });
     console.log("Testing connection to Webhook...");
   };
-
+  
   return (
     <Card>
       <CardHeader>

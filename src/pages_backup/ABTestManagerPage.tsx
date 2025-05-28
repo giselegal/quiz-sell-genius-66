@@ -1,9 +1,6 @@
-"use client";
-
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
-import { useToast } from "@/components/ui/use-toast";
 import React, { useState, useEffect } from 'react';
-import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
+import { safeLocalStorage } from "@/utils/localStorage";
+import { useRouter } from 'next/navigation';
 import { ABTest, ABTestVariation } from '@/hooks/useABTest';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -18,15 +15,18 @@ import {
   Plus, Save, Trash2, PieChart
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/components/ui/use-toast';
 
-const ABTestManagerPage: React.FC = (): JSX.Element => {
-  const { navigate } = useUniversalNavigation();
+const ABTestManagerPage: React.FC = () => {
+  const router = useRouter();
   const { toast } = useToast();
   const [tests, setTests] = useState<ABTest[]>([]);
   const [selectedTest, setSelectedTest] = useState<ABTest | null>(null);
   const [selectedTabId, setSelectedTabId] = useState<'active' | 'archived'>('active');
   const [editMode, setEditMode] = useState(false);
   const [isCreatingTest, setIsCreatingTest] = useState(false);
+
+  // Variáveis de estado para edição
   const [editedTest, setEditedTest] = useState<ABTest | null>(null);
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
         const parsedTests = JSON.parse(savedTests);
         setTests(parsedTests);
         
+        // Se houver testes, selecionar o primeiro
         if (parsedTests.length > 0) {
           setSelectedTest(parsedTests[0]);
         }
@@ -60,14 +61,14 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
       setTests(updatedTests);
       toast({
         title: 'Testes salvos',
-        description: 'Os testes A/B foram salvos com sucesso.'
+        description: 'Os testes A/B foram salvos com sucesso.',
       });
     } catch (error) {
       console.error('Erro ao salvar testes:', error);
       toast({
         title: 'Erro ao salvar testes',
         description: 'Não foi possível salvar os testes A/B.',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -138,6 +139,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
       const updatedTests = tests.map(test => 
         test.id === editedTest.id ? editedTest : test
       );
+      
       handleSaveTests(updatedTests);
       setSelectedTest(editedTest);
       setEditMode(false);
@@ -148,6 +150,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
   const handleCancelEdit = () => {
     setEditMode(false);
     setIsCreatingTest(false);
+    
     // Se estiver criando um novo teste e cancelar, removê-lo
     if (isCreatingTest && editedTest) {
       const updatedTests = tests.filter(test => test.id !== editedTest.id);
@@ -164,7 +167,9 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
         trafficPercentage: 0,
         content: {}
       };
+      
       const updatedVariations = [...editedTest.variations, newVariation];
+      
       // Redistribuir percentuais
       const newPercentage = Math.floor(100 / updatedVariations.length);
       const updatedVariationsWithPercentages = updatedVariations.map((variation, index) => {
@@ -180,6 +185,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
         }
         return { ...variation, trafficPercentage: newPercentage };
       });
+      
       setEditedTest({
         ...editedTest,
         variations: updatedVariationsWithPercentages
@@ -197,11 +203,29 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
         });
         return;
       }
+      
       const updatedVariations = editedTest.variations
         .filter(variation => variation.id !== variationId);
+      
+      // Redistribuir percentuais
+      const newPercentage = Math.floor(100 / updatedVariations.length);
+      const updatedVariationsWithPercentages = updatedVariations.map((variation, index) => {
+        if (index === updatedVariations.length - 1) {
+          // Última variação recebe o que sobrou para garantir soma = 100%
+          const sumOthers = updatedVariations
+            .slice(0, -1)
+            .reduce((acc, var1) => acc + (var1.trafficPercentage || 0), 0);
+          return { 
+            ...variation, 
+            trafficPercentage: 100 - sumOthers 
+          };
+        }
+        return { ...variation, trafficPercentage: newPercentage };
+      });
+      
       setEditedTest({
         ...editedTest,
-        variations: updatedVariations
+        variations: updatedVariationsWithPercentages
       });
     }
   };
@@ -217,6 +241,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
           ? { ...variation, [field]: value } 
           : variation
       );
+      
       setEditedTest({
         ...editedTest,
         variations: updatedVariations
@@ -232,8 +257,8 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
     if (editedTest) {
       const updatedVariations = editedTest.variations.map(variation => {
         if (variation.id === variationId) {
-          return {
-            ...variation,
+          return { 
+            ...variation, 
             content: { 
               ...(variation.content || {}),
               [field]: value 
@@ -242,6 +267,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
         }
         return variation;
       });
+      
       setEditedTest({
         ...editedTest,
         variations: updatedVariations
@@ -252,19 +278,37 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
   const handleDuplicateVariation = (variationId: string) => {
     if (editedTest) {
       const variationToDuplicate = editedTest.variations.find(v => v.id === variationId);
+      
       if (!variationToDuplicate) return;
-
+      
       const newVariation: ABTestVariation = {
         ...JSON.parse(JSON.stringify(variationToDuplicate)),
         id: `var_${Date.now()}`,
         name: `${variationToDuplicate.name} (cópia)`,
         trafficPercentage: 0
       };
-
+      
       const updatedVariations = [...editedTest.variations, newVariation];
+      
+      // Redistribuir percentuais
+      const newPercentage = Math.floor(100 / updatedVariations.length);
+      const updatedVariationsWithPercentages = updatedVariations.map((variation, index) => {
+        if (index === updatedVariations.length - 1) {
+          // Última variação recebe o que sobrou para garantir soma = 100%
+          const sumOthers = updatedVariations
+            .slice(0, -1)
+            .reduce((acc, var1) => acc + (var1.trafficPercentage || 0), 0);
+          return { 
+            ...variation, 
+            trafficPercentage: 100 - sumOthers 
+          };
+        }
+        return { ...variation, trafficPercentage: newPercentage };
+      });
+      
       setEditedTest({
         ...editedTest,
-        variations: updatedVariations
+        variations: updatedVariationsWithPercentages
       });
     }
   };
@@ -280,13 +324,14 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
       const visitorKey = `ab_test_${testId}_visitor_count_${variationId}`;
       const visitors = safeLocalStorage.getItem(visitorKey);
       const visitorsCount = visitors ? parseInt(visitors, 10) : 0;
+      
       // Obter o número de conversões
       const conversionKey = `ab_test_${testId}_${variationId}_conversions`;
       const conversions = safeLocalStorage.getItem(conversionKey);
       const conversionsCount = conversions ? parseInt(conversions, 10) : 0;
-
+      
       if (visitorsCount === 0) return '0%';
-
+      
       const rate = (conversionsCount / visitorsCount) * 100;
       return `${rate.toFixed(2)}%`;
     } catch (error) {
@@ -298,13 +343,13 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
   return (
     <div className="container mx-auto p-6">
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="outline" size="sm" onClick={() => navigate('/admin')}>
+        <Button variant="outline" size="sm" onClick={() => router.push('/admin')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar
         </Button>
         <h1 className="text-2xl font-semibold">Gerenciador de Testes A/B</h1>
       </div>
-
+      
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="md:col-span-1">
           <Card className="mb-4">
@@ -328,7 +373,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                   <TabsTrigger value="archived" className="flex-1">Arquivados</TabsTrigger>
                 </TabsList>
               </Tabs>
-
+              
               {filteredTests.length === 0 ? (
                 <div className="text-center py-4 text-muted-foreground">
                   Nenhum teste {selectedTabId === 'active' ? 'ativo' : 'arquivado'} encontrado.
@@ -355,7 +400,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
             </CardContent>
           </Card>
         </div>
-
+        
         <div className="md:col-span-3">
           {selectedTest ? (
             <Card>
@@ -406,20 +451,24 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                           />
                         </div>
                       </div>
-                      <div>
-                        <Label>Status</Label>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <Switch
-                            checked={editedTest?.isActive || false}
-                            onCheckedChange={(checked) => setEditedTest(prev => prev ? { ...prev, isActive: checked } : null)}
-                          />
-                          <Label>
-                            {editedTest?.isActive ? 'Ativo' : 'Inativo'}
-                          </Label>
+                      
+                      <div className="space-y-3">
+                        <div>
+                          <Label>Status</Label>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Switch
+                              checked={editedTest?.isActive || false}
+                              onCheckedChange={(checked) => setEditedTest(prev => prev ? { ...prev, isActive: checked } : null)}
+                            />
+                            <Label>
+                              {editedTest?.isActive ? 'Ativo' : 'Inativo'}
+                            </Label>
+                          </div>
                         </div>
+                        
                         <div>
                           <Label>Data de Término</Label>
-                            <Input
+                          <Input
                             type="date"
                             value={editedTest?.endDate ? new Date(editedTest.endDate).toISOString().split('T')[0] : ''}
                             onChange={(e) => {
@@ -470,6 +519,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                                   />
                                 </div>
                               </div>
+                              
                               <div>
                                 <Label>Distribuição de Tráfego (%)</Label>
                                 <Input
@@ -491,6 +541,9 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                                 placeholder="https://checkout.exemplo.com/seu-produto"
                                 className="mt-1"
                               />
+                            </div>
+                            
+                            <div className="mt-4">
                               <Label>Informações de Preço (para variação de teste)</Label>
                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                                 <div>
@@ -508,6 +561,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                                     className="mt-1"
                                   />
                                 </div>
+                                
                                 <div>
                                   <Label className="text-xs text-muted-foreground">Preço Atual</Label>
                                   <Input
@@ -523,6 +577,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                                     className="mt-1"
                                   />
                                 </div>
+                                
                                 <div>
                                   <Label className="text-xs text-muted-foreground">Informação de Parcelamento</Label>
                                   <Input
@@ -540,7 +595,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                                 </div>
                               </div>
                             </div>
-
+                            
                             <div className="flex justify-end mt-4 space-x-2">
                               <Button 
                                 size="sm" 
@@ -550,6 +605,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                                 <Copy className="h-4 w-4 mr-1" />
                                 Duplicar
                               </Button>
+                              
                               <Button 
                                 size="sm" 
                                 variant="destructive"
@@ -575,11 +631,23 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                           {selectedTest.type === 'result' ? 'Página de Resultados' : 'Página de Vendas'}
                         </p>
                       </div>
+                      
                       <div className="flex gap-2">
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            checked={selectedTest.isActive}
+                            onCheckedChange={(checked) => handleToggleTestActive(selectedTest.id, checked)}
+                          />
+                          <Label>
+                            {selectedTest.isActive ? 'Ativo' : 'Inativo'}
+                          </Label>
+                        </div>
+                        
                         <Button variant="outline" onClick={handleEditTest}>
                           <Edit className="h-4 w-4 mr-2" />
                           Editar
                         </Button>
+                        
                         <Button 
                           variant="destructive" 
                           onClick={() => handleDeleteTest(selectedTest.id)}
@@ -595,10 +663,12 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                         <h3 className="text-sm font-medium text-muted-foreground">Data de Início</h3>
                         <p>{new Date(selectedTest.startDate).toLocaleDateString()}</p>
                       </div>
+                      
                       <div>
                         <h3 className="text-sm font-medium text-muted-foreground">Data de Término</h3>
                         <p>{selectedTest.endDate ? new Date(selectedTest.endDate).toLocaleDateString() : 'Não definida'}</p>
                       </div>
+                      
                       <div>
                         <h3 className="text-sm font-medium text-muted-foreground">Status</h3>
                         <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -610,9 +680,10 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                         </div>
                       </div>
                     </div>
-
+                    
                     <div className="mb-8">
                       <h3 className="text-lg font-medium mb-4">Performance</h3>
+                      
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <Card className="p-4">
                           <div className="flex justify-between items-center">
@@ -623,6 +694,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                             <BarChart className="h-8 w-8 text-muted-foreground opacity-50" />
                           </div>
                         </Card>
+                        
                         <Card className="p-4">
                           <div className="flex justify-between items-center">
                             <div>
@@ -634,6 +706,7 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                             <LineChart className="h-8 w-8 text-muted-foreground opacity-50" />
                           </div>
                         </Card>
+                        
                         <Card className="p-4">
                           <div className="flex justify-between items-center">
                             <div>
@@ -647,33 +720,37 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                         </Card>
                       </div>
                     </div>
-
-                    <h3 className="text-lg font-medium mb-4">Variações</h3>
-                    <div className="space-y-4">
-                      {selectedTest.variations.map((variation) => (
-                        <Card key={variation.id} className="p-4">
-                          <div className="flex flex-col md:flex-row justify-between md:items-center">
-                            <div>
-                              <h4 className="font-medium">{variation.name}</h4>
-                              <div className="flex items-center mt-1 text-sm text-muted-foreground">
-                                <div className="flex items-center mr-4">
-                                  <BarChart className="h-4 w-4 mr-1" />
-                                  <span>{variation.trafficPercentage || 0}% do tráfego</span>
-                                </div>
-                                  
-                                {variation.domain && (
-                                  <div className="flex items-center">
-                                    <Globe className="h-4 w-4 mr-1" />
-                                    <span>{variation.domain}</span>
+                    
+                    <div>
+                      <h3 className="text-lg font-medium mb-4">Variações</h3>
+                      
+                      <div className="space-y-4">
+                        {selectedTest.variations.map((variation) => (
+                          <Card key={variation.id} className="p-4">
+                            <div className="flex flex-col md:flex-row justify-between md:items-center">
+                              <div>
+                                <h4 className="font-medium">{variation.name}</h4>
+                                <div className="flex items-center mt-1 text-sm text-muted-foreground">
+                                  <div className="flex items-center mr-4">
+                                    <BarChart className="h-4 w-4 mr-1" />
+                                    <span>{variation.trafficPercentage || 0}% do tráfego</span>
                                   </div>
-                                )}
+                                  
+                                  {variation.domain && (
+                                    <div className="flex items-center">
+                                      <Globe className="h-4 w-4 mr-1" />
+                                      <span>{variation.domain}</span>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                            <div className="mt-2 md:mt-0 flex flex-wrap gap-2">
-                              <div className="bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full text-xs">
-                                CR: {getConversionRate(selectedTest.id, variation.id)}
-                              </div>
-                              {(variation.content?.checkoutUrl as string) && (
+                              
+                              <div className="mt-2 md:mt-0 flex flex-wrap gap-2">
+                                <div className="bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full text-xs">
+                                  CR: {getConversionRate(selectedTest.id, variation.id)}
+                                </div>
+                                
+                                {(variation.content?.checkoutUrl as string) && (
                                   <a 
                                     href={variation.content?.checkoutUrl as string} 
                                     target="_blank"
@@ -684,10 +761,11 @@ const ABTestManagerPage: React.FC = (): JSX.Element => {
                                     Abrir checkout
                                   </a>
                                 )}
+                              </div>
                             </div>
-                          </div>
-                        </Card>
-                      ))}
+                          </Card>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}

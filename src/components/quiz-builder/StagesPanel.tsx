@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { QuizStage } from '@/types/quizBuilder';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -37,7 +35,7 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
   });
   
   const [popoverOpen, setPopoverOpen] = useState(false);
-  
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -45,7 +43,7 @@ export const StagesPanel: React.FC<StagesPanelProps> = ({
     })
   );
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event) => {
     const { active, over } = event;
     
     if (active.id !== over.id) {

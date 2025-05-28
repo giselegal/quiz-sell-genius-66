@@ -1,10 +1,8 @@
 
-"use client";
-
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { 
   Carousel, 
@@ -91,15 +89,19 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
         }
       };
       img.onerror = () => {
+        loadedCount++;
         console.error(`Failed to load image: ${src}`);
+        if (loadedCount === totalImages) {
+          setCriticalImagesLoaded(true);
+        }
       };
     });
-
+    
     // Timeout para garantir que não ficará travado mesmo se alguma imagem falhar
     const timeout = setTimeout(() => {
       setCriticalImagesLoaded(true);
     }, 3000);
-
+    
     return () => clearTimeout(timeout);
   }, []);
 
@@ -111,7 +113,7 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
       title: "Redirecionando para o checkout",
       description: "Você será redirecionado para a página de pagamento.",
     });
-
+    
     // URL do checkout
     window.location.href = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912";
   };
@@ -212,7 +214,6 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
                 </div>
               )}
             </div>
-            
             <div className="order-1 md:order-2">
               <img
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp"
@@ -363,7 +364,7 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z" clipRule="evenodd" />
                           </svg>
                         </div>
-
+                        
                         <div className="text-center">
                           <p className="text-sm font-medium text-[#aa6b5d] mb-1">
                             Por apenas
@@ -382,24 +383,46 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
                     </div>
                   ) : (
                     <div className="mb-6">
-                      <div className="flex items-baseline gap-1 justify-center">
-                        <span className="text-lg">R$</span>
-                        <span className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#4CAF50]">
-                          39
-                        </span>
-                        <span className="text-xl">,90</span>
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-4">
+                        <div className="text-center">
+                          <p className="text-sm text-gray-500 mb-1">De</p>
+                          <p className="text-xl sm:text-2xl line-through text-[#6B5B4E] opacity-70">
+                            R$ 175,00
+                          </p>
+                        </div>
+                        
+                        <div className="hidden sm:block text-[#4CAF50]">
+                          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        
+                        <div className="text-center">
+                          <p className="text-sm font-medium text-[#aa6b5d] mb-1">
+                            Por apenas
+                          </p>
+                          <div className="flex items-baseline gap-1 justify-center">
+                            <span className="text-lg">R$</span>
+                            <span className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#4CAF50]">
+                              39
+                            </span>
+                            <span className="text-xl">,90</span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-[#8F7A6A] mt-1">pagamento único</p>
+                        </div>
                       </div>
-                      <p className="text-xs sm:text-sm text-[#8F7A6A] mt-1">pagamento único</p>
                     </div>
                   )}
-
+                  
                   {/* Badge de Economia - USANDO VERDE PARA CONVERSÃO */}
                   <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-3 rounded-full bg-[#4CAF50] text-white font-bold mb-8 shadow-lg">
                     <Gift className="w-5 h-5" />
                     <span className="text-sm sm:text-base">💰 Economia de R$ 135,10 (77% OFF)</span>
                   </div>
+                </div>
 
-                  {/* CTA Button - VERDE PARA MÁXIMA CONVERSÃO */}
+                {/* CTA Button - VERDE PARA MÁXIMA CONVERSÃO */}
+                <div className="text-center mb-8">
                   <Button
                     onClick={handleBuyNow}
                     className="w-full sm:w-auto bg-[#4CAF50] hover:bg-[#45a049] text-white font-bold py-4 sm:py-6 px-6 sm:px-12 rounded-xl text-base sm:text-lg shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
@@ -409,40 +432,40 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
                       <span>Transformar Meu Estilo Agora</span>
                     </div>
                   </Button>
-
+                  
                   <p className="text-xs sm:text-sm text-[#aa6b5d] font-medium mt-3 flex items-center justify-center gap-1">
                     <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>Oferta expira quando você sair desta página</span>
                   </p>
+                </div>
 
-                  {/* Elementos de Confiança */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm mb-8">
-                    {[
-                      { icon: <Shield className="w-4 h-4" />, text: 'Pagamento 100% Seguro', color: 'text-[#4CAF50]' },
-                      { icon: <Award className="w-4 h-4" />, text: 'Garantia de 7 dias', color: 'text-[#aa6b5d]' },
-                      { icon: <Zap className="w-4 h-4" />, text: 'Acesso Imediato', color: 'text-[#B89B7A]' },
-                      { icon: <Star className="w-4 h-4" />, text: 'Avaliação 5 estrelas', color: 'text-[#aa6b5d]' }
-                    ].map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-[#432818] text-center sm:text-left"
-                      >
-                        <span className={item.color}>{item.icon}</span>
-                        <span className="text-xs">{item.text}</span>
-                      </div>
-                    ))}
-                  </div>
+                {/* Elementos de Confiança */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm mb-8">
+                  {[
+                    { icon: <Shield className="w-4 h-4" />, text: 'Pagamento 100% Seguro', color: 'text-[#4CAF50]' },
+                    { icon: <Award className="w-4 h-4" />, text: 'Garantia de 7 dias', color: 'text-[#aa6b5d]' },
+                    { icon: <Zap className="w-4 h-4" />, text: 'Acesso Imediato', color: 'text-[#B89B7A]' },
+                    { icon: <Star className="w-4 h-4" />, text: 'Avaliação 5 estrelas', color: 'text-[#aa6b5d]' }
+                  ].map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-[#432818] text-center sm:text-left"
+                    >
+                      <span className={item.color}>{item.icon}</span>
+                      <span className="text-xs">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
 
-                  {/* Métodos de Pagamento */}
-                  <div className="text-center">
-                    <p className="text-sm text-[#8F7A6A] mb-4">Métodos de pagamento aceitos:</p>
-                    <img
-                      src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
-                      alt="Métodos de pagamento"
-                      className="w-full max-w-sm mx-auto rounded-lg shadow-sm"
-                      loading="lazy"
-                    />
-                  </div>
+                {/* Métodos de Pagamento */}
+                <div className="text-center">
+                  <p className="text-sm text-[#8F7A6A] mb-4">Métodos de pagamento aceitos:</p>
+                  <img
+                    src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+                    alt="Métodos de pagamento"
+                    className="w-full max-w-sm mx-auto rounded-lg shadow-sm"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </Card>
@@ -503,7 +526,6 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
           <h2 className="text-xl sm:text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             Bônus Exclusivos Inclusos
           </h2>
-          
           <Carousel className="w-full max-w-4xl mx-auto">
             <CarouselContent>
               {[
@@ -555,7 +577,7 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
         {/* About Author */}
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
+            <div className="order-2 md:order-1">
               <h2 className="text-xl sm:text-2xl font-playfair text-[#aa6b5d] mb-4">
                 Sobre a Especialista
               </h2>
@@ -569,7 +591,7 @@ const ImprovedQuizResultSalesPage: React.FC<ImprovedQuizResultSalesPageProps> = 
                 confiança todos os dias.
               </p>
             </div>
-            <div>
+            <div className="order-1 md:order-2">
               <img
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
                 alt="Foto da Especialista"

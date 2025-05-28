@@ -7,6 +7,7 @@ interface AspectRatioContainerProps {
   minHeight?: string;
   bgColor?: string;
 }
+
 /**
  * AspectRatioContainer - Um componente que mantém uma proporção consistente
  * para evitar mudanças de layout (CLS) durante o carregamento da página

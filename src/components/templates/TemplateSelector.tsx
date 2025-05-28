@@ -1,16 +1,9 @@
 
-"use client";
-
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-
-interface StyleResult {
-  category: string;
-  score: number;
-  percentage: number;
-}
+import { StyleResult } from '@/types/quiz';
 
 interface TemplateSelectorProps {
   primaryStyle: StyleResult;
@@ -21,8 +14,8 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   primaryStyle,
   secondaryStyles
 }) => {
-  const router = useRouter();
-  
+  const navigate = useNavigate();
+
   const templates = [
     {
       id: 'sales-page',
@@ -61,16 +54,15 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                 src={template.image} 
                 alt={template.title} 
                 className="w-full h-full object-cover"
-                loading="lazy"
-                width="400"
-                height="225"
               />
             </div>
             <div className="p-4">
               <h3 className="text-xl font-playfair text-[#432818] mb-2">{template.title}</h3>
               <p className="text-[#8F7A6A] mb-4">{template.description}</p>
               <Button 
-                onClick={() => router.push(template.path)}
+                onClick={() => navigate(template.path, { 
+                  state: { primaryStyle, secondaryStyles } 
+                })}
                 className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
               >
                 Usar este modelo

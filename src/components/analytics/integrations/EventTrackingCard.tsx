@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -19,7 +17,7 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
 }) => {
   const [trackingEnabled, setTrackingEnabled] = useState(() => {
     try {
-      const stored = localStorage.getItem('event_tracking_enabled');
+      const stored = safeLocalStorage.getItem('event_tracking_enabled');
       return stored !== null ? stored === 'true' : initialEnabled;
     } catch (e) {
       return initialEnabled;
@@ -28,38 +26,38 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
   
   const [trackButtons, setTrackButtons] = useState(() => {
     try {
-      const stored = localStorage.getItem('track_buttons');
+      const stored = safeLocalStorage.getItem('track_buttons');
       return stored !== null ? stored === 'true' : true;
     } catch (e) {
       return true;
     }
   });
-
+  
   const [trackLinks, setTrackLinks] = useState(() => {
     try {
-      const stored = localStorage.getItem('track_links');
+      const stored = safeLocalStorage.getItem('track_links');
       return stored !== null ? stored === 'true' : true;
     } catch (e) {
       return true;
     }
   });
-
+  
   const [trackImages, setTrackImages] = useState(() => {
     try {
-      const stored = localStorage.getItem('track_images');
+      const stored = safeLocalStorage.getItem('track_images');
       return stored !== null ? stored === 'true' : false;
     } catch (e) {
       return false;
     }
   });
-
+  
   // Load settings from localStorage
   useEffect(() => {
     try {
-      const storedTrackingEnabled = localStorage.getItem('event_tracking_enabled');
-      const storedTrackButtons = localStorage.getItem('track_buttons');
-      const storedTrackLinks = localStorage.getItem('track_links');
-      const storedTrackImages = localStorage.getItem('track_images');
+      const storedTrackingEnabled = safeLocalStorage.getItem('event_tracking_enabled');
+      const storedTrackButtons = safeLocalStorage.getItem('track_buttons');
+      const storedTrackLinks = safeLocalStorage.getItem('track_links');
+      const storedTrackImages = safeLocalStorage.getItem('track_images');
       
       if (storedTrackingEnabled !== null) setTrackingEnabled(storedTrackingEnabled === 'true');
       if (storedTrackButtons !== null) setTrackButtons(storedTrackButtons === 'true');
@@ -69,13 +67,13 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
       console.error('Error loading event tracking settings:', error);
     }
   }, []);
-
+  
   const handleSaveSettings = () => {
     try {
-      localStorage.setItem('event_tracking_enabled', String(trackingEnabled));
-      localStorage.setItem('track_buttons', String(trackButtons));
-      localStorage.setItem('track_links', String(trackLinks));
-      localStorage.setItem('track_images', String(trackImages));
+      safeLocalStorage.setItem('event_tracking_enabled', String(trackingEnabled));
+      safeLocalStorage.setItem('track_buttons', String(trackButtons));
+      safeLocalStorage.setItem('track_links', String(trackLinks));
+      safeLocalStorage.setItem('track_images', String(trackImages));
       
       toast({
         title: "Configurações de rastreamento salvas",
@@ -90,7 +88,7 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
       });
     }
   };
-
+  
   return (
     <Card className="border-border/40 shadow-sm">
       <CardHeader className="pb-3">

@@ -1,6 +1,4 @@
 
-"use client";
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -100,6 +98,7 @@ export default function QuizFlow() {
       <div 
         className="w-full max-w-md rounded-lg border bg-card p-6 shadow-lg"
         data-lovable-component="quiz-container"
+        data-lovable-editable="true"
       >
         {isLoading ? (
           <div 
@@ -124,23 +123,26 @@ export default function QuizFlow() {
             <div 
               className="mb-6 h-2 w-full overflow-hidden rounded-full bg-muted"
               data-lovable-component="quiz-progress-bar"
+              data-lovable-editable="true"
             >
               <div 
                 className="h-full bg-primary transition-all duration-300 ease-in-out" 
                 style={{ width: `${((currentQuestion + 1) / quizQuestions.length) * 100}%` }}
               ></div>
             </div>
-
+            
             <h2 
               className="mb-6 text-xl font-medium"
               data-lovable-component="quiz-question"
+              data-lovable-editable="true"
             >
               {question.text}
             </h2>
-
+            
             <div 
               className="space-y-3"
               data-lovable-component="quiz-options"
+              data-lovable-editable="true"
             >
               {question.options.map(option => (
                 <button

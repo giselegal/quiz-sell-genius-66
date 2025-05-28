@@ -1,4 +1,13 @@
 {
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
@@ -30,25 +39,14 @@
     "target": "ES2017"
   },
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "next-env.d.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    ".next",
-    "dist",
-    "out",
-    "src/pages_backup",
-    "**/pages_legacy/**/*",
-    "src/pages_backup/**/*",
-    "**/pages_legacy/**/*",
-    "*.backup.*",
-    "**/*.backup.*",
-    "backup/**/*",
-    "**/backup/**/*"
+    "node_modules"
   ]
 }

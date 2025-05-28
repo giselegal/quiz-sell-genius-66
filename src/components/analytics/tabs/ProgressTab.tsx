@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -37,7 +36,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
       const retentionFromStart = userProgressData[0] ? 
         ((item.uniqueUsers / userProgressData[0].uniqueUsers) * 100).toFixed(1) :
         '100.0';
-
+        
       return {
         ...item,
         dropoffRate: parseFloat(dropoffRate),
@@ -45,7 +44,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
       };
     });
   }, [userProgressData]);
-
+  
   // Chart configurations
   const chartConfig: ChartConfig = {
     uniqueUsers: { 
@@ -57,21 +56,22 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
       theme: { light: '#10b981', dark: '#34d399' }
     }
   };
-
+  
   // Color gradient for progress bars
   const getBarColor = (index: number, total: number) => {
     // Generate colors from purple to green
     const hue = 260 - (index / Math.max(1, total - 1) * 100);
     return `hsl(${hue}, 70%, 60%)`;
   };
-
+  
   // Custom tooltip renderer
   const renderTooltipContent = (props: any) => {
     if (!props.active || !props.payload?.[0]) {
       return null;
     }
-
+    
     const data = props.payload[0].payload;
+    
     return (
       <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md">
         <p className="text-[7px] font-medium mb-0.5">Questão {data.questionId}</p>
@@ -83,7 +83,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
       </div>
     );
   };
-
+  
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -210,7 +210,8 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                         <Progress
                           value={item.retentionFromStart}
                           className="h-1.5 w-[40px]"
-                          indicatorClassName="bg-gradient-to-r from-purple-500 to-green-500"
+                          indicatorClassName=""
+                          {...(item.retentionFromStart != null && { style: { '--tw-bg-opacity': '1', backgroundColor: getBarColor(index, dropoffData.length) } as React.CSSProperties })}
                         />
                         <span className="text-xs">{item.retentionFromStart}%</span>
                       </div>

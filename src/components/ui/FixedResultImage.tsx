@@ -1,4 +1,3 @@
-"use client";
 /**
  * FixedResultImage - Componente otimizado para imagens de resultados
  * 
@@ -19,7 +18,10 @@ interface FixedResultImageProps {
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   onLoad?: () => void;
 }
+
+/**
  * Transforma qualquer URL do Cloudinary em uma versão de alta qualidade
+ */
 function getHighQualityUrl(url: string): string {
   if (!url) return url;
   
@@ -27,20 +29,27 @@ function getHighQualityUrl(url: string): string {
   if (!url.includes('cloudinary.com') && !url.includes('res.cloudinary.com')) {
     return url;
   }
+  
   // Dividir a URL para trabalhar com ela
   const parts = url.split('/upload/');
   if (parts.length !== 2) return url;
+  
   const baseUrl = parts[0] + '/upload/';
   let pathAndQuery = parts[1];
+  
   // Remover qualquer parâmetro de blur existente
   pathAndQuery = pathAndQuery.replace(/[,/]e_blur:[0-9]+/g, '');
+  
   // Detectar versão na URL (v12345678)
   const versionMatch = pathAndQuery.match(/^(v\d+)\//);
   let version = '';
   let finalPath = pathAndQuery;
+  
   if (versionMatch) {
     version = versionMatch[1] + '/';
     finalPath = pathAndQuery.substring(version.length);
+  }
+  
   // Parâmetros de alta qualidade para imagens de resultado
   const transforms = [
     'f_auto',         // Formato automático (webp/avif)
@@ -48,9 +57,14 @@ function getHighQualityUrl(url: string): string {
     'dpr_auto',       // Densidade de pixel automática
     'e_sharpen:40'    // Nitidez leve para melhorar qualidade visual
   ].join(',');
+  
   // Montar URL final com alta qualidade
   return `${baseUrl}${version}${transforms}/${finalPath}`;
+}
+
+/**
  * Componente de imagem de alta qualidade para página de resultados
+ */
 const FixedResultImage: React.FC<FixedResultImageProps> = ({
   src,
   alt,
@@ -63,17 +77,21 @@ const FixedResultImage: React.FC<FixedResultImageProps> = ({
   onLoad
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  
   // Obter URL de alta qualidade
   const highQualitySrc = getHighQualityUrl(src);
+  
   // Calcular a proporção para o estilo
   const aspectRatio = height / width;
   const paddingBottom = `${aspectRatio * 100}%`;
+  
   const handleImageLoad = () => {
     setImageLoaded(true);
     if (onLoad) {
       onLoad();
     }
   };
+  
   return (
     <div 
       className={`relative overflow-hidden ${containerClassName}`}
@@ -93,4 +111,5 @@ const FixedResultImage: React.FC<FixedResultImageProps> = ({
     </div>
   );
 };
+
 export default FixedResultImage;

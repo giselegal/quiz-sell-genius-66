@@ -1,12 +1,10 @@
 
-"use client";
-
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useParams } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Shield, Star, Clock, Zap, Award, CheckCircle, ArrowDown } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { trackButtonClick } from '@/utils/analytics';
 
 // Design tokens para consistência
@@ -47,9 +45,9 @@ const designTokens = {
 };
 
 const PreviewQuizOfferPage: React.FC = () => {
-  const router = useRouter();
-  const { styleType } = router.query;
+  const { styleType } = useParams<{ styleType: string }>();
   const [isHovered, setIsHovered] = useState(false);
+  const [countdown, setCountdown] = useState({ hours: 2, minutes: 30, seconds: 45 });
 
   // CTA handler otimizado
   const handleCTAClick = (e: React.MouseEvent) => {
@@ -57,6 +55,7 @@ const PreviewQuizOfferPage: React.FC = () => {
     e.stopPropagation();
     
     trackButtonClick('checkout_button', 'Preview CTA Click', 'preview_page');
+    
     if (window.innerWidth >= 768) {
       window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
     } else {
@@ -106,7 +105,7 @@ const PreviewQuizOfferPage: React.FC = () => {
             >
               <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
               <Star className="w-6 h-6 text-[#B89B7A]" />
-              <div className="w-8 h-px bg-gradient-to-r from-[#B89B7A] via-transparent to-transparent"></div>
+              <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
             </motion.div>
             
             <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: designTokens.colors.textPrimary }}>
@@ -241,7 +240,6 @@ const PreviewQuizOfferPage: React.FC = () => {
                     >
                       💰 Economia de R$ 135,10 (77% OFF)
                     </div>
-                    
                     <p className="text-sm" style={{ color: designTokens.colors.textSecondary }}>
                       ou <strong>5x de R$ 8,83</strong> sem juros
                     </p>
@@ -306,12 +304,61 @@ const PreviewQuizOfferPage: React.FC = () => {
           </Card>
         </motion.div>
 
+        {/* Seção de Benefícios Adicionais */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="grid md:grid-cols-3 gap-6 mb-12"
+        >
+          {[
+            {
+              icon: <Star className="w-8 h-8" />,
+              title: 'Resultado Garantido',
+              description: 'Transformação visível ou seu dinheiro de volta'
+            },
+            {
+              icon: <Zap className="w-8 h-8" />,
+              title: 'Acesso Imediato',
+              description: 'Receba todo o conteúdo na hora, direto no seu email'
+            },
+            {
+              icon: <Award className="w-8 h-8" />,
+              title: 'Suporte Especializado',
+              description: 'Tire dúvidas com nossa equipe de consultoras'
+            }
+          ].map((benefit, index) => (
+            <Card 
+              key={index}
+              className="p-6 text-center border transition-all duration-300 hover:scale-105"
+              style={{ 
+                borderColor: designTokens.colors.border,
+                boxShadow: designTokens.shadows.md 
+              }}
+            >
+              <div 
+                className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: `${designTokens.colors.primary}20` }}
+              >
+                <span style={{ color: designTokens.colors.primary }}>
+                  {benefit.icon}
+                </span>
+              </div>
+              <h3 className="font-bold mb-2">{benefit.title}</h3>
+              <p className="text-sm" style={{ color: designTokens.colors.textSecondary }}>
+                {benefit.description}
+              </p>
+            </Card>
+          ))}
+        </motion.div>
+
         {/* Footer */}
         <div className="text-center py-8 border-t" style={{ borderColor: designTokens.colors.border }}>
           <p className="text-sm" style={{ color: designTokens.colors.textMuted }}>
             Esta é uma visualização da página de resultados do quiz de estilo.
           </p>
         </div>
+
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 import React from 'react';
 import * as Icons from 'lucide-react';
 import { LucideIcon, LucideProps } from 'lucide-react';
+
 // This function returns a React component type that renders the specified Lucide icon
 export const dynamicIconImport = (iconName: string): React.ElementType => {
   // Default to Star if icon not found
@@ -17,10 +18,13 @@ export const dynamicIconImport = (iconName: string): React.ElementType => {
       .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
       .join('');
   };
+  
   const formattedName = formatIconName(iconName);
+  
   // Return the icon component if it exists, otherwise return Star
   return (Icons[formattedName as keyof typeof Icons] as React.ElementType) || Icons.Star;
 };
+
 // Function to get all available icon names
 export const getAvailableIcons = (): string[] => {
   return Object.keys(Icons)
@@ -31,3 +35,4 @@ export const getAvailableIcons = (): string[] => {
         .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
         .toLowerCase();
     });
+};

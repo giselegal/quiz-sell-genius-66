@@ -33,6 +33,8 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
   {
     id: 'strategic-6',
     title: 'Quanto você estaria disposta a investir em um guia completo de estilo personalizado?',
+    type: 'text',
+    multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp',
     options: [
       {

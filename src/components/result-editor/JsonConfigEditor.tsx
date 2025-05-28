@@ -1,12 +1,11 @@
 
-"use client";
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Download, Upload, Save } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
 import { exportProjectAsJson } from '@/utils/exportUtils';
+import { useToast } from '@/components/ui/use-toast';
 
 interface JsonConfigEditorProps {
   config: any;
@@ -19,6 +18,7 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [jsonText, setJsonText] = useState('');
+  const { toast } = useToast();
 
   const handleOpen = () => {
     setJsonText(JSON.stringify(config, null, 2));
@@ -84,7 +84,6 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
         >
           Editar JSON
         </Button>
-        
         <Button
           variant="outline"
           size="sm"
@@ -93,7 +92,6 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
           <Download className="w-4 h-4 mr-2" />
           Exportar
         </Button>
-        
         <Button
           variant="outline"
           size="sm"
@@ -102,7 +100,6 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
           <Upload className="w-4 h-4 mr-2" />
           Importar
         </Button>
-        
         <input
           id="import-json"
           type="file"
@@ -111,7 +108,7 @@ export const JsonConfigEditor: React.FC<JsonConfigEditorProps> = ({
           onChange={handleImport}
         />
       </div>
-      
+
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>

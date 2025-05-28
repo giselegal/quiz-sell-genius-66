@@ -1,6 +1,3 @@
-
-"use client";
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
@@ -44,7 +41,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
           console.error('Error fetching UTM data:', error);
           return;
         }
-
+        
         // Process the data to format it for our charts
         const processedData = processUtmData(data || []);
         setUtmData(processedData);
@@ -57,7 +54,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
     
     fetchUtmData();
   }, [analyticsData]);
-
+  
   // Process the UTM data from Supabase into the format we need
   const processUtmData = (data: any[]): UtmData[] => {
     // If there's no data yet, provide some sample data
@@ -70,10 +67,10 @@ export const UtmTab: React.FC<UtmTabProps> = ({
         { source: 'email', medium: 'email', campaign: 'newsletter', users: 85, conversions: 19, conversionRate: 22.3 }
       ];
     }
-
+    
     // Group the data by source, medium, and campaign
     const groupedData: Record<string, UtmData> = {};
-
+    
     data.forEach(item => {
       const key = `${item.utm_source || 'direct'}-${item.utm_medium || 'none'}-${item.utm_campaign || 'none'}`;
       
@@ -90,7 +87,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
         groupedData[key].users += 1;
       }
     });
-
+    
     // Calculate conversion rates (in a real scenario, you would track actual conversions)
     Object.values(groupedData).forEach(item => {
       // This is just a placeholder - in a real scenario, you would track actual conversions
@@ -99,7 +96,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
       item.conversionRate = randomConversionRate;
       item.conversions = Math.round(item.users * (randomConversionRate / 100));
     });
-
+    
     return Object.values(groupedData);
   };
 
@@ -126,14 +123,15 @@ export const UtmTab: React.FC<UtmTabProps> = ({
       theme: { light: '#8B5CF6', dark: '#A78BFA' }
     }
   };
-
+  
   // Custom tooltip renderer
   const renderTooltipContent = (props: any) => {
     if (!props.active || !props.payload?.[0]) {
       return null;
     }
-
+    
     const data = props.payload[0];
+    
     return (
       <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md">
         <p className="text-[7px] font-medium mb-0.5">
@@ -145,7 +143,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
       </div>
     );
   };
-
+  
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -169,8 +167,7 @@ export const UtmTab: React.FC<UtmTabProps> = ({
                   <Pie
                     data={sourceData}
                     cx="50%"
-                    cy="50%"
-                    labelLine={false}
+                    cy="50%"                    labelLine={false}
                     outerRadius={50}
                     fill="#8884d8"
                     dataKey="value"
@@ -202,14 +199,11 @@ export const UtmTab: React.FC<UtmTabProps> = ({
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis 
                     dataKey="campaign"
-                    stroke="#888888"
                     tick={{ fill: '#888888', fontSize: 7 }}
                     tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <YAxis 
-                    stroke="#888888"
                     tick={{ fill: '#888888', fontSize: 7 }}
-                    tickLine={{ stroke: '#e0e0e0' }}
                   />
                   <Tooltip content={renderTooltipContent} />
                   <Bar 

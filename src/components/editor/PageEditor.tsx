@@ -37,6 +37,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
       
       const newBlocks = arrayMove(blocks, activeIndex, overIndex)
         .map((block, index) => ({ ...block, order: index }));
+      
       onBlocksChange(newBlocks);
       addToHistory(newBlocks);
     }
@@ -53,6 +54,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({
         canUndo={canUndo}
         canRedo={canRedo}
       />
+
       <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
         <EditorContent 
           blocks={blocks}

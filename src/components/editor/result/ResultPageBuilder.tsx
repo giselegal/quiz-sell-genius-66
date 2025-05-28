@@ -25,7 +25,7 @@ export const ResultPageBuilder: React.FC<ResultPageBuilderProps> = ({
           Editor da Página de Resultados
         </h1>
       </div>
-      
+
       <ResizablePanelGroup direction="horizontal" className="flex-1">
         {/* Left Sidebar - Components */}
         <ResizablePanel defaultSize={20} minSize={15} maxSize={25}>

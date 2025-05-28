@@ -11,6 +11,7 @@ export default function ComponentPalette() {
   const handleDragStart = (e: React.DragEvent, type: string) => {
     e.dataTransfer.setData('componentType', type);
   };
+
   return (
     <div className="space-y-4">
       <h3 className="font-medium">Componentes</h3>

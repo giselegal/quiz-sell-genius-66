@@ -1,7 +1,4 @@
 
-"use client";
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -31,10 +28,12 @@ export const EventLogger: React.FC = () => {
 
   useEffect(() => {
     loadEvents();
+
     // Configurar atualização automática a cada 5 segundos
     const interval = setInterval(() => {
       loadEvents();
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -120,7 +119,6 @@ export const EventLogger: React.FC = () => {
             </Button>
           </div>
         </div>
-        
         <div className="flex flex-wrap gap-1 mt-2">
           <Badge 
             variant={filter === null ? "default" : "outline"}

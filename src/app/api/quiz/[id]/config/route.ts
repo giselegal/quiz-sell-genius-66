@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// Configuração para rota dinâmica
-export const dynamic = "force-dynamic";
+// Adicionando configuração necessária para build estático
+export const dynamic = "force-static";
+export const revalidate = 3600; // Revalidar a cada 1 hora
 
 export async function POST(
   request: NextRequest,
@@ -12,11 +13,25 @@ export async function POST(
     const { mode, ...config } = await request.json();
     const { id } = await params;
     const quizId = id;
-    
-    // Por enquanto, apenas atualizamos o updatedAt até o schema ser expandido
+
+    // Determinar qual campo atualizar baseado no modo
     const updateData: any = {
       updatedAt: new Date(),
     };
+
+    switch (mode) {
+      case 'quiz':
+        updateData.quizConfig = config;
+        break;
+      case 'result':
+        updateData.resultConfig = config;
+        break;
+      case 'offer':
+        updateData.offerConfig = config;
+        break;
+      default:
+        updateData.editorConfig = config;
+    }
 
     const updatedQuiz = await prisma.quiz.update({
       where: { id: Number(quizId) },
@@ -37,21 +52,24 @@ export async function POST(
 }
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+    const quizId = id;
     const url = new URL(request.url);
     const mode = url.searchParams.get('mode') || 'quiz';
-    const { id } = await params;
-    
+
     const quiz = await prisma.quiz.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(quizId) },
       select: { 
-        id: true,
+        quizConfig: true,
+        resultConfig: true,
+        offerConfig: true,
+        editorConfig: true,
         title: true,
-        createdAt: true,
-        updatedAt: true
+        description: true 
       },
     });
 
@@ -62,19 +80,32 @@ export async function GET(
       );
     }
 
-    // Por enquanto, retornar configuração vazia até o schema ser atualizado
-    const config = {};
+    // Retornar configuração baseada no modo
+    let config;
+    switch (mode) {
+      case 'quiz':
+        config = quiz.quizConfig;
+        break;
+      case 'result':
+        config = quiz.resultConfig;
+        break;
+      case 'offer':
+        config = quiz.offerConfig;
+        break;
+      default:
+        config = quiz.editorConfig;
+    }
 
-    return NextResponse.json({
-      success: true,
+    return NextResponse.json({ 
+      success: true, 
       config,
       quiz: {
-        id: quiz.id,
-        title: quiz.title
+        title: quiz.title,
+        description: quiz.description
       }
     });
   } catch (error) {
-    console.error('Erro ao buscar configuração:', error);
+    console.error('Erro ao carregar configuração:', error);
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },
       { status: 500 }

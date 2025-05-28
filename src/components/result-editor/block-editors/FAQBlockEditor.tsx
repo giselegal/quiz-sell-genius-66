@@ -67,6 +67,7 @@ const FAQBlockEditor: React.FC<FAQBlockEditorProps> = ({ block, onUpdate }) => {
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor={`question-${index}`}>Pergunta</Label>
               <Input
@@ -75,6 +76,9 @@ const FAQBlockEditor: React.FC<FAQBlockEditorProps> = ({ block, onUpdate }) => {
                 onChange={(e) => handleQuestionChange(index, e.target.value)}
                 placeholder="Digite a pergunta"
               />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor={`answer-${index}`}>Resposta</Label>
               <Textarea
                 id={`answer-${index}`}

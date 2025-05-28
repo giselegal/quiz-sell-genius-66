@@ -74,7 +74,7 @@ const ProductShowcase = () => {
             animate={{ opacity: 0.3 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           />
-          <motion.div
+          <motion.div 
             className="absolute top-4 right-4 bg-amber-100 text-amber-700 rounded-full px-3 py-1 text-xs font-bold"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -86,9 +86,9 @@ const ProductShowcase = () => {
         
         <motion.div 
           className="space-y-7"
-          variants={containerVariants}
+          variants={itemVariants}
         >
-          <motion.div className="space-y-2" variants={itemVariants}>
+          <motion.div className="space-y-2">
             <motion.h2 
               className="text-3xl font-playfair text-[#aa6b5d] relative inline-block"
               variants={itemVariants}

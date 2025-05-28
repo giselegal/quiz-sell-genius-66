@@ -7,6 +7,7 @@ interface AdminHeaderProps {
   showBackButton?: boolean;
   backTo?: string;
 }
+
 export function AdminHeader({ 
   title, 
   showBackButton = true, 

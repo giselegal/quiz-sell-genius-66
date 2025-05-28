@@ -1,7 +1,4 @@
 
-"use client";
-
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,7 +15,7 @@ export const ApiIntegrationsTab: React.FC = () => {
   const [googleAnalyticsEnabled, setGoogleAnalyticsEnabled] = useState(() => {
     return safeLocalStorage.getItem('ga_enabled') !== 'false';
   });
-
+  
   // Webhook states
   const [webhookUrl, setWebhookUrl] = useState(() => {
     return safeLocalStorage.getItem('webhook_url') || '';
@@ -36,7 +33,7 @@ export const ApiIntegrationsTab: React.FC = () => {
       description: "Google Analytics settings have been updated successfully.",
     });
   };
-
+  
   const handleSaveWebhook = () => {
     safeLocalStorage.setItem('webhook_url', webhookUrl);
     safeLocalStorage.setItem('webhook_enabled', String(webhookEnabled));
@@ -46,7 +43,7 @@ export const ApiIntegrationsTab: React.FC = () => {
       description: "Webhook settings have been updated successfully.",
     });
   };
-
+  
   const handleTestConnection = (service: string) => {
     toast({
       title: `Testing ${service} connection`,
@@ -86,7 +83,7 @@ export const ApiIntegrationsTab: React.FC = () => {
             />
             <Label htmlFor="ga-tracking">Enable Google Analytics tracking</Label>
           </div>
-
+          
           <div className="flex justify-between">
             <Button 
               variant="outline"
@@ -134,7 +131,7 @@ export const ApiIntegrationsTab: React.FC = () => {
             />
             <Label htmlFor="webhook-enabled">Enable webhook notifications</Label>
           </div>
-
+          
           <div className="flex justify-between">
             <Button 
               variant="outline"
@@ -152,7 +149,7 @@ export const ApiIntegrationsTab: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-
+      
       <Card>
         <CardHeader>
           <CardTitle>API Tokens</CardTitle>

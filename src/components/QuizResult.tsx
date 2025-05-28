@@ -1,6 +1,5 @@
-"use client";
 import React, { useEffect, useState } from 'react';
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
+import { safeLocalStorage } from "@/utils/localStorage";
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
 import { ContentContainer } from './shared/ContentContainer';
@@ -11,6 +10,7 @@ import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
 import BeforeAfterTransformation from './result/BeforeAfterTransformation4';
 import { CheckCircle } from 'lucide-react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { cn } from '@/lib/utils';
@@ -23,6 +23,7 @@ interface QuizResultProps {
   previewMode?: boolean;
   onReset?: () => void;
 }
+
 const QuizResult: React.FC<QuizResultProps> = ({
   primaryStyle,
   secondaryStyles,
@@ -43,7 +44,9 @@ const QuizResult: React.FC<QuizResultProps> = ({
       }
     }
   }, [user]);
+
   const [config, setConfig] = useState<ResultPageConfig | null>(null);
+  
   useEffect(() => {
     try {
       if (externalConfig) {
@@ -51,6 +54,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
       } else {
         const configKey = `quiz_result_config_${primaryStyle.category}`;
         const savedConfig = safeLocalStorage.getItem(configKey);
+        
         if (savedConfig) {
           setConfig(JSON.parse(savedConfig));
           console.log("Loaded config from localStorage:", configKey);
@@ -64,12 +68,15 @@ const QuizResult: React.FC<QuizResultProps> = ({
       setConfig(null);
     }
   }, [primaryStyle.category, externalConfig]);
+
   if (!primaryStyle || !secondaryStyles) {
     console.error('Missing required props:', { primaryStyle, secondaryStyles });
     return <div>Erro ao carregar os resultados. Por favor, refaça o quiz.</div>;
   }
+
   // Build custom title with user name
   const customTitle = `Olá, ${userName}, seu Estilo Predominante é:`;
+
   return (
     <div 
       className={cn(
@@ -83,6 +90,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
     >
       <ContentContainer size="md">
         <ResultHeader userName={userName} customTitle={customTitle} />
+        
         <div className="space-y-8">
           <PrimaryStyleCard primaryStyle={primaryStyle} />
           <SecondaryStylesSection secondaryStyles={secondaryStyles} />
@@ -99,4 +107,5 @@ const QuizResult: React.FC<QuizResultProps> = ({
     </div>
   );
 };
+
 export default QuizResult;

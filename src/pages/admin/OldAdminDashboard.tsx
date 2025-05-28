@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -29,11 +28,13 @@ const ABTestManagerPage = React.lazy(() => import('../ABTestManagerPage'));
 const ResultPagePrototype = React.lazy(() => import('../ResultPagePrototype'));
 const EnhancedResultPageEditorPage = React.lazy(() => import('../EnhancedResultPageEditorPage'));
 const QuizOfferPageVisualEditor = React.lazy(() => import('@/components/visual-editor/QuizOfferPageVisualEditor'));
+
 const OldAdminDashboard = () => {
   const { user } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState('dashboard');
+
   // Determinar qual aba está ativa baseado na URL
   React.useEffect(() => {
     const path = location.pathname;
@@ -46,11 +47,13 @@ const OldAdminDashboard = () => {
     else if (path.includes('/prototype')) setActiveTab('prototype');
     else setActiveTab('dashboard');
   }, [location.pathname]);
+
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     // Para o dashboard antigo, não precisamos navegar para outras rotas
     // As abas são controladas internamente pelo componente
   };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F7]">
       {/* Header */}
@@ -69,6 +72,7 @@ const OldAdminDashboard = () => {
               <Button variant="outline" size="sm">
                 Novo Dashboard
               </Button>
+            </Link>
             {user && (
               <div className="flex items-center gap-3">
                 <div className="text-sm text-[#8F7A6A]">
@@ -76,10 +80,13 @@ const OldAdminDashboard = () => {
                 </div>
                 <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center text-sm font-medium text-purple-700">
                   {user.userName?.[0]?.toUpperCase() || 'U'}
+                </div>
               </div>
             )}
+          </div>
         </div>
       </header>
+
       {/* Main Content */}
       <main className="flex-grow">
         <div className="container mx-auto p-6">
@@ -94,22 +101,29 @@ const OldAdminDashboard = () => {
               <TabsTrigger value="editor" className="flex items-center gap-2">
                 <Edit className="w-4 h-4" />
                 Editor Visual
+              </TabsTrigger>
               <TabsTrigger value="offer-editor" className="flex items-center gap-2">
                 <Layout className="w-4 h-4" />
                 Oferta
+              </TabsTrigger>
               <TabsTrigger value="analytics" className="flex items-center gap-2">
                 <BarChart className="w-4 h-4" />
                 Analytics
+              </TabsTrigger>
               <TabsTrigger value="ab-test" className="flex items-center gap-2">
                 <TestTube className="w-4 h-4" />
                 A/B Test
+              </TabsTrigger>
               <TabsTrigger value="prototype" className="flex items-center gap-2">
                 <Palette className="w-4 h-4" />
                 Protótipo
+              </TabsTrigger>
               <TabsTrigger value="settings" className="flex items-center gap-2">
                 <Settings className="w-4 h-4" />
                 Config
+              </TabsTrigger>
             </TabsList>
+
             {/* Dashboard Principal */}
             <TabsContent value="dashboard" className="space-y-6">
               <div className="mb-6">
@@ -128,8 +142,12 @@ const OldAdminDashboard = () => {
                     Esta é a interface principal do dashboard. Para uma experiência alternativa, 
                     <Link href="/admin/new" className="underline font-medium ml-1">acesse o novo dashboard</Link>.
                   </p>
+                </div>
+              </div>
+
               {/* Cards de acesso rápido */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                
                 <DashboardCard 
                   title="Editor Unificado"
                   description="Edite quiz, páginas de resultados e vendas"
@@ -137,31 +155,47 @@ const OldAdminDashboard = () => {
                   onClick={() => handleTabChange('editor')}
                   buttonText="Abrir Editor"
                 />
+                
+                <DashboardCard 
                   title="Editor de Oferta"
                   description="Customize a página de oferta do quiz"
                   icon={<Layout className="w-6 h-6" />}
                   onClick={() => handleTabChange('offer-editor')}
                   buttonText="Editar Oferta"
+                />
+                
+                <DashboardCard 
                   title="Analytics"
                   description="Visualize métricas e performance"
                   icon={<BarChart className="w-6 h-6" />}
                   onClick={() => handleTabChange('analytics')}
                   buttonText="Ver Analytics"
+                />
+                
+                <DashboardCard 
                   title="Teste A/B"
                   description="Configure e monitore testes A/B"
                   icon={<TestTube className="w-6 h-6" />}
                   onClick={() => handleTabChange('ab-test')}
                   buttonText="Gerenciar Testes"
+                />
+                
+                <DashboardCard 
                   title="Protótipo"
                   description="Visualize protótipos e testes"
                   icon={<Palette className="w-6 h-6" />}
                   onClick={() => handleTabChange('prototype')}
                   buttonText="Ver Protótipo"
+                />
+                
+                <DashboardCard 
                   title="Configurações"
                   description="Ajustes gerais do sistema"
                   icon={<Settings className="w-6 h-6" />}
                   onClick={() => handleTabChange('settings')}
                   buttonText="Configurar"
+                />
+                
                 <DashboardCard
                   title="Ver Resultados"
                   description="Acesse a página de resultados"
@@ -169,11 +203,18 @@ const OldAdminDashboard = () => {
                   linkTo="/resultado"
                   buttonText="Ver Página"
                   isExternal
+                />
+                
+                <DashboardCard
                   title="Quiz Principal"
                   description="Acesse o quiz principal"
                   icon={<FileText className="w-6 h-6" />}
                   linkTo="/"
                   buttonText="Fazer Quiz"
+                  isExternal
+                />
+              </div>
+
               {/* Estatísticas rápidas */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card>
@@ -187,41 +228,77 @@ const OldAdminDashboard = () => {
                     </div>
                   </CardContent>
                 </Card>
+                
+                <Card>
+                  <CardHeader>
                     <CardTitle>Último Acesso</CardTitle>
+                  </CardHeader>
+                  <CardContent>
                     <p className="text-sm text-[#8F7A6A]">Agora</p>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
                     <CardTitle>Versão</CardTitle>
+                  </CardHeader>
+                  <CardContent>
                     <p className="text-sm text-[#8F7A6A]">v2.1.0</p>
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
+
             {/* Outras abas carregam os componentes específicos */}
             <TabsContent value="editor">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando editor...</div>}>
                 <EnhancedResultPageEditorPage />
               </React.Suspense>
+            </TabsContent>
+
             <TabsContent value="offer-editor">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando editor de oferta...</div>}>
                 <QuizOfferPageVisualEditor />
+              </React.Suspense>
+            </TabsContent>
+
             <TabsContent value="analytics">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando analytics...</div>}>
                 <AnalyticsPage />
+              </React.Suspense>
+            </TabsContent>
+
             <TabsContent value="ab-test">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando testes A/B...</div>}>
                 <ABTestPage />
+              </React.Suspense>
+            </TabsContent>
+
             <TabsContent value="prototype">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando protótipo...</div>}>
                 <ResultPagePrototype />
+              </React.Suspense>
+            </TabsContent>
+
             <TabsContent value="settings">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando configurações...</div>}>
                 <SettingsPage />
+              </React.Suspense>
+            </TabsContent>
           </Tabs>
+        </div>
       </main>
+
       {/* Footer */}
       <footer className="bg-white border-t p-3 text-center text-sm text-[#8F7A6A]">
         <div className="container mx-auto">
           Admin Dashboard © {new Date().getFullYear()} - Central de controle administrativo
+        </div>
       </footer>
     </div>
   );
 };
+
 interface DashboardCardProps {
   title: string;
   description: string;
@@ -231,6 +308,7 @@ interface DashboardCardProps {
   linkTo?: string;
   isExternal?: boolean;
 }
+
 const DashboardCard: React.FC<DashboardCardProps> = ({ 
   title, 
   description, 
@@ -246,6 +324,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         <div className="flex items-center gap-3 mb-2">
           <div className="w-10 h-10 bg-[#B89B7A]/10 rounded-lg flex items-center justify-center text-[#B89B7A]">
             {icon}
+          </div>
+        </div>
         <CardTitle className="text-lg font-medium text-[#432818]">{title}</CardTitle>
         <CardDescription className="text-[#8F7A6A]">{description}</CardDescription>
       </CardHeader>
@@ -259,6 +339,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         </Button>
       </CardContent>
     </Card>
+  );
+
   if (linkTo && isExternal) {
     return (
       <Link href={linkTo} target={linkTo.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer">
@@ -266,5 +348,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
       </Link>
     );
   }
+
   return cardContent;
+};
+
 export default OldAdminDashboard;

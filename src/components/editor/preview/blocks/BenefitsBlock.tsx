@@ -1,10 +1,12 @@
 
 import React from 'react';
 import { EditableContent } from '@/types/editor';
+
 interface BenefitsBlockProps {
   content: EditableContent;
   onClick: () => void;
 }
+
 export const BenefitsBlock: React.FC<BenefitsBlockProps> = ({ content, onClick }) => {
   return (
     <div className="p-4 border-2 border-dashed border-[#B89B7A]/40 rounded-lg cursor-pointer hover:bg-[#FAF9F7]" onClick={onClick}>

@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Block } from '@/types/editor';
-import StyleEditor from '../StyleEditor';
+import StyleEditor from '../style-editors/StyleEditor';
 
 interface TwoColumnBlockEditorProps {
   block: Block;
@@ -19,7 +19,7 @@ const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUp
   // Ensure leftColumn and rightColumn exist and have style property
   const leftColumn = content.leftColumn || { content: '', width: '50%', style: {} };
   const rightColumn = content.rightColumn || { content: '', width: '50%', style: {} };
-
+  
   const handleLeftColumnUpdate = (leftColumnUpdate: any) => {
     onUpdate({
       ...content,
@@ -29,7 +29,7 @@ const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUp
       }
     });
   };
-
+  
   const handleRightColumnUpdate = (rightColumnUpdate: any) => {
     onUpdate({
       ...content,
@@ -39,7 +39,7 @@ const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUp
       }
     });
   };
-
+  
   return (
     <div className="space-y-6">
       <Card className="p-4">
@@ -71,7 +71,7 @@ const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUp
               />
               <p className="text-xs text-muted-foreground">Em telas pequenas, as colunas serão empilhadas</p>
             </div>
-
+            
             <div className="space-y-2">
               <Label htmlFor="rightColumnWidth">Largura da Coluna Direita</Label>
               <Input
@@ -82,7 +82,7 @@ const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUp
               />
             </div>
           </TabsContent>
-
+          
           <TabsContent value="left" className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="leftContent">Conteúdo da Coluna Esquerda</Label>
@@ -95,7 +95,7 @@ const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUp
               />
               <p className="text-xs text-muted-foreground">Você pode adicionar HTML básico como &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, etc.</p>
             </div>
-
+            
             <div className="space-y-2">
               <Label>Estilo da Coluna Esquerda</Label>
               <StyleEditor
@@ -104,7 +104,7 @@ const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUp
               />
             </div>
           </TabsContent>
-
+          
           <TabsContent value="right" className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="rightContent">Conteúdo da Coluna Direita</Label>
@@ -117,7 +117,7 @@ const TwoColumnBlockEditor: React.FC<TwoColumnBlockEditorProps> = ({ block, onUp
               />
               <p className="text-xs text-muted-foreground">Você pode adicionar HTML básico como &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, etc.</p>
             </div>
-
+            
             <div className="space-y-2">
               <Label>Estilo da Coluna Direita</Label>
               <StyleEditor

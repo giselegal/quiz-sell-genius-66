@@ -1,5 +1,3 @@
-
-"use client";
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -25,7 +23,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
 }) => {
   const [fbPixelId, setFbPixelId] = useState(() => {
     try {
-      return localStorage.getItem('fb_pixel_id') || initialId || '1311550759901086';
+      return safeLocalStorage.getItem('fb_pixel_id') || initialId || '1311550759901086';
     } catch (e) {
       return initialId || '1311550759901086';
     }
@@ -33,16 +31,16 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   
   const [fbPixelEnabled, setFbPixelEnabled] = useState(() => {
     try {
-      const stored = localStorage.getItem('tracking_enabled');
+      const stored = safeLocalStorage.getItem('tracking_enabled');
       return stored !== null ? stored === 'true' : initialEnabled;
     } catch (e) {
       return initialEnabled;
     }
   });
-
+  
   const [fbAccessToken, setFbAccessToken] = useState(() => {
     try {
-      return localStorage.getItem('fb_access_token') || '';
+      return safeLocalStorage.getItem('fb_access_token') || '';
     } catch (e) {
       return '';
     }
@@ -50,7 +48,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
 
   const [trackedEvents, setTrackedEvents] = useState(() => {
     try {
-      const stored = localStorage.getItem('fb_tracked_events');
+      const stored = safeLocalStorage.getItem('fb_tracked_events');
       return stored ? JSON.parse(stored) : {
         quiz_start: true,
         quiz_answer: true,
@@ -72,16 +70,16 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
       };
     }
   });
-
+  
   const [isEventsOpen, setIsEventsOpen] = useState(false);
-
+  
   // Load settings from localStorage
   useEffect(() => {
     try {
-      const storedId = localStorage.getItem('fb_pixel_id');
-      const storedEnabled = localStorage.getItem('tracking_enabled');
-      const storedToken = localStorage.getItem('fb_access_token');
-      const storedEvents = localStorage.getItem('fb_tracked_events');
+      const storedId = safeLocalStorage.getItem('fb_pixel_id');
+      const storedEnabled = safeLocalStorage.getItem('tracking_enabled');
+      const storedToken = safeLocalStorage.getItem('fb_access_token');
+      const storedEvents = safeLocalStorage.getItem('fb_tracked_events');
       
       if (storedId) setFbPixelId(storedId);
       if (storedEnabled !== null) setFbPixelEnabled(storedEnabled === 'true');
@@ -94,10 +92,10 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
 
   const handleSaveFacebookPixel = () => {
     try {
-      localStorage.setItem('fb_pixel_id', fbPixelId);
-      localStorage.setItem('tracking_enabled', String(fbPixelEnabled));
-      localStorage.setItem('fb_access_token', fbAccessToken);
-      localStorage.setItem('fb_tracked_events', JSON.stringify(trackedEvents));
+      safeLocalStorage.setItem('fb_pixel_id', fbPixelId);
+      safeLocalStorage.setItem('tracking_enabled', String(fbPixelEnabled));
+      safeLocalStorage.setItem('fb_access_token', fbAccessToken);
+      safeLocalStorage.setItem('fb_tracked_events', JSON.stringify(trackedEvents));
       
       toast({
         title: "Configurações do Facebook Pixel salvas",
@@ -120,6 +118,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
     });
     
     const result = testFunction ? testFunction() : false;
+    
     setTimeout(() => {
       toast({
         title: result ? "Teste bem-sucedido" : "Teste falhou",
@@ -157,7 +156,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
     sale: "Disparado quando uma venda é concluída",
     button_click: "Disparado quando o usuário clica em botões importantes"
   };
-
+  
   return (
     <div className="space-y-4">
       <Card className="border-border/40 shadow-sm">
@@ -201,7 +200,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
               Necessário para rastreamento avançado de conversões
             </p>
           </div>
-
+          
           <div className="flex items-center space-x-2 pt-1">
             <Switch 
               id="fb-tracking"
@@ -221,23 +220,118 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
               <div className="text-xs text-muted-foreground mb-2">
                 Selecione quais eventos serão enviados para o Facebook Pixel:
               </div>
-              {Object.entries(eventLabels).map(([eventKey, eventLabel]) => (
-                <div key={eventKey} className="bg-muted/30 p-2 rounded-md">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <Switch 
-                      id={`event-${eventKey}`}
-                      checked={trackedEvents[eventKey] || false}
-                      onCheckedChange={() => handleEventToggle(eventKey)}
-                      className="data-[state=checked]:bg-blue-600"
-                    />
-                    <Label htmlFor={`event-${eventKey}`} className="text-xs font-medium">{eventLabel}</Label>
-                    <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions[eventKey]} />
-                  </div>
-                  <p className="text-[10px] text-muted-foreground pl-6">
-                    {eventDescriptions[eventKey]}
-                  </p>
+              <div className="bg-muted/30 p-2 rounded-md">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Switch 
+                    id={`event-quiz_start`}
+                    checked={trackedEvents.quiz_start || false}
+                    onCheckedChange={() => handleEventToggle('quiz_start')}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                  <Label htmlFor={`event-quiz_start`} className="text-xs font-medium">Início do Quiz (QuizStart)</Label>
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.quiz_start} />
                 </div>
-              ))}
+                <p className="text-[10px] text-muted-foreground pl-6">
+                  Ocorre quando o usuário clica em &ldquo;Começar&rdquo; na tela inicial
+                </p>
+              </div>
+              
+              <div className="bg-muted/30 p-2 rounded-md">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Switch 
+                    id={`event-quiz_answer`}
+                    checked={trackedEvents.quiz_answer || false}
+                    onCheckedChange={() => handleEventToggle('quiz_answer')}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                  <Label htmlFor={`event-quiz_answer`} className="text-xs font-medium">Respostas do Quiz (QuizAnswer)</Label>
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.quiz_answer} />
+                </div>
+                <p className="text-[10px] text-muted-foreground pl-6">
+                  Ocorre a cada resposta do usuário em uma questão
+                </p>
+              </div>
+              
+              <div className="bg-muted/30 p-2 rounded-md">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Switch 
+                    id={`event-quiz_complete`}
+                    checked={trackedEvents.quiz_complete || false}
+                    onCheckedChange={() => handleEventToggle('quiz_complete')}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                  <Label htmlFor={`event-quiz_complete`} className="text-xs font-medium">Conclusão do Quiz (QuizComplete)</Label>
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.quiz_complete} />
+                </div>
+                <p className="text-[10px] text-muted-foreground pl-6">
+                  Ocorre quando o usuário termina todas as perguntas do quiz
+                </p>
+              </div>
+              
+              <div className="bg-muted/30 p-2 rounded-md">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Switch 
+                    id={`event-result_view`}
+                    checked={trackedEvents.result_view || false}
+                    onCheckedChange={() => handleEventToggle('result_view')}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                  <Label htmlFor={`event-result_view`} className="text-xs font-medium">Visualização de Resultado (ResultView)</Label>
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.result_view} />
+                </div>
+                <p className="text-[10px] text-muted-foreground pl-6">
+                  Ocorre quando o usuário visualiza a página de resultado
+                </p>
+              </div>
+              
+              <div className="bg-muted/30 p-2 rounded-md">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Switch 
+                    id={`event-lead_generated`}
+                    checked={trackedEvents.lead_generated || false}
+                    onCheckedChange={() => handleEventToggle('lead_generated')}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                  <Label htmlFor={`event-lead_generated`} className="text-xs font-medium">Captura de Lead (Lead)</Label>
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.lead_generated} />
+                </div>
+                <p className="text-[10px] text-muted-foreground pl-6">
+                  Ocorre quando o usuário fornece seu endereço de email
+                </p>
+              </div>
+              
+              <div className="bg-muted/30 p-2 rounded-md">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Switch 
+                    id={`event-sale`}
+                    checked={trackedEvents.sale || false}
+                    onCheckedChange={() => handleEventToggle('sale')}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                  <Label htmlFor={`event-sale`} className="text-xs font-medium">Vendas (Purchase)</Label>
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.sale} />
+                </div>
+                <p className="text-[10px] text-muted-foreground pl-6">
+                  Ocorre quando uma venda é concluída com sucesso
+                </p>
+              </div>
+              
+              <div className="bg-muted/30 p-2 rounded-md">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Switch 
+                    id={`event-button_click`}
+                    checked={trackedEvents.button_click || false}
+                    onCheckedChange={() => handleEventToggle('button_click')}
+                    className="data-[state=checked]:bg-blue-600"
+                  />
+                  <Label htmlFor={`event-button_click`} className="text-xs font-medium">Cliques em Botões (ButtonClick)</Label>
+                  <Info className="h-3 w-3 text-muted-foreground cursor-help" aria-label={eventDescriptions.button_click} />
+                </div>
+                <p className="text-[10px] text-muted-foreground pl-6">
+                  Ocorre quando o usuário clica em botões importantes (ex: checkout)
+                </p>
+              </div>
+              
               <div className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
                 <Info className="h-3.5 w-3.5" />
                 <span>Acesse "Log de Eventos" para visualizar todos os eventos enviados</span>
@@ -254,6 +348,7 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
           </Button>
         </CardFooter>
       </Card>
+      
       <EventTrackingCard />
     </div>
   );

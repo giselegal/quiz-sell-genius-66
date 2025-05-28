@@ -4,11 +4,14 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Edit, Eye, BarChart3, Copy, Trash2 } from 'lucide-react';
+
 // Importando configuração estática
 export { dynamic } from './static';
+
 export default function QuizDetailPage() {
   const params = useParams();
   const quizId = params?.id;
+
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
@@ -22,6 +25,7 @@ export default function QuizDetailPage() {
           <p className="text-[#B89B7A]">Detalhes e configurações do quiz</p>
         </div>
       </div>
+
       <div className="text-center py-12">
         <h2 className="text-xl font-semibold text-[#432818] mb-2">
           Página em Desenvolvimento

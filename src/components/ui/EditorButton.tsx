@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from './button';
 import { Edit } from 'lucide-react';
+
 const EditorButton: React.FC = () => {
   return (
     <Link href="/admin/editor?tab=result">
@@ -13,4 +14,5 @@ const EditorButton: React.FC = () => {
     </Link>
   );
 };
+
 export default EditorButton;

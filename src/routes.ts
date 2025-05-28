@@ -20,6 +20,7 @@ export const ROUTES = {
     COMPETITIVE_ADVANTAGE: '/admin/competitive-advantage'
   }
 } as const;
+
 // Validador de rotas para garantir consistência
 export function isValidRoute(path: string): boolean {
   const allRoutes = [
@@ -34,12 +35,16 @@ export function isValidRoute(path: string): boolean {
     ROUTES.ADMIN.CAPACITY,
     ROUTES.ADMIN.COMPETITIVE_ADVANTAGE
   ];
+  
   return allRoutes.includes(path) || path.startsWith('/admin/');
 }
+
 // Breadcrumbs para navegação
 export function getBreadcrumbs(currentPath: string) {
   const breadcrumbs = [
     { label: 'Home', path: ROUTES.ADMIN.ROOT }
+  ];
+
   if (currentPath.startsWith('/admin/')) {
     const pathSegments = currentPath.split('/').filter(Boolean);
     
@@ -49,16 +54,24 @@ export function getBreadcrumbs(currentPath: string) {
         break;
       case 'ab-testing':
         breadcrumbs.push({ label: 'Testes A/B', path: ROUTES.ADMIN.AB_TESTING });
+        break;
       case 'utm':
         breadcrumbs.push({ label: 'UTM', path: ROUTES.ADMIN.UTM });
+        break;
       case 'integrations':
         breadcrumbs.push({ label: 'Integrações', path: '/admin/integrations' });
         if (pathSegments[2] === 'hotmart') {
           breadcrumbs.push({ label: 'Hotmart', path: ROUTES.ADMIN.INTEGRATIONS.HOTMART });
         }
+        break;
       case 'capacity':
         breadcrumbs.push({ label: 'Capacidade', path: ROUTES.ADMIN.CAPACITY });
+        break;
       case 'competitive-advantage':
         breadcrumbs.push({ label: 'Diferenciais', path: ROUTES.ADMIN.COMPETITIVE_ADVANTAGE });
+        break;
     }
+  }
+
   return breadcrumbs;
+}

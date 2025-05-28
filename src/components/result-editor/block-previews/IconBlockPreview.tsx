@@ -37,9 +37,9 @@ const IconBlockPreview: React.FC<IconBlockPreviewProps> = ({ content }) => {
     justifyContent: 'center',
     gap: '0.5rem'
   };
-  
-  const sizeInPixels = parseInt(size) || 24;
 
+  const sizeInPixels = parseInt(size) || 24;
+  
   return (
     <div className="w-full" style={containerStyle as React.CSSProperties}>
       <div className="flex items-center justify-center">

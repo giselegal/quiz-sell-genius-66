@@ -55,7 +55,7 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({
             <h3 className="text-xl font-medium">{component.data.question || 'Pergunta não definida'}</h3>
             {(component.data.options && component.data.options.length > 0) ? (
               <div className="space-y-2">
-                {component.data.options.map((option: string, index: number) => (
+                {component.data.options.map((option, index) => (
                   <div key={index} className="p-3 border rounded hover:bg-gray-50 cursor-pointer">
                     {option}
                   </div>
@@ -71,40 +71,36 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         
       case 'multipleChoice':
         return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-medium">{component.data.question || 'Pergunta de múltipla escolha'}</h3>
-            <div className="space-y-2">
-              {component.data.options ? 
-                component.data.options.map((option: string, index: number) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <input type="checkbox" id={`opt-${component.id}-${index}`} disabled={isPreviewing} />
-                    <label htmlFor={`opt-${component.id}-${index}`}>{option}</label>
-                  </div>
-                )) :
-                <div className="text-gray-500">Opções não definidas</div>
-              }
-            </div>
+          <div className="space-y-2">
+            {(component.data.options && component.data.options.length > 0) ? (
+              component.data.options.map((option, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <input type="checkbox" id={`opt-${component.id}-${index}`} disabled={isPreviewing} />
+                  <label htmlFor={`opt-${component.id}-${index}`}>{option}</label>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500">Opções não definidas</div>
+            )}
           </div>
         );
       
       case 'singleChoice':
         return (
-          <div className="space-y-4">
-            <h3 className="text-xl font-medium">{component.data.question || 'Pergunta de escolha única'}</h3>
-            <div className="space-y-2">
-              {component.data.options ? 
-                component.data.options.map((option: string, index: number) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <input type="radio" name={`opt-${component.id}`} id={`opt-${component.id}-${index}`} disabled={isPreviewing} />
-                    <label htmlFor={`opt-${component.id}-${index}`}>{option}</label>
-                  </div>
-                )) :
-                <div className="text-gray-500">Opções não definidas</div>
-              }
-            </div>
+          <div className="space-y-2">
+            {(component.data.options && component.data.options.length > 0) ? (
+              component.data.options.map((option, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <input type="radio" name={`opt-${component.id}`} id={`opt-${component.id}-${index}`} disabled={isPreviewing} />
+                  <label htmlFor={`opt-${component.id}-${index}`}>{option}</label>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500">Opções não definidas</div>
+            )}
           </div>
         );
-      
+        
       default:
         return <div>Componente de tipo desconhecido: {component.type}</div>;
     }

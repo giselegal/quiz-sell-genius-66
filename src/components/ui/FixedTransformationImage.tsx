@@ -1,6 +1,7 @@
 
 import React from 'react';
 import OptimizedImageV2 from './optimized-image-v2';
+
 interface FixedTransformationImageProps {
   src: string;
   alt: string;
@@ -9,6 +10,7 @@ interface FixedTransformationImageProps {
   className?: string;
   priority?: boolean;
 }
+
 /**
  * FixedTransformationImage - Componente específico para exibição de imagens de transformação
  * com configurações já otimizadas para esse caso de uso

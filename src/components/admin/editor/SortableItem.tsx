@@ -1,5 +1,3 @@
-
-import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '../../ui/button';
@@ -63,7 +61,7 @@ export function SortableItem({
         <span className="text-xs text-gray-500 capitalize px-2">
           {component.type}
         </span>
-
+        
         <Button
           variant="ghost"
           size="sm"
@@ -75,7 +73,7 @@ export function SortableItem({
         >
           <Copy className="h-3 w-3" />
         </Button>
-
+        
         <Button
           variant="ghost"
           size="sm"

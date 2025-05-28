@@ -23,30 +23,24 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuRadioGroup
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
+
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
   const navigation = [
     {
       name: 'Dashboard',
@@ -58,47 +52,48 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       name: 'Quizzes',
       href: '/admin/quizzes',
       icon: FileText,
-      current: pathname?.startsWith('/admin/quizzes') || false
+      current: pathname.startsWith('/admin/quizzes')
     },
     {
       name: 'Editor Visual',
       href: '/admin/editor',
       icon: Palette,
-      current: pathname?.startsWith('/admin/editor') || false,
+      current: pathname.startsWith('/admin/editor'),
       badge: 'NOVO'
     },
     {
       name: 'Pixels & Tracking',
       href: '/admin/tracking',
       icon: Code,
-      current: pathname?.startsWith('/admin/tracking') || false,
+      current: pathname.startsWith('/admin/tracking'),
       badge: 'PRO'
     },
     {
       name: 'Conversões',
       href: '/admin/conversions',
       icon: TrendingUp,
-      current: pathname?.startsWith('/admin/conversions') || false
+      current: pathname.startsWith('/admin/conversions')
     },
     {
       name: 'Analytics',
       href: '/admin/analytics',
       icon: BarChart3,
-      current: pathname?.startsWith('/admin/analytics') || false
+      current: pathname.startsWith('/admin/analytics')
     },
     {
       name: 'Leads',
       href: '/admin/leads',
       icon: Users,
-      current: pathname?.startsWith('/admin/leads') || false
+      current: pathname.startsWith('/admin/leads')
     },
     {
       name: 'Configurações',
       href: '/admin/settings',
       icon: Settings,
-      current: pathname?.startsWith('/admin/settings') || false
+      current: pathname.startsWith('/admin/settings')
     }
   ];
+
   return (
     <div className="min-h-screen bg-[#F5F2E9]">
       {/* Sidebar */}
@@ -125,6 +120,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Menu className="w-4 h-4" />
           </Button>
         </div>
+
         {/* Navigation */}
         <nav className="mt-6 px-3">
           <ul className="space-y-2">
@@ -165,6 +161,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             })}
           </ul>
         </nav>
+
         {/* Quick Actions */}
         {sidebarOpen && (
           <div className="absolute bottom-6 left-3 right-3">
@@ -185,6 +182,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         )}
       </div>
+
       {/* Main Content */}
       <div className={`${sidebarOpen ? 'ml-64' : 'ml-20'} transition-all duration-300`}>
         {/* Top Bar */}
@@ -198,6 +196,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 className="pl-10 bg-[#F5F2E9]/50 border-[#D4C4A0]/30 focus:border-[#B89B7A] focus:ring-[#B89B7A]/20 text-[#432818] placeholder:text-[#B89B7A]"
               />
             </div>
+
             {/* Right Actions */}
             <div className="flex items-center gap-4">
               {/* Notifications */}
@@ -205,6 +204,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <Bell className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-[#D4AF37] to-[#FFD700] rounded-full shadow-md animate-pulse"></span>
               </Button>
+
               {/* User Info - Simplificado para desenvolvimento */}
               <div className="flex items-center gap-3 p-2">
                 <Avatar className="w-8 h-8 ring-2 ring-[#B89B7A]/30">
@@ -218,6 +218,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </div>
           </div>
         </div>
+
         {/* Page Content */}
         <main className="p-6">
           {children}

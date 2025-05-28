@@ -1,8 +1,6 @@
 
-"use client";
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
-
 import { useState } from 'react';
+import { safeLocalStorage } from "@/utils/localStorage";
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';

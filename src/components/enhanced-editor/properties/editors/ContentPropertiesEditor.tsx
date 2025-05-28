@@ -64,6 +64,7 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
               placeholder="https://exemplo.com/imagem.jpg"
             />
           </div>
+          
           <div className="space-y-2">
             <Label htmlFor="imageAlt">Texto Alternativo</Label>
             <Input
@@ -73,6 +74,7 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
               placeholder="Descrição da imagem para acessibilidade"
             />
           </div>
+          
           <div className="space-y-2">
             <Label htmlFor="caption">Legenda</Label>
             <Input
@@ -82,8 +84,12 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
               placeholder="Legenda da imagem"
             />
           </div>
+          
+          {/* Add file upload button here later */}
         </div>
       );
+      
+    // Add more block types here...
       
     default:
       return (

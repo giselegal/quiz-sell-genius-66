@@ -49,23 +49,21 @@ export const MarketingTab: React.FC = () => {
           
           <div>
             <Label className="text-base">Analytics Integration</Label>
-            <div className="flex flex-col gap-2 mt-2">
-              <div className="flex items-center space-x-2">
-                <Switch id="utm-to-ga" defaultChecked={true} />
-                <Label htmlFor="utm-to-ga">Send UTM data to Google Analytics</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch id="utm-to-fb" defaultChecked={true} />
-                <Label htmlFor="utm-to-fb">Send UTM data to Facebook Pixel</Label>
-              </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <Switch id="utm-to-ga" defaultChecked={true} />
+              <Label htmlFor="utm-to-ga">Send UTM data to Google Analytics</Label>
+            </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <Switch id="utm-to-fb" defaultChecked={true} />
+              <Label htmlFor="utm-to-fb">Send UTM data to Facebook Pixel</Label>
             </div>
           </div>
         </div>
-
+        
         <Button className="mt-4 bg-[#B89B7A] hover:bg-[#A38A69]">
           Save UTM Settings
         </Button>
-
+        
         <div className="mt-6">
           <Button variant="outline" asChild>
             <Link href="/admin/analytics?tab=utm">

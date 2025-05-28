@@ -39,7 +39,7 @@ export function EditPreview({
               </TooltipTrigger>
               <TooltipContent>Visualização Desktop</TooltipContent>
             </Tooltip>
-            
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -55,7 +55,7 @@ export function EditPreview({
             </Tooltip>
           </TooltipProvider>
         </div>
-        
+
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -72,7 +72,7 @@ export function EditPreview({
           </Tooltip>
         </TooltipProvider>
       </div>
-      
+
       <div className={cn(
         "flex-1 overflow-auto p-8",
         viewMode === "mobile" && "max-w-md mx-auto"

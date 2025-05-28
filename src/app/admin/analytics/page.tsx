@@ -16,8 +16,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 export default function AnalyticsPage() {
   const [dateRange, setDateRange] = useState('30d');
+
   const overviewStats = [
     {
       title: 'Visitantes Únicos',
@@ -30,6 +32,7 @@ export default function AnalyticsPage() {
       title: 'Quizzes Iniciados',
       value: '8,956',
       change: '+8.7%',
+      changeType: 'positive',
       icon: Target
     },
     {
@@ -43,15 +46,18 @@ export default function AnalyticsPage() {
       title: 'Conversões Totais',
       value: '1,247',
       change: '+15.8%',
+      changeType: 'positive',
       icon: TrendingUp
     }
   ];
+
   const topQuizzes = [
     { name: 'Quiz de Liderança', views: 3420, conversions: 156, rate: 4.6 },
     { name: 'Produto Ideal', views: 2840, conversions: 98, rate: 3.4 },
     { name: 'Personalidade Emp.', views: 2150, conversions: 87, rate: 4.0 },
     { name: 'Marketing Digital', views: 1680, conversions: 52, rate: 3.1 }
   ];
+
   const trafficSources = [
     { source: 'Orgânico', visitors: 5240, percentage: 40.8 },
     { source: 'Facebook Ads', visitors: 3180, percentage: 24.8 },
@@ -59,6 +65,7 @@ export default function AnalyticsPage() {
     { source: 'Instagram', visitors: 1320, percentage: 10.3 },
     { source: 'Direto', visitors: 657, percentage: 5.1 }
   ];
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -69,7 +76,8 @@ export default function AnalyticsPage() {
             Acompanhe o desempenho geral dos seus quizzes
           </p>
         </div>
-        <div className="flex gap-3 items-center">
+        
+        <div className="flex gap-3">
           <Button variant="outline" className="border-[#B89B7A] text-[#432818]">
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
@@ -89,6 +97,7 @@ export default function AnalyticsPage() {
           </select>
         </div>
       </div>
+
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {overviewStats.map((stat, index) => {
@@ -101,13 +110,13 @@ export default function AnalyticsPage() {
                     <p className="text-sm font-medium text-[#B89B7A]">{stat.title}</p>
                     <p className="text-3xl font-bold text-[#432818] mt-1">{stat.value}</p>
                     <div className="flex items-center mt-2">
-                      {stat.changeType === 'negative' ? (
-                        <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
-                      ) : (
+                      {stat.changeType === 'positive' ? (
                         <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+                      ) : (
+                        <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
                       )}
                       <span className={`text-sm font-medium ${
-                        stat.changeType === 'negative' ? 'text-red-600' : 'text-green-600'
+                        stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
                       }`}>
                         {stat.change}
                       </span>
@@ -122,6 +131,7 @@ export default function AnalyticsPage() {
           );
         })}
       </div>
+
       {/* Detailed Analytics */}
       <Tabs defaultValue="performance" className="space-y-6">
         <TabsList className="bg-[#F5F2E9] border border-[#D4C4A0]">
@@ -129,6 +139,7 @@ export default function AnalyticsPage() {
           <TabsTrigger value="traffic">Tráfego</TabsTrigger>
           <TabsTrigger value="conversions">Conversões</TabsTrigger>
         </TabsList>
+
         <TabsContent value="performance" className="space-y-6">
           <Card className="border-[#D4C4A0]">
             <CardHeader>
@@ -148,7 +159,7 @@ export default function AnalyticsPage() {
                       <p className="font-bold text-[#432818]">{quiz.conversions} conversões</p>
                       <Badge 
                         variant="outline"
-                        className={`$ {
+                        className={`${
                           quiz.rate >= 4 ? 'border-green-500 text-green-700' :
                           quiz.rate >= 3 ? 'border-yellow-500 text-yellow-700' :
                           'border-red-500 text-red-700'
@@ -163,6 +174,7 @@ export default function AnalyticsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
         <TabsContent value="traffic" className="space-y-6">
           <Card className="border-[#D4C4A0]">
             <CardHeader>
@@ -190,6 +202,7 @@ export default function AnalyticsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
         <TabsContent value="conversions" className="space-y-6">
           <Card className="border-[#D4C4A0]">
             <CardHeader>
@@ -207,10 +220,12 @@ export default function AnalyticsPage() {
                   <div key={index} className="relative">
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium text-[#432818]">{step.step}</span>
-                      <span className="text-sm text-[#B89B7A]">{step.value.toLocaleString()} ({step.percentage}%)</span>
+                      <span className="text-sm text-[#B89B7A]">
+                        {step.value.toLocaleString()} ({step.percentage}%)
+                      </span>
                     </div>
                     <div className="w-full bg-[#F5F2E9] rounded-full h-4">
-                      <div
+                      <div 
                         className="bg-gradient-to-r from-[#B89B7A] to-[#D4C4A0] h-4 rounded-full transition-all duration-500"
                         style={{ width: `${step.percentage}%` }}
                       />

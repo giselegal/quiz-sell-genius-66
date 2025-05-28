@@ -7,13 +7,18 @@ declare module '@lovable/react' {
 
 declare module '@lovable/editor' {
   // Caso precise de APIs específicas do editor
+}
+
 // Estende o objeto Window para incluir propriedades do Lovable
 interface LovableConfig {
   projectId: string;
   apiBaseUrl: string;
   authToken?: string;
   [key: string]: any;
+}
+
 declare global {
   interface Window {
     LOVABLE_CONFIG?: LovableConfig;
   }
+}

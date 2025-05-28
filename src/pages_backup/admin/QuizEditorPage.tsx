@@ -1,45 +1,66 @@
 
-import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import AdminLayout from '@/components/admin/AdminLayout';
+import QuizEditor from '@/components/quiz-editor/QuizEditor';
+import { LoadingState } from '@/components/ui/loading-state';
+import { getTemplateById } from '@/services/templates/templateService';
+import { QuizTemplate } from '@/types/quizTemplate';
 
 const QuizEditorPage = () => {
+  const { templateId } = useParams();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [template, setTemplate] = useState<QuizTemplate | null>(null);
+
+  useEffect(() => {
+    const loadTemplate = async () => {
+      if (templateId && typeof templateId === 'string') {
+        try {
+          const template = await getTemplateById(templateId);
+          if (!template) {
+            setError('Template não encontrado');
+            router.push('/admin/quiz-editor');
+            return;
+          }
+          setTemplate(template);
+        } catch (err) {
+          console.error('Error loading template:', err);
+          setError('Erro ao carregar template');
+          router.push('/admin/quiz-editor');
+        }
+      }
+      setLoading(false);
+    };
+
+    loadTemplate();
+  }, [templateId, router]);
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <LoadingState />
+      </AdminLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminLayout>
+        <div className="p-6">
+          <p className="text-red-500">{error}</p>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   return (
-    <div className="container mx-auto p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">Editor de Quiz</h1>
-        <p className="text-gray-600">Configure as perguntas e opções do seu quiz</p>
+    <AdminLayout>
+      <div className="h-full bg-[#FAF9F7] p-6">
+        {template && <QuizEditor initialTemplate={template} />}
       </div>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Configurações do Quiz</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Título do Quiz
-              </label>
-              <input 
-                type="text" 
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Quiz de Estilo Pessoal"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Descrição
-              </label>
-              <textarea 
-                className="w-full p-2 border border-gray-300 rounded-md h-20"
-                placeholder="Descubra qual estilo combina perfeitamente com sua personalidade"
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    </AdminLayout>
   );
 };
 
