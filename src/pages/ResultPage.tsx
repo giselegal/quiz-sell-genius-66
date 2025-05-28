@@ -1,9 +1,8 @@
-
 "use client";
 
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { ResultPage as ResultPageComponent } from '@/components/ResultPage';
+import ResultPageComponent from '@/components/ResultPage';
 
 const ResultPage: React.FC = () => {
   const location = useLocation();
