@@ -80,7 +80,6 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             }
           ]
         };
-
       case 'question':
         return {
           title: 'Componentes de Questão',
@@ -105,7 +104,6 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             }
           ]
         };
-
       case 'result':
         return {
           title: 'Componentes de Resultado',
@@ -119,7 +117,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             {
               type: 'benefitsList',
               name: 'Lista de Benefícios',
-              icon: <ListFilter className="w-4 h-4" />,
+              icon: <CheckSquare className="w-4 h-4" />,
               description: 'Lista de benefícios do produto'
             },
             {
@@ -130,7 +128,6 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
             }
           ]
         };
-
       default:
         return { title: 'Componentes', items: [] };
     }

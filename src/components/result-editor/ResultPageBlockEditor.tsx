@@ -1,5 +1,3 @@
-
-"use client";
 import React, { useState } from 'react';
 import { ResultPageBlock, StyleResultBlock, CTABlock, TestimonialBlock, CarouselBlock } from '@/types/quizResult';
 import { Button } from '@/components/ui/button';
@@ -102,7 +100,7 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           </SelectContent>
         </Select>
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="percentage">Porcentagem</Label>
         <Input
@@ -114,7 +112,7 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           onChange={(e) => onUpdate({ ...styleBlock, percentage: Number(e.target.value) })}
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="description">Descrição</Label>
         <Textarea
@@ -137,7 +135,7 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           onChange={(e) => onUpdate({ ...ctaBlock, buttonText: e.target.value })}
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="url">URL</Label>
         <Input
@@ -146,7 +144,7 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           onChange={(e) => onUpdate({ ...ctaBlock, url: e.target.value })}
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="pixelId">ID do Pixel (opcional)</Label>
         <Input
@@ -154,6 +152,42 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           value={ctaBlock.pixelId || ''}
           onChange={(e) => onUpdate({ ...ctaBlock, pixelId: e.target.value })}
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="backgroundColor">Cor de Fundo</Label>
+        <div className="flex items-center gap-2">
+          <Input
+            id="backgroundColor"
+            type="color"
+            className="w-12 h-10 p-1"
+            value={ctaBlock.backgroundColor || '#000000'}
+            onChange={(e) => onUpdate({ ...ctaBlock, backgroundColor: e.target.value })}
+          />
+          <Input
+            value={ctaBlock.backgroundColor || '#000000'}
+            onChange={(e) => onUpdate({ ...ctaBlock, backgroundColor: e.target.value })}
+            className="flex-1"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="textColor">Cor do Texto</Label>
+        <div className="flex items-center gap-2">
+          <Input
+            id="textColor"
+            type="color"
+            className="w-12 h-10 p-1"
+            value={ctaBlock.textColor || '#ffffff'}
+            onChange={(e) => onUpdate({ ...ctaBlock, textColor: e.target.value })}
+          />
+          <Input
+            value={ctaBlock.textColor || '#ffffff'}
+            onChange={(e) => onUpdate({ ...ctaBlock, textColor: e.target.value })}
+            className="flex-1"
+          />
+        </div>
       </div>
     </div>
   );
@@ -169,7 +203,7 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           rows={4}
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="author">Autor</Label>
         <Input
@@ -178,7 +212,16 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           onChange={(e) => onUpdate({ ...testimonialBlock, author: e.target.value })}
         />
       </div>
-      
+
+      <div className="space-y-2">
+        <Label htmlFor="authorImage">Imagem do Autor (URL)</Label>
+        <Input
+          id="authorImage"
+          value={testimonialBlock.authorImage || ''}
+          onChange={(e) => onUpdate({ ...testimonialBlock, authorImage: e.target.value })}
+        />
+      </div>
+
       <div className="space-y-2">
         <Label htmlFor="rating">Avaliação (1-5)</Label>
         <Input
@@ -193,16 +236,93 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
     </div>
   );
 
-  const renderCarouselEditor = (carouselBlock: CarouselBlock) => (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label>Itens do Carrossel</Label>
-        <Button size="sm" variant="outline">
-          <PlusCircle className="h-4 w-4 mr-1" /> Adicionar Item
-        </Button>
+  const renderCarouselEditor = (carouselBlock: CarouselBlock) => {
+    const addCarouselItem = () => {
+      const newItem = {
+        id: `item-${Date.now()}`,
+        imageUrl: '',
+        caption: ''
+      };
+      
+      onUpdate({
+        ...carouselBlock,
+        items: [...(carouselBlock.items || []), newItem]
+      });
+    };
+
+    const updateCarouselItem = (index: number, key: string, value: string) => {
+      const updatedItems = [...(carouselBlock.items || [])];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        [key]: value
+      };
+      
+      onUpdate({
+        ...carouselBlock,
+        items: updatedItems
+      });
+    };
+
+    const removeCarouselItem = (index: number) => {
+      const updatedItems = [...(carouselBlock.items || [])];
+      updatedItems.splice(index, 1);
+      
+      onUpdate({
+        ...carouselBlock,
+        items: updatedItems
+      });
+    };
+
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Label>Itens do Carrossel</Label>
+          <Button size="sm" variant="outline" onClick={addCarouselItem}>
+            <PlusCircle className="h-4 w-4 mr-1" /> Adicionar Item
+          </Button>
+        </div>
+
+        <ScrollArea className="h-[300px] pr-4">
+          <div className="space-y-4">
+            {(carouselBlock.items || []).map((item, index) => (
+              <Card key={item.id} className="p-4">
+                <div className="flex justify-between items-start mb-2">
+                  <h4 className="text-sm font-medium">Item {index + 1}</h4>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => removeCarouselItem(index)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <Label htmlFor={`item-${index}-image`}>URL da Imagem</Label>
+                    <Input
+                      id={`item-${index}-image`}
+                      value={item.imageUrl}
+                      onChange={(e) => updateCarouselItem(index, 'imageUrl', e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label htmlFor={`item-${index}-caption`}>Legenda</Label>
+                    <Input
+                      id={`item-${index}-caption`}
+                      value={item.caption || ''}
+                      onChange={(e) => updateCarouselItem(index, 'caption', e.target.value)}
+                    />
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderDefaultEditor = () => (
     <div className="space-y-4">
@@ -215,70 +335,98 @@ export const ResultPageBlockEditor: React.FC<ResultPageBlockEditorProps> = ({
           rows={6}
         />
       </div>
+
+      {block.type === 'image' && (
+        <div className="space-y-2">
+          <Label htmlFor="imageUrl">URL da Imagem</Label>
+          <Input
+            id="imageUrl"
+            value={block.imageUrl || ''}
+            onChange={(e) => onUpdate({ ...block, imageUrl: e.target.value })}
+          />
+        </div>
+      )}
     </div>
   );
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <h3 className="text-lg font-medium capitalize">{block.type}</h3>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={handleVisibilityToggle}
-              title={block.isVisible === false ? "Mostrar bloco" : "Ocultar bloco"}
-            >
-              {block.isVisible === false ? (
-                <EyeOff className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-          
-          <div className="flex space-x-2">
-            <Button size="sm" variant="outline" onClick={onDuplicate}>
-              <Copy className="h-4 w-4" />
-            </Button>
-            <Button size="sm" variant="outline" onClick={onDelete}>
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <h3 className="text-lg font-medium capitalize">{block.type}</h3>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={handleVisibilityToggle}
+            title={block.isVisible === false ? "Mostrar bloco" : "Ocultar bloco"}
+          >
+            {block.isVisible === false ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </Button>
         </div>
-      </CardHeader>
+        <div className="flex space-x-2">
+          <Button size="sm" variant="outline" onClick={onDuplicate}>
+            <Copy className="h-4 w-4" />
+          </Button>
+          <Button size="sm" variant="outline" onClick={onDelete}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
 
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="content">Conteúdo</TabsTrigger>
-            <TabsTrigger value="settings">Configurações</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="content" className="pt-4">
-            {renderSpecificBlockEditor()}
-          </TabsContent>
-          
-          <TabsContent value="settings" className="pt-4">
-            <div className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="content">Conteúdo</TabsTrigger>
+          <TabsTrigger value="settings">Configurações</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="content" className="pt-4">
+          {renderSpecificBlockEditor()}
+        </TabsContent>
+
+        <TabsContent value="settings" className="pt-4">
+          <div className="space-y-4">
+            {abTestEnabled && (
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="isVisible">Visibilidade</Label>
-                  <Switch
-                    id="isVisible"
-                    checked={block.isVisible !== false}
-                    onCheckedChange={() => handleVisibilityToggle()}
-                  />
-                </div>
-                <p className="text-sm text-gray-500">
-                  Controle se este bloco deve ser exibido na página de resultados
-                </p>
+                <Label htmlFor="abTestVariant">Variante de Teste A/B</Label>
+                <Select
+                  value={block.abTestVariant || ''}
+                  onValueChange={handleAbTestVariantChange}
+                >
+                  <SelectTrigger id="abTestVariant">
+                    <SelectValue placeholder="Selecione a variante" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Todas as variantes</SelectItem>
+                    {abTestVariants.map((variant) => (
+                      <SelectItem key={variant} value={variant}>
+                        {variant}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
+            )}
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="isVisible">Visibilidade</Label>
+                <Switch
+                  id="isVisible"
+                  checked={block.isVisible !== false}
+                  onCheckedChange={() => handleVisibilityToggle()}
+                />
+              </div>
+              <p className="text-sm text-gray-500">
+                Controle se este bloco deve ser exibido na página de resultados
+              </p>
             </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };

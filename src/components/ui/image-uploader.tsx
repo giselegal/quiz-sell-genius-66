@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { Button } from './button';
 import { ImagePlus, Trash } from 'lucide-react';
@@ -78,6 +76,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             size="sm"
             className="text-xs"
             onClick={() => document.getElementById('image-upload')?.click()}
+            disabled={isUploading}
           >
             {isUploading ? 'Enviando...' : 'Procurar imagens'}
           </Button>

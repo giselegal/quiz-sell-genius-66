@@ -22,7 +22,7 @@ export const optimizeCloudinaryUrl = (
   if (!url || !url.includes('cloudinary.com')) {
     return url;
   }
-  
+
   // Opções padrão de otimização com melhor equilíbrio qualidade/tamanho
   const defaults = {
     width: 0,
@@ -31,6 +31,7 @@ export const optimizeCloudinaryUrl = (
     format: 'auto' as const,
     crop: 'fill' as const
   };
+
   const settings = { ...defaults, ...options };
   
   // Extrai partes da URL base para lidar com URLs com transformações existentes
@@ -46,9 +47,11 @@ export const optimizeCloudinaryUrl = (
   
   // Constrói string de transformação
   let transformations = `f_${settings.format}`;
+  
   if (settings.quality) {
     transformations += `,q_${settings.quality}`;
   }
+  
   if (settings.width && settings.height) {
     transformations += `,c_${settings.crop},w_${settings.width},h_${settings.height}`;
   } else if (settings.width) {
@@ -74,7 +77,7 @@ export const optimizeCloudinaryUrl = (
  * @returns URL de placeholder de baixa qualidade
  */
 export const getLowQualityPlaceholder = (
-  url: string,
+  url: string, 
   options: { width?: number, quality?: number } = {}
 ): string => {
   if (!url || !url.includes('cloudinary.com')) {
@@ -186,7 +189,9 @@ export const checkImageFormatSupport = (): { webp: boolean, avif: boolean } => {
  */
 export const getOptimalImageFormat = (): 'auto' | 'webp' | 'avif' => {
   const support = checkImageFormatSupport();
+  
   if (support.avif) return 'avif'; 
   if (support.webp) return 'webp';
   return 'auto'; // Padrão para auto que normalmente servirá JPEG
 };
+

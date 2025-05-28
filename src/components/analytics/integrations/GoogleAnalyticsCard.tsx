@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -46,7 +44,7 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
     });
     console.log("Testing connection to Google Analytics...");
   };
-
+  
   return (
     <Card>
       <CardHeader>

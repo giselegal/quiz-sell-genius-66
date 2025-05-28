@@ -37,7 +37,7 @@ interface OfferSectionProps {
 
 const OfferSection: React.FC<OfferSectionProps> = ({ data, onChange }) => {
   const [offerData, setOfferData] = useState<OfferData>(data || defaultOfferData);
-  
+
   const autoSave = useAutoSave({
     onSave: (data) => {
       onChange?.(data);
@@ -78,8 +78,8 @@ const OfferSection: React.FC<OfferSectionProps> = ({ data, onChange }) => {
               <Textarea
                 value={offerData.description}
                 onChange={(e) => handleChange('description', e.target.value)}
-                rows={4}
                 className="mt-1"
+                rows={4}
               />
             </div>
 
@@ -120,6 +120,7 @@ const OfferSection: React.FC<OfferSectionProps> = ({ data, onChange }) => {
               <ImageUploader
                 currentImage={offerData.imageUrl}
                 onImageUpload={(url) => handleChange('imageUrl', url)}
+                className="mt-1"
               />
             </div>
 
@@ -135,10 +136,12 @@ const OfferSection: React.FC<OfferSectionProps> = ({ data, onChange }) => {
         </div>
       </div>
       
+      {/* Preview da Oferta */}
       <div className="bg-[#FAF9F7] p-6 rounded-lg">
         <h3 className="text-xl font-semibold text-[#432818] mb-4">Pré-visualização</h3>
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-2xl font-bold text-[#432818]">{offerData.title}</h2>
+          
           {offerData.imageUrl && (
             <img 
               src={offerData.imageUrl} 
@@ -146,11 +149,14 @@ const OfferSection: React.FC<OfferSectionProps> = ({ data, onChange }) => {
               className="mt-4 w-full h-48 object-cover rounded"
             />
           )}
+          
           <p className="mt-4 text-[#8F7A6A]">{offerData.description}</p>
+          
           <div className="mt-6 flex items-center gap-3">
             <span className="text-xl font-semibold text-[#B89B7A]">{offerData.discountPrice}</span>
             <span className="text-sm text-gray-500 line-through">{offerData.price}</span>
           </div>
+          
           <div className="mt-4">
             <h4 className="text-lg font-semibold text-[#432818]">O que você vai receber:</h4>
             <ul className="mt-2 space-y-2">
@@ -161,6 +167,7 @@ const OfferSection: React.FC<OfferSectionProps> = ({ data, onChange }) => {
               ))}
             </ul>
           </div>
+          
           <Button className="mt-6 w-full bg-[#B89B7A] hover:bg-[#A38A69] text-white">
             {offerData.buttonText}
           </Button>

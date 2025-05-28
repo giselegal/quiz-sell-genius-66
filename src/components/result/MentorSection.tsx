@@ -1,10 +1,7 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
-
 const MentorSection: React.FC = () => {
-  return (
-    <Card className="relative p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant overflow-hidden">
+  return <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#B89B7A]/5 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-[#aa6b5d]/5 rounded-full blur-3xl"></div>
@@ -12,14 +9,18 @@ const MentorSection: React.FC = () => {
       <div className="grid md:grid-cols-2 gap-8 items-center relative z-10">
         <div>
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-            Sobre Gisele Galvão
+    
           </h2>
           <p className="text-[#432818] mb-4">
             <strong>Gisele Galvão</strong> — Consultora de Imagem e Estilo, Persona Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.
           </p>
           <p className="text-[#432818] mb-4">
             Advogada de formação. Mãe da Victória, esposa do Fabrício.
+          </p>
+          <p className="text-[#432818] mb-4">
             Apaixonada pela vida, pelos detalhes, viagens e tudo que me proporcione crescer como ser humano. Colérica, virginiana, paciente, pacificadora e muito empata.
+          </p>
+          <p className="text-[#432818] mb-4">
             Amo receber, atos de serviços e tempo de qualidade são minha linguagem de amor. Amo vinho, chás e café. Meus maiores valores são minha família, justiça, honestidade, ética e liberdade.
           </p>
         </div>
@@ -44,8 +45,6 @@ const MentorSection: React.FC = () => {
           <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
         </div>
       </div>
-    </Card>
-  );
+    </Card>;
 };
-
 export default MentorSection;

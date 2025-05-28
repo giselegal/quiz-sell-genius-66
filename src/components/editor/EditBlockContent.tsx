@@ -29,7 +29,7 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
       
     case 'hero-section':
       return <HeroSectionBlockEditor block={block} onUpdate={onUpdate} />;
-    
+      
     case 'bonus-carousel':
       return <BonusCarouselBlockEditor block={block} onUpdate={onUpdate} />;
     
@@ -44,22 +44,22 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
     
     case 'benefits':
       return <BenefitsBlockEditor block={block} onUpdate={onUpdate} />;
-    
+      
     case 'pricing':
       return <PricingBlockEditor block={block} onUpdate={onUpdate} />;
-    
+      
     case 'guarantee':
       return <GuaranteeBlockEditor block={block} onUpdate={onUpdate} />;
-    
+      
     case 'cta':
       return <CTABlockEditor block={block} onUpdate={onUpdate} />;
-    
+
     case 'style-result':
       return <StyleResultBlockEditor block={block} onUpdate={onUpdate} />;
-    
+
     case 'secondary-styles':
       return <SecondaryStylesBlockEditor block={block} onUpdate={onUpdate} />;
-    
+      
     case 'products':
       return (
         <div className="p-4 rounded-md bg-[#FAF9F7] border border-[#B89B7A]/20">
@@ -69,7 +69,7 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
           </p>
         </div>
       );
-    
+      
     case 'testimonials':
       return (
         <div className="p-4 rounded-md bg-[#FAF9F7] border border-[#B89B7A]/20">
@@ -79,7 +79,7 @@ export const EditBlockContent: React.FC<EditBlockContentProps> = ({
           </p>
         </div>
       );
-    
+      
     default:
       return <p>Tipo de bloco não suportado: {block.type}</p>;
   }

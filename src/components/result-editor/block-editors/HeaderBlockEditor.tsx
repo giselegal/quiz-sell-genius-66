@@ -28,14 +28,15 @@ const HeaderBlockEditor: React.FC<HeaderBlockEditorProps> = ({ block, onUpdate }
       
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo (opcional)</Label>
-        <Input
+        <Textarea
           id="subtitle"
+          rows={2}
           value={content.subtitle || ''}
           onChange={(e) => onUpdate({ subtitle: e.target.value })}
           placeholder="Subtítulo personalizado"
         />
       </div>
-
+      
       <div className="space-y-2">
         <Label htmlFor="logo">URL do Logo</Label>
         <Input
@@ -54,7 +55,7 @@ const HeaderBlockEditor: React.FC<HeaderBlockEditorProps> = ({ block, onUpdate }
           </div>
         )}
       </div>
-
+      
       <div className="space-y-2">
         <Label htmlFor="logoAlt">Texto Alternativo do Logo</Label>
         <Input
@@ -64,7 +65,7 @@ const HeaderBlockEditor: React.FC<HeaderBlockEditorProps> = ({ block, onUpdate }
           placeholder="Logo Gisele Galvão"
         />
       </div>
-
+      
       <div className="grid grid-cols-2 gap-2">
         <div className="space-y-2">
           <Label htmlFor="logoWidth">Largura do Logo</Label>
@@ -75,14 +76,13 @@ const HeaderBlockEditor: React.FC<HeaderBlockEditorProps> = ({ block, onUpdate }
             placeholder="auto"
           />
         </div>
-        
         <div className="space-y-2">
           <Label htmlFor="logoHeight">Altura do Logo</Label>
           <Input
             id="logoHeight"
             value={content.logoHeight || ''}
             onChange={(e) => onUpdate({ logoHeight: e.target.value })}
-            placeholder="80px"
+            placeholder="auto"
           />
         </div>
       </div>

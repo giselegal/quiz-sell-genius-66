@@ -33,17 +33,24 @@ export interface ResultPageBlock {
 export interface StyleResultBlock extends ResultPageBlock {
   type: 'styleResult';
   styleCategory: string;
+  percentage?: number;
+  description?: string;
 }
 
 export interface CTABlock extends ResultPageBlock {
   type: 'cta';
   buttonText: string;
   url: string;
+  pixelId?: string;
+  backgroundColor?: string;
+  textColor?: string;
 }
 
 export interface TestimonialBlock extends ResultPageBlock {
   type: 'testimonial';
   author: string;
+  authorImage?: string;
+  rating?: number;
 }
 
 export interface CarouselBlock extends ResultPageBlock {
@@ -56,6 +63,7 @@ export interface CarouselBlock extends ResultPageBlock {
 }
 
 export interface ResultPage {
+  id: string;
   title: string;
   blocks: ResultPageBlock[];
   settings: {
@@ -71,10 +79,22 @@ export interface ResultPage {
 }
 
 export interface OfferPage {
-  // Define offer page structure
+  id: string;
+  title: string;
+  blocks: ResultPageBlock[];
+  settings: {
+    backgroundColor?: string;
+    backgroundImage?: string;
+    fontFamily?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+    abTestEnabled?: boolean;
+    abTestVariants?: string[];
+  };
 }
 
 export interface QuizFunnel {
+  id: string;
   name: string;
   quizQuestions: string[];
   resultPage: ResultPage;

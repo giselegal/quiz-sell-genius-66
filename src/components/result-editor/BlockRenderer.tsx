@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Block } from '@/types/editor';
 import { cn } from '@/lib/utils';
@@ -24,6 +25,7 @@ import FAQBlockPreview from './block-previews/FAQBlockPreview';
 import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
 import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
 import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
+
 interface BlockRendererProps {
   block: Block;
   primaryStyle: StyleResult;

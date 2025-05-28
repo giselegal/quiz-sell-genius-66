@@ -1,15 +1,12 @@
-
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/components/ui/use-toast';
 import { useUtmParameters } from '@/hooks/useUtmParameters';
 import { CopyIcon, CheckCircleIcon, ArrowRightIcon } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
 export const UtmSettingsTab: React.FC = () => {
   const { domainBase, setBaseDomain, generateUtmLink } = useUtmParameters();
@@ -45,6 +42,7 @@ export const UtmSettingsTab: React.FC = () => {
       title: "Domínio atualizado",
       description: `O domínio base para UTMs foi atualizado para ${domain}.`,
     });
+    updateExampleLinks(domain);
   };
 
   const handleCopyLink = (link: string) => {
@@ -84,11 +82,12 @@ export const UtmSettingsTab: React.FC = () => {
 
             <Separator className="my-4" />
 
-            <div>
+            <div className="space-y-2">
               <h3 className="text-lg font-medium">Links de Exemplo</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-muted-foreground">
                 Aqui estão alguns exemplos de como seus links UTM serão gerados:
               </p>
+
               <div className="mt-4 space-y-3">
                 {Object.entries(exampleLinks).map(([key, link]) => (
                   <div key={key} className="p-3 bg-muted rounded-md">
@@ -132,6 +131,7 @@ export const UtmSettingsTab: React.FC = () => {
                 </p>
               </div>
             </div>
+
             <div className="flex items-start gap-2">
               <div className="mt-0.5 flex-shrink-0 bg-primary rounded-full p-1">
                 <CheckCircleIcon className="h-4 w-4 text-white" />
@@ -143,6 +143,7 @@ export const UtmSettingsTab: React.FC = () => {
                 </p>
               </div>
             </div>
+
             <div className="flex items-start gap-2">
               <div className="mt-0.5 flex-shrink-0 bg-primary rounded-full p-1">
                 <CheckCircleIcon className="h-4 w-4 text-white" />

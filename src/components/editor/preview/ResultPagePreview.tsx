@@ -1,6 +1,4 @@
 
-"use client";
-
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { ResultPageConfig } from '@/types/resultPageConfig';
@@ -48,6 +46,7 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
             Mobile
           </Button>
         </div>
+
         <Button
           variant="outline"
           size="sm"
@@ -90,7 +89,6 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
             onClick={() => !isPreviewing && onSectionSelect('mainContent')}
           >
             {/* Style preview content */}
-            <p>Conteúdo principal da página de resultado</p>
           </section>
 
           {/* Sales Offer Section */}
@@ -104,7 +102,6 @@ export const ResultPagePreview: React.FC<ResultPagePreviewProps> = ({
             onClick={() => !isPreviewing && onSectionSelect('offer')}
           >
             {/* Offer content preview */}
-            <p>Seção de oferta</p>
           </section>
         </div>
       </div>

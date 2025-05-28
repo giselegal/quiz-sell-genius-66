@@ -7,8 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { GripVertical, Copy, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-type AllowedBlockType = 'heading' | 'paragraph' | 'image' | 'button';
+import { BlockType } from '@/types/quiz';
 
 export interface SortableBlockProps {
   block: Block;
@@ -41,9 +40,7 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
   };
 
   const getBlockPreview = () => {
-    const blockType = block.type as AllowedBlockType;
-    
-    switch (blockType) {
+    switch (block.type as BlockType) {
       case 'heading':
         return <h2 className="text-xl font-medium">{block.content.text || 'Título'}</h2>;
       case 'paragraph':
@@ -94,7 +91,7 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
       <div className="absolute left-0 top-0 bottom-0 px-1 flex items-center cursor-grab" {...attributes} {...listeners}>
         <GripVertical className="h-4 w-4 text-muted-foreground" />
       </div>
-      
+
       <CardContent className="p-4 pl-8">
         <div className="flex items-center justify-between mb-2">
           <h4 className="text-sm font-medium capitalize">{block.type}</h4>
@@ -124,7 +121,7 @@ export const SortableBlock: React.FC<SortableBlockProps> = ({
             )}
           </div>
         </div>
-        
+
         <div className="mt-2">
           {getBlockPreview()}
         </div>

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 interface FAQBlockPreviewProps {
   content: {
     faqItems?: {
@@ -11,11 +12,13 @@ interface FAQBlockPreviewProps {
     style?: any;
   };
 }
+
 const FAQBlockPreview: React.FC<FAQBlockPreviewProps> = ({ content }) => {
   const { faqItems = [], defaultOpen = false, style = {} } = content;
   
   // Define o valor padrão para o Accordion
   const defaultValue = defaultOpen && faqItems.length > 0 ? `item-0` : undefined;
+
   return (
     <div style={style} className="w-full">
       {faqItems.length === 0 ? (
@@ -39,4 +42,5 @@ const FAQBlockPreview: React.FC<FAQBlockPreviewProps> = ({ content }) => {
     </div>
   );
 };
+
 export default FAQBlockPreview;

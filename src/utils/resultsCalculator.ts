@@ -1,5 +1,6 @@
 
 import { StyleResult } from '../types/quiz';
+
 /**
  * Representa a resposta de um usuário para uma pergunta
  */
@@ -9,9 +10,12 @@ export interface UserAnswer {
   points?: number;
   stylePoints?: Record<string, number>;
 }
+
+/**
  * Calcula os resultados do quiz com base nas respostas do usuário
  * @param answers Respostas do usuário
  * @returns Objeto com resultados
+ */
 export const calculateResults = (answers: Record<string, UserAnswer[]>) => {
   // Implementação simplificada para mock
   const styles = ['Clássico', 'Romântico', 'Dramático', 'Natural', 'Criativo'];

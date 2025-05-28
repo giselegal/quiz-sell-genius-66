@@ -27,6 +27,7 @@ export const useEditorActions = (
     const newBlocks = blocks.map(block => 
       block.id === id ? { ...block, content: { ...block.content, ...content } } : block
     );
+    
     onBlocksChange(newBlocks);
     addToHistory(newBlocks);
   }, [blocks, onBlocksChange, addToHistory]);
@@ -34,6 +35,7 @@ export const useEditorActions = (
   const handleDeleteBlock = useCallback((id: string) => {
     const newBlocks = blocks.filter(block => block.id !== id)
       .map((block, index) => ({ ...block, order: index }));
+    
     onBlocksChange(newBlocks);
     addToHistory(newBlocks);
   }, [blocks, onBlocksChange, addToHistory]);

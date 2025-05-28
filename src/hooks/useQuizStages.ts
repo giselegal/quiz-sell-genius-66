@@ -1,27 +1,44 @@
-
 import { useState, useCallback } from 'react';
 import { QuizStage } from '@/types/quizBuilder';
 
 export const useQuizStages = () => {
   const [stages, setStages] = useState<QuizStage[]>([]);
-  const [activeStageId, setActiveStageId] = useState<string>('');
+  const [activeStageId, setActiveStageId] = useState<string | null>(null);
 
   const initializeStages = useCallback((initialStages: QuizStage[]) => {
     setStages(initialStages);
+    // Se houver estágios, define o primeiro como ativo por padrão
     if (initialStages.length > 0) {
       setActiveStageId(initialStages[0].id);
     }
   }, []);
 
-  const addStage = useCallback((stage: Omit<QuizStage, 'id' | 'order'>): string => {
+  const addStage = useCallback((type: QuizStage['type']): string => {
+    const stageNumber = stages.length + 1;
+    let stageTitle = '';
+    
+    switch (type) {
+      case 'cover':
+        stageTitle = 'Etapa 1: Capa do Quiz';
+        break;
+      case 'question':
+        stageTitle = `Etapa ${stageNumber}: Questão ${stages.filter(s => s.type === 'question').length + 1}`;
+        break;
+      case 'result':
+        stageTitle = `Etapa ${stageNumber}: Página de Resultado`;
+        break;
+    }
+    
     const newStage: QuizStage = {
-      ...stage,
       id: `stage-${Date.now()}`,
-      order: stages.length
+      title: stageTitle,
+      order: stages.length,
+      type
     };
+    
     setStages(prev => [...prev, newStage]);
     return newStage.id;
-  }, [stages.length]);
+  }, [stages]);
 
   const updateStage = useCallback((id: string, updates: Partial<QuizStage>) => {
     setStages(prev => 
@@ -40,15 +57,13 @@ export const useQuizStages = () => {
       }));
     });
     
-    // Update active stage if the deleted stage was active
-    setActiveStageId(current => {
-      if (current === id) {
-        const remainingStages = stages.filter(s => s.id !== id);
-        return remainingStages.length > 0 ? remainingStages[0].id : '';
-      }
-      return current;
-    });
-  }, [stages]);
+    if (id === activeStageId) {
+      setActiveStageId(prev => {
+        const remainingStages = stages.filter(stage => stage.id !== id);
+        return remainingStages.length > 0 ? remainingStages[0].id : null;
+      });
+    }
+  }, [stages, activeStageId]);
 
   const moveStage = useCallback((draggedId: string, targetId: string) => {
     setStages(prev => {
@@ -58,8 +73,8 @@ export const useQuizStages = () => {
       if (draggedIndex === -1 || targetIndex === -1) return prev;
       
       const newStages = [...prev];
-      const [removed] = newStages.splice(draggedIndex, 1);
-      newStages.splice(targetIndex, 0, removed);
+      const [draggedStage] = newStages.splice(draggedIndex, 1);
+      newStages.splice(targetIndex, 0, draggedStage);
       
       return newStages.map((stage, index) => ({
         ...stage,
@@ -68,9 +83,45 @@ export const useQuizStages = () => {
     });
   }, []);
 
-  const setActiveStage = useCallback((stageId: string) => {
-    setActiveStageId(stageId);
-  }, []);
+  /**
+   * Duplica uma etapa existente do quiz
+   * @param id ID da etapa a ser duplicada
+   * @returns ID da nova etapa duplicada
+   */
+  const duplicateStage = useCallback((id: string): string | null => {
+    const stageToDuplicate = stages.find(stage => stage.id === id);
+    
+    if (!stageToDuplicate) return null;
+    
+    const stageNumber = stages.length + 1;
+    let stageTitle = '';
+    
+    switch (stageToDuplicate.type) {
+      case 'cover':
+        stageTitle = `Etapa ${stageNumber}: Capa do Quiz (Cópia)`;
+        break;
+      case 'question':
+        stageTitle = `Etapa ${stageNumber}: Questão ${stages.filter(s => s.type === 'question').length + 1} (Cópia)`;
+        break;
+      case 'result':
+        stageTitle = `Etapa ${stageNumber}: Página de Resultado (Cópia)`;
+        break;
+    }
+    
+    // Cria uma cópia profunda do objeto de configuração
+    const configCopy = stageToDuplicate.config ? JSON.parse(JSON.stringify(stageToDuplicate.config)) : undefined;
+    
+    const newStage: QuizStage = {
+      id: `stage-${Date.now()}`,
+      title: stageTitle,
+      order: stages.length,
+      type: stageToDuplicate.type,
+      config: configCopy
+    };
+    
+    setStages(prev => [...prev, newStage]);
+    return newStage.id;
+  }, [stages]);
 
   return {
     stages,
@@ -79,7 +130,8 @@ export const useQuizStages = () => {
     updateStage,
     deleteStage,
     moveStage,
-    setActiveStage,
+    duplicateStage, // Nova função para duplicar etapas
+    setActiveStage: setActiveStageId,
     initializeStages
   };
 };

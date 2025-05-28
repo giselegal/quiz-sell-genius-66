@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import { EditorConfig } from '@/types/editor';
 import { EditorThemeActions } from '@/types/editorActions';
+
 export const useEditorTheme = (
   config: EditorConfig,
   setConfig: (config: EditorConfig) => void
@@ -15,5 +16,6 @@ export const useEditorTheme = (
       }
     });
   }, [config, setConfig]);
+
   return { updateTheme };
 };

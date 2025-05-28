@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from '../sidebar/ComponentsSidebar';
@@ -21,6 +19,7 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
   return (
     <div className={cn("h-screen flex flex-col bg-[#FAF9F7]", className)}>
       <ResizablePanelGroup direction="horizontal">
+        {/* Components Sidebar */}
         <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
           <ComponentsSidebar 
             onComponentSelect={(type) => {
@@ -29,9 +28,10 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
             }} 
           />
         </ResizablePanel>
-        
+
         <ResizableHandle withHandle />
-        
+
+        {/* Preview Area */}
         <ResizablePanel defaultSize={55}>
           <EditPreview 
             isPreviewing={isPreviewing}
@@ -40,9 +40,10 @@ export function EditorWorkspace({ className }: EditorWorkspaceProps) {
             selectedComponentId={selectedComponentId}
           />
         </ResizablePanel>
-        
+
         <ResizableHandle withHandle />
-        
+
+        {/* Properties Panel */}
         <ResizablePanel defaultSize={25}>
           <PropertiesPanel
             selectedComponentId={selectedComponentId}

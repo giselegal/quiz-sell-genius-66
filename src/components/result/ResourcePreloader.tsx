@@ -1,5 +1,3 @@
-
-"use client";
 import React, { useEffect } from 'react';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { preloadImagesByUrls } from '@/utils/imageManager';
@@ -29,13 +27,13 @@ const CRITICAL_IMAGES = [
  */
 const ResourcePreloader: React.FC = () => {
   const { globalStyles } = useGlobalStyles();
-
+  
   // Lista dinâmica que inclui logo personalizada se disponível
   const criticalImages = [...CRITICAL_IMAGES];
   if (globalStyles.logo && !CRITICAL_IMAGES.includes(globalStyles.logo)) {
     criticalImages.unshift(globalStyles.logo);
   }
-
+  
   useEffect(() => {
     // Pré-carregar imagens em baixa prioridade
     preloadImagesByUrls(criticalImages, {
@@ -60,7 +58,7 @@ const ResourcePreloader: React.FC = () => {
       dnsPrefetch.href = cdnUrl;
       document.head.appendChild(dnsPrefetch);
     });
-
+    
     // Adicionar preload de imagens críticas ao head
     criticalImages.forEach((imgSrc, index) => {
       const preloadLink = document.createElement('link');
@@ -70,7 +68,7 @@ const ResourcePreloader: React.FC = () => {
       preloadLink.type = 'image/webp';
       document.head.appendChild(preloadLink);
     });
-
+    
     return () => {
       // Limpar links de preconnect quando componente desmontar
       document.querySelectorAll('link[rel="preconnect"], link[rel="dns-prefetch"], link[rel="preload"][as="image"]').forEach(el => {
@@ -84,7 +82,7 @@ const ResourcePreloader: React.FC = () => {
       });
     };
   }, []);
-
+  
   return null; // Este componente não renderiza nada visualmente, apenas manipula o DOM
 };
 

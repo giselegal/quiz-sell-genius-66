@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,7 +10,7 @@ import { useEditor } from '@/hooks/useEditor';
 
 interface SalesPageEditorProps {
   primaryStyle: StyleResult;
-  onClose?: () => void;
+  onClose?: () => void; // Made this optional to maintain compatibility
 }
 
 const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle, onClose }) => {
@@ -23,6 +21,7 @@ const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle, onClose
     deleteBlock, 
     reorderBlocks 
   } = useEditor();
+
   const [isPreviewing, setIsPreviewing] = useState(false);
 
   return (
@@ -99,33 +98,33 @@ const SalesPageEditor: React.FC<SalesPageEditorProps> = ({ primaryStyle, onClose
                 )}
               </Card>
             ))}
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-              <Button
-                onClick={() => addBlock('headline')}
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              >
-                + Headline
-              </Button>
-              <Button
-                onClick={() => addBlock('image')}
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              >
-                + Imagem
-              </Button>
-              <Button
-                onClick={() => addBlock('benefits')}
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              >
-                + Benefícios
-              </Button>
-              <Button
-                onClick={() => addBlock('testimonials')}
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-              >
-                + Depoimentos
-              </Button>
-            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <Button
+              onClick={() => addBlock('headline')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Headline
+            </Button>
+            <Button
+              onClick={() => addBlock('image')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Imagem
+            </Button>
+            <Button
+              onClick={() => addBlock('benefits')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Benefícios
+            </Button>
+            <Button
+              onClick={() => addBlock('testimonials')}
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
+            >
+              + Depoimentos
+            </Button>
           </div>
         </Card>
       </div>

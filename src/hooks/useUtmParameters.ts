@@ -1,6 +1,4 @@
 
-"use client";
-
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -14,24 +12,33 @@ export interface UtmParameters {
   fbclid?: string;
 }
 
+/**
+ * Hook para capturar e gerenciar parâmetros UTM da URL
+ */
 export const useUtmParameters = () => {
   const [utmParams, setUtmParams] = useState<UtmParameters>({});
   const [domainBase, setDomainBase] = useState<string>('giselegalvao.com.br');
   
   useEffect(() => {
+    // Carregar configuração de domínio do localStorage, se disponível
     const savedDomain = localStorage.getItem('domain_base');
     if (savedDomain) {
       setDomainBase(savedDomain);
     }
     
+    // Captura parâmetros UTM ao carregar o componente
     const capturedParams = captureUtmParameters();
     setUtmParams(capturedParams);
     
+    // Se tiver parâmetros UTM, salve no Supabase para análises
     if (Object.keys(capturedParams).length > 0) {
       saveUtmToSupabase(capturedParams);
     }
   }, []);
-
+  
+  /**
+   * Salva os parâmetros UTM no Supabase para análise
+   */
   const saveUtmToSupabase = async (params: UtmParameters) => {
     try {
       const { error } = await supabase.from('utm_analytics').insert({
@@ -49,24 +56,32 @@ export const useUtmParameters = () => {
       console.error('Error in saveUtmToSupabase:', error);
     }
   };
-
+  
+  /**
+   * Captura parâmetros UTM da URL atual
+   */
   const captureUtmParameters = (): UtmParameters => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const utmParams: UtmParameters = {};
       
+      // Parâmetros UTM padrão
       if (urlParams.has('utm_source')) utmParams.source = urlParams.get('utm_source') || undefined;
       if (urlParams.has('utm_medium')) utmParams.medium = urlParams.get('utm_medium') || undefined;
       if (urlParams.has('utm_campaign')) utmParams.campaign = urlParams.get('utm_campaign') || undefined;
       if (urlParams.has('utm_content')) utmParams.content = urlParams.get('utm_content') || undefined;
       if (urlParams.has('utm_term')) utmParams.term = urlParams.get('utm_term') || undefined;
       if (urlParams.has('utm_id')) utmParams.id = urlParams.get('utm_id') || undefined;
+      
+      // Parâmetro específico do Facebook
       if (urlParams.has('fbclid')) utmParams.fbclid = urlParams.get('fbclid') || undefined;
       
+      // Armazenar parâmetros UTM no localStorage para persistência
       if (Object.keys(utmParams).length > 0) {
         localStorage.setItem('utm_parameters', JSON.stringify(utmParams));
         console.log('UTM parameters captured:', utmParams);
       } else {
+        // Tentar recuperar parâmetros do localStorage se não houver na URL
         const storedUtmParams = localStorage.getItem('utm_parameters');
         if (storedUtmParams) {
           return JSON.parse(storedUtmParams);
@@ -79,21 +94,33 @@ export const useUtmParameters = () => {
       return {};
     }
   };
-
+  
+  /**
+   * Verifica se o tráfego veio de uma campanha específica
+   */
   const isFromCampaign = (campaignName?: string): boolean => {
     if (!campaignName) return Object.keys(utmParams).length > 0;
     return utmParams.campaign === campaignName;
   };
-
+  
+  /**
+   * Verifica se o tráfego veio de uma fonte específica
+   */
   const isFromSource = (sourceName?: string): boolean => {
     if (!sourceName) return !!utmParams.source;
     return utmParams.source === sourceName;
   };
-
+  
+  /**
+   * Obtém o valor de um parâmetro UTM específico
+   */
   const getUtmParameter = (param: keyof UtmParameters): string | undefined => {
     return utmParams[param];
   };
-
+  
+  /**
+   * Adiciona parâmetros UTM a uma URL
+   */
   const addUtmToUrl = (url: string): string => {
     if (Object.keys(utmParams).length === 0) return url;
     
@@ -113,12 +140,18 @@ export const useUtmParameters = () => {
       return url;
     }
   };
-
+  
+  /**
+   * Configura o domínio base para uso nos links UTM
+   */
   const setBaseDomain = (domain: string) => {
     setDomainBase(domain);
     localStorage.setItem('domain_base', domain);
   };
-
+  
+  /**
+   * Gera links UTM completos para diferentes canais
+   */
   const generateUtmLink = (
     path: string = '',
     source: string = 'facebook',
@@ -132,17 +165,17 @@ export const useUtmParameters = () => {
       baseUrl += '/';
     }
     baseUrl += path;
-
+    
     const url = new URL(baseUrl);
     url.searchParams.append('utm_source', source);
     url.searchParams.append('utm_medium', medium);
     url.searchParams.append('utm_campaign', campaign);
     if (content) url.searchParams.append('utm_content', content);
     if (term) url.searchParams.append('utm_term', term);
-
+    
     return url.toString();
   };
-
+  
   return {
     utmParams,
     captureUtmParameters,

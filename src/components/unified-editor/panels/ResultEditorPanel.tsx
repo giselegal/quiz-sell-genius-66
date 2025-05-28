@@ -1,5 +1,3 @@
-
-"use client";
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
@@ -58,6 +56,7 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
           ? { ...block, content: { ...block.content, ...content } }
           : block
       );
+      
       updateSection('blocks', updatedBlocks);
     }
   };
@@ -67,6 +66,8 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
     if (selectedBlockId) {
       blockActions.handleDeleteBlock(selectedBlockId);
       setSelectedBlockId(null);
+      
+      // Update resultPageConfig blocks to match
       const updatedBlocks = blocks.filter(block => block.id !== selectedBlockId);
       updateSection('blocks', updatedBlocks);
     }
@@ -83,32 +84,28 @@ const ResultEditorPanel: React.FC<ResultEditorPanelProps> = ({
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">
       <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-        <div className="h-full border-r bg-white overflow-y-auto">
-          <UnifiedComponentsSidebar
-            activeTab="result"
-            onComponentSelect={blockActions.handleAddBlock}
-            activeStageType={null}
-          />
-        </div>
+        <UnifiedComponentsSidebar
+          activeTab="result"
+          onComponentSelect={blockActions.handleAddBlock}
+          activeStageType={null}
+        />
       </ResizablePanel>
-      
+
       <ResizableHandle withHandle />
-      
+
       <ResizablePanel defaultSize={55}>
-        <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
-          <EditorPreview
-            blocks={blocks}
-            selectedBlockId={selectedBlockId}
-            onSelectBlock={handleBlockSelect}
-            isPreviewing={isPreviewing}
-            primaryStyle={primaryStyle}
-            onReorderBlocks={blockActions.handleReorderBlocks}
-          />
-        </div>
+        <EditorPreview
+          blocks={blocks}
+          selectedBlockId={selectedBlockId}
+          onSelectBlock={handleBlockSelect}
+          isPreviewing={isPreviewing}
+          primaryStyle={primaryStyle}
+          onReorderBlocks={blockActions.handleReorderBlocks}
+        />
       </ResizablePanel>
-      
+
       <ResizableHandle withHandle />
-      
+
       <ResizablePanel defaultSize={25}>
         <div className="h-full border-l border-gray-200 bg-white overflow-auto">
           {selectedBlockId ? (

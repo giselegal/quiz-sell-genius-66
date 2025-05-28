@@ -12,7 +12,7 @@ export const HeroSectionBlockEditor: React.FC<BlockEditorProps> = ({
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor={`${block.id}-heroImage`}>URL da Imagem Principal</Label>
+        <Label htmlFor={`${block.id}-heroImage`}>Imagem Principal</Label>
         <Input
           id={`${block.id}-heroImage`}
           value={block.content.heroImage || ''}
@@ -29,30 +29,29 @@ export const HeroSectionBlockEditor: React.FC<BlockEditorProps> = ({
           value={block.content.heroImageAlt || ''}
           onChange={(e) => onUpdate({ heroImageAlt: e.target.value })}
           className="mt-1"
-          placeholder="Descrição da imagem"
+          placeholder="Descrição da imagem para acessibilidade"
         />
       </div>
-      
+
       <div>
-        <Label htmlFor={`${block.id}-quote`}>Citação</Label>
+        <Label htmlFor={`${block.id}-quote`}>Depoimento</Label>
         <Textarea
           id={`${block.id}-quote`}
           value={block.content.quote || ''}
           onChange={(e) => onUpdate({ quote: e.target.value })}
           className="mt-1"
-          rows={3}
-          placeholder="Uma citação inspiradora..."
+          placeholder="Digite o depoimento do cliente"
         />
       </div>
-      
+
       <div>
-        <Label htmlFor={`${block.id}-quoteAuthor`}>Autor da Citação</Label>
+        <Label htmlFor={`${block.id}-quoteAuthor`}>Autor do Depoimento</Label>
         <Input
           id={`${block.id}-quoteAuthor`}
           value={block.content.quoteAuthor || ''}
           onChange={(e) => onUpdate({ quoteAuthor: e.target.value })}
           className="mt-1"
-          placeholder="Nome do autor"
+          placeholder="Nome e idade do cliente"
         />
       </div>
     </div>

@@ -1,12 +1,10 @@
-
-"use client";
-import { useToast } from "@/components/ui/use-toast";
 import React, { useState, useEffect } from 'react';
 import { getAllImages } from '@/data/imageBank';
 import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
 import { ImageAnalysis, ImageDiagnosticResult } from '@/utils/images/types';
 import { Button } from '@/components/ui/button';
 import { Copy, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
@@ -31,17 +29,19 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
 
   useEffect(() => {
     if (!isVisible) return;
+
     setIsLoading(true);
-    
+    // Wait for the DOM to be fully loaded
     const waitForImages = () => {
       const imgs = Array.from(document.querySelectorAll('img')) as HTMLImageElement[];
       if (imgs.length > 0) {
         setImages(imgs);
         setIsLoading(false);
       } else {
-        setTimeout(waitForImages, 500);
+        setTimeout(waitForImages, 500); // Check again after 500ms
       }
     };
+
     waitForImages();
   }, [isVisible]);
 
@@ -52,7 +52,6 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
       format: optimizationSettings.format,
       width: optimizationSettings.responsive ? undefined : 800
     };
-    
     const optimizedUrl = isCloudinary ? optimizeCloudinaryUrl(url, options) : url;
     const originalSize = await getImageSize(url);
     const optimizedSize = await getImageSize(optimizedUrl);
@@ -79,7 +78,7 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
       suggestedImprovements,
       estimatedSizeReduction: originalSize - optimizedSize,
     };
-    
+
     return analysis;
   };
 
@@ -105,7 +104,7 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
   const runDiagnostics = async () => {
     setIsLoading(true);
     const results: ImageAnalysis[] = [];
-    
+
     for (const imageEl of images) {
       try {
         const url = imageEl.src;
@@ -125,14 +124,86 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
         });
       }
     }
-    
+
     setAnalysisResults(results);
+
+    const totalImagesRendered = images.length;
+    let totalImagesWithIssues = 0;
+    let totalDownloadedBytes = 0;
+    let detailedIssues: ImageDiagnosticResult['detailedIssues'] = [];
+
+    for (const imageEl of images) {
+      const url = imageEl.src;
+      const issues: string[] = [];
+
+      if (!url) {
+        totalImagesWithIssues++;
+        issues.push('URL da imagem não encontrada.');
+      } else {
+        const isCloudinary = url.includes('cloudinary.com');
+        if (isCloudinary) {
+          const options = {
+            quality: optimizationSettings.quality,
+            format: optimizationSettings.format,
+            width: optimizationSettings.responsive ? undefined : 800
+          };
+          const optimizedUrl = optimizeCloudinaryUrl(url, options);
+          const originalSize = await getImageSize(url);
+          const optimizedSize = await getImageSize(optimizedUrl);
+          totalDownloadedBytes += optimizedSize;
+
+          if (optimizationSettings.quality < 80) {
+            totalImagesWithIssues++;
+            issues.push('Qualidade da imagem abaixo do recomendado (80).');
+          }
+          if (optimizationSettings.format === 'auto') {
+            totalImagesWithIssues++;
+            issues.push('Formato da imagem não é específico (usar webp ou avif).');
+          }
+          if (!url.includes('w_auto') && !url.includes('dpr_auto')) {
+            totalImagesWithIssues++;
+            issues.push('URLs não são responsivas para diferentes tamanhos de tela.');
+          }
+          if (optimizedSize > originalSize) {
+            issues.push('Tamanho da imagem otimizada é maior que a original.');
+          }
+        } else {
+          totalImagesWithIssues++;
+          issues.push('Imagem não está hospedada no Cloudinary.');
+        }
+      }
+
+      if (issues.length > 0) {
+        detailedIssues.push({
+          url,
+          element: imageEl,
+          issues,
+          dimensions: {
+            natural: { width: imageEl.naturalWidth, height: imageEl.naturalHeight },
+            display: { width: imageEl.width, height: imageEl.height }
+          }
+        });
+      }
+    }
+
+    const estimatedPerformanceImpact = totalImagesWithIssues > 0 ? 'Alto' : 'Baixo';
+
+    setDiagnosticResult({
+      summary: {
+        totalImagesRendered,
+        totalImagesWithIssues,
+        totalDownloadedBytes,
+        estimatedPerformanceImpact,
+      },
+      detailedIssues,
+    });
+
     setIsLoading(false);
   };
 
   const optimizeImageUrl = async (url: string) => {
     if (!url) return;
-    
+
     const isCloudinary = url.includes('cloudinary.com');
     if (!isCloudinary) {
       toast({
@@ -149,9 +220,9 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
         format: optimizationSettings.format,
         width: optimizationSettings.responsive ? undefined : 800
       };
-      
       const optimizedUrl = optimizeCloudinaryUrl(url, options);
       
+      // Copy the optimized URL to the clipboard
       await navigator.clipboard.writeText(optimizedUrl);
       toast({
         title: "Sucesso",
@@ -171,7 +242,8 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
       <div className="fixed top-0 left-0 w-full h-full bg-gray-100 bg-opacity-75 z-50 overflow-auto">
         <div className="container mx-auto p-4">
           <h2 className="text-2xl font-bold mb-4">Image Diagnostic Debugger</h2>
-          
+
+          {/* Optimization Settings */}
           <div className="mb-4 p-4 bg-white rounded shadow-md">
             <h3 className="text-lg font-semibold mb-2">Optimization Settings</h3>
             <div className="space-y-2">
@@ -212,6 +284,7 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             </div>
           </div>
 
+          {/* Custom URL Input */}
           <div className="mb-4 p-4 bg-white rounded shadow-md">
             <h3 className="text-lg font-semibold mb-2">Optimize Custom URL</h3>
             <div className="flex space-x-2">
@@ -227,6 +300,7 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             </div>
           </div>
 
+          {/* Run Diagnostics Button */}
           <Button onClick={runDiagnostics} disabled={isLoading}>
             {isLoading ? (
               <>
@@ -238,6 +312,44 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             )}
           </Button>
 
+          {/* Diagnostic Summary */}
+          {diagnosticResult && (
+            <div className="mt-4 p-4 bg-white rounded shadow-md">
+              <h3 className="text-lg font-semibold mb-2">Diagnostic Summary</h3>
+              <p>Total Images Rendered: {diagnosticResult.summary.totalImagesRendered}</p>
+              <p>Total Images with Issues: {diagnosticResult.summary.totalImagesWithIssues}</p>
+              <p>Total Downloaded Bytes: {diagnosticResult.summary.totalDownloadedBytes}</p>
+              <p>Estimated Performance Impact: {diagnosticResult.summary.estimatedPerformanceImpact}</p>
+            </div>
+          )}
+
+          {/* Detailed Issues */}
+          {diagnosticResult && diagnosticResult.detailedIssues.length > 0 && (
+            <div className="mt-4 p-4 bg-white rounded shadow-md">
+              <h3 className="text-lg font-semibold mb-2">Detailed Issues</h3>
+              {diagnosticResult.detailedIssues.map((issue, index) => (
+                <div key={index} className="mb-4 p-4 border rounded">
+                  <p>
+                    <strong>URL:</strong> {issue.url}
+                  </p>
+                  <p>
+                    <strong>Natural Dimensions:</strong> {issue.dimensions?.natural.width}x{issue.dimensions?.natural.height}
+                  </p>
+                  <p>
+                    <strong>Display Dimensions:</strong> {issue.dimensions?.display.width}x{issue.dimensions?.display.height}
+                  </p>
+                  {issue.issues.map((error, i) => (
+                    <p key={i} className="text-red-500">
+                      <AlertTriangle className="inline-block h-4 w-4 mr-1" />
+                      {error}
+                    </p>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Image List and Analysis */}
           <div className="mt-4">
             <h3 className="text-xl font-semibold mb-2">Image Analysis</h3>
             {isLoading ? (

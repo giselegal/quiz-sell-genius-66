@@ -1,5 +1,3 @@
-
-"use client";
 import React, { useState, useEffect } from 'react';
 import { getLowQualityPlaceholder } from '@/utils/imageUtils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -54,6 +52,9 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   const handleError = () => {
     console.warn(`[Image] Erro ao carregar: ${src}`);
     setError(true);
+    // Garantir que o callback onLoad seja chamado mesmo em erro
+    // para não travar a progressão do carregamento
+    if (onLoad) onLoad();
   };
 
   // Iniciar temporizador para garantir eventual carregamento
@@ -94,6 +95,9 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         {!error ? (
           <motion.img 
             src={src} 
+            alt={alt} 
+            width={width}
+            height={height}
             loading={loading}
             fetchPriority={fetchPriority}
             sizes={sizes}
@@ -104,9 +108,6 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
             transition={{ duration: 0.3 }}
             className="w-full h-full transition-all"
             style={{ objectFit: fit }}
-            alt={alt}
-            width={width}
-            height={height}
           />
         ) : (
           <div className="flex items-center justify-center w-full h-full bg-gray-100 text-gray-400 text-sm py-4">

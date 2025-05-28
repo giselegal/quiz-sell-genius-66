@@ -22,6 +22,7 @@ export const useEditorBlocks = (
       ...config,
       blocks: [...config.blocks, newBlock]
     });
+
     return newBlock.id;
   }, [config, setConfig]);
 

@@ -1,23 +1,69 @@
+
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import { initializeAnimationOptimization } from './utils/disable-animations'
-import { initializeResourcePreloading } from './utils/preloadResources'
+import { initializeResourcePreloading, setupRouteChangePreloading } from './utils/preloadResources'
+import { fixMainRoutes } from './utils/fixMainRoutes'
+import { checkMainRoutes } from './utils/routeChecker'
 
-// 1) Inicializa o que é crítico
-initializeAnimationOptimization()
+// 1) Initialize critical resources and route fixing
 initializeResourcePreloading()
 
-// 2) Renderiza imediatamente
-ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+// 2) Render immediately with error handling
+const prepareRootAndRender = () => {
+  try {
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      // Remove loading fallback if exists
+      const loadingFallback = rootElement.querySelector('.loading-fallback');
+      if (loadingFallback) {
+        loadingFallback.style.display = 'none';
+      }
+      
+      ReactDOM.createRoot(rootElement).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    } else {
+      console.error('Elemento root não encontrado!');
+    }
+  } catch (error) {
+    console.error('Erro ao renderizar o aplicativo:', error);
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      rootElement.innerHTML = `
+        <div style="padding: 20px; text-align: center;">
+          <h2>Oops! Algo deu errado.</h2>
+          <p>Estamos trabalhando para resolver. Por favor, tente recarregar a página.</p>
+          <button onclick="window.location.reload()" style="padding: 8px 16px; background: #B89B7A; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">
+            Recarregar Página
+          </button>
+        </div>
+      `;
+    }
+  }
+};
 
-// 3) Lazy-load de monitoramentos e rotas quando o navegador estiver ocioso
+// Execute rendering immediately
+prepareRootAndRender();
+
+// 3) Setup route change monitoring and fixes
 const loadNonCritical = () => {
-  import('./utils/performance-monitor').then(m => m.monitorPerformance())
-  import('./utils/siteHealthCheck').then(m => m.checkSiteHealth())
-  import('./utils/funnelMonitor').then(m => m.monitorFunnelRoutes())
+  // Fix any URL issues in the main routes
+  fixMainRoutes()
+  
+  // Setup monitoring for route changes to preload resources
+  setupRouteChangePreloading()
+  
+  // Check the status of main routes
+  setTimeout(() => {
+    checkMainRoutes()
+    console.log('✅ Main routes activated and checked')
+  }, 1000)
 }
+
 if ('requestIdleCallback' in window) {
   window.requestIdleCallback(loadNonCritical, { timeout: 2000 })
 } else {

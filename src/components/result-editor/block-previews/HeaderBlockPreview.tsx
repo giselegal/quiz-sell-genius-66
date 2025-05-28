@@ -18,7 +18,7 @@ const HeaderBlockPreview: React.FC<HeaderBlockPreviewProps> = ({ content }) => {
     width: content.logoWidth || 'auto',
     height: content.logoHeight || 'auto',
     maxWidth: '100%',
-    objectFit: 'contain' as const
+    objectFit: 'contain' as 'contain' // Type assertion to ObjectFit
   };
 
   return (
@@ -37,7 +37,7 @@ const HeaderBlockPreview: React.FC<HeaderBlockPreviewProps> = ({ content }) => {
           {content.title}
         </h1>
       )}
-
+      
       {content.subtitle && (
         <p className="text-[#8F7A6A]">{content.subtitle}</p>
       )}

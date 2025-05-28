@@ -1,34 +1,43 @@
 
 import React from 'react';
+import { cn } from '@/lib/utils';
+
+type GridColumns = 1 | 2 | 3 | 4 | 5 | 6;
+type GridGap = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 interface GridLayoutProps {
   children: React.ReactNode;
+  columns: GridColumns;
+  gap?: GridGap;
   className?: string;
-  columns?: number;
-  gap?: string;
 }
 
-export const GridLayout: React.FC<GridLayoutProps> = ({
-  children,
-  className = '',
-  columns = 2,
-  gap = '4'
+export const GridLayout: React.FC<GridLayoutProps> = ({ 
+  children, 
+  columns = 1,
+  gap = 'md',
+  className 
 }) => {
-  const gridColsClass = {
+  const colsMap = {
     1: 'grid-cols-1',
-    2: 'grid-cols-1 md:grid-cols-2',
-    3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
+    2: 'grid-cols-1 sm:grid-cols-2',
+    3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+    4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+    5: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5',
+    6: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6'
   };
 
-  const gapClass = `gap-${gap}`;
-  const colClass = gridColsClass[columns as keyof typeof gridColsClass] || gridColsClass[2];
+  const gapMap = {
+    'xs': 'gap-1',
+    'sm': 'gap-2',
+    'md': 'gap-4',
+    'lg': 'gap-6',
+    'xl': 'gap-8'
+  };
 
   return (
-    <div className={`grid ${colClass} ${gapClass} ${className}`}>
+    <div className={cn('grid', colsMap[columns], gapMap[gap], className)}>
       {children}
     </div>
   );
 };
-
-export default GridLayout;

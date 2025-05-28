@@ -1,5 +1,6 @@
 
 // Facebook Pixel utility functions
+
 // Define types for fbq function
 declare global {
   interface Window {
@@ -19,7 +20,7 @@ export const initFacebookPixel = (pixelId: string): boolean => {
       console.warn('Facebook Pixel ID not provided');
       return false;
     }
-    
+
     // Initialize Facebook Pixel
     window.fbq = window.fbq || function() {
       (window.fbq as any).q = (window.fbq as any).q || [];
@@ -27,6 +28,7 @@ export const initFacebookPixel = (pixelId: string): boolean => {
     };
     
     window._fbq = window._fbq || window.fbq;
+    
     window.fbq('init', pixelId);
     window.fbq('track', 'PageView');
     
@@ -52,7 +54,7 @@ export const trackPixelEvent = (
       console.warn('Facebook Pixel not initialized');
       return;
     }
-    
+
     if (params) {
       window.fbq('track', eventName, params);
     } else {
@@ -71,7 +73,12 @@ export const trackPixelEvent = (
  */
 export const trackPageView = (url?: string): void => {
   try {
-    trackPixelEvent('PageView');
+    if (typeof window === 'undefined' || !window.fbq) {
+      return;
+    }
+
+    window.fbq('track', 'PageView');
+    
     if (url) {
       console.log(`Tracked Facebook Pixel PageView: ${url}`);
     }

@@ -1,10 +1,10 @@
 
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React from 'react';
 import { QuizQuestion } from './QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { QuizHeader } from './quiz/QuizHeader';
 import { StrategicQuestions } from './quiz/StrategicQuestions';
+
 interface QuizContentProps {
   user: any;
   currentQuestionIndex: number;
@@ -17,6 +17,7 @@ interface QuizContentProps {
   handleNextClick: () => void;
   handlePrevious: () => void;
 }
+
 export const QuizContent: React.FC<QuizContentProps> = ({
   user,
   currentQuestionIndex,
@@ -30,12 +31,14 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   handlePrevious,
 }) => {
   // Get user name from localStorage if not provided in props
-  const userName = user?.userName || safeLocalStorage.getItem('userName') || '';
+  const userName = user?.userName || localStorage.getItem('userName') || '';
   
   // Determine the required selections based on question type
   const requiredSelections = showingStrategicQuestions ? 1 : (currentQuestion?.multiSelect || 3);
+  
   // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length === requiredSelections;
+
   return (
     <>
       <QuizHeader 
@@ -45,28 +48,25 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         showingStrategicQuestions={showingStrategicQuestions}
         currentStrategicQuestionIndex={currentStrategicQuestionIndex}
       />
+
       <div className="container mx-auto px-4 py-8 w-full max-w-5xl">
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={
-              showingStrategicQuestions
-                ? currentAnswers.reduce<Record<string, string[]>>((acc, optionId) => {
-                    if (currentQuestion?.id) {
-                      acc[currentQuestion.id] = [optionId];
-                    }
-                    return acc;
-                  }, {})
-                : {} as Record<string, string[]>
-            }
+            answers={showingStrategicQuestions ? currentAnswers.reduce((acc, optionId) => {
+              if (currentQuestion?.id) {
+                acc[currentQuestion.id] = [optionId];
+              }
+              return acc;
+            }, {}) : {}}
             onAnswer={handleAnswerSubmit}
           />
         ) : (
           <QuizQuestion
             question={currentQuestion}
+            onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
             showQuestionImage={true}
-            onAnswer={handleAnswerSubmit}
           />
         )}
       </div>

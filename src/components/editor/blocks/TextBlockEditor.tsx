@@ -4,6 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { BlockEditorProps } from './types';
+
 export const TextBlockEditor: React.FC<BlockEditorProps> = ({
   block,
   onUpdate
@@ -21,6 +22,7 @@ export const TextBlockEditor: React.FC<BlockEditorProps> = ({
         />
       </div>
       
+      <div>
         <Label>Alinhamento</Label>
         <RadioGroup
           value={block.content.alignment || 'left'}
@@ -31,11 +33,16 @@ export const TextBlockEditor: React.FC<BlockEditorProps> = ({
             <RadioGroupItem value="left" id={`${block.id}-align-left`} />
             <Label htmlFor={`${block.id}-align-left`}>Esquerda</Label>
           </div>
+          <div className="flex items-center space-x-2">
             <RadioGroupItem value="center" id={`${block.id}-align-center`} />
             <Label htmlFor={`${block.id}-align-center`}>Centro</Label>
+          </div>
+          <div className="flex items-center space-x-2">
             <RadioGroupItem value="right" id={`${block.id}-align-right`} />
             <Label htmlFor={`${block.id}-align-right`}>Direita</Label>
+          </div>
         </RadioGroup>
+      </div>
     </div>
   );
 };

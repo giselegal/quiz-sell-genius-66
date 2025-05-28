@@ -3,6 +3,7 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+
 interface HeaderEditorProps {
   content: {
     logo?: string;
@@ -13,6 +14,7 @@ interface HeaderEditorProps {
   onUpdate: (content: any) => void;
   onToggleVisibility: (visible: boolean) => void;
 }
+
 export const HeaderEditor: React.FC<HeaderEditorProps> = ({
   content,
   visible,
@@ -47,14 +49,23 @@ export const HeaderEditor: React.FC<HeaderEditorProps> = ({
             )}
           </div>
           
+          <div className="space-y-2">
             <Label htmlFor="logoAlt">Texto alternativo do Logo</Label>
+            <Input
               id="logoAlt"
               value={content.logoAlt || ''}
               onChange={(e) => onUpdate({ ...content, logoAlt: e.target.value })}
+            />
+          </div>
+          
+          <div className="space-y-2">
             <Label htmlFor="title">Título</Label>
+            <Input
               id="title"
               value={content.title || ''}
               onChange={(e) => onUpdate({ ...content, title: e.target.value })}
+            />
+          </div>
         </>
       )}
     </div>

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import QuizBuilder from './QuizBuilder';
+
 /**
  * EnhancedQuizBuilder é um wrapper para o componente QuizBuilder
  * que pode adicionar funcionalidades extras como análises, ferramentas
@@ -13,4 +14,5 @@ const EnhancedQuizBuilder: React.FC = () => {
     </div>
   );
 };
+
 export default EnhancedQuizBuilder;

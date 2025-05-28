@@ -15,6 +15,8 @@ export const AnalyticsLoadingState: React.FC = () => {
         <div className="flex gap-2">
           <Skeleton className="h-9 w-32" />
           <Skeleton className="h-9 w-9" />
+          <Skeleton className="h-9 w-9" />
+          <Skeleton className="h-9 w-9" />
         </div>
       </div>
       
@@ -32,7 +34,7 @@ export const AnalyticsLoadingState: React.FC = () => {
           </Card>
         ))}
       </div>
-
+      
       {/* Chart Skeleton */}
       <Card>
         <CardHeader>
@@ -45,13 +47,13 @@ export const AnalyticsLoadingState: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-
+      
       {/* Data Grid Skeleton */}
       <Card>
         <CardHeader>
           <Skeleton className="h-5 w-32" />
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-0">
           <div className="space-y-2">
             {Array(5).fill(0).map((_, i) => (
               <div key={i} className="flex justify-between">

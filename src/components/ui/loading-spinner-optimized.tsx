@@ -1,4 +1,4 @@
-
+// Otimização do componente de spinner para melhorar a performance
 import React from 'react';
 
 interface LoadingSpinnerProps {
@@ -21,23 +21,23 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     lg: 'w-12 h-12',
     xl: 'w-16 h-16'
   };
-  
+
   const thicknessMap = {
     thin: 'border-2',
-    normal: 'border-3',
-    thick: 'border-[5px]'
+    normal: 'border-3', // Reduzido de border-4 para border-3
+    thick: 'border-[5px]' // Reduzido de border-[6px] para border-[5px]
   };
-  
+
   const sizeClass = sizeMap[size] || sizeMap.md;
   const thicknessClass = thicknessMap[thickness] || thicknessMap.normal;
-  
+
   return (
     <div className={`flex justify-center items-center ${className}`} role="status" aria-label="Loading">
       <div
         className={`${sizeClass} ${thicknessClass} rounded-full`}
         style={{
           borderColor: `${color} transparent transparent transparent`,
-          animation: 'spin-optimized 0.8s linear infinite',
+          animation: 'spin-optimized 0.8s linear infinite', // Reduzido de 1s para 0.8s
           willChange: 'transform',
           transform: 'translateZ(0)',
           backfaceVisibility: 'hidden'

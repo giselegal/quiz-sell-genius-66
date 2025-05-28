@@ -27,7 +27,10 @@ export function BlockRenderer({
         !isPreview && "border-2 border-dashed border-[#B89B7A]/40"
       )}
     >
+      {/* Block Content */}
       {renderBlockContent(block)}
+
+      {/* Edit Controls */}
       {!isPreview && isSelected && (
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button variant="ghost" size="sm" className="text-[#8F7A6A]">
