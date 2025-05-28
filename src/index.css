@@ -201,6 +201,19 @@ img:hover, .hover-scale:hover {
     font-family: 'Playfair Display', serif;
   }
 
+  /* Melhorias para loading de chunks grandes */
+  .chunk-loading {
+    opacity: 0.7;
+    pointer-events: none;
+    transition: opacity 300ms ease-in-out !important;
+  }
+
+  .chunk-loaded {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 300ms ease-in-out !important;
+  }
+
   /* Questões só com texto – aumentar fonte e melhorar layout */
   .text-only-question .question-text,
   .text-only-question .options {

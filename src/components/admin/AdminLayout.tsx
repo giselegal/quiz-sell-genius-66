@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { AdminHeader } from './AdminHeader';
 
@@ -14,8 +13,8 @@ interface AdminLayoutProps {
  */
 const AdminLayout: React.FC<AdminLayoutProps> = () => {
   const { user } = useAuth();
-  const pathname = usePathname();
-  const currentTab = pathname?.split('/').pop() || 'dashboard';
+  const location = useLocation();
+  const currentTab = location.pathname?.split('/').pop() || 'dashboard';
   
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F7]">

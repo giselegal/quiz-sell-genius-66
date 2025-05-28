@@ -4,31 +4,32 @@ import loadable from '@loadable/component';
 import { Toaster } from './components/ui/toaster';
 import { ThemeProvider } from './components/theme-provider';
 import { AuthProvider } from './context/AuthContext';
+import { LoadingFallback } from './components/ui/loading-fallback';
 
 // Lazy-loaded components - SPA ORIGINAL
 const QuizIntro = loadable(() => import('./components/QuizIntro'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando quiz...</div>
+  fallback: <LoadingFallback message="Carregando quiz..." />
 });
 
 const QuizPage = loadable(() => import('./components/QuizPage'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando quiz...</div>
+  fallback: <LoadingFallback message="Carregando perguntas..." />
 });
 
 const ResultPage = loadable(() => import('./pages_backup/ResultPage'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando resultado...</div>
+  fallback: <LoadingFallback message="Carregando resultado..." />
 });
 
 const QuizOfferPage = loadable(() => import('./pages_backup/QuizOfferPage'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando oferta...</div>
+  fallback: <LoadingFallback message="Carregando oferta..." />
 });
 
 // Admin components
 const AdminDashboard = loadable(() => import('./pages_backup/admin/OldAdminDashboard'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando painel...</div>
+  fallback: <LoadingFallback message="Carregando painel administrativo..." />
 });
 
 const EditorPage = loadable(() => import('./components/admin/editor/EnhancedResultPageEditorPage'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando editor...</div>
+  fallback: <LoadingFallback message="Carregando editor..." />
 });
 
 // Componente wrapper para QuizIntro com navegação

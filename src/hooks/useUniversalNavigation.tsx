@@ -1,34 +1,18 @@
-import { useEffect, useState } from 'react';
-
-// Detecta se estamos no ambiente Next.js ou React Router
-const isNextJsEnvironment = () => {
-  return typeof window !== 'undefined' && 
-         window.location?.pathname?.includes('_next') || 
-         typeof (globalThis as any).__NEXT_DATA__ !== 'undefined';
-};
-
-const isReactRouterEnvironment = () => {
-  return typeof window !== 'undefined' && 
-         document?.querySelector('[data-reactroot]') !== null;
-};
+import { useNavigate } from 'react-router-dom';
 
 export const useUniversalNavigation = () => {
-  const [navigationMethod, setNavigationMethod] = useState<'nextjs' | 'react-router' | 'fallback'>('fallback');
-
-  useEffect(() => {
-    if (isNextJsEnvironment()) {
-      setNavigationMethod('nextjs');
-    } else if (isReactRouterEnvironment()) {
-      setNavigationMethod('react-router');
-    } else {
-      setNavigationMethod('fallback');
-    }
-  }, []);
+  const navigate = useNavigate();
 
   const universalNavigate = (path: string) => {
-    switch (navigationMethod) {
-      case 'nextjs':
-        // Para Next.js, importamos dinamicamente
+    navigate(path);
+  };
+
+  return {
+    navigate: universalNavigate,
+    push: universalNavigate, // Alias para compatibilidade
+    replace: (path: string) => navigate(path, { replace: true })
+  };
+};
         import('next/router').then(({ default: Router }) => {
           Router.push(path);
         }).catch(() => {
