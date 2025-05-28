@@ -39,13 +39,13 @@ export const runDiagnosticDemo = () => {
   console.log(`${Object.keys(cachedImages).length} imagens em cache.`);
   
   // Mostrar estatísticas de tamanho
-  const totalSize = Object.values(cachedImages).reduce((sum, entry: any) => sum + (entry.size || 0), 0);
+  const totalSize = Object.values(cachedImages).reduce((sum, entry) => sum + (entry.size || 0), 0);
   console.log(`Tamanho total em cache: ${(totalSize / 1024).toFixed(2)} KB`);
   
   // Mostrar estatísticas de tempo de carregamento
   const loadTimes = Object.values(cachedImages)
-    .filter((entry: any) => entry.loadTime)
-    .map((entry: any) => entry.loadTime);
+    .filter((entry) => entry.loadTime)
+    .map((entry) => entry.loadTime);
     
   if (loadTimes.length > 0) {
     const avgLoadTime = loadTimes.reduce((sum, time) => sum + time, 0) / loadTimes.length;
@@ -103,7 +103,7 @@ export const analyzeIntroImages = () => {
   console.log(`Encontradas ${introImages.length} imagens na introdução.`);
   
   if (introImages.length > 0) {
-    introImages.forEach((img: HTMLImageElement, i) => {
+    introImages.forEach((img, i) => {
       console.group(`Imagem da Introdução ${i+1}`);
       console.log('Elemento:', img);
       console.log('URL:', img.src);

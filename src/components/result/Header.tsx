@@ -11,7 +11,9 @@ interface HeaderProps {
   title?: string;
   primaryStyle?: StyleResult;
   logoHeight?: number;
-  userName?: string; // Added userName prop
+  userName?: string;
+  isScrolled?: boolean;
+  className?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,14 +22,16 @@ export const Header: React.FC<HeaderProps> = ({
   title = "Olá",
   primaryStyle,
   logoHeight = 80,
-  userName // New prop
+  userName,
+  isScrolled,
+  className = ''
 }) => {
   // Get userName from context if not provided as prop
   const { user } = useAuth();
   const displayName = userName || user?.userName || 'Visitante';
   
   return (
-    <Card className="bg-white shadow-sm p-6 mb-6">
+    <Card className={`bg-white shadow-sm p-6 mb-6 ${className}`}>
       <div className="flex flex-col items-center gap-5">
         <div className="flex justify-center w-full">
           <Logo 

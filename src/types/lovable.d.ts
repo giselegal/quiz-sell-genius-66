@@ -1,4 +1,3 @@
-
 declare module '@lovable/react' {
   import React from 'react';
   export const LovableProvider: React.FC<{ children: React.ReactNode }>;

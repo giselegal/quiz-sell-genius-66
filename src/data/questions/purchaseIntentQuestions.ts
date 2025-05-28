@@ -1,4 +1,3 @@
-
 import { QuizQuestion } from '../../types/quiz';
 
 export const purchaseIntentQuestions: QuizQuestion[] = [
@@ -7,6 +6,7 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
     title: 'Você já considerou investir em algum guia ou consultoria de estilo no passado?',
     type: 'text',
     multiSelect: 1,
+    // A questão 15 (strategic-5) não deve ter imagem
     options: [
       {
         id: 'strategic-5-1',
@@ -35,6 +35,7 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
     title: 'Quanto você estaria disposta a investir em um guia completo de estilo personalizado?',
     type: 'text',
     multiSelect: 1,
+    imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp',
     options: [
       {
         id: 'strategic-6-1',

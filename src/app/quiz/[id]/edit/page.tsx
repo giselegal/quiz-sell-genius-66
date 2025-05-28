@@ -1,16 +1,15 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useParams } from 'next/navigation';
 import { DragDropEditor } from '@/components/result-editor/DragDropEditor';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-interface EditQuizPageProps {
-  params: { id: string };
-}
+// Importando configuração estática
+export { dynamic } from './static';
 
 function LoadingSpinner() {
   return (
@@ -20,7 +19,9 @@ function LoadingSpinner() {
   );
 }
 
-export default function EditQuizPage({ params }: EditQuizPageProps) {
+export default function EditQuizPage() {
+  const params = useParams();
+  const quizId = params?.id as string;
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('tab') || 'quiz';
   

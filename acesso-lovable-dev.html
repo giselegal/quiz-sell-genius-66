@@ -1,160 +1,105 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ferramentas de Acesso Lovable.dev - Quiz Sell Genius</title>
-  <style>
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      color: #432818;
-      background-color: #fffaf7;
-      padding: 2rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    h1, h2, h3 {
-      color: #B89B7A;
-    }
-    
-    .card {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(184, 155, 122, 0.1);
-      padding: 2rem;
-      margin-bottom: 2rem;
-      border: 1px solid rgba(184, 155, 122, 0.2);
-    }
-    
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-    
-    .btn {
-      cursor: pointer;
-      background: linear-gradient(to right, #B89B7A, #aa6b5d);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 0.75rem 1.25rem;
-      font-weight: 500;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
-    }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(184, 155, 122, 0.3);
-    }
-    
-    .btn-secondary {
-      background: white;
-      color: #B89B7A;
-      border: 1px solid #B89B7A;
-    }
-    
-    .code {
-      background: #f7f3ef;
-      border-radius: 4px;
-      padding: 1rem;
-      font-family: 'Menlo', 'Consolas', monospace;
-      font-size: 0.9rem;
-      overflow-x: auto;
-      margin: 1rem 0;
-    }
-    
-    .steps {
-      counter-reset: step;
-      margin-left: 0;
-      padding-left: 0;
-    }
-    
-    .steps li {
-      position: relative;
-      list-style: none;
-      padding-left: 2.5rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .steps li:before {
-      content: counter(step);
-      counter-increment: step;
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 1.5rem;
-      height: 1.5rem;
-      background: #B89B7A;
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Lovable.dev - Quiz Sell Genius</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .bookmarklet {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 10px 10px 0;
+            font-weight: bold;
+        }
+        .bookmarklet:hover {
+            background-color: #2980b9;
+        }
+        .instructions {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 10px 20px;
+            margin: 20px 0;
+        }
+        code {
+            background-color: #f2f2f2;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Acesso ao Ambiente Lovable.dev</h1>
-    <p>Esta página contém as ferramentas necessárias para acessar o ambiente Lovable.dev do projeto Quiz Sell Genius.</p>
-
-    <h2>Acessar Admin via Lovable.dev</h2>
-    <p>Use os links abaixo para acessar o painel administrativo do Quiz Sell Genius através do ambiente Lovable.dev:</p>
+    <h1>Acesso ao Lovable.dev</h1>
     
-    <div class="button-group">
-      <a href="javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/admin';return;}const lovableUrl='https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com/admin';window.open(lovableUrl,'_blank');})()" class="btn">
-        Acessar Admin (Lovable.dev)
-      </a>
-      
-      <a href="javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/resultado/editor';return;}const lovableUrl='https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com/resultado/editor';window.open(lovableUrl,'_blank');})()" class="btn">
-        Acessar Editor Visual (Lovable.dev)
-      </a>
+    <p>Para facilitar o acesso ao ambiente Lovable.dev do Quiz Sell Genius, arraste os seguintes bookmarklets para sua barra de favoritos:</p>
+    
+    <div>
+        <a class="bookmarklet" href="javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/admin';return;}const lovableUrl='https://giselegalvao.com.br/admin';window.open(lovableUrl,'_blank');})()">
+            Admin Lovable
+        </a>
+        
+        <a class="bookmarklet" href="javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/resultado/editor';return;}const lovableUrl='https://giselegalvao.com.br/resultado/editor';window.open(lovableUrl,'_blank');})()">
+            Editor Visual
+        </a>
+        
+        <a class="bookmarklet" href="javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/admin/quiz-editor';return;}const lovableUrl='https://giselegalvao.com.br/admin/quiz-editor';window.open(lovableUrl,'_blank');})()">
+            Editor de Quiz
+        </a>
+        
+        <a class="bookmarklet" href="javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/admin/sales-page';return;}const lovableUrl='https://giselegalvao.com.br/admin/sales-page';window.open(lovableUrl,'_blank');})()">
+            Páginas de Venda
+        </a>
     </div>
     
-    <h3>Como usar:</h3>
-    <ol class="steps">
-      <li>Arraste um dos botões acima para sua barra de favoritos do navegador.</li>
-      <li>Clique no favorito quando quiser acessar o ambiente Lovable.dev.</li>
-      <li>Se já estiver no ambiente Lovable.dev, o botão irá navegar para a seção apropriada.</li>
-    </ol>
-  </div>
-  
-  <div class="card">
-    <h2>Código dos Bookmarklets</h2>
-    <p>Caso prefira criar seus próprios bookmarklets, aqui estão os códigos:</p>
+    <div class="instructions">
+        <h2>Instruções:</h2>
+        <ol>
+            <li>Certifique-se que sua barra de favoritos está visível (pressione Ctrl+Shift+B ou Cmd+Shift+B se não estiver)</li>
+            <li>Arraste os botões coloridos acima para sua barra de favoritos</li>
+            <li>Para usar, simplesmente clique no favorito quando quiser acessar o ambiente Lovable.dev</li>
+        </ol>
+    </div>
     
-    <h3>Acesso Admin (Lovable.dev)</h3>
-    <pre class="code">javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/admin';return;}const lovableUrl='https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com/admin';window.open(lovableUrl,'_blank');})()</pre>
-    
-    <h3>Acesso Editor Visual (Lovable.dev)</h3>
-    <pre class="code">javascript:(function(){const isInLovable=window.location.hostname.includes('lovableproject.com')||window.location.hostname.includes('lovable.dev');if(isInLovable){window.location.href=window.location.origin+'/resultado/editor';return;}const lovableUrl='https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com/resultado/editor';window.open(lovableUrl,'_blank');})()</pre>
-  </div>
-  
-  <div class="card">
-    <h2>Instruções Adicionais</h2>
-    <p>O ambiente Lovable.dev foi configurado para ter acesso às seguintes rotas:</p>
+    <h2>Rotas Disponíveis</h2>
     <ul>
-      <li><strong>/admin</strong> - Painel administrativo principal</li>
-      <li><strong>/admin/editor</strong> - Editor unificado</li>
-      <li><strong>/admin/settings</strong> - Configurações</li>
-      <li><strong>/admin/analytics</strong> - Analytics</li>
-      <li><strong>/admin/ab-test</strong> - Gerenciador de Testes A/B</li>
-      <li><strong>/admin/ab-test-manager</strong> - Interface completa de Testes A/B</li>
-      <li><strong>/admin/prototipo</strong> - Visualizar protótipo no painel admin</li>
-      <li><strong>/resultado</strong> - Visualizar página de resultado</li>
-      <li><strong>/resultado/editor</strong> - Editor visual aprimorado</li>
-      <li><strong>/quiz</strong> - Interface do quiz</li>
-      <li><strong>/prototipo</strong> - Página de protótipo</li>
+        <li><code>/admin</code> - Painel administrativo principal</li>
+        <li><code>/admin/quiz-editor</code> - Editor de quizes</li>
+        <li><code>/admin/sales-page</code> - Gerenciador de páginas de venda</li>
+        <li><code>/resultado/editor</code> - Editor visual aprimorado</li>
+        <li><code>/admin/editor</code> - Editor unificado</li>
+        <li><code>/admin/settings</code> - Configurações</li>
+        <li><code>/admin/analytics</code> - Análise de dados</li>
+        <li><code>/admin/ab-test</code> - Gerenciador de Testes A/B</li>
+        <li><code>/quiz</code> - Interface do quiz</li>sar diretamente a URL: <code>https://giselegalvao.com.br</code></p>
+        <li><code>/prototipo</code> - Página de protótipo</li>
     </ul>
-  </div>
+    
+    <p>Você também pode acessar o ambiente Lovable.dev diretamente pela URL: <code>https://lovable.dev/projects/a10d1b34-b5d4-426b-8c97-45f125d03ec1</code></p>
+    <p>E o site de produção: <code>https://giselegalvao.com.br</code></p>        <h2>Teste de Funcionalidade</h2>    <p>Para verificar se os bookmarklets estão funcionando corretamente:</p>    <ol>        <li>Clique em um dos bookmarklets acima</li>        <li>Confirme que você é redirecionado para a página correta</li>        <li>Se estiver usando o ambiente Lovable.dev, verifique se todas as rotas listadas estão acessíveis</li>    </ol>        <h2>Lista Completa de Rotas</h2>    <ul>        <li><code>/admin</code> - Painel administrativo principal</li>        <li><code>/admin/editor</code> - Editor unificado</li>        <li><code>/admin/quiz-editor</code> - Editor de quizes</li>        <li><code>/admin/sales-page</code> - Gerenciador de páginas de venda</li>        <li><code>/admin/settings</code> - Configurações</li>        <li><code>/admin/analytics</code> - Análise de dados</li>        <li><code>/admin/ab-test</code> - Gerenciador de Testes A/B</li>
+        <li><code>/admin/ab-test-manager</code> - Interface completa de Testes A/B</li>
+        <li><code>/admin/prototipo</code> - Visualizar protótipo no painel admin</li>
+        <li><code>/resultado</code> - Visualizar página de resultado</li>
+        <li><code>/resultado/editor</code> - Editor visual aprimorado</li>
+        <li><code>/quiz</code> - Interface do quiz</li>
+        <li><code>/prototipo</code> - Página de protótipo</li>
+    </ul>
+    
+    <p>Para mais informações sobre o uso do Lovable.dev, consulte o arquivo <code>LOVABLE-ACCESS.md</code> no repositório.</p>
 </body>
 </html>

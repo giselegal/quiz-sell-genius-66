@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
@@ -132,7 +133,8 @@ export const QuizBuilder: React.FC = () => {
           percentage: 10
         }
       ],
-      totalSelections: 30
+      totalSelections: 30,
+      userName: 'Preview User'
     };
     
     setPreviewResult(previewResult);

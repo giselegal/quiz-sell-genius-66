@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -7,6 +7,13 @@ import OptimizedImage from '@/components/ui/optimized-image';
 import { preloadImagesByUrls } from '@/utils/imageManager';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// Extend Window interface to include custom property
+declare global {
+  interface Window {
+    ctaClickProcessing?: boolean;
+  }
+}
 
 // Design tokens centralizados
 const designTokens = {
@@ -66,111 +73,96 @@ const Badge: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = '' }) => (
-  <span 
-    className={`absolute z-10 bg-[${designTokens.colors.primary}] text-white text-[0.6rem] font-semibold px-1.5 py-0.5 rounded-full shadow-sm ${className}`}
-    style={{ boxShadow: designTokens.shadows.sm }}
+  <span
+    className={`absolute z-10 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm ${className}`}
+    style={{ boxShadow: designTokens.shadows.sm, backgroundColor: designTokens.colors.primary }}
   >
     {children}
   </span>
 );
 
-// Componente CheckItem reutilizável
-const CheckItem: React.FC<{
-  children: React.ReactNode;
-}> = ({ children }) => (
-  <li className="flex items-start gap-2.5 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
-    <span className="min-w-[22px] mt-0.5 flex-shrink-0 transform transition-transform group-hover:scale-110">
-      <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="12" fill={designTokens.colors.secondary}/>
+// MEMOIZED COMPONENTS PARA PERFORMANCE
+const CheckItem = React.memo<{ children: React.ReactNode }>(({ children }) => (
+  <li className="flex items-start gap-3 text-[#aa6b5d] text-base justify-center md:justify-start group transition-all duration-300 hover:translate-x-1">
+    <span className="min-w-[20px] mt-1 flex-shrink-0 transform transition-transform group-hover:scale-110">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="12" fill="#aa6b5d"/>
         <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     </span>
     <span className="group-hover:text-[#432818] transition-colors">{children}</span>
   </li>
-);
+));
+CheckItem.displayName = 'CheckItem';
 
-// Componente NavButton reutilizável
-const NavButton: React.FC<{
+const NavButton = React.memo<{
   direction: 'prev' | 'next';
   onClick: () => void;
-}> = ({ direction, onClick }) => (
-  <motion.button
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.95 }}
-    className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-    onClick={onClick}
+}>(({ direction, onClick }) => (
+  <button
+    className="bg-white/95 backdrop-blur-sm rounded-full p-2 md:p-3 shadow-md hover:bg-[#B89B7A]/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-1 z-20"
+    onClick={useCallback((e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onClick();
+    }, [onClick])}
+    style={{ pointerEvents: 'auto' }}
     aria-label={direction === 'prev' ? 'Anterior' : 'Próxima'}
   >
     {direction === 'prev' ? (
-      <ChevronLeft size={22} className="text-[#432818]" />
+      <ChevronLeft size={16} className="text-[#432818] md:w-6 md:h-6" style={{ pointerEvents: 'none' }} />
     ) : (
-      <ChevronRight size={22} className="text-[#432818]" />
+      <ChevronRight size={16} className="text-[#432818] md:w-6 md:h-6" style={{ pointerEvents: 'none' }} />
     )}
-  </motion.button>
-);
+  </button>
+));
 
-// Dados das transformações
+// SIMPLIFIED TRANSFORMATIONS DATA
 const transformations: TransformationItem[] = [
   {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
     name: "Adriana",
     id: "transformation-adriana",
-    width: 800,
-    height: 1000
+    width: 600,
+    height: 750
   }, 
   {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
-    name: "Mariangela",
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+    name: "Mariangela", 
     id: "transformation-mariangela",
-    width: 800,
-    height: 1000
+    width: 600,
+    height: 750
   }
 ];
 
-// Hook personalizado para gerenciar o carregamento de imagens
+// OPTIMIZED IMAGE PRELOADER
 const useImagePreloader = (images: string[], initialIndex = 0) => {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   
   useEffect(() => {
-    // Pré-carregar a imagem inicial
     if (images.length > 0) {
-      preloadImagesByUrls([images[initialIndex]], {
-        quality: 90,
-      });
+      // Pré-carregar imagem atual
+      const currentImage = new Image();
+      currentImage.onload = () => {
+        setLoadedImages(prev => ({ ...prev, [images[initialIndex]]: true }));
+      };
+      currentImage.src = images[initialIndex];
       
-      // Marcar como carregada após um tempo
-      const timer = setTimeout(() => {
-        setLoadedImages(prev => ({
-          ...prev,
-          [images[initialIndex]]: true
-        }));
-      }, 500);
-      
-      return () => clearTimeout(timer);
+      // Pré-carregar próxima imagem com delay
+      if (images.length > 1) {
+        setTimeout(() => {
+          const nextIndex = (initialIndex + 1) % images.length;
+          const nextImage = new Image();
+          nextImage.onload = () => {
+            setLoadedImages(prev => ({ ...prev, [images[nextIndex]]: true }));
+          };
+          nextImage.src = images[nextIndex];
+        }, 1000);
+      }
     }
-  }, []);
+  }, [images, initialIndex]);
   
-  // Função para pré-carregar a próxima imagem
-  const preloadNextImage = (currentIndex: number) => {
-    if (images.length > 1) {
-      const nextIndex = (currentIndex + 1) % images.length;
-      const nextImageUrl = images[nextIndex];
-      
-      preloadImagesByUrls([nextImageUrl], { 
-        quality: 80, 
-      });
-      
-      // Marcar como carregada após um tempo
-      setTimeout(() => {
-        setLoadedImages(prev => ({
-          ...prev,
-          [nextImageUrl]: true
-        }));
-      }, 500);
-    }
-  };
-  
-  return { loadedImages, setLoadedImages, preloadNextImage };
+  return { loadedImages };
 };
 
 const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ handleCTAClick }) => {
@@ -180,97 +172,96 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   
   const isLowPerformance = useIsLowPerformanceDevice();
   const imageUrls = transformations.map(t => t.image);
-  const { loadedImages, preloadNextImage } = useImagePreloader(imageUrls, 0);
+  const { loadedImages } = useImagePreloader(imageUrls, 0);
   
   const activeTransformation = transformations[activeIndex];
-  const isImageLoaded = loadedImages[activeTransformation.image];
 
-  // Efeito para desativar o estado de carregamento inicial após um tempo
-  useEffect(() => {
-    const fallbackLoadingTimer = setTimeout(() => {
-      if (isLoading) {
-        setIsLoading(false);
-      }
-    }, 1500);
-
-    return () => clearTimeout(fallbackLoadingTimer);
+  // MEMOIZED NAVIGATION FUNCTIONS
+  const navigateToTransformation = useCallback((index: number) => {
+    if (index >= 0 && index < transformations.length) {
+      setActiveIndex(index);
+    }
   }, []);
 
-  // Efeito para pré-carregar a próxima imagem quando o índice ativo muda
+  const goToPrevious = useCallback(() => {
+    const prevIndex = (activeIndex - 1 + transformations.length) % transformations.length;
+    navigateToTransformation(prevIndex);
+  }, [activeIndex, navigateToTransformation]);
+
+  const goToNext = useCallback(() => {
+    const nextIndex = (activeIndex + 1) % transformations.length;
+    navigateToTransformation(nextIndex);
+  }, [activeIndex, navigateToTransformation]);
+
+  // LOADING STATE MANAGEMENT
   useEffect(() => {
-    preloadNextImage(activeIndex);
-  }, [activeIndex]);
+    if (loadedImages[transformations[activeIndex].image]) {
+      setIsLoading(false);
+    }
+  }, [loadedImages, activeIndex]);
 
-  // Função para navegar entre transformações
-  const navigateToTransformation = (index: number) => {
-    setActiveIndex(index);
-  };
+  // OPTIMIZED CTA HANDLER
+  const handleCTA = useCallback((e?: React.MouseEvent) => {
+    // Prevenir comportamento padrão e propagação
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    // Prevenir múltiplos cliques
+    if (window.ctaClickProcessing) return;
+    window.ctaClickProcessing = true;
+    
+    if (handleCTAClick) {
+      handleCTAClick();
+    } else {
+      trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
+      
+      // Para desktop, usar window.open para garantir funcionamento
+      if (window.innerWidth >= 768) {
+        window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
+      } else {
+        // Para mobile, usar location.href
+        window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+      }
+    }
+    
+    // Limpar flag após delay
+    setTimeout(() => {
+      window.ctaClickProcessing = false;
+    }, 1000);
+  }, [handleCTAClick]);
 
-  // O esqueleto de carregamento é mostrado enquanto isLoading é true
+  // LOADING SKELETON - SIMPLIFIED
   if (isLoading) {
     return (
-      <div className="my-8 sm:my-10 md:my-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          {/* Título com decoração */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-8"
-          >
-            <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] inline-block relative">
-              Descubra o poder da imagem intencional
-              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-0.5 bg-[#B89B7A]/30"></span>
-            </h3>
-          </motion.div>
+      <div className="my-12">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-8">
+            <div className="h-8 bg-gradient-to-r from-[#f8f5f0] to-[#f0ebe6] rounded-lg mb-4 animate-pulse"></div>
+            <div className="w-20 h-1 bg-[#f8f5f0] rounded-full mx-auto animate-pulse"></div>
+          </div>
           
-          {/* Card principal com skeleton */}
-          <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-shadow duration: 300">
+          <Card className="overflow-hidden border border-[#B89B7A]/20">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
-              {/* Coluna da imagem */}
-              <div className="p-5 md:p-6 flex flex-col items-center">
-                <div className="relative w-full max-w-sm mx-auto aspect-[4/5] bg-[#f8f5f0] rounded-lg animate-pulse">
-                  <div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 z-10 bg-[#B89B7A] text-white text-xs font-semibold px-4 py-1 rounded-full shadow">
-                    Resultados Reais
-                  </div>
-                </div>
-                
-                {/* Indicadores de slides */}
+              <div className="p-6 flex flex-col items-center">
+                <div className="w-full max-w-sm aspect-[4/5] bg-[#f8f5f0] rounded-lg mb-4 animate-pulse"></div>
                 <div className="flex justify-center space-x-2 mt-4">
                   {transformations.map((_, idx) => (
-                    <div key={idx} className={`w-2.5 h-2.5 rounded-full ${idx === 0 ? 'bg-[#B89B7A]' : 'bg-gray-300'}`} />
+                    <div key={idx} className="w-3 h-3 bg-[#f8f5f0] rounded-full animate-pulse"></div>
                   ))}
                 </div>
               </div>
               
-              {/* Coluna de conteúdo */}
-              <div className="p-5 md:p-6 bg-white">
-                <h4 className="text-lg font-medium text-[#432818] text-center md:text-left mb-4 md:hidden">
-                  Transformação Visual com Propósito
-                </h4>
-                
-                <div className="text-gray-700 text-base md:text-lg text-center md:text-left mb-4 bg-[#f8f5f0] h-20 rounded animate-pulse">
+              <div className="p-6 bg-white space-y-4">
+                <div className="h-6 bg-[#f8f5f0] rounded animate-pulse"></div>
+                <div className="h-16 bg-[#f8f5f0] rounded animate-pulse"></div>
+                <div className="space-y-3">
+                  {Array(4).fill(0).map((_, idx) => (
+                    <div key={idx} className="h-5 bg-[#f8f5f0] rounded animate-pulse"></div>
+                  ))}
                 </div>
-                
-                <div className="bg-[#f9f4ef]/70 rounded-lg p-4 mb-6">
-                  <ul className="space-y-4 text-center md:text-left">
-                    {Array(4).fill(0).map((_, idx) => (
-                      <li key={idx} className="flex items-start gap-2 justify-center md:justify-start">
-                        <span className="min-w-[22px] mt-1 flex-shrink-0">
-                          <div className="w-5 h-5 bg-[#f8f5f0] rounded-full animate-pulse"></div>
-                        </span>
-                        <div className="h-5 bg-[#f8f5f0] rounded animate-pulse w-3/4"></div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className="flex flex-col items-center md:items-start">
-                  <div className="w-full h-12 max-w-[280px] bg-[#f8f5f0] rounded animate-pulse mb-2"></div>
-                  <div className="h-3 w-32 bg-[#f8f5f0] rounded animate-pulse mb-4"></div>
-                
-                  <div className="w-full h-10 max-w-[280px] bg-[#f8f5f0] rounded animate-pulse"></div>
-                </div>
+                <div className="h-12 bg-[#f8f5f0] rounded animate-pulse"></div>
               </div>
             </div>
           </Card>
@@ -279,33 +270,24 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     );
   }
 
-  // Layout principal após o carregamento
+  // MAIN COMPONENT - OPTIMIZED
   return (
-    <div className="my-8 sm:my-10 md:my-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        {/* Título com decoração */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] inline-block relative">
-            Descubra o poder da imagem intencional
-            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-0.5 bg-[#B89B7A]/30"></span>
+    <div className="my-12">
+      <div className="max-w-4xl mx-auto px-6">
+        {/* HEADER */}
+        <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4">
+            Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
           </h3>
+          <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto"></div>
         </motion.div>
         
-        {/* Card principal com grid layout */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-all duration-300">
+        {/* MAIN CARD */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+          <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-lg transition-all duration-300">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
-              {/* Coluna da imagem */}
-              <div className="p-5 md:p-6 flex flex-col items-center">
+              {/* IMAGE SECTION */}
+              <div className="p-6 flex flex-col items-center">
                 <div className="relative w-full max-w-sm mx-auto">
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -324,47 +306,29 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                         className="w-full h-auto rounded-lg shadow-md"
                         priority={true}
                       />
-                      
-                      {/* Nome da pessoa */}
-                      <Badge className="top-3 right-3 bg-white/90 backdrop-blur-sm text-[#432818] font-medium">
-                        {activeTransformation.name}
-                      </Badge>
-                      
-                      {/* Selo 'Resultados Reais' */}
-                      <Badge className="bottom-[10%] left-1/2 -translate-x-1/2">
-                        Resultados Reais
-                      </Badge>
                     </motion.div>
                   </AnimatePresence>
                   
-                  {/* Navegação */}
+                  {/* NAVIGATION - OPTIMIZED */}
                   {transformations.length > 1 && (
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
-                      <NavButton 
-                        direction="prev" 
-                        onClick={() => navigateToTransformation((activeIndex - 1 + transformations.length) % transformations.length)} 
-                      />
-                      <NavButton 
-                        direction="next" 
-                        onClick={() => navigateToTransformation((activeIndex + 1) % transformations.length)} 
-                      />
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 md:px-2 z-20">
+                      <NavButton direction="prev" onClick={goToPrevious} />
+                      <NavButton direction="next" onClick={goToNext} />
                     </div>
                   )}
                 </div>
                 
-                {/* Indicadores de slides */}
+                {/* INDICATORS */}
                 {transformations.length > 1 && (
                   <div className="flex justify-center space-x-3 mt-4">
                     {transformations.map((_, idx) => (
-                      <motion.button
+                      <button
                         key={idx}
                         onClick={() => navigateToTransformation(idx)}
-                        whileHover={{ scale: 1.2 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
                           idx === activeIndex 
-                            ? 'bg-[#B89B7A] scale-110' 
-                            : 'bg-gray-300 hover:bg-[#B89B7A]/50'
+                            ? 'bg-[#B89B7A] scale-110 shadow-sm' 
+                            : 'bg-gray-300 hover:bg-[#B89B7A]/50 hover:scale-105'
                         }`}
                         aria-label={`Ver transformação ${idx + 1}`}
                       />
@@ -373,86 +337,44 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 )}
               </div>
               
-              {/* Coluna de conteúdo */}
-              <div className="p-5 md:p-6 bg-white">
-                {/* Título mobile */}
-                <motion.h4 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="text-lg font-medium text-[#432818] md:hidden text-center mb-4"
-                >
-                  Transformação Visual com Propósito
-                </motion.h4>
+              {/* CONTENT SECTION - SIMPLIFIED */}
+              <div className="p-6 bg-white">
+                <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
+                  <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
+                    Transforme sua Imagem
+                  </span>
+                </h4>
                 
-                {/* Título desktop */}
-                <motion.h4 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="text-xl font-medium text-[#432818] hidden md:block text-left mb-4"
-                >
-                  Transformação Visual com Propósito
-                </motion.h4>
+                <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
+                  Seu estilo é muito mais que roupas — é a expressão da sua essência e uma aliada para atingir seus objetivos.
+                </p>
                 
-                {/* Texto descritivo */}
-                <motion.p 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.4 }}
-                  className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5"
-                >
-                  Seu estilo não é apenas sobre roupas — é sobre comunicar quem você é e onde quer chegar.
-                </motion.p>
-                
-                {/* Lista de benefícios */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 }}
-                  className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10 hover:border-[#B89B7A]/20 transition-all duration-300 hover:shadow-sm"
-                >
-                  <ul className="space-y-3.5 text-center md:text-left">
-                    <CheckItem>Looks com intenção e identidade</CheckItem>
-                    <CheckItem>Cores, modelagens e tecidos a seu favor</CheckItem>
-                    <CheckItem>Imagem alinhada aos seus objetivos</CheckItem>
-                    <CheckItem>Guarda-roupa funcional, sem compras por impulso</CheckItem>
+                {/* BENEFITS LIST */}
+                <div className="bg-[#f9f4ef]/70 rounded-lg p-5 mb-6 border border-[#B89B7A]/10">
+                  <ul className="space-y-3 text-center md:text-left">
+                    <CheckItem>Looks que expressam sua verdadeira essência</CheckItem>
+                    <CheckItem>Cores e modelagens que realçam sua beleza natural</CheckItem>
+                    <CheckItem>Imagem profissional alinhada aos seus objetivos</CheckItem>
+                    <CheckItem>Guarda-roupa inteligente e sem desperdícios</CheckItem>
                   </ul>
-                </motion.div>
+                </div>
                 
-                {/* CTA e informações */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.6 }}
-                  className="flex flex-col items-center md:items-start"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  >
+                {/* CTA SECTION */}
+                <div className="flex flex-col items-center md:items-start">
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                     <Button
-                      onClick={handleCTAClick ? handleCTAClick : () => {
-                        trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-                        window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-                      }}
+                      onClick={handleCTA}
                       onMouseEnter={() => setIsButtonHovered(true)}
                       onMouseLeave={() => setIsButtonHovered(false)}
-                      className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#45a049] focus:ring-offset-2"
+                      className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-sm md:text-base mb-2 cursor-pointer"
                       style={{
                         background: "linear-gradient(to right, #4CAF50, #45a049)",
-                        boxShadow: designTokens.shadows.cta,
+                        boxShadow: "0 8px 32px rgba(76, 175, 80, 0.4)",
                       }}
+                      type="button"
                     >
-                      <span className="flex items-center justify-center gap-2">
-                        <motion.div
-                          animate={{ 
-                            scale: isButtonHovered ? 1.1 : 1,
-                            rotate: isButtonHovered ? 10 : 0
-                          }}
-                          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                        >
+                      <span className="flex items-center justify-center gap-2" style={{ pointerEvents: 'none' }}>
+                        <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1, rotate: isButtonHovered ? 10 : 0 }}>
                           <ShoppingCart className="w-5 h-5" />
                         </motion.div>
                         Quero Meu Guia de Estilo
@@ -464,18 +386,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     Oferta por tempo limitado
                   </p>
                 
-                  {/* Métodos de pagamento */}
-                  <div className="w-full max-w-[280px] mx-auto md:mx-0 transition-transform duration-300 hover:scale-[1.02]">
+                  {/* PAYMENT METHODS */}
+                  <div className="w-full max-w-[280px] mx-auto md:mx-0">
                     <img
                       src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
                       alt="Métodos de pagamento"
                       className="w-full rounded-lg shadow-sm"
                       loading="lazy"
-                      width="400"
-                      height="100"
+                      width="280"
+                      height="70"
                     />
                   </div>
-                </motion.div>
+                </div>
               </div>
             </div>
           </Card>
@@ -485,4 +407,4 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   );
 };
 
-export default BeforeAfterTransformation;
+export default React.memo(BeforeAfterTransformation);

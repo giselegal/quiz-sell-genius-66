@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -18,6 +18,10 @@ import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import ProgressiveImage from '@/components/ui/progressive-image';
+import ResourcePreloader from '@/components/result/ResourcePreloader';
+import PerformanceMonitor from '@/components/result/PerformanceMonitor';
+
 // Seções carregadas via lazy
 const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
 const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
@@ -46,7 +50,10 @@ const ResultPage: React.FC = () => {
     isLoading,
     completeLoading
   } = useLoadingState({
-    minDuration: isLowPerformance ? 400 : 800,
+    // Para evitar a exibição sequencial de duas barras de progresso,
+    // reduzimos drasticamente o tempo de carregamento quando os resultados
+    // já foram pré-carregados durante o quiz
+    minDuration: isLowPerformance ? 100 : 300,
     disableTransitions: isLowPerformance
   });
 
@@ -56,35 +63,25 @@ const ResultPage: React.FC = () => {
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
+    
+    // Verificar se os resultados já foram pré-carregados
+    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
+    
+    // Se os resultados já foram pré-carregados durante o quiz, pulamos o skeleton quase que imediatamente
+    if (hasPreloadedResults) {
+      setImagesLoaded({ style: true, guide: true });
+      completeLoading();
+      return; // Retornamos cedo sem criar o timeout
+    } 
+    
+    // Definir timeout de segurança apenas se não tiver pré-carregado
+    const safetyTimeout = setTimeout(() => {
+      setImagesLoaded({ style: true, guide: true });
+      completeLoading();
+    }, 2500);
 
-    // Pré-carregar imagens críticas primeiro
-    const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
-    criticalImages.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
-
-    // Depois carregar as imagens específicas do estilo
-    const {
-      category
-    } = primaryStyle;
-    const {
-      image,
-      guideImage
-    } = styleConfig[category];
-    const styleImg = new Image();
-    styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
-    styleImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      style: true
-    }));
-    const guideImg = new Image();
-    guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
-    guideImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      guide: true
-    }));
-  }, [primaryStyle, globalStyles.logo]);
+    return () => clearTimeout(safetyTimeout);
+  }, [primaryStyle, globalStyles.logo, completeLoading]);
   
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
@@ -114,6 +111,12 @@ const ResultPage: React.FC = () => {
       color: globalStyles.textColor || '#432818',
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
+      {/* Componente de pré-carregamento de recursos */}
+      <ResourcePreloader />
+      
+      {/* Monitor de desempenho (componente invisível) */}
+      <PerformanceMonitor />
+      
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
@@ -126,13 +129,17 @@ const ResultPage: React.FC = () => {
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
               <div className="max-w-md mx-auto mb-6">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-[#8F7A6A]">
-                    Seu estilo predominante
-                  </span>
-                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+                <div className="text-sm text-[#8F7A6A] text-center mb-2">
+                  Seu estilo predominante
                 </div>
-                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
+                <Progress 
+                  value={primaryStyle.percentage} 
+                  className="h-3 bg-[#F3E8E6] rounded-full overflow-hidden" 
+                  indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] transition-all duration-500 ease-in-out"
+                />
+                <div className="text-right text-sm text-[#8F7A6A] mt-1">
+                  {primaryStyle.percentage}%
+                </div>
               </div>
             </div>
 
@@ -150,7 +157,16 @@ const ResultPage: React.FC = () => {
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
-                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
+                  <ProgressiveImage 
+                    src={`${image}?q=85&f=auto&w=238`} 
+                    alt={`Estilo ${category}`} 
+                    width={238} 
+                    height={298} 
+                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                    loading="eager" 
+                    fetchPriority="high" 
+                    onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
+                  />
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
                   <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
@@ -159,7 +175,13 @@ const ResultPage: React.FC = () => {
             </div>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
               <div className="mt-8 max-w-[540px] mx-auto relative">
-                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" width="540" height="auto" />
+                <ProgressiveImage 
+                  src={`${guideImage}?q=85&f=auto&w=540`} 
+                  alt={`Guia de Estilo ${category}`} 
+                  loading="lazy" 
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
+                  onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
+                />
                 {/* Elegant badge */}
                 <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
                   Exclusivo
@@ -170,82 +192,49 @@ const ResultPage: React.FC = () => {
         </Card>
 
         {/* INTEREST: Before/After Transformation Section */}
-        <Suspense fallback={<div className="flex justify-center py-8"><LoadingSpinner size="lg" /></div>}>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={700}>
             <BeforeAfterTransformation handleCTAClick={handleCTAClick} />
           </AnimatedWrapper>
         </Suspense>
 
         {/* INTEREST: Motivation Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-          <Suspense fallback={null}>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={800}>
             <MotivationSection />
-          </Suspense>
-        </AnimatedWrapper>
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* INTEREST: Bonus Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
-          <Suspense fallback={null}>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={850}>
             <BonusSection />
-          </Suspense>
-        </AnimatedWrapper>
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* DESIRE: Testimonials */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
-          <Suspense fallback={null}>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={900}>
             <Testimonials />
-          </Suspense>
-        </AnimatedWrapper>
-
-        {/* DESIRE: Featured CTA (Green) */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
-          <div className="text-center my-10">
-            <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
-              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
-                Descubra Como Aplicar Seu Estilo na Prática
-              </h3>
-              <div className="flex justify-center">
-                <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
-              </div>
-            </div>
-            
-            <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
-              background: "linear-gradient(to right, #4CAF50, #45a049)",
-              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-            }}>
-              <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                Quero meu Guia de Estilo Agora
-              </span>
-            </Button>
-            
-            <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
-              <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
-                
-                
-              </p>
-            </div>
-            
-            <SecurePurchaseElement />
-          </div>
-        </AnimatedWrapper>
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* DESIRE: Guarantee Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
-          <Suspense fallback={null}>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1000}>
             <GuaranteeSection />
-          </Suspense>
-        </AnimatedWrapper>
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* DESIRE: Mentor and Trust Elements */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
-          <Suspense fallback={null}>
+        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-8" />}>
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1050}>
             <MentorSection />
-          </Suspense>
-        </AnimatedWrapper>
+          </AnimatedWrapper>
+        </Suspense>
 
         {/* ACTION: Final Value Proposition and CTA */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1100}>
           <div className="text-center mt-10">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
               Vista-se de Você — na Prática
@@ -281,7 +270,7 @@ const ResultPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
+              <div className="bg-white text-left p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
                 <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
@@ -304,18 +293,21 @@ const ResultPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-                  <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-                  <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-                  <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+                <div className="bg-[#f9f4ef] p-6 rounded-lg space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
+                  <div className="text-center md:text-left space-y-1">
+                    <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por Apenas</p>
+                    <p className="text-4xl font-bold text-[#aa6b5d]">5x de R$ 8,83</p>
+                  </div>
+                  <div className="text-center md:text-left">
+                    <p className="text-sm text-[#432818]">Ou R$ 39,90 à vista</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2" style={{
+            <Button onClick={handleCTAClick} className="text-white text-sm leading-none py-3 px-6 md:py-5 md:px-8 rounded-md shadow-md transition-colors btn-3d w-full md:w-auto mb-2" style={{
             background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-            fontSize: "1rem" /* Smaller font size for button */
+            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
             }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />

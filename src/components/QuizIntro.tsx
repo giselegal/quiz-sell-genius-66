@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -49,17 +48,27 @@ interface QuizIntroProps {
 type QuizIntroComponent = React.FC<QuizIntroProps>;
 const QuizIntro: QuizIntroComponent = ({ onStart }) => {
   const [nome, setNome] = useState('');
+  const [error, setError] = useState('');
   
   // Função simplificada de submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (nome.trim()) {
-      onStart(nome);
-      
-      // Reportar Web Vitals após interação do usuário
-      if (typeof window !== 'undefined' && 'performance' in window) {
-        window.performance.mark('user-interaction');
-      }
+    
+    // Verificar se o nome foi preenchido
+    if (!nome.trim()) {
+      setError('Por favor, digite seu nome para continuar');
+      return;
+    }
+    
+    // Limpar qualquer erro anterior
+    setError('');
+    
+    // Iniciar o quiz com o nome fornecido
+    onStart(nome);
+    
+    // Reportar Web Vitals após interação do usuário
+    if (typeof window !== 'undefined' && 'performance' in window) {
+      window.performance.mark('user-interaction');
     }
   };
 
@@ -86,7 +95,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
   // Renderizar diretamente o conteúdo principal sem estados de carregamento
   return (
     <main
-      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-white to-gray-50 py-6"
+      className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-white to-gray-50 py-8"
       data-section="intro"
     >
       {/* Skip link para acessibilidade */}
@@ -97,7 +106,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
         Pular para o formulário
       </a>
       
-      <header className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 mx-auto">
+      <header className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-8 mx-auto">
         {/* Logo centralizado - renderização imediata */}
         <div className="flex flex-col items-center space-y-2">
           <div className="relative">
@@ -144,7 +153,7 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
         </h1>
       </header>
 
-      <section className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 mx-auto">
+      <section className="w-full max-w-xs sm:max-w-md md:max-w-lg px-4 space-y-6 md:space-y-8 mx-auto">
         {/* Imagem principal - renderização imediata e LCP */}
         <div className="mt-2 w-full max-w-xs sm:max-w-md md:max-w-lg mx-auto">
           <div
@@ -194,10 +203,10 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
         </p>
 
         {/* Formulário - renderização imediata */}
-        <div id="quiz-form">
+        <div id="quiz-form" className="mt-8">
           <form
             onSubmit={handleSubmit}
-            className="w-full space-y-4"
+            className="w-full space-y-6"
             autoComplete="off"
           >
             <div>
@@ -205,39 +214,56 @@ const QuizIntro: QuizIntroComponent = ({ onStart }) => {
                 htmlFor="name"
                 className="block text-xs font-semibold text-[#432818] mb-1.5"
               >
-                NOME
+                NOME <span className="text-red-500">*</span>
               </label>
               <Input
                 id="name"
                 placeholder="Digite seu nome"
                 value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                className="w-full p-2.5 bg-[#FEFEFE] rounded-md border-[#B89B7A] focus:border-[#A1835D] focus:ring-[#A1835D]"
+                onChange={(e) => {
+                  setNome(e.target.value);
+                  if (error) setError('');
+                }}
+                className={cn(
+                  "w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-offset-2 focus-visible:ring-offset-2 focus:ring-offset-[#FEFEFE] focus-visible:ring-offset-[#FEFEFE]",
+                  error 
+                    ? "border-red-500 focus:ring-red-500 focus-visible:ring-red-500" 
+                    : "border-[#B89B7A] focus:ring-[#A1835D] focus-visible:ring-[#A1835D]"
+                )}
                 autoFocus
                 aria-required="true"
                 autoComplete="off"
                 inputMode="text"
                 maxLength={32}
+                aria-invalid={!!error}
+                aria-describedby={error ? "name-error" : undefined}
+                required
               />
+              {error && (
+                <p id="name-error" className="mt-1.5 text-sm text-red-500 font-medium">{error}</p>
+              )}
             </div>
             
             <button
               type="submit"
               className={cn(
-                'w-full py-2 px-3 text-sm font-semibold rounded-md shadow-md transition-colors',
-                'bg-[#B89B7A] text-white hover:bg-[#A1835D] active:bg-[#947645] hover:shadow-lg',
+                'w-full py-2 px-3 text-sm font-semibold rounded-md shadow-md transition-all duration-300',
                 'focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2',
                 'sm:py-3 sm:px-4 sm:text-base',
-                'md:py-3.5 md:text-lg'
+                'md:py-3.5 md:text-lg',
+                nome.trim() 
+                  ? 'bg-[#B89B7A] text-white hover:bg-[#A1835D] active:bg-[#947645] hover:shadow-lg transform hover:scale-[1.01]' 
+                  : 'bg-[#B89B7A]/50 text-white/90 cursor-not-allowed'
               )}
+              aria-disabled={!nome.trim()}
             >
               <span className="flex items-center justify-center gap-2">
-                Quero Descobrir meu Estilo Agora!
+                {nome.trim() ? 'Quero Descobrir meu Estilo Agora!' : 'Digite seu nome para continuar'}
               </span>
             </button>
 
             <p className="text-xs text-center text-gray-500 pt-1">
-              Ao clicar, você concorda com nossa{' '}
+              Seu nome é necessário para personalizar sua experiência. Ao clicar, você concorda com nossa{' '}
               <a 
                 href="#" 
                 className="text-[#B89B7A] hover:text-[#A1835D] underline focus:outline-none focus:ring-1 focus:ring-[#B89B7A] rounded"

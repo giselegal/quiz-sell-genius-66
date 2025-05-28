@@ -6,6 +6,22 @@ import compression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Configurações para ignorar erros não críticos
+  build: {
+    reportCompressedSize: false, // Reduz warnings relacionados a tamanho
+    chunkSizeWarningLimit: 2000, // Aumenta limite de tamanho de chunk para evitar warnings
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Ignora warnings específicos
+        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+        if (warning.code === 'EMPTY_BUNDLE') return;
+        if (warning.code === 'EVAL') return;
+        if (warning.code === 'THIS_IS_UNDEFINED') return;
+        if (warning.message?.includes('sourcemap')) return;
+        warn(warning);
+      }
+    },
+  },
   root: '.',
   base: './',
   
@@ -15,14 +31,29 @@ export default defineConfig(({ mode }) => ({
     // Configurações CORS e mime-types para desenvolvimento
     headers: {
       'X-Content-Type-Options': 'nosniff',
-      'Access-Control-Allow-Origin': '*',
+      // Limitando CORS para hosts específicos
+      'Access-Control-Allow-Origin': [
+        'http://localhost:8080',
+        'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com'
+      ].join(', '),
     },
     fs: {
       allow: ['../']
     },
     allowedHosts: [
       "a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com"
-    ]
+    ],
+    // CORREÇÃO CRÍTICA: Configuração de fallback para SPA
+    // Isso garante que todas as rotas retornem o index.html
+    historyApiFallback: {
+      rewrites: [
+        { from: /\/admin\/editor/, to: '/index.html' },
+        { from: /\/admin\/.*/, to: '/index.html' },
+        { from: /\/resultado/, to: '/index.html' },
+        { from: /\/quiz-.*/, to: '/index.html' },
+        { from: /.*/, to: '/index.html' }
+      ]
+    }
   },
   
   plugins: [

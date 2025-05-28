@@ -1,148 +1,61 @@
-import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { QuizProvider } from './context/QuizContext';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { Toaster } from '@/components/ui/toaster';
-import { captureUTMParameters } from './utils/analytics';
-import { loadFacebookPixel } from './utils/facebookPixel';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import CriticalCSSLoader from './components/CriticalCSSLoader';
-import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
-import LovableRoutes from './lovable-routes';
+import React, { Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import loadable from '@loadable/component';
+import { Toaster } from './components/ui/toaster';
+import { ThemeProvider } from './components/theme-provider';
 
-// Componente de loading para Suspense
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-screen bg-gray-50">
-    <div className="text-center">
-      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
-      <p className="mt-4 text-gray-600">Carregando...</p>
-    </div>
-  </div>
-);
+// Lazy-loaded components
+const QuizFlow = loadable(() => import('./components/QuizFlow'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando quiz...</div>
+});
 
-// Lazy loading das páginas principais para melhorar performance
-const HomePage = lazy(() => import('./pages/HomePage'));
-const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./components/pages/ResultPage'));
-const ResultPagePrototype = lazy(() => import('./pages/ResultPagePrototype'));
-const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
-const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
-const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
-const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
-const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
-const EditorNotFoundPage = lazy(() => import('./pages/EditorNotFoundPage'));
-const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
-const ABTestPage = lazy(() => import('./pages/admin/ABTestPage'));
-const ABTestManagerPage = lazy(() => import('./pages/ABTestManagerPage'));
+const AdminLayout = loadable(() => import('./components/admin/AdminLayout'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando painel...</div>
+});
 
-// Avalia se o dispositivo tem performance limitada
-const isLowPerformanceDevice = () => {
-  const memory = (navigator as any).deviceMemory;
-  if (memory && memory < 4) return true;
-  
-  // Se o dispositivo tem menos de 4GB de RAM ou não tem informação disponível, verificar CPU cores
-  const cpuCores = navigator.hardwareConcurrency;
-  if (cpuCores && cpuCores < 4) return true;
-  
-  return false;
-};
+const EditorPage = loadable(() => import('./components/admin/editor/EnhancedResultPageEditorPage'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando editor...</div>
+});
 
-// Detecta se o aplicativo está rodando dentro do ambiente Lovable.dev
-const isRunningInLovable = () => {
-  return typeof window !== 'undefined' && (
-    window.location.hostname.includes('lovableproject.com') || 
-    window.location.hostname.includes('lovable.dev') ||
-    // Para testes locais:
-    window.location.search.includes('lovable=true')
-  );
-};
+const ResultPage = loadable(() => import('./components/ResultPage'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando resultados...</div>
+});
 
-const App = () => {
-  const lowPerformance = isLowPerformanceDevice();
-  const isLovableEnv = isRunningInLovable();
-
-  // Inicializar analytics na montagem do componente
-  useEffect(() => {
-    try {
-      // Inicializar Facebook Pixel
-      loadFacebookPixel();
-      
-      // Capturar UTM parameters para analytics de marketing
-      captureUTMParameters();
-      
-      console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
-    } catch (error) {
-      console.error('Erro ao inicializar analytics:', error);
-    }
-  }, [lowPerformance]);
-
-  // Reinicializar Facebook Pixel em mudanças de rota
-  useEffect(() => {    
-    // Função para lidar com mudanças de rota
-    const handleRouteChange = () => {
-      if (typeof window !== 'undefined' && window.fbq) {
-        window.fbq('track', 'PageView');
-        console.log('PageView tracked on route change');
-      }
-    };
-    
-    // Adicionar listener para mudanças de rota
-    window.addEventListener('popstate', handleRouteChange);
-    
-    // Limpar o listener
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-    };
-  }, []);
-
+function App() {
   return (
-    <AuthProvider>
-      <QuizProvider>
-        <TooltipProvider>
-          <Router>
-            {/* Injetar CSS crítico para melhorar o First Contentful Paint */}
-            <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
-            <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <BrowserRouter>
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Carregando...</div>}>
+          <Routes>
+            {/* Rota principal para o quiz */}
+            <Route path="/" element={<QuizFlow />} />
             
-            {isLovableEnv ? (
-              <LovableRoutes />
-            ) : (
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/quiz" element={<QuizPage />} />
-                  <Route path="/resultado" element={<ResultPage />} />
-                  <Route path="/prototipo" element={<ResultPagePrototype />} />
-                  {/* Nova página de oferta com quiz embutido */}
-                  <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                  {/* Editor visual aprimorado para página de resultados */}
-                  <Route path="/resultado/editor" element={<EnhancedResultPageEditorPage />} />
-                  {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
-                  <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  {/* Manter apenas uma rota principal para o editor unificado */}
-                  <Route path="/admin/editor" element={<EditorPage />} />
-                  <Route path="/admin/editor/error" element={<EditorNotFoundPage />} />
-                  {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
-                  <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
-                  <Route path="/admin/settings" element={<SettingsPage />} />
-                  <Route path="/admin/analytics" element={<AnalyticsPage />} />
-                  <Route path="/admin/ab-test" element={<ABTestPage />} />
-                  <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
-                  {/* Adicionando acesso ao protótipo no painel admin */}
-                  <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </Suspense>
-            )}
-          </Router>
-          <Toaster />
-        </TooltipProvider>
-      </QuizProvider>
-    </AuthProvider>
+            {/* Rota para a página de resultados */}
+            <Route path="/resultado" element={<ResultPage />} />
+            <Route path="/resultado/:id" element={<ResultPage />} />
+
+            {/* Rotas administrativas aninhadas */}
+            <Route path="/admin" element={<AdminLayout />}>
+              {/* Dashboard padrão do admin */}
+              <Route index element={
+                <div className="rounded-lg border bg-card p-6 shadow-sm">
+                  <h3 className="mb-4 text-lg font-medium">Bem-vindo ao Painel Admin</h3>
+                  <p className="mb-4 text-sm text-muted-foreground">Selecione uma opção no menu.</p>
+                </div>
+              } />
+              {/* Editor visual */}
+              <Route path="editor" element={<EditorPage />} />
+              <Route path="editor/:id" element={<EditorPage />} />
+            </Route>
+
+            {/* Rota de fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+        <Toaster />
+      </BrowserRouter>
+    </ThemeProvider>
   );
-};
+}
 
 export default App;

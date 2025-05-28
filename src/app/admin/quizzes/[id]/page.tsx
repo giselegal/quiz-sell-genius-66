@@ -5,6 +5,9 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Edit, Eye, BarChart3, Copy, Trash2 } from 'lucide-react';
 
+// Importando configuração estática
+export { dynamic } from './static';
+
 export default function QuizDetailPage() {
   const params = useParams();
   const quizId = params?.id;

@@ -1,6 +1,9 @@
+/* filepath: /workspaces/quiz-sell-genius-66/src/index.css */
 @import './styles/spinner-optimized.css';
 @import './styles/effects.css';
-@import './styles/spinner-optimized.css';
+/* @import './styles/typography.css'; */ /* MISSING */
+/* @import './styles/animations.css'; */ /* MISSING */
+/* @import './styles/spinner.css'; */ /* MISSING */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -71,7 +74,7 @@ img:hover, .hover-scale:hover {
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 33 42% 63%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -101,11 +104,9 @@ img:hover, .hover-scale:hover {
     --sidebar-primary-foreground: 0 0% 98%;
 
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
 
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -148,14 +149,74 @@ img:hover, .hover-scale:hover {
   }
 
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
 
   body {
-    @apply bg-background;
+    background-color: hsl(var(--background));
   }
 
   .font-playfair {
     font-family: 'Playfair Display', serif;
+  }
+
+  /* Questões só com texto – aumentar fonte */
+  .text-only-question .question-text,
+  .text-only-question .options {
+    font-size: 1.35rem;
+  }
+
+  /* Questões Estratégicas – títulos e opções maiores e destacados */
+  .strategic-question .question-title,
+  .strategic-question .options,
+  .strategic-question-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  /* Destaque de termos estratégicos */
+  .highlight-strategic {
+    background-color: rgba(240, 240, 245, 0.3); /* Versão mais segura do hsl(var(--accent) / 0.3) */
+    padding: 0.1em 0.2em;
+    border-radius: 0.2em;
+    font-weight: 600;
+  }
+}
+
+/* Media queries para dispositivos móveis */
+@media (max-width: 640px) {
+  /* Questões só com texto em mobile - aumentar fonte */
+  .text-only-question .question-text,
+  .text-only-question .options {
+    font-size: 1.4rem;
+  }
+
+  /* Questões Estratégicas em mobile - títulos e opções maiores */
+  .strategic-question .question-title,
+  .strategic-question .options,
+  .strategic-question-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  /* Destaque mais pronunciado em mobile */
+  .highlight-strategic {
+    background-color: rgba(240, 240, 245, 0.4); /* Versão mais segura do hsl(var(--accent) / 0.4) */
+    padding: 0.15em 0.25em;
+  }
+}
+
+/* Dispositivos móveis muito pequenos */
+@media (max-width: 375px) {
+  /* Ajuste para telas muito pequenas */
+  .text-only-question .question-text,
+  .text-only-question .options {
+    font-size: 1.25rem;
+  }
+  
+  .strategic-question .question-title,
+  .strategic-question .options,
+  .strategic-question-title {
+    font-size: 1.35rem;
   }
 }
