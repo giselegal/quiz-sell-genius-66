@@ -25,7 +25,8 @@ export default function ResultPage() {
         'Prefira cortes clássicos',
         'Mantenha um guarda-roupa atemporal'
       ]
-    }
+    },
+    secondaryStyles: [] // Adicionado secondaryStyles como um array vazio
   };
 
   return (
