@@ -1,14 +1,13 @@
-
 'use client';
 
 import React from 'react';
 import QuizResult from '@/components/QuizResult';
 import { QuizOfferHero } from '@/components/quiz-offer/QuizOfferHero';
 import { QuizOfferCTA } from '@/components/quiz-offer/QuizOfferCTA';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResultPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   // Mock result data - in real app this would come from quiz state
   const mockResult = {
@@ -34,7 +33,7 @@ export default function ResultPage() {
       <QuizResult {...mockResult} />
       
       <div className="mt-8">
-        <QuizOfferHero onStartQuizClick={() => router.push('/')} />
+        <QuizOfferHero onStartQuizClick={() => navigate('/')} />
         <QuizOfferCTA />
       </div>
     </div>
