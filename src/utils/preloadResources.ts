@@ -1,4 +1,3 @@
-
 /**
  * preloadResources.ts
  * Utilitário para pré-carregar recursos críticos de forma eficiente
@@ -23,7 +22,7 @@ export const preloadCriticalScripts = (): void => {
     linkEl.rel = 'preload';
     linkEl.as = 'image';
     linkEl.href = mainImageURL;
-    linkEl.setAttribute('fetchpriority', 'high');
+    linkEl.fetchPriority = 'high';
     
     // Adicionar ao head se ainda não existir
     const linkExists = Array.from(document.head.querySelectorAll('link[rel="preload"][as="image"]'))
@@ -43,7 +42,7 @@ export const preloadCriticalScripts = (): void => {
       const linkEl = document.createElement('link');
       linkEl.rel = 'modulepreload';
       linkEl.href = scriptPattern.replace('*', '');
-      linkEl.setAttribute('as', 'script');
+      linkEl.as = 'script';
       document.head.appendChild(linkEl);
     });
   };
@@ -87,18 +86,19 @@ export const preloadCriticalImages = (page: 'home' | 'quiz' | 'result'): void =>
   }
 
   // Pré-carregar imagens com prioridade adequada
-  imagesToPreload.forEach((imageUrl, index) => {
+  imagesToPreload.forEach(imageUrl => {
     // Para imagens críticas, usar link preload para maior prioridade
-    if (page === 'quiz' && index === 0) {
+    if (page === 'quiz' && imagesToPreload.indexOf(imageUrl) === 0) {
       const linkEl = document.createElement('link');
       linkEl.rel = 'preload';
       linkEl.as = 'image';
       linkEl.href = imageUrl;
-      linkEl.setAttribute('fetchpriority', 'high');
+      linkEl.fetchPriority = 'high';
       document.head.appendChild(linkEl);
     } else {
       // Para imagens secundárias, usar fetch com prioridade mais baixa
       fetch(imageUrl, { 
+        priority: page === 'quiz' ? 'high' : 'auto',
         cache: 'force-cache'
       }).catch(err => console.error('Erro ao pré-carregar imagem:', err));
     }
@@ -118,6 +118,7 @@ export const initializeResourcePreloading = (): void => {
   if ('requestIdleCallback' in window) {
     window.requestIdleCallback(() => {
       const path = window.location.pathname;
+      
       if (path === '/' || path === '/index.html') {
         preloadCriticalImages('home');
       } else if (path.includes('/quiz')) {
@@ -129,6 +130,7 @@ export const initializeResourcePreloading = (): void => {
   } else {
     setTimeout(() => {
       const path = window.location.pathname;
+      
       if (path === '/' || path === '/index.html') {
         preloadCriticalImages('home');
       } else if (path.includes('/quiz')) {
@@ -150,6 +152,7 @@ export const setupRouteChangePreloading = (): void => {
     const currentPath = window.location.pathname;
     if (currentPath !== lastPath) {
       lastPath = currentPath;
+      
       if (currentPath.includes('/quiz')) {
         preloadCriticalImages('quiz');
       } else if (currentPath.includes('/resultado')) {

@@ -31,7 +31,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5,
+        distance: 5, // 5px
       },
     })
   );
@@ -49,6 +49,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
 
   return (
     <div className="h-full flex flex-col">
+      {/* Preview Controls */}
       <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
         <div className="flex gap-2">
           <Button
@@ -70,6 +71,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
             Mobile
           </Button>
         </div>
+
         <div className="flex items-center text-sm text-[#8F7A6A]">
           {isPreviewing ? (
             <div className="flex items-center gap-1">
@@ -85,6 +87,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
         </div>
       </div>
 
+      {/* Preview Content */}
       <div className={cn(
         "flex-1 overflow-auto p-4 bg-[#FAF9F7]",
         viewMode === 'mobile' && 'flex justify-center'

@@ -1,3 +1,4 @@
+
 import { QuizBuilderState } from '@/types/quizBuilder';
 import { generateId } from '@/utils/idGenerator';
 import { selfPerceptionQuestions } from '@/data/questions/selfPerceptionQuestions';
@@ -22,6 +23,7 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         textColor: '#432818'
       },
       style: {
+        backgroundColor: '#FFFAF0',
         textColor: '#432818',
         paddingY: '2rem',
         paddingX: '1rem',
@@ -49,6 +51,13 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
         selectionIndicator: 'border' as const
+      },
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     })),
     ...styleExperienceQuestions.map((question, index) => ({
@@ -72,6 +81,13 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
         selectionIndicator: 'border' as const
+      },
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     })),
     ...purchaseIntentQuestions.map((question, index) => ({
@@ -95,6 +111,13 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
         selectionIndicator: 'border' as const
+      },
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     })),
     ...desiredOutcomesQuestions.map((question, index) => ({
@@ -118,6 +141,13 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
         backgroundColorQuestion: '#FFFAF0',
         textColorQuestion: '#432818',
         selectionIndicator: 'border' as const
+      },
+      style: {
+        backgroundColor: '#FFFAF0',
+        textColor: '#432818',
+        paddingY: '2rem',
+        paddingX: '1rem',
+        borderRadius: '8px'
       }
     }))
   ],
@@ -125,14 +155,14 @@ export const strategicQuestionsTemplate: QuizBuilderState = {
     {
       id: 'cover',
       title: 'Início',
-      type: 'cover',
-      order: 0
+      order: 0,
+      type: 'cover'
     },
     ...[...selfPerceptionQuestions, ...styleExperienceQuestions, ...purchaseIntentQuestions, ...desiredOutcomesQuestions].map((_, index) => ({
       id: `q${index + 1}`,
       title: `Pergunta ${index + 1}`,
-      type: 'question' as const,
-      order: index + 1
+      order: index + 1,
+      type: 'question' as const
     }))
   ]
 };

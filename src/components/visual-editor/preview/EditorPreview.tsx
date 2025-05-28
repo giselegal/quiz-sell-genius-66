@@ -25,6 +25,7 @@ export function EditorPreview({
 
   return (
     <div className="h-full flex flex-col">
+      {/* Preview Controls */}
       <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
         <div className="flex gap-2">
           <Button
@@ -46,12 +47,14 @@ export function EditorPreview({
             Mobile
           </Button>
         </div>
+
         <Button variant="outline" size="sm" onClick={onPreviewToggle}>
           <Eye className="w-4 h-4 mr-2" />
           {isPreviewing ? 'Editar' : 'Visualizar'}
         </Button>
       </div>
-      
+
+      {/* Preview Content */}
       <div className="flex-1 overflow-auto p-4 bg-[#FAF9F7]">
         <div className={cn(
           "min-h-full bg-white rounded-lg shadow-sm p-6",

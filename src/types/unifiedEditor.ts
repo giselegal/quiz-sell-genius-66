@@ -15,7 +15,7 @@ export interface UnifiedEditorState {
     blocks: Block[];
   };
   salesEditorState: {
-    // Define sales editor state
+    blocks: Block[];
   };
 }
 
@@ -27,7 +27,8 @@ export interface ResultPageConfig {
     content: Record<string, any>;
   };
   mainContent: {
-    // Define main content structure
+    visible: boolean;
+    content: Record<string, any>;
   };
   offer: {
     hero: {
@@ -35,19 +36,24 @@ export interface ResultPageConfig {
       content: Record<string, any>;
     };
     benefits: {
-      // Define benefits structure
+      visible: boolean;
+      content: Record<string, any>;
     };
     products: {
-      // Define products structure
+      visible: boolean;
+      content: Record<string, any>;
     };
     pricing: {
-      // Define pricing structure
+      visible: boolean;
+      content: Record<string, any>;
     };
     testimonials: {
-      // Define testimonials structure
+      visible: boolean;
+      content: Record<string, any>;
     };
     guarantee: {
-      // Define guarantee structure
+      visible: boolean;
+      content: Record<string, any>;
     };
   };
 }

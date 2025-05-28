@@ -1,43 +1,41 @@
 
-export type QuizCategory = 
-  | 'clothingQuestions' 
-  | 'accessoriesQuestions' 
-  | 'styleQuestions' 
-  | 'strategicQuestions';
-
-export interface QuizEditorState {
-  questions: any[];
-  editingQuestionId: string | null;
-  selectedCategory: QuizCategory | null;
-}
+import { QuizQuestion } from './quiz';
 
 export const QUIZ_CATEGORIES = [
   {
-    id: 'clothingQuestions' as QuizCategory,
+    id: 'clothingQuestions',
     name: 'Roupas',
-    description: 'Perguntas sobre preferências de vestuário',
-    icon: '👕',
+    icon: '👚',
+    description: 'Perguntas sobre preferências de roupas',
     isStrategic: false
   },
   {
-    id: 'accessoriesQuestions' as QuizCategory,
+    id: 'personalityQuestions',
+    name: 'Personalidade',
+    icon: '😊',
+    description: 'Perguntas sobre traços de personalidade',
+    isStrategic: false
+  },
+  {
+    id: 'accessoriesQuestions',
     name: 'Acessórios',
-    description: 'Perguntas sobre acessórios e complementos',
-    icon: '💎',
+    icon: '💍',
+    description: 'Perguntas sobre preferências de acessórios',
     isStrategic: false
   },
   {
-    id: 'styleQuestions' as QuizCategory,
-    name: 'Estilo',
-    description: 'Perguntas sobre estilo pessoal',
-    icon: '✨',
-    isStrategic: false
-  },
-  {
-    id: 'strategicQuestions' as QuizCategory,
-    name: 'Estratégicas',
-    description: 'Perguntas estratégicas para leads',
+    id: 'strategicQuestions',
+    name: 'Perguntas Estratégicas',
     icon: '🎯',
+    description: 'Perguntas para coleta de informações direcionadas',
     isStrategic: true
   }
 ];
+
+export type QuizCategory = typeof QUIZ_CATEGORIES[number]['id'];
+
+export interface QuizEditorState {
+  questions: QuizQuestion[];
+  editingQuestionId: string | null;
+  selectedCategory: string | null;
+}

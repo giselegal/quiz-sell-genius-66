@@ -1,4 +1,3 @@
-"use client";
 import { useState, useCallback, useEffect } from 'react';
 import { quizQuestions } from '../data/quizQuestions';
 import { QuizResult, StyleResult } from '../types/quiz';
@@ -18,6 +17,7 @@ export const useQuizLogic = () => {
     return savedResult ? JSON.parse(savedResult) : null;
   });
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
+
   // 2. Computed values
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const nextQuestion = quizQuestions[currentQuestionIndex + 1] || null;
@@ -27,8 +27,10 @@ export const useQuizLogic = () => {
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
   const totalQuestions = quizQuestions.length;
   const allQuestions = quizQuestions;
+
   // Preload first question images on component mount
   useEffect(() => {
+    // Collect all images from first question
     if (currentQuestion) {
       const firstQuestionImages = currentQuestion.options
         .map(option => {
@@ -37,14 +39,18 @@ export const useQuizLogic = () => {
           return null;
         })
         .filter(Boolean) as string[];
+
       if (firstQuestionImages.length > 0) {
+        // High priority preload for first question
         preloadImagesByUrls(firstQuestionImages, {
-          quality: 85,
+          quality: 85, // Alterado de 95 para 85
           batchSize: 4,
           onComplete: () => {
             setIsInitialLoadComplete(true);
           }
         });
+
+        // Start preloading next question with lower priority
         if (nextQuestion) {
           const nextQuestionImages = nextQuestion.options
             .map(option => {
@@ -53,9 +59,10 @@ export const useQuizLogic = () => {
               return null;
             })
             .filter(Boolean) as string[];
+
           if (nextQuestionImages.length > 0) {
             preloadImagesByUrls(nextQuestionImages, { 
-              quality: 85,
+              quality: 85, // Alterado de 95 para 85
               batchSize: 2 
             });
           }
@@ -64,10 +71,12 @@ export const useQuizLogic = () => {
         setIsInitialLoadComplete(true);
       }
     }
+    
+    // Also start preloading strategic images in the background
     preloadCriticalImages('strategic');
-  }, []);
+  }, []); // Removido currentQuestion e nextQuestion das dependências para rodar apenas uma vez
 
-  // Função para lidar com respostas
+  // 3. Simple utility functions that don't depend on other functions
   const handleAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
     setAnswers(prev => {
       const newAnswers = {
@@ -77,41 +86,49 @@ export const useQuizLogic = () => {
       console.log(`Question ${questionId} answered with options:`, selectedOptions);
       return newAnswers;
     });
-    // Preload next question images sempre que uma resposta for dada
-    const nextQ = quizQuestions[currentQuestionIndex + 1];
-    if (nextQ) {
-      const nextImages = nextQ.options
+    
+    // Preload next question images whenever an answer is provided
+    if (nextQuestion) {
+      const nextImages = nextQuestion.options
         .map(option => {
           if (typeof option === 'string') return null;
           if (option.imageUrl) return option.imageUrl;
           return null;
         })
         .filter(Boolean) as string[];
+
       if (nextImages.length > 0) {
-        preloadImagesByUrls(nextImages, { batchSize: 3 });
+        preloadImagesByUrls(nextImages, { 
+          quality: 85, // Alterado de 95 para 85
+          batchSize: 3 
+        });
       }
-      // Preload next-next question
-      const nextNextQ = quizQuestions[currentQuestionIndex + 2];
-      if (nextNextQ) {
-        const nextNextImages = nextNextQ.options
+      
+      // Also start preloading next-next question with lower priority
+      if (nextNextQuestion) {
+        const nextNextImages = nextNextQuestion.options
           .map(option => {
             if (typeof option === 'string') return null;
             if (option.imageUrl) return option.imageUrl;
             return null;
           })
           .filter(Boolean) as string[];
+
         if (nextNextImages.length > 0) {
-          preloadImagesByUrls(nextNextImages, { batchSize: 2 });
+          preloadImagesByUrls(nextNextImages, { 
+            quality: 85, // Alterado de 95 para 85
+            batchSize: 2 
+          });
         }
       }
     }
-  }, [currentQuestionIndex]);
+  }, [nextQuestion, nextNextQuestion]);
 
-  // 3. Simple utility functions that don't depend on other functions
   const handleStrategicAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
     // Para questões estratégicas, garantimos que SEMPRE haja apenas UMA opção selecionada
     // Se houver múltiplas, usamos apenas a última selecionada
     const finalOptions = selectedOptions.length > 0 ? [selectedOptions[selectedOptions.length - 1]] : selectedOptions;
+    
     // Não permitimos que o usuário desmarque uma opção em questões estratégicas
     // Se o array estiver vazio e já tiver uma seleção anterior, mantemos a seleção anterior
     if (finalOptions.length === 0) {
@@ -120,15 +137,18 @@ export const useQuizLogic = () => {
         return; // Mantém a seleção anterior, não permite desmarcar
       }
     }
+    
     setStrategicAnswers(prev => {
       const newAnswers = {
         ...prev,
         [questionId]: finalOptions
       };
       localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers)); // Salvar imediatamente
+      
       // Aproveitar questões estratégicas para pré-carregar imagens da página de resultados
       // Isso melhora significativamente o tempo de carregamento dos resultados
       const strategicQuestionsProgress = Object.keys(newAnswers).length;
+      
       // A cada resposta estratégica, carregamos um novo conjunto de imagens da página de resultados
       // Isso distribui a carga de rede durante as questões que não pontuam
       if (strategicQuestionsProgress === 1) {
@@ -153,14 +173,17 @@ export const useQuizLogic = () => {
         });
         console.log('[Otimização] Pré-carregando imagens de bônus e depoimentos');
       }
+      
       return newAnswers;
     });
   }, []);
+
   const handlePrevious = useCallback(() => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1);
     }
   }, [currentQuestionIndex]);
+
   const resetQuiz = useCallback(() => {
     setCurrentQuestionIndex(0);
     setAnswers({});
@@ -171,6 +194,7 @@ export const useQuizLogic = () => {
     setStrategicAnswers({});
     console.log('Quiz reset');
   }, []);
+
   // 4. Complex function that others depend on
   const calculateResults = useCallback((clickOrderInternal: string[] = []) => {
     const styleCounter: Record<string, number> = {
@@ -183,23 +207,25 @@ export const useQuizLogic = () => {
       'Dramático': 0,
       'Criativo': 0
     };
+
     let totalSelections = 0;
+
     Object.entries(answers).forEach(([questionId, optionIds]) => {
       const question = quizQuestions.find(q => q.id === questionId);
       if (!question) return;
+
       optionIds.forEach(optionId => {
         const option = question.options.find(o => o.id === optionId);
         if (option) {
-          // Corrigir incremento seguro para styleCounter
-          if (option.styleCategory && styleCounter[option.styleCategory] !== undefined) {
-            styleCounter[option.styleCategory]++;
-          }
+          styleCounter[option.styleCategory]++;
           totalSelections++;
         }
       });
     });
+
     console.log('Style counts:', styleCounter);
     console.log('Total selections:', totalSelections);
+
     const styleResults: StyleResult[] = Object.entries(styleCounter)
       .map(([category, score]) => ({
         category: category as StyleResult['category'],
@@ -218,20 +244,25 @@ export const useQuizLogic = () => {
         }
         return b.score - a.score;
       });
+
     const primaryStyle = styleResults[0] || null;
     const secondaryStyles = styleResults.slice(1);
-    const result: QuizResult = {
+
+    const result: QuizResult = { // Explicitly type QuizResult
       primaryStyle,
       secondaryStyles,
       totalSelections,
-      userName: 'Usuário' // Default username
+      // clickOrder: clickOrderInternal // Optional: save the click order used
     };
+
     setQuizResult(result);
     localStorage.setItem('quizResult', JSON.stringify(result));
     localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers)); // Save strategic answers along
     console.log('Results calculated and saved to localStorage:', result);
+
     return result;
   }, [answers, strategicAnswers]);
+
   // 5. Functions that depend on other complex functions
   const handleNext = useCallback(() => {
     if (currentQuestionIndex < quizQuestions.length - 1) {
@@ -241,6 +272,7 @@ export const useQuizLogic = () => {
       setQuizCompleted(true);
     }
   }, [currentQuestionIndex, calculateResults, quizQuestions.length]);
+
   const submitQuizIfComplete = useCallback((clickOrderInternal: string[] = []) => {
     const results = calculateResults(clickOrderInternal);
     setQuizCompleted(true);
@@ -248,6 +280,7 @@ export const useQuizLogic = () => {
     console.log('Results saved to localStorage before redirect:', results);
     return results;
   }, [calculateResults]);
+
   // 6. Side effects 
   useEffect(() => {
     if (quizResult) {
@@ -255,33 +288,34 @@ export const useQuizLogic = () => {
       console.log('QuizResult saved to localStorage:', quizResult);
     }
   }, [quizResult]);
+
   useEffect(() => {
     if (Object.keys(strategicAnswers).length > 0) {
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
       console.log('Strategic answers saved to localStorage:', strategicAnswers);
     }
   }, [strategicAnswers]);
+
   // 7. Return all needed functions and values
   return {
-    currentQuestionIndex,
-    setCurrentQuestionIndex,
-    answers,
-    setAnswers,
-    strategicAnswers,
-    setStrategicAnswers,
-    quizCompleted,
-    setQuizCompleted,
-    quizResult,
-    setQuizResult,
-    isInitialLoadComplete,
     currentQuestion,
     nextQuestion,
-    nextNextQuestion,
+    currentQuestionIndex,
     currentAnswers,
     canProceed,
     isLastQuestion,
+    quizCompleted,
+    quizResult,
+    handleAnswer,
+    handleNext,
+    handlePrevious,
+    resetQuiz,
+    submitQuizIfComplete,
+    calculateResults,
     totalQuestions,
+    strategicAnswers,
+    handleStrategicAnswer,
     allQuestions,
-    handleAnswer
+    isInitialLoadComplete
   };
 };

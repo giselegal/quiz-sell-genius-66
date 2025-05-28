@@ -48,7 +48,7 @@ const GlobalStyleEditor: React.FC<GlobalStyleEditorProps> = ({
             />
             <p className="text-xs text-[#8F7A6A]">Usada em subtítulos e elementos secundários</p>
           </div>
-
+          
           <div className="space-y-2">
             <Label>Cor do Texto</Label>
             <ColorPicker
@@ -56,7 +56,7 @@ const GlobalStyleEditor: React.FC<GlobalStyleEditorProps> = ({
               onChange={(color) => handleChange('textColor', color)}
             />
           </div>
-
+          
           <div className="space-y-2">
             <Label>Cor de Fundo</Label>
             <ColorPicker
@@ -69,6 +69,7 @@ const GlobalStyleEditor: React.FC<GlobalStyleEditorProps> = ({
       
       <div>
         <h3 className="text-lg font-medium mb-4">Tipografia</h3>
+        
         <div className="space-y-2">
           <Label htmlFor="fontFamily">Fonte Principal</Label>
           <select

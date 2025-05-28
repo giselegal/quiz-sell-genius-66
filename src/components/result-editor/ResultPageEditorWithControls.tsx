@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeOff, Save, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
 import QuizResult from '../QuizResult';
 import EditableComponent from './EditableComponent';

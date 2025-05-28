@@ -118,7 +118,7 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
                 )}
               </div>
             )}
-
+            
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <Label htmlFor={`option-points-${option.id}`} className="mb-0">Pontos:</Label>
@@ -139,7 +139,7 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
                   </SelectContent>
                 </Select>
               </div>
-
+              
               <Button 
                 type="button" 
                 variant="ghost" 

@@ -30,17 +30,18 @@ const OfferEditor: React.FC<OfferEditorProps> = ({ content, onUpdate }) => {
           rows={2}
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo</Label>
-        <Input
+        <Textarea
           id="subtitle"
           value={content.subtitle || ''}
           onChange={(e) => handleChange('subtitle', e.target.value)}
           placeholder="Agora é hora de aplicar com clareza — e se vestir de você"
+          rows={2}
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="price">Preço</Label>
         <Input
@@ -50,7 +51,7 @@ const OfferEditor: React.FC<OfferEditorProps> = ({ content, onUpdate }) => {
           placeholder="39,00"
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="regularPrice">Preço Regular</Label>
         <Input
@@ -60,7 +61,7 @@ const OfferEditor: React.FC<OfferEditorProps> = ({ content, onUpdate }) => {
           placeholder="175,00"
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="ctaText">Texto do Botão</Label>
         <Input
@@ -70,7 +71,7 @@ const OfferEditor: React.FC<OfferEditorProps> = ({ content, onUpdate }) => {
           placeholder="Quero meu Guia + Bônus"
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="ctaUrl">Link do Botão</Label>
         <Input
@@ -80,7 +81,7 @@ const OfferEditor: React.FC<OfferEditorProps> = ({ content, onUpdate }) => {
           placeholder="https://pay.hotmart.com/..."
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="heroImage">URL Imagem Principal</Label>
         <Input
@@ -90,7 +91,7 @@ const OfferEditor: React.FC<OfferEditorProps> = ({ content, onUpdate }) => {
           placeholder="https://exemplo.com/imagem.jpg"
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="heroImage2">URL Imagem Secundária</Label>
         <Input

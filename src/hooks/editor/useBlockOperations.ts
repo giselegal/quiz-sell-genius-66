@@ -19,8 +19,10 @@ export const useBlockOperations = () => {
       order: blocks.length,
       content: getDefaultContentForType(type)
     };
+
     setBlocks(prev => [...prev, newBlock]);
     setSelectedBlockId(newBlock.id);
+
     return newBlock.id;
   }, [blocks]);
 
@@ -39,6 +41,7 @@ export const useBlockOperations = () => {
         .map((block, index) => ({ ...block, order: index }));
       return filteredBlocks;
     });
+
     setSelectedBlockId(null);
   }, []);
 

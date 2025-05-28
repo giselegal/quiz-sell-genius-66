@@ -43,6 +43,7 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceComponentProps> = ({ data,
             "Selecione uma ou mais opções"}
         </p>
       </div>
+
       <div className="space-y-2">
         {options.map((option, index) => (
           <div 

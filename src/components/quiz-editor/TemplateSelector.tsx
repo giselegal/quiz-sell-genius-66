@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -62,7 +60,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
       setNewTemplateName('');
       setNewTemplateDescription('');
       loadTemplates();
-
+      
       toast({
         title: 'Template criado',
         description: 'O novo template foi criado com sucesso.'
@@ -103,8 +101,8 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
     try {
       const success = deleteTemplate(id);
       if (success) {
-        setIsDeleteConfirmOpen(null);
         loadTemplates();
+        setIsDeleteConfirmOpen(null);
         toast({
           title: 'Template excluído',
           description: 'O template foi excluído com sucesso.'
@@ -170,7 +168,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
           </DialogContent>
         </Dialog>
       </div>
-
+      
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {templates.map((template) => (
           <Card key={template.id} className="overflow-hidden border border-[#B89B7A]/20">
@@ -180,6 +178,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
                 {template.description || 'Sem descrição'}
               </CardDescription>
             </CardHeader>
+            
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">
                 <p className="flex items-center">
@@ -191,6 +190,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
                 </p>
               </div>
             </CardContent>
+            
             <CardFooter className="border-t bg-[#FAF9F7] flex justify-between">
               <div className="flex gap-2">
                 <Button 
@@ -244,17 +244,17 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ onSelectTemplate })
             </CardFooter>
           </Card>
         ))}
-
-        {templates.length === 0 && (
-          <Card className="p-6 text-center">
-            <p className="text-muted-foreground mb-4">Nenhum template disponível. Crie um novo para começar.</p>
-            <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-[#B89B7A] hover:bg-[#A38A69]">
-              <Plus className="w-4 h-4 mr-2" />
-              Criar Primeiro Template
-            </Button>
-          </Card>
-        )}
       </div>
+      
+      {templates.length === 0 && (
+        <Card className="p-6 text-center">
+          <p className="text-muted-foreground mb-4">Nenhum template disponível. Crie um novo para começar.</p>
+          <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-[#B89B7A] hover:bg-[#A38A69]">
+            <Plus className="w-4 h-4 mr-2" />
+            Criar Primeiro Template
+          </Button>
+        </Card>
+      )}
     </div>
   );
 };

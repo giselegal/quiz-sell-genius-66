@@ -42,9 +42,11 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           sale: 0
         };
       }
+      
       if (acc[date][event.type] !== undefined) {
         acc[date][event.type] += 1;
       }
+      
       return acc;
     }, {});
     
@@ -61,17 +63,17 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
       day: 'numeric' 
     });
   };
-
+  
   // Safe access to metrics with defaults
   const safeMetric = (value: any, defaultValue: number = 0) => {
     return typeof value === 'number' ? value : defaultValue;
   };
-
+  
   const formatPercentage = (value: any) => {
     if (value === undefined || value === null) return '0.0%';
     return `${safeMetric(value, 0).toFixed(1)}%`;
   };
-
+  
   const conversionMetrics = [
     {
       title: 'Taxa de Conclusão',
@@ -159,7 +161,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           compact={compactView}
         />
       </div>
-
+      
       <Card>
         <CardHeader>
           <CardTitle>Tendência de Eventos</CardTitle>
@@ -219,6 +221,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
                   bottom: 5,
                 }}
               >
+                <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="title" />
                 <YAxis tickFormatter={(value) => `${value}%`} />
                 <Tooltip

@@ -1,32 +1,4 @@
-
-import React, { lazy, Suspense, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { 
-  Carousel, 
-  CarouselContent, 
-  CarouselItem, 
-  CarouselNext, 
-  CarouselPrevious 
-} from '@/components/ui/carousel';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { ShoppingCart, Heart, Award, CheckCircle, Star, XCircle } from 'lucide-react';
-import { trackButtonClick } from '@/utils/analytics';
-
-// Types
-interface StyleResult {
-  category: string;
-  score: number;
-  percentage: number;
-}
 
 // Helper function to get style descriptions
 const getStyleDescription = (styleType: string): string => {
@@ -54,6 +26,7 @@ const getStyleDescription = (styleType: string): string => {
 
 // Lazy load componentes menos críticos
 const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
+const BenefitList = lazy(() => import('@/components/quiz-result/sales/BenefitList'));
 
 interface QuizResultSalesPageProps {
   primaryStyle: StyleResult;
@@ -67,7 +40,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
   userName = 'Visitante'
 }) => {
   const { toast } = useToast();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [criticalImagesLoaded, setCriticalImagesLoaded] = useState(false);
 
@@ -109,6 +82,9 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
   const handleBuyNow = () => {
     // Rastrear evento de clique no botão
     trackButtonClick('buy_now_button', 'Quero Comprar', 'result_page_main_cta');
+    
+    // Rastrear conversão para analytics
+    trackSaleConversion(39);
     
     toast({
       title: "Redirecionando para o checkout",
@@ -259,6 +235,7 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
             </li>
           </ul>
         </section>
+        {/* Seção Antes e Depois */}
 
         {/* Offer Card */}
         <Card className="p-6 md:p-8 border-[#aa6b5d]/20 mb-16">
@@ -435,32 +412,36 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
           </Card>
         </section>
 
-        {/* FAQ */}
+        {/* FAQ Section */}
         <section className="mb-16">
           <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
             Perguntas Frequentes
           </h2>
-          <Accordion type="single" collapsible className="w-full max-w-2xl mx-auto">
+          <Accordion type="single" collapsible className="w-full">
             {[
               {
-                question: "Como recebo o guia após a compra?",
-                answer: "Após confirmar o pagamento, você receberá por email o acesso imediato ao seu guia personalizado."
+                question: "Como vou receber meu guia após a compra?",
+                answer: "Imediatamente após a confirmação do pagamento, você receberá um e-mail com as instruções de acesso à sua área de membros, onde poderá baixar todos os materiais."
               },
               {
-                question: "O guia funciona para qualquer tipo físico?",
-                answer: "Sim! Nosso método considera não apenas seu estilo, mas também suas características físicas únicas."
+                question: "O guia é personalizado para o meu estilo?",
+                answer: "Sim! O guia é totalmente adaptado ao seu estilo predominante identificado no quiz, com dicas específicas para valorizar suas características únicas."
               },
               {
-                question: "Posso acessar o conteúdo pelo celular?",
-                answer: "Sim, todo o conteúdo é otimizado para visualização em qualquer dispositivo."
+                question: "Posso acessar em qualquer dispositivo?",
+                answer: "Sim, o guia está em formato PDF que pode ser acessado em qualquer dispositivo (computador, tablet ou celular)."
+              },
+              {
+                question: "Por quanto tempo terei acesso aos materiais?",
+                answer: "O acesso é vitalício! Uma vez que você adquire o guia, ele é seu para sempre, incluindo futuras atualizações."
               }
             ].map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger>
+                <AccordionTrigger className="text-left font-medium">
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent>
-                  {faq.answer}
+                  <p>{faq.answer}</p>
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -468,25 +449,34 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
         </section>
 
         {/* Final CTA */}
-        <section className="text-center">
-          <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white p-8 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4">
-              Sua Transformação Começa Agora!
-            </h2>
-            <p className="mb-6">
-              Não perca mais tempo se sentindo perdida com seu guarda-roupa.
-            </p>
-            <Button 
-              onClick={handleBuyNow}
-              size="lg"
-              className="bg-white text-[#aa6b5d] hover:bg-gray-100 font-bold px-8 py-3"
-            >
-              <ShoppingCart className="mr-2 h-5 w-5" />
-              Quero Meu Guia Agora
-            </Button>
-          </div>
+        <section className="text-center mb-16">
+          <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
+            Transforme seu Estilo Agora!
+          </h2>
+          <p className="mb-8 max-w-2xl mx-auto">
+            Não perca mais tempo com roupas que não combinam com você. Descubra como 
+            expressar sua verdadeira essência através do seu estilo pessoal.
+          </p>
+          <Button 
+            onClick={handleBuyNow}
+            className="bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 px-8 rounded-md text-lg leading-none md:leading-normal transition-colors duration-300"
+          >
+            <Star className="w-5 h-5 mr-2" />
+            Quero Transformar Meu Estilo
+          </Button>
         </section>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-[#432818] text-white py-8">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <p className="mb-4">© 2025 Todos os direitos reservados</p>
+          <div className="flex justify-center gap-4">
+            <a href="#" className="text-white hover:text-[#B89B7A]">Termos de Uso</a>
+            <a href="#" className="text-white hover:text-[#B89B7A]">Política de Privacidade</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

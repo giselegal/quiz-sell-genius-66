@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 export const MarketingTab: React.FC = () => {
   return (

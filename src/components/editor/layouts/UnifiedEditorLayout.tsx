@@ -34,10 +34,11 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({ primar
             <TabsTrigger value="sales">Página de Venda</TabsTrigger>
           </TabsList>
         </div>
-        
+
         <div className="flex-1">
           <TabsContent value="result" className="h-full mt-0">
             <ResizablePanelGroup direction="horizontal" className="h-full">
+              {/* Left Sidebar - Components */}
               <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
                 <div className="h-full border-r border-[#B89B7A]/20 bg-white overflow-y-auto">
                   <ComponentsSidebar onComponentSelect={handleComponentSelect} />
@@ -46,6 +47,7 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({ primar
               
               <ResizableHandle withHandle />
               
+              {/* Central Area - Page Preview */}
               <ResizablePanel defaultSize={55}>
                 <ResultPagePreview
                   primaryStyle={primaryStyle}
@@ -57,6 +59,7 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({ primar
               
               <ResizableHandle withHandle />
               
+              {/* Right Sidebar - Properties */}
               <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
                 <div className="h-full border-l border-[#B89B7A]/20 bg-white overflow-y-auto">
                   <PropertiesPanel
@@ -84,10 +87,10 @@ export const UnifiedEditorLayout: React.FC<UnifiedEditorLayoutProps> = ({ primar
               </ResizablePanel>
             </ResizablePanelGroup>
           </TabsContent>
-          
+
           <TabsContent value="sales" className="h-full mt-0">
             <div className="h-full p-4 bg-[#FAF9F7]">
-              <p className="text-[#8F7A6A]">Página de vendas em desenvolvimento</p>
+              {/* Sales page preview implementation */}
             </div>
           </TabsContent>
         </div>

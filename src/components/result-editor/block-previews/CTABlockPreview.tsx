@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+
 interface CTABlockPreviewProps {
   content: {
     title?: string;
@@ -9,6 +10,7 @@ interface CTABlockPreviewProps {
     style?: any;
   };
 }
+
 const CTABlockPreview: React.FC<CTABlockPreviewProps> = ({ content }) => {
   return (
     <div className="text-center space-y-4" style={content.style}>
@@ -24,4 +26,5 @@ const CTABlockPreview: React.FC<CTABlockPreviewProps> = ({ content }) => {
     </div>
   );
 };
+
 export default CTABlockPreview;

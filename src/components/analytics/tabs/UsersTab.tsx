@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -28,6 +26,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
   // Prepare users list from analytics data
   const prepareUsersList = useMemo(() => {
     if (!analyticsData?.events) return [];
+
     const uniqueUsers = new Map();
     
     analyticsData.events.forEach((event: any) => {
@@ -44,8 +43,9 @@ export const UsersTab: React.FC<UsersTabProps> = ({
           totalQuestions: 0
         });
       }
-
+      
       const user = uniqueUsers.get(userId);
+      
       // Update user data based on events
       if (event.timestamp) {
         const timestamp = new Date(event.timestamp);
@@ -53,21 +53,22 @@ export const UsersTab: React.FC<UsersTabProps> = ({
         if (!user.startTime || timestamp < user.startTime) {
           user.startTime = timestamp;
         }
+        
         if (!user.lastActivity || timestamp > user.lastActivity) {
           user.lastActivity = timestamp;
         }
       }
-
+      
       if (event.type === 'quiz_complete') {
         user.completed = true;
         user.completeTime = new Date(event.timestamp);
       }
-
+      
       if (event.type === 'quiz_answer') {
         user.totalQuestions++;
       }
     });
-
+    
     // Convert map to array and filter by search term
     return Array.from(uniqueUsers.values())
       .filter(user => 
@@ -85,15 +86,17 @@ export const UsersTab: React.FC<UsersTabProps> = ({
   // Handle user details view
   const handleViewUserDetails = (userId: string) => {
     setSelectedUser(userId);
+    
     if (!analyticsData?.events) {
       setUserEvents([]);
       return;
     }
-
+    
     // Get all events for the selected user
     const events = analyticsData.events.filter((event: any) => {
       return (event.sessionId === userId || event.userEmail === userId);
     });
+    
     setUserEvents(events);
   };
 
@@ -230,6 +233,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                               </p>
                             </div>
                           </div>
+                          
                           <div className="border-t pt-4">
                             <h4 className="text-sm font-medium text-gray-500 mb-2">Histórico de Eventos</h4>
                             <ScrollArea className="h-[300px]">
@@ -274,6 +278,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                               </div>
                             </ScrollArea>
                           </div>
+                          
                           <DialogFooter>
                             <Button 
                               variant="outline" 

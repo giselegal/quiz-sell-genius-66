@@ -7,11 +7,12 @@ interface BenefitItem {
   title: string;
   description: string;
 }
+
 interface BenefitListProps {
   items?: BenefitItem[];
 }
 
-const defaultBenefits: BenefitItem[] = [
+const defaultBenefits = [
   {
     title: "Peças que revelam sua essência",
     description: "Descobrir as roupas e acessórios que comunicam quem você realmente é, valorizando seu corpo e sua personalidade."
@@ -43,6 +44,7 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
       }
     }
   };
+  
   const itemVariants = {
     hidden: { opacity: 0, x: -20 },
     show: { 
@@ -54,6 +56,7 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
       }
     }
   };
+
   return (
     <Card className="p-8 bg-[#fffaf7] border border-[#B89B7A]/20 shadow-md rounded-xl">
       <motion.h3 
@@ -72,6 +75,7 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
           transition={{ duration: 0.8, delay: 0.5 }}
         />
       </motion.h3>
+
       <motion.div 
         className="space-y-5"
         variants={containerVariants}
@@ -98,4 +102,5 @@ const BenefitList: React.FC<BenefitListProps> = ({ items }) => {
     </Card>
   );
 };
+
 export default BenefitList;

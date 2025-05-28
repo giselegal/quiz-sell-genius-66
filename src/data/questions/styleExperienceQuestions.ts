@@ -33,6 +33,8 @@ export const styleExperienceQuestions: QuizQuestion[] = [
   {
     id: 'strategic-4',
     title: 'O que você mais valoriza em um guia de estilo?',
+    type: 'text',
+    multiSelect: 1,
     // A questão 14 (strategic-4) não deve ter imagem
     options: [
       {

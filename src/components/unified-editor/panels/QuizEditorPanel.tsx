@@ -69,6 +69,7 @@ const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
         <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
           {/* Quiz Editor Preview/Editing Area */}
           <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
+            {/* Your quiz editor component goes here */}
             <p>Quiz Editor Content</p>
             {unifiedEditor.quizBuilder && unifiedEditor.quizBuilder.components && (
               <div>

@@ -1,6 +1,4 @@
 
-"use client";
-
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { useQuizBuilder } from './useQuizBuilder';
@@ -15,23 +13,26 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   
+  // Initialize the individual editors
   const quizBuilder = useQuizBuilder();
   const resultPageEditor = useResultPageEditor(primaryStyle.category);
   const salesPageEditor = useSalesPageEditor(primaryStyle.category);
-
+  
+  // Initialization log
   useEffect(() => {
     console.info('useUnifiedEditor inicializado com estilo:', primaryStyle.category);
   }, [primaryStyle.category]);
-
+  
   const togglePreview = useCallback(() => {
     setIsPreviewing(prev => !prev);
   }, []);
-
+  
   const saveAll = useCallback(async () => {
     try {
       let success = true;
       
       if (activeMode === 'quiz' && quizBuilder) {
+        // Save quiz state if implemented
         if (typeof quizBuilder.saveCurrentState === 'function') {
           success = quizBuilder.saveCurrentState();
           console.info('Quiz salvo:', success);
@@ -39,6 +40,7 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
           console.warn('Método saveCurrentState não encontrado no quizBuilder');
         }
       } else if (activeMode === 'result' && resultPageEditor) {
+        // Save result page state
         if (resultPageEditor.actions?.handleSave) {
           success = await resultPageEditor.actions.handleSave();
           console.info('Página de resultado salva:', success);
@@ -46,6 +48,7 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
           console.warn('Método handleSave não encontrado no resultPageEditor');
         }
       } else if (activeMode === 'sales') {
+        // Save sales page state if implemented
         success = await salesPageEditor.handleSave();
         console.info('Página de vendas salva:', success);
       }
@@ -61,11 +64,11 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
       return false;
     }
   }, [activeMode, quizBuilder, resultPageEditor, salesPageEditor]);
-
+  
   const openTemplateModal = useCallback(() => {
     setIsTemplateModalOpen(true);
   }, []);
-
+  
   const closeTemplateModal = useCallback(() => {
     setIsTemplateModalOpen(false);
   }, []);
@@ -74,7 +77,8 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
     try {
       let success = false;
       
-      if (activeMode === 'quiz') {
+      if (activeMode === 'quiz' && quizBuilder) {
+        // Load quiz template if implemented
         if (templateData.stages && Array.isArray(templateData.stages) &&
             typeof quizBuilder.initializeStages === 'function') {
           quizBuilder.initializeStages(templateData.stages);
@@ -83,8 +87,10 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
               typeof quizBuilder.initializeComponents === 'function') {
             quizBuilder.initializeComponents(templateData.components);
           } else {
+            // Initialize with empty components if not provided in template
             quizBuilder.initializeComponents([]);
           }
+          
           success = true;
           
           if (templateData.stages && templateData.stages.length > 0) {
@@ -93,17 +99,20 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
         } else {
           console.warn('Formato de template inválido para o quiz');
         }
-      } else if (activeMode === 'result') {
+      } else if (activeMode === 'result' && resultPageEditor) {
+        // Load result page template
         if (resultPageEditor.actions?.importConfig) {
           const configWithStyleType = {
             ...templateData,
             styleType: primaryStyle.category
           };
-          success = resultPageEditor.actions.importConfig(configWithStyleType);
+          resultPageEditor.actions.importConfig(configWithStyleType);
+          success = true;
         } else {
           console.warn('Método importConfig não encontrado no resultPageEditor');
         }
       } else if (activeMode === 'sales') {
+        // Load sales page template if implemented
         if (templateData.blocks && Array.isArray(templateData.blocks)) {
           success = salesPageEditor.loadTemplate(templateData.blocks);
         } else {
@@ -122,6 +131,8 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
           description: `Formato de template incompatível com o editor de ${activeMode === 'quiz' ? 'Quiz' : activeMode === 'result' ? 'Resultado' : 'Vendas'}.`,
         });
       }
+      
+      return success;
     } catch (error) {
       console.error('Erro ao carregar template:', error);
       toast({
@@ -129,9 +140,10 @@ export const useUnifiedEditor = (primaryStyle: StyleResult) => {
         description: "Não foi possível aplicar o template selecionado.",
         variant: "destructive"
       });
+      return false;
     }
   }, [activeMode, quizBuilder, resultPageEditor, salesPageEditor, primaryStyle.category]);
-
+  
   return {
     activeMode,
     isPreviewing,

@@ -1,3 +1,4 @@
+
 export const styleConfig = {
   Natural: {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
@@ -7,7 +8,7 @@ export const styleConfig = {
   Clássico: {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp',
     guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
-    description: 'Você aprecia a elegância atemporal, com peças de qualidade e caimento perfeito.',
+    description: 'Você aprecia a elegância atemporal, com peças de qualidade e caimento perfeito.'
   },
   Contemporâneo: {
     image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',

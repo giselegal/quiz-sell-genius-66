@@ -1,7 +1,4 @@
 
-"use client";
-
-import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,40 +10,40 @@ import { toast } from '@/components/ui/use-toast';
 export const ApiIntegrationsTab: React.FC = () => {
   // Google Analytics states
   const [googleAnalyticsId, setGoogleAnalyticsId] = useState(() => {
-    return safeLocalStorage.getItem('ga_id') || '';
+    return localStorage.getItem('ga_id') || '';
   });
   const [googleAnalyticsEnabled, setGoogleAnalyticsEnabled] = useState(() => {
-    return safeLocalStorage.getItem('ga_enabled') !== 'false';
+    return localStorage.getItem('ga_enabled') !== 'false';
   });
-
+  
   // Webhook states
   const [webhookUrl, setWebhookUrl] = useState(() => {
-    return safeLocalStorage.getItem('webhook_url') || '';
+    return localStorage.getItem('webhook_url') || '';
   });
   const [webhookEnabled, setWebhookEnabled] = useState(() => {
-    return safeLocalStorage.getItem('webhook_enabled') === 'true';
+    return localStorage.getItem('webhook_enabled') === 'true';
   });
 
   const handleSaveGoogleAnalytics = () => {
-    safeLocalStorage.setItem('ga_id', googleAnalyticsId);
-    safeLocalStorage.setItem('ga_enabled', String(googleAnalyticsEnabled));
+    localStorage.setItem('ga_id', googleAnalyticsId);
+    localStorage.setItem('ga_enabled', String(googleAnalyticsEnabled));
     
     toast({
       title: "Settings saved",
       description: "Google Analytics settings have been updated successfully.",
     });
   };
-
+  
   const handleSaveWebhook = () => {
-    safeLocalStorage.setItem('webhook_url', webhookUrl);
-    safeLocalStorage.setItem('webhook_enabled', String(webhookEnabled));
+    localStorage.setItem('webhook_url', webhookUrl);
+    localStorage.setItem('webhook_enabled', String(webhookEnabled));
     
     toast({
       title: "Settings saved",
       description: "Webhook settings have been updated successfully.",
     });
   };
-
+  
   const handleTestConnection = (service: string) => {
     toast({
       title: `Testing ${service} connection`,
@@ -86,7 +83,7 @@ export const ApiIntegrationsTab: React.FC = () => {
             />
             <Label htmlFor="ga-tracking">Enable Google Analytics tracking</Label>
           </div>
-
+          
           <div className="flex justify-between">
             <Button 
               variant="outline"
@@ -134,7 +131,7 @@ export const ApiIntegrationsTab: React.FC = () => {
             />
             <Label htmlFor="webhook-enabled">Enable webhook notifications</Label>
           </div>
-
+          
           <div className="flex justify-between">
             <Button 
               variant="outline"
@@ -152,7 +149,7 @@ export const ApiIntegrationsTab: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-
+      
       <Card>
         <CardHeader>
           <CardTitle>API Tokens</CardTitle>

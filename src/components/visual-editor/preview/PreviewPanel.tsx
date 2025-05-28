@@ -61,7 +61,6 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               selectedBlockId === block.id && 'border-2 border-blue-400 rounded'
             )}
             onClick={() => onSelect(block.id)}
-            style={block.content.style as React.CSSProperties}
           >
             {block.content.imageUrl ? (
               <img 
@@ -119,7 +118,6 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           </Button>
         </div>
       </div>
-      
       <ScrollArea className="flex-1 p-4 bg-gray-50">
         <div 
           className={cn(

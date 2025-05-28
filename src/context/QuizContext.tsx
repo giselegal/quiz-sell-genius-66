@@ -1,92 +1,157 @@
 
-"use client";
+import React, { createContext, useContext, ReactNode } from 'react';
+import { useQuizLogic } from '../hooks/useQuizLogic';
+import { useToast } from '@/components/ui/use-toast';
+import { QuizResult, StyleResult } from '@/types/quiz';
 
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { QuizQuestion, QuizAnswer, StyleResult } from '@/types/quiz';
-
-interface QuizState {
-  currentQuestionIndex: number;
-  answers: QuizAnswer[];
-  isCompleted: boolean;
-  result: StyleResult | null;
-  questions: QuizQuestion[];
-}
-
-type QuizAction =
-  | { type: 'NEXT_QUESTION' }
-  | { type: 'PREVIOUS_QUESTION' }
-  | { type: 'ADD_ANSWER'; payload: QuizAnswer }
-  | { type: 'COMPLETE_QUIZ' }
-  | { type: 'SET_RESULT'; payload: StyleResult }
-  | { type: 'RESET_QUIZ' }
-  | { type: 'SET_QUESTIONS'; payload: QuizQuestion[] };
-
-const initialState: QuizState = {
-  currentQuestionIndex: 0,
-  answers: [],
-  isCompleted: false,
-  result: null,
-  questions: []
+// Define the context type
+type QuizContextType = ReturnType<typeof useQuizLogic> & {
+  startQuiz: (name: string, email: string, quizId: string) => Promise<any>;
+  submitAnswers: (answers: Array<{ questionId: string; optionId: string; points: number }>) => Promise<void>;
+  submitResults: (results: QuizResult) => Promise<void>;
 };
 
-function quizReducer(state: QuizState, action: QuizAction): QuizState {
-  switch (action.type) {
-    case 'NEXT_QUESTION':
-      return {
-        ...state,
-        currentQuestionIndex: Math.min(state.currentQuestionIndex + 1, state.questions.length - 1)
-      };
-    case 'PREVIOUS_QUESTION':
-      return {
-        ...state,
-        currentQuestionIndex: Math.max(state.currentQuestionIndex - 1, 0)
-      };
-    case 'ADD_ANSWER':
-      return {
-        ...state,
-        answers: [...state.answers, action.payload]
-      };
-    case 'COMPLETE_QUIZ':
-      return {
-        ...state,
-        isCompleted: true
-      };
-    case 'SET_RESULT':
-      return {
-        ...state,
-        result: action.payload
-      };
-    case 'RESET_QUIZ':
-      return initialState;
-    case 'SET_QUESTIONS':
-      return {
-        ...state,
-        questions: action.payload
-      };
-    default:
-      return state;
-  }
-}
+// Create context with undefined default
+const QuizContext = createContext<QuizContextType | undefined>(undefined);
 
-const QuizContext = createContext<{
-  state: QuizState;
-  dispatch: React.Dispatch<QuizAction>;
-} | undefined>(undefined);
+// Provider component
+export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const quizLogic = useQuizLogic();
+  const { toast } = useToast();
+  
+  // Define all context functions before returning the provider
+  const startQuiz = async (name: string, email: string, quizId: string) => {
+    try {
+      console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
+      return { id: '1', name, email };
+    } catch (error) {
+      toast({
+        title: "Erro ao iniciar o quiz",
+        description: "Por favor, tente novamente.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
 
-export function QuizProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(quizReducer, initialState);
+  const submitAnswers = async (answers: Array<{ questionId: string; optionId: string; points: number }>) => {
+    try {
+      console.log('Submitting answers:', answers);
+    } catch (error) {
+      toast({
+        title: "Erro ao salvar respostas",
+        description: "Por favor, tente novamente.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
 
+  const submitResults = async (results: QuizResult) => {
+    try {
+      console.log("Results submitted:", results);
+      window.location.href = '/resultado';
+    } catch (error) {
+      toast({
+        title: "Erro ao salvar resultados",
+        description: "Por favor, tente novamente.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+  
+  // Spread quizLogic and add our additional functions
+  const contextValue = {
+    ...quizLogic,
+    startQuiz,
+    submitAnswers,
+    submitResults
+  };
+  
+  // Return the provider
   return (
-    <QuizContext.Provider value={{ state, dispatch }}>
+    <QuizContext.Provider value={contextValue}>
       {children}
     </QuizContext.Provider>
   );
-}
+};
 
-export function useQuiz() {
+// Hook for using the context
+export const useQuizContext = () => {
   const context = useContext(QuizContext);
   if (context === undefined) {
-    throw new Error('useQuiz must be used within a QuizProvider');
+    throw new Error('useQuizContext must be used within a QuizProvider');
   }
   return context;
-}
+};
+
+// Export a simplification of the context
+export const useQuiz = () => {
+  const { toast } = useToast();
+  
+  const getQuizResult = (): { primaryStyle: StyleResult; secondaryStyles: StyleResult[] } | null => {
+    try {
+      const savedResult = localStorage.getItem('quizResult');
+      if (savedResult) {
+        const parsedResult = JSON.parse(savedResult);
+        return {
+          primaryStyle: parsedResult.primaryStyle,
+          secondaryStyles: parsedResult.secondaryStyles || []
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error loading quiz result:', error);
+      return null;
+    }
+  };
+
+  const quizResult = getQuizResult();
+  
+  return {
+    ...quizResult,
+    startQuiz: async (name: string, email: string, quizId: string) => {
+      try {
+        console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
+        return { id: '1', name, email };
+      } catch (error) {
+        toast({
+          title: "Erro ao iniciar o quiz",
+          description: "Por favor, tente novamente.",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    },
+    
+    submitAnswers: async (
+      answers: Array<{ questionId: string; optionId: string; points: number }>
+    ) => {
+      try {
+        console.log('Submitting answers:', answers);
+      } catch (error) {
+        toast({
+          title: "Erro ao salvar respostas",
+          description: "Por favor, tente novamente.",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    },
+    
+    submitResults: async (results: QuizResult) => {
+      try {
+        console.log("Results submitted:", results);
+        window.location.href = '/resultado';
+      } catch (error) {
+        toast({
+          title: "Erro ao salvar resultados",
+          description: "Por favor, tente novamente.",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    }
+  };
+};

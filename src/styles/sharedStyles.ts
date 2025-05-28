@@ -1,3 +1,4 @@
+
 export const sharedStyles = {
   colors: {
     background: '#fffaf7',
@@ -20,13 +21,13 @@ export const sharedStyles = {
     sm: '1rem',
     md: '1.5rem',
     lg: '2rem',
-    xl: '3rem',
+    xl: '3rem'
   },
   borderRadius: {
     sm: '0.25rem',
     md: '0.5rem',
     lg: '1rem',
-    xl: '2rem',
+    xl: '1.5rem'
   },
   shadows: {
     sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
