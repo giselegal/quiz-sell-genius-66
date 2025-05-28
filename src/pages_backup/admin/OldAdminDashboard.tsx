@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -27,7 +26,7 @@ const AnalyticsPage = React.lazy(() => import('./AnalyticsPage'));
 const ABTestPage = React.lazy(() => import('./ABTestPage'));
 const ABTestManagerPage = React.lazy(() => import('../ABTestManagerPage'));
 const ResultPagePrototype = React.lazy(() => import('../ResultPagePrototype'));
-const EnhancedResultPageEditorPage = React.lazy(() => import('../EnhancedResultPageEditorPage'));
+// const EnhancedResultPageEditorPage = React.lazy(() => import('../EnhancedResultPageEditorPage'));
 const QuizOfferPageVisualEditor = React.lazy(() => import('@/components/visual-editor/QuizOfferPageVisualEditor'));
 
 const OldAdminDashboard = () => {
@@ -248,7 +247,7 @@ const OldAdminDashboard = () => {
             {/* Outras abas carregam os componentes específicos */}
             <TabsContent value="editor">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando editor...</div>}>
-                <EnhancedResultPageEditorPage />
+                {/* <EnhancedResultPageEditorPage /> */}
               </React.Suspense>
             </TabsContent>
 

@@ -28,9 +28,9 @@ const AdminDashboard = loadable(() => import('./pages_backup/admin/OldAdminDashb
   fallback: <LoadingFallback message="Carregando painel administrativo..." />
 });
 
-const EditorPage = loadable(() => import('./components/admin/editor/EnhancedResultPageEditorPage'), {
-  fallback: <LoadingFallback message="Carregando editor..." />
-});
+// const EditorPage = loadable(() => import('./components/admin/editor/EnhancedResultPageEditorPage'), {
+//   fallback: <LoadingFallback message="Carregando editor..." />
+// });
 
 // Componente wrapper para QuizIntro com navegação
 const QuizIntroWrapper = () => {
@@ -83,8 +83,8 @@ function App() {
               <Route path="/admin/*" element={<AdminDashboard />} />
               
               {/* EDITOR VISUAL */}
-              <Route path="/editor" element={<EditorPage />} />
-              <Route path="/editor/:id" element={<EditorPage />} />
+              {/* <Route path="/editor" element={<EditorPage />} />
+              <Route path="/editor/:id" element={<EditorPage />} /> */}
               
               {/* ROTAS DE DESENVOLVIMENTO/TESTE */}
               <Route path="/demo" element={<QuizDemoWrapper />} />
