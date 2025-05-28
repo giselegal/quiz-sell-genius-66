@@ -4,7 +4,6 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface User {
   userName: string;
   email?: string; // Added email as optional property
-  role?: string;  // Added role property for admin access
 }
 
 interface AuthContextType {
@@ -19,12 +18,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(() => {
     const savedName = localStorage.getItem('userName');
     const savedEmail = localStorage.getItem('userEmail');
-    const savedRole = localStorage.getItem('userRole');
-    
     return savedName ? { 
       userName: savedName,
-      ...(savedEmail && { email: savedEmail }),
-      ...(savedRole && { role: savedRole })
+      ...(savedEmail && { email: savedEmail })
     } : null;
   });
 
@@ -38,12 +34,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       localStorage.setItem('userEmail', email);
     }
     
-    // Preservar o status de admin caso exista
-    const savedRole = localStorage.getItem('userRole');
-    if (savedRole) {
-      userData.role = savedRole;
-    }
-    
     setUser(userData);
     localStorage.setItem('userName', name);
   };
@@ -52,7 +42,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
-    localStorage.removeItem('userRole');
   };
 
   return (

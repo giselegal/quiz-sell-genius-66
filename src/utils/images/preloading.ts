@@ -1,272 +1,336 @@
-import { type BankImage, getAllImages, getImageById } from '@/data/imageBank';
-import { optimizeCloudinaryUrl } from './optimization';
-import { updateImageCache, hasImageWithStatus } from './caching';
 
-interface PreloadOptions {
-  quality?: number;
-  priority?: 'high' | 'low' | 'auto';
-  categories?: string[];
-  limit?: number;
-  timeout?: number;
-  format?: string;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
-  batchSize?: number;
-}
+import { BankImage, getImageById } from '@/data/imageBank';
+import { PreloadOptions } from './types';
+import { optimizeCloudinaryUrl, getLowQualityPlaceholder } from './optimization';
+import { updateImageCache, hasImageWithStatus, imageCache } from './caching';
+import { getAllImages } from '@/data/imageBank';
 
 /**
- * Verifica se uma imagem já foi pré-carregada
- * @param url URL da imagem para verificar
- * @returns Booleano indicando se a imagem já foi pré-carregada
+ * Check if an image is preloaded
+ * @param url URL of the image to check
  */
 export const isImagePreloaded = (url: string): boolean => {
-  return hasImageWithStatus(url, 'loaded');
+  if (!url) return false;
+  
+  // First optimize the URL if needed
+  const optimizedUrl = optimizeCloudinaryUrl(url, { quality: 80, format: 'auto' });
+  
+  // Check if the image is loaded
+  return hasImageWithStatus(optimizedUrl, 'loaded');
 };
 
 /**
- * Pré-carrega imagens pelo ID do banco de imagens
- * @param imageIds IDs das imagens para pré-carregar
- * @param options Opções de pré-carregamento
+ * Preload specific images from the bank
+ * @param imageIds Array of image IDs to preload
+ * @param options Preload options
  */
 export const preloadImagesByIds = (
   imageIds: string[],
   options: PreloadOptions = {}
-): Promise<boolean> => {
-  try {
-    const images = imageIds
-      .map(id => getImageById(id))
-      .filter(img => img !== undefined) as BankImage[];
-
-    return preloadImages(images, options);
-  } catch (error) {
-    console.error('[Image Manager] Erro ao pré-carregar imagens por ID:', error);
-    return Promise.resolve(false);
-  }
+) => {
+  const images = imageIds
+    .map(id => getImageById(id))
+    .filter(img => img !== undefined) as BankImage[];
+  
+  return preloadImages(images, options);
 };
 
 /**
- * Pré-carrega imagens por URL
- * @param urls URLs das imagens para pré-carregar
- * @param options Opções de pré-carregamento
+ * Preload images by their source URLs
+ * @param urls Array of image URLs to preload
+ * @param options Preload options
  */
 export const preloadImagesByUrls = (
   urls: string[],
   options: PreloadOptions = {}
-): Promise<boolean> => {
-  try {
-    const images = urls.map(url => ({
-      id: `url-${url.slice(-20)}`, // Generate a simple ID based on URL
-      src: url,
-      alt: 'Preloaded image',
-      category: 'preloaded'
-    })) as BankImage[];
-
-    return preloadImages(images, options);
-  } catch (error) {
-    console.error('[Image Manager] Erro ao pré-carregar imagens por URL:', error);
-    return Promise.resolve(false);
+) => {
+  // Create temporary BankImage objects for each URL
+  const tempImages: BankImage[] = urls.map(url => ({
+    id: url,
+    src: url,
+    category: 'external',
+    tags: [],
+    alt: 'Preloaded image' // Add required alt property
+  }));
+  
+  const { generateLowQuality = true, ...restOptions } = options;
+  
+  // If requested, also generate and cache low quality placeholders
+  if (generateLowQuality) {
+    urls.forEach(url => {
+      const lowQualityUrl = getLowQualityPlaceholder(url, {
+        width: 40,   // Better quality placeholders
+        quality: 35  // Better quality placeholders
+      });
+      
+      if (lowQualityUrl) {
+        // Add low quality version to cache
+        const optimizedUrl = optimizeCloudinaryUrl(url, { 
+          quality: options.quality || 85, // Improved default quality
+          format: 'auto',
+          width: options.width,
+          height: options.height
+        });
+        
+        // Update cache with low quality URL
+        updateImageCache(optimizedUrl, {
+          url: url,
+          lowQualityUrl: lowQualityUrl
+        });
+        
+        // Also preload the low quality version
+        const img = new Image();
+        img.src = lowQualityUrl;
+        img.decoding = "async"; // Allow async decode for better perf
+        img.fetchPriority = "high"; // High priority for placeholders
+      }
+    });
   }
+  
+  return preloadImages(tempImages, restOptions);
 };
 
 /**
- * Pré-carrega um conjunto de imagens
- * @param images Array de imagens para pré-carregar
- * @param options Opções de pré-carregamento
+ * Preload bank images
+ * @param images Array of bank images to preload
+ * @param options Preload options 
  */
 export const preloadImages = (
   images: BankImage[],
   options: PreloadOptions = {}
-): Promise<boolean> => {
-  if (!images || images.length === 0) {
-    if (options.onComplete) options.onComplete();
-    return Promise.resolve(true);
-  }
-
+) => {
   const {
-    quality = 85,
+    quality = 95,
+    width,
+    height,
     format = 'auto',
-    timeout = 3000,
     onProgress,
     onComplete,
-    batchSize = 4
+    batchSize = 3,
+    generateLowQuality = true
   } = options;
-
-  let loaded = 0;
-  const total = images.length;
-
-  return new Promise((resolve) => {
-    // Iniciar temporizador para garantir que a promessa sempre resolva
-    const timeoutId = setTimeout(() => {
-      console.warn(`[Image Manager] Timeout ao carregar ${total} imagens. Carregadas: ${loaded}`);
-      if (onComplete) onComplete();
-      resolve(loaded === total);
-    }, timeout);
-
-    // Função para carregar uma imagem
-    const loadImage = (src: string): Promise<void> => {
-      return new Promise((resolveImage) => {
-        if (hasImageWithStatus(src, 'loaded')) {
-          resolveImage();
-          return;
-        }
-
-        updateImageCache(src, { url: src, loadStatus: 'loading' });
-
-        const optimizedSrc = optimizeCloudinaryUrl(src, { quality, format });
-        const img = new Image();
-
-        img.onload = () => {
-          updateImageCache(src, { url: src, loadStatus: 'loaded', imageElement: img });
-          loaded++;
-          if (onProgress) onProgress(loaded, total);
-          resolveImage();
-        };
-
-        img.onerror = () => {
-          console.warn(`[Image Manager] Falha ao carregar imagem: ${src}`);
-          updateImageCache(src, { url: src, loadStatus: 'error' });
-          loaded++;
-          if (onProgress) onProgress(loaded, total);
-          resolveImage();
-        };
-
-        img.src = optimizedSrc;
-      });
-    };
-
-    // Carregar imagens em lotes
-    const loadBatch = async (batch: BankImage[]): Promise<void> => {
-      await Promise.all(batch.map(image => loadImage(image.src)));
-    };
-
-    // Dividir em lotes e carregar
-    const batches: BankImage[][] = [];
-    for (let i = 0; i < images.length; i += batchSize) {
-      batches.push(images.slice(i, i + batchSize));
-    }
-
-    // Carregar lotes em sequência
-    let batchIndex = 0;
-    const processNextBatch = () => {
-      if (batchIndex >= batches.length) {
-        clearTimeout(timeoutId);
-        if (onComplete) onComplete();
-        resolve(loaded === total);
-        return;
-      }
-
-      loadBatch(batches[batchIndex]).then(() => {
-        batchIndex++;
-        processNextBatch();
-      });
-    };
-
-    processNextBatch();
-  });
-};
-
-/**
- * Pré-carrega imagens críticas por categoria
- * @param categoryName Nome da categoria de imagens para pré-carregar
- * @param options Opções de pré-carregamento
- */
-export const preloadImagesByCategory = (
-  categoryName: string,
-  options: PreloadOptions = {}
-): Promise<boolean> => {
-  try {
-    const allImages = getAllImages();
-    const categoryImages = allImages.filter(img => 
-      img.category === categoryName || 
-      (img.categories && img.categories.includes(categoryName))
-    );
-
-    if (categoryImages.length === 0) {
-      console.warn(`[Image Manager] Nenhuma imagem encontrada na categoria '${categoryName}'`);
-      return Promise.resolve(false);
-    }
-
-    console.log(`[Image Manager] Pré-carregando ${categoryImages.length} imagens da categoria '${categoryName}'`);
-    return preloadImages(categoryImages, options);
-  } catch (error) {
-    console.error('[Image Manager] Erro ao pré-carregar categoria:', error);
-    return Promise.resolve(false);
-  }
-};
-
-/**
- * Pré-carrega imagens críticas para uma determinada seção ou página
- * @param section Nome da seção ou página para pré-carregar imagens
- * @param options Opções de pré-carregamento
- */
-export const preloadCriticalImages = (
-  section: string | string[],
-  options: PreloadOptions = {}
-): Promise<boolean> => {
-  // Converter para array se for string única
-  const sections = Array.isArray(section) ? section : [section];
   
-  // Tentar cada método de carregamento em ordem de prioridade
-  return preloadBySection(sections, options);
-};
-
-/**
- * Função interna para pré-carregar imagens de uma ou mais seções
- */
-const preloadBySection = async (
-  sections: string[],
-  options: PreloadOptions = {}
-): Promise<boolean> => {
-  try {
-    const allImages = getAllImages();
-    
-    // Filtrar imagens das seções especificadas
-    const sectionImages = allImages.filter(img => {
-      if (!img.category) return false;
-      
-      // Verificar se a imagem pertence a qualquer uma das seções ou categorias
-      return sections.some(section => 
-        (img.section && img.section === section) || 
-        img.category === section ||
-        (img.categories && img.categories.includes(section))
-      );
+  // Skip any already loaded or loading images
+  const imagesToLoad = images.filter(img => {
+    const optimizedUrl = optimizeCloudinaryUrl(img.src, { 
+      quality, 
+      format,
+      width,
+      height
     });
     
-    if (sectionImages.length === 0) {
-      console.warn(`[Image Manager] Nenhuma imagem crítica encontrada para seções: ${sections.join(', ')}`);
-      return Promise.resolve(false);
+    return !hasImageWithStatus(optimizedUrl, 'loaded') && !hasImageWithStatus(optimizedUrl, 'loading');
+  });
+  
+  if (imagesToLoad.length === 0) {
+    if (onComplete) onComplete();
+    return;
+  }
+  
+  // Load images in batches
+  let loadedCount = 0;
+  const totalCount = imagesToLoad.length;
+  
+  const loadNextBatch = (startIndex: number) => {
+    const batch = imagesToLoad.slice(startIndex, startIndex + batchSize);
+    if (batch.length === 0) {
+      if (onComplete) onComplete();
+      return;
     }
     
-    // Ordenar por prioridade
-    sectionImages.sort((a, b) => {
-      const priorityA = a.priority || 'medium';
-      const priorityB = b.priority || 'medium';
-      
-      const priorityValues = { high: 3, medium: 2, low: 1 };
-      return priorityValues[priorityB as keyof typeof priorityValues] - 
-             priorityValues[priorityA as keyof typeof priorityValues];
-    });
+    let batchLoaded = 0;
     
-    console.log(`[Image Manager] Pré-carregando ${sectionImages.length} imagens críticas para: ${sections.join(', ')}`);
-    return preloadImages(sectionImages, options);
-  } catch (error) {
-    console.error('[Image Manager] Erro ao pré-carregar imagens críticas:', error);
-    return Promise.resolve(false);
-  }
+    batch.forEach(img => {
+      const optimizedUrl = optimizeCloudinaryUrl(img.src, { 
+        quality, 
+        format,
+        width: width || img.width,
+        height: height || img.height
+      });
+      
+      // Generate high quality placeholder if needed
+      let lowQualityUrl;
+      if (generateLowQuality && img.src.includes('cloudinary.com')) {
+        // Usa a versão melhorada do placeholder com qualidade e tamanho aumentados
+        lowQualityUrl = getLowQualityPlaceholder(img.src, {
+          width: 40,
+          quality: 35
+        });
+      }
+      
+      // Mark as loading
+      updateImageCache(optimizedUrl, {
+        url: img.src,
+        loadStatus: 'loading',
+        lowQualityUrl: lowQualityUrl
+      });
+      
+      const imgElement = new Image();
+      
+      imgElement.onload = () => {
+        // Update cache with loaded status
+        updateImageCache(optimizedUrl, {
+          url: img.src,
+          loadStatus: 'loaded',
+          element: imgElement,
+          optimizedUrl,
+          lowQualityUrl: lowQualityUrl
+        });
+        
+        loadedCount++;
+        batchLoaded++;
+        
+        if (onProgress) {
+          onProgress(loadedCount, totalCount);
+        }
+        
+        if (batchLoaded === batch.length) {
+          loadNextBatch(startIndex + batchSize);
+        }
+      };
+      
+      imgElement.onerror = () => {
+        // Mark as error
+        updateImageCache(optimizedUrl, {
+          url: img.src,
+          loadStatus: 'error',
+          lowQualityUrl: lowQualityUrl
+        });
+        
+        console.error(`Failed to preload image: ${img.src}`);
+        
+        loadedCount++;
+        batchLoaded++;
+        
+        if (onProgress) {
+          onProgress(loadedCount, totalCount);
+        }
+        
+        if (batchLoaded === batch.length) {
+          loadNextBatch(startIndex + batchSize);
+        }
+      };
+      
+      // Start loading the image
+      imgElement.src = optimizedUrl;
+    });
+  };
+  
+  // Start loading the first batch
+  loadNextBatch(0);
 };
 
 /**
- * Obtém URL para imagem de baixa qualidade para carregamento progressivo
- * @param url URL da imagem original
- * @returns URL para imagem de baixa qualidade
+ * Get a low quality placeholder for an image URL
+ * @param url Original image URL
  */
 export const getLowQualityImage = (url: string): string => {
   if (!url) return '';
   
-  return optimizeCloudinaryUrl(url, {
-    quality: 20,
-    width: 30,
-    format: 'auto',
-    crop: 'limit'
+  // Check if we already have this in the cache
+  const optimizedUrl = optimizeCloudinaryUrl(url, { quality: 90, format: 'auto' });
+  
+  // Get cache entry first
+  const cacheEntry = imageCache.get(optimizedUrl);
+  
+  // Then check if the cache entry has a lowQualityUrl
+  if (cacheEntry && cacheEntry.lowQualityUrl) {
+    return cacheEntry.lowQualityUrl;
+  }
+  
+  // Make sure we add it to the cache properly
+  updateImageCache(optimizedUrl, { url });
+  
+  // Generate a better quality version of the placeholder to avoid blurry images
+  return getLowQualityPlaceholder(url, {
+    width: 40,   // Increased from default 20px
+    quality: 35  // Increased from default 10% 
   });
+};
+
+/**
+ * Preload critical images for a page
+ * @param page 'intro', 'quiz', 'results' or 'strategic'
+ */
+export const preloadCriticalImages = (page: 'intro' | 'quiz' | 'results' | 'strategic') => {
+  // Determine which images are critical based on the page
+  let minPriority = 4;
+  let categoryFilter: string | undefined;
+  let batchSize = 3; // Padrão
+  
+  switch (page) {
+    case 'intro':
+      categoryFilter = 'branding';
+      batchSize = 2;
+      // Apenas preload otimizadas do logo e imagens de marca
+      preloadImagesByCategory('branding', { 
+        quality: 90, 
+        batchSize: 2,
+        width: 160, // Reduzindo para apenas o tamanho visível inicialmente
+        format: 'auto'
+      });
+      break;
+    case 'quiz':
+      categoryFilter = undefined; // All high priority images
+      batchSize = 4; // Mais imagens em paralelo para quiz
+      break;
+    case 'results':
+      minPriority = 3;
+      batchSize = 2;
+      // Otimização específica para imagens de transformação
+      preloadImagesByCategory('transformation', { 
+        quality: 85, 
+        batchSize: 2,
+        width: 640, // Largura reduzida para carregamento mais rápido
+        format: 'webp' // Formato moderno mais eficiente
+      });
+      categoryFilter = undefined;
+      break;
+    case 'strategic':
+      categoryFilter = 'strategic';
+      minPriority = 3;
+      batchSize = 3;
+      break;
+  }
+  
+  // Get high priority images, filtered by category if needed
+  const highPriorityImages = getAllImages().filter(img => {
+    const meetsMinPriority = (img.preloadPriority || 0) >= minPriority;
+    return categoryFilter 
+      ? meetsMinPriority && img.category === categoryFilter
+      : meetsMinPriority;
+  });
+  
+  // Calcula largura otimizada com base na página
+  const optimalWidth = page === 'intro' ? 300 : 
+                       page === 'results' ? 600 : 
+                       page === 'strategic' ? 400 : 500;
+  
+  // Preload these images with optimized settings - revisados para melhor performance
+  preloadImages(highPriorityImages, {
+    quality: page === 'results' ? 85 : 90, // Qualidade adaptada por contexto
+    batchSize: batchSize, // Configuração adaptada por contexto
+    width: optimalWidth, // Largura adaptativa
+    format: 'auto', // Auto format for best browser compatibility
+    onComplete: () => {
+      console.log(`Preloaded ${highPriorityImages.length} critical images for ${page}`);
+    }
+  });
+};
+
+/**
+ * Preload images from a specific category
+ * @param category Category name to preload
+ * @param options Preload options
+ */
+export const preloadImagesByCategory = (
+  category: string,
+  options: PreloadOptions = {}
+) => {
+  const images = getAllImages().filter(img => img.category === category);
+  
+  if (images.length > 0) {
+    console.log(`Preloading ${images.length} images from ${category} category`);
+    preloadImages(images, options);
+  }
 };

@@ -3,8 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { 
   getAllImages, 
   getImagesByCategory, 
-  getImageById,
-  type BankImage
+  getImagesByStyleCategory,
+  getImageById
 } from '@/data/imageBank';
 import { 
   preloadImages, 
@@ -13,7 +13,8 @@ import {
   preloadCriticalImages,
   preloadImagesByCategory
 } from '@/utils/imageManager';
-import type { PreloadOptions } from '@/utils/images/types';
+import type { BankImage } from '@/data/imageBank';
+import type { StyleCategory } from '@/types/quiz';
 
 interface UseImageBankProps {
   initialCategory?: string;
@@ -52,9 +53,9 @@ export const useImageBank = ({
   }, []);
 
   // Load images by style category
-  const loadImagesByStyle = useCallback((styleCategory: string) => {
+  const loadImagesByStyle = useCallback((styleCategory: StyleCategory) => {
     try {
-      const resultImages = getImagesByCategory(styleCategory);
+      const resultImages = getImagesByStyleCategory(styleCategory);
       setImages(resultImages);
       setCurrentCategory(undefined); // Not a standard category
       setError(null);

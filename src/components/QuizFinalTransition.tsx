@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { preloadCriticalImages } from '@/utils/imageManager';
@@ -24,7 +23,7 @@ const QuizFinalTransition: React.FC<QuizFinalTransitionProps> = ({ onShowResult 
   useEffect(() => {
     // Iniciamos o preload de imagens em paralelo com a animação
     const preloadPromise = Promise.resolve().then(() => {
-      preloadCriticalImages(["results"]);
+      preloadCriticalImages('results');
       return true;
     });
     

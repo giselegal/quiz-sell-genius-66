@@ -1,139 +1,367 @@
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useQuizContext } from '../context/QuizContext';
-import { calculateResults } from '../utils/resultsCalculator';
-import { useTransformation } from '../hooks/useTransformation';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { FixedTransformationImage } from '@/components/ui/FixedTransformationImage';
+import React, { useEffect, useState } from 'react';
+import { useQuiz } from '@/hooks/useQuiz';
+import { useGlobalStyles } from '@/hooks/useGlobalStyles';
+import { Header } from '@/components/result/Header';
+import { styleConfig } from '@/config/styleConfig';
+import { Progress } from '@/components/ui/progress';
+import { Card } from '@/components/ui/card';
+import { ShoppingCart, CheckCircle, ArrowDown, Lock, Edit } from 'lucide-react';
+import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
+import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
+import ErrorState from '@/components/result/ErrorState';
+import MotivationSection from '@/components/result/MotivationSection';
+import MentorSection from '@/components/result/MentorSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
+import BonusSection from '@/components/result/BonusSection';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useLoadingState } from '@/hooks/useLoadingState';
+import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
+import ResultSkeleton from '@/components/result/ResultSkeleton';
+import { trackButtonClick } from '@/utils/analytics';
+import BuildInfo from '@/components/BuildInfo';
+import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+import { useAuth } from '@/context/AuthContext';
+import { useABTest } from '@/hooks/useABTest';
+import { Link } from 'react-router-dom';
 import { preloadCriticalImages } from '@/utils/imageManager';
-import { UserAnswer } from '@/utils/resultsCalculator';
-import { QuizResult } from '@/types/quiz';
+import { resultPageCriticalCSS } from '@/utils/critical-css';
+import CriticalCSSLoader from '@/components/CriticalCSSLoader';
+import OptimizedImage from '@/components/ui/OptimizedImage';
 
-interface ResultPageProps {
-  // Add any props if needed
-}
-
-const ResultPage: React.FC<ResultPageProps> = () => {
-  // Type assertion to fix incompatible types
-  const { answers, userName, resetQuiz } = useQuizContext() as {
-    answers: Record<string, UserAnswer[]>;
-    userName: string;
-    resetQuiz: () => void;
-  };
+const ResultPage: React.FC = () => {
+  const {
+    primaryStyle,
+    secondaryStyles
+  } = useQuiz();
+  const {
+    globalStyles
+  } = useGlobalStyles();
+  const {
+    user
+  } = useAuth();
   
-  const [results, setResults] = useState<any>(null);
-  const [currentTransformationIndex, setCurrentTransformationIndex] = useState(0);
-  const { transformation, isLoading, error } = useTransformation(results?.style);
-  const navigate = useNavigate();
-  const isMobile = useIsMobile();
+  const { currentVariation, registerConversion, isLoading: isLoadingABTest } = useABTest('result');
+  
+  const isLowPerformance = useIsLowPerformanceDevice();
+  const {
+    isLoading,
+    completeLoading
+  } = useLoadingState({
+    minDuration: 50, 
+    disableTransitions: isLowPerformance
+  });
 
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  
   useEffect(() => {
-    // Preload critical images for the result page
-    preloadCriticalImages(["results"]);
-    
-    if (answers) {
-      const calculatedResults = calculateResults(answers);
-      setResults(calculatedResults);
+    if (!primaryStyle) return;
+    window.scrollTo(0, 0);
+    preloadCriticalImages('results');
+    completeLoading();
+  }, [primaryStyle, completeLoading]);
+  
+  if (!primaryStyle) {
+    return <ErrorState />;
+  }
+  
+  if (isLoading || isLoadingABTest) {
+    return <ResultSkeleton primaryStyle={primaryStyle} />;
+  }
+  
+  const {
+    category
+  } = primaryStyle;
+  const {
+    image,
+    guideImage,
+    description
+  } = styleConfig[category];
+  
+  const getCheckoutUrl = () => {
+    let checkoutUrl = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    if (currentVariation?.content?.checkoutUrl) {
+      checkoutUrl = currentVariation.content.checkoutUrl;
     }
-  }, [answers]);
-
-  const handleRestartQuiz = () => {
-    resetQuiz();
-    navigate('/');
-  };
-
-  const handleNextTransformation = () => {
-    setCurrentTransformationIndex((prevIndex) =>
-      prevIndex + 1 < transformation.length ? prevIndex + 1 : 0
-    );
-  };
-
-  const handlePrevTransformation = () => {
-    setCurrentTransformationIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : transformation.length - 1
-    );
+    return checkoutUrl;
   };
   
-  const fadeStyles = {
-    opacity: 1,
-    transition: 'opacity 0.5s ease-in-out'
+  const handleCTAClick = () => {
+    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
+    if (currentVariation) {
+      registerConversion();
+    }
+    window.location.href = getCheckoutUrl();
   };
-
-  if (!results) {
-    return <div>Calculando resultados...</div>;
-  }
-
+  
+  const getStyleOverrides = () => {
+    const baseStyles: React.CSSProperties = {
+      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit'
+    };
+    if (currentVariation?.content?.styles) {
+      return {
+        ...baseStyles,
+        ...currentVariation.content.styles
+      };
+    }
+    return baseStyles;
+  };
+  
+  const getPriceInfo = () => {
+    const priceInfo = {
+      regularPrice: 'R$ 175,00',
+      currentPrice: 'R$ 39,00',
+      installments: '4X de R$ 10,86'
+    };
+    if (currentVariation?.content?.pricing) {
+      return {
+        ...priceInfo,
+        ...currentVariation.content.pricing
+      };
+    }
+    return priceInfo;
+  };
+  
+  const priceInfo = getPriceInfo();
+  
+  const isAdmin = user && 
+    typeof user === 'object' && 
+    'role' in user && 
+    user.role === 'admin';
+  
   return (
-    <div className="min-h-screen bg-background p-4 flex flex-col items-center justify-start">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl w-full text-center py-8"
-      >
-        <h1 className="text-3xl font-playfair text-brand-coffee font-semibold mb-4">
-          {userName ? `Parabéns, ${userName}!` : "Seu Resultado"}
-        </h1>
-        <p className="text-brand-text">
-          Com base nas suas respostas, identificamos o seu estilo predominante como:
-        </p>
-        <h2 className="text-2xl font-playfair text-brand-primary font-semibold mt-2">
-          {results.style}
-        </h2>
-        <p className="text-brand-text mt-4">
-          {results.description}
-        </p>
-      </motion.div>
+    <div className="min-h-screen relative overflow-hidden" style={getStyleOverrides()}>
+      <CriticalCSSLoader cssContent={resultPageCriticalCSS} />
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+      
+      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl w-full flex flex-col items-center"
-      >
-        <h3 className="text-xl font-playfair text-brand-coffee font-semibold mb-4">
-          Inspire-se com essa transformação
-        </h3>
-        {isLoading ? (
-          <div>Carregando transformação...</div>
-        ) : error ? (
-          <div>Erro ao carregar transformação.</div>
-        ) : transformation && transformation.length > 0 ? (
-          <div className="relative w-full max-w-md">
-            <div style={{ ...fadeStyles }}>
-              <FixedTransformationImage
-                src={transformation[currentTransformationIndex].imageUrl}
-                alt={`Transformação ${currentTransformationIndex + 1}`}
-                width={500}
-                height={500}
-                className="rounded-lg shadow-md"
-              />
+      {isAdmin && (
+        <div className="container mx-auto px-4 py-2 max-w-4xl">
+          <Link to="/resultado/editor" className="inline-flex items-center gap-1.5 text-sm py-1.5 px-3 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors">
+            <Edit className="h-3.5 w-3.5" />
+            <span>Editar Página</span>
+          </Link>
+        </div>
+      )}
+
+      <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
+        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
+          <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
+            <div className="text-center mb-8">
+              <div className="max-w-md mx-auto mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-[#8F7A6A]">
+                    Seu estilo predominante
+                  </span>
+                  <span className="text-[#aa6b5d] font-medium">{primaryStyle.percentage}%</span>
+                </div>
+                <Progress value={primaryStyle.percentage} className="h-2 bg-[#F3E8E6]" indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]" />
+              </div>
             </div>
-            <div className="flex justify-between mt-2">
-              <Button variant="outline" size="icon" onClick={handlePrevTransformation}>
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" onClick={handleNextTransformation}>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-4">
+                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={150}>
+                  <p className="text-[#432818] leading-relaxed">{description}</p>
+                </AnimatedWrapper>
+                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={200}>
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 glass-panel">
+                    <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
+                    <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                  </div>
+                </AnimatedWrapper>
+              </div>
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={100}>
+                <div className="max-w-[180px] md:max-w-[238px] mx-auto relative">
+                  <OptimizedImage 
+                    src={image}
+                    alt={`Estilo ${category}`}
+                    width={238}
+                    height={Math.round(238 * 1.3)}
+                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                    priority={true}
+                  />
+                  <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A] dark:border-[#E0C9B1]"></div>
+                  <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A] dark:border-[#E0C9B1]"></div>
+                </div>
+              </AnimatedWrapper>
             </div>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={50}>
+              <div className="mt-10 md:mt-12 max-w-[600px] mx-auto relative p-4 bg-gradient-to-br from-[#fdfaf8] to-[#fbf5ef] dark:from-[#3a2e26] dark:to-[#332820] rounded-xl shadow-xl border border-[#B89B7A]/30 dark:border-[#E0C9B1]/30">
+                <OptimizedImage
+                  src={guideImage}
+                  alt={`Guia de Estilo ${category}`}
+                  width={600}
+                  height={400}
+                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                  priority={true}
+                />
+                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] dark:from-[#D4B79F] dark:to-[#C8A88A] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                  Seu Guia Detalhado
+                </div>
+              </div>
+            </AnimatedWrapper>
+          </AnimatedWrapper>
+        </Card>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
+          <BeforeAfterTransformation />
+        </AnimatedWrapper>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
+          <MotivationSection />
+        </AnimatedWrapper>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
+          <BonusSection />
+        </AnimatedWrapper>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
+          <Testimonials />
+        </AnimatedWrapper>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
+          <div className="text-center my-10">
+            <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
+                Descubra Como Aplicar Seu Estilo na Prática
+              </h3>
+              <div className="flex justify-center">
+                <ArrowDown className="w-8 h-8 text-[#B89B7A] animate-bounce" />
+              </div>
+            </div>
+            
+            <Button 
+              onClick={handleCTAClick} 
+              className="text-white py-4 px-6 rounded-md btn-cta-green" 
+              onMouseEnter={() => setIsButtonHovered(true)} 
+              onMouseLeave={() => setIsButtonHovered(false)} 
+              style={{
+                background: "linear-gradient(to right, #4CAF50, #45a049)",
+                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+              }}
+            >
+              <span className="flex items-center justify-center gap-2">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                Quero meu Guia de Estilo Agora
+              </span>
+            </Button>
+            
+            <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
+              <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
+                {priceInfo.installments}
+              </p>
+            </div>
+            
+            <SecurePurchaseElement />
           </div>
-        ) : (
-          <div>Nenhuma transformação disponível para este estilo.</div>
-        )}
-      </motion.div>
+        </AnimatedWrapper>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl w-full mt-8"
-      >
-        <Button className="w-full" onClick={handleRestartQuiz}>
-          Fazer o Quiz Novamente
-        </Button>
-      </motion.div>
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
+          <GuaranteeSection />
+        </AnimatedWrapper>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
+          <MentorSection />
+        </AnimatedWrapper>
+
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
+          
+          <div className="text-center mt-10">
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
+              Vista-se de Você — na Prática
+            </h2>
+            <div className="elegant-divider"></div>
+            <p className="text-[#432818] mb-6 max-w-xl mx-auto">
+              Agora que você conhece seu estilo, é hora de aplicá-lo com clareza e intenção. 
+              O Guia da Gisele Galvão foi criado para mulheres como você — que querem se vestir 
+              com autenticidade e transformar sua imagem em ferramenta de poder.
+            </p>
+
+            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
+              <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
+              <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
+                {["Looks com intenção e identidade", "Cores, modelagens e tecidos a seu favor", "Imagem alinhada aos seus objetivos", "Guarda-roupa funcional, sem compras por impulso"].map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <div className="flex-shrink-0 h-5 w-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white mr-2 mt-0.5">
+                      <CheckCircle className="h-3 w-3" />
+                    </div>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
+              <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
+              
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Guia Principal</span>
+                  <span className="font-medium">R$ 67,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Bônus - Peças-chave</span>
+                  <span className="font-medium">R$ 79,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
+                  <span>Bônus - Visagismo Facial</span>
+                  <span className="font-medium">R$ 29,00</span>
+                </div>
+                <div className="flex justify-between items-center p-2 pt-3 font-bold">
+                  <span>Valor Total</span>
+                  <div className="relative">
+                    <span>{priceInfo.regularPrice}</span>
+                    <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
+                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
+                <p className="text-4xl font-bold gold-text">{priceInfo.currentPrice}</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em {priceInfo.installments}</p>
+              </div>
+              
+              <div className="mt-4">
+                <img
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+                  alt="Métodos de pagamento"
+                  className="w-full rounded-lg"
+                  loading="lazy"
+                  width="400"
+                  height="100"
+                />
+              </div>
+            </div>
+
+            <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2" style={{
+              background: "linear-gradient(to right, #4CAF50, #45a049)",
+              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+              fontSize: "1rem"
+            }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
+              <span className="flex items-center justify-center gap-2">
+                <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                <span>Garantir Meu Guia + Bônus Especiais</span>
+              </span>
+            </Button>
+            
+            <SecurePurchaseElement />
+
+            <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
+              <Lock className="w-3 h-3" />
+              <span>Oferta exclusiva nesta página</span>
+            </p>
+          </div>
+        </AnimatedWrapper>
+      </div>
+
+      <BuildInfo />
     </div>
   );
 };

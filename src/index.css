@@ -1,24 +1,20 @@
-@import './styles/spinner-optimized.css';
 @import './styles/effects.css';
-@import './styles/spinner-optimized.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Melhorar performance desativando todas as animações não críticas */
+/* Melhorar performance desativando animações não críticas */
 * {
   will-change: auto !important;
-  transition: none !important; /* Desativar todas as transições por padrão */
 }
 
-/* Permitir apenas animações realmente essenciais */
-.critical-animation {
-  transition: opacity 300ms ease-in-out !important;
+/* Permitir apenas animações específicas que são críticas para UX */
+img, .hover-scale {
+  transition: transform 300ms ease-in-out !important;
 }
 
-/* Desabilitar efeitos hover de escala para melhorar performance */
 img:hover, .hover-scale:hover {
-  transform: none !important; /* Remover efeito de escala no hover */
+  transform: scale(1.05) !important;
 }
 
 /* Classe para animação 3D */

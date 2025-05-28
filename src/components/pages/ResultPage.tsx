@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -9,6 +9,12 @@ import { ShoppingCart, CheckCircle, ArrowDown, Lock, ChevronLeft, ChevronRight }
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
+import MotivationSection from '@/components/result/MotivationSection';
+import MentorSection from '@/components/result/MentorSection';
+import GuaranteeSection from '@/components/result/GuaranteeSection';
+import Testimonials from '@/components/quiz-result/sales/Testimonials';
+import BonusSection from '@/components/result/BonusSection';
+import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
@@ -17,14 +23,6 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-// Seções carregadas via lazy
-const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
-const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
-const BonusSection = lazy(() => import('@/components/result/BonusSection'));
-const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
-const GuaranteeSection = lazy(() => import('@/components/result/GuaranteeSection'));
-const MentorSection = lazy(() => import('@/components/result/MentorSection'));
 
 const ResultPage: React.FC = () => {
   const {
@@ -170,31 +168,23 @@ const ResultPage: React.FC = () => {
         </Card>
 
         {/* INTEREST: Before/After Transformation Section */}
-        <Suspense fallback={<div className="flex justify-center py-8"><LoadingSpinner size="lg" /></div>}>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
-            <BeforeAfterTransformation handleCTAClick={handleCTAClick} />
-          </AnimatedWrapper>
-        </Suspense>
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
+          <BeforeAfterTransformation />
+        </AnimatedWrapper>
 
         {/* INTEREST: Motivation Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-          <Suspense fallback={null}>
-            <MotivationSection />
-          </Suspense>
+          <MotivationSection />
         </AnimatedWrapper>
 
         {/* INTEREST: Bonus Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
-          <Suspense fallback={null}>
-            <BonusSection />
-          </Suspense>
+          <BonusSection />
         </AnimatedWrapper>
 
         {/* DESIRE: Testimonials */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
-          <Suspense fallback={null}>
-            <Testimonials />
-          </Suspense>
+          <Testimonials />
         </AnimatedWrapper>
 
         {/* DESIRE: Featured CTA (Green) */}
@@ -232,16 +222,12 @@ const ResultPage: React.FC = () => {
 
         {/* DESIRE: Guarantee Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
-          <Suspense fallback={null}>
-            <GuaranteeSection />
-          </Suspense>
+          <GuaranteeSection />
         </AnimatedWrapper>
 
         {/* DESIRE: Mentor and Trust Elements */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
-          <Suspense fallback={null}>
-            <MentorSection />
-          </Suspense>
+          <MentorSection />
         </AnimatedWrapper>
 
         {/* ACTION: Final Value Proposition and CTA */}
