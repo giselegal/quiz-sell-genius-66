@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { AuthProvider } from './context/AuthContext'; // Adicionado
 
 // Comentar ou remover qualquer função de manipulação de URL ou rotas aqui
 // function fixMainRoutes() { ... }
@@ -9,6 +10,8 @@ import './index.css';
 // function setupRouteChangePreloading() { ... }
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <AuthProvider> {/* Adicionado */}
+      <App />
+    </AuthProvider> {/* Adicionado */}
   </React.StrictMode>,
 );
