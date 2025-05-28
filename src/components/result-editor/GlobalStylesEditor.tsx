@@ -1,5 +1,6 @@
+
+"use client";
 import React, { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -24,14 +25,6 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
 }) => {
   const [styles, setStyles] = useState(globalStyles);
 
-  // Handle color change safely
-  const handleColorChange = (colorType: string, hexColor: string) => {
-    setStyles(prev => ({
-      ...prev,
-      [colorType]: hexColor || '#FFFFFF' // Default to white if color is undefined
-    }));
-  };
-
   const handleChange = (key: string, value: string) => {
     setStyles(prev => ({
       ...prev,
@@ -53,9 +46,7 @@ export const GlobalStylesEditor: React.FC<GlobalStylesEditorProps> = ({
             Fechar
           </Button>
         </div>
-
         <Separator className="mb-4" />
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="primaryColor">Cor Primária</Label>

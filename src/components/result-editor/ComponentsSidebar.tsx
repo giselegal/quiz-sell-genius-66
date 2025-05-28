@@ -24,7 +24,6 @@ interface ComponentsSidebarProps {
 }
 
 export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponentSelect }) => {
-  // Component category definitions
   const componentCategories = [
     {
       title: 'Estrutura',
@@ -59,7 +58,7 @@ export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponen
         { type: 'guarantee', icon: <Award size={16} />, label: 'Garantia' },
         { type: 'cta', icon: <Award size={16} />, label: 'Chamada para Ação' },
       ]
-    },
+    }
   ];
 
   return (

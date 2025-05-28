@@ -3,57 +3,54 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { Toaster } from './components/ui/toaster';
 import { ThemeProvider } from './components/theme-provider';
+import { AuthProvider } from './context/AuthContext';
+import { LoadingFallback } from './components/ui/loading-fallback';
 
-// Lazy-loaded components
-const QuizFlow = loadable(() => import('./components/QuizFlow'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando quiz...</div>
+// Lazy-loaded components principais
+const QuizIntro = loadable(() => import('./components/QuizIntro'), {
+  fallback: <LoadingFallback message="Carregando quiz..." />
 });
 
-const AdminLayout = loadable(() => import('./components/admin/AdminLayout'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando painel...</div>
+const QuizPage = loadable(() => import('./components/QuizPage'), {
+  fallback: <LoadingFallback message="Carregando perguntas..." />
 });
 
-const EditorPage = loadable(() => import('./components/admin/editor/EnhancedResultPageEditorPage'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando editor...</div>
+const ResultPage = loadable(() => import('./pages/ResultPage'), {
+  fallback: <LoadingFallback message="Carregando resultado..." />
 });
 
-const ResultPage = loadable(() => import('./components/ResultPage'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando resultados...</div>
+// Admin Dashboard
+const AdminDashboard = loadable(() => import('./pages_backup/admin/OldAdminDashboard'), {
+  fallback: <LoadingFallback message="Carregando painel administrativo..." />
 });
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <BrowserRouter>
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Carregando...</div>}>
-          <Routes>
-            {/* Rota principal para o quiz */}
-            <Route path="/" element={<QuizFlow />} />
-            
-            {/* Rota para a página de resultados */}
-            <Route path="/resultado" element={<ResultPage />} />
-            <Route path="/resultado/:id" element={<ResultPage />} />
-
-            {/* Rotas administrativas aninhadas */}
-            <Route path="/admin" element={<AdminLayout />}>
-              {/* Dashboard padrão do admin */}
-              <Route index element={
-                <div className="rounded-lg border bg-card p-6 shadow-sm">
-                  <h3 className="mb-4 text-lg font-medium">Bem-vindo ao Painel Admin</h3>
-                  <p className="mb-4 text-sm text-muted-foreground">Selecione uma opção no menu.</p>
-                </div>
-              } />
-              {/* Editor visual */}
-              <Route path="editor" element={<EditorPage />} />
-              <Route path="editor/:id" element={<EditorPage />} />
-            </Route>
-
-            {/* Rota de fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Suspense>
-        <Toaster />
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Carregando...</div>}>
+            <Routes>
+              {/* ROTA PRINCIPAL - Quiz */}
+              <Route path="/" element={<QuizIntro />} />
+              
+              {/* ROTAS DO QUIZ */}
+              <Route path="/quiz" element={<QuizPage />} />
+              <Route path="/quiz/:step" element={<QuizPage />} />
+              
+              {/* ROTA DE RESULTADO */}
+              <Route path="/resultado" element={<ResultPage />} />
+              
+              {/* ROTAS ADMINISTRATIVAS */}
+              <Route path="/admin/*" element={<AdminDashboard />} />
+              
+              {/* Rota de fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+          <Toaster />
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

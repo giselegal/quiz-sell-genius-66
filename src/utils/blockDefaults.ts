@@ -1,93 +1,60 @@
 
-import { EditableContent } from "@/types/editor";
+export const blockDefaults = {
+  header: {
+    title: 'Título Principal',
+    subtitle: 'Subtítulo do cabeçalho',
+    backgroundColor: '#ffffff',
+    textColor: '#333333',
+    alignment: 'center',
+    fontSize: 'large'
+  },
 
-export const getDefaultContentForType = (type: string): EditableContent => {
-  switch (type) {
-    case 'headline':
-      return {
-        title: 'Título do Bloco',
-        subtitle: 'Um subtítulo opcional para seu bloco',
-        style: {
-          textAlign: 'center',
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          color: '#432818'
-        }
-      };
-    case 'text':
-      return {
-        text: 'Este é um bloco de texto que você pode editar. Personalize o conteúdo conforme necessário.',
-        style: {
-          fontSize: '1rem',
-          lineHeight: '1.5',
-          color: '#3A3A3A'
-        }
-      };
-    case 'image':
-      return {
-        imageUrl: 'https://placehold.co/600x400/png',
-        imageAlt: 'Imagem de exemplo',
-        caption: '',
-        style: {
-          width: '100%',
-          borderRadius: '8px'
-        }
-      };
-    case 'style-result':
-      return {
-        title: 'Seu Estilo Principal',
-        description: 'Descrição personalizada do seu estilo predominante.',
-        customImage: '',
-        style: {
-          backgroundColor: '#FAF9F7',
-          padding: '1.5rem',
-          borderRadius: '8px'
-        }
-      };
-    case 'secondary-styles':
-      return {
-        title: 'Seus Estilos Secundários',
-        description: 'Estes estilos complementam seu estilo principal e ajudam a criar seu visual único.',
-        style: {
-          backgroundColor: '#FFFFFF',
-          padding: '1.5rem',
-          borderRadius: '8px'
-        }
-      };
-    case 'benefits':
-      return {
-        title: 'Benefícios',
-        items: [
-          { title: 'Benefício 1', description: 'Descrição do primeiro benefício' },
-          { title: 'Benefício 2', description: 'Descrição do segundo benefício' },
-          { title: 'Benefício 3', description: 'Descrição do terceiro benefício' }
-        ],
-        style: {
-          padding: '1rem'
-        }
-      };
-    case 'cta':
-      return {
-        title: 'Aproveite Essa Oportunidade',
-        buttonText: 'Comprar Agora',
-        buttonUrl: '#comprar',
-        style: {
-          backgroundColor: '#B89B7A',
-          color: '#FFFFFF',
-          textAlign: 'center',
-          padding: '2rem',
-          borderRadius: '8px'
-        }
-      };
-    case 'spacer':
-      return {
-        height: '2rem'
-      };
-    default:
-      return {
-        title: 'Novo Bloco',
-        text: 'Conteúdo do bloco',
-        style: {}
-      };
+  text: {
+    content: 'Digite seu texto aqui...',
+    fontSize: 'medium',
+    textColor: '#333333',
+    alignment: 'left',
+    backgroundColor: 'transparent'
+  },
+
+  image: {
+    src: '',
+    alt: 'Imagem',
+    width: '100%',
+    height: 'auto',
+    alignment: 'center',
+    caption: ''
+  },
+
+  cta: {
+    text: 'Clique Aqui',
+    url: '#',
+    backgroundColor: '#007bff',
+    textColor: '#ffffff',
+    size: 'medium',
+    alignment: 'center'
+  },
+
+  testimonial: {
+    quote: 'Depoimento do cliente...',
+    author: 'Nome do Cliente',
+    position: 'Cargo',
+    avatar: '',
+    rating: 5
+  },
+
+  pricing: {
+    title: 'Plano Premium',
+    price: 'R$ 97',
+    originalPrice: 'R$ 197',
+    features: ['Recurso 1', 'Recurso 2', 'Recurso 3'],
+    buttonText: 'Comprar Agora',
+    buttonUrl: '#'
+  },
+
+  guarantee: {
+    title: 'Garantia de 30 Dias',
+    description: 'Se não ficar satisfeito, devolvemos seu dinheiro.',
+    icon: 'shield'
   }
 };

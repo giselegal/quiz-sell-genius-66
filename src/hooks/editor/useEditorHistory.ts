@@ -1,4 +1,6 @@
 
+"use client";
+
 import { useState } from 'react';
 import { EditorBlock } from '@/types/editor';
 import { useToast } from '@/components/ui/use-toast';

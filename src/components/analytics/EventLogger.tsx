@@ -1,4 +1,7 @@
 
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,7 +20,7 @@ export const EventLogger: React.FC = () => {
 
   const loadEvents = () => {
     try {
-      const eventsJson = localStorage.getItem('fb_pixel_event_log');
+      const eventsJson = safeLocalStorage.getItem('fb_pixel_event_log');
       const loadedEvents = eventsJson ? JSON.parse(eventsJson) : [];
       setEvents(loadedEvents);
     } catch (error) {
@@ -28,17 +31,15 @@ export const EventLogger: React.FC = () => {
 
   useEffect(() => {
     loadEvents();
-
     // Configurar atualização automática a cada 5 segundos
     const interval = setInterval(() => {
       loadEvents();
     }, 5000);
-
     return () => clearInterval(interval);
   }, []);
 
   const clearEvents = () => {
-    localStorage.removeItem('fb_pixel_event_log');
+    safeLocalStorage.removeItem('fb_pixel_event_log');
     setEvents([]);
   };
 
@@ -119,6 +120,7 @@ export const EventLogger: React.FC = () => {
             </Button>
           </div>
         </div>
+        
         <div className="flex flex-wrap gap-1 mt-2">
           <Badge 
             variant={filter === null ? "default" : "outline"}

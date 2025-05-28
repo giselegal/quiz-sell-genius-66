@@ -1,4 +1,6 @@
 
+"use client";
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 
@@ -26,7 +28,7 @@ const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }
   const [isVisible, setIsVisible] = React.useState(animationTrigger !== 'onScroll');
   const [isHovered, setIsHovered] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
-  
+
   React.useEffect(() => {
     if (animationTrigger !== 'onScroll') return;
     
@@ -39,16 +41,16 @@ const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }
       },
       { threshold: 0.1 }
     );
-    
+
     if (ref.current) {
       observer.observe(ref.current);
     }
-    
+
     return () => {
       observer.disconnect();
     };
   }, [animationTrigger]);
-  
+
   // Gerar os estilos de animação com base nos parâmetros
   const getAnimationStyle = () => {
     // Só aplicar animação se estiver visível ou com hover quando necessário
@@ -57,12 +59,12 @@ const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }
     if (!shouldAnimate) {
       return { opacity: 0 };
     }
-    
+
     const baseStyle = {
       transition: `all ${animationDuration}ms ease-out`,
       transitionDelay: `${animationDelay}ms`,
     };
-    
+
     // Estilos específicos para cada tipo de animação
     switch (animationType) {
       case 'fade-in':
@@ -110,7 +112,7 @@ const AnimationBlockPreview: React.FC<AnimationBlockPreviewProps> = ({ content }
         return baseStyle;
     }
   };
-  
+
   return (
     <div
       ref={ref}

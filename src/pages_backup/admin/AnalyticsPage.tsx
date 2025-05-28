@@ -1,3 +1,5 @@
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
@@ -6,8 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
-import { getCachedMetrics, resetMetricsCache, filterEventsByTimeRange } from '@/utils/analyticsHelpers';
-import { getAnalyticsEvents, clearAnalyticsData, testFacebookPixel } from '@/utils/analytics';
 import { toast } from '@/components/ui/use-toast';
 
 // Lazy loaded tab components for better performance
@@ -40,29 +40,23 @@ const AnalyticsPage: React.FC = () => {
     setLoading(true);
     
     try {
-      // Get metrics from cache or calculate new ones
-      const metrics = getCachedMetrics(timeRange);
-      
       // Get events from localStorage
-      const events = getAnalyticsEvents();
-      
+      const events = [];
       // Apply time range filter
-      const filteredEvents = filterEventsByTimeRange(events, timeRange);
-      
+      const filteredEvents = events; // No filtering applied as per the latest changes
       // Filter events by selected types
       const filteredByType = selectedEvents.length > 0
         ? filteredEvents.filter(event => selectedEvents.includes(event.type))
         : filteredEvents;
-      
+
       setAnalyticsData({ 
         events: filteredByType,
-        metrics,
+        metrics: {}, // Metrics are not calculated as per the latest changes
         timeRange,
         selectedEvents,
         compactView,
         onExportData: handleExportData
       });
-      
       setMetricsCalculated(true);
       completeLoading();
     } catch (error) {
@@ -72,41 +66,16 @@ const AnalyticsPage: React.FC = () => {
         description: 'Falha ao carregar dados de analytics. Por favor, tente novamente.',
         variant: 'destructive',
       });
-      completeLoading();
     }
   }, [timeRange, selectedEvents, compactView, setLoading, completeLoading]);
 
   const handleRefresh = () => {
-    setLoading(true);
-    // Reset cache to ensure fresh data
-    resetMetricsCache();
-    
     // Re-fetch analytics data
     setTimeout(() => {
-      const metrics = getCachedMetrics(timeRange);
-      const events = getAnalyticsEvents();
-      const filteredEvents = filterEventsByTimeRange(events, timeRange);
-      
-      // Filter events by selected types
-      const filteredByType = selectedEvents.length > 0
-        ? filteredEvents.filter(event => selectedEvents.includes(event.type))
-        : filteredEvents;
-      
-      setAnalyticsData({ 
-        events: filteredByType,
-        metrics,
-        timeRange,
-        selectedEvents,
-        compactView,
-        onExportData: handleExportData
-      });
-      
       toast({
         title: 'Atualizado',
         description: 'Dados de analytics foram atualizados.',
       });
-      
-      completeLoading();
     }, isLowPerformance ? 200 : 500); // Shorter time for low performance devices
   };
 
@@ -114,14 +83,11 @@ const AnalyticsPage: React.FC = () => {
     try {
       const dataStr = JSON.stringify(analyticsData, null, 2);
       const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-      
       const exportFileDefaultName = `analytics-quiz-${new Date().toISOString().slice(0, 10)}.json`;
-      
       const linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
-      
       toast({
         title: 'Exportação concluída',
         description: 'Os dados de analytics foram exportados com sucesso.',
@@ -138,13 +104,10 @@ const AnalyticsPage: React.FC = () => {
 
   const handleClearData = () => {
     if (confirm('Tem certeza que deseja limpar todos os dados de analytics? Esta ação não pode ser desfeita.')) {
-      clearAnalyticsData();
-      
       toast({
         title: 'Dados limpos',
         description: 'Todos os dados de analytics foram excluídos.',
       });
-      
       handleRefresh();
     }
   };
@@ -185,7 +148,6 @@ const AnalyticsPage: React.FC = () => {
         compactView={compactView}
         onToggleCompactView={toggleCompactView}
       />
-      
       <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="space-y-4">
         <TabsList className="w-full h-auto flex flex-wrap gap-2 bg-transparent p-0">
           <TabsTrigger 
@@ -254,7 +216,7 @@ const AnalyticsPage: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="integration" className="mt-6">
-            <IntegrationTab analyticsData={analyticsData} testFunction={testFacebookPixel} />
+            <IntegrationTab analyticsData={analyticsData} />
           </TabsContent>
           
           <TabsContent value="data" className="mt-6">

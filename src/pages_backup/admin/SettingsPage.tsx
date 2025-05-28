@@ -1,25 +1,23 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AppearanceTab } from '@/components/settings/AppearanceTab';
-import { AnalyticsTab } from '@/components/settings/AnalyticsTab';
-import { MarketingTab } from '@/components/settings/MarketingTab';
 import { ApiIntegrationsTab } from '@/components/settings/ApiIntegrationsTab';
 import { AdvancedTab } from '@/components/settings/AdvancedTab';
 import { FacebookAdsTab } from '@/components/settings/FacebookAdsTab';
 import { UtmSettingsTab } from '@/components/settings/UtmSettingsTab';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
 
 const SettingsPage = () => {
-  const searchParams = useSearchParams();
-  const defaultTab = searchParams.get('tab') || 'appearance';
-  const [activeTab, setActiveTab] = useState(defaultTab);
-  const router = useRouter();
+  const { navigate } = useUniversalNavigation();
+  const [activeTab, setActiveTab] = useState('appearance');
   
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    router.push(`/admin/settings?tab=${value}`);
+    navigate(`/admin/settings?tab=${value}`);
   };
   
   return (
@@ -43,7 +41,6 @@ const SettingsPage = () => {
           </TabsContent>
           
           <TabsContent value="analytics">
-            <AnalyticsTab />
           </TabsContent>
           
           <TabsContent value="utm">
@@ -51,7 +48,6 @@ const SettingsPage = () => {
           </TabsContent>
           
           <TabsContent value="marketing">
-            <MarketingTab />
           </TabsContent>
           
           <TabsContent value="facebook-ads">

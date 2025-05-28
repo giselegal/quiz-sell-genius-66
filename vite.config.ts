@@ -1,122 +1,41 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
-import compression from "vite-plugin-compression";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+import compression from 'vite-plugin-compression';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  // Configurações para ignorar erros não críticos
-  build: {
-    reportCompressedSize: false, // Reduz warnings relacionados a tamanho
-    chunkSizeWarningLimit: 2000, // Aumenta limite de tamanho de chunk para evitar warnings
-    rollupOptions: {
-      onwarn(warning, warn) {
-        // Ignora warnings específicos
-        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
-        if (warning.code === 'EMPTY_BUNDLE') return;
-        if (warning.code === 'EVAL') return;
-        if (warning.code === 'THIS_IS_UNDEFINED') return;
-        if (warning.message?.includes('sourcemap')) return;
-        warn(warning);
-      }
-    },
-  },
-  root: '.',
-  base: './',
-  
-  server: {
-    host: '0.0.0.0',
-    port: 8080,
-    // Configurações CORS e mime-types para desenvolvimento
-    headers: {
-      'X-Content-Type-Options': 'nosniff',
-      // Limitando CORS para hosts específicos
-      'Access-Control-Allow-Origin': [
-        'http://localhost:8080',
-        'https://a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com'
-      ].join(', '),
-    },
-    fs: {
-      allow: ['../']
-    },
-    allowedHosts: [
-      "a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com"
-    ],
-    // CORREÇÃO CRÍTICA: Configuração de fallback para SPA
-    // Isso garante que todas as rotas retornem o index.html
-    historyApiFallback: {
-      rewrites: [
-        { from: /\/admin\/editor/, to: '/index.html' },
-        { from: /\/admin\/.*/, to: '/index.html' },
-        { from: /\/resultado/, to: '/index.html' },
-        { from: /\/quiz-.*/, to: '/index.html' },
-        { from: /.*/, to: '/index.html' }
-      ]
-    }
-  },
-  
+export default defineConfig({
   plugins: [
     react(),
-    componentTagger(),
-    // Compressão GZIP
-    compression({
-      algorithm: 'gzip',
-      ext: '.gz',
-    }),
-    // Compressão Brotli
-    compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-    }),
+    compression({ algorithm: 'gzip' }),
+    compression({ algorithm: 'brotliCompress' }),
   ],
-  
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+      '@': path.resolve(__dirname, './src')
+    }
   },
-  
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
-    emptyOutDir: true,
-    sourcemap: false,
-    // Configurações para evitar problemas de MIME type
+    sourcemap: true,
+    minify: 'terser',
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-router': ['react-router-dom'],
-          'vendor-ui': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-tooltip'
-          ],
-          'vendor-utils': [
-            'clsx', 
-            'tailwind-merge'
-          ],
-          'analytics': [
-            './src/utils/analytics.ts',
-            './src/utils/facebookPixel.ts'
-          ]
-        },
-        // Garantir que os assets sejam carregados corretamente para as rotas específicas
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+          'react-vendor': ['react', 'react-dom'],
+          'charts': ['recharts'],
+          'ui-components': ['@radix-ui/react-toast', '@radix-ui/react-progress', '@radix-ui/react-select']
+        }
       }
-    },
-    chunkSizeWarningLimit: 1000,
+    }
   },
-  
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom']
+  server: {
+    port: 8080,
+    open: true
   },
-  
-  css: {
-    devSourcemap: mode === 'development',
+  // Otimizações de performance
+  esbuild: {
+    drop: ['console', 'debugger'] // Remover console.log em produção
   }
-}));
+});

@@ -1,3 +1,4 @@
+
 /**
  * Script para verificar e corrigir problemas específicos nas URLs principais da Gisele Galvão
  * - https://giselegalvao.com.br/
@@ -40,19 +41,18 @@ export function fixMainRoutes(): boolean {
   // 1. Verificar se estamos no domínio correto
   const isCorrectDomain = window.location.hostname === 'giselegalvao.com.br' || 
                           window.location.hostname === 'www.giselegalvao.com.br';
-
+  
   if (!isCorrectDomain) {
     console.log('Domínio de desenvolvimento detectado - usando configurações de desenvolvimento');
     // Continuar com as correções mesmo em ambiente de desenvolvimento
   }
-
+  
   // 2. Verificar se a rota atual é uma das rotas principais
   const currentPath = window.location.pathname;
   const currentRoute = MAIN_ROUTES.find(route => currentPath === route.path || 
                                          currentPath.startsWith(route.path + '/'));
   
   // 3. Verificar problemas comuns e corrigi-los
-  
   // 3.1 Verificar se há '/index.html' no final da URL e remover
   if (currentPath.endsWith('/index.html')) {
     const newPath = currentPath.replace('/index.html', '/');

@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -44,7 +46,7 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
     });
     console.log("Testing connection to Google Analytics...");
   };
-  
+
   return (
     <Card>
       <CardHeader>
@@ -68,7 +70,7 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
             onChange={(e) => setGoogleAnalyticsId(e.target.value)}
           />
           <p className="text-sm text-muted-foreground">
-            Found in your Google Analytics property settings under &ldquo;Data Streams&rdquo;
+            Found in your Google Analytics property settings under "Data Streams"
           </p>
         </div>
         

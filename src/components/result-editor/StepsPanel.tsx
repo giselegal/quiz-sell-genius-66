@@ -1,3 +1,5 @@
+
+"use client";
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -107,7 +109,6 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
 
   return (
     <div className="flex-1 flex flex-col">
-      {/* Add Step Button */}
       <div className="p-4 border-b border-gray-200">
         <Button
           variant="outline"
@@ -118,8 +119,7 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
           Nova Etapa
         </Button>
       </div>
-
-      {/* Steps List */}
+      
       <div className="flex-1 overflow-y-auto">
         <div className="p-4 space-y-3">
           {steps.map((step, index) => (
@@ -132,7 +132,6 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
               }`}
               onClick={() => onStepSelect(step.id)}
             >
-              {/* Step Header */}
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <GripVertical className="w-4 h-4 text-gray-400" />
@@ -191,8 +190,7 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
                   </DropdownMenu>
                 </div>
               </div>
-
-              {/* Step Name */}
+              
               {editingStepId === step.id ? (
                 <div className="space-y-2">
                   <Input
@@ -217,11 +215,10 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
               ) : (
                 <h4 className="font-medium text-sm mb-1">{step.name}</h4>
               )}
-
-              {/* Step Info */}
+              
               <div className="flex items-center justify-between text-xs text-gray-500">
                 <span>{step.items.length} componentes</span>
-                <div className="flex items-center gap-1">
+                <div className="flex gap-1">
                   {step.settings.showLogo && <span>🏷️</span>}
                   {step.settings.showProgress && <span>📊</span>}
                   {step.settings.allowReturn && <span>↩️</span>}

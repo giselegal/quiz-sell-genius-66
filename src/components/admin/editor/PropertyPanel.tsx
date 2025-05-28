@@ -1,3 +1,5 @@
+
+import React from 'react';
 import { Input } from '../../ui/input';
 import { Label } from '../../ui/label';
 import { Textarea } from '../../ui/textarea';
@@ -34,7 +36,7 @@ export default function PropertyPanel({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="p-4 space-y-4">
       <h3 className="font-medium">Propriedades</h3>
       
       <div>

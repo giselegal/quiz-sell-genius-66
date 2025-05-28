@@ -74,9 +74,9 @@ export function optimizeImage(url: string, options: {
 }): string {
   if (!url) return url;
   
-  const { width, height, quality = 85, format = 'auto' } = options;
-  
   try {
+    const { width, height, quality = 85, format = 'auto' } = options;
+    
     // Handle Cloudinary URLs
     if (url.includes('cloudinary.com')) {
       const widthParam = width ? `w_${width},` : '';

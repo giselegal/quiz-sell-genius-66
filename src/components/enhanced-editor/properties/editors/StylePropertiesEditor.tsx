@@ -34,7 +34,6 @@ export function StylePropertiesEditor({ style, onUpdate }: StylePropertiesEditor
                   />
                 </PopoverTrigger>
                 <PopoverContent className="w-64">
-                  {/* We'll replace this with a color picker component */}
                   <div className="grid grid-cols-5 gap-2">
                     {['#ffffff', '#f8f9fa', '#e9ecef', '#dee2e6', '#ced4da',
                       '#B89B7A', '#8F7A6A', '#432818', '#aa6b5d', '#fffaf7'].map(color => (
@@ -70,7 +69,6 @@ export function StylePropertiesEditor({ style, onUpdate }: StylePropertiesEditor
                   />
                 </PopoverTrigger>
                 <PopoverContent className="w-64">
-                  {/* We'll replace this with a color picker component */}
                   <div className="grid grid-cols-5 gap-2">
                     {['#000000', '#212529', '#495057', '#6c757d', '#adb5bd',
                       '#B89B7A', '#8F7A6A', '#432818', '#aa6b5d', '#ffffff'].map(color => (

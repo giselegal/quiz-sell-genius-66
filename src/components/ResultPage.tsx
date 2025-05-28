@@ -1,104 +1,164 @@
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import PixelInitializer from './PixelInitializer';
-import { trackResultView } from '@/utils/analytics';
+"use client";
 
-export default function ResultPage() {
-  const params = useParams();
-  const [loading, setLoading] = useState(true);
-  const [result, setResult] = useState<any>(null);
-  const resultId = params?.id as string || 'default';
-  
+import React, { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
+
+const tokens = {
+  colors: {
+    primary: '#B89B7A',
+    primaryDark: '#A1835D',
+    secondary: '#aa6b5d',
+    background: '#fffaf7',
+    backgroundCard: '#ffffff',
+    text: '#432818',
+    textSecondary: '#6B5B4E',
+    textMuted: '#8F7A6A',
+    border: '#E5D5C8',
+  },
+  gradients: {
+    primary: 'linear-gradient(135deg, #B89B7A 0%, #aa6b5d 100%)',
+  },
+  shadows: {
+    md: '0 4px 8px rgba(184, 155, 122, 0.12)',
+    lg: '0 8px 16px rgba(184, 155, 122, 0.16)',
+  },
+};
+
+interface StyleResult {
+  category: string;
+  percentage: number;
+}
+
+interface ResultPageProps {
+  primaryStyle?: StyleResult;
+  secondaryStyles?: StyleResult[];
+}
+
+const ResultPage: React.FC<ResultPageProps> = ({ 
+  primaryStyle = { category: 'Elegante', percentage: 85 },
+  secondaryStyles = []
+}) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    // Simular carregamento de dados
     const timer = setTimeout(() => {
-      setResult({
-        title: 'Seu Resultado Personalizado',
-        description: 'Com base nas suas respostas, preparamos este resultado especial para você.',
-        // Outros dados do resultado
-      });
-      setLoading(false);
-      
-      // Rastrear visualização de resultado
-      trackResultView(resultId);
+      setIsLoading(false);
     }, 1000);
-    
     return () => clearTimeout(timer);
-  }, [params]);
-  
-  if (loading) {
-    return <div className="flex h-screen w-full items-center justify-center">Carregando seu resultado...</div>;
-  }
+  }, []);
 
   const handleCTAClick = () => {
-    // Lógica do CTA
-    console.log('CTA clicado');
+    console.log('CTA clicked');
   };
-  
-  return (
-    <div className="container mx-auto min-h-screen p-6">
-      <PixelInitializer pageType="result" />
-      <h1 className="mb-8 text-center text-3xl font-bold">{result?.title}</h1>
-      
-      <div className="mx-auto max-w-3xl rounded-lg border bg-card p-8 shadow-lg">
-        <p className="mb-6 text-lg">{result?.description}</p>
-        
-        <div className="mb-6">
-          <span className="text-xl lg:text-2xl font-bold text-primary">
-            Parabéns!
-          </span>
-          <div className="w-12 h-px mx-auto mt-2 bg-primary"></div>
-        </div>
-        
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <span className="text-2xl lg:text-4xl font-bold text-primary">
-            Seu Estilo Ideal
-          </span>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
+          <p>Carregando seu resultado...</p>
         </div>
-        
-        <div className="mt-4 text-center">
-          <span className="text-sm font-medium uppercase text-muted-foreground">Oferta Especial</span>
-        </div>
-        
-        <div className="mt-2 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold">Preço Normal</span>
-            <span className="text-lg font-bold line-through text-muted-foreground">R$ 199,90</span>
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold">Seu Preço</span>
-            <span className="text-2xl font-bold text-primary">
-              R$ 39,90
-            </span>
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold">Parcelas</span>
-            <span className="text-2xl font-bold text-primary">
-              5x R$ 8,83
-            </span>
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold">Preço à Vista</span>
-            <span className="text-xs font-normal text-muted-foreground">ou R$ 39,90 à vista</span>
-          </div>
-        </div>
-        
-        <div className="mt-8 text-center">
-          <Button 
-            onClick={handleCTAClick} 
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-          >
-            <span className="flex items-center justify-center gap-2">
-              Adquirir Agora
-            </span>
-          </Button>
-        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen relative overflow-hidden" style={{
+      backgroundColor: tokens.colors.background,
+      color: tokens.colors.text,
+    }}>
+      <div className="container mx-auto px-6 lg:px-8 py-8 max-w-4xl relative z-10">
+        <Card className="p-6 lg:p-8 mb-12 rounded-xl overflow-hidden relative" 
+              style={{ 
+                backgroundColor: tokens.colors.backgroundCard,
+                border: `1px solid ${tokens.colors.border}`,
+                boxShadow: tokens.shadows.lg 
+              }}>
+          <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
+            <div className="text-center mb-8">
+              <h1 className="text-xl lg:text-3xl font-playfair mb-6 leading-tight" 
+                  style={{ color: tokens.colors.text }}>
+                Descobrimos Seu Estilo Predominante:
+                <br />
+                <span className="text-2xl lg:text-4xl font-bold" 
+                      style={{ 
+                        background: tokens.gradients.primary, 
+                        backgroundClip: 'text', 
+                        WebkitBackgroundClip: 'text', 
+                        color: 'transparent' 
+                      }}>
+                  {primaryStyle.category}
+                </span>
+              </h1>
+              
+              <div className="max-w-md mx-auto mb-6">
+                <div className="flex items-center justify-end text-sm mb-2">
+                  <span className="font-medium" style={{ color: tokens.colors.textMuted }}>
+{primaryStyle.percentage}%
+                  </span>
+                </div>
+                <Progress 
+                  value={primaryStyle.percentage} 
+                  className="h-2 rounded-full overflow-hidden" 
+                  style={{ backgroundColor: tokens.colors.border }}
+                />
+              </div>
+            </div>
+            
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div className="space-y-6 order-2 lg:order-1">
+                <div className="space-y-4">
+                  <p className="leading-relaxed text-base lg:text-lg font-medium" 
+                     style={{ color: tokens.colors.text }}>
+                    <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
+                  </p>
+                  
+                  <div className="rounded-lg p-4" 
+                       style={{ 
+                         backgroundColor: tokens.colors.background,
+                         border: `1px solid ${tokens.colors.border}`,
+                         boxShadow: tokens.shadows.md 
+                       }}>
+                    <p className="text-sm lg:text-base leading-relaxed" style={{ color: tokens.colors.text }}>
+                      <strong>Seu estilo {primaryStyle.category}</strong> revela uma mulher que expressa elegância e sofisticação em cada detalhe.
+                    </p>
+                  </div>
+                  
+                  <p className="text-sm lg:text-base" style={{ color: tokens.colors.textSecondary }}>
+                    <strong>Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!</strong>
+                  </p>
+                </div>
+              </div>
+              
+              <div className="order-1 lg:order-2">
+                <div className="w-full max-w-xs lg:max-w-sm mx-auto relative">
+                  <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
+                    <p className="text-gray-500">Imagem do Estilo</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-12 text-center">
+              <Button 
+                onClick={handleCTAClick}
+                className="px-8 py-3 text-lg rounded-md transition-all duration-300"
+                style={{
+                  background: tokens.gradients.primary,
+                  color: '#ffffff'
+                }}
+              >
+                Descobrir Meu Guia Completo
+              </Button>
+            </div>
+          </AnimatedWrapper>
+        </Card>
       </div>
     </div>
   );
-}
+};
+
+export default ResultPage;

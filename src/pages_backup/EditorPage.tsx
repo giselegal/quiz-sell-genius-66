@@ -1,6 +1,8 @@
 
+"use client";
+
 import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
 import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
@@ -9,16 +11,16 @@ import { createOfferSectionConfig } from '@/utils/config/offerDefaults';
 
 export const EditorPage = () => {
   const [showTemplates, setShowTemplates] = useState(false);
-  const { style } = useParams<{ style?: string }>();
+  const router = useRouter();
+  const { style } = router.query;
   
   const styleCategory = (style as "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo") || 'Natural';
-  
   const selectedStyle = {
     category: styleCategory,
     score: 100,
     percentage: 100
   };
-  
+
   // Ensure the initialConfig follows the ResultPageConfig type structure
   const initialConfig = {
     styleType: styleCategory,
@@ -36,7 +38,6 @@ export const EditorPage = () => {
     },
     offer: createOfferSectionConfig(), // Using the createOfferConfig() function to create a proper OfferSection
     secondaryStyles: {
-      visible: true,
       content: {},
       style: {
         padding: '20px'
@@ -51,7 +52,7 @@ export const EditorPage = () => {
     },
     blocks: []
   };
-  
+
   return (
     <div className="h-screen">
       {showTemplates ? (

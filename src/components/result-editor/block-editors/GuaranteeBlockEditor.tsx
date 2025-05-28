@@ -35,7 +35,7 @@ const GuaranteeBlockEditor: React.FC<GuaranteeBlockEditorProps> = ({ block, onUp
           placeholder="Se você não ficar 100% satisfeita com o conteúdo nos primeiros 7 dias, devolvemos seu dinheiro integralmente, sem burocracia."
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="image">URL da Imagem</Label>
         <Input

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -5,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { Progress } from '@/components/ui/progress';
 import { GridLayout } from '@/components/shared/GridLayout';
-import { getUserProgressData } from '@/utils/analyticsHelpers';
+import { getUserProgressData, UserProgressItem } from '@/utils/analyticsHelpers';
 
 interface ProgressTabProps {
   analyticsData: any;
@@ -25,8 +26,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
   const dropoffData = React.useMemo(() => {
     if (!userProgressData || userProgressData.length < 2) return [];
     
-    return userProgressData.map((item, index) => {
-      const prevItem = index > 0 ? userProgressData[index - 1] : null;
+    return userProgressData.map((item: UserProgressItem, index: number) => {
       const nextItem = index < userProgressData.length - 1 ? userProgressData[index + 1] : null;
       
       const dropoffRate = nextItem ? 
@@ -36,7 +36,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
       const retentionFromStart = userProgressData[0] ? 
         ((item.uniqueUsers / userProgressData[0].uniqueUsers) * 100).toFixed(1) :
         '100.0';
-        
+
       return {
         ...item,
         dropoffRate: parseFloat(dropoffRate),
@@ -44,7 +44,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
       };
     });
   }, [userProgressData]);
-  
+
   // Chart configurations
   const chartConfig: ChartConfig = {
     uniqueUsers: { 
@@ -56,22 +56,20 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
       theme: { light: '#10b981', dark: '#34d399' }
     }
   };
-  
+
   // Color gradient for progress bars
   const getBarColor = (index: number, total: number) => {
-    // Generate colors from purple to green
     const hue = 260 - (index / Math.max(1, total - 1) * 100);
     return `hsl(${hue}, 70%, 60%)`;
   };
-  
+
   // Custom tooltip renderer
   const renderTooltipContent = (props: any) => {
     if (!props.active || !props.payload?.[0]) {
       return null;
     }
-    
+
     const data = props.payload[0].payload;
-    
     return (
       <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md">
         <p className="text-[7px] font-medium mb-0.5">Questão {data.questionId}</p>
@@ -83,7 +81,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
       </div>
     );
   };
-  
+
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -127,7 +125,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                     animationDuration={1200}
                     animationEasing="ease-out"
                   >
-                    {userProgressData.map((entry, index) => (
+                    {userProgressData.map((entry: UserProgressItem, index: number) => (
                       <Cell 
                         key={`cell-${index}`} 
                         fill={getBarColor(index, userProgressData.length)}
@@ -198,7 +196,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dropoffData.map((item, index) => (
+                {dropoffData.map((item: any, index: number) => (
                   <TableRow key={item.questionId}>
                     <TableCell className="font-medium py-1.5 text-xs">
                       Q{index + 1}
@@ -210,8 +208,7 @@ export const ProgressTab: React.FC<ProgressTabProps> = ({
                         <Progress
                           value={item.retentionFromStart}
                           className="h-1.5 w-[40px]"
-                          indicatorClassName=""
-                          {...(item.retentionFromStart != null && { style: { '--tw-bg-opacity': '1', backgroundColor: getBarColor(index, dropoffData.length) } as React.CSSProperties })}
+                          indicatorClassName="bg-gradient-to-r from-purple-500 to-green-500"
                         />
                         <span className="text-xs">{item.retentionFromStart}%</span>
                       </div>

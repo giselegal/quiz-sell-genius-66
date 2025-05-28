@@ -1,17 +1,15 @@
+"use client";
 
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
-import { trackButtonClick, trackSaleConversion } from '@/utils/analytics';
 import { getCtaUrl } from '@/services/pixelManager';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
-
 interface QuizOfferCTAProps {
   price?: string;
   regularPrice?: string;
 }
-
 export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({ 
   price = "39,00", 
   regularPrice = "175,00" 
@@ -19,13 +17,9 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   
   const handleCTAClick = () => {
-    trackButtonClick('main-cta', 'Comprar Quiz Completo', 'cta-section', 'purchase');
-    // Registrar início de checkout
-    trackSaleConversion(39.0, 'Quiz de Estilo Completo');
     // Redirecionar para checkout
     window.location.href = getCtaUrl();
   };
-  
   return (
     <Card className="border-[#aa6b5d] border-2 shadow-lg overflow-hidden bg-[#F9F7F4]">
       <CardContent className="p-6">
@@ -59,25 +53,22 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
                 -78% OFF
               </div>
             </div>
+            <Button 
+              onClick={handleCTAClick}
+              className="w-full text-white py-6 rounded-md btn-cta-green text-lg"
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
+            >
+              <span className="flex items-center justify-center gap-2">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                Quero o Quiz Completo + Bônus
+              </span>
+            </Button>
           </div>
         </div>
-        
-        <Button 
-          onClick={handleCTAClick}
-          className="w-full text-white py-6 rounded-md btn-cta-green text-lg"
-          onMouseEnter={() => setIsButtonHovered(true)}
-          onMouseLeave={() => setIsButtonHovered(false)}
-        >
-          <span className="flex items-center justify-center gap-2">
-            <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-            Quero o Quiz Completo + Bônus
-          </span>
-        </Button>
-        
         <div className="mt-4">
           <SecurePurchaseElement />
         </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
           <div className="bg-white p-3 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h4 className="font-medium text-[#432818] text-sm">Guia Detalhado</h4>
@@ -96,5 +87,5 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
     </Card>
   );
 };
-
 export default QuizOfferCTA;
+

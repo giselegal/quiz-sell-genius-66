@@ -24,7 +24,6 @@ const HeadlineBlockPreview: React.FC<HeadlineBlockPreviewProps> = ({ content }) 
   const subtitleStyle = {
     fontSize: '1rem',
     color: '#8F7A6A',
-    textAlign: style.textAlign || 'left',
   };
 
   return (

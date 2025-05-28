@@ -24,7 +24,7 @@ const optimizeCloudinaryUrl = (originalUrl: string): string => {
   if (processedImagesCache[originalUrl]?.optimized) {
     return processedImagesCache[originalUrl].optimized;
   }
-
+  
   let optimizedUrl = originalUrl;
   
   // Remover parâmetros de blur que possam existir
@@ -167,7 +167,7 @@ export const initializeImageFixer = (): void => {
       });
     }
   };
-
+  
   // Estratégia de inicialização baseada no estado do documento
   if (document.readyState === 'loading') {
     // Executar apenas após o carregamento do DOM, não durante o parsing

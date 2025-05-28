@@ -1,6 +1,5 @@
 
 import React from 'react';
-
 interface GuaranteeBlockPreviewProps {
   content: {
     title?: string;
@@ -9,7 +8,6 @@ interface GuaranteeBlockPreviewProps {
     style?: any;
   };
 }
-
 const GuaranteeBlockPreview: React.FC<GuaranteeBlockPreviewProps> = ({ content }) => {
   return (
     <div className="flex flex-col md:flex-row items-center gap-6 p-6 bg-[#fff7f3] rounded-lg" style={content.style}>
@@ -34,5 +32,4 @@ const GuaranteeBlockPreview: React.FC<GuaranteeBlockPreviewProps> = ({ content }
     </div>
   );
 };
-
 export default GuaranteeBlockPreview;

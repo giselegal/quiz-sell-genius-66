@@ -1,3 +1,4 @@
+
 // Utilitário para usar localStorage de forma segura no SSR
 export const safeLocalStorage = {
   getItem: (key: string): string | null => {

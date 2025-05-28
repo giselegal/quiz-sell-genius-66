@@ -1,114 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import { safeLocalStorage } from "@/utils/localStorage";
-import { StyleResult } from '@/types/quiz';
-import { ResultPageEditorWithControls } from '@/components/result-editor/ResultPageEditorWithControls';
-import { useRouter } from 'next/navigation';
 
-const ResultPageEditorPage: React.FC = () => {
-  const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
-  const [secondaryStyles, setSecondaryStyles] = useState<StyleResult[]>([]);
-  const [customDomain, setCustomDomain] = useState(''); // Novo estado para domínio personalizado
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
+import { TemplateList } from '@/components/editor/templates/TemplateList';
+import { Button } from '@/components/ui/button';
+import { defaultResultTemplate } from '@/config/resultPageTemplates';
+import { createOfferSectionConfig } from '@/utils/config/offerDefaults';
+
+export const ResultPageEditorPage = () => {
+  const [showTemplates, setShowTemplates] = useState(false);
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const { style } = router.query;
+  
+  const styleCategory = (style as "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo") || 'Natural';
+  const selectedStyle = {
+    category: styleCategory,
+    score: 100,
+    percentage: 100
+  };
+
+  const initialConfig = {
+    styleType: styleCategory,
+    header: {
+      ...defaultResultTemplate.header,
+      visible: true,
+      style: {
+        ...defaultResultTemplate.header.style,
+        borderRadius: '0'
+      }
+    },
+    mainContent: {
+      ...defaultResultTemplate.mainContent,
+      visible: true
+    },
+    offer: createOfferSectionConfig(),
+    secondaryStyles: {
+      content: {},
+      style: {
+        padding: '20px'
+      }
+    },
+    globalStyles: {
+      primaryColor: '#B89B7A',
+      secondaryColor: '#432818',
+      textColor: '#432818',
+      backgroundColor: '#FAF9F7',
+      fontFamily: 'Playfair Display, serif'
+    },
+    blocks: []
+  };
+
+  const handleError = (error: Error) => {
+    console.error('Error in ResultPageEditorPage:', error);
+  };
 
   useEffect(() => {
     try {
-      const savedResult = safeLocalStorage.getItem('quizResult');
-      const savedDomain = safeLocalStorage.getItem('customDomain'); // Carregar domínio salvo
-
-      if (savedResult) {
-        const parsedResult = JSON.parse(savedResult);
-
-        if (parsedResult?.primaryStyle) {
-          setPrimaryStyle(parsedResult.primaryStyle);
-          setSecondaryStyles(parsedResult.secondaryStyles || []);
-        } else {
-          console.error("Formato de resultado inválido");
-          router.push('/resultado');
-        }
-      } else {
-        const defaultStyle: StyleResult = {
-          category: 'Natural',
-          score: 10,
-          percentage: 100
-        };
-
-        setPrimaryStyle(defaultStyle);
-        setSecondaryStyles([]);
-      }
-
-      if (savedDomain) {
-        setCustomDomain(savedDomain);
-      }
+      // Initialize any required setup
     } catch (error) {
-      console.error("Erro ao carregar resultados:", error);
-      router.push('/resultado');
-    } finally {
-      setIsLoading(false);
+      handleError(error as Error);
     }
-  }, [router]);
-
-  const handleSave = () => {
-    try {
-      const resultToSave = {
-        primaryStyle,
-        secondaryStyles
-      };
-      safeLocalStorage.setItem('quizResult', JSON.stringify(resultToSave));
-      safeLocalStorage.setItem('customDomain', customDomain); // Salvar domínio personalizado
-      alert('Configurações salvas com sucesso!');
-    } catch (error) {
-      console.error("Erro ao salvar configurações:", error);
-      alert('Erro ao salvar configurações. Verifique o console para mais detalhes.');
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg">Carregando editor...</p>
-      </div>
-    );
-  }
-
-  if (!primaryStyle) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-lg mb-4">Erro: Nenhum resultado encontrado para editar</p>
-          <button 
-            className="bg-primary text-white px-4 py-2 rounded"
-            onClick={() => router.push('/resultado')}
-          >
-            Voltar para Resultados
-          </button>
-        </div>
-      </div>
-    );
-  }
+  }, []);
 
   return (
-    <div className="editor-container">
-      <ResultPageEditorWithControls 
-        primaryStyle={primaryStyle} 
-        secondaryStyles={secondaryStyles} 
-      />
-      <div className="editor-settings mt-4">
-        <label className="block mb-2">Domínio Personalizado:</label>
-        <input 
-          type="text" 
-          value={customDomain} 
-          onChange={(e) => setCustomDomain(e.target.value)} 
-          className="border rounded px-2 py-1 w-full"
-          placeholder="https://meu-dominio.com"
+    <div className="h-screen">
+      {showTemplates ? (
+        <div className="p-8 max-w-4xl mx-auto">
+          <Button
+            onClick={() => setShowTemplates(false)}
+            variant="outline"
+            className="mb-4"
+          >
+            Voltar ao Editor
+          </Button>
+          <TemplateList onSelectTemplate={() => setShowTemplates(false)} />
+        </div>
+      ) : (
+        <ResultPageVisualEditor 
+          selectedStyle={selectedStyle} 
+          onShowTemplates={() => setShowTemplates(true)}
+          initialConfig={initialConfig}
         />
-        <button 
-          className="bg-primary text-white px-4 py-2 rounded mt-4"
-          onClick={handleSave}
-        >
-          Salvar Configurações
-        </button>
-      </div>
+      )}
     </div>
   );
 };

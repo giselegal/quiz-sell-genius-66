@@ -14,7 +14,7 @@ import {
   DragEndEvent, 
   DragStartEvent 
 } from '@dnd-kit/core';
-import { 
+import {
   SortableContext, 
   sortableKeyboardCoordinates, 
   useSortable, 
@@ -111,7 +111,6 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
     const { active, over } = event;
     
     setActiveId(null);
-    
     if (over && active.id !== over.id) {
       onMoveComponent(active.id as string, over.id as string);
     }

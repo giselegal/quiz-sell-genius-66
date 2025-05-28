@@ -1,10 +1,10 @@
+"use client";
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
-
+// import { useRouter } from 'next/navigation';
 const ErrorState: React.FC = () => {
-  const router = useRouter();
+  // const router = useRouter();
   
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-[#fff9f7]">
@@ -25,5 +25,4 @@ const ErrorState: React.FC = () => {
     </div>
   );
 };
-
 export default ErrorState;

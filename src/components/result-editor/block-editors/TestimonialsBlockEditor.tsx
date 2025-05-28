@@ -3,15 +3,12 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Block } from '@/types/editor';
-
 interface TestimonialsBlockEditorProps {
   block: Block;
   onUpdate: (content: any) => void;
 }
-
 const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block, onUpdate }) => {
   const content = block.content;
-
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -24,14 +21,11 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
         />
       </div>
       
-      <div className="space-y-2">
         <Label htmlFor="testimonialsImage">URL da Imagem de Depoimentos</Label>
-        <Input
           id="testimonialsImage"
           value={content.testimonialsImage || ''}
           onChange={(e) => onUpdate({ testimonialsImage: e.target.value })}
           placeholder="https://exemplo.com/depoimentos.jpg"
-        />
         {content.testimonialsImage && (
           <div className="mt-2 p-2 bg-gray-50 rounded">
             <img 
@@ -41,9 +35,7 @@ const TestimonialsBlockEditor: React.FC<TestimonialsBlockEditorProps> = ({ block
             />
           </div>
         )}
-      </div>
     </div>
   );
 };
-
 export default TestimonialsBlockEditor;

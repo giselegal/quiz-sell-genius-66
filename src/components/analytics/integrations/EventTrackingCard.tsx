@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -32,7 +34,7 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
       return true;
     }
   });
-  
+
   const [trackLinks, setTrackLinks] = useState(() => {
     try {
       const stored = localStorage.getItem('track_links');
@@ -41,7 +43,7 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
       return true;
     }
   });
-  
+
   const [trackImages, setTrackImages] = useState(() => {
     try {
       const stored = localStorage.getItem('track_images');
@@ -50,7 +52,7 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
       return false;
     }
   });
-  
+
   // Load settings from localStorage
   useEffect(() => {
     try {
@@ -67,7 +69,7 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
       console.error('Error loading event tracking settings:', error);
     }
   }, []);
-  
+
   const handleSaveSettings = () => {
     try {
       localStorage.setItem('event_tracking_enabled', String(trackingEnabled));
@@ -88,7 +90,7 @@ export const EventTrackingCard: React.FC<EventTrackingCardProps> = ({
       });
     }
   };
-  
+
   return (
     <Card className="border-border/40 shadow-sm">
       <CardHeader className="pb-3">

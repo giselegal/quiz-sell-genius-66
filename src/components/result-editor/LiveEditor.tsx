@@ -1,3 +1,5 @@
+
+"use client";
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -80,12 +82,11 @@ export const LiveEditor: React.FC<LiveEditorProps> = ({ onSave }) => {
     setConfig(prev => {
       const newConfig = { ...prev };
       const keys = path.split('.');
-      let current = newConfig;
+      let current: any = newConfig;
       
       for (let i = 0; i < keys.length - 1; i++) {
         current = current[keys[i]];
       }
-      
       current[keys[keys.length - 1]] = value;
       return newConfig;
     });
@@ -126,164 +127,8 @@ export const LiveEditor: React.FC<LiveEditorProps> = ({ onSave }) => {
     });
   };
 
-  // Componente de Preview em Tempo Real
-  const LivePreview: React.FC = () => (
-    <div 
-      className={`transition-all duration-300 ${
-        previewMode === 'mobile' ? 'max-w-sm mx-auto' : 'w-full'
-      }`}
-      style={{
-        backgroundColor: config.colors.background,
-        borderRadius: `${config.layout.borderRadius}px`,
-        padding: `${config.layout.padding}px`,
-        minHeight: '400px'
-      }}
-    >
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h1 
-          className="font-bold mb-2 transition-all duration-300"
-          style={{
-            fontSize: `${config.typography.h1}px`,
-            background: `linear-gradient(135deg, ${config.colors.primary} 0%, ${config.colors.secondary} 100%)`,
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            color: 'transparent'
-          }}
-        >
-          {config.content.title}
-        </h1>
-        
-        <h2 
-          className="font-semibold mb-4 transition-all duration-300"
-          style={{
-            fontSize: `${config.typography.h2}px`,
-            color: config.colors.secondary
-          }}
-        >
-          {config.content.subtitle}
-        </h2>
-      </div>
-
-      {/* Content Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        {/* Text Content */}
-        <div className="space-y-4">
-          <div 
-            className="p-4 rounded-lg transition-all duration-300"
-            style={{
-              backgroundColor: config.colors.backgroundCard,
-              borderRadius: `${config.layout.borderRadius}px`,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}
-          >
-            <h3 
-              className="font-medium mb-2 transition-all duration-300"
-              style={{
-                fontSize: `${config.typography.h3}px`,
-                color: config.colors.text
-              }}
-            >
-              Sobre Seu Estilo
-            </h3>
-            
-            <p 
-              className="transition-all duration-300"
-              style={{
-                fontSize: `${config.typography.body}px`,
-                color: config.colors.text,
-                lineHeight: '1.6'
-              }}
-            >
-              {config.content.description}
-            </p>
-            
-            <p 
-              className="text-sm mt-2 transition-all duration-300"
-              style={{
-                color: config.colors.textMuted
-              }}
-            >
-              Personalize seu visual com confiança
-            </p>
-          </div>
-
-          <button
-            className="w-full px-6 py-3 font-medium text-white transition-all duration-300 hover:scale-105"
-            style={{
-              background: `linear-gradient(135deg, ${config.colors.primary} 0%, ${config.colors.secondary} 100%)`,
-              borderRadius: `${config.layout.borderRadius / 2}px`,
-              fontSize: `${config.typography.body}px`
-            }}
-          >
-            {config.content.buttonText}
-          </button>
-        </div>
-
-        {/* Image */}
-        <div className="text-center">
-          <img
-            src={config.content.imageUrl}
-            alt="Estilo"
-            className="w-full max-w-sm mx-auto transition-all duration-300 hover:scale-105"
-            style={{
-              borderRadius: `${config.layout.borderRadius}px`,
-              boxShadow: '0 4px 16px rgba(0,0,0,0.1)'
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mt-6">
-        {[
-          { label: 'Mulheres Atendidas', value: '10.000+' },
-          { label: 'Satisfação', value: '98%' },
-          { label: 'Estilos', value: '8 Tipos' }
-        ].map((stat, index) => (
-          <div 
-            key={index}
-            className="text-center p-3 rounded-lg transition-all duration-300"
-            style={{
-              backgroundColor: config.colors.backgroundCard,
-              borderRadius: `${config.layout.borderRadius / 2}px`
-            }}
-          >
-            <div 
-              className="font-bold transition-all duration-300"
-              style={{
-                fontSize: `${config.typography.h3}px`,
-                color: config.colors.primary
-              }}
-            >
-              {stat.value}
-            </div>
-            <div 
-              className="text-sm transition-all duration-300"
-              style={{
-                color: config.colors.textMuted
-              }}
-            >
-              {stat.label}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* CSS Dinâmico */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          .live-preview-container {
-            background: var(--live-background);
-            color: var(--live-text);
-          }
-        `
-      }} />
-
       {/* Sidebar de Controles */}
       <div className="w-80 bg-white border-r flex flex-col">
         {/* Header */}
@@ -558,7 +403,143 @@ export const LiveEditor: React.FC<LiveEditorProps> = ({ onSave }) => {
 
         {/* Preview Content */}
         <div className="flex-1 p-6 overflow-auto">
-          <LivePreview />
+          <div 
+            className={`transition-all duration-300 ${
+              previewMode === 'mobile' ? 'max-w-sm mx-auto' : 'w-full'
+            }`}
+            style={{
+              backgroundColor: config.colors.background,
+              borderRadius: `${config.layout.borderRadius}px`,
+              padding: `${config.layout.padding}px`,
+              minHeight: '400px'
+            }}
+          >
+            <div className="text-center mb-6">
+              <h1 
+                className="font-bold mb-2 transition-all duration-300"
+                style={{
+                  fontSize: `${config.typography.h1}px`,
+                  background: `linear-gradient(135deg, ${config.colors.primary} 0%, ${config.colors.secondary} 100%)`,
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  color: 'transparent'
+                }}
+              >
+                {config.content.title}
+              </h1>
+              
+              <h2 
+                className="font-semibold mb-4 transition-all duration-300"
+                style={{
+                  fontSize: `${config.typography.h2}px`,
+                  color: config.colors.secondary
+                }}
+              >
+                {config.content.subtitle}
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              <div className="space-y-4">
+                <div 
+                  className="p-4 rounded-lg transition-all duration-300"
+                  style={{
+                    backgroundColor: config.colors.backgroundCard,
+                    borderRadius: `${config.layout.borderRadius}px`,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  <h3 
+                    className="font-medium mb-2 transition-all duration-300"
+                    style={{
+                      fontSize: `${config.typography.h3}px`,
+                      color: config.colors.text
+                    }}
+                  >
+                    Sobre Seu Estilo
+                  </h3>
+                  
+                  <p 
+                    className="transition-all duration-300"
+                    style={{
+                      fontSize: `${config.typography.body}px`,
+                      color: config.colors.text,
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    {config.content.description}
+                  </p>
+
+                  <p 
+                    className="text-sm mt-2 transition-all duration-300"
+                    style={{
+                      color: config.colors.textMuted
+                    }}
+                  >
+                    Personalize seu visual com confiança
+                  </p>
+                </div>
+
+                <button
+                  className="w-full px-6 py-3 font-medium text-white transition-all duration-300 hover:scale-105"
+                  style={{
+                    background: `linear-gradient(135deg, ${config.colors.primary} 0%, ${config.colors.secondary} 100%)`,
+                    borderRadius: `${config.layout.borderRadius / 2}px`,
+                    fontSize: `${config.typography.body}px`
+                  }}
+                >
+                  {config.content.buttonText}
+                </button>
+              </div>
+
+              <div className="text-center">
+                <img
+                  src={config.content.imageUrl}
+                  alt="Estilo"
+                  className="w-full max-w-sm mx-auto transition-all duration-300 hover:scale-105"
+                  style={{
+                    borderRadius: `${config.layout.borderRadius}px`,
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.1)'
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 mt-6">
+              {[
+                { label: 'Mulheres Atendidas', value: '10.000+' },
+                { label: 'Satisfação', value: '98%' },
+                { label: 'Estilos', value: '8 Tipos' }
+              ].map((stat, index) => (
+                <div
+                  key={index}
+                  className="text-center p-3 rounded-lg transition-all duration-300"
+                  style={{
+                    backgroundColor: config.colors.backgroundCard,
+                    borderRadius: `${config.layout.borderRadius / 2}px`
+                  }}
+                >
+                  <div 
+                    className="font-bold transition-all duration-300"
+                    style={{
+                      fontSize: `${config.typography.h3}px`,
+                      color: config.colors.primary
+                    }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div 
+                    className="text-sm transition-all duration-300"
+                    style={{
+                      color: config.colors.textMuted
+                    }}
+                  >
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

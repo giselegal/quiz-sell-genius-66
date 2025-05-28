@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
@@ -25,7 +27,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected
   const optimizedImageUrl = data.imageUrl 
     ? optimizeCloudinaryUrl(data.imageUrl, { quality: 95, format: 'auto' })
     : '';
-  
+
   return (
     <div 
       className={cn(
@@ -40,14 +42,12 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ data, style, isSelected
       <div className="relative">
         {data.imageUrl && !imageError ? (
           <>
-            {/* Loading placeholder */}
             {!imageLoaded && (
               <div className="bg-gray-200 animate-pulse w-full aspect-[4/3] rounded-md flex items-center justify-center">
                 <span className="text-gray-400 text-sm">Carregando...</span>
               </div>
             )}
             
-            {/* Actual image */}
             <img 
               src={optimizedImageUrl} 
               alt={data.alt || 'Imagem do quiz'} 

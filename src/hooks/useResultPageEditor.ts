@@ -1,4 +1,6 @@
 
+"use client";
+
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
 import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
@@ -24,7 +26,6 @@ export const useResultPageEditor = (styleType: string) => {
     loading 
   } = useResultPageConfig(styleType);
 
-  // Initialize blocks from config when it's loaded
   useEffect(() => {
     if (resultPageConfig?.blocks) {
       setState(prev => ({
@@ -32,7 +33,6 @@ export const useResultPageEditor = (styleType: string) => {
         blocks: resultPageConfig.blocks
       }));
     } else {
-      // Initialize with empty blocks array if not present
       updateSection('blocks', []);
     }
   }, [resultPageConfig, updateSection]);
@@ -54,16 +54,13 @@ export const useResultPageEditor = (styleType: string) => {
     };
     
     const newBlocks = [...state.blocks, newBlock];
-    
     setState(prev => ({
       ...prev,
       blocks: newBlocks,
       selectedBlockId: newBlock.id
     }));
     
-    // Sync with resultPageConfig
     updateSection('blocks', newBlocks);
-    
     return newBlock.id;
   }, [state.blocks, updateSection]);
 
@@ -77,7 +74,6 @@ export const useResultPageEditor = (styleType: string) => {
       blocks: updatedBlocks
     }));
     
-    // Sync with resultPageConfig
     updateSection('blocks', updatedBlocks);
   }, [state.blocks, updateSection]);
 
@@ -92,7 +88,6 @@ export const useResultPageEditor = (styleType: string) => {
       selectedBlockId: null
     }));
     
-    // Sync with resultPageConfig
     updateSection('blocks', filteredBlocks);
   }, [state.blocks, updateSection]);
 
@@ -111,7 +106,6 @@ export const useResultPageEditor = (styleType: string) => {
       blocks: reorderedBlocks
     }));
     
-    // Sync with resultPageConfig
     updateSection('blocks', reorderedBlocks);
   }, [state.blocks, updateSection]);
 
@@ -122,7 +116,6 @@ export const useResultPageEditor = (styleType: string) => {
     }));
   }, []);
 
-  // Improved import config with error handling
   const handleImportConfig = useCallback((config: any) => {
     if (!config) {
       console.warn('Tentativa de importar configuração nula ou indefinida');
@@ -133,14 +126,12 @@ export const useResultPageEditor = (styleType: string) => {
       if (importConfig) {
         importConfig(config);
         
-        // Se a configuração tiver blocos, atualizar o estado local também
         if (config.blocks) {
           setState(prev => ({
             ...prev,
             blocks: config.blocks
           }));
         }
-        
         return true;
       }
       return false;

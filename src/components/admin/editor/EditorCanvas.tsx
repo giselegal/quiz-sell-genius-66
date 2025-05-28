@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+
+import React, { useState, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { DragEndEvent } from '@dnd-kit/core';
 import { DndContext, closestCenter } from '@dnd-kit/core';
@@ -26,7 +27,7 @@ export default function EditorCanvas({
   selectedComponent 
 }: EditorCanvasProps) {
   
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver }, dropRef] = useDrop<{ type: string }, void, { isOver: boolean }>(() => ({
     accept: 'component',
     drop: (item: { type: string }) => {
       const newComponent: Component = {
@@ -64,11 +65,9 @@ export default function EditorCanvas({
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (over && active.id !== over.id) {
       const oldIndex = components.findIndex((item) => item.id === active.id);
       const newIndex = components.findIndex((item) => item.id === over.id);
-
       onChange(arrayMove(components, oldIndex, newIndex));
     }
   };
@@ -85,25 +84,23 @@ export default function EditorCanvas({
       onSelectComponent(null);
     }
   };
-
+    
   const handleComponentDuplicate = (component: Component) => {
     const duplicatedComponent: Component = {
       ...component,
       id: `comp-${Date.now()}`,
       props: { ...component.props }
     };
-    
     const componentIndex = components.findIndex(comp => comp.id === component.id);
     const newComponents = [...components];
     newComponents.splice(componentIndex + 1, 0, duplicatedComponent);
-    
     onChange(newComponents);
     onSelectComponent(duplicatedComponent);
   };
 
   return (
     <div 
-      ref={drop}
+      ref={dropRef}
       className={`min-h-[600px] rounded-lg border-2 border-dashed p-6 transition-colors ${
         isOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'
       }`}
@@ -143,13 +140,11 @@ export default function EditorCanvas({
           </SortableContext>
         </DndContext>
       )}
-      
+
       {isOver && (
-        <div className="fixed inset-0 pointer-events-none">
-          <div className="flex h-full items-center justify-center">
-            <div className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-lg">
-              Solte aqui para adicionar o componente
-            </div>
+        <div className="flex h-full items-center justify-center">
+          <div className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-lg">
+            Solte aqui para adicionar o componente
           </div>
         </div>
       )}

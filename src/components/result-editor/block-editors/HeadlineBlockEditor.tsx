@@ -28,15 +28,14 @@ const HeadlineBlockEditor: React.FC<HeadlineBlockEditorProps> = ({ block, onUpda
       
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo</Label>
-        <Textarea
+        <Input
           id="subtitle"
-          rows={2}
           value={content.subtitle || ''}
           onChange={(e) => onUpdate({ subtitle: e.target.value })}
           placeholder="Digite o subtítulo aqui"
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="textColor">Cor do texto</Label>
         <Input
@@ -46,7 +45,7 @@ const HeadlineBlockEditor: React.FC<HeadlineBlockEditorProps> = ({ block, onUpda
           onChange={(e) => onUpdate({ textColor: e.target.value })}
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="alignment">Alinhamento</Label>
         <div className="flex gap-2">
