@@ -2,7 +2,8 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { StyleResult } from '@/types/quiz';
 import { styleConfig } from '@/config/styleConfig';
-import OptimizedImage from '@/components/ui/OptimizedImage';
+import OptimizedImage from '@/components/ui/optimized-image';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface ResultSkeletonProps {
   primaryStyle?: StyleResult;
@@ -22,16 +23,12 @@ const ResultSkeleton: React.FC<ResultSkeletonProps> = ({ primaryStyle }) => {
         {/* Header skeleton with brand logo */}
         <Card className="p-4 sm:p-6 mb-4 sm:mb-6 bg-white relative overflow-hidden" aria-busy="true" role="status">
           <div className="flex flex-col items-center gap-4 sm:gap-5">
+            <LoadingSpinner size="md" color="#aa6b5d" className="mb-2" />
             <div className="w-36 sm:w-48 h-16 sm:h-20 relative flex justify-center items-center">
               <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md"></div>
               <div className="flex justify-center w-full">
-                <img 
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-                  alt="Gisele Galvão"
-                  className="h-12 sm:h-16 relative z-10 opacity-70 mx-auto"
-                  loading="eager"
-                  fetchPriority="high"
-                />
+                {/* Logo removido para acelerar o carregamento do skeleton */}
+                <div className="h-12 sm:h-16 w-36 sm:w-48 bg-gray-100 animate-pulse rounded-md mx-auto" />
               </div>
             </div>
             <div className="w-full max-w-xs sm:max-w-md h-6 sm:h-8 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse rounded-md" />

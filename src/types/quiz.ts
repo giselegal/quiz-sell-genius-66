@@ -1,101 +1,69 @@
 
-export type StyleCategory = 
-  | 'Natural' 
-  | 'Clássico' 
-  | 'Contemporâneo' 
-  | 'Elegante' 
-  | 'Romântico' 
-  | 'Sexy' 
-  | 'Dramático' 
-  | 'Criativo' 
-  | string; // Allow any string to handle dynamic values
-
-export interface QuizOption {
-  id: string;
-  text: string;
-  styleCategory: StyleCategory;
-  imageUrl?: string;
-  points?: number;
-  isSelected?: boolean;
-}
-
-export interface StyleResult {
-  category: StyleCategory;
-  score: number;
-  percentage: number;
-}
-
-export interface QuizAnswers {
-  [questionId: string]: string[];
-}
+import { UserAnswer } from '../utils/resultsCalculator';
 
 export interface QuizQuestion {
   id: string;
   title: string;
-  options: QuizOption[];
-  type: 'text' | 'image' | 'both';
-  multiSelect: number; // 0 = single select, n = select up to n options
-  imageUrl?: string;
-}
-
-export interface QuizStage {
-  id: string;
-  title: string;
   description?: string;
-  questions: QuizQuestion[];
+  options: QuizOption[];
+  imageUrl?: string;
+  multiSelect?: number;
+  type?: "image" | "text" | "both"; // Restrict to valid types
 }
 
-export interface QuizState {
-  currentStageIndex: number;
-  currentQuestionIndex: number;
-  answers: QuizAnswers;
-  stages: QuizStage[];
-}
-
-export interface QuizComponentData {
+export interface QuizOption {
   id: string;
-  type: string;
-  title?: string;
-  options?: QuizOption[];
-  [key: string]: any;
+  text: string;
+  imageUrl?: string;
+  stylePoints?: Record<string, number>;
+  styleCategory?: string;
+  points?: number;
 }
 
-export interface QuizConfig {
-  title: string;
-  stages: QuizStage[];
-  settings: {
-    showProgressBar: boolean;
-    allowSkip: boolean;
-    showResultsImmediately: boolean;
-    theme: string;
-  };
-}
-
-// Add the missing interface for UserResponse
 export interface UserResponse {
   questionId: string;
   selectedOptions: string[];
 }
 
-// Add the missing interface for QuizResult
+export interface QuizContextType {
+  currentQuestion: QuizQuestion | null;
+  currentQuestionIndex: number;
+  totalQuestions: number;
+  isLastQuestion: boolean;
+  currentAnswers: string[];
+  answers: Record<string, UserAnswer[]>;
+  userName: string;
+  handleNext: () => void;
+  handlePrevious: () => void;
+  handleAnswer: (questionId: string, optionIds: string[]) => void;
+  calculateResults: () => void;
+  isSubmitted: boolean;
+}
+
+export interface StyleResult {
+  category: string;
+  name?: string;
+  description?: string;
+  score: number;
+  percentage: number; // Added percentage property
+  colorPalette?: string[];
+  attributes?: string[];
+  imageUrl?: string;
+}
+
 export interface QuizResult {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
-  totalSelections?: number;
+  userName: string;
+  answers?: Record<string, UserAnswer[]>;
+  strategicAnswers?: Record<string, string[]>;
+  timestamp?: number;
+  totalSelections?: number; // Added totalSelections property
 }
 
-// Add BlockType for the SortableBlock component
-export type BlockType = 
-  | 'title' 
-  | 'subtitle' 
-  | 'styleResult' 
-  | 'image' 
-  | 'text' 
-  | 'cta' 
-  | 'testimonial' 
-  | 'bonus' 
-  | 'guarantee' 
-  | 'carousel'
-  | 'heading'
-  | 'paragraph'
-  | string; // Allow any string to handle dynamic values
+export interface BlockType {
+  id: string;
+  type: string;
+  content: any;
+  settings?: Record<string, any>;
+}

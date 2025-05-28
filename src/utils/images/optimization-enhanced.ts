@@ -1,4 +1,4 @@
-import { ImageSettings } from './types';
+import { ImageSettings, ImageOptimizationOptions } from './types';
 
 /**
  * Otimiza URLs do Cloudinary aplicando transformações para imagens.
@@ -9,14 +9,14 @@ import { ImageSettings } from './types';
  */
 export const optimizeCloudinaryUrl = (
   url: string, 
-  settings: ImageSettings = {}
+  settings: ImageSettings = { quality: 75, format: "auto", responsive: false }
 ): string => {
   if (!url) return '';
   if (!url.includes('cloudinary.com')) return url;
   
-  // Define configurações padrão
+  // Define configurações padrão com qualidade reduzida para melhor performance
   const {
-    quality = 85,
+    quality = 75, // Reduzido de 85 para 75 para melhorar desempenho
     format = 'auto',
     width,
     height,
@@ -43,14 +43,10 @@ export const optimizeCloudinaryUrl = (
   // Adiciona dimensões se especificadas
   if (width) {
     transformations += `,w_${width}`;
-  } else if (settings.width) {
-    transformations += `,w_${settings.width}`;
   }
   
   if (height) {
     transformations += `,h_${height}`;
-  } else if (settings.height) {
-    transformations += `,h_${settings.height}`;
   }
   
   // Aplica transformações à URL com tratamento adequado
@@ -76,7 +72,7 @@ export const getLowQualityPlaceholder = (url: string, options: { width?: number,
   }
   
   // Melhorou a qualidade dos placeholders para evitar embaçamento excessivo
-  const { width = 40, quality = 35 } = options;
+  const { width = 40, quality = 30 } = options; // Reduziu qualidade de 35 para 30
   
   // Extrai partes base da URL
   const baseUrlParts = url.split('/upload/');
@@ -107,7 +103,7 @@ export const getOptimizedImageUrl = (
   const baseUrlParts = url.split('/upload/');
   if (baseUrlParts.length !== 2) return url;
   
-  const { width = 800, height, quality = 80 } = options;
+  const { width = 800, height, quality = 70 } = options; // Reduzido de 80 para 70
   
   // Constrói string de transformação
   let transformations = `f_auto,q_${quality},w_${width}`;

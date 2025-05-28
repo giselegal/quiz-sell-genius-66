@@ -66,13 +66,16 @@ body {
 
 /* Spinner de carregamento otimizado */
 .loading-spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid #B89B7A;
+  width: 40px; /* Reduzido de 48px para 40px */
+  height: 40px; /* Reduzido de 48px para 40px */
+  border: 3px solid #B89B7A; /* Reduzido de 4px para 3px */
   border-radius: 50%;
   border-top-color: transparent;
-  animation: spinner 0.8s linear infinite;
+  animation: spinner 0.8s linear infinite; /* Reduzido de 1s para 0.8s */
   margin: 0 auto;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @keyframes spinner {

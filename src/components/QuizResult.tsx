@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { StyleResult } from '../types/quiz';
 import { useAuth } from '../context/AuthContext';
@@ -8,6 +7,8 @@ import ResultHeader from './quiz-result/ResultHeader';
 import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
+import BeforeAfterTransformation from './result/BeforeAfterTransformation4';
+import { CheckCircle } from 'lucide-react';
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { cn } from '@/lib/utils';
@@ -91,7 +92,14 @@ const QuizResult: React.FC<QuizResultProps> = ({
           <PrimaryStyleCard primaryStyle={primaryStyle} />
           <SecondaryStylesSection secondaryStyles={secondaryStyles} />
           <OfferCard primaryStyle={primaryStyle} config={config?.offer?.hero?.content || {}} />
-        </div>
+          {/* Bloco de transformação Antes e Depois */}
+          <BeforeAfterTransformation />
+          {/* Seção de Garantia animada */}
+          <div className="mt-8 flex items-center justify-center gap-2 animate-pulse">
+            <CheckCircle className="h-6 w-6 text-green-500" />
+            <span className="text-lg font-semibold text-gray-800">Garantia de Satisfação 7 dias</span>
+          </div>
+        </div>            
       </ContentContainer>
     </div>
   );

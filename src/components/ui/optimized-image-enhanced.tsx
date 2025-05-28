@@ -1,169 +1,104 @@
+
 import React, { useState, useEffect } from 'react';
-import { getLowQualityImage } from '@/utils/imageManager';
-import { AspectRatioContainer } from './aspect-ratio-container';
+import { getOptimizedImageUrl, getLowQualityPlaceholder } from '@/utils/imageOptimizer';
 
 interface OptimizedImageProps {
   src: string;
   alt: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   className?: string;
-  containerClassName?: string;
-  priority?: boolean;
   quality?: number;
+  priority?: boolean;
   placeholderColor?: string;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   onLoad?: () => void;
+  lazy?: boolean;
 }
 
-/**
- * OptimizedImage - Componente de imagem que implementa as melhores práticas para performance:
- * - Usa placeholders de alta qualidade
- * - Define dimensões explícitas para evitar CLS (Content Layout Shift)
- * - Otimiza formatos de imagem automaticamente via Cloudinary
- * - Suporta lazy loading e priority loading
- * - Adicionado melhor tratamento de erro e estados de transição
- */
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
   width,
   height,
   className = '',
-  containerClassName = '',
-  priority = false,
   quality = 80,
-  placeholderColor = '#f5f5f5',
+  priority = false,
+  placeholderColor = '#f8f5f2',
   objectFit = 'cover',
-  onLoad
+  onLoad,
+  lazy = !priority
 }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [lowQualitySrc, setLowQualitySrc] = useState<string>('');
-  const [hasError, setHasError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
   
-  /**
-   * Otimiza URLs do Cloudinary aplicando transformações para melhor qualidade e performance.
-   * Detecta se a URL já tem transformações para não aplicar duplicadamente.
-   */
-  const optimizeCloudinaryUrl = (url: string): string => {
-    if (!url.includes('cloudinary.com')) return url;
-    
-    // Extrair partes da URL do Cloudinary
-    const baseUrlPattern = /(https:\/\/res\.cloudinary\.com\/[^\/]+\/image\/upload\/)(.*)/;
-    const match = url.match(baseUrlPattern);
-    
-    if (!match) return url;
-    
-    const [, baseUrl, pathAndQuery] = match;
-    
-    // Verificar se a URL já contém parâmetros de otimização
-    const hasExistingParams = /f_auto|q_auto|w_\d+|dpr_auto/.test(pathAndQuery);
-    
-    // Se já tiver parâmetros, apenas devolver a URL original
-    if (hasExistingParams) return url;
-    
-    // Transformações avançadas para melhorar a performance e qualidade
-    const transforms = [
-      'f_auto',              // formato automático (webp/avif para navegadores compatíveis)
-      `q_auto:${quality}`,   // qualidade adaptativa com base no parâmetro quality
-      `w_${width}`,          // largura exata
-      'dpr_auto',            // densidade de pixel adaptativa (para retina displays)
-      'c_limit',             // modo de corte limitado para preservar proporção
-      'e_sharpen:60'         // leve nitidez para melhorar a qualidade percebida
-    ].join(',');
-    
-    // Extrair o nome do arquivo e extensão
-    const filePathParts = pathAndQuery.split('/');
-    const fileName = filePathParts[filePathParts.length - 1];
-    
-    // Adicionar transformações
-    return `${baseUrl}${transforms}/${fileName}`;
+  // Get optimized image URLs
+  const optimizedSrc = src ? getOptimizedImageUrl(src, { width, height, quality }) : '';
+  const placeholderSrc = src ? getLowQualityPlaceholder(src) : '';
+  
+  // Handle image loading completion
+  const handleImageLoaded = () => {
+    setLoaded(true);
+    if (onLoad) onLoad();
   };
   
-  const optimizedSrc = optimizeCloudinaryUrl(src);
+  // Report load error
+  const handleImageError = () => {
+    console.error('Error loading image:', optimizedSrc);
+    setError(true);
+  };
   
-  // Gerar e carregar o placeholder de baixa qualidade
+  // Reset state on src change
   useEffect(() => {
-    // Resetar estados quando a fonte muda
-    setImageLoaded(false);
-    setHasError(false);
-    
-    // Gerar LQIP apenas para imagens do Cloudinary
-    if (src.includes('cloudinary.com')) {
-      const lqip = getLowQualityImage(src);
-      if (lqip) {
-        setLowQualitySrc(lqip);
-        
-        // Pré-carregar a imagem de baixa qualidade
-        const imgPlaceholder = new Image();
-        imgPlaceholder.src = lqip;
-        imgPlaceholder.decoding = "async";
-      }
-    }
+    setLoaded(false);
+    setError(false);
   }, [src]);
 
-  // Lidar com o carregamento da imagem
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-    if (onLoad) {
-      onLoad();
-    }
-  };
-  
-  // Lidar com erros de carregamento
-  const handleImageError = () => {
-    setHasError(true);
-    console.error(`Falha ao carregar imagem: ${src}`);
-  };
-  
-  // Calcular a proporção de aspecto para o container
-  const aspectRatio = height / width;
-  
-  // Convert width and height to string for img element
-  const widthStr = String(width);
-  const heightStr = String(height);
+  // Calculate aspect ratio for placeholder
+  const aspectRatio = height && width ? (height / width) : undefined;
+  const paddingBottom = aspectRatio ? `${aspectRatio * 100}%` : undefined;
   
   return (
-    <AspectRatioContainer 
-      ratio={aspectRatio} 
-      className={`${containerClassName} relative overflow-hidden`}
-      bgColor={placeholderColor}
+    <div 
+      className={`relative overflow-hidden ${className}`} 
+      style={{ 
+        paddingBottom: paddingBottom,
+        backgroundColor: placeholderColor
+      }}
     >
-      {/* Placeholder de baixa qualidade - visível enquanto a imagem principal carrega */}
-      {lowQualitySrc && !imageLoaded && !hasError && (
+      {/* Placeholder or fallback */}
+      {!loaded && !error && placeholderSrc && (
         <img
-          src={lowQualitySrc}
-          alt={alt}
-          width={widthStr}
-          height={heightStr}
-          className={`w-full h-full object-${objectFit} absolute inset-0 transition-opacity duration-300 ${className}`}
-          loading="eager"
-          decoding="async"
+          src={placeholderSrc}
+          alt=""
+          className={`absolute inset-0 w-full h-full object-${objectFit} transition-opacity blur-sm`}
+          aria-hidden="true"
         />
       )}
       
-      {/* Imagem principal otimizada */}
-      {!hasError && (
+      {/* Main image */}
+      {!error ? (
         <img
           src={optimizedSrc}
           alt={alt}
-          width={widthStr}
-          height={heightStr}
-          className={`w-full h-full object-${objectFit} absolute inset-0 transition-opacity duration-500 ${className} ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={handleImageLoad}
-          onError={handleImageError}
-          loading={priority ? 'eager' : 'lazy'}
+          width={width}
+          height={height}
+          loading={lazy ? 'lazy' : 'eager'}
           fetchPriority={priority ? 'high' : 'auto'}
-          decoding={priority ? 'sync' : 'async'}
+          onLoad={handleImageLoaded}
+          onError={handleImageError}
+          className={`absolute inset-0 w-full h-full object-${objectFit} transition-opacity duration-300 ${
+            loaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ width: '100%', height: '100%' }}
         />
-      )}
-      
-      {/* Mensagem de erro caso o carregamento falhe */}
-      {hasError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-200 text-gray-500 text-sm">
-          Não foi possível carregar a imagem
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <span className="text-sm text-gray-500">Imagem indisponível</span>
         </div>
       )}
-    </AspectRatioContainer>
+    </div>
   );
 };
+
+export default OptimizedImage;

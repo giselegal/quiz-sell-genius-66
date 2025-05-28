@@ -9,6 +9,7 @@ import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import CriticalCSSLoader from './components/CriticalCSSLoader';
 import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
+import LovableRoutes from './lovable-routes';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -23,7 +24,7 @@ const LoadingFallback = () => (
 // Lazy loading das páginas principais para melhorar performance
 const HomePage = lazy(() => import('./pages/HomePage'));
 const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./pages/ResultPage'));
+const ResultPage = lazy(() => import('./components/pages/ResultPage'));
 const ResultPagePrototype = lazy(() => import('./pages/ResultPagePrototype'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -32,7 +33,7 @@ const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
 const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const EditorNotFoundPage = lazy(() => import('./pages/EditorNotFoundPage'));
-const EnhancedResultPageEditor = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
+const EnhancedResultPageEditorPage = lazy(() => import('./pages/EnhancedResultPageEditorPage'));
 const ABTestPage = lazy(() => import('./pages/admin/ABTestPage'));
 const ABTestManagerPage = lazy(() => import('./pages/ABTestManagerPage'));
 
@@ -48,8 +49,19 @@ const isLowPerformanceDevice = () => {
   return false;
 };
 
+// Detecta se o aplicativo está rodando dentro do ambiente Lovable.dev
+const isRunningInLovable = () => {
+  return typeof window !== 'undefined' && (
+    window.location.hostname.includes('lovableproject.com') || 
+    window.location.hostname.includes('lovable.dev') ||
+    // Para testes locais:
+    window.location.search.includes('lovable=true')
+  );
+};
+
 const App = () => {
   const lowPerformance = isLowPerformanceDevice();
+  const isLovableEnv = isRunningInLovable();
 
   // Inicializar analytics na montagem do componente
   useEffect(() => {
@@ -94,33 +106,37 @@ const App = () => {
             <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
             <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
             
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/quiz" element={<QuizPage />} />
-                <Route path="/resultado" element={<ResultPage />} />
-                <Route path="/prototipo" element={<ResultPagePrototype />} />
-                {/* Nova página de oferta com quiz embutido */}
-                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                {/* Editor visual aprimorado para página de resultados */}
-                <Route path="/resultado/editor" element={<EnhancedResultPageEditor />} />
-                {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
-                <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
-                <Route path="/admin" element={<AdminDashboard />} />
-                {/* Manter apenas uma rota principal para o editor unificado */}
-                <Route path="/admin/editor" element={<EditorPage />} />
-                <Route path="/admin/editor/error" element={<EditorNotFoundPage />} />
-                {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
-                <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
-                <Route path="/admin/settings" element={<SettingsPage />} />
-                <Route path="/admin/analytics" element={<AnalyticsPage />} />
-                <Route path="/admin/ab-test" element={<ABTestPage />} />
-                <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
-                {/* Adicionando acesso ao protótipo no painel admin */}
-                <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
+            {isLovableEnv ? (
+              <LovableRoutes />
+            ) : (
+              <Suspense fallback={<LoadingFallback />}>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/quiz" element={<QuizPage />} />
+                  <Route path="/resultado" element={<ResultPage />} />
+                  <Route path="/prototipo" element={<ResultPagePrototype />} />
+                  {/* Nova página de oferta com quiz embutido */}
+                  <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                  {/* Editor visual aprimorado para página de resultados */}
+                  <Route path="/resultado/editor" element={<EnhancedResultPageEditorPage />} />
+                  {/* Redirecionar página de edição de resultados para o editor unificado com a aba de resultados ativa */}
+                  <Route path="/resultado/editar" element={<Navigate to="/admin/editor?tab=result" replace />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  {/* Manter apenas uma rota principal para o editor unificado */}
+                  <Route path="/admin/editor" element={<EditorPage />} />
+                  <Route path="/admin/editor/error" element={<EditorNotFoundPage />} />
+                  {/* Redirecionar o antigo quiz-builder para o editor unificado com a aba de quiz ativa */}
+                  <Route path="/admin/quiz-builder" element={<Navigate to="/admin/editor?tab=quiz" replace />} />
+                  <Route path="/admin/settings" element={<SettingsPage />} />
+                  <Route path="/admin/analytics" element={<AnalyticsPage />} />
+                  <Route path="/admin/ab-test" element={<ABTestPage />} />
+                  <Route path="/admin/ab-test-manager" element={<ABTestManagerPage />} />
+                  {/* Adicionando acesso ao protótipo no painel admin */}
+                  <Route path="/admin/prototipo" element={<ResultPagePrototype />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
+            )}
           </Router>
           <Toaster />
         </TooltipProvider>

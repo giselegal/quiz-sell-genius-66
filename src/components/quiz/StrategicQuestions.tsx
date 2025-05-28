@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
@@ -28,7 +29,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   // Preload strategic images on first render
   useEffect(() => {
     if (!imagesPreloaded) {
-      preloadCriticalImages('strategic');
+      preloadCriticalImages(["strategic"]);
       setImagesPreloaded(true);
     }
   }, [imagesPreloaded]);
@@ -54,3 +55,5 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
     </AnimatedWrapper>
   );
 };
+
+export default StrategicQuestions;

@@ -63,15 +63,14 @@ const EditorPage = () => {
                   <p className="text-gray-600 mb-4">Use o editor avançado para personalizar completamente a página de resultados</p>
                   <button 
                     onClick={() => window.location.href = '/resultado/editor'} 
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                   >
-                    <span className="mr-2">Abrir Editor Avançado</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                      <polyline points="15 3 21 3 21 9"></polyline>
-                      <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
+                    Abrir Editor de Resultados
                   </button>
+                  
+                  <p className="text-sm text-gray-500 mt-4">
+                    Obs: Se o editor não abrir, execute o script <code>acesso-editor-producao.js</code> no console e tente novamente.
+                  </p>
                 </div>
               </div>
             )}

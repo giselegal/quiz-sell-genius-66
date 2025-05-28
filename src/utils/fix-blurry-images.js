@@ -5,7 +5,7 @@
  */
 
 // Configurações
-const IMAGE_QUALITY = 95; // Qualidade muito alta para imagens críticas
+const IMAGE_QUALITY = 75; // Reduzido de 95 para 75 para melhorar performance
 const MIN_IMAGE_WIDTH = 1200; // Largura mínima para garantir nitidez
 const DEBUG_MODE = false; // Ativar logs de depuração
 

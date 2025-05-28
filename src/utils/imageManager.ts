@@ -1,7 +1,7 @@
 
 // This file now serves as a facade/aggregator for the modularized image utilities
-import { BankImage } from '@/data/imageBank';
-import { PreloadOptions } from './images/types';
+import { type BankImage } from '@/data/imageBank';
+import { type PreloadOptions } from './images/types';
 
 // Import and re-export functionality from modules
 import { initializeImageCache, getImageMetadata } from './images/caching';

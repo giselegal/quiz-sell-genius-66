@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
   base: './',
   
   server: {
-    host: "::",
+    host: '0.0.0.0',
     port: 8080,
     // Configurações CORS e mime-types para desenvolvimento
     headers: {
@@ -56,12 +56,15 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-components': [
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          'vendor-ui': [
             '@radix-ui/react-dialog',
             '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-tooltip',
-            'clsx',
+            '@radix-ui/react-tooltip'
+          ],
+          'vendor-utils': [
+            'clsx', 
             'tailwind-merge'
           ],
           'analytics': [

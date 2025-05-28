@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { fixBlurryIntroQuizImages } from '@/utils/fixBlurryIntroQuizImages';
 
 interface AutoFixedImagesProps {
@@ -7,70 +7,132 @@ interface AutoFixedImagesProps {
   fixOnMount?: boolean;
   fixOnUpdate?: boolean;
   className?: string;
+  observeSelector?: string; // Novo: seletor específico para observar
 }
 
 /**
  * Componente wrapper que aplica correções de imagens borradas automaticamente
- * Este componente observa mudanças no DOM para corrigir imagens adicionadas dinamicamente
+ * Versão otimizada para desempenho com observação seletiva de DOM
  */
 const AutoFixedImages: React.FC<AutoFixedImagesProps> = ({
   children,
   fixOnMount = true,
   fixOnUpdate = true,
-  className = ''
+  className = '',
+  observeSelector = '.quiz-intro, [data-section="intro"]' // Observar apenas elementos relevantes
 }) => {
-  // Aplicar correção na montagem inicial
+  // Ref para o elemento contêiner para limitação de escopo do MutationObserver
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Debounce para evitar múltiplas chamadas
+  const debounceTimeoutRef = useRef<number | null>(null);
+  
+  // Função de debounce otimizada
+  const debouncedFix = () => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    
+    // Usar requestIdleCallback se disponível
+    if ('requestIdleCallback' in window) {
+      debounceTimeoutRef.current = setTimeout(() => {
+        // @ts-ignore
+        window.requestIdleCallback(() => {
+          fixBlurryIntroQuizImages();
+          debounceTimeoutRef.current = null;
+        }, { timeout: 1000 });
+      }, 300) as unknown as number;
+    } else {
+      debounceTimeoutRef.current = setTimeout(() => {
+        fixBlurryIntroQuizImages();
+        debounceTimeoutRef.current = null;
+      }, 500) as unknown as number;
+    }
+  };
+  
+  // Aplicar correção na montagem inicial - otimizada para não interferir com LCP
   useEffect(() => {
     if (fixOnMount) {
-      // Pequeno atraso para permitir que a renderização seja completada
-      const timer = setTimeout(() => {
-        fixBlurryIntroQuizImages();
-      }, 100);
+      // Detectar se o navegador suporta métricas de performance
+      const supportsPerformanceObserver = 
+        'PerformanceObserver' in window && 
+        PerformanceObserver.supportedEntryTypes?.includes('largest-contentful-paint');
       
-      return () => clearTimeout(timer);
-    }
-  }, [fixOnMount]);
-  
-  // Observar mudanças no DOM para corrigir imagens adicionadas dinamicamente
-  useEffect(() => {
-    if (fixOnUpdate) {
-      // Configurar MutationObserver para detectar mudanças no DOM
-      const observer = new MutationObserver((mutations) => {
-        let needsFix = false;
-        
-        // Verificar se alguma mutação adicionou imagens
-        mutations.forEach(mutation => {
-          if (mutation.type === 'childList') {
-            mutation.addedNodes.forEach(node => {
-              if ((node as Element).tagName === 'IMG' || 
-                  (node as Element).querySelector?.('img')) {
-                needsFix = true;
-              }
+      if (supportsPerformanceObserver) {
+        // Aguardar o LCP antes de executar otimizações
+        const lcpObserver = new PerformanceObserver((entryList) => {
+          const entries = entryList.getEntries();
+          if (entries.length > 0) {
+            // Executar após o LCP
+            requestAnimationFrame(() => {
+              fixBlurryIntroQuizImages();
             });
+            lcpObserver.disconnect();
           }
         });
         
-        // Aplicar correção apenas se novas imagens foram adicionadas
-        if (needsFix) {
-          fixBlurryIntroQuizImages();
+        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+      } else {
+        // Fallback para navegadores que não suportam PerformanceObserver
+        setTimeout(fixBlurryIntroQuizImages, 1000);
+      }
+    }
+  }, [fixOnMount]);
+  
+  // Observar mudanças no DOM com escopo reduzido
+  useEffect(() => {
+    if (fixOnUpdate) {
+      // Elementos a serem observados
+      const elementsToObserve = document.querySelectorAll(observeSelector);
+      
+      if (elementsToObserve.length === 0) {
+        return; // Nada para observar
+      }
+      
+      // Configurar MutationObserver otimizado
+      const observer = new MutationObserver((mutations) => {
+        // Verificar se alguma das mutações é relevante (adiciona imagens)
+        const hasImageChanges = mutations.some(mutation => 
+          Array.from(mutation.addedNodes).some(node => 
+            node.nodeName === 'IMG' || 
+            (node instanceof Element && node.querySelector('img'))
+          )
+        );
+        
+        // Só processar se houver mudanças em imagens
+        if (hasImageChanges) {
+          debouncedFix();
         }
       });
       
-      // Iniciar observação
-      observer.observe(document.body, { 
-        childList: true, 
-        subtree: true 
+      // Observar apenas os elementos específicos, não todo o body
+      elementsToObserve.forEach(element => {
+        observer.observe(element, { 
+          childList: true, 
+          subtree: true,
+          attributes: false,
+          characterData: false
+        });
       });
       
       return () => observer.disconnect();
     }
-  }, [fixOnUpdate]);
+  }, [fixOnUpdate, observeSelector]);
+  
+  // Limpar o timeout quando o componente é desmontado
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
   
   return (
-    <div className={className}>
+    <div ref={containerRef} className={className}>
       {children}
     </div>
   );
 };
 
-export default AutoFixedImages;
+export default React.memo(AutoFixedImages);

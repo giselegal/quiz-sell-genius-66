@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllImages } from '@/data/imageBank';
-import { optimizeCloudinaryUrl, getResponsiveImageSources } from '@/utils/imageUtils';
+import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
 import { ImageAnalysis, ImageDiagnosticResult } from '@/utils/images/types';
 import { Button } from '@/components/ui/button';
 import { Copy, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
@@ -21,7 +21,7 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
   const [isLoading, setIsLoading] = useState(false);
   const [optimizationSettings, setOptimizationSettings] = useState({
     quality: 80,
-    format: 'auto',
+    format: 'auto' as 'auto' | 'webp' | 'avif',
     responsive: true,
   });
   const [customUrl, setCustomUrl] = useState('');
@@ -47,7 +47,12 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
 
   const analyzeImage = async (url: string): Promise<ImageAnalysis> => {
     const isCloudinary = url.includes('cloudinary.com');
-    const optimizedUrl = isCloudinary ? optimizeCloudinaryUrl(url, optimizationSettings) : url;
+    const options = {
+      quality: optimizationSettings.quality,
+      format: optimizationSettings.format,
+      width: optimizationSettings.responsive ? undefined : 800
+    };
+    const optimizedUrl = isCloudinary ? optimizeCloudinaryUrl(url, options) : url;
     const originalSize = await getImageSize(url);
     const optimizedSize = await getImageSize(optimizedUrl);
 
@@ -55,8 +60,8 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
     if (isCloudinary && optimizationSettings.quality < 80) {
       suggestedImprovements.push('Aumentar a qualidade da imagem para pelo menos 80.');
     }
-    if (isCloudinary && optimizationSettings.format === 'jpg') {
-      suggestedImprovements.push('Usar formato automático ou WebP para melhor compressão.');
+    if (isCloudinary && optimizationSettings.format === 'auto') {
+      suggestedImprovements.push('Usar formato específico como WebP para melhor compressão.');
     }
     if (!url.includes('w_auto') && !url.includes('dpr_auto')) {
       suggestedImprovements.push('Considerar URLs responsivas para diferentes tamanhos de tela.');
@@ -137,7 +142,12 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
       } else {
         const isCloudinary = url.includes('cloudinary.com');
         if (isCloudinary) {
-          const optimizedUrl = optimizeCloudinaryUrl(url, optimizationSettings);
+          const options = {
+            quality: optimizationSettings.quality,
+            format: optimizationSettings.format,
+            width: optimizationSettings.responsive ? undefined : 800
+          };
+          const optimizedUrl = optimizeCloudinaryUrl(url, options);
           const originalSize = await getImageSize(url);
           const optimizedSize = await getImageSize(optimizedUrl);
           totalDownloadedBytes += optimizedSize;
@@ -146,9 +156,9 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             totalImagesWithIssues++;
             issues.push('Qualidade da imagem abaixo do recomendado (80).');
           }
-          if (optimizationSettings.format === 'jpg') {
+          if (optimizationSettings.format === 'auto') {
             totalImagesWithIssues++;
-            issues.push('Formato da imagem não é otimizado (usar auto ou webp).');
+            issues.push('Formato da imagem não é específico (usar webp ou avif).');
           }
           if (!url.includes('w_auto') && !url.includes('dpr_auto')) {
             totalImagesWithIssues++;
@@ -205,17 +215,15 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
     }
 
     try {
-      const optimizedUrl = optimizeCloudinaryUrl(url, optimizationSettings);
-      const responsiveSources = getResponsiveImageSources(url, [320, 640, 960, 1280]);
+      const options = {
+        quality: optimizationSettings.quality,
+        format: optimizationSettings.format,
+        width: optimizationSettings.responsive ? undefined : 800
+      };
+      const optimizedUrl = optimizeCloudinaryUrl(url, options);
       
-      // Create a temporary image element to apply the optimized URL
-      const imageEl = new Image();
-      imageEl.src = optimizedUrl;
-      imageEl.srcset = responsiveSources.srcSet;
-      imageEl.sizes = responsiveSources.sizes;
-
       // Copy the optimized URL to the clipboard
-      await navigator.clipboard.writeText(imageEl.src);
+      await navigator.clipboard.writeText(optimizedUrl);
       toast({
         title: "Sucesso",
         description: "URL otimizada copiada para a área de transferência.",
@@ -255,11 +263,14 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
                   id="format"
                   className="w-full p-2 border rounded"
                   value={optimizationSettings.format}
-                  onChange={(e) => setOptimizationSettings({ ...optimizationSettings, format: e.target.value })}
+                  onChange={(e) => setOptimizationSettings({ 
+                    ...optimizationSettings, 
+                    format: e.target.value as 'auto' | 'webp' | 'avif'
+                  })}
                 >
                   <option value="auto">Auto</option>
                   <option value="webp">WebP</option>
-                  <option value="jpg">JPG</option>
+                  <option value="avif">AVIF</option>
                 </select>
               </div>
               <div className="flex items-center space-x-2">

@@ -14,11 +14,11 @@ const Index = () => {
   // Preload critical images when the page loads
   useEffect(() => {
     // Preload intro images first
-    preloadCriticalImages('intro');
+    preloadCriticalImages(["intro"]);
     
     // Start preloading strategic question images in background
     setTimeout(() => {
-      preloadCriticalImages('strategic');
+      preloadCriticalImages(["strategic"]);
     }, 2000);
   }, []);
 
@@ -28,7 +28,7 @@ const Index = () => {
     localStorage.setItem('userName', name);
     
     // Preload quiz images when starting the quiz
-    preloadCriticalImages('quiz');
+    preloadCriticalImages(["quiz"]);
     
     // Start preloading transformation images for results page
     preloadByCategory('transformation');

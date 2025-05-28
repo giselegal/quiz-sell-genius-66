@@ -59,7 +59,7 @@ export default function OptimizedImage({
     const imgHeight = height || (imageMetadata?.height || undefined);
     
     return getOptimizedImage(src, {
-      quality: 95,
+      quality: 75, // Reduzido de 95 para 75
       format: 'auto',
       width: imgWidth,
       height: imgHeight

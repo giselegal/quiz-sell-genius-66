@@ -1,99 +1,60 @@
 
-// Type definitions for image utility functions
-
-// Options for preloading images
-export interface PreloadOptions {
-  quality?: number;
-  format?: 'auto' | 'webp' | 'jpg' | 'png';
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
-  batchSize?: number;
-  generateLowQuality?: boolean;
-  timeout?: number;
-  width?: number;
-  height?: number;
-}
-
-// Image definition for preloading
-export interface PreloadImageDefinition {
-  src: string;
-  priority?: number;
-  width?: number;
-  height?: number;
-  quality?: number;
-}
-
-// Type for image metadata cache
-export interface ImageMetadata {
-  width: number;
-  height: number;
-  format?: string;
-  aspectRatio?: number;
-  dominantColor?: string;
-  lastAccessed: number;
-}
-
-// Type for comprehensive image analysis
 export interface ImageAnalysis {
   url: string;
-  format: string;
-  quality: string | number;
-  width: string | number;
-  height: string | number;
-  isOptimized: boolean;
-  isResponsive: boolean;
-  suggestedImprovements: string[];
-  estimatedSizeReduction?: number;
+  element: HTMLImageElement;
+  issues: string[];
+  dimensions?: {
+    natural: { width: number; height: number },
+    display: { width: number; height: number }
+  };
+  downloadSize?: number;
+  format?: string;
+  isOptimized?: boolean;
+  isResponsive?: boolean;
+  quality?: number;
+  width?: number;
+  height?: number;
+  suggestedImprovements?: string[];
 }
 
-// Type for image diagnostic result
 export interface ImageDiagnosticResult {
-  summary: {
+  url?: string;
+  issues?: string[];
+  recommendations?: string[];
+  optimizationPotential?: number;
+  summary?: {
     totalImagesRendered: number;
     totalImagesWithIssues: number;
     totalDownloadedBytes: number;
     estimatedPerformanceImpact: string;
   };
-  detailedIssues: {
-    url: string;
-    element: HTMLImageElement;
-    issues: string[];
-    dimensions?: {
-      natural: { width: number, height: number };
-      display: { width: number, height: number };
-    }
-  }[];
+  detailedIssues?: ImageAnalysis[];
 }
 
-// Add ImageSettings type with proper format values
-export interface ImageSettings {
-  width?: number;
-  height?: number;
+export interface FixBlurryImagesOptions {
   quality?: number;
-  format?: 'auto' | 'webp' | 'avif' | 'jpg' | 'png';
-  crop?: 'fill' | 'fit' | 'limit';
+  format?: string;
+  skipOptimized?: boolean;
+  forceOptimize?: boolean;
+  debug?: boolean;
+  placeholderColor?: string;
 }
 
-// Add ImageCacheEntry type with loadStatus and lowQualityUrl
-export interface ImageCacheEntry {
-  url: string;
-  metadata?: ImageMetadata;
-  lastAccessed: number;
-  loadStatus?: 'idle' | 'loading' | 'loaded' | 'error';
-  element?: HTMLImageElement;
-  optimizedUrl?: string;
-  lowQualityUrl?: string;
-}
-
-// Update BankImage to include priority and make alt optional
-export interface BankImage {
-  id: string;
+export interface PreloadImageDefinition {
   src: string;
+  id: string;
+  alt: string;
   category: string;
-  tags: string[];
-  width?: number;
-  height?: number;
-  priority?: number;
   preloadPriority?: number;
-  alt?: string;
+  tags?: string[];
+  quality?: number;
+}
+
+// Add PreloadOptions interface to fix imports
+export interface PreloadOptions {
+  quality?: number;
+  priority?: 'high' | 'low' | 'auto';
+  categories?: string[];
+  limit?: number;
+  timeout?: number;
 }
