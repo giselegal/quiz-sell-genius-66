@@ -271,56 +271,23 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
 
   // MAIN COMPONENT - OPTIMIZED
   return (
-    <div className="my-8 md:my-12 lg:my-16">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* HEADER - MELHORADO PARA RESPONSIVIDADE */}
-        <motion.div 
-          className="text-center mb-8 md:mb-10 lg:mb-12" 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.5 }}
-        >
-          <div className="relative">
-            {/* Elemento decorativo de fundo */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-30">
-              <div className="w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-[#B89B7A]/20 to-[#aa6b5d]/10 rounded-full blur-3xl"></div>
-            </div>
-            
-            <h3 className="relative text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4 md:mb-6 px-4 leading-tight max-w-4xl mx-auto">
-              Mulheres que Aprenderam e Praticam no dia a dia
-              <br className="hidden sm:block" />
-              <span className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-light">
-                Seu Estilo de Ser
-              </span>
-            </h3>
-          </div>
-          
-          <div className="w-16 md:w-20 lg:w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
-          
-          {/* Subtítulo adicional para contexto */}
-          <p className="text-sm md:text-base text-[#8F7A6A] mt-4 max-w-2xl mx-auto px-4 font-light">
-            Veja como outras mulheres transformaram sua imagem e conquistaram mais confiança
-          </p>
+    <div className="my-12">
+      <div className="max-w-4xl mx-auto px-6">
+        {/* HEADER */}
+        <motion.div className="text-center mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] bg-gradient-to-r from-[#aa6b5d] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent mb-4">
+            Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser
+          </h3>
+          <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto"></div>
         </motion.div>
         
-        {/* MAIN CARD - LAYOUT ESTRATÉGICO MELHORADO */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-lg hover:shadow-xl transition-all duration-500 bg-white backdrop-blur-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 min-h-[500px] lg:min-h-[600px]">
-              {/* SEÇÃO DA IMAGEM - 2/5 do espaço em desktop, ordem estratégica */}
-              <div className="lg:col-span-2 order-2 lg:order-1 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center relative">
-                {/* Badge de destaque para mobile */}
-                <div className="absolute top-4 left-4 lg:hidden z-20">
-                  <span className="bg-[#B89B7A] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm backdrop-blur-sm">
-                    ✨ Transformação Real
-                  </span>
-                </div>
-                
-                <div className="relative w-full max-w-sm lg:max-w-none mx-auto">
+        {/* MAIN CARD */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+          <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-lg transition-all duration-300">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
+              {/* IMAGE SECTION */}
+              <div className="p-6 flex flex-col items-center">
+                <div className="relative w-full max-w-sm mx-auto">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeTransformation.id}
@@ -328,36 +295,31 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.4 }}
-                      className="relative group"
+                      className="relative"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                       <OptimizedImage
                         src={activeTransformation.image}
                         alt={`Transformação de ${activeTransformation.name}`}
                         width={activeTransformation.width}
                         height={activeTransformation.height}
-                        className="w-full h-auto rounded-lg shadow-md transition-transform duration-300 group-hover:scale-[1.02]"
+                        className="w-full h-auto rounded-lg shadow-md"
                         priority={true}
                       />
-                      {/* Nome da transformação no hover */}
-                      <div className="absolute bottom-4 left-4 right-4 text-white text-sm font-medium bg-black/50 backdrop-blur-sm rounded px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                        Transformação de {activeTransformation.name}
-                      </div>
                     </motion.div>
                   </AnimatePresence>
                   
-                  {/* NAVIGATION - OTIMIZADA PARA TOUCH */}
+                  {/* NAVIGATION - OPTIMIZED */}
                   {transformations.length > 1 && (
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 md:px-4 z-30">
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 md:px-2 z-20">
                       <NavButton direction="prev" onClick={goToPrevious} />
                       <NavButton direction="next" onClick={goToNext} />
                     </div>
                   )}
                 </div>
                 
-                {/* INDICATORS - POSICIONAMENTO ESTRATÉGICO */}
+                {/* INDICATORS */}
                 {transformations.length > 1 && (
-                  <div className="flex justify-center space-x-3 mt-6">
+                  <div className="flex justify-center space-x-3 mt-4">
                     {transformations.map((_, idx) => (
                       <button
                         key={idx}
@@ -374,99 +336,65 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 )}
               </div>
               
-              {/* SEÇÃO DE CONTEÚDO - 3/5 do espaço em desktop */}
-              <div className="lg:col-span-3 order-1 lg:order-2 p-6 lg:p-8 xl:p-10 bg-white flex flex-col justify-center relative">
-                {/* Elemento decorativo sutil */}
-                <div className="absolute top-6 right-6 w-16 h-16 bg-gradient-to-br from-[#B89B7A]/10 to-[#aa6b5d]/5 rounded-full blur-xl"></div>
+              {/* CONTENT SECTION - SIMPLIFIED */}
+              <div className="p-6 bg-white">
+                <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
+                  <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
+                    Transforme sua Imagem
+                  </span>
+                </h4>
                 
-                <div className="max-w-xl mx-auto lg:mx-0 relative z-10">
-                  {/* Badge de valor para desktop */}
-                  <div className="hidden lg:block mb-4">
-                    <span className="inline-flex items-center bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 text-[#4CAF50] text-sm font-semibold px-4 py-2 rounded-full border border-[#4CAF50]/20">
-                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                      </svg>
-                      Resultados Comprovados
-                    </span>
-                  </div>
+                <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
+                  Seu estilo é muito mais que roupas — é a expressão da sua essência e uma aliada para atingir seus objetivos.
+                </p>
+                
+                {/* BENEFITS LIST */}
+                <div className="bg-[#f9f4ef]/70 rounded-lg p-5 mb-6 border border-[#B89B7A]/10">
+                  <ul className="space-y-3 text-center md:text-left">
+                    <CheckItem>Looks que expressam sua verdadeira essência</CheckItem>
+                    <CheckItem>Cores e modelagens que realçam sua beleza natural</CheckItem>
+                    <CheckItem>Imagem profissional alinhada aos seus objetivos</CheckItem>
+                    <CheckItem>Guarda-roupa inteligente e sem desperdícios</CheckItem>
+                  </ul>
+                </div>
+                
+                {/* CTA SECTION */}
+                <div className="flex flex-col items-center md:items-start">
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                    <Button
+                      onClick={handleCTA}
+                      onMouseEnter={() => setIsButtonHovered(true)}
+                      onMouseLeave={() => setIsButtonHovered(false)}
+                      className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-sm md:text-base mb-2 cursor-pointer"
+                      style={{
+                        background: "linear-gradient(to right, #4CAF50, #45a049)",
+                        boxShadow: "0 8px 32px rgba(76, 175, 80, 0.4)",
+                      }}
+                      type="button"
+                    >
+                      <span className="flex items-center justify-center gap-2" style={{ pointerEvents: 'none' }}>
+                        <motion.div animate={{ scale: isButtonHovered ? 1.1 : 1, rotate: isButtonHovered ? 10 : 0 }}>
+                          <ShoppingCart className="w-5 h-5" />
+                        </motion.div>
+                        Quero Meu Guia de Estilo
+                      </span>
+                    </Button>
+                  </motion.div>
                   
-                  <h4 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-medium text-[#432818] text-center lg:text-left mb-4 lg:mb-6 leading-tight">
-                    <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                      Transforme sua Imagem
-                    </span>
-                    <br className="hidden lg:block" />
-                    <span className="text-lg md:text-xl lg:text-2xl font-normal text-[#aa6b5d] block mt-2">
-                      e Conquiste seus Objetivos
-                    </span>
-                  </h4>
-                  
-                  <p className="text-base md:text-lg lg:text-xl leading-relaxed text-gray-700 text-center lg:text-left mb-6 lg:mb-8 font-light">
-                    Seu estilo é muito mais que roupas — é a expressão da sua <strong className="text-[#432818] font-medium">essência</strong> e uma aliada para atingir seus <strong className="text-[#432818] font-medium">objetivos profissionais</strong>.
+                  <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4">
+                    Oferta por tempo limitado
                   </p>
-                  
-                  {/* BENEFITS LIST - HIERARQUIA VISUAL MELHORADA */}
-                  <div className="bg-gradient-to-br from-[#f9f4ef]/70 via-[#fff7f3]/50 to-[#f9f4ef]/70 rounded-xl p-6 lg:p-7 mb-8 lg:mb-10 border border-[#B89B7A]/15 shadow-sm">
-                    <h5 className="text-sm font-semibold text-[#aa6b5d] uppercase tracking-wide mb-4 text-center lg:text-left">
-                      O que você vai conseguir:
-                    </h5>
-                    <ul className="space-y-4 text-center lg:text-left">
-                      <CheckItem>Looks que expressam sua verdadeira essência</CheckItem>
-                      <CheckItem>Cores e modelagens que realçam sua beleza natural</CheckItem>
-                      <CheckItem>Imagem profissional alinhada aos seus objetivos</CheckItem>
-                      <CheckItem>Guarda-roupa inteligente e sem desperdícios</CheckItem>
-                    </ul>
-                  </div>
-                  
-                  {/* CTA SECTION - POSICIONAMENTO ESTRATÉGICO */}
-                  <div className="flex flex-col items-center lg:items-start space-y-5">
-                    {/* Urgência sutil */}
-                    <div className="flex items-center gap-2 text-sm text-[#aa6b5d] font-medium">
-                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                      <span>Últimas vagas com desconto especial</span>
-                    </div>
-                    
-                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                      <Button
-                        onClick={handleCTA}
-                        onMouseEnter={() => setIsButtonHovered(true)}
-                        onMouseLeave={() => setIsButtonHovered(false)}
-                        className="w-full sm:w-auto py-4 px-8 lg:px-12 rounded-xl shadow-lg transition-all duration-300 font-semibold text-base md:text-lg lg:text-xl cursor-pointer transform hover:shadow-2xl"
-                        style={{
-                          background: "linear-gradient(135deg, #4CAF50 0%, #45a049 100%)",
-                          boxShadow: "0 10px 40px rgba(76, 175, 80, 0.4)",
-                        }}
-                        type="button"
-                      >
-                        <span className="flex items-center justify-center gap-3" style={{ pointerEvents: 'none' }}>
-                          <motion.div animate={{ scale: isButtonHovered ? 1.2 : 1, rotate: isButtonHovered ? 15 : 0 }}>
-                            <ShoppingCart className="w-5 h-5 lg:w-6 lg:h-6" />
-                          </motion.div>
-                          Quero Meu Guia de Estilo
-                        </span>
-                      </Button>
-                    </motion.div>
-                    
-                    <div className="flex flex-col sm:flex-row items-center gap-4 text-center lg:text-left">
-                      <p className="text-xs md:text-sm text-[#aa6b5d] font-medium">
-                        🔒 Compra 100% segura
-                      </p>
-                      <div className="hidden sm:block w-1 h-1 bg-[#aa6b5d]/50 rounded-full"></div>
-                      <p className="text-xs md:text-sm text-[#aa6b5d] font-medium">
-                        ⏰ Oferta por tempo limitado
-                      </p>
-                    </div>
-                  
-                    {/* PAYMENT METHODS - RESPONSIVO */}
-                    <div className="w-full max-w-[320px] lg:max-w-[300px] mx-auto lg:mx-0 mt-2">
-                      <img
-                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
-                        alt="Métodos de pagamento aceitos: cartão, pix, boleto"
-                        className="w-full rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
-                        loading="lazy"
-                        width="300"
-                        height="75"
-                      />
-                    </div>
+                
+                  {/* PAYMENT METHODS */}
+                  <div className="w-full max-w-[280px] mx-auto md:mx-0">
+                    <img
+                      src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+                      alt="Métodos de pagamento"
+                      className="w-full rounded-lg shadow-sm"
+                      loading="lazy"
+                      width="280"
+                      height="70"
+                    />
                   </div>
                 </div>
               </div>
