@@ -1,7 +1,7 @@
 import { StyleResult, QuizResult } from '@/types/quiz';
 import { useState, useEffect, useCallback } from 'react'; // Adicionado useCallback
 import { toast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useQuizLogic } from './useQuizLogic'; // Importar o hook de lógica principal
 
 export const useQuiz = () => {
@@ -13,7 +13,7 @@ export const useQuiz = () => {
   } = useQuizLogic();
 
   const [isSubmittingResults, setIsSubmittingResults] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
   
   // Os estados primaryStyle e secondaryStyles agora são derivados de quizResult de useQuizLogic
   const primaryStyle = quizResult?.primaryStyle || null;
@@ -84,7 +84,7 @@ export const useQuiz = () => {
     } finally {
       setIsSubmittingResults(false);
     }
-  }, [calculateResults, navigate]); // Adicionado navigate às dependências
+  }, [calculateResults, router]); // Adicionado router às dependências
 
   // A função de reset pode chamar a função de reset do useQuizLogic
   const resetQuiz = useCallback(() => {

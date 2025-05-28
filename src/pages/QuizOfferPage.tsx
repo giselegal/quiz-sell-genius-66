@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { preloadCriticalImages } from '@/utils/images/preloading';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart, CheckCircle, ArrowDown, Hourglass } from 'lucide-react';
-import { trackButtonClick } from '@/utils/analytics';
+import { trackButtonClick, trackPageView } from '@/utils/analytics';
+import PixelInitializer from '@/components/PixelInitializer';
 
 // CSS simplificado e otimizado
 const customStyles = `
@@ -311,6 +312,7 @@ const QuizOfferPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[var(--background)]" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <PixelInitializer pageType="offer" />
             {/* Header limpo */}
             <header className="py-4 px-6 sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
                 <div className="container-main flex justify-center">

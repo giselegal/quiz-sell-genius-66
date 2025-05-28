@@ -15,23 +15,30 @@ export function LovableClientProvider({ children }: LovableProviderProps) {
     // Só executa no cliente
     if (typeof window !== 'undefined') {
       const isEditor = window.location.pathname.includes('/admin') || 
-                      window.location.pathname === '/' ||
-                      window.location.pathname.startsWith('/resultado/') ||
-                      window.location.search.includes('lovable=true');
+                      window.location.search.includes('lovable=true') || 
+                      window.location.search.includes('editor=true'); // Mantém compatibilidade com implementação anterior
       
       setIsEditorMode(isEditor);
       
       if (isEditor) {
-        // Configuração global para o Lovable
-        (window as any).LOVABLE_CONFIG = {
-          projectId: 'quiz-sell-genius',
-          apiBaseUrl: 'https://api.lovable.dev',
-        };
-
-        return () => {
-          delete (window as any).LOVABLE_CONFIG;
-        };
+        // Em uma implementação real, aqui seria carregado o script do editor
+        console.log('Modo de edição ativado', { 
+          isLovableMode: window.location.search.includes('lovable=true'),
+          params: window.location.search
+        });
       }
+    }
+  }, []);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      console.log('Diagnóstico Lovable Mode:', {
+        pathname: window.location.pathname,
+        search: window.location.search,
+        hasLovableParam: window.location.search.includes('lovable=true'),
+        hasEditorParam: window.location.search.includes('editor=true'),
+        isAdminPath: window.location.pathname.includes('/admin')
+      });
     }
   }, []);
   

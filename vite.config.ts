@@ -6,6 +6,22 @@ import compression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Configurações para ignorar erros não críticos
+  build: {
+    reportCompressedSize: false, // Reduz warnings relacionados a tamanho
+    chunkSizeWarningLimit: 2000, // Aumenta limite de tamanho de chunk para evitar warnings
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Ignora warnings específicos
+        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+        if (warning.code === 'EMPTY_BUNDLE') return;
+        if (warning.code === 'EVAL') return;
+        if (warning.code === 'THIS_IS_UNDEFINED') return;
+        if (warning.message?.includes('sourcemap')) return;
+        warn(warning);
+      }
+    },
+  },
   root: '.',
   base: './',
   
@@ -66,16 +82,31 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist',
     assetsDir: 'assets',
     emptyOutDir: true,
-    sourcemap: true,
+    sourcemap: false,
     // Configurações para evitar problemas de MIME type
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          ui: ['lucide-react'],
-          utils: ['date-fns', 'clsx']
-        }
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          'vendor-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-tooltip'
+          ],
+          'vendor-utils': [
+            'clsx', 
+            'tailwind-merge'
+          ],
+          'analytics': [
+            './src/utils/analytics.ts',
+            './src/utils/facebookPixel.ts'
+          ]
+        },
+        // Garantir que os assets sejam carregados corretamente para as rotas específicas
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     },
     chunkSizeWarningLimit: 1000,

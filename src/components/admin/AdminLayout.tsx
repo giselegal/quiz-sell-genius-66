@@ -1,49 +1,22 @@
 import React, { ReactNode } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from '../ui/button';
 import { AdminHeader } from './AdminHeader';
-import { ROUTES } from '../../utils/routes';
 
 interface AdminLayoutProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 /**
  * Layout básico para componentes administrativos que não usam o novo AdminDashboard
  * Este componente será gradualmente descontinuado conforme migramos tudo para o novo dashboard
  */
-const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = () => {
   const { user } = useAuth();
-  const location = useLocation();
-  const currentTab = location.pathname.split('/').pop() || 'dashboard';
-
-  const navigationItems = [
-    {
-      name: 'Dashboard',
-      href: '/admin',
-      icon: null,
-      description: 'Visão geral do sistema'
-    },
-    {
-      name: 'Editor',
-      href: ROUTES.ADMIN.EDITOR,
-      icon: null,
-      description: 'Editor de quizzes e páginas'
-    },
-    {
-      name: 'Resultados',
-      href: '/resultado',
-      icon: null,
-      description: 'Visualizar resultados do quiz'
-    },
-    {
-      name: 'Sair',
-      href: '/logout',
-      icon: null,
-      description: 'Sair da sua conta'
-    }
-  ];
+  const pathname = usePathname();
+  const currentTab = pathname.split('/').pop() || 'dashboard';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F7]">
@@ -51,15 +24,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       
       <div className="p-6">
         <div className="mb-8 flex gap-4">
-          {navigationItems.map((item) => (
-            <Button
-              key={item.name}
-              variant={location.pathname === item.href ? 'default' : 'outline'}
-              asChild
-            >
-              <Link to={item.href}>{item.name}</Link>
-            </Button>
-          ))}
+          <Button variant={location.pathname === '/admin' ? 'default' : 'outline'} asChild>
+            <Link to="/admin">Dashboard</Link>
+          </Button>
+          <Button variant={location.pathname.includes('/admin/editor') ? 'default' : 'outline'} asChild>
+            <Link to="/admin/editor">Editor Visual</Link>
+          </Button>
         </div>
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -101,8 +71,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           )}
         </div>
 
-        {/* Se não, o React Router renderiza o componente da rota correspondente */}
-        <Outlet />
+        {/* Next.js App Router renderiza automaticamente os children */}
+        {/* Outlet não é necessário no Next.js */}
       </div>
     </div>
   );

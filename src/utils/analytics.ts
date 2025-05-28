@@ -359,6 +359,39 @@ export const clearAnalyticsData = () => {
 };
 
 /**
+ * Rastreia visualizações de página (PageView)
+ * @param url URL da página atual (opcional)
+ * @param additionalData Dados adicionais para o evento (opcional)
+ */
+export const trackPageView = (url?: string, additionalData: Record<string, any> = {}) => {
+  if (typeof window === 'undefined' || !window.fbq) {
+    console.warn('Facebook Pixel não inicializado ao tentar rastrear pageview');
+    return;
+  }
+
+  const eventData = addUtmParamsToEvent({
+    page_url: url || window.location.pathname,
+    page_title: document.title,
+    funnel: getCurrentFunnelConfig().funnelName,
+    ...additionalData
+  });
+
+  // Standard PageView tracking
+  window.fbq('track', 'PageView', eventData);
+  
+  // Track in Google Analytics if available
+  if (window.gtag) {
+    window.gtag('event', 'page_view', {
+      page_path: url || window.location.pathname,
+      page_title: document.title,
+      ...additionalData
+    });
+  }
+
+  console.log(`PageView tracked: ${url || window.location.pathname}`);
+};
+
+/**
  * Testa a funcionalidade do Facebook Pixel
  */
 export const testFacebookPixel = () => {

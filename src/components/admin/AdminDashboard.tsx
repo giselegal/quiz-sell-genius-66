@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Edit, Settings, Users, BarChart, Eye, Palette } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {

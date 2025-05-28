@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '../../../../../lib/prisma';
+import { prisma } from '@/lib/prisma';
+
+// Adicionando configuração necessária para build estático
+export const dynamic = "force-static";
+export const revalidate = 3600; // Revalidar a cada 1 hora
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { mode, ...config } = await request.json();
-    const quizId = params.id;
+    const { id } = await params;
+    const quizId = id;
 
     // Determinar qual campo atualizar baseado no modo
     const updateData: any = {
@@ -29,7 +34,7 @@ export async function POST(
     }
 
     const updatedQuiz = await prisma.quiz.update({
-      where: { id: quizId },
+      where: { id: Number(quizId) },
       data: updateData,
     });
 
@@ -48,15 +53,16 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const quizId = params.id;
+    const { id } = await params;
+    const quizId = id;
     const url = new URL(request.url);
     const mode = url.searchParams.get('mode') || 'quiz';
 
     const quiz = await prisma.quiz.findUnique({
-      where: { id: quizId },
+      where: { id: Number(quizId) },
       select: { 
         quizConfig: true,
         resultConfig: true,

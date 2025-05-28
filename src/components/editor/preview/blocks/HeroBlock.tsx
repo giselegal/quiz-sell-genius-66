@@ -22,7 +22,7 @@ export const HeroBlock: React.FC<HeroBlockProps> = ({ content, onClick }) => {
           {content.quote && (
             <>
               <blockquote className="italic text-lg text-[#6b4e43]">
-                "{content.quote}"
+                &ldquo;{content.quote}&rdquo;
               </blockquote>
               {content.quoteAuthor && (
                 <span className="not-italic font-medium block mt-2">

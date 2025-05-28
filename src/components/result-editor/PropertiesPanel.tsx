@@ -24,9 +24,6 @@ import {
   Image as ImageIcon,
   MousePointer,
   Layout,
-  Spacing,
-  Border,
-  Shadow,
   Link,
   Eye,
   EyeOff
@@ -149,7 +146,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     <div className="space-y-4">
       <div>
         <Label className="flex items-center gap-2 mb-2">
-          <Spacing className="w-4 h-4" />
           Margens e Padding
         </Label>
         <div className="grid grid-cols-2 gap-2">
@@ -173,52 +169,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               className="h-8"
             />
           </div>
-        </div>
-      </div>
-
-      <div>
-        <Label className="flex items-center gap-2 mb-2">
-          <Border className="w-4 h-4" />
-          Bordas
-        </Label>
-        <div className="space-y-2">
-          <div>
-            <Label className="text-xs">Raio da Borda</Label>
-            <Slider
-              value={[selectedItem.props.borderRadius || 0]}
-              onValueChange={([value]) => updateProp('borderRadius', value)}
-              min={0}
-              max={50}
-              step={1}
-              className="mt-1"
-            />
-            <span className="text-xs text-gray-500">{selectedItem.props.borderRadius || 0}px</span>
-          </div>
-          
-          <div>
-            <Label className="text-xs">Cor da Borda</Label>
-            <Input
-              type="color"
-              value={selectedItem.props.borderColor || '#e5e7eb'}
-              onChange={(e) => updateProp('borderColor', e.target.value)}
-              className="h-8"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <Label className="flex items-center gap-2 mb-2">
-          <Shadow className="w-4 h-4" />
-          Sombra
-        </Label>
-        <div className="flex items-center justify-between">
-          <Label htmlFor="shadow" className="text-sm">Adicionar Sombra</Label>
-          <Switch
-            id="shadow"
-            checked={selectedItem.props.shadow || false}
-            onCheckedChange={(checked) => updateProp('shadow', checked)}
-          />
         </div>
       </div>
     </div>

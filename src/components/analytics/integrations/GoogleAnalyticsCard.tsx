@@ -68,7 +68,7 @@ export const GoogleAnalyticsCard: React.FC<GoogleAnalyticsCardProps> = ({
             onChange={(e) => setGoogleAnalyticsId(e.target.value)}
           />
           <p className="text-sm text-muted-foreground">
-            Found in your Google Analytics property settings under "Data Streams"
+            Found in your Google Analytics property settings under &ldquo;Data Streams&rdquo;
           </p>
         </div>
         

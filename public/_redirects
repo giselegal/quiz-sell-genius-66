@@ -1,3 +1,4 @@
+
 /* /index.html 200
 
 # Redirecionamentos específicos para o funil de vendas
@@ -13,10 +14,3 @@
 /home/*                     /index.html                 200
 /quiz-descubra-seu-estilo/* /index.html                 200
 /admin/*                    /index.html                 200
-
-# Redirecionar todas as rotas não encontradas para index.html para suportar SPA
-/*    /index.html   200
-
-# Garantir que arquivos estáticos sejam servidos corretamente
-/assets/*  /assets/:splat  200
-/favicon.ico  /favicon.ico  200
