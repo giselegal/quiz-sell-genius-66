@@ -31,10 +31,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
 export default function LeadsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-
   const leads = [
     {
       id: 1,
@@ -67,7 +65,7 @@ export default function LeadsPage() {
       score: 68,
       quality: 'warm',
       createdAt: '2024-01-18',
-      converted: true
+      converted: false
     },
     {
       id: 4,
@@ -81,7 +79,6 @@ export default function LeadsPage() {
       converted: false
     }
   ];
-
   const getQualityBadge = (quality: string) => {
     const styles = {
       hot: 'bg-red-100 text-red-800 border-red-200',
@@ -90,14 +87,12 @@ export default function LeadsPage() {
     };
     
     const labels = { hot: 'Quente', warm: 'Morno', cold: 'Frio' };
-    
     return (
       <Badge variant="outline" className={styles[quality as keyof typeof styles]}>
         {labels[quality as keyof typeof labels]}
       </Badge>
     );
   };
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -108,7 +103,6 @@ export default function LeadsPage() {
             Gerencie todos os leads capturados pelos seus quizzes
           </p>
         </div>
-        
         <div className="flex gap-3">
           <Button variant="outline" className="border-[#B89B7A] text-[#432818]">
             <Filter className="w-4 h-4 mr-2" />
@@ -120,7 +114,6 @@ export default function LeadsPage() {
           </Button>
         </div>
       </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="border-[#D4C4A0]">
@@ -136,7 +129,6 @@ export default function LeadsPage() {
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-[#D4C4A0]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -150,7 +142,6 @@ export default function LeadsPage() {
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-[#D4C4A0]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -164,7 +155,6 @@ export default function LeadsPage() {
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-[#D4C4A0]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -179,7 +169,6 @@ export default function LeadsPage() {
           </CardContent>
         </Card>
       </div>
-
       {/* Leads Table */}
       <Card className="border-[#D4C4A0]">
         <CardHeader>
@@ -196,7 +185,6 @@ export default function LeadsPage() {
             </div>
           </div>
         </CardHeader>
-        
         <CardContent>
           <Table>
             <TableHeader>

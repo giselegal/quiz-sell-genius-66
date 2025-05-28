@@ -1,3 +1,4 @@
+
 import { hotmart } from '../../utils/hotmartIntegration';
 
 // Função para processar webhook da Hotmart (simulação para frontend)
@@ -11,10 +12,8 @@ export async function handleHotmartWebhook(webhookData: any): Promise<boolean> {
     
     // Processar webhook
     await hotmart.processWebhook(webhookData);
-
     console.log('Webhook processado com sucesso:', webhookData.event);
     return true;
-
   } catch (error) {
     console.error('Erro ao processar webhook Hotmart:', error);
     return false;
@@ -49,6 +48,6 @@ export function simulateHotmartWebhook(eventType: string, productData: any) {
       custom_fields: productData.customFields || {}
     }
   };
-
+  
   return handleHotmartWebhook(mockWebhookData);
 }

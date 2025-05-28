@@ -70,5 +70,4 @@ export const imageBank: ImageBank = {
 
 // Re-export BankImage type so it can be imported from this file
 export type { BankImage };
-
 export default imageBank;

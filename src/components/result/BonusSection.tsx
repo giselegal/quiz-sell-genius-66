@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Gift, Star } from 'lucide-react';
@@ -11,7 +12,7 @@ const BonusSection: React.FC = () => {
     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp",
     { quality: 95, format: 'webp' }
   );
-
+  
   // Criar imagem otimizada para o segundo bônus
   const bonus2ImageUrl = optimizeCloudinaryUrl(
     "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp",
@@ -27,7 +28,6 @@ const BonusSection: React.FC = () => {
         Além do guia principal, você receberá estas ferramentas complementares para potencializar sua jornada de transformação:
       </p>
       <div className="elegant-divider w-32 mx-auto mt-0 mb-6"></div>
-
       <div className="max-w-4xl mx-auto">
         <div className="grid md:grid-cols-2 gap-6">
           {/* Animated cards entrada */}
@@ -61,7 +61,6 @@ const BonusSection: React.FC = () => {
                   loading="lazy"
                   width={300}
                   height={420}
-                  sizes="(max-width: 768px) 45vw, 300px"
                 />
               </picture>
             </div>
@@ -101,7 +100,7 @@ const BonusSection: React.FC = () => {
                     ${optimizeCloudinaryUrl("https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp", { width: 400, quality: 95, format: 'webp' })} 400w,
                     ${optimizeCloudinaryUrl("https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp", { width: 600, quality: 95, format: 'webp' })} 600w
                   `}
-                  sizes="(max-width: 768px) 45vw, 300px"
+                  sizes="(max-width: 768px) 80vw, (max-width: 1024px) 60vw, 450px"
                   type="image/webp"
                 />
                 <ProgressiveImage 

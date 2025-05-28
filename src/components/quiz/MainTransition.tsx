@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
@@ -30,7 +31,7 @@ export const MainTransition: React.FC<MainTransitionProps> = ({
               Responda com <strong className="text-[#432818] not-italic">sinceridade</strong>. Isso é só entre você e a sua <strong className="text-[#432818] not-italic">nova versão</strong>.
             </p>
           </div>
-
+          
           <div className="flex justify-center mt-6">
             <Button 
               variant="default" 

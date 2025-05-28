@@ -1,9 +1,7 @@
-
 "use client";
 
 import React from "react";
 import { cn } from "@/lib/utils";
-
 interface AnimatedWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   show?: boolean;
@@ -12,7 +10,6 @@ interface AnimatedWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
   animation?: "fade" | "slide" | "scale" | "none";
   disableOnLowPerformance?: boolean;
 }
-
 // This component is simplified to avoid any flashing issues
 export const AnimatedWrapper = ({
   children,

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -35,8 +36,7 @@ export default function LoginPage() {
     }
 
     try {
-      login(name, email || undefined, password || undefined);
-      router.push('/admin');
+      login(name);
     } catch (err) {
       setError('Erro ao fazer login');
     }
@@ -44,9 +44,9 @@ export default function LoginPage() {
 
   const handleQuickLogin = (type: 'admin' | 'user') => {
     if (type === 'admin') {
-      login('Admin User', 'admin@sellgenius.com.br', '123456');
+      login('Admin User');
     } else {
-      login('Usuário Teste', 'usuario@teste.com', '123456');
+      login('Usuário Teste');
     }
     router.push('/admin');
   };
@@ -115,7 +115,6 @@ export default function LoginPage() {
                 required
               />
             </div>
-
             <div>
               <Label htmlFor="email" className="text-[#432818]">Email (opcional)</Label>
               <Input
@@ -127,7 +126,6 @@ export default function LoginPage() {
                 className="border-[#D4C4A0] focus:border-[#B89B7A] text-[#432818]"
               />
             </div>
-
             <div>
               <Label htmlFor="password" className="text-[#432818]">Senha (qualquer uma)</Label>
               <Input
@@ -139,7 +137,6 @@ export default function LoginPage() {
                 className="border-[#D4C4A0] focus:border-[#B89B7A] text-[#432818]"
               />
             </div>
-
             <Button 
               type="submit" 
               className="w-full bg-[#432818] hover:bg-[#5C3B2A] text-[#F5F2E9]"

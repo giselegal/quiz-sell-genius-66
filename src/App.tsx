@@ -5,21 +5,41 @@ import { Toaster } from './components/ui/toaster';
 import { ThemeProvider } from './components/theme-provider';
 
 // Lazy-loaded components
-const QuizFlow = loadable(() => import('./components/QuizFlow'), {
+const QuizIntroComponent = loadable(() => import('./components/QuizIntro'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando introdução ao quiz...</div>
+});
+
+const QuizPageComponent = loadable(() => import('./components/QuizPage'), {
   fallback: <div className="flex h-screen w-full items-center justify-center">Carregando quiz...</div>
 });
 
-const AdminLayout = loadable(() => import('./components/admin/AdminLayout'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando painel...</div>
-});
-
-const EditorPage = loadable(() => import('./components/admin/editor/EnhancedResultPageEditorPage'), {
-  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando editor...</div>
-});
-
-const ResultPage = loadable(() => import('./components/ResultPage'), {
+const ResultPageComponent = loadable(() => import('./pages/ResultPage'), {
   fallback: <div className="flex h-screen w-full items-center justify-center">Carregando resultados...</div>
 });
+
+const QuizOfferPageComponent = loadable(() => import('./pages/QuizOfferPage'), {
+  fallback: <div className="flex h-screen w-full items-center justify-center">Carregando oferta de quiz...</div>
+});
+
+const HomePage = () => {
+  const [activeComponent, setActiveComponent] = React.useState<'intro' | 'quiz'>('intro');
+  
+  const handleStartQuiz = () => {
+    setActiveComponent('quiz');
+  };
+  
+  return (
+    <div>
+      {activeComponent === 'intro' && (
+        <QuizIntroComponent onStartQuiz={handleStartQuiz} />
+      )}
+      
+      {activeComponent === 'quiz' && (
+        <QuizPageComponent />
+      )}
+    </div>
+  );
+};
 
 function App() {
   return (
@@ -28,25 +48,14 @@ function App() {
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Carregando...</div>}>
           <Routes>
             {/* Rota principal para o quiz */}
-            <Route path="/" element={<QuizFlow />} />
+            <Route path="/" element={<HomePage />} />
             
             {/* Rota para a página de resultados */}
-            <Route path="/resultado" element={<ResultPage />} />
-            <Route path="/resultado/:id" element={<ResultPage />} />
+            <Route path="/resultado" element={<ResultPageComponent />} />
+            <Route path="/resultado/:id" element={<ResultPageComponent />} />
 
-            {/* Rotas administrativas aninhadas */}
-            <Route path="/admin" element={<AdminLayout />}>
-              {/* Dashboard padrão do admin */}
-              <Route index element={
-                <div className="rounded-lg border bg-card p-6 shadow-sm">
-                  <h3 className="mb-4 text-lg font-medium">Bem-vindo ao Painel Admin</h3>
-                  <p className="mb-4 text-sm text-muted-foreground">Selecione uma opção no menu.</p>
-                </div>
-              } />
-              {/* Editor visual */}
-              <Route path="editor" element={<EditorPage />} />
-              <Route path="editor/:id" element={<EditorPage />} />
-            </Route>
+            {/* Rota para a página de oferta de quiz */}
+            <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPageComponent />} />
 
             {/* Rota de fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />

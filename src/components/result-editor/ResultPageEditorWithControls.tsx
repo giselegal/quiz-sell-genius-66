@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
@@ -22,21 +24,18 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const { config, updateConfig, saveConfig } = useQuizResultConfig(primaryStyle.category);
   
-  // Use our new autosave hook
   const { isSaving, lastSaved, saveNow } = useAutosave({
     data: config,
     onSave: saveConfig,
     interval: 5000,
-    enabled: !isPreviewMode // Only enable autosave when not in preview mode
+    enabled: !isPreviewMode
   });
 
   const handleConfigUpdate = (sectionKey: string, data: any) => {
     updateConfig(sectionKey, data);
-    // No need to call save here, autosave will handle it
   };
-  
+
   const togglePreviewMode = () => {
-    // If we're switching from edit to preview, save immediately
     if (!isPreviewMode) {
       saveNow();
     }
@@ -45,10 +44,9 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Barra de ferramentas do editor */}
       <div className="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-10">
         <div className="flex items-center gap-3">
-          <Link to="/resultado">
+          <Link href="/resultado">
             <Button variant="outline" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar
@@ -70,10 +68,7 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
             </div>
           )}
           
-          <Button
-            variant="outline"
-            onClick={togglePreviewMode}
-          >
+          <Button variant="outline" onClick={togglePreviewMode}>
             {isPreviewMode ? (
               <>
                 <EyeOff className="w-4 h-4 mr-2" />
@@ -98,16 +93,13 @@ export const ResultPageEditorWithControls: React.FC<ResultPageEditorWithControls
         </div>
       </div>
       
-      {/* Conteúdo da página */}
       <div className="flex-1">
         {isPreviewMode ? (
-          // Modo de visualização: mostra a página exatamente como o usuário verá
           <QuizResult 
             primaryStyle={primaryStyle} 
             secondaryStyles={secondaryStyles} 
           />
         ) : (
-          // Modo de edição: envolve cada seção com controles de edição
           <EditableComponent
             components={{
               primaryStyle,

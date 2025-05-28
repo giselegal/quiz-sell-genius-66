@@ -35,13 +35,10 @@ export function VisualEditor() {
 
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">
-      {/* Sidebar */}
       <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
         <ComponentsSidebar onComponentSelect={handleComponentSelect} />
       </ResizablePanel>
       <ResizableHandle withHandle />
-
-      {/* Preview */}
       <ResizablePanel defaultSize={55}>
         <PreviewPanel
           blocks={config.blocks}
@@ -50,11 +47,9 @@ export function VisualEditor() {
         />
       </ResizablePanel>
       <ResizableHandle withHandle />
-
-      {/* Properties */}
       <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
         <PropertiesPanel
-          selectedBlockId={selectedBlockId}
+          selectedBlock={config.blocks.find(block => block.id === selectedBlockId)}
           onClose={() => setSelectedBlockId(null)}
           onUpdate={handleUpdateBlock}
           onDelete={handleDeleteBlock}

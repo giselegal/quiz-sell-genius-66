@@ -17,12 +17,10 @@ import {
   ArrowDown,
   Activity
 } from 'lucide-react';
-
 export default function AdminDashboard() {
   const router = useRouter();
   
   // Removido o redirecionamento automático para permitir acesso ao dashboard
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -53,7 +51,6 @@ export default function AdminDashboard() {
           </Link>
         </div>
       </div>
-
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
@@ -87,7 +84,7 @@ export default function AdminDashboard() {
             change: '-5.2%',
             changeType: 'negative',
             icon: TrendingUp,
-            description: 'vs. ontem'
+            description: 'Receita do dia'
           }
         ].map((stat, index) => {
           const Icon = stat.icon;
@@ -119,7 +116,6 @@ export default function AdminDashboard() {
           );
         })}
       </div>
-
       {/* Quick Actions */}
       <div className="border border-[#D4C4A0] rounded-lg bg-white">
         <div className="p-6 border-b border-[#D4C4A0]">
@@ -187,7 +183,6 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
-
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Quizzes */}
@@ -260,52 +255,40 @@ export default function AdminDashboard() {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Performance Chart */}
-        <div className="border border-[#D4C4A0] rounded-lg bg-white">
-          <div className="p-6 border-b border-[#D4C4A0]">
+          {/* Performance Chart */}
+          <div className="p-6">
             <h2 className="text-xl font-bold text-[#432818]">Performance Semanal</h2>
             <p className="text-[#B89B7A] text-sm mt-1">Conversões dos últimos 7 dias</p>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {[
-                { day: 'Segunda', value: 85, conversions: 12 },
-                { day: 'Terça', value: 92, conversions: 15 },
-                { day: 'Quarta', value: 78, conversions: 9 },
-                { day: 'Quinta', value: 96, conversions: 18 },
-                { day: 'Sexta', value: 88, conversions: 14 },
-                { day: 'Sábado', value: 65, conversions: 7 },
-                { day: 'Domingo', value: 72, conversions: 8 }
-              ].map((data, index) => (
-                <div key={index} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-[#432818]">{data.day}</span>
-                    <span className="text-sm text-[#B89B7A]">{data.conversions} conversões</span>
-                  </div>
-                  <div className="w-full bg-[#F5F2E9] rounded-full h-2">
-                    <div 
-                      className="bg-[#B89B7A] h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${data.value}%` }}
-                    />
-                  </div>
+            {[
+              { day: 'Segunda', value: 85, conversions: 12 },
+              { day: 'Terça', value: 92, conversions: 15 },
+              { day: 'Quarta', value: 78, conversions: 9 },
+              { day: 'Quinta', value: 96, conversions: 18 },
+              { day: 'Sexta', value: 88, conversions: 14 },
+              { day: 'Sábado', value: 65, conversions: 7 },
+              { day: 'Domingo', value: 72, conversions: 8 }
+            ].map((data, index) => (
+              <div key={index} className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-[#432818]">{data.day}</span>
+                  <span className="text-sm text-[#B89B7A]">{data.conversions} conversões</span>
                 </div>
-              ))}
-            </div>
+                <div className="w-full bg-[#F5F2E9] rounded-full h-2">
+                  <div 
+                    className="bg-[#B89B7A] h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${data.value}%` }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-
-      {/* Activity Feed */}
-      <div className="border border-[#D4C4A0] rounded-lg bg-white">
-        <div className="p-6 border-b border-[#D4C4A0]">
+        {/* Activity Feed */}
+        <div>
           <h2 className="text-xl font-bold text-[#432818] flex items-center gap-2">
             <Activity className="w-5 h-5" />
             Atividade Recente
           </h2>
-        </div>
-        <div className="p-6">
           <div className="space-y-4">
             {[
               {
@@ -343,13 +326,13 @@ export default function AdminDashboard() {
                   <div className="p-2 rounded-full bg-gray-100">
                     <Icon className={`w-4 h-4 ${activity.color}`} />
                   </div>
-                  <div className="flex-1">
+                  <div>
                     <p className="font-medium text-[#432818] text-sm">{activity.action}</p>
                     <p className="text-xs text-[#B89B7A]">{activity.details}</p>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-[#B89B7A]">
-                    <Calendar className="w-3 h-3" />
-                    {activity.time}
+                    <div className="flex items-center gap-1 text-xs text-[#B89B7A]">
+                      <Calendar className="w-3 h-3" />
+                      {activity.time}
+                    </div>
                   </div>
                 </div>
               );

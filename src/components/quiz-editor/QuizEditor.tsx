@@ -1,3 +1,6 @@
+
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QuizEditorState, QUIZ_CATEGORIES, QuizCategory } from '@/types/quizEditor';
@@ -48,7 +51,6 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
         questions: initialTemplate.questions.filter(q => 
           q.id.includes(activeTab) || activeTab === 'clothingQuestions'
         ),
-        editingQuestionId: null
       }));
     }
   }, [activeTab, initialTemplate]);
@@ -80,13 +82,13 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
     const updatedQuestions = editorState.questions.map(q => 
       q.id === updatedQuestion.id ? updatedQuestion : q
     );
-    
+
     setEditorState(prevState => ({
       ...prevState,
       questions: updatedQuestions,
       editingQuestionId: null
     }));
-    
+
     // Atualizar todas as perguntas do template
     if (initialTemplate && onQuestionsUpdate) {
       const allQuestions = [...initialTemplate.questions];
@@ -97,10 +99,9 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
       } else {
         allQuestions.push(updatedQuestion);
       }
-      
       onQuestionsUpdate(allQuestions);
     }
-    
+
     toast({
       title: 'Pergunta salva com sucesso',
       description: 'As alterações foram salvas.',
@@ -115,13 +116,12 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
       questions: updatedQuestions,
       editingQuestionId: null
     }));
-    
-    // Atualizar todas as perguntas do template
+
     if (initialTemplate && onQuestionsUpdate) {
       const allQuestions = initialTemplate.questions.filter(q => q.id !== questionId);
       onQuestionsUpdate(allQuestions);
     }
-    
+
     toast({
       title: 'Pergunta removida',
       description: 'A pergunta foi removida com sucesso.',
@@ -234,7 +234,7 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
           </Button>
         </div>
       </div>
-      
+
       {/* Right side - Question editor */}
       <div className="flex-1 overflow-auto p-4">
         {isEditingQuestion ? (

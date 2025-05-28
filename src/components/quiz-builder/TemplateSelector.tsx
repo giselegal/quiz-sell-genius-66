@@ -1,3 +1,5 @@
+
+"use client";
 import React, { useState } from 'react';
 import { quizTemplates, QuizTemplate } from '@/data/quizTemplates';
 import { Button } from '@/components/ui/button';

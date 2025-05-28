@@ -1,7 +1,14 @@
+
 'use client';
 
-import ResultPage from '@/components/ResultPage';
+import dynamic from 'next/dynamic';
 
-export default function ResultadoPage() {
+// Dynamically load the ResultPage component
+const ResultPage = dynamic(
+  () => import('@/pages/ResultPage'),
+  { ssr: false }
+);
+
+export default function ResultPageWrapper() {
   return <ResultPage />;
 }

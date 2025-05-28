@@ -1,3 +1,5 @@
+
+"use client";
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '../../ui/button';
@@ -25,7 +27,7 @@ interface PageData {
 
 export default function EnhancedResultPageEditorPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [pageData, setPageData] = useState<PageData | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,9 +39,8 @@ export default function EnhancedResultPageEditorPage() {
     const fetchPageData = async () => {
       if (id) {
         try {
-          // Simulando dados de uma página existente
           const mockData: PageData = {
-            id: id,
+            id: id as string,
             title: 'Página de Resultado - ' + id,
             components: [
               {
@@ -79,7 +80,7 @@ export default function EnhancedResultPageEditorPage() {
     
     fetchPageData();
   }, [id]);
-  
+
   const saveToHistory = (newPageData: PageData) => {
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push(newPageData);
@@ -103,18 +104,14 @@ export default function EnhancedResultPageEditorPage() {
 
   const handleComponentsChange = (newComponents: Component[]) => {
     if (!pageData) return;
-    
     const newPageData = { ...pageData, components: newComponents };
     setPageData(newPageData);
     saveToHistory(newPageData);
   };
 
   const handleSave = async () => {
-    if (!pageData) return;
-    
     setIsSaving(true);
     try {
-      // Simulando salvamento - substitua pela chamada real da API
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
@@ -124,7 +121,7 @@ export default function EnhancedResultPageEditorPage() {
       
       if (!id) {
         const newId = Date.now().toString();
-        navigate(`/admin/editor/${newId}`);
+        router.push(`/admin/editor/${newId}`);
       }
     } catch (error) {
       console.error('Erro ao salvar página:', error);
@@ -148,7 +145,7 @@ export default function EnhancedResultPageEditorPage() {
       });
     }
   };
-  
+
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -159,12 +156,11 @@ export default function EnhancedResultPageEditorPage() {
       </div>
     );
   }
-  
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
       <AdminHeader title={`Editor Visual - ${pageData?.title || 'Nova Página'}`} />
       
-      {/* Toolbar */}
       <div className="flex items-center justify-between border-b bg-white px-4 py-2 shadow-sm">
         <div className="flex items-center gap-2">
           <Button
@@ -183,9 +179,6 @@ export default function EnhancedResultPageEditorPage() {
           >
             <Redo className="h-4 w-4" />
           </Button>
-        </div>
-
-        <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={handlePreview}>
             <Eye className="h-4 w-4 mr-2" />
             Visualizar
@@ -196,15 +189,13 @@ export default function EnhancedResultPageEditorPage() {
           </Button>
         </div>
       </div>
-      
+
       <div className="flex flex-1">
         <DndProvider backend={HTML5Backend}>
-          {/* Paleta de Componentes */}
           <div className="w-64 border-r bg-white shadow-sm">
             <ComponentPalette />
           </div>
           
-          {/* Canvas Principal */}
           <div className="flex-1 p-6">
             <EditorCanvas 
               components={pageData?.components || []}
@@ -213,8 +204,7 @@ export default function EnhancedResultPageEditorPage() {
               selectedComponent={selectedComponent}
             />
           </div>
-          
-          {/* Painel de Propriedades */}
+
           <div className="w-80 border-l bg-white shadow-sm">
             <PropertyPanel 
               selectedComponent={selectedComponent}
@@ -224,7 +214,6 @@ export default function EnhancedResultPageEditorPage() {
                 const updatedComponents = pageData.components.map(comp => 
                   comp.id === selectedComponent.id ? updatedComponent : comp
                 );
-                
                 handleComponentsChange(updatedComponents);
                 setSelectedComponent(updatedComponent);
               }}
@@ -232,18 +221,18 @@ export default function EnhancedResultPageEditorPage() {
           </div>
         </DndProvider>
       </div>
-      
-      {/* Footer fixo */}
+
       <div className="sticky bottom-0 flex justify-between border-t bg-white p-4 shadow-lg">
-        <Button variant="outline" onClick={() => navigate('/admin')}>
+        <Button variant="outline" onClick={() => router.push('/admin')}>
           Voltar ao Painel
         </Button>
         
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => navigate('/resultado')}>
+          <Button variant="outline" onClick={() => router.push('/resultado')}>
             Ver Página de Resultados
           </Button>
           <Button onClick={handleSave} disabled={isSaving}>
+            <Save className="h-4 w-4 mr-2" />
             {isSaving ? 'Salvando...' : 'Salvar Alterações'}
           </Button>
         </div>

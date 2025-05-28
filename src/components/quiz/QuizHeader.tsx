@@ -10,7 +10,6 @@ interface QuizHeaderProps {
   showingStrategicQuestions: boolean;
   currentStrategicQuestionIndex: number;
 }
-
 export const QuizHeader: React.FC<QuizHeaderProps> = ({
   userName,
   currentQuestionIndex,
@@ -19,11 +18,9 @@ export const QuizHeader: React.FC<QuizHeaderProps> = ({
   currentStrategicQuestionIndex,
 }) => {
   const totalNumberOfStrategicQuestions = strategicQuestions.length;
-
   const progressValue = showingStrategicQuestions
     ? Math.round(((totalQuestions + currentStrategicQuestionIndex + 1) / (totalQuestions + totalNumberOfStrategicQuestions)) * 100)
     : Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
-
   const currentStep = showingStrategicQuestions
     ? totalQuestions + currentStrategicQuestionIndex + 1
     : currentQuestionIndex + 1;
@@ -31,7 +28,6 @@ export const QuizHeader: React.FC<QuizHeaderProps> = ({
   const totalSteps = showingStrategicQuestions
     ? totalQuestions + totalNumberOfStrategicQuestions
     : totalQuestions;
-
   return (
     <>
       <Progress 

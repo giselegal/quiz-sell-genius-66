@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Save, Eye, RefreshCw, Palette } from 'lucide-react';
@@ -36,6 +37,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
             Modelos de Página
           </Button>
         )}
+        
         <Button
           variant="outline"
           size="sm"

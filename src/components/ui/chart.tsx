@@ -1,3 +1,6 @@
+
+"use client";
+
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
@@ -91,7 +94,8 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
                 .join("\n");
               
               return `${prefix} [data-chart=${id}] {\n${styleContent}\n}`;
-            })
+            }
+          )
           .join("\n"),
       }}
     />
@@ -126,6 +130,7 @@ const ChartTooltipContent = React.forwardRef<
       color,
       nameKey,
       labelKey,
+      ...props
     },
     ref
   ) => {
@@ -158,13 +163,13 @@ const ChartTooltipContent = React.forwardRef<
 
       return <div className={cn("font-medium", labelClassName)}>{value}</div>
     }, [
+      hideLabel,
       label,
       labelFormatter,
       payload,
-      hideLabel,
-      labelClassName,
       config,
       labelKey,
+      labelClassName,
     ])
 
     if (!active || !payload?.length) {
@@ -180,6 +185,7 @@ const ChartTooltipContent = React.forwardRef<
           "grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
           className
         )}
+        {...props}
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
@@ -264,10 +270,7 @@ const ChartLegendContent = React.forwardRef<
       nameKey?: string
     }
 >(
-  (
-    { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
-    ref
-  ) => {
+  ({ className, hideIcon = false, payload, verticalAlign = "bottom", nameKey, ...props }, ref) => {
     const { config } = useChart()
 
     if (!payload?.length) {
@@ -282,6 +285,7 @@ const ChartLegendContent = React.forwardRef<
           verticalAlign === "top" ? "pb-3" : "pt-3",
           className
         )}
+        {...props}
       >
         {payload.map((item) => {
           const key = `${nameKey || item.dataKey || "value"}`

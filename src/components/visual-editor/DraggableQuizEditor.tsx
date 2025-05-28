@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -46,30 +47,17 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       const dragIndex = item.index;
       const hoverIndex = index;
       
-      // Don't replace items with themselves
       if (dragIndex === hoverIndex && item.parentId === parentId) return;
-
-      // Determine rectangle on screen
+      
       const hoverBoundingRect = ref.current.getBoundingClientRect();
-      // Get vertical middle
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      // Determine mouse position
       const clientOffset = monitor.getClientOffset();
-      // Get pixels to the top
       const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
-
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
+      
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-
-      // Time to actually perform the action
+      
       moveItem(dragIndex, hoverIndex, type, parentId);
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
       item.index = hoverIndex;
     },
   });
@@ -195,7 +183,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
             </Button>
           </div>
         </div>
-
+        
         <AnimatePresence>
           {expanded && (
             <motion.div
@@ -214,7 +202,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
                     placeholder="Título da pergunta"
                   />
                 </div>
-
+                
                 <div className="mb-4 flex gap-4">
                   <div>
                     <label className="block text-sm text-[#8F7A6A] mb-1">Tipo de pergunta</label>
@@ -228,7 +216,6 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
                       <option value="both">Texto e Imagem</option>
                     </select>
                   </div>
-
                   <div>
                     <label className="block text-sm text-[#8F7A6A] mb-1">Seleção múltipla</label>
                     <select
@@ -266,16 +253,16 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
                       </DraggableItem>
                     ))}
                   </div>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => addOption(question.id)}
+                    className="w-full mt-2 border-dashed border-[#B89B7A]/40 text-[#8F7A6A] hover:bg-[#FAF9F7]"
+                  >
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Adicionar Opção
+                  </Button>
                 </div>
-
-                <Button
-                  variant="outline"
-                  onClick={() => addOption(question.id)}
-                  className="w-full mt-2 border-dashed border-[#B89B7A]/40 text-[#8F7A6A] hover:bg-[#FAF9F7]"
-                >
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  Adicionar Opção
-                </Button>
               </CardContent>
             </motion.div>
           )}
@@ -290,7 +277,10 @@ interface DraggableQuizEditorProps {
   onQuestionsChange: (questions: QuizQuestion[]) => void;
 }
 
-const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, onQuestionsChange }) => {
+const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ 
+  questions, 
+  onQuestionsChange 
+}) => {
   const [previewMode, setPreviewMode] = useState(false);
 
   const moveQuestion = useCallback(
@@ -455,7 +445,7 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
             </Button>
           </div>
         </div>
-
+        
         <div className="space-y-4">
           {questions.map((question, index) => (
             <QuestionBlock
@@ -474,7 +464,7 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
             />
           ))}
         </div>
-
+        
         <Button
           onClick={addQuestion}
           className="mt-6 bg-[#B89B7A] hover:bg-[#A38A69] text-white"

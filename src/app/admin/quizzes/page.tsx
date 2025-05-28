@@ -34,10 +34,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
 export default function QuizzesPage() {
   const [searchTerm, setSearchTerm] = useState('');
-
   const quizzes = [
     {
       id: 1,
@@ -84,7 +82,6 @@ export default function QuizzesPage() {
       thumbnail: 'https://via.placeholder.com/100x60'
     }
   ];
-
   const getStatusBadge = (status: string) => {
     const styles = {
       ativo: 'bg-green-100 text-green-800 border-green-200',
@@ -98,7 +95,6 @@ export default function QuizzesPage() {
       </Badge>
     );
   };
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -109,7 +105,6 @@ export default function QuizzesPage() {
             Gerencie todos os seus quizzes e acompanhe sua performance
           </p>
         </div>
-        
         <div className="flex gap-3">
           <Button variant="outline" className="border-[#B89B7A] text-[#432818]">
             <Filter className="w-4 h-4 mr-2" />
@@ -123,7 +118,6 @@ export default function QuizzesPage() {
           </Link>
         </div>
       </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="border-[#D4C4A0]">
@@ -139,7 +133,6 @@ export default function QuizzesPage() {
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-[#D4C4A0]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -153,7 +146,6 @@ export default function QuizzesPage() {
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-[#D4C4A0]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -167,7 +159,6 @@ export default function QuizzesPage() {
             </div>
           </CardContent>
         </Card>
-
         <Card className="border-[#D4C4A0]">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -182,7 +173,6 @@ export default function QuizzesPage() {
           </CardContent>
         </Card>
       </div>
-
       {/* Search and Filters */}
       <Card className="border-[#D4C4A0]">
         <CardHeader>
@@ -199,7 +189,6 @@ export default function QuizzesPage() {
             </div>
           </div>
         </CardHeader>
-        
         <CardContent>
           <Table>
             <TableHeader>

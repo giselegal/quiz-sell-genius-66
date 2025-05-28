@@ -1,3 +1,6 @@
+
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -13,7 +16,7 @@ const EditorSimples: React.FC = () => {
     fundo: '#fffaf7',
     texto: '#432818'
   });
-
+  
   const [texto, setTexto] = useState({
     titulo: 'Descubra Seu Estilo Único',
     subtitulo: 'Guia Personalizado',
@@ -22,7 +25,7 @@ const EditorSimples: React.FC = () => {
   });
 
   const salvar = () => {
-    localStorage.setItem('editorConfig', JSON.stringify({ cores, texto }));
+    safeLocalStorage.setItem('editorConfig', JSON.stringify({ cores, texto }));
     toast({
       title: "Salvo!",
       description: "Configurações foram salvas com sucesso.",
@@ -32,16 +35,13 @@ const EditorSimples: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Editor Visual Simples</h1>
           <p className="text-gray-600">Edite cores e textos em tempo real</p>
         </div>
-
+        
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Controles */}
           <div className="space-y-6">
-            {/* Cores */}
             <Card className="p-6">
               <div className="flex items-center mb-4">
                 <Palette className="h-5 w-5 mr-2 text-blue-600" />
@@ -59,59 +59,9 @@ const EditorSimples: React.FC = () => {
                       className="w-16"
                     />
                     <Input
+                      type="text"
                       value={cores.primaria}
                       onChange={(e) => setCores({...cores, primaria: e.target.value})}
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label>Cor Secundária</Label>
-                  <div className="flex gap-2 mt-1">
-                    <Input
-                      type="color"
-                      value={cores.secundaria}
-                      onChange={(e) => setCores({...cores, secundaria: e.target.value})}
-                      className="w-16"
-                    />
-                    <Input
-                      value={cores.secundaria}
-                      onChange={(e) => setCores({...cores, secundaria: e.target.value})}
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label>Cor de Fundo</Label>
-                  <div className="flex gap-2 mt-1">
-                    <Input
-                      type="color"
-                      value={cores.fundo}
-                      onChange={(e) => setCores({...cores, fundo: e.target.value})}
-                      className="w-16"
-                    />
-                    <Input
-                      value={cores.fundo}
-                      onChange={(e) => setCores({...cores, fundo: e.target.value})}
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label>Cor do Texto</Label>
-                  <div className="flex gap-2 mt-1">
-                    <Input
-                      type="color"
-                      value={cores.texto}
-                      onChange={(e) => setCores({...cores, texto: e.target.value})}
-                      className="w-16"
-                    />
-                    <Input
-                      value={cores.texto}
-                      onChange={(e) => setCores({...cores, texto: e.target.value})}
                       className="flex-1"
                     />
                   </div>
@@ -119,7 +69,6 @@ const EditorSimples: React.FC = () => {
               </div>
             </Card>
 
-            {/* Textos */}
             <Card className="p-6">
               <div className="flex items-center mb-4">
                 <Type className="h-5 w-5 mr-2 text-green-600" />
@@ -135,34 +84,6 @@ const EditorSimples: React.FC = () => {
                     className="mt-1"
                   />
                 </div>
-
-                <div>
-                  <Label>Subtítulo</Label>
-                  <Input
-                    value={texto.subtitulo}
-                    onChange={(e) => setTexto({...texto, subtitulo: e.target.value})}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label>Descrição</Label>
-                  <textarea
-                    value={texto.descricao}
-                    onChange={(e) => setTexto({...texto, descricao: e.target.value})}
-                    className="w-full p-2 border rounded-md mt-1"
-                    rows={3}
-                  />
-                </div>
-
-                <div>
-                  <Label>Texto do Botão</Label>
-                  <Input
-                    value={texto.botao}
-                    onChange={(e) => setTexto({...texto, botao: e.target.value})}
-                    className="mt-1"
-                  />
-                </div>
               </div>
             </Card>
 
@@ -172,11 +93,9 @@ const EditorSimples: React.FC = () => {
             </Button>
           </div>
 
-          {/* Preview */}
           <div className="lg:sticky lg:top-6">
             <Card className="p-6">
               <h2 className="text-xl font-semibold mb-4">Preview</h2>
-              
               <div 
                 className="p-6 rounded-lg"
                 style={{
@@ -195,17 +114,6 @@ const EditorSimples: React.FC = () => {
                 >
                   {texto.titulo}
                 </h1>
-                
-                <h2 
-                  className="text-2xl font-semibold mb-4"
-                  style={{ color: cores.secundaria }}
-                >
-                  {texto.subtitulo}
-                </h2>
-                
-                <p className="mb-6 text-lg">
-                  {texto.descricao}
-                </p>
                 
                 <button
                   className="px-6 py-3 rounded-lg text-white font-semibold"

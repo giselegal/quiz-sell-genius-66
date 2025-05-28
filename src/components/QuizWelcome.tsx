@@ -1,4 +1,7 @@
 
+"use client";
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
+
 import { useState } from 'react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
@@ -16,7 +19,7 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const handleStart = () => {
     if (name.trim()) {
       login(name.trim());
-      localStorage.setItem('userName', name.trim());
+      safeLocalStorage.setItem('userName', name.trim());
       onStart();
     }
   };

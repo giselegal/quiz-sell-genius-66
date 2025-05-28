@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { PlusCircle, Trash2, Upload } from 'lucide-react';
 import { Block } from '@/types/editor';
-import StyleEditor from '../style-editors/StyleEditor';
+import StyleEditor from '../StyleEditor';
 
 interface CarouselBlockEditorProps {
   block: Block;
@@ -48,7 +48,7 @@ const CarouselBlockEditor: React.FC<CarouselBlockEditorProps> = ({ block, onUpda
           />
           <Label htmlFor="autoPlay">Reprodução automática</Label>
         </div>
-        
+
         {content.autoPlay && (
           <div className="space-y-2">
             <Label htmlFor="interval">Intervalo (ms)</Label>
@@ -62,7 +62,7 @@ const CarouselBlockEditor: React.FC<CarouselBlockEditorProps> = ({ block, onUpda
             />
           </div>
         )}
-        
+
         <div className="flex items-center space-x-2">
           <Switch
             id="showArrows"
@@ -71,7 +71,7 @@ const CarouselBlockEditor: React.FC<CarouselBlockEditorProps> = ({ block, onUpda
           />
           <Label htmlFor="showArrows">Mostrar setas de navegação</Label>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Switch
             id="showDots"
@@ -97,7 +97,6 @@ const CarouselBlockEditor: React.FC<CarouselBlockEditorProps> = ({ block, onUpda
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor={`image-url-${index}`}>URL da imagem</Label>
               <div className="flex gap-2">
@@ -112,9 +111,6 @@ const CarouselBlockEditor: React.FC<CarouselBlockEditorProps> = ({ block, onUpda
                   <Upload className="h-4 w-4" />
                 </Button>
               </div>
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor={`image-alt-${index}`}>Texto alternativo</Label>
               <Input
                 id={`image-alt-${index}`}
@@ -122,9 +118,6 @@ const CarouselBlockEditor: React.FC<CarouselBlockEditorProps> = ({ block, onUpda
                 onChange={(e) => handleImageChange(index, 'alt', e.target.value)}
                 placeholder="Descrição da imagem"
               />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor={`image-caption-${index}`}>Legenda (opcional)</Label>
               <Input
                 id={`image-caption-${index}`}

@@ -22,10 +22,9 @@ export const useQuizComponents = () => {
         paddingX: '16',
         backgroundColor: '',
         textColor: '',
-        borderRadius: '0' // Changed from number to string to match the QuizComponentStyle interface
+        borderRadius: '0'
       }
     };
-
     setComponents(prev => [...prev, newComponent]);
     return newComponent.id;
   }, [components]);
@@ -50,7 +49,6 @@ export const useQuizComponents = () => {
       const filteredComponents = prev.filter(component => component.id !== id);
       
       const stageId = prev.find(c => c.id === id)?.stageId;
-      
       if (stageId) {
         return filteredComponents.map(component => {
           if (component.stageId === stageId) {
@@ -61,7 +59,6 @@ export const useQuizComponents = () => {
           return component;
         });
       }
-      
       return filteredComponents;
     });
   }, []);
@@ -74,22 +71,22 @@ export const useQuizComponents = () => {
       if (!draggedComponent || !targetComponent || draggedComponent.stageId !== targetComponent.stageId) {
         return prev;
       }
-      
+
       const stageComponents = prev.filter(c => c.stageId === draggedComponent.stageId);
       const draggedIndex = stageComponents.findIndex(c => c.id === draggedId);
       const targetIndex = stageComponents.findIndex(c => c.id === targetId);
-      
+
       if (draggedIndex === -1 || targetIndex === -1) return prev;
-      
+
       const newStageComponents = [...stageComponents];
       const [removedComponent] = newStageComponents.splice(draggedIndex, 1);
       newStageComponents.splice(targetIndex, 0, removedComponent);
-      
+
       const updatedStageComponents = newStageComponents.map((component, index) => ({
         ...component,
         order: index
       }));
-      
+
       return prev.map(component => {
         if (component.stageId === draggedComponent.stageId) {
           const updatedComponent = updatedStageComponents.find(c => c.id === component.id);

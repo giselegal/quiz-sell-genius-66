@@ -1,71 +1,58 @@
 
-import { supabase } from '@/integrations/supabase/client';
-import { QuizQuestion, StyleResult } from '@/types/quiz';
+export interface QuizResult {
+  style: string;
+  score: number;
+  answers: Record<string, string>;
+}
 
-export const fetchQuizQuestions = async (quizId: string) => {
-  const { data: questions, error } = await supabase
-    .from('quiz_questions')
-    .select(`
-      *,
-      question_options:question_options(*)
-    `)
-    .eq('quiz_id', quizId)
-    .eq('active', true)
-    .order('order_index', { ascending: true });
+export interface QuizData {
+  questions: any[];
+  results: any[];
+  config: any;
+}
 
-  if (error) throw error;
-  return questions;
-};
+export const quizService = {
+  calculateResult: (answers: Record<string, string>): QuizResult => {
+    // Simple calculation logic
+    const styles = ['Natural', 'Clássico', 'Contemporâneo', 'Elegante', 'Romântico', 'Sexy', 'Dramático', 'Criativo'];
+    
+    // For now, return a random style - in a real app this would be based on the answers
+    const randomStyle = styles[Math.floor(Math.random() * styles.length)];
+    
+    return {
+      style: randomStyle,
+      score: Math.floor(Math.random() * 100) + 1,
+      answers
+    };
+  },
 
-export const saveParticipant = async (name: string, email: string, quizId: string) => {
-  const { data, error } = await supabase
-    .from('quiz_participants')
-    .insert({
-      name,
-      email,
-      quiz_id: quizId,
-    })
-    .select()
-    .single();
+  saveResult: (result: QuizResult): void => {
+    try {
+      const existingResults = JSON.parse(localStorage.getItem('quiz-results') || '[]');
+      existingResults.push({
+        ...result,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('quiz-results', JSON.stringify(existingResults));
+    } catch (error) {
+      console.error('Error saving quiz result:', error);
+    }
+  },
 
-  if (error) throw error;
-  return data;
-};
+  getResults: (): QuizResult[] => {
+    try {
+      return JSON.parse(localStorage.getItem('quiz-results') || '[]');
+    } catch (error) {
+      console.error('Error getting quiz results:', error);
+      return [];
+    }
+  },
 
-export const saveAnswers = async (
-  participantId: string,
-  answers: Array<{ questionId: string; optionId: string; points: number }>
-) => {
-  const { error } = await supabase
-    .from('participant_answers')
-    .insert(
-      answers.map(answer => ({
-        participant_id: participantId,
-        question_id: answer.questionId,
-        option_id: answer.optionId,
-        points: answer.points,
-      }))
-    );
-
-  if (error) throw error;
-};
-
-export const saveResults = async (
-  participantId: string,
-  results: Array<StyleResult>
-) => {
-  const { error } = await supabase
-    .from('style_results')
-    .insert(
-      results.map((result, index) => ({
-        participant_id: participantId,
-        style_type_id: result.category,
-        points: result.score,
-        percentage: result.percentage,
-        is_primary: index === 0,
-        rank: index + 1,
-      }))
-    );
-
-  if (error) throw error;
+  getQuizData: (): QuizData => {
+    return {
+      questions: [],
+      results: [],
+      config: {}
+    };
+  }
 };

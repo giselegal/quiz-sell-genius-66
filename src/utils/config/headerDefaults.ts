@@ -1,6 +1,5 @@
 
 import { Section } from '@/types/resultPageConfig';
-
 export const createHeaderConfig = (): Section => ({
   visible: true,
   content: {

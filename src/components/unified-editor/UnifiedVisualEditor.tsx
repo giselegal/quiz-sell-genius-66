@@ -1,3 +1,6 @@
+
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -46,7 +49,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     // Update URL when tab changes
     router.push(`/admin/editor?tab=${activeTab}`);
   }, [activeTab, router, setActiveMode]);
-  
+
   const handleTabChange = (value: string) => {
     const newTab = value as EditorTab;
     setActiveTab(newTab);
@@ -61,7 +64,6 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     toast({
       title: "Salvando alterações",
       description: "Por favor, aguarde...",
-      duration: 2000,
     });
     
     try {
@@ -96,7 +98,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         viewportSize={viewportSize}
         onViewportSizeChange={setViewportSize}
       />
-      
+
       <Tabs
         value={activeTab}
         onValueChange={handleTabChange}
@@ -134,7 +136,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
           onApplyTemplate={loadTemplateForCurrentEditor}
         />
       )}
-      
+
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white rounded-lg p-6 flex items-center gap-3">

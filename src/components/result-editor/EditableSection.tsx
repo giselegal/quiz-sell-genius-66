@@ -40,7 +40,6 @@ const EditableSection: React.FC<EditableSectionProps> = ({
 }) => {
   if (!visible && isPreview) return null;
 
-  // Apply section styles
   const sectionStyle = {
     fontSize: style?.fontSize,
     fontWeight: style?.fontWeight,
@@ -95,7 +94,7 @@ const EditableSection: React.FC<EditableSectionProps> = ({
           {renderSectionContent(sectionPath, content, primaryStyle, secondaryStyles)}
         </div>
       </Card>
-      
+
       {!isPreview && (
         <div className="mt-2 text-xs text-[#8F7A6A]">
           {title}
@@ -105,7 +104,6 @@ const EditableSection: React.FC<EditableSectionProps> = ({
   );
 };
 
-// Helper function to render the appropriate content based on section type
 function renderSectionContent(
   sectionPath: string, 
   content: any, 
@@ -124,10 +122,10 @@ function renderSectionContent(
           customImage={content.customImage}
         />
       );
-    
+
     case 'secondaryStyles':
       return <SecondaryStylesSection secondaryStyles={secondaryStyles} />;
-    
+
     case 'offer.hero':
       return (
         <HeroSection 
@@ -136,7 +134,7 @@ function renderSectionContent(
           subtitle={content.subtitle}
         />
       );
-    
+
     case 'offer.pricing':
       return (
         <PricingSection 
@@ -146,9 +144,8 @@ function renderSectionContent(
           ctaUrl={content.ctaUrl}
         />
       );
-    
+
     default:
-      // If no specific renderer, show a generic representation
       return (
         <div className="text-center py-4 text-[#8F7A6A]">
           {content.title ? (

@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -6,14 +7,11 @@ import { Edit } from 'lucide-react';
 interface EditResultPageButtonProps {
   className?: string;
 }
-
 export const EditResultPageButton: React.FC<EditResultPageButtonProps> = ({ className }) => {
-  const navigate = useNavigate();
-
+  const router = useRouter();
   const handleClick = () => {
-    navigate('/resultado/editor');
+    router.push('/resultado/editor');
   };
-
   return (
     <Button
       onClick={handleClick}
@@ -26,5 +24,4 @@ export const EditResultPageButton: React.FC<EditResultPageButtonProps> = ({ clas
     </Button>
   );
 };
-
 export default EditResultPageButton;

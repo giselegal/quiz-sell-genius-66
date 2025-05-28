@@ -1,104 +1,41 @@
 
-
-export interface ImageAnalysis {
-  url: string;
-  element?: HTMLImageElement;
-  issues?: string[];
-  dimensions?: {
-    natural: { width: number; height: number },
-    display: { width: number; height: number }
-  };
-  downloadSize?: number;
-  format?: string | number;
-  quality?: string | number;
-  width?: string | number;
-  height?: string | number;
-  isOptimized?: boolean;
-  isResponsive?: boolean;
-  suggestedImprovements?: string[];
-  estimatedSizeReduction?: number;
-}
-
-export interface ImageDiagnosticResult {
-  url?: string;
-  issues?: string[];
-  recommendations?: string[];
-  optimizationPotential?: number;
-  summary?: {
-    totalImagesRendered: number;
-    totalImagesWithIssues: number;
-    totalDownloadedBytes: number;
-    estimatedPerformanceImpact: string;
-  };
-  detailedIssues?: ImageAnalysis[];
-}
+/**
+ * TypeScript type definitions for image utilities
+ */
 
 export interface FixBlurryImagesOptions {
   quality?: number;
-  format?: string;
+  format?: 'auto' | 'webp' | 'avif';
   skipOptimized?: boolean;
   forceOptimize?: boolean;
   debug?: boolean;
   placeholderColor?: string;
 }
 
-export interface PreloadImageDefinition {
-  src: string;
-  id: string;
-  alt: string;
-  category: string;
-  preloadPriority?: number;
-  tags?: string[];
-  quality?: number;
+export interface ImageDiagnosticResult {
+  totalImages: number;
+  optimizedImages: number;
+  blurryImages: number;
+  largeImages: number;
+  recommendations: string[];
 }
 
-export interface PreloadOptions {
-  quality?: number;
-  priority?: 'high' | 'low' | 'auto';
-  categories?: string[];
-  limit?: number;
-  timeout?: number;
-  batchSize?: number;
-  format?: string;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
-}
-
-// Additional missing types
-export interface ImageMetadata {
-  width: number;
-  height: number;
-  format: string;
-  size: number;
+export interface ImageMetrics {
   url: string;
-  alt?: string;
+  naturalWidth: number;
+  naturalHeight: number;
+  displayWidth: number;
+  displayHeight: number;
+  isOptimized: boolean;
+  isBlurry: boolean;
+  fileSize?: number;
 }
 
-export interface ImageCacheEntry {
-  url: string;
-  metadata: ImageMetadata;
-  timestamp: number;
-  blob?: Blob;
-  loadStatus?: 'loading' | 'loaded' | 'error';
-  lastAccessed?: number;
-}
-
-export interface ImageSettings {
-  quality: number;
-  format: string;
+export interface OptimizationOptions {
   width?: number;
   height?: number;
-  responsive?: boolean;
-  crop?: string;
-}
-
-export interface ImageOptimizationOptions {
   quality?: number;
-  format?: string;
-  width?: number;
-  height?: number;
-  progressive?: boolean;
-  lossless?: boolean;
-  crop?: string;
+  format?: 'auto' | 'webp' | 'avif' | 'jpg' | 'png';
+  crop?: 'fill' | 'fit' | 'limit';
+  dpr?: number;
 }
-

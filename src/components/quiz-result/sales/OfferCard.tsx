@@ -1,127 +1,90 @@
 
-import React, { useState } from 'react';
-import { StyleResult } from '@/types/quiz';
-import { Card } from '@/components/ui/card';
+"use client";
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart } from 'lucide-react';
-import BenefitList from './BenefitList';
-import Testimonials from './Testimonials';
-import Guarantee from './Guarantee';
-import Logo from '../../ui/logo';
-import { OfferContent } from '@/types/resultPageConfig';
-import { useUtmParameters } from '@/hooks/useUtmParameters';
-import BuildInfo from '@/components/BuildInfo';
-import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+import { Check } from 'lucide-react';
 
 interface OfferCardProps {
-  primaryStyle: StyleResult;
-  config?: OfferContent;
+  title: string;
+  description: string;
+  originalPrice: number;
+  discountedPrice: number;
+  features: string[];
+  ctaText?: string;
+  ctaUrl?: string;
+  className?: string;
 }
 
-const OfferCard: React.FC<OfferCardProps> = ({ primaryStyle, config = {} }) => {
-  const defaultConfig = {
-    title: "VOCÊ DESCOBRIU SEU ESTILO",
-    subtitle: "Agora é hora de aplicar com clareza — e se vestir de você",
-    price: "39,00",
-    regularPrice: "175,00",
-    ctaText: "Quero meu Guia + Bônus por R$39,00",
-    ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
-    heroImage: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
-    heroImage2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
-  };
-
-  const finalConfig = {
-    ...defaultConfig,
-    ...config
-  };
-
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
-  
-  // Use UTM parameters hook
-  const { addUtmToUrl } = useUtmParameters();
-
-  // Update the CTA URL handler to include UTM parameters
-  const handleCTAClick = () => {
-    // Add UTM parameters to the CTA URL
-    const urlWithUtm = addUtmToUrl(finalConfig.ctaUrl);
-    window.location.href = urlWithUtm;
-  };
-
-  const globalStyles = {
-    backgroundColor: '#fffaf7',
-    textColor: '#432818',
-    fontFamily: 'inherit'
-  };
+const OfferCard: React.FC<OfferCardProps> = ({
+  title,
+  description,
+  originalPrice,
+  discountedPrice,
+  features,
+  ctaText = "Garantir Minha Consultoria",
+  ctaUrl = "#",
+  className = ""
+}) => {
+  const discount = Math.round(((originalPrice - discountedPrice) / originalPrice) * 100);
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-      color: globalStyles.textColor || '#432818',
-      fontFamily: globalStyles.fontFamily || 'inherit'
-    }}>
-      <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-        <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-        <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-        <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
-        <p className="text-sm text-[#432818] mt-2">
-          ou <strong>4x de R$ 10,86</strong> no cartão
-        </p>
-      </div>
-
-      <div className="text-center mt-6">
-        <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
-          background: 'linear-gradient(to right, #4CAF50, #45a049)',
-          boxShadow: '0 4px 14px rgba(76, 175, 80, 0.4)'
-        }}>
-          <span className="flex items-center justify-center gap-2">
-            <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-            Garantir Meu Guia + Bônus Especiais
-          </span>
-        </Button>
-      </div>
-
-      <div className="mt-4">
-        <SecurePurchaseElement />
-      </div>
-
-      <Card>
-        <div className="p-4">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className={className}
+    >
+      <Card className="relative overflow-hidden border-2 border-[#B89B7A] shadow-xl">
+        {discount > 0 && (
+          <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+            -{discount}%
+          </div>
+        )}
+        
+        <CardHeader className="text-center bg-[#FAF9F7]">
+          <CardTitle className="text-2xl font-playfair text-[#432818]">
+            {title}
+          </CardTitle>
+          <CardDescription className="text-[#8F7A6A]">
+            {description}
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent className="pt-6">
+          <div className="text-center mb-6">
+            {originalPrice > discountedPrice && (
+              <div className="text-lg text-gray-500 line-through mb-2">
+                De R$ {originalPrice.toFixed(2)}
+              </div>
+            )}
+            <div className="text-4xl font-bold text-[#B89B7A]">
+              R$ {discountedPrice.toFixed(2)}
+            </div>
+          </div>
+          
+          <div className="space-y-3">
+            {features.map((feature, index) => (
+              <div key={index} className="flex items-start space-x-3">
+                <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                <span className="text-[#432818]">{feature}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+        
+        <CardFooter>
           <Button 
-            className="w-full bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-6 rounded-md text-lg transition-colors duration-300"
-            onClick={handleCTAClick}
+            className="w-full bg-[#B89B7A] hover:bg-[#A38A69] text-white py-4 text-lg font-semibold"
+            onClick={() => window.open(ctaUrl, '_blank')}
           >
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            {finalConfig.ctaText}
+            {ctaText}
           </Button>
-        </div>
+        </CardFooter>
       </Card>
-
-      <BenefitList />
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
-          alt="Mockup celular peças-chave por dentro"
-          className="w-full rounded-lg"
-        />
-        <img
-          src={finalConfig.heroImage2}
-          alt="Foto Gisele Galvão"
-          className="w-full rounded-lg"
-        />
-      </div>
-
-      <img
-        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
-        alt="Imagem adicional bônus"
-        className="w-full rounded-lg"
-        onError={(e) => e.currentTarget.style.display='none'}
-      />
-
-      <Testimonials />
-      <Guarantee />
-      <BuildInfo />
-    </div>
+    </motion.div>
   );
 };
 

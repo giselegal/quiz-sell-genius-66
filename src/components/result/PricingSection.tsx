@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck } from 'lucide-react';
-
 interface PricingSectionProps {
   regularPrice: number;
   salePrice: number;
@@ -14,7 +13,6 @@ interface PricingSectionProps {
   ctaUrl: string;
   guaranteeText?: string;
 }
-
 export const PricingSection: React.FC<PricingSectionProps> = ({
   regularPrice,
   salePrice,
@@ -48,7 +46,6 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
           >
             {ctaText}
           </Button>
-          
           {guaranteeText && (
             <div className="mt-6 flex items-center justify-center gap-2 text-[#8F7A6A]">
               <ShieldCheck className="h-5 w-5" />

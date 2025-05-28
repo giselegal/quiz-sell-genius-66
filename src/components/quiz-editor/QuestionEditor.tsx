@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
@@ -100,7 +101,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
       });
       return;
     }
-    
+
     if (editedQuestion.options.length < 2) {
       toast({
         title: "Opções insuficientes",
@@ -109,7 +110,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
       });
       return;
     }
-    
+
     onSave(editedQuestion);
   };
 
@@ -179,7 +180,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
           </div>
           
           <Separator />
-          
+
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">Opções</h3>
@@ -193,7 +194,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                 Adicionar Opção
               </Button>
             </div>
-            
+
             <div className="space-y-4">
               {editedQuestion.options.map((option, index) => (
                 <QuestionOptionEditor
@@ -205,7 +206,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                   index={index}
                 />
               ))}
-              
+
               {editedQuestion.options.length === 0 && (
                 <div className="text-center p-4 border border-dashed rounded-md">
                   <p className="text-gray-500">Nenhuma opção adicionada</p>
@@ -223,7 +224,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
             </div>
           </div>
         </CardContent>
-        
+
         <CardFooter className="flex justify-between">
           <div className="flex gap-2">
             <Button type="button" variant="outline" onClick={onCancel}>
@@ -254,7 +255,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
               </AlertDialogContent>
             </AlertDialog>
           </div>
-          
+
           <Button type="submit" className="bg-[#B89B7A] hover:bg-[#A38A69]">
             <Save className="w-4 h-4 mr-2" />
             Salvar Pergunta

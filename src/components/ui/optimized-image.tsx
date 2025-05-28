@@ -1,8 +1,15 @@
+"use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { optimizeCloudinaryUrl, getResponsiveImageSources, getLowQualityPlaceholder } from '@/utils/imageUtils';
+import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
 import { getImageMetadata, isImagePreloaded, getOptimizedImage } from '@/utils/imageManager';
+
+export interface ImageOptimizationOptions {
+  quality?: number;
+  height?: number;
+  width?: number;
+}
 
 interface OptimizedImageProps {
   src: string;
@@ -45,51 +52,43 @@ export const OptimizedImage = ({
   // Obter metadados da imagem do banco de imagens
   const imageMetadata = useMemo(() => src ? getImageMetadata(src) : undefined, [src]);
 
-  // Gerar placeholders e URLs otimizadas apenas uma vez
+  // Gerar placeholder manualmente (blur de baixa qualidade)
   const placeholderSrc = useMemo(() => {
     if (!src) return '';
-    return getLowQualityPlaceholder(src);
+    // Gera uma versão extremamente pequena para efeito blur
+    return getOptimizedImage(src, { width: 16, quality: 10 });
   }, [src]);
 
   // Otimizar URLs do Cloudinary automaticamente
   const optimizedSrc = useMemo(() => {
-    if (!src) return '';
-    
-    // Usar metadados width/height se disponíveis e não substituídos
-    const imgWidth = width || (imageMetadata?.width || undefined);
-    const imgHeight = height || (imageMetadata?.height || undefined);
-    
+    // Garante que width e height sejam números ou undefined
+    const imgWidth = typeof width === 'number' && !isNaN(width)
+      ? width
+      : (typeof imageMetadata?.width === 'number' && !isNaN(imageMetadata.width) ? imageMetadata.width : undefined);
+    const imgHeight = typeof height === 'number' && !isNaN(height)
+      ? height
+      : (typeof imageMetadata?.height === 'number' && !isNaN(imageMetadata.height) ? imageMetadata.height : undefined);
     return getOptimizedImage(src, {
-      quality: quality,
-      format: 'auto',
       width: imgWidth,
-      height: imgHeight
+      height: imgHeight,
+      quality
     });
   }, [src, width, height, imageMetadata, quality]);
 
-  // Obter atributos de imagem responsiva se necessário
-  const responsiveImageProps = useMemo(() => {
-    if (!src) return { srcSet: '', sizes: '' };
-    if (width && width > 300) {
-      return getResponsiveImageSources(src, [width/2, width, width*1.5]);
-    }
-    return { srcSet: '', sizes: '' };
-  }, [src, width]);
+  // Responsivo: não implementado sem função utilitária
+  const responsiveImageProps = { srcSet: '', sizes: '' };
 
   // Para imagens prioritárias, verificamos se já estão pré-carregadas
   useEffect(() => {
-    // Redefine estados quando src muda
     setLoaded(false);
     setBlurredLoaded(false);
     setError(false);
-    
     if (src && priority) {
       if (isImagePreloaded(src)) {
         setLoaded(true);
         onLoad?.();
       } else {
-        // Caso contrário, carrega-a agora
-        const img = new Image();
+        const img = new window.Image();
         img.src = optimizedSrc;
         img.onload = () => {
           setLoaded(true);
@@ -97,19 +96,16 @@ export const OptimizedImage = ({
         };
         img.onerror = () => setError(true);
       }
-
-      // Sempre carrega a versão desfocada para transições mais suaves
-      const blurImg = new Image();
-      blurImg.src = placeholderSrc;
-      blurImg.onload = () => setBlurredLoaded(true);
+      setBlurredLoaded(true);
     }
   }, [optimizedSrc, placeholderSrc, priority, src, onLoad]);
 
-  // Determina a proporção de aspecto se width e height forem fornecidos
-  const aspectRatio = width && height ? `${width} / ${height}` : undefined;
-  
+  const aspectRatio = (typeof width === 'number' && typeof height === 'number' && width > 0 && height > 0)
+    ? `${width} / ${height}`
+    : undefined;
+
   return (
-    <div 
+    <div
       className={cn(
         "relative overflow-hidden",
         className
@@ -117,52 +113,37 @@ export const OptimizedImage = ({
       style={{
         aspectRatio,
         ...style
-      }} 
+      }}
     >
       {!loaded && !error && (
         <>
-          {/* Imagem de baixa qualidade como placeholder */}
-          {blurredLoaded && (
-            <img 
-              src={placeholderSrc} 
-              alt="" 
-              width={width} 
-              height={height} 
-              className={cn(
-                "absolute inset-0 w-full h-full",
-                objectFit === 'cover' && "object-cover",
-                objectFit === 'contain' && "object-contain",
-                objectFit === 'fill' && "object-fill",
-                objectFit === 'none' && "object-none",
-                objectFit === 'scale-down' && "object-scale-down",
-                "blur-sm scale-105" // Reduzi o blur para melhorar a percepção de qualidade
-              )}
+          {/* Placeholder de carregamento */}
+          {placeholderSrc && (
+            <img
+              src={placeholderSrc}
+              alt=""
               aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover blur-lg scale-105 transition-opacity duration-300"
+              style={{ backgroundColor: placeholderColor }}
             />
           )}
-          
-          {/* Efeito de carregamento */}
-          <div 
-            className="absolute inset-0 animate-pulse" 
+          <div
+            className="absolute inset-0 animate-pulse"
             style={{ backgroundColor: placeholderColor }}
           />
         </>
       )}
-      
-      <img 
-        src={optimizedSrc} 
-        alt={imageMetadata?.alt || alt}  // Usa metadados alt se disponíveis
-        width={width} 
-        height={height}
+      <img
+        src={optimizedSrc}
+        alt={imageMetadata?.alt || alt}
+        width={typeof width === 'number' && !isNaN(width) ? width : undefined}
+        height={typeof height === 'number' && !isNaN(height) ? height : undefined}
         loading={priority ? "eager" : "lazy"}
         decoding={priority ? "sync" : "async"}
         fetchPriority={priority ? "high" : "auto"}
         srcSet={responsiveImageProps.srcSet || undefined}
         sizes={responsiveImageProps.sizes || undefined}
-        onLoad={() => {
-          setLoaded(true);
-          onLoad?.();
-        }}
+        onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         className={cn(
           "w-full h-full transition-opacity duration-300",
@@ -175,7 +156,6 @@ export const OptimizedImage = ({
           objectFit === 'scale-down' && "object-scale-down"
         )}
       />
-      
       {error && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded">
           <span className="text-sm text-gray-500">Imagem não disponível</span>

@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -54,8 +56,8 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
     e.preventDefault();
     e.stopPropagation();
     
-    if (window.ctaClickProcessing) return;
-    window.ctaClickProcessing = true;
+    if ((window as any).ctaClickProcessing) return;
+    (window as any).ctaClickProcessing = true;
     
     trackButtonClick('checkout_button', 'Enhanced Pricing CTA', 'pricing_section');
     
@@ -66,7 +68,7 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
     }
     
     setTimeout(() => {
-      window.ctaClickProcessing = false;
+      (window as any).ctaClickProcessing = false;
     }, 1000);
   };
 
@@ -83,7 +85,6 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
         <div className="inline-flex items-center gap-3 mb-6">
           <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
           <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
-          <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
         </div>
         
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-[#432818] mb-4">
@@ -98,7 +99,6 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
         transition={{ duration: 0.7 }}
         className="max-w-4xl mx-auto"
       >
@@ -256,7 +256,7 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
             <motion.div
               className="text-center mb-8"
               initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
@@ -337,40 +337,21 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                     transition={{ duration: 0.3 }}
                     className="mb-6"
                   >
-                    <div className="flex items-center justify-center gap-6 mb-4">
-                      <div className="text-center">
-                        <p className="text-sm text-gray-500 mb-1">De</p>
-                        <p 
-                          className="text-2xl md:text-3xl line-through"
-                          style={{ color: tokens.colors.textMuted }}
-                        >
-                          R$ 175,00
-                        </p>
-                      </div>
-                      
-                      <ArrowDown className="w-8 h-8 text-green-500" />
-                      
-                      <div className="text-center">
-                        <p className="text-sm font-medium mb-1" style={{ color: tokens.colors.secondary }}>
-                          Por apenas
-                        </p>
-                        <div className="flex items-baseline gap-1 justify-center">
-                          <span className="text-lg">R$</span>
-                          <span 
-                            className="text-5xl md:text-6xl font-bold"
-                            style={{ color: tokens.colors.accent }}
-                          >
-                            39
-                          </span>
-                          <span className="text-2xl">,90</span>
-                        </div>
-                        <p className="text-sm text-[#8F7A6A] mt-1">pagamento único</p>
-                      </div>
+                    <div className="flex items-baseline gap-1 justify-center">
+                      <span className="text-lg">R$</span>
+                      <span 
+                        className="text-5xl md:text-6xl font-bold"
+                        style={{ color: tokens.colors.accent }}
+                      >
+                        39
+                      </span>
+                      <span className="text-2xl">,90</span>
                     </div>
+                    <p className="text-sm text-[#8F7A6A] mt-1">pagamento único</p>
                   </motion.div>
                 )}
               </AnimatePresence>
-              
+
               {/* Badge de Economia */}
               <motion.div 
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold mb-6"
@@ -385,9 +366,8 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
 
             {/* CTA Button */}
             <motion.div
-              className="text-center mb-8"
               initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
@@ -406,14 +386,14 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
                     transform: isHovered ? 'translateY(-2px)' : 'translateY(0)'
                   }}
                 >
-                  <motion.div
+                  <motion.span
                     className="flex items-center gap-3"
                     animate={isHovered ? { x: [0, 5, 0] } : {}}
                     transition={{ duration: 0.5 }}
                   >
                     <ShoppingCart className="w-6 h-6" />
                     Transformar Meu Estilo Agora
-                  </motion.div>
+                  </motion.span>
                 </Button>
               </motion.div>
               
@@ -424,7 +404,7 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
             </motion.div>
 
             {/* Elementos de Confiança */}
-            <motion.div 
+            <motion.div
               className="flex flex-wrap items-center justify-center gap-6 text-sm mb-8"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -450,7 +430,7 @@ const EnhancedPricingSection: React.FC<EnhancedPricingSectionProps> = ({ classNa
             </motion.div>
 
             {/* Métodos de Pagamento */}
-            <motion.div 
+            <motion.div
               className="text-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

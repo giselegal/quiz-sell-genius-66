@@ -1,4 +1,6 @@
 
+"use client";
+
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { set, get } from 'lodash';
@@ -17,10 +19,8 @@ const getDefaultConfig = (styleType: string): ResultConfig => {
       }
     },
     mainContent: {
-      content: {
-        description: getDefaultDescription(styleType),
-        customImage: ''
-      }
+      description: getDefaultDescription(styleType),
+      customImage: ''
     },
     offer: {
       hero: {
@@ -101,7 +101,6 @@ export const useQuizResultConfig = (styleType: string) => {
   // Atualizar uma seção da configuração
   const updateConfig = useCallback((sectionKey: string, data: any) => {
     console.log(`Atualizando seção: ${sectionKey}`, data);
-    
     setConfig(prev => {
       // Criar uma cópia profunda para evitar mutação
       const newConfig = JSON.parse(JSON.stringify(prev));
@@ -127,7 +126,6 @@ export const useQuizResultConfig = (styleType: string) => {
   const saveConfig = useCallback(async (): Promise<boolean> => {
     console.log('Salvando configuração:', config);
     const success = saveStoredConfig(styleType, config);
-    
     if (success) {
       setHasChanges(false);
       toast({
