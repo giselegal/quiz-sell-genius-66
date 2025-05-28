@@ -19,10 +19,6 @@ const ResultPage = loadable(() => import('./pages_backup/ResultPage'), {
   fallback: <LoadingFallback message="Carregando resultado..." />
 });
 
-const QuizOfferPage = loadable(() => import('./pages_backup/QuizOfferPage'), {
-  fallback: <LoadingFallback message="Carregando oferta..." />
-});
-
 // Admin components
 const AdminDashboard = loadable(() => import('./pages_backup/admin/OldAdminDashboard'), {
   fallback: <LoadingFallback message="Carregando painel administrativo..." />
@@ -72,12 +68,9 @@ function App() {
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/quiz/:step" element={<QuizPage />} />
               
-              {/* ROTAS DE RESULTADO + OFERTA */}
+              {/* ROTAS DE RESULTADO */}
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/resultado/:id" element={<ResultPage />} />
-              
-              {/* PÁGINA DE OFERTA */}
-              <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
               
               {/* ROTAS ADMINISTRATIVAS */}
               <Route path="/admin/*" element={<AdminDashboard />} />
@@ -89,7 +82,6 @@ function App() {
               {/* ROTAS DE DESENVOLVIMENTO/TESTE */}
               <Route path="/demo" element={<QuizDemoWrapper />} />
               <Route path="/preview" element={<ResultPage />} />
-              <Route path="/offer" element={<QuizOfferPage />} />
               <Route path="/test" element={
                 <div className="min-h-screen flex items-center justify-center bg-gray-100">
                   <div className="text-center">
@@ -101,9 +93,6 @@ function App() {
                       </a>
                       <a href="/resultado" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 block text-center">
                         📊 Resultado
-                      </a>
-                      <a href="/quiz-descubra-seu-estilo" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 block text-center">
-                        💰 Oferta
                       </a>
                       <a href="/admin" className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 block text-center">
                         ⚙️ Admin
