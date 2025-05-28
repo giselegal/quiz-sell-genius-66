@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import loadable from '@loadable/component';
@@ -20,10 +19,6 @@ const ResultPage = loadable(() => import('./pages/ResultPage'), {
   fallback: <LoadingFallback message="Carregando resultado..." />
 });
 
-const QuizOfferPage = loadable(() => import('./components/QuizOfferPage'), {
-  fallback: <LoadingFallback message="Carregando oferta..." />
-});
-
 // Admin Dashboard
 const AdminDashboard = loadable(() => import('./pages_backup/admin/OldAdminDashboard'), {
   fallback: <LoadingFallback message="Carregando painel administrativo..." />
@@ -43,11 +38,8 @@ function App() {
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/quiz/:step" element={<QuizPage />} />
               
-              {/* ROTA DE RESULTADO + OFERTA */}
+              {/* ROTA DE RESULTADO */}
               <Route path="/resultado" element={<ResultPage />} />
-              
-              {/* ROTA QUIZ OFERTA */}
-              <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
               
               {/* ROTAS ADMINISTRATIVAS */}
               <Route path="/admin/*" element={<AdminDashboard />} />
