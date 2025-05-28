@@ -24,7 +24,10 @@ export default function ResultPage() {
         'Invista em peças básicas de qualidade',
         'Prefira cortes clássicos',
         'Mantenha um guarda-roupa atemporal'
-      ]
+      ],
+      category: 'estilo_principal', // Adicionado
+      score: 100, // Adicionado
+      percentage: 100 // Adicionado
     },
     secondaryStyles: [] // Adicionado secondaryStyles como um array vazio
   };
