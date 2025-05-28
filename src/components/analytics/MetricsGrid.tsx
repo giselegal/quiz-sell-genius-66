@@ -35,18 +35,18 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, loading = fal
       </div>
     );
   }
-
+  
   const formatNumber = (num: number): string => {
     if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'k';
     }
     return num.toString();
   };
-
+  
   const formatPercent = (num: number): string => {
     return num.toFixed(1) + '%';
   };
-
+  
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       <MetricCard 
@@ -62,42 +62,42 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({ metrics, loading = fal
         description={`${metrics.totalCompletes} de ${metrics.totalStarts} quizzes concluídos`}
         icon="Target"
       />
-
+      
       <MetricCard 
         title="Resultados Vistos" 
         value={formatNumber(metrics.totalResultViews)}
         description={`Pessoas que viram seus resultados`}
         icon="BarChart3"
       />
-
+      
       <MetricCard 
         title="Leads Gerados" 
         value={formatNumber(metrics.totalLeads)}
         description={`Total de leads capturados`}
         icon="Users"
       />
-
+      
       <MetricCard 
         title="Taxa de Conversão" 
         value={formatPercent(metrics.conversionRate)}
         description={`Conversão de leads dos inícios`}
         icon="ArrowUpRight"
       />
-
+      
       <MetricCard 
         title="Vendas" 
         value={formatNumber(metrics.totalSales)}
         description={`Total de compras realizadas`}
         icon="ShoppingCart"
       />
-
+      
       <MetricCard 
         title="Taxa de Vendas" 
         value={formatPercent(metrics.salesRate)}
         description={`Taxa de compras de leads`}
         icon="Share2"
       />
-
+      
       <MetricCard 
         title="Tempo Médio" 
         value="3:27"

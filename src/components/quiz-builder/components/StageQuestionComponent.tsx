@@ -34,27 +34,28 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
   const multiSelect = data.multiSelect || 1;
   const imageSize = data.imageSize || 'medium';
   const selectionIndicator = data.selectionIndicator || 'border';
-
+  
   const getGridColumns = () => {
     const columns = data.layout?.columns || 2;
     switch (columns) {
       case 1: return "grid-cols-1 gap-3";
       case 3: return "grid-cols-1 sm:grid-cols-3 gap-3";
       case 4: return "grid-cols-2 sm:grid-cols-4 gap-3";
-      default: return "grid-cols-1 sm:grid-cols-2 gap-4";
+      default: return "grid-cols-1 sm:grid-cols-2 gap-4"; // Default to 2 columns
     }
   };
-
+  
   const getImageSize = () => {
     switch (imageSize) {
       case 'small': return { ratio: 16 / 9, classes: "max-h-24" };
       case 'large': return { ratio: 4 / 3, classes: "max-h-64" };
-      default: return { ratio: 4 / 3, classes: "max-h-48" };
+      default: return { ratio: 4 / 3, classes: "max-h-48" }; // Medium is default
     }
   };
-
+  
   const imageConfig = getImageSize();
-
+  
+  // Helper function to safely extract text and image from option
   const extractOptionData = (option: Option, index: number) => {
     let text = '';
     let imageUrl: string | null = null;
@@ -70,34 +71,38 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
       imageUrl = option.imageUrl || null;
       styleCategory = option.styleCategory;
     }
-
+    
     return { text, imageUrl, styleCategory };
   };
-
+  
   const handleOptionClick = (index: number) => {
     setSelectedOptions(prev => {
+      // If already selected, remove it
       if (prev.includes(index)) {
         return prev.filter(i => i !== index);
       }
       
+      // If multiSelect is 1, replace the selection
       if (multiSelect === 1) {
         return [index];
       }
-
+      
+      // If we're at the limit, remove the first and add the new one
       if (prev.length >= multiSelect) {
         return [...prev.slice(1), index];
       }
-
+      
+      // Otherwise add to selection
       return [...prev, index];
     });
   };
-
+  
   const isOptionSelected = (index: number) => {
     return selectedOptions.includes(index);
   };
-
+  
   const canProceed = multiSelect <= 1 || selectedOptions.length >= multiSelect;
-
+  
   return (
     <div 
       className={cn(
@@ -114,6 +119,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
       <h2 className="text-xl sm:text-2xl font-playfair text-center mb-5 px-3 pt-3 font-semibold tracking-normal">
         {data.title || data.question || 'Pergunta do Quiz'}
       </h2>
+      
       <p className="text-sm text-[#1A1818]/70 px-2 py-2 mb-4 text-center font-medium">
         {data.subtitle || (multiSelect > 1 ? `Selecione ${multiSelect} opções` : 'Selecione uma opção')}
       </p>
@@ -169,7 +175,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                   </AspectRatio>
                 </div>
               )}
-
+              
               {showText && (
                 <div className={cn(
                   "flex-1 p-3 text-[#432818]",
@@ -178,7 +184,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                   <p>{text}</p>
                 </div>
               )}
-
+              
               {selectionIndicator === 'checkbox' && (
                 <div className={cn(
                   "absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center",
@@ -189,7 +195,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
                   {isSelected && <Check className="w-4 h-4" />}
                 </div>
               )}
-
+              
               {isSelected && selectionIndicator === 'highlight' && (
                 <div className="absolute inset-0 bg-[#B89B7A]/10 pointer-events-none shadow-inner" />
               )}
@@ -197,7 +203,7 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
           );
         })}
       </div>
-
+      
       <div className="flex justify-between items-center mt-6">
         <p className="text-sm text-[#1A1818]/70 px-2 py-2 text-center font-medium">
           {multiSelect > 1 
@@ -218,11 +224,11 @@ const StageQuestionComponent: React.FC<StageQuestionComponentProps> = ({
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
-
+      
       <div className="mt-4 text-sm text-[#432818]/60 text-center">
         {data.stageTitle || 'Pergunta'} • {data.stageNumber || 1} de {data.totalStages || 7}
       </div>
-
+      
       <div className="w-full h-1 bg-[#B89B7A]/20 mt-3 rounded-full overflow-hidden">
         <div 
           className="h-full bg-[#B89B7A]" 

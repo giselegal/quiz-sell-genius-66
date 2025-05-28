@@ -54,6 +54,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
               <AccordionContent>
                 <div className="space-y-4">
                   {Object.entries(section.content).map(([key, value]) => {
+                    // Skip rendering arrays and objects directly
                     if (Array.isArray(value) || typeof value === 'object') {
                       return null;
                     }
@@ -73,7 +74,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                         </div>
                       );
                     }
-
+                    
                     return (
                       <div key={key} className="space-y-2">
                         <Label htmlFor={key} className="text-xs capitalize">
@@ -118,7 +119,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                         </div>
                       );
                     }
-
+                    
                     return (
                       <div key={key} className="space-y-2">
                         <Label htmlFor={`${key}-appearance`} className="text-xs capitalize">

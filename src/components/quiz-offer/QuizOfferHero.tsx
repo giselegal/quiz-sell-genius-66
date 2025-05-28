@@ -1,19 +1,26 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
+import { trackButtonClick } from '@/utils/analytics';
 import { getCtaUrl } from '@/services/pixelManager';
 import OptimizedImage from '@/components/ui/OptimizedImage';
+
 interface QuizOfferHeroProps {
   onStartQuizClick: () => void;
 }
+
 export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }) => {
   const handleCtaClick = () => {
+    trackButtonClick('hero-cta', 'Comprar Quiz', 'hero', 'primary-cta');
     window.location.href = getCtaUrl();
   };
   
   const handleStartQuizClick = () => {
+    trackButtonClick('hero-start-quiz', 'Começar Quiz', 'hero', 'start-quiz');
     onStartQuizClick();
   };
+
   return (
     <div className="bg-[#F9F7F4] py-8 px-4 md:py-16 md:px-8 rounded-lg">
       <div className="max-w-4xl mx-auto text-center">
@@ -24,6 +31,7 @@ export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }
         <p className="text-lg md:text-xl text-[#432818]/80 mb-6 max-w-3xl mx-auto">
           Um teste exclusivo que revela seu estilo autêntico e como expressar sua verdadeira essência através das roupas que você escolhe.
         </p>
+        
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
           <Button 
             onClick={handleStartQuizClick}
@@ -31,6 +39,7 @@ export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }
           >
             Começar o Quiz Gratuito
           </Button>
+          
           <Button 
             onClick={handleCtaClick}
             className="text-white py-3 px-6 rounded-md btn-cta-green text-base md:text-lg w-full md:w-auto"
@@ -39,6 +48,7 @@ export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }
             Adquirir Guia Completo
           </Button>
         </div>
+        
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
             <h3 className="font-medium text-[#432818]">7+ Estilos</h3>
@@ -61,4 +71,5 @@ export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }
     </div>
   );
 };
+
 export default QuizOfferHero;

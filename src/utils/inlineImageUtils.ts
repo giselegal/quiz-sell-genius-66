@@ -1,4 +1,3 @@
-
 /**
  * Utility functions for inline image optimization
  */
@@ -19,6 +18,7 @@ export const getTinyBase64ImageUrl = (baseUrl: string, imageId: string): string 
 /**
  * Carrega uma imagem super-tiny como base64 para renderização instantânea
  * como background antes da imagem principal
+ * 
  * @param imageUrl URL da imagem tiny
  * @returns Promise com string base64
  */
@@ -40,6 +40,7 @@ export const loadTinyImageAsBase64 = async (imageUrl: string): Promise<string> =
 
 /**
  * Gera URL otimizada para carregar imagens do Cloudinary com parâmetros específicos
+ * 
  * @param baseUrl URL base do Cloudinary
  * @param imageId ID da imagem
  * @param format Formato (avif, webp, etc)
@@ -60,6 +61,7 @@ export const getOptimizedImageUrl = (
 
 /**
  * Gera URL super-otimizada para preload inicial (LCP crítico)
+ * 
  * @param baseUrl URL base do Cloudinary
  * @param imageId ID da imagem
  * @param format Formato da imagem

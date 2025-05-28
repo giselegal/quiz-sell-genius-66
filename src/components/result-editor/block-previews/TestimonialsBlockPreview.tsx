@@ -1,5 +1,6 @@
 
 import React from 'react';
+
 interface TestimonialsBlockPreviewProps {
   content: {
     title?: string;
@@ -7,6 +8,7 @@ interface TestimonialsBlockPreviewProps {
     style?: any;
   };
 }
+
 const TestimonialsBlockPreview: React.FC<TestimonialsBlockPreviewProps> = ({ content }) => {
   return (
     <div style={content.style}>
@@ -28,4 +30,5 @@ const TestimonialsBlockPreview: React.FC<TestimonialsBlockPreviewProps> = ({ con
     </div>
   );
 };
+
 export default TestimonialsBlockPreview;

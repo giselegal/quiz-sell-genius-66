@@ -1,13 +1,5 @@
 
-// Interface for preload options
-interface PreloadOptions {
-  quality?: number;
-  format?: 'auto' | 'webp' | 'jpg' | 'png';
-  timeout?: number;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
-  batchSize?: number;
-}
+import { PreloadOptions, PreloadImageDefinition } from './types';
 
 /**
  * Preloads a set of critical images that should be loaded before rendering
@@ -22,7 +14,7 @@ export const preloadCriticalImages = (
   const {
     quality = 90,
     format = 'auto',
-    timeout = 3000,
+    timeout = 3000, // Now properly typed in PreloadOptions
     onProgress,
     onComplete,
     batchSize = 4,
@@ -45,7 +37,7 @@ export const preloadCriticalImages = (
     // Extract base URL parts
     const baseUrlParts = url.split('/upload/');
     if (baseUrlParts.length !== 2) return url;
-
+    
     // Add optimization parameters
     return `${baseUrlParts[0]}/upload/f_${format},q_${quality},dpr_auto/${baseUrlParts[1]}`;
   });
@@ -55,7 +47,6 @@ export const preloadCriticalImages = (
     const updateProgress = () => {
       loaded++;
       if (onProgress) onProgress(loaded, total);
-      
       if (loaded === total) {
         const endTime = performance.now();
         const loadTime = (endTime - startTime) / 1000;
@@ -85,11 +76,14 @@ export const preloadCriticalImages = (
           clearTimeout(timeoutId);
         }
       };
-
+      
       // Handle loading error
       img.onerror = (err) => {
         console.error(`[Preload] Failed to preload image: ${url.substring(0, 50)}...`, err);
         updateProgress(); // Still count as processed
+        if (loaded === total) {
+          clearTimeout(timeoutId);
+        }
       };
       
       // Start loading
@@ -106,12 +100,12 @@ export const preloadCriticalImages = (
 export const preloadLCPImage = (
   imageUrl: string,
   options: PreloadOptions = {}
-) => {
+): Promise<void> => {
   // Higher quality and priority for LCP image
   const lcpOptions: PreloadOptions = {
     quality: 95,
     format: 'auto',
-    timeout: 2000,
+    timeout: 2000, // Now properly defined in PreloadOptions
     ...options
   };
   

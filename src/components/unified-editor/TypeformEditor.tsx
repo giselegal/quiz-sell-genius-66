@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -40,7 +38,6 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
     if (!newQuestions[currentQuestionIndex]) return;
 
     const currentQuestion = newQuestions[currentQuestionIndex];
-    
     // Check if data.options property exists instead of direct options
     if (!currentQuestion?.data?.options) return;
 
@@ -88,7 +85,6 @@ const TypeformEditor: React.FC<TypeformEditorProps> = ({
       }
       return question;
     });
-
     onStateChange({
       ...editorState,
       quizEditorState: {

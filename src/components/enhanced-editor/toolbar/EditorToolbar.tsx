@@ -116,6 +116,7 @@ export function EditorToolbar({
           <Eye className="w-4 h-4 mr-2" />
           {isPreviewing ? "Editar" : "Visualizar"}
         </Button>
+        
         <Button
           variant="default"
           size="sm"

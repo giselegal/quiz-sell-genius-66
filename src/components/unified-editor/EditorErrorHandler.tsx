@@ -1,8 +1,5 @@
-
-"use client";
-
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -14,7 +11,7 @@ interface EditorErrorHandlerProps {
 const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Simular verificação de carregamento
@@ -43,7 +40,7 @@ const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => 
 
   const handleGoBack = () => {
     // Voltar para o dashboard
-    router.push('/admin');
+    navigate('/admin');
   };
 
   if (isLoading) {

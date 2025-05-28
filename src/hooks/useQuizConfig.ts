@@ -1,6 +1,4 @@
 
-"use client";
-
 import { useState, useEffect, useCallback } from 'react';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';

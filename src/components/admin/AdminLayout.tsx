@@ -1,70 +1,46 @@
 
 import React, { ReactNode } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Link, useLocation } from 'react-router-dom';
-import { Button } from '../ui/button';
+import { Link } from 'react-router-dom';
 
 interface AdminLayoutProps {
-  children?: ReactNode;
+  children: ReactNode;
 }
 
+/**
+ * Layout básico para componentes administrativos que não usam o novo AdminDashboard
+ * Este componente será gradualmente descontinuado conforme migramos tudo para o novo dashboard
+ */
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const { user } = useAuth();
-  const location = useLocation();
-  const pathname = location.pathname;
-  
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F7]">
-      <div className="border-b border-gray-200 bg-white px-6 py-4">
-        <h1 className="text-2xl font-bold text-gray-900">Painel Administrativo</h1>
-      </div>
-      
-      <div className="p-6">
-        <div className="mb-8 flex gap-4">
-          <Button variant={pathname === '/admin' ? 'default' : 'outline'} asChild>
-            <Link to="/admin">Dashboard</Link>
-          </Button>
-          <Button variant={pathname?.includes('/admin/editor') ? 'default' : 'outline'} asChild>
-            <Link to="/admin/editor">Editor Visual</Link>
-          </Button>
-        </div>
-        
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {pathname === '/admin' && (
-            <div className="rounded-lg border bg-card p-6 shadow-sm">
-              <h3 className="mb-4 text-lg font-medium">Editor Visual</h3>
-              <p className="mb-4 text-sm text-muted-foreground">
-                Personalize a página de resultados com o editor visual de arrastar e soltar.
-              </p>
-              <Button asChild className="w-full">
-                <Link to="/admin/editor">Abrir Editor</Link>
-              </Button>
+      <header className="bg-white border-b px-6 py-3 shadow-sm">
+        <div className="container mx-auto flex items-center justify-between">
+          <Link to="/admin" className="text-xl font-bold text-[#432818]">
+            Voltar ao Dashboard
+          </Link>
+          {user && (
+            <div className="flex items-center gap-3">
+              <div className="text-sm text-[#8F7A6A]">
+                Olá, <span className="font-medium">{user.userName}</span>
+              </div>
+              <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center text-sm font-medium text-purple-700">
+                {user.userName?.[0]?.toUpperCase() || 'U'}
+              </div>
             </div>
           )}
-          
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-medium">Resultados</h3>
-            <p className="mb-4 text-sm text-muted-foreground">
-              Visualize e gerencie os resultados do quiz.
-            </p>
-            <Button variant="outline" asChild className="w-full">
-              <Link to="/resultado">Ver Resultados</Link>
-            </Button>
-          </div>
-          
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-medium">Quiz</h3>
-            <p className="mb-4 text-sm text-muted-foreground">
-              Volte para o quiz principal.
-            </p>
-            <Button variant="outline" asChild className="w-full">
-              <Link to="/">Ir para Quiz</Link>
-            </Button>
-          </div>
         </div>
-        
+      </header>
+      <main className="flex-grow">
         {children}
-      </div>
+      </main>
+      <footer className="bg-white border-t p-3 text-center text-sm text-[#8F7A6A]">
+        <div className="container mx-auto">
+          Admin © {new Date().getFullYear()}
+        </div>
+      </footer>
     </div>
   );
 };

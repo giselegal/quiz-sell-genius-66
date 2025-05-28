@@ -1,73 +1,57 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-
-interface Template {
-  id: string;
-  name: string;
-  description: string;
-  preview: string;
-}
+import { Card } from '@/components/ui/card';
+import { giseleStyleTemplate } from '@/services/templates/giseleStyleTemplate';
+import { useResultPageConfig } from '@/hooks/useResultPageConfig';
+import { toast } from '@/components/ui/use-toast';
 
 interface TemplateListProps {
-  onSelectTemplate: (templateId: string) => void;
+  onSelectTemplate?: () => void;
 }
 
 export const TemplateList: React.FC<TemplateListProps> = ({ onSelectTemplate }) => {
-  const [templates, setTemplates] = React.useState<Template[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const { resultPageConfig, importConfig } = useResultPageConfig("Natural");
+  
+  // Use the styleType from the current config
+  const styleType = resultPageConfig?.styleType || "Natural";
 
-  React.useEffect(() => {
-    const loadTemplates = async () => {
-      try {
-        // Simulated template data
-        const mockTemplates: Template[] = [
-          {
-            id: 'modern',
-            name: 'Moderno',
-            description: 'Design moderno e clean',
-            preview: '/templates/modern.jpg'
-          },
-          {
-            id: 'classic',
-            name: 'Clássico',
-            description: 'Design tradicional e elegante',
-            preview: '/templates/classic.jpg'
-          }
-        ];
-        
-        setTemplates(mockTemplates);
-      } catch (error) {
-        console.error('Erro ao carregar templates:', error);
-      } finally {
-        setLoading(false);
+  const handleSelectTemplate = (template: any) => {
+    try {
+      if (importConfig) {
+        importConfig(template);
       }
-    };
-
-    loadTemplates();
-  }, []);
-
-  if (loading) {
-    return <div className="p-4 text-center">Carregando templates...</div>;
-  }
+      
+      toast({
+        title: "Template aplicado",
+        description: "O template foi aplicado com sucesso",
+      });
+      
+      if (onSelectTemplate) {
+        onSelectTemplate();
+      }
+    } catch (error) {
+      console.error('Error applying template:', error);
+      toast({
+        title: "Erro ao aplicar template",
+        description: "Ocorreu um erro ao aplicar o template",
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-      {templates.map((template) => (
-        <Card key={template.id} className="p-4">
-          <div className="space-y-2">
-            <h3 className="font-medium">{template.name}</h3>
-            <p className="text-sm text-gray-600">{template.description}</p>
-            <Button
-              onClick={() => onSelectTemplate(template.id)}
-              className="w-full"
-            >
-              Usar Template
-            </Button>
-          </div>
-        </Card>
-      ))}
+    <div className="grid gap-4">
+      <Card className="p-4">
+        <h3 className="text-lg font-medium mb-2 text-[#432818]">Modelo de Página - Estilo Gisele Galvão</h3>
+        <p className="text-[#8F7A6A] mb-4">Página de vendas otimizada com design exclusivo e elementos estratégicos.</p>
+        <Button 
+          onClick={() => handleSelectTemplate(giseleStyleTemplate)}
+          className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
+        >
+          Usar este modelo
+        </Button>
+      </Card>
     </div>
   );
 };

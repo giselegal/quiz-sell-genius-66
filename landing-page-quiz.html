@@ -1069,28 +1069,25 @@
     }
 
     // Function to update limited spots
-    let limitedSpotsInterval;
     function updateLimitedSpots() {
-      if (limitedSpotsInterval) return; // Evita múltiplos intervals
       const remainingSpotsEl = document.getElementById('remaining-spots');
       const progressFillEl = document.getElementById('progress-fill');
       if (!remainingSpotsEl || !progressFillEl) return;
 
       let spotsFilledPercentage = 86;
       let remainingSpots = 14;
-      const totalSpots = 100; // Total de vagas
+      const totalSpots = 100; // Assuming 100 total spots for percentage calculation
 
-      limitedSpotsInterval = setInterval(() => {
-        if (remainingSpots > 5) { // Não deixa ir para 0 rápido
-          const spotsTakenThisInterval = Math.floor(Math.random() * 2) + 1; // 1 ou 2
+      setInterval(() => {
+        if (remainingSpots > 5) { // Don't let it go to 0 too quickly
+          const spotsTakenThisInterval = Math.floor(Math.random() * 2) + 1; // 1 or 2
           remainingSpots = Math.max(5, remainingSpots - spotsTakenThisInterval);
           spotsFilledPercentage = ((totalSpots - remainingSpots) / totalSpots) * 100;
-          spotsFilledPercentage = Math.max(0, Math.min(100, spotsFilledPercentage)); // Garante 0-100%
-
+          
           remainingSpotsEl.textContent = remainingSpots;
           progressFillEl.style.width = `${spotsFilledPercentage}%`;
         }
-      }, 25000); // Atualiza a cada 25s
+      }, 25000); // Update every 25 seconds
     }
     
     // Track button clicks for analytics

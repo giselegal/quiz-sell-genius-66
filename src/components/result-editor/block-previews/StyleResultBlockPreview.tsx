@@ -29,7 +29,7 @@ const StyleResultBlockPreview: React.FC<StyleResultBlockPreviewProps> = ({
           {primaryStyle.percentage}% de compatibilidade
         </div>
       </div>
-      
+
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <img

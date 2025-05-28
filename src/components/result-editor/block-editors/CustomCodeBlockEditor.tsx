@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
@@ -6,10 +5,12 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
 import { Block } from '@/types/editor';
+
 interface CustomCodeBlockEditorProps {
   block: Block;
   onUpdate: (content: any) => void;
 }
+
 const CustomCodeBlockEditor: React.FC<CustomCodeBlockEditorProps> = ({ block, onUpdate }) => {
   const [showWarning, setShowWarning] = useState(true);
   
@@ -37,4 +38,5 @@ const CustomCodeBlockEditor: React.FC<CustomCodeBlockEditorProps> = ({ block, on
     </div>
   );
 };
+
 export default CustomCodeBlockEditor;

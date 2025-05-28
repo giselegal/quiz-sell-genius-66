@@ -1,6 +1,4 @@
 
-"use client";
-
 import React from 'react';
 import { StyleResult } from '@/types/quiz';
 import { EditorBlock } from '@/types/editor';

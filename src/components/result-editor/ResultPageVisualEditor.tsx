@@ -1,6 +1,4 @@
 
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ComponentsSidebar } from './ComponentsSidebar';
@@ -48,27 +46,31 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     actions: blockActions
   } = useBlockOperations();
 
+  // Apply initial config if provided
   useEffect(() => {
     if (initialConfig && importConfig) {
       importConfig(initialConfig);
     }
   }, [initialConfig, importConfig]);
 
+  // Sync blocks with config when needed
   useEffect(() => {
     if (resultPageConfig?.blocks) {
       updateBlocks(resultPageConfig.blocks);
     } else {
+      // Initialize with empty blocks if not present
       updateSection('blocks', []);
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
 
-  const handleUpdateConfig = (newConfig: any) => {
+  const handleUpdateConfig = (newConfig) => {
     if (newConfig) {
       try {
         importConfig(newConfig);
         if (newConfig.blocks) {
           updateBlocks(newConfig.blocks);
         } else {
+          // Initialize with empty blocks if not present
           updateBlocks([]);
         }
         toast({
@@ -96,6 +98,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
     );
   }
 
+  // Cast do tipo para garantir compatibilidade com o componente EditorPreview
   const primaryStyle: StyleResult = {
     category: selectedStyle.category as any,
     score: selectedStyle.score,
@@ -125,7 +128,9 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
             <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
               <ComponentsSidebar onComponentSelect={blockActions.handleAddBlock} />
             </ResizablePanel>
+
             <ResizableHandle withHandle />
+
             <ResizablePanel defaultSize={55}>
               <EditorPreview
                 blocks={blocks}
@@ -136,9 +141,13 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
                 onReorderBlocks={blockActions.handleReorderBlocks}
               />
             </ResizablePanel>
+
             <ResizableHandle withHandle />
+
             <ResizablePanel defaultSize={25}>
               <PropertiesPanel
+                selectedBlockId={selectedBlockId}
+                blocks={blocks}
                 onClose={() => setSelectedBlockId(null)}
                 onUpdate={blockActions.handleUpdateBlock}
                 onDelete={blockActions.handleDeleteBlock}

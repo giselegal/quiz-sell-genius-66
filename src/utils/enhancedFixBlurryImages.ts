@@ -58,7 +58,7 @@ export function fixBlurryIntroQuizImages(
         img.classList.contains('quiz-image') || 
         img.closest('[data-section="quiz"]') ||
         img.closest('.quiz-option-image');
-        
+      
       if (!isIntroImage && !isQuizImage) {
         return;
       }
@@ -70,12 +70,13 @@ export function fixBlurryIntroQuizImages(
       const shouldOptimize = options.forceOptimize || 
         !originalSrc.includes('w_') || 
         !originalSrc.includes('q_');
-        
+      
       if (shouldOptimize) {
         // Aplicar otimização de imagem
         const newSrc = applyOptimizations(originalSrc, options);
         img.src = newSrc;
         img.dataset.optimized = 'true';
+        
         fixedImages.push(img);
         
         if (options.debug) {
@@ -90,6 +91,7 @@ export function fixBlurryIntroQuizImages(
     if (options.debug) {
       console.log(`[fixBlurryIntroQuizImages] Total de imagens otimizadas: ${fixedImages.length}`);
     }
+    
   } catch (error) {
     console.error('[fixBlurryIntroQuizImages] Erro ao otimizar imagens:', error);
   }
@@ -107,6 +109,7 @@ function applyOptimizations(imageUrl: string, options: FixBlurryImagesOptions): 
     if (imageUrl.includes('cloudinary.com')) {
       // Adicione parâmetros de otimização Cloudinary
       const hasExistingTransformations = imageUrl.includes('/upload/');
+      
       if (hasExistingTransformations) {
         // Inserir após /upload/
         return imageUrl.replace(

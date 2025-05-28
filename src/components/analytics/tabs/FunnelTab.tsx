@@ -27,7 +27,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
       { name: 'Venda', value: metrics.totalSales, text: 'Compras realizadas' }
     ];
   }, [metrics]);
-
+  
   // Chart configuration
   const chartConfig: ChartConfig = {
     value: { 
@@ -35,16 +35,18 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
       theme: { light: '#4f46e5', dark: '#818cf8' }
     }
   };
-
+  
   // Define colors with gradients for funnel steps
   const FUNNEL_COLORS = ['#4f46e5', '#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899'];
-
+  
   // Custom tooltip renderer
   const renderTooltipContent = (props: any) => {
     if (!props.active || !props.payload) {
       return null;
     }
+    
     const data = props.payload[0].payload;
+    
     return (
       <div className="bg-white p-1.5 border border-gray-100 shadow-lg rounded-md">
         <p className="text-[7px] font-medium mb-0.5">{data.name}</p>
@@ -53,11 +55,11 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
       </div>
     );
   };
-
+  
   const renderLegendContent = (props: any) => {
     return null; // Hide default legend
   };
-
+  
   if (loading || !metrics) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -91,9 +93,10 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
                 <YAxis 
                   dataKey="name" 
                   type="category" 
-                  width={35}
+                  stroke="#888888"
                   tick={{ fill: '#888888', fontSize: 7 }}
                   tickLine={{ stroke: '#e0e0e0' }}
+                  width={35}
                 />
                 <Tooltip content={renderTooltipContent} />
                 <Legend content={renderLegendContent} />
@@ -147,7 +150,7 @@ export const FunnelTab: React.FC<FunnelTabProps> = ({ analyticsData, loading }) 
                 />
               </CardContent>
             </Card>
-
+            
             <Card className="border border-border/60">
               <CardHeader className="pb-1 pt-2">
                 <CardTitle className="text-sm font-medium">Resultado → Venda</CardTitle>

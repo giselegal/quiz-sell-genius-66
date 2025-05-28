@@ -30,11 +30,12 @@ export const StageList: React.FC<StageListProps> = ({
     onStageUpdate(id, { title });
   };
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result) => {
     if (!result.destination) return;
     
     const sourceId = stages[result.source.index].id;
     const destinationId = stages[result.destination.index].id;
+    
     if (sourceId !== destinationId) {
       onStageMove(sourceId, destinationId);
     }
@@ -92,7 +93,7 @@ export const StageList: React.FC<StageListProps> = ({
           )}
         </Droppable>
       </DragDropContext>
-      
+
       <div className="grid grid-cols-2 gap-2 pt-2">
         <Button
           variant="outline"

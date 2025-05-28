@@ -1,11 +1,13 @@
 
 import React from 'react';
+
 interface CustomCodeBlockPreviewProps {
   content: {
     code?: string;
     style?: any;
   };
 }
+
 const CustomCodeBlockPreview: React.FC<CustomCodeBlockPreviewProps> = ({ content }) => {
   const { code = '', style = {} } = content;
   
@@ -16,10 +18,12 @@ const CustomCodeBlockPreview: React.FC<CustomCodeBlockPreviewProps> = ({ content
       </div>
     );
   }
+  
   return (
     <div style={style} className="w-full">
       <div dangerouslySetInnerHTML={{ __html: code }} />
     </div>
   );
 };
+
 export default CustomCodeBlockPreview;

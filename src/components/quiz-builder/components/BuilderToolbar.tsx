@@ -1,8 +1,11 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, Eye, EyeOff, Play, Upload, Undo, Redo } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { 
+  Save, Eye, EyeOff, Settings, Edit, Layout, 
+  FileText, DatabaseBackup, Share2, Play, Import
+} from 'lucide-react';
 
 interface BuilderToolbarProps {
   activeView: 'editor' | 'preview';
@@ -10,7 +13,7 @@ interface BuilderToolbarProps {
   onViewChange: (view: 'editor' | 'preview') => void;
   onPreviewToggle: () => void;
   onSave: () => void;
-  onPreviewResultPage: () => void;
+  onPreviewResultPage?: () => void;
   onImportQuizTemplate: () => void;
 }
 
@@ -24,68 +27,95 @@ const BuilderToolbar: React.FC<BuilderToolbarProps> = ({
   onImportQuizTemplate
 }) => {
   return (
-    <div className="bg-[#1A1F2C] border-b border-[#333333] px-4 py-2 flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <h1 className="text-xl font-bold text-white">Quiz Builder</h1>
+    <div className="border-b border-[#333333] bg-[#222222] p-3 flex items-center justify-between">
+      <div className="flex items-center space-x-6">
+        <h1 className="text-lg font-medium text-white mr-6">Editor de Quiz</h1>
         
-        <Tabs value={activeView} onValueChange={(value) => onViewChange(value as 'editor' | 'preview')}>
-          <TabsList className="bg-[#333333] border-[#444444]">
-            <TabsTrigger value="editor" className="text-white data-[state=active]:bg-[#B89B7A]">
-              Editor
+        <Tabs 
+          value={activeView} 
+          onValueChange={(v) => onViewChange(v as 'editor' | 'preview')}
+          className="w-auto"
+        >
+          <TabsList className="bg-[#333333]">
+            <TabsTrigger 
+              value="editor" 
+              className="text-sm text-gray-200 data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white"
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Construtor
             </TabsTrigger>
-            <TabsTrigger value="preview" className="text-white data-[state=active]:bg-[#B89B7A]">
-              Preview
+            <TabsTrigger 
+              value="preview" 
+              className="text-sm text-gray-200 data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white"
+            >
+              <Play className="w-4 h-4 mr-2" />
+              Prévia
             </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
-      
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="sm"
+
+      <div className="flex items-center space-x-2">
+        <Button 
+          variant="outline" 
+          size="sm" 
           onClick={onImportQuizTemplate}
-          className="text-gray-400 hover:text-white hover:bg-[#333333]"
+          className="text-gray-300 border-[#444444] bg-[#333333] hover:bg-[#444444] hover:text-white"
         >
-          <Upload className="w-4 h-4 mr-2" />
-          Importar Template
+          <FileText className="w-4 h-4 mr-2" />
+          Importar Quiz
         </Button>
+
+        {activeView === 'editor' && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onPreviewToggle}
+            className="text-gray-300 border-[#444444] bg-[#333333] hover:bg-[#444444] hover:text-white"
+          >
+            {isPreviewing ? (
+              <>
+                <EyeOff className="w-4 h-4 mr-2" />
+                Editar
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4 mr-2" />
+                Visualizar
+              </>
+            )}
+          </Button>
+        )}
         
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onPreviewToggle}
-          className="text-gray-400 hover:text-white hover:bg-[#333333]"
-        >
-          {isPreviewing ? (
-            <>
-              <EyeOff className="w-4 h-4 mr-2" />
-              Editar
-            </>
-          ) : (
-            <>
-              <Eye className="w-4 h-4 mr-2" />
-              Preview
-            </>
-          )}
-        </Button>
+        {activeView === 'preview' && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onPreviewResultPage}
+            className="text-gray-300 border-[#444444] bg-[#333333] hover:bg-[#444444] hover:text-white"
+          >
+            <Layout className="w-4 h-4 mr-2" />
+            Visualizar Resultado
+          </Button>
+        )}
         
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onPreviewResultPage}
-          className="text-gray-400 hover:text-white hover:bg-[#333333]"
-        >
-          <Play className="w-4 h-4 mr-2" />
-          Testar Resultado
-        </Button>
-        
-        <Button
+        <Button 
+          variant="default" 
+          size="sm" 
           onClick={onSave}
-          className="bg-[#B89B7A] hover:bg-[#A38A69] text-white"
+          className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
         >
           <Save className="w-4 h-4 mr-2" />
           Salvar
+        </Button>
+        
+        <Button 
+          variant="default" 
+          size="sm" 
+          className="bg-[#6E59A5] hover:bg-[#5D48A0] text-white"
+        >
+          <Share2 className="w-4 h-4 mr-2" />
+          Publicar
         </Button>
       </div>
     </div>

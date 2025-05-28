@@ -1,11 +1,13 @@
 
 import React from 'react';
+
 interface SpacerBlockPreviewProps {
   content: {
     height?: string;
     style?: any;
   };
 }
+
 const SpacerBlockPreview: React.FC<SpacerBlockPreviewProps> = ({ content }) => {
   const height = content.height || '40px';
   
@@ -17,4 +19,5 @@ const SpacerBlockPreview: React.FC<SpacerBlockPreviewProps> = ({ content }) => {
     </div>
   );
 };
+
 export default SpacerBlockPreview;

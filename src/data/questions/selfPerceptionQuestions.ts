@@ -33,6 +33,8 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
   {
     id: 'strategic-2',
     title: 'Qual é o maior desafio que você enfrenta ao se vestir?',
+    type: 'text',
+    multiSelect: 1,
     imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp',
     options: [
       {

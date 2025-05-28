@@ -1,16 +1,16 @@
-
-"use client";
-
 import { useState, useEffect, useCallback } from 'react';
 import { ResultPageConfig } from '@/types/resultPageConfig';
 import { toast } from '@/components/ui/use-toast';
 import { set } from 'lodash';
 import { createDefaultConfig as createFullDefaultConfig } from '@/utils/resultPageDefaults';
 
+// Default configurations based on style type
 const createDefaultConfig = (styleType: string): ResultPageConfig => {
+  // Use the full default config utility to ensure all required fields are present
   return createFullDefaultConfig(styleType);
 };
 
+// Storage key based on style type
 const getStorageKey = (styleType: string) => `result_page_config_${styleType}`;
 
 export const useResultPageConfig = (styleType: string) => {
@@ -21,6 +21,7 @@ export const useResultPageConfig = (styleType: string) => {
     const loadConfig = async () => {
       setLoading(true);
       try {
+        // Get config from localStorage
         const key = getStorageKey(styleType);
         const savedConfigStr = localStorage.getItem(key);
         
@@ -97,10 +98,12 @@ export const useResultPageConfig = (styleType: string) => {
         return false;
       }
       
+      // Ensure the imported config has the correct styleType
       const configToImport = {
         ...importedConfig,
         styleType: styleType
       };
+      
       setResultPageConfig(configToImport);
       return true;
     } catch (error) {

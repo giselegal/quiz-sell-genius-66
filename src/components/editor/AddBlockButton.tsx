@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState } from 'react';
 import { EditorBlock } from '@/types/editor';
@@ -9,15 +8,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+
 interface AddBlockButtonProps {
   onAddBlock: (type: EditorBlock['type']) => void;
 }
+
 export const AddBlockButton: React.FC<AddBlockButtonProps> = ({ onAddBlock }) => {
   const [open, setOpen] = useState(false);
+
   const handleAddBlock = (type: EditorBlock['type']) => {
     onAddBlock(type);
     setOpen(false);
   };
+
   const blockTypes = [
     { type: 'headline' as const, label: 'Título', icon: Type },
     { type: 'text' as const, label: 'Texto', icon: Type },
@@ -28,6 +31,7 @@ export const AddBlockButton: React.FC<AddBlockButtonProps> = ({ onAddBlock }) =>
     { type: 'guarantee' as const, label: 'Garantia', icon: Shield },
     { type: 'cta' as const, label: 'Botão CTA', icon: MousePointer },
   ];
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

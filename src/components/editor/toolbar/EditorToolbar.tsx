@@ -1,79 +1,153 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Monitor, Smartphone, Tablet, Eye, Save, Undo, Redo } from 'lucide-react';
+import { 
+  Save, 
+  Eye, 
+  EyeOff, 
+  Undo, 
+  Redo,
+  Smartphone, 
+  Tablet, 
+  Monitor, 
+  LayoutGrid
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Block } from '@/types/editor';
 
 interface EditorToolbarProps {
   isPreviewing: boolean;
-  viewportSize: 'sm' | 'md' | 'lg' | 'xl';
-  onViewportSizeChange: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
   onTogglePreview: () => void;
   onSave: () => void;
+  onUndo?: () => Block[];
+  onRedo?: () => Block[];
+  canUndo?: boolean;
+  canRedo?: boolean;
+  viewportSize?: 'sm' | 'md' | 'lg' | 'xl';
+  onViewportSizeChange?: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
 }
 
-export const EditorToolbar: React.FC<EditorToolbarProps> = ({
+export const EditorToolbar: React.FC<EditorToolbarProps> = ({ 
   isPreviewing,
-  viewportSize,
-  onViewportSizeChange,
   onTogglePreview,
-  onSave
+  onSave,
+  onUndo,
+  onRedo,
+  canUndo = false,
+  canRedo = false,
+  viewportSize = 'lg',
+  onViewportSizeChange = () => {}
 }) => {
   return (
-    <div className="border-b bg-white p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 border rounded-md p-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onViewportSizeChange('sm')}
-              className={cn(viewportSize === 'sm' && 'bg-accent')}
-            >
-              <Smartphone className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onViewportSizeChange('md')}
-              className={cn(viewportSize === 'md' && 'bg-accent')}
-            >
-              <Tablet className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onViewportSizeChange('lg')}
-              className={cn(viewportSize === 'lg' && 'bg-accent')}
-            >
-              <Monitor className="w-4 h-4" />
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="sm">
-              <Undo className="w-4 h-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <Redo className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
+    <div className="bg-white border-b border-[#B89B7A]/20 p-2 flex items-center justify-between">
+      <div className="flex items-center space-x-2">
+        {onUndo && (
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={onTogglePreview}
+            onClick={onUndo}
+            disabled={!canUndo}
+            title="Desfazer"
+            className="text-[#432818]"
           >
-            <Eye className="w-4 h-4 mr-2" />
-            {isPreviewing ? 'Editar' : 'Visualizar'}
+            <Undo className="h-4 w-4" />
           </Button>
-          <Button onClick={onSave}>
-            <Save className="w-4 h-4 mr-2" />
-            Salvar
+        )}
+        
+        {onRedo && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onRedo}
+            disabled={!canRedo}
+            title="Refazer"
+            className="text-[#432818]"
+          >
+            <Redo className="h-4 w-4" />
           </Button>
-        </div>
+        )}
+
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "text-[#432818]",
+            viewportSize === 'sm' && "bg-[#FAF9F7]"
+          )}
+          onClick={() => onViewportSizeChange('sm')}
+          title="Visualização Mobile"
+        >
+          <Smartphone className="h-4 w-4" />
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "text-[#432818]",
+            viewportSize === 'md' && "bg-[#FAF9F7]"
+          )}
+          onClick={() => onViewportSizeChange('md')}
+          title="Visualização Tablet"
+        >
+          <Tablet className="h-4 w-4" />
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "text-[#432818]",
+            viewportSize === 'lg' && "bg-[#FAF9F7]"
+          )}
+          onClick={() => onViewportSizeChange('lg')}
+          title="Visualização Desktop"
+        >
+          <Monitor className="h-4 w-4" />
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "text-[#432818]",
+            viewportSize === 'xl' && "bg-[#FAF9F7]"
+          )}
+          onClick={() => onViewportSizeChange('xl')}
+          title="Visualização Desktop Grande"
+        >
+          <LayoutGrid className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      <div className="flex items-center space-x-2">
+        <Button
+          variant="outline" 
+          size="sm"
+          onClick={onTogglePreview}
+          className="text-[#432818]"
+        >
+          {isPreviewing ? (
+            <>
+              <EyeOff className="mr-2 h-4 w-4" />
+              Editar
+            </>
+          ) : (
+            <>
+              <Eye className="mr-2 h-4 w-4" />
+              Visualizar
+            </>
+          )}
+        </Button>
+        
+        <Button
+          onClick={onSave}
+          size="sm"
+          className="bg-[#B89B7A] hover:bg-[#A38A69] text-white"
+        >
+          <Save className="mr-2 h-4 w-4" />
+          Salvar
+        </Button>
       </div>
     </div>
   );

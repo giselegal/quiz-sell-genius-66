@@ -1,6 +1,3 @@
-
-"use client";
-
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -12,7 +9,7 @@ import { EditorToolbar } from './toolbar/EditorToolbar';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { UnifiedTemplateModal } from './modals/UnifiedTemplateModal';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
@@ -30,7 +27,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
   const [activeTab, setActiveTab] = useState<EditorTab>(initialActiveTab);
   const [isLoading, setIsLoading] = useState(false);
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('lg');
-  const router = useRouter();
+  const navigate = useNavigate();
   
   const {
     isPreviewing,
@@ -47,9 +44,9 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     // Update the active mode in the unified editor hook
     setActiveMode(activeTab);
     // Update URL when tab changes
-    router.push(`/admin/editor?tab=${activeTab}`);
-  }, [activeTab, router, setActiveMode]);
-
+    navigate(`/admin/editor?tab=${activeTab}`, { replace: true });
+  }, [activeTab, navigate, setActiveMode]);
+  
   const handleTabChange = (value: string) => {
     const newTab = value as EditorTab;
     setActiveTab(newTab);
@@ -64,6 +61,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
     toast({
       title: "Salvando alterações",
       description: "Por favor, aguarde...",
+      duration: 2000,
     });
     
     try {
@@ -98,7 +96,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         viewportSize={viewportSize}
         onViewportSizeChange={setViewportSize}
       />
-
+      
       <Tabs
         value={activeTab}
         onValueChange={handleTabChange}
@@ -136,7 +134,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
           onApplyTemplate={loadTemplateForCurrentEditor}
         />
       )}
-
+      
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white rounded-lg p-6 flex items-center gap-3">

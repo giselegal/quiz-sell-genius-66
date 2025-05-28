@@ -4,6 +4,7 @@ import { selfPerceptionQuestions } from './questions/selfPerceptionQuestions';
 import { styleExperienceQuestions } from './questions/styleExperienceQuestions';
 import { purchaseIntentQuestions } from './questions/purchaseIntentQuestions';
 import { desiredOutcomesQuestions } from './questions/desiredOutcomesQuestions';
+
 // Concatenate all strategic questions in the correct order
 export const strategicQuestions: QuizQuestion[] = [
   ...selfPerceptionQuestions,
@@ -11,4 +12,5 @@ export const strategicQuestions: QuizQuestion[] = [
   ...purchaseIntentQuestions,
   ...desiredOutcomesQuestions
 ];
+
 console.log('Strategic questions loaded:', strategicQuestions.length);

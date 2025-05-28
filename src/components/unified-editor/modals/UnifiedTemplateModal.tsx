@@ -1,5 +1,3 @@
-
-"use client";
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -25,7 +23,7 @@ const quizTemplates = [
     ],
     components: []
   },
-  {
+  { 
     id: 'quiz-template-2', 
     title: 'Quiz de Estilo', 
     description: 'Template para quiz de estilo pessoal', 
@@ -42,7 +40,7 @@ const quizTemplates = [
 ];
 
 const resultTemplates = [
-  {
+  { 
     id: 'result-template-1', 
     title: 'Resultado Elegante', 
     description: 'Design elegante para página de resultados', 
@@ -53,7 +51,7 @@ const resultTemplates = [
       { id: 'block-desc', type: 'styleDescription', content: { description: 'Descrição do estilo elegante', style: {} } }
     ]
   },
-  {
+  { 
     id: 'result-template-2', 
     title: 'Resultado Contemporâneo', 
     description: 'Design contemporâneo para página de resultados', 
@@ -67,7 +65,7 @@ const resultTemplates = [
 ];
 
 const salesTemplates = [
-  {
+  { 
     id: 'sales-template-1', 
     title: 'Página de Vendas Básica', 
     description: 'Template básico para página de vendas', 
@@ -227,7 +225,7 @@ export const UnifiedTemplateModal: React.FC<UnifiedTemplateModalProps> = ({
             </TabsContent>
           </ScrollArea>
         </Tabs>
-
+        
         {isLoading && (
           <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10">
             <div className="flex flex-col items-center">

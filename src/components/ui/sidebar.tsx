@@ -67,7 +67,6 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024)
     }
-
     checkMobile()
     window.addEventListener("resize", checkMobile)
     return () => {
@@ -194,7 +193,7 @@ export function SidebarFooter({
     <div
       className={cn(
         "flex items-center border-t p-4 transition-all dark:border-slate-700",
-        isCollapsed ? "lg:justify-center" : "",
+        isCollapsed ? "lg:justify-center lg:px-0" : "",
         className
       )}
       {...props}
@@ -348,3 +347,4 @@ export function SidebarMenuLink({
     </a>
   )
 }
+

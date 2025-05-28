@@ -6,10 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Upload } from 'lucide-react';
+
 interface ImagePropertiesProps {
   data: QuizComponentData['data'];
   onUpdate: (data: any) => void;
 }
+
 const ImageProperties: React.FC<ImagePropertiesProps> = ({ data, onUpdate }) => {
   return (
     <div className="space-y-4">
@@ -31,6 +33,7 @@ const ImageProperties: React.FC<ImagePropertiesProps> = ({ data, onUpdate }) => 
             <span className="text-xs">Upload de Imagem</span>
           </Button>
         </div>
+        
         {data.imageUrl && (
           <div className="mt-4">
             <p className="text-xs text-gray-500 mb-1">Preview:</p>
@@ -43,15 +46,20 @@ const ImageProperties: React.FC<ImagePropertiesProps> = ({ data, onUpdate }) => 
         )}
       </div>
       
+      <div className="space-y-2">
         <Label htmlFor="alt">Texto Alternativo</Label>
+        <Input
           id="alt"
           value={data.alt || ''}
           onChange={(e) => onUpdate({ ...data, alt: e.target.value })}
           placeholder="Descrição da imagem"
+        />
         <p className="text-xs text-gray-500 mt-1">
           Forneça uma descrição da imagem para acessibilidade
         </p>
+      </div>
     </div>
   );
 };
+
 export default ImageProperties;

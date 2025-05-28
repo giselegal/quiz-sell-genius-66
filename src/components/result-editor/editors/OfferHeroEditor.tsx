@@ -38,11 +38,12 @@ const OfferHeroEditor: React.FC<OfferHeroEditorProps> = ({ content, onUpdate }) 
       
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo da Oferta</Label>
-        <Input
+        <Textarea
           id="subtitle"
           value={content.subtitle || ''}
           onChange={(e) => handleChange('subtitle', e.target.value)}
           placeholder="Agora é hora de aplicar com clareza — e se vestir de você"
+          rows={2}
         />
       </div>
       

@@ -17,8 +17,9 @@ const StagePreview: React.FC<StagePreviewProps> = ({ stage, components }) => {
     );
   }
   
+  // Ordenar os componentes por ordem
   const sortedComponents = [...components].sort((a, b) => a.order - b.order);
-
+  
   return (
     <div className="space-y-4">
       {sortedComponents.map(component => (

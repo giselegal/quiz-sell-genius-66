@@ -18,7 +18,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
   isSelected = false
 }) => {
   const { type, data, style } = component;
-  
+
   const getComponentStyles = () => {
     return {
       backgroundColor: style?.backgroundColor || 'transparent',
@@ -118,7 +118,11 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
         <StageQuestionComponent
           data={{
             ...data,
+            displayType: data.displayType || 'text',
             multiSelect: data.multiSelect || 3,
+            layout: data.layout || { columns: 2, direction: 'vertical' },
+            imageSize: data.imageSize || 'medium',
+            selectionIndicator: data.selectionIndicator || 'border',
           }}
           style={style || {}}
           isSelected={isSelected && !isPreview}
@@ -133,7 +137,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           isSelected={isSelected && !isPreview}
         />
       );
-      
+
     default:
       return (
         <div className="p-4 text-center border border-dashed border-gray-300 rounded-md">
@@ -142,3 +146,4 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       );
   }
 };
+

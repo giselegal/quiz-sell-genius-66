@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Block } from '@/types/editor';
 import { StyleResult } from '@/types/quiz';
@@ -74,6 +73,7 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
     zIndex: isSelected ? 1 : 0
   };
   
+  // Render the appropriate block preview based on type
   const renderBlockPreview = () => {
     switch (block.type) {
       case 'header':
@@ -122,7 +122,7 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
         return <div>Tipo de bloco desconhecido: {block.type}</div>;
     }
   };
-
+  
   if (isPreviewMode) {
     return (
       <div style={{ opacity: isDragging ? 0.5 : 1 }}>
@@ -130,7 +130,7 @@ const EditableBlock: React.FC<EditableBlockProps> = ({
       </div>
     );
   }
-
+  
   return (
     <div
       ref={setNodeRef}

@@ -17,7 +17,7 @@ export const FacebookAdsTab = () => {
     consideration: "estilo_quiz_consideration",
     conversion: "estilo_quiz_conversion"
   };
-
+  
   return (
     <div className="space-y-6">
       <Card>
@@ -67,7 +67,7 @@ export const FacebookAdsTab = () => {
                 </div>
               </div>
             </TabsContent>
-
+            
             <TabsContent value="examples" className="space-y-4">
               <div className="space-y-4">
                 <div>
@@ -101,7 +101,7 @@ export const FacebookAdsTab = () => {
                     Copiar
                   </Button>
                 </div>
-
+                
                 <div>
                   <h3 className="text-sm font-semibold mb-2">Campanha de Conversão</h3>
                   <Input 
@@ -119,7 +119,7 @@ export const FacebookAdsTab = () => {
                 </div>
               </div>
             </TabsContent>
-
+            
             <TabsContent value="generator" className="space-y-4">
               <div className="grid gap-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -131,6 +131,9 @@ export const FacebookAdsTab = () => {
                     <Label htmlFor="utm_medium">UTM Medium</Label>
                     <Input id="utm_medium" defaultValue="cpc" />
                   </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="utm_campaign">UTM Campaign</Label>
                     <Input id="utm_campaign" defaultValue="estilo_quiz" />
@@ -140,20 +143,23 @@ export const FacebookAdsTab = () => {
                     <Input id="utm_content" defaultValue="ad_version_1" />
                   </div>
                 </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="utm_term">UTM Term (opcional)</Label>
                   <Input id="utm_term" placeholder="Palavras-chave (opcional)" />
                 </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="generated_url">URL Gerada</Label>
                   <Textarea 
                     id="generated_url" 
                     className="font-mono text-xs" 
+                    readOnly 
                     rows={3}
                     value={`${window.location.origin}?utm_source=facebook&utm_medium=cpc&utm_campaign=estilo_quiz&utm_content=ad_version_1`}
-                    readOnly
                   />
                 </div>
+                
                 <Button className="bg-[#B89B7A] hover:bg-[#A38A69]">
                   Gerar e Copiar URL
                 </Button>
@@ -173,12 +179,14 @@ export const FacebookAdsTab = () => {
             <p>
               Quando os parâmetros UTM estão presentes na URL, o Facebook Pixel automaticamente:
             </p>
+            
             <ol className="list-decimal ml-5 space-y-2">
               <li>Associa a conversão à campanha e anúncio específicos</li>
               <li>Melhora a atribuição de conversões no Facebook Ads Manager</li>
               <li>Otimiza automaticamente seus anúncios para melhor performance</li>
               <li>Permite criar públicos personalizados baseados em campanhas específicas</li>
             </ol>
+            
             <div className="rounded-md bg-muted p-4 mt-4">
               <h4 className="font-medium mb-2">Dica:</h4>
               <p className="text-xs">

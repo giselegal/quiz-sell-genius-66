@@ -38,11 +38,12 @@ const HeaderEditor: React.FC<HeaderEditorProps> = ({ content, onUpdate }) => {
       
       <div className="space-y-2">
         <Label htmlFor="subtitle">Subtítulo (opcional)</Label>
-        <Input
+        <Textarea
           id="subtitle"
           value={content.subtitle || ''}
           onChange={(e) => handleChange('subtitle', e.target.value)}
           placeholder="Subtítulo personalizado"
+          rows={2}
         />
       </div>
       

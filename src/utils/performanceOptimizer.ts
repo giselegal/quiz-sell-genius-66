@@ -1,4 +1,3 @@
-
 /**
  * Utilitário para monitoramento e otimização de performance
  */
@@ -15,14 +14,12 @@ interface EnhancedPerformanceEntry extends PerformanceEntry {
 export const QUIZ_PERF = {
   startTime: performance.now(),
   markerTimings: {} as Record<string, number>,
-  
   mark: (name: string) => {
     QUIZ_PERF.markerTimings[name] = performance.now() - QUIZ_PERF.startTime;
     if (typeof window !== 'undefined' && 'performance' in window) {
       window.performance.mark(name);
     }
   },
-  
   measure: (name: string, startMark: string, endMark: string) => {
     if (typeof window !== 'undefined' && 'performance' in window) {
       try {
@@ -32,7 +29,6 @@ export const QUIZ_PERF = {
       }
     }
   },
-  
   getLCP: () => {
     // Implementação simulada para retornar LCP
     return 1200; // Valor fictício em ms
@@ -66,7 +62,7 @@ export function initPerformanceObservers() {
     });
     
     lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-
+    
     // FID Observer
     const fidObserver = new PerformanceObserver((entryList) => {
       const entries = entryList.getEntries();
@@ -75,8 +71,10 @@ export function initPerformanceObservers() {
         const fid = customEntry.processingStart ? 
           customEntry.processingStart - customEntry.startTime : 
           0;
+        
         console.log(`[Performance] FID: ${fid.toFixed(0)}ms`);
         
+        // Armazenar para análise
         (window as any).quizPerformanceMetrics = {
           ...(window as any).quizPerformanceMetrics || {},
           fid
@@ -85,7 +83,7 @@ export function initPerformanceObservers() {
     });
     
     fidObserver.observe({ type: 'first-input', buffered: true });
-
+    
     // Metrics para CLS
     let cumulativeLayoutShift = 0;
     const clsObserver = new PerformanceObserver((entryList) => {
