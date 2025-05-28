@@ -9,9 +9,9 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { 
   ArrowLeft, 
-  BarChart, Copy, 
+  Bar, BarChart, Copy, 
   Edit, ExternalLink, Globe, LineChart, 
-  Plus, Save, Trash2, PieChart
+  Plus, Save, Trash2
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
@@ -588,7 +588,7 @@ const ABTestManagerPage: React.FC = () => {
                                       };
                                       handleUpdateVariationContent(variation.id, 'pricing', pricing);
                                     }}
-                                    placeholder="4X de R$ 10,86"
+                                    placeholder="4X de R$ 10,86 sem juros"
                                     className="mt-1"
                                   />
                                 </div>
@@ -714,7 +714,7 @@ const ABTestManagerPage: React.FC = () => {
                                 {selectedTest.variations.map(v => v.trafficPercentage || 0).reduce((a, b) => a + b, 0)}%
                               </p>
                             </div>
-                            <PieChart className="h-8 w-8 text-muted-foreground opacity-50" />
+                            <Bar className="h-8 w-8 text-muted-foreground opacity-50" />
                           </div>
                         </Card>
                       </div>

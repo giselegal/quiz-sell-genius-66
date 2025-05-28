@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,8 +16,6 @@ import MainContentEditor from './editors/MainContentEditor';
 import OfferHeroEditor from './editors/OfferHeroEditor';
 import PricingEditor from './editors/PricingEditor';
 import { set, get } from 'lodash';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { useToast } from '@/components/ui/use-toast';
 
 interface ResultPageEditorProps {
   primaryStyle: StyleResult;
@@ -102,7 +101,7 @@ const ResultPageEditor: React.FC<ResultPageEditorProps> = ({
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <LoadingSpinner size="lg" color="#B89B7A" />
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }

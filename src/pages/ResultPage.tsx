@@ -5,7 +5,7 @@ import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Lock, Edit } from 'lucide-react';
+import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import ErrorState from '@/components/result/ErrorState';
@@ -24,11 +24,6 @@ import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import { useABTest } from '@/hooks/useABTest';
-import { Link } from 'react-router-dom';
-import { preloadCriticalImages } from '@/utils/imageManager';
-import { resultPageCriticalCSS } from '@/utils/critical-css';
-import CriticalCSSLoader from '@/components/CriticalCSSLoader';
-import OptimizedImage from '@/components/ui/OptimizedImage';
 
 const ResultPage: React.FC = () => {
   const {
@@ -40,35 +35,66 @@ const ResultPage: React.FC = () => {
   } = useGlobalStyles();
   const {
     user
-  } = useAuth();
+  } = useAuth(); // Get user from auth context
   
+  // Usar o hook de teste A/B para a página de resultados
   const { currentVariation, registerConversion, isLoading: isLoadingABTest } = useABTest('result');
   
+  const [imagesLoaded, setImagesLoaded] = useState({
+    style: false,
+    guide: false
+  });
   const isLowPerformance = useIsLowPerformanceDevice();
   const {
     isLoading,
     completeLoading
   } = useLoadingState({
-    minDuration: 50, 
+    minDuration: isLowPerformance ? 400 : 800,
     disableTransitions: isLowPerformance
   });
 
+  // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
-    preloadCriticalImages('results');
-    completeLoading();
-  }, [primaryStyle, completeLoading]);
+
+    // Pré-carregar imagens críticas primeiro
+    const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
+    criticalImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
+    // Depois carregar as imagens específicas do estilo
+    const {
+      category
+    } = primaryStyle;
+    const {
+      image,
+      guideImage
+    } = styleConfig[category];
+    const styleImg = new Image();
+    styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
+    styleImg.onload = () => setImagesLoaded(prev => ({
+      ...prev,
+      style: true
+    }));
+    const guideImg = new Image();
+    guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
+    guideImg.onload = () => setImagesLoaded(prev => ({
+      ...prev,
+      guide: true
+    }));
+  }, [primaryStyle, globalStyles.logo]);
   
-  if (!primaryStyle) {
-    return <ErrorState />;
-  }
+  useEffect(() => {
+    if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
+  }, [imagesLoaded, completeLoading]);
   
-  if (isLoading || isLoadingABTest) {
-    return <ResultSkeleton primaryStyle={primaryStyle} />;
-  }
+  if (!primaryStyle) return <ErrorState />;
+  if (isLoading || isLoadingABTest) return <ResultSkeleton />;
   
   const {
     category
@@ -79,79 +105,85 @@ const ResultPage: React.FC = () => {
     description
   } = styleConfig[category];
   
+  // Determinar a URL de checkout com base na variação do teste A/B
   const getCheckoutUrl = () => {
+    // URL de checkout padrão
     let checkoutUrl = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-    if (currentVariation?.content?.checkoutUrl) {
+    
+    // Se houver uma variação ativa de teste A/B, usar sua configuração
+    if (currentVariation && currentVariation.content && currentVariation.content.checkoutUrl) {
       checkoutUrl = currentVariation.content.checkoutUrl;
     }
+    
     return checkoutUrl;
   };
   
   const handleCTAClick = () => {
+    // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
+    
+    // Registrar conversão para o teste A/B (se houver)
     if (currentVariation) {
       registerConversion();
     }
+    
+    // Redirecionar para a URL de checkout
     window.location.href = getCheckoutUrl();
   };
   
+  // Aplicar configurações específicas da variação (se houver)
   const getStyleOverrides = () => {
-    const baseStyles: React.CSSProperties = {
+    const baseStyles = {
       backgroundColor: globalStyles.backgroundColor || '#fffaf7',
       color: globalStyles.textColor || '#432818',
       fontFamily: globalStyles.fontFamily || 'inherit'
     };
-    if (currentVariation?.content?.styles) {
+    
+    // Se houver uma variação ativa de teste A/B, mesclar suas configurações de estilo
+    if (currentVariation && currentVariation.content && currentVariation.content.styles) {
       return {
         ...baseStyles,
         ...currentVariation.content.styles
       };
     }
+    
     return baseStyles;
   };
   
+  // Verificar se a oferta deve ser modificada com base na variação A/B
   const getPriceInfo = () => {
+    // Valores padrão
     const priceInfo = {
       regularPrice: 'R$ 175,00',
       currentPrice: 'R$ 39,00',
-      installments: '4X de R$ 10,86'
+      installments: '4X de R$ 10,86 sem juros'
     };
-    if (currentVariation?.content?.pricing) {
+    
+    // Se houver uma variação ativa de teste A/B, usar suas configurações de preço
+    if (currentVariation && currentVariation.content && currentVariation.content.pricing) {
       return {
         ...priceInfo,
         ...currentVariation.content.pricing
       };
     }
+    
     return priceInfo;
   };
   
   const priceInfo = getPriceInfo();
   
-  const isAdmin = user && 
-    typeof user === 'object' && 
-    'role' in user && 
-    user.role === 'admin';
-  
   return (
     <div className="min-h-screen relative overflow-hidden" style={getStyleOverrides()}>
-      <CriticalCSSLoader cssContent={resultPageCriticalCSS} />
+      {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
-      {isAdmin && (
-        <div className="container mx-auto px-4 py-2 max-w-4xl">
-          <Link to="/resultado/editor" className="inline-flex items-center gap-1.5 text-sm py-1.5 px-3 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors">
-            <Edit className="h-3.5 w-3.5" />
-            <span>Editar Página</span>
-          </Link>
-        </div>
-      )}
-
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
+        {/* ATTENTION: Primary Style Card */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
-          <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
+          <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
               <div className="max-w-md mx-auto mb-6">
                 <div className="flex justify-between items-center mb-2">
@@ -166,65 +198,58 @@ const ResultPage: React.FC = () => {
 
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={150}>
+                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
                   <p className="text-[#432818] leading-relaxed">{description}</p>
                 </AnimatedWrapper>
-                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={200}>
+                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={600}>
                   <div className="bg-white rounded-lg p-4 shadow-sm border border-[#B89B7A]/10 glass-panel">
                     <h3 className="text-lg font-medium text-[#432818] mb-2">Estilos que Também Influenciam Você</h3>
                     <SecondaryStylesSection secondaryStyles={secondaryStyles} />
                   </div>
                 </AnimatedWrapper>
               </div>
-              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={100}>
-                <div className="max-w-[180px] md:max-w-[238px] mx-auto relative">
-                  <OptimizedImage 
-                    src={image}
-                    alt={`Estilo ${category}`}
-                    width={238}
-                    height={Math.round(238 * 1.3)}
-                    className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-                    priority={true}
-                  />
-                  <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A] dark:border-[#E0C9B1]"></div>
-                  <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A] dark:border-[#E0C9B1]"></div>
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
+                <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
+                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
+                  {/* Elegant decorative corner */}
+                  <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
+                  <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
                 </div>
               </AnimatedWrapper>
             </div>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={50}>
-              <div className="mt-10 md:mt-12 max-w-[600px] mx-auto relative p-4 bg-gradient-to-br from-[#fdfaf8] to-[#fbf5ef] dark:from-[#3a2e26] dark:to-[#332820] rounded-xl shadow-xl border border-[#B89B7A]/30 dark:border-[#E0C9B1]/30">
-                <OptimizedImage
-                  src={guideImage}
-                  alt={`Guia de Estilo ${category}`}
-                  width={600}
-                  height={400}
-                  className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-                  priority={true}
-                />
-                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] dark:from-[#D4B79F] dark:to-[#C8A88A] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
-                  Seu Guia Detalhado
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
+              <div className="mt-8 max-w-[540px] mx-auto relative">
+                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" width="540" height="auto" />
+                {/* Elegant badge */}
+                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+                  Exclusivo
                 </div>
               </div>
             </AnimatedWrapper>
           </AnimatedWrapper>
         </Card>
 
+        {/* INTEREST: Before/After Transformation Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
           <BeforeAfterTransformation />
         </AnimatedWrapper>
 
+        {/* INTEREST: Motivation Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
           <MotivationSection />
         </AnimatedWrapper>
 
+        {/* INTEREST: Bonus Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
           <BonusSection />
         </AnimatedWrapper>
 
+        {/* DESIRE: Testimonials */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
           <Testimonials />
         </AnimatedWrapper>
 
+        {/* DESIRE: Featured CTA (Green) */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
           <div className="text-center my-10">
             <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
@@ -236,16 +261,10 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
             
-            <Button 
-              onClick={handleCTAClick} 
-              className="text-white py-4 px-6 rounded-md btn-cta-green" 
-              onMouseEnter={() => setIsButtonHovered(true)} 
-              onMouseLeave={() => setIsButtonHovered(false)} 
-              style={{
-                background: "linear-gradient(to right, #4CAF50, #45a049)",
-                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-              }}
-            >
+            <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
+            background: "linear-gradient(to right, #4CAF50, #45a049)",
+            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+          }}>
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 Quero meu Guia de Estilo Agora
@@ -262,16 +281,18 @@ const ResultPage: React.FC = () => {
           </div>
         </AnimatedWrapper>
 
+        {/* DESIRE: Guarantee Section */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
           <GuaranteeSection />
         </AnimatedWrapper>
 
+        {/* DESIRE: Mentor and Trust Elements */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
           <MentorSection />
         </AnimatedWrapper>
 
+        {/* ACTION: Final Value Proposition and CTA */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
-          
           <div className="text-center mt-10">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
               Vista-se de Você — na Prática
@@ -286,17 +307,16 @@ const ResultPage: React.FC = () => {
             <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
               <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
-                {["Looks com intenção e identidade", "Cores, modelagens e tecidos a seu favor", "Imagem alinhada aos seus objetivos", "Guarda-roupa funcional, sem compras por impulso"].map((item, index) => (
-                  <li key={index} className="flex items-start">
+                {["Looks com intenção e identidade", "Cores, modelagens e tecidos a seu favor", "Imagem alinhada aos seus objetivos", "Guarda-roupa funcional, sem compras por impulso"].map((item, index) => <li key={index} className="flex items-start">
                     <div className="flex-shrink-0 h-5 w-5 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white mr-2 mt-0.5">
                       <CheckCircle className="h-3 w-3" />
                     </div>
                     <span>{item}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </div>
 
+            {/* Updated Value Stack Section with new prices and installment option */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
               
@@ -328,22 +348,20 @@ const ResultPage: React.FC = () => {
                 <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único ou em {priceInfo.installments}</p>
               </div>
               
+              {/* Payment methods image */}
               <div className="mt-4">
                 <img
                   src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
                   alt="Métodos de pagamento"
                   className="w-full rounded-lg"
-                  loading="lazy"
-                  width="400"
-                  height="100"
                 />
               </div>
             </div>
 
             <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2" style={{
-              background: "linear-gradient(to right, #4CAF50, #45a049)",
-              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-              fontSize: "1rem"
+            background: "linear-gradient(to right, #4CAF50, #45a049)",
+            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+            fontSize: "1rem" /* Smaller font size for button */
             }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />

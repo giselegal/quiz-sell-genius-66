@@ -7,89 +7,25 @@
     <title>Descubra Seu Estilo com Gisele Galvão | Vista-se de Você!</title>
     <meta name="description" content="Cansada do guarda-roupa lotado e nada combina? Faça o quiz da Gisele Galvão e descubra seu estilo com clareza e confiança. Resultado imediato!" />
     <meta name="author" content="Gisele Galvão" />
+
     <meta property="og:title" content="Descubra Seu Estilo com Gisele Galvão | Vista-se de Você!" />
     <meta property="og:description" content="Cansada do guarda-roupa lotado e nada combina? Faça o quiz da Gisele Galvão e descubra seu estilo com clareza e confiança. Resultado imediato!" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://giselegalvao.com.br/" />
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Descubra Seu Estilo com Gisele Galvão | Vista-se de Você!" />
     <meta name="twitter:description" content="Cansada do guarda-roupa lotado e nada combina? Faça o quiz da Gisele Galvão e descubra seu estilo com clareza e confiança. Resultado imediato!" />
     <meta name="twitter:image" content="https://giselegalvao.com.br/" />
-    <!-- Favicon e tema de cores -->
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="theme-color" content="#ffffff">
-    <!-- Removido preload de imagens para evitar avisos de preload não utilizado -->
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
-    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-    <link rel="dns-prefetch" href="https://connect.facebook.net" />
-    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
-    <meta http-equiv="Cache-Control" content="max-age=86400, must-revalidate" />
-    <!-- Preload critical fonts -->
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" rel="stylesheet">
-    <!-- Defer other fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <!-- Critical CSS inline for faster rendering -->
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Inter', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-      #root {
-        min-height: 100vh;
-        width: 100%;
-      }
-      .loading-fallback {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        background-color: #f9fafb;
-      }
-      .loading-spinner {
-        width: 3rem;
-        height: 3rem;
-        border-radius: 50%;
-        border: 2px solid #e5e7eb;
-        border-top-color: #b29670;
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-      .font-playfair {
-        font-family: 'Playfair Display', serif;
-      }
-    </style>
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    </noscript>
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <script type="module" src="https://cdn.gpteng.co/gptengineer.js"></script>
-    <script src="https://static.cloudflareinsights.com/beacon.min.js" defer></script>
-    <script type="text/javascript">
-      !function(f,b,e,v,n,t,s) {
-        if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)
-      }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
   </head>
   <body>
-    <div id="root">
-      <div class="loading-fallback">
-        <div class="loading-spinner"></div>
-      </div>
-    </div>
-    <!-- Script principal: entrada padrão do Vite, será substituído no build -->
-    <script type="module" src="/src/main.jsx"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -11,28 +11,23 @@ export const desiredOutcomesQuestions: QuizQuestion[] = [
     options: [
       {
         id: 'strategic-7-1',
-        text: 'Montar looks com mais facilidade e confiança',
-        styleCategory: 'Strategic' // Added missing property
+        text: 'Montar looks com mais facilidade e confiança'
       },
       {
         id: 'strategic-7-2',
-        text: 'Usar o que já tenho e me sentir estilosa',
-        styleCategory: 'Strategic' // Added missing property
+        text: 'Usar o que já tenho e me sentir estilosa'
       },
       {
         id: 'strategic-7-3',
-        text: 'Comprar com mais consciência e sem culpa',
-        styleCategory: 'Strategic' // Added missing property
+        text: 'Comprar com mais consciência e sem culpa'
       },
       {
         id: 'strategic-7-4',
-        text: 'Ser admirada pela imagem que transmito',
-        styleCategory: 'Strategic' // Added missing property
+        text: 'Ser admirada pela imagem que transmito'
       },
       {
         id: 'strategic-7-5',
-        text: 'Resgatar peças esquecidas e criar novos looks com estilo',
-        styleCategory: 'Strategic' // Added missing property
+        text: 'Resgatar peças esquecidas e criar novos looks com estilo'
       }
     ]
   }

@@ -1,10 +1,10 @@
+
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Clock, Lock, Check } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface PricingSectionProps {
   price?: string;
@@ -85,12 +85,9 @@ const PricingSection: React.FC<PricingSectionProps> = ({
         {/* Payment method images */}
         <div className="mt-3 mb-4 text-center">
           <img
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_auto:good,w_320/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
             alt="Métodos de pagamento"
             className="w-full max-w-xs mx-auto"
-            width={320}
-            height={48}
-            loading="lazy"
           />
         </div>
 
@@ -113,9 +110,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({
             <span className="flex items-center gap-2">
               {isLoading ? (
                 <>
-                  <div className="inline-block">
-                    <LoadingSpinner size="xs" color="#FFFFFF" />
-                  </div>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   <span>Processando...</span>
                 </>
               ) : (

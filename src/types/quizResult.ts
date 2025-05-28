@@ -1,4 +1,3 @@
-
 import { StyleResult } from './quiz';
 
 export interface ResultPageBlock {
@@ -10,24 +9,6 @@ export interface ResultPageBlock {
   settings?: Record<string, any>;
   abTestVariant?: string;
   isVisible?: boolean;
-  
-  // Additional properties for specific block types
-  styleCategory?: string;
-  percentage?: number;
-  description?: string;
-  buttonText?: string;
-  url?: string;
-  pixelId?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  author?: string;
-  authorImage?: string;
-  rating?: number;
-  items?: Array<{
-    id: string;
-    imageUrl: string;
-    caption?: string;
-  }>;
 }
 
 export interface StyleResultBlock extends ResultPageBlock {

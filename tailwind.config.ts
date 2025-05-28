@@ -21,19 +21,14 @@ export default {
       fontSize: {
         '2xs': '0.65rem',
       },
-      scale: {
-        '102': '1.02',
-      },
       fontFamily: {
         playfair: ["Playfair Display", "serif"],
         inter: ["Inter", "sans-serif"],
       },
       colors: {
-        brand: {
-          primary: "#B89B7A",
-          secondary: "#432818",
-          background: "#fefefe",
-        },
+        primary: "#B89B7A",
+        secondary: "#432818",
+        background: "#fefefe",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -115,28 +110,12 @@ export default {
             transform: 'scale(1)',
             opacity: '1'
           }
-        },
-        'loading-bar': {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(100%)' }
-        },
-        'enhanced-pulse': {
-          '0%, 100%': {
-            transform: 'scale(1)',
-            boxShadow: '0 0 0 0 rgba(184, 155, 122, 0.4)'
-          },
-          '50%': {
-            transform: 'scale(1.05)',
-            boxShadow: '0 0 0 10px rgba(184, 155, 122, 0)'
-          }
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'scale-in': 'scale-in 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        'loading-bar': 'loading-bar 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1)',
-        'enhanced-pulse': 'enhanced-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+        'scale-in': 'scale-in 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
       },
       perspective: {
         '1000': '1000px',
@@ -153,7 +132,6 @@ export default {
       },
       scale: {
         '115': '1.15',
-        '102': '1.02',
       },
       backgroundImage: {
         'gradient-gold': 'linear-gradient(to right, #B89B7A, #432818)',

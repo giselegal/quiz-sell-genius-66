@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface EditorErrorHandlerProps {
   children: React.ReactNode;
@@ -47,7 +46,7 @@ const EditorErrorHandler: React.FC<EditorErrorHandlerProps> = ({ children }) => 
     return (
       <div className="h-full flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <LoadingSpinner size="lg" color="#B89B7A" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#B89B7A]" />
           <p className="text-[#8F7A6A]">Carregando editor...</p>
         </div>
       </div>
