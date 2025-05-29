@@ -80,6 +80,16 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   }, [activeIndex]);
   */
 
+  const handleNext = () => {
+    if (isLoading) return;
+    setActiveIndex((prev) => (prev + 1) % transformations.length);
+  };
+
+  const handlePrev = () => {
+    if (isLoading) return;
+    setActiveIndex((prev) => (prev - 1 + transformations.length) % transformations.length);
+  };
+
   if (isLoading) {
     return (
       <div className="my-6 sm:my-8 md:my-10">
