@@ -367,8 +367,8 @@ const ResultPage: React.FC = () => {
             onClick={handleCTAClick} 
             className="text-white text-xs sm:text-sm leading-none py-2 px-4 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto cursor-pointer"
             style={{
-              background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
-              boxShadow: '0 4px 14px rgba(184, 155, 122, 0.4)',
+              background: 'linear-gradient(90deg, #4CAF50 0%, #43a047 100%)', // verde estratégico
+              boxShadow: '0 4px 14px rgba(76, 175, 80, 0.25)',
               transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
             }}
             onMouseEnter={() => setIsButtonHovered(true)} 
@@ -817,7 +817,9 @@ const ResultPage: React.FC = () => {
                   Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, mas hoje você garante por <span className="text-[#4CAF50] font-bold">apenas R$ 39,00</span>.
                 </p>
                 <p className="text-sm sm:text-base text-[#2d7d32] font-medium economia-label mt-2">
-                  <span className="economia bg-[#e6f9e7] px-2 py-1 rounded-lg border border-[#4CAF50]/30 shadow-sm">Economia de R$ 135,10 (77% OFF)</span>
+                  <span className="economia text-[#4CAF50] text-xs sm:text-sm font-semibold" style={{ background: 'none', border: 'none', boxShadow: 'none', padding: 0 }}>
+                    Economia de R$ 135,10 (77% OFF)
+                  </span>
                 </p>
                 <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2">
                   <Clock className="w-4 h-4" />
