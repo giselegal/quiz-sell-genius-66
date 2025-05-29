@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -27,8 +26,6 @@ const SettingsPage = React.lazy(() => import('./SettingsPage'));
 const AnalyticsPage = React.lazy(() => import('./AnalyticsPage'));
 const ABTestPage = React.lazy(() => import('./ABTestPage'));
 const ABTestManagerPage = React.lazy(() => import('../ABTestManagerPage'));
-const ResultPagePrototype = React.lazy(() => import('../ResultPagePrototype'));
-const EnhancedResultPageEditorPage = React.lazy(() => import('../EnhancedResultPageEditorPage'));
 const QuizOfferPageVisualEditor = React.lazy(() => import('@/components/visual-editor/QuizOfferPageVisualEditor'));
 
 const AdminDashboard = () => {
@@ -45,7 +42,6 @@ const AdminDashboard = () => {
     else if (path.includes('/analytics')) setActiveTab('analytics');
     else if (path.includes('/ab-test')) setActiveTab('ab-test');
     else if (path.includes('/offer-editor')) setActiveTab('offer-editor');
-    else if (path.includes('/prototype')) setActiveTab('prototype');
     else setActiveTab('dashboard');
   }, [location.pathname]);
 
@@ -275,12 +271,6 @@ const AdminDashboard = () => {
             <TabsContent value="ab-test">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando testes A/B...</div>}>
                 <ABTestPage />
-              </React.Suspense>
-            </TabsContent>
-
-            <TabsContent value="prototype">
-              <React.Suspense fallback={<div className="p-8 text-center">Carregando protótipo...</div>}>
-                <ResultPagePrototype />
               </React.Suspense>
             </TabsContent>
 

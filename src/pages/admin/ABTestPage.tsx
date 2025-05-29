@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import QuizResultSalesPage from '@/components/templates/QuizResultSalesPage';
-import ResultPage from '@/components/pages/ResultPage';
+import ResultPage from '@/pages/resultado';
 
 const ABTestPage: React.FC = () => {
   const [activeVersion, setActiveVersion] = useState<'A' | 'B'>('A');
