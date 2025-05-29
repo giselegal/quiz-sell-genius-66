@@ -811,14 +811,15 @@ const ResultPage: React.FC = () => {
                             <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> Sexy
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong>• + Guias dos Seus Estilos Complementares:</strong> Criativo e Dramático e Romântico e Elegante e Contemporâneo e Natural e Clássico
+                            <strong>• + Guias dos Seus Estilos Complementares:</strong> Criativo e Dramático
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             Transforme sua imagem com looks Estratégicos que comunicam sua essência e valorizam sua Personalidade única.
                           </p>
                         </div>
+                        {/* Removido elemento com ícone raio */}
                         <div className="mt-4 flex flex-col items-start sm:items-end">
-                          <div className="bg-[#f8fdf8] border border-[#4CAF50]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
+                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
                             <span className="text-[#aa6b5d] font-bold text-base block">Valor: R$ 79,00</span>
                           </div>
                         </div>
