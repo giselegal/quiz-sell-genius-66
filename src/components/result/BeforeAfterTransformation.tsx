@@ -231,7 +231,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             {/* Frase de incentivo acima do botão */}
             <div className="mb-3 flex justify-center md:justify-start">
               <span className="text-[#aa6b5d] text-sm md:text-base font-medium">
-                Dê o próximo passo na sua transformação!
               </span>
             </div>
             <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4 flex justify-center md:justify-start">
