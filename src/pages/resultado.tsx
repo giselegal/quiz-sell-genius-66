@@ -23,7 +23,7 @@ import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
 
 // Seções carregadas via lazy
-const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
+const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation'));
 const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
 const BonusSection = lazy(() => import('@/components/result/BonusSection'));
 const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
