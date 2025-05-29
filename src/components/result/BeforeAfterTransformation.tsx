@@ -210,7 +210,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               
               {/* Navegação */}
               {transformations.length > 1 && (
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none z-20"> {/* Aumentado z-index para 20 */}
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
                     onClick={handlePrev}
@@ -253,7 +253,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           </div>
           
           {/* Coluna de conteúdo */}
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center md:relative md:z-10"> {/* Adicionado md:relative e md:z-10 */}
             {/* Frase de incentivo acima do botão */}
             <div className="mb-3 flex justify-center md:justify-start">
               <span className="text-[#aa6b5d] text-sm md:text-base font-medium">
