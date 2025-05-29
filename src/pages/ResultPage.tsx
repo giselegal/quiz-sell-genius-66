@@ -542,6 +542,23 @@ const ResultPage: React.FC = () => {
               <BeforeAfterTransformation />
             </AnimatedWrapper>
           </Suspense>
+          {/* Apresentação rápida dos bônus logo após o antes/depois */}
+          <div className="mt-10 flex flex-col md:flex-row items-center justify-center gap-6">
+            <div className="flex items-center gap-3 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] border border-[#B89B7A]/15 rounded-xl px-5 py-4 shadow-sm w-full md:w-auto">
+              <Gift className="w-7 h-7 text-[#aa6b5d]" />
+              <div>
+                <div className="font-bold text-[#432818] text-base">Bônus 1</div>
+                <div className="text-xs text-[#6B5B4E]">Peças-chave para multiplicar seus looks</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] border border-[#B89B7A]/15 rounded-xl px-5 py-4 shadow-sm w-full md:w-auto">
+              <Star className="w-7 h-7 text-[#aa6b5d]" />
+              <div>
+                <div className="font-bold text-[#432818] text-base">Bônus 2</div>
+                <div className="text-xs text-[#6B5B4E]">Visagismo facial para valorizar sua beleza</div>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Motivation Section */}
