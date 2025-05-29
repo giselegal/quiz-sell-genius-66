@@ -12,7 +12,7 @@ const GuaranteeSeal: React.FC<GuaranteeSealProps> = ({
 }) => {
   if (variant === 'floating') {
     return (
-      <div className={`fixed bottom-4 right-4 z-50 ${className}`}>
+      <div className={`fixed bottom-4 right-4 z-40 ${className}`}>
         <div className="bg-gradient-to-br from-[#4CAF50] to-[#45a049] text-white px-4 py-3 rounded-full shadow-lg border-2 border-white/20 animate-pulse">
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5" />

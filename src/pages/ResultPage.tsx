@@ -17,6 +17,7 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import GuaranteeSeal from '@/components/result/GuaranteeSeal';
+import FloatingCTA from '@/components/result/FloatingCTA';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
@@ -887,8 +888,11 @@ const ResultPage: React.FC = () => {
         <BuildInfo />
       </div>
       
-      {/* Selo de Garantia Flutuante */}
-      <GuaranteeSeal variant="floating" />
+      {/* Botão Flutuante de Compra */}
+      <FloatingCTA onClickCTA={handleCTAClick} />
+      
+      {/* Selo de Garantia Flutuante - posicionado à esquerda para não sobrepor */}
+      <GuaranteeSeal variant="floating" className="bottom-4 left-4 right-auto" />
     </div>
   );
 };
