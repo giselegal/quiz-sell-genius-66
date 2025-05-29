@@ -206,7 +206,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   </button>
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={handleNext}
+                    onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
                     aria-label="Próxima"
                   >
                     <ChevronRight
@@ -296,20 +296,36 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               <Button
                 onClick={e => {
                   e.preventDefault();
-                  // Remover pointerEvents do span para garantir clique em todo o botão
+                  // Efeito de clique: ripple simples
                   const btn = e.currentTarget;
-                  btn.classList.add('scale-95');
+                  const ripple = document.createElement('span');
+                  ripple.className = 'cta-ripple';
+                  ripple.style.position = 'absolute';
+                  ripple.style.left = `${e.nativeEvent.offsetX}px`;
+                  ripple.style.top = `${e.nativeEvent.offsetY}px`;
+                  ripple.style.width = ripple.style.height = '120px';
+                  ripple.style.background = 'rgba(184,155,122,0.18)';
+                  ripple.style.borderRadius = '50%';
+                  ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+                  ripple.style.pointerEvents = 'none';
+                  ripple.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s';
+                  btn.style.position = 'relative';
+                  btn.appendChild(ripple);
                   setTimeout(() => {
-                    btn.classList.remove('scale-95');
-                    trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-                    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-                  }, 120);
+                    ripple.style.transform = 'translate(-50%, -50%) scale(1)';
+                    ripple.style.opacity = '0';
+                  }, 10);
+                  setTimeout(() => {
+                    ripple.remove();
+                  }, 400);
+                  trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
+                  window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
                 }}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
-                className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 active:scale-95 ${
+                className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden ${
                   isButtonHovered ? 'brightness-105' : ''
-                } leading-none animate-gradient-x select-none flex items-center justify-center`}
+                }`}
                 style={{
                   background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
                   boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
@@ -321,7 +337,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 }}
                 type="button"
               >
-                <span className="flex items-center justify-center gap-2 w-full pointer-events-none">
+                <span className="flex items-center justify-center gap-2 w-full">
                   <ShoppingCart className={`w-5 h-5 transition-transform duration-200 ${isButtonHovered ? 'scale-110' : ''}`} />
                   Quero Minha Transformação Agora
                 </span>
