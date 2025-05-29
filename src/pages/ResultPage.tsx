@@ -790,161 +790,117 @@ const ResultPage: React.FC = () => {
               </div>
 
               {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
-              <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/25 max-w-6xl mx-auto relative overflow-hidden"
+              <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-4 sm:p-6 lg:p-8 border border-[#B89B7A]/25 max-w-6xl mx-auto relative overflow-hidden"
                    style={{ boxShadow: tokens.shadows.lg }}>
                 
                 <div className="relative z-10">
-                  <h4 className="font-bold text-[#432818] mb-8 text-center text-xl lg:text-2xl">
+                  <h4 className="font-bold text-[#432818] mb-6 sm:mb-8 text-center text-lg sm:text-xl lg:text-2xl">
                     TUDO O QUE VOCÊ VAI RECEBER HOJE:
                   </h4>
-                  
-                  {/* PRODUTOS EM CARDS SEPARADOS - DESIGN LIMPO */}
-                  <div className="space-y-4 mb-8">
-                    
+                  {/* PRODUTOS EM CARDS SEPARADOS - DESIGN LIMPO E MOBILE FIRST */}
+                  <div className="flex flex-col gap-5 mb-8">
                     {/* PRODUTO PRINCIPAL */}
-                    <div className="bg-white rounded-xl p-6 lg:p-8 border-2 border-[#B89B7A]/30 relative"
-                         style={{ boxShadow: tokens.shadows.md }}>
-                      
+                    <div className="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#B89B7A]/30 flex flex-col shadow-md">
                       {/* Badge destacado */}
-                      <div className="absolute -top-3 left-6 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-md">
-                        <div className="flex items-center gap-2">
-                          <Star className="w-4 h-4" />
-                          <span>Produto Principal</span>
-                        </div>
+                      <div className="absolute -top-4 left-4 sm:left-6 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-md flex items-center gap-2">
+                        <Star className="w-4 h-4" />
+                        <span>Produto Principal</span>
                       </div>
-                      
-                      <div className="pt-2">
-                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-                          
-                          {/* Informações do produto */}
-                          <div className="flex-1 max-w-none">
-                            <h5 className="text-xl lg:text-2xl font-bold text-[#432818] mb-4">
-                              1. Guias Completos de Estilo Personalizado
-                            </h5>
-                            
-                            <div className="space-y-3 mb-4">
-                              <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                                <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> {category}
-                              </p>
-                              <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                                <strong>• + Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.map(s => s.category).join(' e ')}
-                              </p>
-                              <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                                Transforme sua imagem com looks estratégicos que comunicam sua essência e valorizam sua personalidade única.
-                              </p>
-                            </div>
-                            
-                            <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-6 py-3 rounded-lg font-medium border border-[#B89B7A]/20">
-                              <div className="flex items-center gap-2">
-                                <Zap className="w-4 h-4 text-[#aa6b5d]" />
-                                <span>Análise 100% Personalizada</span>
-                              </div>
-                            </div>
+                      <div className="pt-2 flex flex-col gap-4">
+                        <h5 className="text-lg sm:text-xl font-bold text-[#432818]">1. Guias Completos de Estilo Personalizado</h5>
+                        <div className="space-y-2 mb-2">
+                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                            <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> {category}
+                          </p>
+                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                            <strong>• + Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.map(s => s.category).join(' e ')}
+                          </p>
+                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                            Transforme sua imagem com looks estratégicos que comunicam sua essência e valorizam sua personalidade única.
+                          </p>
+                        </div>
+                        <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-4 py-2 rounded-lg font-medium border border-[#B89B7A]/20 text-xs sm:text-sm">
+                          <div className="flex items-center gap-2">
+                            <Zap className="w-4 h-4 text-[#aa6b5d]" />
+                            <span>Análise 100% Personalizada</span>
                           </div>
-                          
-                          {/* Valor */}
-                          <div className="text-center lg:text-right lg:min-w-[140px]">
-                            <div className="bg-[#f8fdf8] border border-[#4CAF50]/20 px-6 py-4 rounded-lg">
-                              <span className="text-[#2d7d32] font-bold text-xl block">INCLUÍDO</span>
-                              <span className="text-base text-gray-500 line-through">Valor: R$ 79,00</span>
-                            </div>
+                        </div>
+                        {/* Valor */}
+                        <div className="mt-4 flex flex-col items-start sm:items-end">
+                          <div className="bg-[#f8fdf8] border border-[#4CAF50]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
+                            <span className="text-[#2d7d32] font-bold text-base sm:text-xl block">INCLUÍDO</span>
+                            <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 79,00</span>
                           </div>
                         </div>
                       </div>
                     </div>
-
                     {/* BÔNUS 1 */}
-                    <div className="bg-white/80 rounded-xl p-6 lg:p-8 border border-[#B89B7A]/15"
-                         style={{ boxShadow: tokens.shadows.sm }}>
-                      
-                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                        
-                        {/* Informações */}
-                        <div className="flex items-start gap-6 flex-1">
-                          <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
-                            1
-                          </div>
-                          <div className="flex-1">
-                            <h6 className="font-bold text-[#432818] text-xl lg:text-2xl mb-3">
-                              BÔNUS 1: Guia das Peças Estratégicas
-                            </h6>
-                            <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                              Descubra as peças essenciais que multiplicam suas possibilidades de looks, economizam tempo e dinheiro.
-                            </p>
-                          </div>
+                    <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
+                      <div className="flex items-start gap-4">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">1</div>
+                        <div className="flex-1">
+                          <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">BÔNUS 1: Guia das Peças Estratégicas</h6>
+                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                            Descubra as peças essenciais que multiplicam suas possibilidades de looks, economizam tempo e dinheiro.
+                          </p>
                         </div>
-                        
-                        {/* Valor bônus */}
-                        <div className="text-center lg:text-right lg:min-w-[140px]">
-                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-6 py-4 rounded-lg">
-                            <span className="text-[#aa6b5d] font-bold text-lg block">BÔNUS GRÁTIS</span>
-                            <span className="text-base text-gray-500 line-through">Valor: R$ 59,00</span>
-                          </div>
+                      </div>
+                      {/* Valor bônus */}
+                      <div className="mt-3 flex flex-col items-start sm:items-end">
+                        <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
+                          <span className="text-[#aa6b5d] font-bold text-base block">BÔNUS GRÁTIS</span>
+                          <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 59,00</span>
                         </div>
                       </div>
                     </div>
-
                     {/* BÔNUS 2 */}
-                    <div className="bg-white/80 rounded-xl p-6 lg:p-8 border border-[#B89B7A]/15"
-                         style={{ boxShadow: tokens.shadows.sm }}>
-                      
-                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                        
-                        {/* Informações */}
-                        <div className="flex items-start gap-6 flex-1">
-                          <div className="w-10 h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
-                            2
-                          </div>
-                          <div className="flex-1">
-                            <h6 className="font-bold text-[#432818] text-xl lg:text-2xl mb-3">
-                              BÔNUS 2: Manual de Visagismo Facial
-                            </h6>
-                            <p className="text-base lg:text-lg leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                              Cortes de cabelo e acessórios ideais para seu formato de rosto, realçando sua beleza natural.
-                            </p>
-                          </div>
+                    <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
+                      <div className="flex items-start gap-4">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">2</div>
+                        <div className="flex-1">
+                          <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">BÔNUS 2: Manual de Visagismo Facial</h6>
+                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
+                            Cortes de cabelo e acessórios ideais para seu formato de rosto, realçando sua beleza natural.
+                          </p>
                         </div>
-                        
-                        {/* Valor bônus */}
-                        <div className="text-center lg:text-right lg:min-w-[140px]">
-                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-6 py-4 rounded-lg">
-                            <span className="text-[#aa6b5d] font-bold text-lg block">BÔNUS GRÁTIS</span>
-                            <span className="text-base text-gray-500 line-through">Valor: R$ 37,00</span>
-                          </div>
+                      </div>
+                      {/* Valor bônus */}
+                      <div className="mt-3 flex flex-col items-start sm:items-end">
+                        <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
+                          <span className="text-[#aa6b5d] font-bold text-base block">BÔNUS GRÁTIS</span>
+                          <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 37,00</span>
                         </div>
                       </div>
                     </div>
                   </div>
-
                   {/* RESUMO FINAL - DESIGN LIMPO */}
-                  <div className="border-t-2 border-[#B89B7A]/20 pt-8">
-                    <div className="text-center space-y-6">
-                      <div className="max-w-sm mx-auto space-y-4 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-6 rounded-xl border border-[#B89B7A]/20"
+                  <div className="border-t-2 border-[#B89B7A]/20 pt-6 sm:pt-8">
+                    <div className="text-center space-y-4 sm:space-y-6">
+                      <div className="max-w-sm mx-auto space-y-2 sm:space-y-4 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-4 sm:p-6 rounded-xl border border-[#B89B7A]/20"
                            style={{ boxShadow: tokens.shadows.sm }}>
-                        <p className="text-lg"><strong>Valor total:</strong> R$ 175,00</p>
-                        <p className="text-xl font-bold text-[#432818]">HOJE POR APENAS:</p>
-                        <p className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                        <p className="text-base sm:text-lg"><strong>Valor total:</strong> R$ 175,00</p>
+                        <p className="text-lg sm:text-xl font-bold text-[#432818]">HOJE POR APENAS:</p>
+                        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                           5x R$ 8,83 no cartão
                         </p>
-                        <p className="text-lg">ou</p>
-                        <p className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                        <p className="text-base sm:text-lg">ou</p>
+                        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                           R$ 39,90 à vista
                         </p>
-                        <p className="text-lg text-[#2d7d32] font-semibold">
+                        <p className="text-base sm:text-lg text-[#2d7d32] font-semibold">
                           Economia de R$ 135,10 (77% OFF)
                         </p>
-                        <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-sm">
+                        <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm">
                           <Clock className="w-4 h-4" />
                           Esta oferta expira quando você sair desta página
                         </p>
                       </div>
                     </div>
-
                     {/* CTA BUTTON */}
-                    <div className="text-center mb-8 relative z-10 flex justify-center mt-8">
+                    <div className="text-center mb-6 sm:mb-8 relative z-10 flex justify-center mt-6 sm:mt-8">
                       <button
                         onClick={handleCTAClick}
-                        className="text-white w-full max-w-md font-bold py-4 px-8 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+                        className="text-white w-full max-w-md font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
                         style={{
                           background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
                           boxShadow: tokens.shadows.cta
@@ -954,9 +910,8 @@ const ResultPage: React.FC = () => {
                         GARANTIR MINHA TRANSFORMAÇÃO AGORA
                       </button>
                     </div>
-
                     {/* TRUST ELEMENTS */}
-                    <div className="flex items-center justify-center gap-8 text-sm flex-wrap mt-6 px-4">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm flex-wrap mt-4 sm:mt-6 px-2 sm:px-4">
                       <div className="flex items-center gap-2 text-[#432818]">
                         <div className="w-4 h-4 bg-[#4CAF50] rounded-full flex items-center justify-center">
                           <span className="text-white text-xs">✓</span>
