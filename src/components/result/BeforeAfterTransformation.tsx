@@ -190,14 +190,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     onClick={() => setActiveIndex((activeIndex - 1 + transformations.length) % transformations.length)}
                     aria-label="Anterior"
                   >
-                    <ChevronLeft size={22} className="text-[#432818]" />
+                    <ChevronLeft
+                      className="text-[#432818] w-5 h-5 md:w-[22px] md:h-[22px]"
+                    />
                   </button>
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
                     onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
                     aria-label="Próxima"
                   >
-                    <ChevronRight size={22} className="text-[#432818]" />
+                    <ChevronRight
+                      className="text-[#432818] w-5 h-5 md:w-[22px] md:h-[22px]"
+                    />
                   </button>
                 </div>
               )}
@@ -329,3 +333,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
 };
 
 export default BeforeAfterTransformation;
+
+// Não existe nenhum HTML estático (fora do JSX/React) neste arquivo.
+// Todo o conteúdo é JSX/React.
