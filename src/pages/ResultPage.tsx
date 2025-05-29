@@ -16,6 +16,7 @@ import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
+import GuaranteeSeal from '@/components/result/GuaranteeSeal';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
@@ -603,9 +604,10 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Guarantee Section */}
-        {/* <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
+        <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
+            subtitle="7 dias de garantia incondicional - Seu investimento é 100% seguro"
           >
             Garantia Total
           </SectionTitle>
@@ -619,7 +621,7 @@ const ResultPage: React.FC = () => {
               <GuaranteeSection />
             </AnimatedWrapper>
           </Suspense>
-        </section> */}
+        </section>
         
         {/* Mentor Section */}
         <section id="mentor" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
