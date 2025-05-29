@@ -774,7 +774,7 @@ const ResultPage: React.FC = () => {
                     <div className="mt-4 pt-4 border-t border-[#B89B7A]/15">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {index === 0 ? 'Guia Completo' : '+ Estilos Complementares'}
+                          {index === 0 ? 'Guia Completo' : ''}
                         </span>
                         <div className="flex items-center gap-2">
                           <span className={`text-sm font-semibold ${index === 0 ? 'text-[#aa6b5d]' : 'text-[#aa6b5d]'}`}>
@@ -812,9 +812,9 @@ const ResultPage: React.FC = () => {
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             <strong>+ Guias dos Seus Estilos Complementares:</strong> {secondaryStyles && secondaryStyles.length > 0 ? (
-    secondaryStyles.map((style, idx) => (
+    secondaryStyles.slice(0, 2).map((style, idx) => (
       <React.Fragment key={style.name}>
-        <strong>{style.name}</strong>{idx < secondaryStyles.length - 1 ? ' e ' : ''}
+        <strong>{style.name}</strong>{idx < Math.min(secondaryStyles.length, 2) - 1 ? ' e ' : ''}
       </React.Fragment>
     ))
   ) : null}
