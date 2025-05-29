@@ -218,10 +218,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => {
-                      if (isLoading) return;
-                      setActiveIndex((prev) => (prev - 1 + transformations.length) % transformations.length);
-                    }}
+                    onClick={() => setActiveIndex((prev) => (prev - 1 + transformations.length) % transformations.length)}
                     aria-label="Anterior"
                   >
                     <ChevronLeft
@@ -230,10 +227,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   </button>
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => {
-                      if (isLoading) return;
-                      setActiveIndex((prev) => (prev + 1) % transformations.length);
-                    }}
+                    onClick={() => setActiveIndex((prev) => (prev + 1) % transformations.length)}
                     aria-label="Próxima"
                   >
                     <ChevronRight
@@ -320,14 +314,15 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
-              {/* --- CORREÇÃO DEFINITIVA DO BOTÃO CTA --- */}
+              {/* --- CORREÇÃO FINAL: BOTÃO CTA E SETA DIREITA --- */}
+              {/* 1. Botão CTA: proteção global e navegação sempre permitida */}
               <Button
                 onClick={e => {
                   e.preventDefault();
                   if (window.ctaClickProcessing) return;
                   window.ctaClickProcessing = true;
                   trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-                  window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+                  window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
                   setTimeout(() => { window.ctaClickProcessing = false; }, 1200);
                 }}
                 onMouseEnter={() => setIsButtonHovered(true)}
