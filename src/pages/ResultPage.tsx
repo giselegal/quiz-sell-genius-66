@@ -894,7 +894,7 @@ const ResultPage: React.FC = () => {
       </div>
       
       {/* Botão Flutuante de Compra */}
-      <FloatingCTA onClickCTA={() => handleCTAClick({} as React.MouseEvent<HTMLButtonElement>)} />
+      <FloatingCTA onClickCTA={handleCTAClick} />
       
       {/* Selo de Garantia Flutuante - posicionado à esquerda para não sobrepor */}
       <GuaranteeSeal variant="floating" className="bottom-4 left-4 right-auto" />
