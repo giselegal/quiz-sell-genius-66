@@ -808,25 +808,18 @@ const ResultPage: React.FC = () => {
                         <h5 className="text-lg sm:text-xl font-bold text-[#432818]">1. Guias Completos de Estilo Personalizado</h5>
                         <div className="space-y-2 mb-2">
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> {category}
+                            <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> Sexy
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong>• + Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.slice(0, 2).map(s => s.category).join(' e ')}
+                            <strong>• + Guias dos Seus Estilos Complementares:</strong> Criativo e Dramático e Romântico e Elegante e Contemporâneo e Natural e Clássico
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             Transforme sua imagem com looks Estratégicos que comunicam sua essência e valorizam sua Personalidade única.
                           </p>
                         </div>
-                        <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-4 py-2 rounded-lg font-medium border border-[#B89B7A]/20 text-xs sm:text-sm">
-                          <div className="flex items-center gap-2">
-                            <Zap className="w-4 h-4 text-[#aa6b5d]" />
-                          </div>
-                        </div>
-                        {/* Valor */}
                         <div className="mt-4 flex flex-col items-start sm:items-end">
                           <div className="bg-[#f8fdf8] border border-[#4CAF50]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                             <span className="text-[#aa6b5d] font-bold text-base block"></span>
-                            <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 79,00</span>
+                            <span className="text-[#aa6b5d] font-bold text-base block">Valor: R$ 79,00</span>
                           </div>
                         </div>
                       </div>
@@ -847,8 +840,7 @@ const ResultPage: React.FC = () => {
                       {/* Valor bônus */}
                       <div className="mt-3 flex flex-col items-start sm:items-end">
                         <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                          <span className="text-[#aa6b5d] font-bold text-base block">Bônus</span>
-                          <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 59,00</span>
+                          <span className="text-[#aa6b5d] font-bold text-base block">Valor: R$ 59,00</span>
                         </div>
                       </div>
                     </div>
@@ -868,8 +860,7 @@ const ResultPage: React.FC = () => {
                       {/* Valor bônus */}
                       <div className="mt-3 flex flex-col items-start sm:items-end">
                         <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                          <span className="text-[#aa6b5d] font-bold text-base block">Bônus</span>
-                          <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 37,00</span>
+                          <span className="text-[#aa6b5d] font-bold text-base block">Valor: R$ 37,00</span>
                         </div>
                       </div>
                     </div>
