@@ -157,7 +157,7 @@ export function AdminSidebar() {
                     return (
                       <Link
                         key={subItem.href}
-                        href={subItem.href}
+                        to={subItem.href}
                         className={cn(
                           'flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-sm',
                           isSubActive 
@@ -179,7 +179,7 @@ export function AdminSidebar() {
       
       <div className="absolute bottom-4 px-4 w-64">
         <Link
-          href="/"
+          to="/"
           className="flex items-center gap-3 px-4 py-3 text-[#B89B7A] hover:bg-[#F5F2E9] rounded-lg transition-colors"
         >
           <Eye className="w-5 h-5" />
