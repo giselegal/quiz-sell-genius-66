@@ -1,15 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = { 
   experimental: {
-    // Removida a chave appDir que é inválida
+    appDir: false // Desabilita o App Router para ignorar arquivos em src/app
   },
   reactStrictMode: false, // Desabilitando modo estrito para ignorar warnings não críticos
   // Desabilitando todas as verificações de tipos, ESLint e erros não críticos durante a compilação
   typescript: {
-    ignoreBuildErrors: true
+    ignoreBuildErrors: true,    // continua build mesmo com erros de TS
   },
   eslint: {
-    ignoreDuringBuilds: true
+    ignoreDuringBuilds: true,   // continua build mesmo com erros de lint
   },
   // Configuração para ignorar warnings durante o build
   onDemandEntries: {
