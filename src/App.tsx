@@ -10,7 +10,6 @@ import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import CriticalCSSLoader from './components/CriticalCSSLoader';
 import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
-import LovableRoutes from './lovable-routes';
 import { fixMainRoutes } from './utils/fixMainRoutes';
 
 // Componente de loading para Suspense
@@ -41,18 +40,8 @@ const isLowPerformanceDevice = () => {
   return false;
 };
 
-// Detecta se o aplicativo está rodando dentro do ambiente Lovable.dev
-const isRunningInLovable = () => {
-  return typeof window !== 'undefined' && (
-    window.location.hostname.includes('lovableproject.com') || 
-    window.location.hostname.includes('lovable.dev') ||
-    window.location.search.includes('lovable=true')
-  );
-};
-
 const App = () => {
   const lowPerformance = isLowPerformanceDevice();
-  const isLovableEnv = isRunningInLovable();
 
   // Inicializar analytics e corrigir rotas na montagem do componente
   useEffect(() => {
@@ -96,32 +85,28 @@ const App = () => {
             <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
             <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
             
-            {isLovableEnv ? (
-              <LovableRoutes />
-            ) : (
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  {/* ROTA PRINCIPAL - Quiz com introdução */}
-                  <Route path="/" element={<QuizPage />} />
-                  
-                  {/* ADMIN - Dashboard centralizado com todas as funcionalidades administrativas */}
-                  <Route path="/admin/*" element={<AdminDashboard />} />
-                  
-                  {/* RESULTADO - Página de resultados do quiz */}
-                  <Route path="/resultado" element={<ResultPage />} />
-                  
-                  {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
-                  <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                  
-                  {/* Redirecionamentos para manter compatibilidade */}
-                  <Route path="/home" element={<Navigate to="/" replace />} />
-                  <Route path="/quiz" element={<Navigate to="/" replace />} />
-                  
-                  {/* 404 - Página não encontrada */}
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </Suspense>
-            )}
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                {/* ROTA PRINCIPAL - Quiz com introdução */}
+                <Route path="/" element={<QuizPage />} />
+                
+                {/* ADMIN - Dashboard centralizado com todas as funcionalidades administrativas */}
+                <Route path="/admin/*" element={<AdminDashboard />} />
+                
+                {/* RESULTADO - Página de resultados do quiz */}
+                <Route path="/resultado" element={<ResultPage />} />
+                
+                {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
+                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                
+                {/* Redirecionamentos para manter compatibilidade */}
+                <Route path="/home" element={<Navigate to="/" replace />} />
+                <Route path="/quiz" element={<Navigate to="/" replace />} />
+                
+                {/* 404 - Página não encontrada */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
           </Router>
           <Toaster />
         </TooltipProvider>
