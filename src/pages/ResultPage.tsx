@@ -607,9 +607,7 @@ const ResultPage: React.FC = () => {
         <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="7 dias de garantia incondicional - Seu investimento é 100% seguro"
           >
-            Garantia Total
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">

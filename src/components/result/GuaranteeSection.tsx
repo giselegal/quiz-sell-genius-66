@@ -4,7 +4,12 @@ import { Card } from '@/components/ui/card';
 const GuaranteeSection: React.FC = () => {
   return (
     <div className="bg-white rounded-2xl shadow-md p-8 relative">
-      <div className="text-center">
+      {/* Círculo animado no topo */}
+      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center shadow-lg animate-bounce">
+        <span className="text-white text-sm md:text-lg font-bold text-center">7 dias<br />de Garantia</span>
+      </div>
+
+      <div className="text-center mt-12">
         <h2 className="text-2xl font-playfair text-[#432818] font-bold leading-tight mb-2">
           Sua Satisfação 100% Garantida
         </h2>
@@ -20,7 +25,6 @@ const GuaranteeSection: React.FC = () => {
           </p>
         </div>
         
-        {/* Elemento visual elegante com a cor da marca */}
         <div className="flex justify-center items-center space-x-4 text-[#432818]">
           <div className="flex items-center">
             <span className="text-[#B89B7A] mr-2">✓</span>
@@ -33,13 +37,6 @@ const GuaranteeSection: React.FC = () => {
           <div className="flex items-center">
             <span className="text-[#B89B7A] mr-2">✓</span>
             <span>Reembolso fácil</span>
-          </div>
-        </div>
-
-        {/* Elemento decorativo responsivo */}
-        <div className="mt-6 flex justify-center">
-          <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center shadow-lg">
-            <span className="text-white text-xl md:text-2xl font-bold">100%</span>
           </div>
         </div>
       </div>
