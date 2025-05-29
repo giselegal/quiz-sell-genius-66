@@ -284,16 +284,9 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
               <Button
-                onClick={e => {
-                  e.preventDefault();
-                  // Remova pointerEvents do span para garantir clique em todo o botão
-                  const btn = e.currentTarget;
-                  btn.classList.add('scale-95');
-                  setTimeout(() => {
-                    btn.classList.remove('scale-95');
-                    trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-                    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-                  }, 120);
+                onClick={() => {
+                  trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
+                  window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
                 }}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
