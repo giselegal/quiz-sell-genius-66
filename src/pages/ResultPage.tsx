@@ -571,6 +571,7 @@ const ResultPage: React.FC = () => {
             variant="simple"
             subtitle={`Ferramentas extras para potencializar uma Imagem de Sucesso ${category}`}
           >
+            Bônus Exclusivos
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -583,7 +584,6 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </Suspense>
         </section>
-        
         {/* Testimonials Section */}
         <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
@@ -626,7 +626,7 @@ const ResultPage: React.FC = () => {
         <section id="mentor" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Especialista que já guiou mais de 10.000 mulheres na descoberta do seu estilo autêntico"
+            subtitle="Especialista que já guiou +de 3.000 mulheres na descoberta do seu estilo autêntico"
           >
             Conheça Sua Mentora
           </SectionTitle>
@@ -804,9 +804,6 @@ const ResultPage: React.FC = () => {
                 <p className="text-base sm:text-lg font-semibold text-[#8F7A6A] mb-1 tracking-wide">
                   <span className="valor-total-label">Valor total:</span> <span className="valor-total font-bold text-[#B89B7A] text-lg sm:text-xl">R$ 175,00</span>
                 </p>
-                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
-                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
-                </p>
                 <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
                   <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
                 </p>
@@ -820,16 +817,8 @@ const ResultPage: React.FC = () => {
                   </span>
                 </p>
                 <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2">
-                  <Clock className="w-4 h-4" />
-                  <span className="oferta-expira">Esta oferta expira quando você sair desta página</span>
-                </p>
-              </div>
-            </div>
-          </AnimatedWrapper>
-        </section>
-      </div>
-    </div>
-  );
-};
-
-export default ResultPage;
+                  {/* Ampulheta animada substituindo o ícone de relógio */}
+                  <span className="relative inline-block w-5 h-5 align-middle">
+                    <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 animate-spin-sand">
+                      <defs>
+                        <linearGradient id="ampulhetaCorMarca" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpace
