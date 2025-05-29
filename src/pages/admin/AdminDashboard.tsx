@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { 
@@ -253,10 +253,7 @@ const AdminDashboard = () => {
             {/* Outras abas carregam os componentes específicos */}
             <TabsContent value="editor">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando editor...</div>}>
-                <Routes>
-                  <Route path="/editor" element={<EditorPage />} />
-                  <Route path="*" element={<EditorPage />} />
-                </Routes>
+                <EditorPage />
               </React.Suspense>
             </TabsContent>
 
