@@ -359,7 +359,6 @@ const ResultPage: React.FC = () => {
             <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
               {/* HIERARQUIA CORRIGIDA - PARCELAS EM DESTAQUE */}
               <span className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">5x R$ 8,83</span>
-              <span className="text-xs text-[#8F7A6A] whitespace-nowrap">sem juros</span>
               <span className="text-xs font-normal text-[#8F7A6A] whitespace-nowrap">ou R$ 39,90 à vista</span>
             </div>
           </div>
@@ -830,7 +829,7 @@ const ResultPage: React.FC = () => {
                 </p>
                 <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2 sm:mt-3">
                   {/* Ampulheta animada maior */}
-                  <span className="relative inline-block w-7 h-7 sm:w-8 sm:h-8 align-middle">
+                  <span className="relative inline-block w-10 h-10 sm:w-12 sm:h-12 align-middle">
                     <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                       <defs>
                         <linearGradient id="ampulhetaCorMarca" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
@@ -867,7 +866,7 @@ const ResultPage: React.FC = () => {
                       .sand-flow { animation: sandFlow 2.5s linear infinite; }
                     `}</style>
                   </span>
-                  <span className="oferta-expira">Esta oferta expira quando você sair desta página</span>
+                  <span className="oferta-expira text-base sm:text-lg font-semibold">Esta oferta expira quando você sair desta página</span>
                 </p>
               </div>
             </div>
