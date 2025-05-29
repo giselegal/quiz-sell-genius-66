@@ -314,8 +314,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
-              {/* --- CORREÇÃO FINAL: BOTÃO CTA E SETA DIREITA --- */}
-              {/* 1. Botão CTA: proteção global e navegação sempre permitida */}
+              {/* --- CORREÇÃO FINAL: BOTÃO CTA SEM DEPENDER DE HOVER/COR --- */}
               <Button
                 onClick={e => {
                   e.preventDefault();
@@ -332,15 +331,13 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   color: "#fff",
                   border: "none",
                   backgroundSize: "200% 200%",
-                  backgroundPosition: isButtonHovered ? "right center" : "left center",
+                  backgroundPosition: "left center",
                   transition: "background-position 0.5s cubic-bezier(0.4,0,0.2,1)"
                 }}
                 type="button"
-                onMouseEnter={() => setIsButtonHovered(true)}
-                onMouseLeave={() => setIsButtonHovered(false)}
               >
                 <span className="flex items-center justify-center gap-2 w-full">
-                  <ShoppingCart className={`w-5 h-5 transition-transform duration-200 ${isButtonHovered ? 'scale-110' : ''}`} />
+                  <ShoppingCart className="w-5 h-5 transition-transform duration-200" />
                   Quero Minha Transformação Agora
                 </span>
               </Button>
