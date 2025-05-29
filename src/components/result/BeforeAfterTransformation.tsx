@@ -224,11 +224,15 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           
           {/* Coluna de conteúdo */}
           <div className="flex flex-col justify-center">
-            <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4">
+            <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4 flex items-center gap-2 justify-center md:justify-start">
+              {/* Elemento decorativo elegante no lugar de emoji */}
+              <span className="inline-block w-5 h-5 rounded-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] shadow-sm"></span>
               Transformação Visual com Propósito
             </h4>
             
-            <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5">
+            <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5 flex items-center gap-2 justify-center md:justify-start">
+              {/* Elemento decorativo elegante no lugar de emoji */}
+              <span className="inline-block w-3 h-3 rounded-full bg-[#aa6b5d] opacity-70"></span>
               Seu Estilo não é apenas sobre Roupas — é sobre comunicar quem você é e onde quer chegar.
             </p>
             
