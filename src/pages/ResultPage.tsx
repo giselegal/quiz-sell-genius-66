@@ -365,7 +365,7 @@ const ResultPage: React.FC = () => {
           </div>
           <Button 
             onClick={handleCTAClick} 
-            className="text-white text-sm sm:text-base leading-none py-3 px-6 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto cursor-pointer"
+            className="text-white text-xs sm:text-sm leading-none py-2 px-4 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto cursor-pointer"
             style={{
               background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
               boxShadow: '0 4px 14px rgba(184, 155, 122, 0.4)',
@@ -813,7 +813,10 @@ const ResultPage: React.FC = () => {
                 <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
                   <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
                 </p>
-                <p className="text-base sm:text-lg text-[#2d7d32] font-semibold economia-label mt-2">
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, mas hoje você garante por <span className="text-[#4CAF50] font-bold">apenas R$ 39,00</span>.
+                </p>
+                <p className="text-sm sm:text-base text-[#2d7d32] font-medium economia-label mt-2">
                   <span className="economia bg-[#e6f9e7] px-2 py-1 rounded-lg border border-[#4CAF50]/30 shadow-sm">Economia de R$ 135,10 (77% OFF)</span>
                 </p>
                 <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2">
