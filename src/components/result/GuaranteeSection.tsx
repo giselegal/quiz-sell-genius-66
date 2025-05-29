@@ -20,6 +20,7 @@ const GuaranteeSection: React.FC = () => {
           </p>
         </div>
         
+        {/* Elemento visual elegante com a cor da marca */}
         <div className="flex justify-center items-center space-x-4 text-[#432818]">
           <div className="flex items-center">
             <span className="text-[#B89B7A] mr-2">✓</span>
@@ -32,6 +33,13 @@ const GuaranteeSection: React.FC = () => {
           <div className="flex items-center">
             <span className="text-[#B89B7A] mr-2">✓</span>
             <span>Reembolso fácil</span>
+          </div>
+        </div>
+
+        {/* Elemento decorativo responsivo */}
+        <div className="mt-6 flex justify-center">
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center shadow-lg">
+            <span className="text-white text-xl md:text-2xl font-bold">100%</span>
           </div>
         </div>
       </div>
