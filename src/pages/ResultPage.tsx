@@ -23,7 +23,7 @@ import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
 
 // Seções carregadas via lazy
-const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation'));
+const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
 const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
 const BonusSection = lazy(() => import('@/components/result/BonusSection'));
 const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
@@ -589,10 +589,7 @@ const ResultPage: React.FC = () => {
         <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle={`O que mulheres ${category} estão dizendo sobre sua transformação`}
-          >
-            Resultados Reais
-          </SectionTitle>
+          />
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -606,7 +603,7 @@ const ResultPage: React.FC = () => {
         </section>
         
         {/* Guarantee Section */}
-        <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
+        {/* <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
           >
@@ -622,7 +619,7 @@ const ResultPage: React.FC = () => {
               <GuaranteeSection />
             </AnimatedWrapper>
           </Suspense>
-        </section>
+        </section> */}
         
         {/* Mentor Section */}
         <section id="mentor" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">

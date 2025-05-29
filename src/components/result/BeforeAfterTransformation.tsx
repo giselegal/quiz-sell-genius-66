@@ -286,7 +286,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               <Button
                 onClick={e => {
                   e.preventDefault();
-                  // Resposta visual imediata
+                  // Remova pointerEvents do span para garantir clique em todo o botão
                   const btn = e.currentTarget;
                   btn.classList.add('scale-95');
                   setTimeout(() => {
@@ -311,10 +311,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 }}
                 type="button"
               >
-                <span
-                  className="flex items-center justify-center gap-2 w-full"
-                  style={{ pointerEvents: 'none' }}
-                >
+                <span className="flex items-center justify-center gap-2 w-full">
                   <ShoppingCart className={`w-5 h-5 transition-transform duration-200 ${isButtonHovered ? 'scale-110' : ''}`} />
                   Quero Minha Transformação Agora
                 </span>
