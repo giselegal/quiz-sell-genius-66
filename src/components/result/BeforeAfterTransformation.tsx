@@ -235,7 +235,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               </span>
             </div>
             <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4 flex justify-center md:justify-start">
-              Transformação Visual com Propósito
+              Dê o próximo passo na sua transformação!
             </h4>
             <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5 flex justify-center md:justify-start">
               Seu Estilo não é apenas sobre Roupas — é sobre comunicar quem você é e onde quer chegar.
