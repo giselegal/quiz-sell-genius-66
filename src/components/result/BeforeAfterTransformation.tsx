@@ -284,10 +284,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
               <Button
-                onClick={() => {
+                onClick={handleCTAClick ? handleCTAClick : (e => {
+                  // Prevenir múltiplos cliques e garantir robustez cross-browser
+                  if (window.ctaClickProcessing) return;
+                  window.ctaClickProcessing = true;
                   trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-                  window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-                }}
+                  if (window.innerWidth >= 768) {
+                    window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
+                  } else {
+                    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+                  }
+                  setTimeout(() => { window.ctaClickProcessing = false; }, 1000);
+                })}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
                 className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 active:scale-95 ${

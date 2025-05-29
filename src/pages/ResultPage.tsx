@@ -778,7 +778,7 @@ const ResultPage: React.FC = () => {
                         </span>
                         <div className="flex items-center gap-2">
                           <span className={`text-sm font-semibold ${index === 0 ? 'text-[#aa6b5d]' : 'text-[#aa6b5d]'}`}>
-                            {index === 0 ? 'Personalizado' : 'Grátis'}
+                            {index === 0 ? 'Personalizado' : ''}
                           </span>
                         </div>
                       </div>
@@ -877,21 +877,17 @@ const ResultPage: React.FC = () => {
                     <div className="text-center space-y-4 sm:space-y-6">
                       <div className="max-w-sm mx-auto space-y-2 sm:space-y-4 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-4 sm:p-6 rounded-xl border border-[#B89B7A]/20"
                            style={{ boxShadow: tokens.shadows.sm }}>
-                        <p className="text-base sm:text-lg"><strong>Valor total:</strong> R$ 175,00</p>
-                        <p className="text-lg sm:text-xl font-bold text-[#432818]">HOJE POR APENAS:</p>
-                        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                          5x R$ 8,83 no cartão
+                        <p className="text-base sm:text-lg"><strong><span className="valor-total-label">Valor total:</span> <span className="valor-total">R$ 175,00</span></strong></p>
+                        <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label">HOJE POR APENAS:</p>
+                        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado"><span className="preco-parcelado">5x R$ 8,83</span> <span className="preco-parcelado-info">no cartão</span></p>
+                        <p className="text-base sm:text-lg ou-label">ou</p>
+                        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista"><span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info">à vista</span></p>
+                        <p className="text-base sm:text-lg text-[#2d7d32] font-semibold economia-label">
+                          <span className="economia">Economia de R$ 135,10 (77% OFF)</span>
                         </p>
-                        <p className="text-base sm:text-lg">ou</p>
-                        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                          R$ 39,00 à vista
-                        </p>
-                        <p className="text-base sm:text-lg text-[#2d7d32] font-semibold">
-                          Economia de R$ 135,10 (77% OFF)
-                        </p>
-                        <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm">
+                        <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label">
                           <Clock className="w-4 h-4" />
-                          Esta oferta expira quando você sair desta página
+                          <span className="oferta-expira">Esta oferta expira quando você sair desta página</span>
                         </p>
                       </div>
                     </div>
@@ -899,31 +895,57 @@ const ResultPage: React.FC = () => {
                     <div className="text-center mb-6 sm:mb-8 relative z-10 flex justify-center mt-6 sm:mt-8">
                       <button
                         onClick={handleCTAClick}
-                        className="text-white w-full max-w-md font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+                        className={
+                          `text-white w-full max-w-md font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 botao-cta-garantir ` +
+                          `focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:ring-offset-2 ` +
+                          `active:scale-98 ` +
+                          `mobile-green-cta`
+                        }
                         style={{
                           background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
                           boxShadow: tokens.shadows.cta
                         }}
                         type="button"
                       >
-                        GARANTIR MINHA TRANSFORMAÇÃO AGORA
+                        <span className="botao-cta-garantir-label">GARANTIR MINHA TRANSFORMAÇÃO AGORA</span>
                       </button>
+                      <style>{`
+    @media (max-width: 640px) {
+      .mobile-green-cta {
+        background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%) !important;
+        box-shadow: 0 4px 18px rgba(76, 175, 80, 0.25) !important;
+        animation: cta-bounce 1.2s cubic-bezier(.36,.07,.19,.97) infinite alternate;
+      }
+    }
+    @keyframes cta-bounce {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.04); }
+    }
+    .botao-cta-garantir-label {
+      display: inline-block;
+      transition: transform 0.25s cubic-bezier(.36,.07,.19,.97);
+    }
+    .botao-cta-garantir:hover .botao-cta-garantir-label,
+    .botao-cta-garantir:active .botao-cta-garantir-label {
+      transform: scale(1.06) translateY(-2px);
+    }
+  `}</style>
                     </div>
                     {/* TRUST ELEMENTS */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm flex-wrap mt-4 sm:mt-6 px-2 sm:px-4">
-                      <div className="flex items-center gap-2 text-[#432818]">
-                        <div className="w-4 h-4 bg-[#4CAF50] rounded-full flex items-center justify-center">
+                      <div className="flex items-center gap-2 text-[#432818] acesso-imediato-label">
+                        <div className="w-4 h-4 rounded-full flex items-center justify-center" style={{ background: tokens.colors.primary }}>
                           <span className="text-white text-xs">✓</span>
                         </div>
-                        Acesso imediato
+                        <span className="acesso-imediato">Acesso imediato</span>
                       </div>
-                      <div className="flex items-center gap-2 text-[#432818]">
+                      <div className="flex items-center gap-2 text-[#432818] pagamento-seguro-label">
                         <Shield className="w-4 h-4 text-[#432818]" />
-                        Pagamento 100% seguro
+                        <span className="pagamento-seguro">Pagamento 100% seguro</span>
                       </div>
-                      <div className="flex items-center gap-2 text-[#432818]">
+                      <div className="flex items-center gap-2 text-[#432818] site-confiavel-label">
                         <Star className="w-4 h-4 text-[#432818]" />
-                        Site confiável
+                        <span className="site-confiavel">Site confiável</span>
                       </div>
                     </div>
                   </div>
