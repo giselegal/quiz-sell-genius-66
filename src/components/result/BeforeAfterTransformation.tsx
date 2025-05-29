@@ -294,44 +294,40 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
               <Button
-                onClick={handleCTAClick ? handleCTAClick : (e => {
-                  if (window.ctaClickProcessing) return;
-                  window.ctaClickProcessing = true;
-                  trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-                  if (window.innerWidth >= 768) {
-                    window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
-                  } else {
+                onClick={e => {
+                  e.preventDefault();
+                  // Remover pointerEvents do span para garantir clique em todo o botão
+                  const btn = e.currentTarget;
+                  btn.classList.add('scale-95');
+                  setTimeout(() => {
+                    btn.classList.remove('scale-95');
+                    trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
                     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-                  }
-                  setTimeout(() => { window.ctaClickProcessing = false; }, 1000);
-                })}
+                  }, 120);
+                }}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
                 className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 active:scale-95 ${
                   isButtonHovered ? 'brightness-105' : ''
-                } leading-none animate-gradient-x select-none`}
+                } leading-none animate-gradient-x select-none flex items-center justify-center`}
                 style={{
-                  background: window.innerWidth < 768
-                    ? 'linear-gradient(90deg, #4CAF50 0%, #43a047 100%)'
-                    : 'linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)',
-                  boxShadow: window.innerWidth < 768
-                    ? '0 4px 14px rgba(76, 175, 80, 0.25)'
-                    : '0 4px 14px rgba(184, 155, 122, 0.4)',
-                  color: '#fff',
-                  border: 'none',
-                  backgroundSize: '200% 200%',
-                  backgroundPosition: isButtonHovered ? 'right center' : 'left center',
-                  transition: 'background-position 0.5s cubic-bezier(0.4,0,0.2,1)'
+                  background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
+                  boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
+                  color: "#fff",
+                  border: "none",
+                  backgroundSize: "200% 200%",
+                  backgroundPosition: isButtonHovered ? "right center" : "left center",
+                  transition: "background-position 0.5s cubic-bezier(0.4,0,0.2,1)"
                 }}
                 type="button"
               >
-                <span className="flex items-center justify-center gap-2 w-full">
+                <span className="flex items-center justify-center gap-2 w-full pointer-events-none">
                   <ShoppingCart className={`w-5 h-5 transition-transform duration-200 ${isButtonHovered ? 'scale-110' : ''}`} />
                   Quero Minha Transformação Agora
                 </span>
               </Button>
               
-              <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4">
+              <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4 whitespace-nowrap">
                 Oferta por tempo limitado
               </p>
             
