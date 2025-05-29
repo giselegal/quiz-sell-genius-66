@@ -770,17 +770,19 @@ const ResultPage: React.FC = () => {
                         {product.subtitle}
                       </p>
                     </div>
-
-                    {/* INDICADOR DE VALOR - SIMPLIFICADO */}
+                    {/* VALOR INDIVIDUAL DO PRODUTO - NOVO BLOCO */}
                     <div className="mt-4 pt-4 border-t border-[#B89B7A]/15">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {index === 0 ? 'Guia Completo' : ''}
+                          {index === 0 ? 'Guia Completo' : index === 1 ? 'Guia Bônus' : 'Manual Premium'}
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className={`text-sm font-semibold ${index === 0 ? 'text-[#aa6b5d]' : 'text-[#aa6b5d]'}`}>
-                            {index === 0 ? 'Personalizado' : ''}
+                          {/* Valor original tachado de cada produto */}
+                          <span className="text-xs sm:text-sm font-bold text-[#B89B7A] line-through">
+                            {index === 0 ? 'R$ 97,00' : index === 1 ? 'R$ 49,00' : 'R$ 29,00'}
                           </span>
+                          {/* Valor promocional (opcional, se quiser mostrar) */}
+                          {/* <span className="text-xs sm:text-sm font-bold text-[#aa6b5d]">{index === 0 ? 'Incluído' : 'Incluído'}</span> */}
                         </div>
                       </div>
                     </div>
