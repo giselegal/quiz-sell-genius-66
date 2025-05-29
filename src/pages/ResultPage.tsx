@@ -829,6 +829,12 @@ const ResultPage: React.FC = () => {
                     Economia de R$ 135,10 (77% OFF)
                   </span>
                 </p>
+                
+                {/* Selo de Garantia Inline */}
+                <div className="mt-4 flex justify-center">
+                  <GuaranteeSeal variant="inline" />
+                </div>
+                
                 <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2 sm:mt-3">
                   {/* Ampulheta animada maior */}
                   <span className="relative inline-block w-10 h-10 sm:w-12 sm:h-12 align-middle">
@@ -880,6 +886,9 @@ const ResultPage: React.FC = () => {
       <div className="hidden">
         <BuildInfo />
       </div>
+      
+      {/* Selo de Garantia Flutuante */}
+      <GuaranteeSeal variant="floating" />
     </div>
   );
 };
