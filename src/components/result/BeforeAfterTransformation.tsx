@@ -287,21 +287,30 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               <Button
                 onClick={e => {
                   e.preventDefault();
-                  window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+                  // Resposta visual imediata
+                  const btn = e.currentTarget;
+                  btn.classList.add('scale-95');
                   setTimeout(() => {
+                    btn.classList.remove('scale-95');
+                    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
                     trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-                  }, 100);
+                  }, 120);
                 }}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
-                className="w-full md:w-auto py-4 px-6 rounded-md shadow-md transition-all duration-300 font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#45a049] focus:ring-offset-2"
+                className={`w-full md:w-auto py-4 px-6 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 active:scale-95 ${
+                  isButtonHovered ? 'brightness-105' : ''
+                }`}
                 style={{
-                  background: "linear-gradient(to right, #4CAF50, #45a049)",
-                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
+                  background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
+                  boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
+                  color: "#fff",
+                  border: "none",
                 }}
+                type="button"
               >
                 <span className="flex items-center justify-center gap-2">
-                  <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                  <ShoppingCart className={`w-5 h-5 transition-transform duration-200 ${isButtonHovered ? 'scale-110' : ''}`} />
                   Quero Minha Transformação Agora
                 </span>
               </Button>
