@@ -4,11 +4,11 @@ const GuaranteeSection: React.FC = () => {
   return (
     <div className="bg-white rounded-2xl shadow-md p-8 relative">
       {/* Círculo animado no topo */}
-      <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-r from-[#fffaf7] to-[#f9f4ef] rounded-full flex items-center justify-center shadow-lg">
-        <div className="relative w-20 h-20 md:w-28 md:h-28 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center">
+      <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 w-28 h-28 md:w-36 md:h-36 bg-gradient-to-r from-[#fffaf7] to-[#f9f4ef] rounded-full flex items-center justify-center shadow-lg">
+        <div className="relative w-24 h-24 md:w-32 md:h-32 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center">
           <div className="absolute inset-0 border-4 border-transparent border-t-[#B89B7A] border-b-[#aa6b5d] rounded-full animate-spin-slow"></div>
           <span className="text-white text-sm md:text-lg font-bold text-center">
-            Garantia<br />100%
+            7 dias<br />de Garantia
           </span>
         </div>
       </div>
