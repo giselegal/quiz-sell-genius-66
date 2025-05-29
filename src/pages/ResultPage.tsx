@@ -839,16 +839,18 @@ const ResultPage: React.FC = () => {
                       <div className="flex items-start gap-4">
                         <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">1</div>
                         <div className="flex-1">
-                          <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">BÔNUS 1: Guia das Peças Estratégicas</h6>
+                          <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
+                            Bônus 1: Peças-Chave Para Multiplicar Seus Looks
+                          </h6>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Descubra as peças essenciais que multiplicam suas possibilidades de looks, economizam tempo e dinheiro.
+                            Tenha acesso à seleção das peças estratégicas que ampliam suas combinações e otimizam seu guarda-roupa, economizando tempo e dinheiro.
                           </p>
                         </div>
                       </div>
                       {/* Valor bônus */}
                       <div className="mt-3 flex flex-col items-start sm:items-end">
                         <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                          <span className="text-[#aa6b5d] font-bold text-base block">BÔNUS GRÁTIS</span>
+                          <span className="text-[#aa6b5d] font-bold text-base block">Bônus Grátis</span>
                           <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 59,00</span>
                         </div>
                       </div>
@@ -858,16 +860,18 @@ const ResultPage: React.FC = () => {
                       <div className="flex items-start gap-4">
                         <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">2</div>
                         <div className="flex-1">
-                          <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">BÔNUS 2: Manual de Visagismo Facial</h6>
+                          <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
+                            Bônus 2: Visagismo Facial Para Valorizar Sua Beleza
+                          </h6>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Cortes de cabelo e acessórios ideais para seu formato de rosto, realçando sua beleza natural.
+                            Descubra cortes de cabelo e acessórios ideais para seu rosto, realçando sua beleza natural com dicas práticas e profissionais.
                           </p>
                         </div>
                       </div>
                       {/* Valor bônus */}
                       <div className="mt-3 flex flex-col items-start sm:items-end">
                         <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                          <span className="text-[#aa6b5d] font-bold text-base block">BÔNUS GRÁTIS</span>
+                          <span className="text-[#aa6b5d] font-bold text-base block">Bônus Grátis</span>
                           <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 37,00</span>
                         </div>
                       </div>
