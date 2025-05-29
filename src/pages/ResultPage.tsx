@@ -532,159 +532,16 @@ const ResultPage: React.FC = () => {
           >
             Resultados que Falam por Si
           </SectionTitle>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
-            {/* Seção Antes e Depois - TUDO O QUE VOCÊ VAI RECEBER HOJE */}
-            <div className="relative bg-gradient-to-br from-[#fffaf7] via-[#f9f4ef] to-[#fffaf7] rounded-3xl shadow-2xl overflow-hidden min-h-[500px] lg:min-h-[600px] p-4 sm:p-6 lg:p-8 xl:p-10 max-w-5xl mx-auto">
-              {/* Elementos decorativos de fundo */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#B89B7A]/5 to-[#aa6b5d]/5 backdrop-blur-sm"></div>
-              <div className="absolute top-10 right-10 w-32 h-32 bg-[#B89B7A]/10 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-10 left-10 w-24 h-24 bg-[#aa6b5d]/10 rounded-full blur-2xl"></div>
-              
-              {/* Badge principal */}
-              <div className="relative z-10 text-center mb-6 lg:mb-8">
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg mb-4">
-                  <Gift className="w-5 h-5" />
-                  OFERTA EXCLUSIVA
-                </div>
-              </div>
-
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 items-center">
-                {/* Coluna da Imagem - 2/5 do espaço */}
-                <div className="lg:col-span-2 relative">
-                  <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl">
-                    <ProgressiveImage
-                      src="https://i.imgur.com/OwlUAtS.jpg"
-                      alt="Transformação de estilo - Antes e Depois"
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
-                  </div>
-                  
-                  {/* Badge "Antes/Depois" */}
-                  <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-white shadow-xl rounded-full px-4 py-2 border-2 border-[#B89B7A]/20">
-                    <span className="text-[#432818] font-semibold text-sm">Transformação Real</span>
-                  </div>
-                </div>
-
-                {/* Coluna do Conteúdo - 3/5 do espaço */}
-                <div className="lg:col-span-3 space-y-4 sm:space-y-5 lg:space-y-6">
-                  {/* Título principal */}
-                  <div className="text-center lg:text-left">
-                    <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-[#432818] leading-tight mb-3">
-                      TUDO O QUE VOCÊ VAI RECEBER HOJE:
-                    </div>
-                  </div>
-
-                  {/* Lista de benefícios */}
-                  <div className="space-y-3 sm:space-y-4">
-                    {/* Item 1 - Guias Completos */}
-                    <div className="flex items-start gap-3 p-3 sm:p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-[#B89B7A]/20 shadow-sm">
-                      <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 bg-[#4CAF50] rounded-full flex items-center justify-center mt-0.5">
-                        <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-[#432818] text-sm sm:text-base">
-                          Guias Completos de Estilo Personalizado
-                        </div>
-                        <div className="text-[#6B5B4E] text-xs sm:text-sm mt-1">
-                          Adaptados especificamente para realçar seu [estilo predominante] com toques de [estilos complementares]
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Item 2 - Bônus 1 */}
-                    <div className="flex items-start gap-3 p-3 sm:p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-[#B89B7A]/20 shadow-sm">
-                      <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 bg-[#4CAF50] rounded-full flex items-center justify-center mt-0.5">
-                        <Gift className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <div className="font-semibold text-[#432818] text-sm sm:text-base">
-                            BÔNUS 1: Guia de Combinações Secretas
-                          </div>
-                          <span className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white px-2 py-1 rounded-full text-xs font-medium">
-                            R$ 59,00
-                          </span>
-                        </div>
-                        <div className="text-[#6B5B4E] text-xs sm:text-sm mt-1">
-                          Combinações exclusivas que potencializam seu estilo
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Item 3 - Bônus 2 */}
-                    <div className="flex items-start gap-3 p-3 sm:p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-[#B89B7A]/20 shadow-sm">
-                      <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 bg-[#4CAF50] rounded-full flex items-center justify-center mt-0.5">
-                        <Star className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <div className="font-semibold text-[#432818] text-sm sm:text-base">
-                            BÔNUS 2: Checklist de Compras Inteligentes
-                          </div>
-                          <span className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white px-2 py-1 rounded-full text-xs font-medium">
-                            R$ 37,00
-                          </span>
-                        </div>
-                        <div className="text-[#6B5B4E] text-xs sm:text-sm mt-1">
-                          Nunca mais erre na hora de comprar roupas
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Preço e desconto */}
-                  <div className="bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border-2 border-[#4CAF50]/20">
-                    <div className="text-center">
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <Hourglass className="w-5 h-5 text-[#aa6b5d]" />
-                        <span className="text-[#aa6b5d] font-semibold text-sm">OFERTA POR TEMPO LIMITADO</span>
-                      </div>
-                      
-                      <div className="flex items-center justify-center gap-3 mb-3">
-                        <span className="text-[#6B5B4E] line-through text-lg sm:text-xl">R$ 175,00</span>
-                        <div className="bg-[#aa6b5d] text-white px-3 py-1 rounded-full text-sm font-bold">
-                          77% OFF
-                        </div>
-                      </div>
-                      
-                      <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#4CAF50] mb-4">
-                        R$ 39,90
-                      </div>
-
-                      {/* Elementos de garantia */}
-                      <div className="flex items-center justify-center gap-4 text-xs sm:text-sm text-[#6B5B4E] mb-4">
-                        <div className="flex items-center gap-1">
-                          <Shield className="w-4 h-4 text-[#4CAF50]" />
-                          <span>Garantia 7 dias</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Award className="w-4 h-4 text-[#4CAF50]" />
-                          <span>Resultados garantidos</span>
-                        </div>
-                      </div>
-
-                      {/* CTA Principal */}
-                      <Button 
-                        onClick={() => trackButtonClick('cta_transformation_main')}
-                        className="w-full bg-gradient-to-r from-[#4CAF50] to-[#45a049] hover:from-[#45a049] hover:to-[#4CAF50] text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-2xl text-sm sm:text-base lg:text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl group relative overflow-hidden"
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                        <div className="relative flex items-center justify-center gap-2">
-                          <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
-                          GARANTIR MINHA TRANSFORMAÇÃO AGORA
-                        </div>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <Suspense fallback={
+            <div className="py-10 flex flex-col items-center justify-center">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A]">Carregando transformações...</p>
             </div>
-          </AnimatedWrapper>
-
-          {/* REMOVER CTA INTERMEDIÁRIO */}
-          {/* CTA após transformações removido para não saturar */}
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <BeforeAfterTransformation />
+            </AnimatedWrapper>
+          </Suspense>
         </section>
 
         {/* Motivation Section */}
