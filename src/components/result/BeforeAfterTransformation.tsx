@@ -224,18 +224,21 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           
           {/* Coluna de conteúdo */}
           <div className="flex flex-col justify-center">
+            {/* Frase de incentivo acima do botão */}
+            <div className="mb-3 flex items-center gap-2 justify-center md:justify-start">
+              <span className="inline-block w-4 h-4 rounded-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] opacity-60"></span>
+              <span className="text-[#aa6b5d] text-sm md:text-base font-medium">
+                Dê o próximo passo na sua transformação!
+              </span>
+            </div>
             <h4 className="text-lg md:text-xl font-medium text-[#432818] text-center md:text-left mb-4 flex items-center gap-2 justify-center md:justify-start">
-              {/* Elemento decorativo elegante no lugar de emoji */}
               <span className="inline-block w-5 h-5 rounded-full bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] shadow-sm"></span>
               Transformação Visual com Propósito
             </h4>
-            
             <p className="text-gray-700 text-base md:text-lg text-center md:text-left mb-5 flex items-center gap-2 justify-center md:justify-start">
-              {/* Elemento decorativo elegante no lugar de emoji */}
               <span className="inline-block w-3 h-3 rounded-full bg-[#aa6b5d] opacity-70"></span>
               Seu Estilo não é apenas sobre Roupas — é sobre comunicar quem você é e onde quer chegar.
             </p>
-            
             {/* Lista de benefícios */}
             <div className="bg-[#f9f4ef]/70 backdrop-blur-sm rounded-lg p-5 mb-6 border border-[#B89B7A]/10 hover:border-[#B89B7A]/20 transition-all duration-300 hover:shadow-sm">
               <ul className="space-y-3.5 text-center md:text-left">
@@ -281,10 +284,12 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
               <Button
-                onClick={() => {
-                  // Responde imediatamente ao clique, sem aguardar trackButtonClick
+                onClick={e => {
+                  e.preventDefault();
                   window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-                  trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
+                  setTimeout(() => {
+                    trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
+                  }, 100);
                 }}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
@@ -296,7 +301,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               >
                 <span className="flex items-center justify-center gap-2">
                   <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                  Quero Meu Guia de Estilo
+                  Quero Minha Transformação Agora
                 </span>
               </Button>
               
