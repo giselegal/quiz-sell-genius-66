@@ -808,10 +808,16 @@ const ResultPage: React.FC = () => {
                         <h5 className="text-lg sm:text-xl font-bold text-[#432818]">Guias Completos de Estilo Personalizado</h5>
                         <div className="space-y-2 mb-2">
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong> Manual Exclusivo do Seu Estilo Predominante:</strong> <strong>Sexy</strong>
+                            <strong> Manual Exclusivo do Seu Estilo Predominante:</strong> <strong>{primaryStyle?.name}</strong>
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong> + Guias dos Seus Estilos Complementares:</strong> <strong>Criativo</strong> e <strong>Dramático</strong>
+                            <strong>+ Guias dos Seus Estilos Complementares:</strong> {secondaryStyles && secondaryStyles.length > 0 ? (
+    secondaryStyles.map((style, idx) => (
+      <React.Fragment key={style.name}>
+        <strong>{style.name}</strong>{idx < secondaryStyles.length - 1 ? ' e ' : ''}
+      </React.Fragment>
+    ))
+  ) : null}
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             Transforme sua imagem com looks Estratégicos que comunicam sua essência e valorizam sua Personalidade única.
