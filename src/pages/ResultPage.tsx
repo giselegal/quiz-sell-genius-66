@@ -805,7 +805,7 @@ const ResultPage: React.FC = () => {
                         <span>Produto Principal</span>
                       </div>
                       <div className="pt-2 flex flex-col gap-4">
-                        <h5 className="text-lg sm:text-xl font-bold text-[#432818]">1. Guias Completos de Estilo Personalizado</h5>
+                        <h5 className="text-lg sm:text-xl font-bold text-[#432818]">Guias Completos de Estilo Personalizado</h5>
                         <div className="space-y-2 mb-2">
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> Sexy
@@ -827,17 +827,17 @@ const ResultPage: React.FC = () => {
                     </div>
                     {/* BÔNUS 1 */}
                     <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
-                      <div className="flex items-start gap-4">
+                      {/* <div className="flex items-start gap-4">
                         <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">1</div>
-                        <div className="flex-1">
+                        <div className="flex-1"> */}
                           <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
                             Bônus 1: Peças-Chave Para Multiplicar Seus Looks
                           </h6>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             Tenha acesso à seleção das peças estratégicas que ampliam suas combinações e otimizam seu guarda-roupa, economizando tempo e dinheiro.
                           </p>
-                        </div>
-                      </div>
+                        {/* </div>
+                      </div> */}
                       {/* Valor bônus */}
                       <div className="mt-3 flex flex-col items-start sm:items-end">
                         <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
@@ -847,17 +847,17 @@ const ResultPage: React.FC = () => {
                     </div>
                     {/* BÔNUS 2 */}
                     <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
-                      <div className="flex items-start gap-4">
+                      {/* <div className="flex items-start gap-4">
                         <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">2</div>
-                        <div className="flex-1">
+                        <div className="flex-1"> */}
                           <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
                             Bônus 2: Visagismo Facial Para Valorizar Sua Beleza
                           </h6>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             Descubra cortes de cabelo e acessórios ideais para seu rosto, realçando sua beleza natural com dicas práticas e profissionais.
                           </p>
-                        </div>
-                      </div>
+                        {/* </div>
+                      </div> */}
                       {/* Valor bônus */}
                       <div className="mt-3 flex flex-col items-start sm:items-end">
                         <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
