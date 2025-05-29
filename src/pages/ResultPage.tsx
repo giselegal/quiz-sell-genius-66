@@ -786,174 +786,50 @@ const ResultPage: React.FC = () => {
                   </div>
                 ))}
               </div>
-
-              {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
-              <div className="bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] rounded-2xl p-4 sm:p-6 lg:p-8 border border-[#B89B7A]/25 max-w-6xl mx-auto relative overflow-hidden"
-                   style={{ boxShadow: tokens.shadows.lg }}>
-                
-                <div className="relative z-10">
-                  <h4 className="font-bold text-[#432818] mb-6 sm:mb-8 text-center text-lg sm:text-xl lg:text-2xl">
-                    TUDO O QUE VOCÊ VAI RECEBER HOJE:
-                  </h4>
-                  {/* PRODUTOS EM CARDS SEPARADOS - DESIGN LIMPO E MOBILE FIRST */}
-                  <div className="flex flex-col gap-5 mb-8">
-                    {/* PRODUTO PRINCIPAL */}
-                    <div className="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#B89B7A]/30 flex flex-col shadow-md">
-                      {/* Badge destacado */}
-                      <div className="absolute -top-4 left-4 sm:left-6 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-md flex items-center gap-2">
-                        <Star className="w-4 h-4" />
-                        <span>Seus Guias </span>
-                      </div>
-                      <div className="pt-2 flex flex-col gap-4">
-                        <h5 className="text-lg sm:text-xl font-bold text-[#432818]">Guias Completos de Estilo Personalizado</h5>
-                        <div className="space-y-2 mb-2">
-                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong> Manual Exclusivo do Seu Estilo Predominante:</strong> <strong>{primaryStyle?.name}</strong>
-                          </p>
-                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong>+ Guias dos Seus Estilos Complementares:</strong> {secondaryStyles && secondaryStyles.length > 0 ? (
-    secondaryStyles.slice(0, 2).map((style, idx) => (
-      <React.Fragment key={style.name}>
-        <strong>{style.name}</strong>{idx < Math.min(secondaryStyles.length, 2) - 1 ? ' e ' : ''}
-      </React.Fragment>
-    ))
-  ) : null}
-                          </p>
-                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Transforme sua imagem com looks Estratégicos que comunicam sua essência e valorizam sua Personalidade única.
-                          </p>
-                        </div>
-                        {/* Removido elemento com ícone raio */}
-                        <div className="mt-4 flex flex-col items-start sm:items-end">
-                          <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                            <span className="text-[#aa6b5d] font-bold text-base block">Valor: R$ 79,00</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* BÔNUS 1 */}
-                    <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
-                      {/* <div className="flex items-start gap-4">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">1</div>
-                        <div className="flex-1"> */}
-                          <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
-                            Bônus 1: Peças-Chave Para Multiplicar Seus Looks
-                          </h6>
-                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Tenha acesso à seleção das peças estratégicas que ampliam suas combinações e otimizam seu guarda-roupa, economizando tempo e dinheiro.
-                          </p>
-                        {/* </div>
-                      </div> */}
-                      {/* Valor bônus */}
-                      <div className="mt-3 flex flex-col items-start sm:items-end">
-                        <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                          <span className="text-[#aa6b5d] font-bold text-base block">Valor: R$ 59,00</span>
-                        </div>
-                      </div>
-                    </div>
-                    {/* BÔNUS 2 */}
-                    <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
-                      {/* <div className="flex items-start gap-4">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">2</div>
-                        <div className="flex-1"> */}
-                          <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
-                            Bônus 2: Visagismo Facial Para Valorizar Sua Beleza
-                          </h6>
-                          <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Descubra cortes de cabelo e acessórios ideais para seu rosto, realçando sua beleza natural com dicas práticas e profissionais.
-                          </p>
-                        {/* </div>
-                      </div> */}
-                      {/* Valor bônus */}
-                      <div className="mt-3 flex flex-col items-start sm:items-end">
-                        <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                          <span className="text-[#aa6b5d] font-bold text-base block">Valor: R$ 37,00</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* RESUMO FINAL - DESIGN LIMPO */}
-                  <div className="border-t-2 border-[#B89B7A]/20 pt-6 sm:pt-8">
-                    <div className="text-center space-y-4 sm:space-y-6">
-                      <div className="max-w-sm mx-auto space-y-2 sm:space-y-4 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-4 sm:p-6 rounded-xl border border-[#B89B7A]/20"
-                           style={{ boxShadow: tokens.shadows.sm }}>
-                        <p className="text-base sm:text-lg"><strong><span className="valor-total-label">Valor total:</span> <span className="valor-total">R$ 175,00</span></strong></p>
-                        <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label">HOJE POR APENAS:</p>
-                        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado"><span className="preco-parcelado">5x R$ 8,83</span> <span className="preco-parcelado-info">no cartão</span></p>
-                        <p className="text-base sm:text-lg ou-label">ou</p>
-                        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista"><span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info">à vista</span></p>
-                        <p className="text-base sm:text-lg text-[#2d7d32] font-semibold economia-label">
-                          <span className="economia">Economia de R$ 135,10 (77% OFF)</span>
-                        </p>
-                        <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label">
-                          <Clock className="w-4 h-4" />
-                          <span className="oferta-expira">Esta oferta expira quando você sair desta página</span>
-                        </p>
-                      </div>
-                    </div>
-                    {/* CTA BUTTON */}
-                    <div className="text-center mb-6 sm:mb-8 relative z-10 flex justify-center mt-6 sm:mt-8">
-                      <button
-                        onClick={handleCTAClick}
-                        className={
-                          `text-white w-full max-w-md font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 botao-cta-garantir ` +
-                          `focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:ring-offset-2 ` +
-                          `active:scale-98 ` +
-                          `mobile-green-cta`
-                        }
-                        style={{
-                          background: `linear-gradient(135deg, ${tokens.colors.primary}, ${tokens.colors.secondary})`,
-                          boxShadow: tokens.shadows.cta
-                        }}
-                        type="button"
-                      >
-                        <span className="botao-cta-garantir-label">GARANTIR MINHA TRANSFORMAÇÃO AGORA</span>
-                      </button>
-                      <style>{`
-    @media (max-width: 640px) {
-      .mobile-green-cta {
-        background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%) !important;
-        box-shadow: 0 4px 18px rgba(76, 175, 80, 0.25) !important;
-        animation: cta-bounce 1.2s cubic-bezier(.36,.07,.19,.97) infinite alternate;
-      }
-    }
-    @keyframes cta-bounce {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.04); }
-    }
-    .botao-cta-garantir-label {
-      display: inline-block;
-      transition: transform 0.25s cubic-bezier(.36,.07,.19,.97);
-    }
-    .botao-cta-garantir:hover .botao-cta-garantir-label,
-    .botao-cta-garantir:active .botao-cta-garantir-label {
-      transform: scale(1.06) translateY(-2px);
-    }
-  `}</style>
-                    </div>
-                    {/* TRUST ELEMENTS */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm flex-wrap mt-4 sm:mt-6 px-2 sm:px-4">
-                      <div className="flex items-center gap-2 text-[#432818] acesso-imediato-label">
-                        <div className="w-4 h-4 rounded-full flex items-center justify-center" style={{ background: tokens.colors.primary }}>
-                          <span className="text-white text-xs">✓</span>
-                        </div>
-                        <span className="acesso-imediato">Acesso imediato</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[#432818] pagamento-seguro-label">
-                        <Shield className="w-4 h-4 text-[#432818]" />
-                        <span className="pagamento-seguro">Pagamento 100% seguro</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[#432818] site-confiavel-label">
-                        <Star className="w-4 h-4 text-[#432818]" />
-                        <span className="site-confiavel">Site confiável</span>
-                      </div>
-                    </div>
-                  </div>
-                </div> {/* fecha div relative z-10 do RESUMO DO VALOR */}
-              </div>   {/* fecha div bg-gradient-to-br (RESUMO DO VALOR) */}
-            </div>     {/* fecha div mb-12 relative z-10 (PRODUCTS PREVIEW) */}
+            </div>
+            {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
+            <div className="max-w-sm mx-auto space-y-2 sm:space-y-4 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-4 sm:p-6 rounded-xl border border-[#B89B7A]/20"
+                 style={{ boxShadow: tokens.shadows.sm }}>
+              <div className="relative rounded-2xl overflow-hidden shadow-xl border-2 border-double border-[#B89B7A]/30 bg-white/80 backdrop-blur-md px-4 py-6 sm:px-8 sm:py-8 flex flex-col items-center gap-2 sm:gap-3"
+                style={{
+                  boxShadow: '0 8px 32px 0 rgba(184,155,122,0.18), 0 1.5px 0 0 #fff inset',
+                  background: 'linear-gradient(135deg,rgba(255,255,255,0.85) 60%,rgba(184,155,122,0.10) 100%)',
+                  border: '2.5px double #B89B7A',
+                  borderRadius: tokens.radius.xl,
+                  position: 'relative',
+                  zIndex: 2
+                }}
+              >
+                <p className="text-base sm:text-lg font-semibold text-[#8F7A6A] mb-1 tracking-wide">
+                  <span className="valor-total-label">Valor total:</span> <span className="valor-total font-bold text-[#B89B7A] text-lg sm:text-xl">R$ 175,00</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#4CAF50] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado drop-shadow-lg mt-1">
+                  <span className="preco-parcelado">5x R$ 8,83</span> <span className="preco-parcelado-info text-base font-medium text-[#8F7A6A]">no cartão</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg text-[#2d7d32] font-semibold economia-label mt-2">
+                  <span className="economia bg-[#e6f9e7] px-2 py-1 rounded-lg border border-[#4CAF50]/30 shadow-sm">Economia de R$ 135,10 (77% OFF)</span>
+                </p>
+                <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2">
+                  <Clock className="w-4 h-4" />
+                  <span className="oferta-expira">Esta oferta expira quando você sair desta página</span>
+                </p>
+                {/* Efeito glassmorphism extra */}
+                <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
+                  background: 'linear-gradient(120deg,rgba(255,255,255,0.18) 60%,rgba(184,155,122,0.10) 100%)',
+                  boxShadow: '0 2px 16px 0 rgba(184,155,122,0.10)',
+                  zIndex: 1
+                }}></div>
+                {/* Brilho sutil */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-6 bg-gradient-to-r from-white/60 to-transparent rounded-b-full blur-md opacity-60 pointer-events-none" style={{zIndex:2}}></div>
+              </div>
+            </div>
           </AnimatedWrapper> {/* fecha AnimatedWrapper da seção CTA */}
-        </section>
+          </section>
         {/* BOTTOM SPACING */}
         <div className="mb-16 md:mb-24"></div>
       </div>
