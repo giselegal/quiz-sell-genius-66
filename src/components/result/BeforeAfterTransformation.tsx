@@ -218,7 +218,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => setActiveIndex((prev) => (prev - 1 + transformations.length) % transformations.length)}
+                    onClick={handlePrev}
                     aria-label="Anterior"
                   >
                     <ChevronLeft
@@ -227,7 +227,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   </button>
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => setActiveIndex((prev) => (prev + 1) % transformations.length)}
+                    onClick={handleNext}
                     aria-label="Próxima"
                   >
                     <ChevronRight
@@ -325,11 +325,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
                   setTimeout(() => { window.ctaClickProcessing = false; }, 1200);
                 }}
-                onMouseEnter={() => setIsButtonHovered(true)}
-                onMouseLeave={() => setIsButtonHovered(false)}
-                className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden ${
-                  isButtonHovered ? 'brightness-105' : ''
-                }`}
+                className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden`}
                 style={{
                   background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
                   boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
@@ -340,6 +336,8 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   transition: "background-position 0.5s cubic-bezier(0.4,0,0.2,1)"
                 }}
                 type="button"
+                onMouseEnter={() => setIsButtonHovered(true)}
+                onMouseLeave={() => setIsButtonHovered(false)}
               >
                 <span className="flex items-center justify-center gap-2 w-full">
                   <ShoppingCart className={`w-5 h-5 transition-transform duration-200 ${isButtonHovered ? 'scale-110' : ''}`} />
