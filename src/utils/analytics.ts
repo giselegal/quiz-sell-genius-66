@@ -3,6 +3,110 @@
  */
 import { getPixelId, getCurrentFunnelConfig, getFacebookToken, getCtaUrl, getUtmCampaign, trackFunnelEvent } from '@/services/pixelManager';
 
+// ===== SISTEMA DE DEDUPLICAÇÃO =====
+/**
+ * Armazena eventos já enviados para prevenir duplicatas
+ */
+const sentEvents = new Set<string>();
+
+/**
+ * Gera um ID único para o evento baseado no tipo, dados e timestamp
+ */
+const generateEventId = (eventType: string, eventData: Record<string, any> = {}): string => {
+  const timestamp = Date.now();
+  const dataHash = JSON.stringify(eventData);
+  const sessionId = getOrCreateSessionId();
+  return `${eventType}_${sessionId}_${timestamp}_${btoa(dataHash).slice(0, 8)}`;
+};
+
+/**
+ * Obtém ou cria um ID de sessão único
+ */
+const getOrCreateSessionId = (): string => {
+  let sessionId = sessionStorage.getItem('fb_session_id');
+  if (!sessionId) {
+    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    sessionStorage.setItem('fb_session_id', sessionId);
+  }
+  return sessionId;
+};
+
+/**
+ * Verifica se um evento já foi enviado recentemente
+ */
+const isDuplicateEvent = (eventId: string): boolean => {
+  return sentEvents.has(eventId);
+};
+
+/**
+ * Marca um evento como enviado
+ */
+const markEventAsSent = (eventId: string): void => {
+  sentEvents.add(eventId);
+  
+  // Remove eventos antigos para evitar memory leak (manter apenas últimos 100 eventos)
+  if (sentEvents.size > 100) {
+    const eventsArray = Array.from(sentEvents);
+    eventsArray.slice(0, sentEvents.size - 100).forEach(oldEventId => {
+      sentEvents.delete(oldEventId);
+    });
+  }
+};
+
+/**
+ * Envia evento para Facebook Pixel com deduplicação automática
+ */
+const sendFacebookEvent = (
+  eventType: 'track' | 'trackCustom', 
+  eventName: string, 
+  eventData: Record<string, any> = {},
+  options: { allowDuplicate?: boolean } = {}
+): void => {
+  if (!window.fbq) {
+    console.warn('Facebook Pixel não inicializado');
+    return;
+  }
+
+  try {
+    // Gerar event_id único
+    const eventId = generateEventId(eventName, eventData);
+    
+    // Verificar duplicata (a menos que explicitamente permitido)
+    if (!options.allowDuplicate && isDuplicateEvent(eventId)) {
+      console.log(`Evento duplicado bloqueado: ${eventName} (${eventId})`);
+      return;
+    }
+
+    // Adicionar event_id aos dados do evento
+    const enhancedEventData = {
+      ...addUtmParamsToEvent(eventData),
+      event_id: eventId,
+      timestamp: Date.now(),
+      session_id: getOrCreateSessionId()
+    };
+
+    // Enviar evento
+    if (eventType === 'track') {
+      window.fbq('track', eventName, enhancedEventData);
+    } else {
+      window.fbq('trackCustom', eventName, enhancedEventData);
+    }
+
+    // Marcar como enviado
+    markEventAsSent(eventId);
+    
+    console.log(`Evento enviado: ${eventName}`, {
+      event_id: eventId,
+      data: enhancedEventData
+    });
+
+  } catch (error) {
+    console.error(`Erro ao enviar evento ${eventName}:`, error);
+  }
+};
+
+// ===== FUNÇÕES PÚBLICAS ATUALIZADAS =====
+
 export const initFacebookPixel = () => {
   if (typeof window === 'undefined') return;
 
@@ -45,20 +149,32 @@ export const initFacebookPixel = () => {
 /**
  * Rastreia um evento de geração de lead
  * @param email Email do lead
+ * @param name Nome do lead (opcional)
  */
-export const trackLeadGeneration = (email: string) => {
-  if (window.fbq) {
-    window.fbq('track', 'Lead', {
-      email: email
-    });
-    console.log('Lead tracked with email:', email);
-  }
+export const trackLeadGeneration = (email: string, name?: string) => {
+  const eventData = {
+    email: email,
+    name: name || 'unknown',
+    value: 0,
+    currency: 'BRL',
+    funnel: getCurrentFunnelConfig().funnelName
+  };
+
+  // Armazenar dados do usuário para tracking posterior
+  storeUserTrackingData(email, { name, lead_timestamp: Date.now() });
+
+  // Enviar para Facebook Pixel com deduplicação
+  sendFacebookEvent('track', 'Lead', eventData);
+
+  // Registrar no log de eventos para análise
+  logEventForAnalysis('Lead', eventData);
   
   // Track in Google Analytics, if available
   if (window.gtag) {
     window.gtag('event', 'lead_generation', {
       event_category: 'lead',
-      event_label: email
+      event_label: email,
+      funnel: getCurrentFunnelConfig().funnelName
     });
   }
 };
@@ -98,9 +214,7 @@ export const captureUTMParameters = (): Record<string, string> => {
       localStorage.setItem('utm_parameters', JSON.stringify(utmParams));
       
       // Track UTM parameters if Facebook Pixel is available
-      if (window.fbq) {
-        window.fbq('trackCustom', 'UTMCaptured', utmParams);
-      }
+      sendFacebookEvent('trackCustom', 'UTMCaptured', utmParams);
       
       console.log('UTM parameters captured:', utmParams);
     }
@@ -144,22 +258,23 @@ export const addUtmParamsToEvent = (eventData: Record<string, any> = {}): Record
  * @param userEmail Email do usuário (opcional)
  */
 export const trackQuizStart = (userName?: string, userEmail?: string) => {
-  if (window.fbq) {
-    const eventData = addUtmParamsToEvent({
-      username: userName || 'Anônimo',
-      user_email: userEmail || '',
-      funnel: getCurrentFunnelConfig().funnelName
-    });
-    window.fbq('trackCustom', 'QuizStart', eventData);
-    
-    // Adicionar tracking específico para análises de funil
-    trackFunnelEvent('FunnelQuizStart', {
-      username: userName || 'Anônimo',
-      has_email: !!userEmail
-    });
-    
-    console.log('QuizStart tracked with UTM data');
-  }
+  const eventData = {
+    username: userName || 'Anônimo',
+    user_email: userEmail || '',
+    funnel: getCurrentFunnelConfig().funnelName
+  };
+  
+  // Enviar para Facebook Pixel com deduplicação
+  sendFacebookEvent('trackCustom', 'QuizStart', eventData);
+
+  // Registrar no log de eventos para análise
+  logEventForAnalysis('QuizStart', eventData);
+  
+  // Adicionar tracking específico para análises de funil
+  trackFunnelEvent('FunnelQuizStart', {
+    username: userName || 'Anônimo',
+    has_email: !!userEmail
+  });
   
   // Track in Google Analytics, if available
   if (window.gtag) {
@@ -179,16 +294,15 @@ export const trackQuizStart = (userName?: string, userEmail?: string) => {
  * @param totalQuestions Número total de perguntas
  */
 export const trackQuizAnswer = (questionId: string, selectedOptions: string[], currentQuestionIndex: number, totalQuestions: number) => {
-  if (window.fbq) {
-    const eventData = addUtmParamsToEvent({
-      question_id: questionId,
-      selected_options: selectedOptions.join(', '),
-      current_question_index: currentQuestionIndex,
-      total_questions: totalQuestions
-    });
-    window.fbq('trackCustom', 'QuizAnswer', eventData);
-    console.log(`QuizAnswer tracked for question ${questionId} with options ${selectedOptions.join(', ')}`);
-  }
+  const eventData = {
+    question_id: questionId,
+    selected_options: selectedOptions.join(', '),
+    current_question_index: currentQuestionIndex,
+    total_questions: totalQuestions
+  };
+  
+  // Enviar para Facebook Pixel com deduplicação
+  sendFacebookEvent('trackCustom', 'QuizAnswer', eventData);
   
   // Track in Google Analytics, if available
   if (window.gtag) {
@@ -211,13 +325,12 @@ export const trackQuizComplete = () => {
   const endTime = Date.now();
   const duration = startTime ? (endTime - parseInt(startTime, 10)) / 1000 : 0; // em segundos
   
-  if (window.fbq) {
-    const eventData = addUtmParamsToEvent({
-      quiz_duration: duration
-    });
-    window.fbq('trackCustom', 'QuizComplete', eventData);
-    console.log('QuizComplete tracked');
-  }
+  const eventData = {
+    quiz_duration: duration
+  };
+  
+  // Enviar para Facebook Pixel com deduplicação
+  sendFacebookEvent('trackCustom', 'QuizComplete', eventData);
   
   // Track in Google Analytics, if available
   if (window.gtag) {
@@ -233,13 +346,12 @@ export const trackQuizComplete = () => {
  * @param styleCategory Categoria do estilo predominante
  */
 export const trackResultView = (styleCategory: string) => {
-  if (window.fbq) {
-    const eventData = addUtmParamsToEvent({
-      style_category: styleCategory
-    });
-    window.fbq('trackCustom', 'ResultView', eventData);
-    console.log('ResultView tracked with UTM data for style:', styleCategory);
-  }
+  const eventData = {
+    style_category: styleCategory
+  };
+  
+  // Enviar para Facebook Pixel com deduplicação
+  sendFacebookEvent('trackCustom', 'ResultView', eventData);
   
   // Track in Google Analytics, if available
   if (window.gtag) {
@@ -263,18 +375,16 @@ export const trackButtonClick = (
   buttonLocation?: string,
   actionType?: string
 ) => {
-  if (window.fbq) {
-    const eventData = addUtmParamsToEvent({
-      button_id: buttonId || 'unknown',
-      button_text: buttonText || 'unknown',
-      button_location: buttonLocation || 'unknown',
-      action_type: actionType || 'click',
-      funnel: getCurrentFunnelConfig().funnelName
-    });
-    
-    window.fbq('trackCustom', 'ButtonClick', eventData);
-    console.log(`Button click tracked: ${buttonText || buttonId}`);
-  }
+  const eventData = {
+    button_id: buttonId || 'unknown',
+    button_text: buttonText || 'unknown',
+    button_location: buttonLocation || 'unknown',
+    action_type: actionType || 'click',
+    funnel: getCurrentFunnelConfig().funnelName
+  };
+  
+  // Enviar para Facebook Pixel com deduplicação
+  sendFacebookEvent('trackCustom', 'ButtonClick', eventData);
   
   // Track in Google Analytics, if available
   if (window.gtag) {
@@ -291,33 +401,35 @@ export const trackButtonClick = (
  * Registra conversões de vendas
  * @param value Valor da venda
  * @param productName Nome do produto (opcional)
+ * @param transactionId ID da transação (opcional)
  */
-export const trackSaleConversion = (value: number, productName?: string) => {
-  if (window.fbq) {
-    const eventData = addUtmParamsToEvent({
-      value: value,
-      currency: 'BRL',
-      content_name: productName || 'Guia de Estilo',
-      content_type: 'product',
-      funnel: getCurrentFunnelConfig().funnelName
-    });
-    
-    // Standard Purchase event
-    window.fbq('track', 'Purchase', eventData);
-    
-    // Adicionar tracking específico para análises de funil
-    trackFunnelEvent('FunnelPurchase', {
-      value: value,
-      product_name: productName || 'Guia de Estilo'
-    });
-    
-    console.log(`Sale conversion tracked: ${value} BRL for ${productName || 'Guia de Estilo'}`);
-  }
+export const trackSaleConversion = (value: number, productName?: string, transactionId?: string) => {
+  const eventData = {
+    value: value,
+    currency: 'BRL',
+    content_name: productName || 'Guia de Estilo',
+    content_type: 'product',
+    transaction_id: transactionId || `T_${Date.now()}`,
+    funnel: getCurrentFunnelConfig().funnelName
+  };
+  
+  // Enviar evento Purchase para Facebook Pixel com deduplicação
+  sendFacebookEvent('track', 'Purchase', eventData);
+
+  // Registrar no log de eventos para análise
+  logEventForAnalysis('Purchase', eventData);
+  
+  // Adicionar tracking específico para análises de funil
+  trackFunnelEvent('FunnelPurchase', {
+    value: value,
+    product_name: productName || 'Guia de Estilo',
+    transaction_id: transactionId
+  });
   
   // Track in Google Analytics, if available
   if (window.gtag) {
     window.gtag('event', 'purchase', {
-      transaction_id: 'T_' + Date.now(),
+      transaction_id: transactionId || 'T_' + Date.now(),
       value: value,
       currency: 'BRL',
       items: [{
@@ -362,12 +474,134 @@ export const clearAnalyticsData = () => {
  * Testa a funcionalidade do Facebook Pixel
  */
 export const testFacebookPixel = () => {
-  if (window.fbq) {
-    window.fbq('trackCustom', 'TestEvent', { test_value: 'test' });
-    console.log('Test event sent to Facebook Pixel');
-    return true;
+  const testData = { test_value: 'test', test_timestamp: Date.now() };
+  
+  // Enviar evento de teste com deduplicação
+  sendFacebookEvent('trackCustom', 'TestEvent', testData, { allowDuplicate: true });
+  
+  return !!window.fbq;
+};
+
+/**
+ * Armazena dados de tracking do usuário para conectar com vendas posteriores
+ */
+export const storeUserTrackingData = (email: string, userData: any = {}) => {
+  const trackingData = {
+    email,
+    utm_parameters: JSON.parse(localStorage.getItem('utm_parameters') || '{}'),
+    session_id: getOrCreateSessionId(),
+    timestamp: Date.now(),
+    quiz_completion: userData,
+    funnel: getCurrentFunnelConfig().funnelName,
+    user_name: localStorage.getItem('userName') || 'unknown'
+  };
+  
+  // Armazenar dados localmente (em produção seria enviado para backend)
+  localStorage.setItem(`user_tracking_${email}`, JSON.stringify(trackingData));
+  
+  // Também manter uma lista de todos os usuários trackados
+  const allUsers = JSON.parse(localStorage.getItem('tracked_users') || '[]');
+  const existingUserIndex = allUsers.findIndex((user: any) => user.email === email);
+  
+  if (existingUserIndex >= 0) {
+    allUsers[existingUserIndex] = trackingData;
   } else {
-    console.error('Facebook Pixel not initialized');
-    return false;
+    allUsers.push(trackingData);
   }
+  
+  localStorage.setItem('tracked_users', JSON.stringify(allUsers));
+  
+  console.log('👤 Dados de tracking do usuário armazenados:', trackingData);
+  
+  return trackingData;
+};
+
+/**
+ * Recupera dados de tracking de um usuário pelo email
+ */
+export const getUserTrackingData = (email: string) => {
+  const userData = localStorage.getItem(`user_tracking_${email}`);
+  return userData ? JSON.parse(userData) : null;
+};
+
+/**
+ * Registra eventos em um log global para análise posterior
+ */
+export const logEventForAnalysis = (eventType: string, eventData: Record<string, any>) => {
+  const eventLog = {
+    event_name: eventType,
+    timestamp: Date.now(),
+    date: new Date().toISOString(),
+    ...eventData
+  };
+  
+  // Armazenar em log global de eventos
+  const allEvents = JSON.parse(localStorage.getItem('all_tracked_events') || '[]');
+  allEvents.push(eventLog);
+  
+  // Manter apenas os últimos 1000 eventos para não sobrecarregar o localStorage
+  if (allEvents.length > 1000) {
+    allEvents.splice(0, allEvents.length - 1000);
+  }
+  
+  localStorage.setItem('all_tracked_events', JSON.stringify(allEvents));
+};
+
+/**
+ * Analisa performance por criativo/utm_content
+ */
+export const getCreativePerformance = (days: number = 7) => {
+  const events = JSON.parse(localStorage.getItem('all_tracked_events') || '[]');
+  const cutoffDate = Date.now() - (days * 24 * 60 * 60 * 1000);
+  
+  // Filtrar eventos dos últimos N dias
+  const recentEvents = events.filter((event: any) => event.timestamp >= cutoffDate);
+  
+  const creativeStats: Record<string, any> = {};
+  
+  recentEvents.forEach((event: any) => {
+    const creative = event.utm_content || 'unknown';
+    
+    if (!creativeStats[creative]) {
+      creativeStats[creative] = {
+        creative_name: creative,
+        page_views: 0,
+        quiz_starts: 0,
+        quiz_completions: 0,
+        leads: 0,
+        purchases: 0,
+        revenue: 0,
+        conversion_rate: 0,
+        cost_per_lead: 0
+      };
+    }
+    
+    switch(event.event_name) {
+      case 'PageView':
+        creativeStats[creative].page_views++;
+        break;
+      case 'QuizStart':
+        creativeStats[creative].quiz_starts++;
+        break;
+      case 'QuizComplete':
+        creativeStats[creative].quiz_completions++;
+        break;
+      case 'Lead':
+        creativeStats[creative].leads++;
+        break;
+      case 'Purchase':
+        creativeStats[creative].purchases++;
+        creativeStats[creative].revenue += event.value || 0;
+        break;
+    }
+  });
+  
+  // Calcular métricas
+  Object.keys(creativeStats).forEach(creative => {
+    const stats = creativeStats[creative];
+    stats.conversion_rate = stats.page_views > 0 ? 
+      ((stats.purchases / stats.page_views) * 100).toFixed(2) : '0.00';
+  });
+  
+  return creativeStats;
 };

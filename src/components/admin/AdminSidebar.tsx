@@ -2,8 +2,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   BarChart3, 
   FileText, 
@@ -12,7 +11,10 @@ import {
   Palette,
   Eye,
   Target,
-  Code
+  Code,
+  ChevronDown,
+  ChevronRight,
+  TrendingUp
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -35,7 +37,19 @@ const sidebarItems = [
   {
     title: 'Analytics',
     href: '/admin/analytics',
-    icon: BarChart3
+    icon: BarChart3,
+    submenu: [
+      {
+        title: 'Visão Geral',
+        href: '/admin/analytics',
+        icon: BarChart3
+      },
+      {
+        title: 'Análise de Criativos',
+        href: '/admin/analytics/criativos',
+        icon: TrendingUp
+      }
+    ]
   },
   {
     title: 'Leads',
@@ -60,7 +74,28 @@ const sidebarItems = [
 ];
 
 export function AdminSidebar() {
-  const pathname = usePathname();
+  const location = useLocation();
+  const pathname = location.pathname;
+  const [expandedMenus, setExpandedMenus] = React.useState<string[]>([]);
+
+  // Auto-expandir menu se uma subrota estiver ativa
+  React.useEffect(() => {
+    sidebarItems.forEach(item => {
+      if (item.submenu && item.submenu.some(sub => pathname === sub.href)) {
+        if (!expandedMenus.includes(item.href)) {
+          setExpandedMenus(prev => [...prev, item.href]);
+        }
+      }
+    });
+  }, [pathname, expandedMenus]);
+
+  const toggleMenu = (href: string) => {
+    setExpandedMenus(prev => 
+      prev.includes(href) 
+        ? prev.filter(item => item !== href)
+        : [...prev, href]
+    );
+  };
 
   return (
     <div className="w-64 bg-white border-r border-[#D4C4A0] h-screen">
@@ -72,21 +107,72 @@ export function AdminSidebar() {
         {sidebarItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
+          const hasSubmenu = item.submenu && item.submenu.length > 0;
+          const isExpanded = expandedMenus.includes(item.href);
+          const hasActiveSubmenu = hasSubmenu && item.submenu.some(sub => pathname === sub.href);
           
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-                isActive 
-                  ? 'bg-[#B89B7A] text-white' 
-                  : 'text-[#432818] hover:bg-[#F5F2E9]'
+            <div key={item.href}>
+              {hasSubmenu ? (
+                <button
+                  onClick={() => toggleMenu(item.href)}
+                  className={cn(
+                    'flex items-center justify-between w-full px-4 py-3 rounded-lg transition-colors',
+                    (isActive || hasActiveSubmenu) 
+                      ? 'bg-[#B89B7A] text-white' 
+                      : 'text-[#432818] hover:bg-[#F5F2E9]'
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className="w-5 h-5" />
+                    <span className="font-medium">{item.title}</span>
+                  </div>
+                  {isExpanded ? (
+                    <ChevronDown className="w-4 h-4" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4" />
+                  )}
+                </button>
+              ) : (
+                <Link
+                  to={item.href}
+                  className={cn(
+                    'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+                    isActive 
+                      ? 'bg-[#B89B7A] text-white' 
+                      : 'text-[#432818] hover:bg-[#F5F2E9]'
+                  )}
+                >
+                  <Icon className="w-5 h-5" />
+                  <span className="font-medium">{item.title}</span>
+                </Link>
               )}
-            >
-              <Icon className="w-5 h-5" />
-              <span className="font-medium">{item.title}</span>
-            </Link>
+              
+              {hasSubmenu && isExpanded && (
+                <div className="ml-4 mt-2 space-y-1">
+                  {item.submenu.map((subItem) => {
+                    const SubIcon = subItem.icon;
+                    const isSubActive = pathname === subItem.href;
+                    
+                    return (
+                      <Link
+                        key={subItem.href}
+                        href={subItem.href}
+                        className={cn(
+                          'flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-sm',
+                          isSubActive 
+                            ? 'bg-[#D4C4A0] text-[#432818] font-medium' 
+                            : 'text-[#8F7A6A] hover:bg-[#F5F2E9] hover:text-[#432818]'
+                        )}
+                      >
+                        <SubIcon className="w-4 h-4" />
+                        <span>{subItem.title}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>
