@@ -822,8 +822,8 @@ const ResultPage: React.FC = () => {
                 <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado drop-shadow-lg mt-1 sm:mt-2">
                   <span className="preco-parcelado">5x R$ 8,83</span> <span className="preco-parcelado-info text-base font-medium text-[#8F7A6A]">no cartão</span>
                 </p>
-                <p className="text-sm sm:text-base text-[#2d7d32] font-medium economia-label mt-2 sm:mt-2.5">
-                  <span className="economia text-[#4CAF50] text-xs sm:text-sm font-semibold" style={{ background: 'none', border: 'none', boxShadow: 'none', padding: 0 }}>
+                <p className="text-xs sm:text-sm text-[#2d7d32] font-medium economia-label mt-2 sm:mt-2.5">
+                  <span className="economia text-[#4CAF50] font-semibold" style={{ background: 'none', border: 'none', boxShadow: 'none', padding: 0 }}>
                     Economia de R$ 135,10 (77% OFF)
                   </span>
                 </p>
@@ -872,7 +872,7 @@ const ResultPage: React.FC = () => {
                       .sand-flow { animation: sandFlow 2.5s linear infinite; }
                     `}</style>
                   </span>
-                  <span className="oferta-expira text-base sm:text-lg font-semibold">Esta oferta expira quando você sair desta página</span>
+                  <span className="oferta-expira text-xs sm:text-sm font-medium">Esta oferta expira quando você sair desta página</span>
                 </p>
               </div>
             </div>
