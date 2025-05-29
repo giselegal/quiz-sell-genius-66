@@ -309,7 +309,20 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
-              {/* --- CORREÇÃO FINAL: BOTÃO CTA SEM DEPENDER DE HOVER/COR --- */}
+              {/* Preço e Economia */}
+              <div className="text-center md:text-left mb-3">
+                <p className="text-lg font-semibold text-[#432818]">
+                  De <span className="line-through">R$ 175,00</span> por apenas:
+                </p>
+                <p className="text-4xl font-bold text-[#B89B7A] my-1">
+                  R$ 39,90
+                </p>
+                {/* GARANTIDO SEM QUEBRA NO MOBILE */}
+                <p className="text-xs text-green-600 font-semibold whitespace-nowrap">
+                  Economia de R$ 135,10 (77% OFF)
+                </p>
+              </div>
+
               <Button
                 onClick={e => {
                   e.preventDefault();
@@ -319,7 +332,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
                   setTimeout(() => { window.ctaClickProcessing = false; }, 1200);
                 }}
-                className={"w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden animate-cta-pulse !flex !items-center !justify-center z-10"} // Adicionado z-10
+                className={"w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden animate-cta-pulse !flex !items-center !justify-center z-10"}
                 style={{
                   background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
                   boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
@@ -331,13 +344,14 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 }}
                 type="button"
               >
-                <span className="flex items-center justify-center gap-2 w-full pointer-events-none">
+                <span className="flex items-center justify-center gap-2 w-full">
                   <ShoppingCart className="w-5 h-5 transition-transform duration-200" />
                   Quero Minha Transformação Agora
                 </span>
               </Button>
               
-              <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4 whitespace-nowrap">
+              {/* FONTE DIMINUÍDA */}
+              <p className="text-[10px] text-[#aa6b5d] font-medium text-center md:text-left mb-4 whitespace-nowrap">
                 Esta oferta expira ao sair da página
               </p>
             
