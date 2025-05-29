@@ -61,18 +61,15 @@ interface BeforeAfterTransformationProps {
 }
 
 interface TransformationItem {
-  image: string; 
+  image: string;
   name: string;
-  id: string; 
+  id: string;
   width?: number;
   height?: number;
 }
 
 // Componente Badge reutilizável
-const Badge: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-}> = ({ children, className = '' }) => (
+const Badge: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
   <span
     className={`absolute z-10 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm ${className}`}
     style={{ boxShadow: designTokens.shadows.sm, backgroundColor: designTokens.colors.primary }}
@@ -94,10 +91,7 @@ const CheckItem = React.memo<{ children: React.ReactNode }>(({ children }) => (
   </li>
 ));
 
-const NavButton = React.memo<{
-  direction: 'prev' | 'next';
-  onClick: () => void;
-}>(({ direction, onClick }) => (
+const NavButton = React.memo<{ direction: 'prev' | 'next'; onClick: () => void }>(({ direction, onClick }) => (
   <button
     className="bg-white/95 backdrop-blur-sm rounded-full p-2 md:p-3 shadow-md hover:bg-[#B89B7A]/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-1 z-20"
     onClick={useCallback((e) => {
@@ -116,38 +110,22 @@ const NavButton = React.memo<{
   </button>
 ));
 
-// SIMPLIFIED TRANSFORMATIONS DATA
 const transformations: TransformationItem[] = [
-  {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
-    name: "Adriana",
-    id: "transformation-adriana",
-    width: 600,
-    height: 750
-  }, 
-  {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
-    name: "Mariangela", 
-    id: "transformation-mariangela",
-    width: 600,
-    height: 750
-  }
+  { image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp", name: "Adriana", id: "transformation-adriana", width: 600, height: 750 },
+  { image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp", name: "Mariangela", id: "transformation-mariangela", width: 600, height: 750 }
 ];
 
-// OPTIMIZED IMAGE PRELOADER
 const useImagePreloader = (images: string[], initialIndex = 0) => {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   
   useEffect(() => {
     if (images.length > 0) {
-      // Pré-carregar imagem atual
       const currentImage = new Image();
       currentImage.onload = () => {
         setLoadedImages(prev => ({ ...prev, [images[initialIndex]]: true }));
       };
       currentImage.src = images[initialIndex];
       
-      // Pré-carregar próxima imagem com delay
       if (images.length > 1) {
         setTimeout(() => {
           const nextIndex = (initialIndex + 1) % images.length;
@@ -171,105 +149,36 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   
   const isLowPerformance = useIsLowPerformanceDevice();
   const imageUrls = transformations.map(t => t.image);
-  const { loadedImages } = useImagePreloader(imageUrls, 0);
+  const { loadedImages } = useImagePreloader(imageUrls, activeIndex);
   
   const activeTransformation = transformations[activeIndex];
 
-  // MEMOIZED NAVIGATION FUNCTIONS
   const navigateToTransformation = useCallback((index: number) => {
-    if (index >= 0 && index < transformations.length) {
-      setActiveIndex(index);
-    }
+    if (index >= 0 && index < transformations.length) setActiveIndex(index);
   }, []);
 
-  const goToPrevious = useCallback(() => {
-    const prevIndex = (activeIndex - 1 + transformations.length) % transformations.length;
-    navigateToTransformation(prevIndex);
-  }, [activeIndex, navigateToTransformation]);
+  const goToPrevious = useCallback(() => navigateToTransformation((activeIndex - 1 + transformations.length) % transformations.length), [activeIndex, navigateToTransformation]);
+  const goToNext = useCallback(() => navigateToTransformation((activeIndex + 1) % transformations.length), [activeIndex, navigateToTransformation]);
 
-  const goToNext = useCallback(() => {
-    const nextIndex = (activeIndex + 1) % transformations.length;
-    navigateToTransformation(nextIndex);
-  }, [activeIndex, navigateToTransformation]);
-
-  // LOADING STATE MANAGEMENT
   useEffect(() => {
-    if (loadedImages[transformations[activeIndex].image]) {
-      setIsLoading(false);
-    }
-  }, [loadedImages, activeIndex]);
+    if (loadedImages[activeTransformation.image]) setIsLoading(false);
+  }, [loadedImages, activeTransformation]);
 
-  // OPTIMIZED CTA HANDLER
   const handleCTA = useCallback((e?: React.MouseEvent) => {
-    // Prevenir comportamento padrão e propagação
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    
-    // Prevenir múltiplos cliques
+    if (e) { e.preventDefault(); e.stopPropagation(); }
     if (window.ctaClickProcessing) return;
     window.ctaClickProcessing = true;
-    
-    if (handleCTAClick) {
-      handleCTAClick();
-    } else {
+    if (handleCTAClick) handleCTAClick();
+    else {
       trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
-      
-      // Para desktop, usar window.open para garantir funcionamento
-      if (window.innerWidth >= 768) {
-        window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
-      } else {
-        // Para mobile, usar location.href
-        window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-      }
+      if (window.innerWidth >= 768) window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912','_blank');
+      else window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
     }
-    
-    // Limpar flag após delay
-    setTimeout(() => {
-      window.ctaClickProcessing = false;
-    }, 1000);
+    setTimeout(() => { window.ctaClickProcessing = false; }, 1000);
   }, [handleCTAClick]);
 
-  // LOADING SKELETON - SIMPLIFIED
-  if (isLoading) {
-    return (
-      <div className="my-12">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-8">
-            <div className="h-8 bg-gradient-to-r from-[#f8f5f0] to-[#f0ebe6] rounded-lg mb-4 animate-pulse"></div>
-            <div className="w-20 h-1 bg-[#f8f5f0] rounded-full mx-auto animate-pulse"></div>
-          </div>
-          
-          <Card className="overflow-hidden border border-[#B89B7A]/20">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6">
-              <div className="p-6 flex flex-col items-center">
-                <div className="w-full max-w-sm aspect-[4/5] bg-[#f8f5f0] rounded-lg mb-4 animate-pulse"></div>
-                <div className="flex justify-center space-x-2 mt-4">
-                  {transformations.map((_, idx) => (
-                    <div key={idx} className="w-3 h-3 bg-[#f8f5f0] rounded-full animate-pulse"></div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="p-6 bg-white space-y-4">
-                <div className="h-6 bg-[#f8f5f0] rounded animate-pulse"></div>
-                <div className="h-16 bg-[#f8f5f0] rounded animate-pulse"></div>
-                <div className="space-y-3">
-                  {Array(4).fill(0).map((_, idx) => (
-                    <div key={idx} className="h-5 bg-[#f8f5f0] rounded animate-pulse"></div>
-                  ))}
-                </div>
-                <div className="h-12 bg-[#f8f5f0] rounded animate-pulse"></div>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <div>Carregando...</div>;
 
-  // MAIN COMPONENT - OPTIMIZED
   return (
     <div className="my-12">
       <div className="max-w-4xl mx-auto px-6">
