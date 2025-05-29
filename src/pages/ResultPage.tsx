@@ -707,7 +707,7 @@ const ResultPage: React.FC = () => {
                     })(),
                     title: `Manual de Estilo ${category}`,
                     subtitle: 'Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única, transformando seu guarda-roupa em uma poderosa ferramenta de comunicação visual e autoexpressão.',
-                    badge: 'GUIA PRINCIPAL',
+                    badge: 'GUIA COMPLETO',
                     priority: true
                   },
                   {
@@ -774,7 +774,7 @@ const ResultPage: React.FC = () => {
                     <div className="mt-4 pt-4 border-t border-[#B89B7A]/15">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {index === 0 ? 'Guia Principal' : 'Bônus Incluso'}
+                          {index === 0 ? 'Guia Completo' : '+ Estilos Complementares'}
                         </span>
                         <div className="flex items-center gap-2">
                           <span className={`text-sm font-semibold ${index === 0 ? 'text-[#aa6b5d]' : 'text-[#aa6b5d]'}`}>
@@ -802,16 +802,16 @@ const ResultPage: React.FC = () => {
                       {/* Badge destacado */}
                       <div className="absolute -top-4 left-4 sm:left-6 bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A] text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-md flex items-center gap-2">
                         <Star className="w-4 h-4" />
-                        <span>Produto Principal</span>
+                        <span>Seus Guias </span>
                       </div>
                       <div className="pt-2 flex flex-col gap-4">
                         <h5 className="text-lg sm:text-xl font-bold text-[#432818]">Guias Completos de Estilo Personalizado</h5>
                         <div className="space-y-2 mb-2">
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> Sexy
+                            <strong> Manual Exclusivo do Seu Estilo Predominante:</strong> <strong>Sexy</strong>
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong>• + Guias dos Seus Estilos Complementares:</strong> Criativo e Dramático
+                            <strong> + Guias dos Seus Estilos Complementares:</strong> <strong>Criativo</strong> e <strong>Dramático</strong>
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             Transforme sua imagem com looks Estratégicos que comunicam sua essência e valorizam sua Personalidade única.
