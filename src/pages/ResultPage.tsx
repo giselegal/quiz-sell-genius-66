@@ -805,40 +805,460 @@ const ResultPage: React.FC = () => {
                 <p className="text-base sm:text-lg font-semibold text-[#8F7A6A] mb-1 tracking-wide">
                   <span className="valor-total-label">Valor total:</span> <span className="valor-total font-bold text-[#B89B7A] text-lg sm:text-xl">R$ 175,00</span>
                 </p>
-                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
-                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#4CAF50] via-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado drop-shadow-lg mt-1">
-                  <span className="preco-parcelado">5x R$ 8,83</span> <span className="preco-parcelado-info text-base font-medium text-[#8F7A6A]">no cartão</span>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
                 </p>
                 <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
                 <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
                   <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
                 </p>
                 <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
-                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, mas hoje você garante por <span className="text-[#4CAF50] font-bold">apenas R$ 39,00</span>.
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
                 </p>
-                <p className="text-sm sm:text-base text-[#2d7d32] font-medium economia-label mt-2">
-                  <span className="economia text-[#4CAF50] text-xs sm:text-sm font-semibold" style={{ background: 'none', border: 'none', boxShadow: 'none', padding: 0 }}>
-                    Economia de R$ 135,10 (77% OFF)
-                  </span>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
                 </p>
-                <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2">
-                  <Clock className="w-4 h-4" />
-                  <span className="oferta-expira">Esta oferta expira quando você sair desta página</span>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
                 </p>
-                {/* Efeito glassmorphism extra */}
-                <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
-                  background: 'linear-gradient(120deg,rgba(255,255,255,0.18) 60%,rgba(184,155,122,0.10) 100%)',
-                  boxShadow: '0 2px 16px 0 rgba(184,155,122,0.10)',
-                  zIndex: 1
-                }}></div>
-                {/* Brilho sutil */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-6 bg-gradient-to-r from-white/60 to-transparent rounded-b-full blur-md opacity-60 pointer-events-none" style={{zIndex:2}}></div>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-xs sm:text-sm text-[#8F7A6A] font-medium text-center mt-2 mb-1">
+                  Tudo isso deveria custar <span className="line-through text-[#B89B7A] font-semibold">R$ 175,00</span>, <span className="uppercase font-bold text-[#432818]">MAS HOJE VOCÊ GARANTE POR APENAS:</span>
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#432818] oferta-label mt-2">HOJE POR APENAS:</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                </p>
               </div>
             </div>
-          </AnimatedWrapper> {/* fecha AnimatedWrapper da seção CTA */}
-          </section>
-        {/* BOTTOM SPACING */}
-        <div className="mb-16 md:mb-24"></div>
+          </AnimatedWrapper>
+        </section>
       </div>
     </div>
   );
