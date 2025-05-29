@@ -291,15 +291,15 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   btn.classList.add('scale-95');
                   setTimeout(() => {
                     btn.classList.remove('scale-95');
-                    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
                     trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
+                    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
                   }, 120);
                 }}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
-                className={`w-full md:w-auto py-4 px-6 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 active:scale-95 ${
+                className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 active:scale-95 ${
                   isButtonHovered ? 'brightness-105' : ''
-                } leading-tight animate-gradient-x`}
+                } leading-none animate-gradient-x select-none`}
                 style={{
                   background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
                   boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
@@ -311,7 +311,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 }}
                 type="button"
               >
-                <span className="flex items-center justify-center gap-2">
+                <span
+                  className="flex items-center justify-center gap-2 w-full"
+                  style={{ pointerEvents: 'none' }}
+                >
                   <ShoppingCart className={`w-5 h-5 transition-transform duration-200 ${isButtonHovered ? 'scale-110' : ''}`} />
                   Quero Minha Transformação Agora
                 </span>
