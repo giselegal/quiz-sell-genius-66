@@ -206,7 +206,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   </button>
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
+                    onClick={handleNext}
                     aria-label="Próxima"
                   >
                     <ChevronRight
@@ -296,28 +296,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               <Button
                 onClick={e => {
                   e.preventDefault();
-                  // Efeito de clique: ripple simples
-                  const btn = e.currentTarget;
-                  const ripple = document.createElement('span');
-                  ripple.className = 'cta-ripple';
-                  ripple.style.position = 'absolute';
-                  ripple.style.left = `${e.nativeEvent.offsetX}px`;
-                  ripple.style.top = `${e.nativeEvent.offsetY}px`;
-                  ripple.style.width = ripple.style.height = '120px';
-                  ripple.style.background = 'rgba(184,155,122,0.18)';
-                  ripple.style.borderRadius = '50%';
-                  ripple.style.transform = 'translate(-50%, -50%) scale(0)';
-                  ripple.style.pointerEvents = 'none';
-                  ripple.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s';
-                  btn.style.position = 'relative';
-                  btn.appendChild(ripple);
-                  setTimeout(() => {
-                    ripple.style.transform = 'translate(-50%, -50%) scale(1)';
-                    ripple.style.opacity = '0';
-                  }, 10);
-                  setTimeout(() => {
-                    ripple.remove();
-                  }, 400);
+                  // Efeito: desabilita o botão temporariamente para evitar múltiplos cliques
+                  if (e.currentTarget.disabled) return;
+                  e.currentTarget.disabled = true;
+                  setTimeout(() => { e.currentTarget.disabled = false; }, 1200);
                   trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
                   window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
                 }}
