@@ -805,7 +805,17 @@ const ResultPage: React.FC = () => {
                   <span className="valor-total-label">Valor total:</span> <span className="valor-total font-bold text-[#B89B7A] text-lg sm:text-xl line-through">R$ 175,00</span>
                 </p>
                 <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1 sm:mt-2">
-                  <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                  <span className="preco-avista animate-pulse-valor">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
+                  <style>{`
+                    @keyframes pulseValor {
+                      0%, 100% { filter: brightness(1) scale(1); }
+                      50% { filter: brightness(1.15) scale(1.07); }
+                    }
+                    .animate-pulse-valor {
+                      animation: pulseValor 1.8s cubic-bezier(0.4,0,0.6,1) infinite;
+                      will-change: filter, transform;
+                    }
+                  `}</style>
                 </p>
                 <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1 sm:mt-2">ou</p>
                 <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado drop-shadow-lg mt-1 sm:mt-2">
@@ -817,9 +827,9 @@ const ResultPage: React.FC = () => {
                   </span>
                 </p>
                 <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2 sm:mt-3">
-                  {/* Ampulheta animada substituindo o ícone de relógio */}
-                  <span className="relative inline-block w-5 h-5 align-middle">
-                    <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
+                  {/* Ampulheta animada maior */}
+                  <span className="relative inline-block w-7 h-7 sm:w-8 sm:h-8 align-middle">
+                    <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                       <defs>
                         <linearGradient id="ampulhetaCorMarca" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
                           <stop stopColor="#B89B7A" />
@@ -829,16 +839,11 @@ const ResultPage: React.FC = () => {
                           <rect x="4" y="3" width="16" height="18" rx="4" />
                         </clipPath>
                       </defs>
-                      {/* Estrutura da ampulheta */}
                       <path d="M7 3h10a1 1 0 0 1 1 1v2c0 2.5-2 4.5-4 5 2 0.5 4 2.5 4 5v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2c0-2.5 2-4.5 4-5-2-0.5-4-2.5-4-5V4a1 1 0 0 1 1-1z" stroke="url(#ampulhetaCorMarca)" strokeWidth="1.5" fill="none"/>
-                      {/* Areia superior (animada) */}
                       <rect x="10.5" y="5.5" width="3" height="3.5" rx="1.2" fill="url(#ampulhetaCorMarca)" className="sand-top" clipPath="url(#ampulhetaClip)"/>
-                      {/* Areia inferior (animada) */}
                       <rect x="10.5" y="15" width="3" height="2.5" rx="1.2" fill="url(#ampulhetaCorMarca)" className="sand-bottom" clipPath="url(#ampulhetaClip)"/>
-                      {/* Filete de areia caindo (animado) */}
                       <rect x="11.7" y="10" width="0.6" height="4" rx="0.3" fill="url(#ampulhetaCorMarca)" className="sand-flow"/>
                     </svg>
-                    {/* Animação CSS */}
                     <style>{`
                       @keyframes sandTop {
                         0% { height: 3.5px; opacity: 1; }
