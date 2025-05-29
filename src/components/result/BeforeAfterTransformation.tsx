@@ -376,7 +376,7 @@ function retornaElemento() {
   return <span>Olá</span>;
 }
 
-function MeuComponente() {
+export default function MeuComponente() {
   return (
     <div>
       {retornaElemento()} {/* Agora retorna um ReactNode */}
