@@ -10,7 +10,6 @@ import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import CriticalCSSLoader from './components/CriticalCSSLoader';
 import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
-import { fixMainRoutes } from './utils/fixMainRoutes';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -43,39 +42,17 @@ const isLowPerformanceDevice = () => {
 const App = () => {
   const lowPerformance = isLowPerformanceDevice();
 
-  // Inicializar analytics e corrigir rotas na montagem do componente
+  // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
       loadFacebookPixel();
       captureUTMParameters();
-      fixMainRoutes();
       
       console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
-      console.log('✅ Main routes activated');
     } catch (error) {
       console.error('Erro ao inicializar aplicativo:', error);
     }
   }, [lowPerformance]);
-
-  // Reinicializar Facebook Pixel e correção de rotas em mudanças de rota
-  useEffect(() => {    
-    const handleRouteChange = () => {
-      if (typeof window !== 'undefined') {
-        fixMainRoutes();
-        
-        if (window.fbq) {
-          window.fbq('track', 'PageView');
-          console.log('PageView tracked on route change');
-        }
-      }
-    };
-    
-    window.addEventListener('popstate', handleRouteChange);
-    
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-    };
-  }, []);
 
   return (
     <AuthProvider>
@@ -91,7 +68,13 @@ const App = () => {
                 <Route path="/" element={<QuizPage />} />
                 
                 {/* ADMIN - Dashboard centralizado com todas as funcionalidades administrativas */}
-                <Route path="/admin/*" element={<AdminDashboard />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/editor" element={<AdminDashboard />} />
+                <Route path="/admin/settings" element={<AdminDashboard />} />
+                <Route path="/admin/analytics" element={<AdminDashboard />} />
+                <Route path="/admin/ab-test" element={<AdminDashboard />} />
+                <Route path="/admin/offer-editor" element={<AdminDashboard />} />
+                <Route path="/admin/prototype" element={<AdminDashboard />} />
                 
                 {/* RESULTADO - Página de resultados do quiz */}
                 <Route path="/resultado" element={<ResultPage />} />
