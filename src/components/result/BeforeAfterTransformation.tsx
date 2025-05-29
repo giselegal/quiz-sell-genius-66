@@ -225,7 +225,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     aria-label="Anterior"
                   >
                     <ChevronLeft
-                      className="text-[#432818] w-5 h-5 md:w-[22px] md:h-[22px]"
+                      className="text-[#432818] w-4 h-4 md:w-[22px] md:h-[22px]"
                     />
                   </button>
                   <button
@@ -237,7 +237,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                     aria-label="Próxima"
                   >
                     <ChevronRight
-                      className="text-[#432818] w-5 h-5 md:w-[22px] md:h-[22px]"
+                      className="text-[#432818] w-4 h-4 md:w-[22px] md:h-[22px]"
                     />
                   </button>
                 </div>
