@@ -319,7 +319,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
                   setTimeout(() => { window.ctaClickProcessing = false; }, 1200);
                 }}
-                className={"w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden animate-cta-pulse !flex !items-center !justify-center"}
+                className={"w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden animate-cta-pulse !flex !items-center !justify-center z-10"} // Adicionado z-10
                 style={{
                   background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
                   boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
