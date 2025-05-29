@@ -300,7 +300,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 onMouseLeave={() => setIsButtonHovered(false)}
                 className={`w-full md:w-auto py-4 px-6 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 active:scale-95 ${
                   isButtonHovered ? 'brightness-105' : ''
-                }`}
+                } leading-tight`}
                 style={{
                   background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
                   boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
