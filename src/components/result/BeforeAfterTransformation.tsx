@@ -180,7 +180,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   return (
     <div className="my-6 sm:my-8 md:my-10">
       {/* Título com decoração removido */}
-      {/* <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-2 text-center relative inline-block mx-auto w-full">
+      {/* <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-2 text-center relative inline-block mx-auto w-full"> */}
 
       {/* Card principal com grid responsivo */}
       <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-all duration-300 max-w-4xl mx-auto">
@@ -371,6 +371,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     </div>
   );
 };
+
+function retornaElemento() {
+  return <span>Olá</span>;
+}
+
+export default function MeuComponente() {
+  return (
+    <div>
+      {retornaElemento()} {/* Agora retorna um ReactNode */}
+    </div>
+  );
+}
 
 export default BeforeAfterTransformation;
 
