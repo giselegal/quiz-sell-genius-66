@@ -837,7 +837,7 @@ const ResultPage: React.FC = () => {
                     {/* BÔNUS 1 */}
                     <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
                       <div className="flex items-start gap-4">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">1</div>
+                        {/* Removido o número 1 */}
                         <div className="flex-1">
                           <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
                             Bônus 1: Peças-Chave Para Multiplicar Seus Looks
@@ -858,7 +858,7 @@ const ResultPage: React.FC = () => {
                     {/* BÔNUS 2 */}
                     <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
                       <div className="flex items-start gap-4">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">2</div>
+                        {/* Removido o número 2 */}
                         <div className="flex-1">
                           <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
                             Bônus 2: Visagismo Facial Para Valorizar Sua Beleza
