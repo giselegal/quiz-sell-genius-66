@@ -1,27 +1,30 @@
 import React from 'react';
-import { Card } from '@/components/ui/card';
 
 const GuaranteeSection: React.FC = () => {
   return (
     <div className="bg-white rounded-2xl shadow-md p-8 relative">
       {/* Círculo animado no topo */}
-      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center shadow-lg animate-bounce">
-        <span className="text-white text-sm md:text-lg font-bold text-center">7 dias<br />de Garantia</span>
+      <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-r from-[#fffaf7] to-[#f9f4ef] rounded-full flex items-center justify-center shadow-lg">
+        <div className="relative w-20 h-20 md:w-28 md:h-28 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center">
+          <div className="absolute inset-0 border-4 border-transparent border-t-[#B89B7A] border-b-[#aa6b5d] rounded-full animate-spin-slow"></div>
+          <span className="text-white text-sm md:text-lg font-bold text-center">
+            Garantia<br />100%
+          </span>
+        </div>
       </div>
 
-      <div className="text-center mt-12">
+      <div className="text-center mt-16">
         <h2 className="text-2xl font-playfair text-[#432818] font-bold leading-tight mb-2">
           Sua Satisfação 100% Garantida
         </h2>
         
         <p className="text-lg text-[#aa6b5d] font-medium mb-4">
-          7 dias de garantia • Risco Zero
+          Risco Zero
         </p>
         
         <div className="max-w-xl mx-auto">
           <p className="text-[#6B5B4E] leading-relaxed mb-6">
-            Se por qualquer motivo você não ficar 100% satisfeita dentro do período de 7 dias, 
-            reembolsamos o valor integral sem perguntas.
+            Se por qualquer motivo você não ficar 100% satisfeita, reembolsamos o valor integral sem perguntas.
           </p>
         </div>
         
@@ -40,6 +43,20 @@ const GuaranteeSection: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes spin-slow {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 4s linear infinite;
+        }
+      `}</style>
     </div>
   );
 };
