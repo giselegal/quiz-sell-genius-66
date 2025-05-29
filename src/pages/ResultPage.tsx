@@ -542,32 +542,16 @@ const ResultPage: React.FC = () => {
               <BeforeAfterTransformation />
             </AnimatedWrapper>
           </Suspense>
-          {/* Apresentação rápida dos bônus logo após o antes/depois */}
-          <div className="mt-10 flex flex-col md:flex-row items-center justify-center gap-6">
-            <div className="flex items-center gap-3 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] border border-[#B89B7A]/15 rounded-xl px-5 py-4 shadow-sm w-full md:w-auto">
-              <Gift className="w-7 h-7 text-[#aa6b5d]" />
-              <div>
-                <div className="font-bold text-[#432818] text-base">Bônus 1</div>
-                <div className="text-xs text-[#6B5B4E]">Peças-chave para multiplicar seus looks</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] border border-[#B89B7A]/15 rounded-xl px-5 py-4 shadow-sm w-full md:w-auto">
-              <Star className="w-7 h-7 text-[#aa6b5d]" />
-              <div>
-                <div className="font-bold text-[#432818] text-base">Bônus 2</div>
-                <div className="text-xs text-[#6B5B4E]">Visagismo facial para valorizar sua beleza</div>
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* Motivation Section */}
         <section id="motivation" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="secondary"
-            subtitle={`Por que mulheres com seu perfil ${category} conquistam mais confiança e oportunidades`}
+            subtitle={`Conhecer seu estilo pessoal é muito mais do que seguir tendências passageiras — é uma ferramenta poderosa de comunicação não-verbal e autoconfiança.
+`}
           >
-            A Ciência Por Trás do Seu Estilo
+            Por que Aplicar o seu Esstilo é tão importante?
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -668,10 +652,10 @@ const ResultPage: React.FC = () => {
             <div className="relative z-10">
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6 md:mb-8"></div>
               <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#432818] mb-4">
-                É Hora de Agir
+                Chegou o momento de Agir
               </h3>
               <p className="text-lg font-medium max-w-md mx-auto" style={{ color: tokens.colors.textMuted }}>
-                Seu novo estilo está a um clique de distância
+                Não deixe para depois a transformação que você pode começar agora!
               </p>
               <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-6 md:mt-8"></div>
             </div>
@@ -702,7 +686,7 @@ const ResultPage: React.FC = () => {
               </h2>
               
               <p className="text-xl mb-8" style={{ color: tokens.colors.textMuted }}>
-                Guia {category} personalizado + Bônus exclusivos
+                Guia {category} Personalizado + Bônus exclusivos
               </p>
             </div>
             
@@ -833,19 +817,18 @@ const ResultPage: React.FC = () => {
                             <strong>• + Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.map(s => s.category).join(' e ')}
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            Transforme sua imagem com looks estratégicos que comunicam sua essência e valorizam sua personalidade única.
+                            Transforme sua imagem com looks Estratégicos que comunicam sua essência e valorizam sua Personalidade única.
                           </p>
                         </div>
                         <div className="inline-block bg-gradient-to-r from-[#B89B7A]/15 to-[#aa6b5d]/15 text-[#432818] px-4 py-2 rounded-lg font-medium border border-[#B89B7A]/20 text-xs sm:text-sm">
                           <div className="flex items-center gap-2">
                             <Zap className="w-4 h-4 text-[#aa6b5d]" />
-                            <span>Análise 100% Personalizada</span>
                           </div>
                         </div>
                         {/* Valor */}
                         <div className="mt-4 flex flex-col items-start sm:items-end">
                           <div className="bg-[#f8fdf8] border border-[#4CAF50]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                            <span className="text-[#2d7d32] font-bold text-base sm:text-xl block">INCLUÍDO</span>
+                             <span className="text-[#aa6b5d] font-bold text-base block"></span>
                             <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 79,00</span>
                           </div>
                         </div>
@@ -854,7 +837,7 @@ const ResultPage: React.FC = () => {
                     {/* BÔNUS 1 */}
                     <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
                       <div className="flex items-start gap-4">
-                        {/* Removido o número 1 */}
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">1</div>
                         <div className="flex-1">
                           <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
                             Bônus 1: Peças-Chave Para Multiplicar Seus Looks
@@ -867,7 +850,7 @@ const ResultPage: React.FC = () => {
                       {/* Valor bônus */}
                       <div className="mt-3 flex flex-col items-start sm:items-end">
                         <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                          <span className="text-[#aa6b5d] font-bold text-base block">Bônus Grátis</span>
+                          <span className="text-[#aa6b5d] font-bold text-base block">Bônus</span>
                           <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 59,00</span>
                         </div>
                       </div>
@@ -875,7 +858,7 @@ const ResultPage: React.FC = () => {
                     {/* BÔNUS 2 */}
                     <div className="relative bg-white/90 rounded-2xl p-5 sm:p-6 border border-[#B89B7A]/15 flex flex-col shadow-sm">
                       <div className="flex items-start gap-4">
-                        {/* Removido o número 2 */}
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0">2</div>
                         <div className="flex-1">
                           <h6 className="font-bold text-[#432818] text-base sm:text-xl mb-2">
                             Bônus 2: Visagismo Facial Para Valorizar Sua Beleza
@@ -888,7 +871,7 @@ const ResultPage: React.FC = () => {
                       {/* Valor bônus */}
                       <div className="mt-3 flex flex-col items-start sm:items-end">
                         <div className="bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 border border-[#B89B7A]/20 px-4 py-3 rounded-lg w-full max-w-[180px] text-center">
-                          <span className="text-[#aa6b5d] font-bold text-base block">Bônus Grátis</span>
+                          <span className="text-[#aa6b5d] font-bold text-base block">Bônus</span>
                           <span className="text-xs sm:text-base text-gray-500 line-through">Valor: R$ 37,00</span>
                         </div>
                       </div>
@@ -906,7 +889,7 @@ const ResultPage: React.FC = () => {
                         </p>
                         <p className="text-base sm:text-lg">ou</p>
                         <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                          R$ 39,90 à vista
+                          R$ 39,00 à vista
                         </p>
                         <p className="text-base sm:text-lg text-[#2d7d32] font-semibold">
                           Economia de R$ 135,10 (77% OFF)
@@ -937,24 +920,23 @@ const ResultPage: React.FC = () => {
                         <div className="w-4 h-4 bg-[#4CAF50] rounded-full flex items-center justify-center">
                           <span className="text-white text-xs">✓</span>
                         </div>
-                        Acesso Imediato
+                        Acesso imediato
                       </div>
                       <div className="flex items-center gap-2 text-[#432818]">
-                        <Shield className="w-4 h-4 text-[#432818]" /> 
+                        <Shield className="w-4 h-4 text-[#432818]" />
                         Pagamento 100% seguro
                       </div>
                       <div className="flex items-center gap-2 text-[#432818]">
-                        <Star className="w-4 h-4 text-[#432818]" /> 
+                        <Star className="w-4 h-4 text-[#432818]" />
                         Site confiável
                       </div>
                     </div>
                   </div>
-                </div>     {/* fecha div relative z-10 do RESUMO DO VALOR */}
-              </div>       {/* fecha div bg-gradient-to-br (RESUMO DO VALOR) */}
-            </div>         {/* fecha div mb-12 relative z-10 (PRODUCTS PREVIEW) */}
-            </AnimatedWrapper>  {/* fecha AnimatedWrapper da seção CTA */}
+                </div> {/* fecha div relative z-10 do RESUMO DO VALOR */}
+              </div>   {/* fecha div bg-gradient-to-br (RESUMO DO VALOR) */}
+            </div>     {/* fecha div mb-12 relative z-10 (PRODUCTS PREVIEW) */}
+          </AnimatedWrapper> {/* fecha AnimatedWrapper da seção CTA */}
         </section>
-
         {/* BOTTOM SPACING */}
         <div className="mb-16 md:mb-24"></div>
       </div>
