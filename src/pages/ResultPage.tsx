@@ -17,7 +17,6 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import GuaranteeSeal from '@/components/result/GuaranteeSeal';
-import FloatingCTA from '@/components/result/FloatingCTA';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
@@ -791,11 +790,6 @@ const ResultPage: React.FC = () => {
                   </div>
                 ))}
               </div>
-              
-              {/* Selo de Garantia Compacto entre produtos e preços */}
-              <div className="flex justify-center mt-8 mb-6">
-                <GuaranteeSeal variant="compact" className="max-w-xs" />
-              </div>
             </div>
             {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
             <div className="max-w-sm mx-auto space-y-4 sm:space-y-6 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-6 sm:p-8 rounded-xl border border-[#B89B7A]/20 mt-10 mb-10"
@@ -893,11 +887,8 @@ const ResultPage: React.FC = () => {
         <BuildInfo />
       </div>
       
-      {/* Botão Flutuante de Compra */}
-      <FloatingCTA onClickCTA={() => handleCTAClick({} as React.MouseEvent<HTMLButtonElement>)} />
-      
-      {/* Selo de Garantia Flutuante - posicionado à esquerda para não sobrepor */}
-      <GuaranteeSeal variant="floating" className="bottom-4 left-4 right-auto" />
+      {/* Selo de Garantia Flutuante */}
+      <GuaranteeSeal variant="floating" />
     </div>
   );
 };
