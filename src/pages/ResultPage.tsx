@@ -365,7 +365,7 @@ const ResultPage: React.FC = () => {
           </div>
           <Button 
             onClick={handleCTAClick} 
-            className="text-white text-xs sm:text-sm leading-none py-2 px-4 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto cursor-pointer"
+            className="text-white text-xs sm:text-sm leading-none py-3 px-6 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto cursor-pointer mt-8 sm:mt-10"
             style={{
               background: 'linear-gradient(90deg, #4CAF50 0%, #43a047 100%)', // verde estratégico
               boxShadow: '0 4px 14px rgba(76, 175, 80, 0.25)',
@@ -791,9 +791,9 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
             {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
-            <div className="max-w-sm mx-auto space-y-2 sm:space-y-4 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-4 sm:p-6 rounded-xl border border-[#B89B7A]/20"
+            <div className="max-w-sm mx-auto space-y-4 sm:space-y-6 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-6 sm:p-8 rounded-xl border border-[#B89B7A]/20 mt-10 mb-10"
                  style={{ boxShadow: tokens.shadows.sm }}>
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border-2 border-double border-[#B89B7A]/30 bg-white/80 backdrop-blur-md px-4 py-6 sm:px-8 sm:py-8 flex flex-col items-center gap-2 sm:gap-3"
+              <div className="relative rounded-2xl overflow-hidden shadow-xl border-2 border-double border-[#B89B7A]/30 bg-white/80 backdrop-blur-md px-4 py-8 sm:px-10 sm:py-10 flex flex-col items-center gap-4 sm:gap-5"
                 style={{
                   boxShadow: '0 8px 32px 0 rgba(184,155,122,0.18), 0 1.5px 0 0 #fff inset',
                   background: 'linear-gradient(135deg,rgba(255,255,255,0.85) 60%,rgba(184,155,122,0.10) 100%)',
