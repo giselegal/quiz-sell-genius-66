@@ -218,7 +218,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={handlePrev}
+                    onClick={() => {
+                      if (isLoading) return;
+                      setActiveIndex((prev) => (prev - 1 + transformations.length) % transformations.length);
+                    }}
                     aria-label="Anterior"
                   >
                     <ChevronLeft
@@ -227,7 +230,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   </button>
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={handleNext}
+                    onClick={() => {
+                      if (isLoading) return;
+                      setActiveIndex((prev) => (prev + 1) % transformations.length);
+                    }}
                     aria-label="Próxima"
                   >
                     <ChevronRight
@@ -314,15 +320,15 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             
             {/* CTA e informações */}
             <div className="flex flex-col items-center md:items-start">
+              {/* --- CORREÇÃO DEFINITIVA DO BOTÃO CTA --- */}
               <Button
                 onClick={e => {
                   e.preventDefault();
-                  // Efeito: desabilita o botão temporariamente para evitar múltiplos cliques
-                  if (e.currentTarget.disabled) return;
-                  e.currentTarget.disabled = true;
-                  setTimeout(() => { e.currentTarget.disabled = false; }, 1200);
+                  if (window.ctaClickProcessing) return;
+                  window.ctaClickProcessing = true;
                   trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
                   window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+                  setTimeout(() => { window.ctaClickProcessing = false; }, 1200);
                 }}
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
