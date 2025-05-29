@@ -54,7 +54,8 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
+  const fallbackTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+
   const activeTransformation = transformations[activeIndex];
   const autoSlideInterval = 5000; // 5 segundos
 
@@ -68,6 +69,26 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
 
     return () => clearTimeout(fallbackLoadingTimer);
   }, []);
+
+  // Carregamento inteligente: mostra skeleton até a imagem carregar OU 2,5s
+  useEffect(() => {
+    setImageLoaded(false);
+    setIsLoading(true);
+    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    fallbackTimerRef.current = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+    return () => {
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    };
+  }, [activeIndex]);
+
+  // Quando a imagem carrega, some o skeleton imediatamente
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+    setIsLoading(false);
+    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+  };
 
   // Removido efeito de slide automático para melhorar desempenho
   /*
@@ -178,7 +199,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 width={activeTransformation.width}
                 height={activeTransformation.height}
                 className="w-full h-auto rounded-lg shadow-md"
-                onLoad={() => setImageLoaded(true)}
+                onLoad={handleImageLoad}
                 priority={true}
               />
               
