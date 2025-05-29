@@ -801,22 +801,22 @@ const ResultPage: React.FC = () => {
                   zIndex: 2
                 }}
               >
-                <p className="text-base sm:text-lg font-semibold text-[#8F7A6A] mb-1 tracking-wide">
+                <p className="text-base sm:text-lg font-semibold text-[#8F7A6A] mb-2 sm:mb-2.5 tracking-wide">
                   <span className="valor-total-label">Valor total:</span> <span className="valor-total font-bold text-[#B89B7A] text-lg sm:text-xl line-through">R$ 175,00</span>
                 </p>
-                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1">
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1 sm:mt-2">
                   <span className="preco-avista">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
                 </p>
-                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1">ou</p>
-                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado drop-shadow-lg mt-1">
+                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1 sm:mt-2">ou</p>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado drop-shadow-lg mt-1 sm:mt-2">
                   <span className="preco-parcelado">5x R$ 8,83</span> <span className="preco-parcelado-info text-base font-medium text-[#8F7A6A]">no cartão</span>
                 </p>
-                <p className="text-sm sm:text-base text-[#2d7d32] font-medium economia-label mt-2">
+                <p className="text-sm sm:text-base text-[#2d7d32] font-medium economia-label mt-2 sm:mt-2.5">
                   <span className="economia text-[#4CAF50] text-xs sm:text-sm font-semibold" style={{ background: 'none', border: 'none', boxShadow: 'none', padding: 0 }}>
                     Economia de R$ 135,10 (77% OFF)
                   </span>
                 </p>
-                <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2">
+                <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2 sm:mt-3">
                   {/* Ampulheta animada substituindo o ícone de relógio */}
                   <span className="relative inline-block w-5 h-5 align-middle">
                     <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
