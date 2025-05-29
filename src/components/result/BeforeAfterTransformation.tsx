@@ -338,7 +338,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
               </Button>
               
               <p className="text-xs text-[#aa6b5d] font-medium text-center md:text-left mb-4 whitespace-nowrap">
-                Oferta por tempo limitado
+                Esta oferta expira ao sair da página
               </p>
             
               {/* Métodos de pagamento */}
