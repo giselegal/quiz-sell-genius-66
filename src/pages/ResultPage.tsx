@@ -811,7 +811,7 @@ const ResultPage: React.FC = () => {
                             <strong>• Manual Exclusivo do Seu Estilo Predominante:</strong> {category}
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
-                            <strong>• + Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.map(s => s.category).join(' e ')}
+                            <strong>• + Guias dos Seus Estilos Complementares:</strong> {secondaryStyles?.slice(0, 2).map(s => s.category).join(' e ')}
                           </p>
                           <p className="text-sm sm:text-base leading-relaxed" style={{ color: tokens.colors.textMuted }}>
                             Transforme sua imagem com looks Estratégicos que comunicam sua essência e valorizam sua Personalidade única.
