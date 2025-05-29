@@ -1,0 +1,15 @@
+Arquivos de variantes e backups de ResultPage e BeforeAfterTransformation movidos para _legacy_utils em 29/05/2025 para limpeza do projeto e evitar duplicidade de rotas.
+
+Incluídos:
+- src/pages/ResultPageEditorPage.tsx
+- src/pages/EnhancedResultPageEditorPage.tsx
+- src/pages/ResultPagePrototype.tsx
+- src/components/pages/ResultPage.tsx
+- src/components/pages/ResultPage.tsx.bak
+- src/pages_backup/ResultPage.tsx
+- src/pages_backup/ResultPagePrototype.tsx
+- src/backup/ResultPage.backup.tsx
+- src/components/result/BeforeAfterTransformation2.tsx
+- src/components/result/BeforeAfterTransformation3.tsx
+- src/components/result/BeforeAfterTransformation4.tsx
+- src/components/result/BeforeAfterTransformation.backup.tsx

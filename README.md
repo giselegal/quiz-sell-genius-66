@@ -1,4 +1,3 @@
-
 # Gisele Galvão Website
 
 This repository contains the source code for the Gisele Galvão website.
@@ -37,3 +36,25 @@ The CI/CD workflow consists of two jobs:
 - `deploy`: Takes the build artifacts and deploys them to Hostinger via FTP
 
 To manually trigger a deployment, you can use the "Run workflow" button on the Actions tab in GitHub.
+
+# Limpeza de Rotas e Variantes de ResultPage
+
+Em 29/05/2025, todas as variantes e backups de ResultPage e BeforeAfterTransformation foram movidos para a pasta `_legacy_utils/` para evitar duplicidade de rotas e facilitar a manutenção do SPA.
+
+- A página principal de resultado do SPA é: `/src/pages/resultado.tsx` (rota `/resultado`)
+- Todos os acessos e testes devem ser feitos por essa rota.
+- O ambiente Lovable.dev pode ser acessado conforme instruções em `acesso-lovable-dev.html` (agora também em `_legacy_utils/`).
+- Para consultar ou restaurar variantes antigas, veja `_legacy_utils/ARQUIVOS_RESULTADO_VARIANTES_BACKUP.txt`.
+
+## Rotas principais do SPA
+- `/resultado` — Página de resultado principal
+- `/resultado/editor` — Editor visual aprimorado
+- `/quiz` — Interface do quiz
+- `/admin` — Painel administrativo
+
+## Ambiente Lovable.dev
+Consulte o arquivo `acesso-lovable-dev.html` para bookmarklets e instruções rápidas de acesso ao ambiente Lovable.
+
+---
+
+**Atenção:** Não edite ou utilize arquivos de backup/variantes para produção. Use sempre a rota e arquivo principal do SPA.
