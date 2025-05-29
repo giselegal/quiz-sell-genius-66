@@ -887,9 +887,6 @@ const ResultPage: React.FC = () => {
       <div className="hidden">
         <BuildInfo />
       </div>
-      
-      {/* Botão Flutuante de Compra */}
-      <FloatingCTA onClickCTA={() => handleCTAClick({} as React.MouseEvent<HTMLButtonElement>)} />
     </div>
   );
 };
