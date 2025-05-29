@@ -101,10 +101,10 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
   }, [activeIndex]);
   */
 
-  const handleNext = () => {
+  const handleNext = React.useCallback(() => {
     if (isLoading) return;
     setActiveIndex((prev) => (prev + 1) % transformations.length);
-  };
+  }, [isLoading]);
 
   const handlePrev = () => {
     if (isLoading) return;
@@ -324,7 +324,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
                   setTimeout(() => { window.ctaClickProcessing = false; }, 1200);
                 }}
-                className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden`}
+                className={`w-full md:w-auto py-3 px-4 rounded-md shadow-md font-semibold text-base mb-2 focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2 transition-all duration-200 leading-none animate-gradient-x select-none relative overflow-hidden animate-cta-pulse`}
                 style={{
                   background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
                   boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
@@ -361,6 +361,18 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           </div>
         </div>
       </Card>
+      {/* Adiciona a animação de pulso suave para o botão CTA (CSS global) */}
+      {typeof window !== 'undefined' && (
+        (() => {
+          const styleId = 'cta-pulse-style';
+          if (!document.getElementById(styleId)) {
+            const style = document.createElement('style');
+            style.id = styleId;
+            style.innerHTML = `@keyframes cta-pulse {0% { box-shadow: 0 0 0 0 rgba(184,155,122,0.25); }70% { box-shadow: 0 0 0 10px rgba(184,155,122,0.08); }100% { box-shadow: 0 0 0 0 rgba(184,155,122,0.25); }}.animate-cta-pulse {animation: cta-pulse 1.8s infinite;}`;
+            document.head.appendChild(style);
+          }
+        })()
+      )}
     </div>
   );
 };
