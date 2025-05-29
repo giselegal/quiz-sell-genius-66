@@ -181,12 +181,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     <div className="my-6 sm:my-8 md:my-10">
       {/* Título com decoração removido */}
       {/* <h3 className="text-xl md:text-2xl font-playfair text-[#aa6b5d] mb-2 text-center relative inline-block mx-auto w-full">
-        Transformações Que Inspiram
-        <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-0.5 bg-[#B89B7A]/30"></span>
-      </h3>
-      <p className="text-base md:text-lg text-[#8F7A6A] text-center mb-6">
-        Mulheres que aprenderam e praticam no dia a dia seu estilo de ser
-      </p> */}
+
       {/* Card principal com grid responsivo */}
       <Card className="overflow-hidden border border-[#B89B7A]/20 shadow-md hover:shadow-lg transition-all duration-300 max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 md:p-6">
