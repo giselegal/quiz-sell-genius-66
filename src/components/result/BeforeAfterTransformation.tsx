@@ -187,7 +187,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 pointer-events-none">
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => setActiveIndex((activeIndex - 1 + transformations.length) % transformations.length)}
+                    onClick={handlePrev}
                     aria-label="Anterior"
                   >
                     <ChevronLeft
@@ -196,7 +196,7 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   </button>
                   <button
                     className="pointer-events-auto bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-md hover:bg-[#B89B7A]/20 transition-all focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2"
-                    onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
+                    onClick={handleNext}
                     aria-label="Próxima"
                   >
                     <ChevronRight
@@ -285,7 +285,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
             <div className="flex flex-col items-center md:items-start">
               <Button
                 onClick={handleCTAClick ? handleCTAClick : (e => {
-                  // Prevenir múltiplos cliques e garantir robustez cross-browser
                   if (window.ctaClickProcessing) return;
                   window.ctaClickProcessing = true;
                   trackButtonClick('checkout_button', 'Iniciar Checkout', 'transformation_section');
@@ -302,13 +301,17 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
                   isButtonHovered ? 'brightness-105' : ''
                 } leading-none animate-gradient-x select-none`}
                 style={{
-                  background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
-                  boxShadow: "0 4px 14px rgba(184, 155, 122, 0.4)",
-                  color: "#fff",
-                  border: "none",
-                  backgroundSize: "200% 200%",
-                  backgroundPosition: isButtonHovered ? "right center" : "left center",
-                  transition: "background-position 0.5s cubic-bezier(0.4,0,0.2,1)"
+                  background: window.innerWidth < 768
+                    ? 'linear-gradient(90deg, #4CAF50 0%, #43a047 100%)'
+                    : 'linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)',
+                  boxShadow: window.innerWidth < 768
+                    ? '0 4px 14px rgba(76, 175, 80, 0.25)'
+                    : '0 4px 14px rgba(184, 155, 122, 0.4)',
+                  color: '#fff',
+                  border: 'none',
+                  backgroundSize: '200% 200%',
+                  backgroundPosition: isButtonHovered ? 'right center' : 'left center',
+                  transition: 'background-position 0.5s cubic-bezier(0.4,0,0.2,1)'
                 }}
                 type="button"
               >
