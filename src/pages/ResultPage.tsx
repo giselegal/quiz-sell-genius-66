@@ -22,7 +22,6 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
 import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
-import FloatingCTA from '@/components/result/FloatingCTA';
 
 // Seções carregadas via lazy
 const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation'));
