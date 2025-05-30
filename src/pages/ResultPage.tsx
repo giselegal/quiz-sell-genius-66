@@ -711,17 +711,17 @@ const ResultPage: React.FC = () => {
                     priority: true
                   },
                   {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.png',
+                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.png',
                     title: 'Guia das Peças Estratégicas',
                     subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação do seu dia a dia.',
                     badge: 'BÔNUS EXCLUSIVO',
                     priority: false
                   },
                   {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.png',
-                    title: 'Guia do Guarda-Roupa de Sucesso',
-                    subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação do seu dia a dia.',
-                    badge: 'BÔNUS EXCLUSIVO',
+                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png',
+                    title: 'Manual de Visagismo',
+                    subtitle: 'Descubra os cortes de cabelo, acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo aplicado.',
+                    badge: 'BÔNUS PREMIUM',
                     priority: false
                   }
                 ].map((product, index) => (
@@ -740,12 +740,14 @@ const ResultPage: React.FC = () => {
                          style={{ 
                            boxShadow: tokens.shadows.sm,
                            minHeight: '280px',
-                           maxHeight: '320px'
-                         }}>
+                           maxHeight: '320px',
+                           height: 'auto',
+                         }}
+                    >
                       <ProgressiveImage 
                         src={`${product.src}?q=85&f=auto&w=400`}
                         alt={product.title}
-                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105"
+                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105 sm:w-[120%] sm:h-[120%]"
                         loading={product.priority ? "eager" : "lazy"}
                         fetchPriority={product.priority ? "high" : "low"}
                         style={{
