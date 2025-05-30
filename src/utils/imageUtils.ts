@@ -84,14 +84,21 @@ export const getLowQualityPlaceholder = (
     return url;
   }
   
-  const { width = 30, quality = 20 } = options;
+  const { width = 40, quality = 30 } = options; // Valores melhorados
   
   // Extrai partes da URL base
   const baseUrlParts = url.split('/upload/');
   if (baseUrlParts.length !== 2) return url;
   
-  // Cria um placeholder otimizado de tamanho pequeno
-  return `${baseUrlParts[0]}/upload/f_auto,q_${quality},w_${width}/${baseUrlParts[1].split('/').slice(1).join('/')}`;
+  const pathPart = baseUrlParts[1];
+  
+  // Remove transformações existentes se houver
+  const cleanPath = pathPart.replace(/^[^/]*\//, '');
+  
+  // Cria um placeholder otimizado de tamanho pequeno com blur para suavizar
+  const transformations = `f_auto,q_${quality},w_${width},c_limit,e_blur:200`;
+  
+  return `${baseUrlParts[0]}/upload/${transformations}/${cleanPath}`;
 };
 
 /**

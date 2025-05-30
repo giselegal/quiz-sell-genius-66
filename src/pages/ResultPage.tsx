@@ -19,7 +19,7 @@ import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import GuaranteeSeal from '@/components/result/GuaranteeSeal';
 import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import ProgressiveImage from '@/components/ui/progressive-image';
+import EnhancedProgressiveImage from '@/components/ui/EnhancedProgressiveImage';
 import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
 
@@ -743,16 +743,19 @@ const ResultPage: React.FC = () => {
                            height: 'auto', // Removido minHeight e maxHeight
                          }}
                     >
-                      <ProgressiveImage 
-                        src={`${product.src}?q=85&f=auto&w=1200`} // Aumentado para 1200px
+                      <EnhancedProgressiveImage 
+                        src={product.src}
                         alt={product.title}
-                        className="w-full h-full object-cover rounded-lg transition-transform duration-300 hover:scale-105 lg:w-full lg:h-full" // Alterado para object-cover
+                        className="w-full h-full object-cover rounded-lg transition-transform duration-300 hover:scale-105 lg:w-full lg:h-full"
                         loading={product.priority ? "eager" : "lazy"}
                         fetchPriority={product.priority ? "high" : "low"}
+                        width={600}
+                        height={600}
                         style={{
-                          maxWidth: '100%', // Permite ocupar todo o contêiner
-                          maxHeight: '100%', // Permite ocupar todo o contêiner
+                          maxWidth: '100%',
+                          maxHeight: '100%',
                         }}
+                        fallbackSrc={product.priority ? undefined : 'https://via.placeholder.com/600x600/f5f5f5/666666?text=Carregando...'}
                       />
                       
                       {/* OVERLAY DE HOVER */}
