@@ -718,10 +718,10 @@ const ResultPage: React.FC = () => {
                     priority: false
                   },
                   {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png',
-                    title: 'Manual de Visagismo',
-                    subtitle: 'Descubra os cortes de cabelo, acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo aplicado.',
-                    badge: 'BÔNUS PREMIUM',
+                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.png',
+                    title: 'Guia do Guarda-Roupa de Sucesso',
+                    subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação do seu dia a dia.',
+                    badge: 'BÔNUS EXCLUSIVO',
                     priority: false
                   }
                 ].map((product, index) => (
@@ -778,7 +778,7 @@ const ResultPage: React.FC = () => {
                         <div className="flex items-center gap-2">
                           {/* Valor original tachado de cada produto */}
                           <span className="text-xs sm:text-sm font-bold text-[#B89B7A] line-through">
-                            {index === 0 ? 'R$ 97,00' : index === 1 ? 'R$ 49,00' : 'R$ 29,00'}
+                            {index === 0 ? 'R$ 77,00' : index === 1 ? 'R$ 59,00' : 'R$ 39,00'}
                           </span>
                           {/* Valor promocional (opcional, se quiser mostrar) */}
                           {/* <span className="text-xs sm:text-sm font-bold text-[#aa6b5d]">{index === 0 ? 'Incluído' : 'Incluído'}</span> */}
