@@ -580,11 +580,6 @@ const ResultPage: React.FC = () => {
         </section>
         {/* Testimonials Section */}
         <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
-            variant="simple"
-          >
-            Depoimentos de Clientes
-          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -599,11 +594,6 @@ const ResultPage: React.FC = () => {
         
         {/* Guarantee Section */}
         <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
-            variant="simple"
-          >
-            Garantia de Satisfação
-          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
