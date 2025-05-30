@@ -1,3 +1,4 @@
+
 /**
  * Funções utilitárias para otimização, gerenciamento e manipulação de imagens
  */
@@ -83,21 +84,14 @@ export const getLowQualityPlaceholder = (
     return url;
   }
   
-  const { width = 40, quality = 30 } = options; // Valores melhorados
+  const { width = 30, quality = 20 } = options;
   
   // Extrai partes da URL base
   const baseUrlParts = url.split('/upload/');
   if (baseUrlParts.length !== 2) return url;
   
-  const pathPart = baseUrlParts[1];
-  
-  // Remove transformações existentes se houver
-  const cleanPath = pathPart.replace(/^[^/]*\//, '');
-  
-  // Cria um placeholder otimizado de tamanho pequeno com blur para suavizar
-  const transformations = `f_auto,q_${quality},w_${width},c_limit,e_blur:200`;
-  
-  return `${baseUrlParts[0]}/upload/${transformations}/${cleanPath}`;
+  // Cria um placeholder otimizado de tamanho pequeno
+  return `${baseUrlParts[0]}/upload/f_auto,q_${quality},w_${width}/${baseUrlParts[1].split('/').slice(1).join('/')}`;
 };
 
 /**
@@ -199,32 +193,5 @@ export const getOptimalImageFormat = (): 'auto' | 'webp' | 'avif' => {
   if (support.avif) return 'avif'; 
   if (support.webp) return 'webp';
   return 'auto'; // Padrão para auto que normalmente servirá JPEG
-};
-
-/**
- * Normaliza URLs do Cloudinary removendo encoding desnecessário
- * @param url URL original que pode conter caracteres codificados
- * @returns URL normalizada
- */
-export const normalizeCloudinaryUrl = (url: string): string => {
-  if (!url || !url.includes('cloudinary.com')) {
-    return url;
-  }
-  
-  // Decodifica caracteres especiais que podem estar causando problemas
-  let normalizedUrl = url;
-  
-  // Decodifica caracteres comuns que aparecem nas URLs
-  normalizedUrl = normalizedUrl.replace(/%C3%81/g, 'Á'); // Á
-  normalizedUrl = normalizedUrl.replace(/%C3%82/g, 'Â'); // Â  
-  normalizedUrl = normalizedUrl.replace(/%C3%80/g, 'À'); // À
-  normalizedUrl = normalizedUrl.replace(/%C3%89/g, 'É'); // É
-  normalizedUrl = normalizedUrl.replace(/%C3%8A/g, 'Ê'); // Ê
-  normalizedUrl = normalizedUrl.replace(/%C3%8D/g, 'Í'); // Í
-  normalizedUrl = normalizedUrl.replace(/%C3%93/g, 'Ó'); // Ó
-  normalizedUrl = normalizedUrl.replace(/%C3%94/g, 'Ô'); // Ô
-  normalizedUrl = normalizedUrl.replace(/%C3%9A/g, 'Ú'); // Ú
-  
-  return normalizedUrl;
 };
 

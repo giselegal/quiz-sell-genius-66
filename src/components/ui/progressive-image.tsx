@@ -36,7 +36,7 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   const [loadStartTime] = useState(Date.now());
 
   // Gerar placeholder de baixa qualidade se não for fornecido
-  const placeholder = lowQualitySrc || getLowQualityPlaceholder(src, { width: 40, quality: 30 });
+  const placeholder = lowQualitySrc || getLowQualityPlaceholder(src, { width: 30, quality: 15 });
 
   // Controlar o carregamento da imagem
   const handleLoad = () => {
@@ -59,11 +59,7 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
 
   // Iniciar temporizador para garantir eventual carregamento
   useEffect(() => {
-    // Reset dos estados quando src muda
-    setLoaded(false);
-    setError(false);
-    
-    // Timeout de 5 segundos para garantir que a imagem seja considerada carregada
+    // Timeout de 3 segundos para garantir que a imagem seja considerada carregada
     // mesmo sem eventos de onload/onerror (fallback de segurança)
     const safetyTimer = setTimeout(() => {
       if (!loaded && !error) {
@@ -71,7 +67,7 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         setLoaded(true);
         if (onLoad) onLoad();
       }
-    }, 5000); // Aumentado de 3000 para 5000ms
+    }, 3000);
 
     return () => clearTimeout(safetyTimer);
   }, [loaded, error, src, onLoad]);
@@ -114,17 +110,9 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
             style={{ objectFit: fit }}
           />
         ) : (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-center w-full h-full bg-gray-100 text-gray-400 text-sm py-8 px-4 rounded-lg"
-          >
-            <svg className="w-12 h-12 mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <span className="text-center">Não foi possível carregar a imagem</span>
-            <span className="text-xs text-gray-300 mt-1 text-center">Verifique sua conexão</span>
-          </motion.div>
+          <div className="flex items-center justify-center w-full h-full bg-gray-100 text-gray-400 text-sm py-4">
+            Não foi possível carregar a imagem
+          </div>
         )}
       </AnimatePresence>
     </div>

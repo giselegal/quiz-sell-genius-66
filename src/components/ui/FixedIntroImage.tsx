@@ -32,7 +32,7 @@ function getHighQualityUrl(url: string): string {
   }
 
   const baseUrl = parts[0] + uploadMarker;
-  const pathAfterUpload = parts[1];
+  let pathAfterUpload = parts[1];
 
   // Regex para encontrar a versão e o public_id, ignorando TODAS as transformações
   const versionAndPublicIdPattern = /^(?:.*?\/)*?(v\d+\/)?([^/]+(?:\/[^/]+)*)$/;
