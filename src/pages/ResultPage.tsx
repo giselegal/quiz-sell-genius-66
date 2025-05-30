@@ -792,87 +792,27 @@ const ResultPage: React.FC = () => {
             {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
             <div className="max-w-sm mx-auto space-y-4 sm:space-y-6 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-6 sm:p-8 rounded-xl border border-[#B89B7A]/20 mt-10 mb-10"
                  style={{ boxShadow: tokens.shadows.sm }}>
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border-2 border-double border-[#B89B7A]/30 bg-white/80 backdrop-blur-md px-4 py-8 sm:px-10 sm:py-10 flex flex-col items-center gap-4 sm:gap-5"
+              <div className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-double border-[#B89B7A]/30 bg-white/80 backdrop-blur-md px-4 py-8 sm:px-10 sm:py-10 flex flex-col items-center gap-4 sm:gap-5"
                 style={{
                   boxShadow: '0 8px 32px 0 rgba(184,155,122,0.18), 0 1.5px 0 0 #fff inset',
                   background: 'linear-gradient(135deg,rgba(255,255,255,0.85) 60%,rgba(184,155,122,0.10) 100%)',
-                  border: '2.5px double #B89B7A',
+                  border: '4px double #B89B7A',
                   borderRadius: tokens.radius.xl,
                   position: 'relative',
                   zIndex: 2
                 }}
               >
                 <p className="text-base sm:text-lg font-semibold text-[#8F7A6A] mb-2 sm:mb-2.5 tracking-wide">
-                  <span className="valor-total-label">Valor total:</span> <span className="valor-total font-bold text-[#B89B7A] text-lg sm:text-xl line-through">R$ 175,00</span>
+                  De <span className="font-bold text-[#B89B7A] text-lg sm:text-xl line-through">R$ 175,00</span> por apenas:
                 </p>
-                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-avista drop-shadow-lg mt-1 sm:mt-2">
-                  <span className="preco-avista animate-pulse-valor">R$ 39,00</span> <span className="preco-avista-info text-base font-medium text-[#8F7A6A]">à vista</span>
-                  <style>{`
-                    @keyframes pulseValor {
-                      0%, 100% { filter: brightness(1) scale(1); }
-                      50% { filter: brightness(1.15) scale(1.07); }
-                    }
-                    .animate-pulse-valor {
-                      animation: pulseValor 1.8s cubic-bezier(0.4,0,0.6,1) infinite;
-                      will-change: filter, transform;
-                    }
-                  `}</style>
+                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent drop-shadow-lg mt-1 sm:mt-2">
+                  R$ 39,90
                 </p>
-                <p className="text-base sm:text-lg ou-label font-medium text-[#8F7A6A] mt-1 sm:mt-2">ou</p>
-                <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent preco-parcelado drop-shadow-lg mt-1 sm:mt-2">
-                  <span className="preco-parcelado">5x R$ 8,83</span> <span className="preco-parcelado-info text-base font-medium text-[#8F7A6A]">no cartão</span>
+                <p className="text-xs sm:text-sm text-[#2d7d32] font-medium mt-2 sm:mt-2.5">
+                  Economia de R$ 135,10 (77% OFF)
                 </p>
-                <p className="text-xs sm:text-sm text-[#2d7d32] font-medium economia-label mt-2 sm:mt-2.5">
-                  <span className="economia text-[#4CAF50] font-semibold" style={{ background: 'none', border: 'none', boxShadow: 'none', padding: 0 }}>
-                    Economia de R$ 135,10 (77% OFF)
-                  </span>
-                </p>
-                
-                {/* Selo de Garantia Inline */}
-                <div className="mt-4 flex justify-center">
-                  <GuaranteeSeal variant="inline" />
-                </div>
-                
-                <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm oferta-expira-label mt-2 sm:mt-3">
-                  {/* Ampulheta animada maior */}
-                  <span className="relative inline-block w-10 h-10 sm:w-12 sm:h-12 align-middle">
-                    <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
-                      <defs>
-                        <linearGradient id="ampulhetaCorMarca" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="#B89B7A" />
-                          <stop offset="1" stopColor="#aa6b5d" />
-                        </linearGradient>
-                        <clipPath id="ampulhetaClip">
-                          <rect x="4" y="3" width="16" height="18" rx="4" />
-                        </clipPath>
-                      </defs>
-                      <path d="M7 3h10a1 1 0 0 1 1 1v2c0 2.5-2 4.5-4 5 2 0.5 4 2.5 4 5v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2c0-2.5 2-4.5 4-5-2-0.5-4-2.5-4-5V4a1 1 0 0 1 1-1z" stroke="url(#ampulhetaCorMarca)" strokeWidth="1.5" fill="none"/>
-                      <rect x="10.5" y="5.5" width="3" height="3.5" rx="1.2" fill="url(#ampulhetaCorMarca)" className="sand-top" clipPath="url(#ampulhetaClip)"/>
-                      <rect x="10.5" y="15" width="3" height="2.5" rx="1.2" fill="url(#ampulhetaCorMarca)" className="sand-bottom" clipPath="url(#ampulhetaClip)"/>
-                      <rect x="11.7" y="10" width="0.6" height="4" rx="0.3" fill="url(#ampulhetaCorMarca)" className="sand-flow"/>
-                    </svg>
-                    <style>{`
-                      @keyframes sandTop {
-                        0% { height: 3.5px; opacity: 1; }
-                        80% { height: 0.5px; opacity: 0.2; }
-                        100% { height: 0.5px; opacity: 0; }
-                      }
-                      @keyframes sandBottom {
-                        0% { height: 0.5px; opacity: 0; }
-                        20% { height: 0.5px; opacity: 0.2; }
-                        100% { height: 2.5px; opacity: 1; }
-                      }
-                      @keyframes sandFlow {
-                        0% { opacity: 1; }
-                        80% { opacity: 1; }
-                        100% { opacity: 0; }
-                      }
-                      .sand-top { animation: sandTop 2.5s linear infinite; transform-origin: top; }
-                      .sand-bottom { animation: sandBottom 2.5s linear infinite; transform-origin: bottom; }
-                      .sand-flow { animation: sandFlow 2.5s linear infinite; }
-                    `}</style>
-                  </span>
-                  <span className="oferta-expira text-xs sm:text-sm font-medium">Esta oferta expira quando você sair desta página</span>
+                <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm mt-2 sm:mt-3">
+                  Esta oferta expira quando você sair desta página
                 </p>
               </div>
             </div>
