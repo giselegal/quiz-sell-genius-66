@@ -28,7 +28,7 @@ const GuaranteeSection: React.FC = () => {
           </p>
         </div>
         
-        <div className="flex justify-center items-center space-x-4 text-[#432818]">
+        <div className="flex justify-center items-center space-x-4 text-[#432818] text-sm">
           <div className="flex items-center">
             <span className="text-[#B89B7A] mr-2">✓</span>
             <span>Sem perguntas</span>
