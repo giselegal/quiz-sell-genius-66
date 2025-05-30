@@ -814,57 +814,7 @@ const ResultPage: React.FC = () => {
                   Economia de R$ 135,10 (77% OFF)
                 </p>
                 <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm mt-2 sm:mt-3">
-                  <span className="relative inline-block w-5 h-5 sm:w-6 sm:h-6">
+                  <span className="relative inline-block w-7 h-7 sm:w-8 sm:h-8">
                     <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                       <defs>
-                        <linearGradient id="ampulhetaCorMarca" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="#B89B7A" />
-                          <stop offset="1" stopColor="#aa6b5d" />
-                        </linearGradient>
-                        <clipPath id="ampulhetaClip">
-                          <rect x="4" y="3" width="16" height="18" rx="4" />
-                        </clipPath>
-                      </defs>
-                      <path d="M7 3h10a1 1 0 0 1 1 1v2c0 2.5-2 4.5-4 5 2 0.5 4 2.5 4 5v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2c0-2.5 2-4.5 4-5-2-0.5-4-2.5-4-5V4a1 1 0 0 1 1-1z" stroke="url(#ampulhetaCorMarca)" strokeWidth="1.5" fill="none"/>
-                      <rect x="10.5" y="5.5" width="3" height="3.5" rx="1.2" fill="url(#ampulhetaCorMarca)" className="sand-top" clipPath="url(#ampulhetaClip)"/>
-                      <rect x="10.5" y="15" width="3" height="2.5" rx="1.2" fill="url(#ampulhetaCorMarca)" className="sand-bottom" clipPath="url(#ampulhetaClip)"/>
-                      <rect x="11.7" y="10" width="0.6" height="4" rx="0.3" fill="url(#ampulhetaCorMarca)" className="sand-flow"/>
-                    </svg>
-                    <style>{`
-                      @keyframes sandTop {
-                        0% { height: 3.5px; opacity: 1; }
-                        80% { height: 0.5px; opacity: 0.2; }
-                        100% { height: 0.5px; opacity: 0; }
-                      }
-                      @keyframes sandBottom {
-                        0% { height: 0.5px; opacity: 0; }
-                        20% { height: 0.5px; opacity: 0.2; }
-                        100% { height: 2.5px; opacity: 1; }
-                      }
-                      @keyframes sandFlow {
-                        0% { opacity: 1; }
-                        80% { opacity: 1; }
-                        100% { opacity: 0; }
-                      }
-                      .sand-top { animation: sandTop 2.5s linear infinite; transform-origin: top; }
-                      .sand-bottom { animation: sandBottom 2.5s linear infinite; transform-origin: bottom; }
-                      .sand-flow { animation: sandFlow 2.5s linear infinite; }
-                    `}</style>
-                  </span>
-                  Esta oferta expira quando você sair desta página
-                </p>
-              </div>
-            </div>
-          </AnimatedWrapper>
-        </section>
-      </div>
-
-      {/* Build info - apenas para desenvolvimento */}
-      <div className="hidden">
-        <BuildInfo />
-      </div>
-    </div>
-  );
-};
-
-export default ResultPage;
+                        <linearGradient id="ampulhetaNovaCor" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpace
