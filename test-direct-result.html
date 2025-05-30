@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Direto - Página de Resultados</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: #f5f5f5;
+        }
+        .test-section { 
+            background: white; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button { 
+            background: #B89B7A; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            margin: 5px; 
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .button:hover { 
+            background: #A1835D; 
+            transform: translateY(-1px);
+        }
+        .button.secondary { 
+            background: #6c757d; 
+        }
+        .button.secondary:hover { 
+            background: #5a6268; 
+        }
+        .status { 
+            font-weight: bold; 
+            padding: 8px 12px; 
+            border-radius: 5px; 
+            margin: 10px 0;
+            display: inline-block;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        pre { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            border-radius: 5px; 
+            overflow-x: auto; 
+            font-size: 12px;
+        }
+        .step { 
+            margin: 15px 0; 
+            padding: 10px; 
+            border-left: 4px solid #B89B7A;
+            background: #fafafa;
+        }
+        h1 { color: #432818; }
+        h3 { color: #B89B7A; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste Direto - Página de Resultados</h1>
+    <p><strong>Objetivo:</strong> Configurar dados de teste e verificar se a página /resultado carrega corretamente</p>
+    
+    <div class="test-section">
+        <h3>📋 Passo 1: Preparar Dados</h3>
+        <div class="step">
+            <strong>1.1 Criar dados completos de teste:</strong>
+            <button class="button" onclick="setupCompleteTestData()">Criar Dados Completos</button>
+            <div id="setup-status"></div>
+        </div>
+        
+        <div class="step">
+            <strong>1.2 Verificar dados criados:</strong>
+            <button class="button secondary" onclick="verifyTestData()">Verificar Dados</button>
+            <div id="verify-status"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🚀 Passo 2: Testar Navegação</h3>
+        <div class="step">
+            <strong>2.1 Abrir página de resultados:</strong>
+            <button class="button" onclick="openResultPage()">Abrir /resultado</button>
+            <button class="button secondary" onclick="openResultPageNewTab()">Abrir em Nova Aba</button>
+        </div>
+        
+        <div class="step">
+            <strong>2.2 Outros testes:</strong>
+            <button class="button secondary" onclick="openQuizPage()">Abrir /quiz</button>
+            <button class="button secondary" onclick="openHomePage()">Abrir Home</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📊 Passo 3: Debug e Logs</h3>
+        <button class="button secondary" onclick="showDebugInfo()">Mostrar Info Debug</button>
+        <button class="button secondary" onclick="clearAllData()">Limpar Dados</button>
+        <button class="button secondary" onclick="clearLogs()">Limpar Logs</button>
+        <div id="debug-info"></div>
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logsDiv = document.getElementById('logs');
+            const logClass = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+            logsDiv.innerHTML += `<div class="status ${logClass}">[${timestamp}] ${message}</div>`;
+        }
+
+        function setupCompleteTestData() {
+            try {
+                // Dados do usuário
+                const userName = 'Maria Silva Teste';
+                
+                // Resultado principal do quiz
+                const quizResult = {
+                    primaryStyle: {
+                        category: 'Natural',
+                        name: 'Natural',
+                        percentage: 87,
+                        description: 'Você possui um estilo natural e autêntico que valoriza a simplicidade e a beleza orgânica.'
+                    },
+                    secondaryStyles: [
+                        { category: 'Romântico', percentage: 73, name: 'Romântico' },
+                        { category: 'Clássico', percentage: 68, name: 'Clássico' },
+                        { category: 'Boho', percentage: 45, name: 'Boho' }
+                    ],
+                    userName: userName,
+                    completedAt: new Date().toISOString(),
+                    timestamp: Date.now()
+                };
+
+                // Dados alternativos no formato quizResults
+                const quizResults = {
+                    primaryStyle: {
+                        category: 'Natural',
+                        percentage: 87
+                    },
+                    secondaryStyles: [
+                        { category: 'Romântico', percentage: 73 },
+                        { category: 'Clássico', percentage: 68 }
+                    ]
+                };
+
+                // Dados do AuthContext simulados
+                const authData = {
+                    userName: userName,
+                    isAuthenticated: true,
+                    loginTime: new Date().toISOString()
+                };
+
+                // Salvar todos os dados
+                localStorage.setItem('userName', userName);
+                localStorage.setItem('quiz_result', JSON.stringify(quizResult));
+                localStorage.setItem('quizResults', JSON.stringify(quizResults));
+                localStorage.setItem('auth_data', JSON.stringify(authData));
+                
+                // Session storage
+                sessionStorage.setItem('introCompleted', 'true');
+                sessionStorage.setItem('quizCompleted', 'true');
+                sessionStorage.setItem('userSession', JSON.stringify({
+                    userName: userName,
+                    startTime: new Date().toISOString()
+                }));
+
+                log('✅ Dados completos criados com sucesso!', 'success');
+                document.getElementById('setup-status').innerHTML = 
+                    '<div class="status success">✅ Todos os dados de teste foram criados</div>';
+                
+                // Auto-verificar
+                setTimeout(verifyTestData, 500);
+                
+            } catch (error) {
+                log('❌ Erro ao criar dados: ' + error.message, 'error');
+                document.getElementById('setup-status').innerHTML = 
+                    '<div class="status error">❌ Erro ao criar dados: ' + error.message + '</div>';
+            }
+        }
+
+        function verifyTestData() {
+            const checks = [];
+            let allGood = true;
+
+            // Verificar userName
+            const userName = localStorage.getItem('userName');
+            if (userName) {
+                checks.push(`✅ userName: ${userName}`);
+            } else {
+                checks.push('❌ userName: não encontrado');
+                allGood = false;
+            }
+
+            // Verificar quiz_result
+            const quizResult = localStorage.getItem('quiz_result');
+            if (quizResult) {
+                try {
+                    const parsed = JSON.parse(quizResult);
+                    checks.push(`✅ quiz_result: ${parsed.primaryStyle?.category} (${parsed.primaryStyle?.percentage}%)`);
+                } catch (e) {
+                    checks.push('❌ quiz_result: erro no JSON');
+                    allGood = false;
+                }
+            } else {
+                checks.push('❌ quiz_result: não encontrado');
+                allGood = false;
+            }
+
+            // Verificar quizResults
+            const quizResults = localStorage.getItem('quizResults');
+            if (quizResults) {
+                checks.push('✅ quizResults: presente');
+            } else {
+                checks.push('⚠️ quizResults: não encontrado (pode ser ok)');
+            }
+
+            // Verificar sessionStorage
+            const introCompleted = sessionStorage.getItem('introCompleted');
+            if (introCompleted === 'true') {
+                checks.push('✅ introCompleted: true');
+            } else {
+                checks.push('⚠️ introCompleted: ' + introCompleted);
+            }
+
+            const statusDiv = document.getElementById('verify-status');
+            if (allGood) {
+                statusDiv.innerHTML = '<div class="status success">✅ Todos os dados essenciais estão presentes!</div>';
+                log('Verificação completa: todos os dados OK', 'success');
+            } else {
+                statusDiv.innerHTML = '<div class="status warning">⚠️ Alguns dados estão faltando</div>';
+                log('Verificação: alguns dados estão faltando', 'warning');
+            }
+
+            // Mostrar detalhes
+            statusDiv.innerHTML += '<pre>' + checks.join('\n') + '</pre>';
+        }
+
+        function openResultPage() {
+            log('Navegando para /resultado...', 'info');
+            window.location.href = '/resultado';
+        }
+
+        function openResultPageNewTab() {
+            log('Abrindo /resultado em nova aba...', 'info');
+            window.open('/resultado', '_blank');
+        }
+
+        function openQuizPage() {
+            log('Navegando para /quiz...', 'info');
+            window.location.href = '/quiz';
+        }
+
+        function openHomePage() {
+            log('Navegando para home...', 'info');
+            window.location.href = '/';
+        }
+
+        function showDebugInfo() {
+            let info = '=== DEBUG INFO ===\n\n';
+            
+            info += '--- localStorage ---\n';
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                info += `${key}: ${value}\n`;
+            }
+            
+            info += '\n--- sessionStorage ---\n';
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                const value = sessionStorage.getItem(key);
+                info += `${key}: ${value}\n`;
+            }
+
+            info += '\n--- Current URL ---\n';
+            info += `${window.location.href}\n`;
+
+            document.getElementById('debug-info').innerHTML = '<pre>' + info + '</pre>';
+        }
+
+        function clearAllData() {
+            localStorage.clear();
+            sessionStorage.clear();
+            log('🗑️ Todos os dados foram limpos', 'warning');
+            document.getElementById('setup-status').innerHTML = '';
+            document.getElementById('verify-status').innerHTML = '';
+            document.getElementById('debug-info').innerHTML = '';
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+        }
+
+        // Auto-executar ao carregar
+        window.onload = function() {
+            log('Página de teste carregada');
+            
+            // Verificar se já existem dados
+            const userName = localStorage.getItem('userName');
+            const quizResult = localStorage.getItem('quiz_result');
+            
+            if (userName && quizResult) {
+                log('Dados existentes encontrados, verificando...', 'info');
+                verifyTestData();
+            } else {
+                log('Nenhum dado encontrado. Clique em "Criar Dados Completos" para começar.', 'warning');
+            }
+        };
+    </script>
+</body>
+</html>

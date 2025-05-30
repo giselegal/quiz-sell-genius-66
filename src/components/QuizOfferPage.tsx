@@ -1,3 +1,4 @@
+// @lovable
 // Componente migrado de src/pages_backup/QuizOfferPage.tsx para uso no roteador SPA
 'use client';
 

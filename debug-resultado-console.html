@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug ResultPage Console</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .console-output {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        .error { color: #ff6b6b; }
+        .warn { color: #feca57; }
+        .info { color: #48dbfb; }
+        button {
+            background: #4834d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #3742fa;
+        }
+        .iframe-container {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🐛 Debug ResultPage - Console Monitor</h1>
+        <p>Esta página monitora os erros de console da página /resultado</p>
+        
+        <div class="status" id="status">
+            ⏳ Carregando página /resultado...
+        </div>
+        
+        <button onclick="reloadResultPage()">🔄 Recarregar /resultado</button>
+        <button onclick="clearConsole()">🧹 Limpar Console</button>
+        <button onclick="checkLocalStorage()">💾 Verificar LocalStorage</button>
+        <button onclick="setupTestData()">⚙️ Setup Dados Teste</button>
+        
+        <h3>📊 Console Output:</h3>
+        <div class="console-output" id="consoleOutput">
+            Aguardando logs do console...
+        </div>
+        
+        <h3>🔍 LocalStorage Data:</h3>
+        <div class="console-output" id="localStorageData">
+            Clique em "Verificar LocalStorage" para ver os dados
+        </div>
+    </div>
+
+    <div class="iframe-container">
+        <iframe id="resultFrame" src="http://localhost:8083/resultado"></iframe>
+    </div>
+
+    <script>
+        let consoleOutput = document.getElementById('consoleOutput');
+        let statusDiv = document.getElementById('status');
+        let localStorageDiv = document.getElementById('localStorageData');
+        
+        // Capturar erros de console
+        function captureConsoleErrors() {
+            const iframe = document.getElementById('resultFrame');
+            
+            iframe.onload = function() {
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ Página /resultado carregada';
+                
+                try {
+                    const iframeWindow = iframe.contentWindow;
+                    const iframeDocument = iframe.contentDocument;
+                    
+                    // Interceptar console.log, console.error, etc.
+                    ['log', 'error', 'warn', 'info'].forEach(method => {
+                        const original = iframeWindow.console[method];
+                        iframeWindow.console[method] = function(...args) {
+                            logToDebugConsole(method, args);
+                            return original.apply(iframeWindow.console, args);
+                        };
+                    });
+                    
+                    // Capturar erros JavaScript
+                    iframeWindow.addEventListener('error', function(e) {
+                        logToDebugConsole('error', [`JavaScript Error: ${e.message}`, `File: ${e.filename}:${e.lineno}:${e.colno}`, e.error]);
+                    });
+                    
+                    // Capturar erros de Promise rejeitadas
+                    iframeWindow.addEventListener('unhandledrejection', function(e) {
+                        logToDebugConsole('error', [`Unhandled Promise Rejection:`, e.reason]);
+                    });
+                    
+                } catch (err) {
+                    logToDebugConsole('error', ['Erro ao interceptar console:', err.message]);
+                }
+            };
+            
+            iframe.onerror = function() {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ Erro ao carregar página /resultado';
+            };
+        }
+        
+        function logToDebugConsole(type, args) {
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'warn' ? 'warn' : type === 'info' ? 'info' : '';
+            const argsStr = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            
+            consoleOutput.innerHTML += `<div class="${className}">[${timestamp}] ${type.toUpperCase()}: ${argsStr}</div>`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        function reloadResultPage() {
+            statusDiv.className = 'status';
+            statusDiv.textContent = '⏳ Recarregando página /resultado...';
+            document.getElementById('resultFrame').src = 'http://localhost:8083/resultado?' + Date.now();
+        }
+        
+        function clearConsole() {
+            consoleOutput.innerHTML = 'Console limpo...\n';
+        }
+        
+        function checkLocalStorage() {
+            try {
+                const iframe = document.getElementById('resultFrame');
+                const iframeWindow = iframe.contentWindow;
+                const localStorage = iframeWindow.localStorage;
+                
+                const data = {
+                    quizResults: localStorage.getItem('quizResults'),
+                    quizId: localStorage.getItem('quizId'),
+                    primaryStyle: localStorage.getItem('primaryStyle'),
+                    userAnswers: localStorage.getItem('userAnswers'),
+                    allKeys: Object.keys(localStorage)
+                };
+                
+                localStorageDiv.innerHTML = JSON.stringify(data, null, 2);
+                logToDebugConsole('info', ['LocalStorage verificado:', data]);
+                
+            } catch (err) {
+                localStorageDiv.innerHTML = `Erro ao acessar localStorage: ${err.message}`;
+                logToDebugConsole('error', ['Erro ao verificar localStorage:', err.message]);
+            }
+        }
+        
+        function setupTestData() {
+            try {
+                const iframe = document.getElementById('resultFrame');
+                const iframeWindow = iframe.contentWindow;
+                const localStorage = iframeWindow.localStorage;
+                
+                // Dados de teste
+                const testData = {
+                    quizResults: JSON.stringify({
+                        primaryStyle: 'clássico',
+                        secundaryStyles: ['romântico', 'boho'],
+                        score: 85,
+                        completedAt: new Date().toISOString()
+                    }),
+                    quizId: 'style-quiz-2025',
+                    primaryStyle: 'clássico',
+                    userAnswers: JSON.stringify([
+                        { questionId: 1, answer: 'opção1' },
+                        { questionId: 2, answer: 'opção2' }
+                    ])
+                };
+                
+                // Definir dados no localStorage
+                Object.entries(testData).forEach(([key, value]) => {
+                    localStorage.setItem(key, value);
+                });
+                
+                logToDebugConsole('info', ['Dados de teste configurados:', testData]);
+                alert('✅ Dados de teste configurados! Recarregue a página.');
+                
+            } catch (err) {
+                logToDebugConsole('error', ['Erro ao configurar dados de teste:', err.message]);
+                alert('❌ Erro ao configurar dados de teste: ' + err.message);
+            }
+        }
+        
+        // Inicializar
+        captureConsoleErrors();
+        
+        // Auto-refresh a cada 30 segundos para monitorar mudanças
+        setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                logToDebugConsole('info', ['Auto-check executado']);
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -24,7 +25,12 @@ import ResourcePreloader from '@/components/result/ResourcePreloader';
 import PerformanceMonitor from '@/components/result/PerformanceMonitor';
 
 // Seções carregadas via lazy
-const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation'));
+const BeforeAfterTransformation4 = lazy(() => 
+  Promise.race([
+    import('@/components/result/BeforeAfterTransformation4'),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
+  ])
+);
 const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
 const BonusSection = lazy(() => import('@/components/result/BonusSection'));
 const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
@@ -137,9 +143,12 @@ const SectionTitle: React.FC<{
 );
 
 const ResultPage: React.FC = () => {
-  const { primaryStyle, secondaryStyles } = useQuiz();
+  const { primaryStyle, secondaryStyles, resetQuiz } = useQuiz();
   const { globalStyles } = useGlobalStyles();
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [localResult, setLocalResult] = useState<any>(null);
+  const [isLoadingData, setIsLoadingData] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false
@@ -149,6 +158,11 @@ const ResultPage: React.FC = () => {
     minDuration: isLowPerformance ? 100 : 300,
     disableTransitions: isLowPerformance
   });
+
+  // Memoizar completeLoading para evitar re-renders
+  const stableCompleteLoading = useCallback(() => {
+    completeLoading();
+  }, [completeLoading]);
 
   // Button hover state
   const [isButtonHovered, setIsButtonHovered] = useState(false);
@@ -167,6 +181,85 @@ const ResultPage: React.FC = () => {
     seconds: 59
   });
   
+  // Função de click no botão CTA
+  const handleCTAClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    trackButtonClick('checkout_button', 'Iniciar Checkout', 'result_page');
+    window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
+  }, []);
+
+  const handleResetQuiz = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    resetQuiz();
+    navigate('/');
+  };
+
+  // Lógica de carregamento dos dados do quiz
+  useEffect(() => {
+    const loadQuizData = () => {
+      // Primeiro, verificar se há dados no context
+      if (primaryStyle) {
+        setLocalResult({
+          primaryStyle,
+          secondaryStyles,
+          userName: user?.userName || localStorage.getItem('userName') || 'Visitante'
+        });
+        setIsLoadingData(false);
+        return;
+      }
+
+      // Tentar carregar do localStorage
+      const savedResult = localStorage.getItem('quiz_result') || localStorage.getItem('quizResults');
+      if (savedResult) {
+        try {
+          const parsedResult = JSON.parse(savedResult);
+          setLocalResult({
+            ...parsedResult,
+            userName: user?.userName || localStorage.getItem('userName') || 'Visitante'
+          });
+          setIsLoadingData(false);
+          return;
+        } catch (error) {
+          console.error('Erro ao parsear resultado do quiz:', error);
+        }
+      }
+
+      // Se não encontrou dados, tentar novamente após um delay
+      setTimeout(() => {
+        const retryResult = localStorage.getItem('quiz_result') || localStorage.getItem('quizResults');
+        if (retryResult) {
+          try {
+            const parsedResult = JSON.parse(retryResult);
+            setLocalResult({
+              ...parsedResult,
+              userName: user?.userName || localStorage.getItem('userName') || 'Visitante'
+            });
+            setIsLoadingData(false);
+            return;
+          } catch (error) {
+            console.error('Erro ao parsear resultado do quiz no retry:', error);
+          }
+        }
+
+        // Se ainda não encontrou, criar exemplo padrão
+        const exampleResult = {
+          primaryStyle: { 
+            category: 'Natural', 
+            percentage: 85 
+          },
+          secondaryStyles: [],
+          userName: user?.userName || localStorage.getItem('userName') || 'Visitante'
+        };
+        localStorage.setItem('quiz_result', JSON.stringify(exampleResult));
+        setLocalResult(exampleResult);
+        setIsLoadingData(false);
+      }, 1000);
+    };
+
+    loadQuizData();
+  }, [primaryStyle, secondaryStyles, user, navigate, resetQuiz]);
+
   useEffect(() => {
     const countdownInterval = setInterval(() => {
       setTimer(prevTimer => {
@@ -194,23 +287,24 @@ const ResultPage: React.FC = () => {
     
     if (hasPreloadedResults) {
       setImagesLoaded({ style: true, guide: true });
-      completeLoading();
+      stableCompleteLoading();
       return;
     } 
     
     const safetyTimeout = setTimeout(() => {
       setImagesLoaded({ style: true, guide: true });
-      completeLoading();
+      stableCompleteLoading();
     }, 2500);
 
     return () => clearTimeout(safetyTimeout);
-  }, [primaryStyle, globalStyles.logo, completeLoading]);
+  }, [primaryStyle, globalStyles.logo]);
   
   useEffect(() => {
-    if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
-  }, [imagesLoaded, completeLoading]);
+    if (imagesLoaded.style && imagesLoaded.guide) {
+      stableCompleteLoading();
+    }
+  }, [imagesLoaded.style, imagesLoaded.guide, stableCompleteLoading]);
   
-  // Scroll tracking effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
@@ -242,47 +336,20 @@ const ResultPage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
+  // --- Retornos condicionais devem vir APÓS todos os hooks ---
+  if (isLoadingData) {
+    return <ResultSkeleton />;
+  }
+
+  if (!localResult || !localResult.primaryStyle) {
+    return <ErrorState />;
+  }
+
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
   
-  const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
-  
-  const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Prevenir comportamento padrão e propagação
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // Prevenir múltiplos cliques
-    if (window.ctaClickProcessing) return;
-    window.ctaClickProcessing = true;
-    
-    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    
-    // Para desktop, usar window.open para garantir funcionamento
-    if (window.innerWidth >= 768) {
-      window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
-    } else {
-      // Para mobile, usar location.href
-      window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-    }
-    
-    // Limpar flag após delay
-    setTimeout(() => {
-      window.ctaClickProcessing = false;
-    }, 1000);
-  };
-  
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      window.scrollTo({
-        top: section.offsetTop - 80,
-        behavior: 'smooth'
-      });
-    }
-  };
-  
+  const { category, percentage } = localResult.primaryStyle;
+
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
       backgroundColor: globalStyles.backgroundColor || tokens.colors.background,
@@ -474,7 +541,7 @@ const ResultPage: React.FC = () => {
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 lg:order-2">
                   <div className="w-full max-w-xs lg:max-w-sm mx-auto relative"> 
                     <ProgressiveImage 
-                      src={`${image}?q=85&f=auto&w=400`} 
+                      src={`${styleConfig[category]?.image || '/placeholder.svg'}?q=85&f=auto&w=400`} 
                       alt={`Estilo ${category}`} 
                       width={400} 
                       height={500} 
@@ -505,7 +572,7 @@ const ResultPage: React.FC = () => {
                     Seu Guia de Estilo Personalizado
                   </h3>
                   <ProgressiveImage 
-                    src={`${guideImage}?q=85&f=auto&w=800`} 
+                    src={`${styleConfig[category]?.guideImage || '/placeholder.svg'}?q=85&f=auto&w=800`} 
                     alt={`Guia de Estilo ${category}`} 
                     loading="lazy" 
                     className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-102" 
@@ -539,7 +606,7 @@ const ResultPage: React.FC = () => {
             </div>
           }>
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
-              <BeforeAfterTransformation />
+              <BeforeAfterTransformation4 />
             </AnimatedWrapper>
           </Suspense>
         </section>
@@ -548,10 +615,9 @@ const ResultPage: React.FC = () => {
         <section id="motivation" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="secondary"
-            subtitle={`Conhecer seu estilo pessoal é muito mais do que seguir tendências passageiras — é uma ferramenta poderosa de comunicação não-verbal e autoconfiança.
-`}
+            subtitle={`Conhecer seu estilo pessoal é muito mais do que seguir tendências passageiras — é uma ferramenta poderosa de comunicação não-verbal e autoconfiança.`}
           >
-            Por que Aplicar o seu Esstilo é tão importante?
+            Por que Aplicar o seu Estilo é tão importante?
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">

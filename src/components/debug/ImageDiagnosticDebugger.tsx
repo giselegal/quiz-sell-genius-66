@@ -1,7 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { getAllImages } from '@/data/imageBank';
 import { optimizeCloudinaryUrl } from '@/utils/imageUtils';
-import { ImageAnalysis, ImageDiagnosticResult } from '@/utils/images/types';
 import { Button } from '@/components/ui/button';
 import { Copy, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -9,6 +9,36 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
+
+interface ImageAnalysis {
+  url: string;
+  format: string;
+  quality: string;
+  width: string;
+  height: string;
+  isOptimized: boolean;
+  isResponsive: boolean;
+  suggestedImprovements: string[];
+  estimatedSizeReduction?: number;
+}
+
+interface ImageDiagnosticResult {
+  summary: {
+    totalImagesRendered: number;
+    totalImagesWithIssues: number;
+    totalDownloadedBytes: number;
+    estimatedPerformanceImpact: string;
+  };
+  detailedIssues: Array<{
+    url: string;
+    element: HTMLImageElement;
+    issues: string[];
+    dimensions?: {
+      natural: { width: number; height: number };
+      display: { width: number; height: number };
+    };
+  }>;
+}
 
 interface ImageDiagnosticDebuggerProps {
   isVisible: boolean;
@@ -31,14 +61,13 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
     if (!isVisible) return;
 
     setIsLoading(true);
-    // Wait for the DOM to be fully loaded
     const waitForImages = () => {
       const imgs = Array.from(document.querySelectorAll('img')) as HTMLImageElement[];
       if (imgs.length > 0) {
         setImages(imgs);
         setIsLoading(false);
       } else {
-        setTimeout(waitForImages, 500); // Check again after 500ms
+        setTimeout(waitForImages, 500);
       }
     };
 
@@ -222,7 +251,6 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
       };
       const optimizedUrl = optimizeCloudinaryUrl(url, options);
       
-      // Copy the optimized URL to the clipboard
       await navigator.clipboard.writeText(optimizedUrl);
       toast({
         title: "Sucesso",
@@ -243,7 +271,6 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
         <div className="container mx-auto p-4">
           <h2 className="text-2xl font-bold mb-4">Image Diagnostic Debugger</h2>
 
-          {/* Optimization Settings */}
           <div className="mb-4 p-4 bg-white rounded shadow-md">
             <h3 className="text-lg font-semibold mb-2">Optimization Settings</h3>
             <div className="space-y-2">
@@ -284,7 +311,6 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             </div>
           </div>
 
-          {/* Custom URL Input */}
           <div className="mb-4 p-4 bg-white rounded shadow-md">
             <h3 className="text-lg font-semibold mb-2">Optimize Custom URL</h3>
             <div className="flex space-x-2">
@@ -300,7 +326,6 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             </div>
           </div>
 
-          {/* Run Diagnostics Button */}
           <Button onClick={runDiagnostics} disabled={isLoading}>
             {isLoading ? (
               <>
@@ -312,7 +337,6 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             )}
           </Button>
 
-          {/* Diagnostic Summary */}
           {diagnosticResult && (
             <div className="mt-4 p-4 bg-white rounded shadow-md">
               <h3 className="text-lg font-semibold mb-2">Diagnostic Summary</h3>
@@ -323,7 +347,6 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             </div>
           )}
 
-          {/* Detailed Issues */}
           {diagnosticResult && diagnosticResult.detailedIssues.length > 0 && (
             <div className="mt-4 p-4 bg-white rounded shadow-md">
               <h3 className="text-lg font-semibold mb-2">Detailed Issues</h3>
@@ -349,7 +372,6 @@ const ImageDiagnosticDebugger: React.FC<ImageDiagnosticDebuggerProps> = ({ isVis
             </div>
           )}
 
-          {/* Image List and Analysis */}
           <div className="mt-4">
             <h3 className="text-xl font-semibold mb-2">Image Analysis</h3>
             {isLoading ? (

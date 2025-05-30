@@ -1,72 +1,96 @@
 
-// This file now serves as a facade/aggregator for the modularized image utilities
-import { type BankImage } from '@/data/imageBank';
-import { type PreloadOptions } from './images/types';
+export interface PreloadImageOptions {
+  src: string;
+  id: string;
+  alt: string;
+  category: string;
+  preloadPriority: number;
+}
 
-// Import and re-export functionality from modules
-import { initializeImageCache, getImageMetadata } from './images/caching';
-import { 
-  optimizeCloudinaryUrl, 
-  getOptimizedImage, 
-  getLowQualityPlaceholder, 
-  getOptimizedImageUrl,
-  getResponsiveImageSources
-} from './images/optimization';
-import { 
-  isImagePreloaded, 
-  preloadImagesByIds, 
-  preloadImagesByUrls, 
-  preloadImages,
-  preloadCriticalImages,
-  preloadImagesByCategory,
-  getLowQualityImage
-} from './images/preloading';
+export interface PreloadOptions {
+  quality?: number;
+  batchSize?: number;
+}
 
-// Initialize the cache
-initializeImageCache();
-
-// Re-export all functions for backward compatibility
-export {
-  // From caching module
-  getImageMetadata,
+export interface ImageMetadata {
+  alt?: string;
+  width?: number;
+  height?: number;
+  category?: string;
+}
+export const preloadImages = async (
+  images: PreloadImageOptions[], 
+  options: PreloadOptions = {}
+): Promise<void> => {
+  const { batchSize = 5 } = options;
   
-  // From optimization module
-  optimizeCloudinaryUrl,
-  getOptimizedImage,
-  getLowQualityPlaceholder,
-  getOptimizedImageUrl,
-  getResponsiveImageSources,
-  
-  // From preloading module
-  isImagePreloaded,
-  preloadImagesByIds,
-  preloadImagesByUrls,
-  preloadImages,
-  preloadCriticalImages,
-  preloadImagesByCategory,
-  getLowQualityImage
+  // Process images in batches
+  for (let i = 0; i < images.length; i += batchSize) {
+    const batch = images.slice(i, i + batchSize);
+    
+    await Promise.allSettled(
+      batch.map(image => 
+        new Promise<void>((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = () => reject(new Error(`Failed to preload ${image.src}`));
+          img.src = image.src;
+        })
+      )
+    );
+  }
 };
 
-// Types for backward compatibility
-export type { BankImage, PreloadOptions };
+// Additional utility functions
+export const isImagePreloaded = (src: string): boolean => {
+  // Simple check - in a real implementation this would track preloaded images
+  return false;
+};
 
-// Default export with all functions
-export default {
-  // From caching module
-  getImageMetadata,
+export const getOptimizedImage = (src: string, options?: { quality?: number; format?: string; width?: number; height?: number }): string => {
+  // For Cloudinary URLs, add optimization parameters
+  if (src.includes('cloudinary.com')) {
+    const baseUrl = src.split('/upload/')[0] + '/upload/';
+    const imagePath = src.split('/upload/')[1];
+    const params = [];
+    
+    if (options?.quality) params.push(`q_${options.quality}`);
+    if (options?.format) params.push(`f_${options.format}`);
+    if (options?.width) params.push(`w_${options.width}`);
+    if (options?.height) params.push(`h_${options.height}`);
+    
+    return baseUrl + (params.length > 0 ? params.join(',') + '/' : '') + imagePath;
+  }
   
-  // From optimization module
-  getOptimizedImage,
-  getLowQualityPlaceholder,
-  getOptimizedImageUrl,
-  getResponsiveImageSources,
+  return src;
+};
+
+export const getImageMetadata = (src: string): ImageMetadata | null => {
+  // Return null for now - could be enhanced to store actual metadata
+  return null;
+};
+
+export const preloadCriticalImages = async (categories: string[], options: PreloadOptions = {}): Promise<void> => {
+  // Placeholder implementation
+  console.log(`Preloading critical images for categories: ${categories.join(', ')}`);
+};
+
+export const preloadImagesByUrls = async (urls: string[], options: PreloadOptions = {}): Promise<void> => {
+  const images = urls.map((url, index) => ({
+    src: url,
+    id: `preload-${index}`,
+    alt: `Preloaded image ${index}`,
+    category: 'preload',
+    preloadPriority: 1
+  }));
   
-  // From preloading module
-  isImagePreloaded,
-  preloadImages,
-  preloadImagesByIds,
-  preloadImagesByUrls,
-  preloadImagesByCategory,
-  preloadCriticalImages,
-  getLowQualityImage
+  await preloadImages(images, options);
+};
+
+export const getLowQualityPlaceholder = (src: string): string => {
+  // Return a low quality version for Cloudinary images
+  if (src.includes('cloudinary.com')) {
+    return getOptimizedImage(src, { quality: 10, width: 50 });
+  }
+  return src;
 };

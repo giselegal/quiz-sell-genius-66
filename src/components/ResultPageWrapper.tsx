@@ -1,7 +1,8 @@
+
 'use client';
 
 import React from 'react';
-import ResultPage from '@/components/pages/ResultPage';
+import ResultPage from '@/pages/ResultPage';
 
 interface ResultPageWrapperProps {
   id: string;

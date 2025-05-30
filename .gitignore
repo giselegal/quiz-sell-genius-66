@@ -28,4 +28,3 @@ dist-ssr
 !public/lovable-uploads/**
 .next/
 .next/cache
-.next/

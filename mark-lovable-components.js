@@ -1,12 +1,13 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // Lista de componentes para marcar
 const componentsToMark = [
-  'src/components/quiz-builder/QuizCover.tsx',
-  'src/components/quiz-builder/QuizQuestion.tsx',
-  'src/components/quiz-logic/QuizLogic.tsx',
-  'src/components/result-editor/ResultPageEditor.tsx'
+  'src/components/QuizQuestion.tsx',
+  'src/pages/admin/editors/ResultPageEditor.tsx',
+  'src/components/result-editor/ResultPageEditorWithControls.tsx',
+  'src/components/QuizOfferPage.tsx',
+  'src/components/QuizWelcome.tsx'
 ];
 
 // Verificar se os arquivos existem e marc√°-los
@@ -27,7 +28,7 @@ componentsToMark.forEach(componentPath => {
   } else {
     console.log(`‚ö†Ô∏è Componente n√£o encontrado: ${componentPath}`);
     // Tente buscar o arquivo em outras pastas
-    console.log(`Ì¥ç Procurando por arquivos semelhantes...`);
+    console.log(`ÔøΩÔøΩÔøΩ Procurando por arquivos semelhantes...`);
   }
 });
 

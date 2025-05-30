@@ -22,7 +22,18 @@ export default defineConfig(({ mode }) => ({
     },
     allowedHosts: [
       "a10d1b34-b5d4-426b-8c97-45f125d03ec1.lovableproject.com"
-    ]
+    ],
+    // Configuração SPA - fallback para index.html
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/$/, to: '/index.html' },
+        { from: /^\/quiz$/, to: '/index.html' },
+        { from: /^\/resultado$/, to: '/index.html' },
+        { from: /^\/oferta$/, to: '/index.html' },
+        { from: /^\/admin.*$/, to: '/index.html' },
+        { from: /./, to: '/index.html' }
+      ]
+    }
   },
   
   plugins: [

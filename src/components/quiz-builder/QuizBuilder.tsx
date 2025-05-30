@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
@@ -110,6 +111,7 @@ export const QuizBuilder: React.FC = () => {
     }
     
     const previewResult: QuizResult = {
+      userName: 'Preview User', // Add the missing userName property
       primaryStyle: {
         category: 'Elegante',
         score: 12,

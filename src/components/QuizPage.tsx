@@ -21,8 +21,12 @@ const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
   const navigate = useNavigate();
   
-  // Modificado: Sempre exibir o QuizIntro primeiro, independente do histórico
-  const [showIntro, setShowIntro] = useState(true);
+  // Estado inicial baseado em se o usuário já passou pela intro nesta sessão
+  const [showIntro, setShowIntro] = useState(() => {
+    // Verificar se o usuário já passou pela intro nesta sessão específica
+    const sessionIntroCompleted = sessionStorage.getItem('introCompleted');
+    return sessionIntroCompleted !== 'true';
+  });
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
   const [showingTransition, setShowingTransition] = useState(false);
   const [showingFinalTransition, setShowingFinalTransition] = useState(false);
@@ -47,17 +51,14 @@ const QuizPage: React.FC = () => {
     isInitialLoadComplete
   } = useQuizLogic();
 
-  // Removida a verificação de sessionStorage - o quiz sempre iniciará com o QuizIntro
-
-  // Garante que sem nome salvo, sempre exibe a intro
-  useEffect(() => {
-    if (!showIntro) {
-      const savedName = localStorage.getItem('userName');
-      if (!savedName || !savedName.trim()) {
-        setShowIntro(true);
-      }
-    }
-  }, [showIntro]);
+  // Não precisamos deste useEffect - o useState já verifica o sessionStorage
+  // useEffect(() => {
+  //   // Se não há sessionStorage da intro, garantir que a intro seja mostrada
+  //   const sessionIntroCompleted = sessionStorage.getItem('introCompleted');
+  //   if (!sessionIntroCompleted) {
+  //     setShowIntro(true);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (isInitialLoadComplete) {
@@ -109,7 +110,8 @@ const QuizPage: React.FC = () => {
     // Salvar nome no localStorage
     localStorage.setItem('userName', name.trim());
     
-    // Removemos a marcação de sessão para garantir que sempre mostre a intro primeiro
+    // Marcar que a intro foi completada nesta sessão
+    sessionStorage.setItem('introCompleted', 'true');
     
     // Atualizar contexto de autenticação
     if (login) {
@@ -252,8 +254,26 @@ const QuizPage: React.FC = () => {
 
   const handleShowResult = useCallback(() => {
     try {
+      console.log('Iniciando processo de finalização do quiz...');
+      
+      // Calcular e obter resultados finais
       const results = submitQuizIfComplete();
+      
+      if (!results) {
+        console.error('Não foi possível calcular os resultados');
+        toast({
+          title: "Erro ao calcular resultado",
+          description: "Não foi possível processar suas respostas. Tente novamente.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Salvar resultados em múltiplos locais para garantir persistência
+      localStorage.setItem('quiz_result', JSON.stringify(results));
+      localStorage.setItem('quizResults', JSON.stringify(results)); // Backup
       localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
+      localStorage.setItem('allAnswers', JSON.stringify({})); // Para compatibilidade
       
       // Registra que as imagens da página de resultados foram pré-carregadas
       localStorage.setItem('preloadedResults', 'true');
@@ -261,12 +281,18 @@ const QuizPage: React.FC = () => {
       // Registra o timestamp de quando o quiz foi finalizado
       localStorage.setItem('quizCompletedAt', Date.now().toString());
       
+      // Garantir que o nome do usuário está salvo
+      const userName = user?.userName || localStorage.getItem('userName') || 'Visitante';
+      localStorage.setItem('userName', userName);
+      
+      // Trackear visualização do resultado
       if (results?.primaryStyle) {
         trackResultView(results.primaryStyle.category);
       }
       
-      // Navegação para a página de resultados ocorre ao clicar no botão "Vamos ao resultado?"
-      // Sem timers para avanço automático
+      console.log('Resultados salvos, navegando para página de resultado...', results);
+      
+      // Navegação para a página de resultados
       navigate('/resultado');
       
     } catch (error) {
@@ -279,7 +305,7 @@ const QuizPage: React.FC = () => {
       // Em caso de erro, tenta navegar diretamente
       navigate('/resultado');
     }
-  }, [strategicAnswers, submitQuizIfComplete, navigate]);
+  }, [strategicAnswers, submitQuizIfComplete, navigate, user, trackResultView]);
 
   const handleNextClickInternal = useCallback(() => {
     if (!showingStrategicQuestions) {
