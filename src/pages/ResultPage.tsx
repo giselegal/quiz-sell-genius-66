@@ -739,15 +739,15 @@ const ResultPage: React.FC = () => {
                     <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden p-4"
                          style={{ 
                            boxShadow: tokens.shadows.sm,
-                           minHeight: '280px',
-                           maxHeight: '320px',
+                           minHeight: '320px',
+                           maxHeight: '360px',
                            height: 'auto',
                          }}
                     >
                       <ProgressiveImage 
                         src={`${product.src}?q=85&f=auto&w=400`}
                         alt={product.title}
-                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105 sm:w-[120%] sm:h-[120%]"
+                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105 sm:w-[140%] sm:h-[140%]"
                         loading={product.priority ? "eager" : "lazy"}
                         fetchPriority={product.priority ? "high" : "low"}
                         style={{
