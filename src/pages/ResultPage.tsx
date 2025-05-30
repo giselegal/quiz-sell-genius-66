@@ -504,7 +504,7 @@ const ResultPage: React.FC = () => {
                   <h3 className="text-xl lg:text-2xl font-medium text-center text-[#aa6b5d] mb-6">
                     Seu Guia de Estilo Personalizado
                   </h3>
-                  <ProgressiveImage 
+                  <EnhancedProgressiveImage 
                     src={`${guideImage}?q=85&f=auto&w=800`} 
                     alt={`Guia de Estilo ${category}`} 
                     loading="lazy" 
