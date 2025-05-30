@@ -739,20 +739,18 @@ const ResultPage: React.FC = () => {
                     <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden p-4"
                          style={{ 
                            boxShadow: tokens.shadows.sm,
-                           minHeight: '500px', // Aumentado
-                           maxHeight: '600px', // Aumentado
-                           height: 'auto',
+                           height: 'auto', // Removido minHeight e maxHeight
                          }}
                     >
                       <ProgressiveImage 
-                        src={`${product.src}?q=85&f=auto&w=800`} // Aumentado para 800px
+                        src={`${product.src}?q=85&f=auto&w=1200`} // Aumentado para 1200px
                         alt={product.title}
-                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105 sm:w-auto sm:h-auto lg:w-auto lg:h-auto" // Ajustado para responsividade
+                        className="w-full h-full object-cover rounded-lg transition-transform duration-300 hover:scale-105 lg:w-full lg:h-full" // Alterado para object-cover
                         loading={product.priority ? "eager" : "lazy"}
                         fetchPriority={product.priority ? "high" : "low"}
                         style={{
-                          width: '100%', // Permite ocupar todo o contêiner
-                          height: '100%', // Permite ocupar todo o contêiner
+                          maxWidth: '100%', // Permite ocupar todo o contêiner
+                          maxHeight: '100%', // Permite ocupar todo o contêiner
                         }}
                       />
                       
