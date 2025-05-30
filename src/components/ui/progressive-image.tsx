@@ -59,7 +59,7 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
 
   // Iniciar temporizador para garantir eventual carregamento
   useEffect(() => {
-    // Timeout de 3 segundos para garantir que a imagem seja considerada carregada
+    // Timeout de 5 segundos para garantir que a imagem seja considerada carregada
     // mesmo sem eventos de onload/onerror (fallback de segurança)
     const safetyTimer = setTimeout(() => {
       if (!loaded && !error) {
@@ -67,7 +67,7 @@ const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         setLoaded(true);
         if (onLoad) onLoad();
       }
-    }, 3000);
+    }, 5000);
 
     return () => clearTimeout(safetyTimer);
   }, [loaded, error, src, onLoad]);
