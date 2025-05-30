@@ -1,4 +1,3 @@
-
 /**
  * Funções utilitárias para otimização, gerenciamento e manipulação de imagens
  */
@@ -84,14 +83,26 @@ export const getLowQualityPlaceholder = (
     return url;
   }
   
-  const { width = 30, quality = 20 } = options;
+  const { width = 40, quality = 30 } = options;
   
   // Extrai partes da URL base
   const baseUrlParts = url.split('/upload/');
   if (baseUrlParts.length !== 2) return url;
   
-  // Cria um placeholder otimizado de tamanho pequeno
-  return `${baseUrlParts[0]}/upload/f_auto,q_${quality},w_${width}/${baseUrlParts[1].split('/').slice(1).join('/')}`;
+  // Limpa o caminho do arquivo, removendo transformações existentes se houver
+  let filePath = baseUrlParts[1];
+  
+  // Se há transformações existentes, remove para aplicar as nossas
+  if (filePath.includes('/')) {
+    const parts = filePath.split('/');
+    // Se o primeiro parte contém transformações (tem vírgulas ou underscores), pula ela
+    if (parts[0].includes(',') || parts[0].includes('_')) {
+      filePath = parts.slice(1).join('/');
+    }
+  }
+  
+  // Cria um placeholder otimizado de tamanho pequeno com blur
+  return `${baseUrlParts[0]}/upload/f_auto,q_${quality},w_${width},e_blur:200/${filePath}`;
 };
 
 /**
@@ -193,5 +204,51 @@ export const getOptimalImageFormat = (): 'auto' | 'webp' | 'avif' => {
   if (support.avif) return 'avif'; 
   if (support.webp) return 'webp';
   return 'auto'; // Padrão para auto que normalmente servirá JPEG
+};
+
+/**
+ * Normaliza URLs do Cloudinary removendo codificação desnecessária de caracteres especiais
+ * @param url URL do Cloudinary com possível codificação
+ * @returns URL normalizada sem codificação desnecessária
+ */
+export const normalizeCloudinaryUrl = (url: string): string => {
+  if (!url || !url.includes('cloudinary.com')) {
+    return url;
+  }
+  
+  // Mapeamento de caracteres codificados para versões normais
+  const charMap: Record<string, string> = {
+    '%C3%81': 'Á', // Á
+    '%C3%82': 'Â', // Â
+    '%C3%89': 'É', // É
+    '%C3%8A': 'Ê', // Ê
+    '%C3%8D': 'Í', // Í
+    '%C3%93': 'Ó', // Ó
+    '%C3%94': 'Ô', // Ô
+    '%C3%9A': 'Ú', // Ú
+    '%C3%87': 'Ç', // Ç
+    '%C3%A0': 'à', // à
+    '%C3%A1': 'á', // á
+    '%C3%A2': 'â', // â
+    '%C3%A3': 'ã', // ã
+    '%C3%A7': 'ç', // ç
+    '%C3%A9': 'é', // é
+    '%C3%AA': 'ê', // ê
+    '%C3%AD': 'í', // í
+    '%C3%B3': 'ó', // ó
+    '%C3%B4': 'ô', // ô
+    '%C3%BA': 'ú', // ú
+    '%C3%BC': 'ü', // ü
+    '%20': '_',    // Espaço para underscore (melhor para URLs)
+  };
+  
+  let normalizedUrl = url;
+  
+  // Aplicar substituições
+  Object.entries(charMap).forEach(([encoded, decoded]) => {
+    normalizedUrl = normalizedUrl.replace(new RegExp(encoded, 'g'), decoded);
+  });
+  
+  return normalizedUrl;
 };
 

@@ -567,12 +567,6 @@ const ResultPage: React.FC = () => {
         
         {/* Bonus Section */}
         <section id="bonuses" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
-            variant="simple"
-            subtitle={`Ferramentas extras para potencializar uma Imagem de Sucesso ${category}`}
-          >
-            Bônus Exclusivos
-          </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -608,6 +602,7 @@ const ResultPage: React.FC = () => {
           <SectionTitle 
             variant="simple"
           >
+            Garantia de Satisfação
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -694,14 +689,14 @@ const ResultPage: React.FC = () => {
                   {
                     src: (() => {
                       const guideImages = {
-                        'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
-                        'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
-                        'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
-                        'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_ELEGANTE_asez1q.webp',
-                        'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
-                        'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071349/GUIA_SEXY_t5x2ov.webp',
-                        'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
-                        'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
+                        'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+                        'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
+                        'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
+                        'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+                        'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
+                        'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071349/GUIA_SEXY_t5x2ov.webp',
+                        'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
+                        'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
                       };
                       return guideImages[category] || guideImages['Natural'];
                     })(),
@@ -711,14 +706,14 @@ const ResultPage: React.FC = () => {
                     priority: true
                   },
                   {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.png',
+                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1744911677/Cópia_de_MOCKUPS_15_-_Copia_grstwl.png',
                     title: 'Guia das Peças Estratégicas',
                     subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação do seu dia a dia.',
                     badge: 'BÔNUS EXCLUSIVO',
                     priority: false
                   },
                   {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png',
+                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1744911666/Cópia_de_Template_Dossiê_Completo_2024_15_-_Copia_ssrhu3.png',
                     title: 'Manual de Visagismo',
                     subtitle: 'Descubra os cortes de cabelo, acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo aplicado.',
                     badge: 'BÔNUS PREMIUM',
@@ -736,23 +731,22 @@ const ResultPage: React.FC = () => {
                     </div>
 
                     {/* IMAGEM DO PRODUTO - PROPORÇÕES MELHORADAS */}
-                    <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden p-4"
+                    <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden p-2 sm:p-4"
                          style={{ 
                            boxShadow: tokens.shadows.sm,
-                           minHeight: '370px',
-                           maxHeight: '410px',
+                           minHeight: '280px',
                            height: 'auto',
                          }}
                     >
                       <ProgressiveImage 
-                        src={`${product.src}?q=85&f=auto&w=500`}
+                        src={`${product.src}?q=85&f=auto&w=600`}
                         alt={product.title}
-                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105 sm:w-[160%] sm:h-[160%]"
+                        className="w-full h-auto object-contain rounded-lg transition-transform duration-300 hover:scale-105"
                         loading={product.priority ? "eager" : "lazy"}
                         fetchPriority={product.priority ? "high" : "low"}
                         style={{
                           maxWidth: '100%',
-                          maxHeight: '100%',
+                          maxHeight: '400px',
                           width: 'auto',
                           height: 'auto'
                         }}
