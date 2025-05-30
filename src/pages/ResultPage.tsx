@@ -528,7 +528,7 @@ const ResultPage: React.FC = () => {
         <section id="transformations" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle="Veja como mulheres descobriram sua melhor versão seguindo as mesmas estratégias que você vai receber"
+            subtitle="Veja como mulheres descobriram sua melhor versão seguindo as mesmas estratégias que Você vai receber"
           >
             Resultados que Falam por Si
           </SectionTitle>
@@ -569,7 +569,7 @@ const ResultPage: React.FC = () => {
         <section id="bonuses" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
           <SectionTitle 
             variant="simple"
-            subtitle={`Ferramentas extras para potencializar uma Imagem de Sucesso ${category}`}
+            subtitle="Ferramentas extras para potencializar uma Imagem de Sucesso Sexy"
           >
             Bônus Exclusivos
           </SectionTitle>
@@ -711,14 +711,14 @@ const ResultPage: React.FC = () => {
                     priority: true
                   },
                   {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.png',
+                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copa_grstwl.png',
                     title: 'Guia das Peças Estratégicas',
                     subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação do seu dia a dia.',
                     badge: 'BÔNUS EXCLUSIVO',
                     priority: false
                   },
                   {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.png',
+                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copa_ssrhu3.png',
                     title: 'Manual de Visagismo',
                     subtitle: 'Descubra os cortes de cabelo, acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo aplicado.',
                     badge: 'BÔNUS PREMIUM',
@@ -739,22 +739,20 @@ const ResultPage: React.FC = () => {
                     <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden p-4"
                          style={{ 
                            boxShadow: tokens.shadows.sm,
-                           minHeight: '370px',
-                           maxHeight: '410px',
+                           minHeight: '500px', // Aumentado
+                           maxHeight: '600px', // Aumentado
                            height: 'auto',
                          }}
                     >
                       <ProgressiveImage 
-                        src={`${product.src}?q=85&f=auto&w=500`}
+                        src={`${product.src}?q=85&f=auto&w=800`} // Aumentado para 800px
                         alt={product.title}
-                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105 sm:w-[160%] sm:h-[160%]"
+                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105 sm:w-auto sm:h-auto lg:w-auto lg:h-auto" // Ajustado para responsividade
                         loading={product.priority ? "eager" : "lazy"}
                         fetchPriority={product.priority ? "high" : "low"}
                         style={{
-                          maxWidth: '100%',
-                          maxHeight: '100%',
-                          width: 'auto',
-                          height: 'auto'
+                          width: '100%', // Permite ocupar todo o contêiner
+                          height: '100%', // Permite ocupar todo o contêiner
                         }}
                       />
                       
@@ -817,4 +815,36 @@ const ResultPage: React.FC = () => {
                   <span className="relative inline-block w-7 h-7 sm:w-8 sm:h-8">
                     <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                       <defs>
-                        <linearGradient id="ampulhetaNovaCor" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpace
+                        <linearGradient id="ampulhetaNovaCor" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpace">
+                          <stop offset="0%" stopColor="#B89B7A" />
+                          <stop offset="100%" stopColor="#aa6b5d" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M12 2C10.34 2 9 3.34 9 5C9 6.66 10.34 8 12 8C13.66 8 15 6.66 15 5C15 3.34 13.66 2 12 2ZM12 10C9.79 10 8 11.79 8 14V17H16V14C16 11.79 14.21 10 12 10ZM12 0C13.66 0 15 1.34 15 3C15 4.66 13.66 6 12 6C10.34 6 9 4.66 9 3C9 1.34 10.34 0 12 0ZM12 8C14.21 8 16 9.79 16 12V18H8V12C8 9.79 9.79 8 12 8ZM12 22C10.34 22 9 20.66 9 19H15C15 20.66 13.66 22 12 22ZM17 19H7V21H17V19ZM17 16H7V18H17V16ZM17 13H7V15H17V13ZM17 10H7V12H17V10ZM17 7H7V9H17V7ZM17 4H7V6H17V4Z" fill="url(#ampulhetaNovaCor)"/>
+                    </svg>
+                  </span>
+                  Oferta por tempo limitado!
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      
+      {/* Footer - Simplificado e otimizado */}
+      <footer className="py-8 px-4 bg-white border-t border-[#B89B7A]/20">
+        <div className="container mx-auto max-w-4xl text-center">
+          <p className="text-sm text-[#8F7A6A] mb-2">
+            &copy; 2023 Seu Site. Todos os direitos reservados.
+          </p>
+          <div className="flex justify-center gap-4">
+            <a href="#" className="text-[#432818] text-sm hover:text-[#B89B7A] transition-colors duration-300">Política de Privacidade</a>
+            <a href="#" className="text-[#432818] text-sm hover:text-[#B89B7A] transition-colors duration-300">Termos de Serviço</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default ResultPage;
