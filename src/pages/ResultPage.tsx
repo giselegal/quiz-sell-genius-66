@@ -608,6 +608,7 @@ const ResultPage: React.FC = () => {
           <SectionTitle 
             variant="simple"
           >
+            Garantia de Satisfação
           </SectionTitle>
           <Suspense fallback={
             <div className="py-10 flex flex-col items-center justify-center">
@@ -825,7 +826,7 @@ const ResultPage: React.FC = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </AnimatedWrapper>
         </section>
       </div>
       
