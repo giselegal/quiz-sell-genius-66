@@ -18,7 +18,7 @@ const HeaderBlockPreview: React.FC<HeaderBlockPreviewProps> = ({ content }) => {
     width: content.logoWidth || 'auto',
     height: content.logoHeight || 'auto',
     maxWidth: '100%',
-    objectFit: 'contain' as 'contain' // Type assertion to ObjectFit
+    objectFit: 'contain' as const // Type assertion to ObjectFit
   };
 
   return (
