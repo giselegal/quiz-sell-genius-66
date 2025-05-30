@@ -725,7 +725,7 @@ const ResultPage: React.FC = () => {
                          style={{ 
                            boxShadow: tokens.shadows.sm,
                            height: 'auto',
-                           aspectRatio: index === 0 ? '4.6/5' : index === 1 ? '6.36/6.9' : index === 2 ? '6.36/6.9' : '3/4'
+                           aspectRatio: index === 0 ? '4.6/5' : index === 1 ? '3/2.5' : index === 2 ? '3/2.8' : '3/4'
                          }}
                     >
                       <ProgressiveImage 
