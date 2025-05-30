@@ -720,25 +720,24 @@ const ResultPage: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* IMAGEM DO PRODUTO - PROPORÇÕES MELHORADAS */}
-                    <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden p-1 sm:p-2"
+                    {/* IMAGEM DO PRODUTO - PROPORÇÕES CORRIGIDAS */}
+                    <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden"
                          style={{ 
                            boxShadow: tokens.shadows.sm,
-                           minHeight: '400px',
                            height: 'auto',
+                           aspectRatio: '3/4'
                          }}
                     >
                       <ProgressiveImage 
                         src={`${product.src}?q=85&f=auto&w=800`}
                         alt={product.title}
-                        className="w-full h-full object-cover rounded-lg transition-transform duration-300 hover:scale-105"
+                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105"
                         loading={product.priority ? "eager" : "lazy"}
                         fetchPriority={product.priority ? "high" : "low"}
                         style={{
                           width: '100%',
                           height: '100%',
-                          minHeight: '380px',
-                          objectFit: 'cover'
+                          objectFit: 'contain'
                         }}
                       />
                       
