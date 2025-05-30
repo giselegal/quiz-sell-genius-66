@@ -731,15 +731,14 @@ const ResultPage: React.FC = () => {
                       <ProgressiveImage 
                         src={`${product.src}?q=85&f=auto&w=800`}
                         alt={product.title}
-                        className="w-full h-auto object-contain rounded-lg transition-transform duration-300 hover:scale-105"
+                        className="w-full h-full object-cover rounded-lg transition-transform duration-300 hover:scale-105"
                         loading={product.priority ? "eager" : "lazy"}
                         fetchPriority={product.priority ? "high" : "low"}
                         style={{
-                          maxWidth: '100%',
-                          maxHeight: '500px',
-                          width: 'auto',
-                          height: 'auto',
-                          minHeight: '350px'
+                          width: '100%',
+                          height: '100%',
+                          minHeight: '380px',
+                          objectFit: 'cover'
                         }}
                       />
                       
