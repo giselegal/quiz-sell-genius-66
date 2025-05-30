@@ -49,6 +49,8 @@ const quizQuestions: Question[] = [
 
 export default function QuizFlow() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  
+  // Adiciona atributos para o editor Lovable
   const [answers, setAnswers] = useState<Record<string, QuestionOption>>({});
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();

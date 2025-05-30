@@ -106,11 +106,15 @@ const ResultPage: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-      color: globalStyles.textColor || '#432818',
-      fontFamily: globalStyles.fontFamily || 'inherit'
-    }}>
+    <div 
+      className="min-h-screen relative overflow-hidden" 
+      data-lovable-component="result-page"
+      data-lovable-editable="true"
+      style={{
+        backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+        color: globalStyles.textColor || '#432818',
+        fontFamily: globalStyles.fontFamily || 'inherit'
+      }}>
       {/* Componente de pré-carregamento de recursos */}
       <ResourcePreloader />
       

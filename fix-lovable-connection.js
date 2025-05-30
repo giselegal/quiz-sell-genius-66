@@ -1,14 +1,20 @@
 // Script para identificar e corrigir problemas na conexão com Lovable.dev
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 console.log('🔍 Analisando problemas de conexão com Lovable.dev...');
 
 // 1. Verificar a configuração do Lovable
 try {
-  const lovableConfig = require('./lovable.config.js');
-  console.log('✅ Configuração do Lovable encontrada:', lovableConfig);
+  const lovableConfigPath = path.join(__dirname, 'lovable.config.js');
+  const lovableConfigContent = fs.readFileSync(lovableConfigPath, 'utf8');
+  console.log('✅ Configuração do Lovable encontrada:', lovableConfigContent);
 } catch (err) {
   console.error('❌ Erro ao carregar configuração do Lovable:', err.message);
 }
