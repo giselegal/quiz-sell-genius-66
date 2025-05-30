@@ -810,7 +810,7 @@ const ResultPage: React.FC = () => {
                 <p className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent drop-shadow-lg mt-1 sm:mt-2">
                   R$ 39,90
                 </p>
-                <p className="text-sm sm:text-base text-[#2d7d32] font-medium mt-2 sm:mt-2.5">
+                <p className="text-[11px] sm:text-[11px] text-[#2d7d32] font-medium mt-2 sm:mt-2.5">
                   Economia de R$ 135,10 (77% OFF)
                 </p>
                 <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm mt-2 sm:mt-3">
