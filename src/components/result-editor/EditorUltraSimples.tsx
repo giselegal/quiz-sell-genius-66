@@ -1,18 +1,17 @@
+
 "use client";
 import React, { useState } from 'react';
 import { ArrowLeft, Save, Palette } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const EditorUltraSimples: React.FC = () => {
+  const router = useRouter();
   const [cor, setCor] = useState('#B89B7A');
   const [titulo, setTitulo] = useState('Descubra Seu Estilo Único');
   
   const salvar = () => {
     localStorage.setItem('editorUltraSimples', JSON.stringify({ cor, titulo }));
     alert('Configurações salvas!');
-  };
-
-  const voltarParaAdmin = () => {
-    window.history.back();
   };
 
   return (
@@ -28,7 +27,7 @@ const EditorUltraSimples: React.FC = () => {
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
       }}>
         <button
-          onClick={voltarParaAdmin}
+          onClick={() => router.push('/admin')}
           style={{
             display: 'flex',
             alignItems: 'center',

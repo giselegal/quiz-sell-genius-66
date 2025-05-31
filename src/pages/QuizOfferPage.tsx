@@ -1,726 +1,586 @@
-"use client";
-import React, { useEffect, useState, useCallback, useMemo, Suspense } from 'react';
-import { lazy } from 'react';
+import React, { useEffect, useState } from 'react';
+import { preloadCriticalImages } from '@/utils/images/preloading';
+import FixedIntroImage from '@/components/ui/FixedIntroImage';
+import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart, CheckCircle, ArrowDown, Hourglass } from 'lucide-react';
+import { trackButtonClick } from '@/utils/analytics';
 
-// Use the existing CountdownTimer component from the codebase
-import CountdownTimer from '@/components/ui/countdown-timer';
-
-// Mock for FixedIntroImage to allow visualization
-const FixedIntroImage = ({ src, alt, width, height, className }: {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-  className?: string;
-}) => {
-  return (
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      // Add a fallback for broken images
-      onError={(e) => {
-        const target = e.target as HTMLImageElement;
-        target.onerror = null; // Prevents infinite loop
-        target.src = `https://placehold.co/${width}x${height}/E0E0E0/888888?text=Imagem+N%C3%A3o+Dispon%C3%ADvel`;
-      }}
-    />
-  );
-};
-
-// Mock for preloadCriticalImages
-const preloadCriticalImages = (urls: string[], options?: any) => {
-  urls.forEach(url => {
-    const img = new Image();
-    img.src = url;
-    // console.log(`Preloading image: ${url}`);
-  });
-};
-
-// Mock for trackButtonClick
-const trackButtonClick = (buttonId: string, action: string, page: string) => {
-  console.log(`Analytics: Button Clicked - ID: ${buttonId}, Action: ${action}, Page: ${page}`);
-};
-
-import {
-  ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award,
-  Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart,
-  CheckCircle, ArrowDown, Hourglass
-} from 'lucide-react';
-
-// --- Constantes para Otimização de Imagens (Mantido, mas URLs devem ser validadas) ---
-// Ensure these URLs are correct and accessible. Consider using dynamic image sizing if possible.
-const IMAGE_ASSETS = {
-  HERO_LOGO: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-  HERO_COMPLEMENTARY: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp",
-  PROBLEM_ILLUSTRATION: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp",
-  SOLUTION_QUIZ: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp",
-  GUIDES_BENEFITS: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp",
-  GUIDES_COMPLEMENTARY: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp",
-  BONUS_KEY_PIECES: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp",
-  BONUS_KEY_PIECES_COMPLEMENTARY: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%A1s_1_uru4r3.webp",
-  BONUS_VISAGISM: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp",
-  BONUS_VISAGISM_COMPLEMENTARY: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
-  MENTOR_GISELE: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp",
-  TESTIMONIALS_RESULTS: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp",
-  TRANSFORMATION_REAL_1: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp",
-  TRANSFORMATION_REAL_2: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp",
-  TRANSFORMATION_REAL_3: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp",
-  GUARANTEE_BADGE: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp",
-  GUARANTEE_COMPLEMENTARY: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%A1s_8_cgrhuw.webp",
-  FAQ_ILLUSTRATION: "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515862/Sem_nome_1000_x_1000_px_1280_x_720_px_vmqk3j.webp",
-};
-
-const globalStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
-
+// CSS simplificado e otimizado
+const customStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+  
   :root {
-    --color-primary: #B89B7A;
-    --color-secondary: #432818;
-    --color-accent: #aa6b5d;
-    --color-background: #FFFBF7;
-    --color-white: #ffffff;
-    --color-text-dark: #432818;
-    --color-text-medium: #6B4F43;
-    --color-text-light: #8B7355;
-    --color-success: #22c55e;
-    --color-green-light: #d1fae5;
-    --color-green-dark: #16a34a;
-    --color-orange-light: #fff7ed;
-    --color-orange-dark: #f97316;
-    --spacing-unit: 1rem;
-    --border-radius-base: 12px;
-    --border-radius-lg: 16px;
-    --box-shadow-subtle: 0 4px 20px rgba(184, 155, 122, 0.1);
-    --box-shadow-elevated: 0 8px 32px rgba(184, 155, 122, 0.15);
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --primary: #B89B7A;
+    --secondary: #432818;
+    --accent: #aa6b5d;
+    --background: #FFFBF7;
+    --white: #ffffff;
+    --text-dark: #432818;
+    --text-medium: #6B4F43;
+    --text-light: #8B7355;
+    --success: #22c55e;
+    --spacing: 2rem;
   }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: var(--color-background);
-    color: var(--color-text-dark);
-    line-height: 1.6;
-    margin: 0;
-    scroll-behavior: smooth;
-    font-feature-settings: 'kern', 'liga', 'clig', 'calt';
-  }
-
-  .container-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 calc(var(--spacing-unit) * 1.5);
-  }
-
-  .section-gap {
-    padding: calc(var(--spacing-unit) * 5) 0;
-  }
-
-  .card-clean {
-    background: var(--color-white);
-    border-radius: var(--border-radius-lg);
-    padding: calc(var(--spacing-unit) * 2.5);
-    box-shadow: var(--box-shadow-subtle);
+  
+  .container-main { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+  .section-gap { margin-bottom: 4rem; }
+  .card-clean { 
+    background: white; 
+    border-radius: 16px; 
+    padding: 2rem; 
+    box-shadow: 0 4px 20px rgba(184, 155, 122, 0.1);
     border: 1px solid rgba(184, 155, 122, 0.1);
-    transition: var(--transition-smooth);
   }
-
-  .card-clean:hover {
-    box-shadow: var(--box-shadow-elevated);
-    transform: translateY(-2px);
-  }
-
+  
   .btn-primary-clean {
-    background: linear-gradient(135deg, var(--color-success) 0%, var(--color-green-dark) 100%);
-    color: var(--color-white);
-    font-weight: 600;
-    border-radius: var(--border-radius-base);
-    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 2.5);
+    background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);
+    color: white;
+    font-weight: 700;
+    border-radius: 12px;
+    padding: 1rem 2rem;
     border: none;
     font-size: 1.125rem;
-    transition: var(--transition-smooth);
+    transition: all 0.2s ease;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-    min-height: 56px;
+    gap: 0.5rem;
   }
-
-  .btn-primary-clean::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-  }
-
-  .btn-primary-clean:hover::before {
-    left: 100%;
-  }
-
+  
   .btn-primary-clean:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(34, 197, 94, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
   }
-
-  .btn-primary-clean:active {
-    transform: translateY(-1px);
-  }
-
-  /* Typography melhorada */
-  .text-h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.025em;
-  }
-
-  .text-h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-  }
-
-  .text-h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 600;
-    line-height: 1.3;
-  }
-
-  .text-body-lg {
-    font-size: 1.125rem;
-    line-height: 1.7;
-    font-weight: 400;
-  }
-
-  .text-body-base {
-    font-size: 1rem;
-    line-height: 1.6;
-    font-weight: 400;
-  }
-
-  .text-small {
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
-
-  /* Utility classes melhoradas */
-  .text-brand-primary { color: var(--color-primary); }
-  .text-brand-secondary { color: var(--color-secondary); }
-  .text-brand-accent { color: var(--color-accent); }
-  .text-brand-dark { color: var(--color-text-dark); }
-  .text-brand-medium { color: var(--color-text-medium); }
-  .text-brand-light { color: var(--color-text-light); }
-  .text-green-success { color: var(--color-success); }
-  .bg-green-light { background-color: var(--color-green-light); }
-  .border-green-subtle { border-color: var(--color-success); }
-  .bg-orange-light { background-color: var(--color-orange-light); }
-  .border-orange-strong { border-color: var(--color-orange-dark); }
-
-  /* Animações melhoradas */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
-  }
-
-  .animate-slide-in-left {
-    animation: slideInLeft 0.8s ease-out forwards;
-  }
-
-  .animate-slide-in-right {
-    animation: slideInRight 0.8s ease-out forwards;
-  }
-
-  /* Pulse melhorado */
-  @keyframes pulse-glow {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    }
-    50% {
-      box-shadow: 0 0 0 20px rgba(34, 197, 94, 0);
-    }
-  }
-
-  .animate-pulse-glow {
-    animation: pulse-glow 2s infinite;
-  }
-
-  /* Grid system responsivo */
-  .grid-responsive {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-
-  /* Responsive melhorado */
+  
+  .text-hierarchy-1 { font-size: 3rem; font-weight: 700; line-height: 1.1; }
+  .text-hierarchy-2 { font-size: 2rem; font-weight: 600; line-height: 1.2; }
+  .text-hierarchy-3 { font-size: 1.5rem; font-weight: 600; line-height: 1.3; }
+  .text-body { font-size: 1.125rem; line-height: 1.6; }
+  
   @media (max-width: 768px) {
-    .container-main {
-      padding: 0 var(--spacing-unit);
-    }
-    .section-gap {
-      padding: calc(var(--spacing-unit) * 3) 0;
-    }
-    .card-clean {
-      padding: calc(var(--spacing-unit) * 1.5);
-    }
-    .btn-primary-clean {
-      width: 100%;
-      justify-content: center;
-      padding: calc(var(--spacing-unit) * 1.5);
-      font-size: 1rem;
-    }
-  }
-
-  /* Loading states */
-  .skeleton {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-  }
-
-  @keyframes loading {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
-    }
-  }
-
-  /* Focus states melhorados */
-  .btn-primary-clean:focus-visible {
-    outline: 2px solid var(--color-success);
-    outline-offset: 2px;
-  }
-
-  /* Scroll suave */
-  html {
-    scroll-behavior: smooth;
+    .container-main { padding: 0 1rem; }
+    .section-gap { margin-bottom: 3rem; }
+    .card-clean { padding: 1.5rem; }
+    .text-hierarchy-1 { font-size: 2rem; }
+    .text-hierarchy-2 { font-size: 1.5rem; }
+    .btn-primary-clean { width: 100%; justify-content: center; padding: 1.25rem; }
   }
 `;
 
-// --- Componente de Estrelas para Avaliações (Mantido, com pequenas melhorias) ---
-type RatingStarsProps = { rating: number; totalStars?: number; starSize?: number };
-const RatingStars: React.FC<RatingStarsProps> = ({ rating, totalStars = 5, starSize = 16 }) => {
-  return (
-    <div className="flex items-center">
-      {[...Array(totalStars)].map((_, i) => (
-        <Star
-          key={i}
-          size={starSize}
-          className={`${i < rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'} mr-0.5`}
-          aria-hidden="true"
-        />
-      ))}
-      <span className="sr-only">Avaliação: {rating} de {totalStars} estrelas</span>
-    </div>
-  );
+// Constantes para otimização de imagens - URLs atualizadas
+const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
+const HERO_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
+const PROBLEM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
+const SOLUTION_QUIZ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp";
+const GUIDES_BENEFITS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp";
+const GUIDES_BENEFITS_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp";
+const BONUS_1_KEY_PIECES_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp";
+const BONUS_1_KEY_PIECES_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515075/Espanhol_Portugu%C3%AAs_1_uru4r3.webp";
+const BONUS_2_VISAGISM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp";
+const BONUS_2_VISAGISM_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp";
+const MENTOR_GISELE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.webp";
+const TESTIMONIALS_RESULTS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/Mockups_p%C3%A1gina_de_venda_Guia_de_Estilo_1_vostj4.webp";
+// Imagens de transformação reais da ResultPage
+const TRANSFORMATION_REAL_IMAGE_1_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334756/ChatGPT_Image_4_de_mai._de_2025_01_42_42_jlugsc.webp";
+const TRANSFORMATION_REAL_IMAGE_2_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp";
+const TRANSFORMATION_REAL_IMAGE_3_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp";
+const GUARANTEE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp";
+const GUARANTEE_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp";
+const FAQ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515862/Sem_nome_1000_x_1000_px_1280_x_720_px_vmqk3j.webp";
+
+// Componente de estrelas para avaliações (mantido)
+const RatingStars = ({ rating }) => {
+    return (
+        <div className="flex">
+            {[...Array(5)].map((_, i) => (
+                <Star
+                    key={i}
+                    size={16}
+                    className={`${i < rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'} mr-0.5`}
+                />
+            ))}
+        </div>
+    );
 };
 
-// --- Componente FAQ (Otimizado) ---
-type FaqItemType = { question: string; answer: string };
+// Componente de contagem regressiva melhorado (mantido)
+const CountdownTimer = () => {
+    const [time, setTime] = useState({
+        hours: 1,
+        minutes: 59,
+        seconds: 59
+    });
 
-const FaqSection: React.FC = () => {
-  const [openItem, setOpenItem] = useState<number | null>(null);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime(prevTime => {
+                if (prevTime.seconds > 0) {
+                    return { ...prevTime, seconds: prevTime.seconds - 1 };
+                } else if (prevTime.minutes > 0) {
+                    return { ...prevTime, minutes: prevTime.minutes - 1, seconds: 59 };
+                } else if (prevTime.hours > 0) {
+                    return { hours: prevTime.hours - 1, minutes: 59, seconds: 59 };
+                } else {
+                    return { hours: 1, minutes: 59, seconds: 59 }; // Reinicia
+                }
+            });
+        }, 1000);
 
-  const faqItems: FaqItemType[] = useMemo(() => [
-    {
-      question: "Quanto tempo leva para fazer o quiz?",
-      answer: "O quiz leva apenas alguns minutos para ser completado. São perguntas simples e objetivas sobre suas preferências e estilo de vida."
-    },
-    {
-      question: "Como recebo os materiais após a compra?",
-      answer: "Imediatamente após a confirmação do pagamento, você receberá um e-mail com as instruções de acesso a todos os materiais."
-    },
-    {
-      question: "Os guias servem para qualquer tipo físico?",
-      answer: "Sim! Os guias foram desenvolvidos considerando a diversidade de tipos físicos. O mais importante é o seu estilo predominante, e as orientações são adaptáveis para valorizar seu corpo único."
-    },
-    {
-      question: "Preciso ter conhecimento prévio sobre moda?",
-      answer: "Não! Os guias foram criados justamente para quem quer aprender do zero ou aprimorar seus conhecimentos sobre estilo pessoal. Tudo é explicado de forma clara e didática."
-    },
-    {
-      question: "Posso acessar os materiais pelo celular?",
-      answer: "Sim! Todos os materiais são digitais e podem ser acessados por qualquer dispositivo: computador, tablet ou smartphone."
-    },
-    {
-      question: "E se eu não gostar do conteúdo?",
-      answer: "Você tem 7 dias de garantia incondicional. Se não ficar satisfeita, basta solicitar o reembolso e devolveremos 100% do seu investimento."
-    },
-    {
-      question: "Quanto tempo terei acesso aos materiais?",
-      answer: "O acesso é vitalício! Você poderá consultar os guias sempre que precisar, sem prazo de expiração."
-    },
-    {
-      question: "Os guias funcionam para qualquer idade?",
-      answer: "Absolutamente! Os princípios de estilo pessoal são atemporais e adaptáveis para mulheres de todas as idades. O importante é expressar sua essência, independente da sua fase de vida."
-    }
-  ], []);
+        return () => clearInterval(interval);
+    }, []);
 
-  const toggleItem = useCallback((index: number) => {
-    setOpenItem(prevOpenItem => (prevOpenItem === index ? null : index));
-  }, []);
+    const formatNumber = (num) => num.toString().padStart(2, '0');
 
-  return (
-    <div className="w-full max-w-3xl mx-auto">
-      <SectionTitle variant="secondary" subtitle="Respostas para suas dúvidas mais comuns">
-        Perguntas Frequentes
-      </SectionTitle>
-      <div className="space-y-4">
-        {faqItems.map((item, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg shadow-md overflow-hidden border-l-4 border-brand-primary"
-          >
-            <button
-              onClick={() => toggleItem(index)}
-              className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
-              aria-expanded={openItem === index}
-              aria-controls={`faq-answer-${index}`}
-            >
-              <span className="font-medium text-brand-dark text-lg">{item.question}</span>
-              <ChevronRight
-                size={24}
-                className={`text-brand-primary transition-transform duration-300 ${openItem === index ? 'transform rotate-90' : ''}`}
-              />
-            </button>
-            {openItem === index && (
-              <div
-                id={`faq-answer-${index}`}
-                className="px-6 py-4 text-brand-medium bg-gray-50 border-t border-gray-100 text-base"
-                role="region"
-                aria-labelledby={`faq-question-${index}`}
-              >
-                {item.answer}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    return (
+        <div className="flex flex-col items-center">
+            <p className="text-[#432818] font-semibold mb-2 flex items-center">
+                <Clock size={18} className="mr-1 text-[#B89B7A]" />
+                Esta oferta expira em:
+            </p>
+            <div className="flex items-center justify-center gap-1">
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">
+                    {formatNumber(time.hours)}
+                </div>
+                <span className="text-[#B89B7A] font-bold text-xl">:</span>
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">
+                    {formatNumber(time.minutes)}
+                </div>
+                <span className="text-[#B89B7A] font-bold text-xl">:</span>
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-md text-lg font-mono font-bold shadow-sm">
+                    {formatNumber(time.seconds)}
+                </div>
+            </div>
+        </div>
+    );
 };
 
-// --- Componente de Título Padronizado (Refatorado) ---
-type SectionTitleProps = {
+// Componente FAQ (mantido)
+const FaqSectionNew = () => {
+    const [openItem, setOpenItem] = useState(null);
+
+    const faqItems = [
+        {
+            question: "Quanto tempo leva para fazer o quiz?",
+            answer: "O quiz leva apenas alguns minutos para ser completado. São perguntas simples e objetivas sobre suas preferências e estilo de vida."
+        },
+        {
+            question: "Como recebo os materiais após a compra?",
+            answer: "Imediatamente após a confirmação do pagamento, você receberá um e-mail com as instruções de acesso a todos os materiais."
+        },
+        {
+            question: "Os guias servem para qualquer tipo físico?",
+            answer: "Sim! Os guias foram desenvolvidos considerando a diversidade de tipos físicos. O mais importante é o seu estilo predominante, e as orientações são adaptáveis para valorizar seu corpo único."
+        },
+        {
+            question: "Preciso ter conhecimento prévio sobre moda?",
+            answer: "Não! Os guias foram criados justamente para quem quer aprender do zero ou aprimorar seus conhecimentos sobre estilo pessoal. Tudo é explicado de forma clara e didática."
+        },
+        {
+            question: "Posso acessar os materiais pelo celular?",
+            answer: "Sim! Todos os materiais são digitais e podem ser acessados por qualquer dispositivo: computador, tablet ou smartphone."
+        },
+        {
+            question: "E se eu não gostar do conteúdo?",
+            answer: "Você tem 7 dias de garantia incondicional. Se não ficar satisfeita, basta solicitar o reembolso e devolveremos 100% do seu investimento."
+        },
+        {
+            question: "Quanto tempo terei acesso aos materiais?",
+            answer: "O acesso é vitalício! Você poderá consultar os guias sempre que precisar, sem prazo de expiração."
+        },
+        {
+            question: "Os guias funcionam para qualquer idade?",
+            answer: "Absolutamente! Os princípios de estilo pessoal são atemporais e adaptáveis para mulheres de todas as idades. O importante é expressar sua essência, independente da sua fase de vida."
+        }
+    ];
+
+    const toggleItem = (index) => {
+        setOpenItem(openItem === index ? null : index);
+    };
+
+    return (
+        <div className="w-full max-w-3xl mx-auto">
+            <h3 className="text-3xl font-bold text-[#432818] mb-8 text-center font-playfair">
+                Perguntas Frequentes
+            </h3>
+
+            <div className="space-y-4">
+                {faqItems.map((item, index) => (
+                    <div
+                        key={index}
+                        className="bg-white rounded-lg shadow-md overflow-hidden border-l-4 border-[#B89B7A]"
+                    >
+                        <button
+                            onClick={() => toggleItem(index)}
+                            className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                        >
+                            <span className="font-medium text-[#432818] text-lg">{item.question}</span>
+                            <ChevronRight
+                                size={24}
+                                className={`text-[#B89B7A] transition-transform duration-300 ${openItem === index ? 'transform rotate-90' : ''}`}
+                            />
+                        </button>
+
+                        {openItem === index && (
+                            <div className="px-6 py-4 text-gray-700 bg-gray-50 border-t border-gray-100 text-base">
+                                {item.answer}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+// Componente de título padronizado - SIMPLIFICADO
+const SectionTitle: React.FC<{
   children: React.ReactNode;
   subtitle?: string;
-  variant?: 'primary' | 'secondary' | 'simple';
+  size?: 'lg' | 'xl';
   className?: string;
-};
-
-const SectionTitle: React.FC<SectionTitleProps> = ({ children, subtitle, variant = 'simple', className = '' }) => (
+  variant?: 'primary' | 'secondary' | 'simple';
+}> = ({ children, subtitle, size = 'xl', className = '', variant = 'simple' }) => (
   <div className={`text-center mb-16 animate-fade-in-up ${className}`}>
+    {/* Decoração superior - APENAS para títulos principais */}
     {variant === 'primary' && (
       <div className="flex justify-center mb-4">
-        <div className="w-24 h-1 bg-gradient-to-r from-brand-primary to-brand-accent rounded-full"></div>
+        <div className="w-24 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-full"></div>
       </div>
     )}
-
-    <h2 className={`font-bold leading-tight mb-4 text-brand-dark ${
-      variant === 'primary'
-        ? 'text-h1'
+    
+    {/* Título principal - estilos diferenciados */}
+    <h2 className={`font-bold font-playfair leading-tight mb-6 ${
+      variant === 'primary' 
+        ? 'text-4xl md:text-5xl lg:text-6xl text-brand-dark'
         : variant === 'secondary'
-        ? 'text-h2'
-        : 'text-h2'
+        ? 'text-3xl md:text-4xl lg:text-5xl text-brand-dark'
+        : 'text-3xl md:text-4xl font-bold text-brand-dark'
     }`}>
       {children}
     </h2>
-
+    
+    {/* Subtítulo opcional */}
     {subtitle && (
-      <p className="text-body-lg text-brand-medium max-w-3xl mx-auto">
+      <p className="text-xl text-brand-medium font-inter max-w-3xl mx-auto">
         {subtitle}
       </p>
     )}
   </div>
 );
 
-// --- Componente Principal: QuizOfferPage ---
 const QuizOfferPage: React.FC = () => {
-  const styleRef = React.useRef<HTMLStyleElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+    useEffect(() => {
+        // Inject custom styles
+        const styleElement = document.createElement('style');
+        styleElement.textContent = customStyles;
+        document.head.appendChild(styleElement);
+        
+        preloadCriticalImages(
+            [
+                HERO_IMAGE_URL,
+                HERO_COMPLEMENTARY_IMAGE_URL,
+                PROBLEM_IMAGE_URL,
+                SOLUTION_QUIZ_IMAGE_URL,
+                GUIDES_BENEFITS_IMAGE_URL,
+                BONUS_1_KEY_PIECES_IMAGE_URL,
+                BONUS_2_VISAGISM_IMAGE_URL,
+                MENTOR_GISELE_IMAGE_URL,
+                TESTIMONIALS_RESULTS_IMAGE_URL,
+                GUARANTEE_IMAGE_URL,
+                FAQ_IMAGE_URL
+            ],
+            { quality: 95 }
+        );
 
-  // Intersection Observer para animações
-  const observerRef = useCallback((node: HTMLElement | null) => {
-    if (node) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          }
-        },
-        { threshold: 0.1 }
-      );
-      observer.observe(node);
-      return () => observer.disconnect();
-    }
-  }, []);
+        if (typeof window !== 'undefined' && 'performance' in window) {
+            window.performance.mark('offer-page-mounted');
+        }
+        
+        return () => {
+            // Cleanup
+            document.head.removeChild(styleElement);
+        };
+    }, []);
 
-  useEffect(() => {
-    if (!styleRef.current) {
-      const styleElement = document.createElement('style');
-      styleElement.textContent = globalStyles;
-      document.head.appendChild(styleElement);
-      styleRef.current = styleElement;
-    }
-
-    // Preload crítico melhorado
-    const criticalImages = [
-      IMAGE_ASSETS.HERO_COMPLEMENTARY,
-      IMAGE_ASSETS.SOLUTION_QUIZ,
-      IMAGE_ASSETS.GUIDES_BENEFITS
-    ];
-    
-    preloadCriticalImages(criticalImages, { quality: 95, priority: true });
-
-    // Performance marking
-    if (typeof window !== 'undefined' && 'performance' in window) {
-      window.performance.mark('offer-page-mounted');
-    }
-
-    return () => {
-      if (styleRef.current) {
-        document.head.removeChild(styleRef.current);
-        styleRef.current = null;
-      }
+    const handleCtaClick = (buttonId: string, action: string = 'Comprar Agora') => {
+        trackButtonClick(
+            buttonId,
+            action,
+            'quiz_offer_page'
+        );
     };
-  }, []);
 
-  const handleCtaClick = useCallback((buttonId: string, action: string = 'Comprar Agora') => {
-    trackButtonClick(buttonId, action, 'quiz_offer_page');
-    
-    // Analytics melhorado
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'purchase_intent', {
-        event_category: 'conversion',
-        event_label: buttonId,
-        value: 67
-      });
-    }
-    
-    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-color-background antialiased">
-      {/* Header melhorado */}
-      <header className="py-4 px-6 sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
-        <div className="container-main flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-green-success rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-green-success">Oferta Ativa</span>
-          </div>
-          <div className="text-sm text-brand-medium">
-            ⭐ 4.9/5 - Mais de 1.200 avaliações
-          </div>
-        </div>
-      </header>
-
-      <main>
-        {/* Hero Section Melhorado */}
-        <section className="section-gap pt-8" ref={observerRef}>
-          <div className="container-main">
-            <div className="card-clean text-center animate-fade-in-up">
-              {/* Social proof badge melhorado */}
-              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-green-light to-green-100 px-6 py-3 rounded-full border-2 border-green-subtle/30 mb-8 animate-pulse-glow">
-                <Award size={20} className="text-green-success" />
-                <span className="text-sm font-semibold text-green-success">✨ Método aprovado por 3.000+ mulheres</span>
-                <RatingStars rating={5} starSize={14} />
-              </div>
-
-              <h1 className="text-h1 text-brand-dark mb-6">
-                Descubra Seu <span className="text-brand-primary bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent">Estilo Predominante</span>
-                <br />em Apenas 5 Minutos
-              </h1>
-              
-              <p className="text-body-lg text-brand-medium mb-8 max-w-2xl mx-auto">
-                Transforme seu guarda-roupa em uma ferramenta de <strong>autoestima e confiança</strong>. 
-                Nunca mais compre peças que não combinam com você!
-              </p>
-
-              {/* Benefícios em destaque */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 max-w-4xl mx-auto">
-                {[
-                  { icon: CheckCircle, text: "Guia 100% Personalizado" },
-                  { icon: Clock, text: "Resultados em 5 Minutos" },
-                  { icon: Shield, text: "7 Dias de Garantia" }
-                ].map((benefit, index) => (
-                  <div key={index} className="flex items-center justify-center gap-2 bg-white/50 rounded-lg p-3">
-                    <benefit.icon size={18} className="text-green-success" />
-                    <span className="text-sm font-medium text-brand-dark">{benefit.text}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mb-8 max-w-lg mx-auto">
-                <FixedIntroImage
-                  src={IMAGE_ASSETS.HERO_COMPLEMENTARY}
-                  alt="Transformação de guarda-roupa - antes e depois"
-                  width={600}
-                  height={400}
-                  className="w-full h-auto rounded-xl shadow-lg"
-                />
-              </div>
-
-              <button
-                onClick={() => handleCtaClick('hero_cta', 'Descobrir Meu Estilo')}
-                className="btn-primary-clean mb-6 animate-pulse-glow"
-                aria-label="Descobrir Meu Estilo Agora"
-              >
-                <ArrowRight size={24} />
-                🎯 Descobrir Meu Estilo Agora
-              </button>
-
-              {/* Trust indicators melhorados */}
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-brand-light">
-                <div className="flex items-center gap-2">
-                  <Lock size={16} className="text-green-success" />
-                  <span>Pagamento 100% Seguro</span>
+    return (
+        <div className="min-h-screen bg-[var(--background)]" style={{ fontFamily: 'Inter, sans-serif' }}>
+            {/* Header limpo */}
+            <header className="py-4 px-6 sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
+                <div className="container-main flex justify-center">
+                    <FixedIntroImage
+                        src={HERO_IMAGE_URL}
+                        alt="Logo Gisele Galvão"
+                        width={180}
+                        height={80}
+                        className="h-auto object-contain"
+                    />
                 </div>
-                <div className="flex items-center gap-2">
-                  <Shield size={16} className="text-green-success" />
-                  <span>Garantia Incondicional</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users size={16} className="text-green-success" />
-                  <span>+3.000 Clientes Satisfeitas</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+            </header>
 
-        {/* Countdown Section */}
-        <section className="section-gap">
-          <div className="container-main">
-            <div className="max-w-2xl mx-auto">
-              <CountdownTimer />
-            </div>
-          </div>
-        </section>
+            <main>
+                {/* 1. Hero Section - LIMPO E FOCADO */}
+                <section className="section-gap pt-8">
+                    <div className="container-main">
+                        <div className="card-clean text-center">
+                            {/* Badge credibilidade */}
+                            <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-6">
+                                <Award size={18} className="text-green-600" />
+                                <span className="text-sm font-semibold text-green-700">3000+ mulheres transformadas</span>
+                            </div>
 
-        {/* FAQ Section */}
-        <section className="section-gap">
-          <div className="container-main">
-            <FaqSection />
-          </div>
-        </section>
+                            {/* Headline simplificada */}
+                            <h1 className="text-hierarchy-1 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                Descubra Seu <span className="text-[var(--primary)]">Estilo Predominante</span>
+                                <br />em 5 Minutos
+                            </h1>
+                            
+                            {/* Subheadline focada */}
+                            <p className="text-body text-[var(--text-medium)] mb-8 max-w-2xl mx-auto">
+                                Tenha finalmente um guarda-roupa que <strong>funciona 100%</strong>, onde tudo combina e reflete sua personalidade
+                            </p>
 
-        {/* Floating CTA for mobile */}
-        <div className="fixed bottom-4 left-4 right-4 md:hidden z-50">
-          <button
-            onClick={() => handleCtaClick('floating_cta', 'Comprar Mobile')}
-            className="btn-primary-clean w-full shadow-2xl"
-          >
-            <ShoppingCart size={20} />
-            R$ 67,00 - Comprar Agora
-          </button>
+                            {/* Hero image otimizada */}
+                            <div className="mb-8 max-w-lg mx-auto">
+                                <FixedIntroImage
+                                    src={HERO_COMPLEMENTARY_IMAGE_URL}
+                                    alt="Transformação de guarda-roupa"
+                                    width={600}
+                                    height={400}
+                                    className="w-full h-auto rounded-xl shadow-lg"
+                                />
+                            </div>
+
+                            {/* CTA principal único */}
+                            <button
+                                onClick={() => {
+                                    handleCtaClick('hero_cta', 'Descobrir Meu Estilo');
+                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                }}
+                                className="btn-primary-clean mb-6"
+                            >
+                                <ArrowRight size={20} />
+                                Descobrir Meu Estilo Agora
+                            </button>
+                            
+                            {/* Trust elements simples */}
+                            <div className="flex items-center justify-center gap-6 text-sm text-[var(--text-light)]">
+                                <div className="flex items-center gap-1">
+                                    <Lock size={16} className="text-green-600" />
+                                    <span>100% Seguro</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <Shield size={16} className="text-green-600" />
+                                    <span>7 Dias Garantia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 2. Problema - SIMPLIFICADO */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean">
+                            <div className="grid md:grid-cols-2 gap-8 items-center">
+                                <div>
+                                    <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                        Você se identifica com isso?
+                                    </h2>
+                                    <div className="space-y-4 text-body text-[var(--text-medium)]">
+                                        <p>
+                                            <strong>Guarda-roupa cheio</strong> mas nunca tem o que vestir?
+                                        </p>
+                                        <p>
+                                            <strong>Compra peças</strong> que nunca combinam com nada?
+                                        </p>
+                                        <p>
+                                            <strong>Sente que "nada fica bom"</strong> em você?
+                                        </p>
+                                    </div>
+                                    <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400 mt-6">
+                                        <p className="text-[var(--text-dark)] font-semibold">
+                                            Isso acontece porque você ainda não descobriu seu <strong>estilo predominante</strong>.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <FixedIntroImage
+                                        src={PROBLEM_IMAGE_URL}
+                                        alt="Frustração com guarda-roupa"
+                                        width={500}
+                                        height={350}
+                                        className="w-full h-auto rounded-lg"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 3. Solução - DIRETO AO PONTO */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean text-center">
+                            <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                A Solução: Quiz de Estilo
+                            </h2>
+                            
+                            <div className="max-w-md mx-auto mb-8">
+                                <FixedIntroImage
+                                    src={SOLUTION_QUIZ_IMAGE_URL}
+                                    alt="Quiz de Estilo"
+                                    width={400}
+                                    height={300}
+                                    className="w-full h-auto rounded-lg"
+                                />
+                            </div>
+
+                            <p className="text-body text-[var(--text-medium)] mb-8 max-w-2xl mx-auto">
+                                Método preciso para identificar seu estilo entre os <strong>7 estilos universais</strong> + guia personalizado completo.
+                            </p>
+
+                            <button
+                                onClick={() => {
+                                    handleCtaClick('solution_cta', 'Fazer Quiz');
+                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                }}
+                                className="btn-primary-clean mb-6"
+                            >
+                                <ShoppingBag size={20} />
+                                Fazer o Quiz Agora
+                            </button>
+
+                            <CountdownTimer />
+                        </div>
+                    </div>
+                </section>
+
+                {/* 4. Valor - PREÇO DESTACADO */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean">
+                            <div className="text-center mb-8">
+                                <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                    Transformação Completa
+                                </h2>
+                                <p className="text-body text-[var(--text-medium)]">
+                                    Tudo que você precisa para descobrir e aplicar seu estilo
+                                </p>
+                            </div>
+
+                            {/* Preview produtos */}
+                            <div className="grid md:grid-cols-3 gap-6 mb-8">
+                                <div className="text-center">
+                                    <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                        <FixedIntroImage
+                                            src={GUIDES_BENEFITS_IMAGE_URL}
+                                            alt="Guia Personalizado"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
+                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Guia Personalizado</h3>
+                                    <p className="text-sm text-[var(--text-medium)]">Para seu estilo específico</p>
+                                </div>
+                                <div className="text-center">
+                                    <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                        <FixedIntroImage
+                                            src={BONUS_1_KEY_PIECES_IMAGE_URL}
+                                            alt="Bônus Peças-Chave"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
+                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Peças-Chave</h3>
+                                    <p className="text-sm text-[var(--text-medium)]">Guarda-roupa funcional</p>
+                                </div>
+                                <div className="text-center">
+                                    <div className="aspect-[4/5] bg-white rounded-lg mb-3 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                        <FixedIntroImage
+                                            src={BONUS_2_VISAGISM_IMAGE_URL}
+                                            alt="Bônus Visagismo"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
+                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Visagismo</h3>
+                                    <p className="text-sm text-[var(--text-medium)]">Valorize seus traços</p>
+                                </div>
+                            </div>
+
+                            {/* Preço FOCADO */}
+                            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-8 text-white text-center mb-8">
+                                <p className="text-sm opacity-90 mb-2">Oferta por tempo limitado</p>
+                                <div className="mb-4">
+                                    <span className="text-sm">5x de</span>
+                                    <span className="text-4xl font-bold mx-2">R$ 8,83</span>
+                                </div>
+                                <p className="text-lg">ou à vista <strong>R$ 39,90</strong></p>
+                                <p className="text-sm mt-2 opacity-75">77% OFF - Economia de R$ 135,10</p>
+                            </div>
+
+                            {/* CTA Final */}
+                            <div className="text-center">
+                                <button
+                                    onClick={() => {
+                                        handleCtaClick('final_cta', 'Garantir Transformação');
+                                        window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                    }}
+                                    className="btn-primary-clean"
+                                >
+                                    <ShoppingCart size={20} />
+                                    Garantir Minha Transformação
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 5. Garantia - SIMPLES */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean text-center">
+                            <FixedIntroImage
+                                src={GUARANTEE_IMAGE_URL}
+                                alt="Garantia 7 dias"
+                                width={200}
+                                height={200}
+                                className="mx-auto mb-6"
+                            />
+                            <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                7 Dias de Garantia
+                            </h2>
+                            <p className="text-body text-[var(--text-medium)] max-w-2xl mx-auto">
+                                Se não ficar satisfeita, devolvemos <strong>100% do seu dinheiro</strong>. Sem perguntas.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 6. FAQ - COMPACTO */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean">
+                            <h2 className="text-hierarchy-2 text-[var(--text-dark)] text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                Perguntas Frequentes
+                            </h2>
+                            <FaqSectionNew />
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
-      </main>
-
-      {/* Footer melhorado */}
-      <footer className="bg-brand-secondary text-white py-12">
-        <div className="container-main">
-          <div className="text-center mb-8">
-            <FixedIntroImage
-              src={IMAGE_ASSETS.HERO_LOGO}
-              alt="Logo Gisele Galvão"
-              width={150}
-              height={60}
-              className="h-auto object-contain mx-auto mb-4 opacity-90"
-            />
-            <div className="flex justify-center items-center gap-4 mb-4">
-              <RatingStars rating={5} />
-              <span className="text-sm opacity-80">4.9/5 baseado em 1.200+ avaliações</span>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div className="text-center">
-              <h4 className="font-semibold mb-2">🏆 Garantia</h4>
-              <p className="text-sm opacity-80">7 dias de garantia incondicional</p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold mb-2">⚡ Entrega</h4>
-              <p className="text-sm opacity-80">Acesso imediato por email</p>
-            </div>
-            <div className="text-center">
-              <h4 className="font-semibold mb-2">💳 Pagamento</h4>
-              <p className="text-sm opacity-80">100% seguro via Hotmart</p>
-            </div>
-          </div>
-
-          <div className="border-t border-white/20 pt-8 text-center">
-            <p className="text-sm mb-4 opacity-70">
-              © {new Date().getFullYear()} Gisele Galvão. Todos os direitos reservados.
-            </p>
-            <div className="flex justify-center gap-6 text-sm opacity-70">
-              <a href="/politica-de-privacidade" className="hover:underline transition-colors">
-                Política de Privacidade
-              </a>
-              <span>|</span>
-              <a href="/termos-de-uso" className="hover:underline transition-colors">
-                Termos de Uso
-              </a>
-              <span>|</span>
-              <a href="/contato" className="hover:underline transition-colors">
-                Contato
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
+    );
 };
 
 export default QuizOfferPage;

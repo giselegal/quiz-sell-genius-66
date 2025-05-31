@@ -1,5 +1,5 @@
-
 import React, { useEffect, useState } from 'react';
+import { preloadCriticalImages } from '@/utils/images/preloading';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart, CheckCircle, ArrowDown, Hourglass } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
@@ -274,14 +274,29 @@ const QuizOfferPage: React.FC = () => {
         styleElement.textContent = customStyles;
         document.head.appendChild(styleElement);
         
-        // Simple image preloading without deleted utilities
-        console.log('Quiz offer page loaded with image optimization');
+        preloadCriticalImages(
+            [
+                HERO_IMAGE_URL,
+                HERO_COMPLEMENTARY_IMAGE_URL,
+                PROBLEM_IMAGE_URL,
+                SOLUTION_QUIZ_IMAGE_URL,
+                GUIDES_BENEFITS_IMAGE_URL,
+                BONUS_1_KEY_PIECES_IMAGE_URL,
+                BONUS_2_VISAGISM_IMAGE_URL,
+                MENTOR_GISELE_IMAGE_URL,
+                TESTIMONIALS_RESULTS_IMAGE_URL,
+                GUARANTEE_IMAGE_URL,
+                FAQ_IMAGE_URL
+            ],
+            { quality: 95 }
+        );
 
         if (typeof window !== 'undefined' && 'performance' in window) {
             window.performance.mark('offer-page-mounted');
         }
         
         return () => {
+            // Cleanup
             document.head.removeChild(styleElement);
         };
     }, []);

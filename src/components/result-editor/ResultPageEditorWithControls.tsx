@@ -1,4 +1,3 @@
-// @lovable
 
 import React, { useState } from 'react';
 import { StyleResult } from '@/types/quiz';

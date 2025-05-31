@@ -1,4 +1,3 @@
-// @lovable
 import React, { useState, useEffect } from 'react';
 
 // Mock de dados da página (eventualmente viria de um backend ou config)

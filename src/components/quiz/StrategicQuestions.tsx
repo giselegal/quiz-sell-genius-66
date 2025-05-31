@@ -1,11 +1,12 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
-import { preloadImages } from '@/utils/imageManager';
+import { preloadCriticalImages, preloadImagesByUrls } from '@/utils/imageManager';
 import OptimizedImage from '../ui/OptimizedImage';
-import { getAllImages } from '@/data/imageBank';
+import { getAllImages } from '@/data/imageBank'; // Importar para acessar o banco de imagens
 
 // Imagens críticas da página de resultados a serem pré-carregadas
 const RESULT_CRITICAL_IMAGES = [
@@ -32,28 +33,61 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   
   useEffect(() => {
     if (!imagesPreloaded) {
-      console.log('Preloading strategic question images');
+      // Preload da questão estratégica atual
+      preloadCriticalImages(["strategic"]);
       setImagesPreloaded(true);
     }
     
+    // Pré-carregamento progressivo das imagens de resultado
+    // baseado no índice da questão estratégica atual
     if (!resultImagesPreloadStarted.current) {
       resultImagesPreloadStarted.current = true;
       
+      // Agenda o pré-carregamento para começar após um pequeno delay
+      // para não competir com os recursos da questão atual
       setTimeout(() => {
         console.log(`[Otimização] Iniciando pré-carregamento progressivo de imagens de resultado`);
-      }, 500);
+        
+        // Inicia o preload da categoria principal de resultado
+        preloadCriticalImages(['results'], {
+          quality: 80,
+          batchSize: 2
+        });
+      }, 500); // Pequeno delay para não competir com recursos iniciais
     }
   }, [imagesPreloaded]);
   
+  // Quando o índice da questão estratégica mudar, carregar mais imagens
+  // de resultado em segundo plano, priorizando diferentes categorias
   useEffect(() => {
+    // Remonta componente quando a questão muda para garantir estado limpo
     setMountKey(Date.now());
     
+    // Carrega diferentes conjuntos de imagens com base no progresso
     if (currentQuestionIndex === 1) {
-      console.log('Loading transformation images');
+      // Na segunda questão estratégica, carrega transformações
+      preloadCriticalImages(['transformation'], {
+        quality: 75,
+        batchSize: 2
+      });
     } else if (currentQuestionIndex === 2) {
-      console.log('Loading bonus images');
+      // Na terceira questão, carrega bônus
+      preloadCriticalImages(['bonus'], {
+        quality: 75,
+        batchSize: 2
+      });
     } else if (currentQuestionIndex >= 3) {
-      console.log('Loading testimonial images');
+      // Em questões posteriores, carrega depoimentos
+      preloadCriticalImages(['testimonials'], {
+        quality: 70,
+        batchSize: 2
+      });
+      
+      // Carrega imagens explícitas de alta prioridade
+      preloadImagesByUrls(RESULT_CRITICAL_IMAGES, {
+        quality: 85, 
+        batchSize: 1
+      });
     }
   }, [currentQuestionIndex]);
 

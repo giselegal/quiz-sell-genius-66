@@ -1,145 +1,127 @@
 
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { preloadImages } from '@/utils/imageManager';
+import { useState, useEffect, useCallback } from 'react';
+import { 
+  getAllImages, 
+  getImagesByCategory, 
+  getImageById,
+  type BankImage
+} from '@/data/imageBank';
+import { 
+  preloadImages, 
+  preloadImagesByIds, 
+  preloadImagesByUrls, 
+  preloadCriticalImages,
+  preloadImagesByCategory
+} from '@/utils/imageManager';
+import type { PreloadOptions } from '@/utils/images/types';
 
-export interface ImageBankItem {
-  id: string;
-  name: string;
-  url: string;
-  category?: string;
-  active: boolean;
-  created_at: string;
-  updated_at: string;
-  created_by?: string;
+interface UseImageBankProps {
+  initialCategory?: string;
+  autoPreload?: boolean;
+  preloadPriority?: number;
 }
 
-export const useImageBank = () => {
-  const [images, setImages] = useState<ImageBankItem[]>([]);
-  const [loading, setLoading] = useState(true);
+export const useImageBank = ({ 
+  initialCategory,
+  autoPreload = false,
+  preloadPriority = 3
+}: UseImageBankProps = {}) => {
+  const [isLoading, setIsLoading] = useState(autoPreload);
+  const [images, setImages] = useState<BankImage[]>([]);
+  const [currentCategory, setCurrentCategory] = useState<string | undefined>(initialCategory);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchImages = async () => {
+  // Load images based on category
+  const loadImages = useCallback((category?: string) => {
     try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('image_bank')
-        .select('*')
-        .eq('active', true)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      setImages(data || []);
+      let resultImages: BankImage[];
+      
+      if (!category) {
+        resultImages = getAllImages();
+      } else {
+        resultImages = getImagesByCategory(category);
+      }
+      
+      setImages(resultImages);
+      setCurrentCategory(category);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
-      console.error('Error fetching images:', err);
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.error('Error loading images:', err);
+      setError('Failed to load images');
     }
-  };
+  }, []);
 
-  const addImage = async (imageData: Omit<ImageBankItem, 'id' | 'created_at' | 'updated_at'>) => {
+  // Load images by style category
+  const loadImagesByStyle = useCallback((styleCategory: string) => {
     try {
-      const { data, error } = await supabase
-        .from('image_bank')
-        .insert(imageData)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      setImages(prev => [data, ...prev]);
-      return data;
-    } catch (err: any) {
-      setError(err.message);
-      throw err;
+      const resultImages = getImagesByCategory(styleCategory);
+      setImages(resultImages);
+      setCurrentCategory(undefined); // Not a standard category
+      setError(null);
+    } catch (err) {
+      console.error('Error loading images by style:', err);
+      setError('Failed to load images by style');
     }
-  };
+  }, []);
 
-  const updateImage = async (id: string, updates: Partial<ImageBankItem>) => {
-    try {
-      const { data, error } = await supabase
-        .from('image_bank')
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq('id', id)
-        .select()
-        .single();
+  // Get a single image by ID
+  const getImage = useCallback((id: string): BankImage | undefined => {
+    return getImageById(id);
+  }, []);
 
-      if (error) throw error;
+  // Preload specific images
+  const preloadSelectedImages = useCallback((imageIds: string[]) => {
+    setIsLoading(true);
+    
+    preloadImagesByIds(imageIds, {
+      onComplete: () => {
+        setIsLoading(false);
+      }
+    });
+  }, []);
 
-      setImages(prev => prev.map(img => img.id === id ? data : img));
-      return data;
-    } catch (err: any) {
-      setError(err.message);
-      throw err;
-    }
-  };
+  // Preload images by category
+  const preloadByCategory = useCallback((category: string) => {
+    setIsLoading(true);
+    
+    preloadImagesByCategory(category, {
+      onComplete: () => {
+        setIsLoading(false);
+      }
+    });
+  }, []);
 
-  const deleteImage = async (id: string) => {
-    try {
-      const { error } = await supabase
-        .from('image_bank')
-        .update({ active: false, updated_at: new Date().toISOString() })
-        .eq('id', id);
-
-      if (error) throw error;
-
-      setImages(prev => prev.filter(img => img.id !== id));
-    } catch (err: any) {
-      setError(err.message);
-      throw err;
-    }
-  };
-
-  const preloadCategoryImages = async (category: string, priority: number = 3) => {
-    const categoryImages = images
-      .filter(img => img.category === category)
-      .slice(0, 10)
-      .map(img => ({
-        src: img.url,
-        id: img.id,
-        alt: img.name,
-        category: 'image-bank' as const,
-        preloadPriority: priority
-      }));
-
-    if (categoryImages.length > 0) {
-      await preloadImages(categoryImages, { quality: 85 });
-    }
-  };
-
-  const preloadAllImages = async () => {
-    const allImages = images.map(img => ({
-      src: img.url,
-      id: img.id,
-      alt: img.name,
-      category: 'image-bank' as const,
-      preloadPriority: 1
-    }));
-
-    if (allImages.length > 0) {
-      await preloadImages(allImages, { 
-        quality: 80,
-        batchSize: 5 
+  // Initialize with category if provided
+  useEffect(() => {
+    loadImages(initialCategory);
+    
+    // Auto preload if enabled
+    if (autoPreload && initialCategory) {
+      setIsLoading(true);
+      
+      const images = getImagesByCategory(initialCategory);
+      preloadImages(images, {
+        onComplete: () => {
+          setIsLoading(false);
+        },
+        batchSize: 4
       });
     }
-  };
-
-  useEffect(() => {
-    fetchImages();
-  }, []);
+  }, [initialCategory, autoPreload, loadImages]);
 
   return {
     images,
-    loading,
+    isLoading,
     error,
-    fetchImages,
-    addImage,
-    updateImage,
-    deleteImage,
-    preloadCategoryImages,
-    preloadAllImages
+    currentCategory,
+    loadImages,
+    loadImagesByStyle,
+    getImage,
+    preloadImages: preloadSelectedImages,
+    preloadCriticalImages,
+    preloadByUrls: preloadImagesByUrls,
+    preloadByCategory
   };
 };
+
+export default useImageBank;

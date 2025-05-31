@@ -1,130 +1,101 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { SecureAuthProvider } from './context/SecureAuthContext';
-import { QuizProvider } from './context/QuizContext';
-import { Toaster } from './components/ui/toaster';
-import HomePage from './pages/HomePage';
-import QuizPage from './components/QuizPage';
-import ResultPage from './pages/ResultPage';
-import ResultPageMinimal from './pages/ResultPageMinimal';
-import SimpleResultPage from './pages/SimpleResultPage';
-import QuizOfferPage from './pages/QuizOfferPage';
-import { AdminRoute } from './components/admin/AdminRoute';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminPage from './pages/admin/AdminPage';
-import AuthPage from './pages/AuthPage';
-import AnalyticsPage from './pages/admin/AnalyticsPage';
-import SettingsPage from './pages/admin/SettingsPage';
-import QuizBuilderPage from './pages/admin/QuizBuilderPage';
-import QuizEditorPage from './pages/admin/QuizEditorPage';
-import TroubleshootPage from './pages/admin/TroubleshootPage';
-import LoginPage from './pages/admin/LoginPage';
-import ResultPageDebug from './pages/ResultPageDebug';
-import ResultPageProgressive from './pages/ResultPageProgressive';
 
-function App() {
+import React, { Suspense, lazy, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { QuizProvider } from './context/QuizContext';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { Toaster } from '@/components/ui/toaster';
+import { captureUTMParameters } from './utils/analytics';
+import { loadFacebookPixel } from './utils/facebookPixel';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import CriticalCSSLoader from './components/CriticalCSSLoader';
+import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
+
+// Componente de loading para Suspense
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="text-center">
+      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
+      <p className="mt-4 text-gray-600">Carregando...</p>
+    </div>
+  </div>
+);
+
+// Lazy loading das páginas principais
+const QuizPage = lazy(() => import('./components/QuizPage'));
+const ResultPage = lazy(() => import('./pages/ResultPage'));
+const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+
+// Avalia se o dispositivo tem performance limitada
+const isLowPerformanceDevice = () => {
+  const memory = (navigator as any).deviceMemory;
+  if (memory && memory < 4) return true;
+  
+  const cpuCores = navigator.hardwareConcurrency;
+  if (cpuCores && cpuCores < 4) return true;
+  
+  return false;
+};
+
+const App = () => {
+  const lowPerformance = isLowPerformanceDevice();
+
+  // Inicializar analytics na montagem do componente
+  useEffect(() => {
+    try {
+      loadFacebookPixel();
+      captureUTMParameters();
+      
+      console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
+    } catch (error) {
+      console.error('Erro ao inicializar aplicativo:', error);
+    }
+  }, [lowPerformance]);
+
   return (
     <AuthProvider>
       <QuizProvider>
-        <SecureAuthProvider>
+        <TooltipProvider>
           <Router>
-            <div className="App">
+            <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
+            <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
+            
+            <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                {/* Rotas públicas - SEM autenticação */}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/quiz" element={<QuizPage />} />
+                {/* ROTA PRINCIPAL - Quiz com introdução */}
+                <Route path="/" element={<QuizPage />} />
+                
+                {/* ADMIN - Dashboard centralizado com todas as funcionalidades administrativas */}
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/editor" element={<AdminDashboard />} />
+                <Route path="/admin/settings" element={<AdminDashboard />} />
+                <Route path="/admin/analytics" element={<AdminDashboard />} />
+                <Route path="/admin/ab-test" element={<AdminDashboard />} />
+                <Route path="/admin/offer-editor" element={<AdminDashboard />} />
+                <Route path="/admin/prototype" element={<AdminDashboard />} />
+                
+                {/* RESULTADO - Página de resultados do quiz */}
                 <Route path="/resultado" element={<ResultPage />} />
-                <Route path="/resultado-minima" element={<ResultPageMinimal />} />
-                <Route path="/resultado-debug" element={<ResultPageDebug />} />
-                <Route path="/resultado-progressivo" element={<ResultPageProgressive />} />
-                <Route path="/resultado-simples" element={<SimpleResultPage />} />
-                <Route path="/oferta" element={<QuizOfferPage />} />
-                <Route path="/auth" element={<AuthPage />} />
                 
-                {/* Rotas de login administrativo - SEM autenticação */}
-                <Route path="/admin/login" element={<LoginPage />} />
-                <Route path="/login" element={<LoginPage />} />
+                {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
+                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
                 
-                {/* Rota de diagnóstico - SEM autenticação para resolver problemas */}
-                <Route path="/troubleshoot" element={<TroubleshootPage />} />
-                <Route path="/admin/troubleshoot" element={<TroubleshootPage />} />
+                {/* Redirecionamentos para manter compatibilidade */}
+                <Route path="/home" element={<Navigate to="/" replace />} />
+                <Route path="/quiz" element={<Navigate to="/" replace />} />
                 
-                {/* Rotas administrativas - COM autenticação protegida */}
-                <Route path="/admin" element={
-                  <AdminRoute>
-                    <AdminDashboard />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/dashboard" element={
-                  <AdminRoute>
-                    <AdminPage />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/analytics" element={
-                  <AdminRoute>
-                    <AnalyticsPage />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/settings" element={
-                  <AdminRoute>
-                    <SettingsPage />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/quiz-builder" element={
-                  <AdminRoute>
-                    <QuizBuilderPage />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/quiz-editor/:templateId?" element={
-                  <AdminRoute>
-                    <QuizEditorPage />
-                  </AdminRoute>
-                } />
-                
-                {/* Rotas adicionais identificadas no AdminSidebar */}
-                <Route path="/admin/pages" element={
-                  <AdminRoute>
-                    <AdminPage />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/analytics/criativos" element={
-                  <AdminRoute>
-                    <AnalyticsPage />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/leads" element={
-                  <AdminRoute>
-                    <AdminPage />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/tracking" element={
-                  <AdminRoute>
-                    <AdminPage />
-                  </AdminRoute>
-                } />
-                
-                <Route path="/admin/ab-tests" element={
-                  <AdminRoute>
-                    <AdminPage />
-                  </AdminRoute>
-                } />
+                {/* 404 - Página não encontrada */}
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
-              <Toaster />
-            </div>
+            </Suspense>
           </Router>
-        </SecureAuthProvider>
+          <Toaster />
+        </TooltipProvider>
       </QuizProvider>
     </AuthProvider>
   );
-}
+};
 
 export default App;

@@ -114,43 +114,6 @@ export const trackConversion = (conversionType, conversionData = {}) => {
 };
 
 /**
- * Rastreia conversões de venda especificamente
- * @param {number} value - Valor da venda
- * @param {string} product - Nome do produto
- * @param {object} additionalData - Dados adicionais sobre a venda
- */
-export const trackSaleConversion = (value, product, additionalData = {}) => {
-  if (typeof window === 'undefined') return;
-  
-  const saleData = {
-    value: value,
-    currency: 'BRL',
-    items: [product],
-    ...additionalData
-  };
-  
-  // Google Analytics
-  if (window.gtag) {
-    window.gtag('event', 'purchase', saleData);
-  }
-  
-  // Facebook Pixel
-  if (window.fbq) {
-    window.fbq('track', 'Purchase', saleData);
-  }
-  
-  // DataLayer para Google Tag Manager
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: 'purchase',
-      ...saleData
-    });
-  }
-  
-  console.log(`[Analytics] Conversão de venda: ${product} - R$ ${value}`, saleData);
-};
-
-/**
  * Captura parâmetros UTM da URL e os armazena para uso em analytics
  * @returns {object} Objeto com os parâmetros UTM capturados
  */
