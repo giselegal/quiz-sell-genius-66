@@ -22,5 +22,5 @@ jobs:
           port: 21
           local-dir: ./
           server-dir: /public_html/
-          dangerous-clean-slate: true# FTP Deploy configurado com dados da Hostinger
-# FTP Deploy configurado com dados da Hostinger
+          dangerous-clean-slate: true
+# FTP Deploy configurado com dados corretos da Hostinger
