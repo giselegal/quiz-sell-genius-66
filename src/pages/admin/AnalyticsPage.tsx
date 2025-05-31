@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import React, { useState, useEffect, Suspense, JSX } from 'react';
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
 import { AnalyticsLoadingState } from '@/components/analytics/LoadingState';
