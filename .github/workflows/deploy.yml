@@ -13,6 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
       - name: Deploy to FTP Server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -20,7 +32,16 @@ jobs:
           username: u116045488
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
-          local-dir: ./
+          local-dir: ./dist/
           server-dir: /public_html/
-          dangerous-clean-slate: true
-# FTP Deploy configurado com dados corretos da Hostinger
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.env*
+            **/src/**
+            **/*.md
+            **/*.log
+            **/*.jar
+            **/bfg-report/**
+# FTP Deploy otimizado - só envia arquivos da pasta dist
