@@ -57,7 +57,13 @@ const sidebarItems = [
     icon: Users
   },
   {
-    title: 'Pixels & Tracking',
+    _title: 'Pixels & Tracking',
+    get title() {
+      return this._title;
+    },
+    set title(value) {
+      this._title = value;
+    },
     href: '/admin/tracking',
     icon: Code
   },
