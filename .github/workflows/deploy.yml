@@ -16,8 +16,10 @@ jobs:
       - name: Deploy to FTP Server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.SERVIDOR_FTP }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.SENHA_FTP }}
-          port: ${{ secrets.PORTA_FTP }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server: 147.93.39.155
+          username: u116045488
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          local-dir: ./
+          server-dir: /public_html/
+          dangerous-clean-slate: true
