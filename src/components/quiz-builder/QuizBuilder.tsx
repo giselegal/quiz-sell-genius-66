@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
@@ -109,19 +110,20 @@ export const QuizBuilder: React.FC = () => {
       }
     }
     
+    // Create a mock result for preview
     const previewResult: QuizResult = {
       primaryStyle: {
-        category: topStyle.category,
-        score: topStyle.score,
-        percentage: topStyle.percentage
+        category: 'Elegante',
+        score: 10,
+        percentage: 50
       },
-      secondaryStyles: otherStyles.map(style => ({
-        category: style.category,
-        score: style.score,
-        percentage: style.percentage
-      })),
-      totalSelections: totalSelections,
-      userName: localStorage.getItem('userName') || 'Usuário' // Add the required userName
+      secondaryStyles: [{
+        category: 'Clássico',
+        score: 8,
+        percentage: 40
+      }],
+      totalSelections: 20,
+      userName: localStorage.getItem('userName') || 'Usuário'
     };
     
     setPreviewResult(previewResult);

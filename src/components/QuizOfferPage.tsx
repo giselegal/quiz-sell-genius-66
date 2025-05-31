@@ -1,9 +1,10 @@
+
 // Componente migrado de src/pages_backup/QuizOfferPage.tsx para uso no roteador SPA
 'use client';
 
 import React from 'react';
-import { QuizOfferHero } from '@/components/quiz-offer/QuizOfferHero';
-import { QuizOfferCTA } from '@/components/quiz-offer/QuizOfferCTA';
+import QuizOfferHero from '@/components/quiz-offer/QuizOfferHero';
+import QuizOfferCTA from '@/components/quiz-offer/QuizOfferCTA';
 import { useUniversalNavigation } from '../hooks/useUniversalNavigation';
 
 export default function QuizOfferPage() {
@@ -11,8 +12,8 @@ export default function QuizOfferPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF9F7]">
-      <QuizOfferHero onStartQuizClick={() => navigate('/')} />
-      <QuizOfferCTA />
+      <QuizOfferHero onStartQuiz={() => navigate('/')} />
+      <QuizOfferCTA onStartQuiz={() => navigate('/')} />
     </div>
   );
 }
