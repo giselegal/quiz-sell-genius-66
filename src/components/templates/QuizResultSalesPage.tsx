@@ -1,4 +1,31 @@
+
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 import { ShoppingCart, Heart, Award, CheckCircle, Star, XCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { 
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { trackButtonClick, trackSaleConversion } from '@/utils/analytics';
+
+// Tipos locais para compatibilidade
+interface StyleResult {
+  category: string;
+  percentage: number;
+}
 
 // Helper function to get style descriptions
 const getStyleDescription = (styleType: string): string => {
@@ -234,218 +261,6 @@ const QuizResultSalesPage: React.FC<QuizResultSalesPageProps> = ({
               <span>Cria looks harmoniosos com menos peças</span>
             </li>
           </ul>
-        </section>
-        {/* Seção Antes e Depois */}
-
-        {/* Offer Card */}
-        <Card className="p-6 md:p-8 border-[#aa6b5d]/20 mb-16">
-          <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            Guia de Estilo Personalizado + Bônus Exclusivos
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-                alt="Mockup do Guia de Estilo"
-                className="rounded-lg shadow-md w-full"
-                loading="lazy"
-                width="600"
-                height="400"
-              />
-            </div>
-            <div className="flex flex-col justify-center">
-              <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">
-                O que você vai receber:
-              </h3>
-              <ul className="space-y-3 mb-6">
-                {[
-                  "Guia completo do seu estilo predominante",
-                  "Paleta de cores personalizada",
-                  "Lista de peças essenciais para seu guarda-roupa",
-                  "Guia de combinações e dicas de styling",
-                  "Acesso vitalício a atualizações"
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="w-5 h-5 text-[#aa6b5d] mr-2 flex-shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
-                <div className="text-center">
-                  <p className="text-sm text-[#3a3a3a]/60 mb-1">Valor original</p>
-                  <p className="text-lg line-through text-[#3a3a3a]/70">
-                    R$ 175,00
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm text-[#aa6b5d] mb-1">Por apenas</p>
-                  <p className="text-3xl font-bold text-[#aa6b5d]">
-                    R$ 39,00
-                  </p>
-                </div>
-              </div>
-              <div className="text-center md:text-right mb-4">
-                <p className="text-sm text-[#432818]">Parcelamento: 5x de R$ 8,83*</p>
-                <p className="text-sm text-[#432818]">ou R$ 39,90 à vista</p>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Bonus Carousel */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            Bônus Exclusivos
-          </h2>
-          <Carousel className="w-full">
-            <CarouselContent>
-              {[
-                {
-                  title: "Guia de Maquiagem",
-                  img: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911677/C%C3%B3pia_de_MOCKUPS_15_-_Copia_grstwl.webp"
-                },
-                {
-                  title: "Guia de Acessórios",
-                  img: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp"
-                },
-                {
-                  title: "Checklist de Compras",
-                  img: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-                }
-              ].map((bonus, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
-                    <Card className="overflow-hidden">
-                      <img
-                        src={bonus.img}
-                        alt={bonus.title}
-                        className="w-full aspect-[3/2] object-cover"
-                        loading="lazy"
-                        width="400"
-                        height="267"
-                      />
-                      <div className="p-4 text-center">
-                        <h3 className="font-medium">{bonus.title}</h3>
-                      </div>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-2" />
-            <CarouselNext className="right-2" />
-          </Carousel>
-        </section>
-
-        {/* Two Columns: About Author */}
-        <section className="mb-16">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
-                alt="Foto da Autora"
-                className="rounded-lg shadow-md w-full"
-                loading="lazy"
-                width="500"
-                height="375"
-              />
-            </div>
-            <div>
-              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-                Sobre a Autora
-              </h2>
-              <p className="mb-4">
-                Com mais de 10 anos de experiência em consultoria de imagem e estilo pessoal, 
-                ajudei centenas de mulheres a descobrirem sua verdadeira essência através das roupas.
-              </p>
-              <p>
-                Minha missão é ajudar você a construir um guarda-roupa que reflita sua personalidade, 
-                valorize seu tipo físico e simplifique sua rotina, permitindo que você se vista com 
-                confiança todos os dias.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials - Lazy loaded */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            O que Dizem As Alunas
-          </h2>
-          <Suspense fallback={
-            <div className="text-center p-8">
-              <LoadingSpinner />
-            </div>
-          }>
-            <Testimonials />
-          </Suspense>
-        </section>
-
-        {/* Guarantee */}
-        <section className="mb-16">
-          <Card className="p-6 border-[#aa6b5d]/20 bg-[#fff7f3]">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="md:w-1/4 flex justify-center">
-                <div className="w-32 h-32 rounded-full bg-[#aa6b5d] flex items-center justify-center text-white">
-                  <div className="text-center">
-                    <Award className="w-12 h-12 mx-auto" />
-                    <span className="block font-bold text-xl">7 Dias</span>
-                  </div>
-                </div>
-              </div>
-              <div className="md:w-3/4">
-                <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-                  Garantia de Satisfação
-                </h2>
-                <p className="mb-2">
-                  Se você não ficar completamente satisfeita com o seu Guia de Estilo Personalizado, 
-                  basta solicitar o reembolso em até 7 dias após a compra.
-                </p>
-                <p>
-                  Sem perguntas, sem complicações. Sua satisfação é nossa prioridade!
-                </p>
-              </div>
-            </div>
-          </Card>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6 text-center">
-            Perguntas Frequentes
-          </h2>
-          <Accordion type="single" collapsible className="w-full">
-            {[
-              {
-                question: "Como vou receber meu guia após a compra?",
-                answer: "Imediatamente após a confirmação do pagamento, você receberá um e-mail com as instruções de acesso à sua área de membros, onde poderá baixar todos os materiais."
-              },
-              {
-                question: "O guia é personalizado para o meu estilo?",
-                answer: "Sim! O guia é totalmente adaptado ao seu estilo predominante identificado no quiz, com dicas específicas para valorizar suas características únicas."
-              },
-              {
-                question: "Posso acessar em qualquer dispositivo?",
-                answer: "Sim, o guia está em formato PDF que pode ser acessado em qualquer dispositivo (computador, tablet ou celular)."
-              },
-              {
-                question: "Por quanto tempo terei acesso aos materiais?",
-                answer: "O acesso é vitalício! Uma vez que você adquire o guia, ele é seu para sempre, incluindo futuras atualizações."
-              }
-            ].map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left font-medium">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <p>{faq.answer}</p>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
         </section>
 
         {/* Final CTA */}
