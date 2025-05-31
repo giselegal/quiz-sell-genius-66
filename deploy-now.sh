@@ -37,14 +37,14 @@ if ! command -v lftp &> /dev/null; then
     sudo apt-get update && sudo apt-get install -y lftp
 fi
 
-# Upload usando lftp (mais robusto)
+# Upload usando lftp (mais robusto) - SEM --delete para evitar erros de permissão
 lftp -c "
 set ssl:verify-certificate false
 set ftp:list-options -a
 open ftp://$FTP_USER:$FTP_PASS@$FTP_SERVER
 cd $FTP_DIR
 lcd dist
-mirror --reverse --delete --verbose --exclude-glob .git* .
+mirror --reverse --verbose --exclude-glob .git* --exclude-glob error_log* --exclude-glob mail.log --exclude-glob .logs .
 bye
 "
 

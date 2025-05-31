@@ -34,6 +34,7 @@ jobs:
           port: 21
           local-dir: ./dist/
           server-dir: /
+          dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
@@ -44,4 +45,11 @@ jobs:
             **/*.log
             **/*.jar
             **/bfg-report/**
+            **/error_log*
+            **/.logs/**
+            **/mail.log
+            **/error_log*
+            **/mail.log
+            **/.logs/**
+          dangerous-delete: false
 # FTP Deploy otimizado - só envia arquivos da pasta dist
