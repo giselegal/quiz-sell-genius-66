@@ -1,10 +1,11 @@
-import React from 'react';
+import * as React from 'react';
+import { JSX, ReactElement } from 'react';
 import CreativePerformanceDashboard from '@/components/analytics/CreativePerformanceDashboard';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, Download, Settings, TestTube } from 'lucide-react';
 
-const CreativeAnalyticsPage: React.FC = () => {
+const CreativeAnalyticsPage = (): JSX.Element => {
   const handleGenerateTestData = () => {
     // Simular dados de teste para demonstração
     const testData = [
@@ -243,7 +244,7 @@ const CreativeAnalyticsPage: React.FC = () => {
               </div>
               
               <div>
-                <h4 className="font-semibold mb-2">🎯 URLs de Exemplo:</h4>
+                <div className="font-semibold mb-2">🎯 URLs de Exemplo:</div>
                 <div className="text-xs space-y-1 bg-blue-100 p-2 rounded">
                   <div><strong>Criativo A:</strong> ?utm_content=elegante_mulher_vestido</div>
                   <div><strong>Criativo B:</strong> ?utm_content=casual_jovem_jeans</div>

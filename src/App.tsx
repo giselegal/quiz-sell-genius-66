@@ -26,6 +26,7 @@ const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // Avalia se o dispositivo tem performance limitada
@@ -75,6 +76,7 @@ const App = () => {
                 <Route path="/admin/ab-test" element={<AdminDashboard />} />
                 <Route path="/admin/offer-editor" element={<AdminDashboard />} />
                 <Route path="/admin/prototype" element={<AdminDashboard />} />
+                <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
                 
                 {/* RESULTADO - Página de resultados do quiz */}
                 <Route path="/resultado" element={<ResultPage />} />

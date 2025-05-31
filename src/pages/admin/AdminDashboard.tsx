@@ -29,6 +29,7 @@ const ABTestPage = React.lazy(() => import('./ABTestPage'));
 const ABTestManagerPage = React.lazy(() => import('../ABTestManagerPage'));
 const ResultPagePrototype = React.lazy(() => import('../ResultPagePrototype'));
 const EnhancedResultPageEditorPage = React.lazy(() => import('../EnhancedResultPageEditorPage'));
+const CreativeAnalyticsPage = React.lazy(() => import('../CreativeAnalyticsPage'));
 const QuizOfferPageVisualEditor = React.lazy(() => import('@/components/visual-editor/QuizOfferPageVisualEditor'));
 
 const AdminDashboard = () => {
@@ -171,6 +172,15 @@ const AdminDashboard = () => {
                   icon={<BarChart className="w-6 h-6" />}
                   onClick={() => handleTabChange('analytics')}
                   buttonText="Ver Analytics"
+                />
+                
+                <DashboardCard 
+                  title="Analytics de Criativos"
+                  description="Analise performance de criativos"
+                  icon={<TrendingUp className="w-6 h-6" />}
+                  linkTo="/admin/creative-analytics"
+                  buttonText="Ver Criativos"
+                  isExternal
                 />
                 
                 <DashboardCard 

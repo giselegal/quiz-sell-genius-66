@@ -13,6 +13,7 @@ export const ROUTES = {
     UTM: '/admin/utm',
     EDITOR: '/admin/editor',
     EDITOR_ID: (id: string) => `/admin/editor/${id}`,
+    CREATIVE_ANALYTICS: '/admin/creative-analytics',
     INTEGRATIONS: {
       HOTMART: '/admin/integrations/hotmart'
     },
@@ -32,6 +33,7 @@ export function isValidRoute(path: string): boolean {
     ROUTES.ADMIN.AB_TESTING,
     ROUTES.ADMIN.UTM,
     ROUTES.ADMIN.EDITOR,
+    ROUTES.ADMIN.CREATIVE_ANALYTICS,
     ROUTES.ADMIN.INTEGRATIONS.HOTMART,
     ROUTES.ADMIN.CAPACITY,
     ROUTES.ADMIN.COMPETITIVE_ADVANTAGE
