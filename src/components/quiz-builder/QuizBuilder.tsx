@@ -111,28 +111,17 @@ export const QuizBuilder: React.FC = () => {
     
     const previewResult: QuizResult = {
       primaryStyle: {
-        category: 'Elegante',
-        score: 12,
-        percentage: 40
+        category: topStyle.category,
+        score: topStyle.score,
+        percentage: topStyle.percentage
       },
-      secondaryStyles: [
-        {
-          category: 'Romântico',
-          score: 9,
-          percentage: 30
-        },
-        {
-          category: 'Clássico',
-          score: 6,
-          percentage: 20
-        },
-        {
-          category: 'Contemporâneo',
-          score: 3,
-          percentage: 10
-        }
-      ],
-      totalSelections: 30
+      secondaryStyles: otherStyles.map(style => ({
+        category: style.category,
+        score: style.score,
+        percentage: style.percentage
+      })),
+      totalSelections: totalSelections,
+      userName: localStorage.getItem('userName') || 'Usuário' // Add the required userName
     };
     
     setPreviewResult(previewResult);

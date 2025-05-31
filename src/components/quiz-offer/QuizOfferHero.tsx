@@ -1,71 +1,66 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
-import { getCtaUrl } from '@/services/pixelManager';
-import OptimizedImage from '@/components/ui/OptimizedImage';
 
 interface QuizOfferHeroProps {
-  onStartQuizClick: () => void;
+  onStartQuiz: () => void;
 }
 
-export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }) => {
-  const handleCtaClick = () => {
-    trackButtonClick('hero-cta', 'Comprar Quiz', 'hero', 'primary-cta');
-    window.location.href = getCtaUrl();
+const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuiz }) => {
+  const handleStartQuiz = () => {
+    // Track button click with 3 parameters as expected
+    trackButtonClick('quiz-offer-hero-cta', 'Descobrir Meu Estilo', 'quiz-offer-hero');
+    onStartQuiz();
   };
-  
-  const handleStartQuizClick = () => {
-    trackButtonClick('hero-start-quiz', 'Começar Quiz', 'hero', 'start-quiz');
-    onStartQuizClick();
+
+  const handleSecondaryClick = () => {
+    // Track button click with 3 parameters as expected  
+    trackButtonClick('quiz-offer-hero-secondary', 'Fazer Quiz Gratuito', 'quiz-offer-hero');
+    onStartQuiz();
   };
 
   return (
-    <div className="bg-[#F9F7F4] py-8 px-4 md:py-16 md:px-8 rounded-lg">
-      <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair text-[#432818] mb-4">
-          Descubra Seu Estilo Pessoal e Transforme Seu Guarda-Roupa
+    <div className="relative bg-gradient-to-br from-[#FAF9F7] to-[#F5F2EE] py-20">
+      <div className="max-w-6xl mx-auto px-4 text-center">
+        <h1 className="text-5xl md:text-6xl font-bold text-[#8F7A6A] mb-6 leading-tight">
+          Descubra Seu 
+          <span className="text-[#B89B7A] block">Estilo Único</span>
         </h1>
         
-        <p className="text-lg md:text-xl text-[#432818]/80 mb-6 max-w-3xl mx-auto">
-          Um teste exclusivo que revela seu estilo autêntico e como expressar sua verdadeira essência através das roupas que você escolhe.
+        <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+          Um quiz personalizado que revela seu estilo autêntico e te ajuda a se vestir com mais confiança e elegância todos os dias.
         </p>
         
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <Button 
-            onClick={handleStartQuizClick}
-            className="text-white py-3 px-6 rounded-md bg-[#aa6b5d] hover:bg-[#8f574a] text-base md:text-lg w-full md:w-auto"
+            onClick={handleStartQuiz}
+            size="lg"
+            className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white text-xl px-8 py-4 rounded-full font-semibold shadow-lg transform hover:scale-105 transition-all duration-200"
           >
-            Começar o Quiz Gratuito
+            Descobrir Meu Estilo Agora
           </Button>
           
           <Button 
-            onClick={handleCtaClick}
-            className="text-white py-3 px-6 rounded-md btn-cta-green text-base md:text-lg w-full md:w-auto"
+            onClick={handleSecondaryClick}
+            variant="outline"
+            size="lg"
+            className="border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white text-lg px-6 py-3 rounded-full font-medium transition-all duration-200"
           >
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            Adquirir Guia Completo
+            Fazer Quiz Gratuito
           </Button>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
-            <h3 className="font-medium text-[#432818]">7+ Estilos</h3>
-            <p className="text-sm text-[#432818]/70">Identificados com precisão</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
-            <h3 className="font-medium text-[#432818]">15+ Questões</h3>
-            <p className="text-sm text-[#432818]/70">Para análise completa</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
-            <h3 className="font-medium text-[#432818]">100% Online</h3>
-            <p className="text-sm text-[#432818]/70">Acesso imediato</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border border-[#EAE4DA]">
-            <h3 className="font-medium text-[#432818]">Bônus Exclusivos</h3>
-            <p className="text-sm text-[#432818]/70">Para transformar seu estilo</p>
-          </div>
+        <div className="flex justify-center items-center gap-8 text-sm text-gray-500">
+          <span className="flex items-center gap-2">
+            ✓ 100% Gratuito
+          </span>
+          <span className="flex items-center gap-2">
+            ✓ 3 minutos
+          </span>
+          <span className="flex items-center gap-2">
+            ✓ Resultado instantâneo
+          </span>
         </div>
       </div>
     </div>

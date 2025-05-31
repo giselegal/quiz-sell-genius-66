@@ -35,6 +35,107 @@ export const initFacebookPixel = (pixelId?: string): void => {
   }
 };
 
+// Track quiz start
+export const trackQuizStart = (userName: string, userEmail?: string): void => {
+  try {
+    // Facebook Pixel
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Lead', {
+        content_name: 'Quiz Started',
+        custom_parameter_1: userName
+      });
+    }
+    
+    // Google Analytics
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'quiz_start', {
+        event_category: 'engagement',
+        event_label: userName,
+        user_email: userEmail
+      });
+    }
+    
+    console.log(`Quiz start tracked for user: ${userName}`);
+  } catch (error) {
+    console.error('Error tracking quiz start:', error);
+  }
+};
+
+// Track quiz answer
+export const trackQuizAnswer = (questionId: string, selectedOptions: string[], currentIndex: number, totalQuestions: number): void => {
+  try {
+    // Facebook Pixel
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('trackCustom', 'QuizAnswer', {
+        question_id: questionId,
+        selected_options: selectedOptions,
+        progress: Math.round((currentIndex / totalQuestions) * 100)
+      });
+    }
+    
+    // Google Analytics
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'quiz_answer', {
+        event_category: 'quiz_interaction',
+        event_label: questionId,
+        custom_parameter_1: selectedOptions.join(','),
+        value: currentIndex
+      });
+    }
+    
+    console.log(`Quiz answer tracked: ${questionId}`, selectedOptions);
+  } catch (error) {
+    console.error('Error tracking quiz answer:', error);
+  }
+};
+
+// Track quiz completion
+export const trackQuizComplete = (): void => {
+  try {
+    // Facebook Pixel
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'CompleteRegistration');
+    }
+    
+    // Google Analytics
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'quiz_complete', {
+        event_category: 'engagement',
+        event_label: 'Quiz Completed'
+      });
+    }
+    
+    console.log('Quiz completion tracked');
+  } catch (error) {
+    console.error('Error tracking quiz completion:', error);
+  }
+};
+
+// Track result view
+export const trackResultView = (resultCategory: string): void => {
+  try {
+    // Facebook Pixel
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'ViewContent', {
+        content_type: 'quiz_result',
+        content_category: resultCategory
+      });
+    }
+    
+    // Google Analytics
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'result_view', {
+        event_category: 'quiz_result',
+        event_label: resultCategory
+      });
+    }
+    
+    console.log(`Result view tracked: ${resultCategory}`);
+  } catch (error) {
+    console.error('Error tracking result view:', error);
+  }
+};
+
 // Track button clicks
 export const trackButtonClick = (buttonId: string, buttonText: string, location: string): void => {
   try {
@@ -79,11 +180,6 @@ export const trackSaleConversion = (value: number): void => {
         value: value,
         currency: 'BRL'
       });
-    }
-    
-    // Make trackSaleConversion available globally for Hotmart integration
-    if (typeof window !== 'undefined') {
-      (window as any).trackSaleConversion = trackSaleConversion;
     }
     
     console.log(`Sale conversion tracked: R$ ${value}`);
@@ -137,4 +233,107 @@ export const trackPageView = (pageName: string): void => {
   } catch (error) {
     console.error('Error tracking page view:', error);
   }
+};
+
+// Get analytics events
+export const getAnalyticsEvents = () => {
+  if (typeof window !== 'undefined' && (window as any).dataLayer && Array.isArray((window as any).dataLayer)) {
+    return [...(window as any).dataLayer];
+  }
+  return [];
+};
+
+// Clear analytics data
+export const clearAnalyticsData = () => {
+  if (typeof window === 'undefined') return;
+
+  if ((window as any).dataLayer && Array.isArray((window as any).dataLayer)) {
+    (window as any).dataLayer.length = 0;
+    console.log('[Analytics] window.dataLayer cleared.');
+  }
+
+  const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'ref', 'source'];
+  utmKeys.forEach(key => {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.warn(`[Analytics] Failed to remove ${key} from localStorage`, e);
+    }
+  });
+  console.log('[Analytics] UTM parameters cleared from localStorage.');
+};
+
+// Test Facebook Pixel
+export const testFacebookPixel = () => {
+  if (typeof window !== 'undefined' && (window as any).fbq) {
+    (window as any).fbq('track', 'PageView');
+    console.log('[Analytics] Test PageView event sent to Facebook Pixel.');
+    return true;
+  }
+  console.warn('[Analytics] Facebook Pixel (window.fbq) not found.');
+  return false;
+};
+
+// Get creative performance
+export const getCreativePerformance = (days = 7) => {
+  const events = JSON.parse(localStorage.getItem('all_tracked_events') || '[]');
+  
+  const filteredEvents = days ? events.filter((event: any) => {
+    const eventDate = new Date(event.date || event.timestamp);
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    return eventDate >= cutoffDate;
+  }) : events;
+  
+  const creativeStats: any = {};
+  
+  filteredEvents.forEach((event: any) => {
+    const creative = event.utm_content || 'unknown';
+    
+    if (!creativeStats[creative]) {
+      creativeStats[creative] = {
+        creative_name: creative.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        page_views: 0,
+        quiz_starts: 0,
+        quiz_completions: 0,
+        leads: 0,
+        purchases: 0,
+        revenue: 0,
+        conversion_rate: '0%',
+        cost_per_lead: 0
+      };
+    }
+    
+    switch(event.event_name) {
+      case 'PageView':
+        creativeStats[creative].page_views++;
+        break;
+      case 'QuizStart':
+        creativeStats[creative].quiz_starts++;
+        break;
+      case 'QuizComplete':
+        creativeStats[creative].quiz_completions++;
+        break;
+      case 'Lead':
+        creativeStats[creative].leads++;
+        break;
+      case 'Purchase':
+        creativeStats[creative].purchases++;
+        creativeStats[creative].revenue += event.value || 0;
+        break;
+    }
+  });
+  
+  Object.values(creativeStats).forEach((stats: any) => {
+    if (stats.page_views > 0) {
+      const convRate = (stats.leads / stats.page_views) * 100;
+      stats.conversion_rate = `${convRate.toFixed(1)}%`;
+      
+      const assumedCPC = 1.2;
+      const assumedCost = stats.page_views * assumedCPC;
+      stats.cost_per_lead = stats.leads > 0 ? assumedCost / stats.leads : 0;
+    }
+  });
+  
+  return creativeStats;
 };
