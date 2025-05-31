@@ -336,3 +336,92 @@ export const trackLeadGeneration = (formId, leadData = {}) => {
   // Log específico para lead generation, se necessário, além do que trackConversion já faz.
   console.log(`[Analytics] Geração de Lead: ${formId}`, data);
 };
+
+/**
+ * Formata o nome do criativo para exibição mais amigável
+ * @param {string} utmContent - Valor do parâmetro utm_content
+ * @returns {string} - Nome formatado do criativo
+ */
+function formatCreativeName(utmContent) {
+  if (!utmContent || utmContent === 'unknown') return 'Desconhecido';
+  
+  // Converter snake_case para Title Case
+  return utmContent
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * Obter dados de performance por criativo usando utm_content como identificador
+ * @param {number} days - Número de dias para filtrar os dados (7, 30, etc)
+ * @returns {object} - Objeto com estatísticas por criativo
+ */
+export const getCreativePerformance = (days = 7) => {
+  // Recuperar eventos do localStorage
+  const events = JSON.parse(localStorage.getItem('all_tracked_events') || '[]');
+  
+  // Filtrar por período, se necessário
+  const filteredEvents = days ? events.filter(event => {
+    const eventDate = new Date(event.date || event.timestamp);
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    return eventDate >= cutoffDate;
+  }) : events;
+  
+  // Objeto para armazenar estatísticas por criativo
+  const creativeStats = {};
+  
+  // Processar eventos para calcular estatísticas
+  filteredEvents.forEach(event => {
+    const creative = event.utm_content || 'unknown';
+    
+    if (!creativeStats[creative]) {
+      creativeStats[creative] = {
+        creative_name: formatCreativeName(creative),
+        page_views: 0,
+        quiz_starts: 0,
+        quiz_completions: 0,
+        leads: 0,
+        purchases: 0,
+        revenue: 0,
+        conversion_rate: '0%',
+        cost_per_lead: 0
+      };
+    }
+    
+    switch(event.event_name) {
+      case 'PageView':
+        creativeStats[creative].page_views++;
+        break;
+      case 'QuizStart':
+        creativeStats[creative].quiz_starts++;
+        break;
+      case 'QuizComplete':
+        creativeStats[creative].quiz_completions++;
+        break;
+      case 'Lead':
+        creativeStats[creative].leads++;
+        break;
+      case 'Purchase':
+        creativeStats[creative].purchases++;
+        creativeStats[creative].revenue += event.value || 0;
+        break;
+    }
+  });
+  
+  // Calcular taxas e métricas derivadas
+  Object.values(creativeStats).forEach(stats => {
+    if (stats.page_views > 0) {
+      const convRate = (stats.leads / stats.page_views) * 100;
+      stats.conversion_rate = `${convRate.toFixed(1)}%`;
+      
+      // Custo por lead simulado (assumindo um CPC médio de R$1,20)
+      const assumedCPC = 1.2;
+      const assumedCost = stats.page_views * assumedCPC;
+      stats.cost_per_lead = stats.leads > 0 ? assumedCost / stats.leads : 0;
+    }
+  });
+  
+  return creativeStats;
+};

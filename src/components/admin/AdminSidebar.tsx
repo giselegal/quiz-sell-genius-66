@@ -46,7 +46,7 @@ const sidebarItems = [
       },
       {
         title: 'Análise de Criativos',
-        href: '/admin/analytics/criativos',
+        href: '/admin/creative-analytics',
         icon: TrendingUp
       }
     ]
