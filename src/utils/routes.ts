@@ -1,8 +1,10 @@
+
 export const ROUTES = {
   // Rotas públicas
   HOME: '/',
-  QUIZ: '/quiz',
+  QUIZ: '/',
   RESULTADO: '/resultado',
+  QUIZ_OFERTA: '/quiz-descubra-seu-estilo',
   
   // Rotas administrativas
   ADMIN: {
@@ -14,6 +16,11 @@ export const ROUTES = {
     EDITOR: '/admin/editor',
     EDITOR_ID: (id: string) => `/admin/editor/${id}`,
     CREATIVE_ANALYTICS: '/admin/creative-analytics',
+    ANALYTICS: '/admin/analytics',
+    SETTINGS: '/admin/settings',
+    AB_TEST: '/admin/ab-test',
+    OFFER_EDITOR: '/admin/offer-editor',
+    PROTOTYPE: '/admin/prototype',
     INTEGRATIONS: {
       HOTMART: '/admin/integrations/hotmart'
     },
@@ -27,6 +34,7 @@ export function isValidRoute(path: string): boolean {
     ROUTES.HOME,
     ROUTES.QUIZ,
     ROUTES.RESULTADO,
+    ROUTES.QUIZ_OFERTA,
     ROUTES.ADMIN.ROOT,
     ROUTES.ADMIN.DASHBOARD,
     ROUTES.ADMIN.LEADS,
@@ -34,6 +42,11 @@ export function isValidRoute(path: string): boolean {
     ROUTES.ADMIN.UTM,
     ROUTES.ADMIN.EDITOR,
     ROUTES.ADMIN.CREATIVE_ANALYTICS,
+    ROUTES.ADMIN.ANALYTICS,
+    ROUTES.ADMIN.SETTINGS,
+    ROUTES.ADMIN.AB_TEST,
+    ROUTES.ADMIN.OFFER_EDITOR,
+    ROUTES.ADMIN.PROTOTYPE,
     ROUTES.ADMIN.INTEGRATIONS.HOTMART,
     ROUTES.ADMIN.CAPACITY,
     ROUTES.ADMIN.COMPETITIVE_ADVANTAGE
@@ -46,6 +59,11 @@ export function isValidRoute(path: string): boolean {
   
   // Verificar rotas com parâmetros
   if (path.startsWith('/admin/editor/') && path.length > '/admin/editor/'.length) {
+    return true;
+  }
+  
+  // Verificar rotas admin com wildcards
+  if (path.startsWith('/admin/') && path.length > '/admin/'.length) {
     return true;
   }
   

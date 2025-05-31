@@ -21,7 +21,7 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Lazy loading das páginas principais
+// Lazy loading das páginas usando a pasta pages/
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
@@ -68,14 +68,11 @@ const App = () => {
                 {/* ROTA PRINCIPAL - Quiz com introdução */}
                 <Route path="/" element={<QuizPage />} />
                 
-                {/* ADMIN - Dashboard centralizado com todas as funcionalidades administrativas */}
+                {/* ADMIN - Dashboard centralizado usando páginas da pasta pages/admin/ */}
                 <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/editor" element={<AdminDashboard />} />
-                <Route path="/admin/settings" element={<AdminDashboard />} />
-                <Route path="/admin/analytics" element={<AdminDashboard />} />
-                <Route path="/admin/ab-test" element={<AdminDashboard />} />
-                <Route path="/admin/offer-editor" element={<AdminDashboard />} />
-                <Route path="/admin/prototype" element={<AdminDashboard />} />
+                <Route path="/admin/*" element={<AdminDashboard />} />
+                
+                {/* ANALYTICS DE CRIATIVOS - Página específica */}
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
                 
                 {/* RESULTADO - Página de resultados do quiz */}
