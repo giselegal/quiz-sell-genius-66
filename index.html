@@ -133,8 +133,8 @@
   <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/quiz-de-estilo/sw.js', { 
-        scope: '/quiz-de-estilo/' 
+      navigator.serviceWorker.register('/sw.js', { 
+        scope: '/' 
       }).then(function(registration) {
         console.log('SW registrado com sucesso:', registration.scope);
       }).catch(function(error) {

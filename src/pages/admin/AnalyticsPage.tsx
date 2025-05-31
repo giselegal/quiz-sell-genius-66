@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, JSX } from 'react';
 import { DashboardHeader } from '@/components/analytics/DashboardHeader';
 import { AnalyticsLoadingState } from '@/components/analytics/LoadingState';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
