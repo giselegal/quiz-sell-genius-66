@@ -26,6 +26,11 @@ const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
+const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
+const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage'));
+const ABTestPage = lazy(() => import('./pages/admin/ABTestPage'));
+const QuickEditorPage = lazy(() => import('./pages/admin/QuickEditorPage'));
 const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
@@ -70,7 +75,14 @@ const App = () => {
                 
                 {/* ADMIN - Dashboard centralizado usando páginas da pasta pages/admin/ */}
                 <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/*" element={<AdminDashboard />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/editor" element={<EditorPage />} />
+                <Route path="/admin/settings" element={<SettingsPage />} />
+                <Route path="/admin/analytics" element={<AnalyticsPage />} />
+                <Route path="/admin/ab-test" element={<ABTestPage />} />
+                <Route path="/admin/offer-editor" element={<AdminDashboard />} />
+                <Route path="/admin/quick-editor" element={<QuickEditorPage />} />
+                <Route path="/admin/prototype" element={<AdminDashboard />} />
                 
                 {/* ANALYTICS DE CRIATIVOS - Página específica */}
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />

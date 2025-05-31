@@ -14,7 +14,8 @@ import {
   TestTube,
   Palette,
   TrendingUp,
-  ChevronRight
+  ChevronRight,
+  Zap
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,6 +32,7 @@ const ResultPagePrototype = React.lazy(() => import('../ResultPagePrototype'));
 const EnhancedResultPageEditorPage = React.lazy(() => import('../EnhancedResultPageEditorPage'));
 const CreativeAnalyticsPage = React.lazy(() => import('../CreativeAnalyticsPage'));
 const QuizOfferPageVisualEditor = React.lazy(() => import('@/components/visual-editor/QuizOfferPageVisualEditor'));
+const QuickVisualEditor = React.lazy(() => import('@/components/quick-editor/QuickVisualEditor'));
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -46,6 +48,7 @@ const AdminDashboard = () => {
     else if (path.includes('/analytics')) setActiveTab('analytics');
     else if (path.includes('/ab-test')) setActiveTab('ab-test');
     else if (path.includes('/offer-editor')) setActiveTab('offer-editor');
+    else if (path.includes('/quick-editor')) setActiveTab('quick-editor');
     else if (path.includes('/prototype')) setActiveTab('prototype');
     else setActiveTab('dashboard');
   }, [location.pathname]);
@@ -109,7 +112,7 @@ const AdminDashboard = () => {
           <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
             
             {/* Navigation Tabs */}
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
               <TabsTrigger value="dashboard" className="flex items-center gap-2">
                 <Home className="w-4 h-4" />
                 Dashboard
@@ -121,6 +124,10 @@ const AdminDashboard = () => {
               <TabsTrigger value="offer-editor" className="flex items-center gap-2">
                 <Layout className="w-4 h-4" />
                 Oferta
+              </TabsTrigger>
+              <TabsTrigger value="quick-editor" className="flex items-center gap-2">
+                <Zap className="w-4 h-4" />
+                Rápido
               </TabsTrigger>
               <TabsTrigger value="analytics" className="flex items-center gap-2">
                 <BarChart className="w-4 h-4" />
@@ -164,6 +171,14 @@ const AdminDashboard = () => {
                   icon={<Layout className="w-6 h-6" />}
                   onClick={() => handleTabChange('offer-editor')}
                   buttonText="Editar Oferta"
+                />
+                
+                <DashboardCard 
+                  title="🚀 Editor Rápido"
+                  description="Edite páginas de resultado e oferta AGORA!"
+                  icon={<Zap className="w-6 h-6" />}
+                  onClick={() => handleTabChange('quick-editor')}
+                  buttonText="Editar Agora"
                 />
                 
                 <DashboardCard 
@@ -270,6 +285,12 @@ const AdminDashboard = () => {
             <TabsContent value="offer-editor">
               <React.Suspense fallback={<div className="p-8 text-center">Carregando editor de oferta...</div>}>
                 <QuizOfferPageVisualEditor />
+              </React.Suspense>
+            </TabsContent>
+
+            <TabsContent value="quick-editor">
+              <React.Suspense fallback={<div className="p-8 text-center">Carregando editor rápido...</div>}>
+                <QuickVisualEditor />
               </React.Suspense>
             </TabsContent>
 
