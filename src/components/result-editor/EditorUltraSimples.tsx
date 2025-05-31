@@ -1,161 +1,112 @@
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
+import { Save, Eye, RotateCcw } from 'lucide-react';
+import { ResultPageConfig } from '@/types/resultPageConfig';
+import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 
-"use client";
-import React, { useState } from 'react';
-import { ArrowLeft, Save, Palette } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+interface EditorUltraSimplesProps {
+  styleType: string;
+}
 
-const EditorUltraSimples: React.FC = () => {
-  const router = useRouter();
-  const [cor, setCor] = useState('#B89B7A');
-  const [titulo, setTitulo] = useState('Descubra Seu Estilo Único');
-  
-  const salvar = () => {
-    localStorage.setItem('editorUltraSimples', JSON.stringify({ cor, titulo }));
-    alert('Configurações salvas!');
+const EditorUltraSimples: React.FC<EditorUltraSimplesProps> = ({ styleType }) => {
+  const { navigate } = useUniversalNavigation();
+  const { resultPageConfig, updateSection, saveConfig, loading } = useResultPageConfig(styleType);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !resultPageConfig) {
+      console.warn('Configuração não carregada a tempo.');
+    }
+  }, [loading, resultPageConfig]);
+
+  const handleInputChange = (section: string, field: string, value: any) => {
+    updateSection(`${section}.${field}`, value);
   };
 
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await saveConfig();
+      alert('Configurações salvas com sucesso!');
+    } catch (error) {
+      console.error('Erro ao salvar as configurações:', error);
+      alert('Erro ao salvar as configurações.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (loading || !resultPageConfig) {
+    return <div>Carregando...</div>;
+  }
+
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5', padding: '20px' }}>
-      <div style={{
-        backgroundColor: 'white',
-        padding: '20px',
-        borderRadius: '8px',
-        marginBottom: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
-        <button
-          onClick={() => router.push('/admin')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '10px 15px',
-            border: '1px solid #ddd',
-            borderRadius: '6px',
-            backgroundColor: 'white',
-            cursor: 'pointer'
-          }}
-        >
-          <ArrowLeft size={16} />
-          Voltar
-        </button>
-        
-        <h1 style={{ margin: 0, fontSize: '24px', color: '#333' }}>
-          🎨 Editor Visual Funcionando!
-        </h1>
-        
-        <button
-          onClick={salvar}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '10px 20px',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}
-        >
-          <Save size={16} />
-          Salvar
-        </button>
-      </div>
-
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: '1fr 1fr', 
-        gap: '20px',
-        maxWidth: '1200px',
-        margin: '0 auto'
-      }}>
-        <div style={{
-          backgroundColor: 'white',
-          padding: '20px',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-            <Palette size={20} style={{ marginRight: '10px', color: '#666' }} />
-            <h2 style={{ margin: 0, fontSize: '18px' }}>Controles do Editor</h2>
+    <div className="p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Editor Simplificado</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Tabs defaultValue="hero" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="hero">Hero Section</TabsTrigger>
+              <TabsTrigger value="about">About Section</TabsTrigger>
+            </TabsList>
+            <TabsContent value="hero" className="space-y-2">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Título</label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  value={resultPageConfig.heroSection.title || ''}
+                  onChange={(e) => handleInputChange('heroSection', 'title', e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Subtítulo</label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  value={resultPageConfig.heroSection.subtitle || ''}
+                  onChange={(e) => handleInputChange('heroSection', 'subtitle', e.target.value)}
+                />
+              </div>
+            </TabsContent>
+            <TabsContent value="about" className="space-y-2">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Título da Seção About</label>
+                <input
+                  type="text"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  value={resultPageConfig.aboutSection.title || ''}
+                  onChange={(e) => handleInputChange('aboutSection', 'title', e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Descrição da Seção About</label>
+                <textarea
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  value={resultPageConfig.aboutSection.description || ''}
+                  onChange={(e) => handleInputChange('aboutSection', 'description', e.target.value)}
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+          <div className="flex justify-between">
+            <Button variant="outline" onClick={() => navigate('/admin/editor')}>
+              <RotateCcw className="mr-2 h-4 w-4" />
+              Voltar
+            </Button>
+            <Button onClick={handleSave} disabled={isSaving}>
+              <Save className="mr-2 h-4 w-4" />
+              {isSaving ? 'Salvando...' : 'Salvar'}
+            </Button>
           </div>
-          
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-              Cor Principal:
-            </label>
-            <input
-              type="color"
-              value={cor}
-              onChange={(e) => setCor(e.target.value)}
-              style={{ width: '50px', height: '40px', border: 'none', borderRadius: '4px' }}
-            />
-          </div>
-          
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-              Título Principal:
-            </label>
-            <input
-              type="text"
-              value={titulo}
-              onChange={(e) => setTitulo(e.target.value)}
-              style={{ 
-                width: '100%', 
-                padding: '10px', 
-                border: '1px solid #ddd', 
-                borderRadius: '4px',
-                fontSize: '16px'
-              }}
-            />
-          </div>
-        </div>
-
-        <div style={{
-          backgroundColor: 'white',
-          padding: '20px',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-        }}>
-          <h2 style={{ margin: '0 0 20px 0', fontSize: '18px' }}>Preview em Tempo Real</h2>
-          
-          <div style={{
-            padding: '30px',
-            backgroundColor: '#fffaf7',
-            borderRadius: '8px',
-            border: '1px solid #eee'
-          }}>
-            <h1 style={{
-              fontSize: '36px',
-              fontWeight: 'bold',
-              color: cor,
-              marginBottom: '15px',
-              textAlign: 'center'
-            }}>
-              {titulo}
-            </h1>
-            
-            <div style={{ textAlign: 'center' }}>
-              <button style={{
-                backgroundColor: cor,
-                color: 'white',
-                padding: '15px 30px',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}>
-                Botão de Exemplo
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
