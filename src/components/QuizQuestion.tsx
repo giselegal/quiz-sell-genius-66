@@ -16,7 +16,7 @@ interface QuizQuestionProps {
   autoAdvance?: boolean;
   hideTitle?: boolean;
   showQuestionImage?: boolean;
-  isStrategicQuestion?: boolean; // Nova prop
+  isStrategicQuestion?: boolean;
 }
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -29,7 +29,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   isStrategicQuestion = false
 }) => {
   const isMobile = useIsMobile();
-  const hasImageOptions = question.type !== 'text';
+  const hasImageOptions = question.options.some(option => option.imageUrl);
   const [imageError, setImageError] = useState(false);
   const { scrollToQuestion } = useQuestionScroll();
 
@@ -41,14 +41,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     let newSelectedOptions: string[];
     
     if (currentAnswers.includes(optionId)) {
-      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
       if (isStrategicQuestion) {
-        return; // Não permite desmarcar a opção em questões estratégicas
+        return;
       }
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
       if (isStrategicQuestion) {
-        // Para questões estratégicas, substituímos qualquer seleção anterior
         newSelectedOptions = [optionId];
       } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
         newSelectedOptions = [...currentAnswers.slice(1), optionId];
@@ -64,7 +62,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   };
   
   const getGridColumns = () => {
-    if (question.type === 'text') {
+    if (!hasImageOptions) {
       if (isStrategicQuestion) {
         return "grid-cols-1 gap-3 px-2";
       }
@@ -77,7 +75,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
       isMobile && "px-2", 
       isStrategicQuestion && "max-w-3xl strategic-question",
-      question.type === 'text' && !isStrategicQuestion && "text-only-question"
+      !hasImageOptions && !isStrategicQuestion && "text-only-question"
     )} id={`question-${question.id}`}>
       {!hideTitle && (
         <>
@@ -85,8 +83,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
             isMobile ? "text-base" : "text-base sm:text-xl",
             isStrategicQuestion && "strategic-question-title text-[#432818] mb-6 font-bold whitespace-pre-line",
-            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl", // Texto maior para questões estratégicas em mobile
-            question.type === 'text' && !isStrategicQuestion && ".text-only-question & " && "text-[1.15rem] sm:text-xl" // Texto maior para títulos em questões só texto
+            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl",
+            !hasImageOptions && !isStrategicQuestion && "text-[1.15rem] sm:text-xl"
           )}>
             {highlightStrategicWords(question.title)}
           </h2>
@@ -119,12 +117,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
             option={option} 
             isSelected={currentAnswers.includes(option.id)} 
             onSelect={handleOptionSelect}
-            type={question.type}
+            type={hasImageOptions ? 'image' : 'text'}
             questionId={question.id}
             isDisabled={
               (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
               (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                currentAnswers.length >= question.multiSelect)
+                currentAnswers.length >= (question.multiSelect || 1))
             }
             isStrategicOption={isStrategicQuestion}
           />
@@ -135,4 +133,3 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 export { QuizQuestion };
-

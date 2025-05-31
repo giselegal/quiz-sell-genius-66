@@ -6,6 +6,7 @@ export interface ImageMetadata {
   size: number;
   url: string;
   quality?: number;
+  alt?: string;
 }
 
 export interface ImageCacheEntry {
@@ -24,7 +25,7 @@ export interface ImageSettings {
 
 export interface ImageOptimizationOptions {
   quality?: number;
-  format?: 'webp' | 'jpeg' | 'png';
+  format?: 'webp' | 'jpeg' | 'png' | 'auto';
   width?: number;
   height?: number;
   lazy?: boolean;
@@ -33,6 +34,23 @@ export interface ImageOptimizationOptions {
 export interface PreloadOptions {
   quality?: number;
   batchSize?: number;
+  format?: 'webp' | 'jpeg' | 'png' | 'auto';
   onProgress?: (loaded: number, total: number) => void;
   onComplete?: () => void;
+}
+
+export interface ImageAnalysis {
+  url: string;
+  loadTime: number;
+  size: number;
+  format: string;
+  cached: boolean;
+}
+
+export interface ImageDiagnosticResult {
+  totalImages: number;
+  averageLoadTime: number;
+  totalSize: number;
+  cacheHitRate: number;
+  slowImages: ImageAnalysis[];
 }

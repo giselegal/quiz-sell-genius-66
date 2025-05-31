@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
@@ -53,7 +54,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
     question || {
       id: generateId(),
       title: '',
-      type: 'text',
+      type: 'single',
       multiSelect: 3,
       options: []
     }
@@ -143,7 +144,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                 <Label htmlFor="type">Tipo de Pergunta</Label>
                 <Select
                   value={editedQuestion.type}
-                  onValueChange={(value: 'text' | 'image' | 'both') => 
+                  onValueChange={(value: 'single' | 'multiple') => 
                     setEditedQuestion(prev => ({ ...prev, type: value }))
                   }
                 >
@@ -151,9 +152,8 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="text">Apenas texto</SelectItem>
-                    <SelectItem value="image">Apenas imagem</SelectItem>
-                    <SelectItem value="both">Texto e imagem</SelectItem>
+                    <SelectItem value="single">Seleção única</SelectItem>
+                    <SelectItem value="multiple">Seleção múltipla</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
