@@ -1,12 +1,21 @@
-// Service Worker para subdiretório quiz-de-estilo
-const CACHE_VERSION = 'v4';
+// Service Worker para o projeto Quiz Sell Genius
+const CACHE_VERSION = 'v5';
 const CACHE_NAME = `quiz-sell-genius-${CACHE_VERSION}`;
-const BASE_PATH = '/quiz-de-estilo/';
+const BASE_PATH = '/';
+
+// Caminhos principais da aplicação
+const APP_ROUTES = [
+  '/',
+  '/resultado',
+  '/admin',
+  '/quiz-descubra-seu-estilo'
+];
 
 // Lista de recursos para pré-cache
 const STATIC_ASSETS = [
   BASE_PATH,
-  `${BASE_PATH}index.html`
+  `${BASE_PATH}index.html`,
+  ...APP_ROUTES
 ];
 
 // Evento de instalação
@@ -41,11 +50,16 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   
   const url = new URL(event.request.url);
+  const pathname = url.pathname;
   
-  // Estratégia para HTML e navegação
-  if (url.pathname.endsWith('.html') || 
-      url.pathname.endsWith('/') ||
-      url.pathname === BASE_PATH.slice(0, -1)) {
+  // Estratégia para rotas SPA - sempre retorna index.html
+  if (pathname.endsWith('.html') || 
+      pathname.endsWith('/') ||
+      pathname === '' ||
+      APP_ROUTES.includes(pathname) ||
+      pathname.startsWith('/resultado') ||
+      pathname.startsWith('/admin') ||
+      pathname.startsWith('/quiz-descubra-seu-estilo')) {
     
     event.respondWith(
       fetch(event.request).catch(() => {
@@ -55,7 +69,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
-  // Estratégia para outros recursos
+  // Estratégia para outros recursos (assets, imagens, etc.)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
