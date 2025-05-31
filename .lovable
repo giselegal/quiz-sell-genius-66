@@ -1,0 +1,10 @@
+{
+  "github": {
+    "autoSyncFromGithub": true,
+    "autoPushToGithub": true,
+    "branch": "main"
+  },
+  "projectName": "Quiz Sell Genius",
+  "projectId": "quiz-sell-genius-66",
+  "version": "1.0.0"
+}

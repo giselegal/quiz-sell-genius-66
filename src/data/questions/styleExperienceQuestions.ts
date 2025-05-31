@@ -20,7 +20,7 @@ export const styleExperienceQuestions: QuizQuestion[] = [
       },
       {
         id: 'strategic-3-3',
-        text: 'Com exemplos práticos que posso aplicar no meu dia-a-dia',
+        text: 'Com exemplos práticos que posso aplicar no meu dia a dia',
         styleCategory: 'Strategic'
       },
       {

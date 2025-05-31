@@ -15,7 +15,7 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
       },
       {
         id: 'strategic-1-2',
-        text: 'Tenho algumas ideias, mas não sei como aplicar',
+        text: 'Tenho algumas ideias, mas não sei como aplicá-las',
         styleCategory: 'Strategic'
       },
       {
@@ -44,7 +44,7 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
       },
       {
         id: 'strategic-2-2',
-        text: 'Tenho muitas roupas mas sempre sinto que não tenho nada para vestir',
+        text: 'Tenho muitas roupas, mas sempre sinto que não tenho nada para vestir',
         styleCategory: 'Strategic'
       },
       {
