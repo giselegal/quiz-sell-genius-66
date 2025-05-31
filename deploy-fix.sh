@@ -1,14 +1,44 @@
 #!/bin/bash
 
-echo "🚀 DEPLOY ESPECÍFICO PARA CORRIGIR PERMISSÕES"
-echo "============================================="
+echo "🔧 DIAGNÓSTICO E CORREÇÃO DO DEPLOY"
+echo "=================================="
 
-# Configurações FTP
-FTP_HOST="147.93.39.155"
+FTP_SERVER="147.93.39.155"
 FTP_USER="u116045488"
 FTP_PASS="GiseleG@l0809"
 
-echo "📦 Build do projeto..."
+echo "🔍 1. Verificando se index.html existe localmente..."
+if [ -f "dist/index.html" ]; then
+    echo "✅ index.html encontrado ($(du -h dist/index.html | cut -f1))"
+else
+    echo "❌ index.html NÃO encontrado - fazendo build..."
+    npm run build
+fi
+
+echo ""
+echo "🔍 2. Testando conexão FTP..."
+if curl -s ftp://$FTP_SERVER --user $FTP_USER:$FTP_PASS --list-only | head -1 >/dev/null; then
+    echo "✅ Conexão FTP OK"
+else
+    echo "❌ Problema na conexão FTP"
+    exit 1
+fi
+
+echo ""
+echo "🚀 3. Upload FORÇADO do index.html..."
+curl -T "dist/index.html" ftp://$FTP_SERVER/index.html --user $FTP_USER:$FTP_PASS -v
+
+echo ""
+echo "🧪 4. Testando site..."
+sleep 3
+
+echo "🔍 Testando http://147.93.39.155..."
+if curl -s http://147.93.39.155 | grep -q "Quiz\|React\|Vite" 2>/dev/null; then
+    echo "✅ SITE FUNCIONANDO! Seu projeto está online!"
+else
+    echo "⚠️  Ainda mostrando página de erro da Hostinger"
+    echo "🔍 Verificando se precisa aguardar cache..."
+fi
 npm run build
 
 echo "📁 Verificando pasta dist..."
