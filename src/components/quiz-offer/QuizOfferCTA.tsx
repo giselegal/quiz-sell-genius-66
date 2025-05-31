@@ -1,4 +1,3 @@
-// filepath: /workspaces/quiz-sell-genius-66/src/components/quiz-offer/QuizOfferCTA.tsx
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { trackButtonClick } from '@/utils/analytics';
