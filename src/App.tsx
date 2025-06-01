@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { captureUTMParameters } from './utils/analytics';
 import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { initializeBuilder } from './utils/builderConfig'; // Builder.io initialization
+// import { initializeBuilder } from './utils/builderConfig'; // Builder.io initialization - temporariamente desabilitado
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -30,7 +30,7 @@ const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage')); // Nova
 const CreativeAnalyticsPage = lazy(() => import('./pages/admin/CreativeAnalyticsPage'));
 const ABTestsPage = lazy(() => import('./pages/admin/ABTestsPage'));
 const QuickMetricsPage = lazy(() => import('./pages/admin/QuickMetricsPage'));
-const BuilderDashboard = lazy(() => import('./pages/admin/BuilderDashboard')); // Builder.io Dashboard
+// const BuilderDashboard = lazy(() => import('./pages/admin/BuilderDashboard')); // Builder.io Dashboard - temporariamente desabilitado
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {
@@ -71,7 +71,7 @@ const App = () => {
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
                 <Route path="/admin/ab-tests" element={<ABTestsPage />} />
                 <Route path="/admin/quick-metrics" element={<QuickMetricsPage />} />
-                <Route path="/admin/builder" element={<BuilderDashboard />} /> {/* Builder.io Dashboard */}
+                {/* <Route path="/admin/builder" element={<BuilderDashboard />} /> Builder.io Dashboard - temporariamente desabilitado */}
                 
                 {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />
