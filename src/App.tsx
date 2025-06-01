@@ -27,6 +27,7 @@ const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
 const QuickVisualEditor = lazy(() => import('./components/quick-editor/QuickVisualEditor'));
 const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage')); // Nova página
 const CreativeAnalyticsPage = lazy(() => import('./pages/admin/CreativeAnalyticsPage'));
+const ABTestsPage = lazy(() => import('./pages/admin/ABTestsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {
@@ -56,6 +57,7 @@ const App = () => {
                 <Route path="/admin/quick-editor" element={<QuickVisualEditor />} />
                 <Route path="/admin/analytics" element={<AnalyticsPage />} /> {/* Nova rota */}
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
+                <Route path="/admin/ab-tests" element={<ABTestsPage />} />
                 
                 {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />
