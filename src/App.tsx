@@ -23,6 +23,7 @@ const LoadingFallback = () => (
 // Lazy loading das páginas principais
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const TestPage = lazy(() => import('./pages/TestPage')); // Página de teste
+const ABTestStatus = lazy(() => import('./pages/ABTestStatus')); // Status A/B Testing
 const ResultPage = lazy(() => import('./pages/ResultPage')); // Versão original
 const ResultPageWithBuilder = lazy(() => import('./pages/ResultPageWithBuilder')); // Versão Builder.io
 const QuizOfferPage = lazy(() => import('./components/QuizOfferPage')); // Versão original
@@ -76,6 +77,9 @@ const App = () => {
                 
                 {/* TESTE - Página de teste */}
                 <Route path="/teste" element={<TestPage />} />
+                
+                {/* STATUS A/B - Status da integração */}
+                <Route path="/ab-status" element={<ABTestStatus />} />
                 
                 {/* ADMIN - Rotas principais */}
                 <Route path="/admin" element={<AdminDashboard />} />
