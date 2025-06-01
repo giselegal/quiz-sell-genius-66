@@ -22,8 +22,8 @@ const LoadingFallback = () => (
 
 // Lazy loading das páginas principais
 const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./pages/ResultPage'));
-const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
+const ResultPage = lazy(() => import('./pages/ResultPageWithBuilder')); // Versão com Builder.io
+const QuizOfferPage = lazy(() => import('./pages/QuizOfferPageWithBuilder')); // Versão com Builder.io
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
 const QuickVisualEditor = lazy(() => import('./components/quick-editor/QuickVisualEditor'));
@@ -32,6 +32,7 @@ const CreativeAnalyticsPage = lazy(() => import('./pages/admin/CreativeAnalytics
 const ABTestsPage = lazy(() => import('./pages/admin/ABTestsPage'));
 const QuickMetricsPage = lazy(() => import('./pages/admin/QuickMetricsPage'));
 const BuilderDashboard = lazy(() => import('./pages/admin/BuilderDashboard')); // Builder.io Dashboard
+const BuilderPageSetup = lazy(() => import('./components/admin/BuilderPageSetup')); // Setup páginas A/B
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {
@@ -79,6 +80,7 @@ const App = () => {
                 <Route path="/admin/ab-tests" element={<ABTestsPage />} />
                 <Route path="/admin/quick-metrics" element={<QuickMetricsPage />} />
                 <Route path="/admin/builder" element={<BuilderDashboard />} /> {/* Builder.io Dashboard - versão segura */}
+                <Route path="/admin/builder-setup" element={<BuilderPageSetup />} /> {/* Setup páginas A/B */}
                 
                 {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />

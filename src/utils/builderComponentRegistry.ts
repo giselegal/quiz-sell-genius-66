@@ -1,8 +1,16 @@
 // src/utils/builderComponentRegistry.ts
-import { builder } from '@builder.io/react';
+import { Builder } from '@builder.io/react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { QuizQuestion } from '@/components/QuizQuestion';
+// Importar componentes das páginas específicas
+import QuizOfferPage from '@/components/QuizOfferPage';
+import QuizOfferHero from '@/components/quiz-offer/QuizOfferHero';
+import QuizOfferCTA from '@/components/quiz-offer/QuizOfferCTA';
+// Importar componentes principais das páginas
+import ResultPage from '@/pages/ResultPage';
+import BuilderResultPage from '@/components/builder/BuilderResultPage';
+import BuilderQuizOfferPage from '@/components/builder/BuilderQuizOfferPage';
 
 // Registrar componentes do Shadcn/UI para uso no Builder.io
 const componentRegistry = [
@@ -151,13 +159,109 @@ const componentRegistry = [
         helperText: 'Pergunta estratégica (estilo diferenciado)'
       }
     ]
+  },
+  {
+    component: QuizOfferPage,
+    name: 'QuizOfferPage',
+    inputs: [
+      {
+        name: 'quizId',
+        type: 'string',
+        required: true,
+        helperText: 'ID do quiz associado a esta página'
+      },
+      {
+        name: 'onStart',
+        type: 'function',
+        helperText: 'Função chamada ao iniciar o quiz'
+      },
+      {
+        name: 'onComplete',
+        type: 'function',
+        helperText: 'Função chamada ao completar o quiz'
+      }
+    ]
+  },
+  {
+    component: QuizOfferHero,
+    name: 'QuizOfferHero',
+    inputs: [
+      {
+        name: 'title',
+        type: 'text',
+        required: true,
+        helperText: 'Título da seção hero'
+      },
+      {
+        name: 'description',
+        type: 'text',
+        helperText: 'Descrição da seção hero'
+      },
+      {
+        name: 'image',
+        type: 'file',
+        helperText: 'Imagem de fundo da seção hero'
+      }
+    ]
+  },
+  {
+    component: QuizOfferCTA,
+    name: 'QuizOfferCTA',
+    inputs: [
+      {
+        name: 'text',
+        type: 'text',
+        defaultValue: 'Comece o Quiz',
+        helperText: 'Texto do botão de chamada para ação'
+      },
+      {
+        name: 'link',
+        type: 'url',
+        helperText: 'URL para onde o botão deve redirecionar'
+      },
+      {
+        name: 'isPrimary',
+        type: 'boolean',
+        defaultValue: true,
+        helperText: 'Se verdadeiro, estiliza como botão primário'
+      }
+    ]
+  },
+  {
+    component: ResultPage,
+    name: 'ResultPageOriginal',
+    inputs: []
+  },
+  {
+    component: BuilderResultPage,
+    name: 'BuilderResultPage',
+    inputs: [
+      {
+        name: 'model',
+        type: 'string',
+        defaultValue: 'resultado-page',
+        helperText: 'Nome do modelo Builder.io'
+      }
+    ]
+  },
+  {
+    component: BuilderQuizOfferPage,
+    name: 'BuilderQuizOfferPage',
+    inputs: [
+      {
+        name: 'model',
+        type: 'string',
+        defaultValue: 'quiz-offer-page',
+        helperText: 'Nome do modelo Builder.io'
+      }
+    ]
   }
 ];
 
 // Registrar todos os componentes no Builder.io
 export const registerComponents = () => {
   componentRegistry.forEach(({ component, name, inputs }) => {
-    builder.registerComponent(component, { 
+    Builder.registerComponent(component, { 
       name, 
       inputs,
       canHaveChildren: name === 'CustomCard',
