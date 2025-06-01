@@ -13,9 +13,9 @@ export const QuizWelcome = ({ onStart }: QuizWelcomeProps) => {
   const [name, setName] = useState('');
   const { login } = useAuth();
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (name.trim()) {
-      login(name.trim());
+      await login(name.trim(), ''); // Passar email vazio como segundo parâmetro
       localStorage.setItem('userName', name.trim());
       onStart();
     }
