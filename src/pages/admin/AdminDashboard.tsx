@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AdminLayout from '../../components/admin/AdminLayout';
@@ -24,7 +23,6 @@ const AdminDashboard = () => {
             description="Visualize os resultados do quiz"
             linkTo="/resultado"
             buttonText="Ver Resultados"
-            isExternal={true}
           />
           
           <DashboardCard
@@ -32,7 +30,6 @@ const AdminDashboard = () => {
             description="Acesse o quiz principal"
             linkTo="/"
             buttonText="Ver Quiz"
-            isExternal={true}
           />
         </div>
       </div>
