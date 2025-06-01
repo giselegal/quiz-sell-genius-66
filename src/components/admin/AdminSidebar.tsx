@@ -8,8 +8,11 @@ import {
   Settings, 
   Palette,
   Eye,
-  ChevronDown,
-  ChevronRight
+  PieChart,
+  TrendingUp,
+  Users,
+  Target,
+  ExternalLink
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -23,6 +26,24 @@ const sidebarItems = [
     title: 'Editor',
     href: '/admin/editor',
     icon: Palette
+  },
+  {
+    title: 'Analytics Principal',
+    href: '/admin/analytics',
+    icon: TrendingUp,
+    description: 'Métricas completas'
+  },
+  {
+    title: 'Analytics de Criativos',
+    href: '/admin/creative-analytics',
+    icon: PieChart,
+    description: 'Performance por criativo'
+  },
+  {
+    title: 'Testes A/B',
+    href: '/admin/ab-test-manager',
+    icon: Target,
+    description: 'Gerenciador de testes'
   },
   {
     title: 'Configurações',
@@ -39,6 +60,7 @@ export function AdminSidebar() {
     <div className="w-64 bg-white border-r border-[#D4C4A0] h-screen">
       <div className="p-6">
         <h2 className="text-xl font-bold text-[#432818]">Admin Panel</h2>
+        <p className="text-sm text-[#8F7A6A] mt-1">Dashboard de Métricas</p>
       </div>
       
       <nav className="px-4 space-y-2">
@@ -51,18 +73,68 @@ export function AdminSidebar() {
               key={item.href}
               to={item.href}
               className={cn(
-                'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+                'flex flex-col gap-1 px-4 py-3 rounded-lg transition-colors group',
                 isActive 
                   ? 'bg-[#B89B7A] text-white' 
                   : 'text-[#432818] hover:bg-[#F5F2E9]'
               )}
             >
-              <Icon className="w-5 h-5" />
-              <span className="font-medium">{item.title}</span>
+              <div className="flex items-center gap-3">
+                <Icon className="w-5 h-5" />
+                <span className="font-medium">{item.title}</span>
+                {item.href.includes('analytics') && (
+                  <ExternalLink className="w-3 h-3 opacity-60" />
+                )}
+              </div>
+              {item.description && (
+                <span className={cn(
+                  "text-xs ml-8 opacity-70",
+                  isActive ? "text-white" : "text-[#8F7A6A]"
+                )}>
+                  {item.description}
+                </span>
+              )}
             </Link>
           );
         })}
       </nav>
+
+      {/* Seção de Analytics em Destaque */}
+      <div className="mx-4 mt-6 p-3 bg-[#F9F4EF] border border-[#D4C4A0] rounded-lg">
+        <h3 className="text-sm font-semibold text-[#432818] mb-2 flex items-center gap-2">
+          <Users className="w-4 h-4" />
+          Métricas Rápidas
+        </h3>
+        <div className="space-y-2 text-xs text-[#8F7A6A]">
+          <div className="flex justify-between">
+            <span>Funil Conversão:</span>
+            <Link 
+              to="/admin/analytics" 
+              className="text-[#B89B7A] hover:underline"
+            >
+              Ver detalhes
+            </Link>
+          </div>
+          <div className="flex justify-between">
+            <span>UTM Tracking:</span>
+            <Link 
+              to="/admin/analytics" 
+              className="text-[#B89B7A] hover:underline"
+            >
+              Campanhas
+            </Link>
+          </div>
+          <div className="flex justify-between">
+            <span>Performance:</span>
+            <Link 
+              to="/admin/creative-analytics" 
+              className="text-[#B89B7A] hover:underline"
+            >
+              Criativos
+            </Link>
+          </div>
+        </div>
+      </div>
       
       <div className="absolute bottom-4 px-4 w-64">
         <Link
