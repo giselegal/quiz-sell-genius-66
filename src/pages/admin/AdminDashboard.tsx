@@ -17,6 +17,13 @@ const AdminDashboard = () => {
             linkTo="/admin/editor"
             buttonText="Abrir Editor"
           />
+
+          <DashboardCard
+            title="Editor Rápido"
+            description="Edite rapidamente as páginas de resultado e oferta"
+            linkTo="/admin/quick-editor"
+            buttonText="Editor Rápido"
+          />
           
           <DashboardCard
             title="Ver Resultados"
