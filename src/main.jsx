@@ -3,11 +3,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import { initializeResourcePreloading, setupRouteChangePreloading } from './utils/preloadResources'
-import { fixMainRoutes } from './utils/fixMainRoutes'
-import { checkMainRoutes } from './utils/routeChecker'
+import { initializeResourcePreloading } from './utils/preloadResources'
 
-// 1) Initialize critical resources and route fixing
+// 1) Initialize critical resources
 initializeResourcePreloading()
 
 // 2) Render immediately with error handling
@@ -22,9 +20,7 @@ const prepareRootAndRender = () => {
       }
       
       ReactDOM.createRoot(rootElement).render(
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
+        <App />
       );
     } else {
       console.error('Elemento root não encontrado!');
