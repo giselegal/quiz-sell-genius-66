@@ -1,6 +1,6 @@
 
 import { ImageSettings, ImageOptimizationOptions } from './types';
-import { getOptimizedImageUrl } from './optimization';
+import { optimizeCloudinaryUrl } from './optimization';
 
 const DEFAULT_SETTINGS: ImageSettings = {
   quality: 80,
@@ -15,7 +15,12 @@ export const enhancedOptimizeImage = (
   options: ImageOptimizationOptions = {}
 ): string => {
   const settings = { ...DEFAULT_SETTINGS, ...options };
-  return getOptimizedImageUrl(url, settings.quality, settings.format);
+  return optimizeCloudinaryUrl(url, {
+    quality: settings.quality,
+    format: settings.format,
+    width: settings.width,
+    height: settings.height
+  });
 };
 
 export const generateResponsiveSources = (
@@ -23,6 +28,6 @@ export const generateResponsiveSources = (
   sizes: number[] = [400, 800, 1200]
 ): string => {
   return sizes
-    .map(size => `${getOptimizedImageUrl(url, 80, 'auto')} ${size}w`)
+    .map(size => `${optimizeCloudinaryUrl(url, { quality: 80, format: 'auto', width: size })} ${size}w`)
     .join(', ');
 };
