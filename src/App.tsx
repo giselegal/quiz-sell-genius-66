@@ -36,7 +36,7 @@ const ErrorFallback = ({ message }: { message: string }) => (
   </div>
 );
 
-// Lazy loading das páginas principais com error boundaries melhorados
+// Lazy loading das páginas com fallbacks seguros
 const QuizPage = lazy(() => 
   import('./components/QuizPage').catch(() => {
     console.error('Failed to load QuizPage');
@@ -54,7 +54,7 @@ const TestPage = lazy(() =>
 const QuizDescubraSeuEstiloPage = lazy(() => 
   import('./pages/quiz-descubra-seu-estilo').catch(() => {
     console.error('Failed to load QuizDescubraSeuEstiloPage');
-    return { default: () => <ErrorFallback message="Erro ao carregar página Quiz Descubra Seu Estilo" /> };
+    return { default: () => <ErrorFallback message="Erro ao carregar Quiz Descubra Seu Estilo" /> };
   })
 );
 
@@ -89,26 +89,27 @@ const NotFoundPage = lazy(() =>
 const App = () => {
   useEffect(() => {
     try {
-      console.log('Inicializando aplicação...');
-      console.log('URL atual:', window.location.href);
-      console.log('Pathname:', window.location.pathname);
+      console.log('🚀 Inicializando aplicação...');
+      console.log('📍 URL atual:', window.location.href);
+      console.log('📍 Pathname:', window.location.pathname);
       
+      // Inicializar tracking
       loadFacebookPixel();
       captureUTMParameters();
       
-      // Inicializar Builder.io com delay menor
+      // Inicializar Builder.io
       setTimeout(() => {
         try {
           initializeBuilder();
-          console.log('Builder.io initialized successfully');
+          console.log('✅ Builder.io inicializado');
         } catch (error) {
-          console.warn('Builder.io não pôde ser inicializado:', error);
+          console.warn('⚠️ Builder.io não pôde ser inicializado:', error);
         }
-      }, 50);
+      }, 100);
       
-      console.log('App initialized successfully');
+      console.log('✅ App inicializado com sucesso');
     } catch (error) {
-      console.error('Erro ao inicializar aplicativo:', error);
+      console.error('❌ Erro ao inicializar aplicativo:', error);
     }
   }, []);
 
@@ -125,14 +126,14 @@ const App = () => {
                 {/* TESTE - Página de teste */}
                 <Route path="/teste" element={<TestPage />} />
                 
-                {/* ADMIN - Rotas principais */}
+                {/* ADMIN - Rotas administrativas */}
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/editor" element={<EditorPage />} />
                 
                 {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />
                 
-                {/* OFERTA - Página de oferta */}
+                {/* QUIZ OFERTA - Página de oferta */}
                 <Route path="/quiz-descubra-seu-estilo" element={<QuizDescubraSeuEstiloPage />} />
                 
                 {/* Redirecionamentos */}
