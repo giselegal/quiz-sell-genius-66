@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
@@ -6,7 +5,11 @@ import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
 import { createOfferSectionConfig } from '@/utils/config/offerDefaults';
 
-export const EditorPage = () => {
+interface EditorPageProps {
+  // Nenhuma prop definida por enquanto
+}
+
+const EditorPage: React.FC<EditorPageProps> = () => {
   const [showTemplates, setShowTemplates] = useState(false);
   const { style } = useParams<{ style?: string }>();
   
