@@ -30,8 +30,7 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
         if (storedQuestions) {
           setQuestions(JSON.parse(storedQuestions));
         } else {
-          // If not in localStorage, fetch from the server (or any other source)
-          // For now, let's use a default set of questions
+          // Default questions for the style quiz
           const defaultQuestions: QuizQuestion[] = [
             {
               id: '1',
@@ -55,6 +54,17 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
                 { id: '2d', text: 'Bolsa estruturada', styleCategory: 'Dramático', points: 5 },
               ],
             },
+            {
+              id: '3',
+              title: 'Seu estilo para uma noite especial?',
+              type: 'single',
+              options: [
+                { id: '3a', text: 'Look clássico e atemporal', styleCategory: 'Clássico', points: 5 },
+                { id: '3b', text: 'Algo ousado e marcante', styleCategory: 'Dramático', points: 5 },
+                { id: '3c', text: 'Confortável mas elegante', styleCategory: 'Natural', points: 5 },
+                { id: '3d', text: 'Romântico e feminino', styleCategory: 'Romântico', points: 5 },
+              ],
+            },
           ];
           setQuestions(defaultQuestions);
         }
@@ -75,9 +85,16 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
   }, [toast]);
 
   const handleAnswerSubmit = useCallback((response: any) => {
-    // Handle answer submission logic here
     console.log('Answer submitted:', response);
-  }, []);
+    
+    // Move to next question or finish quiz
+    if (currentQuestionIndex < (questions?.length ?? 0) - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      // Quiz completed, navigate to results
+      navigate('/resultado');
+    }
+  }, [currentQuestionIndex, questions, navigate]);
 
   const handleComplete = useCallback((results: StyleResult[]) => {
     console.log('Quiz completed with results:', results);
@@ -98,16 +115,18 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
     }
   }, [navigate]);
 
-  const handleStartQuiz = () => {
-    // Implement logic to start the quiz, e.g., show the first question
-  };
-
   const handleNextClick = () => {
-    // Implement next question logic
+    if (currentQuestionIndex < (questions?.length ?? 0) - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      navigate('/resultado');
+    }
   };
 
   const handlePrevious = () => {
-    // Implement previous question logic
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
   };
 
   if (loading) {
@@ -165,7 +184,7 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
                 {questions === null ? 'Carregando quiz...' : 'Nenhuma pergunta encontrada.'}
               </p>
               {questions !== null && (
-                <Button onClick={handleStartQuiz} className="mt-4">
+                <Button onClick={() => window.location.reload()} className="mt-4">
                   Tentar Novamente
                 </Button>
               )}
@@ -174,9 +193,7 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
         </CardContent>
       </Card>
       <footer className="mt-8 text-center text-gray-500">
-        <p>
-          Feito com ❤️ por [Seu Nome/Empresa]
-        </p>
+        <p>Quiz Sell Genius - Descubra seu estilo único</p>
       </footer>
     </div>
   );
