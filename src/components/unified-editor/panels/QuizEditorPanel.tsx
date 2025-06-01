@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
@@ -18,9 +19,9 @@ interface QuizEditorPanelProps {
 }
 
 const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing, onSave }) => {
-  // Pass a default primaryStyle to useUnifiedEditor to satisfy the parameter requirement
+  // Pass a valid primary style to useUnifiedEditor
   const unifiedEditor = useUnifiedEditor({
-    category: 'default',
+    category: 'Natural',
     score: 0,
     percentage: 0
   });

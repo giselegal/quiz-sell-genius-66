@@ -4,6 +4,7 @@ export interface StyleResult {
   score: number;
   percentage: number;
   name?: string;
+  description?: string;
 }
 
 export interface QuizResult {

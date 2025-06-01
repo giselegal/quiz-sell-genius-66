@@ -16,6 +16,7 @@ export interface ImageCacheEntry {
   hits: number;
   lastAccessed?: number;
   loadStatus?: 'loading' | 'loaded' | 'error';
+  imageElement?: HTMLImageElement;
 }
 
 export interface ImageSettings {
@@ -26,6 +27,7 @@ export interface ImageSettings {
   width?: number;
   height?: number;
   crop?: string;
+  responsive?: boolean;
 }
 
 export interface ImageOptimizationOptions {

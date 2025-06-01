@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Eye, EyeOff, Save, Settings, Trash2 } from 'lucide-react';
 import { Block } from '@/types/editor';
 import { SortableBlock } from './SortableBlock';
-import { EditableComponent } from './EditableComponent';
+import EditableComponent from './EditableComponent';
 import { generateId } from '@/utils/idGenerator';
 import { getDefaultContentForType } from '@/utils/editorDefaults';
 
