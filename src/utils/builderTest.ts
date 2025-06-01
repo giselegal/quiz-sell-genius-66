@@ -18,7 +18,7 @@ export const testBuilderIntegration = async () => {
     // Verificar se Builder.io foi inicializado
     if (builder && builder.apiKey) {
       results.initialized = true;
-      results.apiKeyValid = builder.apiKey === 'a31ec1897d044da09b3a96f2b4f46102';
+      results.apiKeyValid = builder.apiKey === '15b188fc9daf4dc5a37e11da13166d10';
       
       console.log('✅ Builder.io inicializado com API key:', builder.apiKey);
     } else {

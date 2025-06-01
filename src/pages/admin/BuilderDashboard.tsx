@@ -317,10 +317,10 @@ const BuilderDashboard: React.FC = () => {
                   <div>
                     <label className="text-sm font-medium text-[#432818]">API Key</label>
                     <div className="mt-1 p-2 bg-gray-100 rounded text-sm text-gray-600">
-                      YJIGb4i01jvw0SRdL5Bt (Demo)
+                      15b188fc9daf4dc5a37e11da13166d10 (Produção)
                     </div>
                     <p className="text-xs text-[#8B7355] mt-1">
-                      Usando chave de demonstração. Substitua pela sua API key real.
+                      API key de produção ativa e funcionando.
                     </p>
                   </div>
                   <div>

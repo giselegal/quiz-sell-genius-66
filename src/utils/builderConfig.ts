@@ -2,7 +2,7 @@
 import { builder } from '@builder.io/react';
 
 // API Key real do Builder.io - PRODUÇÃO
-const BUILDER_API_KEY = 'a31ec1897d044da09b3a96f2b4f46102';
+const BUILDER_API_KEY = '15b188fc9daf4dc5a37e11da13166d10';
 
 // Função segura para registrar componentes
 const registerComponentsSafely = async () => {

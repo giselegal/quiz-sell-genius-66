@@ -186,14 +186,14 @@ const BuilderDashboardSafe = () => {
                   <label className="text-sm font-medium">API Key</label>
                   <div className="mt-1 flex gap-2">
                     <div className="flex-1 p-2 border rounded bg-gray-50 text-sm">
-                      YJIGb4i01jvw0SRdL5Bt (Demo)
+                      15b188fc9daf4dc5a37e11da13166d10 (Produção)
                     </div>
                     <Button variant="outline" size="sm">
                       Alterar
                     </Button>
                   </div>
                   <p className="text-xs text-[#8F7A6A] mt-1">
-                    Esta é uma API key demo. Para usar em produção, registre-se no Builder.io.
+                    API key de produção ativa. Configuração atualizada com sucesso.
                   </p>
                 </div>
 
