@@ -22,8 +22,9 @@ const LoadingFallback = () => (
 
 // Lazy loading das páginas principais
 const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./pages/ResultPageWithBuilder')); // Versão com Builder.io
-const QuizOfferPage = lazy(() => import('./pages/QuizOfferPageWithBuilder')); // Versão com Builder.io
+const TestPage = lazy(() => import('./pages/TestPage')); // Página de teste
+const ResultPage = lazy(() => import('./pages/ResultPage')); // Versão original
+const QuizOfferPage = lazy(() => import('./components/QuizOfferPage')); // Versão original
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
 const QuickVisualEditor = lazy(() => import('./components/quick-editor/QuickVisualEditor'));
@@ -70,6 +71,9 @@ const App = () => {
               <Routes>
                 {/* ROTA PRINCIPAL - Quiz */}
                 <Route path="/" element={<QuizPage />} />
+                
+                {/* TESTE - Página de teste */}
+                <Route path="/teste" element={<TestPage />} />
                 
                 {/* ADMIN - Rotas principais */}
                 <Route path="/admin" element={<AdminDashboard />} />
