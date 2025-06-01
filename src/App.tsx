@@ -38,7 +38,8 @@ const App = () => {
     try {
       loadFacebookPixel();
       captureUTMParameters();
-      initializeBuilder(); // Initialize Builder.io
+      // Builder.io já é inicializado automaticamente no import
+      console.log('Builder.io initialized:', builder);
       console.log('App initialized successfully');
     } catch (error) {
       console.error('Erro ao inicializar aplicativo:', error);
