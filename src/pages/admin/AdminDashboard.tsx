@@ -33,6 +33,13 @@ const AdminDashboard = () => {
           />
 
           <DashboardCard
+            title="Analytics de Criativos"
+            description="Analise a performance dos seus criativos"
+            linkTo="/admin/creative-analytics"
+            buttonText="Ver Analytics de Criativos"
+          />
+
+          <DashboardCard
             title="Editor Rápido"
             description="Edite rapidamente as páginas de resultado e oferta"
             linkTo="/admin/quick-editor"
