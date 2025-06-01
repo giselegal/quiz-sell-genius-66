@@ -7,6 +7,7 @@ export interface ImageMetadata {
   url: string;
   quality?: number;
   alt?: string;
+  loadStatus?: 'loading' | 'loaded' | 'error';
 }
 
 export interface ImageCacheEntry {

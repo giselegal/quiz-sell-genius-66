@@ -63,7 +63,7 @@ export const defaultResultTemplate: ResultPageConfig = {
   blocks: []
 };
 
-export const getStyleDefaultConfig = (styleType: string): ResultPageConfig => {
+export const createDefaultConfig = (styleType: string): ResultPageConfig => {
   return {
     ...defaultResultTemplate,
     styleType,
@@ -73,4 +73,8 @@ export const getStyleDefaultConfig = (styleType: string): ResultPageConfig => {
       subtitle: `Descubra tudo sobre o estilo ${styleType} e como usar no seu dia a dia`
     }
   };
+};
+
+export const getStyleDefaultConfig = (styleType: string): ResultPageConfig => {
+  return createDefaultConfig(styleType);
 };
