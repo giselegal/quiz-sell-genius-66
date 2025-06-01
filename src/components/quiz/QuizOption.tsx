@@ -36,44 +36,45 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       const element = optionRef.current;
       
       if (isSelected) {
-        // Adicionar classe de animação
+        // Adicionar classe de animação com efeito mais suave
         setIsAnimating(true);
-        element.style.transform = 'scale(1.02)';
+        element.style.transform = 'scale(1.01)';
         
         if (type === 'text') {
           element.style.borderColor = '#b29670';
+          // Removido boxShadow das imagens - apenas bordas para texto
           element.style.boxShadow = isStrategicOption 
-            ? '0 8px 25px rgba(178, 150, 112, 0.4), 0 0 0 2px rgba(178, 150, 112, 0.2)' 
-            : '0 6px 20px rgba(178, 150, 112, 0.3), 0 0 0 1px rgba(178, 150, 112, 0.15)';
+            ? '0 4px 12px rgba(178, 150, 112, 0.2), 0 0 0 2px rgba(178, 150, 112, 0.15)' 
+            : '0 2px 8px rgba(178, 150, 112, 0.15), 0 0 0 1px rgba(178, 150, 112, 0.1)';
           element.style.backgroundColor = '#faf9f7';
         } else {
           element.style.borderColor = 'transparent';
-          element.style.boxShadow = isStrategicOption 
-            ? '0 15px 35px rgba(0, 0, 0, 0.25), 0 5px 15px rgba(178, 150, 112, 0.2)' 
-            : '0 12px 28px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(178, 150, 112, 0.15)';
+          // Removido boxShadow para imagens
+          element.style.boxShadow = 'none';
         }
         
-        // Efeito de pulse suave
+        // Efeito de pulse mais suave
         setTimeout(() => {
           if (element) {
-            element.style.transform = 'scale(1.01)';
+            element.style.transform = 'scale(1.005)';
           }
-        }, 150);
+        }, 200);
         
         // Reset animação
         setTimeout(() => {
           setIsAnimating(false);
-        }, 300);
+        }, 400);
         
       } else {
         element.style.transform = 'scale(1)';
         if (type === 'text') {
           element.style.borderColor = '#E5E7EB';
-          element.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+          element.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.03)';
           element.style.backgroundColor = '#FEFEFE';
         } else {
           element.style.borderColor = 'transparent';
-          element.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+          // Removido boxShadow para imagens
+          element.style.boxShadow = 'none';
         }
       }
     }
@@ -85,21 +86,21 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         return;
       }
       
-      // Efeito de click imediato
+      // Efeito de click mais suave
       if (optionRef.current) {
         const element = optionRef.current;
-        element.style.transform = 'scale(0.98)';
+        element.style.transform = 'scale(0.995)';
         
         setTimeout(() => {
           if (element) {
-            element.style.transform = isSelected ? 'scale(1)' : 'scale(1.02)';
+            element.style.transform = isSelected ? 'scale(1)' : 'scale(1.005)';
           }
-        }, 100);
+        }, 150);
       }
       
       setTimeout(() => {
         onSelect(option.id);
-      }, 50);
+      }, 75);
     }
   };
   
@@ -115,15 +116,15 @@ const QuizOption: React.FC<QuizOptionProps> = ({
       <div 
         ref={optionRef}
         className={cn(
-          "relative h-full flex flex-col rounded-xl overflow-hidden transition-all duration-300 ease-out",
+          "relative h-full flex flex-col rounded-xl overflow-hidden transition-all duration-500 ease-out",
           
           type === 'text' && "p-4 border-2",
           type !== 'text' && "border-0",
           
-          "bg-[#FEFEFE] shadow-sm",
+          "bg-[#FEFEFE]",
           
-          // Hover effects apenas se não estiver selecionado
-          !isSelected && !isDisabled && "hover:shadow-lg hover:-translate-y-1",
+          // Hover effects mais suaves - apenas se não estiver selecionado
+          !isSelected && !isDisabled && "hover:-translate-y-0.5",
           
           // Efeitos de animação
           isAnimating && "animate-pulse",
@@ -144,8 +145,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
               questionId={questionId || ''}
             />
             
-            {/* Overlay gradiente para melhor legibilidade do texto */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/20 to-transparent h-12 pointer-events-none" />
+            {/* Overlay gradiente mais sutil para melhor legibilidade do texto */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/15 to-transparent h-10 pointer-events-none" />
           </div>
         )}
         
@@ -157,7 +158,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 isStrategicOption && "text-[0.9rem] sm:text-base font-semibold"
               )
             : cn(
-                "leading-relaxed text-[#432818] transition-colors duration-200",
+                "leading-relaxed text-[#432818] transition-colors duration-300",
                 isMobile ? "text-[0.9rem]" : "text-sm sm:text-base",
                 isStrategicOption && "text-[1.1rem] sm:text-lg font-medium",
                 isSelected && "text-[#2d1810]"
@@ -166,14 +167,14 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           {highlightStrategicWords(option.text)}
         </p>
         
-        {/* Indicador de seleção melhorado */}
+        {/* Indicador de seleção melhorado com transição mais suave */}
         {isSelected && (
           <div className={cn(
-            "absolute z-20 flex items-center justify-center transition-all duration-300 ease-out",
+            "absolute z-20 flex items-center justify-center transition-all duration-400 ease-out",
             isStrategicOption 
-              ? "top-2 right-2 h-8 w-8 bg-[#b29670] rounded-full shadow-lg" 
-              : "top-1 right-1 h-6 w-6 bg-[#b29670] rounded-full shadow-md",
-            "animate-in zoom-in-50 duration-200"
+              ? "top-2 right-2 h-8 w-8 bg-[#b29670] rounded-full" 
+              : "top-1 right-1 h-6 w-6 bg-[#b29670] rounded-full",
+            "animate-in zoom-in-50 duration-300"
           )}>
             <Check
               className={cn(
@@ -184,9 +185,9 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           </div>
         )}
         
-        {/* Efeito de brilho ao selecionar */}
+        {/* Efeito de brilho mais suave ao selecionar */}
         {isSelected && (
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-50 animate-shimmer pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-30 animate-shimmer pointer-events-none" />
         )}
       </div>
     </div>
