@@ -62,36 +62,24 @@ export const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps>
               <div className="text-center">
                 <h4 className="text-lg font-medium text-[#432818] mb-3">Antes</h4>
                 <div className="relative">
-                  {currentTransformation.before ? (
-                    <img
-                      src={currentTransformation.before}
-                      alt="Antes da transformação"
-                      className="w-full max-w-[250px] h-[300px] object-cover rounded-lg shadow-md mx-auto"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full max-w-[250px] h-[300px] bg-gray-200 rounded-lg flex items-center justify-center mx-auto">
-                      <span className="text-gray-400">Imagem não disponível</span>
-                    </div>
-                  )}
+                  <img
+                    src={currentTransformation.before}
+                    alt="Antes da transformação"
+                    className="w-full max-w-[250px] h-[300px] object-cover rounded-lg shadow-md mx-auto"
+                    loading="lazy"
+                  />
                 </div>
               </div>
               
               <div className="text-center">
                 <h4 className="text-lg font-medium text-[#432818] mb-3">Depois</h4>
                 <div className="relative">
-                  {currentTransformation.after ? (
-                    <img
-                      src={currentTransformation.after}
-                      alt="Depois da transformação"
-                      className="w-full max-w-[250px] h-[300px] object-cover rounded-lg shadow-md mx-auto"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full max-w-[250px] h-[300px] bg-gray-200 rounded-lg flex items-center justify-center mx-auto">
-                      <span className="text-gray-400">Imagem não disponível</span>
-                    </div>
-                  )}
+                  <img
+                    src={currentTransformation.after}
+                    alt="Depois da transformação"
+                    className="w-full max-w-[250px] h-[300px] object-cover rounded-lg shadow-md mx-auto"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </div>
