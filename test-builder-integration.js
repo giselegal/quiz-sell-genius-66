@@ -13,7 +13,7 @@ console.log('🔧 Testando integração Builder.io...');
 const requiredFiles = [
   'src/utils/builderConfig.ts',
   'src/utils/builderComponentRegistry.ts', 
-  'src/utils/builderAnalytics.ts',
+  'src/utils/builderAnalytics.tsx',
   'src/pages/admin/BuilderDashboard.tsx',
   'src/components/builder/BuilderQuizEditor.tsx'
 ];

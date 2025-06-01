@@ -1,5 +1,5 @@
-// src/utils/builderAnalytics.ts
-import { ComponentType } from 'react';
+// src/utils/builderAnalytics.tsx
+import React, { ComponentType } from 'react';
 
 // Função de tracking que você já tem no projeto
 const trackButtonClick = (trackingId: string, additionalData?: any) => {
