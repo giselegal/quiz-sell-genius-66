@@ -1,5 +1,4 @@
 
-
 export interface HeroSection {
   title: string;
   subtitle: string;
@@ -28,6 +27,8 @@ export interface StyleOptions {
   color?: string;
   backgroundColor?: string;
   padding?: string;
+  paddingY?: string;
+  paddingX?: string;
   margin?: string;
   width?: string;
   borderRadius?: string;
@@ -53,6 +54,7 @@ export interface Section {
   visible: boolean;
   style: StyleOptions;
   content: SectionContent;
+  appearance?: any;
 }
 
 export interface OfferContent {
@@ -86,5 +88,8 @@ export interface ResultPageConfig {
   mainContent: Section;
   secondaryStyles: Section;
   offer: OfferSection;
+  mentor?: any;
 }
 
+// Export all the missing types
+export { OfferContent, StyleOptions };
