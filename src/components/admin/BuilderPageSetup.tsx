@@ -1,10 +1,11 @@
+
 // src/components/admin/BuilderPageSetup.tsx
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { AlertCircle, CheckCircle, ExternalLink, Settings } from 'lucide-react';
-import { createBuilderModels, checkBuilderModels, builderModels } from '@/utils/builderModels';
+import { checkBuilderModels, builderModels } from '@/utils/builderModels';
 
 const BuilderPageSetup: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -31,16 +32,14 @@ const BuilderPageSetup: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const success = await createBuilderModels();
       
-      if (success) {
-        await checkModelsStatus();
-        alert('Modelos criados com sucesso! Agora você pode editar as páginas no Builder.io');
-      } else {
-        setError('Erro ao criar modelos');
-      }
+      // Simular criação de modelos - na prática seria feito via Builder.io dashboard
+      alert('Para criar os modelos, acesse o Builder.io dashboard e crie manualmente os modelos: ' + 
+            Object.values(builderModels).join(', '));
+      
+      await checkModelsStatus();
     } catch (err) {
-      setError('Erro ao criar modelos Builder.io');
+      setError('Erro ao configurar modelos Builder.io');
     } finally {
       setLoading(false);
     }

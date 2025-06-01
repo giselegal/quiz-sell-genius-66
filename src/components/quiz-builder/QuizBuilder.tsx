@@ -130,10 +130,7 @@ export const QuizBuilder: React.FC = () => {
     setPreviewResult(previewResult);
   };
 
-  const handleImportTemplate = (template: QuizTemplate) => {
-    // Convert QuizTemplate to QuizBuilderState
-    const builderState = createBuilderStateFromQuiz(template.questions);
-    
+  const handleImportTemplate = (builderState: QuizBuilderState) => {
     initializeStages(builderState.stages);
     initializeComponents(builderState.components);
     
