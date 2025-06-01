@@ -24,7 +24,9 @@ const LoadingFallback = () => (
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const TestPage = lazy(() => import('./pages/TestPage')); // Página de teste
 const ResultPage = lazy(() => import('./pages/ResultPage')); // Versão original
+const ResultPageWithBuilder = lazy(() => import('./pages/ResultPageWithBuilder')); // Versão Builder.io
 const QuizOfferPage = lazy(() => import('./components/QuizOfferPage')); // Versão original
+const QuizOfferPageWithBuilder = lazy(() => import('./pages/QuizOfferPageWithBuilder')); // Versão Builder.io
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
 const QuickVisualEditor = lazy(() => import('./components/quick-editor/QuickVisualEditor'));
@@ -87,10 +89,10 @@ const App = () => {
                 <Route path="/admin/builder-setup" element={<BuilderPageSetup />} /> {/* Setup páginas A/B */}
                 
                 {/* RESULTADO - Página de resultados */}
-                <Route path="/resultado" element={<ResultPage />} />
+                <Route path="/resultado" element={<ResultPageWithBuilder />} />
                 
                 {/* OFERTA - Página de oferta */}
-                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPageWithBuilder />} />
                 
                 {/* Redirecionamentos */}
                 <Route path="/home" element={<Navigate to="/" replace />} />
