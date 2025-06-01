@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { captureUTMParameters } from './utils/analytics';
 import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { builder } from './utils/builderConfig'; // Builder.io initialization
+import { initializeBuilder } from './utils/builderConfig'; // Builder.io initialization
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -38,8 +38,15 @@ const App = () => {
     try {
       loadFacebookPixel();
       captureUTMParameters();
-      // Builder.io já é inicializado automaticamente no import
-      console.log('Builder.io initialized:', builder);
+      // Temporariamente desabilitado para debug
+      // setTimeout(() => {
+      //   try {
+      //     initializeBuilder();
+      //     console.log('Builder.io initialized successfully');
+      //   } catch (error) {
+      //     console.warn('Builder.io não pôde ser inicializado:', error);
+      //   }
+      // }, 100);
       console.log('App initialized successfully');
     } catch (error) {
       console.error('Erro ao inicializar aplicativo:', error);
