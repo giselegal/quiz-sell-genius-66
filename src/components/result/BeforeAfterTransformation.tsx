@@ -103,3 +103,5 @@ export const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps>
     </div>
   );
 };
+
+export default BeforeAfterTransformation;

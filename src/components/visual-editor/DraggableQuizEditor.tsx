@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { cn } from '@/lib/utils';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { PlusCircle, Trash2, Copy, Eye, Move, Settings } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, Label, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/card';
+import { PlusCircle, Trash2, Copy, Eye, Move, Settings, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QuestionOptionEditor from '../quiz-editor/QuestionOptionEditor';
 import { QuizOption as QuizOptionComponent } from '../quiz/QuizOption';
@@ -288,10 +288,96 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
 interface DraggableQuizEditorProps {
   questions: QuizQuestion[];
   onQuestionsChange: (questions: QuizQuestion[]) => void;
+  onSave?: (questions: QuizQuestion[]) => void;
 }
 
-const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, onQuestionsChange }) => {
+const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({
+  questions: initialQuestions = [],
+  onQuestionsChange,
+  onSave
+}) => {
+  const [questions, setQuestions] = useState<QuizQuestion[]>(initialQuestions);
+  const [draggedQuestionId, setDraggedQuestionId] = useState<string | null>(null);
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
+
+  useEffect(() => {
+    if (onQuestionsChange) {
+      onQuestionsChange(questions);
+    }
+  }, [questions, onQuestionsChange]);
+
+  const createNewQuestion = (): QuizQuestion => {
+    return {
+      id: generateId(),
+      title: 'Nova Pergunta',
+      subtitle: '',
+      imageUrl: '',
+      options: [],
+      multiSelect: 1,
+      type: 'single' as const
+    };
+  };
+
+  const addQuestion = () => {
+    const newQuestion = createNewQuestion();
+    const updatedQuestions = [...questions, newQuestion];
+    setQuestions(updatedQuestions);
+    onQuestionsChange?.(updatedQuestions);
+    setEditingQuestionId(newQuestion.id);
+  };
+
+  const updateQuestion = (questionId: string, updates: Partial<QuizQuestion>) => {
+    const updatedQuestions = questions.map(q =>
+      q.id === questionId ? { ...q, ...updates } : q
+    );
+    setQuestions(updatedQuestions);
+    onQuestionsChange?.(updatedQuestions);
+  };
+
+  const deleteQuestion = (questionId: string) => {
+    const updatedQuestions = questions.filter(q => q.id !== questionId);
+    setQuestions(updatedQuestions);
+    onQuestionsChange?.(updatedQuestions);
+    if (editingQuestionId === questionId) {
+      setEditingQuestionId(null);
+    }
+  };
+
+  const addOptionToQuestion = (questionId: string) => {
+    const newOption: QuizOption = {
+      id: generateId(),
+      text: 'Nova opção',
+      styleCategory: 'Natural',
+      points: 1
+    };
+
+    updateQuestion(questionId, {
+      options: [
+        ...(questions.find(q => q.id === questionId)?.options || []),
+        newOption
+      ]
+    });
+  };
+
+  const updateQuestionOption = (questionId: string, optionId: string, updates: Partial<QuizOption>) => {
+    const question = questions.find(q => q.id === questionId);
+    if (!question) return;
+
+    const updatedOptions = question.options.map(option =>
+      option.id === optionId ? { ...option, ...updates } : option
+    );
+
+    updateQuestion(questionId, { options: updatedOptions });
+  };
+
+  const deleteQuestionOption = (questionId: string, optionId: string) => {
+    const question = questions.find(q => q.id === questionId);
+    if (!question) return;
+
+    const updatedOptions = question.options.filter(option => option.id !== optionId);
+    updateQuestion(questionId, { options: updatedOptions });
+  };
 
   const moveQuestion = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -299,7 +385,8 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
       const newQuestions = [...questions];
       newQuestions.splice(dragIndex, 1);
       newQuestions.splice(hoverIndex, 0, draggedQuestion);
-      onQuestionsChange(newQuestions);
+      setQuestions(newQuestions);
+      onQuestionsChange?.(newQuestions);
     },
     [questions, onQuestionsChange]
   );
@@ -309,7 +396,8 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
       const newQuestions = questions.map((q) =>
         q.id === id ? { ...q, ...updates } : q
       );
-      onQuestionsChange(newQuestions);
+      setQuestions(newQuestions);
+      onQuestionsChange?.(newQuestions);
     },
     [questions, onQuestionsChange]
   );
@@ -317,9 +405,13 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
   const deleteQuestion = useCallback(
     (id: string) => {
       const newQuestions = questions.filter((q) => q.id !== id);
-      onQuestionsChange(newQuestions);
+      setQuestions(newQuestions);
+      onQuestionsChange?.(newQuestions);
+      if (editingQuestionId === id) {
+        setEditingQuestionId(null);
+      }
     },
-    [questions, onQuestionsChange]
+    [questions, onQuestionsChange, editingQuestionId]
   );
 
   const duplicateQuestion = useCallback(
@@ -334,7 +426,8 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
             id: `option-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           })),
         };
-        onQuestionsChange([...questions, duplicatedQuestion]);
+        setQuestions([...questions, duplicatedQuestion]);
+        onQuestionsChange?.([...questions, duplicatedQuestion]);
       }
     },
     [questions, onQuestionsChange]
@@ -352,7 +445,8 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
         }
         return q;
       });
-      onQuestionsChange(newQuestions);
+      setQuestions(newQuestions);
+      onQuestionsChange?.(newQuestions);
     },
     [questions, onQuestionsChange]
   );
@@ -376,7 +470,8 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
         }
         return q;
       });
-      onQuestionsChange(newQuestions);
+      setQuestions(newQuestions);
+      onQuestionsChange?.(newQuestions);
     },
     [questions, onQuestionsChange]
   );
@@ -394,7 +489,8 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
         }
         return q;
       });
-      onQuestionsChange(newQuestions);
+      setQuestions(newQuestions);
+      onQuestionsChange?.(newQuestions);
     },
     [questions, onQuestionsChange]
   );
@@ -410,80 +506,290 @@ const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, on
         }
         return q;
       });
-      onQuestionsChange(newQuestions);
+      setQuestions(newQuestions);
+      onQuestionsChange?.(newQuestions);
     },
     [questions, onQuestionsChange]
   );
 
-  const addQuestion = useCallback(() => {
-    const newQuestion: QuizQuestion = {
-      id: `question-${Date.now()}`,
-      title: 'Nova pergunta',
-      type: 'text',
-      multiSelect: 1,
-      options: [
-        {
-          id: `option-${Date.now()}-1`,
-          text: 'Opção 1',
-          styleCategory: 'Natural',
-          points: 1,
-        },
-        {
-          id: `option-${Date.now()}-2`,
-          text: 'Opção 2',
-          styleCategory: 'Clássico',
-          points: 1,
-        },
-      ],
-    };
-    onQuestionsChange([...questions, newQuestion]);
-  }, [questions, onQuestionsChange]);
+  const handleQuestionTypeChange = (questionId: string, newType: QuizQuestion['type']) => {
+    updateQuestion(questionId, { type: newType });
+  };
+
+  const renderQuestionEditor = (question: QuizQuestion) => {
+    return (
+      <Card key={question.id} className="mb-4 border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg">Pergunta {questions.indexOf(question) + 1}</CardTitle>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setEditingQuestionId(editingQuestionId === question.id ? null : question.id)}
+              >
+                {editingQuestionId === question.id ? 'Fechar' : 'Editar'}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => deleteQuestion(question.id)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent>
+          {editingQuestionId === question.id ? (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor={`title-${question.id}`}>Título</Label>
+                <Input
+                  id={`title-${question.id}`}
+                  value={question.title}
+                  onChange={(e) => updateQuestion(question.id, { title: e.target.value })}
+                  placeholder="Digite o título da pergunta"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor={`subtitle-${question.id}`}>Subtítulo</Label>
+                <Input
+                  id={`subtitle-${question.id}`}
+                  value={question.subtitle || ''}
+                  onChange={(e) => updateQuestion(question.id, { subtitle: e.target.value })}
+                  placeholder="Digite o subtítulo (opcional)"
+                />
+              </div>
+
+              <div>
+                <Label>Tipo de Pergunta</Label>
+                <Select
+                  value={question.type}
+                  onValueChange={(value: QuizQuestion['type']) => handleQuestionTypeChange(question.id, value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="single">Escolha única</SelectItem>
+                    <SelectItem value="multiple">Múltipla escolha</SelectItem>
+                    <SelectItem value="text">Texto livre</SelectItem>
+                    <SelectItem value="both">Mista</SelectItem>
+                    <SelectItem value="image">Apenas imagem</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {question.type === 'multiple' && (
+                <div>
+                  <Label htmlFor={`multiSelect-${question.id}`}>Número máximo de seleções</Label>
+                  <Input
+                    id={`multiSelect-${question.id}`}
+                    type="number"
+                    min="2"
+                    max={question.options.length}
+                    value={question.multiSelect || 2}
+                    onChange={(e) => updateQuestion(question.id, { multiSelect: parseInt(e.target.value) || 2 })}
+                  />
+                </div>
+              )}
+
+              {/* Options Section */}
+              {['single', 'multiple', 'both', 'image'].includes(question.type) && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-medium">Opções</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => addOptionToQuestion(question.id)}
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Adicionar Opção
+                    </Button>
+                  </div>
+
+                  {question.options.map((option, optionIndex) => (
+                    <Card key={option.id} className="p-3 bg-gray-50">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="font-medium">Opção {optionIndex + 1}</Label>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => deleteQuestionOption(question.id, option.id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+
+                        <div>
+                          <Label>Texto</Label>
+                          <Input
+                            value={option.text}
+                            onChange={(e) => updateQuestionOption(question.id, option.id, { text: e.target.value })}
+                            placeholder="Digite o texto da opção"
+                          />
+                        </div>
+
+                        <div>
+                          <Label>Categoria de Estilo</Label>
+                          <Select
+                            value={option.styleCategory}
+                            onValueChange={(value: QuizOption['styleCategory']) => 
+                              updateQuestionOption(question.id, option.id, { styleCategory: value })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Natural">Natural</SelectItem>
+                              <SelectItem value="Clássico">Clássico</SelectItem>
+                              <SelectItem value="Contemporâneo">Contemporâneo</SelectItem>
+                              <SelectItem value="Elegante">Elegante</SelectItem>
+                              <SelectItem value="Romântico">Romântico</SelectItem>
+                              <SelectItem value="Sexy">Sexy</SelectItem>
+                              <SelectItem value="Dramático">Dramático</SelectItem>
+                              <SelectItem value="Criativo">Criativo</SelectItem>
+                              <SelectItem value="Strategic">Strategic</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label>Pontos</Label>
+                          <Input
+                            type="number"
+                            min="0"
+                            max="10"
+                            value={option.points || 1}
+                            onChange={(e) => updateQuestionOption(question.id, option.id, { points: parseInt(e.target.value) || 1 })}
+                          />
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <h3 className="font-medium">{question.title}</h3>
+              {question.subtitle && <p className="text-sm text-gray-600">{question.subtitle}</p>}
+              <p className="text-xs text-gray-500">Tipo: {question.type} | Opções: {question.options.length}</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const handleSave = () => {
+    // Validate questions before saving
+    const validQuestions = questions.filter(question => {
+      if (!question.title.trim()) return false;
+      if (['single', 'multiple', 'both', 'image'].includes(question.type) && question.options.length < 2) return false;
+      return true;
+    });
+
+    if (validQuestions.length !== questions.length) {
+      alert('Algumas perguntas estão incompletas e não serão salvas. Verifique se todas têm título e pelo menos 2 opções.');
+    }
+
+    onSave?.(validQuestions);
+  };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-playfair text-[#432818]">Editor de Quiz</h2>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setPreviewMode(!previewMode)}
-              className="flex items-center gap-2"
-            >
-              <Eye className="h-4 w-4" />
-              {previewMode ? 'Modo Edição' : 'Pré-visualizar'}
-            </Button>
-          </div>
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Editor de Quiz Visual</h1>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            onClick={() => setPreviewMode(!previewMode)}
+          >
+            <Eye className="w-4 h-4 mr-2" />
+            {previewMode ? 'Editar' : 'Visualizar'}
+          </Button>
+          <Button onClick={handleSave}>
+            <Save className="w-4 h-4 mr-2" />
+            Salvar Quiz
+          </Button>
         </div>
+      </div>
 
-        <div className="space-y-4">
+      {previewMode ? (
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold mb-4">Visualização do Quiz</h2>
           {questions.map((question, index) => (
-            <QuestionBlock
-              key={question.id}
-              question={question}
-              index={index}
-              moveQuestion={moveQuestion}
-              updateQuestion={updateQuestion}
-              deleteQuestion={deleteQuestion}
-              duplicateQuestion={duplicateQuestion}
-              moveOption={moveOption}
-              addOption={addOption}
-              updateOption={updateOption}
-              deleteOption={deleteOption}
-              previewMode={previewMode}
-            />
+            <Card key={question.id} className="p-6">
+              <div className="mb-4">
+                <h3 className="text-lg font-medium mb-2">{question.title}</h3>
+                {question.subtitle && <p className="text-gray-600 mb-4">{question.subtitle}</p>}
+              </div>
+              
+              {question.type === 'text' ? (
+                <textarea
+                  placeholder="Digite sua resposta aqui..."
+                  className="w-full p-3 border rounded-md"
+                  rows={3}
+                  disabled
+                />
+              ) : (
+                <div className="space-y-2">
+                  {question.options.map((option) => (
+                    <label key={option.id} className="flex items-center space-x-3 p-3 border rounded-md hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type={question.type === 'multiple' ? 'checkbox' : 'radio'}
+                        name={`question-${question.id}`}
+                        disabled
+                        className="form-checkbox"
+                      />
+                      <span>{option.text}</span>
+                      {option.imageUrl && (
+                        <img src={option.imageUrl} alt={option.text} className="w-16 h-16 object-cover rounded" />
+                      )}
+                    </label>
+                  ))}
+                </div>
+              )}
+            </Card>
           ))}
         </div>
+      ) : (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Perguntas ({questions.length})</h2>
+            <Button onClick={addQuestion}>
+              <Plus className="w-4 h-4 mr-2" />
+              Adicionar Pergunta
+            </Button>
+          </div>
 
-        <Button
-          onClick={addQuestion}
-          className="mt-6 bg-[#B89B7A] hover:bg-[#A38A69] text-white"
-        >
-          <PlusCircle className="h-4 w-4 mr-2" />
-          Adicionar Pergunta
-        </Button>
-      </div>
-    </DndProvider>
+          {questions.length === 0 ? (
+            <Card className="p-8 text-center">
+              <p className="text-gray-500 mb-4">Nenhuma pergunta criada ainda</p>
+              <Button onClick={addQuestion}>
+                <Plus className="w-4 h-4 mr-2" />
+                Criar Primeira Pergunta
+              </Button>
+            </Card>
+          ) : (
+            <div className="space-y-4">
+              {questions.map(renderQuestionEditor)}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

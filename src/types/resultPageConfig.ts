@@ -1,4 +1,5 @@
 
+
 export interface HeroSection {
   title: string;
   subtitle: string;
@@ -18,6 +19,61 @@ export interface GlobalStyles {
   secondaryColor?: string;
   fontFamily?: string;
   backgroundColor?: string;
+  textColor?: string;
+}
+
+export interface StyleOptions {
+  fontSize?: string;
+  fontWeight?: string;
+  color?: string;
+  backgroundColor?: string;
+  padding?: string;
+  margin?: string;
+  width?: string;
+  borderRadius?: string;
+  textAlign?: string;
+  fontFamily?: string;
+}
+
+export interface SectionContent {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  userName?: string;
+  customImage?: string;
+  price?: string;
+  regularPrice?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  imageUrl?: string;
+  [key: string]: any;
+}
+
+export interface Section {
+  visible: boolean;
+  style: StyleOptions;
+  content: SectionContent;
+}
+
+export interface OfferContent {
+  title?: string;
+  subtitle?: string;
+  price?: string;
+  regularPrice?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  heroImage?: string;
+  heroImage2?: string;
+  [key: string]: any;
+}
+
+export interface OfferSection {
+  hero: Section;
+  products: Section;
+  benefits: Section;
+  pricing: Section;
+  testimonials: Section;
+  guarantee: Section;
 }
 
 export interface ResultPageConfig {
@@ -26,4 +82,9 @@ export interface ResultPageConfig {
   aboutSection: AboutSection;
   globalStyles?: GlobalStyles;
   blocks?: any[];
+  header: Section;
+  mainContent: Section;
+  secondaryStyles: Section;
+  offer: OfferSection;
 }
+
