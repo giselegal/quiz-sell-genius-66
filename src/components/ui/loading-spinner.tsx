@@ -1,47 +1,32 @@
+
 import React from 'react';
-import './loading-spinner.css';
+import { cn } from '@/lib/utils';
 
 interface LoadingSpinnerProps {
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg';
   color?: string;
   className?: string;
-  thickness?: 'thin' | 'normal' | 'thick';
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = 'md',
-  color = '#B89B7A',
-  className = '',
-  thickness = 'normal'
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
+  size = 'md', 
+  color = '#3B82F6',
+  className 
 }) => {
-  const sizeMap = {
-    xs: 'w-2 h-2', // Reduzido de w-3 h-3
-    sm: 'w-4 h-4', // Reduzido de w-5 h-5
-    md: 'w-6 h-6', // Reduzido de w-8 h-8
-    lg: 'w-10 h-10', // Reduzido de w-12 h-12
-    xl: 'w-14 h-14' // Reduzido de w-16 h-16
+  const sizeClasses = {
+    sm: 'h-4 w-4',
+    md: 'h-8 w-8', 
+    lg: 'h-12 w-12'
   };
-
-  const thicknessMap = {
-    thin: 'border-2',
-    normal: 'border-3', // Reduzido de border-4 para border-3
-    thick: 'border-[5px]' // Reduzido de border-[6px] para border-[5px]
-  };
-
-  const sizeClass = sizeMap[size] || sizeMap.md;
-  const thicknessClass = thicknessMap[thickness] || thicknessMap.normal;
 
   return (
-    <div className={`flex justify-center items-center ${className}`} role="status" aria-label="Loading">
-      <div
-        className={`${sizeClass} ${thicknessClass} rounded-full elegant-spinner`}
-        style={{
-          borderColor: `${color} transparent transparent transparent`,
-          willChange: 'transform',
-          transform: 'translateZ(0)',  // Força aceleração por hardware
-          backfaceVisibility: 'hidden' // Evita problemas de renderização
-        }}
-      />
-    </div>
+    <div 
+      className={cn(
+        'animate-spin rounded-full border-2 border-gray-300 border-t-current',
+        sizeClasses[size],
+        className
+      )}
+      style={{ borderTopColor: color }}
+    />
   );
 };

@@ -1,62 +1,31 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-interface User {
-  userName: string;
-  email?: string; // Added email as optional property
-  role?: string;  // Added role property for admin access
-}
+import React, { createContext, useContext, ReactNode } from 'react';
 
 interface AuthContextType {
-  user: User | null;
-  login: (name: string, email?: string) => void;
+  user: any;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const savedName = localStorage.getItem('userName');
-    const savedEmail = localStorage.getItem('userEmail');
-    const savedRole = localStorage.getItem('userRole');
-    
-    return savedName ? { 
-      userName: savedName,
-      ...(savedEmail && { email: savedEmail }),
-      ...(savedRole && { role: savedRole })
-    } : null;
-  });
-
-  const login = (name: string, email?: string) => {
-    const userData: User = { 
-      userName: name 
-    };
-    
-    if (email) {
-      userData.email = email;
-      localStorage.setItem('userEmail', email);
-    }
-    
-    // Preservar o status de admin caso exista
-    const savedRole = localStorage.getItem('userRole');
-    if (savedRole) {
-      userData.role = savedRole;
-    }
-    
-    setUser(userData);
-    localStorage.setItem('userName', name);
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userRole');
+  console.log('🔐 AuthProvider carregando...');
+  
+  const contextValue: AuthContextType = {
+    user: null,
+    login: async (email: string, password: string) => {
+      console.log('Login attempt:', email);
+    },
+    logout: () => {
+      console.log('Logout');
+    },
+    isAuthenticated: false
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,67 +1,33 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
-import { useToast } from '@/components/ui/use-toast';
-import { QuizResult, StyleResult } from '@/types/quiz';
 
-// Define the context type
 type QuizContextType = ReturnType<typeof useQuizLogic> & {
   startQuiz: (name: string, email: string, quizId: string) => Promise<any>;
   submitAnswers: (answers: Array<{ questionId: string; optionId: string; points: number }>) => Promise<void>;
-  submitResults: (results: QuizResult) => Promise<void>;
+  submitResults: (results: any) => Promise<void>;
 };
 
-// Create context with undefined default
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
 
-// Provider component
 export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  console.log('🎯 QuizProvider carregando...');
   const quizLogic = useQuizLogic();
-  const { toast } = useToast();
   
-  // Define all context functions before returning the provider
   const startQuiz = async (name: string, email: string, quizId: string) => {
-    try {
-      console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
-      return { id: '1', name, email };
-    } catch (error) {
-      toast({
-        title: "Erro ao iniciar o quiz",
-        description: "Por favor, tente novamente.",
-        variant: "destructive",
-      });
-      throw error;
-    }
+    console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
+    return { id: '1', name, email };
   };
 
   const submitAnswers = async (answers: Array<{ questionId: string; optionId: string; points: number }>) => {
-    try {
-      console.log('Submitting answers:', answers);
-    } catch (error) {
-      toast({
-        title: "Erro ao salvar respostas",
-        description: "Por favor, tente novamente.",
-        variant: "destructive",
-      });
-      throw error;
-    }
+    console.log('Submitting answers:', answers);
   };
 
-  const submitResults = async (results: QuizResult) => {
-    try {
-      console.log("Results submitted:", results);
-      window.location.href = '/resultado';
-    } catch (error) {
-      toast({
-        title: "Erro ao salvar resultados",
-        description: "Por favor, tente novamente.",
-        variant: "destructive",
-      });
-      throw error;
-    }
+  const submitResults = async (results: any) => {
+    console.log("Results submitted:", results);
+    window.location.href = '/resultado';
   };
   
-  // Spread quizLogic and add our additional functions
   const contextValue = {
     ...quizLogic,
     startQuiz,
@@ -69,7 +35,6 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     submitResults
   };
   
-  // Return the provider
   return (
     <QuizContext.Provider value={contextValue}>
       {children}
@@ -77,7 +42,6 @@ export const QuizProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-// Hook for using the context
 export const useQuizContext = () => {
   const context = useContext(QuizContext);
   if (context === undefined) {
@@ -86,11 +50,8 @@ export const useQuizContext = () => {
   return context;
 };
 
-// Export a simplification of the context
 export const useQuiz = () => {
-  const { toast } = useToast();
-  
-  const getQuizResult = (): { primaryStyle: StyleResult; secondaryStyles: StyleResult[] } | null => {
+  const getQuizResult = () => {
     try {
       const savedResult = localStorage.getItem('quizResult');
       if (savedResult) {
@@ -112,46 +73,17 @@ export const useQuiz = () => {
   return {
     ...quizResult,
     startQuiz: async (name: string, email: string, quizId: string) => {
-      try {
-        console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
-        return { id: '1', name, email };
-      } catch (error) {
-        toast({
-          title: "Erro ao iniciar o quiz",
-          description: "Por favor, tente novamente.",
-          variant: "destructive",
-        });
-        throw error;
-      }
+      console.log(`Starting quiz for ${name} (${email}) with quiz ID ${quizId}`);
+      return { id: '1', name, email };
     },
     
-    submitAnswers: async (
-      answers: Array<{ questionId: string; optionId: string; points: number }>
-    ) => {
-      try {
-        console.log('Submitting answers:', answers);
-      } catch (error) {
-        toast({
-          title: "Erro ao salvar respostas",
-          description: "Por favor, tente novamente.",
-          variant: "destructive",
-        });
-        throw error;
-      }
+    submitAnswers: async (answers: Array<{ questionId: string; optionId: string; points: number }>) => {
+      console.log('Submitting answers:', answers);
     },
     
-    submitResults: async (results: QuizResult) => {
-      try {
-        console.log("Results submitted:", results);
-        window.location.href = '/resultado';
-      } catch (error) {
-        toast({
-          title: "Erro ao salvar resultados",
-          description: "Por favor, tente novamente.",
-          variant: "destructive",
-        });
-        throw error;
-      }
+    submitResults: async (results: any) => {
+      console.log("Results submitted:", results);
+      window.location.href = '/resultado';
     }
   };
 };
