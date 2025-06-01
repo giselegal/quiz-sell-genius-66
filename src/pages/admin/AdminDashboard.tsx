@@ -26,6 +26,13 @@ const AdminDashboard = () => {
           />
 
           <DashboardCard
+            title="Métricas Completas"
+            description="Acesse todas as métricas detalhadas"
+            linkTo="/admin/analytics" // Reutilizando a página de analytics existente
+            buttonText="Ver Métricas"
+          />
+
+          <DashboardCard
             title="Editor Rápido"
             description="Edite rapidamente as páginas de resultado e oferta"
             linkTo="/admin/quick-editor"
