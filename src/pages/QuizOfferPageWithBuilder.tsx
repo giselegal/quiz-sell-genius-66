@@ -2,6 +2,7 @@
 import React from 'react';
 import { useBuilderContent } from '@/hooks/useBuilderContent';
 import { BuilderComponent } from '@builder.io/react';
+import BuilderQuizOfferPage from '@/components/builder/BuilderQuizOfferPage';
 import QuizOfferPage from '@/components/QuizOfferPage';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
