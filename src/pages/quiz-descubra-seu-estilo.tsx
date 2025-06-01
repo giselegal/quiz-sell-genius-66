@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -131,7 +130,6 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
         <CardContent className="p-6">
           {questions && questions.length > 0 ? (
             <QuizContent
-              quizId={QUIZ_ID}
               questions={questions}
               onComplete={handleComplete}
             />
