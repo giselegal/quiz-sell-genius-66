@@ -40,6 +40,13 @@ const AdminDashboard = () => {
           />
 
           <DashboardCard
+            title="Testes A/B"
+            description="Gerencie e configure seus testes A/B"
+            linkTo="/admin/ab-tests"
+            buttonText="Gerenciar Testes A/B"
+          />
+
+          <DashboardCard
             title="Editor Rápido"
             description="Edite rapidamente as páginas de resultado e oferta"
             linkTo="/admin/quick-editor"
