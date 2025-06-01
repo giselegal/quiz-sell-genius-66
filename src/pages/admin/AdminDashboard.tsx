@@ -19,6 +19,13 @@ const AdminDashboard = () => {
           />
 
           <DashboardCard
+            title="Analytics Principal"
+            description="Visualize as métricas principais"
+            linkTo="/admin/analytics"
+            buttonText="Ver Analytics"
+          />
+
+          <DashboardCard
             title="Editor Rápido"
             description="Edite rapidamente as páginas de resultado e oferta"
             linkTo="/admin/quick-editor"
