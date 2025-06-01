@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, Suspense, lazy } from 'react';
+import React, { useEffect, useState, Suspense, lazy, useMemo } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -21,13 +21,49 @@ import { useAuth } from '@/context/AuthContext';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import ProgressiveImage from '@/components/ui/progressive-image';
 
-// Seções carregadas via lazy para melhor performance
-const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation4'));
-const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
-const BonusSection = lazy(() => import('@/components/result/BonusSection'));
-const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
-const GuaranteeSection = lazy(() => import('@/components/result/GuaranteeSection'));
+// Lazy load components com preload inteligente
+const BeforeAfterTransformation = lazy(() => 
+  import('@/components/result/BeforeAfterTransformation4').then(module => {
+    // Preload próximo componente
+    import('@/components/result/MotivationSection');
+    return module;
+  })
+);
+
+const MotivationSection = lazy(() => 
+  import('@/components/result/MotivationSection').then(module => {
+    import('@/components/result/BonusSection');
+    return module;
+  })
+);
+
+const BonusSection = lazy(() => 
+  import('@/components/result/BonusSection').then(module => {
+    import('@/components/quiz-result/sales/Testimonials');
+    return module;
+  })
+);
+
+const Testimonials = lazy(() => 
+  import('@/components/quiz-result/sales/Testimonials').then(module => {
+    import('@/components/result/GuaranteeSection');
+    return module;
+  })
+);
+
+const GuaranteeSection = lazy(() => 
+  import('@/components/result/GuaranteeSection').then(module => {
+    import('@/components/result/MentorSection');
+    return module;
+  })
+);
+
 const MentorSection = lazy(() => import('@/components/result/MentorSection'));
+
+// Componente de fallback otimizado
+const SectionFallback = () => (
+  <div className="w-full h-32 bg-gray-50 rounded-lg animate-pulse mb-6" />
+);
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -36,42 +72,98 @@ const ResultPage: React.FC = () => {
   const [imagesLoaded, setImagesLoaded] = useState({ style: false, guide: false });
   const isLowPerformance = useIsLowPerformanceDevice();
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [sectionsInView, setSectionsInView] = useState(new Set(['main']));
   
   const { isLoading, completeLoading } = useLoadingState({
-    minDuration: isLowPerformance ? 50 : 200, // Reduzido drasticamente
+    minDuration: isLowPerformance ? 100 : 300,
     disableTransitions: isLowPerformance
   });
+
+  // Memoizar dados do estilo para evitar recálculos
+  const styleData = useMemo(() => {
+    if (!primaryStyle) return null;
+    const { category } = primaryStyle;
+    return {
+      category,
+      ...styleConfig[category]
+    };
+  }, [primaryStyle]);
+
+  // Preload de imagens críticas
+  useEffect(() => {
+    if (!styleData) return;
+    
+    const preloadImages = async () => {
+      const promises = [
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            setImagesLoaded(prev => ({ ...prev, style: true }));
+            resolve(null);
+          };
+          img.onerror = resolve;
+          img.src = styleData.image;
+        }),
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            setImagesLoaded(prev => ({ ...prev, guide: true }));
+            resolve(null);
+          };
+          img.onerror = resolve;
+          img.src = styleData.guideImage;
+        })
+      ];
+      
+      // Timeout de segurança
+      const timeout = setTimeout(() => {
+        setImagesLoaded({ style: true, guide: true });
+      }, 1500);
+      
+      await Promise.allSettled(promises);
+      clearTimeout(timeout);
+    };
+
+    preloadImages();
+  }, [styleData]);
+
+  // Observer para lazy loading das seções
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setSectionsInView(prev => new Set([...prev, entry.target.id]));
+          }
+        });
+      },
+      { 
+        threshold: 0.1,
+        rootMargin: '100px 0px'
+      }
+    );
+
+    // Observar seções principais
+    const sections = ['before-after', 'motivation', 'bonus', 'testimonials', 'guarantee', 'mentor'];
+    sections.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
     
-    // Carregamento instantâneo se já pré-carregado
-    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
-    if (hasPreloadedResults) {
-      setImagesLoaded({ style: true, guide: true });
+    if (imagesLoaded.style && imagesLoaded.guide) {
       completeLoading();
-      return;
     }
-    
-    // Timeout de segurança muito reduzido
-    const safetyTimeout = setTimeout(() => {
-      setImagesLoaded({ style: true, guide: true });
-      completeLoading();
-    }, 1000); // Reduzido de 2500ms para 1000ms
-
-    return () => clearTimeout(safetyTimeout);
-  }, [primaryStyle, globalStyles.logo, completeLoading]);
+  }, [primaryStyle, globalStyles.logo, completeLoading, imagesLoaded]);
   
-  useEffect(() => {
-    if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
-  }, [imagesLoaded, completeLoading]);
-  
-  if (!primaryStyle) return <ErrorState />;
+  if (!primaryStyle || !styleData) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
-  
-  const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
   
   const handleCTAClick = () => {
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
@@ -85,13 +177,19 @@ const ResultPage: React.FC = () => {
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
       {/* Background elements otimizados */}
-      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#B89B7A]/3 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4"></div>
-      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[#aa6b5d]/3 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4"></div>
+      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#B89B7A]/3 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4 will-change-transform"></div>
+      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[#aa6b5d]/3 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4 will-change-transform"></div>
       
-      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
+      <Header 
+        primaryStyle={primaryStyle} 
+        logoHeight={globalStyles.logoHeight} 
+        logo={globalStyles.logo} 
+        logoAlt={globalStyles.logoAlt} 
+        userName={user?.userName} 
+      />
 
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-4xl relative z-10">
-        {/* Card principal otimizado para mobile */}
+        {/* Card principal otimizado */}
         <Card className="p-4 sm:p-6 mb-6 sm:mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
             <div className="text-center mb-6 sm:mb-8">
@@ -113,7 +211,7 @@ const ResultPage: React.FC = () => {
             <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
               <div className="space-y-3 sm:space-y-4 order-2 md:order-1">
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={200}>
-                  <p className="text-[#432818] leading-relaxed text-sm sm:text-base">{description}</p>
+                  <p className="text-[#432818] leading-relaxed text-sm sm:text-base">{styleData.description}</p>
                 </AnimatedWrapper>
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={300}>
                   <div className="bg-white rounded-lg p-3 sm:p-4 shadow-sm border border-[#B89B7A]/10">
@@ -126,8 +224,8 @@ const ResultPage: React.FC = () => {
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={250} className="order-1 md:order-2">
                 <div className="max-w-[180px] sm:max-w-[220px] md:max-w-[260px] mx-auto relative">
                   <ProgressiveImage 
-                    src={image} 
-                    alt={`Estilo ${category}`} 
+                    src={styleData.image} 
+                    alt={`Estilo ${styleData.category}`} 
                     width={260} 
                     height={325} 
                     className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
@@ -144,8 +242,8 @@ const ResultPage: React.FC = () => {
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
               <div className="mt-6 sm:mt-8 max-w-[90%] sm:max-w-[480px] md:max-w-[540px] mx-auto relative">
                 <ProgressiveImage 
-                  src={guideImage} 
-                  alt={`Guia de Estilo ${category}`} 
+                  src={styleData.guideImage} 
+                  alt={`Guia de Estilo ${styleData.category}`} 
                   loading="lazy" 
                   className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" 
                   onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
@@ -158,42 +256,78 @@ const ResultPage: React.FC = () => {
           </AnimatedWrapper>
         </Card>
 
-        {/* Seções lazy-loaded */}
-        <Suspense fallback={<LoadingSpinner size="lg" className="mx-auto py-6" />}>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={500}>
-            <BeforeAfterTransformation handleCTAClick={handleCTAClick} />
-          </AnimatedWrapper>
-        </Suspense>
+        {/* Seções lazy-loaded com Observer */}
+        <div id="before-after">
+          {sectionsInView.has('before-after') ? (
+            <Suspense fallback={<SectionFallback />}>
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={500}>
+                <BeforeAfterTransformation handleCTAClick={handleCTAClick} />
+              </AnimatedWrapper>
+            </Suspense>
+          ) : (
+            <SectionFallback />
+          )}
+        </div>
 
-        <Suspense fallback={<div className="h-4" />}>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={600}>
-            <MotivationSection />
-          </AnimatedWrapper>
-        </Suspense>
+        <div id="motivation">
+          {sectionsInView.has('motivation') ? (
+            <Suspense fallback={<SectionFallback />}>
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={600}>
+                <MotivationSection />
+              </AnimatedWrapper>
+            </Suspense>
+          ) : (
+            <SectionFallback />
+          )}
+        </div>
 
-        <Suspense fallback={<div className="h-4" />}>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={700}>
-            <BonusSection />
-          </AnimatedWrapper>
-        </Suspense>
+        <div id="bonus">
+          {sectionsInView.has('bonus') ? (
+            <Suspense fallback={<SectionFallback />}>
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={700}>
+                <BonusSection />
+              </AnimatedWrapper>
+            </Suspense>
+          ) : (
+            <SectionFallback />
+          )}
+        </div>
 
-        <Suspense fallback={<div className="h-4" />}>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={800}>
-            <Testimonials />
-          </AnimatedWrapper>
-        </Suspense>
+        <div id="testimonials">
+          {sectionsInView.has('testimonials') ? (
+            <Suspense fallback={<SectionFallback />}>
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={800}>
+                <Testimonials />
+              </AnimatedWrapper>
+            </Suspense>
+          ) : (
+            <SectionFallback />
+          )}
+        </div>
 
-        <Suspense fallback={<div className="h-4" />}>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={900}>
-            <GuaranteeSection />
-          </AnimatedWrapper>
-        </Suspense>
+        <div id="guarantee">
+          {sectionsInView.has('guarantee') ? (
+            <Suspense fallback={<SectionFallback />}>
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={900}>
+                <GuaranteeSection />
+              </AnimatedWrapper>
+            </Suspense>
+          ) : (
+            <SectionFallback />
+          )}
+        </div>
 
-        <Suspense fallback={<div className="h-4" />}>
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1000}>
-            <MentorSection />
-          </AnimatedWrapper>
-        </Suspense>
+        <div id="mentor">
+          {sectionsInView.has('mentor') ? (
+            <Suspense fallback={<SectionFallback />}>
+              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1000}>
+                <MentorSection />
+              </AnimatedWrapper>
+            </Suspense>
+          ) : (
+            <SectionFallback />
+          )}
+        </div>
 
         {/* CTA final otimizado */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show duration={400} delay={1100}>

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { trackButtonClick } from '@/utils/analytics';
@@ -8,7 +9,6 @@ interface QuizOfferCTAProps {
   onStartQuiz: () => void;
 }
 
-// Usando sintaxe mais básica para evitar problemas de tipagem no TypeScript
 function QuizOfferCTA({ onStartQuiz }: QuizOfferCTAProps) {
   const handleStartQuiz = () => {
     trackButtonClick('quiz-offer-cta', 'Começar Quiz Agora', 'quiz-offer-page');
