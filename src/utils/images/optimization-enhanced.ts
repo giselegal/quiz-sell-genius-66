@@ -15,7 +15,7 @@ export const enhancedOptimizeImage = (
   options: ImageOptimizationOptions = {}
 ): string => {
   const settings = { ...DEFAULT_SETTINGS, ...options };
-  return getOptimizedImageUrl(url, settings);
+  return getOptimizedImageUrl(url, settings.quality, settings.format);
 };
 
 export const generateResponsiveSources = (
@@ -23,6 +23,6 @@ export const generateResponsiveSources = (
   sizes: number[] = [400, 800, 1200]
 ): string => {
   return sizes
-    .map(size => `${getOptimizedImageUrl(url, { width: size })} ${size}w`)
+    .map(size => `${getOptimizedImageUrl(url, 80, 'auto')} ${size}w`)
     .join(', ');
 };
