@@ -13,6 +13,7 @@ import QuizDescubraSeuEstiloPage from './pages/quiz-descubra-seu-estilo';
 import ResultPage from './pages/ResultPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import EditorPage from './pages/admin/EditorPage';
+import BuilderDashboard from './pages/admin/BuilderDashboard';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
               <Route path="/teste" element={<TestPage />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/editor" element={<EditorPage />} />
+              <Route path="/admin/builder" element={<BuilderDashboard />} />
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/quiz-descubra-seu-estilo" element={<QuizDescubraSeuEstiloPage />} />
               

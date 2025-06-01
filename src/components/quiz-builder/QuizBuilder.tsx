@@ -129,6 +129,7 @@ export const QuizBuilder: React.FC = () => {
     setPreviewResult(previewResult);
   };
 
+  // Corrigir o tipo do parâmetro para aceitar QuizBuilderState
   const handleImportTemplate = (template: QuizBuilderState) => {
     initializeStages(template.stages);
     initializeComponents(template.components);

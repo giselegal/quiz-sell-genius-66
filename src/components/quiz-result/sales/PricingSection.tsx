@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -10,7 +11,7 @@ interface PricingTier {
   cta: string;
 }
 
-export const PricingSection = () => {
+const PricingSection = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleCtaClick = async () => {
@@ -61,8 +62,6 @@ export const PricingSection = () => {
 
   return (
     <section className="py-16 bg-gradient-to-br from-[#FFFAF0] to-[#F5F2E8]">
-      
-      
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-semibold text-gray-800 mb-4">
@@ -74,8 +73,6 @@ export const PricingSection = () => {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {tiers.map((tier, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md p-6">
@@ -120,3 +117,6 @@ export const PricingSection = () => {
     </section>
   );
 };
+
+export { PricingSection };
+export default PricingSection;
