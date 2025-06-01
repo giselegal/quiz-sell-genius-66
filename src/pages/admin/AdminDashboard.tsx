@@ -47,6 +47,27 @@ const AdminDashboard = () => {
           />
 
           <DashboardCard
+            title="Funil de Conversão (Detalhes)"
+            description="Veja os detalhes do funil de conversão"
+            linkTo="/admin/analytics?tab=funnel"
+            buttonText="Ver Funil"
+          />
+          
+          <DashboardCard
+            title="UTM Tracking (Campanhas)"
+            description="Acompanhe suas campanhas UTM"
+            linkTo="/admin/analytics?tab=utm"
+            buttonText="Ver Campanhas UTM"
+          />
+
+          <DashboardCard
+            title="Métricas Rápidas"
+            description="Acesse métricas chave rapidamente"
+            linkTo="/admin/quick-metrics"
+            buttonText="Ver Métricas Rápidas"
+          />
+
+          <DashboardCard
             title="Editor Rápido"
             description="Edite rapidamente as páginas de resultado e oferta"
             linkTo="/admin/quick-editor"
