@@ -1,3 +1,4 @@
+
 import { optimizeCloudinaryUrl } from './images/optimization';
 import { FixBlurryImagesOptions } from './images/types';
 
@@ -19,7 +20,7 @@ export function fixBlurryIntroQuizImages(
 ): HTMLImageElement[] {
   const options = {
     quality: 85,
-    format: 'auto',
+    format: 'auto' as const,
     skipOptimized: true,
     forceOptimize: false,
     debug: false,

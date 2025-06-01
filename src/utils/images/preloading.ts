@@ -1,4 +1,3 @@
-
 import { type BankImage, getAllImages, getImageById } from '@/data/imageBank';
 import { optimizeCloudinaryUrl } from './optimization';
 import { PreloadOptions } from './types';
@@ -100,13 +99,13 @@ export const preloadImages = (
           return;
         }
 
-        updateImageCache(src, { url: src, loadStatus: 'loading' });
+        updateImageCache(src, { url: src, width: 0, height: 0, format: '', size: 0 });
 
         const optimizedSrc = optimizeCloudinaryUrl(src, { quality, format });
         const img = new Image();
 
         img.onload = () => {
-          updateImageCache(src, { url: src, loadStatus: 'loaded', imageElement: img });
+          updateImageCache(src, { url: src, width: img.width, height: img.height, format: 'loaded', size: 0 });
           loaded++;
           if (onProgress) onProgress(loaded, total);
           resolveImage();
@@ -114,7 +113,7 @@ export const preloadImages = (
 
         img.onerror = () => {
           console.warn(`[Image Manager] Falha ao carregar imagem: ${src}`);
-          updateImageCache(src, { url: src, loadStatus: 'error' });
+          updateImageCache(src, { url: src, width: 0, height: 0, format: 'error', size: 0 });
           loaded++;
           if (onProgress) onProgress(loaded, total);
           resolveImage();

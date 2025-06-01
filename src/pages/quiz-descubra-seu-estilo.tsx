@@ -1,23 +1,21 @@
+
 "use client";
 import React, { useState, useCallback, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { StyleResult, QuizQuestion } from '@/types/quiz';
-import { Quiz } from '@/components/quiz/Quiz';
+import { QuizContent } from '@/components/QuizContent';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/use-toast';
-import { useSearchParams } from 'next/navigation';
 
 const QUIZ_ID = 'estilo-pessoal';
 
 const QuizDescubraSeuEstiloPage: React.FC = () => {
   const [questions, setQuestions] = useState<QuizQuestion[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useRouter();
+  const navigate = useNavigate();
   const { toast } = useToast();
-  const searchParams = useSearchParams();
-  const isTest = searchParams.get('test') === 'true';
 
   useEffect(() => {
     const loadQuizData = async () => {
@@ -87,12 +85,7 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
       }));
       
       // Navigate to results page
-      navigate('/resultado', { 
-        state: { 
-          primaryStyle, 
-          secondaryStyles 
-        } 
-      });
+      navigate('/resultado');
     }
   }, [navigate]);
 
@@ -137,11 +130,10 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
         </CardHeader>
         <CardContent className="p-6">
           {questions && questions.length > 0 ? (
-            <Quiz
+            <QuizContent
               quizId={QUIZ_ID}
               questions={questions}
               onComplete={handleComplete}
-              isTest={isTest}
             />
           ) : (
             <div className="text-center py-12">
