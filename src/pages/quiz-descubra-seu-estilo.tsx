@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +14,10 @@ const QUIZ_ID = 'estilo-pessoal';
 const QuizDescubraSeuEstiloPage: React.FC = () => {
   const [questions, setQuestions] = useState<QuizQuestion[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentAnswers, setCurrentAnswers] = useState<string[]>([]);
+  const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
+  const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState(0);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -69,6 +74,11 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
     loadQuizData();
   }, [toast]);
 
+  const handleAnswerSubmit = useCallback((response: any) => {
+    // Handle answer submission logic here
+    console.log('Answer submitted:', response);
+  }, []);
+
   const handleComplete = useCallback((results: StyleResult[]) => {
     console.log('Quiz completed with results:', results);
     
@@ -90,6 +100,14 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
 
   const handleStartQuiz = () => {
     // Implement logic to start the quiz, e.g., show the first question
+  };
+
+  const handleNextClick = () => {
+    // Implement next question logic
+  };
+
+  const handlePrevious = () => {
+    // Implement previous question logic
   };
 
   if (loading) {
@@ -130,8 +148,16 @@ const QuizDescubraSeuEstiloPage: React.FC = () => {
         <CardContent className="p-6">
           {questions && questions.length > 0 ? (
             <QuizContent
-              questions={questions}
-              onComplete={handleComplete}
+              user={{}}
+              currentQuestionIndex={currentQuestionIndex}
+              totalQuestions={questions.length}
+              showingStrategicQuestions={showingStrategicQuestions}
+              currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+              currentQuestion={questions[currentQuestionIndex]}
+              currentAnswers={currentAnswers}
+              handleAnswerSubmit={handleAnswerSubmit}
+              handleNextClick={handleNextClick}
+              handlePrevious={handlePrevious}
             />
           ) : (
             <div className="text-center py-12">
