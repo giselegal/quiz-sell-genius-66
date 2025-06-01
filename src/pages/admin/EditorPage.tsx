@@ -1,20 +1,11 @@
-// @ts-nocheck
+
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import AdminLayout from '../../components/admin/AdminLayout';
-import QuizOfferPageEditor from './editors/QuizOfferPageEditor';
-import ResultPageEditor from './editors/ResultPageEditor';
 
 const EditorPage = () => {
   const [searchParams] = useSearchParams();
-  // Define 'funil2' como padrão se nenhuma aba for especificada ou se a aba for inválida
-  const validTabs = ['funil1', 'funil2'];
-  let tabParam = searchParams.get('tab');
-  if (!tabParam || !validTabs.includes(tabParam)) {
-    tabParam = 'funil2'; 
-    // Opcional: Adicionar lógica para atualizar a URL se desejar que a aba padrão reflita na URL
-    // Ex: window.history.replaceState(null, '', `/admin/editor?tab=${tabParam}`);
-  }
+  const tab = searchParams.get('tab') || 'funil1';
 
   return (
     <AdminLayout>
@@ -23,11 +14,11 @@ const EditorPage = () => {
           <div className="border-b p-4 bg-gray-50 flex items-center justify-between">
             <h1 className="text-xl font-semibold">Editor Unificado</h1>
             <div className="space-x-2">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 opacity-50 cursor-not-allowed" title="Funcionalidade de salvar global pendente">
-                Salvar (Global)
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                Salvar
               </button>
-              <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 opacity-50 cursor-not-allowed" title="Funcionalidade de visualizar global pendente">
-                Visualizar (Global)
+              <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                Visualizar
               </button>
             </div>
           </div>
@@ -35,13 +26,13 @@ const EditorPage = () => {
           <div className="p-2 border-b bg-white">
             <div className="flex space-x-1">
               <button 
-                className={`px-4 py-2 rounded-md ${tabParam === 'funil1' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
+                className={`px-4 py-2 rounded-md ${tab === 'funil1' ? 'bg-green-100 text-green-800' : 'hover:bg-gray-100'}`}
                 onClick={() => window.location.href = '/admin/editor?tab=funil1'}
               >
                 Funil 1 (/resultado)
               </button>
               <button 
-                className={`px-4 py-2 rounded-md ${tabParam === 'funil2' ? 'bg-purple-100 text-purple-800' : 'hover:bg-gray-100'}`}
+                className={`px-4 py-2 rounded-md ${tab === 'funil2' ? 'bg-purple-100 text-purple-800' : 'hover:bg-gray-100'}`}
                 onClick={() => window.location.href = '/admin/editor?tab=funil2'}
               >
                 Funil 2 (/quiz-descubra-seu-estilo)
@@ -50,13 +41,17 @@ const EditorPage = () => {
           </div>
           
           <div className="flex-1 p-4 overflow-auto">
-            {tabParam === 'funil1' && (
-              <ResultPageEditor />
-            )}
-
-            {tabParam === 'funil2' && (
-              <QuizOfferPageEditor />
-            )}
+            <div className="text-center py-8">
+              <h2 className="text-lg font-medium text-gray-900 mb-2">
+                Editor {tab === 'funil1' ? 'de Resultado' : 'de Oferta'}
+              </h2>
+              <p className="text-gray-600">
+                {tab === 'funil1' 
+                  ? 'Configure a página de resultados do quiz'
+                  : 'Configure a página de oferta com quiz'
+                }
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -4,11 +4,15 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { cn } from '@/lib/utils';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, Label, Input, Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/card';
-import { PlusCircle, Trash2, Copy, Eye, Move, Settings, Save } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { PlusCircle, Trash2, Copy, Eye, Move, Settings, Save, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import QuestionOptionEditor from '../quiz-editor/QuestionOptionEditor';
 import { QuizOption as QuizOptionComponent } from '../quiz/QuizOption';
+import { generateId } from '@/utils/idGenerator';
 
 type ItemType = 'QUESTION' | 'OPTION';
 
