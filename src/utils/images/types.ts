@@ -41,16 +41,30 @@ export interface PreloadOptions {
 
 export interface ImageAnalysis {
   url: string;
-  loadTime: number;
-  size: number;
   format: string;
-  cached: boolean;
+  quality: string;
+  width: string;
+  height: string;
+  isOptimized: boolean;
+  isResponsive: boolean;
+  suggestedImprovements: string[];
+  estimatedSizeReduction?: number;
 }
 
 export interface ImageDiagnosticResult {
-  totalImages: number;
-  averageLoadTime: number;
-  totalSize: number;
-  cacheHitRate: number;
-  slowImages: ImageAnalysis[];
+  summary: {
+    totalImagesRendered: number;
+    totalImagesWithIssues: number;
+    totalDownloadedBytes: number;
+    estimatedPerformanceImpact: string;
+  };
+  detailedIssues: Array<{
+    url: string;
+    element: HTMLImageElement;
+    issues: string[];
+    dimensions?: {
+      natural: { width: number; height: number };
+      display: { width: number; height: number };
+    };
+  }>;
 }
