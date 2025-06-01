@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -25,6 +24,7 @@ const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
+const QuickVisualEditor = lazy(() => import('./components/quick-editor/QuickVisualEditor'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {
@@ -51,6 +51,7 @@ const App = () => {
                 {/* ADMIN - Rotas principais */}
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/editor" element={<EditorPage />} />
+                <Route path="/admin/quick-editor" element={<QuickVisualEditor />} />
                 
                 {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />
