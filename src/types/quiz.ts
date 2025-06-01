@@ -3,6 +3,7 @@ export interface StyleResult {
   category: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo' | 'Strategic';
   score: number;
   percentage: number;
+  name?: string;
 }
 
 export interface QuizResult {
@@ -39,7 +40,7 @@ export interface QuizQuestion {
   imageUrl?: string;
   options: QuizOption[];
   multiSelect?: number;
-  type: 'single' | 'multiple' | 'text' | 'both';
+  type: 'single' | 'multiple' | 'text' | 'both' | 'image';
 }
 
 // Block types for result editor

@@ -1,16 +1,23 @@
-
 import React, { useState } from 'react';
 import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
 import { toast } from '@/components/ui/use-toast';
 import { QuizComponentType } from '@/types/quizBuilder';
+import { QuizQuestion, QuizOption } from '@/types/quiz';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Plus, Trash2 } from 'lucide-react';
+import { generateId } from '@/utils/idGenerator';
 
 interface QuizEditorPanelProps {
   isPreviewing: boolean;
+  onSave?: (questions: QuizQuestion[]) => void;
 }
 
-const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
+const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing, onSave }) => {
   // Pass a default primaryStyle to useUnifiedEditor to satisfy the parameter requirement
   const unifiedEditor = useUnifiedEditor({
     category: 'default',

@@ -144,7 +144,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                 <Label htmlFor="type">Tipo de Pergunta</Label>
                 <Select
                   value={editedQuestion.type}
-                  onValueChange={(value: 'single' | 'multiple') => 
+                  onValueChange={(value: QuizQuestion['type']) => 
                     setEditedQuestion(prev => ({ ...prev, type: value }))
                   }
                 >
@@ -154,6 +154,9 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                   <SelectContent>
                     <SelectItem value="single">Seleção única</SelectItem>
                     <SelectItem value="multiple">Seleção múltipla</SelectItem>
+                    <SelectItem value="text">Texto</SelectItem>
+                    <SelectItem value="both">Texto e imagem</SelectItem>
+                    <SelectItem value="image">Imagem</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
