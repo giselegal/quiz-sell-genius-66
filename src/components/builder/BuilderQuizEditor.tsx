@@ -1,4 +1,3 @@
-
 // src/components/builder/BuilderQuizEditor.tsx
 import React, { useState, useEffect } from 'react';
 import { BuilderComponent, builder } from '@builder.io/react';
@@ -25,7 +24,7 @@ export const BuilderQuizEditor: React.FC<BuilderQuizEditorProps> = ({
         
         const builderContent = await builder.get(modelName, {
           url: window.location.pathname,
-          // Opções válidas para GetContentOptions
+          // Opções adicionais para personalização
           includeRefs: true,
           cachebust: process.env.NODE_ENV === 'development'
         });
@@ -83,7 +82,12 @@ export const BuilderQuizEditor: React.FC<BuilderQuizEditorProps> = ({
         content={content}
         // Props personalizadas que podem ser usadas nos componentes
         options={{
-          includeRefs: true
+          includeRefs: true,
+          // Adicionar dados de contexto se necessário
+          data: {
+            currentUrl: window.location.href,
+            timestamp: new Date().toISOString()
+          }
         }}
       />
     </div>

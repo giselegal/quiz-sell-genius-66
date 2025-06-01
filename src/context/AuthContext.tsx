@@ -2,52 +2,61 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface User {
-  userName?: string;
-  email?: string;
-  id?: string;
+  userName: string;
+  email?: string; // Added email as optional property
+  role?: string;  // Added role property for admin access
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (name: string, email?: string) => void;
   logout: () => void;
-  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  console.log('🔐 AuthProvider carregando...');
-  
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const savedName = localStorage.getItem('userName');
+    const savedEmail = localStorage.getItem('userEmail');
+    const savedRole = localStorage.getItem('userRole');
+    
+    return savedName ? { 
+      userName: savedName,
+      ...(savedEmail && { email: savedEmail }),
+      ...(savedRole && { role: savedRole })
+    } : null;
+  });
 
-  const login = async (email: string, password: string) => {
-    console.log('Login attempt:', email);
-    // Simple login simulation - store user data
-    const userData = { 
-      userName: email.split('@')[0], 
-      email, 
-      id: Date.now().toString() 
+  const login = (name: string, email?: string) => {
+    const userData: User = { 
+      userName: name 
     };
+    
+    if (email) {
+      userData.email = email;
+      localStorage.setItem('userEmail', email);
+    }
+    
+    // Preservar o status de admin caso exista
+    const savedRole = localStorage.getItem('userRole');
+    if (savedRole) {
+      userData.role = savedRole;
+    }
+    
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('userName', name);
   };
 
   const logout = () => {
-    console.log('Logout');
     setUser(null);
-    localStorage.removeItem('user');
-  };
-
-  const contextValue: AuthContextType = {
-    user,
-    login,
-    logout,
-    isAuthenticated: !!user
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userRole');
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

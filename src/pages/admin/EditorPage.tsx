@@ -1,54 +1,103 @@
-
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
+import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { createOfferSectionConfig } from '@/utils/config/offerDefaults';
 
-const EditorPage: React.FC = () => {
-  const navigate = useNavigate();
+interface EditorPageProps {
+  // Nenhuma prop definida por enquanto
+}
 
+const EditorPage: React.FC<EditorPageProps> = () => {
+  const [showTemplates, setShowTemplates] = useState(false);
+  const { style } = useParams<{ style?: string }>();
+  
+  const styleCategory = (style as "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo") || 'Natural';
+  
+  const selectedStyle = {
+    category: styleCategory,
+    score: 100,
+    percentage: 100
+  };
+  
+  // Add missing heroSection and aboutSection
+  const initialConfig = {
+    styleType: styleCategory,
+    heroSection: {
+      title: "Descubra Seu Estilo",
+      subtitle: "Transforme seu visual com nosso quiz personalizado",
+      imageUrl: "",
+      ctaText: "Começar Quiz",
+      backgroundColor: "#FAF9F7"
+    },
+    aboutSection: {
+      title: "Sobre Seu Estilo",
+      description: "Entenda melhor suas preferências e descubra looks perfeitos para você",
+      imageUrl: ""
+    },
+    header: {
+      visible: true,
+      style: {
+        borderRadius: '0',
+        paddingY: '20px',
+        paddingX: '40px',
+        backgroundColor: '#FAF9F7',
+        textColor: '#432818'
+      },
+      content: {
+        title: 'Quiz de Estilo',
+        logo: ''
+      }
+    },
+    mainContent: {
+      visible: true,
+      style: {
+        padding: '40px'
+      },
+      content: {
+        title: 'Seu Resultado',
+        description: 'Descubra seu estilo único'
+      }
+    },
+    offer: createOfferSectionConfig(),
+    secondaryStyles: {
+      visible: true,
+      content: {},
+      style: {
+        padding: '20px'
+      }
+    },
+    globalStyles: {
+      primaryColor: '#B89B7A',
+      secondaryColor: '#432818',
+      textColor: '#432818',
+      backgroundColor: '#FAF9F7',
+      fontFamily: 'Playfair Display, serif'
+    },
+    blocks: []
+  };
+  
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Editor Visual
-          </h1>
-          <Button 
-            onClick={() => navigate('/admin')}
+    <div className="h-screen">
+      {showTemplates ? (
+        <div className="p-8 max-w-4xl mx-auto">
+          <Button
+            onClick={() => setShowTemplates(false)}
             variant="outline"
+            className="mb-4"
           >
-            ← Voltar ao Dashboard
+            Voltar ao Editor
           </Button>
+          <TemplateList onSelectTemplate={() => setShowTemplates(false)} />
         </div>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Editor Visual de Páginas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-600 mb-6">
-              Use este editor para personalizar visualmente suas páginas de quiz e resultado.
-            </p>
-            
-            <div className="space-y-4">
-              <div className="p-4 border rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Funcionalidades:</h3>
-                <ul className="list-disc list-inside text-gray-600 space-y-1">
-                  <li>Editor drag-and-drop</li>
-                  <li>Personalização de cores e tipografia</li>
-                  <li>Preview em tempo real</li>
-                  <li>Salvamento automático</li>
-                </ul>
-              </div>
-              
-              <Button className="w-full">
-                Iniciar Editor Visual
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      ) : (
+        <ResultPageVisualEditor 
+          selectedStyle={selectedStyle} 
+          onShowTemplates={() => setShowTemplates(true)}
+          initialConfig={initialConfig}
+        />
+      )}
     </div>
   );
 };

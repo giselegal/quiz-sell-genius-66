@@ -63,7 +63,7 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
     <div className={cn(
       "w-full relative flex-grow overflow-hidden",
       "md:mx-auto", // Center on desktop
-      !isMobile && "md:max-w-[65%]" // Aumentado de 40% para 65% para imagens maiores
+      !isMobile && "md:max-w-[40%]" // Reduced from 50% to 40% on desktop
     )}>
       <AspectRatio 
         ratio={imageUrl.includes('sapatos') ? 1 : 3/4} 
@@ -71,18 +71,19 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
       >
         <div className={cn(
           "w-full h-full flex items-center justify-center overflow-hidden transform-gpu",
-          // Efeito de seleção mais suave
-          isSelected && "scale-[1.01] transition-all duration-500 ease-out"
+          isSelected && "scale-[1.03] transition-all duration-300"
         )}>
-          {/* Use OptimizedImage component sem sombras */}
+          {/* Use OptimizedImage component instead of img tag */}
           <OptimizedImage 
             src={optimizedImageUrl}
             alt={imageMetadata?.alt || altText}
             className={cn(
-              "object-cover w-full h-full transition-all duration-500 ease-out",
-              // Removido todas as sombras
-              // Enhanced 3D effect mais sutil
-              isSelected && is3DQuestion && "transform-3d rotate-y-6"
+              "object-cover w-full h-full",
+              isSelected 
+                ? "shadow-3d" 
+                : "shadow-sm hover:shadow-md",
+              // Enhanced 3D effect
+              isSelected && is3DQuestion && "transform-3d rotate-y-12"
             )}
             onLoad={() => setImageLoaded(true)}
             priority={true}

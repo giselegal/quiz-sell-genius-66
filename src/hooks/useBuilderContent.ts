@@ -1,7 +1,6 @@
 // src/hooks/useBuilderContent.ts
 import { useState, useEffect } from 'react';
 import { builder } from '@builder.io/react';
-import { BUILDER_CONFIG } from '../config/builderConfig.js';
 
 interface UseBuilderContentOptions {
   model: string;
@@ -27,20 +26,6 @@ export const useBuilderContent = ({
         setLoading(true);
         setError(null);
 
-        // Verificar se estamos no modo offline
-        if (BUILDER_CONFIG.isOfflineMode()) {
-          console.log('🔧 Modo offline ativo - usando conteúdo de fallback');
-          const offlineContent = BUILDER_CONFIG.OFFLINE_CONTENT[model];
-          if (offlineContent) {
-            setContent(offlineContent);
-            setIsBuilderVersion(false);
-          }
-          return;
-        }
-
-        // Log do modo atual
-        console.log(`🔧 Builder.io Mode: ${BUILDER_CONFIG.CURRENT_MODE} para modelo: ${model}`);
-
         // Buscar conteúdo do Builder.io
         const builderContent = await builder
           .get(model, {
@@ -56,11 +41,8 @@ export const useBuilderContent = ({
         if (builderContent) {
           setContent(builderContent);
           setIsBuilderVersion(true);
-          console.log(`✅ Conteúdo Builder.io carregado para: ${model}`);
         } else if (!fallbackToOriginal) {
           setError('Conteúdo não encontrado no Builder.io');
-        } else {
-          console.log(`📄 Usando página original para: ${model} (sem conteúdo Builder.io)`);
         }
       } catch (err) {
         console.warn('Erro ao buscar conteúdo do Builder.io:', err);

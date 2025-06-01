@@ -8,6 +8,8 @@ interface Window {
   gtag?: (event: string, eventName: string, params?: any) => void;
 
   // Custom utility functions exposed to the global scope
+  checkMainRoutes?: () => any;
+  fixMainRoutes?: () => any;
   monitorFunnelRoutes?: () => any;
   checkSiteHealth?: () => any;
   fixBlurryIntroQuizImages?: () => number;

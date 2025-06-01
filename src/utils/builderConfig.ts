@@ -1,9 +1,8 @@
 // src/utils/builderConfig.ts
 import { builder } from '@builder.io/react';
-import { BUILDER_CONFIG } from '../config/builderConfig.js';
 
-// Usar API Key configurada (produção, demo ou offline)
-const BUILDER_API_KEY = BUILDER_CONFIG.getActiveApiKey();
+// API Key real do Builder.io - PRODUÇÃO
+const BUILDER_API_KEY = 'a31ec1897d044da09b3a96f2b4f46102';
 
 // Função segura para registrar componentes
 const registerComponentsSafely = async () => {
@@ -18,29 +17,15 @@ const registerComponentsSafely = async () => {
 // Inicializar Builder.io de forma segura
 const initializeBuilderSafely = () => {
   try {
-    // Mostrar informações sobre a API key atual
-    console.log(`🔧 Builder.io Mode: ${BUILDER_CONFIG.CURRENT_MODE}`);
-    console.log(`🔑 API Key: ${BUILDER_API_KEY.substring(0, 8)}...`);
-    
-    // Verificar modo offline
-    if (BUILDER_CONFIG.isOfflineMode()) {
-      console.log('🔌 Modo offline ativo - Builder.io não será inicializado');
-      return;
-    }
-    
-    if (BUILDER_CONFIG.isDemoMode()) {
-      console.warn('⚠️  USANDO API KEY DE DEMONSTRAÇÃO - Para produção, configure uma API key válida em BUILDER_CONFIG');
-    }
-    
     // Inicializar Builder.io apenas com a API key
     builder.init(BUILDER_API_KEY);
 
     // Registrar componentes customizados de forma assíncrona
     registerComponentsSafely();
     
-    console.log('✅ Builder.io inicializado com sucesso');
+    console.log('Builder.io inicializado com sucesso - API Key real conectada');
   } catch (error) {
-    console.warn('❌ Erro ao inicializar Builder.io:', error);
+    console.warn('Erro ao inicializar Builder.io:', error);
   }
 };
 
