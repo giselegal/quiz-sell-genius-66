@@ -30,7 +30,7 @@ const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage')); // Nova
 const CreativeAnalyticsPage = lazy(() => import('./pages/admin/CreativeAnalyticsPage'));
 const ABTestsPage = lazy(() => import('./pages/admin/ABTestsPage'));
 const QuickMetricsPage = lazy(() => import('./pages/admin/QuickMetricsPage'));
-// const BuilderDashboard = lazy(() => import('./pages/admin/BuilderDashboard')); // Builder.io Dashboard - temporariamente desabilitado
+const BuilderDashboardSafe = lazy(() => import('./pages/admin/BuilderDashboardSafe')); // Builder.io Dashboard - versão segura
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {
@@ -71,7 +71,7 @@ const App = () => {
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
                 <Route path="/admin/ab-tests" element={<ABTestsPage />} />
                 <Route path="/admin/quick-metrics" element={<QuickMetricsPage />} />
-                {/* <Route path="/admin/builder" element={<BuilderDashboard />} /> Builder.io Dashboard - temporariamente desabilitado */}
+                <Route path="/admin/builder" element={<BuilderDashboardSafe />} /> {/* Builder.io Dashboard - versão segura */}
                 
                 {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />
