@@ -91,5 +91,5 @@ export interface ResultPageConfig {
   mentor?: any;
 }
 
-// Export all the missing types
-export { OfferContent, StyleOptions };
+// Export types properly for isolatedModules
+export type { OfferContent as OfferContentType, StyleOptions as StyleOptionsType };
