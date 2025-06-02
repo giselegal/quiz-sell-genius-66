@@ -29,6 +29,8 @@ interface DragDropContainerProps {
   onAddBlock: () => void;
   isEditMode: boolean;
   onToggleEditMode: () => void;
+  selectedBlockId?: string | null;
+  onSelectBlock?: (blockId: string | null) => void;
   primaryStyle?: any;
   secondaryStyles?: any[];
   globalStyles?: any;
@@ -47,7 +49,9 @@ interface DragDropContainerProps {
 interface SortableBlockItemProps {
   block: BlockData;
   isEditMode: boolean;
+  isSelected?: boolean;
   onEditBlock: (blockId: string) => void;
+  onSelectBlock?: (blockId: string) => void;
   toggleBlockVisibility: (blockId: string) => void;
   deleteBlock: (blockId: string) => void;
   blockProps: any;
@@ -56,7 +60,9 @@ interface SortableBlockItemProps {
 const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
   block,
   isEditMode,
+  isSelected,
   onEditBlock,
+  onSelectBlock,
   toggleBlockVisibility,
   deleteBlock,
   blockProps,
@@ -76,11 +82,23 @@ const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
     opacity: isDragging ? 0.5 : 1,
   };
 
+  const handleBlockClick = (e: React.MouseEvent) => {
+    if (isEditMode && onSelectBlock) {
+      e.preventDefault();
+      onSelectBlock(block.id);
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative group ${isEditMode ? 'ring-2 ring-dashed ring-[#B89B7A]/40 rounded-lg' : ''}`}
+      className={`relative group cursor-pointer ${
+        isEditMode ? 
+          `ring-2 rounded-lg ${isSelected ? 'ring-[#B89B7A] ring-solid' : 'ring-dashed ring-[#B89B7A]/40'} hover:ring-[#B89B7A]/60` : 
+          ''
+      }`}
+      onClick={handleBlockClick}
     >
       {/* Edit Controls Overlay */}
       {isEditMode && (
@@ -151,6 +169,8 @@ const DragDropContainer: React.FC<DragDropContainerProps> = ({
   onAddBlock,
   isEditMode,
   onToggleEditMode,
+  selectedBlockId,
+  onSelectBlock,
   ...blockProps
 }) => {
   const sensors = useSensors(
@@ -216,7 +236,9 @@ const DragDropContainer: React.FC<DragDropContainerProps> = ({
                 key={block.id}
                 block={block}
                 isEditMode={isEditMode}
+                isSelected={selectedBlockId === block.id}
                 onEditBlock={onEditBlock}
+                onSelectBlock={onSelectBlock}
                 toggleBlockVisibility={toggleBlockVisibility}
                 deleteBlock={deleteBlock}
                 blockProps={blockProps}
