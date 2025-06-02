@@ -24,7 +24,7 @@ const AdminLoadingPage: React.FC = () => {
     'src/pages/admin/AdminDashboard.tsx'
   ];
 
-  // Função para calcular velocidade necessária para terminar às 03:00 de 03/06
+  // Função para calcular velocidade necessária para terminar às 03:00 AM de 03/06
   const calculateRequiredSpeed = (current: number, total: number) => {
     const targetTime = new Date();
     targetTime.setDate(3);
@@ -46,9 +46,9 @@ const AdminLoadingPage: React.FC = () => {
     return (total - current) / hoursToTarget;
   };
 
-  // Função para calcular tempo restante sempre mostrando 03:00
+  // Função para calcular tempo restante sempre mostrando 03:00 AM
   const calculateTimeRemaining = () => {
-    return '03:00';
+    return '03:00 AM';
   };
 
   useEffect(() => {
@@ -58,8 +58,8 @@ const AdminLoadingPage: React.FC = () => {
     const interval = setInterval(() => {
       setCurrentFiles(prev => {
         if (prev >= totalFiles) return totalFiles;
-        // Usar a velocidade calculada para atingir o target
-        const increment = Math.max(1, Math.floor(filesPerMinute * 1.2)); // 1.2 é o intervalo em minutos
+        // Velocidade mais lenta e realista (2-4 arquivos por vez)
+        const increment = Math.max(1, Math.floor(Math.random() * 3) + 1); // 1-3 arquivos por intervalo
         const newValue = Math.min(prev + increment, totalFiles);
         
         // Atualizar porcentagem baseada no progresso real
@@ -72,7 +72,7 @@ const AdminLoadingPage: React.FC = () => {
       // Simular mudança de arquivo atual
       const randomFile = sampleFiles[Math.floor(Math.random() * sampleFiles.length)];
       setCurrentFile(randomFile);
-    }, 1200); // Intervalo de 1.2 segundos
+    }, 2500); // Intervalo mais lento: 2.5 segundos
 
     // Definir tempo fixo
     setTimeRemaining(calculateTimeRemaining());
@@ -170,7 +170,7 @@ const AdminLoadingPage: React.FC = () => {
                 <span>Performance Otimizada</span>
               </div>
               <span>•</span>
-              <span>Conclusão prevista: 03:00 - 03/06</span>
+              <span>Conclusão prevista: 03:00 AM - 03/06</span>
             </div>
           </div>
 
