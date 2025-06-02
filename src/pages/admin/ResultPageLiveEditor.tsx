@@ -27,7 +27,24 @@ import {
   Undo,
   Redo,
   RotateCcw,
-  HelpCircle
+  HelpCircle,
+  MessageSquare,
+  Users,
+  Video,
+  BarChart3,
+  Quote,
+  FileText,
+  Calendar,
+  Mail,
+  Phone,
+  MapPin,
+  Award,
+  TrendingUp,
+  Heart,
+  CheckCircle,
+  AlertCircle,
+  Lightbulb,
+  Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -66,11 +83,13 @@ import { CSS } from '@dnd-kit/utilities';
 // Tipos de componentes disponíveis para arrastar
 interface ComponentBlock {
   id: string;
-  type: 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result';
+  type: 'headline' | 'text' | 'image' | 'benefits' | 'pricing' | 'guarantee' | 'cta' | 'style-result' | 
+        'testimonial' | 'video' | 'faq' | 'countdown' | 'stats' | 'contact' | 'divider' | 'spacer' | 
+        'social-proof' | 'newsletter' | 'checklist' | 'comparison' | 'feature-grid';
   name: string;
   icon: React.ReactNode;
   description: string;
-  category: 'content' | 'marketing' | 'design';
+  category: 'content' | 'marketing' | 'design' | 'social' | 'forms';
 }
 
 const componentBlocks: ComponentBlock[] = [
