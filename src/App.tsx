@@ -65,6 +65,7 @@ function App() {
               <Route path="/" element={<QuizIntroWrapper />} />
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/quiz-results" element={<QuizResultWrapper />} />
+              {/* Rota principal de resultado usando ResultPage */}
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/resultado/:style" element={<ResultPage />} />
               
