@@ -16,6 +16,7 @@ interface EditorContentProps {
   isPreviewing: boolean;
 }
 
+// Helper function to render a preview of a block
 const renderBlockPreview = (block: EditorBlock) => {
   switch (block.type) {
     case 'headline':
@@ -44,12 +45,13 @@ const renderBlockPreview = (block: EditorBlock) => {
         <div className="mb-4">
           <h3 className="text-xl font-bold mb-2">{block.content.title || 'Benefícios'}</h3>
           <ul className="list-disc pl-5">
-            {(block.content.items || []).map((item: string, index: number) => (
+            {(block.content.items || []).map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
         </div>
       );
+    // Add more cases for other block types as needed
     default:
       return <div className="p-4 border rounded mb-4">Bloco: {block.type}</div>;
   }

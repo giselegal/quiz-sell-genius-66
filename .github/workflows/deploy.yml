@@ -13,43 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build project
-        run: npm run build
-
       - name: Deploy to FTP Server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: 147.93.39.155
-          username: u116045488
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 21
-          local-dir: ./dist/
-          server-dir: /
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.env*
-            **/src/**
-            **/*.md
-            **/*.log
-            **/*.jar
-            **/bfg-report/**
-            **/error_log*
-            **/.logs/**
-            **/mail.log
-            **/error_log*
-            **/mail.log
-            **/.logs/**
-          dangerous-delete: false
-# FTP Deploy otimizado - só envia arquivos da pasta dist
+          server: ${{ secrets.SERVIDOR_FTP }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.SENHA_FTP }}
+          port: ${{ secrets.PORTA_FTP }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}

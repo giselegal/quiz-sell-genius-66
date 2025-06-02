@@ -1,100 +1,100 @@
 
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { Suspense, lazy, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { QuizProvider } from './context/QuizContext';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/toaster';
-import QuizIntro from '@/components/QuizIntro';
-import QuizPage from '@/components/QuizPage';
-import QuizResult from '@/components/QuizResult';
-import ResultPage from '@/pages/ResultPage';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { AdminSidebar } from '@/components/admin/AdminSidebar';
-import AdminDashboard from '@/pages/admin/AdminDashboard';
-import UnifiedEditorPage from '@/pages/UnifiedEditorPage';
-import AnalyticsPage from '@/pages/admin/AnalyticsPage';
-import CreativeAnalyticsPage from '@/pages/admin/CreativeAnalyticsPage';
-import ABTestsPage from '@/pages/admin/ABTestsPage';
-import QuickMetricsPage from '@/pages/admin/QuickMetricsPage';
-import HeaderEditorPage from '@/pages/admin/HeaderEditorPage';
-import LiveEditorPage from '@/pages/admin/LiveEditorPage';
-import EditorPage from '@/pages/admin/EditorPage';
-import { useNavigate } from 'react-router-dom';
-import { StyleResult } from '@/types/quiz';
-import { AuthProvider } from '@/context/AuthContext';
-import { QuizProvider } from '@/context/QuizContext';
+import { captureUTMParameters } from './utils/analytics';
+import { loadFacebookPixel } from './utils/facebookPixel';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import CriticalCSSLoader from './components/CriticalCSSLoader';
+import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
 
-// Wrapper component for QuizIntro to handle navigation
-const QuizIntroWrapper = () => {
-  const navigate = useNavigate();
+// Componente de loading para Suspense
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="text-center">
+      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
+      <p className="mt-4 text-gray-600">Carregando...</p>
+    </div>
+  </div>
+);
+
+// Lazy loading das páginas usando a pasta pages/
+const QuizPage = lazy(() => import('./components/QuizPage'));
+const ResultPage = lazy(() => import('./pages/ResultPage'));
+const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+
+// Avalia se o dispositivo tem performance limitada
+const isLowPerformanceDevice = () => {
+  const memory = (navigator as any).deviceMemory;
+  if (memory && memory < 4) return true;
   
-  const handleStart = (name: string) => {
-    localStorage.setItem('userName', name);
-    navigate('/quiz');
-  };
+  const cpuCores = navigator.hardwareConcurrency;
+  if (cpuCores && cpuCores < 4) return true;
   
-  return <QuizIntro onStart={handleStart} />;
+  return false;
 };
 
-// Wrapper component for QuizResult to provide default props
-const QuizResultWrapper = () => {
-  // Get quiz results from localStorage or provide defaults
-  const savedResults = localStorage.getItem('quizResults');
-  let primaryStyle: StyleResult = { category: 'Natural' as const, score: 100, percentage: 100 };
-  let secondaryStyles: StyleResult[] = [];
-  
-  if (savedResults) {
+const App = () => {
+  const lowPerformance = isLowPerformanceDevice();
+
+  // Inicializar analytics na montagem do componente
+  useEffect(() => {
     try {
-      const results = JSON.parse(savedResults);
-      primaryStyle = results.primaryStyle || primaryStyle;
-      secondaryStyles = results.secondaryStyles || [];
+      loadFacebookPixel();
+      captureUTMParameters();
+      
+      console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
     } catch (error) {
-      console.error('Error parsing quiz results:', error);
+      console.error('Erro ao inicializar aplicativo:', error);
     }
-  }
-  
-  return <QuizResult primaryStyle={primaryStyle} secondaryStyles={secondaryStyles} />;
-};
+  }, [lowPerformance]);
 
-function App() {
   return (
     <AuthProvider>
       <QuizProvider>
-        <Router>
-          <div className="min-h-screen bg-gradient-to-br from-[#FAF9F7] to-[#F5F2E9]">
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<QuizIntroWrapper />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/quiz-results" element={<QuizResultWrapper />} />
-              {/* Rota principal de resultado usando ResultPage */}
-              <Route path="/resultado" element={<ResultPage />} />
-              <Route path="/resultado/:style" element={<ResultPage />} />
-              
-              {/* Admin Routes with Sidebar */}
-              <Route path="/admin/*" element={
-                <div className="flex min-h-screen w-full">
-                  <AdminSidebar />
-                  <div className="flex-1">
-                    <Routes>
-                      <Route index element={<AdminDashboard />} />
-                      <Route path="editor" element={<UnifiedEditorPage />} />
-                      <Route path="live-editor" element={<LiveEditorPage />} />
-                      <Route path="analytics" element={<AnalyticsPage />} />
-                      <Route path="creative-analytics" element={<CreativeAnalyticsPage />} />
-                      <Route path="ab-tests" element={<ABTestsPage />} />
-                      <Route path="quick-metrics" element={<QuickMetricsPage />} />
-                      <Route path="header-editor" element={<HeaderEditorPage />} />
-                      <Route path="editor/:style" element={<EditorPage />} />
-                    </Routes>
-                  </div>
-                </div>
-              } />
-            </Routes>
-            <Toaster />
-          </div>
-        </Router>
+        <TooltipProvider>
+          <Router>
+            <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
+            <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
+            
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                {/* ROTA PRINCIPAL - Quiz com introdução */}
+                <Route path="/" element={<QuizPage />} />
+                
+                {/* ADMIN - Dashboard centralizado usando páginas da pasta pages/admin/ */}
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/*" element={<AdminDashboard />} />
+                
+                {/* ANALYTICS DE CRIATIVOS - Página específica */}
+                <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
+                
+                {/* RESULTADO - Página de resultados do quiz */}
+                <Route path="/resultado" element={<ResultPage />} />
+                
+                {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
+                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                
+                {/* Redirecionamentos para manter compatibilidade */}
+                <Route path="/home" element={<Navigate to="/" replace />} />
+                <Route path="/quiz" element={<Navigate to="/" replace />} />
+                
+                {/* 404 - Página não encontrada */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </Router>
+          <Toaster />
+        </TooltipProvider>
       </QuizProvider>
     </AuthProvider>
   );
-}
+};
 
 export default App;

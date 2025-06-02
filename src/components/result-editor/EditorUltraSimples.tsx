@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
 import { Save, Eye, RotateCcw } from 'lucide-react';
+import { ResultPageConfig } from '@/types/resultPageConfig';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 
 interface EditorUltraSimplesProps {
@@ -61,7 +61,7 @@ const EditorUltraSimples: React.FC<EditorUltraSimplesProps> = ({ styleType }) =>
                 <input
                   type="text"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  value={resultPageConfig.heroSection?.title || ''}
+                  value={resultPageConfig.heroSection.title || ''}
                   onChange={(e) => handleInputChange('heroSection', 'title', e.target.value)}
                 />
               </div>
@@ -70,7 +70,7 @@ const EditorUltraSimples: React.FC<EditorUltraSimplesProps> = ({ styleType }) =>
                 <input
                   type="text"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  value={resultPageConfig.heroSection?.subtitle || ''}
+                  value={resultPageConfig.heroSection.subtitle || ''}
                   onChange={(e) => handleInputChange('heroSection', 'subtitle', e.target.value)}
                 />
               </div>
@@ -81,7 +81,7 @@ const EditorUltraSimples: React.FC<EditorUltraSimplesProps> = ({ styleType }) =>
                 <input
                   type="text"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  value={resultPageConfig.aboutSection?.title || ''}
+                  value={resultPageConfig.aboutSection.title || ''}
                   onChange={(e) => handleInputChange('aboutSection', 'title', e.target.value)}
                 />
               </div>
@@ -89,7 +89,7 @@ const EditorUltraSimples: React.FC<EditorUltraSimplesProps> = ({ styleType }) =>
                 <label className="block text-sm font-medium text-gray-700">Descrição da Seção About</label>
                 <textarea
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  value={resultPageConfig.aboutSection?.description || ''}
+                  value={resultPageConfig.aboutSection.description || ''}
                   onChange={(e) => handleInputChange('aboutSection', 'description', e.target.value)}
                 />
               </div>

@@ -129,18 +129,5 @@
   <script>
     document.getElementById('root')?.classList.remove('js-loading');
   </script>
-  
-  <!-- Service Worker Registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js', { 
-        scope: '/' 
-      }).then(function(registration) {
-        console.log('SW registrado com sucesso:', registration.scope);
-      }).catch(function(error) {
-        console.log('Falha no registro do SW:', error);
-      });
-    }
-  </script>
 </body>
 </html>

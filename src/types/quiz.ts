@@ -1,10 +1,8 @@
 
 export interface StyleResult {
-  category: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo' | 'Strategic';
+  category: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
   score: number;
   percentage: number;
-  name?: string;
-  description?: string;
 }
 
 export interface QuizResult {
@@ -41,8 +39,8 @@ export interface QuizQuestion {
   imageUrl?: string;
   options: QuizOption[];
   multiSelect?: number;
-  type: 'single' | 'multiple' | 'text' | 'both' | 'image';
+  type: 'single' | 'multiple';
 }
 
 // Block types for result editor
-export type BlockType = 'headline' | 'text' | 'image' | 'cta' | 'testimonial' | 'features' | 'transformation' | 'bonus' | 'heading' | 'paragraph' | 'button' | 'benefits';
+export type BlockType = 'headline' | 'text' | 'image' | 'cta' | 'testimonial' | 'features' | 'transformation' | 'bonus';
