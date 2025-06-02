@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import VisualEditorLayout from '@/components/visual-editor/VisualEditorLayout';
 import { QuizQuestion } from '@/types/quiz';
@@ -28,7 +27,7 @@ const VisualEditorPage: React.FC = () => {
             {
               id: `question-${Date.now()}-1`,
               title: 'Qual estilo de roupa você prefere no dia a dia?',
-              type: 'both', // Changed from 'image' to 'both'
+              type: 'image',
               multiSelect: 1,
               options: [
                 {

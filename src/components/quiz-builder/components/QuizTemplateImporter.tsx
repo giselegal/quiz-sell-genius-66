@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -215,6 +214,17 @@ const QuizTemplateImporter: React.FC<QuizTemplateImporterProps> = ({
       ]
     };
   };
+
+  // Remove these functions as they use undefined variables
+  /* Removing these functions as they reference undefined variables
+  const handleImportBasicQuiz = () => {
+    // ...code removed
+  };
+
+  const handleImportPersonalStyleQuiz = () => {
+    // ...code removed
+  };
+  */
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

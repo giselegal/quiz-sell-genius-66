@@ -79,15 +79,9 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const { user } = useAuth();
+  const { hasPremiumFeatures, hasFeature, user } = useAuth();
 
-  // Provide fallback values for auth properties
-  const hasPremiumFeatures = (user as any)?.hasPremiumFeatures || false;
-  const hasFeature = (user as any)?.hasFeature || (() => false);
-  const userFeatures = (user as any)?.features || [];
-  const userPlan = (user as any)?.plan || 'FREE';
-
-  const availableComponents = getAvailableComponents(userFeatures, hasPremiumFeatures);
+  const availableComponents = getAvailableComponents(user?.features || [], hasPremiumFeatures);
   
   const { available, locked } = components.reduce((acc, component) => {
     const isAvailable = availableComponents.find(c => c.id === component.id);
@@ -134,7 +128,7 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
         <div className="mb-4 p-3 bg-[#F5F2E9] rounded-lg">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-[#432818]">
-              Plano: {userPlan}
+              Plano: {user?.plan || 'FREE'}
             </span>
             <Badge 
               variant="outline"

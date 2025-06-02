@@ -70,7 +70,7 @@ export function PreviewBlock({
               <h3 className="text-xl font-playfair text-[#432818]">{block.content.title}</h3>
             )}
             <ul className="space-y-2">
-              {(block.content.items || []).map((item: string, index: number) => (
+              {block.content.items?.map((item: string, index: number) => (
                 <li key={index} className="flex items-start gap-2">
                   <span className="text-[#B89B7A]">✓</span>
                   <span>{item}</span>

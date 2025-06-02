@@ -24,14 +24,14 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   currentStrategicQuestionIndex,
   currentQuestion,
   currentAnswers,
-  handleAnswerSubmit
+  handleAnswerSubmit,
 }) => {
   // Get user name from localStorage if not provided in props
   const userName = user?.userName || localStorage.getItem('userName') || '';
-
+  
   // Determine the required selections based on question type
-  const requiredSelections = showingStrategicQuestions ? 1 : currentQuestion?.multiSelect || 3;
-
+  const requiredSelections = showingStrategicQuestions ? 1 : (currentQuestion?.multiSelect || 3);
+  
   // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length === requiredSelections;
 
@@ -45,15 +45,15 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         currentStrategicQuestionIndex={currentStrategicQuestionIndex}
       />
 
-      <div className="container mx-auto py-8 w-full max-w-5xl px-0">
+      <div className="container mx-auto px-4 py-8 w-full max-w-5xl">
         {showingStrategicQuestions ? (
-          <StrategicQuestions 
+          <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
             answers={{}}
             onAnswer={handleAnswerSubmit}
           />
         ) : (
-          <QuizQuestion 
+          <QuizQuestion
             question={currentQuestion}
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
