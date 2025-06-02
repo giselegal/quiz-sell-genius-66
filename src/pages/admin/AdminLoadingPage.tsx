@@ -59,7 +59,7 @@ const AdminLoadingPage: React.FC = () => {
     const interval = setInterval(() => {
       setCurrentFiles(prev => {
         if (prev >= totalFiles) return totalFiles;
-        // Processamento muito lento: 1 arquivo a cada intervalo
+        // Processamento muito lento: 1 arquivo a cada 15 minutos
         const increment = 1;
         const newValue = Math.min(prev + increment, totalFiles);
         
