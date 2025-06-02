@@ -40,6 +40,7 @@ import {
   useSensor,
   useSensors,
   closestCenter,
+  useDroppable,
 } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -285,12 +286,41 @@ const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
   );
 }
 
+// Drop Zone Component for the preview area
+interface DropZoneProps {
+  onDrop: (componentType: ComponentBlock['type']) => void;
+  isOver: boolean;
+  children?: React.ReactNode;
+}
+
+const DropZone: React.FC<DropZoneProps> = ({ onDrop, isOver, children }) => {
+  const { setNodeRef } = useDroppable({
+    id: 'preview-drop-zone',
+    data: {
+      type: 'drop-zone',
+    },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={cn(
+        "min-h-full transition-all duration-200",
+        isOver && "bg-[#B89B7A]/10 border-2 border-dashed border-[#B89B7A]"
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
 const ResultPageLiveEditor: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'content' | 'marketing' | 'design'>('all');
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isOverDropZone, setIsOverDropZone] = useState(false);
   const { toast } = useToast();
 
   // Configure drag sensors
@@ -341,11 +371,13 @@ const ResultPageLiveEditor: React.FC = () => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveId(null);
+    setIsOverDropZone(false);
 
     if (!over) return;
 
     // Handle component drop to preview area
-    if (active.data.current?.type === 'component' && over.data.current?.type === 'drop-zone') {
+    if (active.data.current?.type === 'component' && 
+        (over.data.current?.type === 'drop-zone' || over.id === 'preview-drop-zone')) {
       const component = active.data.current.component as ComponentBlock;
       handleAddComponent(component.type);
       return;
@@ -435,6 +467,10 @@ const ResultPageLiveEditor: React.FC = () => {
       collisionDetection={closestCenter}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragOver={(event) => {
+        const { over } = event;
+        setIsOverDropZone(over?.id === 'preview-drop-zone' || over?.data.current?.type === 'drop-zone');
+      }}
     >
       <div className="h-screen bg-[#FAF9F7] flex flex-col">
         {/* Header Toolbar */}
@@ -595,10 +631,15 @@ const ResultPageLiveEditor: React.FC = () => {
                     "w-full bg-white rounded-lg shadow-sm border border-gray-200 min-h-full transition-all duration-300",
                     getDeviceClass()
                   )}>
-                    <ResultPageVisualEditor
-                      selectedStyle={mockPrimaryStyle}
-                      initialConfig={resultPageConfig}
-                    />
+                    <DropZone
+                      onDrop={handleAddComponent}
+                      isOver={activeId !== null}
+                    >
+                      <ResultPageVisualEditor
+                        selectedStyle={mockPrimaryStyle}
+                        initialConfig={resultPageConfig}
+                      />
+                    </DropZone>
                   </div>
                 </div>
               </div>
@@ -683,6 +724,10 @@ const ResultPageLiveEditor: React.FC = () => {
               );
             })()}
           </div>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
+  );
 };
 
 export default ResultPageLiveEditor;
