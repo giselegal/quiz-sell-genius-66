@@ -26,7 +26,8 @@ import {
   GripVertical,
   Undo,
   Redo,
-  RotateCcw
+  RotateCcw,
+  HelpCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -38,8 +39,11 @@ import { Block } from '@/types/editor';
 import { PropertyEditorRouter } from '@/components/live-editor/property-editors';
 import { BlockRenderer } from '@/components/live-editor/preview/BlockRenderer';
 import { ProjectManager } from '@/components/live-editor/ProjectManager';
+import { EditorTutorial, useEditorTutorial } from '@/components/live-editor/EditorTutorial';
+import { ShortcutsPanel } from '@/components/live-editor/ShortcutsPanel';
 import { useEditorPersistence } from '@/hooks/editor/useEditorPersistence';
 import { useUndoRedo } from '@/hooks/editor/useUndoRedo';
+import { useKeyboardShortcuts } from '@/hooks/editor/useKeyboardShortcuts';
 import {
   DndContext,
   DragEndEvent,
@@ -404,6 +408,56 @@ const ResultPageLiveEditor: React.FC = () => {
     getHistoryInfo,
   } = useUndoRedo(blocks);
 
+  // Tutorial functionality
+  const {
+    hasSeenTutorial,
+    isTutorialOpen,
+    showTutorial,
+    completeTutorial,
+    resetTutorial,
+    closeTutorial,
+  } = useEditorTutorial();
+
+  // Undo/Redo handlers
+  const handleUndo = () => {
+    const previousBlocks = undo();
+    if (previousBlocks) {
+      updateBlocks(previousBlocks);
+      updateSection('blocks', previousBlocks);
+    }
+  };
+
+  const handleRedo = () => {
+    const nextBlocks = redo();
+    if (nextBlocks) {
+      updateBlocks(nextBlocks);
+      updateSection('blocks', nextBlocks);
+    }
+  };
+
+  // Keyboard shortcuts
+  const { shortcuts } = useKeyboardShortcuts({
+    onUndo: handleUndo,
+    onRedo: handleRedo,
+    onSave: () => {
+      if (currentState) {
+        handleSaveProject(currentState.name, currentState.id);
+      } else {
+        handleSaveChanges();
+      }
+    },
+    onDelete: () => {
+      if (selectedBlockId) {
+        handleDeleteBlock(selectedBlockId);
+      }
+    },
+    onEscape: () => {
+      setSelectedBlockId(null);
+      setSelectedComponentId(null);
+    },
+    isEnabled: !isTutorialOpen, // Disable shortcuts when tutorial is open
+  });
+
   // Sync blocks with config when needed
   useEffect(() => {
     if (resultPageConfig?.blocks) {
@@ -412,6 +466,31 @@ const ResultPageLiveEditor: React.FC = () => {
       updateSection('blocks', []);
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
+
+  // Auto-save functionality
+  useEffect(() => {
+    if (!currentState || !isAutoSaveEnabled || !hasUnsavedChanges) {
+      return;
+    }
+
+    const autoSaveTimer = setTimeout(() => {
+      handleSaveProject(currentState.name, currentState.id);
+      toast({
+        title: "Auto-salvamento",
+        description: "Projeto salvo automaticamente",
+        duration: 1500
+      });
+    }, 30000); // Auto-save after 30 seconds of inactivity
+
+    return () => clearTimeout(autoSaveTimer);
+  }, [blocks, currentState, isAutoSaveEnabled, hasUnsavedChanges]);
+
+  // Monitor blocks changes for undo/redo and persistence
+  useEffect(() => {
+    if (blocks.length > 0) {
+      markAsChanged();
+    }
+  }, [blocks]);
 
   // Handle drag start
   const handleDragStart = (event: DragStartEvent) => {
@@ -512,23 +591,6 @@ const ResultPageLiveEditor: React.FC = () => {
     }
   };
 
-  // Undo/Redo handlers
-  const handleUndo = () => {
-    const previousBlocks = undo();
-    if (previousBlocks) {
-      updateBlocks(previousBlocks);
-      updateSection('blocks', previousBlocks);
-    }
-  };
-
-  const handleRedo = () => {
-    const nextBlocks = redo();
-    if (nextBlocks) {
-      updateBlocks(nextBlocks);
-      updateSection('blocks', nextBlocks);
-    }
-  };
-
   // Project management handlers
   const handleSaveProject = (name: string, stateId?: string) => {
     const savedState = saveState(name, blocks, stateId);
@@ -568,6 +630,30 @@ const ResultPageLiveEditor: React.FC = () => {
       updateSection('blocks', importedState.blocks);
       updateInitialBlocks(importedState.blocks);
     }
+  };
+
+  // Delete block with undo/redo support
+  const handleDeleteBlock = (blockId: string) => {
+    const blockToDelete = blocks.find(b => b.id === blockId);
+    const blockName = blockToDelete ? componentBlocks.find(c => c.type === blockToDelete.type)?.name : 'componente';
+    
+    blockActions.handleDeleteBlock(blockId);
+    
+    // Add to undo/redo history
+    pushState(blocks.filter(b => b.id !== blockId), `Deletar ${blockName}`);
+    markAsChanged();
+    
+    // Clear selection if deleted block was selected
+    if (selectedBlockId === blockId) {
+      setSelectedBlockId(null);
+      setSelectedComponentId(null);
+    }
+    
+    toast({
+      title: "Componente removido",
+      description: `${blockName} foi removido da página`,
+      duration: 2000
+    });
   };
 
   const filteredComponents = componentBlocks.filter(component => 
@@ -619,8 +705,28 @@ const ResultPageLiveEditor: React.FC = () => {
             </Link>
             <Separator orientation="vertical" className="h-6" />
             <div>
-              <h1 className="text-lg font-semibold text-[#432818]">Editor Visual da Página de Resultado</h1>
-              <p className="text-sm text-[#8F7A6A]">Crie uma experiência visual incrível para seus usuários</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-semibold text-[#432818]">Editor Visual da Página de Resultado</h1>
+                {currentState && (
+                  <>
+                    <span className="text-[#8F7A6A]">•</span>
+                    <span className="text-sm font-medium text-[#D4B996]">
+                      {currentState.name}
+                    </span>
+                    {hasUnsavedChanges && (
+                      <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">
+                        Modificado
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+              <p className="text-sm text-[#8F7A6A]">
+                Crie uma experiência visual incrível para seus usuários
+                {currentState && (
+                  <span className="ml-2">• {blocks.length} componente{blocks.length !== 1 ? 's' : ''}</span>
+                )}
+              </p>
             </div>
           </div>
 
@@ -706,15 +812,68 @@ const ResultPageLiveEditor: React.FC = () => {
               {isPreviewing ? 'Editar' : 'Visualizar'}
             </Button>
 
-            {/* Save Button */}
+            <Separator orientation="vertical" className="h-6" />
+
+            {/* Help Button */}
             <Button
-              onClick={handleSaveChanges}
+              variant="ghost"
               size="sm"
-              className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white"
+              onClick={showTutorial}
+              title="Mostrar tutorial"
+              className="flex items-center gap-2"
             >
-              <Save className="h-4 w-4 mr-2" />
-              Salvar
+              <HelpCircle className="h-4 w-4" />
+              <span className="text-xs">Ajuda</span>
             </Button>
+
+            {/* Shortcuts Panel */}
+            <ShortcutsPanel shortcuts={shortcuts} />
+
+            <Separator orientation="vertical" className="h-6" />
+
+            {/* Auto-save Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsAutoSaveEnabled(!isAutoSaveEnabled)}
+              className={cn(
+                "flex items-center gap-2",
+                isAutoSaveEnabled && "text-green-600"
+              )}
+              title={`Auto-salvamento ${isAutoSaveEnabled ? 'ativado' : 'desativado'}`}
+            >
+              <div className={cn(
+                "w-2 h-2 rounded-full",
+                isAutoSaveEnabled ? "bg-green-500" : "bg-gray-300"
+              )}></div>
+              <span className="text-xs">Auto</span>
+            </Button>
+
+            {/* Auto-save Status & Save Button */}
+            <div className="flex items-center gap-2">
+              {isAutoSaveEnabled && hasUnsavedChanges && (
+                <div className="flex items-center gap-1 text-xs text-[#8F7A6A]">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                  <span>Auto-salvamento em 30s</span>
+                </div>
+              )}
+              {!hasUnsavedChanges && currentState && (
+                <div className="flex items-center gap-1 text-xs text-green-600">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Salvo</span>
+                </div>
+              )}
+              
+              <Button
+                onClick={handleSaveChanges}
+                size="sm"
+                variant={hasUnsavedChanges ? "default" : "outline"}
+                className={hasUnsavedChanges ? "bg-[#B89B7A] hover:bg-[#8F7A6A] text-white animate-pulse" : ""}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {hasUnsavedChanges ? 'Salvar*' : 'Salvar'}
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -838,7 +997,7 @@ const ResultPageLiveEditor: React.FC = () => {
                                     index={index}
                                     isSelected={selectedBlockId === block.id}
                                     onSelect={handleBlockSelect}
-                                    onDelete={blockActions.handleDeleteBlock}
+                                    onDelete={handleDeleteBlock}
                                   >
                                     <div className="p-4 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-lg hover:bg-[#FAF9F7]/80 transition-colors">
                                       <div className="flex items-center gap-3 mb-2">
@@ -973,6 +1132,13 @@ const ResultPageLiveEditor: React.FC = () => {
           </div>
         ) : null}
       </DragOverlay>
+
+      {/* Tutorial Component */}
+      <EditorTutorial
+        isOpen={isTutorialOpen}
+        onClose={closeTutorial}
+        onComplete={completeTutorial}
+      />
     </DndContext>
   );
 };
