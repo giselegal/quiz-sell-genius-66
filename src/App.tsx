@@ -23,7 +23,6 @@ const LoadingFallback = () => (
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
-const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const AdminLoadingPage = lazy(() => import('./pages/admin/AdminLoadingPage'));
 const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
@@ -50,9 +49,9 @@ const App = () => {
                 {/* ROTA PRINCIPAL - Quiz com introdução */}
                 <Route path="/" element={<QuizPage />} />
                 
-                {/* ADMIN - Dashboard centralizado */}
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/*" element={<AdminDashboard />} />
+                {/* ADMIN - Tela de carregamento de análise de código */}
+                <Route path="/admin" element={<AdminLoadingPage />} />
+                <Route path="/admin/*" element={<AdminLoadingPage />} />
                 
                 {/* ANALYTICS DE CRIATIVOS - Página específica */}
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
