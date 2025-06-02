@@ -75,8 +75,8 @@ const defaultBlocks: BlockData[] = [
     type: 'bonus',
     title: 'Bônus',
     content: {
-      title: 'Bônus Exclusivos',
-      description: 'Materiais extras para potencializar sua transformação',
+      title: 'Bônus Exclusivos para Você',
+      description: 'Além do guia principal, você receberá estas ferramentas complementares para potencializar sua jornada de transformação',
     },
     style: {
       backgroundColor: 'white',
@@ -91,8 +91,8 @@ const defaultBlocks: BlockData[] = [
     type: 'testimonials',
     title: 'Depoimentos',
     content: {
-      title: 'O que nossas clientes dizem',
-      description: 'Transformei completamente meu guarda-roupa e minha autoestima!',
+      title: 'Transformações Reais',
+      description: 'O que mulheres como você estão dizendo sobre esta jornada de transformação',
       userName: 'Maria Silva',
     },
     style: {
@@ -108,8 +108,8 @@ const defaultBlocks: BlockData[] = [
     type: 'guarantee',
     title: 'Garantia',
     content: {
-      title: 'Garantia Incondicional',
-      description: '7 dias para testar sem riscos',
+      title: 'Sua Satisfação 100% Garantida',
+      description: 'Se por qualquer motivo você não ficar 100% satisfeita, reembolsamos o valor integral sem perguntas.',
     },
     style: {
       backgroundColor: 'white',
@@ -125,7 +125,8 @@ const defaultBlocks: BlockData[] = [
     title: 'Mentora',
     content: {
       title: 'Conheça Sua Mentora',
-      description: 'Especialista que já guiou +de 3.000 mulheres na descoberta do seu estilo autêntico',
+      description: 'Gisele Galvão — Consultora de Imagem e Estilo, Personal Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.',
+      name: 'Gisele Galvão',
     },
     style: {
       backgroundColor: 'white',

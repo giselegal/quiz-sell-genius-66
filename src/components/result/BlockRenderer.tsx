@@ -4,6 +4,11 @@ import HeroBlock from './blocks/HeroBlock';
 import BenefitsBlock from './blocks/BenefitsBlock';
 import PricingBlock from './blocks/PricingBlock';
 import TestimonialsBlock from './blocks/TestimonialsBlock';
+import MotivationBlock from './blocks/MotivationBlock';
+import BonusBlock from './blocks/BonusBlock';
+import GuaranteeBlock from './blocks/GuaranteeBlock';
+import MentorBlock from './blocks/MentorBlock';
+import TransformationsBlock from './blocks/TransformationsBlock';
 
 interface BlockRendererProps {
   block: BlockData;
@@ -205,99 +210,47 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
 
       case 'guarantee':
         return (
-          <div className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white rounded-lg p-6 text-center">
-            <h3 className="text-2xl font-bold mb-4">
-              {block.content.title || 'Garantia Incondicional'}
-            </h3>
-            <p className="mb-4 opacity-90">
-              {block.content.description || 'Teste por 30 dias sem riscos. Se não ficar satisfeito, devolvemos 100% do seu investimento.'}
-            </p>
-            <div className="text-lg font-semibold">
-              {block.content.period || '30 dias'} de garantia
-            </div>
-          </div>
+          <GuaranteeBlock
+            block={block}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
         );
 
       case 'mentor':
         return (
-          <div className="bg-[#f8f9fa] rounded-lg p-6">
-            <h3 className="text-2xl font-bold mb-4 text-center text-[#432818]">
-              {block.content.title || 'Conheça Seu Mentor'}
-            </h3>
-            <div className="text-center">
-              <p className="text-[#8F7A6A] mb-4">
-                {block.content.description || 'Especialista com anos de experiência'}
-              </p>
-              <div className="font-semibold text-[#432818]">
-                {block.content.name || 'Nome do Mentor'}
-              </div>
-              <div className="text-sm text-[#8F7A6A]">
-                {block.content.credentials || 'Credenciais profissionais'}
-              </div>
-            </div>
-          </div>
+          <MentorBlock
+            block={block}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
         );
 
       case 'transformations':
         return (
-          <div>
-            <h3 className="text-2xl font-bold mb-6 text-center text-[#432818]">
-              {block.content.title || 'Transformações Possíveis'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((item) => (
-                <div key={item} className="text-center">
-                  <div className="w-16 h-16 bg-[#B89B7A] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white text-xl">✨</span>
-                  </div>
-                  <h4 className="font-semibold text-[#432818] mb-2">
-                    Transformação {item}
-                  </h4>
-                  <p className="text-sm text-[#8F7A6A]">
-                    Descrição da transformação que você pode alcançar
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <TransformationsBlock
+            block={block}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
         );
 
       case 'motivation':
         return (
-          <div className="text-center py-8">
-            <h3 className="text-2xl font-bold mb-4 text-[#432818]">
-              {block.content.title || 'Sua Motivação'}
-            </h3>
-            <p className="text-lg text-[#8F7A6A] max-w-2xl mx-auto">
-              {block.content.description || 'Lembre-se: toda grande transformação começa com um primeiro passo. Este é o seu momento!'}
-            </p>
-          </div>
+          <MotivationBlock
+            block={block}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
         );
 
       case 'bonus':
         return (
-          <div className="bg-[#fff7f3] border border-[#B89B7A]/20 rounded-lg p-6">
-            <h3 className="text-2xl font-bold mb-4 text-center text-[#432818]">
-              {block.content.title || 'Bônus Exclusivos'}
-            </h3>
-            <p className="text-center text-[#8F7A6A] mb-6">
-              {block.content.description || 'Além do conteúdo principal, você recebe'}
-            </p>
-            <div className="space-y-4">
-              {(block.content.bonuses || [
-                { title: 'Bônus 1', description: 'Descrição do bônus', value: 'R$ 49,90' },
-                { title: 'Bônus 2', description: 'Descrição do bônus', value: 'R$ 29,90' }
-              ]).map((bonus, index) => (
-                <div key={index} className="flex justify-between items-center bg-white p-4 rounded border">
-                  <div>
-                    <h4 className="font-semibold text-[#432818]">{bonus.title}</h4>
-                    <p className="text-sm text-[#8F7A6A]">{bonus.description}</p>
-                  </div>
-                  <div className="text-[#B89B7A] font-bold">{bonus.value}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <BonusBlock
+            block={block}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
         );
 
       case 'secondary-styles':

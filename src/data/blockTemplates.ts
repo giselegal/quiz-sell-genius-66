@@ -233,7 +233,113 @@ export const blockTemplates: BlockTemplate[] = [
       visible: true,
       editable: true
     }]
-  }
+  },
+  {
+    id: 'transformations-real',
+    name: 'Transformações Reais',
+    description: 'Seção de depoimentos com transformações reais',
+    category: 'social',
+    icon: '✨',
+    blocks: [{
+      type: 'transformations',
+      title: 'Transformações',
+      content: {
+        title: 'Resultados que Falam por Si',
+        description: 'Veja como mulheres descobriram sua melhor versão seguindo as mesmas estratégias que você vai receber'
+      },
+      style: {
+        backgroundColor: 'white',
+        padding: '3rem'
+      },
+      visible: true,
+      editable: false
+    }]
+  },
+  {
+    id: 'motivation-section',
+    name: 'Seção de Motivação',
+    description: 'Seção explicando a importância do estilo pessoal',
+    category: 'content',
+    icon: '💪',
+    blocks: [{
+      type: 'motivation',
+      title: 'Motivação',
+      content: {
+        title: 'Por que Aplicar o seu Estilo é tão importante?',
+        description: 'Conhecer seu estilo pessoal é muito mais do que seguir tendências passageiras — é uma ferramenta poderosa de comunicação não-verbal e autoconfiança.'
+      },
+      style: {
+        backgroundColor: 'white',
+        padding: '2rem'
+      },
+      visible: true,
+      editable: false
+    }]
+  },
+  {
+    id: 'bonus-exclusive',
+    name: 'Bônus Exclusivos',
+    description: 'Seção de bônus com layout real do produto',
+    category: 'marketing',
+    icon: '🎁',
+    blocks: [{
+      type: 'bonus',
+      title: 'Bônus',
+      content: {
+        title: 'Bônus Exclusivos para Você',
+        description: 'Além do guia principal, você receberá estas ferramentas complementares para potencializar sua jornada de transformação'
+      },
+      style: {
+        backgroundColor: 'white',
+        padding: '2rem'
+      },
+      visible: true,
+      editable: false
+    }]
+  },
+  {
+    id: 'guarantee-real',
+    name: 'Garantia Real',
+    description: 'Seção de garantia com design profissional',
+    category: 'marketing',
+    icon: '🛡️',
+    blocks: [{
+      type: 'guarantee',
+      title: 'Garantia',
+      content: {
+        title: 'Sua Satisfação 100% Garantida',
+        description: 'Se por qualquer motivo você não ficar 100% satisfeita, reembolsamos o valor integral sem perguntas.'
+      },
+      style: {
+        backgroundColor: 'white',
+        padding: '2rem'
+      },
+      visible: true,
+      editable: false
+    }]
+  },
+  {
+    id: 'mentor-gisele',
+    name: 'Mentora Gisele',
+    description: 'Seção sobre a mentora Gisele Galvão',
+    category: 'social',
+    icon: '👩‍🏫',
+    blocks: [{
+      type: 'mentor',
+      title: 'Mentora',
+      content: {
+        title: 'Conheça Sua Mentora',
+        description: 'Gisele Galvão — Consultora de Imagem e Estilo, Personal Branding, Estrategista de Marca pessoal e Especialista em coloração pessoal com Certificação internacional.',
+        name: 'Gisele Galvão'
+      },
+      style: {
+        backgroundColor: 'white',
+        padding: '2rem'
+      },
+      visible: true,
+      editable: false
+    }]
+  },
 ];
 
 export const getTemplatesByCategory = (category: BlockTemplate['category']) => {
