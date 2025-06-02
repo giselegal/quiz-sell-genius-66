@@ -6,6 +6,7 @@ import QuizIntro from '@/components/QuizIntro';
 import QuizPage from '@/components/QuizPage';
 import QuizResult from '@/components/QuizResult';
 import ResultPage from '@/pages/ResultPage';
+import QuizDescubraSeuEstiloPage from '@/pages/QuizDescubraSeuEstiloPage';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
@@ -61,15 +62,25 @@ function App() {
         <Router>
           <div className="min-h-screen bg-gradient-to-br from-[#FAF9F7] to-[#F5F2E9]">
             <Routes>
-              {/* Public Routes */}
+              {/* ========== ROTAS PRINCIPAIS ========== */}
+              {/* Entrada do quiz */}
               <Route path="/" element={<QuizIntroWrapper />} />
+              
+              {/* Quiz em andamento */}
               <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/quiz-results" element={<QuizResultWrapper />} />
-              {/* Rota principal de resultado usando ResultPage */}
+              
+              {/* Versão completa do quiz com oferta */}
+              <Route path="/quiz-descubra-seu-estilo" element={<QuizDescubraSeuEstiloPage />} />
+              
+              {/* Página principal de resultados */}
               <Route path="/resultado" element={<ResultPage />} />
               <Route path="/resultado/:style" element={<ResultPage />} />
               
-              {/* Admin Routes with Sidebar */}
+              {/* ========== ROTAS AUXILIARES ========== */}
+              {/* Mantida temporariamente */}
+              <Route path="/quiz-results" element={<QuizResultWrapper />} />
+              
+              {/* ========== ROTAS ADMINISTRATIVAS ========== */}
               <Route path="/admin/*" element={
                 <div className="flex min-h-screen w-full">
                   <AdminSidebar />
