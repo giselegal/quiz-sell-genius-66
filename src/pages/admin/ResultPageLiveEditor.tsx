@@ -23,7 +23,10 @@ import {
   Zap,
   Plus,
   Settings,
-  GripVertical
+  GripVertical,
+  Undo,
+  Redo,
+  RotateCcw
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -31,6 +34,12 @@ import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVis
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { StyleResult } from '@/types/quiz';
+import { Block } from '@/types/editor';
+import { PropertyEditorRouter } from '@/components/live-editor/property-editors';
+import { BlockRenderer } from '@/components/live-editor/preview/BlockRenderer';
+import { ProjectManager } from '@/components/live-editor/ProjectManager';
+import { useEditorPersistence } from '@/hooks/editor/useEditorPersistence';
+import { useUndoRedo } from '@/hooks/editor/useUndoRedo';
 import {
   DndContext,
   DragEndEvent,
@@ -46,8 +55,6 @@ import {
   SortableContext,
   arrayMove,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -311,11 +318,16 @@ const DropZone: React.FC<DropZoneProps> = ({ onDrop, isOver, children }) => {
     >
       {/* Drop indicator overlay */}
       {isOver && (
-        <div className="absolute inset-0 border-2 border-dashed border-[#B89B7A] bg-[#B89B7A]/5 rounded-lg z-10 flex items-center justify-center">
-          <div className="bg-white px-4 py-2 rounded-lg shadow-lg border border-[#B89B7A]">
-            <div className="flex items-center gap-2 text-[#B89B7A]">
-              <Plus className="h-4 w-4" />
-              <span className="text-sm font-medium">Solte aqui para adicionar</span>
+        <div className="absolute inset-0 border-2 border-dashed border-[#D4B996] bg-[#D4B996]/10 rounded-lg z-10 flex items-center justify-center animate-pulse">
+          <div className="bg-white px-6 py-3 rounded-lg shadow-xl border-2 border-[#D4B996] transform scale-105">
+            <div className="flex items-center gap-3 text-[#D4B996]">
+              <div className="p-2 bg-[#D4B996]/10 rounded-full">
+                <Plus className="h-5 w-5" />
+              </div>
+              <div>
+                <span className="text-sm font-semibold">Solte aqui para adicionar</span>
+                <p className="text-xs text-[#8F7A6A] mt-1">O componente será inserido na posição ideal</p>
+              </div>
             </div>
           </div>
         </div>
@@ -364,6 +376,34 @@ const ResultPageLiveEditor: React.FC = () => {
     actions: blockActions
   } = useBlockOperations();
 
+  // Editor persistence for save/load functionality
+  const {
+    states,
+    currentState,
+    hasUnsavedChanges,
+    isAutoSaveEnabled,
+    saveState,
+    loadState,
+    deleteState,
+    duplicateState,
+    exportState,
+    importState,
+    markAsChanged,
+    setIsAutoSaveEnabled,
+  } = useEditorPersistence(blocks);
+
+  // Undo/Redo functionality
+  const {
+    canUndo,
+    canRedo,
+    pushState,
+    undo,
+    redo,
+    clearHistory,
+    updateInitialBlocks,
+    getHistoryInfo,
+  } = useUndoRedo(blocks);
+
   // Sync blocks with config when needed
   useEffect(() => {
     if (resultPageConfig?.blocks) {
@@ -408,6 +448,10 @@ const ResultPageLiveEditor: React.FC = () => {
         
         updateBlocks(newBlocks);
         updateSection('blocks', newBlocks);
+        
+        // Add to undo/redo history
+        pushState(newBlocks, 'Reordenar blocos');
+        markAsChanged();
       }
     }
   };
@@ -417,9 +461,14 @@ const ResultPageLiveEditor: React.FC = () => {
     setSelectedBlockId(newBlockId);
     setSelectedComponentId(newBlockId);
     
+    // Add to undo/redo history
+    const componentName = componentBlocks.find(c => c.type === type)?.name;
+    pushState(blocks, `Adicionar ${componentName}`);
+    markAsChanged();
+    
     toast({
       title: "Componente adicionado",
-      description: `${componentBlocks.find(c => c.type === type)?.name} foi adicionado à página`,
+      description: `${componentName} foi adicionado à página`,
       duration: 2000
     });
   };
@@ -427,6 +476,22 @@ const ResultPageLiveEditor: React.FC = () => {
   const handleBlockSelect = (blockId: string | null) => {
     setSelectedBlockId(blockId);
     setSelectedComponentId(blockId);
+  };
+
+  const handleUpdateBlock = (blockId: string, content: any) => {
+    const updatedBlocks = blocks.map(block => 
+      block.id === blockId 
+        ? { ...block, content }
+        : block
+    );
+    updateBlocks(updatedBlocks);
+    updateSection('blocks', updatedBlocks);
+    
+    // Add to undo/redo history
+    const block = blocks.find(b => b.id === blockId);
+    const blockType = block?.type || 'componente';
+    pushState(updatedBlocks, `Editar ${blockType}`);
+    markAsChanged();
   };
 
   const handleSaveChanges = async () => {
@@ -444,6 +509,64 @@ const ResultPageLiveEditor: React.FC = () => {
         variant: "destructive",
         duration: 3000
       });
+    }
+  };
+
+  // Undo/Redo handlers
+  const handleUndo = () => {
+    const previousBlocks = undo();
+    if (previousBlocks) {
+      updateBlocks(previousBlocks);
+      updateSection('blocks', previousBlocks);
+    }
+  };
+
+  const handleRedo = () => {
+    const nextBlocks = redo();
+    if (nextBlocks) {
+      updateBlocks(nextBlocks);
+      updateSection('blocks', nextBlocks);
+    }
+  };
+
+  // Project management handlers
+  const handleSaveProject = (name: string, stateId?: string) => {
+    const savedState = saveState(name, blocks, stateId);
+    if (savedState && !stateId) {
+      // New save - update undo/redo history
+      clearHistory(blocks);
+    }
+  };
+
+  const handleLoadProject = (stateId: string) => {
+    const loadedState = loadState(stateId);
+    if (loadedState) {
+      updateBlocks(loadedState.blocks);
+      updateSection('blocks', loadedState.blocks);
+      updateInitialBlocks(loadedState.blocks);
+      setSelectedBlockId(null);
+      setSelectedComponentId(null);
+    }
+  };
+
+  const handleDeleteProject = (stateId: string) => {
+    deleteState(stateId);
+  };
+
+  const handleDuplicateProject = (stateId: string) => {
+    duplicateState(stateId);
+  };
+
+  const handleExportProject = (stateId: string) => {
+    exportState(stateId);
+  };
+
+  const handleImportProject = async (file: File) => {
+    const importedState = await importState(file);
+    if (importedState) {
+      updateBlocks(importedState.blocks);
+      updateSection('blocks', importedState.blocks);
+      updateInitialBlocks(importedState.blocks);
     }
   };
 
@@ -502,6 +625,45 @@ const ResultPageLiveEditor: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Project Management */}
+            <ProjectManager
+              states={states}
+              currentState={currentState}
+              onSave={handleSaveProject}
+              onLoad={handleLoadProject}
+              onDelete={handleDeleteProject}
+              onDuplicate={handleDuplicateProject}
+              onExport={handleExportProject}
+              onImport={handleImportProject}
+              hasUnsavedChanges={hasUnsavedChanges}
+            />
+
+            <Separator orientation="vertical" className="h-6" />
+
+            {/* Undo/Redo Controls */}
+            <div className="flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleUndo}
+                disabled={!canUndo}
+                title={`Desfazer${canUndo ? ` (${getHistoryInfo().undoAction})` : ''}`}
+              >
+                <Undo className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRedo}
+                disabled={!canRedo}
+                title={`Refazer${canRedo ? ` (${getHistoryInfo().redoAction})` : ''}`}
+              >
+                <Redo className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <Separator orientation="vertical" className="h-6" />
+
             {/* Device Preview Controls */}
             <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
               <Button
@@ -692,8 +854,12 @@ const ResultPageLiveEditor: React.FC = () => {
                                           </div>
                                         </div>
                                       </div>
-                                      <div className="text-sm text-[#432818] bg-white p-3 rounded border border-[#B89B7A]/10">
-                                        Preview do componente {block.type}
+                                      <div className="bg-white p-3 rounded border border-[#B89B7A]/10">
+                                        <BlockRenderer
+                                          block={block}
+                                          isSelected={selectedBlockId === block.id}
+                                          onClick={() => handleBlockSelect(block.id)}
+                                        />
                                       </div>
                                     </div>
                                   </SortableBlockItem>
@@ -761,10 +927,11 @@ const ResultPageLiveEditor: React.FC = () => {
                           </div>
                         </div>
                         
-                        {/* O painel de propriedades específico será renderizado pelo ResultPageVisualEditor */}
-                        <div className="text-sm text-[#8F7A6A]">
-                          As propriedades deste componente aparecerão aqui quando implementadas.
-                        </div>
+                        {/* Property Editor Router */}
+                        <PropertyEditorRouter
+                          selectedBlock={blocks.find(block => block.id === selectedComponentId) || null}
+                          onUpdateBlock={handleUpdateBlock}
+                        />
                       </div>
                     ) : (
                       <div className="text-center py-8">
@@ -786,16 +953,21 @@ const ResultPageLiveEditor: React.FC = () => {
       {/* Drag Overlay */}
       <DragOverlay>
         {activeId ? (
-          <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200 opacity-90">
+          <div className="bg-white p-4 rounded-lg shadow-2xl border-2 border-[#D4B996] opacity-95 transform rotate-3 scale-105">
             {(() => {
               const component = componentBlocks.find(c => c.id === activeId);
               return component ? (
-                <div className="flex items-center gap-2">
-                  {component.icon}
-                  <span className="text-sm font-medium">{component.name}</span>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-[#D4B996]/10 rounded border border-[#D4B996]/20">
+                    {component.icon}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-[#432818]">{component.name}</div>
+                    <div className="text-xs text-[#8F7A6A]">{component.description}</div>
+                  </div>
                 </div>
               ) : (
-                <div className="text-sm">Arrastando componente...</div>
+                <div className="text-sm text-[#432818]">Arrastando componente...</div>
               );
             })()}
           </div>
