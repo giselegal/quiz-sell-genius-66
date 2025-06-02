@@ -1,85 +1,104 @@
-
-import React from 'react';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
+import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { Palette, Eye, Edit } from 'lucide-react';
+import { createOfferSectionConfig } from '@/utils/config/offerDefaults';
 
-const EditorPage = () => {
+interface EditorPageProps {
+  // Nenhuma prop definida por enquanto
+}
+
+const EditorPage: React.FC<EditorPageProps> = () => {
+  const [showTemplates, setShowTemplates] = useState(false);
+  const { style } = useParams<{ style?: string }>();
+  
+  const styleCategory = (style as "Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo") || 'Natural';
+  
+  const selectedStyle = {
+    category: styleCategory,
+    score: 100,
+    percentage: 100
+  };
+  
+  // Add missing heroSection and aboutSection
+  const initialConfig = {
+    styleType: styleCategory,
+    heroSection: {
+      title: "Descubra Seu Estilo",
+      subtitle: "Transforme seu visual com nosso quiz personalizado",
+      imageUrl: "",
+      ctaText: "Começar Quiz",
+      backgroundColor: "#FAF9F7"
+    },
+    aboutSection: {
+      title: "Sobre Seu Estilo",
+      description: "Entenda melhor suas preferências e descubra looks perfeitos para você",
+      imageUrl: ""
+    },
+    header: {
+      visible: true,
+      style: {
+        borderRadius: '0',
+        paddingY: '20px',
+        paddingX: '40px',
+        backgroundColor: '#FAF9F7',
+        textColor: '#432818'
+      },
+      content: {
+        title: 'Quiz de Estilo',
+        logo: ''
+      }
+    },
+    mainContent: {
+      visible: true,
+      style: {
+        padding: '40px'
+      },
+      content: {
+        title: 'Seu Resultado',
+        description: 'Descubra seu estilo único'
+      }
+    },
+    offer: createOfferSectionConfig(),
+    secondaryStyles: {
+      visible: true,
+      content: {},
+      style: {
+        padding: '20px'
+      }
+    },
+    globalStyles: {
+      primaryColor: '#B89B7A',
+      secondaryColor: '#432818',
+      textColor: '#432818',
+      backgroundColor: '#FAF9F7',
+      fontFamily: 'Playfair Display, serif'
+    },
+    blocks: []
+  };
+  
   return (
-    <AdminLayout>
-      <div className="p-6">
-        <h1 className="text-2xl font-semibold text-[#432818] mb-6">
-          Editor Unificado
-        </h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Palette className="h-5 w-5" />
-                Editor de Resultados
-              </CardTitle>
-              <CardDescription>
-                Edite a página de resultados do quiz com interface visual
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/admin/live-editor">
-                <Button className="w-full">
-                  Abrir Editor Visual
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Edit className="h-5 w-5" />
-                Editor Simples
-              </CardTitle>
-              <CardDescription>
-                Editor básico para edições rápidas
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/admin/quick-editor">
-                <Button variant="outline" className="w-full">
-                  Abrir Editor Simples
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Eye className="h-5 w-5" />
-                Preview
-              </CardTitle>
-              <CardDescription>
-                Visualize como está a página atual
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/resultado">
-                <Button variant="outline" className="w-full">
-                  Ver Resultado
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Link to="/admin" className="inline-block mt-6">
-          <Button variant="outline">
-            Voltar ao Painel
+    <div className="h-screen">
+      {showTemplates ? (
+        <div className="p-8 max-w-4xl mx-auto">
+          <Button
+            onClick={() => setShowTemplates(false)}
+            variant="outline"
+            className="mb-4"
+          >
+            Voltar ao Editor
           </Button>
-        </Link>
-      </div>
-    </AdminLayout>
+          <TemplateList onSelectTemplate={() => setShowTemplates(false)} />
+        </div>
+      ) : (
+        <ResultPageVisualEditor 
+          selectedStyle={selectedStyle} 
+          onShowTemplates={() => setShowTemplates(true)}
+          initialConfig={initialConfig}
+        />
+      )}
+    </div>
   );
 };
 
