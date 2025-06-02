@@ -2,10 +2,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
-import { QuizIntro } from '@/components/QuizIntro';
+import QuizIntro from '@/components/QuizIntro';
 import QuizFlow from '@/components/QuizFlow';
-import { QuizResults } from '@/components/QuizResult';
-import { ResultPageWithBlocks } from '@/pages/ResultPageWithBlocks';
+import QuizResult from '@/components/QuizResult';
+import ResultPageWithBlocks from '@/pages/ResultPageWithBlocks';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
@@ -27,7 +27,7 @@ function App() {
           <Route path="/" element={<QuizIntro />} />
           <Route path="/quiz" element={<QuizFlow />} />
           <Route path="/quiz-flow" element={<QuizFlow />} />
-          <Route path="/quiz-results" element={<QuizResults />} />
+          <Route path="/quiz-results" element={<QuizResult />} />
           <Route path="/resultado" element={<ResultPageWithBlocks />} />
           <Route path="/resultado/:style" element={<ResultPageWithBlocks />} />
           
