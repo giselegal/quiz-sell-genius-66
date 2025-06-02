@@ -77,6 +77,7 @@ const App = () => {
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/editor" element={<EditorPage />} />
                 <Route path="/admin/quick-editor" element={<QuickVisualEditor />} />
+                <Route path="/admin/live-editor" element={<ResultPageLiveEditor />} /> {/* Editor ao vivo estilo InLead/Typeform */}
                 <Route path="/admin/analytics" element={<AnalyticsPage />} /> {/* Nova rota */}
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
                 <Route path="/admin/ab-tests" element={<ABTestsPage />} />
