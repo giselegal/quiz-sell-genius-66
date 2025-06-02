@@ -305,10 +305,22 @@ const DropZone: React.FC<DropZoneProps> = ({ onDrop, isOver, children }) => {
     <div
       ref={setNodeRef}
       className={cn(
-        "min-h-full transition-all duration-200",
-        isOver && "bg-[#B89B7A]/10 border-2 border-dashed border-[#B89B7A]"
+        "min-h-full transition-all duration-200 relative",
+        isOver && "bg-[#B89B7A]/5"
       )}
     >
+      {/* Drop indicator overlay */}
+      {isOver && (
+        <div className="absolute inset-0 border-2 border-dashed border-[#B89B7A] bg-[#B89B7A]/5 rounded-lg z-10 flex items-center justify-center">
+          <div className="bg-white px-4 py-2 rounded-lg shadow-lg border border-[#B89B7A]">
+            <div className="flex items-center gap-2 text-[#B89B7A]">
+              <Plus className="h-4 w-4" />
+              <span className="text-sm font-medium">Solte aqui para adicionar</span>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {children}
     </div>
   );
@@ -633,12 +645,75 @@ const ResultPageLiveEditor: React.FC = () => {
                   )}>
                     <DropZone
                       onDrop={handleAddComponent}
-                      isOver={activeId !== null}
+                      isOver={isOverDropZone}
                     >
-                      <ResultPageVisualEditor
-                        selectedStyle={mockPrimaryStyle}
-                        initialConfig={resultPageConfig}
-                      />
+                      <div className="min-h-full relative">
+                        {/* Empty state when no blocks */}
+                        {blocks.length === 0 && !isPreviewing && (
+                          <div className="h-64 flex flex-col items-center justify-center text-[#8F7A6A] border-2 border-dashed border-[#B89B7A]/40 rounded-lg m-4">
+                            <div className="text-center">
+                              <Type className="h-12 w-12 mx-auto mb-4 text-[#B89B7A]/50" />
+                              <p className="text-lg font-medium mb-2">Arraste componentes para esta área</p>
+                              <p className="text-sm opacity-75">
+                                Ou use o botão "+" nos componentes da barra lateral
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Blocks preview with sortable functionality */}
+                        {blocks.length > 0 && (
+                          <div className="p-4">
+                            <SortableContext
+                              items={blocks.map(block => block.id)}
+                              strategy={verticalListSortingStrategy}
+                            >
+                              <div className="space-y-4">
+                                {blocks.map((block, index) => (
+                                  <SortableBlockItem
+                                    key={block.id}
+                                    blockId={block.id}
+                                    index={index}
+                                    isSelected={selectedBlockId === block.id}
+                                    onSelect={handleBlockSelect}
+                                    onDelete={blockActions.handleDeleteBlock}
+                                  >
+                                    <div className="p-4 bg-[#FAF9F7] border border-[#B89B7A]/20 rounded-lg hover:bg-[#FAF9F7]/80 transition-colors">
+                                      <div className="flex items-center gap-3 mb-2">
+                                        <div className="p-2 bg-white rounded border border-[#B89B7A]/20">
+                                          {componentBlocks.find(c => c.type === block.type)?.icon}
+                                        </div>
+                                        <div>
+                                          <div className="text-sm font-medium text-[#432818]">
+                                            {componentBlocks.find(c => c.type === block.type)?.name || block.type}
+                                          </div>
+                                          <div className="text-xs text-[#8F7A6A]">
+                                            {componentBlocks.find(c => c.type === block.type)?.description}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="text-sm text-[#432818] bg-white p-3 rounded border border-[#B89B7A]/10">
+                                        Preview do componente {block.type}
+                                      </div>
+                                    </div>
+                                  </SortableBlockItem>
+                                ))}
+                              </div>
+                            </SortableContext>
+                          </div>
+                        )}
+                        
+                        {/* ResultPageVisualEditor integration */}
+                        <div className={cn(
+                          "transition-opacity duration-200",
+                          blocks.length > 0 ? "mt-4 border-t border-[#B89B7A]/20" : ""
+                        )}>
+                          <ResultPageVisualEditor
+                            selectedStyle={mockPrimaryStyle}
+                            initialConfig={resultPageConfig}
+                          />
+                        </div>
+                      </div>
                     </DropZone>
                   </div>
                 </div>
