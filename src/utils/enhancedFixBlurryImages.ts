@@ -1,4 +1,5 @@
 
+import { optimizeCloudinaryUrl } from './images/optimization';
 import { FixBlurryImagesOptions } from './images/types';
 
 interface FixedImage {
@@ -19,7 +20,7 @@ export function fixBlurryIntroQuizImages(
 ): HTMLImageElement[] {
   const options = {
     quality: 85,
-    format: 'auto',
+    format: 'auto' as const,
     skipOptimized: true,
     forceOptimize: false,
     debug: false,
@@ -132,3 +133,93 @@ export const fixBlurryImages = fixBlurryIntroQuizImages;
 
 // Export default for compatibility with previous versions
 export default fixBlurryIntroQuizImages;
+
+export const enhancedFixBlurryImages = async (options: FixBlurryImagesOptions = {}) => {
+  const defaultOptions = {
+    quality: 85,
+    format: 'auto' as const,
+    threshold: 0.7,
+    skipOptimized: false,
+    forceOptimize: false,
+    debug: false,
+    placeholderColor: '#f8f5f2'
+  };
+
+  const config = { ...defaultOptions, ...options };
+
+  const optionsWithCloudinary = {
+    ...config,
+    optimizeCloudinaryUrl
+  };
+
+  const targetElement = document.body;
+  const fixedImages: HTMLImageElement[] = [];
+  
+  try {
+    // Primeiro, encontre todas as imagens no documento ou elemento raiz
+    const images = targetElement.querySelectorAll('img');
+    
+    if (optionsWithCloudinary.debug) {
+      console.log(`[enhancedFixBlurryImages] Analisando ${images.length} imagens`);
+    }
+    
+    // Para cada imagem, verifique se precisa ser otimizada
+    images.forEach((img) => {
+      // Ignore imagens já processadas
+      if (img.dataset.optimized === 'true' && !optionsWithCloudinary.forceOptimize) {
+        if (optionsWithCloudinary.debug) {
+          console.log(`[enhancedFixBlurryImages] Imagem já otimizada: ${img.src}`);
+        }
+        return;
+      }
+      
+      // Verifique se é uma imagem relevante para intro ou quiz
+      const isIntroImage = 
+        img.classList.contains('intro-image') || 
+        img.closest('[data-section="intro"]') || 
+        img.id === 'lcp-image';
+        
+      const isQuizImage = 
+        img.classList.contains('quiz-image') || 
+        img.closest('[data-section="quiz"]') ||
+        img.closest('.quiz-option-image');
+      
+      if (!isIntroImage && !isQuizImage) {
+        return;
+      }
+      
+      // Aplique otimização de imagem (exemplo simplificado)
+      const originalSrc = img.src;
+      
+      // Verifique se a imagem já tem um tamanho menor (aproximado)
+      const shouldOptimize = optionsWithCloudinary.forceOptimize || 
+        !originalSrc.includes('w_') || 
+        !originalSrc.includes('q_');
+      
+      if (shouldOptimize) {
+        // Aplicar otimização de imagem
+        const newSrc = applyOptimizations(originalSrc, optionsWithCloudinary);
+        img.src = newSrc;
+        img.dataset.optimized = 'true';
+        
+        fixedImages.push(img);
+        
+        if (optionsWithCloudinary.debug) {
+          console.log(`[enhancedFixBlurryImages] Imagem otimizada:`, {
+            original: originalSrc,
+            optimized: newSrc
+          });
+        }
+      }
+    });
+    
+    if (optionsWithCloudinary.debug) {
+      console.log(`[enhancedFixBlurryImages] Total de imagens otimizadas: ${fixedImages.length}`);
+    }
+    
+  } catch (error) {
+    console.error('[enhancedFixBlurryImages] Erro ao otimizar imagens:', error);
+  }
+  
+  return fixedImages;
+};

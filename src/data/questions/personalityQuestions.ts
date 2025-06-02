@@ -5,7 +5,7 @@ export const personalityQuestions: QuizQuestion[] = [
   {
     id: '2',
     title: 'RESUMA A SUA PERSONALIDADE:',
-    type: 'text',
+    type: 'multiple',
     multiSelect: 3,
     options: [
       {

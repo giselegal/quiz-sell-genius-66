@@ -1,13 +1,13 @@
 
-
-export interface Block {
+export interface UniversalBlock {
   id: string;
   type: string;
   content: Record<string, any>;
-  order: number; // Changed from optional to required to match EditorBlock
   settings?: Record<string, any>;
-  [key: string]: any;
+  order: number;
 }
+
+export interface Block extends UniversalBlock {}
 
 export type BlockType = 
   | 'heading'
@@ -23,18 +23,16 @@ export type BlockType =
   | 'carousel'
   | 'bonus'
   | 'guarantee'
+  | 'divider'
+  | 'spacer'
+  | 'video'
+  | 'benefits'
   | string;
 
-// Add missing EditorBlock type which was imported across many files
-export interface EditorBlock extends Block {
-  id: string;
-  type: BlockType;
-  content: EditableContent;
-  order: number;
-  settings?: Record<string, any>;
+export interface EditorBlock extends UniversalBlock {
+  content: EditableContent; 
 }
 
-// Add missing EditableContent type
 export interface EditableContent {
   title?: string;
   subtitle?: string;
@@ -45,55 +43,32 @@ export interface EditableContent {
   buttonText?: string;
   buttonUrl?: string;
   description?: string;
-  items?: any[];
-  style?: {
-    color?: string;
-    backgroundColor?: string;
-    padding?: string;
-    margin?: string;
-    textAlign?: string;
-    fontSize?: string;
-    fontWeight?: string;
-    fontFamily?: string;
-    lineHeight?: string;
-    width?: string;
-    height?: string;
-    borderRadius?: string;
-    display?: string;
-    flexDirection?: string;
-    justifyContent?: string;
-    alignItems?: string;
-    gap?: string;
-    boxShadow?: string;
-    letterSpacing?: string;
-    borderWidth?: string;
-    borderStyle?: string;
-    borderColor?: string;
-    objectFit?: string;
-    [key: string]: any;
-  };
+  items?: string[]; // Changed from Array<Record<string, any>> to string[]
+  style?: Record<string, any>;
   [key: string]: any;
 }
 
-// Add missing EditorConfig type
 export interface EditorConfig {
   blocks: EditorBlock[];
-  globalStyles?: {
-    backgroundColor?: string;
-    fontFamily?: string;
-    textColor?: string;
-    accentColor?: string;
-    secondaryColor?: string;
-    buttonStyle?: string;
-    headingStyle?: string;
-    spacing?: string;
-    borderRadius?: string;
-    [key: string]: any;
-  };
-  settings?: {
-    showLogo?: boolean;
-    showNavigation?: boolean;
-    showFooter?: boolean;
-    [key: string]: any;
-  };
+  globalStyles?: GlobalStyles;
+  settings?: EditorSettings;
+}
+
+export interface GlobalStyles extends Record<string, any> {
+  textColor?: string;
+  accentColor?: string;
+  secondaryColor?: string;
+  buttonStyle?: string;
+  headingStyle?: string;
+  spacing?: string;
+  borderRadius?: string;
+  [key: string]: any;
+}
+
+export interface EditorSettings {
+  showLogo?: boolean;
+  showNavigation?: boolean;
+  showFooter?: boolean;
+  customVariables?: Record<string, string | number>;
+  [key: string]: any;
 }

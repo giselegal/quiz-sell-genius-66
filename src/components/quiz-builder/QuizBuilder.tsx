@@ -14,6 +14,7 @@ import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from '@/services/resultPageStorage';
 import { createBuilderStateFromQuiz, loadQuizResultConfig } from '@/services/quizBuilderService';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { QuizTemplate } from '@/types/quizTemplate';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -129,12 +130,12 @@ export const QuizBuilder: React.FC = () => {
     setPreviewResult(previewResult);
   };
 
-  const handleImportTemplate = (template: QuizBuilderState) => {
-    initializeStages(template.stages);
-    initializeComponents(template.components);
+  const handleImportTemplate = (builderState: QuizBuilderState) => {
+    initializeStages(builderState.stages);
+    initializeComponents(builderState.components);
     
-    if (template.stages.length > 0) {
-      setActiveStage(template.stages[0].id);
+    if (builderState.stages.length > 0) {
+      setActiveStage(builderState.stages[0].id);
     }
     
     toast({

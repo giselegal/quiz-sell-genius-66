@@ -25,6 +25,7 @@ import FAQBlockPreview from './block-previews/FAQBlockPreview';
 import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
 import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
 import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
+import AntesDepoisTransformacaoBlockPreview from './block-previews/AntesDepoisTransformacaoBlockPreview';
 
 interface BlockRendererProps {
   block: Block;
@@ -88,6 +89,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
         return <CustomCodeBlockPreview content={block.content} />;
       case 'animation-block':
         return <AnimationBlockPreview content={block.content} />;
+      case 'antes-depois-transformacao':
+        return <AntesDepoisTransformacaoBlockPreview content={block.content} />;
       default:
         return <p>Bloco não reconhecido: {block.type}</p>;
     }

@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVisualEditor';
 import { TemplateList } from '@/components/editor/templates/TemplateList';
 import { Button } from '@/components/ui/button';
-import { defaultResultTemplate } from '@/config/resultPageTemplates';
 import { createOfferSectionConfig } from '@/utils/config/offerDefaults';
 
 export const EditorPage = () => {
@@ -19,22 +18,45 @@ export const EditorPage = () => {
     percentage: 100
   };
   
-  // Ensure the initialConfig follows the ResultPageConfig type structure
+  // Complete initialConfig with all required properties
   const initialConfig = {
     styleType: styleCategory,
+    heroSection: {
+      title: "Descubra Seu Estilo",
+      subtitle: "Transforme seu visual com nosso quiz personalizado",
+      imageUrl: "",
+      ctaText: "Começar Quiz",
+      backgroundColor: "#FAF9F7"
+    },
+    aboutSection: {
+      title: "Sobre Seu Estilo",
+      description: "Entenda melhor suas preferências e descubra looks perfeitos para você",
+      imageUrl: ""
+    },
     header: {
-      ...defaultResultTemplate.header,
       visible: true,
       style: {
-        ...defaultResultTemplate.header.style,
-        borderRadius: '0' // Using string value for borderRadius
+        borderRadius: '0',
+        padding: '20px',
+        backgroundColor: '#FAF9F7',
+        textColor: '#432818'
+      },
+      content: {
+        title: 'Quiz de Estilo',
+        logo: ''
       }
     },
     mainContent: {
-      ...defaultResultTemplate.mainContent,
-      visible: true
+      visible: true,
+      style: {
+        padding: '40px'
+      },
+      content: {
+        title: 'Seu Resultado',
+        description: 'Descubra seu estilo único'
+      }
     },
-    offer: createOfferSectionConfig(), // Using the createOfferConfig() function to create a proper OfferSection
+    offer: createOfferSectionConfig(),
     secondaryStyles: {
       visible: true,
       content: {},

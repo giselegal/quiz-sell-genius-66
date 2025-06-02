@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MetricCard } from '../MetricCard';
@@ -77,26 +76,26 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
   const conversionMetrics = [
     {
       title: 'Taxa de Conclusão',
-      value: formatPercentage(metrics.completionRate),
-      description: 'Quiz iniciado → Quiz completo',
-      change: '+2.5%',
-      trend: 'up',
+      value: metrics.completionRate, // Raw value for chart, tooltip will format
+      description: `Quiz: ${safeMetric(metrics.totalCompletes)}/${safeMetric(metrics.totalStarts)}`,
+      change: '+2.5%', // Placeholder
+      trend: 'up',    // Placeholder
       color: '#4f46e5'
     },
     {
-      title: 'Taxa de Conversão',
-      value: formatPercentage(metrics.conversionRate),
-      description: 'Quiz iniciado → Lead',
-      change: '+1.2%',
-      trend: 'up',
+      title: 'Taxa de Conversão (Lead)',
+      value: metrics.conversionRate, // Raw value for chart, tooltip will format
+      description: `Lead: ${safeMetric(metrics.totalLeads)}/${safeMetric(metrics.totalStarts)}`,
+      change: '+1.2%', // Placeholder
+      trend: 'up',    // Placeholder
       color: '#10b981'
     },
     {
-      title: 'Taxa de Vendas',
-      value: formatPercentage(metrics.salesRate),
-      description: 'Lead → Venda',
-      change: '-0.8%',
-      trend: 'down',
+      title: 'Taxa de Vendas (Lead)',
+      value: metrics.salesRate, // Raw value for chart, tooltip will format
+      description: `Venda: ${safeMetric(metrics.totalSales)}/${safeMetric(metrics.totalLeads)}`,
+      change: '-0.8%', // Placeholder
+      trend: 'down',   // Placeholder
       color: '#f59e0b'
     }
   ];
@@ -108,56 +107,56 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           title="Inicios de Quiz"
           value={safeMetric(metrics.totalStarts)}
           icon="Play"
-          trend="up"
-          change="+12%"
+          trend="up" // Placeholder
+          change="+12%" // Placeholder
           compact={compactView}
         />
         <MetricCard
           title="Quiz Completos"
           value={safeMetric(metrics.totalCompletes)}
           icon="CheckCircle"
-          trend="up"
-          change="+8%"
+          trend="up" // Placeholder
+          change="+8%" // Placeholder
+          compact={compactView}
+        />
+        <MetricCard
+          title="Taxa de Conclusão"
+          value={`${formatPercentage(metrics.completionRate)} (${safeMetric(metrics.totalCompletes)}/${safeMetric(metrics.totalStarts)})`}
+          icon="BarChart"
+          trend="up" // Placeholder
+          change="+2%" // Placeholder
           compact={compactView}
         />
         <MetricCard
           title="Resultados Vistos"
           value={safeMetric(metrics.totalResultViews)}
           icon="Eye"
-          trend="up"
-          change="+15%"
+          trend="up" // Placeholder
+          change="+15%" // Placeholder
           compact={compactView}
         />
         <MetricCard
           title="Leads Gerados"
           value={safeMetric(metrics.totalLeads)}
           icon="Users"
-          trend="up"
-          change="+5%"
+          trend="up" // Placeholder
+          change="+5%" // Placeholder
+          compact={compactView}
+        />
+        <MetricCard
+          title="Taxa de Conversão (Lead)"
+          value={`${formatPercentage(metrics.conversionRate)} (${safeMetric(metrics.totalLeads)}/${safeMetric(metrics.totalStarts)})`}
+          icon="TrendingUp"
+          trend="down" // Placeholder
+          change="-1%" // Placeholder
           compact={compactView}
         />
         <MetricCard
           title="Vendas"
           value={safeMetric(metrics.totalSales)}
           icon="ShoppingCart"
-          trend="up"
-          change="+3%"
-          compact={compactView}
-        />
-        <MetricCard
-          title="Taxa de Conclusão"
-          value={formatPercentage(metrics.completionRate)}
-          icon="BarChart"
-          trend="up"
-          change="+2%"
-          compact={compactView}
-        />
-        <MetricCard
-          title="Taxa de Conversão"
-          value={formatPercentage(metrics.conversionRate)}
-          icon="TrendingUp"
-          trend="down"
-          change="-1%"
+          trend="up" // Placeholder
+          change="+3%" // Placeholder
           compact={compactView}
         />
       </div>
@@ -168,7 +167,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           <CardDescription>Visualização dos eventos por data</CardDescription>
         </CardHeader>
         <CardContent className="px-2">
-          <div className={`w-full ${compactView ? 'h-[250px]' : 'h-[400px]'}`}>
+          <div className={`w-full ${compactView ? 'h-[200px]' : 'h-[300px]'}`}> {/* Reduced height */}
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
                 data={chartData}
@@ -210,7 +209,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
           <CardDescription>Análise das taxas de conversão entre etapas do funil</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className={`w-full ${compactView ? 'h-[200px]' : 'h-[300px]'}`}>
+          <div className={`w-full ${compactView ? 'h-[150px]' : 'h-[250px]'}`}> {/* Reduced height */}
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={conversionMetrics}
@@ -223,14 +222,14 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({ analyticsData, loading
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="title" />
-                <YAxis tickFormatter={(value) => `${value}%`} />
+                <YAxis tickFormatter={(value) => `${value.toFixed(1)}%`} /> {/* Ensure YAxis formats percentage */}
                 <Tooltip
-                  formatter={(value) => [value, 'Taxa']}
+                  formatter={(value, name, props) => [`${(typeof value === 'number' ? value : 0).toFixed(1)}%`, props.payload.description || 'Taxa']}
                   labelFormatter={(label) => `${label}`}
                 />
                 <Bar 
                   dataKey="value" 
-                  name="Taxa"
+                  name="Taxa" // This name is used by tooltip if not overridden by formatter
                   fill="#4f46e5"
                 />
               </BarChart>
