@@ -80,6 +80,13 @@ const AdminDashboard = () => {
             linkTo="/admin/quick-editor"
             buttonText="Editor Rápido"
           />
+
+          <DashboardCard
+            title="Editor Ao Vivo"
+            description="Editor visual moderno estilo InLead/Typeform com preview em tempo real"
+            linkTo="/admin/live-editor"
+            buttonText="Editor Ao Vivo"
+          />
           
           <DashboardCard
             title="Ver Resultados"

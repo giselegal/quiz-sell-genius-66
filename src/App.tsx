@@ -35,6 +35,7 @@ const BuilderDashboard = lazy(() => import('./pages/admin/BuilderDashboard')); /
 const BuilderPageSetup = lazy(() => import('./components/admin/BuilderPageSetup')); // Setup páginas A/B
 const HeaderEditorPage = lazy(() => import('./pages/admin/HeaderEditorPage')); // Editor do Header
 const ResultPageEditorPage = lazy(() => import('./pages/admin/ResultPageEditorPage')); // Editor da ResultPage
+const ResultPageLiveEditor = lazy(() => import('./pages/admin/ResultPageLiveEditor')); // Editor ao vivo estilo InLead/Typeform
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {

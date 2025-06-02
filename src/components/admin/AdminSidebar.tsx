@@ -28,6 +28,12 @@ const sidebarItems = [
     icon: Palette
   },
   {
+    title: 'Editor Ao Vivo',
+    href: '/admin/live-editor',
+    icon: Eye,
+    description: 'Editor visual moderno'
+  },
+  {
     title: 'Analytics Principal',
     href: '/admin/analytics',
     icon: TrendingUp,
