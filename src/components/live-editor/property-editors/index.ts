@@ -12,8 +12,14 @@ export { VideoPropertyEditor } from './VideoPropertyEditor';
 export { FAQPropertyEditor } from './FAQPropertyEditor';
 export { CountdownPropertyEditor } from './CountdownPropertyEditor';
 export { StatsPropertyEditor } from './StatsPropertyEditor';
+export { ContactPropertyEditor } from './ContactPropertyEditor';
 export { DividerPropertyEditor } from './DividerPropertyEditor';
 export { SpacerPropertyEditor } from './SpacerPropertyEditor';
+export { SocialProofPropertyEditor } from './SocialProofPropertyEditor';
+export { NewsletterPropertyEditor } from './NewsletterPropertyEditor';
+export { ChecklistPropertyEditor } from './ChecklistPropertyEditor';
+export { ComparisonPropertyEditor } from './ComparisonPropertyEditor';
+export { FeatureGridPropertyEditor } from './FeatureGridPropertyEditor';
 
 // Export the router component
 export { PropertyEditorRouter } from './PropertyEditorRouter';

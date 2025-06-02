@@ -37,13 +37,18 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
     return null;
   }
 
+  // Create a wrapper function that matches the expected signature
+  const handleUpdate = (content: any) => {
+    onUpdateBlock(selectedBlock.id, content);
+  };
+
   const renderPropertyEditor = () => {
     switch (selectedBlock.type) {
       case 'headline':
         return (
           <HeadlinePropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -51,7 +56,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <TextPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -59,7 +64,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <ImagePropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -67,7 +72,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <BenefitsPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -75,7 +80,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <PricingPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -83,7 +88,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <CTAPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -91,7 +96,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <GuaranteePropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -99,7 +104,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <StyleResultPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -107,7 +112,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <TestimonialPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -115,7 +120,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <VideoPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -123,7 +128,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <FAQPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -131,7 +136,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <CountdownPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -139,7 +144,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <StatsPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -147,7 +152,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <ContactPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -155,7 +160,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <DividerPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -163,7 +168,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <SpacerPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -171,7 +176,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <SocialProofPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -179,7 +184,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <NewsletterPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -187,7 +192,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <ChecklistPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -195,7 +200,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <ComparisonPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
@@ -203,7 +208,7 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
         return (
           <FeatureGridPropertyEditor
             block={selectedBlock}
-            onUpdate={onUpdateBlock}
+            onUpdate={handleUpdate}
           />
         );
       
