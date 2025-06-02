@@ -55,6 +55,11 @@ const ResultPageLiveEditor: React.FC = () => {
 
   const handleTogglePreview = () => {
     setIsPreviewMode(!isPreviewMode);
+    // Ao entrar no modo de visualização, desseleciona o bloco atual
+    if (!isPreviewMode) {
+      setSelectedBlockId(null);
+      setEditingBlock(null);
+    }
   };
 
   const handleDeleteBlock = (blockId: string) => {
@@ -77,6 +82,8 @@ const ResultPageLiveEditor: React.FC = () => {
   };
 
   const handleSave = () => {
+    // Aqui poderia ter lógica para salvar em um banco de dados ou localStorage
+    localStorage.setItem('editor-blocks', JSON.stringify(blocks));
     toast({
       title: "Configuração salva",
       description: "Todas as alterações foram salvas com sucesso",
