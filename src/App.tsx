@@ -28,6 +28,7 @@ const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const AccessLoaderPage = lazy(() => import('./pages/AccessLoaderPage'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
