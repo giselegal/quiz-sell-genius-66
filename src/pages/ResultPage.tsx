@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
+import { useResultPageConfig } from '@/hooks/useResultPageConfig';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
@@ -140,6 +141,10 @@ const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
   const { user } = useAuth();
+  
+  // ✨ NOVA INTEGRAÇÃO - Config editável
+  const { resultPageConfig, updateSection } = useResultPageConfig(primaryStyle?.category || 'Natural');
+  
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false
@@ -405,9 +410,9 @@ const ResultPage: React.FC = () => {
                   </AnimatedWrapper>
                 )}
                 
-                {/* TÍTULO OTIMIZADO */}
+                {/* TÍTULO EDITÁVEL */}
                 <h1 className="text-xl lg:text-3xl font-playfair text-[#432818] mb-6 leading-tight">
-                  Descobrimos Seu Estilo Predominante:
+                  {resultPageConfig?.heroSection?.title || "Descobrimos Seu Estilo Predominante:"}
                   <br />
                   <span className="text-2xl lg:text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                     {category}

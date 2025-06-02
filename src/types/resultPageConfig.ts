@@ -78,12 +78,30 @@ export interface OfferSection {
   guarantee: Section;
 }
 
+// Sistema de Blocos Drag-and-Drop
+export interface BlockData {
+  id: string;
+  type: 'hero' | 'text' | 'image' | 'cta' | 'testimonials' | 'pricing' | 'benefits' | 'guarantee' | 'mentor' | 'transformations' | 'bonus' | 'motivation' | 'secondary-styles';
+  title: string;
+  content: SectionContent;
+  style: StyleOptions;
+  visible: boolean;
+  order: number;
+  editable: boolean;
+}
+
+export interface DragDropConfig {
+  blocks: BlockData[];
+  globalStyles: GlobalStyles;
+}
+
 export interface ResultPageConfig {
   styleType: string;
   heroSection: HeroSection;
   aboutSection: AboutSection;
   globalStyles?: GlobalStyles;
-  blocks?: any[];
+  blocks?: BlockData[];
+  dragDropConfig?: DragDropConfig;
   header: Section;
   mainContent: Section;
   secondaryStyles: Section;
