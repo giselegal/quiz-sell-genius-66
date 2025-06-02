@@ -25,6 +25,7 @@ import FAQBlockPreview from './block-previews/FAQBlockPreview';
 import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
 import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
 import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
+import AntesDepoisTransformacaoBlockPreview from './block-previews/AntesDepoisTransformacaoBlockPreview';
 
 interface BlockRendererProps {
   block: Block;
