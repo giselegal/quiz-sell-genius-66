@@ -1,4 +1,25 @@
-import { ShoppingCart, Heart, Award, CheckCircle, Star, XCircle } from 'lucide-react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselPrevious, 
+  CarouselNext 
+} from '@/components/ui/carousel';
+import { 
+  Accordion, 
+  AccordionContent, 
+  AccordionItem, 
+  AccordionTrigger 
+} from '@/components/ui/accordion';
+import { trackButtonClick, trackSaleConversion } from '@/utils/analytics';
+import { StyleResult } from '@/types/quiz';
+import { CheckCircle, Star, XCircle, Award, Heart, ShoppingCart } from 'lucide-react';
 
 // Helper function to get style descriptions
 const getStyleDescription = (styleType: string): string => {

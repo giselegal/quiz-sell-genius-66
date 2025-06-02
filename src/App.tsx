@@ -8,8 +8,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { captureUTMParameters } from './utils/analytics';
 import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import CriticalCSSLoader from './components/CriticalCSSLoader';
-import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -29,40 +27,23 @@ const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-// Avalia se o dispositivo tem performance limitada
-const isLowPerformanceDevice = () => {
-  const memory = (navigator as any).deviceMemory;
-  if (memory && memory < 4) return true;
-  
-  const cpuCores = navigator.hardwareConcurrency;
-  if (cpuCores && cpuCores < 4) return true;
-  
-  return false;
-};
-
 const App = () => {
-  const lowPerformance = isLowPerformanceDevice();
-
   // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
       loadFacebookPixel();
       captureUTMParameters();
-      
-      console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
+      console.log('App initialized successfully');
     } catch (error) {
       console.error('Erro ao inicializar aplicativo:', error);
     }
-  }, [lowPerformance]);
+  }, []);
 
   return (
     <AuthProvider>
       <QuizProvider>
         <TooltipProvider>
           <Router>
-            <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
-            <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
-            
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 {/* ROTA PRINCIPAL - Quiz com introdução */}
@@ -84,6 +65,7 @@ const App = () => {
                 {/* Redirecionamentos para manter compatibilidade */}
                 <Route path="/home" element={<Navigate to="/" replace />} />
                 <Route path="/quiz" element={<Navigate to="/" replace />} />
+                <Route path="/result" element={<Navigate to="/resultado" replace />} />
                 
                 {/* 404 - Página não encontrada */}
                 <Route path="*" element={<NotFoundPage />} />
