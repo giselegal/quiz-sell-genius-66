@@ -43,6 +43,10 @@ export const useBuilderContent = ({
           setIsBuilderVersion(true);
         } else if (!fallbackToOriginal) {
           setError('Conteúdo não encontrado no Builder.io');
+        } else {
+          // Se não há conteúdo e fallback está habilitado, 
+          // não considera erro e permite usar página original
+          console.log(`Modelo ${model} não encontrado no Builder.io, usando fallback`);
         }
       } catch (err) {
         console.warn('Erro ao buscar conteúdo do Builder.io:', err);

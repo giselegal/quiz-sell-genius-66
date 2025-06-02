@@ -23,8 +23,8 @@ const QuizOfferPageWithBuilder: React.FC = () => {
     }
   });
 
-  // Mostrar loading apenas se estiver carregando e não há fallback
-  if (loading && !content) {
+  // Mostrar loading apenas se estiver carregando
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FAF9F7] via-[#F5F2EE] to-[#F0EBE5]">
         <LoadingSpinner />

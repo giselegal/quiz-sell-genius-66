@@ -23,8 +23,8 @@ const ResultPageWithBuilder: React.FC = () => {
     }
   });
 
-  // Mostrar loading apenas se estiver carregando e não há fallback
-  if (loading && !content) {
+  // Mostrar loading apenas se estiver carregando e não há conteúdo
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#fffaf7]">
         <LoadingSpinner />

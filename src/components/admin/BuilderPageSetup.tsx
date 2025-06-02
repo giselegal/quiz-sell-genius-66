@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { AlertCircle, CheckCircle, ExternalLink, Settings } from 'lucide-react';
+import { AlertCircle, CheckCircle, ExternalLink, Settings, Info } from 'lucide-react';
 import { checkBuilderModels, builderModels } from '@/utils/builderModels';
+import { createAllRequiredModels, openBuilderSetupInstructions } from '@/utils/builderModelCreator';
 
 const BuilderPageSetup: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -33,13 +34,23 @@ const BuilderPageSetup: React.FC = () => {
       setLoading(true);
       setError(null);
       
-      // Simular criação de modelos - na prática seria feito via Builder.io dashboard
-      alert('Para criar os modelos, acesse o Builder.io dashboard e crie manualmente os modelos: ' + 
-            Object.values(builderModels).join(', '));
+      // Tentar criar automaticamente os modelos via API
+      const result = await createAllRequiredModels();
       
-      await checkModelsStatus();
+      if (result.success) {
+        alert(`Modelos criados com sucesso: ${result.createdModels.join(', ')}`);
+        await checkModelsStatus();
+      } else {
+        // Se não conseguir criar automaticamente, mostrar instruções
+        const instructions = openBuilderSetupInstructions();
+        setError(`Não foi possível criar os modelos automaticamente. ${instructions}`);
+      }
+      
     } catch (err) {
-      setError('Erro ao configurar modelos Builder.io');
+      console.error('Erro ao configurar modelos:', err);
+      // Fallback para instruções manuais
+      openBuilderSetupInstructions();
+      setError('Erro ao configurar modelos Builder.io. Verifique as instruções na nova aba aberta.');
     } finally {
       setLoading(false);
     }
@@ -64,9 +75,22 @@ const BuilderPageSetup: React.FC = () => {
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
           Configuração das Páginas A/B Testing
         </h2>
-        <p className="text-gray-600">
+        <p className="text-gray-600 mb-4">
           Configure e gerencie as páginas editáveis no Builder.io para testes A/B
         </p>
+        
+        {!modelsStatus?.bothExist && (
+          <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start gap-3">
+            <Info className="h-5 w-5 text-yellow-600 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-yellow-800 mb-1">Modelos Builder.io Necessários</h4>
+              <p className="text-yellow-700 text-sm">
+                As rotas <code>/resultado</code> e <code>/quiz-descubra-seu-estilo</code> precisam dos modelos 
+                Builder.io para funcionar. Clique em "Configurar Modelo" para criá-los automaticamente.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {error && (
