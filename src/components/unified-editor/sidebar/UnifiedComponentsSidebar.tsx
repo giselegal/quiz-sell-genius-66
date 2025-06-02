@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -299,6 +298,36 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
             name: 'Perguntas Frequentes',
             icon: <AlertCircle className="w-4 h-4" />,
             description: 'Seção de perguntas e respostas'
+          },
+          {
+            type: 'bonus',
+            name: 'Bônus',
+            icon: <Star className="w-4 h-4" />,
+            description: 'Seção de bônus e benefícios extras'
+          },
+          {
+            type: 'urgency',
+            name: 'Urgência',
+            icon: <AlertCircle className="w-4 h-4" />,
+            description: 'Elementos de urgência e escassez'
+          },
+          {
+            type: 'social-proof',
+            name: 'Prova Social',
+            icon: <Users className="w-4 h-4" />,
+            description: 'Elementos de prova social e credibilidade'
+          },
+          {
+            type: 'quiz-stats',
+            name: 'Estatísticas do Quiz',
+            icon: <BarChart2 className="w-4 h-4" />,
+            description: 'Estatísticas detalhadas do resultado'
+          },
+          {
+            type: 'transformation',
+            name: 'Transformação',
+            icon: <ArrowRight className="w-4 h-4" />,
+            description: 'Histórias de transformação de clientes'
           }
         ]
       },
