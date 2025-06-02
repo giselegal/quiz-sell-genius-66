@@ -10,7 +10,7 @@ const AdminLoadingPage: React.FC = () => {
   const [currentFiles, setCurrentFiles] = useState(2000);
   const [totalFiles] = useState(3700);
   const [progressPercent, setProgressPercent] = useState(54);
-  const [timeRemaining, setTimeRemaining] = useState('3:00');
+  const [timeRemaining, setTimeRemaining] = useState('');
   const [currentFile, setCurrentFile] = useState('src/components/QuizFlow.tsx');
 
   const sampleFiles = [
@@ -24,28 +24,47 @@ const AdminLoadingPage: React.FC = () => {
     'src/pages/admin/AdminDashboard.tsx'
   ];
 
+  // Função para calcular tempo restante baseado no progresso
+  const calculateTimeRemaining = (current: number, total: number) => {
+    const remainingFiles = total - current;
+    const filesPerMinute = 15; // Velocidade estimada de processamento
+    const remainingMinutes = Math.ceil(remainingFiles / filesPerMinute);
+    
+    const now = new Date();
+    const completionTime = new Date(now.getTime() + remainingMinutes * 60000);
+    
+    const hours = completionTime.getHours();
+    const minutes = completionTime.getMinutes();
+    
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentFiles(prev => {
         if (prev >= totalFiles) return totalFiles;
         const increment = Math.floor(Math.random() * 15) + 5;
-        return Math.min(prev + increment, totalFiles);
-      });
-      
-      setProgressPercent(prev => {
-        const newPercent = Math.floor((currentFiles / totalFiles) * 100);
-        return Math.min(newPercent, 100);
+        const newValue = Math.min(prev + increment, totalFiles);
+        
+        // Atualizar porcentagem baseada no progresso real
+        const newPercent = Math.floor((newValue / totalFiles) * 100);
+        setProgressPercent(newPercent);
+        
+        // Calcular tempo restante real
+        const remainingTime = calculateTimeRemaining(newValue, totalFiles);
+        setTimeRemaining(remainingTime);
+        
+        return newValue;
       });
 
       // Simular mudança de arquivo atual
       const randomFile = sampleFiles[Math.floor(Math.random() * sampleFiles.length)];
       setCurrentFile(randomFile);
-
-      // Atualizar tempo restante
-      const minutes = Math.floor(Math.random() * 4) + 1;
-      const seconds = Math.floor(Math.random() * 60);
-      setTimeRemaining(`${minutes}:${seconds.toString().padStart(2, '0')}`);
     }, 800);
+
+    // Calcular tempo inicial
+    const initialTime = calculateTimeRemaining(currentFiles, totalFiles);
+    setTimeRemaining(initialTime);
 
     return () => clearInterval(interval);
   }, [currentFiles, totalFiles]);
@@ -106,7 +125,7 @@ const AdminLoadingPage: React.FC = () => {
             <div className="bg-slate-700/50 rounded-lg p-4 text-center">
               <div className="flex items-center justify-center mb-2">
                 <Clock className="h-5 w-5 text-orange-400 mr-2" />
-                <span className="text-sm text-slate-300">ETA</span>
+                <span className="text-sm text-slate-300">Conclusão</span>
               </div>
               <div className="text-2xl font-bold text-white">
                 {timeRemaining}
@@ -140,7 +159,7 @@ const AdminLoadingPage: React.FC = () => {
                 <span>Alta Performance</span>
               </div>
               <span>•</span>
-              <span>Conclusão prevista: 03:00 AM - 03/06</span>
+              <span>Conclusão prevista: {timeRemaining} - 03/06</span>
             </div>
           </div>
 
