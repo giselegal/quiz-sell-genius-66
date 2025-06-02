@@ -2,61 +2,63 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface User {
-  userName: string;
-  email?: string; // Added email as optional property
-  role?: string;  // Added role property for admin access
+  id: string;
+  userName?: string;
+  email?: string;
+  role?: 'admin' | 'user';
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (name: string, email?: string) => void;
+  setUser: (user: User | null) => void;
+  login: (userName: string) => void;
   logout: () => void;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const savedName = localStorage.getItem('userName');
-    const savedEmail = localStorage.getItem('userEmail');
-    const savedRole = localStorage.getItem('userRole');
-    
-    return savedName ? { 
-      userName: savedName,
-      ...(savedEmail && { email: savedEmail }),
-      ...(savedRole && { role: savedRole })
-    } : null;
+    // Get user name from localStorage if available
+    const userName = localStorage.getItem('userName');
+    if (userName) {
+      return {
+        id: '1',
+        userName,
+        email: 'user@quiz.com',
+        role: 'user'
+      };
+    }
+    return null;
   });
 
-  const login = (name: string, email?: string) => {
-    const userData: User = { 
-      userName: name 
+  const login = (userName: string) => {
+    const newUser = {
+      id: '1',
+      userName,
+      email: 'user@quiz.com',
+      role: 'user' as const
     };
-    
-    if (email) {
-      userData.email = email;
-      localStorage.setItem('userEmail', email);
-    }
-    
-    // Preservar o status de admin caso exista
-    const savedRole = localStorage.getItem('userRole');
-    if (savedRole) {
-      userData.role = savedRole;
-    }
-    
-    setUser(userData);
-    localStorage.setItem('userName', name);
+    setUser(newUser);
+    localStorage.setItem('userName', userName);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('userName');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userRole');
+  };
+
+  const contextValue = {
+    user,
+    setUser,
+    login,
+    logout,
+    isAuthenticated: !!user
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

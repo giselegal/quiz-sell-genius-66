@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { QuizHeader } from './QuizHeader';
 import { StrategicQuestions } from './StrategicQuestions';
+
 interface QuizContentProps {
   user: any;
   currentQuestionIndex: number;
@@ -13,6 +15,7 @@ interface QuizContentProps {
   currentAnswers: string[];
   handleAnswerSubmit: (response: UserResponse) => void;
 }
+
 export const QuizContent: React.FC<QuizContentProps> = ({
   user,
   currentQuestionIndex,
@@ -31,11 +34,34 @@ export const QuizContent: React.FC<QuizContentProps> = ({
 
   // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length === requiredSelections;
-  return <>
-      <QuizHeader userName={userName} currentQuestionIndex={currentQuestionIndex} totalQuestions={totalQuestions} showingStrategicQuestions={showingStrategicQuestions} currentStrategicQuestionIndex={currentStrategicQuestionIndex} />
+
+  return (
+    <>
+      <QuizHeader 
+        userName={userName}
+        currentQuestionIndex={currentQuestionIndex}
+        totalQuestions={totalQuestions}
+        showingStrategicQuestions={showingStrategicQuestions}
+        currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+      />
 
       <div className="container mx-auto py-8 w-full max-w-5xl px-0">
-        {showingStrategicQuestions ? <StrategicQuestions currentQuestionIndex={currentStrategicQuestionIndex} answers={{}} onAnswer={handleAnswerSubmit} /> : <QuizQuestion question={currentQuestion} onAnswer={handleAnswerSubmit} currentAnswers={currentAnswers || []} showQuestionImage={true} autoAdvance={true} />}
+        {showingStrategicQuestions ? (
+          <StrategicQuestions 
+            currentQuestionIndex={currentStrategicQuestionIndex}
+            answers={{}}
+            onAnswer={handleAnswerSubmit}
+          />
+        ) : (
+          <QuizQuestion 
+            question={currentQuestion}
+            onAnswer={handleAnswerSubmit}
+            currentAnswers={currentAnswers || []}
+            showQuestionImage={true}
+            autoAdvance={true}
+          />
+        )}
       </div>
-    </>;
+    </>
+  );
 };

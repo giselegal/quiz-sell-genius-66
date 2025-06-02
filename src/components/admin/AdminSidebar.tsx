@@ -47,14 +47,21 @@ const sidebarItems = [
   },
   {
     title: 'Testes A/B',
-    href: '/admin/ab-test-manager',
+    href: '/admin/ab-tests',
     icon: Target,
     description: 'Gerenciador de testes'
   },
   {
-    title: 'Configurações',
-    href: '/admin/settings',
-    icon: Settings
+    title: 'Métricas Rápidas',
+    href: '/admin/quick-metrics',
+    icon: Users,
+    description: 'Dashboard resumido'
+  },
+  {
+    title: 'Editor de Header',
+    href: '/admin/header-editor',
+    icon: Settings,
+    description: 'Personalizar cabeçalho'
   }
 ];
 

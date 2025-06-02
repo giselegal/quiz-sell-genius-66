@@ -42,15 +42,15 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         
         if (type === 'text') {
           element.style.borderColor = '#b29670';
+          // Sombra reduzida para opções de texto selecionadas
           element.style.boxShadow = isStrategicOption 
-            ? '0 8px 25px rgba(178, 150, 112, 0.4), 0 0 0 2px rgba(178, 150, 112, 0.2)' 
-            : '0 6px 20px rgba(178, 150, 112, 0.3), 0 0 0 1px rgba(178, 150, 112, 0.15)';
+            ? '0 4px 12px rgba(178, 150, 112, 0.2), 0 0 0 2px rgba(178, 150, 112, 0.2)' 
+            : '0 2px 8px rgba(178, 150, 112, 0.15), 0 0 0 1px rgba(178, 150, 112, 0.15)';
           element.style.backgroundColor = '#faf9f7';
         } else {
           element.style.borderColor = 'transparent';
-          element.style.boxShadow = isStrategicOption 
-            ? '0 15px 35px rgba(0, 0, 0, 0.25), 0 5px 15px rgba(178, 150, 112, 0.2)' 
-            : '0 12px 28px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(178, 150, 112, 0.15)';
+          // REMOVIDA A SOMBRA para opções com imagem
+          element.style.boxShadow = 'none';
         }
         
         // Efeito de pulse suave
@@ -69,11 +69,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         element.style.transform = 'scale(1)';
         if (type === 'text') {
           element.style.borderColor = '#E5E7EB';
-          element.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+          element.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.03)'; // Sombra muito sutil
           element.style.backgroundColor = '#FEFEFE';
         } else {
           element.style.borderColor = 'transparent';
-          element.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+          element.style.boxShadow = 'none'; // REMOVIDA A SOMBRA
         }
       }
     }
@@ -120,10 +120,10 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           type === 'text' && "p-4 border-2",
           type !== 'text' && "border-0",
           
-          "bg-[#FEFEFE] shadow-sm",
+          "bg-[#FEFEFE]", // Removida a classe shadow-sm
           
-          // Hover effects apenas se não estiver selecionado
-          !isSelected && !isDisabled && "hover:shadow-lg hover:-translate-y-1",
+          // Hover effects apenas se não estiver selecionado - SEM SOMBRAS
+          !isSelected && !isDisabled && "hover:-translate-y-1",
           
           // Efeitos de animação
           isAnimating && "animate-pulse",
@@ -171,8 +171,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           <div className={cn(
             "absolute z-20 flex items-center justify-center transition-all duration-300 ease-out",
             isStrategicOption 
-              ? "top-2 right-2 h-8 w-8 bg-[#b29670] rounded-full shadow-lg" 
-              : "top-1 right-1 h-6 w-6 bg-[#b29670] rounded-full shadow-md",
+              ? "top-2 right-2 h-8 w-8 bg-[#b29670] rounded-full" // Removida shadow-lg
+              : "top-1 right-1 h-6 w-6 bg-[#b29670] rounded-full", // Removida shadow-md
             "animate-in zoom-in-50 duration-200"
           )}>
             <Check
