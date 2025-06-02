@@ -22,7 +22,8 @@ import {
   Target, 
   Zap,
   Plus,
-  Settings
+  Settings,
+  GripVertical
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -30,6 +31,25 @@ import { ResultPageVisualEditor } from '@/components/result-editor/ResultPageVis
 import { useBlockOperations } from '@/hooks/editor/useBlockOperations';
 import { useResultPageEditor } from '@/hooks/useResultPageEditor';
 import { StyleResult } from '@/types/quiz';
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import {
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 // Tipos de componentes disponíveis para arrastar
 interface ComponentBlock {
@@ -115,12 +135,172 @@ const mockPrimaryStyle: StyleResult = {
   percentage: 85
 };
 
+// Draggable Component Block Interface
+interface DraggableComponentBlockProps {
+  component: ComponentBlock;
+  onAdd: (type: ComponentBlock['type']) => void;
+}
+
+const DraggableComponentBlock: React.FC<DraggableComponentBlockProps> = ({ component, onAdd }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: component.id,
+    data: {
+      type: 'component',
+      component,
+    },
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={cn(
+        "p-3 rounded-lg border border-gray-200 cursor-grab transition-all duration-200",
+        "hover:border-[#B89B7A] hover:bg-[#FAF9F7] hover:shadow-sm",
+        "group",
+        isDragging && "opacity-50 cursor-grabbing"
+      )}
+    >
+      <div className="flex items-start gap-3">
+        <div className="p-2 bg-[#FAF9F7] rounded-md group-hover:bg-[#B89B7A] group-hover:text-white transition-colors">
+          {component.icon}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="font-medium text-sm text-[#432818] truncate">
+            {component.name}
+          </div>
+          <div className="text-xs text-[#8F7A6A] leading-relaxed">
+            {component.description}
+          </div>
+        </div>
+        <div className="flex flex-col gap-1">
+          <GripVertical className="h-3 w-3 text-[#8F7A6A] group-hover:text-[#B89B7A] transition-colors flex-shrink-0" />
+          <Plus 
+            className="h-3 w-3 text-[#8F7A6A] group-hover:text-[#B89B7A] transition-colors flex-shrink-0 cursor-pointer" 
+            onClick={(e) => {
+              e.stopPropagation();
+              onAdd(component.type);
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Sortable Block Item for the preview area
+interface SortableBlockItemProps {
+  blockId: string;
+  index: number;
+  isSelected: boolean;
+  onSelect: (blockId: string) => void;
+  onDelete: (blockId: string) => void;
+  children: React.ReactNode;
+}
+
+const SortableBlockItem: React.FC<SortableBlockItemProps> = ({
+  blockId,
+  index,
+  isSelected,
+  onSelect,
+  onDelete,
+  children,
+}) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: blockId,
+    data: {
+      type: 'block',
+      blockId,
+      index,
+    },
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        "relative group border-2 border-transparent rounded-lg transition-all duration-200",
+        isSelected && "border-[#B89B7A] shadow-sm",
+        isDragging && "opacity-50",
+        "hover:border-[#B89B7A]/50"
+      )}
+      onClick={() => onSelect(blockId)}
+    >
+      {/* Drag Handle */}
+      <div
+        {...attributes}
+        {...listeners}
+        className={cn(
+          "absolute -left-8 top-2 opacity-0 group-hover:opacity-100 transition-opacity",
+          "bg-white border border-gray-200 rounded p-1 cursor-grab hover:bg-gray-50",
+          isDragging && "cursor-grabbing"
+        )}
+      >
+        <GripVertical className="h-4 w-4 text-gray-400" />
+      </div>
+
+      {/* Delete Button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(blockId);
+        }}
+        className={cn(
+          "absolute -right-8 top-2 opacity-0 group-hover:opacity-100 transition-opacity",
+          "bg-red-500 hover:bg-red-600 text-white rounded p-1 text-xs"
+        )}
+      >
+        ✕
+      </button>
+
+      {children}
+    </div>
+  );
+}
+
 const ResultPageLiveEditor: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'content' | 'marketing' | 'design'>('all');
+  const [activeId, setActiveId] = useState<string | null>(null);
   const { toast } = useToast();
+
+  // Configure drag sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
 
   // Use o hook existente do ResultPageEditor
   const {
@@ -150,6 +330,43 @@ const ResultPageLiveEditor: React.FC = () => {
       updateSection('blocks', []);
     }
   }, [resultPageConfig, updateBlocks, updateSection]);
+
+  // Handle drag start
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    setActiveId(active.id as string);
+  };
+
+  // Handle drag end
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveId(null);
+
+    if (!over) return;
+
+    // Handle component drop to preview area
+    if (active.data.current?.type === 'component' && over.data.current?.type === 'drop-zone') {
+      const component = active.data.current.component as ComponentBlock;
+      handleAddComponent(component.type);
+      return;
+    }
+
+    // Handle block reordering within preview
+    if (active.data.current?.type === 'block' && over.data.current?.type === 'block') {
+      const activeIndex = blocks.findIndex(block => block.id === active.id);
+      const overIndex = blocks.findIndex(block => block.id === over.id);
+
+      if (activeIndex !== overIndex) {
+        const newBlocks = arrayMove(blocks, activeIndex, overIndex).map((block, index) => ({
+          ...block,
+          order: index
+        }));
+        
+        updateBlocks(newBlocks);
+        updateSection('blocks', newBlocks);
+      }
+    }
+  };
 
   const handleAddComponent = (type: ComponentBlock['type']) => {
     const newBlockId = blockActions.handleAddBlock(type);
@@ -213,259 +430,259 @@ const ResultPageLiveEditor: React.FC = () => {
   }
 
   return (
-    <div className="h-screen bg-[#FAF9F7] flex flex-col">
-      {/* Header Toolbar */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link to="/admin/dashboard">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Voltar
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="h-screen bg-[#FAF9F7] flex flex-col">
+        {/* Header Toolbar */}
+        <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link to="/admin/dashboard">
+              <Button variant="ghost" size="sm">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Voltar
+              </Button>
+            </Link>
+            <Separator orientation="vertical" className="h-6" />
+            <div>
+              <h1 className="text-lg font-semibold text-[#432818]">Editor Visual da Página de Resultado</h1>
+              <p className="text-sm text-[#8F7A6A]">Crie uma experiência visual incrível para seus usuários</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Device Preview Controls */}
+            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+              <Button
+                variant={previewDevice === 'desktop' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setPreviewDevice('desktop')}
+                className="h-8 px-3"
+              >
+                <Monitor className="h-3 w-3" />
+              </Button>
+              <Button
+                variant={previewDevice === 'tablet' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setPreviewDevice('tablet')}
+                className="h-8 px-3"
+              >
+                <Tablet className="h-3 w-3" />
+              </Button>
+              <Button
+                variant={previewDevice === 'mobile' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setPreviewDevice('mobile')}
+                className="h-8 px-3"
+              >
+                <Smartphone className="h-3 w-3" />
+              </Button>
+            </div>
+
+            {/* Preview Toggle */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setIsPreviewing(!isPreviewing);
+                togglePreview();
+              }}
+              className="flex items-center gap-2"
+            >
+              {isPreviewing ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {isPreviewing ? 'Editar' : 'Visualizar'}
             </Button>
-          </Link>
-          <Separator orientation="vertical" className="h-6" />
-          <div>
-            <h1 className="text-lg font-semibold text-[#432818]">Editor Visual da Página de Resultado</h1>
-            <p className="text-sm text-[#8F7A6A]">Crie uma experiência visual incrível para seus usuários</p>
+
+            {/* Save Button */}
+            <Button
+              onClick={handleSaveChanges}
+              size="sm"
+              className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Salvar
+            </Button>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Device Preview Controls */}
-          <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
-            <Button
-              variant={previewDevice === 'desktop' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setPreviewDevice('desktop')}
-              className="h-8 px-3"
-            >
-              <Monitor className="h-3 w-3" />
-            </Button>
-            <Button
-              variant={previewDevice === 'tablet' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setPreviewDevice('tablet')}
-              className="h-8 px-3"
-            >
-              <Tablet className="h-3 w-3" />
-            </Button>
-            <Button
-              variant={previewDevice === 'mobile' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setPreviewDevice('mobile')}
-              className="h-8 px-3"
-            >
-              <Smartphone className="h-3 w-3" />
-            </Button>
-          </div>
+        {/* Main Editor Layout */}
+        <div className="flex-1 overflow-hidden">
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            {/* Left Sidebar - Components */}
+            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+              <div className="h-full bg-white border-r border-gray-200 flex flex-col">
+                {/* Sidebar Header */}
+                <div className="p-4 border-b border-gray-200">
+                  <h3 className="font-medium text-[#432818] mb-3">Componentes</h3>
+                  
+                  {/* Category Filter */}
+                  <div className="flex flex-wrap gap-1">
+                    <Badge
+                      variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                      className="cursor-pointer text-xs"
+                      onClick={() => setSelectedCategory('all')}
+                    >
+                      Todos
+                    </Badge>
+                    <Badge
+                      variant={selectedCategory === 'content' ? 'default' : 'outline'}
+                      className="cursor-pointer text-xs"
+                      onClick={() => setSelectedCategory('content')}
+                    >
+                      Conteúdo
+                    </Badge>
+                    <Badge
+                      variant={selectedCategory === 'marketing' ? 'default' : 'outline'}
+                      className="cursor-pointer text-xs"
+                      onClick={() => setSelectedCategory('marketing')}
+                    >
+                      Marketing
+                    </Badge>
+                    <Badge
+                      variant={selectedCategory === 'design' ? 'default' : 'outline'}
+                      className="cursor-pointer text-xs"
+                      onClick={() => setSelectedCategory('design')}
+                    >
+                      Design
+                    </Badge>
+                  </div>
+                </div>
 
-          {/* Preview Toggle */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setIsPreviewing(!isPreviewing);
-              togglePreview();
-            }}
-            className="flex items-center gap-2"
-          >
-            {isPreviewing ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            {isPreviewing ? 'Editar' : 'Visualizar'}
-          </Button>
+                {/* Components List */}
+                <ScrollArea className="flex-1">
+                  <div className="p-4 space-y-2">
+                    <SortableContext items={filteredComponents.map(c => c.id)} strategy={verticalListSortingStrategy}>
+                      {filteredComponents.map((component) => (
+                        <DraggableComponentBlock
+                          key={component.id}
+                          component={component}
+                          onAdd={handleAddComponent}
+                        />
+                      ))}
+                    </SortableContext>
+                  </div>
+                </ScrollArea>
+              </div>
+            </ResizablePanel>
 
-          {/* Save Button */}
-          <Button
-            onClick={handleSaveChanges}
-            size="sm"
-            className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white"
-          >
-            <Save className="h-4 w-4 mr-2" />
-            Salvar
-          </Button>
+            <ResizableHandle withHandle />
+
+            {/* Center Panel - Preview */}
+            <ResizablePanel defaultSize={55}>
+              <div className="h-full flex flex-col bg-[#f8f9fa]">
+                {/* Preview Header */}
+                <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <h3 className="font-medium text-[#432818]">Preview</h3>
+                    <Badge variant="outline" className="text-xs">
+                      {previewDevice === 'desktop' && 'Desktop'}
+                      {previewDevice === 'tablet' && 'Tablet'}
+                      {previewDevice === 'mobile' && 'Mobile'}
+                    </Badge>
+                  </div>
+                  
+                  <div className="text-xs text-[#8F7A6A]">
+                    {blocks.length} {blocks.length === 1 ? 'componente' : 'componentes'}
+                  </div>
+                </div>
+
+                {/* Preview Content */}
+                <div className="flex-1 overflow-auto p-6 flex justify-center">
+                  <div className={cn(
+                    "w-full bg-white rounded-lg shadow-sm border border-gray-200 min-h-full transition-all duration-300",
+                    getDeviceClass()
+                  )}>
+                    <ResultPageVisualEditor
+                      selectedStyle={mockPrimaryStyle}
+                      initialConfig={resultPageConfig}
+                    />
+                  </div>
+                </div>
+              </div>
+            </ResizablePanel>
+
+            <ResizableHandle withHandle />
+
+            {/* Right Panel - Properties */}
+            <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
+              <div className="h-full bg-white border-l border-gray-200 flex flex-col">
+                {/* Properties Header */}
+                <div className="p-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-medium text-[#432818]">Propriedades</h3>
+                    {selectedComponentId && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedComponentId(null);
+                          setSelectedBlockId(null);
+                        }}
+                      >
+                        ✕
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Properties Content */}
+                <ScrollArea className="flex-1">
+                  <div className="p-4">
+                    {selectedComponentId ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3 p-3 bg-[#FAF9F7] rounded-lg">
+                          <Settings className="h-4 w-4 text-[#B89B7A]" />
+                          <div>
+                            <div className="font-medium text-sm text-[#432818]">
+                              Componente Selecionado
+                            </div>
+                            <div className="text-xs text-[#8F7A6A]">
+                              {componentBlocks.find(c => c.id === selectedComponentId)?.name || 'Componente'}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* O painel de propriedades específico será renderizado pelo ResultPageVisualEditor */}
+                        <div className="text-sm text-[#8F7A6A]">
+                          As propriedades deste componente aparecerão aqui quando implementadas.
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <Settings className="h-8 w-8 mx-auto mb-3 text-[#8F7A6A] opacity-50" />
+                        <p className="text-sm text-[#8F7A6A] mb-1">Nenhum componente selecionado</p>
+                        <p className="text-xs text-[#8F7A6A]">
+                          Clique em um componente no preview para editar suas propriedades
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
         </div>
       </div>
 
-      {/* Main Editor Layout */}
-      <div className="flex-1 overflow-hidden">
-        <ResizablePanelGroup direction="horizontal" className="h-full">
-          {/* Left Sidebar - Components */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <div className="h-full bg-white border-r border-gray-200 flex flex-col">
-              {/* Sidebar Header */}
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="font-medium text-[#432818] mb-3">Componentes</h3>
-                
-                {/* Category Filter */}
-                <div className="flex flex-wrap gap-1">
-                  <Badge
-                    variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                    className="cursor-pointer text-xs"
-                    onClick={() => setSelectedCategory('all')}
-                  >
-                    Todos
-                  </Badge>
-                  <Badge
-                    variant={selectedCategory === 'content' ? 'default' : 'outline'}
-                    className="cursor-pointer text-xs"
-                    onClick={() => setSelectedCategory('content')}
-                  >
-                    Conteúdo
-                  </Badge>
-                  <Badge
-                    variant={selectedCategory === 'marketing' ? 'default' : 'outline'}
-                    className="cursor-pointer text-xs"
-                    onClick={() => setSelectedCategory('marketing')}
-                  >
-                    Marketing
-                  </Badge>
-                  <Badge
-                    variant={selectedCategory === 'design' ? 'default' : 'outline'}
-                    className="cursor-pointer text-xs"
-                    onClick={() => setSelectedCategory('design')}
-                  >
-                    Design
-                  </Badge>
+      {/* Drag Overlay */}
+      <DragOverlay>
+        {activeId ? (
+          <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200 opacity-90">
+            {(() => {
+              const component = componentBlocks.find(c => c.id === activeId);
+              return component ? (
+                <div className="flex items-center gap-2">
+                  {component.icon}
+                  <span className="text-sm font-medium">{component.name}</span>
                 </div>
-              </div>
-
-              {/* Components List */}
-              <ScrollArea className="flex-1">
-                <div className="p-4 space-y-2">
-                  {filteredComponents.map((component) => (
-                    <div
-                      key={component.id}
-                      onClick={() => handleAddComponent(component.type)}
-                      className={cn(
-                        "p-3 rounded-lg border border-gray-200 cursor-pointer transition-all duration-200",
-                        "hover:border-[#B89B7A] hover:bg-[#FAF9F7] hover:shadow-sm",
-                        "group"
-                      )}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 bg-[#FAF9F7] rounded-md group-hover:bg-[#B89B7A] group-hover:text-white transition-colors">
-                          {component.icon}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-sm text-[#432818] truncate">
-                            {component.name}
-                          </div>
-                          <div className="text-xs text-[#8F7A6A] leading-relaxed">
-                            {component.description}
-                          </div>
-                        </div>
-                        <Plus className="h-4 w-4 text-[#8F7A6A] group-hover:text-[#B89B7A] transition-colors flex-shrink-0 mt-0.5" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Center Panel - Preview */}
-          <ResizablePanel defaultSize={55}>
-            <div className="h-full flex flex-col bg-[#f8f9fa]">
-              {/* Preview Header */}
-              <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <h3 className="font-medium text-[#432818]">Preview</h3>
-                  <Badge variant="outline" className="text-xs">
-                    {previewDevice === 'desktop' && 'Desktop'}
-                    {previewDevice === 'tablet' && 'Tablet'}
-                    {previewDevice === 'mobile' && 'Mobile'}
-                  </Badge>
-                </div>
-                
-                <div className="text-xs text-[#8F7A6A]">
-                  {blocks.length} {blocks.length === 1 ? 'componente' : 'componentes'}
-                </div>
-              </div>
-
-              {/* Preview Content */}
-              <div className="flex-1 overflow-auto p-6 flex justify-center">
-                <div className={cn(
-                  "w-full bg-white rounded-lg shadow-sm border border-gray-200 min-h-full transition-all duration-300",
-                  getDeviceClass()
-                )}>
-                  <ResultPageVisualEditor
-                    selectedStyle={mockPrimaryStyle}
-                    initialConfig={resultPageConfig}
-                    onConfigUpdate={(newConfig) => {
-                      if (newConfig?.blocks) {
-                        updateBlocks(newConfig.blocks);
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Right Panel - Properties */}
-          <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
-            <div className="h-full bg-white border-l border-gray-200 flex flex-col">
-              {/* Properties Header */}
-              <div className="p-4 border-b border-gray-200">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-medium text-[#432818]">Propriedades</h3>
-                  {selectedComponentId && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setSelectedComponentId(null);
-                        setSelectedBlockId(null);
-                      }}
-                    >
-                      ✕
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              {/* Properties Content */}
-              <ScrollArea className="flex-1">
-                <div className="p-4">
-                  {selectedComponentId ? (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 p-3 bg-[#FAF9F7] rounded-lg">
-                        <Settings className="h-4 w-4 text-[#B89B7A]" />
-                        <div>
-                          <div className="font-medium text-sm text-[#432818]">
-                            Componente Selecionado
-                          </div>
-                          <div className="text-xs text-[#8F7A6A]">
-                            {componentBlocks.find(c => c.id === selectedComponentId)?.name || 'Componente'}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* O painel de propriedades específico será renderizado pelo ResultPageVisualEditor */}
-                      <div className="text-sm text-[#8F7A6A]">
-                        As propriedades deste componente aparecerão aqui quando implementadas.
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <Settings className="h-8 w-8 mx-auto mb-3 text-[#8F7A6A] opacity-50" />
-                      <p className="text-sm text-[#8F7A6A] mb-1">Nenhum componente selecionado</p>
-                      <p className="text-xs text-[#8F7A6A]">
-                        Clique em um componente no preview para editar suas propriedades
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </div>
-    </div>
-  );
+              ) : (
+                <div className="text-sm">Arrastando componente...</div>
+              );
+            })()}
+          </div>
 };
 
 export default ResultPageLiveEditor;
