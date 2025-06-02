@@ -1,6 +1,9 @@
-
 import React from 'react';
 import { BlockData } from '@/types/resultPageConfig';
+import HeroBlock from './blocks/HeroBlock';
+import BenefitsBlock from './blocks/BenefitsBlock';
+import PricingBlock from './blocks/PricingBlock';
+import TestimonialsBlock from './blocks/TestimonialsBlock';
 
 interface BlockRendererProps {
   block: BlockData;
@@ -17,6 +20,8 @@ interface BlockRendererProps {
   setImagesLoaded?: (state: { style: boolean; guide: boolean }) => void;
   isLowPerformance?: boolean;
   tokens?: any;
+  isEditMode?: boolean;
+  onClick?: () => void;
 }
 
 const BlockRenderer: React.FC<BlockRendererProps> = ({
@@ -33,7 +38,9 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
   imagesLoaded,
   setImagesLoaded,
   isLowPerformance,
-  tokens
+  tokens,
+  isEditMode = false,
+  onClick
 }) => {
   const handleImageLoad = () => {
     if (setImagesLoaded) {
@@ -45,22 +52,43 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
     switch (block.type) {
       case 'hero':
         return (
-          <div className="text-center py-12 px-6">
-            <h1 className="text-4xl font-bold mb-4 text-[#432818]">
-              {block.content.title || 'Título Hero'}
-            </h1>
-            <p className="text-xl text-[#8F7A6A] mb-8">
-              {block.content.subtitle || 'Subtítulo explicativo'}
-            </p>
-            {block.content.imageUrl && (
-              <img 
-                src={block.content.imageUrl} 
-                alt="Hero" 
-                className="mx-auto rounded-lg shadow-lg max-w-md"
-                onLoad={handleImageLoad}
-              />
-            )}
-          </div>
+          <HeroBlock
+            block={block}
+            primaryStyle={primaryStyle}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
+        );
+
+      case 'benefits':
+        return (
+          <BenefitsBlock
+            block={block}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
+        );
+
+      case 'pricing':
+        return (
+          <PricingBlock
+            block={block}
+            onCTAClick={onCTAClick}
+            isButtonHovered={isButtonHovered}
+            setIsButtonHovered={setIsButtonHovered}
+            timer={timer}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
+        );
+
+      case 'testimonials':
+        return (
+          <TestimonialsBlock
+            block={block}
+            isEditMode={isEditMode}
+            onClick={onClick}
+          />
         );
 
       case 'text':
@@ -306,16 +334,16 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
     <div 
       className="block-renderer"
       style={{
-        backgroundColor: block.style.backgroundColor,
-        padding: block.style.padding,
-        margin: block.style.margin,
-        borderRadius: block.style.borderRadius,
-        fontSize: block.style.fontSize,
-        fontWeight: block.style.fontWeight,
-        color: block.style.color,
-        textAlign: block.style.textAlign as 'left' | 'center' | 'right' | undefined,
-        fontFamily: block.style.fontFamily,
-        width: block.style.width
+        backgroundColor: block.style?.backgroundColor,
+        padding: block.style?.padding,
+        margin: block.style?.margin,
+        borderRadius: block.style?.borderRadius,
+        fontSize: block.style?.fontSize,
+        fontWeight: block.style?.fontWeight,
+        color: block.style?.color,
+        textAlign: block.style?.textAlign as 'left' | 'center' | 'right' | undefined,
+        fontFamily: block.style?.fontFamily,
+        width: block.style?.width
       }}
     >
       {renderBlockContent()}

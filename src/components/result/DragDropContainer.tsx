@@ -1,23 +1,10 @@
-import React, { useState } from 'react';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { Button } from '@/components/ui/button';
-import { Plus, Settings, Eye, EyeOff } from 'lucide-react';
-import EditableBlock from './EditableBlock';
+
+import React from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { BlockData } from '@/types/resultPageConfig';
+import BlockRenderer from './BlockRenderer';
+import { Button } from '@/components/ui/button';
+import { Edit, Trash2, Eye, EyeOff } from 'lucide-react';
 
 interface DragDropContainerProps {
   blocks: BlockData[];
@@ -26,7 +13,6 @@ interface DragDropContainerProps {
   onAddBlock: () => void;
   isEditMode: boolean;
   onToggleEditMode: () => void;
-  // Props adicionais para o BlockRenderer
   primaryStyle?: any;
   secondaryStyles?: any[];
   globalStyles?: any;
@@ -49,182 +35,130 @@ const DragDropContainer: React.FC<DragDropContainerProps> = ({
   onAddBlock,
   isEditMode,
   onToggleEditMode,
-  primaryStyle,
-  secondaryStyles,
-  globalStyles,
-  user,
-  resultPageConfig,
-  onCTAClick,
-  isButtonHovered,
-  setIsButtonHovered,
-  timer,
-  imagesLoaded,
-  setImagesLoaded,
-  isLowPerformance,
-  tokens
+  ...blockProps
 }) => {
-  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+    const items = Array.from(blocks);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
-  const handleDragStart = (event: any) => {
-    setDraggedId(event.active.id);
+    // Update order property
+    const updatedBlocks = items.map((block, index) => ({
+      ...block,
+      order: index
+    }));
+
+    onUpdateBlocks(updatedBlocks);
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    setDraggedId(null);
+  const toggleBlockVisibility = (blockId: string) => {
+    const updatedBlocks = blocks.map(block =>
+      block.id === blockId ? { ...block, visible: !block.visible } : block
+    );
+    onUpdateBlocks(updatedBlocks);
+  };
 
-    if (active.id !== over?.id) {
-      const oldIndex = blocks.findIndex((block) => block.id === active.id);
-      const newIndex = blocks.findIndex((block) => block.id === over?.id);
-
-      const newBlocks = arrayMove(blocks, oldIndex, newIndex).map((block, index) => ({
-        ...block,
-        order: index
-      }));
-
-      onUpdateBlocks(newBlocks);
+  const deleteBlock = (blockId: string) => {
+    if (window.confirm('Tem certeza que deseja excluir este bloco?')) {
+      const updatedBlocks = blocks.filter(block => block.id !== blockId);
+      onUpdateBlocks(updatedBlocks);
     }
   };
 
-  const handleToggleVisibility = (blockId: string) => {
-    const newBlocks = blocks.map(block =>
-      block.id === blockId
-        ? { ...block, visible: !block.visible }
-        : block
-    );
-    onUpdateBlocks(newBlocks);
-  };
-
-  const handleDeleteBlock = (blockId: string) => {
-    const newBlocks = blocks
-      .filter(block => block.id !== blockId)
-      .map((block, index) => ({ ...block, order: index }));
-    onUpdateBlocks(newBlocks);
-  };
-
-  // Filtrar apenas blocos visíveis quando não estiver no modo de edição
-  const displayBlocks = isEditMode ? blocks : blocks.filter(block => block.visible);
-
   return (
-    <div className="w-full">
-      {/* Barra de controles superior */}
-      <div className="sticky top-16 z-40 bg-white/95 backdrop-blur-sm border-b border-[#B89B7A]/20 p-4 mb-6">
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
-          <div className="flex items-center gap-3">
-            <h3 className="font-medium text-[#432818]">
-              {isEditMode ? 'Modo Edição' : 'Visualização'}
-            </h3>
-            <span className="text-sm text-[#8F7A6A]">
-              {blocks.length} blocos
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            {/* Toggle Edit Mode */}
-            <Button
-              variant={isEditMode ? "default" : "outline"}
-              size="sm"
-              onClick={onToggleEditMode}
-              className={`${
-                isEditMode 
-                  ? 'bg-[#B89B7A] text-white hover:bg-[#A1835D]' 
-                  : 'border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white'
-              }`}
+    <div className="space-y-4">
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="blocks">
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className="space-y-6"
             >
-              {isEditMode ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-              {isEditMode ? 'Sair da Edição' : 'Editar Página'}
-            </Button>
+              {blocks
+                .filter(block => block.visible)
+                .sort((a, b) => a.order - b.order)
+                .map((block, index) => (
+                  <Draggable
+                    key={block.id}
+                    draggableId={block.id}
+                    index={index}
+                    isDragDisabled={!isEditMode}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        className={`relative group ${isEditMode ? 'ring-2 ring-dashed ring-[#B89B7A]/40 rounded-lg' : ''}`}
+                      >
+                        {/* Edit Controls Overlay */}
+                        {isEditMode && (
+                          <div className="absolute top-4 right-4 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => toggleBlockVisibility(block.id)}
+                              className="bg-white/90 backdrop-blur-sm"
+                            >
+                              {block.visible ? (
+                                <Eye className="w-4 h-4" />
+                              ) : (
+                                <EyeOff className="w-4 h-4" />
+                              )}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => onEditBlock(block.id)}
+                              className="bg-white/90 backdrop-blur-sm"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => deleteBlock(block.id)}
+                              className="bg-white/90 backdrop-blur-sm text-red-600 hover:text-red-700"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
 
-            {/* Add Block */}
-            {isEditMode && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onAddBlock}
-                className="border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Adicionar Bloco
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
+                        {/* Drag Handle */}
+                        {isEditMode && (
+                          <div
+                            {...provided.dragHandleProps}
+                            className="absolute top-4 left-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
+                          >
+                            <div className="bg-white/90 backdrop-blur-sm rounded p-2 border">
+                              <div className="w-4 h-4 flex flex-col justify-center">
+                                <div className="h-0.5 bg-gray-400 mb-1"></div>
+                                <div className="h-0.5 bg-gray-400 mb-1"></div>
+                                <div className="h-0.5 bg-gray-400"></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
 
-      {/* Container de blocos */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext items={displayBlocks.map(block => block.id)} strategy={verticalListSortingStrategy}>
-          <div className="space-y-6">
-            {displayBlocks.map((block) => (
-              <EditableBlock
-                key={block.id}
-                block={block}
-                onEdit={onEditBlock}
-                onToggleVisibility={handleToggleVisibility}
-                onDelete={handleDeleteBlock}
-                isEditMode={isEditMode}
-                isDragging={draggedId === block.id}
-                primaryStyle={primaryStyle}
-                secondaryStyles={secondaryStyles}
-                globalStyles={globalStyles}
-                user={user}
-                resultPageConfig={resultPageConfig}
-                onCTAClick={onCTAClick}
-                isButtonHovered={isButtonHovered}
-                setIsButtonHovered={setIsButtonHovered}
-                timer={timer}
-                imagesLoaded={imagesLoaded}
-                setImagesLoaded={setImagesLoaded}
-                isLowPerformance={isLowPerformance}
-                tokens={tokens}
-              />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
-
-      {/* Mensagem quando não há blocos visíveis */}
-      {!isEditMode && displayBlocks.length === 0 && (
-        <div className="text-center py-12 text-[#8F7A6A]">
-          <p>Nenhum bloco visível nesta página.</p>
-          <Button
-            variant="outline"
-            className="mt-4 border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white"
-            onClick={onToggleEditMode}
-          >
-            Entrar no Modo Edição
-          </Button>
-        </div>
-      )}
-
-      {/* Help text para modo edição */}
-      {isEditMode && (
-        <div className="mt-12 p-6 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg border border-[#B89B7A]/20">
-          <h4 className="font-medium text-[#432818] mb-2">💡 Dicas de Edição:</h4>
-          <ul className="text-sm text-[#6B5B4E] space-y-1">
-            <li>• Arraste os blocos pela alça para reordenar</li>
-            <li>• Use o ícone de olho para mostrar/ocultar blocos</li>
-            <li>• Clique no lápis para editar o conteúdo</li>
-            <li>• Clique na lixeira para excluir blocos editáveis</li>
-          </ul>
-        </div>
-      )}
+                        {/* Block Content */}
+                        <BlockRenderer
+                          block={block}
+                          isEditMode={isEditMode}
+                          onClick={() => isEditMode && onEditBlock(block.id)}
+                          {...blockProps}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 };
