@@ -1,3 +1,4 @@
+// filepath: /workspaces/quiz-sell-genius-66/src/pages/admin/ResultPageEditorPage.tsx
 import React, { useState, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -162,9 +163,9 @@ const ResultPageEditorPage: React.FC = () => {
   const getPreviewStyle = () => {
     switch (previewDevice) {
       case 'mobile':
-        return { width: '375px', height: '812px' };
+        return { width: '375px', height: '100%', maxWidth: '375px' };
       case 'tablet':
-        return { width: '768px', height: '1024px' };
+        return { width: '768px', height: '100%', maxWidth: '768px' };
       default:
         return { width: '100%', height: '100%' };
     }
@@ -173,7 +174,7 @@ const ResultPageEditorPage: React.FC = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header da página */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4">
           <Link
             to="/admin"
@@ -222,7 +223,7 @@ const ResultPageEditorPage: React.FC = () => {
         {/* Painel de Edição - Lado Esquerdo */}
         <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
           {/* Header do painel de edição */}
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-4 border-b border-gray-200 shrink-0">
             <h2 className="text-lg font-semibold text-[#432818]">
               Configurações
             </h2>
@@ -235,483 +236,496 @@ const ResultPageEditorPage: React.FC = () => {
           <div className="flex-1 overflow-auto">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
               <TabsList className="grid w-full grid-cols-4 m-4">
-                <TabsTrigger value="general" className="flex items-center gap-2 text-xs">
+                <TabsTrigger value="general" className="flex items-center gap-1 text-xs">
                   <Settings className="h-3 w-3" />
                   Geral
                 </TabsTrigger>
-                <TabsTrigger value="design" className="flex items-center gap-2 text-xs">
+                <TabsTrigger value="design" className="flex items-center gap-1 text-xs">
                   <Palette className="h-3 w-3" />
                   Design
                 </TabsTrigger>
-                <TabsTrigger value="content" className="flex items-center gap-2 text-xs">
+                <TabsTrigger value="content" className="flex items-center gap-1 text-xs">
                   <FileText className="h-3 w-3" />
                   Conteúdo
                 </TabsTrigger>
-                <TabsTrigger value="offer" className="flex items-center gap-2 text-xs">
+                <TabsTrigger value="offer" className="flex items-center gap-1 text-xs">
                   <ShoppingCart className="h-3 w-3" />
                   Oferta
                 </TabsTrigger>
               </TabsList>
 
-          {/* Aba Geral */}
-          <TabsContent value="general">
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4 text-[#432818]">
-                Configurações Gerais
-              </h2>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="pageTitle" className="text-sm font-medium text-[#432818]">
-                      Título da Página (SEO)
-                    </Label>
-                    <Input
-                      id="pageTitle"
-                      value={config.pageTitle}
-                      onChange={(e) => handleInputChange('pageTitle', e.target.value)}
-                      placeholder="Título para SEO"
-                      className="mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="pageDescription" className="text-sm font-medium text-[#432818]">
-                      Descrição da Página (SEO)
-                    </Label>
-                    <Textarea
-                      id="pageDescription"
-                      value={config.pageDescription}
-                      onChange={(e) => handleInputChange('pageDescription', e.target.value)}
-                      placeholder="Descrição para SEO"
-                      className="mt-1"
-                      rows={3}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="checkbox"
-                      id="timerEnabled"
-                      checked={config.timerEnabled}
-                      onChange={(e) => handleInputChange('timerEnabled', e.target.checked)}
-                      className="w-4 h-4 text-[#B89B7A] border-gray-300 rounded focus:ring-[#B89B7A]"
-                    />
-                    <Label htmlFor="timerEnabled" className="text-sm font-medium text-[#432818]">
-                      Habilitar Timer de Urgência
-                    </Label>
-                  </div>
-
-                  {config.timerEnabled && (
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="timerHours" className="text-sm font-medium text-[#432818]">
-                          Horas
-                        </Label>
-                        <Input
-                          id="timerHours"
-                          type="number"
-                          min="0"
-                          max="23"
-                          value={config.timerHours}
-                          onChange={(e) => handleInputChange('timerHours', parseInt(e.target.value) || 0)}
-                          className="mt-1"
-                        />
-                      </div>
-
-                      <div>
-                        <Label htmlFor="timerMinutes" className="text-sm font-medium text-[#432818]">
-                          Minutos
-                        </Label>
-                        <Input
-                          id="timerMinutes"
-                          type="number"
-                          min="0"
-                          max="59"
-                          value={config.timerMinutes}
-                          onChange={(e) => handleInputChange('timerMinutes', parseInt(e.target.value) || 0)}
-                          className="mt-1"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Card>
-          </TabsContent>
-
-          {/* Aba Design */}
-          <TabsContent value="design">
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4 text-[#432818]">
-                Configurações de Design
-              </h2>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="primaryColor" className="text-sm font-medium text-[#432818]">
-                      Cor Primária
-                    </Label>
-                    <div className="flex items-center gap-3 mt-1">
-                      <input
-                        type="color"
-                        id="primaryColor"
-                        value={config.primaryColor}
-                        onChange={(e) => handleInputChange('primaryColor', e.target.value)}
-                        className="w-12 h-10 border border-gray-300 rounded"
-                      />
-                      <Input
-                        value={config.primaryColor}
-                        onChange={(e) => handleInputChange('primaryColor', e.target.value)}
-                        placeholder="#B89B7A"
-                        className="flex-1"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="secondaryColor" className="text-sm font-medium text-[#432818]">
-                      Cor Secundária
-                    </Label>
-                    <div className="flex items-center gap-3 mt-1">
-                      <input
-                        type="color"
-                        id="secondaryColor"
-                        value={config.secondaryColor}
-                        onChange={(e) => handleInputChange('secondaryColor', e.target.value)}
-                        className="w-12 h-10 border border-gray-300 rounded"
-                      />
-                      <Input
-                        value={config.secondaryColor}
-                        onChange={(e) => handleInputChange('secondaryColor', e.target.value)}
-                        placeholder="#aa6b5d"
-                        className="flex-1"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="backgroundColor" className="text-sm font-medium text-[#432818]">
-                      Cor de Fundo
-                    </Label>
-                    <div className="flex items-center gap-3 mt-1">
-                      <input
-                        type="color"
-                        id="backgroundColor"
-                        value={config.backgroundColor}
-                        onChange={(e) => handleInputChange('backgroundColor', e.target.value)}
-                        className="w-12 h-10 border border-gray-300 rounded"
-                      />
-                      <Input
-                        value={config.backgroundColor}
-                        onChange={(e) => handleInputChange('backgroundColor', e.target.value)}
-                        placeholder="#fffaf7"
-                        className="flex-1"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="textColor" className="text-sm font-medium text-[#432818]">
-                      Cor do Texto
-                    </Label>
-                    <div className="flex items-center gap-3 mt-1">
-                      <input
-                        type="color"
-                        id="textColor"
-                        value={config.textColor}
-                        onChange={(e) => handleInputChange('textColor', e.target.value)}
-                        className="w-12 h-10 border border-gray-300 rounded"
-                      />
-                      <Input
-                        value={config.textColor}
-                        onChange={(e) => handleInputChange('textColor', e.target.value)}
-                        placeholder="#432818"
-                        className="flex-1"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </TabsContent>
-
-          {/* Aba Conteúdo */}
-          <TabsContent value="content">
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4 text-[#432818]">
-                Configurações de Conteúdo
-              </h2>
-
-              <div className="space-y-6">
-                <div>
-                  <Label htmlFor="mainTitle" className="text-sm font-medium text-[#432818]">
-                    Título Principal
-                  </Label>
-                  <Input
-                    id="mainTitle"
-                    value={config.mainTitle}
-                    onChange={(e) => handleInputChange('mainTitle', e.target.value)}
-                    placeholder="🎉 Parabéns! Descobrimos seu estilo único!"
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="subtitle" className="text-sm font-medium text-[#432818]">
-                    Subtítulo
-                  </Label>
-                  <Textarea
-                    id="subtitle"
-                    value={config.subtitle}
-                    onChange={(e) => handleInputChange('subtitle', e.target.value)}
-                    placeholder="Baseado nas suas respostas, criamos um guia personalizado especialmente para você."
-                    className="mt-1"
-                    rows={3}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="ctaText" className="text-sm font-medium text-[#432818]">
-                      Texto do Botão Principal
-                    </Label>
-                    <Input
-                      id="ctaText"
-                      value={config.ctaText}
-                      onChange={(e) => handleInputChange('ctaText', e.target.value)}
-                      placeholder="QUERO MEU GUIA PERSONALIZADO"
-                      className="mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="ctaLink" className="text-sm font-medium text-[#432818]">
-                      Link do Botão Principal
-                    </Label>
-                    <Input
-                      id="ctaLink"
-                      value={config.ctaLink}
-                      onChange={(e) => handleInputChange('ctaLink', e.target.value)}
-                      placeholder="/quiz-descubra-seu-estilo"
-                      className="mt-1"
-                    />
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </TabsContent>
-
-          {/* Aba Oferta */}
-          <TabsContent value="offer">
-            <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4 text-[#432818]">
-                Configurações de Oferta
-              </h2>
-
-              <div className="space-y-6">
-                <div>
-                  <Label htmlFor="offerTitle" className="text-sm font-medium text-[#432818]">
-                    Título da Oferta
-                  </Label>
-                  <Input
-                    id="offerTitle"
-                    value={config.offerTitle}
-                    onChange={(e) => handleInputChange('offerTitle', e.target.value)}
-                    placeholder="🎁 Oferta Especial Exclusiva para Você!"
-                    className="mt-1"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="originalPrice" className="text-sm font-medium text-[#432818]">
-                      Preço Original
-                    </Label>
-                    <Input
-                      id="originalPrice"
-                      value={config.originalPrice}
-                      onChange={(e) => handleInputChange('originalPrice', e.target.value)}
-                      placeholder="R$ 297,00"
-                      className="mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="discountPrice" className="text-sm font-medium text-[#432818]">
-                      Preço com Desconto
-                    </Label>
-                    <Input
-                      id="discountPrice"
-                      value={config.discountPrice}
-                      onChange={(e) => handleInputChange('discountPrice', e.target.value)}
-                      placeholder="R$ 97,00"
-                      className="mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="urgencyText" className="text-sm font-medium text-[#432818]">
-                      Texto de Urgência
-                    </Label>
-                    <Input
-                      id="urgencyText"
-                      value={config.urgencyText}
-                      onChange={(e) => handleInputChange('urgencyText', e.target.value)}
-                      placeholder="⏰ Esta oferta expira em:"
-                      className="mt-1"
-                    />
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div>
-                  <div className="flex items-center gap-4 mb-4">
-                    <input
-                      type="checkbox"
-                      id="guaranteeEnabled"
-                      checked={config.guaranteeEnabled}
-                      onChange={(e) => handleInputChange('guaranteeEnabled', e.target.checked)}
-                      className="w-4 h-4 text-[#B89B7A] border-gray-300 rounded focus:ring-[#B89B7A]"
-                    />
-                    <Label htmlFor="guaranteeEnabled" className="text-sm font-medium text-[#432818]">
-                      Habilitar Seção de Garantia
-                    </Label>
-                  </div>
-
-                  {config.guaranteeEnabled && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                      <div className="lg:col-span-2">
-                        <Label htmlFor="guaranteeText" className="text-sm font-medium text-[#432818]">
-                          Texto da Garantia
-                        </Label>
-                        <Input
-                          id="guaranteeText"
-                          value={config.guaranteeText}
-                          onChange={(e) => handleInputChange('guaranteeText', e.target.value)}
-                          placeholder="Garantia de 30 dias ou seu dinheiro de volta"
-                          className="mt-1"
-                        />
-                      </div>
-
-                      <div>
-                        <Label htmlFor="guaranteeDays" className="text-sm font-medium text-[#432818]">
-                          Dias de Garantia
-                        </Label>
-                        <Input
-                          id="guaranteeDays"
-                          type="number"
-                          min="1"
-                          max="365"
-                          value={config.guaranteeDays}
-                          onChange={(e) => handleInputChange('guaranteeDays', parseInt(e.target.value) || 30)}
-                          className="mt-1"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <Separator />
-
-                <div>
-                  <div className="flex items-center gap-4 mb-4">
-                    <input
-                      type="checkbox"
-                      id="bonusEnabled"
-                      checked={config.bonusEnabled}
-                      onChange={(e) => handleInputChange('bonusEnabled', e.target.checked)}
-                      className="w-4 h-4 text-[#B89B7A] border-gray-300 rounded focus:ring-[#B89B7A]"
-                    />
-                    <Label htmlFor="bonusEnabled" className="text-sm font-medium text-[#432818]">
-                      Habilitar Seção de Bônus
-                    </Label>
-                  </div>
-
-                  {config.bonusEnabled && (
+              {/* Conteúdo das abas */}
+              <div className="px-4 pb-4">
+                {/* Aba Geral */}
+                <TabsContent value="general" className="mt-0">
+                  <Card className="p-4">
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="bonusTitle" className="text-sm font-medium text-[#432818]">
-                          Título dos Bônus
+                        <Label htmlFor="pageTitle" className="text-sm font-medium text-[#432818]">
+                          Título da Página (SEO)
                         </Label>
                         <Input
-                          id="bonusTitle"
-                          value={config.bonusTitle}
-                          onChange={(e) => handleInputChange('bonusTitle', e.target.value)}
-                          placeholder="🎁 Bônus Exclusivos"
+                          id="pageTitle"
+                          value={config.pageTitle}
+                          onChange={(e) => handleInputChange('pageTitle', e.target.value)}
+                          placeholder="Título para SEO"
                           className="mt-1"
                         />
                       </div>
 
                       <div>
-                        <Label htmlFor="bonusDescription" className="text-sm font-medium text-[#432818]">
-                          Descrição dos Bônus
+                        <Label htmlFor="pageDescription" className="text-sm font-medium text-[#432818]">
+                          Descrição da Página (SEO)
                         </Label>
                         <Textarea
-                          id="bonusDescription"
-                          value={config.bonusDescription}
-                          onChange={(e) => handleInputChange('bonusDescription', e.target.value)}
-                          placeholder="Receba materiais extras para completar sua transformação"
+                          id="pageDescription"
+                          value={config.pageDescription}
+                          onChange={(e) => handleInputChange('pageDescription', e.target.value)}
+                          placeholder="Descrição para SEO"
                           className="mt-1"
                           rows={3}
                         />
                       </div>
+
+                      <Separator />
+
+                      <div className="flex items-center gap-4">
+                        <input
+                          type="checkbox"
+                          id="timerEnabled"
+                          checked={config.timerEnabled}
+                          onChange={(e) => handleInputChange('timerEnabled', e.target.checked)}
+                          className="w-4 h-4 text-[#B89B7A] border-gray-300 rounded focus:ring-[#B89B7A]"
+                        />
+                        <Label htmlFor="timerEnabled" className="text-sm font-medium text-[#432818]">
+                          Habilitar Timer de Urgência
+                        </Label>
+                      </div>
+
+                      {config.timerEnabled && (
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="timerHours" className="text-sm font-medium text-[#432818]">
+                              Horas
+                            </Label>
+                            <Input
+                              id="timerHours"
+                              type="number"
+                              min="0"
+                              max="23"
+                              value={config.timerHours}
+                              onChange={(e) => handleInputChange('timerHours', parseInt(e.target.value) || 0)}
+                              className="mt-1"
+                            />
+                          </div>
+
+                          <div>
+                            <Label htmlFor="timerMinutes" className="text-sm font-medium text-[#432818]">
+                              Minutos
+                            </Label>
+                            <Input
+                              id="timerMinutes"
+                              type="number"
+                              min="0"
+                              max="59"
+                              value={config.timerMinutes}
+                              onChange={(e) => handleInputChange('timerMinutes', parseInt(e.target.value) || 0)}
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </Card>
+                </TabsContent>
+
+                {/* Aba Design */}
+                <TabsContent value="design" className="mt-0">
+                  <Card className="p-4">
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="primaryColor" className="text-sm font-medium text-[#432818]">
+                          Cor Primária
+                        </Label>
+                        <div className="flex items-center gap-3 mt-1">
+                          <input
+                            type="color"
+                            id="primaryColor"
+                            value={config.primaryColor}
+                            onChange={(e) => handleInputChange('primaryColor', e.target.value)}
+                            className="w-10 h-8 border border-gray-300 rounded"
+                          />
+                          <Input
+                            value={config.primaryColor}
+                            onChange={(e) => handleInputChange('primaryColor', e.target.value)}
+                            placeholder="#B89B7A"
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="secondaryColor" className="text-sm font-medium text-[#432818]">
+                          Cor Secundária
+                        </Label>
+                        <div className="flex items-center gap-3 mt-1">
+                          <input
+                            type="color"
+                            id="secondaryColor"
+                            value={config.secondaryColor}
+                            onChange={(e) => handleInputChange('secondaryColor', e.target.value)}
+                            className="w-10 h-8 border border-gray-300 rounded"
+                          />
+                          <Input
+                            value={config.secondaryColor}
+                            onChange={(e) => handleInputChange('secondaryColor', e.target.value)}
+                            placeholder="#aa6b5d"
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="backgroundColor" className="text-sm font-medium text-[#432818]">
+                          Cor de Fundo
+                        </Label>
+                        <div className="flex items-center gap-3 mt-1">
+                          <input
+                            type="color"
+                            id="backgroundColor"
+                            value={config.backgroundColor}
+                            onChange={(e) => handleInputChange('backgroundColor', e.target.value)}
+                            className="w-10 h-8 border border-gray-300 rounded"
+                          />
+                          <Input
+                            value={config.backgroundColor}
+                            onChange={(e) => handleInputChange('backgroundColor', e.target.value)}
+                            placeholder="#fffaf7"
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="textColor" className="text-sm font-medium text-[#432818]">
+                          Cor do Texto
+                        </Label>
+                        <div className="flex items-center gap-3 mt-1">
+                          <input
+                            type="color"
+                            id="textColor"
+                            value={config.textColor}
+                            onChange={(e) => handleInputChange('textColor', e.target.value)}
+                            className="w-10 h-8 border border-gray-300 rounded"
+                          />
+                          <Input
+                            value={config.textColor}
+                            onChange={(e) => handleInputChange('textColor', e.target.value)}
+                            placeholder="#432818"
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </TabsContent>
+
+                {/* Aba Conteúdo */}
+                <TabsContent value="content" className="mt-0">
+                  <Card className="p-4">
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="mainTitle" className="text-sm font-medium text-[#432818]">
+                          Título Principal
+                        </Label>
+                        <Input
+                          id="mainTitle"
+                          value={config.mainTitle}
+                          onChange={(e) => handleInputChange('mainTitle', e.target.value)}
+                          placeholder="🎉 Parabéns! Descobrimos seu estilo único!"
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="subtitle" className="text-sm font-medium text-[#432818]">
+                          Subtítulo
+                        </Label>
+                        <Textarea
+                          id="subtitle"
+                          value={config.subtitle}
+                          onChange={(e) => handleInputChange('subtitle', e.target.value)}
+                          placeholder="Baseado nas suas respostas, criamos um guia personalizado especialmente para você."
+                          className="mt-1"
+                          rows={3}
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="ctaText" className="text-sm font-medium text-[#432818]">
+                          Texto do Botão Principal
+                        </Label>
+                        <Input
+                          id="ctaText"
+                          value={config.ctaText}
+                          onChange={(e) => handleInputChange('ctaText', e.target.value)}
+                          placeholder="QUERO MEU GUIA PERSONALIZADO"
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="ctaLink" className="text-sm font-medium text-[#432818]">
+                          Link do Botão Principal
+                        </Label>
+                        <Input
+                          id="ctaLink"
+                          value={config.ctaLink}
+                          onChange={(e) => handleInputChange('ctaLink', e.target.value)}
+                          placeholder="/quiz-descubra-seu-estilo"
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </TabsContent>
+
+                {/* Aba Oferta */}
+                <TabsContent value="offer" className="mt-0">
+                  <Card className="p-4">
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="offerTitle" className="text-sm font-medium text-[#432818]">
+                          Título da Oferta
+                        </Label>
+                        <Input
+                          id="offerTitle"
+                          value={config.offerTitle}
+                          onChange={(e) => handleInputChange('offerTitle', e.target.value)}
+                          placeholder="🎁 Oferta Especial Exclusiva para Você!"
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="originalPrice" className="text-sm font-medium text-[#432818]">
+                            Preço Original
+                          </Label>
+                          <Input
+                            id="originalPrice"
+                            value={config.originalPrice}
+                            onChange={(e) => handleInputChange('originalPrice', e.target.value)}
+                            placeholder="R$ 297,00"
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="discountPrice" className="text-sm font-medium text-[#432818]">
+                            Preço com Desconto
+                          </Label>
+                          <Input
+                            id="discountPrice"
+                            value={config.discountPrice}
+                            onChange={(e) => handleInputChange('discountPrice', e.target.value)}
+                            placeholder="R$ 97,00"
+                            className="mt-1"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="urgencyText" className="text-sm font-medium text-[#432818]">
+                          Texto de Urgência
+                        </Label>
+                        <Input
+                          id="urgencyText"
+                          value={config.urgencyText}
+                          onChange={(e) => handleInputChange('urgencyText', e.target.value)}
+                          placeholder="⏰ Esta oferta expira em:"
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <Separator />
+
+                      <div>
+                        <div className="flex items-center gap-4 mb-4">
+                          <input
+                            type="checkbox"
+                            id="guaranteeEnabled"
+                            checked={config.guaranteeEnabled}
+                            onChange={(e) => handleInputChange('guaranteeEnabled', e.target.checked)}
+                            className="w-4 h-4 text-[#B89B7A] border-gray-300 rounded focus:ring-[#B89B7A]"
+                          />
+                          <Label htmlFor="guaranteeEnabled" className="text-sm font-medium text-[#432818]">
+                            Habilitar Seção de Garantia
+                          </Label>
+                        </div>
+
+                        {config.guaranteeEnabled && (
+                          <div className="space-y-4">
+                            <div>
+                              <Label htmlFor="guaranteeText" className="text-sm font-medium text-[#432818]">
+                                Texto da Garantia
+                              </Label>
+                              <Input
+                                id="guaranteeText"
+                                value={config.guaranteeText}
+                                onChange={(e) => handleInputChange('guaranteeText', e.target.value)}
+                                placeholder="Garantia de 30 dias ou seu dinheiro de volta"
+                                className="mt-1"
+                              />
+                            </div>
+
+                            <div>
+                              <Label htmlFor="guaranteeDays" className="text-sm font-medium text-[#432818]">
+                                Dias de Garantia
+                              </Label>
+                              <Input
+                                id="guaranteeDays"
+                                type="number"
+                                min="1"
+                                max="365"
+                                value={config.guaranteeDays}
+                                onChange={(e) => handleInputChange('guaranteeDays', parseInt(e.target.value) || 30)}
+                                className="mt-1"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <Separator />
+
+                      <div>
+                        <div className="flex items-center gap-4 mb-4">
+                          <input
+                            type="checkbox"
+                            id="bonusEnabled"
+                            checked={config.bonusEnabled}
+                            onChange={(e) => handleInputChange('bonusEnabled', e.target.checked)}
+                            className="w-4 h-4 text-[#B89B7A] border-gray-300 rounded focus:ring-[#B89B7A]"
+                          />
+                          <Label htmlFor="bonusEnabled" className="text-sm font-medium text-[#432818]">
+                            Habilitar Seção de Bônus
+                          </Label>
+                        </div>
+
+                        {config.bonusEnabled && (
+                          <div className="space-y-4">
+                            <div>
+                              <Label htmlFor="bonusTitle" className="text-sm font-medium text-[#432818]">
+                                Título dos Bônus
+                              </Label>
+                              <Input
+                                id="bonusTitle"
+                                value={config.bonusTitle}
+                                onChange={(e) => handleInputChange('bonusTitle', e.target.value)}
+                                placeholder="🎁 Bônus Exclusivos"
+                                className="mt-1"
+                              />
+                            </div>
+
+                            <div>
+                              <Label htmlFor="bonusDescription" className="text-sm font-medium text-[#432818]">
+                                Descrição dos Bônus
+                              </Label>
+                              <Textarea
+                                id="bonusDescription"
+                                value={config.bonusDescription}
+                                onChange={(e) => handleInputChange('bonusDescription', e.target.value)}
+                                placeholder="Receba materiais extras para completar sua transformação"
+                                className="mt-1"
+                                rows={3}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                </TabsContent>
               </div>
-            </Card>
-          </TabsContent>
-        </Tabs>
+            </Tabs>
+          </div>
 
-        {/* Ações na parte inferior */}
-        <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
-          <Button
-            variant="outline"
-            onClick={handleReset}
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Resetar para Padrão
-          </Button>
-
-          <div className="flex items-center gap-3">
+          {/* Ações na parte inferior */}
+          <div className="p-4 border-t border-gray-200 shrink-0">
             <Button
               variant="outline"
-              onClick={() => setPreviewMode(true)}
-              className="flex items-center gap-2"
+              onClick={handleReset}
+              className="w-full flex items-center justify-center gap-2"
             >
-              <Eye className="h-4 w-4" />
-              Preview da Página
-            </Button>
-
-            <Button
-              onClick={handleSave}
-              disabled={saving}
-              className="bg-[#B89B7A] hover:bg-[#A1835D] text-white"
-            >
-              {saving ? (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                  Salvando...
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4 mr-2" />
-                  Salvar Configurações
-                </>
-              )}
+              <RefreshCw className="h-4 w-4" />
+              Resetar para Padrão
             </Button>
           </div>
         </div>
+
+        {/* Painel de Preview - Lado Direito */}
+        <div className="w-1/2 bg-gray-100 flex flex-col">
+          {/* Header do preview */}
+          <div className="p-4 bg-white border-b border-gray-200 shrink-0">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-[#432818]">
+                Preview em Tempo Real
+              </h3>
+              
+              {/* Controles de dispositivo */}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={previewDevice === 'desktop' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setPreviewDevice('desktop')}
+                  className="flex items-center gap-1"
+                >
+                  <Monitor className="h-3 w-3" />
+                  Desktop
+                </Button>
+                <Button
+                  variant={previewDevice === 'tablet' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setPreviewDevice('tablet')}
+                  className="flex items-center gap-1"
+                >
+                  <Tablet className="h-3 w-3" />
+                  Tablet
+                </Button>
+                <Button
+                  variant={previewDevice === 'mobile' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setPreviewDevice('mobile')}
+                  className="flex items-center gap-1"
+                >
+                  <Smartphone className="h-3 w-3" />
+                  Mobile
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Container do preview */}
+          <div className="flex-1 overflow-auto p-4 flex justify-center">
+            <div 
+              className="bg-white shadow-lg rounded-lg overflow-hidden"
+              style={getPreviewStyle()}
+            >
+              <Suspense fallback={
+                <div className="flex items-center justify-center h-96">
+                  <LoadingSpinner size="lg" color="#B89B7A" />
+                </div>
+              }>
+                <div className="h-full overflow-auto">
+                  <ResultPage />
+                </div>
+              </Suspense>
+            </div>
+          </div>
+        </div>
       </div>
-    </AdminLayout>
+    </div>
   );
 };
 
