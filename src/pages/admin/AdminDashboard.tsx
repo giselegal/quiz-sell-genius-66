@@ -101,6 +101,13 @@ const AdminDashboard = () => {
             linkTo="/admin/header-editor"
             buttonText="Editar Header"
           />
+
+          <DashboardCard
+            title="Editor da Página de Resultado"
+            description="Edite e configure a página de resultado completa"
+            linkTo="/admin/resultpage-editor"
+            buttonText="Editar Página de Resultado"
+          />
         </div>
       </div>
     </AdminLayout>
