@@ -304,6 +304,13 @@ function getDefaultContentForType(type: BlockData['type']) {
         description: 'Adicione um depoimento aqui...',
         userName: 'Nome do Cliente',
       };
+    case 'secondary-styles':
+      return {
+        title: 'Seus Estilos Complementares',
+        description: 'Além do seu estilo predominante, você também tem características destes estilos:',
+        showPrimaryStyle: true,
+        showPercentages: true,
+      };
     default:
       return {
         title: `Conteúdo ${type}`,

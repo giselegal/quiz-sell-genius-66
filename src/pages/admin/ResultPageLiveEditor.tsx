@@ -283,6 +283,7 @@ const ResultPageLiveEditor: React.FC = () => {
           <div className="grid grid-cols-1 gap-2">
             {[
               { type: 'hero' as const, icon: '🎭', label: 'Hero', desc: 'Seção principal' },
+              { type: 'secondary-styles' as const, icon: '🎨', label: 'Resultado Estilo', desc: 'Estilo + Complementares' },
               { type: 'text' as const, icon: '📝', label: 'Texto', desc: 'Parágrafo/Lista' },
               { type: 'image' as const, icon: '🖼️', label: 'Imagem', desc: 'Foto/Ilustração' },
               { type: 'cta' as const, icon: '🎯', label: 'CTA', desc: 'Botão de ação' },

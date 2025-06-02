@@ -9,6 +9,7 @@ import BonusBlock from './blocks/BonusBlock';
 import GuaranteeBlock from './blocks/GuaranteeBlock';
 import MentorBlock from './blocks/MentorBlock';
 import TransformationsBlock from './blocks/TransformationsBlock';
+import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 
 interface BlockRendererProps {
   block: BlockData;
@@ -197,19 +198,71 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
 
       case 'secondary-styles':
         return (
-          <div>
-            <h3 className="text-2xl font-bold mb-6 text-center text-[#432818]">
-              {block.content.title || 'Estilos Relacionados'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {secondaryStyles?.slice(0, 3).map((style, index) => (
-                <div key={index} className="bg-white border border-[#B89B7A]/20 rounded-lg p-4 text-center">
-                  <h4 className="font-semibold text-[#432818] mb-2">{style.category}</h4>
-                  <p className="text-sm text-[#8F7A6A]">{style.description}</p>
+          <div 
+            className={`py-8 px-6 ${isEditMode ? 'cursor-pointer hover:ring-2 hover:ring-[#B89B7A] hover:bg-[#FAF9F7]' : ''}`}
+            onClick={onClick}
+          >
+            <div className="container mx-auto max-w-4xl">
+              <h3 className="text-2xl font-playfair font-bold mb-8 text-center text-[#432818]">
+                {block.content.title || 'Seu Resultado Completo'}
+              </h3>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                {/* Estilo Predominante com Imagem */}
+                {primaryStyle && (
+                  <div className="space-y-4">
+                    <div className="text-center">
+                      <h4 className="text-xl font-semibold text-[#432818] mb-2">
+                        Seu Estilo Predominante
+                      </h4>
+                      <div className="inline-block bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full text-lg font-medium">
+                        {primaryStyle.category} - {primaryStyle.percentage}%
+                      </div>
+                    </div>
+                    
+                    {/* Imagem do Estilo Predominante */}
+                    <div className="relative">
+                      <img
+                        src={primaryStyle.imageUrl || `https://placehold.co/400x300/B89B7A/ffffff?text=${encodeURIComponent(primaryStyle.category)}`}
+                        alt={`Estilo ${primaryStyle.category}`}
+                        className="w-full h-64 object-cover rounded-lg shadow-lg"
+                        onLoad={handleImageLoad}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
+                    </div>
+                    
+                    {primaryStyle.description && (
+                      <p className="text-[#5A5A5A] leading-relaxed text-center">
+                        {primaryStyle.description}
+                      </p>
+                    )}
+                  </div>
+                )}
+                
+                {/* Estilos Complementares */}
+                <div className="space-y-4">
+                  <h4 className="text-xl font-semibold text-[#432818] text-center mb-4">
+                    Seus Estilos Complementares
+                  </h4>
+                  
+                  {secondaryStyles && secondaryStyles.length > 0 ? (
+                    <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                  ) : (
+                    <div className="bg-[#fffaf7] rounded-lg p-6 text-center">
+                      <p className="text-[#8F7A6A]">
+                        Dados dos estilos complementares serão carregados automaticamente
+                      </p>
+                    </div>
+                  )}
                 </div>
-              )) || (
-                <div className="col-span-full text-center text-[#8F7A6A]">
-                  Nenhum estilo secundário disponível
+              </div>
+              
+              {/* Descrição adicional */}
+              {block.content.description && (
+                <div className="mt-8 text-center">
+                  <p className="text-[#5A5A5A] leading-relaxed max-w-2xl mx-auto">
+                    {block.content.description}
+                  </p>
                 </div>
               )}
             </div>
