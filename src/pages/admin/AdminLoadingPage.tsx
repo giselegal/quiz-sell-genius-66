@@ -24,35 +24,47 @@ const AdminLoadingPage: React.FC = () => {
     'src/pages/admin/AdminDashboard.tsx'
   ];
 
-  // Função para calcular tempo restante baseado no progresso
-  const calculateTimeRemaining = (current: number, total: number) => {
-    const remainingFiles = total - current;
-    const filesPerMinute = 8; // Velocidade mais realista de processamento
-    const remainingMinutes = Math.ceil(remainingFiles / filesPerMinute);
+  // Função para calcular velocidade necessária para terminar às 03:00 de 03/06
+  const calculateRequiredSpeed = (current: number, total: number) => {
+    const targetTime = new Date();
+    targetTime.setDate(3);
+    targetTime.setMonth(5); // Junho é mês 5 (zero-based)
+    targetTime.setHours(3, 0, 0, 0);
     
     const now = new Date();
-    const completionTime = new Date(now.getTime() + remainingMinutes * 60000);
+    const timeToTarget = targetTime.getTime() - now.getTime();
+    const hoursToTarget = timeToTarget / (1000 * 60 * 60);
     
-    const hours = completionTime.getHours();
-    const minutes = completionTime.getMinutes();
+    if (hoursToTarget <= 0) {
+      // Se já passou do horário alvo, ajustar para próximo dia
+      targetTime.setDate(targetTime.getDate() + 1);
+      const newTimeToTarget = targetTime.getTime() - now.getTime();
+      const newHoursToTarget = newTimeToTarget / (1000 * 60 * 60);
+      return (total - current) / newHoursToTarget;
+    }
     
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    return (total - current) / hoursToTarget;
+  };
+
+  // Função para calcular tempo restante sempre mostrando 03:00
+  const calculateTimeRemaining = () => {
+    return '03:00';
   };
 
   useEffect(() => {
+    const requiredSpeed = calculateRequiredSpeed(currentFiles, totalFiles);
+    const filesPerMinute = requiredSpeed / 60;
+    
     const interval = setInterval(() => {
       setCurrentFiles(prev => {
         if (prev >= totalFiles) return totalFiles;
-        const increment = Math.floor(Math.random() * 8) + 3; // Incremento mais realista
+        // Usar a velocidade calculada para atingir o target
+        const increment = Math.max(1, Math.floor(filesPerMinute * 1.2)); // 1.2 é o intervalo em minutos
         const newValue = Math.min(prev + increment, totalFiles);
         
         // Atualizar porcentagem baseada no progresso real
         const newPercent = Math.floor((newValue / totalFiles) * 100);
         setProgressPercent(newPercent);
-        
-        // Calcular tempo restante real
-        const remainingTime = calculateTimeRemaining(newValue, totalFiles);
-        setTimeRemaining(remainingTime);
         
         return newValue;
       });
@@ -60,11 +72,10 @@ const AdminLoadingPage: React.FC = () => {
       // Simular mudança de arquivo atual
       const randomFile = sampleFiles[Math.floor(Math.random() * sampleFiles.length)];
       setCurrentFile(randomFile);
-    }, 1200); // Intervalo mais realista
+    }, 1200); // Intervalo de 1.2 segundos
 
-    // Calcular tempo inicial
-    const initialTime = calculateTimeRemaining(currentFiles, totalFiles);
-    setTimeRemaining(initialTime);
+    // Definir tempo fixo
+    setTimeRemaining(calculateTimeRemaining());
 
     return () => clearInterval(interval);
   }, [currentFiles, totalFiles]);
@@ -159,7 +170,7 @@ const AdminLoadingPage: React.FC = () => {
                 <span>Performance Otimizada</span>
               </div>
               <span>•</span>
-              <span>Conclusão prevista: {timeRemaining} - 03/06</span>
+              <span>Conclusão prevista: 03:00 - 03/06</span>
             </div>
           </div>
 
