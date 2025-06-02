@@ -18,6 +18,7 @@ import HeaderEditorPage from '@/pages/admin/HeaderEditorPage';
 import LiveEditorPage from '@/pages/admin/LiveEditorPage';
 import EditorPage from '@/pages/admin/EditorPage';
 import { useNavigate } from 'react-router-dom';
+import { StyleResult } from '@/types/quiz';
 
 // Wrapper component for QuizIntro to handle navigation
 const QuizIntroWrapper = () => {
@@ -35,8 +36,8 @@ const QuizIntroWrapper = () => {
 const QuizResultWrapper = () => {
   // Get quiz results from localStorage or provide defaults
   const savedResults = localStorage.getItem('quizResults');
-  let primaryStyle = { category: 'Natural', score: 100, percentage: 100 };
-  let secondaryStyles = [];
+  let primaryStyle: StyleResult = { category: 'Natural' as const, score: 100, percentage: 100 };
+  let secondaryStyles: StyleResult[] = [];
   
   if (savedResults) {
     try {
