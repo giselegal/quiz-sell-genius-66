@@ -6,9 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, RefreshCw, Eye, ArrowLeft, Settings, Palette, FileText, ShoppingCart } from 'lucide-react';
+import { Save, RefreshCw, Eye, ArrowLeft, Settings, Palette, FileText, ShoppingCart, Monitor, Smartphone, Tablet } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import AdminLayout from '@/components/admin/AdminLayout';
 import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
@@ -88,9 +87,9 @@ const defaultConfig: ResultPageConfig = {
 
 const ResultPageEditorPage: React.FC = () => {
   const [config, setConfig] = useState<ResultPageConfig>(defaultConfig);
-  const [previewMode, setPreviewMode] = useState(false);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
+  const [previewDevice, setPreviewDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const { toast } = useToast();
 
   // Carregar configurações salvas do localStorage
@@ -159,140 +158,100 @@ const ResultPageEditorPage: React.FC = () => {
     });
   };
 
-  if (previewMode) {
-    return (
-      <div className="min-h-screen bg-white">
-        {/* Barra de controle do preview */}
-        <div className="fixed top-0 left-0 right-0 bg-[#432818] text-white p-4 z-50 shadow-lg">
-          <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setPreviewMode(false)}
-                className="bg-white text-[#432818] border-white hover:bg-gray-100"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Voltar ao Editor
-              </Button>
-              <span className="text-sm font-medium">Modo Preview - Página de Resultado</span>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSave}
-                disabled={saving}
-                className="bg-[#B89B7A] text-white border-[#B89B7A] hover:bg-[#A1835D]"
-              >
-                {saving ? (
-                  <>
-                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                    Salvando...
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-4 w-4 mr-2" />
-                    Salvar
-                  </>
-                )}
-              </Button>
-            </div>
-          </div>
-        </div>
-        
-        {/* Preview da página */}
-        <div className="pt-16">
-          <Suspense fallback={
-            <div className="flex items-center justify-center min-h-screen">
-              <LoadingSpinner size="lg" color="#B89B7A" />
-            </div>
-          }>
-            <ResultPage />
-          </Suspense>
-        </div>
-      </div>
-    );
-  }
+  // Estilo do preview baseado no dispositivo selecionado
+  const getPreviewStyle = () => {
+    switch (previewDevice) {
+      case 'mobile':
+        return { width: '375px', height: '812px' };
+      case 'tablet':
+        return { width: '768px', height: '1024px' };
+      default:
+        return { width: '100%', height: '100%' };
+    }
+  };
 
   return (
-    <AdminLayout>
-      <div className="p-6 max-w-7xl mx-auto">
-        {/* Header da página */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Link
-              to="/admin"
-              className="flex items-center gap-2 text-[#B89B7A] hover:text-[#432818] transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Voltar ao Painel
-            </Link>
-            <h1 className="text-2xl font-bold text-[#432818]">
-              Editor da Página de Resultado
-            </h1>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              onClick={handleExportConfig}
-              className="flex items-center gap-2"
-            >
-              <FileText className="h-4 w-4" />
-              Exportar Config
-            </Button>
-            
-            <Button
-              variant="outline"
-              onClick={() => setPreviewMode(true)}
-              className="flex items-center gap-2"
-            >
-              <Eye className="h-4 w-4" />
-              Preview
-            </Button>
-            
-            <Button
-              onClick={handleSave}
-              disabled={saving}
-              className="bg-[#B89B7A] hover:bg-[#A1835D] text-white"
-            >
-              {saving ? (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                  Salvando...
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4 mr-2" />
-                  Salvar
-                </>
-              )}
-            </Button>
-          </div>
+    <div className="h-screen flex flex-col bg-gray-50">
+      {/* Header da página */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link
+            to="/admin"
+            className="flex items-center gap-2 text-[#B89B7A] hover:text-[#432818] transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Voltar ao Painel
+          </Link>
+          <h1 className="text-xl font-bold text-[#432818]">
+            Editor da Página de Resultado
+          </h1>
         </div>
+        
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={handleExportConfig}
+            className="flex items-center gap-2"
+          >
+            <FileText className="h-4 w-4" />
+            Exportar
+          </Button>
+          
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-[#B89B7A] hover:bg-[#A1835D] text-white"
+          >
+            {saving ? (
+              <>
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                Salvando...
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4 mr-2" />
+                Salvar
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
 
-        {/* Conteúdo principal com abas */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="general" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              Geral
-            </TabsTrigger>
-            <TabsTrigger value="design" className="flex items-center gap-2">
-              <Palette className="h-4 w-4" />
-              Design
-            </TabsTrigger>
-            <TabsTrigger value="content" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Conteúdo
-            </TabsTrigger>
-            <TabsTrigger value="offer" className="flex items-center gap-2">
-              <ShoppingCart className="h-4 w-4" />
-              Oferta
-            </TabsTrigger>
-          </TabsList>
+      {/* Layout principal split-screen */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Painel de Edição - Lado Esquerdo */}
+        <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
+          {/* Header do painel de edição */}
+          <div className="p-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-[#432818]">
+              Configurações
+            </h2>
+            <p className="text-sm text-gray-600">
+              Edite os componentes e veja as alterações em tempo real
+            </p>
+          </div>
+
+          {/* Abas de configuração */}
+          <div className="flex-1 overflow-auto">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
+              <TabsList className="grid w-full grid-cols-4 m-4">
+                <TabsTrigger value="general" className="flex items-center gap-2 text-xs">
+                  <Settings className="h-3 w-3" />
+                  Geral
+                </TabsTrigger>
+                <TabsTrigger value="design" className="flex items-center gap-2 text-xs">
+                  <Palette className="h-3 w-3" />
+                  Design
+                </TabsTrigger>
+                <TabsTrigger value="content" className="flex items-center gap-2 text-xs">
+                  <FileText className="h-3 w-3" />
+                  Conteúdo
+                </TabsTrigger>
+                <TabsTrigger value="offer" className="flex items-center gap-2 text-xs">
+                  <ShoppingCart className="h-3 w-3" />
+                  Oferta
+                </TabsTrigger>
+              </TabsList>
 
           {/* Aba Geral */}
           <TabsContent value="general">
