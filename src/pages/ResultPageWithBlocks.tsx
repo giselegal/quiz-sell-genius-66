@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
-import DragDropContainer from '@/components/result/DragDropContainer';
-import BlockEditorModal from '@/components/result/BlockEditorModal';
+import { DragDropContainer } from '@/components/result/DragDropContainer';
+import { BlockEditorModal } from '@/components/result/BlockEditorModal';
 import { useBlocks } from '@/hooks/useBlocks';
 import { BlockData } from '@/types/resultPageConfig';
 import { styleConfig } from '@/config/styleConfig';
@@ -70,7 +70,7 @@ const tokens = {
   }
 };
 
-const ResultPage: React.FC = () => {
+const ResultPageWithBlocks: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
   const { user } = useAuth();
@@ -346,11 +346,10 @@ const ResultPage: React.FC = () => {
         {/* SISTEMA DE BLOCOS DRAG-AND-DROP */}
         <DragDropContainer
           blocks={blocks}
-          onUpdateBlocks={updateBlocks}
+          onBlocksChange={updateBlocks}
           onEditBlock={handleEditBlock}
-          onAddBlock={handleAddNewBlock}
+          onDeleteBlock={deleteBlock}
           isEditMode={isEditMode}
-          onToggleEditMode={handleToggleEditMode}
           primaryStyle={primaryStyle}
           secondaryStyles={secondaryStyles}
           globalStyles={globalStyles}
@@ -365,15 +364,27 @@ const ResultPage: React.FC = () => {
           isLowPerformance={isLowPerformance}
           tokens={tokens}
         />
+
+        {/* BOTÃO PARA ADICIONAR NOVOS BLOCOS */}
+        {isEditMode && (
+          <div className="text-center mt-8">
+            <Button
+              onClick={handleAddNewBlock}
+              className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-md shadow-md transition-all duration-300 flex items-center gap-2 mx-auto"
+            >
+              <Plus className="w-4 h-4" />
+              Adicionar Novo Bloco
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* MODAL DE EDIÇÃO DE BLOCOS */}
       {editingBlock && (
         <BlockEditorModal
-          isOpen={!!editingBlock}
           block={editingBlock}
-          onSave={(blockId, updates) => {
-            updateBlock(blockId, updates);
+          onSave={(updatedBlock) => {
+            updateBlock(updatedBlock.id, updatedBlock);
             setEditingBlock(null);
           }}
           onClose={() => setEditingBlock(null)}
@@ -383,4 +394,4 @@ const ResultPage: React.FC = () => {
   );
 };
 
-export default ResultPage;
+export default ResultPageWithBlocks;

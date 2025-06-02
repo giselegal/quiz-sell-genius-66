@@ -36,6 +36,7 @@ const BuilderPageSetup = lazy(() => import('./components/admin/BuilderPageSetup'
 const HeaderEditorPage = lazy(() => import('./pages/admin/HeaderEditorPage')); // Editor do Header
 const ResultPageEditorPage = lazy(() => import('./pages/admin/ResultPageEditorPage')); // Editor da ResultPage
 const ResultPageLiveEditor = lazy(() => import('./pages/admin/ResultPageLiveEditor')); // Editor ao vivo estilo InLead/Typeform
+const BlockSystemDemo = lazy(() => import('./components/result/BlockSystemDemo')); // Demo do sistema de blocos
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {
@@ -90,6 +91,9 @@ const App = () => {
                 
                 {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />
+                
+                {/* DEMO - Sistema de blocos */}
+                <Route path="/demo-blocks" element={<BlockSystemDemo />} />
                 
                 {/* OFERTA - Página de oferta */}
                 <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
