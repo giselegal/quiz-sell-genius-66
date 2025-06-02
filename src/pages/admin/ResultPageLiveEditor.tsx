@@ -105,7 +105,7 @@ const componentBlocks: ComponentBlock[] = [
     id: 'text',
     type: 'text',
     name: 'Texto',
-    icon: <Type className="h-4 w-4" />,
+    icon: <FileText className="h-4 w-4" />,
     description: 'Parágrafos e texto corrido',
     category: 'content'
   },
@@ -115,6 +115,14 @@ const componentBlocks: ComponentBlock[] = [
     name: 'Imagem',
     icon: <Image className="h-4 w-4" />,
     description: 'Imagens e galerias',
+    category: 'content'
+  },
+  {
+    id: 'video',
+    type: 'video',
+    name: 'Vídeo',
+    icon: <Video className="h-4 w-4" />,
+    description: 'Vídeos do YouTube, Vimeo ou local',
     category: 'content'
   },
   {
@@ -148,6 +156,102 @@ const componentBlocks: ComponentBlock[] = [
     icon: <Shield className="h-4 w-4" />,
     description: 'Selo e texto de garantia',
     category: 'marketing'
+  },
+  {
+    id: 'countdown',
+    type: 'countdown',
+    name: 'Contador Regressivo',
+    icon: <Clock className="h-4 w-4" />,
+    description: 'Timer de urgência e escassez',
+    category: 'marketing'
+  },
+  {
+    id: 'testimonial',
+    type: 'testimonial',
+    name: 'Depoimento',
+    icon: <Quote className="h-4 w-4" />,
+    description: 'Depoimentos de clientes',
+    category: 'social'
+  },
+  {
+    id: 'social-proof',
+    type: 'social-proof',
+    name: 'Prova Social',
+    icon: <Users className="h-4 w-4" />,
+    description: 'Números de clientes, vendas, etc.',
+    category: 'social'
+  },
+  {
+    id: 'stats',
+    type: 'stats',
+    name: 'Estatísticas',
+    icon: <BarChart3 className="h-4 w-4" />,
+    description: 'Números e métricas importantes',
+    category: 'social'
+  },
+  {
+    id: 'faq',
+    type: 'faq',
+    name: 'Perguntas Frequentes',
+    icon: <MessageSquare className="h-4 w-4" />,
+    description: 'Seção de FAQ expandível',
+    category: 'content'
+  },
+  {
+    id: 'checklist',
+    type: 'checklist',
+    name: 'Lista de Verificação',
+    icon: <CheckCircle className="h-4 w-4" />,
+    description: 'Lista com itens marcáveis',
+    category: 'content'
+  },
+  {
+    id: 'feature-grid',
+    type: 'feature-grid',
+    name: 'Grade de Recursos',
+    icon: <Sparkles className="h-4 w-4" />,
+    description: 'Grid de funcionalidades',
+    category: 'content'
+  },
+  {
+    id: 'comparison',
+    type: 'comparison',
+    name: 'Tabela de Comparação',
+    icon: <TrendingUp className="h-4 w-4" />,
+    description: 'Compare produtos ou planos',
+    category: 'marketing'
+  },
+  {
+    id: 'contact',
+    type: 'contact',
+    name: 'Informações de Contato',
+    icon: <Phone className="h-4 w-4" />,
+    description: 'Dados de contato e localização',
+    category: 'forms'
+  },
+  {
+    id: 'newsletter',
+    type: 'newsletter',
+    name: 'Newsletter',
+    icon: <Mail className="h-4 w-4" />,
+    description: 'Formulário de inscrição',
+    category: 'forms'
+  },
+  {
+    id: 'divider',
+    type: 'divider',
+    name: 'Divisor',
+    icon: <Type className="h-4 w-4" />,
+    description: 'Linha separadora decorativa',
+    category: 'design'
+  },
+  {
+    id: 'spacer',
+    type: 'spacer',
+    name: 'Espaçador',
+    icon: <Type className="h-4 w-4" />,
+    description: 'Espaço em branco ajustável',
+    category: 'design'
   },
   {
     id: 'style-result',
@@ -365,7 +469,7 @@ const ResultPageLiveEditor: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isPreviewing, setIsPreviewing] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'content' | 'marketing' | 'design'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'content' | 'marketing' | 'design' | 'social' | 'forms'>('all');
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isOverDropZone, setIsOverDropZone] = useState(false);
   const { toast } = useToast();
@@ -935,6 +1039,20 @@ const ResultPageLiveEditor: React.FC = () => {
                       onClick={() => setSelectedCategory('design')}
                     >
                       Design
+                    </Badge>
+                    <Badge
+                      variant={selectedCategory === 'social' ? 'default' : 'outline'}
+                      className="cursor-pointer text-xs"
+                      onClick={() => setSelectedCategory('social')}
+                    >
+                      Social
+                    </Badge>
+                    <Badge
+                      variant={selectedCategory === 'forms' ? 'default' : 'outline'}
+                      className="cursor-pointer text-xs"
+                      onClick={() => setSelectedCategory('forms')}
+                    >
+                      Formulários
                     </Badge>
                   </div>
                 </div>
