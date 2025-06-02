@@ -27,7 +27,7 @@ const AdminLoadingPage: React.FC = () => {
   // Função para calcular tempo restante baseado no progresso
   const calculateTimeRemaining = (current: number, total: number) => {
     const remainingFiles = total - current;
-    const filesPerMinute = 15; // Velocidade estimada de processamento
+    const filesPerMinute = 8; // Velocidade mais realista de processamento
     const remainingMinutes = Math.ceil(remainingFiles / filesPerMinute);
     
     const now = new Date();
@@ -43,7 +43,7 @@ const AdminLoadingPage: React.FC = () => {
     const interval = setInterval(() => {
       setCurrentFiles(prev => {
         if (prev >= totalFiles) return totalFiles;
-        const increment = Math.floor(Math.random() * 15) + 5;
+        const increment = Math.floor(Math.random() * 8) + 3; // Incremento mais realista
         const newValue = Math.min(prev + increment, totalFiles);
         
         // Atualizar porcentagem baseada no progresso real
@@ -60,7 +60,7 @@ const AdminLoadingPage: React.FC = () => {
       // Simular mudança de arquivo atual
       const randomFile = sampleFiles[Math.floor(Math.random() * sampleFiles.length)];
       setCurrentFile(randomFile);
-    }, 800);
+    }, 1200); // Intervalo mais realista
 
     // Calcular tempo inicial
     const initialTime = calculateTimeRemaining(currentFiles, totalFiles);
@@ -156,7 +156,7 @@ const AdminLoadingPage: React.FC = () => {
             <div className="flex items-center space-x-4 text-xs text-slate-400">
               <div className="flex items-center">
                 <Zap className="h-3 w-3 mr-1" />
-                <span>Alta Performance</span>
+                <span>Performance Otimizada</span>
               </div>
               <span>•</span>
               <span>Conclusão prevista: {timeRemaining} - 03/06</span>
