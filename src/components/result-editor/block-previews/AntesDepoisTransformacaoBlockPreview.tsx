@@ -489,7 +489,7 @@ const AntesDepoisTransformacaoBlockPreview: React.FC<AntesDepoisTransformacaoBlo
                           height="60"
                         />
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
               </div>
