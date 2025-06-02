@@ -328,6 +328,66 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
             name: 'Transformação',
             icon: <ArrowRight className="w-4 h-4" />,
             description: 'Histórias de transformação de clientes'
+          },
+          {
+            type: 'countdown',
+            name: 'Contagem Regressiva',
+            icon: <AlertCircle className="w-4 h-4" />,
+            description: 'Timer de urgência para ofertas'
+          },
+          {
+            type: 'payment-methods',
+            name: 'Formas de Pagamento',
+            icon: <CreditCard className="w-4 h-4" />,
+            description: 'Exibição das formas de pagamento aceitas'
+          },
+          {
+            type: 'about-creator',
+            name: 'Sobre o Criador',
+            icon: <Users className="w-4 h-4" />,
+            description: 'Informações sobre quem criou o conteúdo'
+          },
+          {
+            type: 'objection-handling',
+            name: 'Tratamento de Objeções',
+            icon: <MessageCircle className="w-4 h-4" />,
+            description: 'Respostas a possíveis objeções'
+          },
+          {
+            type: 'value-stack',
+            name: 'Pilha de Valor',
+            icon: <BarChart2 className="w-4 h-4" />,
+            description: 'Demonstração do valor total oferecido'
+          },
+          {
+            type: 'pain-points',
+            name: 'Pontos de Dor',
+            icon: <AlertCircle className="w-4 h-4" />,
+            description: 'Identificação dos problemas do público'
+          },
+          {
+            type: 'solution',
+            name: 'Solução',
+            icon: <CheckSquare className="w-4 h-4" />,
+            description: 'Apresentação da solução oferecida'
+          },
+          {
+            type: 'features-benefits',
+            name: 'Recursos e Benefícios',
+            icon: <List className="w-4 h-4" />,
+            description: 'Lista detalhada de recursos e benefícios'
+          },
+          {
+            type: 'comparison',
+            name: 'Comparação',
+            icon: <Columns className="w-4 h-4" />,
+            description: 'Tabela comparativa com concorrentes'
+          },
+          {
+            type: 'risk-reversal',
+            name: 'Reversão de Risco',
+            icon: <Star className="w-4 h-4" />,
+            description: 'Elementos que reduzem o risco da compra'
           }
         ]
       },
@@ -360,7 +420,7 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
   const getSalesComponents = (): ComponentGroup[] => {
     return [
       {
-        title: 'Componentes de Página de Vendas',
+        title: 'Estrutura Principal',
         items: [
           {
             type: 'hero',
@@ -368,6 +428,35 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
             icon: <Layout className="w-4 h-4" />,
             description: 'Seção principal com título e imagem'
           },
+          {
+            type: 'headline',
+            name: 'Título',
+            icon: <Type className="w-4 h-4" />,
+            description: 'Título com destaque'
+          },
+          {
+            type: 'text',
+            name: 'Texto',
+            icon: <FileText className="w-4 h-4" />,
+            description: 'Bloco de texto para explicações'
+          },
+          {
+            type: 'image',
+            name: 'Imagem',
+            icon: <Image className="w-4 h-4" />,
+            description: 'Imagem com legenda opcional'
+          },
+          {
+            type: 'video',
+            name: 'Vídeo',
+            icon: <Image className="w-4 h-4" />,
+            description: 'Player de vídeo incorporado'
+          }
+        ]
+      },
+      {
+        title: 'Produto e Oferta',
+        items: [
           {
             type: 'productInfo',
             name: 'Informação do Produto',
@@ -387,21 +476,27 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
             description: 'Lista de benefícios do produto'
           },
           {
-            type: 'testimonials',
-            name: 'Depoimentos',
-            icon: <MessageCircle className="w-4 h-4" />,
-            description: 'Depoimentos de clientes'
+            type: 'features-benefits',
+            name: 'Recursos e Benefícios',
+            icon: <List className="w-4 h-4" />,
+            description: 'Lista detalhada de recursos e benefícios'
           },
           {
-            type: 'faq',
-            name: 'Perguntas Frequentes',
-            icon: <AlertCircle className="w-4 h-4" />,
-            description: 'Seção de perguntas frequentes'
+            type: 'value-stack',
+            name: 'Pilha de Valor',
+            icon: <BarChart2 className="w-4 h-4" />,
+            description: 'Demonstração do valor total oferecido'
+          },
+          {
+            type: 'bonus',
+            name: 'Bônus',
+            icon: <Star className="w-4 h-4" />,
+            description: 'Seção de bônus e benefícios extras'
           }
         ]
       },
       {
-        title: 'Componentes de Conversão',
+        title: 'Conversão e Vendas',
         items: [
           {
             type: 'callToAction',
@@ -410,10 +505,22 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
             description: 'Botão de chamada para ação'
           },
           {
+            type: 'cta',
+            name: 'CTA Avançado',
+            icon: <ArrowRight className="w-4 h-4" />,
+            description: 'Botão de CTA com mais opções'
+          },
+          {
             type: 'countdown',
             name: 'Contagem Regressiva',
             icon: <AlertCircle className="w-4 h-4" />,
             description: 'Temporizador de urgência'
+          },
+          {
+            type: 'urgency',
+            name: 'Urgência',
+            icon: <AlertCircle className="w-4 h-4" />,
+            description: 'Elementos de urgência e escassez'
           },
           {
             type: 'guarantee',
@@ -422,16 +529,92 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
             description: 'Política de garantia'
           },
           {
-            type: 'featureList',
-            name: 'Lista de Recursos',
-            icon: <List className="w-4 h-4" />,
-            description: 'Lista de recursos ou características'
+            type: 'risk-reversal',
+            name: 'Reversão de Risco',
+            icon: <Star className="w-4 h-4" />,
+            description: 'Elementos que reduzem o risco da compra'
+          },
+          {
+            type: 'payment-methods',
+            name: 'Formas de Pagamento',
+            icon: <CreditCard className="w-4 h-4" />,
+            description: 'Exibição das formas de pagamento aceitas'
+          }
+        ]
+      },
+      {
+        title: 'Credibilidade',
+        items: [
+          {
+            type: 'testimonials',
+            name: 'Depoimentos',
+            icon: <MessageCircle className="w-4 h-4" />,
+            description: 'Depoimentos de clientes'
           },
           {
             type: 'socialProof',
             name: 'Prova Social',
             icon: <Users className="w-4 h-4" />,
             description: 'Prova social para aumentar confiança'
+          },
+          {
+            type: 'social-proof',
+            name: 'Prova Social Avançada',
+            icon: <Users className="w-4 h-4" />,
+            description: 'Elementos de prova social e credibilidade'
+          },
+          {
+            type: 'about-creator',
+            name: 'Sobre o Criador',
+            icon: <Users className="w-4 h-4" />,
+            description: 'Informações sobre quem criou o conteúdo'
+          },
+          {
+            type: 'transformation',
+            name: 'Transformação',
+            icon: <ArrowRight className="w-4 h-4" />,
+            description: 'Histórias de transformação de clientes'
+          }
+        ]
+      },
+      {
+        title: 'Suporte e Informações',
+        items: [
+          {
+            type: 'faq',
+            name: 'Perguntas Frequentes',
+            icon: <AlertCircle className="w-4 h-4" />,
+            description: 'Seção de perguntas frequentes'
+          },
+          {
+            type: 'objection-handling',
+            name: 'Tratamento de Objeções',
+            icon: <MessageCircle className="w-4 h-4" />,
+            description: 'Respostas a possíveis objeções'
+          },
+          {
+            type: 'pain-points',
+            name: 'Pontos de Dor',
+            icon: <AlertCircle className="w-4 h-4" />,
+            description: 'Identificação dos problemas do público'
+          },
+          {
+            type: 'solution',
+            name: 'Solução',
+            icon: <CheckSquare className="w-4 h-4" />,
+            description: 'Apresentação da solução oferecida'
+          },
+          {
+            type: 'comparison',
+            name: 'Comparação',
+            icon: <Columns className="w-4 h-4" />,
+            description: 'Tabela comparativa com concorrentes'
+          },
+          {
+            type: 'featureList',
+            name: 'Lista de Recursos',
+            icon: <List className="w-4 h-4" />,
+            description: 'Lista de recursos ou características'
           }
         ]
       }
