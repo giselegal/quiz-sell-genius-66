@@ -92,7 +92,7 @@ export interface OfferSection {
 // Sistema de Blocos Drag-and-Drop
 export interface BlockData {
   id: string;
-  type: 'hero' | 'text' | 'image' | 'cta' | 'testimonials' | 'pricing' | 'benefits' | 'guarantee' | 'mentor' | 'transformations' | 'bonus' | 'motivation' | 'secondary-styles';
+  type: 'hero' | 'text' | 'image' | 'cta' | 'testimonials' | 'pricing' | 'benefits' | 'guarantee' | 'mentor' | 'transformations' | 'bonus' | 'motivation' | 'secondary-styles' | 'antes-depois-transformacao';
   title: string;
   content: SectionContent;
   style: StyleOptions;

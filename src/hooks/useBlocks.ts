@@ -311,6 +311,36 @@ function getDefaultContentForType(type: BlockData['type']) {
         showPrimaryStyle: true,
         showPercentages: true,
       };
+    case 'antes-depois-transformacao':
+      return {
+        title: 'Transformações Que Inspiram',
+        subtitle: 'Mulheres que Aprenderam e Praticam no dia a dia Seu Estilo de Ser',
+        description: 'Seu estilo é muito mais que roupas — é a expressão da sua personalidade e o reflexo dos seus sonhos e objetivos.',
+        transformations: [
+          {
+            image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+            name: "Adriana",
+            id: "transformation-adriana",
+            width: 600,
+            height: 750
+          }, 
+          {
+            image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+            name: "Mariangela", 
+            id: "transformation-mariangela",
+            width: 600,
+            height: 750
+          }
+        ],
+        benefits: [
+          "Looks que expressam sua verdadeira essência",
+          "Cores e modelagens que realçam sua beleza natural",
+          "Imagem profissional alinhada aos seus objetivos",
+          "Guarda-roupa inteligente e sem desperdícios"
+        ],
+        ctaText: "Quero Meu Guia de Estilo",
+        ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+      };
     default:
       return {
         title: `Conteúdo ${type}`,

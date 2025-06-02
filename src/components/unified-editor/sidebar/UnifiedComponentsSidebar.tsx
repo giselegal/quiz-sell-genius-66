@@ -178,6 +178,12 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
             description: 'Imagem representativa do estilo'
           },
           {
+            type: 'antes-depois-transformacao',
+            name: 'Antes e Depois',
+            icon: <ArrowRight className="w-4 h-4" />,
+            description: 'Galeria de transformações com antes e depois'
+          },
+          {
             type: 'recommendations',
             name: 'Recomendações',
             icon: <Star className="w-4 h-4" />,
