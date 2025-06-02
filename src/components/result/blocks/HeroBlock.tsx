@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BlockData } from '@/types/resultPageConfig';
@@ -19,6 +18,20 @@ const HeroBlock: React.FC<HeroBlockProps> = ({
 }) => {
   const content = block.content;
   
+  // Convert StyleOptions to CSS-compatible styles
+  const sectionStyles = block.style ? {
+    backgroundColor: block.style.backgroundColor,
+    padding: block.style.padding,
+    margin: block.style.margin,
+    borderRadius: block.style.borderRadius,
+    fontSize: block.style.fontSize,
+    fontWeight: block.style.fontWeight,
+    color: block.style.color,
+    textAlign: block.style.textAlign as 'left' | 'center' | 'right' | undefined,
+    fontFamily: block.style.fontFamily,
+    width: block.style.width
+  } : {};
+  
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
@@ -26,7 +39,7 @@ const HeroBlock: React.FC<HeroBlockProps> = ({
       transition={{ duration: 0.6 }}
       className={`relative py-12 px-6 ${isEditMode ? 'cursor-pointer hover:ring-2 hover:ring-[#B89B7A] hover:bg-[#FAF9F7]' : ''}`}
       onClick={onClick}
-      style={block.style}
+      style={sectionStyles}
     >
       <div className="container mx-auto max-w-4xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

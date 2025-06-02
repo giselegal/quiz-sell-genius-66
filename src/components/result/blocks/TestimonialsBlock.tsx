@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
@@ -38,6 +37,20 @@ const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({
     }
   ];
 
+  // Convert StyleOptions to CSS-compatible styles
+  const sectionStyles = block.style ? {
+    backgroundColor: block.style.backgroundColor,
+    padding: block.style.padding,
+    margin: block.style.margin,
+    borderRadius: block.style.borderRadius,
+    fontSize: block.style.fontSize,
+    fontWeight: block.style.fontWeight,
+    color: block.style.color,
+    textAlign: block.style.textAlign as 'left' | 'center' | 'right' | undefined,
+    fontFamily: block.style.fontFamily,
+    width: block.style.width
+  } : {};
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 30 }}
@@ -46,7 +59,7 @@ const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({
       transition={{ duration: 0.6 }}
       className={`py-16 px-6 bg-[#f8f9fa] ${isEditMode ? 'cursor-pointer hover:ring-2 hover:ring-[#B89B7A]' : ''}`}
       onClick={onClick}
-      style={block.style}
+      style={sectionStyles}
     >
       <div className="container mx-auto max-w-6xl">
         <motion.div
