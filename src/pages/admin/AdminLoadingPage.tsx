@@ -7,9 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Clock, Code, FileText, Zap } from 'lucide-react';
 
 const AdminLoadingPage: React.FC = () => {
-  const [currentFiles, setCurrentFiles] = useState(2000);
+  const [currentFiles, setCurrentFiles] = useState(1900); // Começar em 1900
   const [totalFiles] = useState(3700);
-  const [progressPercent, setProgressPercent] = useState(54);
+  const [progressPercent, setProgressPercent] = useState(51); // ~51% para 1900/3700
   const [timeRemaining, setTimeRemaining] = useState('');
   const [currentFile, setCurrentFile] = useState('src/components/QuizFlow.tsx');
 
@@ -52,14 +52,15 @@ const AdminLoadingPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const requiredSpeed = calculateRequiredSpeed(currentFiles, totalFiles);
-    const filesPerMinute = requiredSpeed / 60;
-    
+    // Calcular progresso inicial
+    const initialPercent = Math.floor((currentFiles / totalFiles) * 100);
+    setProgressPercent(initialPercent);
+
     const interval = setInterval(() => {
       setCurrentFiles(prev => {
         if (prev >= totalFiles) return totalFiles;
-        // Velocidade mais lenta e realista (2-4 arquivos por vez)
-        const increment = Math.max(1, Math.floor(Math.random() * 3) + 1); // 1-3 arquivos por intervalo
+        // Processamento muito lento: 1 arquivo a cada intervalo
+        const increment = 1;
         const newValue = Math.min(prev + increment, totalFiles);
         
         // Atualizar porcentagem baseada no progresso real
@@ -72,7 +73,7 @@ const AdminLoadingPage: React.FC = () => {
       // Simular mudança de arquivo atual
       const randomFile = sampleFiles[Math.floor(Math.random() * sampleFiles.length)];
       setCurrentFile(randomFile);
-    }, 2500); // Intervalo mais lento: 2.5 segundos
+    }, 900000); // 15 minutos = 900000 milissegundos
 
     // Definir tempo fixo
     setTimeRemaining(calculateTimeRemaining());
