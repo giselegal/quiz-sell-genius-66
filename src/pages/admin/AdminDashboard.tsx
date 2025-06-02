@@ -94,6 +94,13 @@ const AdminDashboard = () => {
             linkTo="/"
             buttonText="Ver Quiz"
           />
+
+          <DashboardCard
+            title="Editor de Header"
+            description="Edite o cabeçalho da página de resultado"
+            linkTo="/admin/header-editor"
+            buttonText="Editar Header"
+          />
         </div>
       </div>
     </AdminLayout>

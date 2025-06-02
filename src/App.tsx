@@ -33,6 +33,7 @@ const ABTestsPage = lazy(() => import('./pages/admin/ABTestsPage'));
 const QuickMetricsPage = lazy(() => import('./pages/admin/QuickMetricsPage'));
 const BuilderDashboard = lazy(() => import('./pages/admin/BuilderDashboard')); // Builder.io Dashboard
 const BuilderPageSetup = lazy(() => import('./components/admin/BuilderPageSetup')); // Setup páginas A/B
+const HeaderEditorPage = lazy(() => import('./pages/admin/HeaderEditorPage')); // Editor do Header
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {
@@ -81,6 +82,7 @@ const App = () => {
                 <Route path="/admin/quick-metrics" element={<QuickMetricsPage />} />
                 <Route path="/admin/builder" element={<BuilderDashboard />} /> {/* Builder.io Dashboard - versão segura */}
                 <Route path="/admin/builder-setup" element={<BuilderPageSetup />} /> {/* Setup páginas A/B */}
+                <Route path="/admin/header-editor" element={<HeaderEditorPage />} /> {/* Editor do Header */}
                 
                 {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />
