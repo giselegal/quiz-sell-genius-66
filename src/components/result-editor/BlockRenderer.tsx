@@ -89,6 +89,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
         return <CustomCodeBlockPreview content={block.content} />;
       case 'animation-block':
         return <AnimationBlockPreview content={block.content} />;
+      case 'antes-depois-transformacao':
+        return <AntesDepoisTransformacaoBlockPreview content={block.content} />;
       default:
         return <p>Bloco não reconhecido: {block.type}</p>;
     }
