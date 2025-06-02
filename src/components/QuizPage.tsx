@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useQuizLogic } from '@/hooks/useQuizLogic';
 import { useAuth } from '@/context/AuthContext';
 import { QuizContent } from '@/components/quiz/QuizContent';
-import { QuizFinalTransition } from '@/components/QuizFinalTransition';
+import QuizFinalTransition from '@/components/QuizFinalTransition';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { UserResponse } from '@/types/quiz';
 import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';

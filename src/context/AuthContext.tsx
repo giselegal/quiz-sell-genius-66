@@ -11,6 +11,8 @@ interface User {
 interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
+  login: (userName: string) => void;
+  logout: () => void;
   isAuthenticated: boolean;
 }
 
@@ -31,9 +33,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return null;
   });
 
+  const login = (userName: string) => {
+    const newUser = {
+      id: '1',
+      userName,
+      email: 'user@quiz.com',
+      role: 'user' as const
+    };
+    setUser(newUser);
+    localStorage.setItem('userName', userName);
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('userName');
+  };
+
   const contextValue = {
     user,
     setUser,
+    login,
+    logout,
     isAuthenticated: !!user
   };
 
