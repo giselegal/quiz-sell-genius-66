@@ -31,6 +31,7 @@ export interface StyleOptions {
   paddingX?: string;
   margin?: string;
   width?: string;
+  maxWidth?: string;
   borderRadius?: string;
   textAlign?: string;
   fontFamily?: string;
@@ -47,6 +48,16 @@ export interface SectionContent {
   ctaText?: string;
   ctaUrl?: string;
   imageUrl?: string;
+  features?: string[];
+  bonuses?: Array<{
+    title: string;
+    description: string;
+    value: string;
+  }>;
+  name?: string;
+  credentials?: string;
+  period?: string;
+  type?: string;
   [key: string]: any;
 }
 

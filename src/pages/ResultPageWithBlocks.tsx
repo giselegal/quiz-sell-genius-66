@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { useResultPageConfig } from '@/hooks/useResultPageConfig';
-import { DragDropContainer } from '@/components/result/DragDropContainer';
-import { BlockEditorModal } from '@/components/result/BlockEditorModal';
+import DragDropContainer from '@/components/result/DragDropContainer';
+import BlockEditorModal from '@/components/result/BlockEditorModal';
 import { useBlocks } from '@/hooks/useBlocks';
 import { BlockData } from '@/types/resultPageConfig';
 import { styleConfig } from '@/config/styleConfig';
@@ -346,10 +346,11 @@ const ResultPageWithBlocks: React.FC = () => {
         {/* SISTEMA DE BLOCOS DRAG-AND-DROP */}
         <DragDropContainer
           blocks={blocks}
-          onBlocksChange={updateBlocks}
+          onUpdateBlocks={updateBlocks}
           onEditBlock={handleEditBlock}
-          onDeleteBlock={deleteBlock}
+          onAddBlock={handleAddNewBlock}
           isEditMode={isEditMode}
+          onToggleEditMode={handleToggleEditMode}
           primaryStyle={primaryStyle}
           secondaryStyles={secondaryStyles}
           globalStyles={globalStyles}
@@ -382,9 +383,10 @@ const ResultPageWithBlocks: React.FC = () => {
       {/* MODAL DE EDIÇÃO DE BLOCOS */}
       {editingBlock && (
         <BlockEditorModal
+          isOpen={!!editingBlock}
           block={editingBlock}
-          onSave={(updatedBlock) => {
-            updateBlock(updatedBlock.id, updatedBlock);
+          onSave={(blockId, updates) => {
+            updateBlock(blockId, updates);
             setEditingBlock(null);
           }}
           onClose={() => setEditingBlock(null)}
