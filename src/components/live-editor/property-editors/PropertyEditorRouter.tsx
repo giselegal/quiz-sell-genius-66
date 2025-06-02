@@ -8,7 +8,20 @@ import {
   PricingPropertyEditor,
   CTAPropertyEditor,
   GuaranteePropertyEditor,
-  StyleResultPropertyEditor
+  StyleResultPropertyEditor,
+  TestimonialPropertyEditor,
+  VideoPropertyEditor,
+  FAQPropertyEditor,
+  CountdownPropertyEditor,
+  StatsPropertyEditor,
+  ContactPropertyEditor,
+  DividerPropertyEditor,
+  SpacerPropertyEditor,
+  SocialProofPropertyEditor,
+  NewsletterPropertyEditor,
+  ChecklistPropertyEditor,
+  ComparisonPropertyEditor,
+  FeatureGridPropertyEditor
 } from './index';
 
 interface PropertyEditorRouterProps {
@@ -85,6 +98,110 @@ export const PropertyEditorRouter: React.FC<PropertyEditorRouterProps> = ({
       case 'style-result':
         return (
           <StyleResultPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'testimonial':
+        return (
+          <TestimonialPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'video':
+        return (
+          <VideoPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'faq':
+        return (
+          <FAQPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'countdown':
+        return (
+          <CountdownPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'stats':
+        return (
+          <StatsPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'contact':
+        return (
+          <ContactPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'divider':
+        return (
+          <DividerPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'spacer':
+        return (
+          <SpacerPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'social-proof':
+        return (
+          <SocialProofPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'newsletter':
+        return (
+          <NewsletterPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'checklist':
+        return (
+          <ChecklistPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'comparison':
+        return (
+          <ComparisonPropertyEditor
+            block={selectedBlock}
+            onUpdate={onUpdateBlock}
+          />
+        );
+      
+      case 'feature-grid':
+        return (
+          <FeatureGridPropertyEditor
             block={selectedBlock}
             onUpdate={onUpdateBlock}
           />
