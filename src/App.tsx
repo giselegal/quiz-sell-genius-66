@@ -17,6 +17,39 @@ import QuickMetricsPage from '@/pages/admin/QuickMetricsPage';
 import HeaderEditorPage from '@/pages/admin/HeaderEditorPage';
 import LiveEditorPage from '@/pages/admin/LiveEditorPage';
 import EditorPage from '@/pages/admin/EditorPage';
+import { useNavigate } from 'react-router-dom';
+
+// Wrapper component for QuizIntro to handle navigation
+const QuizIntroWrapper = () => {
+  const navigate = useNavigate();
+  
+  const handleStart = (name: string) => {
+    localStorage.setItem('userName', name);
+    navigate('/quiz');
+  };
+  
+  return <QuizIntro onStart={handleStart} />;
+};
+
+// Wrapper component for QuizResult to provide default props
+const QuizResultWrapper = () => {
+  // Get quiz results from localStorage or provide defaults
+  const savedResults = localStorage.getItem('quizResults');
+  let primaryStyle = { category: 'Natural', score: 100, percentage: 100 };
+  let secondaryStyles = [];
+  
+  if (savedResults) {
+    try {
+      const results = JSON.parse(savedResults);
+      primaryStyle = results.primaryStyle || primaryStyle;
+      secondaryStyles = results.secondaryStyles || [];
+    } catch (error) {
+      console.error('Error parsing quiz results:', error);
+    }
+  }
+  
+  return <QuizResult primaryStyle={primaryStyle} secondaryStyles={secondaryStyles} />;
+};
 
 function App() {
   return (
@@ -24,10 +57,10 @@ function App() {
       <div className="min-h-screen bg-gradient-to-br from-[#FAF9F7] to-[#F5F2E9]">
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<QuizIntro />} />
+          <Route path="/" element={<QuizIntroWrapper />} />
           <Route path="/quiz" element={<QuizFlow />} />
           <Route path="/quiz-flow" element={<QuizFlow />} />
-          <Route path="/quiz-results" element={<QuizResult />} />
+          <Route path="/quiz-results" element={<QuizResultWrapper />} />
           <Route path="/resultado" element={<ResultPageWithBlocks />} />
           <Route path="/resultado/:style" element={<ResultPageWithBlocks />} />
           
