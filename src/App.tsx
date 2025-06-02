@@ -69,6 +69,12 @@ const App = () => {
                 {/* ROTA PRINCIPAL - Quiz com introdução */}
                 <Route path="/" element={<QuizPage />} />
                 
+                {/* ROTAS DE CARREGAMENTO DO EDITOR - Simulação de carregamento */}
+                <Route path="/acesso/editor" element={<AccessLoaderPage redirectTarget="editor" />} />
+                <Route path="/acesso/admin" element={<AccessLoaderPage redirectTarget="admin" />} />
+                <Route path="/acesso/unificado" element={<AccessLoaderPage redirectTarget="unified" />} />
+                <Route path="/acesso/resultado" element={<AccessLoaderPage redirectTarget="result-editor" />} />
+                
                 {/* ADMIN - Dashboard centralizado usando páginas da pasta pages/admin/ */}
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/*" element={<AdminDashboard />} />
