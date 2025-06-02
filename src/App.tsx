@@ -21,14 +21,13 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Lazy loading das páginas usando a pasta pages/
+// Lazy loading das páginas
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
-const AccessLoaderPage = lazy(() => import('./pages/AccessLoaderPage'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -69,7 +68,7 @@ const App = () => {
                 {/* ROTA PRINCIPAL - Quiz com introdução */}
                 <Route path="/" element={<QuizPage />} />
                 
-                {/* ADMIN - Dashboard centralizado usando páginas da pasta pages/admin/ */}
+                {/* ADMIN - Dashboard centralizado */}
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/*" element={<AdminDashboard />} />
                 
