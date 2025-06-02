@@ -45,49 +45,57 @@ const AdminDashboard: React.FC = () => {
       title: "Editor Unificado", 
       description: "Editor moderno para Quiz, Resultado e Vendas de forma integrada.", 
       linkTo: "/admin/editor", 
-      buttonText: "Abrir Editor" 
+      buttonText: "Abrir Editor",
+      isExternal: false
     },
     { 
       title: "Editor Ao Vivo", 
       description: "Editor visual avançado com preview em tempo real.", 
       linkTo: "/admin/live-editor", 
-      buttonText: "Editor Visual" 
+      buttonText: "Editor Visual",
+      isExternal: false
     },
     { 
       title: "Analytics Principal", 
       description: "Visualize as métricas chave de desempenho do seu funil.", 
       linkTo: "/admin/analytics", 
-      buttonText: "Ver Analytics" 
+      buttonText: "Ver Analytics",
+      isExternal: false
     },
     { 
       title: "Analytics de Criativos", 
       description: "Analise a performance dos seus anúncios e criativos.", 
       linkTo: "/admin/creative-analytics", 
-      buttonText: "Analisar Criativos" 
+      buttonText: "Analisar Criativos",
+      isExternal: false
     },
     { 
       title: "Testes A/B", 
       description: "Gerencie e configure seus testes A/B para otimizar conversões.", 
       linkTo: "/admin/ab-tests", 
-      buttonText: "Gerenciar Testes" 
+      buttonText: "Gerenciar Testes",
+      isExternal: false
     },
     { 
       title: "Métricas Rápidas", 
       description: "Acesse um resumo das métricas mais importantes rapidamente.", 
       linkTo: "/admin/quick-metrics", 
-      buttonText: "Ver Métricas" 
+      buttonText: "Ver Métricas",
+      isExternal: false
     },
     { 
       title: "Editor de Header", 
       description: "Personalize o cabeçalho da página de resultado do quiz.", 
       linkTo: "/admin/header-editor", 
-      buttonText: "Editar Header" 
+      buttonText: "Editar Header",
+      isExternal: false
     },
     { 
       title: "Ver Resultados", 
       description: "Visualize os resultados dos quizzes enviados pelos usuários.", 
       linkTo: "/resultado", 
-      buttonText: "Ver Resultados" 
+      buttonText: "Ver Resultados",
+      isExternal: false
     }
   ];
 

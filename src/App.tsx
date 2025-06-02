@@ -2,10 +2,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
-import { QuizIntro } from '@/components/quiz/QuizIntro';
-import { QuizFlow } from '@/components/quiz/QuizFlow';
-import { QuizResults } from '@/components/quiz/QuizResults';
-import { ResultPageWithBlocks } from '@/components/result/ResultPageWithBlocks';
+import { QuizIntro } from '@/components/QuizIntro';
+import QuizFlow from '@/components/QuizFlow';
+import { QuizResults } from '@/components/QuizResult';
+import { ResultPageWithBlocks } from '@/pages/ResultPageWithBlocks';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
