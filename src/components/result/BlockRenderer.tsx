@@ -150,64 +150,6 @@ const BlockRenderer: React.FC<BlockRendererProps> = ({
           </div>
         );
 
-      case 'pricing':
-        return (
-          <div className="bg-white border border-[#B89B7A]/20 rounded-lg p-6 text-center">
-            <h3 className="text-2xl font-bold mb-4 text-[#432818]">
-              {block.content.title || 'Preço Especial'}
-            </h3>
-            <div className="mb-4">
-              <span className="text-3xl font-bold text-[#B89B7A]">
-                {block.content.price || 'R$ 97,00'}
-              </span>
-              {block.content.regularPrice && (
-                <span className="text-lg text-gray-500 line-through ml-2">
-                  {block.content.regularPrice}
-                </span>
-              )}
-            </div>
-            <p className="text-[#8F7A6A] mb-6">
-              {block.content.description || 'Oferta por tempo limitado'}
-            </p>
-          </div>
-        );
-
-      case 'testimonials':
-        return (
-          <div className="bg-[#f8f9fa] rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 text-center text-[#432818]">
-              {block.content.title || 'Depoimentos'}
-            </h3>
-            <blockquote className="text-center">
-              <p className="text-[#8F7A6A] italic mb-4">
-                "{block.content.description || 'Produto incrível! Superou todas as minhas expectativas.'}"
-              </p>
-              <footer className="font-medium text-[#432818]">
-                {block.content.userName || 'Cliente Satisfeito'}
-              </footer>
-            </blockquote>
-          </div>
-        );
-
-      case 'benefits':
-        return (
-          <div>
-            <h3 className="text-2xl font-bold mb-6 text-center text-[#432818]">
-              {block.content.title || 'Benefícios'}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {(block.content.features || ['Benefício 1', 'Benefício 2', 'Benefício 3']).map((benefit, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-[#4CAF50] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-white text-sm">✓</span>
-                  </div>
-                  <span className="text-[#432818]">{benefit}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-
       case 'guarantee':
         return (
           <GuaranteeBlock

@@ -7,8 +7,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { captureUTMParameters } from './utils/analytics';
 import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { initializeBuilder } from './utils/builderConfig'; // Builder.io initialization
-import { runBuilderTest } from './utils/builderTest'; // Builder.io testing
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -22,8 +20,8 @@ const LoadingFallback = () => (
 
 // Lazy loading das páginas principais
 const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./pages/ResultPageWithBuilder')); // Versão com Builder.io
-const QuizOfferPage = lazy(() => import('./pages/QuizOfferPageWithBuilder')); // Versão com Builder.io
+const ResultPage = lazy(() => import('./pages/ResultPage')); // Página original de resultado
+const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage')); // Página original de oferta
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
 const QuickVisualEditor = lazy(() => import('./components/quick-editor/QuickVisualEditor'));
@@ -31,8 +29,6 @@ const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage')); // Nova
 const CreativeAnalyticsPage = lazy(() => import('./pages/admin/CreativeAnalyticsPage'));
 const ABTestsPage = lazy(() => import('./pages/admin/ABTestsPage'));
 const QuickMetricsPage = lazy(() => import('./pages/admin/QuickMetricsPage'));
-const BuilderDashboard = lazy(() => import('./pages/admin/BuilderDashboard')); // Builder.io Dashboard
-const BuilderPageSetup = lazy(() => import('./components/admin/BuilderPageSetup')); // Setup páginas A/B
 const HeaderEditorPage = lazy(() => import('./pages/admin/HeaderEditorPage')); // Editor do Header
 const ResultPageEditorPage = lazy(() => import('./pages/admin/ResultPageEditorPage')); // Editor da ResultPage
 const ResultPageLiveEditor = lazy(() => import('./pages/admin/ResultPageLiveEditor')); // Editor ao vivo estilo InLead/Typeform
@@ -44,21 +40,6 @@ const App = () => {
     try {
       loadFacebookPixel();
       captureUTMParameters();
-      
-      // Inicializar Builder.io com API key real
-      setTimeout(() => {
-        try {
-          initializeBuilder();
-          console.log('Builder.io initialized successfully with real API key');
-          
-          // Executar teste do Builder.io em desenvolvimento
-          if (process.env.NODE_ENV === 'development') {
-            runBuilderTest();
-          }
-        } catch (error) {
-          console.warn('Builder.io não pôde ser inicializado:', error);
-        }
-      }, 100);
       console.log('App initialized successfully');
     } catch (error) {
       console.error('Erro ao inicializar aplicativo:', error);
@@ -84,8 +65,6 @@ const App = () => {
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
                 <Route path="/admin/ab-tests" element={<ABTestsPage />} />
                 <Route path="/admin/quick-metrics" element={<QuickMetricsPage />} />
-                <Route path="/admin/builder" element={<BuilderDashboard />} /> {/* Builder.io Dashboard - versão segura */}
-                <Route path="/admin/builder-setup" element={<BuilderPageSetup />} /> {/* Setup páginas A/B */}
                 <Route path="/admin/header-editor" element={<HeaderEditorPage />} /> {/* Editor do Header */}
                 <Route path="/admin/resultpage-editor" element={<ResultPageEditorPage />} /> {/* Editor da ResultPage */}
                 
