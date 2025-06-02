@@ -151,7 +151,7 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
   const getResultComponents = (): ComponentGroup[] => {
     return [
       {
-        title: 'Componentes de Resultado',
+        title: 'Estrutura e Layout',
         items: [
           {
             type: 'header',
@@ -160,40 +160,145 @@ export const UnifiedComponentsSidebar: React.FC<UnifiedComponentsSidebarProps> =
             description: 'Cabeçalho da página de resultado'
           },
           {
-            type: 'resultsSummary',
-            name: 'Resumo',
-            icon: <BarChart2 className="w-4 h-4" />,
-            description: 'Resumo visual dos resultados'
+            type: 'hero-section',
+            name: 'Seção Hero',
+            icon: <Layout className="w-4 h-4" />,
+            description: 'Seção principal com título e imagem de destaque'
           },
           {
-            type: 'styleDescription',
-            name: 'Descrição de Estilo',
+            type: 'two-column',
+            name: 'Duas Colunas',
+            icon: <Columns className="w-4 h-4" />,
+            description: 'Layout de duas colunas para organizar conteúdo'
+          },
+          {
+            type: 'spacer',
+            name: 'Espaçador',
+            icon: <Layout className="w-4 h-4" />,
+            description: 'Espaço em branco para separar seções'
+          }
+        ]
+      },
+      {
+        title: 'Conteúdo e Texto',
+        items: [
+          {
+            type: 'headline',
+            name: 'Título',
+            icon: <Type className="w-4 h-4" />,
+            description: 'Título principal com subtítulo opcional'
+          },
+          {
+            type: 'text',
+            name: 'Texto',
             icon: <FileText className="w-4 h-4" />,
-            description: 'Descrição detalhada do estilo'
+            description: 'Bloco de texto formatado'
           },
           {
-            type: 'styleImage',
-            name: 'Imagem de Estilo',
+            type: 'image',
+            name: 'Imagem',
             icon: <Image className="w-4 h-4" />,
-            description: 'Imagem representativa do estilo'
+            description: 'Imagem com legenda opcional'
+          },
+          {
+            type: 'video',
+            name: 'Vídeo',
+            icon: <Image className="w-4 h-4" />,
+            description: 'Player de vídeo incorporado'
+          },
+          {
+            type: 'icon',
+            name: 'Ícone',
+            icon: <Star className="w-4 h-4" />,
+            description: 'Ícone decorativo ou informativo'
+          },
+          {
+            type: 'carousel',
+            name: 'Carrossel',
+            icon: <ArrowRight className="w-4 h-4" />,
+            description: 'Carrossel de imagens ou conteúdo'
+          },
+          {
+            type: 'animation',
+            name: 'Animação',
+            icon: <Star className="w-4 h-4" />,
+            description: 'Elemento animado para engajamento'
+          },
+          {
+            type: 'custom-code',
+            name: 'Código Customizado',
+            icon: <Type className="w-4 h-4" />,
+            description: 'HTML/CSS personalizado'
+          }
+        ]
+      },
+      {
+        title: 'Resultados do Quiz',
+        items: [
+          {
+            type: 'style-result',
+            name: 'Estilo Principal',
+            icon: <BarChart2 className="w-4 h-4" />,
+            description: 'Exibe o estilo principal identificado'
+          },
+          {
+            type: 'secondary-styles',
+            name: 'Estilos Secundários',
+            icon: <BarChart2 className="w-4 h-4" />,
+            description: 'Lista os estilos secundários com percentuais'
           },
           {
             type: 'antes-depois-transformacao',
             name: 'Antes e Depois',
             icon: <ArrowRight className="w-4 h-4" />,
             description: 'Galeria de transformações com antes e depois'
-          },
+          }
+        ]
+      },
+      {
+        title: 'Vendas e Conversão',
+        items: [
           {
-            type: 'recommendations',
-            name: 'Recomendações',
-            icon: <Star className="w-4 h-4" />,
-            description: 'Dicas e recomendações personalizadas'
-          },
-          {
-            type: 'callToAction',
+            type: 'cta',
             name: 'Chamada para Ação',
             icon: <ArrowRight className="w-4 h-4" />,
-            description: 'Botão de chamada para ação'
+            description: 'Botão de chamada para ação principal'
+          },
+          {
+            type: 'pricing',
+            name: 'Preços',
+            icon: <CreditCard className="w-4 h-4" />,
+            description: 'Tabela de preços e ofertas'
+          },
+          {
+            type: 'products',
+            name: 'Produtos',
+            icon: <ShoppingCart className="w-4 h-4" />,
+            description: 'Showcase de produtos ou serviços'
+          },
+          {
+            type: 'benefits',
+            name: 'Benefícios',
+            icon: <List className="w-4 h-4" />,
+            description: 'Lista de benefícios do produto'
+          },
+          {
+            type: 'testimonials',
+            name: 'Depoimentos',
+            icon: <MessageCircle className="w-4 h-4" />,
+            description: 'Depoimentos de clientes satisfeitos'
+          },
+          {
+            type: 'guarantee',
+            name: 'Garantia',
+            icon: <Star className="w-4 h-4" />,
+            description: 'Seção de garantia e segurança'
+          },
+          {
+            type: 'faq',
+            name: 'Perguntas Frequentes',
+            icon: <AlertCircle className="w-4 h-4" />,
+            description: 'Seção de perguntas e respostas'
           }
         ]
       },
