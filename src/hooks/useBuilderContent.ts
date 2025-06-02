@@ -25,6 +25,8 @@ export const useBuilderContent = ({
       try {
         setLoading(true);
         setError(null);
+        
+        console.log(`🔍 Buscando conteúdo do Builder.io para modelo: ${model}`);
 
         // Buscar conteúdo do Builder.io
         const builderContent = await builder
@@ -38,26 +40,32 @@ export const useBuilderContent = ({
           })
           .toPromise();
 
+        console.log(`📦 Resultado para modelo ${model}:`, builderContent ? 'Conteúdo encontrado' : 'Nenhum conteúdo');
+
         if (builderContent) {
           setContent(builderContent);
           setIsBuilderVersion(true);
+          console.log(`✅ Usando versão Builder.io para ${model}`);
         } else if (!fallbackToOriginal) {
           setError('Conteúdo não encontrado no Builder.io');
+          console.log(`❌ Erro: Conteúdo não encontrado para ${model}`);
         } else {
           // Se não há conteúdo e fallback está habilitado, 
           // não considera erro e permite usar página original
-          console.log(`Modelo ${model} não encontrado no Builder.io, usando fallback`);
+          console.log(`⚠️ Modelo ${model} não encontrado no Builder.io, usando fallback para página original`);
         }
       } catch (err) {
-        console.warn('Erro ao buscar conteúdo do Builder.io:', err);
+        console.warn(`🚨 Erro ao buscar conteúdo do Builder.io para ${model}:`, err);
         setError(err instanceof Error ? err.message : 'Erro desconhecido');
         
         // Se fallback está habilitado, não considera erro
         if (fallbackToOriginal) {
           setError(null);
+          console.log(`🔄 Fallback habilitado para ${model}, continuando com página original`);
         }
       } finally {
         setLoading(false);
+        console.log(`🏁 Carregamento finalizado para ${model}`);
       }
     };
 

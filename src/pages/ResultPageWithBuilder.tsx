@@ -4,7 +4,6 @@ import { useBuilderContent } from '@/hooks/useBuilderContent';
 import { BuilderComponent } from '@builder.io/react';
 import ResultPage from '@/pages/ResultPage';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import BuilderDebugTest from '@/components/debug/BuilderDebugTest';
 
 const ResultPageWithBuilder: React.FC = () => {
   const { 
@@ -57,12 +56,7 @@ const ResultPageWithBuilder: React.FC = () => {
   }
 
   // Fallback para página original
-  return (
-    <div>
-      <BuilderDebugTest />
-      <ResultPage />
-    </div>
-  );
+  return <ResultPage />;
 };
 
 export default ResultPageWithBuilder;
