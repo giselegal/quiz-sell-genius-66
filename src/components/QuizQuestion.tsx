@@ -8,6 +8,7 @@ import { highlightStrategicWords } from '@/utils/textHighlight';
 import { Button } from './ui/button';
 import { ArrowRight } from 'lucide-react';
 import { useQuestionScroll } from '@/hooks/useQuestionScroll';
+import { StaggeredOptionAnimations } from './effects/StaggeredOptionAnimations';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;

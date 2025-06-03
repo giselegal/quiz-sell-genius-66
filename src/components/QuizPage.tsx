@@ -389,20 +389,25 @@ const QuizPage: React.FC = () => {
   return (
     <LoadingManager isLoading={!pageIsReady}>
       <div className="relative">
+        {/* Background Encantado */}
+        {!showIntro && (
+          <EnchantedBackground
+            phase={showingStrategicQuestions ? 'strategic' : 'normal'}
+            intensity={progressPercentage > 75 ? 'high' : 'medium'}
+          />
+        )}
+        
         {showIntro ? (
           <QuizIntro onStart={handleStartQuiz} />
         ) : (
           <>
-            <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
-              <div 
-                className="h-full bg-[#b29670]"
-                style={{ width: `${progressPercentage}%` }}
-                role="progressbar"
-                aria-valuenow={progressPercentage}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              ></div>
-            </div>
+            {/* Barra de Progresso Morphing */}
+            <MorphingProgressBar
+              progress={progressPercentage}
+              phase={showingStrategicQuestions ? 'strategic' : 'normal'}
+              isTransitioning={showingTransition || showingFinalTransition}
+            />
+            
             <QuizContainer>
               <AnimatePresence mode="wait">
                 {showingTransition ? (
