@@ -114,22 +114,27 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         hasImageOptions && "mb-4 relative",
         isStrategicQuestion && "gap-4"
       )}>
-        {question.options.map(option => (
-          <QuizOption 
-            key={option.id} 
-            option={option} 
-            isSelected={currentAnswers.includes(option.id)} 
-            onSelect={handleOptionSelect}
-            type={question.type}
-            questionId={question.id}
-            isDisabled={
-              (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
-              (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                currentAnswers.length >= question.multiSelect)
-            }
-            isStrategicOption={isStrategicQuestion}
-          />
-        ))}
+        <StaggeredOptionAnimations 
+          questionId={question.id}
+          isVisible={true}
+        >
+          {question.options.map((option, index) => (
+            <QuizOption 
+              key={option.id} 
+              option={option} 
+              isSelected={currentAnswers.includes(option.id)} 
+              onSelect={handleOptionSelect}
+              type={question.type}
+              questionId={question.id}
+              isDisabled={
+                (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
+                (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
+                  currentAnswers.length >= question.multiSelect)
+              }
+              isStrategicOption={isStrategicQuestion}
+            />
+          ))}
+        </StaggeredOptionAnimations>
       </div>
     </div>
   );

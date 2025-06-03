@@ -5,6 +5,7 @@ interface StaggeredOptionAnimationsProps {
   children: React.ReactNode[];
   isVisible: boolean;
   questionId?: string;
+  className?: string;
 }
 
 const StaggeredOptionAnimations: React.FC<StaggeredOptionAnimationsProps> = ({
