@@ -6,6 +6,9 @@ import { highlightStrategicWords } from '@/utils/textHighlight';
 import { QuizOptionImage } from './QuizOptionImage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Check } from 'lucide-react';
+import { RippleEffect, PulseEffect } from '../effects/InteractionEffects';
+import { ParticleSystem } from '../effects/ParticleSystem';
+import '../../styles/enchanted-effects.css';
 
 interface QuizOptionProps {
   option: QuizOptionType;
@@ -28,8 +31,13 @@ const QuizOption: React.FC<QuizOptionProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
-  // Usar ref para evitar re-renderizações desnecessárias
   const optionRef = useRef<HTMLDivElement>(null);
+  
+  // Estados para efeitos encantadores
+  const [isHovered, setIsHovered] = useState(false);
+  const [showRipple, setShowRipple] = useState(false);
+  const [showParticles, setShowParticles] = useState(false);
+  const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
   
   // Usar useEffect para lidar com mudanças de isSelected sem causar flash
   useEffect(() => {
