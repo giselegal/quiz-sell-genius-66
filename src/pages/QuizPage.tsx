@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { QuizContent } from '@/components/quiz/QuizContent';
@@ -43,7 +44,7 @@ const QuizPage: React.FC = () => {
     console.log('Answer submitted:', response);
     
     // Track analytics
-    trackQuizAnswer(response.questionId, response.selectedOptions.join(','), currentQuestionIndex, totalQuestions);
+    trackQuizAnswer(response.questionId, response.selectedOptions, currentQuestionIndex, totalQuestions);
     
     if (showingStrategicQuestions) {
       handleStrategicAnswer(response.questionId, response.selectedOptions);
