@@ -184,6 +184,40 @@
   animation: shimmer 1.5s infinite;
 }
 
+/* Efeitos personalizados para quiz options */
+
+/* Efeito hover para opções de texto com cor da marca */
+.quiz-text-option-hover {
+  border-color: #B89B7A !important;
+  background-color: rgba(184, 155, 122, 0.05) !important;
+  box-shadow: 0 4px 12px rgba(184, 155, 122, 0.15) !important;
+}
+
+/* Efeito de zoom para opções com imagem */
+.quiz-image-option-zoom {
+  transform: scale(1.1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efeito de seleção com cor da marca */
+.quiz-option-selected-brand {
+  border-color: #B89B7A;
+  box-shadow: 0 6px 16px rgba(184, 155, 122, 0.25);
+}
+
+/* Gradiente sutil da marca para opções selecionadas */
+.quiz-option-brand-gradient {
+  background: linear-gradient(135deg, 
+    rgba(184, 155, 122, 0.05) 0%,
+    rgba(184, 155, 122, 0.02) 50%,
+    rgba(184, 155, 122, 0.05) 100%);
+}
+
+/* Animação suave para interações */
+.quiz-option-smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Responsividade para efeitos */
 @media (prefers-reduced-motion: reduce) {
   .enchanted-hover,
