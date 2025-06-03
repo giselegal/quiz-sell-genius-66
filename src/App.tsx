@@ -24,6 +24,7 @@ const LoadingFallback = () => (
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
+const QuizOfferPageV2 = lazy(() => import('./pages/quiz-descubra-seu-estilo-v2'));
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
@@ -87,6 +88,7 @@ const App = () => {
                 <Route path="/" element={<QuizPage />} />
                 <Route path="/resultado" element={<ResultPage />} />
                 <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                <Route path="/quiz-descubra-seu-estilo-v2" element={<QuizOfferPageV2 />} />
                 {/* Dashboard SPA */}
                 <Route path="/dashboard/*" element={<DashboardPage />} />
                 {/* Redirecionamento para não quebrar links antigos */}
