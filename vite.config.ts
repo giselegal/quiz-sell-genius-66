@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => ({
     assetsDir: 'assets',
     emptyOutDir: true,
     sourcemap: false,
-    target: 'es2015',
+    target: 'es2020',
     minify: 'terser',
     terserOptions: {
       compress: {
@@ -74,6 +74,7 @@ export default defineConfig(({ mode }) => ({
           'analytics': ['./src/utils/analytics', './src/utils/facebookPixel'],
           'charts': ['recharts'],
           'animations': ['framer-motion'],
+          'lovable': ['@lovable/react'],
         },
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
@@ -96,7 +97,7 @@ export default defineConfig(({ mode }) => ({
   },
   
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    include: ['react', 'react-dom', 'react-router-dom', '@lovable/react'],
     exclude: ['@huggingface/transformers'],
   },
   
@@ -104,9 +105,17 @@ export default defineConfig(({ mode }) => ({
     devSourcemap: mode === 'development',
   },
 
-  // Lovable integration configuration
+  // Configuração de integração Lovable aprimorada para v2.1.0
   define: {
     __LOVABLE_PROJECT_ID__: JSON.stringify("quiz-sell-genius-66"),
     __LOVABLE_ENABLED__: JSON.stringify(true),
+    __LOVABLE_VERSION__: JSON.stringify("2.1.0"),
+    __LOVABLE_FEATURES__: JSON.stringify([
+      "componentTagger",
+      "liveEditing", 
+      "enhancedSync",
+      "visualEditor",
+      "realTimeCollaboration"
+    ]),
   },
 }));
