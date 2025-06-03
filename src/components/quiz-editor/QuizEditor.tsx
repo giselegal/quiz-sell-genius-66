@@ -56,7 +56,6 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
   const handleAddQuestion = () => {
     const newQuestion: QuizQuestion = {
       id: generateId(),
-      text: 'Nova Pergunta',
       title: 'Nova Pergunta',
       type: 'text',
       multiSelect: 3,

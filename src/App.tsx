@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -22,7 +21,7 @@ const LoadingFallback = () => (
 );
 
 // Lazy loading das páginas usando a pasta pages/
-const QuizPage = lazy(() => import('./pages/QuizPage'));
+const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));

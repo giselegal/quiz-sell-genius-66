@@ -1,72 +1,71 @@
 
-import { QuizQuestion, QuizOption, StyleResult, QuizResult } from '@/types/quiz';
-import { clothingQuestions } from '@/data/questions/clothingQuestions';
-import { personalityQuestions } from '@/data/questions/personalityQuestions';
-import { stylePreferencesQuestions } from '@/data/questions/stylePreferencesQuestions';
-import { outerwearQuestions } from '@/data/questions/outerwearQuestions';
-import { accessoriesQuestions } from '@/data/questions/accessoriesQuestions';
-import { accessoryStyleQuestions } from '@/data/questions/accessoryStyleQuestions';
+import { supabase } from '@/integrations/supabase/client';
+import { QuizQuestion, StyleResult } from '@/types/quiz';
 
-interface StyleCount {
-  category: string;
-  count: number;
-}
+export const fetchQuizQuestions = async (quizId: string) => {
+  const { data: questions, error } = await supabase
+    .from('quiz_questions')
+    .select(`
+      *,
+      question_options:question_options(*)
+    `)
+    .eq('quiz_id', quizId)
+    .eq('active', true)
+    .order('order_index', { ascending: true });
 
-interface CalculateStyleResultsParams {
-  answers: Record<string, string[]>;
-  questions: QuizQuestion[];
-}
-
-export const getQuizQuestions = async (): Promise<QuizQuestion[]> => {
-  // Combine all question categories
-  return [
-    ...clothingQuestions,
-    ...personalityQuestions,
-    ...stylePreferencesQuestions,
-    ...outerwearQuestions,
-    ...accessoriesQuestions,
-    ...accessoryStyleQuestions
-  ];
+  if (error) throw error;
+  return questions;
 };
 
-export const calculateStyleResults = (answers: Record<string, string[]>, questions: QuizQuestion[]): QuizResult => {
-  const styleCounts: Record<string, number> = {};
-  let totalSelections = 0;
+export const saveParticipant = async (name: string, email: string, quizId: string) => {
+  const { data, error } = await supabase
+    .from('quiz_participants')
+    .insert({
+      name,
+      email,
+      quiz_id: quizId,
+    })
+    .select()
+    .single();
 
-  // Count selections for each style category
-  Object.entries(answers).forEach(([questionId, selectedOptionIds]) => {
-    const question = questions.find(q => q.id === questionId);
-    if (!question) return;
+  if (error) throw error;
+  return data;
+};
 
-    selectedOptionIds.forEach(optionId => {
-      const option = question.options.find(opt => opt.id === optionId);
-      if (option && option.styleCategory) {
-        styleCounts[option.styleCategory] = (styleCounts[option.styleCategory] || 0) + (option.points || 1);
-        totalSelections++;
-      }
-    });
-  });
+export const saveAnswers = async (
+  participantId: string,
+  answers: Array<{ questionId: string; optionId: string; points: number }>
+) => {
+  const { error } = await supabase
+    .from('participant_answers')
+    .insert(
+      answers.map(answer => ({
+        participant_id: participantId,
+        question_id: answer.questionId,
+        option_id: answer.optionId,
+        points: answer.points,
+      }))
+    );
 
-  // Convert counts to StyleResult objects with percentages
-  const styleResults: StyleResult[] = Object.entries(styleCounts).map(([category, score]) => ({
-    category,
-    score,
-    percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
-  }));
+  if (error) throw error;
+};
 
-  // Sort results by score in descending order
-  styleResults.sort((a, b) => b.score - a.score);
+export const saveResults = async (
+  participantId: string,
+  results: Array<StyleResult>
+) => {
+  const { error } = await supabase
+    .from('style_results')
+    .insert(
+      results.map((result, index) => ({
+        participant_id: participantId,
+        style_type_id: result.category,
+        points: result.score,
+        percentage: result.percentage,
+        is_primary: index === 0,
+        rank: index + 1,
+      }))
+    );
 
-  // Determine primary and secondary styles
-  const primaryStyle = styleResults.length > 0 ? styleResults[0] : { category: 'Unknown', score: 0, percentage: 0 };
-  const secondaryStyles = styleResults.slice(1, 4); // Get top 3 secondary styles
-
-  const userName = 'User'; // Replace with actual user name if available
-
-  return {
-    primaryStyle,
-    secondaryStyles,
-    totalSelections,
-    userName
-  };
+  if (error) throw error;
 };

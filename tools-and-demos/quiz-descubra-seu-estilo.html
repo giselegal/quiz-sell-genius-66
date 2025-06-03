@@ -6,85 +6,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz de Estilo Gisele Galvão | Descubra e Vista-se de Você!</title>
   <meta property="og:title" content="Quiz de Estilo Gisele Galvão | Descubra e Vista-se de Você!" />
-  <meta property="og:description" content="Descubra seu estilo pessoal em 3 minutos. Quiz gratuito + Guia completo de transformação do seu guarda-roupa com Gisele Galvão." />
+  <meta property="og:description" content="Adquira o pacote completo de estilo com Gisele Galvão. Inclui quiz exclusivo, guia de estilo personalizado e bônus especiais para transformar seu guarda-roupa." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://giselegalvao.com.br/" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Quiz de Estilo Gisele Galvão | Descubra e Vista-se de Você!" />
   
   <!-- Preload critical fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <style>
-    /* CSS Reset and Modern Base */
-    *, *::before, *::after {
+    /* CSS Reset and Base Styles */
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     
     :root {
-      /* Modern Color Palette */
-      --primary-green: #22c55e;
-      --primary-green-dark: #16a34a;
-      --primary-blue: #1e293b;
-      --secondary-orange: #f97316;
-      --background-light: #f8fafc;
-      --background-white: #ffffff;
-      --text-primary: #1e293b;
-      --text-secondary: #64748b;
-      --text-light: #94a3b8;
-      --border-light: #e2e8f0;
+      --color-primary: #B89B7A;
+      --color-secondary: #aa6b5d;
+      --color-accent: #432818;
+      --color-bg: #fffaf7;
+      --color-card: #ffffff;
+      --color-text: #3a3a3a;
+      --color-text-light: #6b7280;
+      --color-success: #10b981;
       --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
       --radius: 12px;
-      --font-primary: 'Inter', sans-serif;
+      --font-primary: 'Playfair Display', serif;
+      --font-secondary: 'Inter', sans-serif;
     }
     
     body {
-      font-family: var(--font-primary);
-      background: var(--background-light);
-      color: var(--text-primary);
+      font-family: var(--font-secondary);
+      background: linear-gradient(135deg, var(--color-bg) 0%, #f9f4f0 100%);
+      color: var(--color-text);
       line-height: 1.6;
-      font-size: 16px;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
     
-    /* Modern Typography */
+    /* Enhanced Typography */
     h1 {
-      font-size: clamp(2.25rem, 5vw, 3.5rem);
-      line-height: 1.1;
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      color: var(--text-primary);
-      margin-bottom: 1.5rem;
+      font-family: var(--font-primary);
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      line-height: 1.2;
+      font-weight: 700;
+      color: var(--color-secondary);
+      margin-bottom: 1rem;
     }
     
     h2 {
-      font-size: clamp(1.875rem, 4vw, 2.5rem);
-      line-height: 1.2;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 1rem;
-    }
-    
-    h3 {
-      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-family: var(--font-primary);
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      line-height: 1.3;
       font-weight: 600;
-      color: var(--text-primary);
+      color: var(--color-accent);
       margin-bottom: 0.75rem;
     }
     
+    h3 {
+      font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+    
     p {
-      font-size: clamp(1rem, 2vw, 1.125rem);
+      font-size: clamp(0.875rem, 2vw, 1.125rem);
       line-height: 1.7;
-      color: var(--text-secondary);
+      color: var(--color-text);
       margin-bottom: 1rem;
     }
     
-    /* Layout System */
+    /* Container and Layout */
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -97,89 +97,58 @@
       }
     }
     
-    .section {
-      padding: clamp(3rem, 8vw, 6rem) 0;
-    }
-    
-    .grid {
-      display: grid;
-      gap: 2rem;
-    }
-    
-    .grid-2 {
-      grid-template-columns: 1fr;
-    }
-    
-    @media (min-width: 768px) {
-      .grid-2 {
-        grid-template-columns: repeat(2, 1fr);
-        align-items: center;
-      }
-    }
-    
-    .grid-3 {
-      grid-template-columns: 1fr;
-    }
-    
-    @media (min-width: 768px) {
-      .grid-3 {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    
-    @media (min-width: 1024px) {
-      .grid-3 {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    
-    /* Modern Header */
+    /* Header Enhancement */
     .header {
-      background: var(--background-white);
+      background: var(--color-card);
       box-shadow: var(--shadow-sm);
       padding: 1rem 0;
       position: sticky;
       top: 0;
       z-index: 100;
       backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(184, 155, 122, 0.1);
     }
     
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
     }
     
     .logo {
-      height: 3rem;
+      height: clamp(3rem, 8vw, 4rem);
       width: auto;
-      border-radius: 8px;
+      transition: transform 0.3s ease;
     }
     
-    .price-display {
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .header-text {
       text-align: right;
+      flex: 1;
     }
     
-    .price-main {
-      font-size: 1.125rem;
-      font-weight: 700;
-      color: var(--primary-green);
+    .header-text .price {
+      font-weight: 600;
+      color: var(--color-secondary);
+      font-size: clamp(0.875rem, 2vw, 1rem);
       margin: 0;
     }
     
-    .price-detail {
-      font-size: 0.875rem;
-      color: var(--text-light);
+    .header-text .price-detail {
+      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+      color: var(--color-text-light);
       margin: 0;
     }
     
     /* Hero Section */
     .hero {
-      background: linear-gradient(135deg, var(--background-white) 0%, var(--background-light) 100%);
-      padding: clamp(4rem, 10vw, 8rem) 0;
+      padding: clamp(3rem, 8vw, 6rem) 0;
       text-align: center;
       position: relative;
-      overflow: hidden;
     }
     
     .hero::before {
@@ -189,79 +158,51 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at 30% 20%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 50%);
+      background: radial-gradient(circle at 30% 20%, rgba(184, 155, 122, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(170, 107, 93, 0.1) 0%, transparent 50%);
       pointer-events: none;
     }
     
     .hero-content {
       position: relative;
       z-index: 1;
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
     }
     
     .hero-subtitle {
-      font-size: clamp(1.125rem, 3vw, 1.5rem);
-      color: var(--text-secondary);
-      font-weight: 500;
-      margin-bottom: 3rem;
+      font-size: clamp(1rem, 2.5vw, 1.375rem);
+      color: var(--color-text-light);
+      margin-bottom: 2rem;
+      font-weight: 400;
     }
     
-    /* Modern Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: var(--radius);
-      font-weight: 600;
-      font-size: 1.125rem;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      min-height: 56px;
-      white-space: nowrap;
+    /* Enhanced Grid Layout */
+    .grid {
+      display: grid;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      margin: clamp(3rem, 6vw, 5rem) 0;
     }
     
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
-      color: white;
-      box-shadow: var(--shadow-md);
+    .grid-2 {
+      grid-template-columns: 1fr;
     }
     
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-      background: linear-gradient(135deg, var(--primary-green-dark) 0%, #15803d 100%);
+    @media (min-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+      }
     }
     
-    .btn-secondary {
-      background: var(--background-white);
-      color: var(--text-primary);
-      border: 2px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .btn-secondary:hover {
-      background: var(--background-light);
-      border-color: var(--primary-green);
-      transform: translateY(-1px);
-    }
-    
-    /* Cards */
+    /* Enhanced Cards */
     .card {
-      background: var(--background-white);
+      background: var(--color-card);
       border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-md);
       overflow: hidden;
       transition: all 0.3s ease;
-      border: 1px solid var(--border-light);
-      height: 100%;
+      border: 1px solid rgba(184, 155, 122, 0.1);
     }
     
     .card:hover {
@@ -270,183 +211,184 @@
     }
     
     .card-padding {
-      padding: 2rem;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
     }
     
-    .card-header {
-      padding: 2rem 2rem 1rem 2rem;
-    }
-    
-    .card-content {
-      padding: 0 2rem 2rem 2rem;
-    }
-    
-    /* Images */
+    /* Enhanced Images */
     .img-responsive {
       width: 100%;
       height: auto;
       border-radius: var(--radius);
       transition: transform 0.3s ease;
+      object-fit: cover;
     }
     
-    .img-hero {
-      max-width: 400px;
-      border-radius: 16px;
-      box-shadow: var(--shadow-xl);
+    .img-responsive:hover {
+      transform: scale(1.02);
     }
     
-    /* Benefits Grid */
-    .benefit-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1.5rem;
-      background: var(--background-white);
+    .img-shadow {
+      box-shadow: var(--shadow-lg);
+    }
+    
+    /* Enhanced Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: clamp(0.875rem, 2vw, 1.125rem) clamp(1.5rem, 4vw, 2.5rem);
+      border: none;
       border-radius: var(--radius);
-      border: 1px solid var(--border-light);
+      font-weight: 600;
+      font-size: clamp(1rem, 2vw, 1.125rem);
+      text-decoration: none;
+      cursor: pointer;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      min-height: 48px;
+      white-space: nowrap;
     }
     
-    .benefit-item:hover {
-      border-color: var(--primary-green);
+    .btn-primary {
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(76, 175, 80, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: white;
       box-shadow: var(--shadow-md);
     }
     
-    .benefit-icon {
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    /* Responsive Button Stack */
+    .btn-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      margin: 2rem 0;
+    }
+    
+    @media (min-width: 640px) {
+      .btn-stack {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+    
+    /* Enhanced Lists */
+    .list-benefits {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0;
+    }
+    
+    .list-benefits li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(184, 155, 122, 0.1);
+    }
+    
+    .list-benefits li:last-child {
+      border-bottom: none;
+    }
+    
+    .check-icon {
       flex-shrink: 0;
-      width: 3rem;
-      height: 3rem;
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+      width: 1.25rem;
+      height: 1.25rem;
+      background: var(--color-success);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: bold;
-      font-size: 1.25rem;
-    }
-    
-    .benefit-content h4 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-    }
-    
-    .benefit-content p {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      margin: 0;
+      margin-top: 0.125rem;
     }
     
     /* Pricing Section */
     .pricing-card {
-      background: linear-gradient(135deg, var(--background-white) 0%, var(--background-light) 100%);
-      border: 2px solid var(--primary-green);
+      background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
+      border: 2px solid var(--color-primary);
       position: relative;
-      text-align: center;
     }
     
     .pricing-badge {
       position: absolute;
-      top: -16px;
+      top: -12px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--secondary-orange);
+      background: var(--color-secondary);
       color: white;
       padding: 0.5rem 1.5rem;
-      border-radius: 50px;
+      border-radius: 20px;
       font-size: 0.875rem;
       font-weight: 600;
-      box-shadow: var(--shadow-md);
-    }
-    
-    .price-container {
-      margin: 2rem 0;
     }
     
     .price-original {
       text-decoration: line-through;
-      color: var(--text-light);
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
+      color: var(--color-text-light);
+      font-size: 1.125rem;
     }
     
     .price-current {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--primary-green);
-      margin-bottom: 0.5rem;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--color-secondary);
+      font-family: var(--font-primary);
     }
     
     .price-installments {
-      color: var(--text-secondary);
-      font-size: 1rem;
+      color: var(--color-text-light);
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
     }
     
     /* Trust Elements */
-    .trust-section {
+    .trust-elements {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 2rem;
-      margin: 3rem 0;
-      padding: 2rem;
-      background: var(--background-white);
+      gap: 1rem;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: rgba(184, 155, 122, 0.05);
       border-radius: var(--radius);
-      border: 1px solid var(--border-light);
     }
     
     .trust-item {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
       font-size: 0.875rem;
-      color: var(--text-secondary);
-      font-weight: 500;
+      color: var(--color-text-light);
     }
     
     .trust-icon {
-      width: 1.25rem;
-      height: 1.25rem;
-      color: var(--primary-green);
-    }
-    
-    /* FAQ Section */
-    .faq-item {
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius);
-      margin-bottom: 1rem;
-      overflow: hidden;
-    }
-    
-    .faq-question {
-      background: var(--background-white);
-      padding: 1.5rem;
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--text-primary);
-      border: none;
-      width: 100%;
-      text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background-color 0.3s ease;
-    }
-    
-    .faq-question:hover {
-      background: var(--background-light);
-    }
-    
-    .faq-answer {
-      padding: 0 1.5rem 1.5rem 1.5rem;
-      color: var(--text-secondary);
-      display: none;
-    }
-    
-    .faq-answer.active {
-      display: block;
+      width: 1rem;
+      height: 1rem;
+      color: var(--color-success);
     }
     
     /* Animations */
@@ -465,39 +407,21 @@
       animation: fadeInUp 0.6s ease-out forwards;
     }
     
-    .animate-delay-1 { animation-delay: 0.2s; }
-    .animate-delay-2 { animation-delay: 0.4s; }
-    .animate-delay-3 { animation-delay: 0.6s; }
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
     
-    /* Mobile Optimizations */
-    @media (max-width: 640px) {
-      .hero {
-        padding: 3rem 0;
-      }
-      
-      .section {
-        padding: 2rem 0;
-      }
-      
-      .btn {
-        width: 100%;
-        max-width: 350px;
-      }
-      
-      .grid {
-        gap: 1.5rem;
-      }
-      
-      .benefit-item {
-        padding: 1rem;
-      }
-      
-      .card-padding {
-        padding: 1.5rem;
-      }
+    /* Loading State */
+    .loading {
+      opacity: 0;
     }
     
-    /* Accessibility */
+    .loaded {
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    
+    /* Accessibility Improvements */
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -520,10 +444,31 @@
       border: 0;
     }
     
+    /* Focus Styles */
     .btn:focus-visible,
     a:focus-visible {
-      outline: 2px solid var(--primary-green);
+      outline: 2px solid var(--color-primary);
       outline-offset: 2px;
+    }
+    
+    /* Mobile Optimizations */
+    @media (max-width: 640px) {
+      .container {
+        padding: 0 1rem;
+      }
+      
+      .hero {
+        padding: 2rem 0;
+      }
+      
+      .card-padding {
+        padding: 1.5rem;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 320px;
+      }
     }
   </style>
 </head>
@@ -535,371 +480,186 @@
         <img 
           src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg" 
           alt="Gisele Galvão - Consultora de Imagem" 
-          class="logo"
+          class="logo loading"
           width="128"
-          height="48"
+          height="64"
         />
-        <div class="price-display">
-          <p class="price-main">Apenas R$ 39,90</p>
-          <p class="price-detail">ou 4x de R$ 10,86</p>
+        <div class="header-text">
+          <p class="price" aria-label="Preço parcelado">5x de R$ 8,83</p>
+          <p class="price-detail">Ou R$ 39,90 à vista</p>
         </div>
       </div>
     </div>
   </header>
 
   <main role="main">
-    <!-- Hero Section -->
     <section class="hero">
       <div class="container">
         <div class="hero-content">
           <h1 class="animate-fade-in">
-            Descubra Seu Estilo Verdadeiro em Apenas 3 Minutos
+            Descubra Seu Estilo Verdadeiro e Vista-se de Você
           </h1>
           <p class="hero-subtitle animate-fade-in animate-delay-1">
-            Quiz personalizado que revela seu estilo autêntico + Guia completo para transformar seu guarda-roupa e projetar a imagem que você realmente deseja
+            Quiz personalizado + Guia completo de estilo para transformar sua imagem com autenticidade
           </p>
           
-          <div style="margin-bottom: 3rem;" class="animate-fade-in animate-delay-2">
+          <div class="btn-stack animate-fade-in animate-delay-2">
             <a 
               href="#quiz" 
               class="btn btn-primary"
-              aria-label="Começar quiz gratuito agora"
+              aria-label="Fazer quiz de estilo agora"
               role="button"
             >
               <span aria-hidden="true">✨</span>
-              Começar Quiz Gratuito Agora
+              Descobrir Meu Estilo Agora
             </a>
           </div>
-          
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="grid grid-2">
+        <div class="animate-fade-in animate-delay-1">
+          <h2>Por que conhecer seu estilo pessoal?</h2>
+          <ul class="list-benefits">
+            <li>
+              <span class="check-icon" aria-hidden="true">✓</span>
+              <span>Economiza tempo e dinheiro em compras</span>
+            </li>
+            <li>
+              <span class="check-icon" aria-hidden="true">✓</span>
+              <span>Projeta a imagem que representa você</span>
+            </li>
+            <li>
+              <span class="check-icon" aria-hidden="true">✓</span>
+              <span>Aumenta sua confiança em qualquer ambiente</span>
+            </li>
+            <li>
+              <span class="check-icon" aria-hidden="true">✓</span>
+              <span>Cria looks harmoniosos com menos peças</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="animate-fade-in animate-delay-2">
           <img 
             src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp" 
-            alt="Gisele Galvão - Consultora de Imagem especialista em transformação de estilo"
-            class="img-responsive img-hero animate-fade-in animate-delay-3"
+            alt="Gisele Galvão - Consultora de Imagem especialista em estilo pessoal"
+            class="img-responsive img-shadow loading"
             loading="lazy"
-            width="400"
-            height="400"
+            width="540"
+            height="540"
           />
         </div>
       </div>
     </section>
 
-    <!-- Problems Section -->
-    <section class="section" style="background: var(--background-white);">
-      <div class="container">
-        <div class="grid grid-2" style="gap: 4rem;">
-          <div>
-            <h2>Você já se sentiu assim?</h2>
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-              <div class="benefit-item">
-                <div class="benefit-icon">😕</div>
-                <div class="benefit-content">
-                  <h4>Armário cheio, nada para vestir</h4>
-                  <p>Você tem muitas roupas, mas nunca sabe o que combinar ou se sente sempre com a mesma aparência</p>
-                </div>
+    <section class="container">
+      <div class="grid">
+        <div class="card pricing-card animate-fade-in">
+          <div class="pricing-badge">Oferta Exclusiva</div>
+          <div class="card-padding">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+              Guia de Estilo Personalizado + Bônus Exclusivos
+            </h2>
+            
+            <div class="grid grid-2" style="gap: 2rem;">
+              <div>
+                <img 
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp" 
+                  alt="Guia Completo de Estilo - Material digital personalizado"
+                  class="img-responsive loading"
+                  loading="lazy"
+                  width="400"
+                  height="300"
+                />
               </div>
               
-              <div class="benefit-item">
-                <div class="benefit-icon">💸</div>
-                <div class="benefit-content">
-                  <h4>Gastando dinheiro em roupas erradas</h4>
-                  <p>Compra peças por impulso que ficam encostadas no armário porque não combinam com nada</p>
-                </div>
-              </div>
-              
-              <div class="benefit-item">
-                <div class="benefit-icon">😔</div>
-                <div class="benefit-content">
-                  <h4>Falta de confiança na sua imagem</h4>
-                  <p>Não se sente bem com a própria aparência e gostaria de transmitir mais personalidade através das roupas</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div style="text-align: center;">
-            <h3 style="color: var(--primary-green); margin-bottom: 2rem;">A solução está aqui!</h3>
-            <p style="font-size: 1.25rem; font-weight: 500; margin-bottom: 2rem;">
-              Descubra seu estilo pessoal único e aprenda a se vestir de forma autêntica, prática e confiante.
-            </p>
-            <a href="#pricing" class="btn btn-secondary">
-              Quero Descobrir Meu Estilo
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section class="section">
-      <div class="container">
-        <div style="text-align: center; margin-bottom: 4rem;">
-          <h2>O que você vai conquistar</h2>
-          <p style="font-size: 1.25rem; color: var(--text-secondary);">
-            Transforme sua relação com as roupas e projete a imagem que realmente representa você
-          </p>
-        </div>
-        
-        <div class="grid grid-3">
-          <div class="card">
-            <div class="card-padding">
-              <div class="benefit-icon" style="margin-bottom: 1.5rem;">⏰</div>
-              <h3>Economize Tempo</h3>
-              <p>Monte looks incríveis em minutos, sabendo exatamente o que combina e o que te valoriza</p>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-padding">
-              <div class="benefit-icon" style="margin-bottom: 1.5rem;">💰</div>
-              <h3>Economize Dinheiro</h3>
-              <p>Compre apenas peças que realmente funcionam para você, criando um guarda-roupa inteligente</p>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-padding">
-              <div class="benefit-icon" style="margin-bottom: 1.5rem;">✨</div>
-              <h3>Aumente sua Confiança</h3>
-              <p>Projete sua personalidade através das roupas e se sinta segura em qualquer ambiente</p>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-padding">
-              <div class="benefit-icon" style="margin-bottom: 1.5rem;">🎯</div>
-              <h3>Estilo Autêntico</h3>
-              <p>Descubra e desenvolva seu estilo pessoal único, que realmente representa quem você é</p>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-padding">
-              <div class="benefit-icon" style="margin-bottom: 1.5rem;">👗</div>
-              <h3>Guarda-roupa Funcional</h3>
-              <p>Tenha um armário organizado com peças versáteis que se combinam entre si</p>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-padding">
-              <div class="benefit-icon" style="margin-bottom: 1.5rem;">💫</div>
-              <h3>Transformação Completa</h3>
-              <p>Mude a forma como você se vê e como as pessoas te veem de forma positiva e autêntica</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="section" id="pricing" style="background: var(--background-white);">
-      <div class="container">
-        <div style="max-width: 800px; margin: 0 auto;">
-          <div class="card pricing-card">
-            <div class="pricing-badge">Oferta Limitada</div>
-            <div class="card-padding">
-              <h2 style="text-align: center; margin-bottom: 1rem;">
-                Quiz de Estilo + Guia Completo de Transformação
-              </h2>
-              <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
-                Tudo que você precisa para descobrir e desenvolver seu estilo pessoal autêntico
-              </p>
-              
-              <div class="grid grid-2" style="gap: 3rem; margin-bottom: 3rem;">
-                <div>
-                  <img 
-                    src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp" 
-                    alt="Guia Completo de Estilo - Material digital personalizado"
-                    class="img-responsive"
-                    loading="lazy"
-                    width="400"
-                    height="300"
-                  />
-                </div>
+              <div>
+                <h3>O que você vai receber:</h3>
+                <ul class="list-benefits">
+                  <li>
+                    <span class="check-icon" aria-hidden="true">✓</span>
+                    <span>Quiz completo de descoberta do seu estilo</span>
+                  </li>
+                  <li>
+                    <span class="check-icon" aria-hidden="true">✓</span>
+                    <span>Guia personalizado baseado no seu resultado</span>
+                  </li>
+                  <li>
+                    <span class="check-icon" aria-hidden="true">✓</span>
+                    <span>Paleta de cores exclusiva para você</span>
+                  </li>
+                  <li>
+                    <span class="check-icon" aria-hidden="true">✓</span>
+                    <span>Lista de peças essenciais do seu estilo</span>
+                  </li>
+                  <li>
+                    <span class="check-icon" aria-hidden="true">✓</span>
+                    <span>Dicas de combinações e styling</span>
+                  </li>
+                </ul>
                 
-                <div>
-                  <h3>O que está incluído:</h3>
-                  <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <div class="benefit-item" style="padding: 1rem; border: none; background: var(--background-light);">
-                      <div style="width: 1.5rem; height: 1.5rem; background: var(--primary-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; flex-shrink: 0;">✓</div>
-                      <div class="benefit-content">
-                        <h4>Quiz completo de descoberta do seu estilo</h4>
-                      </div>
-                    </div>
-                    <div class="benefit-item" style="padding: 1rem; border: none; background: var(--background-light);">
-                      <div style="width: 1.5rem; height: 1.5rem; background: var(--primary-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; flex-shrink: 0;">✓</div>
-                      <div class="benefit-content">
-                        <h4>Guia personalizado baseado no seu resultado</h4>
-                      </div>
-                    </div>
-                    <div class="benefit-item" style="padding: 1rem; border: none; background: var(--background-light);">
-                      <div style="width: 1.5rem; height: 1.5rem; background: var(--primary-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; flex-shrink: 0;">✓</div>
-                      <div class="benefit-content">
-                        <h4>Paleta de cores exclusiva para você</h4>
-                      </div>
-                    </div>
-                    <div class="benefit-item" style="padding: 1rem; border: none; background: var(--background-light);">
-                      <div style="width: 1.5rem; height: 1.5rem; background: var(--primary-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; flex-shrink: 0;">✓</div>
-                      <div class="benefit-content">
-                        <h4>Lista de peças essenciais do seu estilo</h4>
-                      </div>
-                    </div>
-                    <div class="benefit-item" style="padding: 1rem; border: none; background: var(--background-light);">
-                      <div style="width: 1.5rem; height: 1.5rem; background: var(--primary-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem; flex-shrink: 0;">✓</div>
-                      <div class="benefit-content">
-                        <h4>Dicas de combinações e styling</h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="price-container">
-                <div class="price-original">De R$ 175,00 por</div>
-                <div class="price-current">R$ 39,90</div>
-                <div class="price-installments">ou 4x de R$ 10,86 sem juros</div>
-              </div>
-              
-              <div style="text-align: center; margin-bottom: 2rem;">
-                <a 
-                  href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912" 
-                  class="btn btn-primary"
-                  aria-label="Garantir acesso ao guia de estilo personalizado"
-                  role="button"
-                  style="font-size: 1.25rem; padding: 1.25rem 2.5rem;"
-                >
-                  <span aria-hidden="true">🛍️</span>
-                  Quero Transformar Meu Estilo Agora
-                </a>
-              </div>
-              
-              <div class="trust-section">
-                <div class="trust-item">
-                  <span class="trust-icon" aria-hidden="true">🔒</span>
-                  <span>Pagamento 100% Seguro</span>
-                </div>
-                <div class="trust-item">
-                  <span class="trust-icon" aria-hidden="true">✅</span>
-                  <span>Garantia de 7 dias</span>
-                </div>
-                <div class="trust-item">
-                  <span class="trust-icon" aria-hidden="true">📱</span>
-                  <span>Acesso imediato</span>
-                </div>
-                <div class="trust-item">
-                  <span class="trust-icon" aria-hidden="true">🎯</span>
-                  <span>Resultado personalizado</span>
+                <div style="text-align: center; margin-top: 2rem;">
+                  <div class="price-original">De R$ 175,00</div>
+                  <div class="price-current">R$ 39,90</div>
+                  <div class="price-installments">ou 5x de R$ 8,83</div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="section">
-      <div class="container">
-        <div style="max-width: 800px; margin: 0 auto;">
-          <h2 style="text-align: center; margin-bottom: 3rem;">Perguntas Frequentes</h2>
-          
-          <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-              Como funciona o quiz de estilo?
-              <span style="font-size: 1.5rem;">+</span>
-            </button>
-            <div class="faq-answer">
-              O quiz consiste em perguntas sobre suas preferências, lifestyle e personalidade. Com base nas suas respostas, identificamos seu estilo pessoal único e criamos um guia personalizado para você.
+            
+            <div class="btn-stack" style="margin-top: 2rem;">
+              <a 
+                href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912" 
+                class="btn btn-primary"
+                aria-label="Garantir acesso ao guia de estilo personalizado"
+                role="button"
+              >
+                <span aria-hidden="true">🛍️</span>
+                Garantir Meu Guia + Bônus Especiais
+              </a>
+            </div>
+            
+            <div class="trust-elements">
+              <div class="trust-item">
+                <span class="trust-icon" aria-hidden="true">🔒</span>
+                <span>Pagamento 100% Seguro</span>
+              </div>
+              <div class="trust-item">
+                <span class="trust-icon" aria-hidden="true">✅</span>
+                <span>Garantia de 7 dias</span>
+              </div>
+              <div class="trust-item">
+                <span class="trust-icon" aria-hidden="true">📱</span>
+                <span>Acesso imediato</span>
+              </div>
             </div>
           </div>
-          
-          <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-              Quanto tempo leva para receber o resultado?
-              <span style="font-size: 1.5rem;">+</span>
-            </button>
-            <div class="faq-answer">
-              O acesso é imediato! Assim que você finalizar o pagamento, receberá um e-mail com o link para fazer o quiz e acessar todo o material.
-            </div>
-          </div>
-          
-          <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-              O guia serve para qualquer idade?
-              <span style="font-size: 1.5rem;">+</span>
-            </button>
-            <div class="faq-answer">
-              Sim! O método se adapta à sua idade, lifestyle e preferências pessoais. O estilo não tem idade, e nosso objetivo é que você se sinta autêntica e confiante.
-            </div>
-          </div>
-          
-          <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-              Posso fazer o quiz mais de uma vez?
-              <span style="font-size: 1.5rem;">+</span>
-            </button>
-            <div class="faq-answer">
-              Claro! Seu estilo pode evoluir com o tempo, e você pode refazer o quiz sempre que quiser atualizar seu resultado.
-            </div>
-          </div>
-          
-          <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-              Tem garantia?
-              <span style="font-size: 1.5rem;">+</span>
-            </button>
-            <div class="faq-answer">
-              Sim! Oferecemos 7 dias de garantia incondicional. Se não ficar satisfeita, devolvemos 100% do seu investimento.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="section" style="background: var(--background-white);">
-      <div class="container">
-        <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-          <h2>Pronta para descobrir seu estilo verdadeiro?</h2>
-          <p style="font-size: 1.25rem; margin-bottom: 2rem;">
-            Pare de se sentir perdida na frente do armário e comece a se vestir com propósito e autenticidade.
-          </p>
-          <a 
-            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912" 
-            class="btn btn-primary"
-            style="font-size: 1.25rem; padding: 1.25rem 2.5rem;"
-          >
-            Quero Começar Minha Transformação
-          </a>
         </div>
       </div>
     </section>
   </main>
 
   <script>
-    // FAQ functionality
-    function toggleFaq(button) {
-      const answer = button.nextElementSibling;
-      const icon = button.querySelector('span');
-      const isActive = answer.classList.contains('active');
-      
-      // Close all other FAQs
-      document.querySelectorAll('.faq-answer').forEach(item => {
-        item.classList.remove('active');
-      });
-      document.querySelectorAll('.faq-question span').forEach(item => {
-        item.textContent = '+';
-      });
-      
-      // Toggle current FAQ
-      if (!isActive) {
-        answer.classList.add('active');
-        icon.textContent = '-';
-      }
-    }
-    
-    // Smooth scroll for anchor links
+    // Enhanced loading and accessibility
     document.addEventListener('DOMContentLoaded', function() {
+      // Improve image loading
+      const images = document.querySelectorAll('img.loading');
+      images.forEach(img => {
+        img.addEventListener('load', function() {
+          this.classList.remove('loading');
+          this.classList.add('loaded');
+        });
+        
+        // Fallback for already loaded images
+        if (img.complete) {
+          img.classList.remove('loading');
+          img.classList.add('loaded');
+        }
+      });
+      
+      // Smooth scroll for anchor links
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
           e.preventDefault();
@@ -913,7 +673,8 @@
         });
       });
       
-      // Intersection Observer for animations
+      // Add loading state management
+      const animatedElements = document.querySelectorAll('.animate-fade-in');
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -928,7 +689,7 @@
         });
       }, observerOptions);
       
-      document.querySelectorAll('.animate-fade-in').forEach(el => {
+      animatedElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
@@ -936,13 +697,65 @@
       });
       
       // Enhanced button interactions
-      document.querySelectorAll('.btn').forEach(button => {
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-2px)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+        });
+        
+        // Track button clicks for analytics
         button.addEventListener('click', function() {
-          // Track button clicks for analytics
-          console.log('Button clicked:', this.textContent.trim());
+          const buttonText = this.textContent.trim();
+          console.log('Button clicked:', buttonText);
+          
+          // Add ripple effect
+          const ripple = document.createElement('span');
+          ripple.style.cssText = `
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+          `;
+          
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+          ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+          
+          this.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 600);
         });
       });
+      
+      // Performance monitoring
+      if ('performance' in window) {
+        window.addEventListener('load', function() {
+          setTimeout(() => {
+            const perfData = performance.getEntriesByType('navigation')[0];
+            console.log('Page load time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
+          }, 0);
+        });
+      }
     });
+    
+    // Add CSS for ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>

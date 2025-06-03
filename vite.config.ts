@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => ({
     assetsDir: 'assets',
     emptyOutDir: true,
     sourcemap: false,
-    target: 'es2020',
+    target: 'es2015',
     minify: 'terser',
     terserOptions: {
       compress: {
@@ -104,17 +104,9 @@ export default defineConfig(({ mode }) => ({
     devSourcemap: mode === 'development',
   },
 
-  // Configuração de integração Lovable aprimorada para v2.1.0
+  // Lovable integration configuration
   define: {
     __LOVABLE_PROJECT_ID__: JSON.stringify("quiz-sell-genius-66"),
     __LOVABLE_ENABLED__: JSON.stringify(true),
-    __LOVABLE_VERSION__: JSON.stringify("2.1.0"),
-    __LOVABLE_FEATURES__: JSON.stringify([
-      "componentTagger",
-      "liveEditing", 
-      "enhancedSync",
-      "visualEditor",
-      "realTimeCollaboration"
-    ]),
   },
 }));

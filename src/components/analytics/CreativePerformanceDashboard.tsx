@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,7 +26,7 @@ export const CreativePerformanceDashboard: React.FC = () => {
     const loadCreativeData = () => {
       setIsLoading(true);
       try {
-        const data = getCreativePerformance();
+        const data = getCreativePerformance(selectedPeriod);
         setCreativesData(data);
       } catch (error) {
         console.error('Erro ao carregar dados de criativos:', error);
@@ -38,6 +37,7 @@ export const CreativePerformanceDashboard: React.FC = () => {
 
     loadCreativeData();
     
+    // Atualizar dados a cada 30 segundos
     const interval = setInterval(loadCreativeData, 30000);
     
     return () => clearInterval(interval);

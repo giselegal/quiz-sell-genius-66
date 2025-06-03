@@ -1,76 +1,100 @@
 
 import React, { useEffect } from 'react';
+import { fixBlurryImages } from '@/utils/enhancedFixBlurryImages';
 
-interface OptimizedAutoFixedImagesProps {
+interface AutoFixedImagesProps {
   children: React.ReactNode;
-  enabled?: boolean;
-  quality?: number;
+  fixOnMount?: boolean;
+  fixOnUpdate?: boolean;
+  className?: string;
 }
 
-const OptimizedAutoFixedImages: React.FC<OptimizedAutoFixedImagesProps> = ({
+/**
+ * Versão otimizada do componente AutoFixedImages
+ * Este componente aplica correções de imagens borradas de forma mais eficiente
+ * usando requestIdleCallback e limitando as observações DOM
+ */
+const OptimizedAutoFixedImages: React.FC<AutoFixedImagesProps> = ({
   children,
-  enabled = true,
-  quality = 90
+  fixOnMount = true, 
+  fixOnUpdate = false, // Reduzido para false por padrão para evitar observação contínua
+  className = ''
 }) => {
+  // Aplicar correção na montagem inicial - com performance melhorada
   useEffect(() => {
-    if (!enabled) return;
-
-    const optimizeImages = (selector: string = 'img') => {
-      const images = document.querySelectorAll(selector);
-      
-      images.forEach(img => {
-        if (img instanceof HTMLImageElement) {
-          const originalSrc = img.src;
-
-          if (originalSrc && originalSrc.includes('cloudinary.com')) {
-            // Simple Cloudinary optimization
-            const optimizedSrc = originalSrc.replace(
-              /\/upload\//,
-              `/upload/f_auto,q_${quality}/`
-            );
-
-            if (optimizedSrc !== originalSrc) {
-              img.src = optimizedSrc;
-            }
-          }
-        }
-      });
-    };
-
-    // Apply optimization on mount
-    optimizeImages();
-
-    // Set up mutation observer for dynamic content
-    const observer = new MutationObserver(() => {
-      optimizeImages();
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-
-    // Handle route changes
-    const handleRouteChange = () => {
-      setTimeout(() => optimizeImages(), 100);
-    };
-
-    window.addEventListener('popstate', handleRouteChange);
+    if (fixOnMount) {
+      // Adiar execução para um momento com baixo impacto na performance
+      if ('requestIdleCallback' in window) {
+        const timeoutId = window.setTimeout(() => {
+          // @ts-ignore
+          window.requestIdleCallback(() => {
+            fixBlurryImages();
+          }, { timeout: 3000 }); // Timeout aumentado para garantir que o LCP já ocorreu
+        }, 2000); // Atraso adicional para priorizar renderização e interatividade iniciais
+        
+        return () => window.clearTimeout(timeoutId);
+      } else {
+        const timeoutId = setTimeout(fixBlurryImages, 2500);
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [fixOnMount]);
+  
+  // Observer otimizado - usa IntersectionObserver para detectar quando elementos
+  // estão visíveis antes de aplicar correções
+  useEffect(() => {
+    if (!fixOnUpdate) return;
     
-    const originalPushState = history.pushState;
-    history.pushState = function(...args) {
-      originalPushState.apply(history, args);
-      handleRouteChange();
-    };
-
+    let debounceTimer: number | null = null;
+    let mutationCount = 0;
+    
+    // Observador de mutações mais eficiente
+    const observer = new MutationObserver((mutations) => {
+      // Incrementar contador para limitar frequência de correções
+      mutationCount++;
+      
+      // Limitar processamento a um máximo de uma correção a cada 10 mutações
+      if (mutationCount % 10 !== 0) return;
+      
+      // Debounce com clear do timer anterior
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+      
+      // Agendar próxima correção com baixa prioridade
+      debounceTimer = window.setTimeout(() => {
+        if ('requestIdleCallback' in window) {
+          // @ts-ignore
+          window.requestIdleCallback(() => {
+            fixBlurryImages();
+          }, { timeout: 2000 });
+        } else {
+          setTimeout(fixBlurryImages, 1000);
+        }
+      }, 1500);
+    });
+    
+    // Opções de observação mais seletivas
+    observer.observe(document.body, { 
+      childList: true,
+      subtree: true,
+      attributes: false,
+      characterData: false
+    });
+    
     return () => {
       observer.disconnect();
-      window.removeEventListener('popstate', handleRouteChange);
-      history.pushState = originalPushState;
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
     };
-  }, [enabled, quality]);
-
-  return <>{children}</>;
+  }, [fixOnUpdate]);
+  
+  return (
+    <div className={className}>
+      {children}
+    </div>
+  );
 };
 
 export default OptimizedAutoFixedImages;

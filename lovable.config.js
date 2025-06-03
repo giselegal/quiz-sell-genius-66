@@ -1,18 +1,15 @@
 
-// Configuração atualizada do Lovable para versão 2.1.0
+// Configuração atualizada do Lovable
 export default {
   projectId: "quiz-sell-genius-66",
   projectName: "Quiz Sell Genius",
-  version: "2.1.0",
   
-  // Configurações do editor aprimoradas
+  // Configurações do editor
   editor: {
     enableLiveMode: true,
     autoSave: true,
     componentHighlighting: true,
-    enhancedPreview: true,
-    inlineEditing: true,
-    realTimeSync: true
+    enhancedPreview: true
   },
   
   // Componentes marcados para edição
@@ -22,41 +19,28 @@ export default {
     QuizLogic: './src/components/quiz/QuizLogic.tsx',
     ResultPageEditor: './src/components/quiz/ResultPageEditor.tsx',
     EnchantedEffects: './src/components/effects/EnchantedEffects.tsx',
-    ComponentRenderers: './src/components/result-editor/ComponentRenderers.tsx',
-    UnifiedEditor: './src/lovables/UnifiedEditor.tsx'
+    ComponentRenderers: './src/components/result-editor/ComponentRenderers.tsx'
   },
   
-  // Configurações de sincronização aprimoradas
+  // Configurações de sincronização
   sync: {
     github: {
       enabled: true,
       autoSync: true,
-      branch: "main",
-      realTime: true
+      branch: "main"
     }
   },
   
   // Configurações de build
   build: {
-    target: "es2020",
-    outDir: "dist",
-    minify: true,
-    sourcemap: false
+    target: "es2015",
+    outDir: "dist"
   },
   
-  // Features experimentais habilitadas
+  // Features experimentais
   experimental: {
     enhancedComponentSystem: true,
     advancedTemplating: true,
-    realTimeCollaboration: true,
-    aiAssistance: true,
-    smartSuggestions: true
-  },
-
-  // Configurações de performance
-  performance: {
-    lazyLoading: true,
-    codesplitting: true,
-    preloadCritical: true
+    realTimeCollaboration: false
   }
 };

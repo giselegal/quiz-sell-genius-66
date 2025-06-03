@@ -7,25 +7,16 @@
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
-  "version": "2.1.0",
+  "version": "2.0.0",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
     "enhancedSync": true,
-    "visualEditor": true,
-    "realTimeCollaboration": true,
-    "advancedTemplating": true
+    "visualEditor": true
   },
   "editor": {
     "enableLiveMode": true,
     "autoSave": true,
-    "componentHighlighting": true,
-    "enhancedPreview": true,
-    "inlineEditing": true
-  },
-  "experimental": {
-    "enhancedComponentSystem": true,
-    "advancedTemplating": true,
-    "realTimeCollaboration": true
+    "componentHighlighting": true
   }
 }

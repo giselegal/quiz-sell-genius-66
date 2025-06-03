@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
 import { getCtaUrl } from '@/services/pixelManager';
-import OptimizedImage from '@/components/ui/optimized-image';
+import OptimizedImage from '@/components/ui/OptimizedImage';
 
 interface QuizOfferHeroProps {
   onStartQuizClick: () => void;

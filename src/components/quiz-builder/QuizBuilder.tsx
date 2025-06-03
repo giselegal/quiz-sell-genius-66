@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
@@ -15,7 +14,7 @@ import { resultPageStorage } from '@/services/resultPageStorage';
 import { createBuilderStateFromQuiz, loadQuizResultConfig } from '@/services/quizBuilderService';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
-const QuizBuilder = () => {
+export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -41,16 +40,6 @@ const QuizBuilder = () => {
     initializeComponents,
     loading
   } = useQuizBuilder();
-
-  const mockResult = {
-    primaryStyle: { category: 'Elegante', score: 85, percentage: 45 },
-    secondaryStyles: [
-      { category: 'Clássico', score: 70, percentage: 35 },
-      { category: 'Romântico', score: 50, percentage: 20 }
-    ],
-    totalSelections: 15,
-    userName: 'Usuário Demo'
-  };
 
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -143,8 +132,7 @@ const QuizBuilder = () => {
           percentage: 10
         }
       ],
-      totalSelections: 30,
-      userName: 'Usuário Demo'
+      totalSelections: 30
     };
     
     setPreviewResult(previewResult);

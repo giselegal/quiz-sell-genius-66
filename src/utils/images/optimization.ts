@@ -1,91 +1,135 @@
 
-import { type ImageOptimizationOptions } from './types';
+import { ImageOptimizationOptions } from './types';
 
+/**
+ * Otimiza URLs do Cloudinary aplicando transformações para melhor qualidade e performance
+ * @param url URL da imagem do Cloudinary
+ * @param options Opções de otimização
+ * @returns URL otimizada
+ */
 export const optimizeCloudinaryUrl = (
-  url: string, 
+  url: string,
   options: ImageOptimizationOptions = {}
 ): string => {
-  if (!url || !url.includes('cloudinary.com')) {
-    return url;
-  }
+  if (!url || !url.includes('cloudinary.com')) return url;
 
+  // Configurações padrão
   const {
-    width = 0,
-    height = 0,
+    width,
+    height,
     quality = 85,
     format = 'auto',
-    crop = 'fill'
+    crop = 'limit'
   } = options;
 
-  const parts = url.split('/upload/');
+  // Extrair partes da URL do Cloudinary
+  const parts = url.split('/image/upload/');
   if (parts.length !== 2) return url;
 
-  const [baseUrl, pathPart] = parts;
-  const pathSegments = pathPart.split('/');
-  
-  // Check if transformations already exist
-  const hasExistingTransforms = pathSegments[0].includes('_') || 
-                                pathSegments[0].includes(',') || 
-                                pathSegments[0].startsWith('f_');
+  // Verificar se a URL já tem transformações
+  const hasTransformations = /f_auto|q_auto|w_\d+/.test(parts[1]);
+  if (hasTransformations) return url;
 
-  // Build transformation string
-  let transforms = `f_${format}`;
+  // Construir parâmetros de transformação
+  const transformations = [];
   
+  // Formato (webp, avif, etc)
+  transformations.push(`f_${format}`);
+  
+  // Qualidade
   if (quality) {
-    transforms += `,q_${quality}`;
+    transformations.push(`q_${quality}`);
   }
   
-  if (width && height) {
-    transforms += `,c_${crop},w_${width},h_${height}`;
-  } else if (width) {
-    transforms += `,w_${width}`;
-  } else if (height) {
-    transforms += `,h_${height}`;
+  // Dimensões
+  if (width) {
+    transformations.push(`w_${width}`);
   }
+  
+  if (height) {
+    transformations.push(`h_${height}`);
+  }
+  
+  // Modo de corte
+  if (crop) {
+    transformations.push(`c_${crop}`);
+  }
+  
+  // Otimizar para retina display
+  transformations.push('dpr_auto');
 
-  if (hasExistingTransforms) {
-    return `${baseUrl}/upload/${transforms}/${pathSegments.slice(1).join('/')}`;
-  } else {
-    return `${baseUrl}/upload/${transforms}/${pathPart}`;
-  }
+  // Construir URL final
+  const transformString = transformations.join(',');
+  return `${parts[0]}/image/upload/${transformString}/${parts[1]}`;
 };
 
-export const getOptimizedImage = (url: string, options: ImageOptimizationOptions = {}): string => {
+/**
+ * Obtém uma imagem otimizada com várias opções
+ * @param url URL da imagem original
+ * @param options Opções de otimização
+ * @returns URL otimizada
+ */
+export const getOptimizedImage = (
+  url: string,
+  options: ImageOptimizationOptions = {}
+): string => {
+  return optimizeCloudinaryUrl(url, options);
+};
+
+/**
+ * Obtém um placeholder de baixa qualidade para uma imagem
+ * @param url URL da imagem original
+ * @returns URL para o placeholder de baixa qualidade
+ */
+export const getLowQualityPlaceholder = (url: string): string => {
+  if (!url) return '';
+  
   return optimizeCloudinaryUrl(url, {
-    quality: 85,
+    width: 20,
+    height: 20,
+    quality: 10,
     format: 'auto',
-    crop: 'fill',
-    ...options
+    crop: 'limit'
   });
 };
 
-export const getLowQualityPlaceholder = (url: string, options = { width: 30, quality: 20 }): string => {
-  if (!url || !url.includes('cloudinary.com')) {
-    return url;
+/**
+ * Obter URL otimizada para uma imagem
+ * @param url URL da imagem original
+ * @param width Largura desejada
+ * @param height Altura desejada (opcional)
+ * @returns URL otimizada
+ */
+export const getOptimizedImageUrl = (
+  url: string,
+  width: number,
+  height?: number
+): string => {
+  const options: ImageOptimizationOptions = {
+    width,
+    quality: 85,
+    format: 'auto'
+  };
+  
+  if (height) {
+    options.height = height;
   }
-
-  const { width = 30, quality = 20 } = options;
-  const parts = url.split('/upload/');
   
-  if (parts.length !== 2) return url;
-  
-  return `${parts[0]}/upload/f_auto,q_${quality},w_${width}/${parts[1].split('/').slice(1).join('/')}`;
+  return optimizeCloudinaryUrl(url, options);
 };
 
-export const getOptimizedImageUrl = getOptimizedImage;
-
-export const getResponsiveImageSources = (url: string, widths = [320, 640, 960, 1280]) => {
-  if (!url || !url.includes('cloudinary.com')) {
-    return {
-      srcSet: url,
-      sizes: '100vw'
-    };
-  }
-
-  return {
-    srcSet: widths.map(width => 
-      `${optimizeCloudinaryUrl(url, { width, quality: 85, format: 'auto' })} ${width}w`
-    ).join(', '),
-    sizes: '(max-width: 768px) 100vw, 50vw'
-  };
+/**
+ * Obtém sources para imagem responsiva
+ * @param url URL da imagem
+ * @param widths Array de larguras para os breakpoints
+ * @returns Array de sources para uso em picture/source
+ */
+export const getResponsiveImageSources = (
+  url: string,
+  widths: number[] = [640, 768, 1024, 1280, 1536]
+): Array<{ srcset: string; width: number }> => {
+  return widths.map(width => ({
+    srcset: getOptimizedImageUrl(url, width),
+    width
+  }));
 };

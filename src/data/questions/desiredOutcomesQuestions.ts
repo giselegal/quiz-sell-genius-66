@@ -1,10 +1,8 @@
-
 import { QuizQuestion } from '../../types/quiz';
 
 export const desiredOutcomesQuestions: QuizQuestion[] = [
   {
     id: 'strategic-7',
-    text: 'Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?',
     title: 'Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?',
     type: 'text',
     multiSelect: 1,

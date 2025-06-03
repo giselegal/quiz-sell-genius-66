@@ -3,8 +3,7 @@ import React from 'react';
 import { QuizQuestion } from '../QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { QuizHeader } from './QuizHeader';
-import StrategicQuestions from './StrategicQuestions';
-import { strategicQuestions } from '@/data/strategicQuestions';
+import { StrategicQuestions } from './StrategicQuestions';
 
 interface QuizContentProps {
   user: any;
@@ -52,7 +51,6 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             currentQuestionIndex={currentStrategicQuestionIndex}
             answers={{}}
             onAnswer={handleAnswerSubmit}
-            questions={strategicQuestions}
           />
         ) : (
           <QuizQuestion

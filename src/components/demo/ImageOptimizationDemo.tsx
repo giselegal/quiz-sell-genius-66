@@ -1,6 +1,7 @@
-
 import React from 'react';
+// Update the import path if the file is located elsewhere, for example:
 import EnhancedAutoFixedImages from '../ui/EnhancedAutoFixedImages';
+// Or create the file at src/components/demo/ui/EnhancedAutoFixedImages.tsx if it doesn't exist.
 
 /**
  * Componente exemplo que demonstra o uso do EnhancedAutoFixedImages
@@ -20,26 +21,24 @@ const ImageOptimizationDemo: React.FC = () => {
             imagens borradas, com detecção inteligente do LCP e escopo limitado.
           </p>
           
-          <EnhancedAutoFixedImages>
-            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <h3 className="text-sm font-medium mb-2">Imagem do Cloudinary</h3>
-                  <img 
-                    src="https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/sample" 
-                    alt="Exemplo do Cloudinary"
-                    className="w-full h-auto rounded-md"
-                  />
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium mb-2">Imagem com Qualidade Baixa</h3>
-                  <img 
-                    src="https://res.cloudinary.com/demo/image/upload/q_30/sample" 
-                    alt="Exemplo com qualidade baixa"
-                    className="w-full h-auto rounded-md"
-                  />
-                </div>
+          <EnhancedAutoFixedImages className="border border-blue-200 rounded-lg p-4 bg-blue-50">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-sm font-medium mb-2">Imagem do Cloudinary</h3>
+                <img 
+                  src="https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/sample" 
+                  alt="Exemplo do Cloudinary"
+                  className="w-full h-auto rounded-md"
+                />
+              </div>
+              
+              <div>
+                <h3 className="text-sm font-medium mb-2">Imagem com Qualidade Baixa</h3>
+                <img 
+                  src="https://res.cloudinary.com/demo/image/upload/q_30/sample" 
+                  alt="Exemplo com qualidade baixa"
+                  className="w-full h-auto rounded-md"
+                />
               </div>
             </div>
           </EnhancedAutoFixedImages>

@@ -3,7 +3,7 @@ import React from 'react';
 import { QuizQuestion } from './QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { QuizHeader } from './quiz/QuizHeader';
-import StrategicQuestions from './quiz/StrategicQuestions';
+import { StrategicQuestions } from './quiz/StrategicQuestions';
 
 interface QuizContentProps {
   user: any;

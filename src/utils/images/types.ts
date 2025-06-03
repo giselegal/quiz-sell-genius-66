@@ -1,39 +1,62 @@
 
-export interface ImageOptimizationOptions {
+export interface ImageAnalysis {
+  url: string;
+  element: HTMLImageElement;
+  issues: string[];
+  dimensions?: {
+    natural: { width: number; height: number },
+    display: { width: number; height: number }
+  };
+  downloadSize?: number;
+  format?: string;
+  isOptimized?: boolean;
+  isResponsive?: boolean;
+  quality?: number;
   width?: number;
   height?: number;
-  quality?: number;
-  format?: 'auto' | 'webp' | 'jpg' | 'png';
-  crop?: 'fill' | 'fit' | 'scale' | 'crop';
+  suggestedImprovements?: string[];
 }
 
-export interface PreloadOptions {
-  quality?: number;
-  batchSize?: number;
-}
-
-export interface ImageCacheEntry {
-  url: string;
-  timestamp: number;
-  preloaded: boolean;
-  lastAccessed?: number;
-  loadStatus?: 'loading' | 'loaded' | 'error';
-}
-
-export interface ImageSettings extends ImageOptimizationOptions {
-  responsive?: boolean;
-}
-
-export interface PreloadImageDefinition {
-  id: string;
-  url: string;
-  priority: number;
-  category: string;
+export interface ImageDiagnosticResult {
+  url?: string;
+  issues?: string[];
+  recommendations?: string[];
+  optimizationPotential?: number;
+  summary?: {
+    totalImagesRendered: number;
+    totalImagesWithIssues: number;
+    totalDownloadedBytes: number;
+    estimatedPerformanceImpact: string;
+  };
+  detailedIssues?: ImageAnalysis[];
 }
 
 export interface FixBlurryImagesOptions {
   quality?: number;
   format?: string;
-  width?: number;
-  height?: number;
+  skipOptimized?: boolean;
+  forceOptimize?: boolean;
+  debug?: boolean;
+  placeholderColor?: string;
+}
+
+export interface PreloadImageDefinition {
+  src: string;
+  id: string;
+  alt: string;
+  category: string;
+  preloadPriority?: number;
+  tags?: string[];
+  quality?: number;
+}
+
+// Add PreloadOptions interface to fix imports
+export interface PreloadOptions {
+  quality?: number;
+  priority?: 'high' | 'low' | 'auto';
+  categories?: string[];
+  limit?: number;
+  timeout?: number;
+  batchSize?: number;
+  format?: string;
 }

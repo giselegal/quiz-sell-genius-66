@@ -1,66 +1,35 @@
+declare module '@lovable/react' {
+  import React from 'react';
 
-// Local Lovable type definitions
-interface LovableProviderProps {
-  children: React.ReactNode;
-  projectId?: string;
-  enableLiveMode?: boolean;
-  enableRealTimeSync?: boolean;
+  interface LovableProviderProps {
+    children: React.ReactNode;
+  }
+  export const LovableProvider: (props: LovableProviderProps) => JSX.Element;
+
+  // Assuming EditorScript takes no props
+  export const EditorScript: () => JSX.Element;
+
+  interface EditableProps {
+    id: string;
+    children: React.ReactNode;
+  }
+  export const Editable: (props: EditableProps) => JSX.Element;
 }
 
-interface EditorScriptProps {
-  enableInlineEditing?: boolean;
-  enableRealTimeSync?: boolean;
+declare module '@lovable/editor' {
+  // Caso precise de APIs específicas do editor
 }
 
-interface EditableProps {
-  id: string;
-  children: React.ReactNode;
-  type?: 'text' | 'image' | 'component';
-  onEdit?: (content: any) => void;
-}
-
-interface VisualEditorProps {
-  componentId: string;
-  children: React.ReactNode;
-  enableInlineEdit?: boolean;
-}
-
-interface LivePreviewProps {
-  children: React.ReactNode;
-  updateMode?: 'instant' | 'debounced';
-}
-
-interface EditorAPI {
-  saveComponent: (id: string, data: any) => Promise<void>;
-  loadComponent: (id: string) => Promise<any>;
-  enableRealTimeSync: () => void;
-  disableRealTimeSync: () => void;
-}
-
-// Configurações globais aprimoradas
+// Estende o objeto Window para incluir propriedades do Lovable
 interface LovableConfig {
   projectId: string;
   apiBaseUrl: string;
   authToken?: string;
-  enableLiveMode?: boolean;
-  enableRealTimeSync?: boolean;
-  version?: string;
-  features?: {
-    componentTagger?: boolean;
-    liveEditing?: boolean;
-    enhancedSync?: boolean;
-    visualEditor?: boolean;
-    realTimeCollaboration?: boolean;
-  };
   [key: string]: any;
 }
 
 declare global {
   interface Window {
     LOVABLE_CONFIG?: LovableConfig;
-    __LOVABLE_VERSION__?: string;
-    __LOVABLE_FEATURES__?: string[];
   }
 }
-
-export {};
