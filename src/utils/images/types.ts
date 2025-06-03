@@ -1,62 +1,35 @@
 
-export interface ImageAnalysis {
-  url: string;
-  element: HTMLImageElement;
-  issues: string[];
-  dimensions?: {
-    natural: { width: number; height: number },
-    display: { width: number; height: number }
-  };
-  downloadSize?: number;
-  format?: string;
-  isOptimized?: boolean;
-  isResponsive?: boolean;
-  quality?: number;
+export interface ImageMetadata {
   width?: number;
   height?: number;
-  suggestedImprovements?: string[];
+  format?: string;
+  size?: number;
+  isLoaded?: boolean;
 }
 
-export interface ImageDiagnosticResult {
-  url?: string;
-  issues?: string[];
-  recommendations?: string[];
-  optimizationPotential?: number;
-  summary?: {
-    totalImagesRendered: number;
-    totalImagesWithIssues: number;
-    totalDownloadedBytes: number;
-    estimatedPerformanceImpact: string;
-  };
-  detailedIssues?: ImageAnalysis[];
+export interface ImageCacheEntry {
+  url: string;
+  metadata: ImageMetadata;
+  timestamp: number;
 }
 
-export interface FixBlurryImagesOptions {
+export interface ImageSettings {
   quality?: number;
   format?: string;
-  skipOptimized?: boolean;
-  forceOptimize?: boolean;
-  debug?: boolean;
-  placeholderColor?: string;
+  width?: number;
+  height?: number;
 }
 
-export interface PreloadImageDefinition {
-  src: string;
-  id: string;
-  alt: string;
-  category: string;
-  preloadPriority?: number;
-  tags?: string[];
+export interface ImageOptimizationOptions {
   quality?: number;
+  format?: string;
+  width?: number;
+  height?: number;
+  lazy?: boolean;
 }
 
-// Add PreloadOptions interface to fix imports
 export interface PreloadOptions {
   quality?: number;
-  priority?: 'high' | 'low' | 'auto';
-  categories?: string[];
-  limit?: number;
-  timeout?: number;
   batchSize?: number;
-  format?: string;
+  priority?: number;
 }

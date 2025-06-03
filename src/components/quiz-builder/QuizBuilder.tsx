@@ -14,7 +14,7 @@ import { resultPageStorage } from '@/services/resultPageStorage';
 import { createBuilderStateFromQuiz, loadQuizResultConfig } from '@/services/quizBuilderService';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
-export const QuizBuilder: React.FC = () => {
+const QuizBuilder = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'editor' | 'preview'>('editor');
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -40,6 +40,16 @@ export const QuizBuilder: React.FC = () => {
     initializeComponents,
     loading
   } = useQuizBuilder();
+
+  const mockResult = {
+    primaryStyle: { category: 'Elegante', score: 85, percentage: 45 },
+    secondaryStyles: [
+      { category: 'Clássico', score: 70, percentage: 35 },
+      { category: 'Romântico', score: 50, percentage: 20 }
+    ],
+    totalSelections: 15,
+    userName: 'Usuário Demo'
+  };
 
   useEffect(() => {
     const currentPath = window.location.pathname;
