@@ -14,6 +14,9 @@ const __dirname = path.dirname(__filename);
 
 console.log('🏷️ Preparando componentes para Lovable...');
 
+// Função principal
+async function main() {
+
 // Função para marcar componentes React como compatíveis com Lovable
 function tagLovableComponents() {
   const srcDir = path.join(__dirname, 'src');
@@ -104,3 +107,8 @@ if (hasValidConfig && hasWorkflow) {
 } else {
   console.log('\n⚠️ Configuração incompleta. Verificar problemas identificados.');
 }
+
+}
+
+// Executar função principal
+main().catch(console.error);
