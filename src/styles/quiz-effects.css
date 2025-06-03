@@ -1,0 +1,123 @@
+
+/* Efeitos aprimorados para as opções do quiz */
+
+.strategic-option {
+  position: relative;
+  overflow: hidden;
+}
+
+.strategic-option::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #B89B7A, #A38A69, #B89B7A);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.strategic-option.selected-option::before {
+  opacity: 0.1;
+}
+
+/* Efeito shimmer para opções selecionadas */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out;
+}
+
+/* Efeitos de hover melhorados */
+.quiz-option {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quiz-option:hover:not(.selected-option) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Animação de entrada para opções */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.4s ease-out;
+}
+
+/* Efeito de pulse para indicadores de seleção */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(178, 150, 112, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(178, 150, 112, 0);
+  }
+}
+
+.selected-option .animate-pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Melhoria da transição de scale */
+.scale-smooth {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Efeito de loading para imagens */
+.image-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Melhorias para dispositivos de baixa performance */
+@media (prefers-reduced-motion: reduce) {
+  .quiz-option,
+  .strategic-option,
+  .animate-shimmer,
+  .animate-slide-in-up {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Efeitos específicos para mobile */
+@media (max-width: 768px) {
+  .quiz-option:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
+  .selected-option {
+    box-shadow: 0 4px 12px rgba(178, 150, 112, 0.3) !important;
+  }
+}

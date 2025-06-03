@@ -1,93 +1,59 @@
 
-import { EditableContent } from "@/types/editor";
+import { EditableContent } from '@/types/editor';
 
 export const getDefaultContentForType = (type: string): EditableContent => {
   switch (type) {
+    case 'heading':
     case 'headline':
       return {
-        title: 'Título do Bloco',
-        subtitle: 'Um subtítulo opcional para seu bloco',
-        style: {
-          textAlign: 'center',
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          color: '#432818'
-        }
+        title: 'Novo Título',
+        subtitle: 'Subtítulo opcional',
+        alignment: 'center'
       };
+      
+    case 'paragraph':
     case 'text':
       return {
-        text: 'Este é um bloco de texto que você pode editar. Personalize o conteúdo conforme necessário.',
-        style: {
-          fontSize: '1rem',
-          lineHeight: '1.5',
-          color: '#3A3A3A'
-        }
+        text: 'Digite seu texto aqui...',
+        alignment: 'left'
       };
+      
     case 'image':
       return {
-        imageUrl: 'https://placehold.co/600x400/png',
-        imageAlt: 'Imagem de exemplo',
-        caption: '',
-        style: {
-          width: '100%',
-          borderRadius: '8px'
-        }
+        imageUrl: '',
+        imageAlt: 'Descrição da imagem',
+        caption: ''
       };
-    case 'style-result':
+      
+    case 'button':
+    case 'cta':
       return {
-        title: 'Seu Estilo Principal',
-        description: 'Descrição personalizada do seu estilo predominante.',
-        customImage: '',
-        style: {
-          backgroundColor: '#FAF9F7',
-          padding: '1.5rem',
-          borderRadius: '8px'
-        }
+        buttonText: 'Clique aqui',
+        buttonUrl: '#',
+        alignment: 'center'
       };
-    case 'secondary-styles':
-      return {
-        title: 'Seus Estilos Secundários',
-        description: 'Estes estilos complementam seu estilo principal e ajudam a criar seu visual único.',
-        style: {
-          backgroundColor: '#FFFFFF',
-          padding: '1.5rem',
-          borderRadius: '8px'
-        }
-      };
+      
     case 'benefits':
       return {
         title: 'Benefícios',
         items: [
-          { title: 'Benefício 1', description: 'Descrição do primeiro benefício' },
-          { title: 'Benefício 2', description: 'Descrição do segundo benefício' },
-          { title: 'Benefício 3', description: 'Descrição do terceiro benefício' }
-        ],
-        style: {
-          padding: '1rem'
-        }
+          'Primeiro benefício',
+          'Segundo benefício', 
+          'Terceiro benefício'
+        ]
       };
-    case 'cta':
+      
+    case 'testimonial':
       return {
-        title: 'Aproveite Essa Oportunidade',
-        buttonText: 'Comprar Agora',
-        buttonUrl: '#comprar',
-        style: {
-          backgroundColor: '#B89B7A',
-          color: '#FFFFFF',
-          textAlign: 'center',
-          padding: '2rem',
-          borderRadius: '8px'
-        }
+        text: 'Depoimento incrível do cliente...',
+        title: 'Nome do Cliente',
+        subtitle: 'Cargo/Empresa'
       };
-    case 'spacer':
-      return {
-        height: '2rem'
-      };
+      
     default:
       return {
-        title: 'Novo Bloco',
-        text: 'Conteúdo do bloco',
-        style: {}
+        title: 'Novo Componente',
+        text: 'Conteúdo padrão'
       };
   }
 };

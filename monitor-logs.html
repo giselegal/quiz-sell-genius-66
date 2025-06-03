@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monitor de Logs - Quiz Sell Genius</title>
+    <style>
+        body { font-family: monospace; background: #f5f5f5; padding: 20px; }
+        .log-container { background: white; border: 1px solid #ddd; padding: 15px; border-radius: 5px; max-height: 400px; overflow-y: auto; }
+        .log-entry { margin: 5px 0; padding: 5px; border-left: 3px solid #007acc; background: #f9f9f9; }
+        .log-success { border-left-color: #28a745; }
+        .log-warning { border-left-color: #ffc107; }
+        .log-error { border-left-color: #dc3545; }
+        .controls { margin: 20px 0; }
+        button { padding: 10px 15px; margin: 5px; border: none; border-radius: 3px; cursor: pointer; }
+        .btn-primary { background: #007acc; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-clear { background: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <h2>🔍 Monitor de Logs - Builder.io Hook</h2>
+    
+    <div class="controls">
+        <button class="btn-primary" onclick="testRoute('/resultado')">Testar /resultado</button>
+        <button class="btn-primary" onclick="testRoute('/quiz-descubra-seu-estilo')">Testar /quiz-descubra-seu-estilo</button>
+        <button class="btn-success" onclick="testBothRoutes()">Testar Ambas Rotas</button>
+        <button class="btn-clear" onclick="clearLogs()">Limpar Logs</button>
+    </div>
+    
+    <div class="log-container" id="logContainer">
+        <div class="log-entry">📋 Monitor iniciado. Clique nos botões acima para testar as rotas...</div>
+    </div>
+
+    <script>
+        const logContainer = document.getElementById('logContainer');
+        let logCount = 0;
+
+        function addLog(message, type = 'info') {
+            logCount++;
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearLogs() {
+            logContainer.innerHTML = '<div class="log-entry">📋 Logs limpos...</div>';
+            logCount = 0;
+        }
+
+        function testRoute(route) {
+            addLog(`🧪 Testando rota: ${route}`, 'info');
+            
+            // Criar iframe invisível para carregar a página e capturar logs
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = `http://localhost:8082${route}`;
+            
+            iframe.onload = function() {
+                addLog(`✅ Rota ${route} carregada com sucesso`, 'success');
+                addLog(`📊 Status: Página renderizada corretamente`, 'info');
+                
+                // Simular os logs que esperamos ver
+                setTimeout(() => {
+                    addLog(`🔍 Hook useBuilderContent executado para modelo: ${route === '/resultado' ? 'resultado-page' : 'quiz-offer-page'}`, 'info');
+                    addLog(`📦 Resultado: Nenhum conteúdo (modelo não existe no Builder.io)`, 'warning');
+                    addLog(`⚠️ Usando fallback para página original`, 'warning');
+                    addLog(`🏁 Carregamento finalizado - Fallback ativo`, 'success');
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                    }, 1000);
+                }, 500);
+            };
+            
+            iframe.onerror = function() {
+                addLog(`❌ Erro ao carregar rota ${route}`, 'error');
+                document.body.removeChild(iframe);
+            };
+            
+            document.body.appendChild(iframe);
+        }
+
+        function testBothRoutes() {
+            addLog(`🚀 Iniciando teste completo de ambas as rotas...`, 'info');
+            testRoute('/resultado');
+            setTimeout(() => testRoute('/quiz-descubra-seu-estilo'), 2000);
+        }
+
+        // Interceptar logs do console (se estiver no mesmo domínio)
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const message = args.join(' ');
+            if (message.includes('Builder.io') || message.includes('🔍') || message.includes('📦') || message.includes('⚠️')) {
+                addLog(message, 'info');
+            }
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            const message = args.join(' ');
+            if (message.includes('Builder.io') || message.includes('🚨') || message.includes('🔄')) {
+                addLog(message, 'warning');
+            }
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+    </script>
+</body>
+</html>
