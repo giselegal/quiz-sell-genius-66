@@ -13,11 +13,26 @@ const ResultPage: React.FC = () => {
   useEffect(() => {
     const loadQuizResult = () => {
       try {
+        console.log('Loading quiz result from localStorage...');
+        
+        // Tentar carregar do localStorage
         const savedResult = localStorage.getItem('quiz_result');
+        console.log('Found saved result:', !!savedResult);
+        
         if (savedResult) {
           const parsedResult = JSON.parse(savedResult);
-          setQuizResult(parsedResult);
+          console.log('Parsed result:', parsedResult);
+          
+          // Validar se o resultado tem a estrutura esperada
+          if (parsedResult && parsedResult.primaryStyle && parsedResult.secondaryStyles) {
+            setQuizResult(parsedResult);
+            console.log('Result loaded successfully');
+          } else {
+            console.warn('Invalid result structure:', parsedResult);
+            navigate('/');
+          }
         } else {
+          console.warn('No saved result found, redirecting to quiz');
           // If no result found, redirect to quiz
           navigate('/');
         }
@@ -29,11 +44,17 @@ const ResultPage: React.FC = () => {
       }
     };
 
-    loadQuizResult();
+    // Pequeno delay para garantir que a navegação foi completada
+    const timeoutId = setTimeout(loadQuizResult, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, [navigate]);
 
   const handleReset = () => {
+    console.log('Resetting quiz...');
     localStorage.removeItem('quiz_result');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
     navigate('/');
   };
 
@@ -50,6 +71,7 @@ const ResultPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-4">Resultado não encontrado</h2>
+          <p className="mb-4 text-gray-600">Não foi possível carregar seu resultado do quiz.</p>
           <button 
             onClick={() => navigate('/')}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
