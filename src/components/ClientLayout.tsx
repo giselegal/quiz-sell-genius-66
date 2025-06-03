@@ -1,15 +1,19 @@
+
 'use client';
 
 import React from 'react';
-import dynamic from 'next/dynamic';
-const LovableClientProvider = dynamic(
-  () => import('./LovableClientProvider').then(mod => mod.LovableClientProvider),
-  { ssr: false }
+
+// Removido dynamic import do Next.js - não é necessário no Vite
+const LovableClientProvider = React.lazy(() => 
+  import('./LovableClientProvider').then(mod => ({ default: mod.LovableClientProvider }))
 );
+
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
-    <LovableClientProvider>
-      {children}
-    </LovableClientProvider>
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <LovableClientProvider>
+        {children}
+      </LovableClientProvider>
+    </React.Suspense>
   );
 }
