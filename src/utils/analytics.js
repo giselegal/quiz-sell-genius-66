@@ -146,10 +146,7 @@ export const captureUTMParameters = () => {
     window.gtag('set', 'user_properties', utmParams);
   }
   
-  // Enviar para Facebook Pixel
-  if (window.fbq && Object.keys(utmParams).length > 0) {
-    window.fbq('trackCustom', 'UTMCapture', utmParams);
-  }
+  // Facebook Pixel - REMOVIDO: UTMCapture não é um evento principal
   
   // DataLayer para Google Tag Manager
   if (window.dataLayer && Object.keys(utmParams).length > 0) {
@@ -213,13 +210,13 @@ export const clearAnalyticsData = () => {
 };
 
 /**
- * Testa a configuração do Facebook Pixel enviando um evento de PageView.
+ * Testa a configuração do Facebook Pixel enviando um evento de teste principal.
  * (Esta é uma função de exemplo, pode precisar de ajustes)
  */
 export const testFacebookPixel = () => {
   if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', 'PageView');
-    console.log('[Analytics] Evento PageView de teste enviado para o Facebook Pixel.');
+    window.fbq('trackCustom', 'QuizStart', { test: true });
+    console.log('[Analytics] Evento QuizStart de teste enviado para o Facebook Pixel.');
     return true;
   }
   console.warn('[Analytics] Facebook Pixel (window.fbq) não encontrado.');

@@ -28,6 +28,7 @@ const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
 const QuizOfferPageV2 = lazy(() => import('./pages/quiz-descubra-seu-estilo-v2'));
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
+const CreativeAnalyticsPageNew = lazy(() => import('./pages/CreativeAnalyticsPageNew'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const AccessLoaderPage = lazy(() => import('./pages/AccessLoaderPage'));
 
@@ -95,8 +96,10 @@ const App = () => {
                   <Route path="/dashboard/*" element={<DashboardPage />} />
                   {/* Redirecionamento para não quebrar links antigos */}
                   <Route path="/admin/*" element={<Navigate to="/dashboard" replace />} />
-                  {/* ANALYTICS DE CRIATIVOS - Página específica */}
-                  <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
+                  {/* ANALYTICS DE CRIATIVOS - Nova página melhorada */}
+                  <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPageNew />} />
+                  {/* ANALYTICS DE CRIATIVOS - Página antiga (backup) */}
+                  <Route path="/admin/creative-analytics-old" element={<CreativeAnalyticsPage />} />
                   {/* 404 */}
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>

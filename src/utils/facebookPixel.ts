@@ -30,7 +30,8 @@ export const initFacebookPixel = (pixelId: string): boolean => {
     window._fbq = window._fbq || window.fbq;
     
     window.fbq('init', pixelId);
-    window.fbq('track', 'PageView');
+    // Facebook Pixel - REMOVIDO: PageView automático não é evento principal
+    // window.fbq('track', 'PageView');
     
     console.log(`Facebook Pixel initialized with ID: ${pixelId}`);
     return true;
@@ -68,7 +69,7 @@ export const trackPixelEvent = (
 };
 
 /**
- * Track PageView event on route change
+ * Track PageView event on route change - OTIMIZADO
  * @param url The URL to track
  */
 export const trackPageView = (url?: string): void => {
@@ -77,10 +78,11 @@ export const trackPageView = (url?: string): void => {
       return;
     }
 
-    window.fbq('track', 'PageView');
+    // Facebook Pixel - REMOVIDO: PageView não é evento principal
+    // window.fbq('track', 'PageView');
     
     if (url) {
-      console.log(`Tracked Facebook Pixel PageView: ${url}`);
+      console.log(`Facebook Pixel PageView removido para otimização: ${url}`);
     }
   } catch (error) {
     console.error('Error tracking Facebook Pixel PageView:', error);
