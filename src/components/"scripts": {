@@ -1,4 +1,0 @@
-"scripts": {
-  …,
-  "lighthouse": "lighthouse http://localhost:4173 --output html --quiet --chrome-flags='--headless'"
-}
