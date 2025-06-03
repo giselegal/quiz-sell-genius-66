@@ -1,54 +1,40 @@
 
-declare module '@lovable/react' {
-  import React from 'react';
-
-  interface LovableProviderProps {
-    children: React.ReactNode;
-    projectId?: string;
-    enableLiveMode?: boolean;
-    enableRealTimeSync?: boolean;
-  }
-  export const LovableProvider: (props: LovableProviderProps) => JSX.Element;
-
-  // Script do editor aprimorado
-  interface EditorScriptProps {
-    enableInlineEditing?: boolean;
-    enableRealTimeSync?: boolean;
-  }
-  export const EditorScript: (props?: EditorScriptProps) => JSX.Element;
-
-  interface EditableProps {
-    id: string;
-    children: React.ReactNode;
-    type?: 'text' | 'image' | 'component';
-    onEdit?: (content: any) => void;
-  }
-  export const Editable: (props: EditableProps) => JSX.Element;
-
-  // Novos componentes para versão 2.1.0
-  interface VisualEditorProps {
-    componentId: string;
-    children: React.ReactNode;
-    enableInlineEdit?: boolean;
-  }
-  export const VisualEditor: (props: VisualEditorProps) => JSX.Element;
-
-  interface LivePreviewProps {
-    children: React.ReactNode;
-    updateMode?: 'instant' | 'debounced';
-  }
-  export const LivePreview: (props: LivePreviewProps) => JSX.Element;
+// Local Lovable type definitions
+interface LovableProviderProps {
+  children: React.ReactNode;
+  projectId?: string;
+  enableLiveMode?: boolean;
+  enableRealTimeSync?: boolean;
 }
 
-declare module '@lovable/editor' {
-  export interface EditorAPI {
-    saveComponent: (id: string, data: any) => Promise<void>;
-    loadComponent: (id: string) => Promise<any>;
-    enableRealTimeSync: () => void;
-    disableRealTimeSync: () => void;
-  }
-  
-  export const useEditorAPI: () => EditorAPI;
+interface EditorScriptProps {
+  enableInlineEditing?: boolean;
+  enableRealTimeSync?: boolean;
+}
+
+interface EditableProps {
+  id: string;
+  children: React.ReactNode;
+  type?: 'text' | 'image' | 'component';
+  onEdit?: (content: any) => void;
+}
+
+interface VisualEditorProps {
+  componentId: string;
+  children: React.ReactNode;
+  enableInlineEdit?: boolean;
+}
+
+interface LivePreviewProps {
+  children: React.ReactNode;
+  updateMode?: 'instant' | 'debounced';
+}
+
+interface EditorAPI {
+  saveComponent: (id: string, data: any) => Promise<void>;
+  loadComponent: (id: string) => Promise<any>;
+  enableRealTimeSync: () => void;
+  disableRealTimeSync: () => void;
 }
 
 // Configurações globais aprimoradas

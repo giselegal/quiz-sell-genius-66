@@ -74,7 +74,6 @@ export default defineConfig(({ mode }) => ({
           'analytics': ['./src/utils/analytics', './src/utils/facebookPixel'],
           'charts': ['recharts'],
           'animations': ['framer-motion'],
-          'lovable': ['@lovable/react'],
         },
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
@@ -97,7 +96,7 @@ export default defineConfig(({ mode }) => ({
   },
   
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', '@lovable/react'],
+    include: ['react', 'react-dom', 'react-router-dom'],
     exclude: ['@huggingface/transformers'],
   },
   
