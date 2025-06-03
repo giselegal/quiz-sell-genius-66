@@ -9,8 +9,8 @@ export const trackPageView = (path: string, data?: any) => {
   console.log('Page view tracked:', path, data);
 };
 
-export const trackButtonClick = (buttonName: string, data?: any) => {
-  console.log('Button click tracked:', buttonName, data);
+export const trackButtonClick = (buttonName: string, data?: any, extra1?: any, extra2?: any) => {
+  console.log('Button click tracked:', buttonName, data, extra1, extra2);
 };
 
 export const trackSaleConversion = (value: number, currency = 'BRL') => {

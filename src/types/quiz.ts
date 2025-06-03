@@ -4,13 +4,15 @@ export interface QuizOption {
   text: string;
   imageUrl?: string;
   value?: string;
+  styleCategory?: string;
+  points?: number;
 }
 
 export interface Question {
   id: string;
   text: string;
   title: string;
-  type: 'image' | 'text';
+  type: 'image' | 'text' | 'both';
   imageUrl?: string;
   options: QuizOption[];
   multiSelect?: number;
@@ -21,7 +23,7 @@ export interface QuizQuestion {
   id: string;
   text: string;
   title: string;
-  type: 'image' | 'text';
+  type: 'image' | 'text' | 'both';
   imageUrl?: string;
   options: QuizOption[];
   multiSelect: number;
