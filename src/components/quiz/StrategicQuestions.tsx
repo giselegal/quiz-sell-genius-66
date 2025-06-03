@@ -5,11 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import { QuizQuestion } from '@/types/quiz';
+import { UserResponse } from '@/types/quiz';
 import OptimizedImage from '../ui/optimized-image';
 
 interface StrategicQuestionsProps {
-  questions: QuizQuestion[];
-  onComplete: (answers: Record<string, string[]>) => void;
+  currentQuestionIndex: number;
+  answers: Record<string, string[]>;
+  onAnswer: (response: UserResponse) => void;
+  questions?: QuizQuestion[];
+  onComplete?: (answers: Record<string, string[]>) => void;
 }
 
 interface BankImage {
@@ -46,19 +50,43 @@ const strategicImageBank: BankImage[] = [
   }
 ];
 
-const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ questions, onComplete }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string[]>>({});
+// Mock questions for now - these should come from props in the future
+const mockQuestions: QuizQuestion[] = [
+  {
+    id: "strategic-1",
+    title: "Qual estilo mais combina com você?",
+    text: "Escolha a opção que mais representa seu estilo pessoal:",
+    type: "image",
+    options: [
+      { id: "classic", text: "Clássico e Elegante", styleCategory: "classic" },
+      { id: "romantic", text: "Romântico e Feminino", styleCategory: "romantic" },
+      { id: "natural", text: "Natural e Casual", styleCategory: "natural" },
+      { id: "modern", text: "Moderno e Sofisticado", styleCategory: "modern" },
+      { id: "creative", text: "Criativo e Único", styleCategory: "creative" }
+    ],
+    multiSelect: 1
+  }
+];
+
+const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ 
+  currentQuestionIndex, 
+  answers, 
+  onAnswer, 
+  questions = mockQuestions, 
+  onComplete 
+}) => {
+  const [localQuestionIndex, setLocalQuestionIndex] = useState(0);
+  const [localAnswers, setLocalAnswers] = useState<Record<string, string[]>>(answers);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const currentQuestion = questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+  const currentQuestion = questions[localQuestionIndex];
+  const progress = ((localQuestionIndex + 1) / questions.length) * 100;
 
   const handleAnswerSelect = (questionId: string, optionId: string) => {
     const question = questions.find(q => q.id === questionId);
     if (!question) return;
 
-    setAnswers(prev => {
+    setLocalAnswers(prev => {
       const currentAnswers = prev[questionId] || [];
       
       if (question.multiSelect > 1) {
@@ -69,28 +97,38 @@ const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ questions, onCo
         }
         return prev;
       } else {
-        return { ...prev, [questionId]: [optionId] };
+        const newAnswers = { ...prev, [questionId]: [optionId] };
+        
+        // Call onAnswer with the response
+        onAnswer({
+          questionId,
+          selectedOptions: [optionId]
+        });
+        
+        return newAnswers;
       }
     });
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    if (localQuestionIndex < questions.length - 1) {
       setIsAnimating(true);
       setTimeout(() => {
-        setCurrentQuestionIndex(prev => prev + 1);
+        setLocalQuestionIndex(prev => prev + 1);
         setIsAnimating(false);
       }, 150);
     } else {
-      onComplete(answers);
+      if (onComplete) {
+        onComplete(localAnswers);
+      }
     }
   };
 
   const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
+    if (localQuestionIndex > 0) {
       setIsAnimating(true);
       setTimeout(() => {
-        setCurrentQuestionIndex(prev => prev - 1);
+        setLocalQuestionIndex(prev => prev - 1);
         setIsAnimating(false);
       }, 150);
     }
@@ -101,7 +139,7 @@ const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ questions, onCo
   };
 
   const canProceed = () => {
-    const currentAnswers = answers[currentQuestion?.id] || [];
+    const currentAnswers = localAnswers[currentQuestion?.id] || [];
     return currentAnswers.length > 0;
   };
 
@@ -112,7 +150,7 @@ const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ questions, onCo
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <span className="text-sm font-medium text-[#B89B7A]">
-            Pergunta {currentQuestionIndex + 1} de {questions.length}
+            Pergunta {localQuestionIndex + 1} de {questions.length}
           </span>
           <span className="text-sm text-gray-600">{Math.round(progress)}% completo</span>
         </div>
@@ -132,7 +170,7 @@ const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ questions, onCo
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {currentQuestion.options.map((option, index) => {
-              const isSelected = (answers[currentQuestion.id] || []).includes(option.id);
+              const isSelected = (localAnswers[currentQuestion.id] || []).includes(option.id);
               const imageData = getImageForOption(index);
               
               return (
@@ -176,7 +214,7 @@ const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ questions, onCo
           <div className="flex justify-between items-center">
             <Button
               onClick={handlePrevious}
-              disabled={currentQuestionIndex === 0}
+              disabled={localQuestionIndex === 0}
               variant="outline"
               className="flex items-center gap-2"
             >
@@ -189,7 +227,7 @@ const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ questions, onCo
               disabled={!canProceed()}
               className="bg-[#B89B7A] hover:bg-[#A08660] text-white flex items-center gap-2"
             >
-              {currentQuestionIndex === questions.length - 1 ? 'Finalizar Quiz' : 'Próxima'}
+              {localQuestionIndex === questions.length - 1 ? 'Finalizar Quiz' : 'Próxima'}
               <ArrowRight size={20} />
             </Button>
           </div>
@@ -199,6 +237,5 @@ const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ questions, onCo
   );
 };
 
-// Export both default and named export for compatibility
 export default StrategicQuestions;
 export { StrategicQuestions };
