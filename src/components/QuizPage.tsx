@@ -16,6 +16,8 @@ import LoadingManager from './quiz/LoadingManager';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { MainTransition } from './quiz/MainTransition';
+import { EnchantedBackground, MorphingProgressBar } from './effects/EnchantedEffects';
+import '../styles/enchanted-effects.css';
 
 const QuizPage: React.FC = () => {
   const { user, login } = useAuth();
