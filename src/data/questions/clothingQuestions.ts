@@ -4,6 +4,7 @@ import { QuizQuestion } from '../../types/quiz';
 export const clothingQuestions: QuizQuestion[] = [
   {
     id: '1',
+    text: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
     title: 'QUAL O SEU TIPO DE ROUPA FAVORITA?',
     type: 'both',
     multiSelect: 3,
@@ -68,6 +69,7 @@ export const clothingQuestions: QuizQuestion[] = [
   },
   {
     id: '3',
+    text: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
     title: 'QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?',
     type: 'both',
     multiSelect: 3,

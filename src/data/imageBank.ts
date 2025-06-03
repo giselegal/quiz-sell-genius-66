@@ -21,3 +21,5 @@ export const imageBank: BankImage[] = [
     category: 'backgrounds'
   }
 ];
+
+export const getAllImages = () => imageBank;

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { QuizQuestion, QuizOption } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
@@ -52,6 +53,7 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
   const [editedQuestion, setEditedQuestion] = useState<QuizQuestion>(
     question || {
       id: generateId(),
+      text: '',
       title: '',
       type: 'text',
       multiSelect: 3,

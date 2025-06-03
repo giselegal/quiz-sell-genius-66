@@ -4,6 +4,7 @@ import { QuizQuestion } from '../../types/quiz';
 export const accessoriesQuestions: QuizQuestion[] = [
   {
     id: '8',
+    text: 'QUAL DESSES SAPATOS VOCÊ TEM OU MAIS GOSTA?',
     title: 'QUAL DESSES SAPATOS VOCÊ TEM OU MAIS GOSTA?',
     type: 'both',
     multiSelect: 3,

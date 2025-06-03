@@ -1,8 +1,10 @@
+
 import { QuizQuestion } from '../../types/quiz';
 
 export const selfPerceptionQuestions: QuizQuestion[] = [
   {
     id: 'strategic-1',
+    text: 'Como você se sente em relação ao seu estilo pessoal hoje?',
     title: 'Como você se sente em relação ao seu estilo pessoal hoje?',
     type: 'text',
     multiSelect: 1,
@@ -32,6 +34,7 @@ export const selfPerceptionQuestions: QuizQuestion[] = [
   },
   {
     id: 'strategic-2',
+    text: 'Qual é o maior desafio que você enfrenta ao se vestir?',
     title: 'Qual é o maior desafio que você enfrenta ao se vestir?',
     type: 'text',
     multiSelect: 1,

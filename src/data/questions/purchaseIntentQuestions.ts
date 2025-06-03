@@ -1,12 +1,13 @@
+
 import { QuizQuestion } from '../../types/quiz';
 
 export const purchaseIntentQuestions: QuizQuestion[] = [
   {
     id: 'strategic-5',
+    text: 'Você já considerou investir em algum guia ou consultoria de estilo no passado?',
     title: 'Você já considerou investir em algum guia ou consultoria de estilo no passado?',
     type: 'text',
     multiSelect: 1,
-    // A questão 15 (strategic-5) não deve ter imagem
     options: [
       {
         id: 'strategic-5-1',
@@ -32,6 +33,7 @@ export const purchaseIntentQuestions: QuizQuestion[] = [
   },
   {
     id: 'strategic-6',
+    text: 'Quanto você estaria disposta a investir em um guia completo de estilo personalizado?',
     title: 'Quanto você estaria disposta a investir em um guia completo de estilo personalizado?',
     type: 'text',
     multiSelect: 1,
