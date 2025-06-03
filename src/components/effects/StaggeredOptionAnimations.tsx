@@ -11,7 +11,8 @@ interface StaggeredOptionAnimationsProps {
 const StaggeredOptionAnimations: React.FC<StaggeredOptionAnimationsProps> = ({
   children,
   isVisible,
-  questionId
+  questionId,
+  className = "grid gap-3 h-full"
 }) => {
   const [showOptions, setShowOptions] = useState(false);
 
@@ -79,7 +80,7 @@ const StaggeredOptionAnimations: React.FC<StaggeredOptionAnimationsProps> = ({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="grid gap-3 h-full"
+          className={className}
         >
           {children.map((child, index) => (
             <motion.div

@@ -16,7 +16,7 @@ import LoadingManager from './quiz/LoadingManager';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { MainTransition } from './quiz/MainTransition';
-import { EnchantedBackground, MorphingProgressBar } from './effects/EnchantedEffects';
+import { EnchantedBackground, MorphingProgress } from './effects/EnchantedEffects';
 import '../styles/enchanted-effects.css';
 
 const QuizPage: React.FC = () => {
@@ -392,8 +392,8 @@ const QuizPage: React.FC = () => {
         {/* Background Encantado */}
         {!showIntro && (
           <EnchantedBackground
-            phase={showingStrategicQuestions ? 'strategic' : 'normal'}
-            intensity={progressPercentage > 75 ? 'high' : 'medium'}
+            phase={showingStrategicQuestions ? 'strategic' : 'quiz'}
+            intensity={progressPercentage > 75 ? 0.8 : 0.5}
           />
         )}
         
@@ -402,10 +402,9 @@ const QuizPage: React.FC = () => {
         ) : (
           <>
             {/* Barra de Progresso Morphing */}
-            <MorphingProgressBar
+            <MorphingProgress
               progress={progressPercentage}
               phase={showingStrategicQuestions ? 'strategic' : 'normal'}
-              isTransitioning={showingTransition || showingFinalTransition}
             />
             
             <QuizContainer>

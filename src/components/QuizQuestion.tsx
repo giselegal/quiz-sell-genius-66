@@ -108,15 +108,16 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
         </>
       )}
       
-      <div className={cn(
-        "grid h-full",
-        getGridColumns(),
-        hasImageOptions && "mb-4 relative",
-        isStrategicQuestion && "gap-4"
-      )}>
+      <div className="w-full">
         <StaggeredOptionAnimations 
           questionId={question.id}
           isVisible={true}
+          className={cn(
+            "grid h-full",
+            getGridColumns(),
+            hasImageOptions && "mb-4 relative",
+            isStrategicQuestion && "gap-4"
+          )}
         >
           {question.options.map((option, index) => (
             <QuizOption 
