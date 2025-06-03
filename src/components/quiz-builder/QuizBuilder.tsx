@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { QuizComponentType, QuizStage, QuizBuilderState } from '@/types/quizBuilder';
@@ -13,6 +14,7 @@ import { ResultPageConfig } from '@/types/resultPageConfig';
 import { resultPageStorage } from '@/services/resultPageStorage';
 import { createBuilderStateFromQuiz, loadQuizResultConfig } from '@/services/quizBuilderService';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { QuizTemplate } from '@/types/quizTemplate';
 
 export const QuizBuilder: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
@@ -109,41 +111,31 @@ export const QuizBuilder: React.FC = () => {
       }
     }
     
+    // Create a mock result for preview
     const previewResult: QuizResult = {
       primaryStyle: {
         category: 'Elegante',
-        score: 12,
-        percentage: 40
+        score: 10,
+        percentage: 50
       },
-      secondaryStyles: [
-        {
-          category: 'Romântico',
-          score: 9,
-          percentage: 30
-        },
-        {
-          category: 'Clássico',
-          score: 6,
-          percentage: 20
-        },
-        {
-          category: 'Contemporâneo',
-          score: 3,
-          percentage: 10
-        }
-      ],
-      totalSelections: 30
+      secondaryStyles: [{
+        category: 'Clássico',
+        score: 8,
+        percentage: 40
+      }],
+      totalSelections: 20,
+      userName: localStorage.getItem('userName') || 'Usuário'
     };
     
     setPreviewResult(previewResult);
   };
 
-  const handleImportTemplate = (template: QuizBuilderState) => {
-    initializeStages(template.stages);
-    initializeComponents(template.components);
+  const handleImportTemplate = (builderState: QuizBuilderState) => {
+    initializeStages(builderState.stages);
+    initializeComponents(builderState.components);
     
-    if (template.stages.length > 0) {
-      setActiveStage(template.stages[0].id);
+    if (builderState.stages.length > 0) {
+      setActiveStage(builderState.stages[0].id);
     }
     
     toast({

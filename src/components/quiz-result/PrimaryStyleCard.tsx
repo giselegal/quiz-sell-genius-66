@@ -17,6 +17,7 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
   customImage
 }) => {
   const imageUrl = customImage || (styleConfig[primaryStyle.category]?.image || '');
+  const guideImageUrl = styleConfig[primaryStyle.category]?.guideImage || '';
   const description = customDescription || (styleConfig[primaryStyle.category]?.description || 'Descrição do estilo não disponível');
   
   return (
@@ -75,36 +76,82 @@ const PrimaryStyleCard: React.FC<PrimaryStyleCardProps> = ({
           </motion.div>
           
           <motion.div 
-            className="order-first md:order-last flex justify-center"
+            className="order-first md:order-last space-y-4"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.6 }}
-            whileHover={{ scale: 1.03 }}
           >
-            {imageUrl ? (
-              <div className="relative overflow-hidden rounded-xl shadow-md">
-                <img 
-                  src={imageUrl} 
-                  alt={`Estilo ${primaryStyle.category}`} 
-                  className="w-full h-auto max-h-80 object-contain z-10 relative"
-                />
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-b from-amber-100/30 to-transparent z-0"
-                  animate={{ 
-                    opacity: [0.2, 0.4, 0.2],
-                  }}
-                  transition={{ 
-                    duration: 3, 
-                    repeat: Infinity,
-                    repeatType: "reverse" 
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg w-full h-64 flex items-center justify-center shadow-inner">
-                <p className="text-amber-700">Imagem não disponível</p>
-              </div>
-            )}
+            {/* Imagem do Estilo */}
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              {imageUrl ? (
+                <div className="relative overflow-hidden rounded-xl shadow-md">
+                  <p className="text-xs text-[#8F7A6A] font-medium mb-2">Estilo {primaryStyle.category}</p>
+                  <img 
+                    src={imageUrl} 
+                    alt={`Estilo ${primaryStyle.category}`} 
+                    className="w-full h-auto max-h-40 object-cover z-10 relative rounded-lg"
+                  />
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-b from-amber-100/30 to-transparent z-0"
+                    animate={{ 
+                      opacity: [0.2, 0.4, 0.2],
+                    }}
+                    transition={{ 
+                      duration: 3, 
+                      repeat: Infinity,
+                      repeatType: "reverse" 
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg w-full h-40 flex items-center justify-center shadow-inner">
+                  <p className="text-amber-700 text-sm">Imagem do estilo não disponível</p>
+                </div>
+              )}
+            </motion.div>
+
+            {/* Imagem do Guia */}
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 300,
+                duration: 0.6, 
+                delay: 1.6 
+              }}
+            >
+              {guideImageUrl ? (
+                <div className="relative overflow-hidden rounded-xl shadow-md">
+                  <p className="text-xs text-[#8F7A6A] font-medium mb-2">Guia de Estilo</p>
+                  <img 
+                    src={guideImageUrl} 
+                    alt={`Guia do estilo ${primaryStyle.category}`} 
+                    className="w-full h-auto max-h-40 object-cover z-10 relative rounded-lg"
+                  />
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-b from-blue-100/30 to-transparent z-0"
+                    animate={{ 
+                      opacity: [0.2, 0.4, 0.2],
+                    }}
+                    transition={{ 
+                      duration: 3, 
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      delay: 1.5
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg w-full h-40 flex items-center justify-center shadow-inner">
+                  <p className="text-blue-700 text-sm">Guia não disponível</p>
+                </div>
+              )}
+            </motion.div>
           </motion.div>
         </div>
       </Card>

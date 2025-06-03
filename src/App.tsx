@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -19,16 +18,24 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Lazy loading das páginas
+// Lazy loading das páginas principais
 const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./pages/ResultPage'));
-const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
-const AdminLoadingPage = lazy(() => import('./pages/admin/AdminLoadingPage'));
-const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
+const ResultPage = lazy(() => import('./pages/ResultPage')); // Página original de resultado
+const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage')); // Página original de oferta
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const EditorPage = lazy(() => import('./pages/admin/EditorPage'));
+const QuickVisualEditor = lazy(() => import('./components/quick-editor/QuickVisualEditor'));
+const AnalyticsPage = lazy(() => import('./pages/admin/AnalyticsPage')); // Nova página
+const CreativeAnalyticsPage = lazy(() => import('./pages/admin/CreativeAnalyticsPage'));
+const ABTestsPage = lazy(() => import('./pages/admin/ABTestsPage'));
+const QuickMetricsPage = lazy(() => import('./pages/admin/QuickMetricsPage'));
+const HeaderEditorPage = lazy(() => import('./pages/admin/HeaderEditorPage')); // Editor do Header
+const ResultPageEditorPage = lazy(() => import('./pages/admin/ResultPageEditorPage')); // Editor da ResultPage
+const ResultPageLiveEditor = lazy(() => import('./pages/admin/ResultPageLiveEditor')); // Editor ao vivo estilo InLead/Typeform
+const BlockSystemDemo = lazy(() => import('./components/result/BlockSystemDemo')); // Demo do sistema de blocos
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const App = () => {
-  // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
       loadFacebookPixel();
@@ -46,28 +53,36 @@ const App = () => {
           <Router>
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                {/* ROTA PRINCIPAL - Quiz com introdução */}
+                {/* ROTA PRINCIPAL - Quiz */}
                 <Route path="/" element={<QuizPage />} />
                 
-                {/* ADMIN - Tela de carregamento de análise de código */}
-                <Route path="/admin" element={<AdminLoadingPage />} />
-                <Route path="/admin/*" element={<AdminLoadingPage />} />
-                
-                {/* ANALYTICS DE CRIATIVOS - Página específica */}
+                {/* ADMIN - Rotas principais */}
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/editor" element={<EditorPage />} />
+                <Route path="/admin/quick-editor" element={<QuickVisualEditor />} />
+                <Route path="/admin/live-editor" element={<ResultPageLiveEditor />} /> {/* Editor ao vivo estilo InLead/Typeform */}
+                <Route path="/admin/analytics" element={<AnalyticsPage />} /> {/* Nova rota */}
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
+                <Route path="/admin/ab-tests" element={<ABTestsPage />} />
+                <Route path="/admin/quick-metrics" element={<QuickMetricsPage />} />
+                <Route path="/admin/header-editor" element={<HeaderEditorPage />} /> {/* Editor do Header */}
+                <Route path="/admin/resultpage-editor" element={<ResultPageEditorPage />} /> {/* Editor da ResultPage */}
                 
-                {/* RESULTADO - Página de resultados do quiz */}
+                {/* RESULTADO - Página de resultados */}
                 <Route path="/resultado" element={<ResultPage />} />
                 
-                {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
+                {/* DEMO - Sistema de blocos */}
+                <Route path="/demo-blocks" element={<BlockSystemDemo />} />
+                
+                {/* OFERTA - Página de oferta */}
                 <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
                 
-                {/* Redirecionamentos para manter compatibilidade */}
+                {/* Redirecionamentos */}
                 <Route path="/home" element={<Navigate to="/" replace />} />
                 <Route path="/quiz" element={<Navigate to="/" replace />} />
-                <Route path="/result" element={<Navigate to="/resultado" replace />} />
+                <Route path="/admin/dashboard" element={<Navigate to="/admin" replace />} />
                 
-                {/* 404 - Página não encontrada */}
+                {/* 404 */}
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>

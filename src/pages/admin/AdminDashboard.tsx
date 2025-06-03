@@ -1,145 +1,147 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
+import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useNavigate } from 'react-router-dom';
-import { BarChart3, Users, ShoppingCart, TrendingUp } from 'lucide-react';
+import { 
+  BarChart3, 
+  Settings, 
+  Palette,
+  Eye,
+  PieChart,
+  TrendingUp,
+  Users,
+  Target,
+  Edit,
+  TestTube
+} from 'lucide-react';
 
-export default function AdminDashboard() {
-  const navigate = useNavigate();
+const DashboardCard = ({
+  title,
+  description,
+  linkTo,
+  buttonText,
+  icon: Icon,
+  status = 'Ativo'
+}: {
+  title: string;
+  description: string;
+  linkTo: string;
+  buttonText: string;
+  icon: any;
+  status?: string;
+}) => (
+  <Card className="hover:shadow-lg transition-shadow">
+    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardTitle className="text-sm font-medium">{title}</CardTitle>
+      <Icon className="h-4 w-4 text-[#B89B7A]" />
+    </CardHeader>
+    <CardContent>
+      <CardDescription className="mb-4">{description}</CardDescription>
+      <div className="flex items-center justify-between">
+        <Badge variant={status === 'Ativo' ? 'default' : 'secondary'}>
+          {status}
+        </Badge>
+        <Link to={linkTo}>
+          <Button variant="outline" size="sm" disabled={status !== 'Ativo'}>
+            {buttonText}
+          </Button>
+        </Link>
+      </div>
+    </CardContent>
+  </Card>
+);
 
-  const stats = [
-    {
-      title: "Total de Participantes",
-      value: "1,234",
-      description: "+12% desde o último mês",
-      icon: Users,
-      color: "text-blue-600"
+const AdminDashboard = () => {
+  const cardsData = [
+    { 
+      title: "Editor Unificado", 
+      description: "Edite quiz, páginas de resultados e vendas de forma centralizada.", 
+      linkTo: "/admin/editor", 
+      buttonText: "Abrir Editor",
+      icon: Edit
     },
-    {
-      title: "Taxa de Conversão",
-      value: "23.5%",
-      description: "+3.2% desde a semana passada",
-      icon: TrendingUp,
-      color: "text-green-600"
+    { 
+      title: "Editor Ao Vivo", 
+      description: "Editor visual moderno estilo InLead/Typeform.", 
+      linkTo: "/admin/live-editor", 
+      buttonText: "Abrir Editor",
+      icon: Palette
     },
-    {
-      title: "Vendas Totais",
-      value: "R$ 45.2k",
-      description: "+18% desde o último mês",
-      icon: ShoppingCart,
-      color: "text-purple-600"
+    { 
+      title: "Analytics Principal", 
+      description: "Visualize as métricas chave de desempenho do seu funil.", 
+      linkTo: "/admin/analytics", 
+      buttonText: "Ver Analytics",
+      icon: BarChart3
     },
-    {
-      title: "Quiz Completados",
-      value: "892",
-      description: "+7% desde ontem",
-      icon: BarChart3,
-      color: "text-orange-600"
+    { 
+      title: "Analytics de Criativos", 
+      description: "Analise a performance dos seus anúncios e criativos.", 
+      linkTo: "/admin/creative-analytics", 
+      buttonText: "Analisar Criativos",
+      icon: PieChart
+    },
+    { 
+      title: "Testes A/B", 
+      description: "Gerencie e configure seus testes A/B para otimizar conversões.", 
+      linkTo: "/admin/ab-tests", 
+      buttonText: "Gerenciar Testes",
+      icon: TestTube
+    },
+    { 
+      title: "Métricas Rápidas", 
+      description: "Acesse um resumo das métricas mais importantes rapidamente.", 
+      linkTo: "/admin/quick-metrics", 
+      buttonText: "Ver Métricas",
+      icon: TrendingUp
+    },
+    { 
+      title: "Ver Resultados", 
+      description: "Visualize os resultados dos quizzes enviados pelos usuários.", 
+      linkTo: "/resultado", 
+      buttonText: "Ver Resultados",
+      icon: Eye
+    },
+    { 
+      title: "Quiz Principal", 
+      description: "Acesse e visualize o quiz principal como um usuário.", 
+      linkTo: "/", 
+      buttonText: "Ver Quiz",
+      icon: Users
+    },
+    { 
+      title: "Editor de Header", 
+      description: "Personalize o cabeçalho da página de resultado do quiz.", 
+      linkTo: "/admin/header-editor", 
+      buttonText: "Editar Header",
+      icon: Settings
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Dashboard Administrativo
-            </h1>
-            <p className="text-gray-600">
-              Bem-vindo ao painel de controle do Quiz de Estilo
-            </p>
-          </div>
-          <Badge variant="outline" className="text-green-700 border-green-700">
-            Sistema Online
-          </Badge>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={index}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {stat.title}
-                  </CardTitle>
-                  <Icon className={`h-4 w-4 ${stat.color}`} />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <p className="text-xs text-gray-600">
-                    {stat.description}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Ações Rápidas</CardTitle>
-              <CardDescription>
-                Gerenciar componentes principais do sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button 
-                onClick={() => navigate('/')} 
-                className="w-full justify-start"
-                variant="outline"
-              >
-                Ver Quiz Principal
-              </Button>
-              <Button 
-                onClick={() => navigate('/resultado')} 
-                className="w-full justify-start"
-                variant="outline"
-              >
-                Página de Resultados
-              </Button>
-              <Button 
-                onClick={() => navigate('/quiz-descubra-seu-estilo')} 
-                className="w-full justify-start"
-                variant="outline"
-              >
-                Quiz de Oferta
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Status do Sistema</CardTitle>
-              <CardDescription>
-                Monitoramento em tempo real
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Quiz Principal</span>
-                <Badge className="bg-green-100 text-green-800">Online</Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Página de Resultados</span>
-                <Badge className="bg-green-100 text-green-800">Online</Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Analytics</span>
-                <Badge className="bg-green-100 text-green-800">Ativo</Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm">Integrações</span>
-                <Badge className="bg-green-100 text-green-800">Conectado</Badge>
-              </div>
-            </CardContent>
-          </Card>
+    <AdminLayout>
+      <div className="p-4 md:p-6">
+        <h1 className="text-3xl font-bold text-[#432818] mb-8 text-center md:text-left">
+          Painel de Administração
+        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {cardsData.map((card) => (
+            <DashboardCard
+              key={card.title}
+              title={card.title}
+              description={card.description}
+              linkTo={card.linkTo}
+              buttonText={card.buttonText}
+              icon={card.icon}
+            />
+          ))}
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
-}
+};
+
+export default AdminDashboard;

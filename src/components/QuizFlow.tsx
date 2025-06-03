@@ -1,8 +1,8 @@
 
+"use client";
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type QuestionOption = {
   id: string;
@@ -35,76 +35,128 @@ const quizQuestions: Question[] = [
       { id: 'q2_b', text: 'Converter leads', value: 10 },
       { id: 'q2_c', text: 'Fidelizar clientes', value: 5 }
     ]
+  },
+  {
+    id: 'q3',
+    text: 'Quanto tempo você dedica ao seu negócio por semana?',
+    options: [
+      { id: 'q3_a', text: 'Menos de 20 horas', value: 3 },
+      { id: 'q3_b', text: '20 a 40 horas', value: 7 },
+      { id: 'q3_c', text: 'Mais de 40 horas', value: 10 }
+    ]
   }
 ];
 
-const QuizFlow: React.FC = () => {
+export default function QuizFlow() {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, QuestionOption>>({});
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
 
-  const currentQuestion = quizQuestions[currentQuestionIndex];
-  const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1;
-
-  const handleAnswer = (optionId: string) => {
+  const handleOptionClick = (option: QuestionOption) => {
+    // Salva a resposta selecionada
     setAnswers(prev => ({
       ...prev,
-      [currentQuestion.id]: optionId
+      [quizQuestions[currentQuestion].id]: option
     }));
-  };
 
-  const handleNext = () => {
-    if (isLastQuestion) {
-      // Simular resultado e navegar para página de resultado
-      navigate('/resultado');
+    // Avança para a próxima pergunta ou finaliza o quiz
+    if (currentQuestion < quizQuestions.length - 1) {
+      setCurrentQuestion(prev => prev + 1);
     } else {
-      setCurrentQuestionIndex(prev => prev + 1);
+      // Finaliza o quiz e calcula o resultado
+      setIsLoading(true);
+      setTimeout(() => {
+        // Simula o processamento do resultado
+        const resultId = calculateResultId(answers);
+        navigate(`/resultado/${resultId}`);
+      }, 1000);
     }
   };
 
-  const canProceed = answers[currentQuestion.id];
+  // Função simples para calcular um ID de resultado com base nas respostas
+  const calculateResultId = (userAnswers: Record<string, QuestionOption>) => {
+    const totalScore = Object.values(userAnswers).reduce((sum, option) => sum + option.value, 0);
+    // Gerar um ID de resultado baseado no score total
+    return `result_${totalScore}`;
+  };
 
-  if (!currentQuestion) {
-    return <div>Carregando quiz...</div>;
-  }
+  const question = quizQuestions[currentQuestion];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle className="text-center">
-            Pergunta {currentQuestionIndex + 1} de {quizQuestions.length}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <h2 className="text-xl font-medium text-center">
-            {currentQuestion.text}
-          </h2>
-          
-          <div className="space-y-3">
-            {currentQuestion.options.map((option) => (
-              <Button
-                key={option.id}
-                variant={answers[currentQuestion.id] === option.id ? "default" : "outline"}
-                className="w-full text-left justify-start"
-                onClick={() => handleAnswer(option.id)}
-              >
-                {option.text}
-              </Button>
-            ))}
-          </div>
-          
-          <Button 
-            onClick={handleNext}
-            disabled={!canProceed}
-            className="w-full"
+    <div 
+      className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4"
+      data-lovable-component="quiz-flow"
+      data-lovable-editable="true"
+    >
+      <h1 
+        className="mb-8 text-3xl font-bold text-brand-primary"
+        data-lovable-component="quiz-title"
+        data-lovable-editable="true"
+      >
+        Quiz de Negócios
+      </h1>
+      
+      <div 
+        className="w-full max-w-md rounded-lg border bg-card p-6 shadow-lg"
+        data-lovable-component="quiz-container"
+      >
+        {isLoading ? (
+          <div 
+            className="flex flex-col items-center justify-center py-8"
+            data-lovable-component="quiz-loading"
+            data-lovable-editable="true"
           >
-            {isLastQuestion ? 'Ver Resultado' : 'Próxima'}
-          </Button>
-        </CardContent>
-      </Card>
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+            <p className="text-lg font-medium">Calculando seu resultado...</p>
+          </div>
+        ) : (
+          <>
+            <div 
+              className="mb-4 flex w-full justify-between text-sm text-muted-foreground"
+              data-lovable-component="quiz-progress-text"
+              data-lovable-editable="true"
+            >
+              <span>Pergunta {currentQuestion + 1} de {quizQuestions.length}</span>
+              <span>{Math.round(((currentQuestion + 1) / quizQuestions.length) * 100)}%</span>
+            </div>
+            
+            <div 
+              className="mb-6 h-2 w-full overflow-hidden rounded-full bg-muted"
+              data-lovable-component="quiz-progress-bar"
+            >
+              <div 
+                className="h-full bg-primary transition-all duration-300 ease-in-out" 
+                style={{ width: `${((currentQuestion + 1) / quizQuestions.length) * 100}%` }}
+              ></div>
+            </div>
+
+            <h2 
+              className="mb-6 text-xl font-medium"
+              data-lovable-component="quiz-question"
+            >
+              {question.text}
+            </h2>
+
+            <div 
+              className="space-y-3"
+              data-lovable-component="quiz-options"
+            >
+              {question.options.map(option => (
+                <button
+                  key={option.id}
+                  className="w-full rounded-lg border bg-card p-4 text-left hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary"
+                  onClick={() => handleOptionClick(option)}
+                  data-lovable-component="quiz-option"
+                  data-lovable-editable="true"
+                >
+                  {option.text}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
-};
-
-export default QuizFlow;
+}

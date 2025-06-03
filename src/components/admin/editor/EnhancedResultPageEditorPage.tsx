@@ -1,7 +1,7 @@
-
 "use client";
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'react-router-dom';
+import { useUniversalNavigation } from '@/hooks/useUniversalNavigation';
 import { Button } from '../../ui/button';
 import { toast } from '../../ui/use-toast';
 import { DndProvider } from 'react-dnd';
@@ -27,7 +27,7 @@ interface PageData {
 
 export default function EnhancedResultPageEditorPage() {
   const { id } = useParams();
-  const router = useRouter();
+  const router = useUniversalNavigation();
   const [pageData, setPageData] = useState<PageData | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<Component | null>(null);
   const [loading, setLoading] = useState(true);

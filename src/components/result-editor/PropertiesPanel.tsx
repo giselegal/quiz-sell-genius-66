@@ -25,6 +25,7 @@ import FAQBlockEditor from './block-editors/FAQBlockEditor';
 import CarouselBlockEditor from './block-editors/CarouselBlockEditor';
 import CustomCodeBlockEditor from './block-editors/CustomCodeBlockEditor';
 import AnimationBlockEditor from './block-editors/AnimationBlockEditor';
+import AntesDepoisTransformacaoBlockEditor from './block-editors/AntesDepoisTransformacaoBlockEditor';
 import StyleEditor from './style-editors/StyleEditor';
 
 interface PropertiesPanelProps {
@@ -103,6 +104,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return 'Código Personalizado';
       case 'animation-block':
         return 'Bloco com Animação';
+      case 'antes-depois-transformacao':
+        return 'Antes e Depois - Transformação';
       default:
         return 'Componente';
     }
@@ -152,6 +155,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         return <CustomCodeBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
       case 'animation-block':
         return <AnimationBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
+      case 'antes-depois-transformacao':
+        return <AntesDepoisTransformacaoBlockEditor block={selectedBlock} onUpdate={(content) => onUpdate(selectedBlock.id, content)} />;
       default:
         return <div>Editor não disponível para este tipo de bloco</div>;
     }

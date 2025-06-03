@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '../ui/button';
@@ -110,6 +111,19 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
     if (isLoading) return;
     setActiveIndex((prev) => (prev - 1 + transformations.length) % transformations.length);
   };
+
+  // Add styles to document head
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const styleId = 'cta-pulse-style';
+      if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.innerHTML = `@keyframes cta-pulse {0% { box-shadow: 0 0 0 0 rgba(184,155,122,0.25); }70% { box-shadow: 0 0 0 10px rgba(184,155,122,0.08); }100% { box-shadow: 0 0 0 0 rgba(184,155,122,0.25); }}.animate-cta-pulse {animation: cta-pulse 1.8s infinite;}`;
+        document.head.appendChild(style);
+      }
+    }
+  }, []);
 
   if (isLoading) {
     return (
@@ -370,18 +384,6 @@ const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({ h
           </div>
         </div>
       </Card>
-      {/* Adiciona a animação de pulso suave para o botão CTA (CSS global) */}
-      {typeof window !== 'undefined' && (
-        (() => {
-          const styleId = 'cta-pulse-style';
-          if (!document.getElementById(styleId)) {
-            const style = document.createElement('style');
-            style.id = styleId;
-            style.innerHTML = `@keyframes cta-pulse {0% { box-shadow: 0 0 0 0 rgba(184,155,122,0.25); }70% { box-shadow: 0 0 0 10px rgba(184,155,122,0.08); }100% { box-shadow: 0 0 0 0 rgba(184,155,122,0.25); }}.animate-cta-pulse {animation: cta-pulse 1.8s infinite;}`;
-            document.head.appendChild(style);
-          }
-        })()
-      )}
     </div>
   );
 };

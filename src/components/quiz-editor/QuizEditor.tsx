@@ -53,31 +53,31 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
     }
   }, [activeTab, initialTemplate]);
 
-  const handleAddQuestion = () => {
-    const newQuestion: QuizQuestion = {
+  const createNewQuestion = (): QuizQuestion => {
+    return {
       id: generateId(),
       title: 'Nova Pergunta',
-      type: 'text',
-      multiSelect: 3,
-      options: []
+      subtitle: '',
+      imageUrl: '',
+      options: [],
+      multiSelect: 1,
+      type: 'single' as const
     };
-    
+  };
+
+  const addQuestion = () => {
+    const newQuestion = createNewQuestion();
+    const updatedQuestions = [...editorState.questions, newQuestion];
     setEditorState(prevState => ({
       ...prevState,
-      questions: [...prevState.questions, newQuestion],
+      questions: updatedQuestions,
       editingQuestionId: newQuestion.id
     }));
+    onQuestionsUpdate?.(updatedQuestions);
   };
 
-  const handleEditQuestion = (questionId: string) => {
-    setEditorState(prevState => ({
-      ...prevState,
-      editingQuestionId: questionId
-    }));
-  };
-
-  const handleSaveQuestion = (updatedQuestion: QuizQuestion) => {
-    const updatedQuestions = editorState.questions.map(q => 
+  const handleQuestionSave = (updatedQuestion: QuizQuestion) => {
+    const updatedQuestions = editorState.questions.map(q =>
       q.id === updatedQuestion.id ? updatedQuestion : q
     );
     
@@ -87,7 +87,6 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
       editingQuestionId: null
     }));
     
-    // Atualizar todas as perguntas do template
     if (initialTemplate && onQuestionsUpdate) {
       const allQuestions = [...initialTemplate.questions];
       const questionIndex = allQuestions.findIndex(q => q.id === updatedQuestion.id);
@@ -107,8 +106,17 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
     });
   };
 
-  const handleDeleteQuestion = (questionId: string) => {
-    const updatedQuestions = editorState.questions.filter(q => q.id !== questionId);
+  const handleQuestionCancel = () => {
+    setEditorState(prevState => ({
+      ...prevState,
+      editingQuestionId: null
+    }));
+  };
+
+  const handleQuestionDelete = () => {
+    if (!editorState.editingQuestionId) return;
+    
+    const updatedQuestions = editorState.questions.filter(q => q.id !== editorState.editingQuestionId);
     
     setEditorState(prevState => ({
       ...prevState,
@@ -116,9 +124,8 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
       editingQuestionId: null
     }));
     
-    // Atualizar todas as perguntas do template
     if (initialTemplate && onQuestionsUpdate) {
-      const allQuestions = initialTemplate.questions.filter(q => q.id !== questionId);
+      const allQuestions = initialTemplate.questions.filter(q => q.id !== editorState.editingQuestionId);
       onQuestionsUpdate(allQuestions);
     }
     
@@ -199,7 +206,7 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
                         q => q.id.includes(category.id)
                       ) || []
                 }
-                onEditQuestion={handleEditQuestion}
+                onEditQuestion={(questionId) => setEditorState(prev => ({ ...prev, editingQuestionId: questionId }))}
               />
             ))}
           </TabsContent>
@@ -218,7 +225,7 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
                         q => q.id.includes(category.id)
                       ) || []
                 }
-                onEditQuestion={handleEditQuestion}
+                onEditQuestion={(questionId) => setEditorState(prev => ({ ...prev, editingQuestionId: questionId }))}
               />
             ))}
           </TabsContent>
@@ -226,7 +233,7 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
         
         <div className="mt-6">
           <Button 
-            onClick={handleAddQuestion} 
+            onClick={addQuestion} 
             className="w-full bg-[#B89B7A] hover:bg-[#A38A69]"
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -237,19 +244,19 @@ const QuizEditor: React.FC<QuizEditorProps> = ({
       
       {/* Right side - Question editor */}
       <div className="flex-1 overflow-auto p-4">
-        {isEditingQuestion ? (
+        {isEditingQuestion && currentQuestion ? (
           <QuestionEditor 
             question={currentQuestion}
-            onSave={handleSaveQuestion}
-            onCancel={() => setEditorState(prev => ({...prev, editingQuestionId: null}))}
-            onDelete={() => currentQuestion && handleDeleteQuestion(currentQuestion.id)}
+            onSave={handleQuestionSave}
+            onCancel={handleQuestionCancel}
+            onDelete={handleQuestionDelete}
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
             <p className="text-lg mb-4">Selecione uma pergunta para editar ou crie uma nova.</p>
             <Button 
               variant="outline" 
-              onClick={handleAddQuestion}
+              onClick={addQuestion}
               className="border-[#B89B7A] text-[#B89B7A]"
             >
               <Plus className="w-4 h-4 mr-2" />

@@ -16,7 +16,7 @@ import { GripVertical, Image, Trash2 } from 'lucide-react';
 
 interface QuestionOptionEditorProps {
   option: QuizOption;
-  questionType: 'text' | 'image' | 'both';
+  questionType: 'single' | 'multiple';
   onUpdate: (option: QuizOption) => void;
   onDelete: () => void;
   index: number;
@@ -90,40 +90,38 @@ const QuestionOptionEditor: React.FC<QuestionOptionEditorProps> = ({
               </div>
             </div>
             
-            {(questionType === 'image' || questionType === 'both') && (
-              <div>
-                <Label htmlFor={`option-image-${option.id}`}>URL da imagem</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id={`option-image-${option.id}`}
-                    value={option.imageUrl || ''}
-                    onChange={(e) => handleChange('imageUrl', e.target.value)}
-                    placeholder="https://exemplo.com/imagem.jpg"
-                  />
-                  <Button type="button" variant="outline" size="icon" className="flex-shrink-0">
-                    <Image className="h-4 w-4" />
-                  </Button>
-                </div>
-                {option.imageUrl && (
-                  <div className="mt-2 max-w-[100px] max-h-[100px] overflow-hidden rounded border">
-                    <img 
-                      src={option.imageUrl} 
-                      alt={option.text} 
-                      className="w-full h-auto object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://placehold.co/100x100?text=Erro';
-                      }}
-                    />
-                  </div>
-                )}
+            <div>
+              <Label htmlFor={`option-image-${option.id}`}>URL da imagem</Label>
+              <div className="flex gap-2">
+                <Input
+                  id={`option-image-${option.id}`}
+                  value={option.imageUrl || ''}
+                  onChange={(e) => handleChange('imageUrl', e.target.value)}
+                  placeholder="https://exemplo.com/imagem.jpg"
+                />
+                <Button type="button" variant="outline" size="icon" className="flex-shrink-0">
+                  <Image className="h-4 w-4" />
+                </Button>
               </div>
-            )}
+              {option.imageUrl && (
+                <div className="mt-2 max-w-[100px] max-h-[100px] overflow-hidden rounded border">
+                  <img 
+                    src={option.imageUrl} 
+                    alt={option.text} 
+                    className="w-full h-auto object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://placehold.co/100x100?text=Erro';
+                    }}
+                  />
+                </div>
+              )}
+            </div>
             
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <Label htmlFor={`option-points-${option.id}`} className="mb-0">Pontos:</Label>
                 <Select
-                  value={String(option.points)}
+                  value={String(option.points || 1)}
                   onValueChange={(value) => handleChange('points', parseInt(value))}
                 >
                   <SelectTrigger id={`option-points-${option.id}`} className="w-16">

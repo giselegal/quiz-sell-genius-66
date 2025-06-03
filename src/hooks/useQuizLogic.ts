@@ -248,16 +248,19 @@ export const useQuizLogic = () => {
     const primaryStyle = styleResults[0] || null;
     const secondaryStyles = styleResults.slice(1);
 
-    const result: QuizResult = { // Explicitly type QuizResult
+    // Get userName from localStorage or context
+    const userName = localStorage.getItem('userName') || 'Usuário';
+
+    const result: QuizResult = {
       primaryStyle,
       secondaryStyles,
       totalSelections,
-      // clickOrder: clickOrderInternal // Optional: save the click order used
+      userName // Add the required userName property
     };
 
     setQuizResult(result);
     localStorage.setItem('quizResult', JSON.stringify(result));
-    localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers)); // Save strategic answers along
+    localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
     console.log('Results calculated and saved to localStorage:', result);
 
     return result;
