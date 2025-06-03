@@ -1,6 +1,18 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { QuizQuestion, StyleResult } from '@/types/quiz';
+import { Question, StyleResult } from '@/types/quiz';
+
+export const getQuizQuestions = async (): Promise<Question[]> => {
+  // Mock implementation for now
+  return [
+    {
+      id: '1',
+      text: 'Qual é o seu estilo preferido?',
+      options: ['Elegante', 'Casual', 'Romântico'],
+      imageUrl: 'https://example.com/image1.jpg'
+    }
+  ];
+};
 
 export const fetchQuizQuestions = async (quizId: string) => {
   const { data: questions, error } = await supabase

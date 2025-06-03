@@ -5,6 +5,7 @@ export interface ImageMetadata {
   format?: string;
   size?: number;
   isLoaded?: boolean;
+  alt?: string;
 }
 
 export interface ImageCacheEntry {
@@ -32,4 +33,6 @@ export interface PreloadOptions {
   quality?: number;
   batchSize?: number;
   priority?: number;
+  onProgress?: (loaded: number, total: number) => void;
+  onComplete?: () => void;
 }

@@ -26,7 +26,7 @@ export const CreativePerformanceDashboard: React.FC = () => {
     const loadCreativeData = () => {
       setIsLoading(true);
       try {
-        const data = getCreativePerformance(selectedPeriod);
+        const data = getCreativePerformance();
         setCreativesData(data);
       } catch (error) {
         console.error('Erro ao carregar dados de criativos:', error);

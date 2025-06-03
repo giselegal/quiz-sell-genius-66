@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { Question, QuizResult, StyleResult, UserResponse } from '@/types/quiz';
@@ -123,14 +124,17 @@ const useQuizLogic = (): QuizLogic => {
       percentage: (style.score / totalSelections) * 100
     }));
 
+    const userName = user?.userName || localStorage.getItem('userName') || 'Anônimo';
+
     const quizResults: QuizResult = {
       primaryStyle: primaryStyle as StyleResult,
       secondaryStyles: secondaryStyles as StyleResult[],
-      totalSelections: totalSelections
+      totalSelections: totalSelections,
+      userName: userName
     };
 
     setQuizResults(quizResults);
-  }, [answers]);
+  }, [answers, user]);
 
   const handleStrategicAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
     setStrategicAnswers(prev => ({
@@ -153,7 +157,7 @@ const useQuizLogic = (): QuizLogic => {
       return results;
     }
     return null;
-  }, [answers, strategicAnswers, quizResults, user]);
+  }, [answers, strategicAnswers, quizResults, user, questions.length]);
 
   return {
     currentQuestion,
