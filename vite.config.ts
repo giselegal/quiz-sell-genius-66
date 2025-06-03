@@ -32,11 +32,15 @@ export default defineConfig(({ mode }) => ({
     compression({
       algorithm: 'gzip',
       ext: '.gz',
+      threshold: 10240,
+      deleteOriginFile: false,
     }),
     // Compressão Brotli
     compression({
       algorithm: 'brotliCompress',
       ext: '.br',
+      threshold: 10240,
+      deleteOriginFile: false,
     }),
   ],
   
@@ -52,37 +56,49 @@ export default defineConfig(({ mode }) => ({
     assetsDir: 'assets',
     emptyOutDir: true,
     sourcemap: false,
+    target: 'es2015',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info'],
+      },
+    },
     // Configurações para evitar problemas de MIME type
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-router': ['react-router-dom'],
-          'vendor-ui': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-tooltip'
-          ],
-          'vendor-utils': [
-            'clsx', 
-            'tailwind-merge'
-          ],
-          'analytics': [
-            './src/utils/analytics.ts',
-            './src/utils/facebookPixel.ts'
-          ]
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select', '@radix-ui/react-tabs'],
+          'vendor-utils': ['lodash', 'date-fns', 'clsx', 'tailwind-merge'],
+          'analytics': ['./src/utils/analytics', './src/utils/facebookPixel'],
+          'charts': ['recharts'],
+          'animations': ['framer-motion'],
         },
-        // Garantir que os assets sejam carregados corretamente para as rotas específicas
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+        chunkFileNames: (chunkInfo) => {
+          const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
+          return `assets/${facadeModuleId}-[hash].js`;
+        },
+        assetFileNames: (assetInfo) => {
+          const extType = assetInfo.name?.split('.').at(1);
+          if (/webp|png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType || '')) {
+            return `assets/images/[name]-[hash][extname]`;
+          }
+          if (/woff2?|ttf|otf|eot/i.test(extType || '')) {
+            return `assets/fonts/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
       }
     },
+    cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
   },
   
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom']
+    include: ['react', 'react-dom', 'react-router-dom'],
+    exclude: ['@huggingface/transformers'],
   },
   
   css: {

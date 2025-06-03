@@ -1,4 +1,3 @@
-
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
@@ -68,4 +67,13 @@ if ('requestIdleCallback' in window) {
   window.requestIdleCallback(loadNonCritical, { timeout: 2000 })
 } else {
   setTimeout(loadNonCritical, 2000)
+}
+
+// Registrar Service Worker
+if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => console.log('SW registered:', registration))
+      .catch(error => console.log('SW registration failed:', error));
+  });
 }

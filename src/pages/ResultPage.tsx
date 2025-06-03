@@ -86,14 +86,14 @@ const tokens = {
   }
 };
 
-// Componente de título padronizado - SIMPLIFICADO
-const SectionTitle: React.FC<{
+// Memoizar componente de título
+const SectionTitle = React.memo<{
   children: React.ReactNode;
   subtitle?: string;
   size?: 'lg' | 'xl';
   className?: string;
   variant?: 'primary' | 'secondary' | 'simple';
-}> = ({ children, subtitle, size = 'xl', className = '', variant = 'simple' }) => (
+}>(({ children, subtitle, size = 'xl', className = '', variant = 'simple' }) => (
   <AnimatedWrapper 
     className={`text-center mb-12 ${className}`}
     animation="fade"
@@ -134,7 +134,7 @@ const SectionTitle: React.FC<{
       <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
     )}
   </AnimatedWrapper>
-);
+));
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();

@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -41,6 +40,19 @@ const isLowPerformanceDevice = () => {
   return false;
 };
 
+// Função para prefetch de componentes
+const prefetchComponent = (componentLoader: () => Promise<any>) => {
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      componentLoader();
+    });
+  } else {
+    setTimeout(() => {
+      componentLoader();
+    }, 2000);
+  }
+};
+
 const App = () => {
   const lowPerformance = isLowPerformanceDevice();
 
@@ -49,6 +61,11 @@ const App = () => {
     try {
       loadFacebookPixel();
       captureUTMParameters();
+      
+      // Prefetch de páginas mais prováveis de serem acessadas
+      if (!lowPerformance) {
+        prefetchComponent(() => import('./pages/ResultPage'));
+      }
       
       console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
     } catch (error) {

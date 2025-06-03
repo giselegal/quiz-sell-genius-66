@@ -1,108 +1,89 @@
-
-import React, { useState, useEffect } from 'react';
-import getOptimizedImageUrl from '@/utils/imageOptimizer/getOptimizedImageUrl';
-import getLowQualityPlaceholder from '@/utils/imageOptimizer/getLowQualityPlaceholder';
+import React, { useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 
 interface OptimizedImageProps {
   src: string;
   alt: string;
+  className?: string;
   width?: number;
   height?: number;
-  className?: string;
-  quality?: number;
   priority?: boolean;
-  placeholderColor?: string;
-  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   onLoad?: () => void;
-  lazy?: boolean;
-  sizes?: string;
+  quality?: number;
 }
 
-export const OptimizedImage: React.FC<OptimizedImageProps> = ({
+export const OptimizedImageEnhanced: React.FC<OptimizedImageProps> = ({
   src,
   alt,
+  className,
   width,
   height,
-  className = '',
-  quality = 80,
   priority = false,
-  placeholderColor = '#f8f5f2',
-  objectFit = 'cover',
   onLoad,
-  lazy = !priority,
-  sizes = '100vw'
+  quality = 85,
 }) => {
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
-  
-  // Get optimized image URLs
-  const optimizedSrc = src ? getOptimizedImageUrl(src, { width, height, quality }) : '';
-  const placeholderSrc = src ? getLowQualityPlaceholder(src) : '';
-  
-  // Handle image loading completion
-  const handleImageLoaded = () => {
-    setLoaded(true);
-    if (onLoad) onLoad();
-  };
-  
-  // Report load error
-  const handleImageError = () => {
-    console.error('Error loading image:', optimizedSrc);
-    setError(true);
-  };
-  
-  // Reset state on src change
-  useEffect(() => {
-    setLoaded(false);
-    setError(false);
-  }, [src]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  // Calculate aspect ratio for placeholder
-  const aspectRatio = height && width ? (height / width) : undefined;
-  const paddingBottom = aspectRatio ? `${aspectRatio * 100}%` : undefined;
-  
+  useEffect(() => {
+    if (!imgRef.current || priority) {
+      setIsInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '50px' }
+    );
+
+    observer.observe(imgRef.current);
+    return () => observer.disconnect();
+  }, [priority]);
+
+  const getOptimizedSrc = (size?: number) => {
+    if (src.includes('cloudinary')) {
+      const params = [`q_${quality}`, 'f_auto'];
+      if (size) params.push(`w_${size}`);
+      return src.replace('/upload/', `/upload/${params.join(',')}/`);
+    }
+    return src;
+  };
+
+  const srcSet = [320, 640, 768, 1024, 1280]
+    .map(size => `${getOptimizedSrc(size)} ${size}w`)
+    .join(', ');
+
   return (
-    <div 
-      className={`relative overflow-hidden ${className}`} 
-      style={{ 
-        paddingBottom: paddingBottom,
-        backgroundColor: placeholderColor
-      }}
-    >
-      {/* Placeholder or fallback */}
-      {!loaded && !error && placeholderSrc && (
-        <img
-          src={placeholderSrc}
-          alt=""
-          className={`absolute inset-0 w-full h-full object-${objectFit} transition-opacity blur-sm`}
-          aria-hidden="true"
-        />
+    <div className={cn('relative overflow-hidden', className)}>
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse" />
       )}
-      
-      {/* Main image */}
-      {!error ? (
-        <img
-          src={optimizedSrc}
-          alt={alt}
-          width={width}
-          height={height}
-          loading={lazy ? 'lazy' : 'eager'}
-          fetchPriority={priority ? 'high' : 'auto'}
-          onLoad={handleImageLoaded}
-          onError={handleImageError}
-          sizes={sizes}
-          className={`absolute inset-0 w-full h-full object-${objectFit} transition-opacity duration-300 ${
-            loaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{ width: '100%', height: '100%' }}
-        />
-      ) : (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-          <span className="text-sm text-gray-500">Imagem indisponível</span>
-        </div>
-      )}
+      <img
+        ref={imgRef}
+        src={isInView ? getOptimizedSrc(width) : undefined}
+        srcSet={isInView ? srcSet : undefined}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        alt={alt}
+        width={width}
+        height={height}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
+        onLoad={() => {
+          setIsLoaded(true);
+          onLoad?.();
+        }}
+        className={cn(
+          'transition-opacity duration-300',
+          isLoaded ? 'opacity-100' : 'opacity-0',
+          className
+        )}
+      />
     </div>
   );
 };
-
-export default OptimizedImage;
