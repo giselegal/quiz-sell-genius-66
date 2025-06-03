@@ -7,7 +7,25 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import { getCachedMetrics, resetMetricsCache, filterEventsByTimeRange } from '@/utils/analyticsHelpers';
-import { getAnalyticsEvents, clearAnalyticsData, testFacebookPixel } from '@/utils/analytics';
+import { getAnalyticsEvents, clearAnalyticsData, testFacebo# 1. Verificar status do repositório
+git status
+
+# 2. Adicionar todas as alterações
+git add .
+
+# 3. Fazer commit das alterações com uma mensagem
+git commit -m "correção questões estratégicas"
+
+# 4. Enviar as alterações para o GitHub
+git push
+
+# 5. Instalar dependências do projeto
+npm install
+
+# 6. Rodar o build ou o projeto
+npm run build    # (ou npm run, se houver script padrão)
+
+okPixel } from '@/utils/analytics';
 import { toast } from '@/components/ui/use-toast';
 
 // Lazy loaded tab components for better performance

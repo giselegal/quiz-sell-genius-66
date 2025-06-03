@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { QuizProvider } from './context/QuizContext';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -21,16 +21,12 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Lazy loading das páginas usando a pasta pages/
+// Lazy loading das páginas essenciais
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
-const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
-const QuizOfferPageV2 = lazy(() => import('./pages/quiz-descubra-seu-estilo-v2'));
+const QuizDescubraSeuEstilo = lazy(() => import('./pages/quiz-descubra-seu-estilo'));
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
-const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
-const CreativeAnalyticsPageNew = lazy(() => import('./pages/CreativeAnalyticsPageNew'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
-const AccessLoaderPage = lazy(() => import('./pages/AccessLoaderPage'));
 
 // Avalia se o dispositivo tem performance limitada
 const isLowPerformanceDevice = () => {
@@ -65,7 +61,7 @@ const App = () => {
       loadFacebookPixel();
       captureUTMParameters();
       
-      // Prefetch de páginas mais prováveis de serem acessadas
+      // Prefetch da página de resultado
       if (!lowPerformance) {
         prefetchComponent(() => import('./pages/ResultPage'));
       }
@@ -87,19 +83,11 @@ const App = () => {
             <Suspense fallback={<LoadingFallback />}>
               <ABTestRedirect>
                 <Routes>
-                  {/* Rotas públicas */}
+                  {/* Rotas principais em SPA */}
                   <Route path="/" element={<QuizPage />} />
                   <Route path="/resultado" element={<ResultPage />} />
-                  <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                  <Route path="/quiz-descubra-seu-estilo-v2" element={<QuizOfferPageV2 />} />
-                  {/* Dashboard SPA */}
-                  <Route path="/dashboard/*" element={<DashboardPage />} />
-                  {/* Redirecionamento para não quebrar links antigos */}
-                  <Route path="/admin/*" element={<Navigate to="/dashboard" replace />} />
-                  {/* ANALYTICS DE CRIATIVOS - Nova página melhorada */}
-                  <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPageNew />} />
-                  {/* ANALYTICS DE CRIATIVOS - Página antiga (backup) */}
-                  <Route path="/admin/creative-analytics-old" element={<CreativeAnalyticsPage />} />
+                  <Route path="/descubra-seu-estilo" element={<QuizDescubraSeuEstilo />} />
+                  <Route path="/admin/*" element={<DashboardPage />} />
                   {/* 404 */}
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
