@@ -17,10 +17,10 @@ export const trackPageView = (pageName, pageData = {}) => {
     });
   }
   
-  // Facebook Pixel
-  if (window.fbq) {
-    window.fbq('track', 'PageView');
-  }
+  // Facebook Pixel - Removido: PageView não é evento principal
+  // if (window.fbq) {
+  //   window.fbq('track', 'PageView');
+  // }
   
   // DataLayer para Google Tag Manager
   if (window.dataLayer) {
@@ -54,15 +54,7 @@ export const trackButtonClick = (buttonId, buttonText, pageName, eventData = {})
     });
   }
   
-  // Facebook Pixel
-  if (window.fbq) {
-    window.fbq('trackCustom', 'ButtonClick', {
-      button_id: buttonId,
-      button_text: buttonText,
-      page_name: pageName,
-      ...eventData
-    });
-  }
+  // Facebook Pixel - REMOVIDO: ButtonClick não é um evento principal
   
   // DataLayer para Google Tag Manager
   if (window.dataLayer) {
@@ -269,9 +261,7 @@ export const trackQuizAnswer = (quizId, questionId, answer, eventData = {}) => {
   if (window.gtag) {
     window.gtag('event', 'quiz_answer', data);
   }
-  if (window.fbq) {
-    window.fbq('trackCustom', 'QuizAnswer', data);
-  }
+  // Facebook Pixel - REMOVIDO: QuizAnswer não é um evento principal
   if (window.dataLayer) {
     window.dataLayer.push({ event: 'quiz_answer', ...data });
   }
@@ -290,9 +280,7 @@ export const trackQuizComplete = (quizId, eventData = {}) => {
   if (window.gtag) {
     window.gtag('event', 'quiz_complete', data);
   }
-  if (window.fbq) {
-    window.fbq('trackCustom', 'QuizComplete', data);
-  }
+  // Facebook Pixel - REMOVIDO: QuizComplete não é um evento principal
   if (window.dataLayer) {
     window.dataLayer.push({ event: 'quiz_complete', ...data });
   }
