@@ -1,124 +1,143 @@
-
-export interface HeroSection {
-  title: string;
-  subtitle: string;
-  imageUrl?: string;
-  ctaText?: string;
-  backgroundColor?: string;
-}
-
-export interface AboutSection {
-  title: string;
-  description: string;
-  imageUrl?: string;
-}
-
-export interface GlobalStyles {
-  primaryColor?: string;
-  secondaryColor?: string;
-  fontFamily?: string;
-  backgroundColor?: string;
-  textColor?: string;
-}
+import { Block } from './editor';
 
 export interface StyleOptions {
   fontSize?: string;
   fontWeight?: string;
   color?: string;
   backgroundColor?: string;
-  padding?: string;
-  paddingY?: string;
-  paddingX?: string;
-  margin?: string;
+  textColor?: string;
+  padding?: string | number;
+  paddingY?: string | number;
+  paddingX?: string | number;
+  margin?: string | number;
   width?: string;
-  maxWidth?: string;
-  borderRadius?: string;
-  textAlign?: string;
+  height?: string;
+  borderRadius?: string | number;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
   fontFamily?: string;
+  lineHeight?: string;
+  letterSpacing?: string;
+  display?: string;
+  flexDirection?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  gap?: string;
+  boxShadow?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  borderColor?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  type?: string;
+  buttonColor?: string;
+}
+
+export interface ImageOptions {
+  url: string;
+  alt: string;
+  width?: string;
+  height?: string;
+  borderRadius?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
 export interface SectionContent {
-  title?: string;
-  subtitle?: string;
-  description?: string;
-  userName?: string;
-  customImage?: string;
-  price?: string;
-  regularPrice?: string;
-  ctaText?: string;
-  ctaUrl?: string;
-  imageUrl?: string;
-  features?: string[];
-  bonuses?: Array<{
-    title: string;
-    description: string;
-    value: string;
-  }>;
-  name?: string;
-  credentials?: string;
-  period?: string;
-  type?: string;
   [key: string]: any;
-}
-
-export interface Section {
-  visible: boolean;
-  style: StyleOptions;
-  content: SectionContent;
-  appearance?: any;
+  style?: StyleOptions;
+  images?: ImageOptions[];
 }
 
 export interface OfferContent {
   title?: string;
   subtitle?: string;
+  description?: string;
   price?: string;
   regularPrice?: string;
+  installments?: string;
   ctaText?: string;
   ctaUrl?: string;
+  urgencyText?: string;
   heroImage?: string;
   heroImage2?: string;
-  [key: string]: any;
+  allProductsImage?: string;
+  mentorImage?: string;
+  bonusImage?: string;
+  productTitle?: string;
+  benefitItems?: Array<{
+    title: string;
+    description: string;
+  }>;
+  guaranteeText?: string;
+  table?: Array<{
+    item: string;
+    value: string;
+  }>;
+  productImages?: Array<{
+    url: string;
+    alt: string;
+  }>;
+  items?: Array<{
+    title: string;
+    description: string;
+  }>;
+  testimonials?: Array<{
+    name: string;
+    role: string;
+    text: string;
+  }>;
+  image?: string;
+}
+
+export interface Section {
+  visible: boolean;
+  content: SectionContent;
+  appearance?: Record<string, any>;
+  style?: StyleOptions;
 }
 
 export interface OfferSection {
-  hero: Section;
-  products: Section;
+  hero: {
+    visible: boolean;
+    content: OfferContent;
+    appearance?: Record<string, any>;
+    style?: StyleOptions;
+  };
   benefits: Section;
+  products: Section;
   pricing: Section;
   testimonials: Section;
   guarantee: Section;
 }
 
-// Sistema de Blocos Drag-and-Drop
-export interface BlockData {
-  id: string;
-  type: 'hero' | 'text' | 'image' | 'cta' | 'testimonials' | 'pricing' | 'benefits' | 'guarantee' | 'mentor' | 'transformations' | 'bonus' | 'motivation' | 'secondary-styles' | 'antes-depois-transformacao';
-  title: string;
-  content: SectionContent;
-  style: StyleOptions;
+export interface MentorSection {
   visible: boolean;
-  order: number;
-  editable: boolean;
-}
-
-export interface DragDropConfig {
-  blocks: BlockData[];
-  globalStyles: GlobalStyles;
+  content: {
+    title?: string;
+    name?: string;
+    image?: string;
+    beforeAfterImage?: string;
+    stylesImage?: string;
+    bio?: string[];
+  };
+  style?: StyleOptions;
 }
 
 export interface ResultPageConfig {
   styleType: string;
-  heroSection: HeroSection;
-  aboutSection: AboutSection;
-  globalStyles?: GlobalStyles;
-  blocks?: BlockData[];
-  dragDropConfig?: DragDropConfig;
   header: Section;
   mainContent: Section;
-  secondaryStyles: Section;
+  secondaryStyles?: Section;
   offer: OfferSection;
-  mentor?: any;
+  mentor?: MentorSection;
+  globalStyles?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+    textColor?: string;
+    backgroundColor?: string;
+    fontFamily?: string;
+  };
+  blocks?: Block[];
 }
 
-// Export types properly for isolatedModules
-export type { OfferContent as OfferContentType, StyleOptions as StyleOptionsType };
+export interface ResultPageConfigsStore {
+  configs: Record<string, ResultPageConfig>;
+}

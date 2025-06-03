@@ -14,7 +14,7 @@ interface QuizOptionProps {
   type: 'text' | 'image' | 'both';
   questionId?: string;
   isDisabled?: boolean;
-  isStrategicOption?: boolean;
+  isStrategicOption?: boolean; // Nova prop
 }
 
 const QuizOption: React.FC<QuizOptionProps> = ({
@@ -24,169 +24,159 @@ const QuizOption: React.FC<QuizOptionProps> = ({
   type,
   questionId,
   isDisabled = false,
-  isStrategicOption = false
+  isStrategicOption = false // Padrão para false
 }) => {
   const isMobile = useIsMobile();
   const is3DQuestion = option.imageUrl?.includes('sapatos') || option.imageUrl?.includes('calca');
+  // Usar ref para evitar re-renderizações desnecessárias
   const optionRef = useRef<HTMLDivElement>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
   
+  // Usar useEffect para lidar com mudanças de isSelected sem causar flash
   useEffect(() => {
     if (optionRef.current) {
-      const element = optionRef.current;
-      
       if (isSelected) {
-        // Adicionar classe de animação
-        setIsAnimating(true);
-        element.style.transform = 'scale(1.02)';
-        
+        // Para opções de texto - manter borda amarela
         if (type === 'text') {
-          element.style.borderColor = '#b29670';
-          element.style.boxShadow = isStrategicOption 
-            ? '0 8px 25px rgba(178, 150, 112, 0.4), 0 0 0 2px rgba(178, 150, 112, 0.2)' 
-            : '0 6px 20px rgba(178, 150, 112, 0.3), 0 0 0 1px rgba(178, 150, 112, 0.15)';
-          element.style.backgroundColor = '#faf9f7';
-        } else {
-          element.style.borderColor = 'transparent';
-          element.style.boxShadow = isStrategicOption 
-            ? '0 15px 35px rgba(0, 0, 0, 0.25), 0 5px 15px rgba(178, 150, 112, 0.2)' 
-            : '0 12px 28px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(178, 150, 112, 0.15)';
-        }
-        
-        // Efeito de pulse suave
-        setTimeout(() => {
-          if (element) {
-            element.style.transform = 'scale(1.01)';
+          optionRef.current.style.borderColor = '#b29670';
+          optionRef.current.style.boxShadow = isStrategicOption 
+            ? '0 6px 12px rgba(178, 150, 112, 0.4)' // Sombra mais pronunciada para estratégicas
+            : '0 4px 8px rgba(178, 150, 112, 0.25)';
+          
+          if (isStrategicOption) {
+            // Destacar mais as opções estratégicas selecionadas
+            optionRef.current.style.backgroundColor = '#faf6f1';
+            optionRef.current.style.transform = 'translateY(-2px)';
           }
-        }, 150);
-        
-        // Reset animação
-        setTimeout(() => {
-          setIsAnimating(false);
-        }, 300);
-        
+        } 
+        // Para opções de imagem - sem borda, apenas sombra
+        else {
+          optionRef.current.style.borderColor = 'transparent';
+          optionRef.current.style.boxShadow = isStrategicOption 
+            ? '0 15px 30px rgba(0, 0, 0, 0.25)' // Sombra mais pronunciada para estratégicas
+            : '0 12px 24px rgba(0, 0, 0, 0.2)';
+        }
       } else {
-        element.style.transform = 'scale(1)';
         if (type === 'text') {
-          element.style.borderColor = '#E5E7EB';
-          element.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
-          element.style.backgroundColor = '#FEFEFE';
+          optionRef.current.style.borderColor = '#B89B7A';
+          optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+          
+          if (isStrategicOption) {
+            // Resetar estilo para opções estratégicas não selecionadas
+            optionRef.current.style.backgroundColor = '#FEFEFE';
+            optionRef.current.style.transform = 'translateY(0)';
+          }
         } else {
-          element.style.borderColor = 'transparent';
-          element.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+          optionRef.current.style.borderColor = 'transparent';
+          optionRef.current.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
         }
       }
     }
   }, [isSelected, type, isStrategicOption]);
   
+  // Manipulador de clique customizado com debounce
   const handleClick = () => {
     if (!isDisabled) {
+      // Se já está selecionado e é uma questão estratégica, não permitimos desmarcar
       if (isSelected && isStrategicOption) {
-        return;
+        return; // Impede desmarcar a opção em questões estratégicas
       }
       
-      // Efeito de click imediato
+      // Aplicar mudança visual imediatamente para feedback instantâneo
       if (optionRef.current) {
-        const element = optionRef.current;
-        element.style.transform = 'scale(0.98)';
-        
-        setTimeout(() => {
-          if (element) {
-            element.style.transform = isSelected ? 'scale(1)' : 'scale(1.02)';
+        if (type === 'text') {
+          optionRef.current.style.borderColor = isSelected ? '#B89B7A' : '#b29670';
+          
+          // Efeito visual adicional para opções estratégicas
+          if (isStrategicOption && !isSelected) {
+            optionRef.current.style.backgroundColor = '#faf6f1';
+            optionRef.current.style.transform = 'translateY(-2px)';
           }
-        }, 100);
+        }
+        
+        // Aplicar sombra correspondente ao estado
+        optionRef.current.style.boxShadow = isSelected 
+          ? '0 2px 4px rgba(0, 0, 0, 0.05)' 
+          : (isStrategicOption 
+              ? (type === 'text' ? '0 6px 12px rgba(178, 150, 112, 0.4)' : '0 15px 30px rgba(0, 0, 0, 0.25)') 
+              : (type === 'text' ? '0 4px 8px rgba(178, 150, 112, 0.25)' : '0 12px 24px rgba(0, 0, 0, 0.2)'));
       }
       
+      // Chamar onSelect com um pequeno atraso para evitar flash
       setTimeout(() => {
         onSelect(option.id);
-      }, 50);
+      }, 10);
     }
   };
   
   return (
     <div 
       className={cn(
-        "relative h-full group",
-        isDisabled && isStrategicOption ? "opacity-45 cursor-not-allowed" : 
-        (isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer")
+        "relative h-full",
+        isDisabled && isStrategicOption ? "opacity-45 cursor-not-allowed transition-opacity duration-300" : 
+        (isDisabled ? "opacity-50 cursor-not-allowed" : "")
       )}
       onClick={handleClick}
     >
+      {/* Conteúdo principal com ref para manipulação direta do DOM */}
       <div 
         ref={optionRef}
         className={cn(
-          "relative h-full flex flex-col rounded-xl overflow-hidden transition-all duration-300 ease-out",
+          "relative h-full flex flex-col rounded-lg overflow-hidden",
+          "cursor-pointer", 
           
-          type === 'text' && "p-4 border-2",
+          // Para opções de texto - manter borda
+          type === 'text' && "p-4 border",
+          
+          // Para opções de imagem - SEM borda na coluna
           type !== 'text' && "border-0",
           
-          "bg-[#FEFEFE] shadow-sm",
-          
-          // Hover effects apenas se não estiver selecionado
-          !isSelected && !isDisabled && "hover:shadow-lg hover:-translate-y-1",
-          
-          // Efeitos de animação
-          isAnimating && "animate-pulse",
-          
-          // Estados especiais
-          isStrategicOption && "strategic-option",
-          isSelected && "selected-option"
+          // Fundo sólido sem transparência e adicionando sombra padrão
+          "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300"
         )}
       >
         {type !== 'text' && option.imageUrl && (
-          <div className="relative overflow-hidden flex-grow">
-            <QuizOptionImage
-              imageUrl={option.imageUrl}
-              altText={option.text}
-              styleCategory={option.styleCategory}
-              isSelected={isSelected}
-              is3DQuestion={is3DQuestion}
-              questionId={questionId || ''}
-            />
-            
-            {/* Overlay gradiente para melhor legibilidade do texto */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/20 to-transparent h-12 pointer-events-none" />
-          </div>
+          <QuizOptionImage
+            imageUrl={option.imageUrl}
+            altText={option.text}
+            styleCategory={option.styleCategory}
+            isSelected={isSelected}
+            is3DQuestion={is3DQuestion}
+            questionId={questionId || ''}
+          />
         )}
         
         <p className={cn(
           type !== 'text' 
             ? cn(
-                "leading-tight font-medium py-2 px-3 mt-auto text-[#432818] relative z-10", 
-                isMobile ? "text-[0.8rem]" : "text-[0.75rem] sm:text-sm",
-                isStrategicOption && "text-[0.9rem] sm:text-base font-semibold"
+                "leading-tight font-medium py-1 px-2 mt-auto text-[#432818] relative", 
+                isMobile ? "text-[0.8rem]" : "text-[0.7rem] sm:text-sm",
+                isStrategicOption && "text-[0.95rem] sm:text-base" // Maior para opções estratégicas
               )
             : cn(
-                "leading-relaxed text-[#432818] transition-colors duration-200",
+                "leading-relaxed text-[#432818]",
                 isMobile ? "text-[0.9rem]" : "text-sm sm:text-base",
-                isStrategicOption && "text-[1.1rem] sm:text-lg font-medium",
-                isSelected && "text-[#2d1810]"
+                isStrategicOption && "text-[1.1rem] sm:text-lg",  // Maior para opções estratégicas texto
+                !isStrategicOption && ".text-only-question & " && "text-[1rem] sm:text-lg" // Maior para opções só texto
               )
         )}>
           {highlightStrategicWords(option.text)}
         </p>
         
-        {/* Indicador de seleção melhorado */}
+        {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
-          <div className={cn(
-            "absolute z-20 flex items-center justify-center transition-all duration-300 ease-out",
-            isStrategicOption 
-              ? "top-2 right-2 h-8 w-8 bg-[#b29670] rounded-full shadow-lg" 
-              : "top-1 right-1 h-6 w-6 bg-[#b29670] rounded-full shadow-md",
-            "animate-in zoom-in-50 duration-200"
-          )}>
+          isStrategicOption ? (
+            <div className="absolute -top-1 -right-1 h-7 w-7 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
+              <Check
+                className="h-5 w-5 text-white"
+                strokeWidth={3}
+              />
+            </div>
+          ) : (
             <Check
-              className={cn(
-                "text-white stroke-[3]",
-                isStrategicOption ? "h-5 w-5" : "h-3.5 w-3.5"
-              )}
+              className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670]"
+              strokeWidth={3}
             />
-          </div>
-        )}
-        
-        {/* Efeito de brilho ao selecionar */}
-        {isSelected && (
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-50 animate-shimmer pointer-events-none" />
+          )
         )}
       </div>
     </div>

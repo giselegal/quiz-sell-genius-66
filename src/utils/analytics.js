@@ -353,43 +353,6 @@ function formatCreativeName(utmContent) {
 }
 
 /**
- * Rastreia conversões de vendas
- * @param {string} productId - ID do produto vendido
- * @param {number} value - Valor da venda
- * @param {object} saleData - Dados adicionais sobre a venda
- */
-export const trackSaleConversion = (productId, value, saleData = {}) => {
-  if (typeof window === 'undefined') return;
-  
-  const enhancedData = {
-    product_id: productId,
-    currency: 'BRL',
-    value: value,
-    ...saleData
-  };
-  
-  // Google Analytics
-  if (window.gtag) {
-    window.gtag('event', 'purchase', enhancedData);
-  }
-  
-  // Facebook Pixel
-  if (window.fbq) {
-    window.fbq('track', 'Purchase', enhancedData);
-  }
-  
-  // DataLayer para Google Tag Manager
-  if (window.dataLayer) {
-    window.dataLayer.push({
-      event: 'purchase',
-      ...enhancedData
-    });
-  }
-  
-  console.log(`[Analytics] Conversão de Venda: ${productId} - R$${value}`, saleData);
-};
-
-/**
  * Obter dados de performance por criativo usando utm_content como identificador
  * @param {number} days - Número de dias para filtrar os dados (7, 30, etc)
  * @returns {object} - Objeto com estatísticas por criativo

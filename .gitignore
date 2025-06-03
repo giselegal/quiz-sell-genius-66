@@ -28,15 +28,3 @@ dist-ssr
 !public/lovable-uploads/**
 .next/
 .next/cache
-
-# BFG Cleaner reports and temporary files
-..bfg-report/
-*.jar
-bfg.jar
-
-# Build artifacts and temporary files
-*.deb
-ck --full --no-reflogs | grep commit
-h
-h origin main
-crição das alterações

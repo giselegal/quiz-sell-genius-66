@@ -59,9 +59,6 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                       return null;
                     }
                     
-                    // Fix type conversion for Input value
-                    const stringValue = String(value || '');
-                    
                     if (typeof value === 'string' && value.length > 100) {
                       return (
                         <div key={key} className="space-y-2">
@@ -70,7 +67,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                           </Label>
                           <Textarea
                             id={key}
-                            value={stringValue}
+                            value={value}
                             onChange={(e) => handleContentChange(key, e.target.value)}
                             rows={3}
                           />
@@ -85,7 +82,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                         </Label>
                         <Input
                           id={key}
-                          value={stringValue}
+                          value={value}
                           onChange={(e) => handleContentChange(key, e.target.value)}
                         />
                       </div>
@@ -130,7 +127,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({ section, onUpdate, sectio
                         </Label>
                         <Input
                           id={`${key}-appearance`}
-                          value={String(value || '')}
+                          value={value}
                           onChange={(e) => {
                             onUpdate({
                               ...section,

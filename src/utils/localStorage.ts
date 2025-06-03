@@ -1,12 +1,14 @@
 
+import { safeLocalStorage } from "@/utils/safeLocalStorage";
+
 // Utilitário para usar localStorage de forma segura no SSR
-export const safeLocalStorage = {
+export const localStorage = {
   getItem: (key: string): string | null => {
     if (typeof window === 'undefined') {
       return null;
     }
     try {
-      return localStorage.getItem(key);
+      return window.localStorage.getItem(key);
     } catch (error) {
       console.warn('LocalStorage access failed:', error);
       return null;
@@ -18,7 +20,7 @@ export const safeLocalStorage = {
       return;
     }
     try {
-      localStorage.setItem(key, value);
+      window.localStorage.setItem(key, value);
     } catch (error) {
       console.warn('LocalStorage write failed:', error);
     }
@@ -29,7 +31,7 @@ export const safeLocalStorage = {
       return;
     }
     try {
-      localStorage.removeItem(key);
+      window.localStorage.removeItem(key);
     } catch (error) {
       console.warn('LocalStorage remove failed:', error);
     }
@@ -40,7 +42,7 @@ export const safeLocalStorage = {
       return;
     }
     try {
-      localStorage.clear();
+      window.localStorage.clear();
     } catch (error) {
       console.warn('LocalStorage clear failed:', error);
     }

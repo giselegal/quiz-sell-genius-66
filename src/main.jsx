@@ -3,9 +3,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import { initializeResourcePreloading } from './utils/preloadResources'
+import { initializeResourcePreloading, setupRouteChangePreloading } from './utils/preloadResources'
+import { fixMainRoutes } from './utils/fixMainRoutes'
+import { checkMainRoutes } from './utils/routeChecker'
 
-// 1) Initialize critical resources
+// 1) Initialize critical resources and route fixing
 initializeResourcePreloading()
 
 // 2) Render immediately with error handling
@@ -20,7 +22,9 @@ const prepareRootAndRender = () => {
       }
       
       ReactDOM.createRoot(rootElement).render(
-        <App />
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
       );
     } else {
       console.error('Elemento root não encontrado!');
@@ -45,12 +49,19 @@ const prepareRootAndRender = () => {
 // Execute rendering immediately
 prepareRootAndRender();
 
-// 3) Setup route change monitoring for performance only
+// 3) Setup route change monitoring and fixes
 const loadNonCritical = () => {
+  // Fix any URL issues in the main routes
+  fixMainRoutes()
+  
   // Setup monitoring for route changes to preload resources
-  import('./utils/preloadResources').then(({ setupRouteChangePreloading }) => {
-    setupRouteChangePreloading()
-  }).catch(err => console.debug('Preload setup not critical:', err))
+  setupRouteChangePreloading()
+  
+  // Check the status of main routes
+  setTimeout(() => {
+    checkMainRoutes()
+    console.log('✅ Main routes activated and checked')
+  }, 1000)
 }
 
 if ('requestIdleCallback' in window) {

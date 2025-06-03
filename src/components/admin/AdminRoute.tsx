@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { redirect } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 interface AdminRouteProps {
@@ -12,16 +12,19 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
   children, 
   requireEditor = false 
 }) => {
-  const { user } = useAuth();
+  const { user, isAdmin, hasEditorAccess } = useAuth();
   
   if (!user) {
-    return <Navigate to="/login" replace />;
+    redirect('/login');
+    return null;
   }
   
-  // For now, allow all authenticated users admin access
-  // TODO: Implement proper role-based access control
+  if (!isAdmin) {
+    redirect('/');
+    return null;
+  }
   
-  if (requireEditor) {
+  if (requireEditor && !hasEditorAccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
