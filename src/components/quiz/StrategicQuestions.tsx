@@ -6,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import { QuizQuestion } from '@/types/quiz';
 import { UserResponse } from '@/types/quiz';
+import { strategicQuestions } from '@/data/strategicQuestions';
 import OptimizedImage from '../ui/optimized-image';
 
 interface StrategicQuestionsProps {
@@ -50,29 +51,11 @@ const strategicImageBank: BankImage[] = [
   }
 ];
 
-// Mock questions for now - these should come from props in the future
-const mockQuestions: QuizQuestion[] = [
-  {
-    id: "strategic-1",
-    title: "Qual estilo mais combina com você?",
-    text: "Escolha a opção que mais representa seu estilo pessoal:",
-    type: "image",
-    options: [
-      { id: "classic", text: "Clássico e Elegante", styleCategory: "classic" },
-      { id: "romantic", text: "Romântico e Feminino", styleCategory: "romantic" },
-      { id: "natural", text: "Natural e Casual", styleCategory: "natural" },
-      { id: "modern", text: "Moderno e Sofisticado", styleCategory: "modern" },
-      { id: "creative", text: "Criativo e Único", styleCategory: "creative" }
-    ],
-    multiSelect: 1
-  }
-];
-
 const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({ 
   currentQuestionIndex, 
   answers, 
   onAnswer, 
-  questions = mockQuestions, 
+  questions = strategicQuestions,
   onComplete 
 }) => {
   const [localQuestionIndex, setLocalQuestionIndex] = useState(0);
