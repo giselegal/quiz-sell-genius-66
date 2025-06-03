@@ -1,4 +1,3 @@
-
 import React, { ReactNode } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -18,7 +17,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     <div className="min-h-screen flex flex-col bg-[#FAF9F7]">
       <header className="bg-white border-b px-6 py-3 shadow-sm">
         <div className="container mx-auto flex items-center justify-between">
-          <Link to="/admin" className="text-xl font-bold text-[#432818]">
+          <Link to="/dashboard" className="text-xl font-bold text-[#432818]">
             Voltar ao Dashboard
           </Link>
           {user && (

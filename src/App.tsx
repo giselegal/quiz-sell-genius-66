@@ -24,7 +24,7 @@ const LoadingFallback = () => (
 const QuizPage = lazy(() => import('./components/QuizPage'));
 const ResultPage = lazy(() => import('./pages/ResultPage'));
 const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
-const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const AccessLoaderPage = lazy(() => import('./pages/AccessLoaderPage'));
@@ -83,33 +83,17 @@ const App = () => {
             
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                {/* ROTA PRINCIPAL - Quiz com introdução */}
+                {/* Rotas públicas */}
                 <Route path="/" element={<QuizPage />} />
-                
-                {/* ROTAS DE CARREGAMENTO DO EDITOR - Simulação de carregamento */}
-                <Route path="/acesso/editor" element={<AccessLoaderPage redirectTarget="editor" />} />
-                <Route path="/acesso/admin" element={<AccessLoaderPage redirectTarget="admin" />} />
-                <Route path="/acesso/unificado" element={<AccessLoaderPage redirectTarget="unified" />} />
-                <Route path="/acesso/resultado" element={<AccessLoaderPage redirectTarget="result-editor" />} />
-                
-                {/* ADMIN - Dashboard centralizado usando páginas da pasta pages/admin/ */}
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/*" element={<AdminDashboard />} />
-                
+                <Route path="/resultado" element={<ResultPage />} />
+                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                {/* Dashboard SPA */}
+                <Route path="/dashboard/*" element={<DashboardPage />} />
+                {/* Redirecionamento para não quebrar links antigos */}
+                <Route path="/admin/*" element={<Navigate to="/dashboard" replace />} />
                 {/* ANALYTICS DE CRIATIVOS - Página específica */}
                 <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
-                
-                {/* RESULTADO - Página de resultados do quiz */}
-                <Route path="/resultado" element={<ResultPage />} />
-                
-                {/* OFERTA DO QUIZ - Página de oferta com quiz embutido */}
-                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                
-                {/* Redirecionamentos para manter compatibilidade */}
-                <Route path="/home" element={<Navigate to="/" replace />} />
-                <Route path="/quiz" element={<Navigate to="/" replace />} />
-                
-                {/* 404 - Página não encontrada */}
+                {/* 404 */}
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
