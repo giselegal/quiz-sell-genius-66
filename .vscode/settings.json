@@ -1,5 +1,6 @@
 {
     "remoteHub.richNavigation.enabled": true,
     "githubRepositories.indexing.cacheRepoLimit": 6,
-    "remoteHub.gitProtocol": "ssh"
+    "remoteHub.gitProtocol": "ssh",
+    "github.copilot.nextEditSuggestions.enabled": true
 }
