@@ -1,3 +1,4 @@
+
 import { optimizeCloudinaryUrl } from './images/optimization';
 import { type FixBlurryImagesOptions } from './images/types';
 
@@ -11,7 +12,7 @@ export const fixBlurryImages = (selector: string, options: FixBlurryImagesOption
       if (originalSrc && originalSrc.includes('cloudinary.com')) {
         const optimizedSrc = optimizeCloudinaryUrl(originalSrc, {
           quality: options.quality || 95,
-          format: options.format || 'auto',
+          format: (options.format as 'auto' | 'webp' | 'jpg' | 'png') || 'auto',
           width: options.width,
           height: options.height
         });

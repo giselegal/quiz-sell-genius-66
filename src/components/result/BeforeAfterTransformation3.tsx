@@ -1,8 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { ShoppingCart, ArrowRight, Star } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
+import { preloadImagesByUrls } from '@/utils/imageManager';
 import OptimizedImage from '@/components/ui/optimized-image';
 
 interface BeforeAfterTransformationProps {

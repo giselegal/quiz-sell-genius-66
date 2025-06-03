@@ -1,4 +1,11 @@
+
 import { QuizQuestion, QuizOption, StyleResult, QuizResult } from '@/types/quiz';
+import { clothingQuestions } from '@/data/questions/clothingQuestions';
+import { personalityQuestions } from '@/data/questions/personalityQuestions';
+import { stylePreferencesQuestions } from '@/data/questions/stylePreferencesQuestions';
+import { outerwearQuestions } from '@/data/questions/outerwearQuestions';
+import { accessoriesQuestions } from '@/data/questions/accessoriesQuestions';
+import { accessoryStyleQuestions } from '@/data/questions/accessoryStyleQuestions';
 
 interface StyleCount {
   category: string;
@@ -9,6 +16,18 @@ interface CalculateStyleResultsParams {
   answers: Record<string, string[]>;
   questions: QuizQuestion[];
 }
+
+export const getQuizQuestions = async (): Promise<QuizQuestion[]> => {
+  // Combine all question categories
+  return [
+    ...clothingQuestions,
+    ...personalityQuestions,
+    ...stylePreferencesQuestions,
+    ...outerwearQuestions,
+    ...accessoriesQuestions,
+    ...accessoryStyleQuestions
+  ];
+};
 
 export const calculateStyleResults = (answers: Record<string, string[]>, questions: QuizQuestion[]): QuizResult => {
   const styleCounts: Record<string, number> = {};
