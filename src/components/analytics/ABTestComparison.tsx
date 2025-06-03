@@ -246,6 +246,160 @@ const ABTestComparison: React.FC<ABTestComparisonProps> = ({ timeRange = '7d' })
     };
   };
 
+  const renderTrendsCharts = () => {
+    if (!metrics) return null;
+
+    // Criar dados simulados de tendência baseados nos eventos
+    const events = getAnalyticsEvents();
+    const now = Date.now();
+    const oneDay = 86400000;
+    
+    // Agrupar eventos por dia
+    const dailyData = [];
+    for (let i = 6; i >= 0; i--) {
+      const dayStart = now - (oneDay * i);
+      const dayEnd = dayStart + oneDay;
+      const dayName = new Date(dayStart).toLocaleDateString('pt-BR', { 
+        month: 'short', 
+        day: 'numeric' 
+      });
+
+      // Eventos da versão A
+      const eventsA = events.filter(e => 
+        e.timestamp >= dayStart && 
+        e.timestamp < dayEnd && 
+        e.customData?.pixel_id === '1311550759901086'
+      );
+
+      // Eventos da versão B
+      const eventsB = events.filter(e => 
+        e.timestamp >= dayStart && 
+        e.timestamp < dayEnd && 
+        e.customData?.pixel_id === '1038647624890676'
+      );
+
+      const visitorsA = new Set(eventsA.filter(e => e.eventName === 'PageView').map(e => e.customData?.session_id)).size;
+      const visitorsB = new Set(eventsB.filter(e => e.eventName === 'PageView').map(e => e.customData?.session_id)).size;
+      const leadsA = eventsA.filter(e => e.eventName === 'Lead').length;
+      const leadsB = eventsB.filter(e => e.eventName === 'Lead').length;
+      const conversionA = visitorsA > 0 ? (leadsA / visitorsA) * 100 : 0;
+      const conversionB = visitorsB > 0 ? (leadsB / visitorsB) * 100 : 0;
+
+      dailyData.push({
+        day: dayName,
+        'Visitantes A': visitorsA,
+        'Visitantes B': visitorsB,
+        'Conversão A': conversionA,
+        'Conversão B': conversionB,
+        'Leads A': leadsA,
+        'Leads B': leadsB
+      });
+    }
+
+    return (
+      <div className="space-y-6">
+        {/* Gráfico de Visitantes por Dia */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Visitantes por Dia</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip />
+              <Line 
+                type="monotone" 
+                dataKey="Visitantes A" 
+                stroke="#3b82f6" 
+                strokeWidth={2}
+                dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="Visitantes B" 
+                stroke="#10b981" 
+                strokeWidth={2}
+                dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Gráfico de Taxa de Conversão por Dia */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Taxa de Conversão por Dia</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip formatter={(value) => [`${Number(value).toFixed(1)}%`, '']} />
+              <Line 
+                type="monotone" 
+                dataKey="Conversão A" 
+                stroke="#ef4444" 
+                strokeWidth={2}
+                dot={{ fill: '#ef4444', strokeWidth: 2, r: 4 }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="Conversão B" 
+                stroke="#22c55e" 
+                strokeWidth={2}
+                dot={{ fill: '#22c55e', strokeWidth: 2, r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Gráfico de Leads por Dia */}
+        <div>
+          <h3 className="text-lg font-semibold mb-4">Leads Gerados por Dia</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={dailyData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="Leads A" fill="#3b82f6" name="Versão A" />
+              <Bar dataKey="Leads B" fill="#10b981" name="Versão B" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Resumo de Tendências */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Resumo de Tendências</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">
+                  {dailyData.reduce((sum, day) => sum + day['Visitantes A'], 0)}
+                </div>
+                <div className="text-sm text-muted-foreground">Total Visitantes A</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">
+                  {dailyData.reduce((sum, day) => sum + day['Visitantes B'], 0)}
+                </div>
+                <div className="text-sm text-muted-foreground">Total Visitantes B</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-600">
+                  {((dailyData.reduce((sum, day) => sum + day['Conversão B'], 0) / 7) - 
+                    (dailyData.reduce((sum, day) => sum + day['Conversão A'], 0) / 7)).toFixed(1)}%
+                </div>
+                <div className="text-sm text-muted-foreground">Diferença Média</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
   const exportData = () => {
     if (!metrics) return;
     
