@@ -123,9 +123,9 @@ export const MorphingProgress: React.FC<MorphingProgressProps> = ({
   phase
 }) => {
   const phaseColors = {
-    normal: 'from-blue-500 to-purple-600',
-    strategic: 'from-red-500 to-orange-500',
-    complete: 'from-green-500 to-emerald-600'
+    normal: 'from-[#B89B7A] to-[#A1835D]',        // Cores da marca: bege principal para bege escuro
+    strategic: 'from-[#aa6b5d] to-[#B89B7A]',     // Cores da marca: terracota para bege
+    complete: 'from-[#B89B7A] to-[#D4B79F]'       // Cores da marca: bege principal para bege claro
   };
 
   return (
