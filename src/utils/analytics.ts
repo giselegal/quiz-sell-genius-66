@@ -21,7 +21,6 @@ export const captureUTMParameters = () => {
   console.log('UTM parameters captured');
 };
 
-// Adicionar funções ausentes para quiz tracking
 export const trackQuizStart = (userName: string, userEmail?: string) => {
   console.log('Quiz started by:', userName, userEmail);
 };
@@ -38,7 +37,6 @@ export const trackResultView = (resultType: string) => {
   console.log('Result viewed:', resultType);
 };
 
-// Adicionar funções ausentes para analytics
 export const getAnalyticsEvents = () => {
   console.log('Getting analytics events');
   return [];
@@ -52,7 +50,30 @@ export const testFacebookPixel = () => {
   console.log('Testing Facebook Pixel');
 };
 
-export const getCreativePerformance = () => {
+export const getCreativePerformance = (): Record<string, any> => {
   console.log('Getting creative performance');
-  return { impressions: 0, clicks: 0, conversions: 0 };
+  return {
+    'Creative A': {
+      creative_name: 'Creative A',
+      page_views: 1000,
+      quiz_starts: 300,
+      quiz_completions: 150,
+      leads: 75,
+      purchases: 25,
+      revenue: 2500,
+      conversion_rate: '2.5',
+      cost_per_lead: 33.33
+    },
+    'Creative B': {
+      creative_name: 'Creative B',
+      page_views: 800,
+      quiz_starts: 200,
+      quiz_completions: 100,
+      leads: 40,
+      purchases: 15,
+      revenue: 1500,
+      conversion_rate: '1.9',
+      cost_per_lead: 37.5
+    }
+  };
 };

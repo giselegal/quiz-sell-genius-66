@@ -1,19 +1,30 @@
 
-export interface Question {
+export interface QuizOption {
   id: string;
   text: string;
   imageUrl?: string;
-  options: string[];
-  multiSelect?: boolean;
+  value?: string;
+}
+
+export interface Question {
+  id: string;
+  text: string;
+  title: string;
+  type: 'image' | 'text';
+  imageUrl?: string;
+  options: QuizOption[];
+  multiSelect?: number;
   order?: number;
 }
 
 export interface QuizQuestion {
   id: string;
   text: string;
+  title: string;
+  type: 'image' | 'text';
   imageUrl?: string;
-  options: string[];
-  multiSelect?: number;
+  options: QuizOption[];
+  multiSelect: number;
   order?: number;
 }
 
@@ -27,7 +38,7 @@ export interface QuizResult {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
   totalSelections: number;
-  userName?: string;
+  userName: string;
 }
 
 export interface UserResponse {
