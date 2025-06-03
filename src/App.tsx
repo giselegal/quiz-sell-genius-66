@@ -9,6 +9,7 @@ import { loadFacebookPixel } from './utils/facebookPixel';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import CriticalCSSLoader from './components/CriticalCSSLoader';
 import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
+import ABTestRedirect from './components/ABTestRedirect';
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -83,21 +84,23 @@ const App = () => {
             <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
             
             <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                {/* Rotas públicas */}
-                <Route path="/" element={<QuizPage />} />
-                <Route path="/resultado" element={<ResultPage />} />
-                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                <Route path="/quiz-descubra-seu-estilo-v2" element={<QuizOfferPageV2 />} />
-                {/* Dashboard SPA */}
-                <Route path="/dashboard/*" element={<DashboardPage />} />
-                {/* Redirecionamento para não quebrar links antigos */}
-                <Route path="/admin/*" element={<Navigate to="/dashboard" replace />} />
-                {/* ANALYTICS DE CRIATIVOS - Página específica */}
-                <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
-                {/* 404 */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
+              <ABTestRedirect>
+                <Routes>
+                  {/* Rotas públicas */}
+                  <Route path="/" element={<QuizPage />} />
+                  <Route path="/resultado" element={<ResultPage />} />
+                  <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
+                  <Route path="/quiz-descubra-seu-estilo-v2" element={<QuizOfferPageV2 />} />
+                  {/* Dashboard SPA */}
+                  <Route path="/dashboard/*" element={<DashboardPage />} />
+                  {/* Redirecionamento para não quebrar links antigos */}
+                  <Route path="/admin/*" element={<Navigate to="/dashboard" replace />} />
+                  {/* ANALYTICS DE CRIATIVOS - Página específica */}
+                  <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
+                  {/* 404 */}
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </ABTestRedirect>
             </Suspense>
           </Router>
           <Toaster />

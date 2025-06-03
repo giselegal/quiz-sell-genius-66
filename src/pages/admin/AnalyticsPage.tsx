@@ -18,6 +18,7 @@ const ProgressTab = React.lazy(() => import('@/components/analytics/tabs/Progres
 const DataTab = React.lazy(() => import('@/components/analytics/tabs/DataTab').then(module => ({ default: module.DataTab })));
 const UtmTab = React.lazy(() => import('@/components/analytics/tabs/UtmTab').then(module => ({ default: module.UtmTab })));
 const IntegrationTab = React.lazy(() => import('@/components/analytics/tabs/IntegrationTab').then(module => ({ default: module.IntegrationTab })));
+const ABTestComparison = React.lazy(() => import('@/components/analytics/ABTestComparison'));
 
 const AnalyticsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -195,6 +196,12 @@ const AnalyticsPage: React.FC = () => {
             Visão Geral
           </TabsTrigger>
           <TabsTrigger 
+            value="abtest"
+            className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
+          >
+            Teste A/B
+          </TabsTrigger>
+          <TabsTrigger 
             value="funnel"
             className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
           >
@@ -235,6 +242,10 @@ const AnalyticsPage: React.FC = () => {
         <Suspense fallback={<div className="h-[200px] flex items-center justify-center"><LoadingSpinner /></div>}>
           <TabsContent value="overview" className="mt-6">
             <OverviewTab analyticsData={{...analyticsData, compactView}} loading={!metricsCalculated} />
+          </TabsContent>
+          
+          <TabsContent value="abtest" className="mt-6">
+            <ABTestComparison timeRange={timeRange as '24h' | '7d' | '30d' | 'all'} />
           </TabsContent>
           
           <TabsContent value="funnel" className="mt-6">
