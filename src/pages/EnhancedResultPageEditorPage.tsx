@@ -1,189 +1,162 @@
-import React, { useState, useEffect } from 'react';
-import { EnhancedResultPageEditor } from '@/components/result-editor/EnhancedResultPageEditor';
-import { useQuiz } from '@/hooks/useQuiz';
-import { toast } from '@/components/ui/use-toast';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, AlertTriangle } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
 
-// Este componente serve como um ponto de entrada para o editor visual aprimorado
-// da página de resultados, permitindo acesso através do sistema de roteamento
+import React, { useState, useEffect } from 'react';
+import { useQuiz } from '@/hooks/useQuiz';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 const EnhancedResultPageEditorPage: React.FC = () => {
-  const navigate = useNavigate();
-  const { primaryStyle, secondaryStyles } = useQuiz();
-  const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
-  
-  // Verificar se o usuário tem acesso de administrador
-  useEffect(() => {
-    // Verificar se o usuário tem role = 'admin'
-    const isAdmin = user && 
-      typeof user === 'object' && 
-      'role' in user && 
-      user.role === 'admin';
-    
-    if (!isAdmin) {
-      // Tentar configurar acesso de admin se não estiver configurado
-      const savedRole = localStorage.getItem('userRole');
-      
-      if (savedRole === 'admin') {
-        // O localStorage tem o role admin, mas o AuthContext não.
-        // Isso pode acontecer se o script foi executado após o carregamento da aplicação.
-        // Recarregar a página para atualizar o contexto.
-        toast({
-          title: "Recarregando página",
-          description: "Detectamos que você tem acesso de administrador. Recarregando para aplicar as configurações.",
-        });
-        
-        // Recarregar a página após um breve delay
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-        
-        return;
-      }
-      
-      // O usuário não tem acesso de admin
-      toast({
-        title: "Acesso Restrito",
-        description: "Você não tem permissão para acessar esta página. Execute o script de acesso admin no console.",
-        variant: "destructive"
-      });
-      
-      // Redirecionar para a página de resultado após um breve delay
-      const timer = setTimeout(() => {
-        navigate('/resultado');
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [user, navigate]);
-  
-  // Verificar se há estilos carregados
-  useEffect(() => {
-    if (!primaryStyle) {
-      toast({
-        title: "Não foi possível carregar os dados do estilo",
-        description: "Você será redirecionado para a página de resultado.",
-        variant: "destructive"
-      });
-      
-      // Redirecionar para a página de resultado após um breve delay
-      const timer = setTimeout(() => {
-        navigate('/resultado');
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [primaryStyle, navigate]);
-  
-  // Carregar o funil do localStorage se existir
-  const [initialFunnel, setInitialFunnel] = useState<any>(null);
-  
-  useEffect(() => {
-    try {
-      const savedFunnel = localStorage.getItem('currentQuizFunnel');
-      if (savedFunnel) {
-        setInitialFunnel(JSON.parse(savedFunnel));
-      }
-    } catch (error) {
-      console.error('Erro ao carregar o funil:', error);
-    }
-  }, []);
-  
-  // Função para salvar o funil
-  const handleSaveFunnel = (funnel: any) => {
-    setIsLoading(true);
-    
-    try {
-      // Salvar no localStorage para persistência local
-      localStorage.setItem('currentQuizFunnel', JSON.stringify(funnel));
-      
-      toast({
-        title: "Configurações salvas",
-        description: "As configurações da página de resultado foram salvas com sucesso.",
-      });
-    } catch (error) {
-      console.error('Erro ao salvar o funil:', error);
-      toast({
-        title: "Erro ao salvar",
-        description: "Não foi possível salvar as configurações.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const { questions, quizResult } = useQuiz();
+  const [editableContent, setEditableContent] = useState({
+    heroTitle: 'VOCÊ DESCOBRIU SEU ESTILO',
+    heroSubtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
+    heroImage: '',
+    heroImage2: '',
+    benefitsList: [
+      'Looks com intenção e identidade',
+      'Cores, modelagens e tecidos a seu favor',
+      'Imagem alinhada aos seus objetivos',
+      'Guarda-roupa funcional, sem compras por impulso'
+    ]
+  });
+
+  const primaryStyle = quizResult?.primaryStyle?.category || 'Natural';
+  const secondaryStyles = quizResult?.secondaryStyles?.map(s => s.category) || [];
+
+  const updateContent = (field: string, value: any) => {
+    setEditableContent(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
-  
-  // Verificar se o usuário tem acesso de administrador
-  const isAdmin = user && 
-    typeof user === 'object' && 
-    'role' in user && 
-    user.role === 'admin';
-  
-  if (!isAdmin) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="text-center max-w-md p-6 bg-white rounded-lg shadow-lg">
-          <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-4">Acesso Restrito</h2>
-          <p className="mb-6">Esta página requer privilégios de administrador. Execute o script de acesso admin no console do navegador.</p>
-          <Button onClick={() => navigate('/resultado')}>
-            Voltar para Resultados
-          </Button>
-        </div>
-      </div>
-    );
-  }
-  
-  if (!primaryStyle) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Carregando...</h2>
-          <p>Preparando o editor da página de resultado.</p>
-        </div>
-      </div>
-    );
-  }
-  
+
   return (
-    <div className="min-h-screen bg-[#FAF9F7]">
-      <div className="border-b bg-white p-4 flex items-center justify-between shadow-sm">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={() => navigate('/resultado')}
-          className="gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Voltar
-        </Button>
-        <h1 className="text-xl font-semibold text-[#432818]">Editor da Página de Resultado</h1>
-        <Button 
-          variant="default" 
-          size="sm" 
-          onClick={() => {
-            toast({
-              title: "Alterações salvas",
-              description: "As configurações foram salvas com sucesso.",
-            });
-          }}
-          className="gap-2 bg-green-600 hover:bg-green-700"
-        >
-          <Save className="h-4 w-4" />
-          Salvar
-        </Button>
-      </div>
-      
-      <div className="p-4">
-        <EnhancedResultPageEditor
-          primaryStyle={primaryStyle}
-          secondaryStyles={secondaryStyles || []}
-          initialFunnel={initialFunnel}
-          onSave={handleSaveFunnel}
-        />
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-6xl mx-auto">
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-2xl">Editor de Página de Resultado</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="hero" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="hero">Hero Section</TabsTrigger>
+                <TabsTrigger value="style">Estilo Principal</TabsTrigger>
+                <TabsTrigger value="benefits">Benefícios</TabsTrigger>
+                <TabsTrigger value="preview">Preview</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="hero" className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="heroTitle">Título Principal</Label>
+                  <Textarea
+                    id="heroTitle"
+                    rows={2}
+                    value={editableContent.heroTitle}
+                    onChange={(e) => updateContent('heroTitle', e.target.value)}
+                    placeholder="VOCÊ DESCOBRIU SEU ESTILO"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="heroSubtitle">Subtítulo</Label>
+                  <Textarea
+                    id="heroSubtitle"
+                    rows={2}
+                    value={editableContent.heroSubtitle}
+                    onChange={(e) => updateContent('heroSubtitle', e.target.value)}
+                    placeholder="Agora é hora de aplicar com clareza — e se vestir de você"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="heroImage">Imagem Principal (URL)</Label>
+                  <Input
+                    id="heroImage"
+                    value={editableContent.heroImage}
+                    onChange={(e) => updateContent('heroImage', e.target.value)}
+                    placeholder="URL da imagem principal"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="heroImage2">Imagem Secundária (URL)</Label>
+                  <Input
+                    id="heroImage2"
+                    value={editableContent.heroImage2}
+                    onChange={(e) => updateContent('heroImage2', e.target.value)}
+                    placeholder="URL da imagem secundária"
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="style" className="space-y-4">
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-2">Estilo Detectado</h3>
+                  <p><strong>Principal:</strong> {primaryStyle}</p>
+                  <p><strong>Secundários:</strong> {secondaryStyles.join(', ')}</p>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="benefits" className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Lista de Benefícios</Label>
+                  {editableContent.benefitsList.map((benefit, index) => (
+                    <Input
+                      key={index}
+                      value={benefit}
+                      onChange={(e) => {
+                        const newList = [...editableContent.benefitsList];
+                        newList[index] = e.target.value;
+                        updateContent('benefitsList', newList);
+                      }}
+                      placeholder={`Benefício ${index + 1}`}
+                    />
+                  ))}
+                  <Button
+                    onClick={() => updateContent('benefitsList', [...editableContent.benefitsList, 'Novo benefício'])}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Adicionar Benefício
+                  </Button>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="preview" className="space-y-4">
+                <div className="p-6 bg-white rounded-lg border-2 border-dashed border-gray-300">
+                  <div className="text-center">
+                    <h1 className="text-3xl font-bold text-[#432818] mb-2">
+                      {editableContent.heroTitle}
+                    </h1>
+                    <p className="text-lg text-gray-600 mb-4">
+                      {editableContent.heroSubtitle}
+                    </p>
+                    
+                    <div className="bg-[#B89B7A] text-white p-4 rounded-lg mb-4">
+                      <h2 className="text-xl font-semibold">Seu Estilo: {primaryStyle}</h2>
+                    </div>
+                    
+                    <div className="text-left max-w-md mx-auto">
+                      <h3 className="font-semibold mb-2">Benefícios:</h3>
+                      <ul className="space-y-1">
+                        {editableContent.benefitsList.map((benefit, index) => (
+                          <li key={index} className="flex items-center gap-2">
+                            <span className="text-green-500">✓</span>
+                            {benefit}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

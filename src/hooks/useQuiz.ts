@@ -1,67 +1,110 @@
 
-import { useState, useCallback } from 'react';
-import { QuizQuestion, UserResponse, QuizResult } from '@/types/quiz';
-import { calculateStyleResults } from '@/services/quizService';
+import { useState, useEffect } from 'react';
+import { QuizQuestion, QuizResult } from '@/types/quiz';
+import { getQuizQuestions, calculateStyleResults } from '@/services/quizService';
 
 export interface UseQuizReturn {
+  questions: QuizQuestion[];
+  currentQuestion: QuizQuestion | null;
   currentQuestionIndex: number;
   answers: Record<string, string[]>;
-  isCompleted: boolean;
-  result: QuizResult | null;
-  handleAnswer: (response: UserResponse) => void;
+  quizResult: QuizResult | null;
+  isLoading: boolean;
+  error: string | null;
+  primaryStyle?: string;
+  secondaryStyles?: string[];
+  handleAnswerSelect: (questionId: string, optionId: string) => void;
   nextQuestion: () => void;
   previousQuestion: () => void;
+  completeQuiz: () => void;
   resetQuiz: () => void;
-  calculateResults: (questions: QuizQuestion[]) => QuizResult;
 }
 
-export const useQuiz = (questions: QuizQuestion[]): UseQuizReturn => {
+export const useQuiz = (): UseQuizReturn => {
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
-  const [result, setResult] = useState<QuizResult | null>(null);
+  const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const isCompleted = currentQuestionIndex >= questions.length;
+  const currentQuestion = questions[currentQuestionIndex] || null;
 
-  const handleAnswer = useCallback((response: UserResponse) => {
-    setAnswers(prev => ({
-      ...prev,
-      [response.questionId]: response.selectedOptions
-    }));
+  useEffect(() => {
+    loadQuestions();
   }, []);
 
-  const nextQuestion = useCallback(() => {
-    if (currentQuestionIndex < questions.length) {
+  const loadQuestions = async () => {
+    try {
+      setIsLoading(true);
+      const loadedQuestions = await getQuizQuestions();
+      setQuestions(loadedQuestions);
+      setError(null);
+    } catch (err) {
+      setError('Erro ao carregar perguntas do quiz');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAnswerSelect = (questionId: string, optionId: string) => {
+    const question = questions.find(q => q.id === questionId);
+    if (!question) return;
+
+    setAnswers(prev => {
+      const currentAnswers = prev[questionId] || [];
+      
+      if (question.multiSelect > 1) {
+        if (currentAnswers.includes(optionId)) {
+          return { ...prev, [questionId]: currentAnswers.filter(id => id !== optionId) };
+        } else if (currentAnswers.length < question.multiSelect) {
+          return { ...prev, [questionId]: [...currentAnswers, optionId] };
+        }
+        return prev;
+      } else {
+        return { ...prev, [questionId]: [optionId] };
+      }
+    });
+  };
+
+  const nextQuestion = () => {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     }
-  }, [currentQuestionIndex, questions.length]);
+  };
 
-  const previousQuestion = useCallback(() => {
+  const previousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1);
     }
-  }, [currentQuestionIndex]);
+  };
 
-  const resetQuiz = useCallback(() => {
+  const completeQuiz = () => {
+    const result = calculateStyleResults(answers, questions);
+    setQuizResult(result);
+  };
+
+  const resetQuiz = () => {
     setCurrentQuestionIndex(0);
     setAnswers({});
-    setResult(null);
-  }, []);
-
-  const calculateResults = useCallback((quizQuestions: QuizQuestion[]): QuizResult => {
-    const quizResult = calculateStyleResults(answers, quizQuestions);
-    setResult(quizResult);
-    return quizResult;
-  }, [answers]);
+    setQuizResult(null);
+  };
 
   return {
+    questions,
+    currentQuestion,
     currentQuestionIndex,
     answers,
-    isCompleted,
-    result,
-    handleAnswer,
+    quizResult,
+    isLoading,
+    error,
+    primaryStyle: quizResult?.primaryStyle?.category,
+    secondaryStyles: quizResult?.secondaryStyles?.map(s => s.category),
+    handleAnswerSelect,
     nextQuestion,
     previousQuestion,
-    resetQuiz,
-    calculateResults
+    completeQuiz,
+    resetQuiz
   };
 };
