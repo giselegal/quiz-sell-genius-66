@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -101,5 +102,11 @@ export default defineConfig(({ mode }) => ({
   
   css: {
     devSourcemap: mode === 'development',
-  }
+  },
+
+  // Lovable integration configuration
+  define: {
+    __LOVABLE_PROJECT_ID__: JSON.stringify("quiz-sell-genius-66"),
+    __LOVABLE_ENABLED__: JSON.stringify(true),
+  },
 }));
