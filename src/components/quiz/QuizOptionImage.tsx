@@ -71,14 +71,17 @@ export const QuizOptionImage: React.FC<QuizOptionImageProps> = ({
       >
         <div className={cn(
           "w-full h-full flex items-center justify-center overflow-hidden transform-gpu",
-          isSelected && "scale-[1.03] transition-all duration-300"
+          "transition-all duration-300",
+          isSelected && "scale-[1.03]",
+          // Efeito de zoom para opções com imagem ao fazer hover
+          !isSelected && "hover:scale-110"
         )}>
           {/* Use OptimizedImage component instead of img tag */}
           <OptimizedImage 
             src={optimizedImageUrl}
             alt={imageMetadata?.alt || altText}
             className={cn(
-              "object-cover w-full h-full",
+              "object-cover w-full h-full transition-all duration-300",
               isSelected 
                 ? "shadow-3d" 
                 : "shadow-sm hover:shadow-md",

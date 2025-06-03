@@ -124,6 +124,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         (isDisabled ? "opacity-50 cursor-not-allowed" : "")
       )}
       onClick={handleClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Conteúdo principal com ref para manipulação direta do DOM */}
       <div 
@@ -132,8 +134,11 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           "relative h-full flex flex-col rounded-lg overflow-hidden",
           "cursor-pointer", 
           
-          // Para opções de texto - manter borda
-          type === 'text' && "p-4 border",
+          // Para opções de texto - manter borda e adicionar efeito hover com cor da marca
+          type === 'text' && cn(
+            "p-4 border transition-all duration-300",
+            isHovered && !isSelected && "border-[#B89B7A] bg-[#B89B7A]/5 shadow-lg"
+          ),
           
           // Para opções de imagem - SEM borda na coluna
           type !== 'text' && "border-0",
