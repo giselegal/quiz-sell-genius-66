@@ -425,3 +425,68 @@ export const getCreativePerformance = (days = 7) => {
   
   return creativeStats;
 };
+
+/**
+ * Rastreia conversões de vendas especificamente
+ * @param {number} value - Valor da venda
+ * @param {string} productName - Nome do produto vendido
+ * @param {object} saleData - Dados adicionais sobre a venda
+ */
+export const trackSaleConversion = (value, productName, saleData = {}) => {
+  if (typeof window === 'undefined') return;
+  
+  const data = { 
+    value: value,
+    product_name: productName,
+    currency: 'BRL',
+    ...saleData 
+  };
+
+  // Google Analytics
+  if (window.gtag) {
+    window.gtag('event', 'purchase', {
+      transaction_id: Date.now().toString(),
+      value: value,
+      currency: 'BRL',
+      items: [{
+        item_name: productName,
+        item_category: 'quiz_product',
+        price: value,
+        quantity: 1
+      }],
+      ...saleData
+    });
+  }
+  
+  // Facebook Pixel
+  if (window.fbq) {
+    window.fbq('track', 'Purchase', {
+      value: value,
+      currency: 'BRL',
+      content_name: productName,
+      content_type: 'product',
+      ...saleData
+    });
+  }
+  
+  // DataLayer para Google Tag Manager
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'purchase',
+      ecommerce: {
+        transaction_id: Date.now().toString(),
+        value: value,
+        currency: 'BRL',
+        items: [{
+          item_name: productName,
+          item_category: 'quiz_product',
+          price: value,
+          quantity: 1
+        }]
+      },
+      ...data
+    });
+  }
+  
+  console.log(`[Analytics] Conversão de venda: ${productName} - R$ ${value}`, data);
+};
