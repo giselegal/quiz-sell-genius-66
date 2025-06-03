@@ -1,38 +1,39 @@
 
-export interface ImageMetadata {
-  width?: number;
-  height?: number;
-  format?: string;
-  size?: number;
-  isLoaded?: boolean;
-  alt?: string;
-}
-
-export interface ImageCacheEntry {
-  url: string;
-  metadata: ImageMetadata;
-  timestamp: number;
-}
-
-export interface ImageSettings {
-  quality?: number;
-  format?: string;
-  width?: number;
-  height?: number;
-}
-
 export interface ImageOptimizationOptions {
-  quality?: number;
-  format?: string;
   width?: number;
   height?: number;
-  lazy?: boolean;
+  quality?: number;
+  format?: 'auto' | 'webp' | 'jpg' | 'png';
+  crop?: 'fill' | 'fit' | 'scale' | 'crop';
 }
 
 export interface PreloadOptions {
   quality?: number;
   batchSize?: number;
-  priority?: number;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
+}
+
+export interface ImageCacheEntry {
+  url: string;
+  timestamp: number;
+  preloaded: boolean;
+  lastAccessed?: number;
+  loadStatus?: 'loading' | 'loaded' | 'error';
+}
+
+export interface ImageSettings extends ImageOptimizationOptions {
+  responsive?: boolean;
+}
+
+export interface PreloadImageDefinition {
+  id: string;
+  url: string;
+  priority: number;
+  category: string;
+}
+
+export interface FixBlurryImagesOptions {
+  quality?: number;
+  format?: string;
+  width?: number;
+  height?: number;
 }

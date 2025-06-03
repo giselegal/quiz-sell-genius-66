@@ -1,5 +1,5 @@
 import React from 'react';
-import { OptimizedImage } from './optimized-image'; // Corrigido: importação nomeada e nome do arquivo em minúsculas com hífen
+import OptimizedImage from './optimized-image';
 
 interface LogoProps {
   src?: string;

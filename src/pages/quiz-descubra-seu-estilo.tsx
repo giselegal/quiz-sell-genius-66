@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import { preloadCriticalImages } from '@/utils/images/preloading';
+import { preloadImagesByUrls } from '@/utils/images/preloading';
 import FixedIntroImage from '@/components/ui/FixedIntroImage';
 import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart, CheckCircle, ArrowDown, Hourglass } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
@@ -331,7 +332,7 @@ const QuizOfferPage: React.FC = () => {
         styleElement.textContent = customStyles;
         document.head.appendChild(styleElement);
         
-        preloadCriticalImages([
+        preloadImagesByUrls([
             HERO_IMAGE_URL,
             HERO_COMPLEMENTARY_IMAGE_URL,
             PROBLEM_IMAGE_URL,

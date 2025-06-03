@@ -1,193 +1,164 @@
-import React, { useState, useEffect } from 'react';
-import VisualEditorLayout from '@/components/visual-editor/VisualEditorLayout';
-import { QuizQuestion } from '@/types/quiz';
-import { useToast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Save } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { QuizQuestion } from '@/types/quiz';
+import { Plus, Trash2 } from 'lucide-react';
 
 const VisualEditorPage: React.FC = () => {
-  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
-  const navigate = useNavigate();
+  const [questions, setQuestions] = useState<QuizQuestion[]>([
+    {
+      id: '1',
+      text: 'Qual seu estilo favorito?',
+      title: 'Qual seu estilo favorito?',
+      type: 'image',
+      multiSelect: 1,
+      options: [
+        { id: '1a', text: 'Casual', styleCategory: 'Natural', points: 1, imageUrl: 'https://example.com/casual.jpg' },
+        { id: '1b', text: 'Elegante', styleCategory: 'Elegante', points: 1, imageUrl: 'https://example.com/elegant.jpg' }
+      ]
+    },
+    {
+      id: '2',
+      text: 'Como você se define?',
+      title: 'Como você se define?',
+      type: 'text',
+      multiSelect: 1,
+      options: [
+        { id: '2a', text: 'Criativa', styleCategory: 'Criativo', points: 1 },
+        { id: '2b', text: 'Prática', styleCategory: 'Natural', points: 1 }
+      ]
+    }
+  ]);
 
-  useEffect(() => {
-    // Carregar perguntas do localStorage ou de uma API
-    const loadQuestions = async () => {
-      try {
-        setLoading(true);
-        const savedQuestions = localStorage.getItem('quiz_editor_questions');
-        
-        if (savedQuestions) {
-          setQuestions(JSON.parse(savedQuestions));
-        } else {
-          // Se não houver perguntas salvas, criar algumas de exemplo
-          const defaultQuestions: QuizQuestion[] = [
-            {
-              id: `question-${Date.now()}-1`,
-              title: 'Qual estilo de roupa você prefere no dia a dia?',
-              type: 'image',
-              multiSelect: 1,
-              options: [
-                {
-                  id: `option-${Date.now()}-1`,
-                  text: 'Roupas confortáveis e práticas',
-                  styleCategory: 'Natural',
-                  points: 3,
-                  imageUrl: 'https://placehold.co/300x400?text=Estilo+Natural'
-                },
-                {
-                  id: `option-${Date.now()}-2`,
-                  text: 'Peças elegantes e sofisticadas',
-                  styleCategory: 'Clássico',
-                  points: 3,
-                  imageUrl: 'https://placehold.co/300x400?text=Estilo+Clássico'
-                },
-                {
-                  id: `option-${Date.now()}-3`,
-                  text: 'Looks modernos e minimalistas',
-                  styleCategory: 'Contemporâneo',
-                  points: 3,
-                  imageUrl: 'https://placehold.co/300x400?text=Estilo+Contemporâneo'
-                },
-                {
-                  id: `option-${Date.now()}-4`,
-                  text: 'Peças românticas e delicadas',
-                  styleCategory: 'Romântico',
-                  points: 3,
-                  imageUrl: 'https://placehold.co/300x400?text=Estilo+Romântico'
-                }
-              ]
-            },
-            {
-              id: `question-${Date.now()}-2`,
-              title: 'Como você descreveria sua personalidade?',
-              type: 'text',
-              multiSelect: 2,
-              options: [
-                {
-                  id: `option-${Date.now()}-5`,
-                  text: 'Prática e objetiva',
-                  styleCategory: 'Natural',
-                  points: 2
-                },
-                {
-                  id: `option-${Date.now()}-6`,
-                  text: 'Sofisticada e tradicional',
-                  styleCategory: 'Clássico',
-                  points: 2
-                },
-                {
-                  id: `option-${Date.now()}-7`,
-                  text: 'Criativa e expressiva',
-                  styleCategory: 'Criativo',
-                  points: 2
-                },
-                {
-                  id: `option-${Date.now()}-8`,
-                  text: 'Sensual e marcante',
-                  styleCategory: 'Sexy',
-                  points: 2
-                }
-              ]
-            }
-          ];
-          
-          setQuestions(defaultQuestions);
-        }
-      } catch (error) {
-        console.error('Erro ao carregar perguntas:', error);
-        toast({
-          title: "Erro ao carregar",
-          description: "Não foi possível carregar as perguntas do quiz.",
-          variant: "destructive"
-        });
-      } finally {
-        setLoading(false);
+  const addQuestion = () => {
+    const newQuestion: QuizQuestion = {
+      id: Date.now().toString(),
+      text: 'Nova pergunta',
+      title: 'Nova pergunta',
+      type: 'text',
+      multiSelect: 1,
+      options: [{ id: Date.now().toString() + '-1', text: 'Nova opção', styleCategory: 'Natural', points: 1 }],
+    };
+    setQuestions([...questions, newQuestion]);
+  };
+
+  const deleteQuestion = (id: string) => {
+    setQuestions(questions.filter(q => q.id !== id));
+  };
+
+  const updateQuestion = (id: string, updatedFields: Partial<QuizQuestion>) => {
+    setQuestions(questions.map(q => q.id === id ? { ...q, ...updatedFields } : q));
+  };
+
+  const updateOption = (questionId: string, optionId: string, updatedFields: Partial<QuizQuestion['options'][0]>) => {
+    setQuestions(questions.map(q => {
+      if (q.id === questionId) {
+        return {
+          ...q,
+          options: q.options.map(option => option.id === optionId ? { ...option, ...updatedFields } : option)
+        };
       }
+      return q;
+    }));
+  };
+
+  const addOption = (questionId: string) => {
+    const newOption = {
+      id: Date.now().toString(),
+      text: 'Nova opção',
+      styleCategory: 'Natural',
+      points: 1
     };
 
-    loadQuestions();
-  }, [toast]);
-
-  const handleSave = async (updatedQuestions: QuizQuestion[]) => {
-    try {
-      // Salvar no localStorage
-      localStorage.setItem('quiz_editor_questions', JSON.stringify(updatedQuestions));
-      
-      // Aqui você poderia salvar em uma API também
-      
-      toast({
-        title: "Quiz salvo com sucesso",
-        description: "Todas as alterações foram salvas."
-      });
-    } catch (error) {
-      console.error('Erro ao salvar quiz:', error);
-      toast({
-        title: "Erro ao salvar",
-        description: "Não foi possível salvar as alterações do quiz.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleDuplicateQuiz = () => {
-    // Implementar a lógica de duplicação do quiz
-    const duplicatedQuiz = JSON.parse(JSON.stringify(questions));
-    
-    // Gerar novos IDs para todas as perguntas e opções
-    const newQuiz = duplicatedQuiz.map((question: QuizQuestion) => ({
-      ...question,
-      id: `question-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      options: question.options.map(option => ({
-        ...option,
-        id: `option-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-      }))
+    setQuestions(questions.map(q => {
+      if (q.id === questionId) {
+        return {
+          ...q,
+          options: [...q.options, newOption]
+        };
+      }
+      return q;
     }));
-    
-    // Salvar o quiz duplicado com um novo nome
-    localStorage.setItem('quiz_editor_questions_duplicate', JSON.stringify(newQuiz));
-    
-    toast({
-      title: "Quiz duplicado",
-      description: "Uma cópia do quiz foi criada com sucesso."
-    });
   };
 
-  if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-[#FAF9F7]">
-        <div className="animate-pulse text-[#B89B7A]">Carregando editor...</div>
-      </div>
-    );
-  }
+  const deleteOption = (questionId: string, optionId: string) => {
+    setQuestions(questions.map(q => {
+      if (q.id === questionId) {
+        return {
+          ...q,
+          options: q.options.filter(option => option.id !== optionId)
+        };
+      }
+      return q;
+    }));
+  };
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="bg-white border-b border-[#B89B7A]/20 p-2 flex items-center justify-between">
-        <Button variant="ghost" onClick={() => navigate(-1)}>
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Voltar
-        </Button>
-        
-        <div className="flex items-center gap-2">
-          <Button 
-            className="bg-[#B89B7A] hover:bg-[#A38A69] text-white" 
-            onClick={() => handleSave(questions)}
-          >
-            <Save className="h-4 w-4 mr-1" />
-            Salvar Quiz
-          </Button>
-        </div>
-      </div>
-      
-      <div className="flex-1">
-        <VisualEditorLayout 
-          initialQuestions={questions} 
-          onSave={handleSave} 
-        />
-      </div>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Editor Visual de Quiz</h1>
+      <Button onClick={addQuestion} className="mb-4">
+        <Plus className="mr-2 h-4 w-4" />
+        Adicionar Pergunta
+      </Button>
+      {questions.map((question) => (
+        <Card key={question.id} className="mb-4">
+          <CardHeader>
+            <CardTitle>
+              <Input
+                type="text"
+                value={question.title}
+                onChange={(e) => updateQuestion(question.id, { title: e.target.value })}
+              />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Label>Texto da Pergunta</Label>
+            <Textarea
+              value={question.text}
+              onChange={(e) => updateQuestion(question.id, { text: e.target.value })}
+              className="mb-2"
+            />
+            <Label>Tipo de Pergunta</Label>
+            <Select value={question.type} onValueChange={(value) => updateQuestion(question.id, { type: value as "text" | "image" | "both" })}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecione o tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="text">Texto</SelectItem>
+                <SelectItem value="image">Imagem</SelectItem>
+                <SelectItem value="both">Ambos</SelectItem>
+              </SelectContent>
+            </Select>
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold mb-2">Opções</h3>
+              {question.options.map((option) => (
+                <div key={option.id} className="flex items-center mb-2">
+                  <Input
+                    type="text"
+                    value={option.text}
+                    onChange={(e) => updateOption(question.id, option.id, { text: e.target.value })}
+                    className="mr-2"
+                  />
+                  <Button variant="outline" size="icon" onClick={() => deleteOption(question.id, option.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button variant="secondary" onClick={() => addOption(question.id)}>
+                Adicionar Opção
+              </Button>
+            </div>
+            <Button variant="destructive" className="mt-4" onClick={() => deleteQuestion(question.id)}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              Excluir Pergunta
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 };

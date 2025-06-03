@@ -1,83 +1,53 @@
+import { QuizQuestion, QuizOption, StyleResult, QuizResult } from '@/types/quiz';
 
-import { supabase } from '@/integrations/supabase/client';
-import { Question, StyleResult } from '@/types/quiz';
+interface StyleCount {
+  category: string;
+  count: number;
+}
 
-export const getQuizQuestions = async (): Promise<Question[]> => {
-  // Mock implementation for now
-  return [
-    {
-      id: '1',
-      text: 'Qual é o seu estilo preferido?',
-      options: ['Elegante', 'Casual', 'Romântico'],
-      imageUrl: 'https://example.com/image1.jpg'
-    }
-  ];
-};
+interface CalculateStyleResultsParams {
+  answers: Record<string, string[]>;
+  questions: QuizQuestion[];
+}
 
-export const fetchQuizQuestions = async (quizId: string) => {
-  const { data: questions, error } = await supabase
-    .from('quiz_questions')
-    .select(`
-      *,
-      question_options:question_options(*)
-    `)
-    .eq('quiz_id', quizId)
-    .eq('active', true)
-    .order('order_index', { ascending: true });
+export const calculateStyleResults = (answers: Record<string, string[]>, questions: QuizQuestion[]): QuizResult => {
+  const styleCounts: Record<string, number> = {};
+  let totalSelections = 0;
 
-  if (error) throw error;
-  return questions;
-};
+  // Count selections for each style category
+  Object.entries(answers).forEach(([questionId, selectedOptionIds]) => {
+    const question = questions.find(q => q.id === questionId);
+    if (!question) return;
 
-export const saveParticipant = async (name: string, email: string, quizId: string) => {
-  const { data, error } = await supabase
-    .from('quiz_participants')
-    .insert({
-      name,
-      email,
-      quiz_id: quizId,
-    })
-    .select()
-    .single();
+    selectedOptionIds.forEach(optionId => {
+      const option = question.options.find(opt => opt.id === optionId);
+      if (option && option.styleCategory) {
+        styleCounts[option.styleCategory] = (styleCounts[option.styleCategory] || 0) + (option.points || 1);
+        totalSelections++;
+      }
+    });
+  });
 
-  if (error) throw error;
-  return data;
-};
+  // Convert counts to StyleResult objects with percentages
+  const styleResults: StyleResult[] = Object.entries(styleCounts).map(([category, score]) => ({
+    category,
+    score,
+    percentage: totalSelections > 0 ? Math.round((score / totalSelections) * 100) : 0
+  }));
 
-export const saveAnswers = async (
-  participantId: string,
-  answers: Array<{ questionId: string; optionId: string; points: number }>
-) => {
-  const { error } = await supabase
-    .from('participant_answers')
-    .insert(
-      answers.map(answer => ({
-        participant_id: participantId,
-        question_id: answer.questionId,
-        option_id: answer.optionId,
-        points: answer.points,
-      }))
-    );
+  // Sort results by score in descending order
+  styleResults.sort((a, b) => b.score - a.score);
 
-  if (error) throw error;
-};
+  // Determine primary and secondary styles
+  const primaryStyle = styleResults.length > 0 ? styleResults[0] : { category: 'Unknown', score: 0, percentage: 0 };
+  const secondaryStyles = styleResults.slice(1, 4); // Get top 3 secondary styles
 
-export const saveResults = async (
-  participantId: string,
-  results: Array<StyleResult>
-) => {
-  const { error } = await supabase
-    .from('style_results')
-    .insert(
-      results.map((result, index) => ({
-        participant_id: participantId,
-        style_type_id: result.category,
-        points: result.score,
-        percentage: result.percentage,
-        is_primary: index === 0,
-        rank: index + 1,
-      }))
-    );
+  const userName = 'User'; // Replace with actual user name if available
 
-  if (error) throw error;
+  return {
+    primaryStyle,
+    secondaryStyles,
+    totalSelections,
+    userName
+  };
 };

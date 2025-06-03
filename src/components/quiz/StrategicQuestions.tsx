@@ -5,10 +5,10 @@ import { UserResponse } from '@/types/quiz';
 import { strategicQuestions } from '@/data/strategicQuestions';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { preloadCriticalImages, preloadImagesByUrls } from '@/utils/imageManager';
-import OptimizedImage from '../ui/OptimizedImage';
+import OptimizedImage from '../ui/optimized-image';
 
-// Imagens críticas da página de resultados a serem pré-carregadas
-const RESULT_CRITICAL_IMAGES = [
+// Result critical images as URLs array
+const RESULT_CRITICAL_IMAGES: string[] = [
   'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911668/C%C3%B3pia_de_Passo_5_Pe%C3%A7as_chaves_Documento_A4_lxmekf.webp',
   'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp',
   'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp'

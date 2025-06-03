@@ -1,489 +1,354 @@
-import React, { useState, useCallback } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { cn } from '@/lib/utils';
-import { QuizQuestion, QuizOption } from '@/types/quiz';
+import React, { useState, useCallback, useEffect } from 'react';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { PlusCircle, Trash2, Copy, Eye, Move, Settings } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import QuestionOptionEditor from '../quiz-editor/QuestionOptionEditor';
-import { QuizOption as QuizOptionComponent } from '../quiz/QuizOption';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Plus, Trash2, GripVertical, Eye, Save, Download, Upload } from 'lucide-react';
+import { QuizQuestion } from '@/types/quiz';
+import SortableQuestionItem from './SortableQuestionItem';
+import { cn } from '@/lib/utils';
 
-type ItemType = 'QUESTION' | 'OPTION';
-
-interface DraggableItemProps {
-  id: string;
-  index: number;
-  type: ItemType;
-  moveItem: (dragIndex: number, hoverIndex: number, type: ItemType, parentId?: string) => void;
-  children: React.ReactNode;
-  parentId?: string;
+interface QuizComponentData {
+  type: string;
+  content: any;
 }
 
-const DraggableItem: React.FC<DraggableItemProps> = ({ 
-  id, 
-  index, 
-  type, 
-  moveItem, 
-  children,
-  parentId 
-}) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  
-  const [{ isDragging }, drag] = useDrag({
-    type,
-    item: { id, index, type, parentId },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
-  const [, drop] = useDrop({
-    accept: type,
-    hover: (item: { id: string; index: number; type: ItemType; parentId?: string }, monitor) => {
-      if (!ref.current) return;
-      const dragIndex = item.index;
-      const hoverIndex = index;
-      
-      // Don't replace items with themselves
-      if (dragIndex === hoverIndex && item.parentId === parentId) return;
-
-      // Determine rectangle on screen
-      const hoverBoundingRect = ref.current.getBoundingClientRect();
-      // Get vertical middle
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      // Determine mouse position
-      const clientOffset = monitor.getClientOffset();
-      // Get pixels to the top
-      const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
-
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-
-      // Time to actually perform the action
-      moveItem(dragIndex, hoverIndex, type, parentId);
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
-      item.index = hoverIndex;
-    },
-  });
-
-  drag(drop(ref));
-
-  return (
-    <div 
-      ref={ref} 
-      className={cn(
-        "transition-opacity duration-200",
-        isDragging ? "opacity-50" : "opacity-100"
-      )}
-    >
-      {children}
-    </div>
-  );
-};
-
-interface QuestionBlockProps {
-  question: QuizQuestion;
-  index: number;
-  moveQuestion: (dragIndex: number, hoverIndex: number) => void;
-  updateQuestion: (id: string, updates: Partial<QuizQuestion>) => void;
-  deleteQuestion: (id: string) => void;
-  duplicateQuestion: (id: string) => void;
-  moveOption: (questionId: string, dragIndex: number, hoverIndex: number) => void;
-  addOption: (questionId: string) => void;
-  updateOption: (questionId: string, optionId: string, updates: Partial<QuizOption>) => void;
-  deleteOption: (questionId: string, optionId: string) => void;
-  previewMode: boolean;
+interface StyleSettings {
+  backgroundColor?: string;
+  textColor?: string;
+  borderRadius?: number;
+  paddingX?: number;
+  paddingY?: number;
 }
 
-const QuestionBlock: React.FC<QuestionBlockProps> = ({
-  question,
-  index,
-  moveQuestion,
-  updateQuestion,
-  deleteQuestion,
-  duplicateQuestion,
-  moveOption,
-  addOption,
-  updateOption,
-  deleteOption,
-  previewMode
-}) => {
-  const [expanded, setExpanded] = useState(true);
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+interface QuestionSettings {
+  questionText?: string;
+  questionType?: 'text' | 'image' | 'both';
+  multiSelect?: number;
+  options?: string[];
+  optionImages?: string[];
+  layout?: {
+    columns: number;
+  };
+  displayType?: 'text' | 'image' | 'both';
+  imageSize?: 'small' | 'medium' | 'large';
+  selectionIndicator?: 'border' | 'checkbox' | 'highlight';
+  backgroundColorQuestion?: string;
+  textColorQuestion?: string;
+}
 
-  const handleMoveOption = useCallback(
-    (dragIndex: number, hoverIndex: number, type: ItemType, parentId?: string) => {
-      if (type === 'OPTION' && parentId === question.id) {
-        moveOption(question.id, dragIndex, hoverIndex);
-      }
-    },
-    [moveOption, question.id]
-  );
-
-  if (previewMode) {
-    return (
-      <div className="mb-8 p-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-[#B89B7A]/20">
-        <h3 className="text-xl font-medium text-[#432818] mb-4">{question.title}</h3>
-        <div className={cn(
-          "grid gap-4",
-          question.options.length <= 2 ? "grid-cols-1 md:grid-cols-2" :
-          question.options.length <= 4 ? "grid-cols-2 md:grid-cols-4" :
-          "grid-cols-2 md:grid-cols-4"
-        )}>
-          {question.options.map((option) => (
-            <QuizOptionComponent
-              key={option.id}
-              option={option}
-              isSelected={option.id === selectedOptionId}
-              onSelect={(id) => setSelectedOptionId(id)}
-              type={question.type}
-              questionId={question.id}
-            />
-          ))}
-        </div>
-      </div>
-    );
+const initialQuestions: QuizQuestion[] = [
+  {
+    id: '1',
+    text: 'Qual seu estilo favorito?',
+    title: 'Qual seu estilo favorito?',
+    type: 'image',
+    multiSelect: 1,
+    options: [
+      { id: '1a', text: 'Casual', styleCategory: 'Natural', points: 1, imageUrl: 'https://example.com/casual.jpg' },
+      { id: '1b', text: 'Elegante', styleCategory: 'Elegante', points: 1, imageUrl: 'https://example.com/elegant.jpg' }
+    ]
+  },
+  {
+    id: '2',
+    text: 'Como você se define?',
+    title: 'Como você se define?',
+    type: 'text',
+    multiSelect: 1,
+    options: [
+      { id: '2a', text: 'Criativa', styleCategory: 'Criativo', points: 1 },
+      { id: '2b', text: 'Prática', styleCategory: 'Natural', points: 1 }
+    ]
   }
+];
 
-  return (
-    <DraggableItem
-      id={question.id}
-      index={index}
-      type="QUESTION"
-      moveItem={moveQuestion}
-    >
-      <Card className="mb-6 border-[#B89B7A]/20 shadow-sm overflow-hidden">
-        <div className="bg-[#FAF9F7] p-3 border-b border-[#B89B7A]/10 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Move className="h-4 w-4 text-[#B89B7A] cursor-move" />
-            <h3 className="font-medium text-[#432818]">
-              Pergunta {index + 1}: {question.title}
-            </h3>
-          </div>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setExpanded(!expanded)}
-              className="h-8 w-8"
-            >
-              <Settings className="h-4 w-4 text-[#8F7A6A]" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => duplicateQuestion(question.id)}
-              className="h-8 w-8"
-            >
-              <Copy className="h-4 w-4 text-[#8F7A6A]" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => deleteQuestion(question.id)}
-              className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+const DraggableQuizEditor: React.FC = () => {
+  const [questions, setQuestions] = useState<QuizQuestion[]>(initialQuestions);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null);
+  const [questionSettings, setQuestionSettings] = useState<QuestionSettings>({});
+  const [styleSettings, setStyleSettings] = useState<StyleSettings>({});
 
-        <AnimatePresence>
-          {expanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <CardContent className="p-4">
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    value={question.title}
-                    onChange={(e) => updateQuestion(question.id, { title: e.target.value })}
-                    className="w-full p-2 border border-[#B89B7A]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/30"
-                    placeholder="Título da pergunta"
-                  />
-                </div>
-
-                <div className="mb-4 flex gap-4">
-                  <div>
-                    <label className="block text-sm text-[#8F7A6A] mb-1">Tipo de pergunta</label>
-                    <select
-                      value={question.type}
-                      onChange={(e) => updateQuestion(question.id, { type: e.target.value as 'text' | 'image' | 'both' })}
-                      className="p-2 border border-[#B89B7A]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/30"
-                    >
-                      <option value="text">Texto</option>
-                      <option value="image">Imagem</option>
-                      <option value="both">Texto e Imagem</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-[#8F7A6A] mb-1">Seleção múltipla</label>
-                    <select
-                      value={question.multiSelect}
-                      onChange={(e) => updateQuestion(question.id, { multiSelect: parseInt(e.target.value) })}
-                      className="p-2 border border-[#B89B7A]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/30"
-                    >
-                      <option value="1">Única (1)</option>
-                      <option value="2">Até 2 opções</option>
-                      <option value="3">Até 3 opções</option>
-                      <option value="4">Até 4 opções</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <h4 className="font-medium text-[#432818] mb-2">Opções</h4>
-                  <div className="space-y-3">
-                    {question.options.map((option, optionIndex) => (
-                      <DraggableItem
-                        key={option.id}
-                        id={option.id}
-                        index={optionIndex}
-                        type="OPTION"
-                        moveItem={handleMoveOption}
-                        parentId={question.id}
-                      >
-                        <QuestionOptionEditor
-                          option={option}
-                          questionType={question.type}
-                          onUpdate={(updatedOption) => updateOption(question.id, option.id, updatedOption)}
-                          onDelete={() => deleteOption(question.id, option.id)}
-                          index={optionIndex}
-                        />
-                      </DraggableItem>
-                    ))}
-                  </div>
-                </div>
-
-                <Button
-                  variant="outline"
-                  onClick={() => addOption(question.id)}
-                  className="w-full mt-2 border-dashed border-[#B89B7A]/40 text-[#8F7A6A] hover:bg-[#FAF9F7]"
-                >
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  Adicionar Opção
-                </Button>
-              </CardContent>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </Card>
-    </DraggableItem>
-  );
-};
-
-interface DraggableQuizEditorProps {
-  questions: QuizQuestion[];
-  onQuestionsChange: (questions: QuizQuestion[]) => void;
-}
-
-const DraggableQuizEditor: React.FC<DraggableQuizEditorProps> = ({ questions, onQuestionsChange }) => {
-  const [previewMode, setPreviewMode] = useState(false);
-
-  const moveQuestion = useCallback(
-    (dragIndex: number, hoverIndex: number) => {
-      const draggedQuestion = questions[dragIndex];
-      const newQuestions = [...questions];
-      newQuestions.splice(dragIndex, 1);
-      newQuestions.splice(hoverIndex, 0, draggedQuestion);
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
   );
 
-  const updateQuestion = useCallback(
-    (id: string, updates: Partial<QuizQuestion>) => {
-      const newQuestions = questions.map((q) =>
-        q.id === id ? { ...q, ...updates } : q
-      );
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
+  const handleDragStart = (event: any) => {
+    setActiveId(event.active.id);
+  };
 
-  const deleteQuestion = useCallback(
-    (id: string) => {
-      const newQuestions = questions.filter((q) => q.id !== id);
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
 
-  const duplicateQuestion = useCallback(
-    (id: string) => {
-      const questionToDuplicate = questions.find((q) => q.id === id);
-      if (questionToDuplicate) {
-        const duplicatedQuestion = {
-          ...questionToDuplicate,
-          id: `question-${Date.now()}`,
-          options: questionToDuplicate.options.map((opt) => ({
-            ...opt,
-            id: `option-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          })),
-        };
-        onQuestionsChange([...questions, duplicatedQuestion]);
+    if (over && active.id !== over.id) {
+      const oldIndex = questions.findIndex((question) => question.id === active.id);
+      const newIndex = questions.findIndex((question) => question.id === over.id);
+
+      if (oldIndex !== -1 && newIndex !== -1) {
+        setQuestions((prevQuestions) => arrayMove(prevQuestions, oldIndex, newIndex));
       }
-    },
-    [questions, onQuestionsChange]
-  );
+    }
 
-  const moveOption = useCallback(
-    (questionId: string, dragIndex: number, hoverIndex: number) => {
-      const newQuestions = questions.map((q) => {
-        if (q.id === questionId) {
-          const newOptions = [...q.options];
-          const draggedOption = newOptions[dragIndex];
-          newOptions.splice(dragIndex, 1);
-          newOptions.splice(hoverIndex, 0, draggedOption);
-          return { ...q, options: newOptions };
-        }
-        return q;
+    setActiveId(null);
+  };
+
+  const handleQuestionClick = (questionId: string) => {
+    setSelectedQuestionId(questionId);
+    const selectedQuestion = questions.find(q => q.id === questionId);
+
+    if (selectedQuestion) {
+      setQuestionSettings({
+        questionText: selectedQuestion.title,
+        questionType: selectedQuestion.type,
+        multiSelect: selectedQuestion.multiSelect,
+        options: selectedQuestion.options.map(opt => opt.text),
+        optionImages: selectedQuestion.options.map(opt => opt.imageUrl || ''),
       });
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
+    }
+  };
 
-  const addOption = useCallback(
-    (questionId: string) => {
-      const newQuestions = questions.map((q) => {
-        if (q.id === questionId) {
-          return {
-            ...q,
-            options: [
-              ...q.options,
-              {
-                id: `option-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                text: 'Nova opção',
-                styleCategory: 'Natural',
-                points: 1,
-              },
-            ],
+  const handleSettingsChange = (field: keyof QuestionSettings, value: any) => {
+    setQuestionSettings(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleStyleChange = (field: keyof StyleSettings, value: any) => {
+    setStyleSettings(prev => ({ ...prev, [field]: value }));
+  };
+
+  const applySettingsToQuestion = () => {
+    if (!selectedQuestionId) return;
+
+    setQuestions(prevQuestions => {
+      return prevQuestions.map(question => {
+        if (question.id === selectedQuestionId) {
+          const updatedQuestion: QuizQuestion = {
+            ...question,
+            title: questionSettings.questionText || question.title,
+            text: questionSettings.questionText || question.title,
+            type: questionSettings.questionType || question.type,
+            multiSelect: questionSettings.multiSelect || question.multiSelect,
+            options: (questionSettings.options || question.options.map(opt => opt.text)).map((text, index) => ({
+              id: question.options[index]?.id || `new-opt-${Date.now()}-${index}`,
+              text: text,
+              styleCategory: question.options[index]?.styleCategory || 'Natural',
+              points: question.options[index]?.points || 1,
+              imageUrl: questionSettings.optionImages?.[index] || question.options[index]?.imageUrl
+            }))
           };
+          return updatedQuestion;
         }
-        return q;
+        return question;
       });
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
+    });
+  };
 
-  const updateOption = useCallback(
-    (questionId: string, optionId: string, updates: Partial<QuizOption>) => {
-      const newQuestions = questions.map((q) => {
-        if (q.id === questionId) {
-          return {
-            ...q,
-            options: q.options.map((opt) =>
-              opt.id === optionId ? { ...opt, ...updates } : opt
-            ),
-          };
-        }
-        return q;
-      });
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
+  const deleteQuestion = (questionId: string) => {
+    setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== questionId));
+    setSelectedQuestionId(null);
+    setQuestionSettings({});
+  };
 
-  const deleteOption = useCallback(
-    (questionId: string, optionId: string) => {
-      const newQuestions = questions.map((q) => {
-        if (q.id === questionId) {
-          return {
-            ...q,
-            options: q.options.filter((opt) => opt.id !== optionId),
-          };
-        }
-        return q;
-      });
-      onQuestionsChange(newQuestions);
-    },
-    [questions, onQuestionsChange]
-  );
-
-  const addQuestion = useCallback(() => {
+  const addNewQuestion = () => {
     const newQuestion: QuizQuestion = {
       id: `question-${Date.now()}`,
-      title: 'Nova pergunta',
+      text: `Nova Pergunta ${questions.length + 1}`,
+      title: `Nova Pergunta ${questions.length + 1}`,
       type: 'text',
       multiSelect: 1,
       options: [
-        {
-          id: `option-${Date.now()}-1`,
-          text: 'Opção 1',
-          styleCategory: 'Natural',
-          points: 1,
-        },
-        {
-          id: `option-${Date.now()}-2`,
-          text: 'Opção 2',
-          styleCategory: 'Clássico',
-          points: 1,
-        },
-      ],
+        { id: `opt-1-${Date.now()}`, text: 'Opção 1', styleCategory: 'Natural', points: 1 },
+        { id: `opt-2-${Date.now()}`, text: 'Opção 2', styleCategory: 'Clássico', points: 1 },
+        { id: `opt-3-${Date.now()}`, text: 'Opção 3', styleCategory: 'Contemporâneo', points: 1 },
+        { id: `opt-4-${Date.now()}`, text: 'Opção 4', styleCategory: 'Elegante', points: 1 }
+      ]
     };
-    onQuestionsChange([...questions, newQuestion]);
-  }, [questions, onQuestionsChange]);
+    setQuestions([...questions, newQuestion]);
+  };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-playfair text-[#432818]">Editor de Quiz</h2>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setPreviewMode(!previewMode)}
-              className="flex items-center gap-2"
+    <div className="flex flex-col md:flex-row h-screen">
+      {/* Sidebar with Draggable Questions */}
+      <div className="w-full md:w-1/4 p-4 border-r overflow-y-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>Questões do Quiz</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              modifiers={[restrictToVerticalAxis]}
             >
-              <Eye className="h-4 w-4" />
-              {previewMode ? 'Modo Edição' : 'Pré-visualizar'}
+              <SortableContext
+                items={questions.map(question => question.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {questions.map((question) => (
+                  <SortableQuestionItem
+                    key={question.id}
+                    id={question.id}
+                    title={question.title}
+                    isActive={activeId === question.id}
+                    isSelected={selectedQuestionId === question.id}
+                    onClick={() => handleQuestionClick(question.id)}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+            <Button variant="outline" className="w-full mt-4" onClick={addNewQuestion}>
+              <Plus className="w-4 h-4 mr-2" />
+              Adicionar Pergunta
             </Button>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          {questions.map((question, index) => (
-            <QuestionBlock
-              key={question.id}
-              question={question}
-              index={index}
-              moveQuestion={moveQuestion}
-              updateQuestion={updateQuestion}
-              deleteQuestion={deleteQuestion}
-              duplicateQuestion={duplicateQuestion}
-              moveOption={moveOption}
-              addOption={addOption}
-              updateOption={updateOption}
-              deleteOption={deleteOption}
-              previewMode={previewMode}
-            />
-          ))}
-        </div>
-
-        <Button
-          onClick={addQuestion}
-          className="mt-6 bg-[#B89B7A] hover:bg-[#A38A69] text-white"
-        >
-          <PlusCircle className="h-4 w-4 mr-2" />
-          Adicionar Pergunta
-        </Button>
+          </CardContent>
+        </Card>
       </div>
-    </DndProvider>
+
+      {/* Main Content with Question Settings */}
+      <div className="w-full md:w-3/4 p-4 overflow-y-auto">
+        {selectedQuestionId ? (
+          <Tabs defaultValue="content" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="content">Conteúdo</TabsTrigger>
+              <TabsTrigger value="style">Estilo</TabsTrigger>
+            </TabsList>
+            <TabsContent value="content" className="space-y-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Configurações da Pergunta</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="questionText">Texto da Pergunta</Label>
+                    <Input
+                      id="questionText"
+                      value={questionSettings.questionText || ''}
+                      onChange={(e) => handleSettingsChange('questionText', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tipo de Pergunta</Label>
+                    <Select value={questionSettings.questionType || 'text'} onValueChange={(value) => handleSettingsChange('questionType', value as 'text' | 'image' | 'both')}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="text">Texto</SelectItem>
+                        <SelectItem value="image">Imagem</SelectItem>
+                        <SelectItem value="both">Ambos</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="multiSelect">Número de Seleções</Label>
+                    <Input
+                      type="number"
+                      id="multiSelect"
+                      value={String(questionSettings.multiSelect || 1)}
+                      onChange={(e) => handleSettingsChange('multiSelect', Number(e.target.value))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="options">Opções (separadas por vírgula)</Label>
+                    <Textarea
+                      id="options"
+                      value={(questionSettings.options || []).join(', ')}
+                      onChange={(e) => handleSettingsChange('options', e.target.value.split(',').map(s => s.trim()))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="optionImages">URLs das Imagens das Opções (separadas por vírgula)</Label>
+                    <Textarea
+                      id="optionImages"
+                      value={(questionSettings.optionImages || []).join(', ')}
+                      onChange={(e) => handleSettingsChange('optionImages', e.target.value.split(',').map(s => s.trim()))}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="style">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Configurações de Estilo</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="backgroundColor">Cor de Fundo</Label>
+                    <Input
+                      type="color"
+                      id="backgroundColor"
+                      value={styleSettings.backgroundColor || '#f0f0f0'}
+                      onChange={(e) => handleStyleChange('backgroundColor', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="textColor">Cor do Texto</Label>
+                    <Input
+                      type="color"
+                      id="textColor"
+                      value={styleSettings.textColor || '#000000'}
+                      onChange={(e) => handleStyleChange('textColor', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="borderRadius">Raio da Borda</Label>
+                    <Input
+                      type="number"
+                      id="borderRadius"
+                      value={String(styleSettings.borderRadius || 0)}
+                      onChange={(e) => handleStyleChange('borderRadius', Number(e.target.value))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="paddingX">Padding Horizontal</Label>
+                    <Input
+                      type="number"
+                      id="paddingX"
+                      value={String(styleSettings.paddingX || 16)}
+                      onChange={(e) => handleStyleChange('paddingX', Number(e.target.value))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="paddingY">Padding Vertical</Label>
+                    <Input
+                      type="number"
+                      id="paddingY"
+                      value={String(styleSettings.paddingY || 16)}
+                      onChange={(e) => handleStyleChange('paddingY', Number(e.target.value))}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <Button variant="secondary" onClick={applySettingsToQuestion}>
+              Aplicar Configurações
+            </Button>
+            <Button variant="destructive" onClick={() => deleteQuestion(selectedQuestionId)}>
+              <Trash2 className="w-4 h-4 mr-2" />
+              Excluir Pergunta
+            </Button>
+          </Tabs>
+        ) : (
+          <div className="text-center">
+            <p className="text-lg">Selecione uma pergunta para editar.</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

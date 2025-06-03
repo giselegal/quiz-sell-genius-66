@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '../ui/button';
-import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ShoppingCart, ArrowRight, Star } from 'lucide-react';
 import { trackButtonClick } from '@/utils/analytics';
-import OptimizedImage from '@/components/ui/OptimizedImage';
-import { preloadImagesByUrls } from '@/utils/imageManager';
+import OptimizedImage from '@/components/ui/optimized-image';
 
 interface BeforeAfterTransformationProps {
   handleCTAClick?: () => void;
@@ -135,14 +134,14 @@ const BeforeAfterTransformation3: React.FC<BeforeAfterTransformationProps> = ({ 
               onClick={() => setActiveIndex((activeIndex - 1 + transformations.length) % transformations.length)}
               aria-label="Anterior"
             >
-              <ChevronLeft size={20} />
+              <ArrowRight size={20} />
             </button>
             <button
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow hover:bg-[#B89B7A]/20 transition"
               onClick={() => setActiveIndex((activeIndex + 1) % transformations.length)}
               aria-label="Próxima"
             >
-              <ChevronRight size={20} />
+              <ArrowRight size={20} />
             </button>
           </div>
         </div>
