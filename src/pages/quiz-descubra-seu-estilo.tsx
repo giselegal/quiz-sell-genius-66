@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, CheckCircle, Clock, Star, Users, Shield, Award } from 'lucide-react';
-import { MentorSection } from '@/components/result/MentorSection';
+import MentorSection from '@/components/result/MentorSection';
 
 const QuizDescubraSeuEstilo = () => {
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutos

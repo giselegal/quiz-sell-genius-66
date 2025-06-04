@@ -32,24 +32,24 @@ export class HotmartWebhookSimulator {
       timestamp: new Date().toISOString(),
       data: {
         purchase: {
+          price: {
+            value: 297,
+            currency_value: "BRL",
+          },
           transaction: transactionId || `T${Date.now()}`,
-          status:
-            event === "PURCHASE_COMPLETE" || event === "PURCHASE_APPROVED"
-              ? "APPROVED"
-              : "CANCELED",
-          checkout_country: "BR",
-          approved_date: new Date().toISOString(),
+          product: {
+            id: 123456,
+            name: "Transformação de Imagem - Gisele Galvão",
+          },
         },
         buyer: {
           email,
           name: "Usuário Teste",
+          document: "12345678900",
         },
         transaction: {
           id: transactionId || `T${Date.now()}`,
-          status:
-            event === "PURCHASE_COMPLETE" || event === "PURCHASE_APPROVED"
-              ? "APPROVED"
-              : "CANCELED",
+          timestamp: new Date().toISOString(),
         },
       },
     };
