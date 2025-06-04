@@ -900,21 +900,23 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* CTA Button principal */}
+                {/* CTA Button principal com texto responsivo */}
                 <div className="text-center">
                   <Button 
                     onClick={handleCTAClick} 
-                    className="group relative text-white font-bold text-lg lg:text-xl py-6 px-12 lg:px-16 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
+                    className="group relative text-white font-bold py-6 px-8 sm:px-12 lg:px-16 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
                     style={{
                       background: 'linear-gradient(135deg, #4CAF50 0%, #43a047 50%, #388e3c 100%)',
                       boxShadow: '0 20px 40px rgba(76, 175, 80, 0.3), 0 0 0 1px rgba(255,255,255,0.2) inset',
                     }}
                     type="button"
                   >
-                    <span className="flex items-center justify-center gap-3">
-                      <ShoppingCart className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
-                      <span>Quero Transformar Meu Estilo Agora</span>
-                      <ArrowDown className="w-5 h-5 animate-bounce" />
+                    <span className="flex items-center justify-center gap-2 sm:gap-3" style={{
+                      fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)' // Ajuste responsivo: 14px min, 20px max
+                    }}>
+                      <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 transition-transform duration-300 group-hover:scale-110 flex-shrink-0" />
+                      <span className="leading-tight">Quero Transformar Meu Estilo Agora</span>
+                      <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce flex-shrink-0" />
                     </span>
                     
                     {/* Efeito de brilho */}
