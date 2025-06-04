@@ -213,7 +213,7 @@ export class HotmartWebhookManager {
       }
 
       // Usar o sistema de analytics interno
-      trackConversion('purchase', {
+      trackSaleConversion('purchase', {
         value: data.data.purchase.price.value,
         currency: data.data.purchase.price.currency_value,
         product_name: data.data.purchase.product.name,
