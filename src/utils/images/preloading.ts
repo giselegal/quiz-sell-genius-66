@@ -67,16 +67,13 @@ export const preloadImages = (
   options: PreloadOptions = {}
 ): Promise<boolean> => {
   if (!images || images.length === 0) {
-    if (options.onComplete) options.onComplete();
     return Promise.resolve(true);
   }
 
   const {
     quality = 85,
     format = 'auto',
-    timeout = 3000,
     onProgress,
-    onComplete,
     batchSize = 4
   } = options;
 
@@ -84,13 +81,6 @@ export const preloadImages = (
   const total = images.length;
 
   return new Promise((resolve) => {
-    // Iniciar temporizador para garantir que a promessa sempre resolva
-    const timeoutId = setTimeout(() => {
-      console.warn(`[Image Manager] Timeout ao carregar ${total} imagens. Carregadas: ${loaded}`);
-      if (onComplete) onComplete();
-      resolve(loaded === total);
-    }, timeout);
-
     // Função para carregar uma imagem
     const loadImage = (src: string): Promise<void> => {
       return new Promise((resolveImage) => {
@@ -105,7 +95,7 @@ export const preloadImages = (
         const img = new Image();
 
         img.onload = () => {
-          updateImageCache(src, { url: src, loadStatus: 'loaded', imageElement: img });
+          updateImageCache(src, { url: src, loadStatus: 'loaded' });
           loaded++;
           if (onProgress) onProgress(loaded, total);
           resolveImage();
@@ -138,8 +128,6 @@ export const preloadImages = (
     let batchIndex = 0;
     const processNextBatch = () => {
       if (batchIndex >= batches.length) {
-        clearTimeout(timeoutId);
-        if (onComplete) onComplete();
         resolve(loaded === total);
         return;
       }

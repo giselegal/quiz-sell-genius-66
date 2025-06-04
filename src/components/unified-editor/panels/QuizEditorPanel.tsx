@@ -9,9 +9,10 @@ import { Textarea } from '@/components/ui/textarea';
 
 interface QuizEditorPanelProps {
   isVisible: boolean;
+  isPreviewing?: boolean;
 }
 
-const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isVisible }) => {
+const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isVisible, isPreviewing = false }) => {
   const [selectedStyle, setSelectedStyle] = useState<"Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo">("Natural");
   const [quizConfig, setQuizConfig] = useState({
     title: 'Descubra Seu Estilo Pessoal',

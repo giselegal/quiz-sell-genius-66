@@ -1,3 +1,4 @@
+
 import { ImageCacheEntry } from './types';
 
 const IMAGE_CACHE_KEY = 'image_cache';
@@ -50,6 +51,21 @@ export const addToCache = (url: string, metadata: any): ImageCacheEntry => {
   }
   
   return cacheEntry;
+};
+
+export const updateImageCache = (url: string, updates: Partial<ImageCacheEntry>): void => {
+  try {
+    const cache = getImageCache();
+    cache[url] = { ...cache[url], ...updates };
+    localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(cache));
+  } catch (error) {
+    console.warn('Could not update image cache:', error);
+  }
+};
+
+export const hasImageWithStatus = (url: string, status: 'loading' | 'loaded' | 'error'): boolean => {
+  const entry = getImageFromCache(url);
+  return entry?.loadStatus === status || false;
 };
 
 export const clearImageCache = (): void => {

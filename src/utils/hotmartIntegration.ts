@@ -1,4 +1,12 @@
+
 import { trackSaleConversion } from '@/utils/analytics';
+
+// Declare window interface extensions
+declare global {
+  interface Window {
+    hmtc?: (transaction: any) => void;
+  }
+}
 
 // Function to initialize Hotmart tracking
 export const initHotmartTracking = (hmtc: any, transaction: any) => {

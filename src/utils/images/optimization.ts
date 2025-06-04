@@ -1,3 +1,4 @@
+
 import { ImageOptimizationOptions } from './types';
 
 /**
@@ -18,7 +19,7 @@ export const optimizeCloudinaryUrl = (
     height,
     quality = 85,
     format = 'auto',
-    crop = 'limit'
+    crop = false
   } = options;
 
   // Extrair partes da URL do Cloudinary
@@ -51,7 +52,7 @@ export const optimizeCloudinaryUrl = (
   
   // Modo de corte
   if (crop) {
-    transformations.push(`c_${crop}`);
+    transformations.push('c_fill');
   }
   
   // Otimizar para retina display

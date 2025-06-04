@@ -1,20 +1,6 @@
+
 import { trackButtonClick } from './analytics';
-import { ABTestVariant } from '@/types/abtest';
-
-export type ABTestVariant = 'A' | 'B';
-
-interface ABTestConfig {
-  testName: string;
-  variantA: {
-    route: string;
-    description: string;
-  };
-  variantB: {
-    route: string;
-    description: string;
-  };
-  trafficSplit: number; // Porcentagem para versão B (0-100)
-}
+import { ABTestVariant, ABTestConfig } from '@/types/abtest';
 
 // Configuração do teste A/B para landing pages
 export const LANDING_PAGE_AB_TEST: ABTestConfig = {
@@ -93,12 +79,7 @@ function simpleHash(str: string): number {
  */
 function trackABTestAssignment(testName: string, variant: ABTestVariant) {
   try {
-    trackButtonClick(`ab_test_${testName}_variant_${variant}`, {
-      test_name: testName,
-      variant: variant,
-      timestamp: new Date().toISOString(),
-      page: window.location.pathname
-    });
+    trackButtonClick(`ab_test_${testName}_variant_${variant}`, `AB Test ${variant}`, testName);
     
     // Salva no localStorage para referência
     localStorage.setItem(`ab_test_${testName}_variant`, variant);
@@ -117,14 +98,7 @@ export function trackABTestConversion(testName: string, conversionType: string, 
     const variant = localStorage.getItem(`ab_test_${testName}_variant`) as ABTestVariant;
     
     if (variant) {
-      trackButtonClick(`ab_test_${testName}_conversion_${conversionType}`, {
-        test_name: testName,
-        variant: variant,
-        conversion_type: conversionType,
-        timestamp: new Date().toISOString(),
-        page: window.location.pathname,
-        ...additionalData
-      });
+      trackButtonClick(`ab_test_${testName}_conversion_${conversionType}`, `AB Test Conversion ${conversionType}`, testName);
       
       console.log(`🎯 A/B Test Conversion: ${conversionType} para variante ${variant} do teste ${testName}`);
     }
@@ -178,16 +152,16 @@ export function clearForcedABTestVariant(testName: string) {
 
 export const logABTestView = (testName: string, variant: ABTestVariant, page: string = 'unknown') => {
   try {
-    const logEntry = JSON.stringify({
+    const logEntry = {
       test_name: testName,
       variant: variant,
       timestamp: new Date().toISOString(),
       page: page
-    });
+    };
     
     const existingLogs = localStorage.getItem('ab_test_views') || '[]';
     const logs = JSON.parse(existingLogs);
-    logs.push(JSON.parse(logEntry));
+    logs.push(logEntry);
     localStorage.setItem('ab_test_views', JSON.stringify(logs));
   } catch (error) {
     console.error('Error logging AB test view:', error);
@@ -196,17 +170,17 @@ export const logABTestView = (testName: string, variant: ABTestVariant, page: st
 
 export const logABTestConversion = (testName: string, variant: ABTestVariant, conversionType: string, page: string = 'unknown') => {
   try {
-    const logEntry = JSON.stringify({
+    const logEntry = {
       test_name: testName,
       variant: variant,
       conversion_type: conversionType,
       timestamp: new Date().toISOString(),
       page: page
-    });
+    };
     
     const existingLogs = localStorage.getItem('ab_test_conversions') || '[]';
     const logs = JSON.parse(existingLogs);
-    logs.push(JSON.parse(logEntry));
+    logs.push(logEntry);
     localStorage.setItem('ab_test_conversions', JSON.stringify(logs));
   } catch (error) {
     console.error('Error logging AB test conversion:', error);
