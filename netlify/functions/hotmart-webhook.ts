@@ -1,7 +1,10 @@
 // Netlify Function para Webhook Hotmart
 // Arquivo: netlify/functions/hotmart-webhook.ts
 
-import { hotmartWebhookManager, HotmartWebhookData } from "../../src/utils/hotmartWebhook";
+import {
+  hotmartWebhookManager,
+  HotmartWebhookData,
+} from "../../src/utils/hotmartWebhook";
 
 export async function handler(event: any, context: any) {
   try {
@@ -48,7 +51,7 @@ export async function handler(event: any, context: any) {
       transaction_id: webhookData.data.transaction?.id,
       buyer_email: webhookData.data.buyer?.email,
       webhook_id: webhookData.webhook_id,
-      timestamp: webhookData.timestamp
+      timestamp: webhookData.timestamp,
     });
 
     // Processar webhook usando nosso gerenciador
@@ -61,21 +64,23 @@ export async function handler(event: any, context: any) {
         success: true,
         message: "Webhook processed successfully",
         event: webhookData.event,
-        transaction_id: webhookData.data.transaction?.id
+        transaction_id: webhookData.data.transaction?.id,
       }),
       headers: {
         "Content-Type": "application/json",
       },
     };
-
   } catch (error) {
-    console.error("[Netlify Hotmart Webhook] Erro ao processar webhook:", error);
-    
+    console.error(
+      "[Netlify Hotmart Webhook] Erro ao processar webhook:",
+      error
+    );
+
     return {
       statusCode: 500,
       body: JSON.stringify({
         error: "Internal server error",
-        message: error instanceof Error ? error.message : "Unknown error"
+        message: error instanceof Error ? error.message : "Unknown error",
       }),
       headers: {
         "Content-Type": "application/json",

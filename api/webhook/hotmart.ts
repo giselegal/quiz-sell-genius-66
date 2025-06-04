@@ -1,7 +1,10 @@
 // API Endpoint para Webhook Hotmart
 // Compatível com Vercel Serverless Functions
 
-import { hotmartWebhookManager, HotmartWebhookData } from "../../src/utils/hotmartWebhook";
+import {
+  hotmartWebhookManager,
+  HotmartWebhookData,
+} from "../../src/utils/hotmartWebhook";
 
 export default async function handler(req: any, res: any) {
   try {
@@ -30,26 +33,25 @@ export default async function handler(req: any, res: any) {
       transaction_id: webhookData.data.transaction?.id,
       buyer_email: webhookData.data.buyer?.email,
       webhook_id: webhookData.webhook_id,
-      timestamp: webhookData.timestamp
+      timestamp: webhookData.timestamp,
     });
 
     // Processar webhook usando nosso gerenciador
     await hotmartWebhookManager.processWebhook(webhookData);
 
     // Resposta de sucesso para a Hotmart
-    return res.status(200).json({ 
-      success: true, 
+    return res.status(200).json({
+      success: true,
       message: "Webhook processed successfully",
       event: webhookData.event,
-      transaction_id: webhookData.data.transaction?.id
+      transaction_id: webhookData.data.transaction?.id,
     });
-
   } catch (error) {
     console.error("[Hotmart Webhook API] Erro ao processar webhook:", error);
-    
-    return res.status(500).json({ 
+
+    return res.status(500).json({
       error: "Internal server error",
-      message: error instanceof Error ? error.message : "Unknown error"
+      message: error instanceof Error ? error.message : "Unknown error",
     });
   }
 }
@@ -58,7 +60,7 @@ export default async function handler(req: any, res: any) {
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '1mb',
+      sizeLimit: "1mb",
     },
   },
-}
+};

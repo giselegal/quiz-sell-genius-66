@@ -1,5 +1,9 @@
 
-/* /index.html 200
+# API endpoints - redirecionar para Netlify Functions
+/api/webhook/hotmart         /.netlify/functions/hotmart-webhook  200
+
+# Fallback para SPA - deve vir por último
+/*                          /index.html                 200
 
 # Redirecionamentos específicos para as rotas ativas
 /                           /index.html                 200
