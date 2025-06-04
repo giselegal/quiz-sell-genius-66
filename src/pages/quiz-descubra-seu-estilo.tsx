@@ -1,229 +1,297 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { getPixelId, trackFunnelEvent } from "../services/pixelManager";
 
 export default function QuizDescubraSeuEstilo() {
+  useEffect(() => {
+    // Inicializar pixel específico da página B
+    const pixelId = getPixelId();
+    if (window.fbq && pixelId) {
+      window.fbq('init', pixelId);
+      trackFunnelEvent('PageView_QuizPageB');
+    }
+  }, []);
+
+  const handleCTAClick = (location: string) => {
+    trackFunnelEvent('CTAClick_QuizPageB', { button_location: location });
+  };
+
   return (
-    <div style={{ background: "#fff", fontFamily: "Montserrat, Arial, sans-serif", color: "#222" }}>
-      {/* Hero Section */}
-      <section style={{ padding: "40px 0 24px 0", textAlign: "center", background: "#f7f7f7" }}>
+    <div style={{ fontFamily: "Montserrat, Arial, sans-serif", background: "#faf9f6", color: "#222" }}>
+      {/* HERO */}
+      <section style={{
+        background: "linear-gradient(120deg, #fff 60%, #bfa46f1a 100%)",
+        padding: "48px 0 32px 0",
+        textAlign: "center"
+      }}>
         <img
           src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
           alt="Gisele Galvão"
-          style={{ maxWidth: 180, marginBottom: 24 }}
+          style={{ maxWidth: 160, marginBottom: 18 }}
         />
-        <h1 style={{ fontSize: "2.2rem", fontWeight: 700, margin: "0 0 12px 0" }}>
-          Descubra Seu Estilo Único em 5 Minutos
+        <h1 style={{
+          fontSize: "2.3rem",
+          fontWeight: 800,
+          margin: "0 0 14px 0",
+          color: "#222"
+        }}>
+          Descubra o Estilo Que Valoriza Sua Essência
         </h1>
-        <p style={{ fontSize: "1.15rem", maxWidth: 480, margin: "0 auto 18px auto" }}>
-          Um método rápido, prático e validado por mais de 3.000 mulheres para você se sentir confiante e autêntica todos os dias.
+        <p style={{
+          fontSize: "1.18rem",
+          maxWidth: 480,
+          margin: "0 auto 22px auto",
+          color: "#444"
+        }}>
+          Um método rápido, prático e validado por mais de <span style={{ color: "#BFA46F", fontWeight: 700 }}>3.000 mulheres</span> para você se sentir confiante e autêntica todos os dias.
         </p>
         <a
           href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+          onClick={() => handleCTAClick('hero')}
           style={{
             display: "inline-block",
             background: "#BFA46F",
             color: "#fff",
             fontWeight: 700,
-            fontSize: "1.1rem",
-            padding: "16px 36px",
+            fontSize: "1.15rem",
+            padding: "18px 44px",
             borderRadius: 32,
-            marginTop: 18,
+            marginTop: 10,
             textDecoration: "none",
             boxShadow: "0 4px 16px #bfa46f33",
+            letterSpacing: 1,
             transition: "background 0.2s"
           }}
         >
           QUERO DESCOBRIR MEU ESTILO
         </a>
+        <div style={{
+          marginTop: 18,
+          fontSize: "0.98rem",
+          color: "#888"
+        }}>
+          Oferta exclusiva para esta página
+        </div>
       </section>
 
-      {/* Prova Social */}
-      <section style={{ background: "#fff", textAlign: "center", padding: "18px 0 0 0" }}>
+      {/* PROVA SOCIAL */}
+      <section style={{
+        background: "#fff",
+        textAlign: "center",
+        padding: "18px 0 0 0"
+      }}>
         <span style={{
           display: "inline-block",
           background: "#BFA46F",
           color: "#fff",
           fontWeight: 600,
           borderRadius: 16,
-          padding: "6px 18px",
-          fontSize: "1rem",
-          marginBottom: 8
+          padding: "7px 22px",
+          fontSize: "1.05rem",
+          marginBottom: 8,
+          letterSpacing: 1
         }}>
           +3.000 mulheres já transformaram seu estilo
         </span>
       </section>
 
-      {/* Problemas */}
-      <section style={{ padding: "36px 0 0 0", background: "#fff" }}>
+      {/* DOR E IDENTIFICAÇÃO */}
+      <section style={{ padding: "38px 0 0 0", background: "#fff" }}>
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: 12 }}>
+          <h2 style={{
+            fontSize: "1.45rem",
+            fontWeight: 700,
+            marginBottom: 14,
+            color: "#222"
+          }}>
             Você se identifica com algum desses cenários?
           </h2>
-          <ul style={{ listStyle: "none", padding: 0, margin: "0 0 18px 0", color: "#444" }}>
+          <ul style={{
+            listStyle: "none",
+            padding: 0,
+            margin: "0 0 18px 0",
+            color: "#444",
+            fontSize: "1.08rem"
+          }}>
             <li style={{ marginBottom: 8 }}>• Sente que suas roupas não refletem quem você é?</li>
             <li style={{ marginBottom: 8 }}>• Perde tempo e energia escolhendo o que vestir?</li>
             <li style={{ marginBottom: 8 }}>• Tem dificuldade para combinar peças e acessórios?</li>
             <li style={{ marginBottom: 8 }}>• Quer se sentir mais confiante e autêntica todos os dias?</li>
           </ul>
-          <p style={{ fontWeight: 500, color: "#BFA46F" }}>
+          <p style={{ fontWeight: 600, color: "#BFA46F", marginTop: 10 }}>
             Você não está sozinha. E existe um caminho prático para mudar isso!
           </p>
         </div>
       </section>
 
-      {/* O que você recebe */}
-      <section style={{ background: "#f7f7f7", padding: "40px 0" }}>
+      {/* O QUE VOCÊ RECEBE */}
+      <section style={{ background: "#faf9f6", padding: "48px 0 32px 0" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <h2 style={{ textAlign: "center", fontSize: "1.5rem", fontWeight: 700, marginBottom: 32 }}>
+          <h2 style={{
+            textAlign: "center",
+            fontSize: "1.5rem",
+            fontWeight: 800,
+            marginBottom: 36,
+            color: "#222"
+          }}>
             O que você recebe hoje:
           </h2>
           <div style={{
             display: "flex",
             flexWrap: "wrap",
-            gap: 24,
+            gap: 28,
             justifyContent: "center"
           }}>
             {/* Produto principal */}
             <div style={{
               background: "#fff",
               borderRadius: 18,
-              boxShadow: "0 2px 12px #0001",
-              padding: 24,
+              boxShadow: "0 2px 12px #bfa46f22",
+              padding: 28,
               minWidth: 260,
               maxWidth: 320,
-              flex: "1 1 260px"
+              flex: "1 1 260px",
+              border: "2px solid #BFA46F"
             }}>
-              <div style={{ fontWeight: 700, color: "#BFA46F", marginBottom: 8 }}>
+              <div style={{ fontWeight: 800, color: "#BFA46F", marginBottom: 8, fontSize: "1.08rem" }}>
                 Manual de Estilo Contemporâneo
               </div>
               <div style={{ fontSize: "1rem", marginBottom: 8 }}>
                 Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única.
               </div>
-              <div style={{ fontSize: "0.95rem", color: "#888" }}>
-                Valor individual: <span style={{ color: "#BFA46F", fontWeight: 600 }}>R$ 77,00</span>
+              <div style={{ fontSize: "0.97rem", color: "#888" }}>
+                Valor individual: <span style={{ color: "#BFA46F", fontWeight: 700 }}>R$ 77,00</span>
               </div>
             </div>
             {/* Bônus 1 */}
             <div style={{
               background: "#fff",
               borderRadius: 18,
-              boxShadow: "0 2px 12px #0001",
-              padding: 24,
+              boxShadow: "0 2px 12px #bfa46f22",
+              padding: 28,
               minWidth: 260,
               maxWidth: 320,
-              flex: "1 1 260px"
+              flex: "1 1 260px",
+              border: "2px solid #BFA46F"
             }}>
               <div style={{
                 fontWeight: 700,
                 color: "#BFA46F",
                 marginBottom: 8,
-                letterSpacing: 1
+                letterSpacing: 1,
+                fontSize: "0.98rem"
               }}>
                 BÔNUS EXCLUSIVO
               </div>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>
+              <div style={{ fontWeight: 700, marginBottom: 8 }}>
                 Guia das Peças Estratégicas
               </div>
               <div style={{ fontSize: "1rem", marginBottom: 8 }}>
                 Peças-chave que maximizam combinações e garantem versatilidade em qualquer situação.
               </div>
-              <div style={{ fontSize: "0.95rem", color: "#888" }}>
-                Valor individual: <span style={{ color: "#BFA46F", fontWeight: 600 }}>R$ 59,00</span>
+              <div style={{ fontSize: "0.97rem", color: "#888" }}>
+                Valor individual: <span style={{ color: "#BFA46F", fontWeight: 700 }}>R$ 59,00</span>
               </div>
             </div>
             {/* Bônus 2 */}
             <div style={{
               background: "#fff",
               borderRadius: 18,
-              boxShadow: "0 2px 12px #0001",
-              padding: 24,
+              boxShadow: "0 2px 12px #bfa46f22",
+              padding: 28,
               minWidth: 260,
               maxWidth: 320,
-              flex: "1 1 260px"
+              flex: "1 1 260px",
+              border: "2px solid #BFA46F"
             }}>
               <div style={{
                 fontWeight: 700,
                 color: "#BFA46F",
                 marginBottom: 8,
-                letterSpacing: 1
+                letterSpacing: 1,
+                fontSize: "0.98rem"
               }}>
                 BÔNUS PREMIUM
               </div>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>
+              <div style={{ fontWeight: 700, marginBottom: 8 }}>
                 Manual de Visagismo
               </div>
               <div style={{ fontSize: "1rem", marginBottom: 8 }}>
                 Descubra os cortes ideais para seu rosto e realce sua beleza natural.
               </div>
-              <div style={{ fontSize: "0.95rem", color: "#888" }}>
-                Valor individual: <span style={{ color: "#BFA46F", fontWeight: 600 }}>R$ 39,00</span>
+              <div style={{ fontSize: "0.97rem", color: "#888" }}>
+                Valor individual: <span style={{ color: "#BFA46F", fontWeight: 700 }}>R$ 39,00</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Oferta */}
-      <section style={{ background: "#fff", padding: "40px 0" }}>
+      {/* OFERTA */}
+      <section style={{ background: "#fff", padding: "48px 0" }}>
         <div style={{
           maxWidth: 480,
           margin: "0 auto",
-          background: "#f7f7f7",
+          background: "#faf9f6",
           borderRadius: 18,
-          boxShadow: "0 2px 12px #0001",
-          padding: 32,
-          textAlign: "center"
+          boxShadow: "0 2px 12px #bfa46f22",
+          padding: 36,
+          textAlign: "center",
+          border: "2px solid #BFA46F"
         }}>
           <div style={{
-            fontWeight: 700,
+            fontWeight: 800,
             color: "#BFA46F",
-            fontSize: "1.2rem",
-            marginBottom: 12
+            fontSize: "1.25rem",
+            marginBottom: 12,
+            letterSpacing: 1
           }}>
-            Oferta Especial Por Tempo Limitado
+            Oferta Especial Só Hoje
           </div>
           <div style={{ fontSize: "1.1rem", marginBottom: 16 }}>
             Valor total dos produtos: <span style={{ textDecoration: "line-through", color: "#888" }}>R$ 175,00</span>
           </div>
           <div style={{
-            fontSize: "2.1rem",
-            fontWeight: 800,
+            fontSize: "2.2rem",
+            fontWeight: 900,
             color: "#BFA46F",
             marginBottom: 8
           }}>
             R$ 39,90
           </div>
-          <div style={{ fontSize: "1.1rem", fontWeight: 600, marginBottom: 8 }}>
+          <div style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: 8 }}>
             ou 5x de R$ 8,83
           </div>
           <div style={{
-            fontSize: "1rem",
+            fontSize: "1.05rem",
             color: "#388e3c",
-            fontWeight: 600,
+            fontWeight: 700,
             marginBottom: 12
           }}>
             Economia de R$ 135,10 <span style={{ color: "#BFA46F" }}>(77% OFF)</span>
           </div>
           <div style={{
-            fontSize: "0.95rem",
+            fontSize: "0.98rem",
             color: "#b71c1c",
-            fontWeight: 600,
+            fontWeight: 700,
             marginBottom: 18
           }}>
             Esta oferta expira quando você sair desta página!
           </div>
           <a
             href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+            onClick={() => handleCTAClick('offer')}
             style={{
               display: "inline-block",
               background: "#BFA46F",
               color: "#fff",
-              fontWeight: 700,
-              fontSize: "1.1rem",
-              padding: "16px 36px",
+              fontWeight: 800,
+              fontSize: "1.15rem",
+              padding: "18px 44px",
               borderRadius: 32,
               marginTop: 8,
               textDecoration: "none",
               boxShadow: "0 4px 16px #bfa46f33",
+              letterSpacing: 1,
               transition: "background 0.2s"
             }}
           >
@@ -232,29 +300,36 @@ export default function QuizDescubraSeuEstilo() {
         </div>
       </section>
 
-      {/* Depoimentos */}
-      <section style={{ background: "#f7f7f7", padding: "40px 0" }}>
+      {/* DEPOIMENTOS */}
+      <section style={{ background: "#faf9f6", padding: "48px 0 32px 0" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <h2 style={{ textAlign: "center", fontSize: "1.5rem", fontWeight: 700, marginBottom: 32 }}>
+          <h2 style={{
+            textAlign: "center",
+            fontSize: "1.5rem",
+            fontWeight: 800,
+            marginBottom: 36,
+            color: "#222"
+          }}>
             Veja a transformação de quem já passou pelo método:
           </h2>
           <div style={{
             display: "flex",
             flexWrap: "wrap",
-            gap: 24,
+            gap: 28,
             justifyContent: "center"
           }}>
-            {/* Exemplo de depoimento */}
+            {/* Depoimento 1 */}
             <div style={{
               background: "#fff",
               borderRadius: 18,
-              boxShadow: "0 2px 12px #0001",
+              boxShadow: "0 2px 12px #bfa46f22",
               padding: 24,
               minWidth: 260,
               maxWidth: 320,
-              flex: "1 1 260px"
+              flex: "1 1 260px",
+              border: "2px solid #BFA46F"
             }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>
+              <div style={{ fontWeight: 700, marginBottom: 8, color: "#BFA46F" }}>
                 Adriana S.
               </div>
               <img
@@ -262,20 +337,22 @@ export default function QuizDescubraSeuEstilo() {
                 alt="Antes e depois Adriana"
                 style={{ width: "100%", borderRadius: 12, marginBottom: 12 }}
               />
-              <div style={{ fontSize: "0.98rem", color: "#444" }}>
-                “Nunca imaginei que pequenas mudanças no meu estilo fariam tanta diferença. Hoje me sinto muito mais confiante!”
+              <div style={{ fontSize: "1.01rem", color: "#444" }}>
+                "Nunca imaginei que pequenas mudanças no meu estilo fariam tanta diferença. Hoje me sinto muito mais confiante!"
               </div>
             </div>
+            {/* Depoimento 2 */}
             <div style={{
               background: "#fff",
               borderRadius: 18,
-              boxShadow: "0 2px 12px #0001",
+              boxShadow: "0 2px 12px #bfa46f22",
               padding: 24,
               minWidth: 260,
               maxWidth: 320,
-              flex: "1 1 260px"
+              flex: "1 1 260px",
+              border: "2px solid #BFA46F"
             }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>
+              <div style={{ fontWeight: 700, marginBottom: 8, color: "#BFA46F" }}>
                 Mariangela M.
               </div>
               <img
@@ -283,35 +360,35 @@ export default function QuizDescubraSeuEstilo() {
                 alt="Antes e depois Mariangela"
                 style={{ width: "100%", borderRadius: 12, marginBottom: 12 }}
               />
-              <div style={{ fontSize: "0.98rem", color: "#444" }}>
-                “O método da Gisele me ajudou a enxergar meu guarda-roupa com outros olhos. Recomendo para todas!”
+              <div style={{ fontSize: "1.01rem", color: "#444" }}>
+                "O método da Gisele me ajudou a enxergar meu guarda-roupa com outros olhos. Recomendo para todas!"
               </div>
             </div>
-            {/* Adicione mais depoimentos conforme necessário */}
           </div>
         </div>
       </section>
 
-      {/* Garantia */}
-      <section style={{ background: "#fff", padding: "40px 0" }}>
+      {/* GARANTIA */}
+      <section style={{ background: "#fff", padding: "48px 0" }}>
         <div style={{
           maxWidth: 600,
           margin: "0 auto",
-          background: "#f7f7f7",
+          background: "#faf9f6",
           borderRadius: 18,
-          boxShadow: "0 2px 12px #0001",
-          padding: 32,
-          textAlign: "center"
+          boxShadow: "0 2px 12px #bfa46f22",
+          padding: 36,
+          textAlign: "center",
+          border: "2px solid #BFA46F"
         }}>
           <div style={{
-            fontWeight: 700,
+            fontWeight: 800,
             color: "#BFA46F",
             fontSize: "1.2rem",
             marginBottom: 12
           }}>
             Garantia Incondicional de 7 Dias
           </div>
-          <div style={{ fontSize: "1.05rem", color: "#444", marginBottom: 12 }}>
+          <div style={{ fontSize: "1.08rem", color: "#444", marginBottom: 12 }}>
             Se você não amar o conteúdo, basta enviar um e-mail em até 7 dias e devolvemos 100% do seu dinheiro. Simples assim, sem perguntas!
           </div>
           <img
@@ -322,13 +399,13 @@ export default function QuizDescubraSeuEstilo() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <footer style={{
         background: "#222",
         color: "#fff",
         textAlign: "center",
         padding: "24px 0",
-        fontSize: "0.95rem"
+        fontSize: "0.98rem"
       }}>
         <div>
           © {new Date().getFullYear()} Gisele Galvão | Todos os direitos reservados.<br />

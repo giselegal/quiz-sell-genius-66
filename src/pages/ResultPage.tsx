@@ -54,7 +54,7 @@ const tokens = {
     borderLight: 'rgba(184, 155, 122, 0.08)',
     overlay: 'rgba(44, 24, 16, 0.02)',
   },
-  // SISTEMA DE SPACING REFINADO
+  // SISTEMA DE SPACING REFINADO E PADRONIZADO
   spacing: {
     xs: '0.25rem',   // 4px
     sm: '0.5rem',    // 8px
@@ -65,6 +65,7 @@ const tokens = {
     '3xl': '3rem',   // 48px
     '4xl': '4rem',   // 64px
     '5xl': '6rem',   // 96px
+    '6xl': '7rem',   // 112px
   },
   // SHADOWS MAIS SUTIS E ELEGANTES
   shadows: {
@@ -108,7 +109,7 @@ const tokens = {
   }
 };
 
-// Componente de título melhorado - BOLINHAS REMOVIDAS
+// Componente de título melhorado - ESPAÇAMENTO PADRONIZADO
 const SectionTitle = React.memo<{
   children: React.ReactNode;
   subtitle?: string;
@@ -118,14 +119,14 @@ const SectionTitle = React.memo<{
   centered?: boolean;
 }>(({ children, subtitle, size = 'xl', className = '', variant = 'simple', centered = true }) => (
   <AnimatedWrapper 
-    className={`${centered ? 'text-center' : ''} mb-8 lg:mb-12 ${className}`}
+    className={`${centered ? 'text-center' : ''} mb-12 lg:mb-16 ${className}`}
     animation="fade"
     show={true}
     duration={600}
   >
-    {/* Decoração superior refinada - SEM BOLINHA */}
+    {/* Decoração superior refinada */}
     {variant === 'primary' && (
-      <div className="inline-flex items-center gap-3 mb-6">
+      <div className="inline-flex items-center gap-3 mb-8">
         <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
         <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
       </div>
@@ -134,8 +135,8 @@ const SectionTitle = React.memo<{
     {/* Título com melhor hierarquia */}
     <h2 className={`font-playfair font-bold leading-tight tracking-tight ${
       variant === 'primary' 
-        ? 'bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent mb-6'
-        : 'text-[#2C1810] mb-4'
+        ? 'bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent mb-8'
+        : 'text-[#2C1810] mb-6'
     } ${
       size === 'xl' ? 'text-2xl md:text-3xl lg:text-4xl xl:text-5xl' : 
       size === 'lg' ? 'text-xl md:text-2xl lg:text-3xl xl:text-4xl' :
@@ -155,7 +156,7 @@ const SectionTitle = React.memo<{
 
     {/* Linha decorativa */}
     {variant === 'primary' && (
-      <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-6 shadow-sm"></div>
+      <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-8 shadow-sm"></div>
     )}
   </AnimatedWrapper>
 ));
@@ -355,7 +356,7 @@ const ResultPage: React.FC = () => {
         </div>
       </header>
 
-      {/* Navigation dots refinada - BOLINHAS DIMINUÍDAS */}
+      {/* Navigation dots refinada */}
       <div className={`fixed right-6 top-1/2 transform -translate-y-1/2 z-40 transition-all duration-500 ${
         isScrolled ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
       }`}>
@@ -379,7 +380,7 @@ const ResultPage: React.FC = () => {
               }`}
               aria-label={`Ir para seção ${section.label}`}
             >
-              {/* Tooltip sem ícone */}
+              {/* Tooltip */}
               <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                 <div className="bg-[#2C1810] text-white text-xs px-2 py-1 rounded whitespace-nowrap">
                   {section.label}
@@ -390,10 +391,10 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
 
-      {/* CONTAINER PRINCIPAL */}
+      {/* CONTAINER PRINCIPAL - ESPAÇAMENTO PADRONIZADO */}
       <main className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-6xl relative z-10">
-        {/* Primary Style Card - Design completamente renovado */}
-        <section id="primary-style" className="scroll-mt-24 mb-16 lg:mb-24">
+        {/* Primary Style Card - ESPAÇAMENTO OTIMIZADO */}
+        <section id="primary-style" className="scroll-mt-24 mb-24 lg:mb-28">
           <Card className="relative overflow-hidden bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15 rounded-2xl p-6 lg:p-10" 
                 style={{ boxShadow: tokens.shadows.xl }}>
 
@@ -402,8 +403,8 @@ const ResultPage: React.FC = () => {
             <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#B89B7A]/20 rounded-br-2xl"></div>
 
             <AnimatedWrapper animation="fade" show={true} duration={600} delay={200}>
-              {/* Header personalizado - BOLINHA REMOVIDA */}
-              <div className="text-center mb-10 lg:mb-12">
+              {/* Header personalizado - ESPAÇAMENTO PADRONIZADO */}
+              <div className="text-center mb-12 lg:mb-16">
                 {user?.userName && (
                   <AnimatedWrapper className="mb-8" animation="scale" show={true} duration={500} delay={100}>
                     <div className="inline-flex items-center gap-3 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-6 py-3 rounded-full border border-[#B89B7A]/20">
@@ -423,7 +424,7 @@ const ResultPage: React.FC = () => {
                   </span>
                 </h1>
 
-                {/* Progress bar elegante */}
+                {/* Progress bar elegante - ESPAÇAMENTO PADRONIZADO */}
                 <div className="max-w-lg mx-auto mb-8">
                   <div className="flex items-center justify-between text-sm font-medium text-[#5D4A3A] mb-3">
                     <span>Compatibilidade</span>
@@ -441,8 +442,8 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Grid principal otimizado */}
-              <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+              {/* Grid principal otimizado - ESPAÇAMENTO PADRONIZADO */}
+              <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                 {/* Conteúdo textual */}
                 <div className="space-y-8 order-2 lg:order-1">
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={300}>
@@ -450,7 +451,7 @@ const ResultPage: React.FC = () => {
                       {/* Mensagem principal */}
                       <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 border border-[#B89B7A]/10"
                            style={{ boxShadow: tokens.shadows.sm }}>
-                        <p className="text-[#2C1810] leading-relaxed text-lg font-medium mb-4">
+                        <p className="text-[#2C1810] leading-relaxed text-lg font-medium mb-6">
                           <strong className="text-[#aa6b5d]">Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
                         </p>
 
@@ -473,10 +474,10 @@ const ResultPage: React.FC = () => {
 
                       {/* Call to action sutil */}
                       <div className="text-center p-4 bg-gradient-to-r from-[#B89B7A]/5 to-[#aa6b5d]/5 rounded-lg border border-[#B89B7A]/10">
-                        <p className="text-base font-semibold text-[#2C1810]">
+                        <p className="text-base font-semibold text-[#2C1810] mb-2">
                           <strong>Chega de ficar perdida no guarda-roupa!</strong>
                         </p>
-                        <p className="text-sm text-[#5D4A3A] mt-1">
+                        <p className="text-sm text-[#5D4A3A]">
                           Descubra como aplicar seu estilo no dia a dia
                         </p>
                       </div>
@@ -487,7 +488,7 @@ const ResultPage: React.FC = () => {
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={500}>
                     <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-6 border border-[#B89B7A]/15"
                          style={{ boxShadow: tokens.shadows.md }}>
-                      <h3 className="text-xl font-semibold text-[#aa6b5d] mb-4 flex items-center gap-2">
+                      <h3 className="text-xl font-semibold text-[#aa6b5d] mb-6 flex items-center gap-2">
                         Estilos que Também Influenciam Você
                       </h3>
                       <SecondaryStylesSection secondaryStyles={secondaryStyles} />
@@ -514,7 +515,7 @@ const ResultPage: React.FC = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none"></div>
                     </div>
 
-                    {/* Badge flutuante - BOLINHA REMOVIDA */}
+                    {/* Badge flutuante */}
                     <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full text-sm font-bold transform rotate-12 shadow-lg">
                       <span>{category}</span>
                     </div>
@@ -525,7 +526,7 @@ const ResultPage: React.FC = () => {
                 </AnimatedWrapper>
               </div>
 
-              {/* Guia do estilo */}
+              {/* Guia do estilo - ESPAÇAMENTO PADRONIZADO */}
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
                 <div className="mt-16 text-center">
                   <h3 className="text-2xl lg:text-3xl font-playfair font-bold text-[#aa6b5d] mb-8">
@@ -541,7 +542,7 @@ const ResultPage: React.FC = () => {
                       onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
                     />
 
-                    {/* Badge exclusivo - BOLINHA REMOVIDA */}
+                    {/* Badge exclusivo */}
                     <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1.5 rounded-full text-xs font-bold transform rotate-12 shadow-md">
                       EXCLUSIVO
                     </div>
@@ -552,8 +553,8 @@ const ResultPage: React.FC = () => {
           </Card>
         </section>
 
-        {/* Seções lazy-loaded com melhor espaçamento */}
-        <section id="transformations" className="scroll-mt-24 mb-20 lg:mb-28">
+        {/* Seções lazy-loaded com ESPAÇAMENTO PADRONIZADO */}
+        <section id="transformations" className="scroll-mt-24 mb-24 lg:mb-28">
           <SectionTitle 
             variant="primary"
             size="xl"
@@ -573,7 +574,7 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
 
-        <section id="motivation" className="scroll-mt-24 mb-20 lg:mb-28">
+        <section id="motivation" className="scroll-mt-24 mb-24 lg:mb-28">
           <SectionTitle 
             variant="secondary"
             size="xl"
@@ -593,7 +594,7 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
 
-        <section id="bonuses" className="scroll-mt-24 mb-20 lg:mb-28">
+        <section id="bonuses" className="scroll-mt-24 mb-24 lg:mb-28">
           <Suspense fallback={
             <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -606,7 +607,7 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
 
-        <section id="testimonials" className="scroll-mt-24 mb-20 lg:mb-28">
+        <section id="testimonials" className="scroll-mt-24 mb-24 lg:mb-28">
           <Suspense fallback={
             <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -619,7 +620,7 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
 
-        <section id="guarantee" className="scroll-mt-24 mb-20 lg:mb-28">
+        <section id="guarantee" className="scroll-mt-24 mb-24 lg:mb-28">
           <Suspense fallback={
             <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
               <LoadingSpinner size="lg" className="mb-4" />
@@ -632,7 +633,7 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
 
-        <section id="mentor" className="scroll-mt-24 mb-20 lg:mb-28">
+        <section id="mentor" className="scroll-mt-24 mb-24 lg:mb-28">
           <SectionTitle 
             variant="simple"
             size="xl"
@@ -652,8 +653,8 @@ const ResultPage: React.FC = () => {
           </Suspense>
         </section>
 
-        {/* Seção de transição elegante */}
-        <div className="mb-20 lg:mb-28">
+        {/* Seção de transição elegante - ESPAÇAMENTO PADRONIZADO */}
+        <div className="mb-24 lg:mb-28">
           <div className="relative text-center py-16 lg:py-20">
             <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/60 via-[#f9f4ef]/40 to-[#fff7f3]/60 rounded-3xl"></div>
             <div className="relative z-10">
@@ -669,8 +670,8 @@ const ResultPage: React.FC = () => {
           </div>
         </div>
 
-        {/* CTA Final completamente redesenhada */}
-        <section id="cta" className="scroll-mt-24 mb-20 lg:mb-28">
+        {/* CTA Final completamente redesenhada - ESPAÇAMENTO PADRONIZADO */}
+        <section id="cta" className="scroll-mt-24 mb-24 lg:mb-28">
           <div className="relative overflow-hidden bg-gradient-to-br from-white via-[#fff7f3] to-[#f9f4ef] rounded-3xl p-8 lg:p-16 border border-[#B89B7A]/20 text-center"
                style={{ boxShadow: tokens.shadows.xl }}>
 
@@ -679,8 +680,8 @@ const ResultPage: React.FC = () => {
 
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={200}>
               <div className="relative z-10">
-                {/* Header da CTA */}
-                <div className="mb-12 lg:mb-16">
+                {/* Header da CTA - ESPAÇAMENTO PADRONIZADO */}
+                <div className="mb-16 lg:mb-20">
                   <div className="inline-flex items-center gap-4 mb-8">
                     <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
                     <div className="w-6 h-6 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full animate-pulse shadow-lg"></div>
@@ -696,7 +697,7 @@ const ResultPage: React.FC = () => {
                     </span>
                   </h2>
 
-                  <p className="text-xl lg:text-2xl text-[#5D4A3A] font-medium mb-4">
+                  <p className="text-xl lg:text-2xl text-[#5D4A3A] font-medium mb-6">
                     Guia {category} Personalizado + Bônus Exclusivos
                   </p>
 
@@ -708,7 +709,7 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Grid de produtos otimizado */}
+                {/* Grid de produtos otimizado - ESPAÇAMENTO PADRONIZADO */}
                 <div className="mb-16">
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
                     {[
@@ -780,7 +781,7 @@ const ResultPage: React.FC = () => {
                           <div className="absolute inset-0 bg-gradient-to-t from-[#B89B7A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl"></div>
                         </div>
 
-                        {/* Conteúdo do produto */}
+                        {/* Conteúdo do produto - ESPAÇAMENTO PADRONIZADO */}
                         <div className="text-left space-y-4">
                           <h4 className="font-bold text-[#2C1810] text-lg lg:text-xl leading-tight">
                             {product.title}
@@ -806,7 +807,7 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Resumo de valor redesenhado */}
+                {/* Resumo de valor redesenhado - ESPAÇAMENTO PADRONIZADO */}
                 <div className="max-w-lg mx-auto mb-12">
                   <div className="relative bg-white rounded-2xl p-8 lg:p-10 border-4 border-double border-[#B89B7A]/30 overflow-hidden"
                        style={{ 
@@ -869,7 +870,7 @@ const ResultPage: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-2xl"></div>
                   </Button>
 
-                  {/* Garantias de segurança */}
+                  {/* Garantias de segurança - ESPAÇAMENTO PADRONIZADO */}
                   <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-[#8F7A6A]">
                     <div className="flex items-center gap-2">
                       <Shield className="w-4 h-4 text-[#B89B7A]" />
@@ -891,17 +892,12 @@ const ResultPage: React.FC = () => {
         </section>
       </main>
 
-      {/* Build info oculto */}
-      <div className="hidden">
-        <BuildInfo />
-      </div>
-
-      {/* Rodapé simples e elegante */}
-      <footer className="mt-20 lg:mt-28 border-t border-[#B89B7A]/15 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef]">
-        <div className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-6xl">
-          <div className="text-center space-y-4">
+      {/* Rodapé simples e elegante - ESPAÇAMENTO PADRONIZADO */}
+      <footer className="mt-28 border-t border-[#B89B7A]/15 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef]">
+        <div className="container mx-auto px-4 lg:px-6 py-12 lg:py-16 max-w-6xl">
+          <div className="text-center space-y-6">
             {/* Links de política */}
-            <div className="mb-6">
+            <div className="mb-8">
               <a 
                 href="/politica-privacidade" 
                 className="text-[#5D4A3A] hover:text-[#B89B7A] transition-colors duration-300 font-medium text-sm lg:text-base underline decoration-[#B89B7A]/30 hover:decoration-[#B89B7A] underline-offset-4"
@@ -911,7 +907,7 @@ const ResultPage: React.FC = () => {
             </div>
 
             {/* Linha decorativa */}
-            <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6"></div>
+            <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-8"></div>
 
             {/* Copyright */}
             <p className="text-[#8F7A6A] text-sm lg:text-base font-medium">
@@ -920,6 +916,11 @@ const ResultPage: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Build info oculto */}
+      <div className="hidden">
+        <BuildInfo />
+      </div>
     </div>
   );
 };
