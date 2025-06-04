@@ -733,57 +733,6 @@ const DescubraSeuEstilo: React.FC = () => {
     };
   }, []);
 
-  const handleCtaClick = (
-    buttonId: string,
-    action: string = "Comprar Agora"
-  ) => {
-    trackButtonClick(buttonId, action, "quiz_offer_page");
-
-    // Armazenar dados para correlação futura com webhook Hotmart
-    // Capturar email se disponível (pode vir de formulário ou outros campos)
-    const emailInput = document.querySelector(
-      'input[type="email"]'
-    ) as HTMLInputElement;
-    if (emailInput?.value) {
-      storeUserForHotmart(emailInput.value, {
-        funnel_step: "quiz_offer_checkout",
-        page_url: window.location.href,
-        utm_parameters: {
-          utm_source:
-            new URLSearchParams(window.location.search).get("utm_source") ||
-            undefined,
-          utm_medium:
-            new URLSearchParams(window.location.search).get("utm_medium") ||
-            undefined,
-          utm_campaign:
-            new URLSearchParams(window.location.search).get("utm_campaign") ||
-            undefined,
-          utm_content:
-            new URLSearchParams(window.location.search).get("utm_content") ||
-            undefined,
-          utm_term:
-            new URLSearchParams(window.location.search).get("utm_term") ||
-            undefined,
-        },
-      });
-
-      console.log(
-        "[Hotmart Integration] Dados armazenados para:",
-        emailInput.value
-      );
-    }
-
-    const checkoutUrl =
-      "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
-
-    // Comportamento responsivo: nova aba desktop (≥768px), mesma aba mobile (<768px)
-    if (window.innerWidth >= 768) {
-      window.open(checkoutUrl, "_blank");
-    } else {
-      window.location.href = checkoutUrl;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-[#FAF9F7]">
       {/* Hero Section */}
