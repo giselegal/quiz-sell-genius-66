@@ -2,6 +2,7 @@
 
 # Redirecionamentos específicos para o funil de vendas
 /                           /index.html                 200
+/quiz                       /index.html                 200
 /resultado                  /index.html                 200
 /descubra-seu-estilo        /index.html                 200
 /admin/*                    /index.html                 200

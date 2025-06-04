@@ -1,16 +1,14 @@
-
-import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { QuizProvider } from './context/QuizContext';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { Toaster } from '@/components/ui/toaster';
-import { captureUTMParameters } from './utils/analytics';
-import { loadFacebookPixel } from './utils/facebookPixel';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import CriticalCSSLoader from './components/CriticalCSSLoader';
-import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
-import ABTestRedirect from './components/ABTestRedirect';
+import React, { Suspense, lazy, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { QuizProvider } from "./context/QuizContext";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+import { captureUTMParameters } from "./utils/analytics";
+import { loadFacebookPixel } from "./utils/facebookPixel";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import CriticalCSSLoader from "./components/CriticalCSSLoader";
+import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -23,11 +21,14 @@ const LoadingFallback = () => (
 );
 
 // Lazy loading das páginas essenciais
-const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./pages/ResultPage'));
-const QuizDescubraSeuEstilo = lazy(() => import('./pages/quiz-descubra-seu-estilo'));
-const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const QuizPage = lazy(() => import("./components/QuizPage"));
+const ResultPage = lazy(() => import("./pages/ResultPage"));
+const QuizDescubraSeuEstilo = lazy(
+  () => import("./pages/quiz-descubra-seu-estilo")
+);
+const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
   // Inicializar analytics na montagem do componente
@@ -35,10 +36,10 @@ const App = () => {
     try {
       loadFacebookPixel();
       captureUTMParameters();
-      
-      console.log('App initialized with essential routes only');
+
+      console.log("App initialized with essential routes only");
     } catch (error) {
-      console.error('Erro ao inicializar aplicativo:', error);
+      console.error("Erro ao inicializar aplicativo:", error);
     }
   }, []);
 
@@ -47,21 +48,34 @@ const App = () => {
       <QuizProvider>
         <TooltipProvider>
           <Router>
-            <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
-            <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
-            
+            <CriticalCSSLoader
+              cssContent={initialCriticalCSS}
+              id="initial-critical"
+              removeOnLoad={true}
+            />
+            <CriticalCSSLoader
+              cssContent={heroCriticalCSS}
+              id="hero-critical"
+              removeOnLoad={true}
+            />
+
             <Suspense fallback={<LoadingFallback />}>
-              <ABTestRedirect>
-                <Routes>
-                  {/* Rotas principais */}
-                  <Route path="/" element={<QuizPage />} />
-                  <Route path="/resultado" element={<ResultPage />} />
-                  <Route path="/descubra-seu-estilo" element={<QuizDescubraSeuEstilo />} />
-                  <Route path="/admin/*" element={<DashboardPage />} />
-                  {/* 404 */}
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </ABTestRedirect>
+              <Routes>
+                {/* Página inicial com teste A/B */}
+                <Route path="/" element={<LandingPage />} />
+                {/* Rota do quiz específica */}
+                <Route path="/quiz" element={<QuizPage />} />
+                {/* Rotas do teste A/B */}
+                <Route path="/resultado" element={<ResultPage />} />
+                <Route
+                  path="/descubra-seu-estilo"
+                  element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Admin */}
+                <Route path="/admin/*" element={<DashboardPage />} />
+                {/* 404 */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
             </Suspense>
           </Router>
           <Toaster />
