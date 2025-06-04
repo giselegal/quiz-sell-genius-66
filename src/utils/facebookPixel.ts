@@ -1,3 +1,4 @@
+
 // Facebook Pixel utility functions
 import {
   getPixelId,
@@ -5,10 +6,10 @@ import {
   trackFunnelEvent,
 } from "../services/pixelManager";
 
-// Define types for fbq function
+// Use the same type definition as in global.d.ts
 declare global {
   interface Window {
-    fbq?: any;
+    fbq?: (event: string, eventName: string, params?: any) => void;
     _fbq?: any;
   }
 }
@@ -27,16 +28,16 @@ export const initFacebookPixel = (pixelId: string): boolean => {
 
     // Initialize Facebook Pixel
     if (!window.fbq) {
-      window.fbq = function (...args: any[]) {
+      window.fbq = function (event: string, eventName: string, params?: any) {
         (window.fbq as any).q = (window.fbq as any).q || [];
-        (window.fbq as any).q.push(args);
+        (window.fbq as any).q.push([event, eventName, params]);
       };
       window._fbq = window.fbq;
       (window.fbq as any).loaded = true;
       (window.fbq as any).version = "2.0";
     }
 
-    window.fbq("init", pixelId);
+    window.fbq("track", "init", { pixelId });
     // Facebook Pixel - PageView será disparado manualmente quando necessário
 
     console.log(`Facebook Pixel initialized with ID: ${pixelId}`);
@@ -62,11 +63,7 @@ export const trackPixelEvent = (
       return;
     }
 
-    if (params) {
-      window.fbq("track", eventName, params);
-    } else {
-      window.fbq("track", eventName);
-    }
+    window.fbq("track", eventName, params);
 
     console.log(`Tracked Facebook Pixel event: ${eventName}`, params || "");
   } catch (error) {
