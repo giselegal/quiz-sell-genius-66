@@ -84,14 +84,26 @@ const QuizDescubraSeuEstilo: React.FC = () => {
           * { box-sizing: border-box; }
           body { background: #f8f6f2; }
           .responsive-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-          @media (max-width: 768px) { .responsive-container { padding: 0 8px; } }
+          @media (max-width: 768px) {
+            .responsive-container { padding: 0 8px; }
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .pain-points { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .section-padding { padding: 28px 0 !important; }
+            .cta-button { width: 100%; padding: 16px 0; font-size: 1rem; }
+            .author-photo { width: 90px; height: 90px; }
+          }
           .hero-title { font-size: clamp(2.2rem, 5vw, 3.2rem); line-height: 1.1; font-family: 'Playfair Display', serif; }
           .hero-subtitle { font-size: clamp(1.1rem, 2.5vw, 1.3rem); color: #6d5c3d; }
           .cta-button { background: linear-gradient(90deg, #bfa46f 60%, #d4b896 100%); color: #fff; font-weight: 800; font-size: 1.18rem; padding: 20px 44px; border-radius: 32px; box-shadow: 0 4px 16px #bfa46f33; letter-spacing: 1px; transition: all 0.3s; text-align: center; border: none; cursor: pointer; margin: 18px 0; }
           .cta-button:hover { background: #a8935f; transform: scale(1.04); box-shadow: 0 8px 24px #bfa46f44; }
-          .pain-point-card { border: 2px solid #bfa46f33; background: #fff; border-radius: 1.2rem; box-shadow: 0 2px 10px #bfa46f22; transition: 0.3s; }
+          .pain-point-card { border: 2px solid #bfa46f33; background: #fff; border-radius: 1.2rem; box-shadow: 0 2px 10px #bfa46f22; transition: 0.3s; display: flex; flex-direction: column; align-items: center; padding: 24px 16px; }
           .pain-point-card:hover { border-color: #bfa46f; box-shadow: 0 8px 24px #bfa46f33; transform: translateY(-4px) scale(1.03); }
-          .testimonial-card { border: 2px solid #bfa46f22; background: #fff; border-radius: 1.2rem; box-shadow: 0 2px 10px #bfa46f22; }
+          .pain-icon { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #bfa46f 60%, #d4b896 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+          .pain-icon svg { color: #fff; width: 28px; height: 28px; }
+          .testimonial-card { border: 2px solid #bfa46f22; background: #fff; border-radius: 1.2rem; box-shadow: 0 2px 10px #bfa46f22; padding: 24px 18px; }
+          .testimonial-name { color: #bfa46f; font-weight: 700; }
           .author-photo { border-radius: 50%; border: 4px solid #bfa46f; width: 120px; height: 120px; object-fit: cover; margin-bottom: 1rem; }
           .faq-item { border-bottom: 1px solid #e0d7c6; }
           .faq-question { cursor: pointer; }
@@ -165,36 +177,75 @@ const QuizDescubraSeuEstilo: React.FC = () => {
                 maxWidth: "800px",
               }}
             >
-              {[
-                {
-                  emoji: "👗",
-                  text: "Guarda-roupa cheio, mas nada para vestir.",
-                },
-                {
-                  emoji: "🤔",
-                  text: "Dúvida se as roupas realmente combinam.",
-                },
-                { emoji: "💸", text: "Compras por impulso que nunca usa." },
-              ].map((item, index) => (
-                <div key={index} className="pain-point-card">
-                  <div
-                    className="emoji"
-                    style={{ fontSize: "2.5rem", marginBottom: "1rem" }}
-                  >
-                    {item.emoji}
-                  </div>
-                  <div
-                    className="text"
-                    style={{
-                      fontSize: "1.08rem",
-                      color: "#333",
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {item.text}
-                  </div>
+              {/* Substituir emojis por ícones elegantes da marca */}
+              <div className="pain-point-card">
+                <div className="pain-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M4 20v-2a4 4 0 014-4h8a4 4 0 014 4v2"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
-              ))}
+                <div
+                  className="text"
+                  style={{
+                    fontSize: "1.08rem",
+                    color: "#333",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  Guarda-roupa cheio, mas nada para vestir.
+                </div>
+              </div>
+              <div className="pain-point-card">
+                <div className="pain-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                    <path d="M12 16v-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    <circle cx="12" cy="8" r="1" fill="currentColor" />
+                  </svg>
+                </div>
+                <div
+                  className="text"
+                  style={{
+                    fontSize: "1.08rem",
+                    color: "#333",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  Dúvida se as roupas realmente combinam.
+                </div>
+              </div>
+              <div className="pain-point-card">
+                <div className="pain-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <rect
+                      x="3"
+                      y="11"
+                      width="18"
+                      height="10"
+                      rx="2"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
+                    <path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                </div>
+                <div
+                  className="text"
+                  style={{
+                    fontSize: "1.08rem",
+                    color: "#333",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  Compras por impulso que nunca usa.
+                </div>
+              </div>
             </div>
           </div>
         </section>
