@@ -1,5 +1,4 @@
-# Criando o arquivo completo com as alterações solicitadas
-code_content = '''import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
+import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -131,7 +130,7 @@ const SectionTitle = React.memo<{
         <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
       </div>
     )}
-    
+
     {/* Título com melhor hierarquia */}
     <h2 className={`font-playfair font-bold leading-tight tracking-tight ${
       variant === 'primary' 
@@ -144,7 +143,7 @@ const SectionTitle = React.memo<{
     }`}>
       {children}
     </h2>
-    
+
     {/* Subtítulo melhorado */}
     {subtitle && (
       <div className="max-w-4xl mx-auto">
@@ -153,7 +152,7 @@ const SectionTitle = React.memo<{
         </p>
       </div>
     )}
-    
+
     {/* Linha decorativa */}
     {variant === 'primary' && (
       <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-6 shadow-sm"></div>
@@ -180,14 +179,14 @@ const ResultPage: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showBottomBar, setShowBottomBar] = useState(false);
   const [activeSection, setActiveSection] = useState('primary-style');
-  
+
   // Timer otimizado
   const [timer, setTimer] = useState({
     hours: 2,
     minutes: 59,
     seconds: 59
   });
-  
+
   useEffect(() => {
     const countdownInterval = setInterval(() => {
       setTimer(prevTimer => {
@@ -202,22 +201,22 @@ const ResultPage: React.FC = () => {
         }
       });
     }, 1000);
-    
+
     return () => clearInterval(countdownInterval);
   }, []);
-  
+
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
-    
+
     const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
-    
+
     if (hasPreloadedResults) {
       setImagesLoaded({ style: true, guide: true });
       completeLoading();
       return;
     } 
-    
+
     const safetyTimeout = setTimeout(() => {
       setImagesLoaded({ style: true, guide: true });
       completeLoading();
@@ -225,30 +224,30 @@ const ResultPage: React.FC = () => {
 
     return () => clearTimeout(safetyTimeout);
   }, [primaryStyle, globalStyles.logo, completeLoading]);
-  
+
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
-  
+
   // Scroll tracking melhorado
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > 120);
-      
+
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const scrolledToBottom = scrollTop + windowHeight >= documentHeight - 1000;
-      
+
       setShowBottomBar(scrolledToBottom);
-      
+
       // Tracking de seção ativa
       const sections = [
         'primary-style', 'transformations', 'motivation', 'bonuses',
         'testimonials', 'guarantee', 'mentor', 'cta'
       ];
-      
+
       for (let i = sections.length - 1; i >= 0; i--) {
         const element = document.getElementById(sections[i]);
         if (element?.getBoundingClientRect().top <= 250) {
@@ -257,37 +256,37 @@ const ResultPage: React.FC = () => {
         }
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
-  
+
   const { category } = primaryStyle;
   const { image, guideImage, description } = styleConfig[category];
-  
+
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    if (window.ctaClickProcessing) return;
-    window.ctaClickProcessing = true;
-    
+
+    if ((window as any).ctaClickProcessing) return;
+    (window as any).ctaClickProcessing = true;
+
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    
+
     if (window.innerWidth >= 768) {
       window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
     } else {
       window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
     }
-    
+
     setTimeout(() => {
-      window.ctaClickProcessing = false;
+      (window as any).ctaClickProcessing = false;
     }, 1000);
   };
-  
+
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -297,7 +296,7 @@ const ResultPage: React.FC = () => {
       });
     }
   };
-  
+
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
       backgroundColor: tokens.colors.background,
@@ -320,12 +319,12 @@ const ResultPage: React.FC = () => {
           ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(to bottom, #aa6b5d, #B89B7A);
           }
-          
+
           /* Smooth scroll behavior */
           html {
             scroll-behavior: smooth;
           }
-          
+
           /* Focus states melhorados */
           button:focus-visible,
           a:focus-visible {
@@ -338,14 +337,14 @@ const ResultPage: React.FC = () => {
       {/* Preloaders */}
       <ResourcePreloader />
       <PerformanceMonitor />
-      
+
       {/* Background decorativo refinado */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-[#B89B7A]/8 to-transparent rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4"></div>
         <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-[#aa6b5d]/6 to-transparent rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4"></div>
         <div className="absolute top-1/2 left-1/4 w-1/4 h-1/4 bg-gradient-to-r from-[#B89B7A]/4 to-transparent rounded-full blur-2xl"></div>
       </div>
-      
+
       {/* Header minimalista e elegante */}
       <header className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled 
@@ -443,11 +442,11 @@ const ResultPage: React.FC = () => {
         <section id="primary-style" className="scroll-mt-24 mb-16 lg:mb-24">
           <Card className="relative overflow-hidden bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15 rounded-2xl p-6 lg:p-10" 
                 style={{ boxShadow: tokens.shadows.xl }}>
-            
+
             {/* Decoração de cantos elegante */}
             <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#B89B7A]/20 rounded-tl-2xl"></div>
             <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#B89B7A]/20 rounded-br-2xl"></div>
-            
+
             <AnimatedWrapper animation="fade" show={true} duration={600} delay={200}>
               {/* Header personalizado - BOLINHA REMOVIDA */}
               <div className="text-center mb-10 lg:mb-12">
@@ -460,7 +459,7 @@ const ResultPage: React.FC = () => {
                     </div>
                   </AnimatedWrapper>
                 )}
-                
+
                 {/* Título principal melhorado */}
                 <h1 className="text-2xl lg:text-4xl xl:text-5xl font-playfair text-[#2C1810] mb-8 leading-tight">
                   Descobrimos Seu Estilo Predominante:
@@ -469,7 +468,7 @@ const ResultPage: React.FC = () => {
                     {category}
                   </span>
                 </h1>
-                
+
                 {/* Progress bar elegante */}
                 <div className="max-w-lg mx-auto mb-8">
                   <div className="flex items-center justify-between text-sm font-medium text-[#5D4A3A] mb-3">
@@ -500,7 +499,7 @@ const ResultPage: React.FC = () => {
                         <p className="text-[#2C1810] leading-relaxed text-lg font-medium mb-4">
                           <strong className="text-[#aa6b5d]">Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
                         </p>
-                        
+
                         {/* Descrição do estilo */}
                         <div className="bg-white/60 rounded-lg p-4 border border-[#B89B7A]/5">
                           <p className="text-[#2C1810] text-base leading-relaxed">
@@ -517,7 +516,7 @@ const ResultPage: React.FC = () => {
                           </p>
                         </div>
                       </div>
-                      
+
                       {/* Call to action sutil */}
                       <div className="text-center p-4 bg-gradient-to-r from-[#B89B7A]/5 to-[#aa6b5d]/5 rounded-lg border border-[#B89B7A]/10">
                         <p className="text-base font-semibold text-[#2C1810]">
@@ -556,22 +555,22 @@ const ResultPage: React.FC = () => {
                         fetchPriority="high" 
                         onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
                       />
-                      
+
                       {/* Overlay gradiente */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none"></div>
                     </div>
-                    
+
                     {/* Badge flutuante - BOLINHA REMOVIDA */}
                     <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full text-sm font-bold transform rotate-12 shadow-lg">
                       <span>{category}</span>
                     </div>
-                    
+
                     {/* Decoração de cantos */}
                     <div className="absolute -bottom-4 -left-4 w-12 h-12 border-b-3 border-l-3 border-[#B89B7A] rounded-bl-xl opacity-60"></div>
                   </div>
                 </AnimatedWrapper>
               </div>
-              
+
               {/* Guia do estilo */}
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
                 <div className="mt-16 text-center">
@@ -587,7 +586,7 @@ const ResultPage: React.FC = () => {
                       style={{ boxShadow: tokens.shadows.xl }}
                       onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
                     />
-                    
+
                     {/* Badge exclusivo - BOLINHA REMOVIDA */}
                     <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1.5 rounded-full text-xs font-bold transform rotate-12 shadow-md">
                       EXCLUSIVO
@@ -639,7 +638,7 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </Suspense>
         </section>
-        
+
         <section id="bonuses" className="scroll-mt-24 mb-20 lg:mb-28">
           <Suspense fallback={
             <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
@@ -665,7 +664,7 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </Suspense>
         </section>
-        
+
         <section id="guarantee" className="scroll-mt-24 mb-20 lg:mb-28">
           <Suspense fallback={
             <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
@@ -678,7 +677,7 @@ const ResultPage: React.FC = () => {
             </AnimatedWrapper>
           </Suspense>
         </section>
-        
+
         <section id="mentor" className="scroll-mt-24 mb-20 lg:mb-28">
           <SectionTitle 
             variant="simple"
@@ -715,15 +714,15 @@ const ResultPage: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         {/* CTA Final completamente redesenhada */}
         <section id="cta" className="scroll-mt-24 mb-20 lg:mb-28">
           <div className="relative overflow-hidden bg-gradient-to-br from-white via-[#fff7f3] to-[#f9f4ef] rounded-3xl p-8 lg:p-16 border border-[#B89B7A]/20 text-center"
                style={{ boxShadow: tokens.shadows.xl }}>
-            
+
             {/* Background decorativo */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#B89B7A]/5 via-transparent to-[#aa6b5d]/5 pointer-events-none"></div>
-            
+
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={200}>
               <div className="relative z-10">
                 {/* Header da CTA */}
@@ -733,7 +732,7 @@ const ResultPage: React.FC = () => {
                     <div className="w-6 h-6 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full animate-pulse shadow-lg"></div>
                     <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
                   </div>
-                  
+
                   <h2 className="text-4xl lg:text-6xl xl:text-7xl font-playfair font-bold leading-tight mb-8">
                     <span className="bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent block mb-4">
                       Desperte Sua Confiança
@@ -742,11 +741,11 @@ const ResultPage: React.FC = () => {
                       Com Seu Estilo Único!
                     </span>
                   </h2>
-                  
+
                   <p className="text-xl lg:text-2xl text-[#5D4A3A] font-medium mb-4">
                     Guia {category} Personalizado + Bônus Exclusivos
                   </p>
-                  
+
                   <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 px-4 py-2 rounded-full border border-[#B89B7A]/20">
                     <Clock className="w-4 h-4 text-[#aa6b5d]" />
                     <span className="text-sm font-medium text-[#aa6b5d]">
@@ -754,7 +753,7 @@ const ResultPage: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                
+
                 {/* Grid de produtos otimizado */}
                 <div className="mb-16">
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
@@ -798,7 +797,7 @@ const ResultPage: React.FC = () => {
                     ].map((product, index) => (
                       <div key={index} className={`group bg-white rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative ${index === 2 ? 'md:col-span-2 xl:col-span-1' : ''}`}
                            style={{ boxShadow: tokens.shadows.lg }}>
-                        
+
                         {/* Badge premium */}
                         <div className="absolute -top-4 -right-4 z-10">
                           <span className={`text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12 ${
@@ -822,7 +821,7 @@ const ResultPage: React.FC = () => {
                             loading={product.priority ? "eager" : "lazy"}
                             fetchPriority={product.priority ? "high" : "low"}
                           />
-                          
+
                           {/* Overlay de hover */}
                           <div className="absolute inset-0 bg-gradient-to-t from-[#B89B7A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl"></div>
                         </div>
@@ -835,7 +834,7 @@ const ResultPage: React.FC = () => {
                           <p className="text-sm lg:text-base text-[#5D4A3A] leading-relaxed">
                             {product.subtitle}
                           </p>
-                          
+
                           {/* Preço original */}
                           <div className="pt-4 border-t border-[#B89B7A]/10">
                             <div className="flex items-center justify-between">
@@ -860,15 +859,15 @@ const ResultPage: React.FC = () => {
                          boxShadow: '0 20px 40px rgba(184,155,122,0.15), 0 0 0 1px rgba(255,255,255,0.8) inset',
                          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(249,244,239,0.95) 100%)'
                        }}>
-                    
+
                     {/* Background decorativo */}
                     <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#B89B7A]/10 to-transparent rounded-full transform translate-x-16 -translate-y-16"></div>
-                    
+
                     <div className="relative z-10 text-center space-y-6">
                       <p className="text-lg lg:text-xl font-semibold text-[#5D4A3A]">
                         De <span className="font-bold text-[#B89B7A] text-xl lg:text-2xl line-through">R$ 175,00</span> por apenas:
                       </p>
-                      
+
                       <div className="space-y-2">
                         <p className="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                           R$ 39,90
@@ -877,15 +876,73 @@ const ResultPage: React.FC = () => {
                           ou 5x de R$ 8,83
                         </p>
                       </div>
-                      
+
                       <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4CAF50]/10 to-[#43a047]/10 px-4 py-2 rounded-full border border-[#4CAF50]/20">
                         <TrendingUp className="w-4 h-4 text-[#4CAF50]" />
                         <span className="text-sm font-bold text-[#4CAF50]">
                           Economia de R$ 135,10 (77% OFF)
                         </span>
                       </div>
-                      
+
                       <div className="flex items-center justify-center gap-2 text-[#8F7A6A] text-sm">
                         <Hourglass className="w-4 h-4 animate-pulse" />
                         <span>Esta oferta expira quando você sair desta página</span>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA Button principal com texto responsivo */}
+                <div className="text-center">
+                  <Button 
+                    onClick={handleCTAClick} 
+                    className="group relative text-white font-bold py-6 px-8 sm:px-12 lg:px-16 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
+                    style={{
+                      background: 'linear-gradient(135deg, #4CAF50 0%, #43a047 50%, #388e3c 100%)',
+                      boxShadow: '0 20px 40px rgba(76, 175, 80, 0.3), 0 0 0 1px rgba(255,255,255,0.2) inset',
+                    }}
+                    type="button"
+                  >
+                    <span className="flex items-center justify-center gap-2 sm:gap-3" style={{
+                      fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)' // Ajuste responsivo: 14px min, 20px max
+                    }}>
+                      <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 transition-transform duration-300 group-hover:scale-110 flex-shrink-0" />
+                      <span className="leading-tight">Quero Transformar Meu Estilo Agora</span>
+                      <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce flex-shrink-0" />
+                    </span>
+
+                    {/* Efeito de brilho */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-2xl"></div>
+                  </Button>
+
+                  {/* Garantias de segurança */}
+                  <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-[#8F7A6A]">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-[#B89B7A]" />
+                      <span>Pagamento 100% Seguro</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
+                      <span>Acesso Imediato</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Award className="w-4 h-4 text-[#B89B7A]" />
+                      <span>Garantia de 7 Dias</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedWrapper>
+          </div>
+        </section>
+      </main>
+
+      {/* Build info oculto */}
+      <div className="hidden">
+        <BuildInfo />
+      </div>
+    </div>
+  );
+};
+
+export default ResultPage;
