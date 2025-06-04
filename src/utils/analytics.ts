@@ -53,15 +53,16 @@ export const setUserProperties = (properties: object) => {
 };
 
 // Function to track a page view
-export const trackPageView = (page_path: string, page_title?: string, page_location?: string) => {
+export const trackPageView = (pagePath: string, additionalData?: Record<string, any>) => {
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID, {
-      page_path: page_path,
-      page_title: page_title,
-      page_location: page_location,
+    window.gtag('event', 'page_view', {
+      page_path: pagePath,
+      page_title: document.title,
+      page_location: window.location.href,
+      ...additionalData
     });
   }
-  console.log(`[Analytics] Page View: ${page_path} - ${page_title} - ${page_location}`);
+  console.log(`[Analytics] Page view: ${pagePath}`, additionalData);
 };
 
 // Function to track a social interaction
@@ -245,4 +246,104 @@ export const getCreativePerformance = async () => {
     ctr: 0,
     conversionRate: 0
   };
+};
+
+// Add missing exports that are being imported elsewhere
+export const captureUTMParameters = () => {
+  if (typeof window === 'undefined') return {};
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmParams: Record<string, string> = {};
+  
+  const utmKeys = [
+    'utm_source', 
+    'utm_medium', 
+    'utm_campaign', 
+    'utm_term', 
+    'utm_content',
+    'fbclid',
+    'gclid'
+  ];
+  
+  utmKeys.forEach(key => {
+    const value = urlParams.get(key);
+    if (value) {
+      utmParams[key] = value;
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        console.warn(`[Analytics] Failed to store ${key} in localStorage`, e);
+      }
+    }
+  });
+  
+  if (Object.keys(utmParams).length > 0 && window.gtag) {
+    window.gtag('set', 'user_properties', utmParams);
+  }
+  
+  console.log('[Analytics] UTM parameters captured:', utmParams);
+  return utmParams;
+};
+
+export const initFacebookPixel = () => {
+  if (typeof window === 'undefined') return;
+  
+  const pixelId = process.env.REACT_APP_FACEBOOK_PIXEL_ID || '1234567890123456';
+  
+  if (!window.fbq) {
+    window.fbq = function() {
+      (window.fbq as any).q = (window.fbq as any).q || [];
+      (window.fbq as any).q.push(arguments);
+    };
+    window._fbq = window.fbq;
+    
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+    document.head.appendChild(script);
+  }
+  
+  window.fbq('init', pixelId);
+  console.log(`[Analytics] Facebook Pixel initialized with ID: ${pixelId}`);
+};
+
+export const trackButtonClick = (buttonId: string, buttonText?: string, location?: string) => {
+  if (typeof window === 'undefined') return;
+  
+  const data = {
+    button_id: buttonId,
+    button_text: buttonText || 'unknown',
+    button_location: location || 'unknown'
+  };
+  
+  if (window.gtag) {
+    window.gtag('event', 'button_click', data);
+  }
+  
+  if (window.fbq) {
+    window.fbq('trackCustom', 'ButtonClick', data);
+  }
+  
+  console.log(`[Analytics] Button click: ${buttonText} (${buttonId})`, data);
+};
+
+export const trackSaleConversion = (value: number, currency: string = 'BRL', productName?: string) => {
+  if (typeof window === 'undefined') return;
+  
+  const data = {
+    value,
+    currency,
+    content_name: productName || 'Product',
+    content_type: 'product'
+  };
+  
+  if (window.gtag) {
+    window.gtag('event', 'purchase', data);
+  }
+  
+  if (window.fbq) {
+    window.fbq('track', 'Purchase', data);
+  }
+  
+  console.log(`[Analytics] Sale conversion: ${value} ${currency}`, data);
 };

@@ -179,3 +179,33 @@ export const preloadCriticalImages = async (
 
   return preloadImagesByUrls(imageUrls, { quality, batchSize });
 };
+
+export const getImageMetadata = (src: string) => {
+  if (!src) return null;
+  
+  // Return basic metadata - in a real implementation this would fetch actual metadata
+  return {
+    url: src,
+    alt: `Image ${src.split('/').pop()}`,
+    format: src.includes('.webp') ? 'webp' : 'jpeg'
+  };
+};
+
+export const isImagePreloaded = (src: string): boolean => {
+  if (!src) return false;
+  
+  // Simple check - in a real implementation this would check if image is in cache
+  const img = new Image();
+  img.src = src;
+  return img.complete;
+};
+
+export const getOptimizedImage = (src: string, options?: { width?: number; height?: number; quality?: number }) => {
+  // For now, delegate to existing function
+  return getOptimizedImageUrl(src, options);
+};
+
+export const preloadImages = (images: Array<{ src: string; id: string; alt?: string; category?: string; preloadPriority?: number }>, options?: { quality?: number; batchSize?: number }) => {
+  const urls = images.map(img => img.src);
+  return preloadImagesByUrls(urls, options);
+};

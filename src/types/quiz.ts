@@ -45,3 +45,24 @@ export type BlockType =
   | "integrations"
   | "legal"
   | "custom-code";
+
+export interface UserResponse {
+  questionId: string;
+  selectedOptions: string[];
+}
+
+export interface QuizQuestion {
+  id: string;
+  title: string;
+  type: 'image' | 'text';
+  options: QuizOption[];
+  multiSelect: number;
+  imageUrl?: string;
+}
+
+export interface QuizOption {
+  id: string;
+  text: string;
+  styleCategory: string;
+  imageUrl?: string;
+}

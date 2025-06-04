@@ -168,7 +168,7 @@ const QuizPage: React.FC = () => {
       // Rastreia a resposta para analytics
       trackQuizAnswer(
         response.questionId, 
-        finalOptions,
+        finalOptions.join(', '),
         currentStrategicQuestionIndex + totalQuestions,
         totalQuestions + strategicQuestions.length
       );
@@ -232,7 +232,7 @@ const QuizPage: React.FC = () => {
       handleAnswer(response.questionId, response.selectedOptions);
       trackQuizAnswer(
         response.questionId, 
-        response.selectedOptions, 
+        response.selectedOptions.join(', '), 
         currentQuestionIndex, 
         totalQuestions
       );
@@ -297,7 +297,7 @@ const QuizPage: React.FC = () => {
         setShowingTransition(true); // Mostra MainTransition
         trackQuizAnswer(
           "quiz_main_complete", 
-          ["completed"], 
+          "completed", 
           totalQuestions, 
           totalQuestions + strategicQuestions.length
         );

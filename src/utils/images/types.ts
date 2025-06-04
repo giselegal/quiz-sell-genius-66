@@ -1,4 +1,3 @@
-
 export interface ImageMetadata {
   url: string;
   width?: number;
@@ -34,4 +33,22 @@ export interface PreloadOptions {
   batchSize?: number;
   onProgress?: (loaded: number, total: number) => void;
   onComplete?: () => void;
+}
+
+export interface ImageAnalysis {
+  dimensions: {
+    width: number;
+    height: number;
+  };
+  format: string;
+  size: number;
+  quality: number;
+}
+
+export interface ImageDiagnosticResult {
+  url: string;
+  status: 'success' | 'error' | 'loading';
+  analysis?: ImageAnalysis;
+  error?: string;
+  loadTime?: number;
 }

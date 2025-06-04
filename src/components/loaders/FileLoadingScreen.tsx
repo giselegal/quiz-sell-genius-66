@@ -1,118 +1,86 @@
 import React, { useState, useEffect } from 'react';
-import { Progress } from "@/components/ui/progress";
+import { motion } from 'framer-motion';
 
 interface FileLoadingScreenProps {
-  totalFiles?: number;
-  initialFilesLoaded?: number;
-  loadingSpeed?: number; // ms between file increments
-  onLoadingComplete?: () => void;
-  redirectUrl?: string;
-  title?: string;
-  subtitle?: string;
+  fileUrl: string;
+  onFileLoaded: (file: Blob) => void;
+  onError: (error: string) => void;
 }
 
-export const FileLoadingScreen: React.FC<FileLoadingScreenProps> = ({
-  totalFiles = 3700,
-  initialFilesLoaded = 2000,
-  loadingSpeed = 50,
-  onLoadingComplete,
-  redirectUrl,
-  title = "Lovable Editor",
-  subtitle = "Carregando arquivos do Editor Unificado"
-}) => {
-  const [filesLoaded, setFilesLoaded] = useState(initialFilesLoaded);
-  const [loadingComplete, setLoadingComplete] = useState(false);
-  const [loadingText, setLoadingText] = useState('Carregando arquivos...');
-  
-  // Textos de carregamento por etapa
-  const loadingTexts = [
-    'Inicializando componentes...',
-    'Carregando arquivos...',
-    'Preparando editor visual...',
-    'Configurando ambiente...',
-    'Carregando templates...',
-    'Inicializando interface...',
-    'Quase pronto...'
-  ];
-  
+const FileLoadingScreen: React.FC<FileLoadingScreenProps> = ({ fileUrl, onFileLoaded, onError }) => {
+  const [progress, setProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    // Trocar texto de carregamento periodicamente
-    const textInterval = setInterval(() => {
-      setLoadingText(loadingTexts[Math.floor(Math.random() * loadingTexts.length)]);
-    }, 2000);
-    
-    // Incrementar número de arquivos carregados
-    const interval = setInterval(() => {
-      setFilesLoaded(prev => {
-        if (prev >= totalFiles) {
-          clearInterval(interval);
-          clearInterval(textInterval);
-          setLoadingComplete(true);
-          setLoadingText('Carregamento concluído!');
-          
-          // Executar callback se existir
-          if (onLoadingComplete) {
-            onLoadingComplete();
-          }
-          
-          // Redirecionar se URL fornecida
-          if (redirectUrl) {
-            setTimeout(() => {
-              window.location.href = redirectUrl;
-            }, 1000);
-          }
-          
-          return totalFiles;
+    const loadFile = async () => {
+      try {
+        const response = await fetch(fileUrl);
+        const contentLength = response.headers.get('content-length');
+        const total = parseInt(contentLength || '0', 10);
+        let loaded = 0;
+
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error('ReadableStream not supported');
         }
-        return prev + Math.floor(Math.random() * 10) + 1;
-      });
-    }, loadingSpeed);
-    
-    return () => {
-      clearInterval(interval);
-      clearInterval(textInterval);
+
+        const chunks: Uint8Array[] = [];
+
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) {
+            break;
+          }
+
+          chunks.push(value);
+          loaded += value.length;
+          const currentProgress = total ? Math.round((loaded / total) * 100) : 0;
+          setProgress(currentProgress);
+        }
+
+        const blob = new Blob(chunks);
+        onFileLoaded(blob);
+        setIsLoading(false);
+      } catch (e: any) {
+        onError(e.message || 'Failed to load file');
+        setIsLoading(false);
+      }
     };
-  }, [totalFiles, loadingSpeed, redirectUrl, onLoadingComplete]);
-  
-  const progressPercentage = (filesLoaded / totalFiles) * 100;
-  
+
+    loadFile();
+  }, [fileUrl, onFileLoaded, onError]);
+
+  // Fix the CSS custom property issue
+  const progressBarStyle = {
+    '--progress-width': `${progress}%`
+  } as React.CSSProperties & { '--progress-width': string };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#FAF9F7] to-[#EDE5DB]">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <div className="flex items-center justify-center mb-6">
-          <div className="mr-3">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 17L12 22L22 17" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 12L12 17L22 12" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <h2 className="text-2xl font-playfair text-[#432818]">{title}</h2>
-        </div>
-        
-        <div className="mb-6">
-          <h3 className="text-lg font-medium mb-2 text-[#432818]">{subtitle}</h3>
-          <p className="text-[#8F7A6A] text-sm mb-4">{loadingText}</p>
-          
-          <Progress value={progressPercentage} className="h-3 mb-2" 
-            style={{
-              background: '#EDE5DB',
-              '--tw-progress-bar': loadingComplete ? '#4CAF50' : '#B89B7A'
-            }} 
-          />
-          
-          <div className="flex justify-between text-sm text-[#8F7A6A]">
-            <span>{filesLoaded} de {totalFiles} arquivos</span>
-            <span>{Math.round(progressPercentage)}%</span>
-          </div>
-        </div>
-        
-        {loadingComplete && (
-          <div className="text-center p-3 bg-green-50 rounded-md text-green-700">
-            Carregamento concluído! Redirecionando...
-          </div>
-        )}
+    <div className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-gray-50 z-50">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-semibold text-gray-800">Carregando arquivo...</h2>
+        <p className="text-gray-600">Por favor, aguarde enquanto o arquivo é carregado.</p>
       </div>
+
+      <div className="relative w-64 h-4 bg-gray-200 rounded-full overflow-hidden">
+        <motion.div
+          className="absolute top-0 left-0 h-full bg-brand-primary rounded-full"
+          style={progressBarStyle}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium text-gray-700">
+          {progress}%
+        </div>
+      </div>
+
+      {isLoading && (
+        <div className="mt-4 text-sm text-gray-500">
+          <span className="animate-pulse">Carregando...</span>
+        </div>
+      )}
     </div>
   );
 };
+
+export default FileLoadingScreen;
