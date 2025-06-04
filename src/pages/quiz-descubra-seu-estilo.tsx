@@ -1,290 +1,280 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { ShoppingCart, ArrowRight } from 'lucide-react';
 import { QuizOption } from '@/components/quiz/QuizOption';
-import { CheckCircle, ArrowRight, Shield, Clock, Users, Star, ShoppingCart, Lock } from 'lucide-react';
-import { useQuiz } from '@/hooks/useQuiz';
-import { useRouter } from 'next/router';
-import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { styleConfig } from '@/config/styleConfig';
-import { trackButtonClick } from '@/utils/analytics';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { AspectRatioContainer } from '@/components/ui/aspect-ratio-container';
-import { OptimizedAutoFixedImages } from '@/components/ui/OptimizedAutoFixedImages';
-import { FixedIntroImage } from '@/components/ui/FixedIntroImage';
-import { useAuth } from '@/context/AuthContext';
+import MentorSection from '@/components/result/MentorSection';
+import { useQuizLogic } from '@/hooks/useQuizLogic';
 
-const QuizPage: React.FC = () => {
-  const {
-    currentQuestionIndex,
-    questions,
-    userAnswers,
-    goToNextQuestion,
-    recordAnswer,
-    primaryStyle,
-    secondaryStyles,
-    resetQuiz
-  } = useQuiz();
-  const { globalStyles } = useGlobalStyles();
-  const router = useRouter();
-  const isMobile = useIsMobile();
-  const { user } = useAuth();
-
-  const currentQuestion = questions[currentQuestionIndex];
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
-
-  useEffect(() => {
-    if (!currentQuestion && questions.length > 0) {
-      // Quiz is complete, navigate to results page
-      router.push('/results');
-    }
-  }, [currentQuestion, questions, router]);
-
-  useEffect(() => {
-    // Scroll to top on question change
-    window.scrollTo(0, 0);
-  }, [currentQuestionIndex]);
-
-  const handleAnswer = (optionId: string) => {
-    if (currentQuestion) {
-      recordAnswer(currentQuestion.id, optionId);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentQuestion) {
-      goToNextQuestion();
-    }
-  };
-
-  const handleCTAClick = () => {
-    trackButtonClick('checkout_button', 'Iniciar Checkout', 'quiz_page');
-    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
-  };
-
-  const isLastQuestion = currentQuestionIndex === questions.length - 1;
-  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-
-  if (!currentQuestion) {
-    return null; // Or a loading state
+const sampleOptions = [
+  {
+    id: "sample-1",
+    text: "Elegante e Sofisticado",
+    styleCategory: "Elegante",
+    imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_70,dpr_1.0,e_sharpen:40/v1687095491/style-quiz/elegante-6_u1ghdr.jpg"
+  },
+  {
+    id: "sample-2", 
+    text: "Contemporâneo e Moderno",
+    styleCategory: "Contemporâneo",
+    imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_70,dpr_1.0,e_sharpen:40/v1687095491/style-quiz/contemporaneo-6_riqfun.jpg"
+  },
+  {
+    id: "sample-3",
+    text: "Romântico e Delicado", 
+    styleCategory: "Romântico",
+    imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_70,dpr_1.0,e_sharpen:40/v1687095492/style-quiz/romantico-6_nkahb3.jpg"
+  },
+  {
+    id: "sample-4",
+    text: "Sexy e Empoderado",
+    styleCategory: "Sexy", 
+    imageUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_70,dpr_1.0,e_sharpen:40/v1687095492/style-quiz/sexy-6_xvvf64.jpg"
   }
+];
 
+export default function QuizDescubraSeuEstilo() {
+  const [showQuiz, setShowQuiz] = useState(false);
   const {
-    title,
-    options,
-    type,
-    styleCategory,
-    imageUrl
-  } = currentQuestion;
+    currentQuestion,
+    currentQuestionIndex,
+    currentAnswers,
+    handleAnswer,
+    handleNext,
+    isLastQuestion,
+    totalQuestions,
+    allQuestions
+  } = useQuizLogic();
 
-  const strategicOptions = options.filter(option => option.isStrategic);
-  const hasStrategicOptions = strategicOptions.length > 0;
-  const isStrategicQuestion = hasStrategicOptions;
+  const handleStartQuiz = () => {
+    setShowQuiz(true);
+    setTimeout(() => {
+      document.getElementById('quiz-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
 
-  const isTextOnlyQuestion = !options.some(option => option.imageUrl);
+  const handleBuyNow = () => {
+    window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
+  };
+
+  const handleAnswerSelect = (optionId: string) => {
+    if (currentQuestion) {
+      handleAnswer(currentQuestion.id, [optionId]);
+    }
+  };
+
+  const progress = totalQuestions > 0 ? ((currentQuestionIndex + 1) / totalQuestions) * 100 : 0;
+  const userAnswers = currentAnswers.reduce((acc, answer) => {
+    acc[currentQuestion?.id || ''] = answer;
+    return acc;
+  }, {} as Record<string, string>);
 
   return (
-    <OptimizedAutoFixedImages fixOnMount={true} fixOnUpdate={false}>
-      <div
-        className="min-h-screen relative overflow-hidden"
-        style={{
-          backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-          color: globalStyles.textColor || '#432818',
-          fontFamily: globalStyles.fontFamily || 'inherit'
-        }}
-      >
-        {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+    <div className="min-h-screen bg-gradient-to-b from-[#FAF9F7] to-white">
+      {/* Header com Logo */}
+      <div className="py-8 text-center">
+        <img 
+          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+          alt="Logo Gisele Galvão"
+          className="h-16 md:h-20 mx-auto"
+        />
+      </div>
 
-        {/* Header Section */}
-        <header className="bg-white py-4 shadow-md z-20 relative">
-          <div className="container mx-auto px-4 flex items-center justify-between max-w-5xl">
-            {/* Logo */}
-            <div className="flex items-center">
-              <a href="/" className="flex items-center">
-                <img
-                  src={globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'}
-                  alt={globalStyles.logoAlt || "Gisele Galvão"}
-                  className="h-12 w-auto mr-2"
-                  style={{ maxHeight: globalStyles.logoHeight || '48px' }}
-                />
-              </a>
+      {/* Hero Section */}
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Conteúdo Principal */}
+            <div className="order-1 md:order-1 space-y-6">
+              <h1 className="text-3xl md:text-5xl font-playfair text-[#432818] leading-tight">
+                Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em um Aliado da Sua Imagem Pessoal
+              </h1>
+              
+              <p className="text-lg md:text-xl text-[#8F7A6A] leading-relaxed">
+                Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button
+                  onClick={handleStartQuiz}
+                  className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Começar o Quiz Gratuito
+                </Button>
+                
+                <Button
+                  onClick={handleBuyNow}
+                  className="bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  Adquirir Guia Completo
+                </Button>
+              </div>
             </div>
+            
+            {/* Imagem Hero */}
+            <div className="order-2 md:order-2 relative">
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp"
+                alt="Mulher perdida com guarda-roupa bagunçado"
+                className="w-full rounded-lg shadow-lg"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
-            {/* User Info */}
-            {user && (
-              <div className="text-sm text-[#432818] font-medium">
-                Olá, {user.userName}!
+      {/* Seção de Problema/Dor */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#432818] mb-8">
+            Você já se sentiu assim?
+          </h2>
+          
+          <div className="space-y-6 text-lg text-[#8F7A6A] leading-relaxed">
+            <p>
+              Você já se sentiu frustrada ao abrir seu guarda-roupa cheio de roupas e mesmo assim não ter o que vestir? Ou já comprou peças que pareciam perfeitas na loja, mas que nunca combinaram com nada que você tem?
+            </p>
+            
+            <p>
+              A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".
+            </p>
+            
+            <p>
+              <strong>O problema não é você, é a falta de autoconhecimento do seu estilo autêntico.</strong>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção Quiz Preview */}
+      <section className="py-16 px-4 bg-[#FAF9F7]">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#432818] mb-8">
+            Descubra Qual dos 8 Estilos Combina com Você
+          </h2>
+          
+          <p className="text-lg text-[#8F7A6A] mb-12">
+            Nosso quiz identifica seu estilo predominante e secundário entre 8 arquétipos únicos:
+          </p>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {sampleOptions.map((option) => (
+              <div key={option.id} className="text-center">
+                <img 
+                  src={option.imageUrl}
+                  alt={option.text}
+                  className="w-full aspect-square object-cover rounded-lg mb-2 shadow-md"
+                />
+                <p className="text-sm font-medium text-[#432818]">{option.text}</p>
+              </div>
+            ))}
+          </div>
+          
+          <Button
+            onClick={handleStartQuiz}
+            className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            Fazer o Quiz Gratuito Agora
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
+        </div>
+      </section>
+
+      {/* Seção Quiz */}
+      {showQuiz && (
+        <section id="quiz-section" className="py-16 px-4 bg-white">
+          <div className="container mx-auto max-w-4xl">
+            {currentQuestion ? (
+              <Card className="bg-white shadow-md border border-[#B89B7A]/20">
+                <div className="p-6">
+                  {/* Progress Bar */}
+                  <div className="mb-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-[#8F7A6A]">
+                        {currentQuestionIndex + 1} de {totalQuestions}
+                      </span>
+                      <span className="text-[#aa6b5d] font-medium">
+                        {progress.toFixed(0)}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-[#F3E8E6] rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  {/* Question */}
+                  <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6">
+                    {currentQuestion.title}
+                  </h2>
+
+                  {/* Options */}
+                  <div className={`grid ${currentQuestion.type === 'text' ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-4 mb-8`}>
+                    {currentQuestion.options.map((option) => (
+                      <QuizOption
+                        key={option.id}
+                        option={option}
+                        isSelected={userAnswers[currentQuestion.id] === option.id}
+                        onSelect={handleAnswerSelect}
+                        type={currentQuestion.type}
+                        questionId={currentQuestion.id}
+                        isDisabled={false}
+                        isStrategicOption={option.isStrategic || false}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Navigation */}
+                  <div className="flex justify-end">
+                    <Button 
+                      onClick={handleNext} 
+                      disabled={!userAnswers[currentQuestion.id]}
+                      className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white"
+                    >
+                      {isLastQuestion ? 'Ver meu resultado' : 'Próxima Pergunta'}
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ) : (
+              <div className="text-center py-12">
+                <h2 className="text-2xl font-playfair text-[#432818] mb-4">
+                  Quiz carregando...
+                </h2>
               </div>
             )}
           </div>
-        </header>
+        </section>
+      )}
 
-        <div className="container mx-auto px-4 py-8 max-w-5xl relative z-10">
-          {/* Progress Bar */}
-          <div className="max-w-md mx-auto mb-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-[#8F7A6A]">
-                {currentQuestionIndex + 1} de {questions.length}
-              </span>
-              <span className="text-[#aa6b5d] font-medium">
-                {progress.toFixed(0)}%
-              </span>
-            </div>
-            <Progress
-              value={progress}
-              className="h-2 bg-[#F3E8E6]"
-              indicatorClassName="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]"
-            />
-          </div>
+      {/* Seção Mentora */}
+      <MentorSection />
 
-          {/* Question Card */}
-          <Card className="bg-white shadow-md border border-[#B89B7A]/20 card-elegant mb-8">
-            <div className="p-6">
-              <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-4">
-                {title}
-              </h2>
-
-              {/* Image above question for mobile view */}
-              {imageUrl && isMobile && (
-                <div className="mb-4">
-                  <AspectRatioContainer ratio="16/9">
-                    <FixedIntroImage
-                      src={imageUrl}
-                      alt={title}
-                      width={500}
-                      height={281}
-                      className="rounded-md shadow-md"
-                      objectFit="cover"
-                    />
-                  </AspectRatioContainer>
-                </div>
-              )}
-
-              {/* Options Grid */}
-              <div className={`grid ${type === 'text' ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-4`}>
-                {options.map((option) => (
-                  <QuizOption
-                    key={option.id}
-                    option={option}
-                    isSelected={userAnswers[currentQuestion.id] === option.id}
-                    onSelect={handleAnswer}
-                    type={type}
-                    questionId={currentQuestion.id}
-                    isDisabled={isStrategicQuestion && userAnswers[currentQuestion.id] && userAnswers[currentQuestion.id] !== option.id}
-                    isStrategicOption={option.isStrategic}
-                    isTextOnlyQuestion={isTextOnlyQuestion}
-                  />
-                ))}
-              </div>
-            </div>
-          </Card>
-
-          {/* Image beside question for desktop view */}
-          {imageUrl && !isMobile && (
-            <div className="mb-4">
-              <AspectRatioContainer ratio="16/9">
-                <FixedIntroImage
-                  src={imageUrl}
-                  alt={title}
-                  width={800}
-                  height={450}
-                  className="rounded-md shadow-md"
-                  objectFit="cover"
-                />
-              </AspectRatioContainer>
-            </div>
-          )}
-
-          {/* Navigation Buttons */}
-          <div className="flex justify-between">
-            <Button
-              variant="outline"
-              onClick={() => {
-                resetQuiz();
-                router.push('/');
-              }}
-            >
-              Recomeçar
-            </Button>
-            <Button onClick={handleNext} disabled={!userAnswers[currentQuestion.id]}>
-              {isLastQuestion ? 'Ver meu resultado' : 'Próxima Pergunta'}
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-          </div>
+      {/* Footer CTA */}
+      <section className="py-16 px-4 bg-[#432818] text-white text-center">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-3xl md:text-4xl font-playfair mb-6">
+            Transforme seu Estilo Hoje!
+          </h2>
+          
+          <p className="text-lg mb-8 opacity-90">
+            Descubra o poder de se vestir com autenticidade e confiança.
+          </p>
+          
+          <Button
+            onClick={handleBuyNow}
+            className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] hover:from-[#45a049] hover:to-[#4CAF50] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <ShoppingCart className="w-5 h-5 mr-2" />
+            Quero meu Guia de Estilo Agora
+          </Button>
         </div>
-
-        {/* Footer Section */}
-        <footer className="bg-[#f9f4ef] py-6 z-20 relative">
-          <div className="container mx-auto px-4 max-w-5xl">
-            <div className="grid md:grid-cols-3 gap-4">
-              {/* First Column - Guarantee */}
-              <div className="flex items-center gap-2">
-                <Shield className="text-[#aa6b5d] w-5 h-5" />
-                <p className="text-sm text-[#432818]">
-                  <strong>Compra Segura</strong>
-                </p>
-              </div>
-
-              {/* Second Column - Delivery Time */}
-              <div className="flex items-center gap-2">
-                <Clock className="text-[#aa6b5d] w-5 h-5" />
-                <p className="text-sm text-[#432818]">
-                  <strong>Acesso Imediato</strong>
-                </p>
-              </div>
-
-              {/* Third Column - Community */}
-              <div className="flex items-center gap-2">
-                <Users className="text-[#aa6b5d] w-5 h-5" />
-                <p className="text-sm text-[#432818]">
-                  <strong>Comunidade Exclusiva</strong>
-                </p>
-              </div>
-            </div>
-
-            {/* Call to Action Section */}
-            <div className="text-center mt-8">
-              <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">
-                Transforme seu Estilo Hoje!
-              </h3>
-              <p className="text-[#432818] mb-6">
-                Descubra o poder de se vestir com autenticidade e confiança.
-              </p>
-              <Button
-                className="text-white py-4 px-6 rounded-md btn-cta-green"
-                style={{
-                  background: "linear-gradient(to right, #4CAF50, #45a049)",
-                  boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-                }}
-                onMouseEnter={() => setIsButtonHovered(true)}
-                onMouseLeave={() => setIsButtonHovered(false)}
-                onClick={handleCTAClick}
-              >
-                <span className="flex items-center justify-center gap-2">
-                  <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                  Quero meu Guia de Estilo Agora
-                </span>
-              </Button>
-              <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
-                <Lock className="w-3 h-3" />
-                Oferta exclusiva nesta página
-              </p>
-            </div>
-
-            {/* Copyright */}
-            <div className="text-center mt-6">
-              <p className="text-xs text-[#8F7A6A]">
-                © {new Date().getFullYear()} Gisele Galvão. Todos os direitos reservados.
-              </p>
-            </div>
-          </div>
-        </footer>
-      </div>
-    </OptimizedAutoFixedImages>
+      </section>
+    </div>
   );
-};
-
-export default QuizPage;
+}
