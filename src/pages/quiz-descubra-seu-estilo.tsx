@@ -936,30 +936,29 @@ const DescubraSeuEstilo: React.FC = () => {
                 alt="Mockup tablet com guia de imagem e estilo"
                 className="w-full rounded-lg shadow-lg object-cover h-auto"
               />
-            </div>
-            <div className="space-y-4">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <Check className="h-6 w-6 text-[#B89B7A] flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-[#432818] text-base md:text-lg font-semibold">
-                      {benefit.title}
-                    </h4>
-                    <p className="text-[#8F7A6A] text-sm">
-                      {benefit.description}
-                    </p>
-                  </div>
+            {benefits.map((benefit, index) => (
+              <div key={index} className="flex items-start gap-3">
+                <Check className="h-6 w-6 text-[#B89B7A] flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-[#432818] text-base md:text-lg font-semibold">
+                    {benefit.title}
+                  </h4>
+                  <p className="text-[#8F7A6A] text-sm">
+                    {benefit.description}
+                  </p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
+        </div>
 
-          <div className="text-center mt-12">
-            <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto italic">
-              Com o nosso método, você não apenas descobrirá seu estilo, mas
-              também aprenderá a usá-lo como uma ferramenta poderosa para
-              expressar sua autenticidade e aumentar sua confiança.
-            </p>
+        <div className="text-center mt-12">
+          <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto italic">
+            Com o nosso método, você não apenas descobrirá seu estilo, mas
+            também aprenderá a usá-lo como uma ferramenta poderosa para
+            expressar sua autenticidade e aumentar sua confiança.
+          </p>
+        </div>
           </div>
         </div>
       </section>
