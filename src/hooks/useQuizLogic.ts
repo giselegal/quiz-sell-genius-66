@@ -43,11 +43,8 @@ export const useQuizLogic = () => {
       if (firstQuestionImages.length > 0) {
         // High priority preload for first question
         preloadImagesByUrls(firstQuestionImages, {
-          quality: 85, // Alterado de 95 para 85
-          batchSize: 4,
-          onComplete: () => {
-            setIsInitialLoadComplete(true);
-          }
+          quality: 85,
+          batchSize: 4
         });
 
         // Start preloading next question with lower priority
@@ -62,7 +59,7 @@ export const useQuizLogic = () => {
 
           if (nextQuestionImages.length > 0) {
             preloadImagesByUrls(nextQuestionImages, { 
-              quality: 85, // Alterado de 95 para 85
+              quality: 85,
               batchSize: 2 
             });
           }
@@ -74,7 +71,7 @@ export const useQuizLogic = () => {
     
     // Also start preloading strategic images in the background
     preloadCriticalImages('strategic');
-  }, []); // Removido currentQuestion e nextQuestion das dependências para rodar apenas uma vez
+  }, []);
 
   // 3. Simple utility functions that don't depend on other functions
   const handleAnswer = useCallback((questionId: string, selectedOptions: string[]) => {
@@ -99,7 +96,7 @@ export const useQuizLogic = () => {
 
       if (nextImages.length > 0) {
         preloadImagesByUrls(nextImages, { 
-          quality: 85, // Alterado de 95 para 85
+          quality: 85,
           batchSize: 3 
         });
       }
@@ -116,7 +113,7 @@ export const useQuizLogic = () => {
 
         if (nextNextImages.length > 0) {
           preloadImagesByUrls(nextNextImages, { 
-            quality: 85, // Alterado de 95 para 85
+            quality: 85,
             batchSize: 2 
           });
         }
@@ -248,16 +245,16 @@ export const useQuizLogic = () => {
     const primaryStyle = styleResults[0] || null;
     const secondaryStyles = styleResults.slice(1);
 
-    const result: QuizResult = { // Explicitly type QuizResult
+    const result: QuizResult = {
       primaryStyle,
       secondaryStyles,
       totalSelections,
-      // clickOrder: clickOrderInternal // Optional: save the click order used
+      userName: 'User' // Add default userName to fix type error
     };
 
     setQuizResult(result);
     localStorage.setItem('quizResult', JSON.stringify(result));
-    localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers)); // Save strategic answers along
+    localStorage.setItem('strategicAnswers', JSON.stringify(strategicAnswers));
     console.log('Results calculated and saved to localStorage:', result);
 
     return result;

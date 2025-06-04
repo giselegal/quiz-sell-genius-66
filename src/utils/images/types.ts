@@ -1,62 +1,37 @@
 
-export interface ImageAnalysis {
+export interface ImageMetadata {
   url: string;
-  element: HTMLImageElement;
-  issues: string[];
-  dimensions?: {
-    natural: { width: number; height: number },
-    display: { width: number; height: number }
-  };
-  downloadSize?: number;
+  width?: number;
+  height?: number;
   format?: string;
-  isOptimized?: boolean;
-  isResponsive?: boolean;
+  size?: number;
+  quality?: number;
+}
+
+export interface ImageCacheEntry {
+  url: string;
+  timestamp: number;
+  metadata: ImageMetadata;
+  blob?: Blob;
+}
+
+export interface ImageSettings {
+  quality: number;
+  format: 'webp' | 'jpeg' | 'png';
+  maxWidth?: number;
+  maxHeight?: number;
+}
+
+export interface ImageOptimizationOptions {
   quality?: number;
   width?: number;
   height?: number;
-  suggestedImprovements?: string[];
+  format?: 'webp' | 'jpeg' | 'png';
 }
 
-export interface ImageDiagnosticResult {
-  url?: string;
-  issues?: string[];
-  recommendations?: string[];
-  optimizationPotential?: number;
-  summary?: {
-    totalImagesRendered: number;
-    totalImagesWithIssues: number;
-    totalDownloadedBytes: number;
-    estimatedPerformanceImpact: string;
-  };
-  detailedIssues?: ImageAnalysis[];
-}
-
-export interface FixBlurryImagesOptions {
-  quality?: number;
-  format?: string;
-  skipOptimized?: boolean;
-  forceOptimize?: boolean;
-  debug?: boolean;
-  placeholderColor?: string;
-}
-
-export interface PreloadImageDefinition {
-  src: string;
-  id: string;
-  alt: string;
-  category: string;
-  preloadPriority?: number;
-  tags?: string[];
-  quality?: number;
-}
-
-// Add PreloadOptions interface to fix imports
 export interface PreloadOptions {
   quality?: number;
-  priority?: 'high' | 'low' | 'auto';
-  categories?: string[];
-  limit?: number;
-  timeout?: number;
   batchSize?: number;
-  format?: string;
+  onProgress?: (loaded: number, total: number) => void;
+  onComplete?: () => void;
 }
