@@ -6,14 +6,6 @@ import {
   trackFunnelEvent,
 } from "../services/pixelManager";
 
-// Define types for fbq function - using consistent type with global declaration
-declare global {
-  interface Window {
-    fbq?: (...args: any[]) => void;
-    _fbq?: any;
-  }
-}
-
 /**
  * Initialize Facebook Pixel with the provided ID
  * @param pixelId Facebook Pixel ID to initialize
