@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import { getPixelId, trackFunnelEvent } from "../services/pixelManager";
 
+declare global {
+  interface Window {
+    fbq?: any;
+  }
+}
+
 export default function QuizDescubraSeuEstilo() {
   useEffect(() => {
     // Inicializar pixel específico da página B

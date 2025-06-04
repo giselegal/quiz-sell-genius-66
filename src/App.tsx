@@ -6,7 +6,7 @@ import { QuizProvider } from "./context/QuizContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { captureUTMParameters } from "./utils/analytics";
-import { loadFacebookPixel } from "./utils/facebookPixel";
+import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import CriticalCSSLoader from "./components/CriticalCSSLoader";
 import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
@@ -36,7 +36,7 @@ const App = () => {
   // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
-      loadFacebookPixel();
+      loadFacebookPixelDynamic();
       captureUTMParameters();
 
       console.log("App initialized with essential routes only");
