@@ -449,36 +449,38 @@ const painPoints = [
   {
     icon: Heart,
     title: "Problemas de autoestima",
-    description: "Você se sente insegura com sua imagem e não sabe como melhorar"
+    description:
+      "Você se sente insegura com sua imagem e não sabe como melhorar",
   },
   {
     icon: ShoppingBag,
     title: "Compras sem direção",
-    description: "Gasta dinheiro em roupas que não combinam com você"
+    description: "Gasta dinheiro em roupas que não combinam com você",
   },
   {
     icon: Clock,
     title: "Perda de tempo",
-    description: "Demora horas para se arrumar e ainda não fica satisfeita"
-  }
+    description: "Demora horas para se arrumar e ainda não fica satisfeita",
+  },
 ];
 
 const benefits = [
   {
     icon: Crown,
     title: "Descobrir seu estilo único",
-    description: "Identifique qual estilo combina perfeitamente com sua personalidade"
+    description:
+      "Identifique qual estilo combina perfeitamente com sua personalidade",
   },
   {
     icon: Target,
     title: "Compras estratégicas",
-    description: "Saiba exatamente o que comprar para valorizar sua beleza"
+    description: "Saiba exatamente o que comprar para valorizar sua beleza",
   },
   {
     icon: Sparkles,
     title: "Confiança renovada",
-    description: "Sinta-se linda e confiante todos os dias"
-  }
+    description: "Sinta-se linda e confiante todos os dias",
+  },
 ];
 
 const realTestimonials = [
@@ -488,43 +490,49 @@ const realTestimonials = [
     text: "Descobri meu estilo e agora me sinto muito mais confiante! O quiz mudou minha forma de me vestir.",
     rating: 5,
     location: "São Paulo, SP",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
+    image:
+      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
   },
   {
-    name: "Ana Carolina", 
+    name: "Ana Carolina",
     author: "Ana Carolina",
     text: "Finalmente entendi quais cores e modelos ficam melhores em mim. Recomendo!",
     rating: 5,
     location: "Rio de Janeiro, RJ",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+    image:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
   },
   {
     name: "Juliana Santos",
-    author: "Juliana Santos", 
+    author: "Juliana Santos",
     text: "Economizei muito dinheiro depois que aprendi a comprar apenas o que realmente me valoriza.",
     rating: 5,
     location: "Belo Horizonte, MG",
-    image: "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=100&h=100&fit=crop&crop=face"
-  }
+    image:
+      "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=100&h=100&fit=crop&crop=face",
+  },
 ];
 
 // Função para lidar com cliques em CTAs
 const handleCTAClick = (buttonId: string, action: string = "Comprar Agora") => {
   return (event: React.MouseEvent) => {
     event.preventDefault();
-    const emailInput = document.querySelector('input[type="email"]') as HTMLInputElement;
+    const emailInput = document.querySelector(
+      'input[type="email"]'
+    ) as HTMLInputElement;
     trackButtonClick(buttonId, action, "quiz_offer_page");
-    
+
     if (emailInput?.value) {
       storeUserForHotmart(emailInput.value, {
         funnel_step: "quiz_offer_checkout",
         page_url: window.location.href,
       });
     }
-    
+
     // Redirecionar para checkout
-    const checkoutUrl = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
-    
+    const checkoutUrl =
+      "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
+
     if (window.innerWidth >= 768) {
       window.open(checkoutUrl, "_blank");
     } else {
@@ -766,14 +774,14 @@ const DescubraSeuEstilo: React.FC = () => {
 
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair text-[#432818] text-center md:text-left leading-tight">
                 Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em
-                um Aliado da Sua Imagem Pessoal
+                um Aliado da Sua Imagem
               </h1>
 
               <p className="text-lg md:text-xl text-[#8F7A6A] text-center md:text-left">
                 Chega de um guarda-roupa lotado e da sensação de que nada
-                combina com você. Descubra seu estilo predominante e aprenda a
-                montar looks que realmente refletem sua essência, com
-                praticidade e confiança.
+                combina com você. Descubra seu Estilo e aprenda a montar looks
+                que realmente refletem sua essência, com praticidade e
+                confiança.
               </p>
 
               <div className="flex justify-center md:justify-start">
@@ -813,8 +821,9 @@ const DescubraSeuEstilo: React.FC = () => {
               A Jornada Para Descobrir Seu Estilo Autêntico Começa Aqui
             </h2>
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto">
-              Muitas mulheres possuem armários repletos de roupas, mas sentem dificuldade em criar 
-              looks que realmente expressem sua personalidade e as façam sentir-se confiantes e autênticas.
+              Muitas mulheres possuem armários repletos de roupas, mas sentem
+              dificuldade em criar looks que realmente expressem sua
+              personalidade e as façam sentir-se confiantes e autênticas.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -835,9 +844,10 @@ const DescubraSeuEstilo: React.FC = () => {
           </div>
           <div className="text-center mt-12">
             <p className="text-lg text-[#8F7A6A] italic max-w-4xl mx-auto">
-              A chave está em descobrir seu estilo predominante - aquele que reflete sua personalidade, 
-              valores e essência autêntica. Com essa clareza, você criará um guarda-roupa harmonioso 
-              onde cada peça conversa entre si e expressa verdadeiramente quem você é.
+              A chave está em descobrir seu estilo predominante - aquele que
+              reflete sua personalidade, valores e essência autêntica. Com essa
+              clareza, você criará um guarda-roupa harmonioso onde cada peça
+              conversa entre si e expressa verdadeiramente quem você é.
             </p>
           </div>
         </div>
@@ -858,8 +868,9 @@ const DescubraSeuEstilo: React.FC = () => {
               Seu Guia Completo Para um Estilo Autêntico
             </h2>
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto mb-8">
-              Apresento um método completo que irá revelar seu estilo predominante 
-              e transformar sua relação com a moda de forma elegante e autêntica.
+              Apresento um método completo que irá revelar seu estilo
+              predominante e transformar sua relação com o vestuário de forma
+              elegante e autêntica.
             </p>
           </div>
 
@@ -958,9 +969,10 @@ const DescubraSeuEstilo: React.FC = () => {
 
           <div className="text-center mt-12">
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto italic">
-              Como você descobrirá, 55% da comunicação é visual, 38% é tom de
-              voz e apenas 7% é verbal. Isso significa que sua imagem comunica
-              muito antes de você falar qualquer coisa!
+              Estudos mostram que 55% da nossa comunicação é visual, 38% é o tom
+              de voz e apenas 7% são as palavras. Sua imagem é a primeira
+              impressão que você transmite - faça com que ela reflita sua
+              verdadeira essência.
             </p>
           </div>
         </div>
@@ -971,7 +983,7 @@ const DescubraSeuEstilo: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Bônus Especiais Inclusos
+              Materiais Complementares Exclusivos
             </h2>
           </div>
 
@@ -1062,7 +1074,7 @@ const DescubraSeuEstilo: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Depoimentos de mulheres que já viveram essa transformação:
+              Histórias de Transformação Autêntica
             </h2>
           </div>
 
@@ -1115,9 +1127,9 @@ const DescubraSeuEstilo: React.FC = () => {
               </div>
             </div>
             <p className="text-[#8F7A6A]">
-              Estou tão confiante de que estes materiais vão transformar sua
-              relação com a moda e sua imagem pessoal que ofereço uma garantia
-              incondicional de 7 dias.
+              Tenho plena confiança de que este material irá transformar sua
+              relação com o vestuário e elevar sua imagem pessoal. Por isso,
+              ofereço uma garantia completa de satisfação por 7 dias.
             </p>
           </div>
 
@@ -1161,14 +1173,17 @@ const DescubraSeuEstilo: React.FC = () => {
           </div>
 
           <Button
-            onClick={handleCTAClick("final-cta", "Quero Transformar Minha Imagem")}
+            onClick={handleCTAClick(
+              "final-cta",
+              "Quero Transformar Minha Imagem"
+            )}
             size="lg"
             className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 w-full md:w-auto"
           >
             <span className="hidden md:inline">
-              Quero Transformar Minha Imagem Agora!
+              Descobrir Meu Estilo Autêntico Agora
             </span>
-            <span className="md:hidden">Quero Minha Transformação!</span>
+            <span className="md:hidden">Descobrir Meu Estilo</span>
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
 
