@@ -1,3 +1,4 @@
+
 export interface StyleResult {
   category: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
   score: number;
@@ -8,7 +9,7 @@ export interface QuizResult {
   primaryStyle: StyleResult;
   secondaryStyles: StyleResult[];
   totalSelections: number;
-  userName?: string; // Make it optional to fix build errors
+  userName?: string;
 }
 
 export interface QuizComponentData {
@@ -16,6 +17,7 @@ export interface QuizComponentData {
   type: string;
   content: any;
   position: number;
+  data?: any; // Added missing data property
 }
 
 export type BlockType =
@@ -44,7 +46,9 @@ export type BlockType =
   | "dynamic-content"
   | "integrations"
   | "legal"
-  | "custom-code";
+  | "custom-code"
+  | "heading"     // Added missing types
+  | "paragraph";
 
 export interface UserResponse {
   questionId: string;
@@ -65,4 +69,5 @@ export interface QuizOption {
   text: string;
   styleCategory: string;
   imageUrl?: string;
+  points?: number; // Added missing points property
 }

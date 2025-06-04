@@ -1,3 +1,4 @@
+
 export interface ImageMetadata {
   url: string;
   width?: number;
@@ -33,6 +34,7 @@ export interface PreloadOptions {
   batchSize?: number;
   onProgress?: (loaded: number, total: number) => void;
   onComplete?: () => void;
+  format?: string;
 }
 
 export interface ImageAnalysis {
@@ -43,6 +45,9 @@ export interface ImageAnalysis {
   format: string;
   size: number;
   quality: number;
+  isOptimized?: boolean;
+  isResponsive?: boolean;
+  suggestedImprovements?: string[];
 }
 
 export interface ImageDiagnosticResult {
@@ -51,4 +56,16 @@ export interface ImageDiagnosticResult {
   analysis?: ImageAnalysis;
   error?: string;
   loadTime?: number;
+  summary?: {
+    totalImages: number;
+    optimizedImages: number;
+    totalSize: number;
+    potentialSavings: number;
+  };
+  detailedIssues?: Array<{
+    type: string;
+    severity: 'low' | 'medium' | 'high';
+    description: string;
+    recommendation: string;
+  }>;
 }

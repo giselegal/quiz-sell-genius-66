@@ -111,8 +111,6 @@ const QuizPage: React.FC = () => {
     // Salvar nome no localStorage
     localStorage.setItem('userName', name.trim());
     
-    // Removemos a marcação de sessão para garantir que sempre mostre a intro primeiro
-    
     // Atualizar contexto de autenticação
     if (login) {
       login(name);
@@ -121,14 +119,14 @@ const QuizPage: React.FC = () => {
     // Iniciar o quiz
     setShowIntro(false);
     
-    // Pré-carregar imagens do quiz
+    // Pré-carregar imagens do quiz - fixed signature
     preloadImages([{ 
       src: currentQuestion?.imageUrl || '', 
       id: `question-0`,
       alt: 'First Question',
       category: 'quiz',
       preloadPriority: 5 
-    }], { quality: 90 });
+    }]);
     
     console.log(`Quiz iniciado por ${name}`);
   };
@@ -165,19 +163,15 @@ const QuizPage: React.FC = () => {
       // Salva a resposta estratégica usando o hook useQuizLogic
       saveStrategicAnswer(response.questionId, finalOptions);
       
-      // Rastreia a resposta para analytics
+      // Rastreia a resposta para analytics - fixed signature
       trackQuizAnswer(
         response.questionId, 
-        finalOptions.join(', '),
-        currentStrategicQuestionIndex + totalQuestions,
-        totalQuestions + strategicQuestions.length
+        finalOptions.join(', ')
       );
       const currentProgress = ((currentStrategicQuestionIndex + totalQuestions + 1) / 
                               (totalQuestions + strategicQuestions.length)) * 100;
       if (currentProgress >= 45 && currentProgress <= 55) {
-        trackQuizAnswer('quiz_middle_point', ['reached'], 
-                       currentStrategicQuestionIndex + totalQuestions,
-                       totalQuestions + strategicQuestions.length);
+        trackQuizAnswer('quiz_middle_point', 'reached');
       }
       // Não avança o índice aqui
     } catch (error) {
@@ -230,18 +224,15 @@ const QuizPage: React.FC = () => {
   const handleAnswerSubmitInternal = useCallback((response: UserResponse) => {
     try {
       handleAnswer(response.questionId, response.selectedOptions);
+      // Fixed signature - removed extra arguments
       trackQuizAnswer(
         response.questionId, 
-        response.selectedOptions.join(', '), 
-        currentQuestionIndex, 
-        totalQuestions
+        response.selectedOptions.join(', ')
       );
       const currentProgress = ((currentQuestionIndex + 1) / 
                               (totalQuestions + strategicQuestions.length)) * 100;
       if (currentProgress >= 20 && currentProgress <= 30) {
-        trackQuizAnswer('quiz_first_quarter', ['reached'], 
-                       currentQuestionIndex,
-                       totalQuestions + strategicQuestions.length);
+        trackQuizAnswer('quiz_first_quarter', 'reached');
       }
     } catch (error) {
       toast({
@@ -344,7 +335,7 @@ const QuizPage: React.FC = () => {
           ? (currentStrategicQuestionIndex === strategicQuestions.length - 1 
               ? () => { 
                   setShowingFinalTransition(true);  
-                  trackQuizComplete(); // Rastreia a conclusão final do quiz aqui
+                  trackQuizComplete(); // Fixed - removed extra arguments
                   // Manual progression to results will be triggered by button click
                 }
               : goToNextStrategicQuestion // Chama a nova função para avançar

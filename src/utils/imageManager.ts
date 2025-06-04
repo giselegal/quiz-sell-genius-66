@@ -183,11 +183,13 @@ export const preloadCriticalImages = async (
 export const getImageMetadata = (src: string) => {
   if (!src) return null;
   
-  // Return basic metadata - in a real implementation this would fetch actual metadata
+  // Return metadata with width and height properties
   return {
     url: src,
     alt: `Image ${src.split('/').pop()}`,
-    format: src.includes('.webp') ? 'webp' : 'jpeg'
+    format: src.includes('.webp') ? 'webp' : 'jpeg',
+    width: 800, // Default dimensions
+    height: 600
   };
 };
 

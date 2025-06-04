@@ -65,6 +65,69 @@ export const trackPageView = (pagePath: string, additionalData?: Record<string, 
   console.log(`[Analytics] Page view: ${pagePath}`, additionalData);
 };
 
+// Quiz specific tracking functions - fixed signatures
+export const trackQuizStart = (userName?: string, userEmail?: string) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'quiz_start', {
+      event_category: 'engagement',
+      user_name: userName,
+      user_email: userEmail
+    });
+  }
+  console.log('[Analytics] Quiz Start:', { userName, userEmail });
+};
+
+export const trackQuizAnswer = (questionId: string, answer: string, questionIndex?: number, totalQuestions?: number) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'quiz_answer', {
+      event_category: 'engagement',
+      question_id: questionId,
+      answer: answer,
+      question_index: questionIndex,
+      total_questions: totalQuestions
+    });
+  }
+  console.log('[Analytics] Quiz Answer:', { questionId, answer, questionIndex, totalQuestions });
+};
+
+export const trackQuizComplete = (result?: any) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'quiz_complete', {
+      event_category: 'conversion',
+      result_type: result?.primaryStyle?.category
+    });
+  }
+  console.log('[Analytics] Quiz Complete:', { result });
+};
+
+export const trackResultView = (resultType: string, data?: any) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'result_view', {
+      event_category: 'engagement',
+      result_type: resultType,
+      ...data
+    });
+  }
+  console.log('[Analytics] Result View:', { resultType, data });
+};
+
+export const getCreativePerformance = async () => {
+  // Mock implementation for now
+  return {
+    campaigns: [],
+    totalImpressions: 0,
+    totalClicks: 0,
+    totalConversions: 0,
+    ctr: 0,
+    conversionRate: 0
+  };
+};
+
+// Export getAnalyticsEvents
+export const getAnalyticsEvents = () => {
+  return [];
+};
+
 // Function to track a social interaction
 export const trackSocialInteraction = (network: string, action: string, target: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
@@ -191,64 +254,6 @@ export const trackPurchase = (transaction_id: string, value: number, currency: s
   console.log(`[Analytics] Purchase`, transaction_id, value, currency, products, coupon, shipping, tax);
 };
 
-// Add missing exports
-export const trackQuizStart = (data?: any) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'quiz_start', {
-      event_category: 'engagement',
-      ...data
-    });
-  }
-  console.log('[Analytics] Quiz Start:', data);
-};
-
-export const trackQuizAnswer = (questionId: string, answer: string, data?: any) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'quiz_answer', {
-      event_category: 'engagement',
-      question_id: questionId,
-      answer: answer,
-      ...data
-    });
-  }
-  console.log('[Analytics] Quiz Answer:', { questionId, answer, data });
-};
-
-export const trackQuizComplete = (result: any, data?: any) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'quiz_complete', {
-      event_category: 'conversion',
-      result_type: result?.primaryStyle?.category,
-      ...data
-    });
-  }
-  console.log('[Analytics] Quiz Complete:', { result, data });
-};
-
-export const trackResultView = (resultType: string, data?: any) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'result_view', {
-      event_category: 'engagement',
-      result_type: resultType,
-      ...data
-    });
-  }
-  console.log('[Analytics] Result View:', { resultType, data });
-};
-
-export const getCreativePerformance = async () => {
-  // Mock implementation for now
-  return {
-    campaigns: [],
-    totalImpressions: 0,
-    totalClicks: 0,
-    totalConversions: 0,
-    ctr: 0,
-    conversionRate: 0
-  };
-};
-
-// Add missing exports that are being imported elsewhere
 export const captureUTMParameters = () => {
   if (typeof window === 'undefined') return {};
   
