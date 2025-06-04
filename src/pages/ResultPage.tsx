@@ -37,6 +37,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import ProgressiveImage from "@/components/ui/progressive-image";
 import ResourcePreloader from "@/components/result/ResourcePreloader";
 import PerformanceMonitor from "@/components/result/PerformanceMonitor";
+import { hotmartWebhookManager, storeUserForHotmart } from "@/utils/hotmartWebhook";
 
 // Seções carregadas via lazy
 const BeforeAfterTransformation = lazy(
@@ -307,8 +308,26 @@ const ResultPage: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    if ((window as any).ctaClickProcessing) return;
-    (window as any).ctaClickProcessing = true;
+    interface WindowWithCTAProcessing extends Window {
+      ctaClickProcessing?: boolean;
+    }
+
+    const windowTyped = window as WindowWithCTAProcessing;
+    
+    if (windowTyped.ctaClickProcessing) return;
+    windowTyped.ctaClickProcessing = true;
+
+    // Capturar dados do usuário para correlação futura com vendas Hotmart
+    if (user?.email) {
+      // Armazenar dados do usuário com UTMs para correlação futura
+      storeUserForHotmart(user.email, {
+        quiz_results: primaryStyle,
+        funnel_step: "checkout_initiation",
+        page_url: window.location.href
+      });
+      
+      console.log("[Hotmart Integration] Dados do usuário armazenados para:", user.email);
+    }
 
     trackButtonClick("checkout_button", "Iniciar Checkout", "results_page");
 
@@ -323,7 +342,7 @@ const ResultPage: React.FC = () => {
     }
 
     setTimeout(() => {
-      (window as any).ctaClickProcessing = false;
+      windowTyped.ctaClickProcessing = false;
     }, 1000);
   };
 
