@@ -74,15 +74,15 @@ const App = () => {
                   element={<QuizDescubraSeuEstilo />}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
-                <Route 
-                  path="/admin/*" 
+                <Route
+                  path="/admin/*"
                   element={
                     <AdminAuthProvider>
                       <AdminRoute>
                         <DashboardPage />
                       </AdminRoute>
                     </AdminAuthProvider>
-                  } 
+                  }
                 />
                 {/* 404 */}
                 <Route path="*" element={<NotFoundPage />} />
