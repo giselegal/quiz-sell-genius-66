@@ -3,18 +3,10 @@
 import { getPixelId, getCurrentFunnelConfig, trackFunnelEvent } from '../services/pixelManager';
 
 // Define types for fbq function
-interface FacebookPixelQueue {
-  callMethod?: (...args: unknown[]) => void;
-  queue: unknown[];
-  push: (args: unknown[]) => void;
-  loaded: boolean;
-  version: string;
-}
-
 declare global {
   interface Window {
-    fbq?: FacebookPixelQueue & ((...args: unknown[]) => void);
-    _fbq?: Window['fbq'];
+    fbq?: any;
+    _fbq?: any;
   }
 }
 
@@ -31,22 +23,15 @@ export const initFacebookPixel = (pixelId: string): boolean => {
     }
 
     // Initialize Facebook Pixel
-    window.fbq = window.fbq || function(...args: unknown[]) {
-      const fbq = window.fbq as FacebookPixelQueue;
-      if (fbq.callMethod) {
-        fbq.callMethod.apply(fbq, args);
-      } else {
-        fbq.queue.push(args);
-      }
-    };
-    
-    const fbq = window.fbq as FacebookPixelQueue;
-    fbq.queue = fbq.queue || [];
-    fbq.push = fbq.push || function(args: unknown[]) { fbq.queue.push(args); };
-    fbq.loaded = true;
-    fbq.version = '2.0';
-    
-    window._fbq = window._fbq || window.fbq;
+    if (!window.fbq) {
+      window.fbq = function(...args: any[]) {
+        (window.fbq as any).q = (window.fbq as any).q || [];
+        (window.fbq as any).q.push(args);
+      };
+      window._fbq = window.fbq;
+      (window.fbq as any).loaded = true;
+      (window.fbq as any).version = '2.0';
+    }
     
     window.fbq('init', pixelId);
     // Facebook Pixel - PageView será disparado manualmente quando necessário
