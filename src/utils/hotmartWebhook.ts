@@ -1,7 +1,8 @@
 // Sistema de Webhook Hotmart
 // ID: agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df
 
-import { trackSaleConversion, captureUTMParameters } from "./analytics";
+import { trackSaleConversion, captureUTMParameters } from "./analytics.ts";
+import { trackConversion } from "./analytics.js";
 
 // Interfaces para dados do webhook Hotmart
 export interface HotmartBuyer {
@@ -213,13 +214,11 @@ export class HotmartWebhookManager {
       }
 
       // Usar o sistema de analytics interno
-      trackSaleConversion('purchase', {
-        value: data.data.purchase.price.value,
-        currency: data.data.purchase.price.currency_value,
-        product_name: data.data.purchase.product.name,
-        transaction_id: data.data.transaction.id,
-        ...userData.utm_parameters
-      });
+      trackSaleConversion(
+        data.data.purchase.price.value,
+        data.data.purchase.price.currency_value,
+        data.data.purchase.product.name
+      );
 
       // Notificar outros sistemas se necessário
       await this.notifyExternalSystems(data, userData);
