@@ -7,7 +7,7 @@ import ResultHeader from './quiz-result/ResultHeader';
 import PrimaryStyleCard from './quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from './quiz-result/SecondaryStylesSection';
 import OfferCard from './quiz-result/OfferCard';
-import BeforeAfterTransformation from './result/BeforeAfterTransformation4';
+import BeforeAfterTransformation from './result/BeforeAfterTransformation';
 import { CheckCircle } from 'lucide-react';
 import { sharedStyles } from '@/styles/sharedStyles';
 import { ResultPageConfig } from '@/types/resultPageConfig';
