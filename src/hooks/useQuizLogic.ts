@@ -30,6 +30,12 @@ export const useQuizLogic = () => {
 
   // Preload first question images on component mount
   useEffect(() => {
+    // Set a safety timeout to ensure loading completes even if images fail
+    const safetyTimeout = setTimeout(() => {
+      console.log('Safety timeout: Setting initial load complete');
+      setIsInitialLoadComplete(true);
+    }, 2000); // 2 seconds timeout
+
     // Collect all images from first question
     if (currentQuestion) {
       const firstQuestionImages = currentQuestion.options
@@ -44,7 +50,12 @@ export const useQuizLogic = () => {
         // High priority preload for first question
         preloadImagesByUrls(firstQuestionImages, {
           quality: 85,
-          batchSize: 4
+          batchSize: 4,
+          onComplete: () => {
+            console.log('First question images preloaded successfully');
+            clearTimeout(safetyTimeout);
+            setIsInitialLoadComplete(true);
+          }
         });
 
         // Start preloading next question with lower priority
@@ -65,12 +76,21 @@ export const useQuizLogic = () => {
           }
         }
       } else {
+        console.log('No images to preload, setting initial load complete');
+        clearTimeout(safetyTimeout);
         setIsInitialLoadComplete(true);
       }
+    } else {
+      console.log('No current question, setting initial load complete');
+      clearTimeout(safetyTimeout);
+      setIsInitialLoadComplete(true);
     }
     
     // Also start preloading strategic images in the background
     preloadCriticalImages('strategic');
+
+    // Cleanup timeout on unmount
+    return () => clearTimeout(safetyTimeout);
   }, []);
 
   // 3. Simple utility functions that don't depend on other functions
