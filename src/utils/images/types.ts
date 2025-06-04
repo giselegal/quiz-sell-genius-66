@@ -27,6 +27,7 @@ export interface ImageSettings {
   width?: number;
   height?: number;
   crop?: boolean;
+  responsive?: boolean;
 }
 
 export interface ImageOptimizationOptions {
