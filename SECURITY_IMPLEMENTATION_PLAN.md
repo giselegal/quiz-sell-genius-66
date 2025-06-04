@@ -1,29 +1,34 @@
 # 🔒 Plano de Implementação de Segurança - Quiz Sell Genius
 
 ## 🎯 Objetivo
+
 Resolver vulnerabilidades críticas de segurança identificadas no projeto Quiz Sell Genius, migrando de um sistema de autenticação mock para uma implementação segura e robusta.
 
 ## 🚨 Vulnerabilidades Críticas Identificadas
 
 ### 1. **CRÍTICO: Sistema de Autenticação Mock**
+
 - **Arquivo**: `/src/context/AuthContext.tsx`
 - **Problema**: Autenticação baseada apenas em localStorage
 - **Risco**: Qualquer usuário pode obter acesso admin modificando localStorage
 - **Impacto**: Comprometimento total do sistema administrativo
 
 ### 2. **ALTO: Uso Extensivo de localStorage para Dados Sensíveis**
+
 - **Instâncias**: 202+ ocorrências em 63 arquivos
-- **Dados Expostos**: 
+- **Dados Expostos**:
   - `userName`, `userEmail`, `userRole`
   - Tokens fictícios
   - Configurações de negócio
   - Dados de analytics
 
 ### 3. **MÉDIO: Exposição de Chaves API**
+
 - **Localização**: Código JavaScript compilado
 - **Problema**: Chaves de API visíveis no cliente
 
 ### 4. **MÉDIO: Ausência de Validação e Proteção**
+
 - Sem validação de entrada
 - Sem proteção CSRF
 - Sem sanitização XSS
@@ -32,6 +37,7 @@ Resolver vulnerabilidades críticas de segurança identificadas no projeto Quiz 
 ## 📋 FASE 1: Autenticação Real com Supabase (CRÍTICA)
 
 ### 1.1 Configuração do Supabase
+
 ```bash
 # Instalar dependências
 npm install @supabase/supabase-js @supabase/auth-helpers-nextjs
@@ -43,154 +49,160 @@ echo "SUPABASE_SERVICE_ROLE_KEY=sua_chave_service_role" >> .env.local
 ```
 
 ### 1.2 Substituir AuthContext Mock
+
 **Arquivo**: `/src/context/AuthContext.tsx`
+
 ```typescript
-import { createContext, useContext, useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { User, Session } from '@supabase/supabase-js'
+import { createContext, useContext, useEffect, useState } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { User, Session } from "@supabase/supabase-js";
 
 interface AuthContextType {
-  user: User | null
-  session: Session | null
-  loading: boolean
-  signIn: (email: string, password: string) => Promise<{ error?: any }>
-  signUp: (email: string, password: string) => Promise<{ error?: any }>
-  signOut: () => Promise<void>
-  isAdmin: boolean
+  user: User | null;
+  session: Session | null;
+  loading: boolean;
+  signIn: (email: string, password: string) => Promise<{ error?: any }>;
+  signUp: (email: string, password: string) => Promise<{ error?: any }>;
+  signOut: () => Promise<void>;
+  isAdmin: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [isAdmin, setIsAdmin] = useState(false)
-  
-  const supabase = createClientComponentClient()
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
     // Verificar sessão atual
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      checkAdminRole(session?.user)
-      setLoading(false)
-    })
+      setSession(session);
+      setUser(session?.user ?? null);
+      checkAdminRole(session?.user);
+      setLoading(false);
+    });
 
     // Escutar mudanças de autenticação
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session)
-        setUser(session?.user ?? null)
-        checkAdminRole(session?.user)
-        setLoading(false)
-      }
-    )
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      checkAdminRole(session?.user);
+      setLoading(false);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => subscription.unsubscribe();
+  }, []);
 
   const checkAdminRole = async (user: User | null) => {
     if (!user) {
-      setIsAdmin(false)
-      return
+      setIsAdmin(false);
+      return;
     }
-    
+
     try {
       const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .single()
-      
-      setIsAdmin(data?.role === 'admin')
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .single();
+
+      setIsAdmin(data?.role === "admin");
     } catch (error) {
-      console.error('Erro ao verificar papel do usuário:', error)
-      setIsAdmin(false)
+      console.error("Erro ao verificar papel do usuário:", error);
+      setIsAdmin(false);
     }
-  }
+  };
 
   const signIn = async (email: string, password: string) => {
-    setLoading(true)
+    setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    })
-    setLoading(false)
-    return { error }
-  }
+    });
+    setLoading(false);
+    return { error };
+  };
 
   const signUp = async (email: string, password: string) => {
-    setLoading(true)
+    setLoading(true);
     const { error } = await supabase.auth.signUp({
       email,
       password,
-    })
-    setLoading(false)
-    return { error }
-  }
+    });
+    setLoading(false);
+    return { error };
+  };
 
   const signOut = async () => {
-    setLoading(true)
-    await supabase.auth.signOut()
-    setLoading(false)
-  }
+    setLoading(true);
+    await supabase.auth.signOut();
+    setLoading(false);
+  };
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      session,
-      loading,
-      signIn,
-      signUp,
-      signOut,
-      isAdmin
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        session,
+        loading,
+        signIn,
+        signUp,
+        signOut,
+        isAdmin,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
 export const useAuth = () => {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth deve ser usado dentro de AuthProvider')
+    throw new Error("useAuth deve ser usado dentro de AuthProvider");
   }
-  return context
-}
+  return context;
+};
 ```
 
 ### 1.3 Atualizar AdminRoute com Verificação Real
+
 **Arquivo**: `/src/components/admin/AdminRoute.tsx`
+
 ```typescript
-import React from 'react'
-import { Navigate } from 'react-router-dom'
-import { useAuth } from '@/context/AuthContext'
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 interface AdminRouteProps {
-  children: React.ReactNode
-  requireAdmin?: boolean
+  children: React.ReactNode;
+  requireAdmin?: boolean;
 }
 
-export const AdminRoute: React.FC<AdminRouteProps> = ({ 
-  children, 
-  requireAdmin = true 
+export const AdminRoute: React.FC<AdminRouteProps> = ({
+  children,
+  requireAdmin = true,
 }) => {
-  const { user, loading, isAdmin } = useAuth()
-  
+  const { user, loading, isAdmin } = useAuth();
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
       </div>
-    )
+    );
   }
-  
+
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" replace />;
   }
-  
+
   if (requireAdmin && !isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -201,7 +213,7 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
           <p className="text-gray-600 mb-4">
             Você não tem permissão para acessar esta área administrativa.
           </p>
-          <button 
+          <button
             onClick={() => window.history.back()}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
@@ -209,15 +221,17 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
           </button>
         </div>
       </div>
-    )
+    );
   }
-  
-  return <>{children}</>
-}
+
+  return <>{children}</>;
+};
 ```
 
 ### 1.4 Configuração do Banco de Dados
+
 **SQL para Supabase**:
+
 ```sql
 -- Tabela para papéis de usuários
 CREATE TABLE user_roles (
@@ -240,7 +254,7 @@ CREATE POLICY "Users can view own role" ON user_roles
 CREATE POLICY "Admins can manage roles" ON user_roles
     FOR ALL USING (
         EXISTS (
-            SELECT 1 FROM user_roles 
+            SELECT 1 FROM user_roles
             WHERE user_id = auth.uid() AND role = 'admin'
         )
     );
@@ -250,7 +264,7 @@ CREATE OR REPLACE FUNCTION is_admin()
 RETURNS boolean AS $$
 BEGIN
     RETURN EXISTS (
-        SELECT 1 FROM user_roles 
+        SELECT 1 FROM user_roles
         WHERE user_id = auth.uid() AND role = 'admin'
     );
 END;
@@ -296,277 +310,308 @@ CREATE POLICY "Only admins can view quiz results" ON quiz_results
 ## 📋 FASE 2: Migração de localStorage para Banco Seguro
 
 ### 2.1 Criar Hooks Seguros para Dados
+
 **Arquivo**: `/src/hooks/useSecureStorage.ts`
+
 ```typescript
-import { useAuth } from '@/context/AuthContext'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useCallback, useEffect, useState } from 'react'
+import { useAuth } from "@/context/AuthContext";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useCallback, useEffect, useState } from "react";
 
 export const useSecureQuizConfig = () => {
-  const { user, isAdmin } = useAuth()
-  const [configs, setConfigs] = useState([])
-  const [loading, setLoading] = useState(false)
-  const supabase = createClientComponentClient()
+  const { user, isAdmin } = useAuth();
+  const [configs, setConfigs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const supabase = createClientComponentClient();
 
-  const saveConfig = useCallback(async (name: string, config: any) => {
-    if (!isAdmin) throw new Error('Acesso negado')
-    
-    setLoading(true)
-    try {
-      const { data, error } = await supabase
-        .from('quiz_configurations')
-        .upsert({
-          name,
-          config,
-          created_by: user?.id
-        })
-        .select()
-      
-      if (error) throw error
-      return data[0]
-    } finally {
-      setLoading(false)
-    }
-  }, [user, isAdmin, supabase])
+  const saveConfig = useCallback(
+    async (name: string, config: any) => {
+      if (!isAdmin) throw new Error("Acesso negado");
+
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("quiz_configurations")
+          .upsert({
+            name,
+            config,
+            created_by: user?.id,
+          })
+          .select();
+
+        if (error) throw error;
+        return data[0];
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user, isAdmin, supabase]
+  );
 
   const loadConfigs = useCallback(async () => {
-    if (!isAdmin) return
-    
-    setLoading(true)
+    if (!isAdmin) return;
+
+    setLoading(true);
     try {
       const { data, error } = await supabase
-        .from('quiz_configurations')
-        .select('*')
-        .order('created_at', { ascending: false })
-      
-      if (error) throw error
-      setConfigs(data || [])
-    } finally {
-      setLoading(false)
-    }
-  }, [isAdmin, supabase])
+        .from("quiz_configurations")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-  return { configs, saveConfig, loadConfigs, loading }
-}
+      if (error) throw error;
+      setConfigs(data || []);
+    } finally {
+      setLoading(false);
+    }
+  }, [isAdmin, supabase]);
+
+  return { configs, saveConfig, loadConfigs, loading };
+};
 
 export const useSecureQuizResults = () => {
-  const supabase = createClientComponentClient()
+  const supabase = createClientComponentClient();
 
-  const saveResult = useCallback(async (resultData: any, sessionId?: string) => {
-    const { data, error } = await supabase
-      .from('quiz_results')
-      .insert({
-        session_id: sessionId || crypto.randomUUID(),
-        result_data: resultData,
-        ip_address: null, // Será preenchido pelo servidor
-        user_agent: navigator.userAgent
-      })
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  }, [supabase])
+  const saveResult = useCallback(
+    async (resultData: any, sessionId?: string) => {
+      const { data, error } = await supabase
+        .from("quiz_results")
+        .insert({
+          session_id: sessionId || crypto.randomUUID(),
+          result_data: resultData,
+          ip_address: null, // Será preenchido pelo servidor
+          user_agent: navigator.userAgent,
+        })
+        .select();
 
-  return { saveResult }
-}
+      if (error) throw error;
+      return data[0];
+    },
+    [supabase]
+  );
+
+  return { saveResult };
+};
 ```
 
 ### 2.2 Middleware de Segurança
+
 **Arquivo**: `/src/middleware/security.ts`
+
 ```typescript
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
-import { NextRequest, NextResponse } from 'next/server'
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req, res });
 
   // Verificar sessão
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   // Proteger rotas administrativas
-  if (req.nextUrl.pathname.startsWith('/admin')) {
+  if (req.nextUrl.pathname.startsWith("/admin")) {
     if (!session) {
-      return NextResponse.redirect(new URL('/login', req.url))
+      return NextResponse.redirect(new URL("/login", req.url));
     }
 
     // Verificar se é admin
     const { data: userRole } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', session.user.id)
-      .single()
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", session.user.id)
+      .single();
 
-    if (userRole?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/unauthorized', req.url))
+    if (userRole?.role !== "admin") {
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
   }
 
   // Headers de segurança
-  res.headers.set('X-Frame-Options', 'DENY')
-  res.headers.set('X-Content-Type-Options', 'nosniff')
-  res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  res.headers.set('X-XSS-Protection', '1; mode=block')
+  res.headers.set("X-Frame-Options", "DENY");
+  res.headers.set("X-Content-Type-Options", "nosniff");
+  res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.headers.set("X-XSS-Protection", "1; mode=block");
   res.headers.set(
-    'Content-Security-Policy',
+    "Content-Security-Policy",
     "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:;"
-  )
+  );
 
-  return res
+  return res;
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-}
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
 ```
 
 ## 📋 FASE 3: Validação e Sanitização
 
 ### 3.1 Esquemas de Validação
+
 **Arquivo**: `/src/lib/validation.ts`
+
 ```typescript
-import { z } from 'zod'
+import { z } from "zod";
 
 export const QuizAnswerSchema = z.object({
   questionId: z.string().uuid(),
   selectedOptions: z.array(z.string()).min(1),
-  timestamp: z.number().positive()
-})
+  timestamp: z.number().positive(),
+});
 
 export const QuizResultSchema = z.object({
   answers: z.array(QuizAnswerSchema),
   sessionId: z.string().uuid(),
   userAgent: z.string().max(500),
-  completedAt: z.string().datetime()
-})
+  completedAt: z.string().datetime(),
+});
 
 export const QuizConfigSchema = z.object({
   name: z.string().min(1).max(255),
-  questions: z.array(z.object({
-    id: z.string().uuid(),
-    text: z.string().min(1),
-    options: z.array(z.string().min(1))
-  })),
+  questions: z.array(
+    z.object({
+      id: z.string().uuid(),
+      text: z.string().min(1),
+      options: z.array(z.string().min(1)),
+    })
+  ),
   settings: z.object({
     timeLimit: z.number().positive().optional(),
-    randomizeQuestions: z.boolean().default(false)
-  })
-})
+    randomizeQuestions: z.boolean().default(false),
+  }),
+});
 
 export const UserInputSchema = z.object({
   email: z.string().email(),
-  name: z.string().min(1).max(100).regex(/^[a-zA-ZÀ-ÿ\s]+$/),
-  message: z.string().max(1000).optional()
-})
+  name: z
+    .string()
+    .min(1)
+    .max(100)
+    .regex(/^[a-zA-ZÀ-ÿ\s]+$/),
+  message: z.string().max(1000).optional(),
+});
 ```
 
 ### 3.2 Utilitários de Sanitização
+
 **Arquivo**: `/src/lib/sanitization.ts`
+
 ```typescript
-import DOMPurify from 'isomorphic-dompurify'
+import DOMPurify from "isomorphic-dompurify";
 
 export const sanitizeHtml = (dirty: string): string => {
   return DOMPurify.sanitize(dirty, {
-    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br'],
-    ALLOWED_ATTR: []
-  })
-}
+    ALLOWED_TAGS: ["b", "i", "em", "strong", "p", "br"],
+    ALLOWED_ATTR: [],
+  });
+};
 
 export const sanitizeUserInput = (input: string): string => {
   return input
     .trim()
-    .replace(/[<>\"'&]/g, '') // Remove caracteres perigosos
-    .substring(0, 1000) // Limita tamanho
-}
+    .replace(/[<>\"'&]/g, "") // Remove caracteres perigosos
+    .substring(0, 1000); // Limita tamanho
+};
 
 export const generateSecureId = (): string => {
-  return crypto.randomUUID()
-}
+  return crypto.randomUUID();
+};
 
-export const validateCSRFToken = (token: string, sessionToken: string): boolean => {
+export const validateCSRFToken = (
+  token: string,
+  sessionToken: string
+): boolean => {
   // Implementar validação CSRF adequada
-  return token === sessionToken
-}
+  return token === sessionToken;
+};
 ```
 
 ## 📋 FASE 4: Implementação de Rate Limiting
 
 ### 4.1 Rate Limiting com Redis
+
 **Arquivo**: `/src/lib/rateLimit.ts`
+
 ```typescript
-import { Redis } from '@upstash/redis'
+import { Redis } from "@upstash/redis";
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-})
+});
 
 interface RateLimitOptions {
-  key: string
-  limit: number
-  window: number // em segundos
+  key: string;
+  limit: number;
+  window: number; // em segundos
 }
 
 export async function rateLimit({ key, limit, window }: RateLimitOptions) {
-  const now = Date.now()
-  const pipeline = redis.pipeline()
-  
-  pipeline.zremrangebyscore(key, 0, now - window * 1000)
-  pipeline.zadd(key, { score: now, member: now })
-  pipeline.zcount(key, 0, '+inf')
-  pipeline.expire(key, window)
-  
-  const results = await pipeline.exec()
-  const count = results[2] as number
-  
+  const now = Date.now();
+  const pipeline = redis.pipeline();
+
+  pipeline.zremrangebyscore(key, 0, now - window * 1000);
+  pipeline.zadd(key, { score: now, member: now });
+  pipeline.zcount(key, 0, "+inf");
+  pipeline.expire(key, window);
+
+  const results = await pipeline.exec();
+  const count = results[2] as number;
+
   return {
     success: count <= limit,
     remaining: Math.max(0, limit - count),
-    reset: new Date(now + window * 1000)
-  }
+    reset: new Date(now + window * 1000),
+  };
 }
 
 // Middleware para API routes
 export function withRateLimit(limit: number, window: number) {
   return async (req: any, res: any, next: any) => {
-    const ip = req.ip || req.connection.remoteAddress
+    const ip = req.ip || req.connection.remoteAddress;
     const result = await rateLimit({
       key: `rate_limit:${ip}`,
       limit,
-      window
-    })
-    
+      window,
+    });
+
     if (!result.success) {
       return res.status(429).json({
-        error: 'Too many requests',
-        retryAfter: result.reset
-      })
+        error: "Too many requests",
+        retryAfter: result.reset,
+      });
     }
-    
-    return next()
-  }
+
+    return next();
+  };
 }
 ```
 
 ## 📋 Cronograma de Implementação
 
 ### **Semana 1: CRÍTICO**
+
 - [x] Configurar Supabase
 - [x] Implementar AuthContext real
 - [x] Atualizar AdminRoute
 - [x] Migrar primeira funcionalidade crítica
 
 ### **Semana 2: ALTO**
+
 - [ ] Migrar todo localStorage para banco
 - [ ] Implementar middleware de segurança
 - [ ] Adicionar validação de entrada
 
 ### **Semana 3: MÉDIO**
+
 - [ ] Implementar rate limiting
 - [ ] Adicionar sanitização XSS
 - [ ] Configurar CSP headers
 
 ### **Semana 4: MONITORAMENTO**
+
 - [ ] Implementar logging de segurança
 - [ ] Configurar alertas
 - [ ] Testes de penetração básicos
@@ -574,6 +619,7 @@ export function withRateLimit(limit: number, window: number) {
 ## 🔍 Verificação e Testes
 
 ### Checklist de Segurança
+
 - [ ] ✅ Autenticação real implementada
 - [ ] ✅ Dados sensíveis fora do localStorage
 - [ ] ✅ Validação de entrada ativa
@@ -583,6 +629,7 @@ export function withRateLimit(limit: number, window: number) {
 - [ ] ✅ Logs de auditoria funcionando
 
 ### Comandos de Teste
+
 ```bash
 # Testar autenticação
 npm run test:auth
