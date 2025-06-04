@@ -204,8 +204,19 @@ const QuizDescubraSeuEstilo: React.FC = () => {
               <div className="pain-point-card">
                 <div className="pain-icon">
                   <svg viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                    <path d="M12 16v-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
+                    <path
+                      d="M12 16v-4"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
                     <circle cx="12" cy="8" r="1" fill="currentColor" />
                   </svg>
                 </div>
@@ -232,7 +243,11 @@ const QuizDescubraSeuEstilo: React.FC = () => {
                       stroke="currentColor"
                       strokeWidth="2"
                     />
-                    <path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" strokeWidth="2" />
+                    <path
+                      d="M7 11V7a5 5 0 0110 0v4"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
                   </svg>
                 </div>
                 <div
