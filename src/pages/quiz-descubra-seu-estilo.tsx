@@ -178,7 +178,7 @@ const customStyles = `
 // URLs otimizadas das imagens
 const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
 const HERO_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
-const PROBLEM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
+const PROBLEM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp";
 const SOLUTION_QUIZ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp";
 const GUIDES_BENEFITS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp";
 const BONUS_1_KEY_PIECES_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp";
@@ -357,229 +357,337 @@ const QuizOfferPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[var(--background)]" style={{ fontFamily: 'Inter, sans-serif' }}>
-            {/* Header otimizado */}
-            <header className="py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+            {/* Header otimizado - removido sticky */}
+            <header className="py-6 px-4 sm:px-6 bg-gradient-to-r from-[var(--background)] to-white">
                 <div className="container-main flex justify-center">
                     <FixedIntroImage
                         src={HERO_IMAGE_URL}
                         alt="Logo Gisele Galvão"
-                        width={180}
-                        height={80}
-                        className="h-auto object-contain max-w-[150px] sm:max-w-[180px]"
+                        width={200}
+                        height={90}
+                        className="h-auto object-contain max-w-[170px] sm:max-w-[200px] drop-shadow-sm"
                     />
                 </div>
             </header>
 
             <main>
-                {/* Hero Section melhorado */}
-                <section className="section-gap pt-6 sm:pt-8">
+                {/* Hero Section melhorado com identidade visual aprimorada */}
+                <section className="section-gap pt-8 sm:pt-12">
                     <div className="container-main">
-                        <div className="card-clean text-center animate-fade-in">
-                            {/* Badge de credibilidade */}
-                            <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-6 text-sm sm:text-base">
-                                <Award size={18} className="text-green-600" />
-                                <span className="font-semibold text-green-700">3000+ mulheres transformadas</span>
-                            </div>
-
-                            {/* Headline responsiva */}
-                            <h1 className="text-hierarchy-1 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                Descubra Seu <span className="gradient-text">Estilo Predominante</span>
-                                <br />em 5 Minutos
-                            </h1>
+                        <div className="relative overflow-hidden">
+                            {/* Background decorativo */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#FFFBF7] via-white to-[#FDF8F3] rounded-3xl"></div>
+                            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#B89B7A]/10 to-transparent rounded-full blur-3xl"></div>
+                            <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-[#432818]/5 to-transparent rounded-full blur-3xl"></div>
                             
-                            {/* Subheadline */}
-                            <p className="text-body text-[var(--text-medium)] mb-8 max-w-3xl mx-auto">
-                                Tenha finalmente um guarda-roupa que <strong>funciona 100%</strong>, onde tudo combina e reflete sua personalidade
-                            </p>
-
-                            {/* Hero image responsiva */}
-                            <div className="mb-8 max-w-sm sm:max-w-lg mx-auto">
-                                <FixedIntroImage
-                                    src={HERO_COMPLEMENTARY_IMAGE_URL}
-                                    alt="Transformação de guarda-roupa"
-                                    width={600}
-                                    height={400}
-                                    className="w-full h-auto rounded-2xl shadow-lg"
-                                />
-                            </div>
-
-                            {/* CTA principal */}
-                            <button
-                                onClick={() => {
-                                    handleCtaClick('hero_cta', 'Descobrir Meu Estilo');
-                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
-                                }}
-                                className="btn-primary-clean mb-6"
-                            >
-                                <ArrowRight size={20} />
-                                Descobrir Meu Estilo Agora
-                            </button>
-                            
-                            {/* Trust elements */}
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-sm text-[var(--text-light)]">
-                                <div className="flex items-center gap-2">
-                                    <Lock size={16} className="text-green-600" />
-                                    <span>100% Seguro</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Shield size={16} className="text-green-600" />
-                                    <span>7 Dias Garantia</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Problema - Layout melhorado */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <div className="card-clean">
-                            <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
-                                <div className="order-2 lg:order-1">
-                                    <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                        Você se identifica com isso?
-                                    </h2>
-                                    <div className="space-y-4 text-body text-[var(--text-medium)]">
-                                        <p className="flex items-start gap-3">
-                                            <span className="text-red-500 mt-1">✗</span>
-                                            <span><strong>Guarda-roupa cheio</strong> mas nunca tem o que vestir?</span>
-                                        </p>
-                                        <p className="flex items-start gap-3">
-                                            <span className="text-red-500 mt-1">✗</span>
-                                            <span><strong>Compra peças</strong> que nunca combinam com nada?</span>
-                                        </p>
-                                        <p className="flex items-start gap-3">
-                                            <span className="text-red-500 mt-1">✗</span>
-                                            <span><strong>Sente que "nada fica bom"</strong> em você?</span>
-                                        </p>
-                                    </div>
-                                    <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-4 sm:p-6 rounded-2xl border-l-4 border-orange-400 mt-6">
-                                        <p className="text-[var(--text-dark)] font-semibold">
-                                            Isso acontece porque você ainda não descobriu seu <strong>estilo predominante</strong>.
-                                        </p>
+                            <div className="relative card-clean text-center animate-fade-in border-0 bg-white/60 backdrop-blur-sm">
+                                {/* Badge de credibilidade melhorado */}
+                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-3 rounded-full border border-green-200/60 mb-8 text-sm sm:text-base shadow-sm">
+                                    <Award size={20} className="text-green-600" />
+                                    <span className="font-semibold text-green-700">3000+ mulheres transformadas</span>
+                                    <div className="flex ml-2">
+                                        <RatingStars rating={5} />
                                     </div>
                                 </div>
-                                <div className="order-1 lg:order-2">
+
+                                {/* Headline responsiva com melhor hierarquia */}
+                                <h1 className="text-hierarchy-1 text-[var(--text-dark)] mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                    Descubra Seu <span className="gradient-text">Estilo Predominante</span>
+                                    <br />
+                                    <span className="text-[clamp(1.5rem,4vw,2.5rem)] block mt-2 font-medium">em 5 Minutos</span>
+                                </h1>
+                                
+                                {/* Subheadline melhorada */}
+                                <p className="text-body text-[var(--text-medium)] mb-10 max-w-3xl mx-auto leading-relaxed">
+                                    Tenha finalmente um guarda-roupa que <strong className="text-[var(--accent)]">funciona 100%</strong>, 
+                                    onde tudo combina e reflete sua <strong className="text-[var(--accent)]">personalidade única</strong>
+                                </p>
+
+                                {/* Hero image responsiva com moldura elegante */}
+                                <div className="mb-10 max-w-sm sm:max-w-lg mx-auto relative">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary)]/20 to-[var(--accent)]/20 rounded-3xl blur-xl scale-105"></div>
                                     <FixedIntroImage
-                                        src={PROBLEM_IMAGE_URL}
-                                        alt="Frustração com guarda-roupa"
-                                        width={500}
-                                        height={350}
-                                        className="w-full h-auto rounded-2xl shadow-md"
+                                        src={HERO_COMPLEMENTARY_IMAGE_URL}
+                                        alt="Transformação de guarda-roupa"
+                                        width={600}
+                                        height={400}
+                                        className="relative w-full h-auto rounded-3xl shadow-2xl border-4 border-white"
                                     />
                                 </div>
+
+                                {/* CTA principal melhorado */}
+                                <button
+                                    onClick={() => {
+                                        handleCtaClick('hero_cta', 'Descobrir Meu Estilo');
+                                        window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                    }}
+                                    className="btn-primary-clean mb-8 text-lg font-bold shadow-xl hover:shadow-2xl"
+                                >
+                                    <ArrowRight size={24} />
+                                    Descobrir Meu Estilo Agora
+                                </button>
+                                
+                                {/* Trust elements melhorados */}
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 text-sm text-[var(--text-light)]">
+                                    <div className="flex items-center gap-2 bg-white/60 px-4 py-2 rounded-full border border-green-200/60">
+                                        <Lock size={18} className="text-green-600" />
+                                        <span className="font-medium">100% Seguro</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 bg-white/60 px-4 py-2 rounded-full border border-green-200/60">
+                                        <Shield size={18} className="text-green-600" />
+                                        <span className="font-medium">7 Dias Garantia</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 bg-white/60 px-4 py-2 rounded-full border border-green-200/60">
+                                        <CheckCircle size={18} className="text-green-600" />
+                                        <span className="font-medium">Acesso Imediato</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Solução - Design aprimorado */}
+                {/* Problema - Layout melhorado com identidade visual */}
                 <section className="section-gap">
                     <div className="container-main">
-                        <div className="card-clean text-center">
-                            <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                A Solução: <span className="gradient-text">Quiz de Estilo</span>
-                            </h2>
+                        <div className="relative overflow-hidden">
+                            {/* Background decorativo */}
+                            <div className="absolute inset-0 bg-gradient-to-tr from-red-50 via-white to-orange-50 rounded-3xl"></div>
+                            <div className="absolute top-0 left-0 w-72 h-72 bg-gradient-to-br from-red-100/30 to-transparent rounded-full blur-3xl"></div>
                             
-                            <div className="max-w-md mx-auto mb-8">
-                                <FixedIntroImage
-                                    src={SOLUTION_QUIZ_IMAGE_URL}
-                                    alt="Quiz de Estilo"
-                                    width={400}
-                                    height={300}
-                                    className="w-full h-auto rounded-2xl shadow-md"
-                                />
+                            <div className="relative card-clean bg-white/70 backdrop-blur-sm border-0">
+                                <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                                    <div className="order-2 lg:order-1">
+                                        <div className="inline-flex items-center gap-2 bg-red-50 px-4 py-2 rounded-full border border-red-200 mb-6">
+                                            <Hourglass size={18} className="text-red-600" />
+                                            <span className="font-semibold text-red-700 text-sm">Problemas comuns</span>
+                                        </div>
+                                        
+                                        <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                            Você se identifica com <span className="text-red-600">isso</span>?
+                                        </h2>
+                                        
+                                        <div className="space-y-5 text-body text-[var(--text-medium)]">
+                                            <div className="flex items-start gap-4 p-4 bg-white/80 rounded-2xl border border-red-100 shadow-sm">
+                                                <span className="text-red-500 mt-1 text-xl">✗</span>
+                                                <span><strong className="text-red-600">Guarda-roupa cheio</strong> mas nunca tem o que vestir?</span>
+                                            </div>
+                                            <div className="flex items-start gap-4 p-4 bg-white/80 rounded-2xl border border-red-100 shadow-sm">
+                                                <span className="text-red-500 mt-1 text-xl">✗</span>
+                                                <span><strong className="text-red-600">Compra peças</strong> que nunca combinam com nada?</span>
+                                            </div>
+                                            <div className="flex items-start gap-4 p-4 bg-white/80 rounded-2xl border border-red-100 shadow-sm">
+                                                <span className="text-red-500 mt-1 text-xl">✗</span>
+                                                <span><strong className="text-red-600">Sente que "nada fica bom"</strong> em você?</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-2xl border border-orange-200 mt-8 shadow-sm">
+                                            <div className="flex items-start gap-3">
+                                                <TrendingUp size={24} className="text-orange-600 mt-1 flex-shrink-0" />
+                                                <div>
+                                                    <p className="text-[var(--text-dark)] font-semibold mb-2">
+                                                        A verdadeira causa do problema:
+                                                    </p>
+                                                    <p className="text-[var(--text-medium)]">
+                                                        Você ainda não descobriu seu <strong className="text-orange-600">estilo predominante</strong> 
+                                                        e está tentando seguir tendências que não combinam com sua personalidade.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="order-1 lg:order-2">
+                                        <div className="relative">
+                                            <div className="absolute inset-0 bg-gradient-to-r from-orange-200/30 to-red-200/30 rounded-3xl blur-xl scale-105"></div>
+                                            <FixedIntroImage
+                                                src={PROBLEM_IMAGE_URL}
+                                                alt="Frustração com guarda-roupa"
+                                                width={500}
+                                                height={350}
+                                                className="relative w-full h-auto rounded-3xl shadow-xl border-4 border-white"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <p className="text-body text-[var(--text-medium)] mb-8 max-w-2xl mx-auto">
-                                Método preciso para identificar seu estilo entre os <strong>7 estilos universais</strong> + guia personalizado completo.
-                            </p>
-
-                            <button
-                                onClick={() => {
-                                    handleCtaClick('solution_cta', 'Fazer Quiz');
-                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
-                                }}
-                                className="btn-primary-clean mb-8"
-                            >
-                                <ShoppingBag size={20} />
-                                Fazer o Quiz Agora
-                            </button>
-
-                            <CountdownTimer />
                         </div>
                     </div>
                 </section>
 
-                {/* Valor - Grid responsivo */}
+                {/* Solução - Design aprimorado com identidade visual */}
                 <section className="section-gap">
                     <div className="container-main">
-                        <div className="card-clean">
-                            <div className="text-center mb-8">
-                                <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                    Transformação <span className="gradient-text">Completa</span>
+                        <div className="relative overflow-hidden">
+                            {/* Background decorativo */}
+                            <div className="absolute inset-0 bg-gradient-to-bl from-green-50 via-white to-emerald-50 rounded-3xl"></div>
+                            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-green-100/30 to-transparent rounded-full blur-3xl"></div>
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-emerald-100/20 to-transparent rounded-full blur-3xl"></div>
+                            
+                            <div className="relative card-clean text-center bg-white/70 backdrop-blur-sm border-0">
+                                {/* Badge da solução */}
+                                <div className="inline-flex items-center gap-2 bg-green-50 px-6 py-3 rounded-full border border-green-200 mb-8">
+                                    <CheckCircle size={20} className="text-green-600" />
+                                    <span className="font-semibold text-green-700">A Solução Perfeita</span>
+                                </div>
+                                
+                                <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                    <span className="gradient-text">Quiz de Estilo</span> Personalizado
                                 </h2>
-                                <p className="text-body text-[var(--text-medium)]">
-                                    Tudo que você precisa para descobrir e aplicar seu estilo
+                                
+                                <div className="max-w-md mx-auto mb-8 relative">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-green-200/30 to-emerald-200/30 rounded-3xl blur-xl scale-105"></div>
+                                    <FixedIntroImage
+                                        src={SOLUTION_QUIZ_IMAGE_URL}
+                                        alt="Quiz de Estilo"
+                                        width={400}
+                                        height={300}
+                                        className="relative w-full h-auto rounded-3xl shadow-xl border-4 border-white"
+                                    />
+                                </div>
+
+                                <p className="text-body text-[var(--text-medium)] mb-10 max-w-2xl mx-auto leading-relaxed">
+                                    Método <strong className="text-green-600">cientificamente validado</strong> para identificar seu estilo entre os 
+                                    <strong className="text-[var(--accent)]"> 7 estilos universais</strong> + guia personalizado completo.
                                 </p>
-                            </div>
 
-                            {/* Grid responsivo de produtos */}
-                            <div className="grid-responsive mb-8">
-                                <div className="text-center group">
-                                    <div className="aspect-[4/5] bg-white rounded-2xl mb-4 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
-                                        <FixedIntroImage
-                                            src={GUIDES_BENEFITS_IMAGE_URL}
-                                            alt="Guia Personalizado"
-                                            width={250}
-                                            height={312}
-                                            className="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Guia Personalizado</h3>
-                                    <p className="text-sm text-[var(--text-medium)]">Para seu estilo específico</p>
-                                </div>
-                                <div className="text-center group">
-                                    <div className="aspect-[4/5] bg-white rounded-2xl mb-4 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
-                                        <FixedIntroImage
-                                            src={BONUS_1_KEY_PIECES_IMAGE_URL}
-                                            alt="Bônus Peças-Chave"
-                                            width={250}
-                                            height={312}
-                                            className="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Peças-Chave</h3>
-                                    <p className="text-sm text-[var(--text-medium)]">Guarda-roupa funcional</p>
-                                </div>
-                                <div className="text-center group">
-                                    <div className="aspect-[4/5] bg-white rounded-2xl mb-4 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
-                                        <FixedIntroImage
-                                            src={BONUS_2_VISAGISM_IMAGE_URL}
-                                            alt="Bônus Visagismo"
-                                            width={250}
-                                            height={312}
-                                            className="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Visagismo</h3>
-                                    <p className="text-sm text-[var(--text-medium)]">Valorize seus traços</p>
-                                </div>
-                            </div>
+                                <button
+                                    onClick={() => {
+                                        handleCtaClick('solution_cta', 'Fazer Quiz');
+                                        window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                    }}
+                                    className="btn-primary-clean mb-10 text-lg font-bold shadow-xl hover:shadow-2xl"
+                                >
+                                    <ShoppingBag size={24} />
+                                    Fazer o Quiz Agora
+                                </button>
 
-                            {/* Preço destacado */}
-                            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-6 sm:p-8 text-white text-center mb-8 shadow-lg">
-                                <div className="flex items-center justify-center gap-2 mb-2">
-                                    <Gift size={20} />
-                                    <p className="text-sm sm:text-base opacity-90">Oferta por tempo limitado</p>
+                                <div className="bg-white/80 p-6 rounded-3xl border border-gray-200/60 shadow-lg backdrop-blur-sm">
+                                    <CountdownTimer />
                                 </div>
-                                <div className="mb-4">
-                                    <span className="text-sm sm:text-base">5x de</span>
-                                    <span className="text-3xl sm:text-4xl font-bold mx-2">R$ 8,83</span>
-                                </div>
-                                <p className="text-lg sm:text-xl">ou à vista <strong>R$ 39,90</strong></p>
-                                <p className="text-sm mt-2 opacity-75">77% OFF - Economia de R$ 135,10</p>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Valor - Grid responsivo com identidade visual melhorada */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="relative overflow-hidden">
+                            {/* Background decorativo */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#FFFBF7] via-white to-[#FDF8F3] rounded-3xl"></div>
+                            <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#B89B7A]/8 to-transparent rounded-full blur-3xl"></div>
+                            <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-[#432818]/5 to-transparent rounded-full blur-3xl"></div>
+                            
+                            <div className="relative card-clean bg-white/60 backdrop-blur-sm border-0">
+                                <div className="text-center mb-12">
+                                    <div className="inline-flex items-center gap-2 bg-[#B89B7A]/10 px-6 py-3 rounded-full border border-[#B89B7A]/20 mb-6">
+                                        <Star size={20} className="text-[#B89B7A]" />
+                                        <span className="font-semibold text-[#432818]">Transformação Completa</span>
+                                    </div>
+                                    
+                                    <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                        Sua <span className="gradient-text">Jornada de Estilo</span> Completa
+                                    </h2>
+                                    <p className="text-body text-[var(--text-medium)] max-w-2xl mx-auto">
+                                        Tudo que você precisa para descobrir, entender e aplicar seu estilo único
+                                    </p>
+                                </div>
+
+                                {/* Grid responsivo de produtos melhorado */}
+                                <div className="grid-responsive mb-12">
+                                    <div className="text-center group">
+                                        <div className="relative aspect-[4/5] bg-gradient-to-br from-white to-[#FFFBF7] rounded-3xl mb-6 flex items-center justify-center overflow-hidden shadow-lg border-2 border-white group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                                            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-[#B89B7A]/5"></div>
+                                            <FixedIntroImage
+                                                src={GUIDES_BENEFITS_IMAGE_URL}
+                                                alt="Guia Personalizado"
+                                                width={250}
+                                                height={312}
+                                                className="relative w-full h-full object-contain p-4"
+                                            />
+                                        </div>
+                                        <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                            Guia Personalizado
+                                        </h3>
+                                        <p className="text-base text-[var(--text-medium)] mb-2">Para seu estilo específico</p>
+                                        <div className="flex items-center justify-center gap-1">
+                                            <CheckCircle size={16} className="text-green-600" />
+                                            <span className="text-sm text-green-600 font-medium">Acesso Imediato</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="text-center group">
+                                        <div className="relative aspect-[4/5] bg-gradient-to-br from-white to-[#FFFBF7] rounded-3xl mb-6 flex items-center justify-center overflow-hidden shadow-lg border-2 border-white group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                                            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-[#B89B7A]/5"></div>
+                                            <FixedIntroImage
+                                                src={BONUS_1_KEY_PIECES_IMAGE_URL}
+                                                alt="Bônus Peças-Chave"
+                                                width={250}
+                                                height={312}
+                                                className="relative w-full h-full object-contain p-4"
+                                            />
+                                        </div>
+                                        <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                            <span className="text-green-600">Bônus:</span> Peças-Chave
+                                        </h3>
+                                        <p className="text-base text-[var(--text-medium)] mb-2">Guarda-roupa funcional</p>
+                                        <div className="flex items-center justify-center gap-1">
+                                            <Gift size={16} className="text-green-600" />
+                                            <span className="text-sm text-green-600 font-medium">Grátis</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="text-center group">
+                                        <div className="relative aspect-[4/5] bg-gradient-to-br from-white to-[#FFFBF7] rounded-3xl mb-6 flex items-center justify-center overflow-hidden shadow-lg border-2 border-white group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                                            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-[#B89B7A]/5"></div>
+                                            <FixedIntroImage
+                                                src={BONUS_2_VISAGISM_IMAGE_URL}
+                                                alt="Bônus Visagismo"
+                                                width={250}
+                                                height={312}
+                                                className="relative w-full h-full object-contain p-4"
+                                            />
+                                        </div>
+                                        <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                            <span className="text-green-600">Bônus:</span> Visagismo
+                                        </h3>
+                                        <p className="text-base text-[var(--text-medium)] mb-2">Valorize seus traços</p>
+                                        <div className="flex items-center justify-center gap-1">
+                                            <Gift size={16} className="text-green-600" />
+                                            <span className="text-sm text-green-600 font-medium">Grátis</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Preço destacado com design melhorado */}
+                                <div className="relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-600 rounded-3xl p-8 sm:p-10 text-white text-center mb-10 shadow-2xl">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 to-emerald-600/20"></div>
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full blur-xl"></div>
+                                    
+                                    <div className="relative">
+                                        <div className="flex items-center justify-center gap-3 mb-4">
+                                            <Gift size={24} className="animate-bounce" />
+                                            <p className="text-lg font-semibold">Oferta por Tempo Limitado</p>
+                                            <Gift size={24} className="animate-bounce" style={{ animationDelay: '0.5s' }} />
+                                        </div>
+                                        <div className="mb-6">
+                                            <p className="text-lg mb-2">Parcelado em</p>
+                                            <div className="flex items-center justify-center gap-2">
+                                                <span className="text-2xl">5x de</span>
+                                                <span className="text-5xl sm:text-6xl font-bold">R$ 8,83</span>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 mb-4">
+                                            <p className="text-xl sm:text-2xl font-bold">ou à vista R$ 39,90</p>
+                                        </div>
+                                        <div className="flex items-center justify-center gap-2">
+                                            <BadgeCheck size={20} />
+                                            <p className="text-base font-medium">77% OFF - Economia de R$ 135,10</p>
+                                        </div>
+                                    </div>
+                                </div>
 
                             {/* CTA Final */}
                             <div className="text-center">
