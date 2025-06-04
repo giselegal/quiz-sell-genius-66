@@ -1,4 +1,3 @@
-
 import { type BankImage, getAllImages, getImageById } from '@/data/imageBank';
 import { optimizeCloudinaryUrl } from './optimization';
 import { PreloadOptions, ImageCacheEntry } from './types';
@@ -92,7 +91,12 @@ export const preloadImages = (
 
         updateImageCache(src, { url: src, loadStatus: 'loading' });
 
-        const optimizedSrc = optimizeCloudinaryUrl(src, { quality, format });
+        // Ensure format is a valid type
+        const validFormat = ['webp', 'jpeg', 'png', 'auto'].includes(format as string) 
+          ? format as 'webp' | 'jpeg' | 'png' | 'auto'
+          : 'auto';
+
+        const optimizedSrc = optimizeCloudinaryUrl(src, { quality, format: validFormat });
         const img = new Image();
 
         img.onload = () => {
