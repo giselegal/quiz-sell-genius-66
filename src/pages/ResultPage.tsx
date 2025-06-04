@@ -40,6 +40,7 @@ import PerformanceMonitor from "@/components/result/PerformanceMonitor";
 import {
   hotmartWebhookManager,
   storeUserForHotmart,
+  storeQuizCompletionData,
 } from "@/utils/hotmartWebhook";
 
 // Seções carregadas via lazy
@@ -328,6 +329,23 @@ const ResultPage: React.FC = () => {
         funnel_step: "checkout_initiation",
         page_url: window.location.href,
       });
+
+      // Store data for Hotmart webhook correlation
+      if (typeof window !== "undefined" && user?.email) {
+        hotmartWebhookManager.storeQuizCompletionData(user.email, {
+          primaryStyle: {
+            category: primaryStyle.category,
+            score: primaryStyle.score,
+            percentage: primaryStyle.percentage
+          },
+          secondaryStyles: secondaryStyles.map(style => ({
+            category: style.category,
+            score: style.score,
+            percentage: style.percentage
+          })),
+          completedAt: new Date().toISOString()
+        });
+      }
 
       console.log(
         "[Hotmart Integration] Dados do usuário armazenados para:",
