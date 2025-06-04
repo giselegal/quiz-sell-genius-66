@@ -31,7 +31,9 @@ const QuizDescubraSeuEstilo: React.FC = () => {
   };
 
   const handleCardHover = (index: number, isEntering: boolean) => {
-    const card = document.querySelectorAll(".transformation-card")[index] as HTMLElement;
+    const card = document.querySelectorAll(".transformation-card")[
+      index
+    ] as HTMLElement;
     if (card) {
       if (isEntering) {
         card.style.transform = "scale(1.02)";
@@ -97,123 +99,479 @@ const QuizDescubraSeuEstilo: React.FC = () => {
       </style>
       <div style={containerStyle}>
         {/* HERO */}
-        <section className="section-padding" style={{ background: "linear-gradient(120deg, #fff 60%, #bfa46f1a 100%)", textAlign: "center" }}>
+        <section
+          className="section-padding"
+          style={{
+            background: "linear-gradient(120deg, #fff 60%, #bfa46f1a 100%)",
+            textAlign: "center",
+          }}
+        >
           <div className="responsive-container">
-            <img src="/logo.png" alt="Gisele Galvão" className="logo" style={{ marginBottom: 18, maxWidth: 180 }} />
-            <h1 className="hero-title" style={{ fontWeight: 900, margin: "0 0 14px 0", color: "#222" }}>Descubra o Estilo Que Valoriza Sua Essência</h1>
-            <p className="hero-subtitle" style={{ maxWidth: 480, margin: "0 auto 22px auto" }}>
-              Método rápido, prático e validado por <span style={{ color: "#BFA46F", fontWeight: 700 }}>3.000+ mulheres</span> para você se sentir confiante e autêntica todos os dias.
+            <img
+              src="/logo.png"
+              alt="Gisele Galvão"
+              className="logo"
+              style={{ marginBottom: 18, maxWidth: 180 }}
+            />
+            <h1
+              className="hero-title"
+              style={{ fontWeight: 900, margin: "0 0 14px 0", color: "#222" }}
+            >
+              Descubra o Estilo Que Valoriza Sua Essência
+            </h1>
+            <p
+              className="hero-subtitle"
+              style={{ maxWidth: 480, margin: "0 auto 22px auto" }}
+            >
+              Método rápido, prático e validado por{" "}
+              <span style={{ color: "#BFA46F", fontWeight: 700 }}>
+                3.000+ mulheres
+              </span>{" "}
+              para você se sentir confiante e autêntica todos os dias.
             </p>
-            <a href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912" onClick={() => handleCTAClick("hero")}
-              className="cta-button">QUERO DESCOBRIR MEU ESTILO</a>
+            <a
+              href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+              onClick={() => handleCTAClick("hero")}
+              className="cta-button"
+            >
+              QUERO DESCOBRIR MEU ESTILO
+            </a>
           </div>
-          <div style={{ marginTop: 18, fontSize: "1rem", color: "#888" }}>Oferta exclusiva para esta página</div>
+          <div style={{ marginTop: 18, fontSize: "1rem", color: "#888" }}>
+            Oferta exclusiva para esta página
+          </div>
         </section>
         {/* PAINEL DE DOR */}
         <section className="section-padding" style={{ textAlign: "center" }}>
           <div className="responsive-container">
-            <h2 className="title" style={{ fontSize: "2.2rem", fontWeight: 800, margin: "0 0 1rem 0", color: "#222" }}>Você se reconhece em alguma destas situações?</h2>
-            <div className="pain-points" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", margin: "0 auto", maxWidth: "800px" }}>
+            <h2
+              className="title"
+              style={{
+                fontSize: "2.2rem",
+                fontWeight: 800,
+                margin: "0 0 1rem 0",
+                color: "#222",
+              }}
+            >
+              Você se reconhece em alguma destas situações?
+            </h2>
+            <div
+              className="pain-points"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gap: "1.5rem",
+                margin: "0 auto",
+                maxWidth: "800px",
+              }}
+            >
               {[
-                { emoji: "👗", text: "Guarda-roupa cheio, mas nada para vestir." },
-                { emoji: "🤔", text: "Dúvida se as roupas realmente combinam." },
+                {
+                  emoji: "👗",
+                  text: "Guarda-roupa cheio, mas nada para vestir.",
+                },
+                {
+                  emoji: "🤔",
+                  text: "Dúvida se as roupas realmente combinam.",
+                },
                 { emoji: "💸", text: "Compras por impulso que nunca usa." },
               ].map((item, index) => (
                 <div key={index} className="pain-point-card">
-                  <div className="emoji" style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>{item.emoji}</div>
-                  <div className="text" style={{ fontSize: "1.08rem", color: "#333", lineHeight: 1.4 }}>{item.text}</div>
+                  <div
+                    className="emoji"
+                    style={{ fontSize: "2.5rem", marginBottom: "1rem" }}
+                  >
+                    {item.emoji}
+                  </div>
+                  <div
+                    className="text"
+                    style={{
+                      fontSize: "1.08rem",
+                      color: "#333",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {item.text}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
         {/* SOLUÇÃO */}
-        <section className="section-padding" style={{ background: "linear-gradient(120deg, #f9f9f9 0%, #f1f1f1 100%)", textAlign: "center" }}>
+        <section
+          className="section-padding"
+          style={{
+            background: "linear-gradient(120deg, #f9f9f9 0%, #f1f1f1 100%)",
+            textAlign: "center",
+          }}
+        >
           <div className="responsive-container">
-            <h2 className="title" style={{ fontSize: "2.2rem", fontWeight: 800, margin: "0 0 1rem 0", color: "#222" }}>A solução está aqui!</h2>
-            <p className="subtitle" style={{ fontSize: "1.15rem", color: "#555", margin: "0 0 2rem 0", maxWidth: "700px", lineHeight: 1.6, marginLeft: "auto", marginRight: "auto" }}>
-              Apresentamos o <strong style={{ color: "#BFA46F" }}>Quiz do Estilo</strong>, uma ferramenta exclusiva para descobrir seu estilo pessoal em minutos!
+            <h2
+              className="title"
+              style={{
+                fontSize: "2.2rem",
+                fontWeight: 800,
+                margin: "0 0 1rem 0",
+                color: "#222",
+              }}
+            >
+              A solução está aqui!
+            </h2>
+            <p
+              className="subtitle"
+              style={{
+                fontSize: "1.15rem",
+                color: "#555",
+                margin: "0 0 2rem 0",
+                maxWidth: "700px",
+                lineHeight: 1.6,
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              Apresentamos o{" "}
+              <strong style={{ color: "#BFA46F" }}>Quiz do Estilo</strong>, uma
+              ferramenta exclusiva para descobrir seu estilo pessoal em minutos!
             </p>
-            <a href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912" onClick={() => handleCTAClick("solution")} className="cta-button">FAZER O QUIZ AGORA</a>
+            <a
+              href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+              onClick={() => handleCTAClick("solution")}
+              className="cta-button"
+            >
+              FAZER O QUIZ AGORA
+            </a>
           </div>
         </section>
         {/* DEPOIMENTOS */}
         <section className="section-padding" style={{ textAlign: "center" }}>
           <div className="responsive-container">
-            <h2 className="title" style={{ fontSize: "2.2rem", fontWeight: 800, margin: "0 0 1rem 0", color: "#222" }}>O que estão dizendo sobre nós</h2>
-            <div className="testimonials-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem", margin: "0 auto", maxWidth: "800px" }}>
+            <h2
+              className="title"
+              style={{
+                fontSize: "2.2rem",
+                fontWeight: 800,
+                margin: "0 0 1rem 0",
+                color: "#222",
+              }}
+            >
+              O que estão dizendo sobre nós
+            </h2>
+            <div
+              className="testimonials-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gap: "1.5rem",
+                margin: "0 auto",
+                maxWidth: "800px",
+              }}
+            >
               {[
-                { name: "Maria Silva", testimonial: "O quiz é incrível! Em poucos minutos consegui entender meu estilo e recebi dicas valiosas.", rating: 5 },
-                { name: "Joana Souza", testimonial: "Amei o resultado do meu quiz! Agora sei exatamente como valorizar meu corpo e meu estilo pessoal.", rating: 5 },
-                { name: "Ana Oliveira", testimonial: "As dicas são práticas e fáceis de seguir. Senti uma diferença enorme na minha confiança ao me vestir.", rating: 5 },
-                { name: "Fernanda Lima", testimonial: "Nunca pensei que um quiz pudesse ser tão assertivo. Recomendo para todas as minhas amigas!", rating: 5 },
+                {
+                  name: "Maria Silva",
+                  testimonial:
+                    "O quiz é incrível! Em poucos minutos consegui entender meu estilo e recebi dicas valiosas.",
+                  rating: 5,
+                },
+                {
+                  name: "Joana Souza",
+                  testimonial:
+                    "Amei o resultado do meu quiz! Agora sei exatamente como valorizar meu corpo e meu estilo pessoal.",
+                  rating: 5,
+                },
+                {
+                  name: "Ana Oliveira",
+                  testimonial:
+                    "As dicas são práticas e fáceis de seguir. Senti uma diferença enorme na minha confiança ao me vestir.",
+                  rating: 5,
+                },
+                {
+                  name: "Fernanda Lima",
+                  testimonial:
+                    "Nunca pensei que um quiz pudesse ser tão assertivo. Recomendo para todas as minhas amigas!",
+                  rating: 5,
+                },
               ].map((item, index) => (
                 <div key={index} className="testimonial-card">
-                  <div className="rating" style={{ marginBottom: "1rem", display: "flex", justifyContent: "center" }}>
+                  <div
+                    className="rating"
+                    style={{
+                      marginBottom: "1rem",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
                     {[...Array(item.rating)].map((_, i) => (
-                      <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#BFA46F] fill-current" viewBox="0 0 20 20" fill="currentColor" style={{ marginRight: "0.125rem" }}>
+                      <svg
+                        key={i}
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-[#BFA46F] fill-current"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        style={{ marginRight: "0.125rem" }}
+                      >
                         <path d="M10 15.27L16.18 20 14.54 13.97 20 9.24l-6.91-.59L10 2 8.91 8.65 2 9.24l5.46 4.73L7.82 20z" />
                       </svg>
                     ))}
                   </div>
-                  <p className="testimonial-text" style={{ fontSize: "1rem", color: "#333", lineHeight: 1.4, marginBottom: "0.5rem" }}>
+                  <p
+                    className="testimonial-text"
+                    style={{
+                      fontSize: "1rem",
+                      color: "#333",
+                      lineHeight: 1.4,
+                      marginBottom: "0.5rem",
+                    }}
+                  >
                     "{item.testimonial}"
                   </p>
-                  <p className="testimonial-name" style={{ fontSize: "0.95rem", color: "#777", fontStyle: "italic" }}>- {item.name}</p>
+                  <p
+                    className="testimonial-name"
+                    style={{
+                      fontSize: "0.95rem",
+                      color: "#777",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    - {item.name}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </section>
         {/* AUTORIDADE */}
-        <section className="section-padding" style={{ background: "linear-gradient(120deg, #fff 0%, #f1f1f1 100%)", textAlign: "center" }}>
+        <section
+          className="section-padding"
+          style={{
+            background: "linear-gradient(120deg, #fff 0%, #f1f1f1 100%)",
+            textAlign: "center",
+          }}
+        >
           <div className="responsive-container">
-            <h2 className="title" style={{ fontSize: "2.2rem", fontWeight: 800, margin: "0 0 1rem 0", color: "#222" }}>Sobre a Criadora</h2>
-            <div className="author-info" style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "2rem" }}>
-              <img src="/logo.png" alt="Gisele Galvão" className="author-photo" />
-              <h3 className="author-name" style={{ fontSize: "1.5rem", fontWeight: 700, color: "#222", margin: "0 0 0.5rem 0" }}>Gisele Galvão</h3>
-              <p className="author-description" style={{ fontSize: "1rem", color: "#555", textAlign: "center", maxWidth: "600px", margin: "0 auto", lineHeight: 1.6 }}>
-                Consultora de Imagem e Estilo, especialista em ajudar mulheres a descobrirem seu estilo pessoal e a se vestirem com confiança. Com mais de 10 anos de experiência, Gisele já ajudou milhares de mulheres a transformarem sua relação com a moda.
+            <h2
+              className="title"
+              style={{
+                fontSize: "2.2rem",
+                fontWeight: 800,
+                margin: "0 0 1rem 0",
+                color: "#222",
+              }}
+            >
+              Sobre a Criadora
+            </h2>
+            <div
+              className="author-info"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginBottom: "2rem",
+              }}
+            >
+              <img
+                src="/logo.png"
+                alt="Gisele Galvão"
+                className="author-photo"
+              />
+              <h3
+                className="author-name"
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: 700,
+                  color: "#222",
+                  margin: "0 0 0.5rem 0",
+                }}
+              >
+                Gisele Galvão
+              </h3>
+              <p
+                className="author-description"
+                style={{
+                  fontSize: "1rem",
+                  color: "#555",
+                  textAlign: "center",
+                  maxWidth: "600px",
+                  margin: "0 auto",
+                  lineHeight: 1.6,
+                }}
+              >
+                Consultora de Imagem e Estilo, especialista em ajudar mulheres a
+                descobrirem seu estilo pessoal e a se vestirem com confiança.
+                Com mais de 10 anos de experiência, Gisele já ajudou milhares de
+                mulheres a transformarem sua relação com a moda.
               </p>
             </div>
           </div>
         </section>
         {/* CTA FINAL */}
-        <section className="section-padding" style={{ background: "linear-gradient(120deg, #BFA46F 0%, #D4B896 100%)", textAlign: "center", color: "#fff" }}>
+        <section
+          className="section-padding"
+          style={{
+            background: "linear-gradient(120deg, #BFA46F 0%, #D4B896 100%)",
+            textAlign: "center",
+            color: "#fff",
+          }}
+        >
           <div className="responsive-container">
-            <h2 className="title" style={{ fontSize: "2.2rem", fontWeight: 800, margin: "0 0 1rem 0", color: "#fff" }}>Pronta para transformar seu estilo?</h2>
-            <p className="subtitle" style={{ fontSize: "1.15rem", color: "#fff", margin: "0 0 2rem 0", maxWidth: "700px", lineHeight: 1.6, marginLeft: "auto", marginRight: "auto" }}>
-              Não perca mais tempo se sentindo insegura sobre suas escolhas fashionistas. Descubra agora mesmo como valorizar sua beleza única e se vestir com confiança todos os dias.
+            <h2
+              className="title"
+              style={{
+                fontSize: "2.2rem",
+                fontWeight: 800,
+                margin: "0 0 1rem 0",
+                color: "#fff",
+              }}
+            >
+              Pronta para transformar seu estilo?
+            </h2>
+            <p
+              className="subtitle"
+              style={{
+                fontSize: "1.15rem",
+                color: "#fff",
+                margin: "0 0 2rem 0",
+                maxWidth: "700px",
+                lineHeight: 1.6,
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              Não perca mais tempo se sentindo insegura sobre suas escolhas
+              fashionistas. Descubra agora mesmo como valorizar sua beleza única
+              e se vestir com confiança todos os dias.
             </p>
-            <a href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912" onClick={() => handleCTAClick("final-cta")} className="cta-button" style={{ background: "#fff", color: "#BFA46F", padding: "1rem 2rem", borderRadius: "2rem", fontSize: "1.125rem", fontWeight: 700, textDecoration: "none", transition: "background 0.3s, transform 0.3s", display: "inline-block", marginTop: "1rem" }}>QUERO DESCOBRIR MEU ESTILO AGORA</a>
+            <a
+              href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+              onClick={() => handleCTAClick("final-cta")}
+              className="cta-button"
+              style={{
+                background: "#fff",
+                color: "#BFA46F",
+                padding: "1rem 2rem",
+                borderRadius: "2rem",
+                fontSize: "1.125rem",
+                fontWeight: 700,
+                textDecoration: "none",
+                transition: "background 0.3s, transform 0.3s",
+                display: "inline-block",
+                marginTop: "1rem",
+              }}
+            >
+              QUERO DESCOBRIR MEU ESTILO AGORA
+            </a>
           </div>
         </section>
         {/* FAQ */}
         <section className="section-padding" style={{ textAlign: "center" }}>
           <div className="responsive-container">
-            <h2 className="title" style={{ fontSize: "2.2rem", fontWeight: 800, margin: "0 0 1rem 0", color: "#222" }}>Perguntas Frequentes</h2>
-            <div className="faq-list" style={{ maxWidth: "800px", margin: "0 auto", textAlign: "left" }}>
+            <h2
+              className="title"
+              style={{
+                fontSize: "2.2rem",
+                fontWeight: 800,
+                margin: "0 0 1rem 0",
+                color: "#222",
+              }}
+            >
+              Perguntas Frequentes
+            </h2>
+            <div
+              className="faq-list"
+              style={{ maxWidth: "800px", margin: "0 auto", textAlign: "left" }}
+            >
               {[
-                { question: "Quanto tempo leva para fazer o quiz?", answer: "O quiz leva apenas 3 minutos para ser concluído. São perguntas simples sobre suas preferências e personalidade." },
-                { question: "O resultado é realmente personalizado?", answer: "Sim! Cada resultado é único e baseado nas suas respostas específicas. Nosso algoritmo analisa suas preferências para criar uma análise personalizada." },
-                { question: "Preciso pagar alguma coisa?", answer: "O quiz é 100% gratuito. Você recebe seu resultado imediatamente após completar as perguntas, sem custo algum." },
-                { question: "O quiz funciona para qualquer idade?", answer: "Sim! Nosso método se adapta a diferentes idades e estilos de vida. O importante é sua personalidade e preferências únicas." },
+                {
+                  question: "Quanto tempo leva para fazer o quiz?",
+                  answer:
+                    "O quiz leva apenas 3 minutos para ser concluído. São perguntas simples sobre suas preferências e personalidade.",
+                },
+                {
+                  question: "O resultado é realmente personalizado?",
+                  answer:
+                    "Sim! Cada resultado é único e baseado nas suas respostas específicas. Nosso algoritmo analisa suas preferências para criar uma análise personalizada.",
+                },
+                {
+                  question: "Preciso pagar alguma coisa?",
+                  answer:
+                    "O quiz é 100% gratuito. Você recebe seu resultado imediatamente após completar as perguntas, sem custo algum.",
+                },
+                {
+                  question: "O quiz funciona para qualquer idade?",
+                  answer:
+                    "Sim! Nosso método se adapta a diferentes idades e estilos de vida. O importante é sua personalidade e preferências únicas.",
+                },
               ].map((item, index) => (
-                <div key={index} className="faq-item" style={{ borderBottom: "1px solid #e0d7c6", padding: "1rem 0" }}>
-                  <div className="faq-question" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-                    onClick={e => {
-                      const answer = (e.currentTarget as HTMLElement).nextElementSibling;
-                      const icon = (e.currentTarget as HTMLElement).querySelector('.faq-icon');
+                <div
+                  key={index}
+                  className="faq-item"
+                  style={{
+                    borderBottom: "1px solid #e0d7c6",
+                    padding: "1rem 0",
+                  }}
+                >
+                  <div
+                    className="faq-question"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                    onClick={(e) => {
+                      const answer = (e.currentTarget as HTMLElement)
+                        .nextElementSibling;
+                      const icon = (
+                        e.currentTarget as HTMLElement
+                      ).querySelector(".faq-icon");
                       if (answer) {
-                        const isHidden = (answer as HTMLElement).style.display === 'none' || !(answer as HTMLElement).style.display;
-                        (answer as HTMLElement).style.display = isHidden ? 'block' : 'none';
-                        if (icon) (icon as HTMLElement).style.transform = isHidden ? 'rotate(45deg)' : 'rotate(0deg)';
+                        const isHidden =
+                          (answer as HTMLElement).style.display === "none" ||
+                          !(answer as HTMLElement).style.display;
+                        (answer as HTMLElement).style.display = isHidden
+                          ? "block"
+                          : "none";
+                        if (icon)
+                          (icon as HTMLElement).style.transform = isHidden
+                            ? "rotate(45deg)"
+                            : "rotate(0deg)";
                       }
-                    }}>
-                    <h3 className="text" style={{ fontSize: "1rem", fontWeight: 500, color: "#333", margin: 0 }}>{item.question}</h3>
-                    <span className="faq-icon" style={{ fontSize: "1.25rem", color: "#BFA46F", transition: "transform 0.3s" }}>+</span>
+                    }}
+                  >
+                    <h3
+                      className="text"
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: 500,
+                        color: "#333",
+                        margin: 0,
+                      }}
+                    >
+                      {item.question}
+                    </h3>
+                    <span
+                      className="faq-icon"
+                      style={{
+                        fontSize: "1.25rem",
+                        color: "#BFA46F",
+                        transition: "transform 0.3s",
+                      }}
+                    >
+                      +
+                    </span>
                   </div>
-                  <div className="faq-answer" style={{ display: "none", fontSize: "0.95rem", color: "#555", marginTop: "0.5rem", lineHeight: 1.4 }}>{item.answer}</div>
+                  <div
+                    className="faq-answer"
+                    style={{
+                      display: "none",
+                      fontSize: "0.95rem",
+                      color: "#555",
+                      marginTop: "0.5rem",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {item.answer}
+                  </div>
                 </div>
               ))}
             </div>
