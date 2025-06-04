@@ -89,7 +89,7 @@ export const getLowQualityPlaceholder = (url: string): string => {
     height: 20,
     quality: 10,
     format: 'auto',
-    crop: 'limit'
+    crop: true
   });
 };
 

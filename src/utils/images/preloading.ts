@@ -1,3 +1,4 @@
+
 import { type BankImage, getAllImages, getImageById } from '@/data/imageBank';
 import { optimizeCloudinaryUrl } from './optimization';
 import { PreloadOptions, ImageCacheEntry } from './types';
@@ -274,7 +275,7 @@ export const getLowQualityImage = (url: string, options: { width?: number, quali
     quality,
     width: placeholderWidth,
     format: 'auto',
-    crop: 'limit'
+    crop: true
   });
 };
 
