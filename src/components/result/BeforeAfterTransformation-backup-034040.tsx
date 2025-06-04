@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -653,7 +653,7 @@ export const BeforeAfterTransformation: React.FC<
           ) : activeTab === "after" ? (
             <Button
               onClick={handleContinue}
-              className="bg-[#B89B7A] hover:bg-[#B89B7A] text-white"
+              className="bg-[#B89B7A] hover:bg-[#8A7258] text-white"
             >
               Continuar
               <ArrowRight className="ml-2 h-4 w-4" />
