@@ -1,4 +1,5 @@
-import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
+# Criando o arquivo completo com as alterações solicitadas
+code_content = '''import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
@@ -43,8 +44,8 @@ const tokens = {
     background: '#fffaf7',
     backgroundAlt: '#f9f4ef',
     backgroundCard: '#ffffff',
-    text: '#2C1810',
-    textSecondary: '#5D4A3A',
+    text: '#2C1810', // Mais escuro para melhor contraste
+    textSecondary: '#5D4A3A', // Melhor hierarquia
     textMuted: '#8F7A6A',
     textLight: '#B5A394',
     success: '#4CAF50',
@@ -54,17 +55,19 @@ const tokens = {
     borderLight: 'rgba(184, 155, 122, 0.08)',
     overlay: 'rgba(44, 24, 16, 0.02)',
   },
+  // SISTEMA DE SPACING REFINADO
   spacing: {
-    xs: '0.25rem',
-    sm: '0.5rem',
-    md: '0.75rem',
-    lg: '1rem',
-    xl: '1.5rem',
-    '2xl': '2rem',
-    '3xl': '3rem',
-    '4xl': '4rem',
-    '5xl': '6rem',
+    xs: '0.25rem',   // 4px
+    sm: '0.5rem',    // 8px
+    md: '0.75rem',   // 12px
+    lg: '1rem',      // 16px
+    xl: '1.5rem',    // 24px
+    '2xl': '2rem',   // 32px
+    '3xl': '3rem',   // 48px
+    '4xl': '4rem',   // 64px
+    '5xl': '6rem',   // 96px
   },
+  // SHADOWS MAIS SUTIS E ELEGANTES
   shadows: {
     xs: '0 1px 2px rgba(184, 155, 122, 0.05)',
     sm: '0 2px 4px rgba(184, 155, 122, 0.08)',
@@ -74,26 +77,28 @@ const tokens = {
     cta: '0 8px 32px rgba(76, 175, 80, 0.25)',
     inner: 'inset 0 1px 0 rgba(255, 255, 255, 0.1)',
   },
+  // BORDER RADIUS HARMONIOSO
   radius: {
-    xs: '0.25rem',
-    sm: '0.5rem',
-    md: '0.75rem',
-    lg: '1rem',
-    xl: '1.25rem',
-    '2xl': '1.5rem',
+    xs: '0.25rem',   // 4px
+    sm: '0.5rem',    // 8px
+    md: '0.75rem',   // 12px
+    lg: '1rem',      // 16px
+    xl: '1.25rem',   // 20px
+    '2xl': '1.5rem', // 24px
     full: '9999px',
   },
+  // TIPOGRAFIA MELHORADA
   typography: {
     fontSizes: {
-      xs: '0.75rem',
-      sm: '0.875rem',
-      base: '1rem',
-      lg: '1.125rem',
-      xl: '1.25rem',
-      '2xl': '1.5rem',
-      '3xl': '1.875rem',
-      '4xl': '2.25rem',
-      '5xl': '3rem',
+      xs: '0.75rem',    // 12px
+      sm: '0.875rem',   // 14px
+      base: '1rem',     // 16px
+      lg: '1.125rem',   // 18px
+      xl: '1.25rem',    // 20px
+      '2xl': '1.5rem',  // 24px
+      '3xl': '1.875rem', // 30px
+      '4xl': '2.25rem',  // 36px
+      '5xl': '3rem',     // 48px
     },
     lineHeights: {
       tight: '1.25',
@@ -104,7 +109,7 @@ const tokens = {
   }
 };
 
-// Componente de título melhorado
+// Componente de título melhorado - BOLINHAS REMOVIDAS
 const SectionTitle = React.memo<{
   children: React.ReactNode;
   subtitle?: string;
@@ -119,14 +124,15 @@ const SectionTitle = React.memo<{
     show={true}
     duration={600}
   >
+    {/* Decoração superior refinada - SEM BOLINHA */}
     {variant === 'primary' && (
       <div className="inline-flex items-center gap-3 mb-6">
         <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
         <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
       </div>
     )}
     
+    {/* Título com melhor hierarquia */}
     <h2 className={`font-playfair font-bold leading-tight tracking-tight ${
       variant === 'primary' 
         ? 'bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent mb-6'
@@ -139,6 +145,7 @@ const SectionTitle = React.memo<{
       {children}
     </h2>
     
+    {/* Subtítulo melhorado */}
     {subtitle && (
       <div className="max-w-4xl mx-auto">
         <p className="text-base md:text-lg lg:text-xl text-[#5D4A3A] leading-relaxed font-medium">
@@ -147,6 +154,7 @@ const SectionTitle = React.memo<{
       </div>
     )}
     
+    {/* Linha decorativa */}
     {variant === 'primary' && (
       <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-6 shadow-sm"></div>
     )}
@@ -167,11 +175,13 @@ const ResultPage: React.FC = () => {
     disableTransitions: isLowPerformance
   });
 
+  // Estados de interação melhorados
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showBottomBar, setShowBottomBar] = useState(false);
   const [activeSection, setActiveSection] = useState('primary-style');
   
+  // Timer otimizado
   const [timer, setTimer] = useState({
     hours: 2,
     minutes: 59,
@@ -220,6 +230,7 @@ const ResultPage: React.FC = () => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
   
+  // Scroll tracking melhorado
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -232,6 +243,7 @@ const ResultPage: React.FC = () => {
       
       setShowBottomBar(scrolledToBottom);
       
+      // Tracking de seção ativa
       const sections = [
         'primary-style', 'transformations', 'motivation', 'bonuses',
         'testimonials', 'guarantee', 'mentor', 'cta'
@@ -292,6 +304,7 @@ const ResultPage: React.FC = () => {
       color: tokens.colors.text,
       fontFamily: globalStyles.fontFamily || 'Inter, system-ui, sans-serif'
     }}>
+      {/* Scrollbar personalizada */}
       <style dangerouslySetInnerHTML={{
         __html: `
           ::-webkit-scrollbar {
@@ -308,10 +321,12 @@ const ResultPage: React.FC = () => {
             background: linear-gradient(to bottom, #aa6b5d, #B89B7A);
           }
           
+          /* Smooth scroll behavior */
           html {
             scroll-behavior: smooth;
           }
           
+          /* Focus states melhorados */
           button:focus-visible,
           a:focus-visible {
             outline: 2px solid #B89B7A;
@@ -320,15 +335,18 @@ const ResultPage: React.FC = () => {
         `
       }} />
 
+      {/* Preloaders */}
       <ResourcePreloader />
       <PerformanceMonitor />
       
+      {/* Background decorativo refinado */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-[#B89B7A]/8 to-transparent rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4"></div>
         <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-[#aa6b5d]/6 to-transparent rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4"></div>
         <div className="absolute top-1/2 left-1/4 w-1/4 h-1/4 bg-gradient-to-r from-[#B89B7A]/4 to-transparent rounded-full blur-2xl"></div>
       </div>
       
+      {/* Header minimalista e elegante */}
       <header className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled 
           ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-[#B89B7A]/10' 
@@ -346,32 +364,34 @@ const ResultPage: React.FC = () => {
         </div>
       </header>
 
+      {/* Navigation dots refinada - BOLINHAS DIMINUÍDAS */}
       <div className={`fixed right-6 top-1/2 transform -translate-y-1/2 z-40 transition-all duration-500 ${
         isScrolled ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
       }`}>
-        <div className="flex flex-col gap-3 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg border border-[#B89B7A]/20">
+        <div className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-lg border border-[#B89B7A]/20">
           {[
-            { id: 'primary-style', label: 'Seu Estilo', icon: <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div> },
-            { id: 'transformations', label: 'Transformações', icon: <ChevronRight className="w-4 h-4 text-[#B89B7A]" /> },
-            { id: 'motivation', label: 'Motivação', icon: <TrendingUp className="w-4 h-4 text-[#B89B7A]" /> },
-            { id: 'bonuses', label: 'Bônus', icon: <Gift className="w-4 h-4 text-[#B89B7A]" /> },
-            { id: 'testimonials', label: 'Depoimentos', icon: <Target className="w-4 h-4 text-[#B89B7A]" /> },
-            { id: 'guarantee', label: 'Garantia', icon: <Shield className="w-4 h-4 text-[#B89B7A]" /> },
-            { id: 'cta', label: 'Adquirir', icon: <ShoppingCart className="w-4 h-4 text-[#B89B7A]" /> }
+            { id: 'primary-style', label: 'Seu Estilo' },
+            { id: 'transformations', label: 'Transformações' },
+            { id: 'motivation', label: 'Motivação' },
+            { id: 'bonuses', label: 'Bônus' },
+            { id: 'testimonials', label: 'Depoimentos' },
+            { id: 'guarantee', label: 'Garantia' },
+            { id: 'cta', label: 'Adquirir' }
           ].map(section => (
             <button
               key={section.id}
               onClick={() => scrollToSection(section.id)}
-              className={`group relative w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`group relative w-2 h-2 rounded-full transition-all duration-300 ${
                 activeSection === section.id 
                   ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] scale-125 shadow-md' 
                   : 'bg-[#B5A394] hover:bg-[#B89B7A] hover:scale-110'
               }`}
               aria-label={`Ir para seção ${section.label}`}
             >
-              <div className="absolute right-6 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                <div className="bg-[#2C1810] text-white text-xs px-2 py-1 rounded whitespace-nowrap flex items-center gap-1">
-                  {section.icon} {section.label}
+              {/* Tooltip sem ícone */}
+              <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                <div className="bg-[#2C1810] text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                  {section.label}
                 </div>
               </div>
             </button>
@@ -379,7 +399,7 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky CTA - BOLINHAS REMOVIDAS */}
+      {/* Sticky CTA melhorada */}
       <div className={`fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-xl border-t border-[#B89B7A]/20 py-4 px-4 z-40 transition-all duration-500 ${
         showBottomBar ? 'translate-y-0' : 'translate-y-full'
       }`}>
@@ -417,20 +437,23 @@ const ResultPage: React.FC = () => {
         </div>
       </div>
 
+      {/* CONTAINER PRINCIPAL */}
       <main className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-6xl relative z-10">
+        {/* Primary Style Card - Design completamente renovado */}
         <section id="primary-style" className="scroll-mt-24 mb-16 lg:mb-24">
           <Card className="relative overflow-hidden bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15 rounded-2xl p-6 lg:p-10" 
                 style={{ boxShadow: tokens.shadows.xl }}>
             
+            {/* Decoração de cantos elegante */}
             <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#B89B7A]/20 rounded-tl-2xl"></div>
             <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#B89B7A]/20 rounded-br-2xl"></div>
             
             <AnimatedWrapper animation="fade" show={true} duration={600} delay={200}>
+              {/* Header personalizado - BOLINHA REMOVIDA */}
               <div className="text-center mb-10 lg:mb-12">
                 {user?.userName && (
                   <AnimatedWrapper className="mb-8" animation="scale" show={true} duration={500} delay={100}>
                     <div className="inline-flex items-center gap-3 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-6 py-3 rounded-full border border-[#B89B7A]/20">
-                      <div className="w-4 h-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
                       <span className="text-lg lg:text-xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                         Parabéns, {user.userName}!
                       </span>
@@ -438,6 +461,7 @@ const ResultPage: React.FC = () => {
                   </AnimatedWrapper>
                 )}
                 
+                {/* Título principal melhorado */}
                 <h1 className="text-2xl lg:text-4xl xl:text-5xl font-playfair text-[#2C1810] mb-8 leading-tight">
                   Descobrimos Seu Estilo Predominante:
                   <br />
@@ -446,6 +470,7 @@ const ResultPage: React.FC = () => {
                   </span>
                 </h1>
                 
+                {/* Progress bar elegante */}
                 <div className="max-w-lg mx-auto mb-8">
                   <div className="flex items-center justify-between text-sm font-medium text-[#5D4A3A] mb-3">
                     <span>Compatibilidade</span>
@@ -463,16 +488,20 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* Grid principal otimizado */}
               <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+                {/* Conteúdo textual */}
                 <div className="space-y-8 order-2 lg:order-1">
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={300}>
                     <div className="space-y-6">
+                      {/* Mensagem principal */}
                       <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 border border-[#B89B7A]/10"
                            style={{ boxShadow: tokens.shadows.sm }}>
                         <p className="text-[#2C1810] leading-relaxed text-lg font-medium mb-4">
                           <strong className="text-[#aa6b5d]">Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
                         </p>
                         
+                        {/* Descrição do estilo */}
                         <div className="bg-white/60 rounded-lg p-4 border border-[#B89B7A]/5">
                           <p className="text-[#2C1810] text-base leading-relaxed">
                             <strong className="text-[#aa6b5d]">Seu estilo {category}</strong> revela uma mulher que {
@@ -489,6 +518,7 @@ const ResultPage: React.FC = () => {
                         </div>
                       </div>
                       
+                      {/* Call to action sutil */}
                       <div className="text-center p-4 bg-gradient-to-r from-[#B89B7A]/5 to-[#aa6b5d]/5 rounded-lg border border-[#B89B7A]/10">
                         <p className="text-base font-semibold text-[#2C1810]">
                           <strong>Chega de ficar perdida no guarda-roupa!</strong>
@@ -500,11 +530,11 @@ const ResultPage: React.FC = () => {
                     </div>
                   </AnimatedWrapper>
 
+                  {/* Estilos secundários melhorados */}
                   <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={500}>
                     <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-6 border border-[#B89B7A]/15"
                          style={{ boxShadow: tokens.shadows.md }}>
                       <h3 className="text-xl font-semibold text-[#aa6b5d] mb-4 flex items-center gap-2">
-                        <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
                         Estilos que Também Influenciam Você
                       </h3>
                       <SecondaryStylesSection secondaryStyles={secondaryStyles} />
@@ -512,6 +542,7 @@ const ResultPage: React.FC = () => {
                   </AnimatedWrapper>
                 </div>
 
+                {/* Imagem principal */}
                 <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={400} className="order-1 lg:order-2">
                   <div className="relative max-w-md mx-auto"> 
                     <div className="relative overflow-hidden rounded-2xl" style={{ boxShadow: tokens.shadows.lg }}>
@@ -526,228 +557,335 @@ const ResultPage: React.FC = () => {
                         onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
                       />
                       
+                      {/* Overlay gradiente */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none"></div>
                     </div>
                     
+                    {/* Badge flutuante - BOLINHA REMOVIDA */}
                     <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full text-sm font-bold transform rotate-12 shadow-lg">
-                      <span className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-white rounded-full mr-1"></div> {category}
-                      </span>
+                      <span>{category}</span>
                     </div>
                     
+                    {/* Decoração de cantos */}
                     <div className="absolute -bottom-4 -left-4 w-12 h-12 border-b-3 border-l-3 border-[#B89B7A] rounded-bl-xl opacity-60"></div>
                   </div>
                 </AnimatedWrapper>
               </div>
               
+              {/* Guia do estilo */}
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
                 <div className="mt-16 text-center">
-                  <h3 className="text-2xl lg:text-3xl font-playfair font-bold text-[#2C1810] mb-8">
+                  <h3 className="text-2xl lg:text-3xl font-playfair font-bold text-[#aa6b5d] mb-8">
                     Seu Guia de Estilo Personalizado
                   </h3>
-                  
-                  <div className="relative max-w-2xl mx-auto">
-                    <div className="relative overflow-hidden rounded-2xl" style={{ boxShadow: tokens.shadows.lg }}>
-                      <ProgressiveImage 
-                        src={`${guideImage}?q=90&f=auto&w=800`} 
-                        alt={`Guia de Estilo ${category}`} 
-                        width={800} 
-                        height={600} 
-                        className="w-full h-auto transition-all duration-500 hover:scale-105" 
-                        loading="lazy" 
-                        onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))}
-                      />
-                      
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
-                      
-                      <div className="absolute bottom-6 left-6 right-6 text-white">
-                        <h4 className="text-xl font-bold mb-2">Guia Completo {category}</h4>
-                        <p className="text-sm opacity-90">Todas as dicas para aplicar seu estilo no dia a dia</p>
-                      </div>
+                  <div className="relative max-w-3xl mx-auto">
+                    <ProgressiveImage 
+                      src={`${guideImage}?q=90&f=auto&w=900`} 
+                      alt={`Guia de Estilo ${category}`} 
+                      loading="lazy" 
+                      className="w-full h-auto rounded-xl transition-all duration-500 hover:scale-102" 
+                      style={{ boxShadow: tokens.shadows.xl }}
+                      onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
+                    />
+                    
+                    {/* Badge exclusivo - BOLINHA REMOVIDA */}
+                    <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1.5 rounded-full text-xs font-bold transform rotate-12 shadow-md">
+                      EXCLUSIVO
                     </div>
                   </div>
-                  
-                  <p className="text-lg text-[#5D4A3A] mt-8 max-w-3xl mx-auto leading-relaxed">
-                    Este é apenas um <strong className="text-[#aa6b5d]">pequeno exemplo</strong> do que você encontrará no seu guia completo. 
-                    Descubra como transformar completamente seu guarda-roupa e sua autoestima!
-                  </p>
                 </div>
               </AnimatedWrapper>
             </AnimatedWrapper>
           </Card>
         </section>
 
-        <Suspense fallback={<div className="h-96 flex items-center justify-center"><LoadingSpinner /></div>}>
-          <section id="transformations" className="scroll-mt-24 mb-16 lg:mb-24">
-            <BeforeAfterTransformation />
-          </section>
-        </Suspense>
+        {/* Seções lazy-loaded com melhor espaçamento */}
+        <section id="transformations" className="scroll-mt-24 mb-20 lg:mb-28">
+          <SectionTitle 
+            variant="primary"
+            size="xl"
+            subtitle="Veja como mulheres descobriram sua melhor versão seguindo as mesmas estratégias que você vai receber"
+          >
+            Resultados que Falam por Si
+          </SectionTitle>
+          <Suspense fallback={
+            <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A] font-medium">Carregando transformações...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <BeforeAfterTransformation />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
 
-        <Suspense fallback={<div className="h-96 flex items-center justify-center"><LoadingSpinner /></div>}>
-          <section id="motivation" className="scroll-mt-24 mb-16 lg:mb-24">
-            <MotivationSection />
-          </section>
-        </Suspense>
+        <section id="motivation" className="scroll-mt-24 mb-20 lg:mb-28">
+          <SectionTitle 
+            variant="secondary"
+            size="xl"
+            subtitle="Conhecer seu estilo pessoal é muito mais do que seguir tendências passageiras — é uma ferramenta poderosa de comunicação não-verbal e autoconfiança."
+          >
+            Por que Aplicar seu Estilo é tão Importante?
+          </SectionTitle>
+          <Suspense fallback={
+            <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A] font-medium">Carregando conteúdo...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <MotivationSection />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+        
+        <section id="bonuses" className="scroll-mt-24 mb-20 lg:mb-28">
+          <Suspense fallback={
+            <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A] font-medium">Carregando bônus...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <BonusSection />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
 
-        <Suspense fallback={<div className="h-96 flex items-center justify-center"><LoadingSpinner /></div>}>
-          <section id="bonuses" className="scroll-mt-24 mb-16 lg:mb-24">
-            <BonusSection />
-          </section>
-        </Suspense>
+        <section id="testimonials" className="scroll-mt-24 mb-20 lg:mb-28">
+          <Suspense fallback={
+            <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A] font-medium">Carregando depoimentos...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <Testimonials />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+        
+        <section id="guarantee" className="scroll-mt-24 mb-20 lg:mb-28">
+          <Suspense fallback={
+            <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A] font-medium">Carregando garantia...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <GuaranteeSection />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
+        
+        <section id="mentor" className="scroll-mt-24 mb-20 lg:mb-28">
+          <SectionTitle 
+            variant="simple"
+            size="xl"
+            subtitle="Especialista que já guiou mais de 3.000 mulheres na descoberta do seu estilo autêntico"
+          >
+            Conheça Sua Mentora
+          </SectionTitle>
+          <Suspense fallback={
+            <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-[#8F7A6A] font-medium">Carregando informações da mentora...</p>
+            </div>
+          }>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+              <MentorSection />
+            </AnimatedWrapper>
+          </Suspense>
+        </section>
 
-        <Suspense fallback={<div className="h-96 flex items-center justify-center"><LoadingSpinner /></div>}>
-          <section id="testimonials" className="scroll-mt-24 mb-16 lg:mb-24">
-            <Testimonials />
-          </section>
-        </Suspense>
-
-        <Suspense fallback={<div className="h-96 flex items-center justify-center"><LoadingSpinner /></div>}>
-          <section id="guarantee" className="scroll-mt-24 mb-16 lg:mb-24">
-            <GuaranteeSection />
-          </section>
-        </Suspense>
-
-        <Suspense fallback={<div className="h-96 flex items-center justify-center"><LoadingSpinner /></div>}>
-          <section id="mentor" className="scroll-mt-24 mb-16 lg:mb-24">
-            <MentorSection />
-          </section>
-        </Suspense>
-
-        {/* CTA FINAL - BOLINHAS REMOVIDAS DOS SELOS */}
-        <section id="cta" className="scroll-mt-24 mb-16">
-          <Card className="relative overflow-hidden bg-gradient-to-br from-white via-[#fff7f3] to-[#f9f4ef] border-2 border-[#B89B7A]/20 rounded-3xl p-8 lg:p-12" 
-                style={{ boxShadow: tokens.shadows.xl }}>
+        {/* Seção de transição elegante */}
+        <div className="mb-20 lg:mb-28">
+          <div className="relative text-center py-16 lg:py-20">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/60 via-[#f9f4ef]/40 to-[#fff7f3]/60 rounded-3xl"></div>
+            <div className="relative z-10">
+              <div className="w-40 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-8"></div>
+              <h3 className="text-3xl lg:text-4xl font-playfair font-bold text-[#2C1810] mb-6">
+                Chegou o Momento de Agir
+              </h3>
+              <p className="text-xl font-medium max-w-2xl mx-auto text-[#5D4A3A] leading-relaxed">
+                Não deixe para depois a transformação que você pode começar agora!
+              </p>
+              <div className="w-40 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-8"></div>
+            </div>
+          </div>
+        </div>
+        
+        {/* CTA Final completamente redesenhada */}
+        <section id="cta" className="scroll-mt-24 mb-20 lg:mb-28">
+          <div className="relative overflow-hidden bg-gradient-to-br from-white via-[#fff7f3] to-[#f9f4ef] rounded-3xl p-8 lg:p-16 border border-[#B89B7A]/20 text-center"
+               style={{ boxShadow: tokens.shadows.xl }}>
             
+            {/* Background decorativo */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#B89B7A]/5 via-transparent to-[#aa6b5d]/5 pointer-events-none"></div>
             
-            <AnimatedWrapper animation="fade" show={true} duration={600}>
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={200}>
               <div className="relative z-10">
-                <div className="text-center mb-12">
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF6B35] to-[#ff8c42] text-white px-4 py-2 rounded-full text-sm font-bold mb-6 animate-pulse">
-                    <Clock className="w-4 h-4" />
-                    Oferta por tempo limitado
+                {/* Header da CTA */}
+                <div className="mb-12 lg:mb-16">
+                  <div className="inline-flex items-center gap-4 mb-8">
+                    <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                    <div className="w-6 h-6 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full animate-pulse shadow-lg"></div>
+                    <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
                   </div>
                   
-                  <h2 className="text-3xl lg:text-5xl font-playfair font-bold text-[#2C1810] mb-6 leading-tight">
-                    Transforme Seu Estilo
-                    <br />
-                    <span className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                      Hoje Mesmo!
+                  <h2 className="text-4xl lg:text-6xl xl:text-7xl font-playfair font-bold leading-tight mb-8">
+                    <span className="bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent block mb-4">
+                      Desperte Sua Confiança
+                    </span>
+                    <span className="text-[#aa6b5d] block">
+                      Com Seu Estilo Único!
                     </span>
                   </h2>
                   
-                  <div className="bg-gradient-to-r from-[#2C1810] to-[#5D4A3A] text-white px-6 py-3 rounded-full inline-block mb-8">
-                    <div className="flex items-center gap-4 text-lg font-bold">
-                      <Clock className="w-5 h-5" />
-                      <span>
-                        {String(timer.hours).padStart(2, '0')}:
-                        {String(timer.minutes).padStart(2, '0')}:
-                        {String(timer.seconds).padStart(2, '0')}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <p className="text-xl text-[#5D4A3A] max-w-3xl mx-auto leading-relaxed mb-8">
-                    Não perca mais tempo se sentindo perdida no guarda-roupa. 
-                    <strong className="text-[#aa6b5d]"> Descubra seu estilo único</strong> e transforme sua autoestima para sempre!
+                  <p className="text-xl lg:text-2xl text-[#5D4A3A] font-medium mb-4">
+                    Guia {category} Personalizado + Bônus Exclusivos
                   </p>
+                  
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 px-4 py-2 rounded-full border border-[#B89B7A]/20">
+                    <Clock className="w-4 h-4 text-[#aa6b5d]" />
+                    <span className="text-sm font-medium text-[#aa6b5d]">
+                      Oferta por tempo limitado
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Grid de produtos otimizado */}
+                <div className="mb-16">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
+                    {[
+                      {
+                        src: (() => {
+                          const guideImages = {
+                            'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+                            'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
+                            'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
+                            'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071342/GUIA_ELEGANTE_asez1q.webp',
+                            'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
+                            'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071349/GUIA_SEXY_t5x2ov.webp',
+                            'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
+                            'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
+                          };
+                          return guideImages[category] || guideImages['Natural'];
+                        })(),
+                        title: `Manual de Estilo ${category}`,
+                        subtitle: 'Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única.',
+                        badge: 'GUIA PRINCIPAL',
+                        originalPrice: 'R$ 77,00',
+                        priority: true
+                      },
+                      {
+                        src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1744911677/Cópia_de_MOCKUPS_15_-_Copia_grstwl.png',
+                        title: 'Guia das Peças Estratégicas',
+                        subtitle: 'Peças-chave que maximizam combinações e garantem versatilidade em qualquer situação.',
+                        badge: 'BÔNUS EXCLUSIVO',
+                        originalPrice: 'R$ 59,00',
+                        priority: false
+                      },
+                      {
+                        src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1744911666/Cópia_de_Template_Dossiê_Completo_2024_15_-_Copia_ssrhu3.png',
+                        title: 'Manual de Visagismo',
+                        subtitle: 'Descubra os cortes ideais para seu rosto e realce sua beleza natural.',
+                        badge: 'BÔNUS PREMIUM',
+                        originalPrice: 'R$ 39,00',
+                        priority: false
+                      }
+                    ].map((product, index) => (
+                      <div key={index} className={`group bg-white rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative ${index === 2 ? 'md:col-span-2 xl:col-span-1' : ''}`}
+                           style={{ boxShadow: tokens.shadows.lg }}>
+                        
+                        {/* Badge premium */}
+                        <div className="absolute -top-4 -right-4 z-10">
+                          <span className={`text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12 ${
+                            index === 0 ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]' : 
+                            'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]'
+                          }`}>
+                            {product.badge}
+                          </span>
+                        </div>
+
+                        {/* Imagem do produto */}
+                        <div className="relative mb-6 bg-gradient-to-br from-[#f9f4ef] to-[#fff7f3] rounded-xl p-4 overflow-hidden"
+                             style={{ 
+                               boxShadow: tokens.shadows.sm,
+                               aspectRatio: index === 0 ? '4.6/5' : index === 1 ? '6/3.5' : '3/4.5'
+                             }}>
+                          <ProgressiveImage 
+                            src={product.src}
+                            alt={product.title}
+                            className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
+                            loading={product.priority ? "eager" : "lazy"}
+                            fetchPriority={product.priority ? "high" : "low"}
+                          />
+                          
+                          {/* Overlay de hover */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#B89B7A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl"></div>
+                        </div>
+
+                        {/* Conteúdo do produto */}
+                        <div className="text-left space-y-4">
+                          <h4 className="font-bold text-[#2C1810] text-lg lg:text-xl leading-tight">
+                            {product.title}
+                          </h4>
+                          <p className="text-sm lg:text-base text-[#5D4A3A] leading-relaxed">
+                            {product.subtitle}
+                          </p>
+                          
+                          {/* Preço original */}
+                          <div className="pt-4 border-t border-[#B89B7A]/10">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium text-[#8F7A6A]">
+                                Valor individual:
+                              </span>
+                              <span className="text-lg font-bold text-[#B89B7A] line-through">
+                                {product.originalPrice}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-                  <div className="space-y-6">
-                    <div className="bg-white/80 rounded-2xl p-6 border border-[#B89B7A]/10" style={{ boxShadow: tokens.shadows.md }}>
-                      <h3 className="text-2xl font-bold text-[#2C1810] mb-4">O que você vai receber:</h3>
-                      <ul className="space-y-3">
-                        {[
-                          'Guia de Estilo Personalizado completo',
-                          'Análise detalhada do seu perfil',
-                          'Dicas de combinações para cada ocasião',
-                          'Guia de cores que valorizam você',
-                          'Bônus exclusivos (+ de R$ 200 em valor)',
-                          'Acesso vitalício ao conteúdo',
-                          'Suporte especializado'
-                        ].map((item, index) => (
-                          <li key={index} className="flex items-start gap-3">
-                            <CheckCircle className="w-5 h-5 text-[#4CAF50] mt-0.5 flex-shrink-0" />
-                            <span className="text-[#2C1810] font-medium">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                {/* Resumo de valor redesenhado */}
+                <div className="max-w-lg mx-auto mb-12">
+                  <div className="relative bg-white rounded-2xl p-8 lg:p-10 border-4 border-double border-[#B89B7A]/30 overflow-hidden"
+                       style={{ 
+                         boxShadow: '0 20px 40px rgba(184,155,122,0.15), 0 0 0 1px rgba(255,255,255,0.8) inset',
+                         background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(249,244,239,0.95) 100%)'
+                       }}>
                     
-                    <div className="text-center">
-                      <div className="flex items-center justify-center gap-4 mb-4">
-                        <span className="text-2xl text-[#8F7A6A] line-through">R$ 197,00</span>
-                        <span className="text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                    {/* Background decorativo */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#B89B7A]/10 to-transparent rounded-full transform translate-x-16 -translate-y-16"></div>
+                    
+                    <div className="relative z-10 text-center space-y-6">
+                      <p className="text-lg lg:text-xl font-semibold text-[#5D4A3A]">
+                        De <span className="font-bold text-[#B89B7A] text-xl lg:text-2xl line-through">R$ 175,00</span> por apenas:
+                      </p>
+                      
+                      <div className="space-y-2">
+                        <p className="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                           R$ 39,90
+                        </p>
+                        <p className="text-lg lg:text-xl font-bold text-[#4CAF50]">
+                          ou 5x de R$ 8,83
+                        </p>
+                      </div>
+                      
+                      <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4CAF50]/10 to-[#43a047]/10 px-4 py-2 rounded-full border border-[#4CAF50]/20">
+                        <TrendingUp className="w-4 h-4 text-[#4CAF50]" />
+                        <span className="text-sm font-bold text-[#4CAF50]">
+                          Economia de R$ 135,10 (77% OFF)
                         </span>
                       </div>
-                      <p className="text-lg text-[#5D4A3A] mb-2">ou</p>
-                      <p className="text-2xl font-bold text-[#2C1810]">
-                        5x de <span className="text-[#4CAF50]">R$ 8,83</span>
-                      </p>
-                      <p className="text-sm text-[#8F7A6A] mt-2">sem juros no cartão</p>
-                    </div>
-                  </div>
-
-                  <div className="text-center space-y-6">
-                    <Button 
-                      onClick={handleCTAClick} 
-                      className="w-full text-white font-bold py-6 px-8 rounded-2xl shadow-2xl transition-all duration-300 group text-lg"
-                      style={{
-                        background: 'linear-gradient(135deg, #4CAF50 0%, #43a047 100%)',
-                        boxShadow: tokens.shadows.cta,
-                        fontSize: 'clamp(1rem, 4vw, 1.25rem)',
-                        padding: 'clamp(1rem, 4vw, 1.5rem) clamp(1.5rem, 6vw, 2rem)',
-                        transform: isButtonHovered ? 'translateY(-4px) scale(1.02)' : 'translateY(0) scale(1)',
-                      }}
-                      onMouseEnter={() => setIsButtonHovered(true)} 
-                      onMouseLeave={() => setIsButtonHovered(false)}
-                      type="button"
-                    >
-                      <span className="flex items-center justify-center gap-3">
-                        <ShoppingCart className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" />
-                        Quero Transformar Meu Estilo Agora
-                      </span>
-                    </Button>
-                    
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="flex items-center justify-center gap-2 bg-white/60 rounded-lg py-3 px-4 border border-[#B89B7A]/10">
-                        <Shield className="w-4 h-4 text-[#4CAF50]" />
-                        <span className="font-medium text-[#2C1810]">Pagamento 100% Seguro</span>
+                      
+                      <div className="flex items-center justify-center gap-2 text-[#8F7A6A] text-sm">
+                        <Hourglass className="w-4 h-4 animate-pulse" />
+                        <span>Esta oferta expira quando você sair desta página</span>
                       </div>
-                      <div className="flex items-center justify-center gap-2 bg-white/60 rounded-lg py-3 px-4 border border-[#B89B7A]/10">
-                        <Zap className="w-4 h-4 text-[#4CAF50]" />
-                        <span className="font-medium text-[#2C1810]">Acesso Imediato</span>
-                      </div>
-                      <div className="flex items-center justify-center gap-2 bg-white/60 rounded-lg py-3 px-4 border border-[#B89B7A]/10">
-                        <Award className="w-4 h-4 text-[#4CAF50]" />
-                        <span className="font-medium text-[#2C1810]">Garantia de 7 Dias</span>
-                      </div>
-                      <div className="flex items-center justify-center gap-2 bg-white/60 rounded-lg py-3 px-4 border border-[#B89B7A]/10">
-                        <Clock className="w-4 h-4 text-[#FF6B35]" />
-                        <span className="font-medium text-[#2C1810]">Oferta por tempo limitado</span>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-gradient-to-r from-[#4CAF50]/10 to-[#43a047]/10 rounded-xl p-4 border border-[#4CAF50]/20">
-                      <p className="text-sm text-[#2C1810] font-medium">
-                        <span className="text-[#4CAF50] font-bold">🎉 Desconto de 80%</span> válido apenas hoje!
-                        <br />
-                        <span className="text-xs text-[#5D4A3A]">Depois volta para R$ 197,00</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </AnimatedWrapper>
-          </Card>
-        </section>
-      </main>
-
-      <BuildInfo />
-    </div>
-  );
-};
-
-export default ResultPage;
