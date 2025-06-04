@@ -1,8 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { preloadCriticalImages } from '@/utils/images/preloading';
-import FixedIntroImage from '@/components/ui/FixedIntroImage';
-import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart, CheckCircle, ArrowDown, Hourglass, Zap, Target, Sparkles, Crown, Flame, Eye } from 'lucide-react';
-import { trackButtonClick } from '@/utils/analytics';
+import React, { useEffect, useState } from "react";
+import { preloadCriticalImages } from "@/utils/images/preloading";
+import FixedIntroImage from "@/components/ui/FixedIntroImage";
+import {
+  ChevronRight,
+  Check,
+  Clock,
+  Star,
+  ShoppingBag,
+  Heart,
+  Users,
+  Award,
+  Shield,
+  ArrowRight,
+  TrendingUp,
+  BadgeCheck,
+  Lock,
+  Gift,
+  ShoppingCart,
+  CheckCircle,
+  ArrowDown,
+  Hourglass,
+  Zap,
+  Target,
+  Sparkles,
+  Crown,
+  Flame,
+  Eye,
+} from "lucide-react";
+import { trackButtonClick } from "@/utils/analytics";
 
 // CSS aprimorado para versão B - mais persuasivo e dinâmico
 const customStyles = `
@@ -384,469 +409,563 @@ const customStyles = `
 `;
 
 // URLs das imagens (mantidas da versão original)
-const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
-const HERO_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg";
-const PROBLEM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp";
-const SOLUTION_QUIZ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp";
-const GUIDES_BENEFITS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp";
-const BONUS_1_KEY_PIECES_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921227/Espanhol_Portugu%C3%AAs_6_y4kqao.webp";
-const BONUS_2_VISAGISM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921365/Espanhol_Portugu%C3%AAs_7_eqgdqz.webp";
-const GUARANTEE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921750/Garantia_7_dias_j8mxth.webp";
+const HERO_IMAGE_URL =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
+const HERO_COMPLEMENTARY_IMAGE_URL =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg";
+const PROBLEM_IMAGE_URL =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp";
+const SOLUTION_QUIZ_IMAGE_URL =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp";
+const GUIDES_BENEFITS_IMAGE_URL =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp";
+const BONUS_1_KEY_PIECES_IMAGE_URL =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921227/Espanhol_Portugu%C3%AAs_6_y4kqao.webp";
+const BONUS_2_VISAGISM_IMAGE_URL =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921365/Espanhol_Portugu%C3%AAs_7_eqgdqz.webp";
+const GUARANTEE_IMAGE_URL =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921750/Garantia_7_dias_j8mxth.webp";
 
 // Componente de Popup de Prova Social Dinâmica
 const SocialProofPopup = () => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [currentUser, setCurrentUser] = useState('');
-    
-    const users = [
-        'Ana Carolina acabou de comprar',
-        'Maria Silva descobriu seu estilo',
-        'Juliana Santos transformou seu guarda-roupa',
-        'Fernanda Costa está encantada',
-        'Camila Oliveira recomenda'
-    ];
+  const [isVisible, setIsVisible] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentUser(users[Math.floor(Math.random() * users.length)]);
-            setIsVisible(true);
-            setTimeout(() => setIsVisible(false), 4000);
-        }, 8000);
+  const users = [
+    "Ana Carolina acabou de comprar",
+    "Maria Silva descobriu seu estilo",
+    "Juliana Santos transformou seu guarda-roupa",
+    "Fernanda Costa está encantada",
+    "Camila Oliveira recomenda",
+  ];
 
-        return () => clearInterval(interval);
-    }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentUser(users[Math.floor(Math.random() * users.length)]);
+      setIsVisible(true);
+      setTimeout(() => setIsVisible(false), 4000);
+    }, 8000);
 
-    return (
-        <div className={`fixed bottom-4 left-4 z-50 transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
-            <div className="bg-green-500 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 max-w-sm">
-                <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
-                    <Check size={16} />
-                </div>
-                <div>
-                    <p className="font-semibold text-sm">{currentUser}</p>
-                    <p className="text-xs opacity-90">há poucos minutos</p>
-                </div>
-            </div>
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div
+      className={`fixed bottom-4 left-4 z-50 transition-all duration-500 ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+      }`}
+    >
+      <div className="bg-green-500 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 max-w-sm">
+        <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
+          <Check size={16} />
         </div>
-    );
+        <div>
+          <p className="font-semibold text-sm">{currentUser}</p>
+          <p className="text-xs opacity-90">há poucos minutos</p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 // Componente de Avaliações com Estrelas
 const StarRating = ({ rating }: { rating: number }) => {
-    return (
-        <div className="flex items-center gap-1">
-            {[...Array(5)].map((_, i) => (
-                <Star
-                    key={i}
-                    size={20}
-                    className={`${i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-                />
-            ))}
-        </div>
-    );
+  return (
+    <div className="flex items-center gap-1">
+      {[...Array(5)].map((_, i) => (
+        <Star
+          key={i}
+          size={20}
+          className={`${
+            i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+          }`}
+        />
+      ))}
+    </div>
+  );
 };
 
 // Componente de Contagem Regressiva Dramática
 const DramaticCountdown = () => {
-    const [time, setTime] = useState({
-        hours: 2,
-        minutes: 47,
-        seconds: 33
-    });
+  const [time, setTime] = useState({
+    hours: 2,
+    minutes: 47,
+    seconds: 33,
+  });
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTime(prevTime => {
-                if (prevTime.seconds > 0) {
-                    return { ...prevTime, seconds: prevTime.seconds - 1 };
-                } else if (prevTime.minutes > 0) {
-                    return { ...prevTime, minutes: prevTime.minutes - 1, seconds: 59 };
-                } else if (prevTime.hours > 0) {
-                    return { hours: prevTime.hours - 1, minutes: 59, seconds: 59 };
-                } else {
-                    return { hours: 23, minutes: 59, seconds: 59 };
-                }
-            });
-        }, 1000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime((prevTime) => {
+        if (prevTime.seconds > 0) {
+          return { ...prevTime, seconds: prevTime.seconds - 1 };
+        } else if (prevTime.minutes > 0) {
+          return { ...prevTime, minutes: prevTime.minutes - 1, seconds: 59 };
+        } else if (prevTime.hours > 0) {
+          return { hours: prevTime.hours - 1, minutes: 59, seconds: 59 };
+        } else {
+          return { hours: 23, minutes: 59, seconds: 59 };
+        }
+      });
+    }, 1000);
 
-        return () => clearInterval(interval);
-    }, []);
+    return () => clearInterval(interval);
+  }, []);
 
-    const formatNumber = (num: number) => num.toString().padStart(2, '0');
+  const formatNumber = (num: number) => num.toString().padStart(2, "0");
 
-    return (
-        <div className="countdown-dramatic">
-            <div className="flex items-center justify-center gap-2 mb-3">
-                <Flame className="text-orange-400" size={24} />
-                <h3 className="text-xl font-bold">OFERTA EXPIRA EM:</h3>
-                <Flame className="text-orange-400" size={24} />
-            </div>
-            <div className="countdown-numbers">
-                <div className="countdown-item">
-                    <div className="text-xs opacity-75">HORAS</div>
-                    <div>{formatNumber(time.hours)}</div>
-                </div>
-                <div className="countdown-item">
-                    <div className="text-xs opacity-75">MIN</div>
-                    <div>{formatNumber(time.minutes)}</div>
-                </div>
-                <div className="countdown-item">
-                    <div className="text-xs opacity-75">SEG</div>
-                    <div>{formatNumber(time.seconds)}</div>
-                </div>
-            </div>
-            <p className="mt-3 text-sm opacity-90">
-                Não perca esta oportunidade única!
-            </p>
+  return (
+    <div className="countdown-dramatic">
+      <div className="flex items-center justify-center gap-2 mb-3">
+        <Flame className="text-orange-400" size={24} />
+        <h3 className="text-xl font-bold">OFERTA EXPIRA EM:</h3>
+        <Flame className="text-orange-400" size={24} />
+      </div>
+      <div className="countdown-numbers">
+        <div className="countdown-item">
+          <div className="text-xs opacity-75">HORAS</div>
+          <div>{formatNumber(time.hours)}</div>
         </div>
-    );
+        <div className="countdown-item">
+          <div className="text-xs opacity-75">MIN</div>
+          <div>{formatNumber(time.minutes)}</div>
+        </div>
+        <div className="countdown-item">
+          <div className="text-xs opacity-75">SEG</div>
+          <div>{formatNumber(time.seconds)}</div>
+        </div>
+      </div>
+      <p className="mt-3 text-sm opacity-90">
+        Não perca esta oportunidade única!
+      </p>
+    </div>
+  );
 };
 
 // Componente FAQ Aprimorado
 const FaqSectionAdvanced = () => {
-    const [openItem, setOpenItem] = useState<number | null>(null);
+  const [openItem, setOpenItem] = useState<number | null>(null);
 
-    const faqItems = [
-        {
-            question: "É realmente possível descobrir meu estilo em 5 minutos?",
-            answer: "Sim! Nosso quiz foi desenvolvido com base em anos de experiência e metodologia científica. Em poucos minutos, você terá uma análise precisa do seu estilo predominante entre os 7 estilos universais."
-        },
-        {
-            question: "O que acontece se eu não gostar do resultado?",
-            answer: "Oferecemos 7 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do seu dinheiro sem perguntas. Sua satisfação é nossa prioridade."
-        },
-        {
-            question: "Quanto tempo terei acesso aos materiais?",
-            answer: "O acesso é vitalício! Você poderá baixar todos os materiais e consultá-los sempre que precisar, sem prazo de expiração."
-        },
-        {
-            question: "Funciona para todas as idades e tipos de corpo?",
-            answer: "Absolutamente! Nosso método é universal e funciona para mulheres de todas as idades, tipos de corpo e estilos de vida. O importante é descobrir e expressar sua essência única."
-        },
-        {
-            question: "Como recebo os materiais após a compra?",
-            answer: "Logo após a confirmação do pagamento, você recebe um email com o link de acesso à área exclusiva onde poderá fazer o quiz e baixar todos os materiais imediatamente."
-        }
-    ];
+  const faqItems = [
+    {
+      question: "É realmente possível descobrir meu estilo em 5 minutos?",
+      answer:
+        "Sim! Nosso quiz foi desenvolvido com base em anos de experiência e metodologia científica. Em poucos minutos, você terá uma análise precisa do seu estilo predominante entre os 7 estilos universais.",
+    },
+    {
+      question: "O que acontece se eu não gostar do resultado?",
+      answer:
+        "Oferecemos 7 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do seu dinheiro sem perguntas. Sua satisfação é nossa prioridade.",
+    },
+    {
+      question: "Quanto tempo terei acesso aos materiais?",
+      answer:
+        "O acesso é vitalício! Você poderá baixar todos os materiais e consultá-los sempre que precisar, sem prazo de expiração.",
+    },
+    {
+      question: "Funciona para todas as idades e tipos de corpo?",
+      answer:
+        "Absolutamente! Nosso método é universal e funciona para mulheres de todas as idades, tipos de corpo e estilos de vida. O importante é descobrir e expressar sua essência única.",
+    },
+    {
+      question: "Como recebo os materiais após a compra?",
+      answer:
+        "Logo após a confirmação do pagamento, você recebe um email com o link de acesso à área exclusiva onde poderá fazer o quiz e baixar todos os materiais imediatamente.",
+    },
+  ];
 
-    const toggleItem = (index: number) => {
-        setOpenItem(openItem === index ? null : index);
-    };
+  const toggleItem = (index: number) => {
+    setOpenItem(openItem === index ? null : index);
+  };
 
-    return (
-        <div className="w-full max-w-4xl mx-auto">
-            <div className="space-y-4">
-                {faqItems.map((item, index) => (
-                    <div
-                        key={index}
-                        className="bg-white rounded-2xl shadow-md overflow-hidden border-2 border-gray-100 hover:border-orange-200 transition-all duration-300"
-                    >
-                        <button
-                            onClick={() => toggleItem(index)}
-                            className="w-full px-6 py-6 text-left flex justify-between items-center hover:bg-orange-50 transition-colors"
-                        >
-                            <span className="font-semibold text-[#432818] text-lg pr-4">{item.question}</span>
-                            <ChevronRight
-                                size={24}
-                                className={`text-orange-500 transition-transform duration-300 flex-shrink-0 ${openItem === index ? 'transform rotate-90' : ''}`}
-                            />
-                        </button>
+  return (
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="space-y-4">
+        {faqItems.map((item, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-2xl shadow-md overflow-hidden border-2 border-gray-100 hover:border-orange-200 transition-all duration-300"
+          >
+            <button
+              onClick={() => toggleItem(index)}
+              className="w-full px-6 py-6 text-left flex justify-between items-center hover:bg-orange-50 transition-colors"
+            >
+              <span className="font-semibold text-[#432818] text-lg pr-4">
+                {item.question}
+              </span>
+              <ChevronRight
+                size={24}
+                className={`text-orange-500 transition-transform duration-300 flex-shrink-0 ${
+                  openItem === index ? "transform rotate-90" : ""
+                }`}
+              />
+            </button>
 
-                        {openItem === index && (
-                            <div className="px-6 py-4 text-gray-700 bg-orange-50 border-t border-orange-100 text-base leading-relaxed">
-                                {item.answer}
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+            {openItem === index && (
+              <div className="px-6 py-4 text-gray-700 bg-orange-50 border-t border-orange-100 text-base leading-relaxed">
+                {item.answer}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 const QuizOfferPageV2: React.FC = () => {
-    useEffect(() => {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = customStyles;
-        document.head.appendChild(styleElement);
-        
-        preloadCriticalImages([
-            HERO_IMAGE_URL,
-            HERO_COMPLEMENTARY_IMAGE_URL,
-            PROBLEM_IMAGE_URL,
-            SOLUTION_QUIZ_IMAGE_URL,
-            GUIDES_BENEFITS_IMAGE_URL,
-            BONUS_1_KEY_PIECES_IMAGE_URL,
-            BONUS_2_VISAGISM_IMAGE_URL,
-            GUARANTEE_IMAGE_URL
-        ], { quality: 95 });
+  useEffect(() => {
+    const styleElement = document.createElement("style");
+    styleElement.textContent = customStyles;
+    document.head.appendChild(styleElement);
 
-        if (typeof window !== 'undefined' && 'performance' in window) {
-            window.performance.mark('offer-page-v2-mounted');
-        }
-        
-        return () => {
-            document.head.removeChild(styleElement);
-        };
-    }, []);
-
-    const handleCtaClick = (buttonId: string, action: string = 'Comprar Agora') => {
-        trackButtonClick(buttonId, action, 'quiz_offer_page_v2');
-    };
-
-    return (
-        <div className="min-h-screen bg-[var(--background)]" style={{ fontFamily: 'Inter, sans-serif' }}>
-            {/* Banner de Urgência no Topo */}
-            <div className="urgency-banner">
-                <div className="flex items-center justify-center gap-2">
-                    <Zap size={20} />
-                    <span>🔥 ÚLTIMAS HORAS: 77% OFF - Apenas R$ 39,90!</span>
-                    <Zap size={20} />
-                </div>
-            </div>
-
-            {/* Header Aprimorado */}
-            <header className="py-4 px-4 sm:px-6 sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
-                <div className="container-main flex justify-between items-center">
-                    <FixedIntroImage
-                        src={HERO_IMAGE_URL}
-                        alt="Logo Gisele Galvão"
-                        width={180}
-                        height={80}
-                        className="h-auto object-contain max-w-[150px] sm:max-w-[180px]"
-                    />
-                    <div className="text-right">
-                        <div className="text-2xl font-bold text-green-600">5x R$ 8,83</div>
-                        <div className="text-sm text-gray-600">ou R$ 39,90 à vista</div>
-                    </div>
-                </div>
-            </header>
-
-            <main>
-                {/* Hero Section Revolucionário */}
-                <section className="section-gap pt-6 sm:pt-8">
-                    <div className="container-main">
-                        <div className="card-impact text-center animate-slide-up">
-                            {/* Badge de Prova Social Melhorado */}
-                            <div className="social-proof">
-                                <div className="flex items-center justify-center gap-3 mb-2">
-                                    <Crown className="text-yellow-300" size={28} />
-                                    <span className="text-xl font-bold">+5.247 MULHERES TRANSFORMADAS</span>
-                                    <Crown className="text-yellow-300" size={28} />
-                                </div>
-                                <div className="flex items-center justify-center gap-2">
-                                    <StarRating rating={5} />
-                                    <span className="font-semibold">4.9/5 estrelas</span>
-                                </div>
-                            </div>
-
-                            {/* Headline Mais Impactante */}
-                            <h1 className="text-hierarchy-1 mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                DESCUBRA SEU ESTILO
-                                <br />
-                                <span style={{ color: '#ff6b6b' }}>EM 5 MINUTOS</span>
-                            </h1>
-                            
-                            {/* Subheadline Mais Persuasiva */}
-                            <p className="text-body mb-8 max-w-4xl mx-auto">
-                                <strong>Pare de desperdiçar dinheiro em roupas que não combinam!</strong>
-                                <br />
-                                Descubra seu estilo predominante e tenha um guarda-roupa que <span style={{ color: '#ff6b6b', fontWeight: 'bold' }}>funciona 100%</span>
-                            </p>
-
-                            {/* Hero Video/Image com Destaque */}
-                            <div className="mb-8 max-w-2xl mx-auto relative">
-                                <div className="absolute -inset-4 bg-gradient-to-r from-orange-400 to-red-400 rounded-3xl blur opacity-30"></div>
-                                <div className="relative">
-                                    <FixedIntroImage
-                                        src={HERO_COMPLEMENTARY_IMAGE_URL}
-                                        alt="Transformação de guarda-roupa"
-                                        width={800}
-                                        height={533}
-                                        className="w-full h-auto rounded-2xl shadow-2xl"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* CTA Principal Mais Impactante */}
-                            <button
-                                onClick={() => {
-                                    handleCtaClick('hero_cta_v2', 'Descobrir Meu Estilo Agora');
-                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
-                                }}
-                                className="btn-impact mb-6 animate-delay-1"
-                            >
-                                <Sparkles size={24} />
-                                QUERO DESCOBRIR MEU ESTILO AGORA
-                                <ArrowRight size={24} />
-                            </button>
-                            
-                            {/* Trust Elements Melhorados */}
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-lg font-semibold">
-                                <div className="flex items-center gap-2 text-green-600">
-                                    <Shield size={20} />
-                                    <span>7 Dias de Garantia Total</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-green-600">
-                                    <Lock size={20} />
-                                    <span>Pagamento 100% Seguro</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Seção Antes vs Depois */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <div className="card-impact animate-slide-up animate-delay-2">
-                            <h2 className="text-hierarchy-2 text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                <span style={{ color: '#ff6b6b' }}>ANTES</span> vs <span style={{ color: '#00c851' }}>DEPOIS</span>
-                            </h2>
-                            
-                            <div className="before-after">
-                                <div className="before-section">
-                                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                        <Eye className="text-red-500" size={24} />
-                                        SEM O QUIZ
-                                    </h3>
-                                    <ul className="space-y-3">
-                                        <li className="flex items-start gap-3">
-                                            <span className="text-red-500 mt-1 text-xl">✗</span>
-                                            <span><strong>Guarda-roupa cheio</strong> mas "nada para vestir"</span>
-                                        </li>
-                                        <li className="flex items-start gap-3">
-                                            <span className="text-red-500 mt-1 text-xl">✗</span>
-                                            <span><strong>Compras por impulso</strong> que nunca usa</span>
-                                        </li>
-                                        <li className="flex items-start gap-3">
-                                            <span className="text-red-500 mt-1 text-xl">✗</span>
-                                            <span><strong>Dinheiro desperdiçado</strong> em peças que não combinam</span>
-                                        </li>
-                                        <li className="flex items-start gap-3">
-                                            <span className="text-red-500 mt-1 text-xl">✗</span>
-                                            <span><strong>Baixa autoestima</strong> com a própria imagem</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <div className="vs-element">
-                                    VS
-                                </div>
-                                
-                                <div className="after-section">
-                                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                        <Crown className="text-green-500" size={24} />
-                                        COM O QUIZ
-                                    </h3>
-                                    <ul className="space-y-3">
-                                        <li className="flex items-start gap-3">
-                                            <span className="text-green-500 mt-1 text-xl">✓</span>
-                                            <span><strong>Guarda-roupa funcional</strong> onde tudo combina</span>
-                                        </li>
-                                        <li className="flex items-start gap-3">
-                                            <span className="text-green-500 mt-1 text-xl">✓</span>
-                                            <span><strong>Compras inteligentes</strong> e certeiras</span>
-                                        </li>
-                                        <li className="flex items-start gap-3">
-                                            <span className="text-green-500 mt-1 text-xl">✓</span>
-                                            <span><strong>Economia de tempo e dinheiro</strong></span>
-                                        </li>
-                                        <li className="flex items-start gap-3">
-                                            <span className="text-green-500 mt-1 text-xl">✓</span>
-                                            <span><strong>Confiança e autoestima</strong> em alta</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Countdown Dramático */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <DramaticCountdown />
-                    </div>
-                </section>
-
-                {/* Valor com Preço Impactante */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <div className="price-impact animate-slide-up animate-delay-3">
-                            <div className="price-badge">
-                                🔥 OFERTA RELÂMPAGO - 77% OFF
-                            </div>
-                            
-                            <h2 className="text-2xl font-bold mb-4">TRANSFORMAÇÃO COMPLETA</h2>
-                            
-                            <div className="grid-impact mb-6">
-                                <div className="text-center">
-                                    <div className="bg-white/20 rounded-2xl p-6 backdrop-blur-sm">
-                                        <h3 className="text-lg font-bold mb-2">📊 Quiz Personalizado</h3>
-                                        <p className="text-sm opacity-90">Descubra seu estilo único</p>
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="bg-white/20 rounded-2xl p-6 backdrop-blur-sm">
-                                        <h3 className="text-lg font-bold mb-2">📖 Guia Completo</h3>
-                                        <p className="text-sm opacity-90">Para seu estilo específico</p>
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="bg-white/20 rounded-2xl p-6 backdrop-blur-sm">
-                                        <h3 className="text-lg font-bold mb-2">🎁 Bônus Exclusivos</h3>
-                                        <p className="text-sm opacity-90">Peças-chave + Visagismo</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="price-original">De R$ 175,00</div>
-                            <div className="price-current">R$ 39,90</div>
-                            <p className="text-xl mb-6">ou <strong>5x de R$ 8,83</strong> sem juros</p>
-                            <p className="text-lg opacity-90">💰 Você economiza R$ 135,10</p>
-                        </div>
-                    </div>
-                </section>
-
-                {/* CTA Final Gigante */}
-                <section className="section-gap">
-                    <div className="container-main text-center">
-                        <button
-                            onClick={() => {
-                                handleCtaClick('final_cta_v2', 'Garantir Transformação');
-                                window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
-                            }}
-                            className="btn-impact text-2xl py-6 px-8 animate-slide-up animate-delay-4"
-                        >
-                            <Target size={32} />
-                            GARANTIR MINHA TRANSFORMAÇÃO AGORA
-                            <Flame size={32} />
-                        </button>
-                        
-                        <div className="mt-6 text-lg text-gray-600">
-                            ⚡ Acesso imediato • 🔒 Pagamento seguro • 🛡️ 7 dias de garantia
-                        </div>
-                    </div>
-                </section>
-
-                {/* FAQ Aprimorado */}
-                <section className="section-gap">
-                    <div className="container-main">
-                        <div className="card-impact animate-slide-up animate-delay-4">
-                            <h2 className="text-hierarchy-2 text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                Perguntas <span style={{ color: '#ff6b6b' }}>Frequentes</span>
-                            </h2>
-                            <FaqSectionAdvanced />
-                        </div>
-                    </div>
-                </section>
-            </main>
-
-            {/* Popup de Prova Social */}
-            <SocialProofPopup />
-        </div>
+    preloadCriticalImages(
+      [
+        HERO_IMAGE_URL,
+        HERO_COMPLEMENTARY_IMAGE_URL,
+        PROBLEM_IMAGE_URL,
+        SOLUTION_QUIZ_IMAGE_URL,
+        GUIDES_BENEFITS_IMAGE_URL,
+        BONUS_1_KEY_PIECES_IMAGE_URL,
+        BONUS_2_VISAGISM_IMAGE_URL,
+        GUARANTEE_IMAGE_URL,
+      ],
+      { quality: 95 }
     );
+
+    if (typeof window !== "undefined" && "performance" in window) {
+      window.performance.mark("offer-page-v2-mounted");
+    }
+
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }, []);
+
+  const handleCtaClick = (
+    buttonId: string,
+    action: string = "Comprar Agora"
+  ) => {
+    trackButtonClick(buttonId, action, "quiz_offer_page_v2");
+  };
+
+  return (
+    <div
+      className="min-h-screen bg-[var(--background)]"
+      style={{ fontFamily: "Inter, sans-serif" }}
+    >
+      {/* Banner de Urgência no Topo */}
+      <div className="urgency-banner">
+        <div className="flex items-center justify-center gap-2">
+          <Zap size={20} />
+          <span>🔥 ÚLTIMAS HORAS: 77% OFF - Apenas R$ 39,90!</span>
+          <Zap size={20} />
+        </div>
+      </div>
+
+      {/* Header Aprimorado */}
+      <header className="py-4 px-4 sm:px-6 sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
+        <div className="container-main flex justify-between items-center">
+          <FixedIntroImage
+            src={HERO_IMAGE_URL}
+            alt="Logo Gisele Galvão"
+            width={180}
+            height={80}
+            className="h-auto object-contain max-w-[150px] sm:max-w-[180px]"
+          />
+          <div className="text-right">
+            <div className="text-2xl font-bold text-green-600">5x R$ 8,83</div>
+            <div className="text-sm text-gray-600">ou R$ 39,90 à vista</div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        {/* Hero Section Revolucionário */}
+        <section className="section-gap pt-6 sm:pt-8">
+          <div className="container-main">
+            <div className="card-impact text-center animate-slide-up">
+              {/* Badge de Prova Social Melhorado */}
+              <div className="social-proof">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <Crown className="text-yellow-300" size={28} />
+                  <span className="text-xl font-bold">
+                    +5.247 MULHERES TRANSFORMADAS
+                  </span>
+                  <Crown className="text-yellow-300" size={28} />
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <StarRating rating={5} />
+                  <span className="font-semibold">4.9/5 estrelas</span>
+                </div>
+              </div>
+
+              {/* Headline Mais Impactante */}
+              <h1
+                className="text-hierarchy-1 mb-6"
+                style={{ fontFamily: "Playfair Display, serif" }}
+              >
+                DESCUBRA SEU ESTILO
+                <br />
+                <span style={{ color: "#ff6b6b" }}>EM 5 MINUTOS</span>
+              </h1>
+
+              {/* Subheadline Mais Persuasiva */}
+              <p className="text-body mb-8 max-w-4xl mx-auto">
+                <strong>
+                  Pare de desperdiçar dinheiro em roupas que não combinam!
+                </strong>
+                <br />
+                Descubra seu estilo predominante e tenha um guarda-roupa que{" "}
+                <span style={{ color: "#ff6b6b", fontWeight: "bold" }}>
+                  funciona 100%
+                </span>
+              </p>
+
+              {/* Hero Video/Image com Destaque */}
+              <div className="mb-8 max-w-2xl mx-auto relative">
+                <div className="absolute -inset-4 bg-gradient-to-r from-orange-400 to-red-400 rounded-3xl blur opacity-30"></div>
+                <div className="relative">
+                  <FixedIntroImage
+                    src={HERO_COMPLEMENTARY_IMAGE_URL}
+                    alt="Transformação de guarda-roupa"
+                    width={800}
+                    height={533}
+                    className="w-full h-auto rounded-2xl shadow-2xl"
+                  />
+                </div>
+              </div>
+
+              {/* CTA Principal Mais Impactante */}
+              <button
+                onClick={() => {
+                  handleCtaClick("hero_cta_v2", "Descobrir Meu Estilo Agora");
+                  const checkoutUrl =
+                    "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912";
+
+                  // Comportamento responsivo: nova aba desktop, mesma aba mobile
+                  if (window.innerWidth >= 768) {
+                    window.open(checkoutUrl, "_blank");
+                  } else {
+                    window.location.href = checkoutUrl;
+                  }
+                }}
+                className="btn-impact mb-6 animate-delay-1"
+              >
+                <Sparkles size={24} />
+                QUERO DESCOBRIR MEU ESTILO AGORA
+                <ArrowRight size={24} />
+              </button>
+
+              {/* Trust Elements Melhorados */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-lg font-semibold">
+                <div className="flex items-center gap-2 text-green-600">
+                  <Shield size={20} />
+                  <span>7 Dias de Garantia Total</span>
+                </div>
+                <div className="flex items-center gap-2 text-green-600">
+                  <Lock size={20} />
+                  <span>Pagamento 100% Seguro</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção Antes vs Depois */}
+        <section className="section-gap">
+          <div className="container-main">
+            <div className="card-impact animate-slide-up animate-delay-2">
+              <h2
+                className="text-hierarchy-2 text-center mb-8"
+                style={{ fontFamily: "Playfair Display, serif" }}
+              >
+                <span style={{ color: "#ff6b6b" }}>ANTES</span> vs{" "}
+                <span style={{ color: "#00c851" }}>DEPOIS</span>
+              </h2>
+
+              <div className="before-after">
+                <div className="before-section">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <Eye className="text-red-500" size={24} />
+                    SEM O QUIZ
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-red-500 mt-1 text-xl">✗</span>
+                      <span>
+                        <strong>Guarda-roupa cheio</strong> mas "nada para
+                        vestir"
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-red-500 mt-1 text-xl">✗</span>
+                      <span>
+                        <strong>Compras por impulso</strong> que nunca usa
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-red-500 mt-1 text-xl">✗</span>
+                      <span>
+                        <strong>Dinheiro desperdiçado</strong> em peças que não
+                        combinam
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-red-500 mt-1 text-xl">✗</span>
+                      <span>
+                        <strong>Baixa autoestima</strong> com a própria imagem
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="vs-element">VS</div>
+
+                <div className="after-section">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <Crown className="text-green-500" size={24} />
+                    COM O QUIZ
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-green-500 mt-1 text-xl">✓</span>
+                      <span>
+                        <strong>Guarda-roupa funcional</strong> onde tudo
+                        combina
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-green-500 mt-1 text-xl">✓</span>
+                      <span>
+                        <strong>Compras inteligentes</strong> e certeiras
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-green-500 mt-1 text-xl">✓</span>
+                      <span>
+                        <strong>Economia de tempo e dinheiro</strong>
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-green-500 mt-1 text-xl">✓</span>
+                      <span>
+                        <strong>Confiança e autoestima</strong> em alta
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Countdown Dramático */}
+        <section className="section-gap">
+          <div className="container-main">
+            <DramaticCountdown />
+          </div>
+        </section>
+
+        {/* Valor com Preço Impactante */}
+        <section className="section-gap">
+          <div className="container-main">
+            <div className="price-impact animate-slide-up animate-delay-3">
+              <div className="price-badge">🔥 OFERTA RELÂMPAGO - 77% OFF</div>
+
+              <h2 className="text-2xl font-bold mb-4">
+                TRANSFORMAÇÃO COMPLETA
+              </h2>
+
+              <div className="grid-impact mb-6">
+                <div className="text-center">
+                  <div className="bg-white/20 rounded-2xl p-6 backdrop-blur-sm">
+                    <h3 className="text-lg font-bold mb-2">
+                      📊 Quiz Personalizado
+                    </h3>
+                    <p className="text-sm opacity-90">
+                      Descubra seu estilo único
+                    </p>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="bg-white/20 rounded-2xl p-6 backdrop-blur-sm">
+                    <h3 className="text-lg font-bold mb-2">📖 Guia Completo</h3>
+                    <p className="text-sm opacity-90">
+                      Para seu estilo específico
+                    </p>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="bg-white/20 rounded-2xl p-6 backdrop-blur-sm">
+                    <h3 className="text-lg font-bold mb-2">
+                      🎁 Bônus Exclusivos
+                    </h3>
+                    <p className="text-sm opacity-90">
+                      Peças-chave + Visagismo
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="price-original">De R$ 175,00</div>
+              <div className="price-current">R$ 39,90</div>
+              <p className="text-xl mb-6">
+                ou <strong>5x de R$ 8,83</strong> sem juros
+              </p>
+              <p className="text-lg opacity-90">💰 Você economiza R$ 135,10</p>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Final Gigante */}
+        <section className="section-gap">
+          <div className="container-main text-center">
+            <button
+              onClick={() => {
+                handleCtaClick("final_cta_v2", "Garantir Transformação");
+                const checkoutUrl =
+                  "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912";
+
+                // Comportamento responsivo: nova aba desktop, mesma aba mobile
+                if (window.innerWidth >= 768) {
+                  window.open(checkoutUrl, "_blank");
+                } else {
+                  window.location.href = checkoutUrl;
+                }
+              }}
+              className="btn-impact text-2xl py-6 px-8 animate-slide-up animate-delay-4"
+            >
+              <Target size={32} />
+              GARANTIR MINHA TRANSFORMAÇÃO AGORA
+              <Flame size={32} />
+            </button>
+
+            <div className="mt-6 text-lg text-gray-600">
+              ⚡ Acesso imediato • 🔒 Pagamento seguro • 🛡️ 7 dias de garantia
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Aprimorado */}
+        <section className="section-gap">
+          <div className="container-main">
+            <div className="card-impact animate-slide-up animate-delay-4">
+              <h2
+                className="text-hierarchy-2 text-center mb-8"
+                style={{ fontFamily: "Playfair Display, serif" }}
+              >
+                Perguntas <span style={{ color: "#ff6b6b" }}>Frequentes</span>
+              </h2>
+              <FaqSectionAdvanced />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Popup de Prova Social */}
+      <SocialProofPopup />
+    </div>
+  );
 };
 
 export default QuizOfferPageV2;
