@@ -1,3 +1,4 @@
+
 // Facebook Pixel utility functions
 import {
   getPixelId,
@@ -5,10 +6,10 @@ import {
   trackFunnelEvent,
 } from "../services/pixelManager";
 
-// Define types for fbq function
+// Define types for fbq function - using consistent type with global declaration
 declare global {
   interface Window {
-    fbq?: any;
+    fbq?: (...args: any[]) => void;
     _fbq?: any;
   }
 }
