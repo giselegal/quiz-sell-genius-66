@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -222,58 +223,6 @@ const ABTestAlerts: React.FC<ABTestAlertsProps> = ({
 
   const clearAllAlerts = () => {
     setAlerts([]);
-  };
-    const variantAEvents = events.filter(e => e.customData?.variant === 'A' || e.customData?.page?.includes('/resultado'));
-    const variantBEvents = events.filter(e => e.customData?.variant === 'B' || e.customData?.page?.includes('/quiz-descubra-seu-estilo'));
-
-    const variantAMetrics = {
-      visitors: variantAEvents.filter(e => e.eventName === 'PageView').length,
-      conversions: variantAEvents.filter(e => e.eventName === 'Lead').length,
-      conversionRate: 0
-    };
-
-    const variantBMetrics = {
-      visitors: variantBEvents.filter(e => e.eventName === 'PageView').length,
-      conversions: variantBEvents.filter(e => e.eventName === 'Lead').length,
-      conversionRate: 0
-    };
-
-    variantAMetrics.conversionRate = variantAMetrics.visitors > 0 ? (variantAMetrics.conversions / variantAMetrics.visitors) * 100 : 0;
-    variantBMetrics.conversionRate = variantBMetrics.visitors > 0 ? (variantBMetrics.conversions / variantBMetrics.visitors) * 100 : 0;
-
-    // Cálculo simplificado de significância
-    const totalSample = variantAMetrics.visitors + variantBMetrics.visitors;
-    const significance = totalSample >= 100;
-    const confidence = Math.min(totalSample * 0.9, 99);
-
-    return { variantAMetrics, variantBMetrics, significance, confidence };
-  };
-
-  const getTestStartDate = (events: any[]): Date | null => {
-    const abTestEvents = events.filter(e => e.eventName.includes('ab_test') || e.eventName.includes('variant'));
-    if (abTestEvents.length === 0) return null;
-    
-    const sortedEvents = abTestEvents.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-    return new Date(sortedEvents[0].timestamp);
-  };
-
-  const sendEmailNotification = async (newAlerts: ABTestAlert[]) => {
-    // Implementação futura: integração com serviço de email
-    console.log('Notificação por email seria enviada:', newAlerts);
-  };
-
-  const acknowledgeAlert = (alertId: string) => {
-    setAlerts(prev => prev.map(alert => 
-      alert.id === alertId ? { ...alert, acknowledged: true } : alert
-    ));
-  };
-
-  const clearAllAlerts = () => {
-    setAlerts([]);
-    toast({
-      title: "Alertas Limpos",
-      description: "Todos os alertas foram removidos"
-    });
   };
 
   const getAlertIcon = (type: ABTestAlert['type']) => {
