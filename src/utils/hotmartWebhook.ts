@@ -388,7 +388,10 @@ export class HotmartWebhookManager {
   }
 
   // Método público para armazenar dados quando o usuário completa o quiz
-  public storeQuizCompletionData(email: string, quizResults: Record<string, unknown>): void {
+  public storeQuizCompletionData(
+    email: string,
+    quizResults: Record<string, unknown>
+  ): void {
     this.storeUserData(email, {
       quiz_results: quizResults,
       funnel_step: "quiz_completion",

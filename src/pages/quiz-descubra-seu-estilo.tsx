@@ -810,14 +810,11 @@ const DescubraSeuEstilo: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Você já se sentiu frustrada ao abrir seu guarda-roupa cheio de
-              roupas e mesmo assim não ter o que vestir?
+              A Jornada Para Descobrir Seu Estilo Autêntico Começa Aqui
             </h2>
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto">
-              A verdade é que ter um armário lotado não significa ter um
-              guarda-roupa funcional. Pelo contrário, muitas vezes isso só
-              aumenta a ansiedade na hora de se vestir e o sentimento de que
-              "nada fica bom em mim".
+              Muitas mulheres possuem armários repletos de roupas, mas sentem dificuldade em criar 
+              looks que realmente expressem sua personalidade e as façam sentir-se confiantes e autênticas.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -838,11 +835,9 @@ const DescubraSeuEstilo: React.FC = () => {
           </div>
           <div className="text-center mt-12">
             <p className="text-lg text-[#8F7A6A] italic max-w-4xl mx-auto">
-              Isso acontece porque você ainda não descobriu seu estilo
-              predominante - aquele que está alinhado com sua personalidade,
-              valores e essência. Sem esse conhecimento, você continua comprando
-              peças aleatórias que não conversam entre si e não expressam quem
-              você é.
+              A chave está em descobrir seu estilo predominante - aquele que reflete sua personalidade, 
+              valores e essência autêntica. Com essa clareza, você criará um guarda-roupa harmonioso 
+              onde cada peça conversa entre si e expressa verdadeiramente quem você é.
             </p>
           </div>
         </div>
@@ -860,12 +855,11 @@ const DescubraSeuEstilo: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Pacote Completo de Estilo Gisele Galvão
+              Seu Guia Completo Para um Estilo Autêntico
             </h2>
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto mb-8">
-              E se eu te dissesse que você pode descobrir seu estilo
-              predominante e transformar sua relação com a moda e sua imagem
-              pessoal com um investimento único?
+              Apresento um método completo que irá revelar seu estilo predominante 
+              e transformar sua relação com a moda de forma elegante e autêntica.
             </p>
           </div>
 
@@ -933,7 +927,7 @@ const DescubraSeuEstilo: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Com este pacote completo, você vai:
+              Transformações que Você Experimentará
             </h2>
           </div>
 

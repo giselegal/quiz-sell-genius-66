@@ -16,6 +16,7 @@ Como o Lovable é uma plataforma SPA pura, você precisará de um backend separa
 ### OPÇÃO 1: Usar Vercel (RECOMENDADO)
 
 1. **Fazer deploy do projeto no Vercel**:
+
    ```bash
    # No seu computador local
    git clone https://github.com/seu-usuario/quiz-sell-genius-66
@@ -61,7 +62,7 @@ simulateHotmartPurchase("teste@exemplo.com");
 testWebhookFlow("teste@exemplo.com");
 
 // Verificar dados armazenados
-console.log(localStorage.getItem('hotmart_user_data'));
+console.log(localStorage.getItem("hotmart_user_data"));
 ```
 
 ### Testar Correlação de UTMs:
@@ -87,7 +88,7 @@ simulateHotmartPurchase("seu@email.com");
 3. **Eventos**:
    - ✅ `PURCHASE_COMPLETE`
    - ✅ `PURCHASE_APPROVED`
-   - ✅ `PURCHASE_CANCELED` 
+   - ✅ `PURCHASE_CANCELED`
    - ✅ `PURCHASE_REFUNDED`
 4. **Método**: `POST`
 5. **Content-Type**: `application/json`
@@ -97,18 +98,22 @@ simulateHotmartPurchase("seu@email.com");
 ### 1. Configurar Backend (Escolha uma opção):
 
 **Vercel (Mais fácil)**:
+
 - Conecte seu GitHub no Vercel
 - Deploy automático
 - Webhook funcionará em: `https://seu-projeto.vercel.app/api/webhook/hotmart`
 
 **Netlify**:
+
 - Conecte seu GitHub no Netlify
 - Webhook funcionará em: `https://seu-projeto.netlify.app/.netlify/functions/hotmart-webhook`
 
 ### 2. Configurar na Hotmart:
+
 - Use a URL do passo 1
 
 ### 3. Testar:
+
 ```bash
 ./test-webhook.sh
 ```

@@ -1,37 +1,40 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
-import { initializeResourcePreloading, setupRouteChangePreloading } from './utils/preloadResources'
-import { fixMainRoutes } from './utils/fixMainRoutes'
-import { checkMainRoutes } from './utils/routeChecker'
-import './utils/hotmartWebhookSimulator' // Carregar simulador de webhook
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import {
+  initializeResourcePreloading,
+  setupRouteChangePreloading,
+} from "./utils/preloadResources";
+import { fixMainRoutes } from "./utils/fixMainRoutes";
+import { checkMainRoutes } from "./utils/routeChecker";
+import "./utils/hotmartWebhookSimulator"; // Carregar simulador de webhook
 
 // 1) Initialize critical resources and route fixing
-initializeResourcePreloading()
+initializeResourcePreloading();
 
 // 2) Render immediately with error handling
 const prepareRootAndRender = () => {
   try {
-    const rootElement = document.getElementById('root');
+    const rootElement = document.getElementById("root");
     if (rootElement) {
       // Remove loading fallback if exists
-      const loadingFallback = rootElement.querySelector('.loading-fallback');
+      const loadingFallback = rootElement.querySelector(".loading-fallback");
       if (loadingFallback) {
-        loadingFallback.style.display = 'none';
+        loadingFallback.style.display = "none";
       }
-      
+
       ReactDOM.createRoot(rootElement).render(
         <React.StrictMode>
           <App />
         </React.StrictMode>
       );
     } else {
-      console.error('Elemento root não encontrado!');
+      console.error("Elemento root não encontrado!");
     }
   } catch (error) {
-    console.error('Erro ao renderizar o aplicativo:', error);
-    const rootElement = document.getElementById('root');
+    console.error("Erro ao renderizar o aplicativo:", error);
+    const rootElement = document.getElementById("root");
     if (rootElement) {
       rootElement.innerHTML = `
         <div style="padding: 20px; text-align: center;">
@@ -52,29 +55,30 @@ prepareRootAndRender();
 // 3) Setup route change monitoring and fixes
 const loadNonCritical = () => {
   // Fix any URL issues in the main routes
-  fixMainRoutes()
-  
+  fixMainRoutes();
+
   // Setup monitoring for route changes to preload resources
-  setupRouteChangePreloading()
-  
+  setupRouteChangePreloading();
+
   // Check the status of main routes
   setTimeout(() => {
-    checkMainRoutes()
-    console.log('✅ Main routes activated and checked')
-  }, 1000)
-}
+    checkMainRoutes();
+    console.log("✅ Main routes activated and checked");
+  }, 1000);
+};
 
-if ('requestIdleCallback' in window) {
-  window.requestIdleCallback(loadNonCritical, { timeout: 2000 })
+if ("requestIdleCallback" in window) {
+  window.requestIdleCallback(loadNonCritical, { timeout: 2000 });
 } else {
-  setTimeout(loadNonCritical, 2000)
+  setTimeout(loadNonCritical, 2000);
 }
 
 // Registrar Service Worker
-if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => console.log('SW registered:', registration))
-      .catch(error => console.log('SW registration failed:', error));
+if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => console.log("SW registered:", registration))
+      .catch((error) => console.log("SW registration failed:", error));
   });
 }
