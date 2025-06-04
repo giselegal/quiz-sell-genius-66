@@ -1,511 +1,448 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { useQuizPixel } from '@/hooks/useQuizPixel';
-import { trackFunnelEvent, getCtaUrl } from '@/services/pixelManager';
-import { loadFacebookPixel } from '@/utils/facebookPixel';
-import { Heart, Shield, Star, CheckCircle2, Users, Crown, Sparkles, ArrowRight, Gift, Clock, Target } from 'lucide-react';
-import MentorSection from '@/components/result/MentorSection';
-import { testimonials } from '@/data/testimonials';
 
-const QuizDescubraSeuEstilo = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string[]>>({});
-  const [showQuiz, setShowQuiz] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const { trackQuizStart, trackQuizProgress, trackQuizComplete, trackCTAClick } = useQuizPixel();
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, Shield, Clock, Star, Check } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { trackPixelEvent } from '@/utils/facebookPixel';
+import { useUtmParameters } from '@/hooks/useUtmParameters';
+import MentorSection from '@/components/result/MentorSection';
+
+const DescubraSeuEstilo: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const { captureUtmParameters } = useUtmParameters();
 
   useEffect(() => {
-    loadFacebookPixel();
-    trackFunnelEvent('PageViewed', {
-      page_type: 'quiz_offer',
-      funnel_stage: 'quiz_inicio'
+    setIsVisible(true);
+    captureUtmParameters();
+    trackPixelEvent('ViewContent', {
+      content_name: 'Quiz Descubra Seu Estilo',
+      content_category: 'Landing Page'
     });
-  }, []);
+  }, [captureUtmParameters]);
 
-  const questions = [
+  const handleCTAClick = () => {
+    trackPixelEvent('InitiateCheckout', {
+      content_name: 'Quiz de Estilo Completo',
+      value: 39.99,
+      currency: 'BRL'
+    });
+    window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
+  };
+
+  const painPoints = [
     {
-      id: 1,
-      question: "Qual é o seu maior desafio com estilo?",
-      options: [
-        "Não sei qual é o meu estilo pessoal",
-        "Tenho dificuldade para combinar peças",
-        "Meu guarda-roupa não me representa",
-        "Não sei como realçar meus pontos fortes"
-      ]
+      icon: "😔",
+      title: "Guarda-roupa lotado, mas nada para vestir",
+      description: "Você tem muitas roupas, mas sempre sente que não tem nada adequado para usar."
     },
     {
-      id: 2,
-      question: "Como você se sente ao se vestir?",
-      options: [
-        "Perdida e sem direção",
-        "Entediada com as mesmas combinações",
-        "Insegura sobre minhas escolhas",
-        "Pronta para uma transformação"
-      ]
+      icon: "💸",
+      title: "Compras que nunca usa",
+      description: "Gastou dinheiro em peças que pareciam perfeitas na loja, mas nunca combinaram com nada."
     },
     {
-      id: 3,
-      question: "O que mais te motiva a descobrir seu estilo?",
-      options: [
-        "Aumentar minha autoconfiança",
-        "Impressionar no trabalho",
-        "Me sentir mais feminina",
-        "Ter um visual mais moderno"
-      ]
+      icon: "⏰",
+      title: "Perde tempo se arrumando",
+      description: "Demora muito para escolher o que vestir e ainda assim não se sente confiante."
+    },
+    {
+      icon: "🤷‍♀️",
+      title: "Imagem não reflete quem você é",
+      description: "Sente que sua aparência não comunica sua verdadeira personalidade e essência."
     }
   ];
 
-  const handleStartQuiz = () => {
-    setShowQuiz(true);
-    trackQuizStart();
-  };
+  const benefits = [
+    "Autoconhecimento profundo sobre seu estilo",
+    "Orientações práticas para valorizar seu tipo físico",
+    "Estratégias de imagem para comunicar visualmente quem você é",
+    "Dicas de composição para looks versáteis e autênticos",
+    "Guia das Peças-Chave do Guarda-Roupa de Sucesso",
+    "Guia de Visagismo Facial personalizado"
+  ];
 
-  const handleAnswer = (questionId: number, answer: string) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: [answer]
-    }));
-    
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(prev => prev + 1);
-      trackQuizProgress(currentQuestion + 1, questions.length);
-    } else {
-      setShowResult(true);
-      trackQuizComplete('estilo_contemporaneo');
+  const realTestimonials = [
+    {
+      text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
+      author: "Mariangela, Engenheira",
+      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/testimonials/natalia.jpg"
+    },
+    {
+      text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
+      author: "Patrícia Paranhos, Advogada",
+      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/testimonials/marina.jpg"
+    },
+    {
+      text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
+      author: "Sônia Spier, Terapeuta",
+      image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916217/testimonials/carolina.jpg"
     }
-  };
-
-  const handleCTAClick = () => {
-    trackCTAClick('main_cta');
-    window.open(getCtaUrl(), '_blank');
-  };
-
-  if (showResult) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-[#FAF9F7] to-white">
-        <div className="container mx-auto px-4 py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <div className="mb-8">
-              <Crown className="w-16 h-16 text-[#B89B7A] mx-auto mb-4" />
-              <h1 className="text-4xl font-playfair text-[#432818] mb-4">
-                Seu Estilo é <span className="text-[#B89B7A]">Contemporâneo</span>
-              </h1>
-              <p className="text-lg text-[#432818]/80 mb-8">
-                Você aprecia praticidade com um toque de estilo atual. Agora é hora de potencializar sua imagem!
-              </p>
-            </div>
-
-            <Card className="p-8 mb-8 border-[#B89B7A]/20">
-              <h2 className="text-2xl font-playfair text-[#432818] mb-6">
-                Kit de Ferramentas para Potencializar sua Imagem de Sucesso
-              </h2>
-              
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="text-left">
-                  <h3 className="font-semibold text-[#432818] mb-3 flex items-center">
-                    <Target className="w-5 h-5 text-[#B89B7A] mr-2" />
-                    Produto Principal
-                  </h3>
-                  <ul className="space-y-2 text-[#432818]/80">
-                    <li className="flex items-start">
-                      <CheckCircle2 className="w-4 h-4 text-[#B89B7A] mr-2 mt-1 flex-shrink-0" />
-                      Quiz completo para descobrir seu estilo
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle2 className="w-4 h-4 text-[#B89B7A] mr-2 mt-1 flex-shrink-0" />
-                      Guia completo de imagem e estilo pessoal
-                    </li>
-                  </ul>
-                </div>
-                
-                <div className="text-left">
-                  <h3 className="font-semibold text-[#432818] mb-3 flex items-center">
-                    <Gift className="w-5 h-5 text-[#B89B7A] mr-2" />
-                    2 Bônus Exclusivos
-                  </h3>
-                  <ul className="space-y-2 text-[#432818]/80">
-                    <li className="flex items-start">
-                      <CheckCircle2 className="w-4 h-4 text-[#B89B7A] mr-2 mt-1 flex-shrink-0" />
-                      Peças-chave do guarda-roupa de sucesso
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle2 className="w-4 h-4 text-[#B89B7A] mr-2 mt-1 flex-shrink-0" />
-                      Guia completo de visagismo facial
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="text-center mb-6">
-                <div className="text-3xl font-bold text-[#B89B7A] mb-2">R$ 47,00</div>
-                <p className="text-sm text-[#432818]/60">Investimento único • Acesso imediato</p>
-              </div>
-
-              <Button 
-                onClick={handleCTAClick}
-                size="lg" 
-                className="w-full bg-[#B89B7A] hover:bg-[#8F7A6A] text-white font-semibold py-4 text-lg"
-              >
-                Quero Meu Kit de Ferramentas Agora
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Card>
-
-            <div className="text-center text-[#432818]/60">
-              <Users className="w-5 h-5 inline mr-2" />
-              +3.000 mulheres já descobriram seu Estilo de Ser
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    );
-  }
-
-  if (showQuiz) {
-    const currentQ = questions[currentQuestion];
-    
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-[#FAF9F7] to-white">
-        <div className="container mx-auto px-4 py-12">
-          <div className="max-w-2xl mx-auto">
-            <div className="mb-8">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-[#432818]/60">Pergunta {currentQuestion + 1} de {questions.length}</span>
-                <div className="flex space-x-1">
-                  {questions.map((_, index) => (
-                    <div 
-                      key={index}
-                      className={`w-3 h-3 rounded-full ${
-                        index <= currentQuestion ? 'bg-[#B89B7A]' : 'bg-[#B89B7A]/20'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="w-full bg-[#B89B7A]/20 rounded-full h-2">
-                <div 
-                  className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
-                />
-              </div>
-            </div>
-
-            <Card className="p-8">
-              <h2 className="text-2xl font-playfair text-[#432818] mb-8 text-center">
-                {currentQ.question}
-              </h2>
-              
-              <div className="space-y-4">
-                {currentQ.options.map((option, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Button
-                      variant="outline"
-                      className="w-full p-6 text-left justify-start border-[#B89B7A]/20 hover:border-[#B89B7A] hover:bg-[#FAF9F7]"
-                      onClick={() => handleAnswer(currentQ.id, option)}
-                    >
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 rounded-full border-2 border-[#B89B7A] mr-4" />
-                        {option}
-                      </div>
-                    </Button>
-                  </motion.div>
-                ))}
-              </div>
-            </Card>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF9F7] to-white">
-      {/* Hero Section with Impact Image */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <Badge className="mb-6 bg-[#B89B7A]/10 text-[#B89B7A] border-[#B89B7A]/20">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Kit de Ferramentas Exclusivo
-              </Badge>
+    <div className="min-h-screen bg-[#FAF9F7]">
+      {/* Hero Section */}
+      <section className="py-8 md:py-16 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Mobile: Text first, Desktop: Text left */}
+            <div className="order-1 md:order-1 space-y-6">
+              <div className="text-center md:text-left mb-6">
+                <img 
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp" 
+                  alt="Gisele Galvão - Logo da Marca" 
+                  className="h-12 md:h-16 mx-auto md:mx-0 mb-4"
+                />
+              </div>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-playfair text-[#432818] mb-6">
-                Descubra Seu{' '}
-                <span className="text-[#B89B7A]">Estilo de Ser</span>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair text-[#432818] text-center md:text-left leading-tight">
+                Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em um Aliado da Sua Imagem Pessoal
               </h1>
               
-              <p className="text-xl text-[#432818]/80 mb-8">
-                Kit completo com ferramentas práticas para descobrir seu estilo pessoal e potencializar sua imagem de sucesso
+              <p className="text-lg md:text-xl text-[#8F7A6A] text-center md:text-left">
+                Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu estilo predominante e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.
               </p>
               
-              <Button 
-                onClick={handleStartQuiz}
-                size="lg" 
-                className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white font-semibold px-8 py-4 text-lg mb-8"
-              >
-                Fazer Quiz Gratuito Agora
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-              
-              <div className="flex items-center text-[#432818]/60">
-                <Users className="w-5 h-5 mr-2" />
-                <span>+3.000 mulheres já descobriram seu Estilo de Ser</span>
+              <div className="flex justify-center md:justify-start">
+                <Button 
+                  onClick={handleCTAClick}
+                  size="lg"
+                  className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Descobrir Meu Estilo Por R$ 39,99
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
               </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
-            >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+            </div>
+            
+            {/* Mobile: Image second, Desktop: Image right */}
+            <div className="order-2 md:order-2 relative">
+              <div className="relative rounded-lg overflow-hidden shadow-2xl">
                 <img 
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.jpg"
-                  alt="Mulher elegante descobrindo seu estilo pessoal"
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.jpg" 
+                  alt="Mulher descobrindo seu estilo autêntico" 
                   className="w-full h-auto object-cover"
-                  loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#432818]/20 to-transparent"></div>
               </div>
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
-              <div className="absolute -bottom-4 -left-4 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Pain Points */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-playfair text-[#432818] text-center mb-12">
-              Você se identifica com alguma dessas situações?
+      {/* Problema/Dor Section */}
+      <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
+              Você já se sentiu frustrada ao abrir seu guarda-roupa cheio de roupas e mesmo assim não ter o que vestir?
             </h2>
+            <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto">
+              A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {painPoints.map((point, index) => (
+              <Card key={index} className="border-[#B89B7A]/20 hover:shadow-lg transition-shadow duration-300">
+                <CardContent className="p-6 text-center">
+                  <div className="text-4xl mb-4">{point.icon}</div>
+                  <h3 className="text-lg font-semibold text-[#432818] mb-3">{point.title}</h3>
+                  <p className="text-[#8F7A6A] text-sm">{point.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          
+          <div className="text-center mt-12">
+            <p className="text-lg text-[#8F7A6A] italic max-w-4xl mx-auto">
+              Isso acontece porque você ainda não descobriu seu estilo predominante - aquele que está alinhado com sua personalidade, valores e essência. Sem esse conhecimento, você continua comprando peças aleatórias que não conversam entre si e não expressam quem você é.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Mentora Section */}
+      <section className="py-12 md:py-16 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto">
+          <MentorSection />
+        </div>
+      </section>
+
+      {/* Solução Section */}
+      <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
+              Pacote Completo de Estilo Gisele Galvão
+            </h2>
+            <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto mb-8">
+              E se eu te dissesse que você pode descobrir seu estilo predominante e transformar sua relação com a moda e sua imagem pessoal com um investimento único?
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
+            <div>
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp" 
+                alt="Qual é o Seu Estilo - Quiz Completo" 
+                className="w-full rounded-lg shadow-lg"
+              />
+            </div>
+            <div>
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp" 
+                alt="Mockup completo com bônus" 
+                className="w-full rounded-lg shadow-lg"
+              />
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border-[#B89B7A]/20">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold text-[#432818] mb-4">Quiz de Estilo Personalizado</h3>
+                <p className="text-[#8F7A6A]">
+                  Um método preciso que analisa suas preferências reais e identifica seu estilo predominante entre os 7 estilos universais.
+                </p>
+              </CardContent>
+            </Card>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  icon: <Target className="w-8 h-8" />,
-                  title: "Não sei qual é meu estilo",
-                  description: "Você olha para o espelho e não reconhece sua personalidade no que está vestindo"
-                },
-                {
-                  icon: <Clock className="w-8 h-8" />,
-                  title: "Perco tempo escolhendo roupas",
-                  description: "Todas as manhãs são um desafio para decidir o que vestir"
-                },
-                {
-                  icon: <Heart className="w-8 h-8" />,
-                  title: "Baixa autoestima",
-                  description: "Não se sente confiante e bonita com suas roupas"
-                },
-                {
-                  icon: <Shield className="w-8 h-8" />,
-                  title: "Compras erradas",
-                  description: "Investe em peças que não usa e não combinam com você"
-                }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="p-6 text-center h-full border-[#B89B7A]/20 hover:border-[#B89B7A]/40 transition-colors">
-                    <div className="text-[#B89B7A] mb-4 flex justify-center">
-                      {item.icon}
-                    </div>
-                    <h3 className="font-semibold text-[#432818] mb-3">
-                      {item.title}
-                    </h3>
-                    <p className="text-[#432818]/70 text-sm">
-                      {item.description}
-                    </p>
-                  </Card>
-                </motion.div>
+            <Card className="border-[#B89B7A]/20">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold text-[#432818] mb-4">Guia de Imagem e Estilo</h3>
+                <p className="text-[#8F7A6A]">
+                  Específico para o seu resultado no Quiz, com orientações práticas para valorizar seu tipo físico e expressar sua personalidade.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-[#B89B7A]/20">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold text-[#432818] mb-4">Bônus Exclusivos</h3>
+                <p className="text-[#8F7A6A]">
+                  Guia das Peças-Chave do Guarda-Roupa de Sucesso e Guia de Visagismo Facial para complementar sua transformação.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefícios Section */}
+      <section className="py-12 md:py-16 px-4 md:px-8 bg-[#F9F7F4]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
+              Com este pacote completo, você vai:
+            </h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp" 
+                alt="Mockup tablet com guia de imagem e estilo" 
+                className="w-full rounded-lg shadow-lg"
+              />
+            </div>
+            <div className="space-y-4">
+              {benefits.map((benefit, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <Check className="h-6 w-6 text-[#B89B7A] flex-shrink-0 mt-0.5" />
+                  <span className="text-[#432818]">{benefit}</span>
+                </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Mentor Section */}
-      <section className="py-16 bg-[#FAF9F7]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-playfair text-[#432818] text-center mb-12">
-              Conheça sua Mentora em Imagem e Estilo
-            </h2>
-            <MentorSection />
+          
+          <div className="text-center mt-12">
+            <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto italic">
+              Como você descobrirá, 55% da comunicação é visual, 38% é tom de voz e apenas 7% é verbal. Isso significa que sua imagem comunica muito antes de você falar qualquer coisa!
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Solution with Product Images */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-playfair text-[#432818] mb-8">
-              A solução está aqui: Kit de Ferramentas para seu Estilo de Ser
+      {/* Bônus Sections */}
+      <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
+              Bônus Especiais Inclusos
             </h2>
-            
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Card className="p-8 border-[#B89B7A]/20 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-[#B89B7A]/10 rounded-full blur-xl"></div>
-                <Target className="w-12 h-12 text-[#B89B7A] mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-[#432818] mb-4">
-                  Ferramentas Principais
-                </h3>
-                <ul className="space-y-3 text-left">
-                  <li className="flex items-start">
-                    <CheckCircle2 className="w-5 h-5 text-[#B89B7A] mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-[#432818]/80">Quiz completo para descobrir seu estilo pessoal</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle2 className="w-5 h-5 text-[#B89B7A] mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-[#432818]/80">Guia prático de imagem e estilo pessoal</span>
-                  </li>
-                </ul>
-              </Card>
-              
-              <Card className="p-8 border-[#B89B7A]/20 relative overflow-hidden">
-                <div className="absolute bottom-0 left-0 w-16 h-16 bg-[#aa6b5d]/10 rounded-full blur-xl"></div>
-                <Gift className="w-12 h-12 text-[#B89B7A] mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-[#432818] mb-4">
-                  2 Bônus Exclusivos
-                </h3>
-                <ul className="space-y-3 text-left">
-                  <li className="flex items-start">
-                    <CheckCircle2 className="w-5 h-5 text-[#B89B7A] mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-[#432818]/80">Peças-chave do guarda-roupa de sucesso</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle2 className="w-5 h-5 text-[#B89B7A] mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-[#432818]/80">Guia completo de visagismo facial</span>
-                  </li>
-                </ul>
-              </Card>
+          </div>
+
+          {/* Bônus 1 */}
+          <div className="grid md:grid-cols-2 gap-8 items-center mb-16">
+            <div>
+              <h3 className="text-xl font-semibold text-[#432818] mb-4">Bônus 1: Peças-Chave do Guarda-Roupa de Sucesso</h3>
+              <p className="text-[#8F7A6A] mb-4">
+                Um manual completo para construir um armário funcional, versátil e alinhado com sua identidade.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-[#B89B7A]" />
+                  <span className="text-sm text-[#432818]">Peças essenciais que toda mulher deveria ter</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-[#B89B7A]" />
+                  <span className="text-sm text-[#432818]">Como adaptar ao seu estilo predominante</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-[#B89B7A]" />
+                  <span className="text-sm text-[#432818]">Estratégias para maximizar combinações</span>
+                </li>
+              </ul>
             </div>
-            
-            <div className="bg-[#FAF9F7] p-8 rounded-2xl mb-8">
-              <div className="text-center mb-6">
-                <div className="text-4xl font-bold text-[#B89B7A] mb-2">R$ 47,00</div>
-                <p className="text-[#432818]/60">Investimento único • Acesso imediato • Garantia de 7 dias</p>
-              </div>
+            <div>
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp" 
+                alt="Guia das Peças-Chave" 
+                className="w-full rounded-lg shadow-lg"
+              />
             </div>
-            
-            <Button 
-              onClick={handleStartQuiz}
-              size="lg" 
-              className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white font-semibold px-8 py-4 text-lg"
-            >
-              Começar Minha Transformação Agora
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
+          </div>
+
+          {/* Bônus 2 */}
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="order-2 md:order-1">
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" 
+                alt="Guia de Visagismo Facial" 
+                className="w-full rounded-lg shadow-lg"
+              />
+            </div>
+            <div className="order-1 md:order-2">
+              <h3 className="text-xl font-semibold text-[#432818] mb-4">Bônus 2: Guia de Visagismo Facial</h3>
+              <p className="text-[#8F7A6A] mb-4">
+                Uma ferramenta poderosa para valorizar seus traços naturais e potencializar sua beleza única.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-[#B89B7A]" />
+                  <span className="text-sm text-[#432818]">Como identificar o formato do seu rosto</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-[#B89B7A]" />
+                  <span className="text-sm text-[#432818]">Cortes de cabelo que valorizam seus traços</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-[#B89B7A]" />
+                  <span className="text-sm text-[#432818]">Acessórios e maquiagem personalizados</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Real Testimonials */}
-      <section className="py-16 bg-[#FAF9F7]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-playfair text-[#432818] text-center mb-12">
-              O que dizem quem já descobriu seu Estilo de Ser
+      {/* Depoimentos Reais */}
+      <section className="py-12 md:py-16 px-4 md:px-8 bg-[#F9F7F4]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
+              Depoimentos de mulheres que já viveram essa transformação:
             </h2>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.2 }}
-                >
-                  <Card className="p-6 h-full border-[#B89B7A]/20 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]/30"></div>
-                    <div className="flex mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-[#B89B7A] fill-current" />
-                      ))}
-                    </div>
-                    <p className="text-[#432818]/80 mb-4 italic">
-                      "{testimonial.text}"
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                        loading="lazy"
-                      />
-                      <div className="text-sm">
-                        <div className="font-semibold text-[#432818]">
-                          {testimonial.name}
-                        </div>
-                        {testimonial.location && (
-                          <div className="text-[#432818]/60">
-                            {testimonial.location}
-                          </div>
-                        )}
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {realTestimonials.map((testimonial, index) => (
+              <Card key={index} className="border-[#B89B7A]/20 hover:shadow-lg transition-shadow duration-300">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.author} 
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="font-medium text-[#432818]">{testimonial.author}</p>
+                      <div className="flex gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="h-4 w-4 fill-[#B89B7A] text-[#B89B7A]" />
+                        ))}
                       </div>
                     </div>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+                  </div>
+                  <p className="text-[#8F7A6A] italic">"{testimonial.text}"</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Final */}
-      <section className="py-16 bg-[#432818] text-white">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-playfair mb-6">
-              Pronta para descobrir seu Estilo de Ser?
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
-              Comece agora com nosso quiz gratuito e receba seu kit de ferramentas completo
+      {/* Garantia e CTA Final */}
+      <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="bg-[#F9F7F4] rounded-2xl p-8 mb-8">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <Shield className="h-12 w-12 text-[#B89B7A]" />
+              <div>
+                <h3 className="text-xl font-semibold text-[#432818]">Garantia de 7 Dias</h3>
+                <p className="text-[#8F7A6A]">100% do seu dinheiro de volta</p>
+              </div>
+            </div>
+            <p className="text-[#8F7A6A]">
+              Estou tão confiante de que estes materiais vão transformar sua relação com a moda e sua imagem pessoal que ofereço uma garantia incondicional de 7 dias.
             </p>
+          </div>
+
+          <div className="bg-gradient-to-r from-[#B89B7A] to-[#A68A6A] rounded-2xl p-8 text-white mb-8">
+            <h3 className="text-2xl font-playfair mb-4">Investimento Único</h3>
+            <div className="text-center mb-6">
+              <span className="text-4xl font-bold">R$ 39,99</span>
+              <p className="text-white/80">Pagamento único, sem mensalidades</p>
+            </div>
             
-            <Button 
-              onClick={handleStartQuiz}
-              size="lg" 
-              className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white font-semibold px-8 py-4 text-lg mb-6"
-            >
-              Fazer Quiz Gratuito
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            
-            <div className="flex items-center justify-center text-white/70">
-              <Users className="w-5 h-5 mr-2" />
-              <span>+3.000 mulheres já descobriram seu Estilo de Ser</span>
+            <div className="grid md:grid-cols-2 gap-4 text-left mb-6">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Check className="h-4 w-4" />
+                  <span className="text-sm">Quiz de Estilo Personalizado</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="h-4 w-4" />
+                  <span className="text-sm">Guia de Imagem e Estilo</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="h-4 w-4" />
+                  <span className="text-sm">Guia das Peças-Chave</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Check className="h-4 w-4" />
+                  <span className="text-sm">Guia de Visagismo Facial</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  <span className="text-sm">Acesso vitalício</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  <span className="text-sm">Garantia de 7 dias</span>
+                </div>
+              </div>
             </div>
           </div>
+
+          <Button 
+            onClick={handleCTAClick}
+            size="lg"
+            className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 w-full md:w-auto"
+          >
+            Quero Transformar Minha Imagem Agora!
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+
+          <p className="text-sm text-[#8F7A6A] mt-4">
+            Pense bem: quanto você já gastou com roupas que nunca usou? Este investimento em autoconhecimento vai muito além de roupas - é um investimento em você mesma.
+          </p>
         </div>
       </section>
     </div>
   );
 };
 
-export default QuizDescubraSeuEstilo;
+export default DescubraSeuEstilo;
