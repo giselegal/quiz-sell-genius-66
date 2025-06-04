@@ -21,71 +21,258 @@ export default function QuizDescubraSeuEstilo() {
     trackFunnelEvent("CTAClick_QuizPageB", { button_location: location });
   };
 
+  // Estilos responsivos
+  const containerStyle = {
+    fontFamily: "Montserrat, Arial, sans-serif",
+    background: "#faf9f6",
+    color: "#222",
+    lineHeight: "1.6",
+  };
+
+  const responsiveContainer = {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "0 20px",
+    "@media (max-width: 768px)": {
+      padding: "0 16px",
+    },
+  };
+
   return (
-    <div
-      style={{
-        fontFamily: "Montserrat, Arial, sans-serif",
-        background: "#faf9f6",
-        color: "#222",
-      }}
-    >
+    <>
+      <style>
+        {`
+          /* Reset e base */
+          * {
+            box-sizing: border-box;
+          }
+          
+          /* Responsividade geral */
+          .responsive-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+          }
+          
+          @media (max-width: 768px) {
+            .responsive-container {
+              padding: 0 16px;
+            }
+          }
+          
+          /* Hero responsivo */
+          .hero-title {
+            font-size: clamp(1.8rem, 4vw, 2.3rem);
+            line-height: 1.2;
+          }
+          
+          .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.18rem);
+          }
+          
+          /* Grid responsivo de produtos */
+          .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+            max-width: 1000px;
+            margin: 0 auto;
+          }
+          
+          @media (max-width: 768px) {
+            .products-grid {
+              grid-template-columns: 1fr;
+              gap: 20px;
+            }
+          }
+          
+          /* Depoimentos responsivos */
+          .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+          }
+          
+          @media (max-width: 768px) {
+            .testimonials-grid {
+              grid-template-columns: 1fr;
+              gap: 20px;
+            }
+          }
+          
+          /* Botões responsivos */
+          .cta-button {
+            display: inline-block;
+            background: #BFA46F;
+            color: #fff;
+            font-weight: 700;
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            padding: 18px 32px;
+            border-radius: 32px;
+            text-decoration: none;
+            box-shadow: 0 4px 16px #bfa46f33;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-align: center;
+            line-height: 1.2;
+          }
+          
+          .cta-button:hover {
+            background: #a8935f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px #bfa46f44;
+          }
+          
+          @media (max-width: 768px) {
+            .cta-button {
+              padding: 16px 28px;
+              width: 100%;
+              max-width: 300px;
+            }
+          }
+          
+          /* Cards responsivos */
+          .card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px #bfa46f22;
+            padding: 28px;
+            border: 2px solid #BFA46F;
+            transition: transform 0.3s ease;
+          }
+          
+          .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px #bfa46f33;
+          }
+          
+          @media (max-width: 768px) {
+            .card {
+              padding: 20px;
+            }
+          }
+          
+          /* Seções responsivas */
+          .section-padding {
+            padding: 48px 0;
+          }
+          
+          @media (max-width: 768px) {
+            .section-padding {
+              padding: 32px 0;
+            }
+          }
+          
+          /* Imagens responsivas */
+          .responsive-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+          }
+          
+          /* Logo responsivo */
+          .logo {
+            max-width: clamp(120px, 20vw, 160px);
+            height: auto;
+          }
+          
+          /* Oferta box responsiva */
+          .offer-box {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #faf9f6;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px #bfa46f22;
+            padding: 36px;
+            text-align: center;
+            border: 2px solid #BFA46F;
+          }
+          
+          @media (max-width: 768px) {
+            .offer-box {
+              padding: 24px;
+              margin: 0 16px;
+            }
+          }
+          
+          /* Preços responsivos */
+          .price-main {
+            font-size: clamp(1.8rem, 5vw, 2.2rem);
+            font-weight: 900;
+            color: #BFA46F;
+          }
+          
+          /* Garantia box responsiva */
+          .guarantee-box {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #faf9f6;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px #bfa46f22;
+            padding: 36px;
+            text-align: center;
+            border: 2px solid #BFA46F;
+          }
+          
+          @media (max-width: 768px) {
+            .guarantee-box {
+              padding: 24px;
+              margin: 0 16px;
+            }
+          }
+        `}
+      </style>
+      <div style={containerStyle}>
       {/* HERO */}
       <section
+        className="section-padding"
         style={{
           background: "linear-gradient(120deg, #fff 60%, #bfa46f1a 100%)",
-          padding: "48px 0 32px 0",
           textAlign: "center",
         }}
       >
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-          alt="Gisele Galvão"
-          style={{ maxWidth: 160, marginBottom: 18 }}
-        />
-        <h1
-          style={{
-            fontSize: "2.3rem",
-            fontWeight: 800,
-            margin: "0 0 14px 0",
-            color: "#222",
-          }}
-        >
-          Descubra o Estilo Que Valoriza Sua Essência
-        </h1>
-        <p
-          style={{
-            fontSize: "1.18rem",
-            maxWidth: 480,
-            margin: "0 auto 22px auto",
-            color: "#444",
-          }}
-        >
-          Um método rápido, prático e validado por mais de{" "}
-          <span style={{ color: "#BFA46F", fontWeight: 700 }}>
-            3.000 mulheres
-          </span>{" "}
-          para você se sentir confiante e autêntica todos os dias.
-        </p>
-        <a
-          href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
-          onClick={() => handleCTAClick("hero")}
-          style={{
-            display: "inline-block",
-            background: "#BFA46F",
-            color: "#fff",
-            fontWeight: 700,
-            fontSize: "1.15rem",
-            padding: "18px 44px",
-            borderRadius: 32,
-            marginTop: 10,
-            textDecoration: "none",
-            boxShadow: "0 4px 16px #bfa46f33",
-            letterSpacing: 1,
-            transition: "background 0.2s",
-          }}
-        >
-          QUERO DESCOBRIR MEU ESTILO
-        </a>
+        <div className="responsive-container">
+          <img
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+            alt="Gisele Galvão"
+            className="logo"
+            style={{ marginBottom: 18 }}
+          />
+          <h1
+            className="hero-title"
+            style={{
+              fontWeight: 800,
+              margin: "0 0 14px 0",
+              color: "#222",
+            }}
+          >
+            Descubra o Estilo Que Valoriza Sua Essência
+          </h1>
+          <p
+            className="hero-subtitle"
+            style={{
+              maxWidth: 480,
+              margin: "0 auto 22px auto",
+              color: "#444",
+            }}
+          >
+            Um método rápido, prático e validado por mais de{" "}
+            <span style={{ color: "#BFA46F", fontWeight: 700 }}>
+              3.000 mulheres
+            </span>{" "}
+            para você se sentir confiante e autêntica todos os dias.
+          </p>
+          <a
+            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+            onClick={() => handleCTAClick("hero")}
+            className="cta-button"
+            style={{ marginTop: 10 }}
+          >
+            QUERO DESCOBRIR MEU ESTILO
+          </a>
+        </div>
         <div
           style={{
             marginTop: 18,
