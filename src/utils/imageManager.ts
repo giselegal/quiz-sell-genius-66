@@ -1,5 +1,5 @@
 
-import { ImageOptimizationOptions } from './images/types';
+import { ImageOptimizationOptions, PreloadOptions } from './images/types';
 
 export const getOptimizedImageUrl = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }) => {
   if (!src) return '';
@@ -16,14 +16,6 @@ export const getLowQualityPlaceholder = (src: string) => {
   // In a real implementation, this would generate a low-quality placeholder
   return src;
 };
-
-interface PreloadOptions {
-  quality?: number;
-  batchSize?: number;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
-  format?: string;
-}
 
 export const preloadImagesByUrls = (
   urls: string[],
@@ -214,7 +206,7 @@ export const preloadImages = (images: Array<{ src: string; id: string; alt?: str
   return preloadImagesByUrls(urls, options);
 };
 
-// Add missing functions
+// Add missing functions with simplified implementations
 export const preloadImagesByIds = (ids: string[], options?: PreloadOptions) => {
   // Convert IDs to URLs - this is a simplified implementation
   const urls = ids.map(id => `/images/${id}`);
@@ -222,5 +214,12 @@ export const preloadImagesByIds = (ids: string[], options?: PreloadOptions) => {
 };
 
 export const preloadImagesByCategory = (category: string, options?: Omit<PreloadOptions, 'onProgress' | 'onComplete'>) => {
-  return preloadCriticalImages(category, options);
+  // Map category to proper context string
+  const validCategories = ['strategic', 'results', 'transformation', 'bonus', 'testimonials'];
+  if (validCategories.includes(category)) {
+    return preloadCriticalImages(category as 'strategic' | 'results' | 'transformation' | 'bonus' | 'testimonials', options);
+  }
+  
+  console.warn(`Unknown category: ${category}`);
+  return Promise.resolve();
 };

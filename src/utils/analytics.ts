@@ -108,21 +108,37 @@ export const trackResultView = (resultType: string, data?: any) => {
   console.log('[Analytics] Result View:', { resultType, data });
 };
 
-// Fix getCreativePerformance to accept no arguments
-export const getCreativePerformance = async () => {
+// Fix getCreativePerformance to accept no arguments and return proper format
+export const getCreativePerformance = async (): Promise<Record<string, any>> => {
   // Mock implementation for now
   return {
-    campaigns: [],
-    totalImpressions: 0,
-    totalClicks: 0,
-    totalConversions: 0,
-    ctr: 0,
-    conversionRate: 0
+    'creative-1': {
+      creative_name: 'Elegante Mulher Vestido',
+      page_views: 1250,
+      quiz_starts: 890,
+      quiz_completions: 678,
+      leads: 234,
+      purchases: 45,
+      revenue: 4500,
+      conversion_rate: '2.3',
+      cost_per_lead: 15.50
+    },
+    'creative-2': {
+      creative_name: 'Casual Moderna',
+      page_views: 980,
+      quiz_starts: 720,
+      quiz_completions: 540,
+      leads: 180,
+      purchases: 32,
+      revenue: 3200,
+      conversion_rate: '1.8',
+      cost_per_lead: 18.20
+    }
   };
 };
 
-// Export getAnalyticsEvents properly
-export const getAnalyticsEvents = () => {
+// Export getAnalyticsEvents properly - single declaration
+export const getAnalyticsEvents = (): any[] => {
   return [];
 };
 
