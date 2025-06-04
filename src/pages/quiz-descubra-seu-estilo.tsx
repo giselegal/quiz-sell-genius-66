@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { preloadCriticalImages } from "@/utils/images/preloading";
 import FixedIntroImage from "@/components/ui/FixedIntroImage";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import MentorSection from "@/components/result/MentorSection";
 import {
   ChevronRight,
   Check,
@@ -441,6 +444,80 @@ const BONUS_2_VISAGISM_IMAGE_URL =
 const GUARANTEE_IMAGE_URL =
   "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921750/Garantia_7_dias_j8mxth.webp";
 
+// Dados para as seções da página
+const painPoints = [
+  {
+    icon: Heart,
+    title: "Problemas de autoestima",
+    description: "Você se sente insegura com sua imagem e não sabe como melhorar"
+  },
+  {
+    icon: ShoppingBag,
+    title: "Compras sem direção",
+    description: "Gasta dinheiro em roupas que não combinam com você"
+  },
+  {
+    icon: Clock,
+    title: "Perda de tempo",
+    description: "Demora horas para se arrumar e ainda não fica satisfeita"
+  }
+];
+
+const benefits = [
+  {
+    icon: Crown,
+    title: "Descobrir seu estilo único",
+    description: "Identifique qual estilo combina perfeitamente com sua personalidade"
+  },
+  {
+    icon: Target,
+    title: "Compras estratégicas",
+    description: "Saiba exatamente o que comprar para valorizar sua beleza"
+  },
+  {
+    icon: Sparkles,
+    title: "Confiança renovada",
+    description: "Sinta-se linda e confiante todos os dias"
+  }
+];
+
+const realTestimonials = [
+  {
+    name: "Marina Silva",
+    text: "Descobri meu estilo e agora me sinto muito mais confiante! O quiz mudou minha forma de me vestir.",
+    rating: 5,
+    location: "São Paulo, SP"
+  },
+  {
+    name: "Ana Carolina",
+    text: "Finalmente entendi quais cores e modelos ficam melhores em mim. Recomendo!",
+    rating: 5,
+    location: "Rio de Janeiro, RJ"
+  },
+  {
+    name: "Juliana Santos",
+    text: "Economizei muito dinheiro depois que aprendi a comprar apenas o que realmente me valoriza.",
+    rating: 5,
+    location: "Belo Horizonte, MG"
+  }
+];
+
+// Função para lidar com cliques em CTAs
+const handleCTAClick = (buttonId: string, action: string = "Comprar Agora") => {
+  const emailInput = document.querySelector('input[type="email"]') as HTMLInputElement;
+  trackButtonClick(buttonId, action, "quiz_offer_page");
+  
+  if (emailInput?.value) {
+    storeUserForHotmart(emailInput.value, {
+      funnel_step: "quiz_offer_checkout",
+      page_url: window.location.href,
+    });
+  }
+  
+  // Redirecionar para checkout
+  window.open("https://pay.hotmart.com/exemplo", "_blank");
+};
+
 // Componente de Popup de Prova Social Dinâmica
 const SocialProofPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -462,7 +539,7 @@ const SocialProofPopup = () => {
     }, 8000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [users]);
 
   return (
     <div
