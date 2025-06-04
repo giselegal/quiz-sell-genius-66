@@ -36,7 +36,7 @@ const DescubraSeuEstilo: React.FC = () => {
       currency: "BRL",
     });
     window.open(
-      "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeA",
+      "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB",
       "_blank"
     );
   };
