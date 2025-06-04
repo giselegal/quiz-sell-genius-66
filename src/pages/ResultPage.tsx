@@ -57,7 +57,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
   // Analytics e tracking
   useEffect(() => {
     trackPageView("/resultado");
-    trackEvent("result_page_viewed", "Quiz", "Result Page Viewed");
+    trackEvent("result_page_viewed", "Quiz");
   }, []);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
   useEffect(() => {
     if (typeof window !== "undefined" && user?.email) {
       // Track quiz completion
-      trackEvent("quiz_completed", "Quiz", primaryStyle.category);
+      trackEvent("quiz_completed", "Quiz");
 
       // Store data for Hotmart webhook correlation
       hotmartWebhookManager.storeQuizCompletionData(user.email, {
