@@ -1,7 +1,7 @@
 // Sistema de Webhook Hotmart
 // ID: agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df
 
-import { trackConversion, captureUTMParameters } from "./analytics";
+import { trackConversion, captureUTMParameters } from "./analytics.js";
 
 // Interfaces para dados do webhook Hotmart
 export interface HotmartBuyer {
@@ -62,7 +62,7 @@ export interface UserAnalyticsData {
   fbclid?: string;
   gclid?: string;
   page_url: string;
-  quiz_results?: any;
+  quiz_results?: Record<string, unknown>;
   funnel_step: string;
 }
 
@@ -318,7 +318,7 @@ export class HotmartWebhookManager {
   }
 
   // Recuperar parâmetros UTM armazenados
-  private getStoredUTMParameters(): any {
+  private getStoredUTMParameters(): Record<string, string> {
     try {
       return JSON.parse(localStorage.getItem("utm_parameters") || "{}");
     } catch {
@@ -389,7 +389,7 @@ export class HotmartWebhookManager {
   }
 
   // Método público para armazenar dados quando o usuário completa o quiz
-  public storeQuizCompletionData(email: string, quizResults: any): void {
+  public storeQuizCompletionData(email: string, quizResults: Record<string, unknown>): void {
     this.storeUserData(email, {
       quiz_results: quizResults,
       funnel_step: "quiz_completion",
