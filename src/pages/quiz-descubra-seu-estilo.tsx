@@ -98,16 +98,16 @@ export default function QuizDescubraSeuEstilo() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   onClick={handleStartQuiz}
-                  className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white py-3 md:py-4 px-6 md:px-8 text-base md:text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 >
                   Começar o Quiz Gratuito
                 </Button>
                 
                 <Button
                   onClick={handleBuyNow}
-                  className="bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-[#aa6b5d] hover:bg-[#8f574a] text-white py-3 md:py-4 px-6 md:px-8 text-base md:text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 >
-                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  <ShoppingCart className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                   Adquirir Guia Completo
                 </Button>
               </div>
@@ -142,7 +142,7 @@ export default function QuizDescubraSeuEstilo() {
             </p>
             
             <p>
-              <strong>O problema não é você, é a falta de autoconhecimento do seu estilo autêntico.</strong>
+              <strong className="text-[#432818]">O problema não é você, é a falta de autoconhecimento do seu estilo autêntico.</strong>
             </p>
           </div>
         </div>
@@ -161,20 +161,26 @@ export default function QuizDescubraSeuEstilo() {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {sampleOptions.map((option) => (
-              <div key={option.id} className="text-center">
-                <img 
-                  src={option.imageUrl}
-                  alt={option.text}
-                  className="w-full aspect-square object-cover rounded-lg mb-2 shadow-md"
-                />
-                <p className="text-sm font-medium text-[#432818]">{option.text}</p>
+              <div key={option.id} className="text-center group">
+                <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                  <img 
+                    src={option.imageUrl}
+                    alt={option.text}
+                    className="w-full aspect-square object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute bottom-2 left-2 right-2 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {option.text}
+                  </div>
+                </div>
+                <p className="text-sm font-medium text-[#432818] mt-3">{option.text}</p>
               </div>
             ))}
           </div>
           
           <Button
             onClick={handleStartQuiz}
-            className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
             Fazer o Quiz Gratuito Agora
             <ArrowRight className="ml-2 w-5 h-5" />
@@ -187,33 +193,44 @@ export default function QuizDescubraSeuEstilo() {
         <section id="quiz-section" className="py-16 px-4 bg-white">
           <div className="container mx-auto max-w-4xl">
             {currentQuestion ? (
-              <Card className="bg-white shadow-md border border-[#B89B7A]/20">
-                <div className="p-6">
+              <Card className="bg-white shadow-xl border-0 rounded-2xl overflow-hidden">
+                <div className="p-6 md:p-8">
                   {/* Progress Bar */}
-                  <div className="mb-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-[#8F7A6A]">
-                        {currentQuestionIndex + 1} de {totalQuestions}
+                  <div className="mb-8">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-sm font-medium text-[#8F7A6A]">
+                        Pergunta {currentQuestionIndex + 1} de {totalQuestions}
                       </span>
-                      <span className="text-[#aa6b5d] font-medium">
+                      <span className="text-[#aa6b5d] font-bold text-lg">
                         {progress.toFixed(0)}%
                       </span>
                     </div>
-                    <div className="w-full bg-[#F3E8E6] rounded-full h-2">
+                    <div className="w-full bg-[#F3E8E6] rounded-full h-3 overflow-hidden">
                       <div 
-                        className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] h-2 rounded-full transition-all duration-300"
+                        className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] h-3 rounded-full transition-all duration-500 ease-out"
                         style={{ width: `${progress}%` }}
                       ></div>
                     </div>
                   </div>
 
                   {/* Question */}
-                  <h2 className="text-2xl font-playfair text-[#aa6b5d] mb-6">
-                    {currentQuestion.title}
-                  </h2>
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-4 leading-tight">
+                      {currentQuestion.title}
+                    </h2>
+                    {currentQuestion.imageUrl && (
+                      <div className="mb-6">
+                        <img 
+                          src={currentQuestion.imageUrl}
+                          alt="Question visual"
+                          className="max-w-md mx-auto rounded-lg shadow-md"
+                        />
+                      </div>
+                    )}
+                  </div>
 
                   {/* Options */}
-                  <div className={`grid ${currentQuestion.type === 'text' ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-4 mb-8`}>
+                  <div className={`grid ${currentQuestion.type === 'text' ? 'md:grid-cols-1 gap-3' : 'md:grid-cols-2 gap-4'} mb-8`}>
                     {currentQuestion.options.map((option) => (
                       <QuizOption
                         key={option.id}
@@ -229,23 +246,25 @@ export default function QuizDescubraSeuEstilo() {
                   </div>
 
                   {/* Navigation */}
-                  <div className="flex justify-end">
+                  <div className="flex justify-center">
                     <Button 
                       onClick={handleNext} 
                       disabled={!userAnswers[currentQuestion.id]}
-                      className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white"
+                      className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white py-3 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
                       {isLastQuestion ? 'Ver meu resultado' : 'Próxima Pergunta'}
-                      <ArrowRight className="ml-2 w-4 h-4" />
+                      <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                   </div>
                 </div>
               </Card>
             ) : (
               <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
                 <h2 className="text-2xl font-playfair text-[#432818] mb-4">
-                  Quiz carregando...
+                  Carregando seu quiz personalizado...
                 </h2>
+                <p className="text-[#8F7A6A]">Preparando as perguntas perfeitas para você!</p>
               </div>
             )}
           </div>
@@ -253,7 +272,11 @@ export default function QuizDescubraSeuEstilo() {
       )}
 
       {/* Seção Mentora */}
-      <MentorSection />
+      <section className="py-16 px-4 bg-[#FAF9F7]">
+        <div className="container mx-auto max-w-6xl">
+          <MentorSection />
+        </div>
+      </section>
 
       {/* Footer CTA */}
       <section className="py-16 px-4 bg-[#432818] text-white text-center">
@@ -262,15 +285,15 @@ export default function QuizDescubraSeuEstilo() {
             Transforme seu Estilo Hoje!
           </h2>
           
-          <p className="text-lg mb-8 opacity-90">
+          <p className="text-lg md:text-xl mb-8 opacity-90">
             Descubra o poder de se vestir com autenticidade e confiança.
           </p>
           
           <Button
             onClick={handleBuyNow}
-            className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] hover:from-[#45a049] hover:to-[#4CAF50] text-white py-3 md:py-4 px-8 text-lg font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] hover:from-[#45a049] hover:to-[#4CAF50] text-white py-4 md:py-5 px-8 md:px-12 text-lg md:text-xl font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
-            <ShoppingCart className="w-5 h-5 mr-2" />
+            <ShoppingCart className="w-5 h-5 md:w-6 md:h-6 mr-3" />
             Quero meu Guia de Estilo Agora
           </Button>
         </div>
