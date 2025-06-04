@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -9,6 +8,8 @@ import { useQuizPixel } from '@/hooks/useQuizPixel';
 import { trackFunnelEvent, getCtaUrl } from '@/services/pixelManager';
 import { loadFacebookPixel } from '@/utils/facebookPixel';
 import { Heart, Shield, Star, CheckCircle2, Users, Crown, Sparkles, ArrowRight, Gift, Clock, Target } from 'lucide-react';
+import MentorSection from '@/components/result/MentorSection';
+import { testimonials } from '@/data/testimonials';
 
 const QuizDescubraSeuEstilo = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -82,27 +83,6 @@ const QuizDescubraSeuEstilo = () => {
     trackCTAClick('main_cta');
     window.open(getCtaUrl(), '_blank');
   };
-
-  const testimonials = [
-    {
-      name: "Ana Carolina",
-      location: "São Paulo, SP",
-      text: "Descobri que sou do estilo Romântico e isso mudou completamente como me visto. Agora tenho muito mais confiança!",
-      rating: 5
-    },
-    {
-      name: "Mariana Santos",
-      location: "Rio de Janeiro, RJ", 
-      text: "O kit de ferramentas é incrível! Finalmente entendi como montar looks que combinam comigo.",
-      rating: 5
-    },
-    {
-      name: "Patricia Lima",
-      location: "Belo Horizonte, MG",
-      text: "Valeu cada centavo! O guia de visagismo me ajudou a encontrar o corte de cabelo perfeito.",
-      rating: 5
-    }
-  ];
 
   if (showResult) {
     return (
@@ -252,42 +232,64 @@ const QuizDescubraSeuEstilo = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FAF9F7] to-white">
-      {/* Hero Section */}
+      {/* Hero Section with Impact Image */}
       <section className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Badge className="mb-6 bg-[#B89B7A]/10 text-[#B89B7A] border-[#B89B7A]/20">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Kit de Ferramentas Exclusivo
-            </Badge>
-            
-            <h1 className="text-4xl md:text-6xl font-playfair text-[#432818] mb-6">
-              Descubra Seu{' '}
-              <span className="text-[#B89B7A]">Estilo de Ser</span>
-            </h1>
-            
-            <p className="text-xl text-[#432818]/80 mb-8 max-w-3xl mx-auto">
-              Kit completo com ferramentas práticas para descobrir seu estilo pessoal e potencializar sua imagem de sucesso
-            </p>
-            
-            <Button 
-              onClick={handleStartQuiz}
-              size="lg" 
-              className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white font-semibold px-8 py-4 text-lg mb-8"
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              Fazer Quiz Gratuito Agora
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            
-            <div className="flex items-center justify-center text-[#432818]/60">
-              <Users className="w-5 h-5 mr-2" />
-              <span>+3.000 mulheres já descobriram seu Estilo de Ser</span>
-            </div>
-          </motion.div>
+              <Badge className="mb-6 bg-[#B89B7A]/10 text-[#B89B7A] border-[#B89B7A]/20">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Kit de Ferramentas Exclusivo
+              </Badge>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-playfair text-[#432818] mb-6">
+                Descubra Seu{' '}
+                <span className="text-[#B89B7A]">Estilo de Ser</span>
+              </h1>
+              
+              <p className="text-xl text-[#432818]/80 mb-8">
+                Kit completo com ferramentas práticas para descobrir seu estilo pessoal e potencializar sua imagem de sucesso
+              </p>
+              
+              <Button 
+                onClick={handleStartQuiz}
+                size="lg" 
+                className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white font-semibold px-8 py-4 text-lg mb-8"
+              >
+                Fazer Quiz Gratuito Agora
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              
+              <div className="flex items-center text-[#432818]/60">
+                <Users className="w-5 h-5 mr-2" />
+                <span>+3.000 mulheres já descobriram seu Estilo de Ser</span>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img 
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.jpg"
+                  alt="Mulher elegante descobrindo seu estilo pessoal"
+                  className="w-full h-auto object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#432818]/20 to-transparent"></div>
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
+              <div className="absolute -bottom-4 -left-4 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -346,8 +348,20 @@ const QuizDescubraSeuEstilo = () => {
         </div>
       </section>
 
-      {/* Solution */}
+      {/* Mentor Section */}
       <section className="py-16 bg-[#FAF9F7]">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-playfair text-[#432818] text-center mb-12">
+              Conheça sua Mentora em Imagem e Estilo
+            </h2>
+            <MentorSection />
+          </div>
+        </div>
+      </section>
+
+      {/* Solution with Product Images */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-playfair text-[#432818] mb-8">
@@ -355,7 +369,8 @@ const QuizDescubraSeuEstilo = () => {
             </h2>
             
             <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Card className="p-8 border-[#B89B7A]/20">
+              <Card className="p-8 border-[#B89B7A]/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-[#B89B7A]/10 rounded-full blur-xl"></div>
                 <Target className="w-12 h-12 text-[#B89B7A] mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-[#432818] mb-4">
                   Ferramentas Principais
@@ -372,7 +387,8 @@ const QuizDescubraSeuEstilo = () => {
                 </ul>
               </Card>
               
-              <Card className="p-8 border-[#B89B7A]/20">
+              <Card className="p-8 border-[#B89B7A]/20 relative overflow-hidden">
+                <div className="absolute bottom-0 left-0 w-16 h-16 bg-[#aa6b5d]/10 rounded-full blur-xl"></div>
                 <Gift className="w-12 h-12 text-[#B89B7A] mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-[#432818] mb-4">
                   2 Bônus Exclusivos
@@ -390,6 +406,13 @@ const QuizDescubraSeuEstilo = () => {
               </Card>
             </div>
             
+            <div className="bg-[#FAF9F7] p-8 rounded-2xl mb-8">
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-[#B89B7A] mb-2">R$ 47,00</div>
+                <p className="text-[#432818]/60">Investimento único • Acesso imediato • Garantia de 7 dias</p>
+              </div>
+            </div>
+            
             <Button 
               onClick={handleStartQuiz}
               size="lg" 
@@ -402,8 +425,8 @@ const QuizDescubraSeuEstilo = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 bg-white">
+      {/* Real Testimonials */}
+      <section className="py-16 bg-[#FAF9F7]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-playfair text-[#432818] text-center mb-12">
@@ -413,26 +436,37 @@ const QuizDescubraSeuEstilo = () => {
             <div className="grid md:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
                 <motion.div
-                  key={index}
+                  key={testimonial.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2 }}
                 >
-                  <Card className="p-6 h-full border-[#B89B7A]/20">
+                  <Card className="p-6 h-full border-[#B89B7A]/20 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]/30"></div>
                     <div className="flex mb-4">
-                      {[...Array(testimonial.rating)].map((_, i) => (
+                      {[...Array(5)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 text-[#B89B7A] fill-current" />
                       ))}
                     </div>
                     <p className="text-[#432818]/80 mb-4 italic">
                       "{testimonial.text}"
                     </p>
-                    <div className="text-sm">
-                      <div className="font-semibold text-[#432818]">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-[#432818]/60">
-                        {testimonial.location}
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className="text-sm">
+                        <div className="font-semibold text-[#432818]">
+                          {testimonial.name}
+                        </div>
+                        {testimonial.location && (
+                          <div className="text-[#432818]/60">
+                            {testimonial.location}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Card>
