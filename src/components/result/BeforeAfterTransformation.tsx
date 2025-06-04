@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
@@ -206,12 +206,12 @@ export const BeforeAfterTransformation: React.FC<
                     Transforme Sua Imagem,{" "}
                     <span className="text-[#aa6b5d]">Revele Sua Essência</span>
                   </h4>
-                  <p className="text-gray-700 mb-6 leading-relaxed">
+                  <p className="text-gray-700 mb-6 leading-snug sm:leading-relaxed">
                     Seu estilo é uma ferramenta poderosa. Não se trata apenas de
                     roupas, mas de comunicar quem você é e aspira ser. Com a
                     orientação certa, você pode:
                   </p>
-                  <ul className="space-y-3 text-gray-700 mb-8">
+                  <ul className="space-y-2 sm:space-y-3 text-gray-700 mb-6 sm:mb-8">
                     {[
                       {
                         text: "Construir looks com intenção e identidade visual.",
@@ -234,7 +234,7 @@ export const BeforeAfterTransformation: React.FC<
                   </ul>
                   <Button
                     onClick={handleButtonClick}
-                    className="text-white py-3.5 px-8 rounded-lg transition-all duration-300 w-full sm:w-auto text-base font-medium"
+                    className="text-white py-3 sm:py-3.5 px-6 sm:px-8 rounded-lg transition-all duration-300 w-full sm:w-auto text-sm sm:text-base font-medium leading-tight"
                     style={{
                       background: "linear-gradient(to right, #aa6b5d, #B89B7A)",
                       boxShadow: "0 4px 14px rgba(184, 155, 122, 0.3)",
@@ -242,13 +242,15 @@ export const BeforeAfterTransformation: React.FC<
                     onMouseEnter={() => setIsButtonHovered(true)}
                     onMouseLeave={() => setIsButtonHovered(false)}
                   >
-                    <span className="flex items-center justify-center gap-2.5">
+                    <span className="flex items-center justify-center gap-2 sm:gap-2.5 leading-none">
                       <ShoppingCart
-                        className={`w-5 h-5 transition-transform duration-300 ${
+                        className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${
                           isButtonHovered ? "scale-110" : ""
                         }`}
                       />
-                      <span>Quero Transformar Minha Imagem</span>
+                      <span className="leading-none">
+                        Quero Transformar Minha Imagem
+                      </span>
                     </span>
                   </Button>
                 </div>
@@ -323,16 +325,6 @@ export const BeforeAfterTransformation: React.FC<
             </div>
           </TabsContent>
         </CardContent>
-
-        <CardFooter className="flex justify-center border-t bg-[#FBF7F1] p-4">
-          <Button
-            onClick={handleContinue}
-            className="bg-[#B89B7A] hover:bg-[#8A7258] text-white px-8"
-          >
-            Finalizar Quiz
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </CardFooter>
       </Tabs>
     </Card>
   );
