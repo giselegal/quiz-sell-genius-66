@@ -58,7 +58,7 @@ export interface UserResponse {
 export interface QuizQuestion {
   id: string;
   title: string;
-  type: 'image' | 'text' | 'both';
+  type: 'image' | 'text' | 'both'; // Added 'both' to the union
   options: QuizOption[];
   multiSelect: number;
   imageUrl?: string;
@@ -70,5 +70,4 @@ export interface QuizOption {
   styleCategory: string;
   imageUrl?: string;
   points?: number;
-  isStrategic?: boolean;
 }
