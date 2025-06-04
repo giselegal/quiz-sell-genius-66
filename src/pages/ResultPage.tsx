@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { StyleResult } from "../types/quiz";
 import { useAuth } from "../context/AuthContext";
@@ -57,7 +56,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
   // Analytics e tracking
   useEffect(() => {
     trackPageView("/resultado");
-    trackEvent("result_page_viewed", "Quiz");
+    trackEvent("result_page_viewed", { category: "Quiz", action: "Result Page Viewed" });
   }, []);
 
   useEffect(() => {
@@ -105,7 +104,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
   useEffect(() => {
     if (typeof window !== "undefined" && user?.email) {
       // Track quiz completion
-      trackEvent("quiz_completed", "Quiz");
+      trackEvent("quiz_completed", { category: "Quiz", style: primaryStyle.category });
 
       // Store data for Hotmart webhook correlation
       hotmartWebhookManager.storeQuizCompletionData(user.email, {
