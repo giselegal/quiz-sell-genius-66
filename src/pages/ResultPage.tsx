@@ -370,13 +370,13 @@ const ResultPage: React.FC = () => {
       }`}>
         <div className="flex flex-col gap-3 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg border border-[#B89B7A]/20">
           {[
-            { id: 'primary-style', label: 'Seu Estilo', icon: '✨' },
-            { id: 'transformations', label: 'Transformações', icon: '🔄' },
-            { id: 'motivation', label: 'Motivação', icon: '💪' },
-            { id: 'bonuses', label: 'Bônus', icon: '🎁' },
-            { id: 'testimonials', label: 'Depoimentos', icon: '💬' },
-            { id: 'guarantee', label: 'Garantia', icon: '🛡️' },
-            { id: 'cta', label: 'Adquirir', icon: '🛒' }
+            { id: 'primary-style', label: 'Seu Estilo', icon: <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div> },
+            { id: 'transformations', label: 'Transformações', icon: <ChevronRight className="w-4 h-4 text-[#B89B7A]" /> },
+            { id: 'motivation', label: 'Motivação', icon: <TrendingUp className="w-4 h-4 text-[#B89B7A]" /> },
+            { id: 'bonuses', label: 'Bônus', icon: <Gift className="w-4 h-4 text-[#B89B7A]" /> },
+            { id: 'testimonials', label: 'Depoimentos', icon: <Target className="w-4 h-4 text-[#B89B7A]" /> },
+            { id: 'guarantee', label: 'Garantia', icon: <Shield className="w-4 h-4 text-[#B89B7A]" /> },
+            { id: 'cta', label: 'Adquirir', icon: <ShoppingCart className="w-4 h-4 text-[#B89B7A]" /> }
           ].map(section => (
             <button
               key={section.id}
@@ -384,13 +384,13 @@ const ResultPage: React.FC = () => {
               className={`group relative w-3 h-3 rounded-full transition-all duration-300 ${
                 activeSection === section.id 
                   ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] scale-125 shadow-md' 
-                  : 'bg-gray-300 hover:bg-gray-400 hover:scale-110'
+                  : 'bg-[#B5A394] hover:bg-[#B89B7A] hover:scale-110'
               }`}
               aria-label={`Ir para seção ${section.label}`}
             >
               {/* Tooltip */}
               <div className="absolute right-6 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                <div className="bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                <div className="bg-[#2C1810] text-white text-xs px-2 py-1 rounded whitespace-nowrap flex items-center gap-1">
                   {section.icon} {section.label}
                 </div>
               </div>
@@ -454,7 +454,7 @@ const ResultPage: React.FC = () => {
                 {user?.userName && (
                   <AnimatedWrapper className="mb-8" animation="scale" show={true} duration={500} delay={100}>
                     <div className="inline-flex items-center gap-3 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-6 py-3 rounded-full border border-[#B89B7A]/20">
-                      <span className="text-2xl">🎉</span>
+                      <div className="w-4 h-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
                       <span className="text-lg lg:text-xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
                         Parabéns, {user.userName}!
                       </span>
@@ -536,7 +536,7 @@ const ResultPage: React.FC = () => {
                     <div className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-6 border border-[#B89B7A]/15"
                          style={{ boxShadow: tokens.shadows.md }}>
                       <h3 className="text-xl font-semibold text-[#aa6b5d] mb-4 flex items-center gap-2">
-                        <span className="text-2xl">🎨</span>
+                        <div className="w-3 h-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
                         Estilos que Também Influenciam Você
                       </h3>
                       <SecondaryStylesSection secondaryStyles={secondaryStyles} />
@@ -566,7 +566,7 @@ const ResultPage: React.FC = () => {
                     {/* Badge flutuante */}
                     <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full text-sm font-bold transform rotate-12 shadow-lg">
                       <span className="flex items-center gap-1">
-                        ✨ {category}
+                        <div className="w-2 h-2 bg-white rounded-full mr-1"></div> {category}
                       </span>
                     </div>
                     
@@ -593,8 +593,11 @@ const ResultPage: React.FC = () => {
                     />
                     
                     {/* Badge exclusivo */}
-                    <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#FF6B35] to-[#F7931E] text-white px-3 py-1.5 rounded-full text-xs font-bold transform rotate-12 shadow-md">
-                      🔥 EXCLUSIVO
+                    <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1.5 rounded-full text-xs font-bold transform rotate-12 shadow-md">
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                        EXCLUSIVO
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -751,9 +754,9 @@ const ResultPage: React.FC = () => {
                     Guia {category} Personalizado + Bônus Exclusivos
                   </p>
                   
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FF6B35]/10 to-[#F7931E]/10 px-4 py-2 rounded-full border border-[#FF6B35]/20">
-                    <Clock className="w-4 h-4 text-[#FF6B35]" />
-                    <span className="text-sm font-medium text-[#FF6B35]">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 px-4 py-2 rounded-full border border-[#B89B7A]/20">
+                    <Clock className="w-4 h-4 text-[#aa6b5d]" />
+                    <span className="text-sm font-medium text-[#aa6b5d]">
                       Oferta por tempo limitado
                     </span>
                   </div>
@@ -806,8 +809,8 @@ const ResultPage: React.FC = () => {
                         {/* Badge premium */}
                         <div className="absolute -top-4 -right-4 z-10">
                           <span className={`text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12 ${
-                            index === 0 ? 'bg-gradient-to-r from-[#4CAF50] to-[#43a047]' : 
-                            'bg-gradient-to-r from-[#FF6B35] to-[#F7931E]'
+                            index === 0 ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]' : 
+                            'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]'
                           }`}>
                             {product.badge}
                           </span>
@@ -921,15 +924,15 @@ const ResultPage: React.FC = () => {
                   {/* Garantias de segurança */}
                   <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-[#8F7A6A]">
                     <div className="flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-[#4CAF50]" />
+                      <Shield className="w-4 h-4 text-[#B89B7A]" />
                       <span>Pagamento 100% Seguro</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-[#4CAF50]" />
+                      <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
                       <span>Acesso Imediato</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Award className="w-4 h-4 text-[#4CAF50]" />
+                      <Award className="w-4 h-4 text-[#B89B7A]" />
                       <span>Garantia de 7 Dias</span>
                     </div>
                   </div>
