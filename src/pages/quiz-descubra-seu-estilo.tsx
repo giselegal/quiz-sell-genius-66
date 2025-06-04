@@ -484,21 +484,27 @@ const benefits = [
 const realTestimonials = [
   {
     name: "Marina Silva",
+    author: "Marina Silva",
     text: "Descobri meu estilo e agora me sinto muito mais confiante! O quiz mudou minha forma de me vestir.",
     rating: 5,
-    location: "São Paulo, SP"
+    location: "São Paulo, SP",
+    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
   },
   {
-    name: "Ana Carolina",
+    name: "Ana Carolina", 
+    author: "Ana Carolina",
     text: "Finalmente entendi quais cores e modelos ficam melhores em mim. Recomendo!",
     rating: 5,
-    location: "Rio de Janeiro, RJ"
+    location: "Rio de Janeiro, RJ",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
   },
   {
     name: "Juliana Santos",
+    author: "Juliana Santos", 
     text: "Economizei muito dinheiro depois que aprendi a comprar apenas o que realmente me valoriza.",
     rating: 5,
-    location: "Belo Horizonte, MG"
+    location: "Belo Horizonte, MG",
+    image: "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=100&h=100&fit=crop&crop=face"
   }
 ];
 
@@ -821,7 +827,7 @@ const DescubraSeuEstilo: React.FC = () => {
                 className="border-[#B89B7A]/20 hover:shadow-lg transition-shadow duration-300 rounded-lg"
               >
                 <CardContent className="p-6 text-center flex flex-col items-center">
-                  {point.icon}
+                  <point.icon className="w-8 h-8 text-[#B89B7A] mb-4" />
                   <h3 className="text-base md:text-lg font-semibold text-[#432818] mb-2 mt-4">
                     {point.title}
                   </h3>
@@ -943,9 +949,14 @@ const DescubraSeuEstilo: React.FC = () => {
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <Check className="h-6 w-6 text-[#B89B7A] flex-shrink-0 mt-0.5" />
-                  <span className="text-[#432818] text-base md:text-lg">
-                    {benefit}
-                  </span>
+                  <div>
+                    <h4 className="text-[#432818] text-base md:text-lg font-semibold">
+                      {benefit.title}
+                    </h4>
+                    <p className="text-[#8F7A6A] text-sm">
+                      {benefit.description}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
