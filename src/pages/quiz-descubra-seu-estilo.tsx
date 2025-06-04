@@ -1,725 +1,553 @@
 
-import React, { useEffect, useState } from "react";
-import { getPixelId, trackFunnelEvent } from "../services/pixelManager";
-import { CountdownTimer } from "../components/ui/countdown-timer";
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useQuizPixel } from "../hooks/useQuizPixel";
+import { Check, Clock, Star, Shield, Users, Zap, ArrowRight, ChevronDown } from "lucide-react";
 
-declare global {
-  interface Window {
-    fbq?: any;
-  }
-}
-
-export default function QuizDescubraSeuEstilo() {
-  const [faqOpen, setFaqOpen] = useState<number | null>(null);
+const QuizDescubraSeuEstilo = () => {
+  const { trackPageView, trackCTAClick } = useQuizPixel();
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 23,
+    minutes: 45,
+    seconds: 30
+  });
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
   useEffect(() => {
-    // Inicializar pixel específico da página B
-    const pixelId = getPixelId();
-    if (window.fbq && pixelId) {
-      window.fbq("init", pixelId);
-      trackFunnelEvent("PageView_QuizPageB");
-    }
+    trackPageView();
+  }, [trackPageView]);
+
+  // Countdown timer effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) {
+          return { ...prev, seconds: prev.seconds - 1 };
+        } else if (prev.minutes > 0) {
+          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        } else if (prev.hours > 0) {
+          return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        }
+        return prev;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
-  const handleCTAClick = (location: string) => {
-    trackFunnelEvent("CTAClick_QuizPageB", { button_location: location });
+  const handleCTAClick = (position: string) => {
+    trackCTAClick(position);
+    window.open("https://pay.kiwify.com.br/JGnq6a4", "_blank");
   };
 
   const toggleFAQ = (index: number) => {
-    setFaqOpen(faqOpen === index ? null : index);
+    setOpenFAQ(openFAQ === index ? null : index);
   };
 
-  const faqData = [
-    {
-      question: "Funciona mesmo para o meu tipo de corpo?",
-      answer: "Sim! O método funciona para todos os tipos de corpo, altura e idade. Não é sobre seguir padrões, mas sobre descobrir o que valoriza VOCÊ especificamente."
-    },
-    {
-      question: "E se eu não tiver muito dinheiro para roupas?",
-      answer: "Perfeito! O guia ensina exatamente como fazer mais com menos. Você vai aprender a escolher peças versáteis que criam múltiplos looks, economizando muito dinheiro."
-    },
-    {
-      question: "Quanto tempo leva para ver resultado?",
-      answer: "Muitas mulheres notam diferença já no primeiro look que montam seguindo o método. Em 30 dias, você terá transformado completamente a forma como se veste."
-    },
-    {
-      question: "E se eu não ficar satisfeita?",
-      answer: "Você tem 7 dias de garantia total. Se não ficar 100% satisfeita, devolvemos seu dinheiro sem perguntas. Simples assim."
-    }
-  ];
-
   return (
-    <div
-      style={{
-        fontFamily: "Montserrat, Arial, sans-serif",
-        background: "#faf9f6",
-        color: "#222",
-      }}
-    >
-      {/* HERO OTIMIZADO */}
-      <section
-        style={{
-          background: "linear-gradient(135deg, #fff 0%, #bfa46f1a 100%)",
-          padding: "40px 0 50px 0",
-          textAlign: "center",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div style={{ position: "absolute", top: "20px", right: "20px", background: "#d32f2f", color: "#fff", padding: "8px 16px", borderRadius: "20px", fontSize: "0.9rem", fontWeight: "700", letterSpacing: "1px" }}>
-          OFERTA LIMITADA
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-[#fffaf7] to-[#f9f4ef]">
+      {/* Hero Section Otimizada */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#fffaf7] via-[#f9f4ef] to-[#f3e8e6] py-12 px-4">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23B89B7A" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
         
-        <img
-          src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-          alt="Gisele Galvão"
-          style={{ maxWidth: 160, marginBottom: 18 }}
-        />
-        
-        <h1
-          style={{
-            fontSize: "2.8rem",
-            fontWeight: 900,
-            margin: "0 0 20px 0",
-            color: "#222",
-            lineHeight: "1.2",
-            textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
-          }}
-        >
-          Pare de Abrir o Guarda-Roupa e Pensar:<br />
-          <span style={{ color: "#BFA46F", fontSize: "2.4rem" }}>
-            "Não Tenho Nada Para Vestir"
-          </span>
-        </h1>
-        
-        <p
-          style={{
-            fontSize: "1.3rem",
-            maxWidth: 550,
-            margin: "0 auto 25px auto",
-            color: "#444",
-            fontWeight: 600,
-            lineHeight: "1.4",
-          }}
-        >
-          Descubra seu <span style={{ color: "#BFA46F", fontWeight: 800 }}>Estilo Autêntico</span> em apenas 7 dias e transforme cada manhã em uma experiência de <strong>confiança total</strong>
-        </p>
-
-        <div style={{ marginBottom: "25px" }}>
-          <CountdownTimer 
-            initialHours={2} 
-            initialMinutes={47} 
-            initialSeconds={33}
-            className="justify-center"
-          />
-          <p style={{ fontSize: "0.95rem", color: "#d32f2f", fontWeight: "700", marginTop: "8px" }}>
-            ⏰ Oferta expira quando o tempo acabar!
-          </p>
-        </div>
-
-        <a
-          href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
-          onClick={() => handleCTAClick("hero")}
-          style={{
-            display: "inline-block",
-            background: "linear-gradient(45deg, #BFA46F 0%, #d4b87a 100%)",
-            color: "#fff",
-            fontWeight: 800,
-            fontSize: "1.25rem",
-            padding: "22px 50px",
-            borderRadius: 40,
-            marginTop: 15,
-            textDecoration: "none",
-            boxShadow: "0 8px 25px rgba(191, 164, 111, 0.4)",
-            letterSpacing: "1px",
-            transition: "all 0.3s ease",
-            border: "3px solid #fff",
-            textTransform: "uppercase",
-          }}
-          onMouseOver={(e) => {
-            e.target.style.transform = "scale(1.05)";
-            e.target.style.boxShadow = "0 12px 35px rgba(191, 164, 111, 0.6)";
-          }}
-          onMouseOut={(e) => {
-            e.target.style.transform = "scale(1)";
-            e.target.style.boxShadow = "0 8px 25px rgba(191, 164, 111, 0.4)";
-          }}
-        >
-          🔥 QUERO MINHA TRANSFORMAÇÃO AGORA
-        </a>
-        
-        <div
-          style={{
-            marginTop: 20,
-            fontSize: "1rem",
-            color: "#666",
-            fontWeight: "600",
-          }}
-        >
-          ✅ Acesso imediato • ✅ Garantia de 7 dias • ✅ +3.000 mulheres transformadas
-        </div>
-      </section>
-
-      {/* PROVA SOCIAL FORTALECIDA */}
-      <section
-        style={{
-          background: "#fff",
-          textAlign: "center",
-          padding: "30px 0",
-          borderBottom: "3px solid #BFA46F",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", flexWrap: "wrap" }}>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2.5rem", fontWeight: "900", color: "#BFA46F" }}>+3.000</div>
-            <div style={{ fontSize: "0.9rem", color: "#666", fontWeight: "600" }}>Mulheres Transformadas</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2.5rem", fontWeight: "900", color: "#BFA46F" }}>98%</div>
-            <div style={{ fontSize: "0.9rem", color: "#666", fontWeight: "600" }}>Taxa de Satisfação</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2.5rem", fontWeight: "900", color: "#BFA46F" }}>8+</div>
-            <div style={{ fontSize: "0.9rem", color: "#666", fontWeight: "600" }}>Anos de Experiência</div>
-          </div>
-        </div>
-      </section>
-
-      {/* DOR MAIS VISCERAL */}
-      <section style={{ padding: "50px 0", background: "#fff" }}>
-        <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center", padding: "0 20px" }}>
-          <h2
-            style={{
-              fontSize: "2.2rem",
-              fontWeight: 800,
-              marginBottom: 20,
-              color: "#222",
-              lineHeight: "1.3",
-            }}
-          >
-            Você Está Cansada de Se Sentir <span style={{ color: "#d32f2f" }}>Invisível</span> Todos os Dias?
-          </h2>
-          
-          <div style={{ background: "#f8f5f2", padding: "40px", borderRadius: "20px", marginBottom: "30px", textAlign: "left" }}>
-            <p style={{ fontSize: "1.1rem", color: "#444", marginBottom: "20px", fontWeight: "600" }}>
-              Se você se identifica com pelo menos 3 dessas situações, este guia vai mudar sua vida:
+        <div className="relative max-w-6xl mx-auto">
+          <div className="text-center mb-8">
+            <Badge className="bg-red-100 text-red-700 border-red-200 mb-4 px-4 py-2 text-sm font-semibold animate-pulse">
+              🔥 OFERTA EXCLUSIVA - ÚLTIMAS HORAS
+            </Badge>
+            
+            <h1 className="text-4xl md:text-6xl font-bold text-[#432818] mb-6 leading-tight">
+              Pare de Gastar Dinheiro em Roupas que 
+              <span className="text-[#B89B7A] block">Nunca Usa!</span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-[#8F7A6A] mb-8 max-w-4xl mx-auto leading-relaxed">
+              Descubra seu <strong>Estilo Único</strong> em 7 minutos e transforme seu guarda-roupa em looks que realmente te representam
+              <span className="block mt-2 text-lg">
+                ✨ Já transformou a vida de <strong>+12.847 mulheres</strong>
+              </span>
             </p>
-            
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, color: "#444", fontSize: "1.1rem" }}>
-              <li style={{ marginBottom: 15, display: "flex", alignItems: "flex-start" }}>
-                <span style={{ color: "#d32f2f", marginRight: "10px", fontSize: "1.3rem" }}>😣</span>
-                <span><strong>Você perde 20+ minutos toda manhã</strong> tentando escolher uma roupa e ainda sai de casa insatisfeita</span>
-              </li>
-              <li style={{ marginBottom: 15, display: "flex", alignItems: "flex-start" }}>
-                <span style={{ color: "#d32f2f", marginRight: "10px", fontSize: "1.3rem" }}>😔</span>
-                <span><strong>Sente que suas roupas não refletem quem você é</strong> e que as pessoas não te veem como você realmente é</span>
-              </li>
-              <li style={{ marginBottom: 15, display: "flex", alignItems: "flex-start" }}>
-                <span style={{ color: "#d32f2f", marginRight: "10px", fontSize: "1.3rem" }}>💸</span>
-                <span><strong>Gasta dinheiro em roupas que nunca usa</strong> porque comprou por impulso e não combina com nada</span>
-              </li>
-              <li style={{ marginBottom: 15, display: "flex", alignItems: "flex-start" }}>
-                <span style={{ color: "#d32f2f", marginRight: "10px", fontSize: "1.3rem" }}>😰</span>
-                <span><strong>Evita eventos sociais ou profissionais</strong> porque não sabe o que vestir para a ocasião</span>
-              </li>
-              <li style={{ marginBottom: 15, display: "flex", alignItems: "flex-start" }}>
-                <span style={{ color: "#d32f2f", marginRight: "10px", fontSize: "1.3rem" }}>😩</span>
-                <span><strong>Olha no espelho e pensa:</strong> "Nada fica bem em mim" ou "Não sei mais como me vestir"</span>
-              </li>
-              <li style={{ marginBottom: 15, display: "flex", alignItems: "flex-start" }}>
-                <span style={{ color: "#d32f2f", marginRight: "10px", fontSize: "1.3rem" }}>🙄</span>
-                <span><strong>Escuta de amigas:</strong> "Nossa, que roupa diferente!" quando você tenta algo novo</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div style={{ background: "linear-gradient(45deg, #BFA46F, #d4b87a)", padding: "25px", borderRadius: "15px", color: "#fff", marginBottom: "20px" }}>
-            <p style={{ fontSize: "1.3rem", fontWeight: "700", margin: 0, textAlign: "center" }}>
-              💔 A verdade dolorosa: Enquanto você não descobrir seu estilo autêntico, vai continuar se sentindo deslocada e desperdiçando tempo e dinheiro todos os dias.
-            </p>
-          </div>
-          
-          <p style={{ fontSize: "1.2rem", fontWeight: "700", color: "#BFA46F", marginTop: "20px" }}>
-            ✨ Mas e se eu te dissesse que existe um método simples para acabar com isso de uma vez por todas?
-          </p>
-        </div>
-      </section>
 
-      {/* SEÇÃO SOBRE A GISELE - AUTORIDADE */}
-      <section style={{ background: "#f8f5f2", padding: "60px 0" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 20px" }}>
-          <h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "800", marginBottom: "40px", color: "#222" }}>
-            Conheça Gisele Galvão: A Especialista Que Já Transformou +3.000 Mulheres
-          </h2>
-          
-          <div style={{ display: "flex", gap: "40px", alignItems: "center", flexWrap: "wrap" }}>
-            <div style={{ flex: "1", minWidth: "300px" }}>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911667/WhatsApp_Image_2025-04-02_at_09.40.53_cv8p5y.jpg"
-                alt="Gisele Galvão"
-                style={{ width: "100%", borderRadius: "20px", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}
-              />
-            </div>
-            
-            <div style={{ flex: "1.5", minWidth: "300px" }}>
-              <h3 style={{ fontSize: "1.5rem", fontWeight: "700", color: "#BFA46F", marginBottom: "20px" }}>
-                8+ Anos Transformando Vidas Através do Estilo
-              </h3>
-              
-              <ul style={{ listStyle: "none", padding: 0, fontSize: "1.1rem", color: "#444" }}>
-                <li style={{ marginBottom: "12px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "10px", fontSize: "1.2rem" }}>✓</span>
-                  <span><strong>Consultora de Imagem Certificada</strong> com formação internacional</span>
-                </li>
-                <li style={{ marginBottom: "12px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "10px", fontSize: "1.2rem" }}>✓</span>
-                  <span><strong>+3.000 mulheres atendidas</strong> em consultoria presencial e online</span>
-                </li>
-                <li style={{ marginBottom: "12px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "10px", fontSize: "1.2rem" }}>✓</span>
-                  <span><strong>Especialista em Coloração Pessoal</strong> e Análise de Estilo</span>
-                </li>
-                <li style={{ marginBottom: "12px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "10px", fontSize: "1.2rem" }}>✓</span>
-                  <span><strong>Criadora do Método Vista-se de Você</strong> - o único que funciona de verdade</span>
-                </li>
-                <li style={{ marginBottom: "12px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "10px", fontSize: "1.2rem" }}>✓</span>
-                  <span><strong>Reconhecida nacionalmente</strong> por grandes marcas de moda</span>
-                </li>
-              </ul>
-              
-              <div style={{ background: "#fff", padding: "20px", borderRadius: "10px", marginTop: "20px", borderLeft: "4px solid #BFA46F" }}>
-                <p style={{ fontSize: "1.1rem", color: "#444", fontStyle: "italic", margin: 0 }}>
-                  <strong>"Minha missão é simples: fazer com que cada mulher desperte todos os dias sabendo exatamente como se vestir para expressar sua verdadeira essência e se sentir poderosa."</strong>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* OFERTA IRRESISTÍVEL */}
-      <section style={{ background: "#fff", padding: "60px 0" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 20px" }}>
-          <h2 style={{ textAlign: "center", fontSize: "2.2rem", fontWeight: "800", marginBottom: "20px", color: "#222" }}>
-            O Que Você Recebe Hoje (Valor Total: R$ 897,00)
-          </h2>
-          
-          <p style={{ textAlign: "center", fontSize: "1.2rem", color: "#666", marginBottom: "40px", fontWeight: "600" }}>
-            Um sistema completo para descobrir e aplicar seu estilo autêntico em apenas 7 dias
-          </p>
-          
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "30px", marginBottom: "40px" }}>
-            {/* Produto Principal */}
-            <div style={{ background: "#f8f5f2", borderRadius: "20px", padding: "30px", border: "3px solid #BFA46F", position: "relative" }}>
-              <div style={{ position: "absolute", top: "-15px", left: "20px", background: "#BFA46F", color: "#fff", padding: "8px 20px", borderRadius: "20px", fontSize: "0.9rem", fontWeight: "700" }}>
-                PRODUTO PRINCIPAL
-              </div>
-              
-              <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_14_oxegnd.webp" alt="Manual Principal" style={{ width: "120px", borderRadius: "10px" }} />
-              </div>
-              
-              <h3 style={{ fontSize: "1.3rem", fontWeight: "800", color: "#BFA46F", marginBottom: "15px", textAlign: "center" }}>
-                Manual de Estilo Contemporâneo
-              </h3>
-              
-              <ul style={{ listStyle: "none", padding: 0, fontSize: "1rem", color: "#444" }}>
-                <li style={{ marginBottom: "8px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "8px" }}>✓</span>
-                  <span>Descubra seu estilo em 7 passos simples</span>
-                </li>
-                <li style={{ marginBottom: "8px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "8px" }}>✓</span>
-                  <span>Paleta de cores personalizada</span>
-                </li>
-                <li style={{ marginBottom: "8px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "8px" }}>✓</span>
-                  <span>Modelagens que valorizam seu corpo</span>
-                </li>
-                <li style={{ marginBottom: "8px", display: "flex", alignItems: "center" }}>
-                  <span style={{ color: "#BFA46F", marginRight: "8px" }}>✓</span>
-                  <span>Combinações infalíveis para qualquer ocasião</span>
-                </li>
-              </ul>
-              
-              <div style={{ textAlign: "center", marginTop: "15px", fontSize: "1.1rem", color: "#666" }}>
-                Valor: <span style={{ textDecoration: "line-through" }}>R$ 397,00</span>
+            {/* Countdown Timer */}
+            <div className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl p-6 mb-8 max-w-md mx-auto shadow-lg">
+              <p className="text-sm mb-2 font-medium">⏰ Oferta expira em:</p>
+              <div className="flex justify-center gap-4 text-2xl font-bold">
+                <div className="bg-white/20 rounded-lg px-3 py-2">
+                  <span>{String(timeLeft.hours).padStart(2, '0')}</span>
+                  <div className="text-xs">HRS</div>
+                </div>
+                <div className="bg-white/20 rounded-lg px-3 py-2">
+                  <span>{String(timeLeft.minutes).padStart(2, '0')}</span>
+                  <div className="text-xs">MIN</div>
+                </div>
+                <div className="bg-white/20 rounded-lg px-3 py-2">
+                  <span>{String(timeLeft.seconds).padStart(2, '0')}</span>
+                  <div className="text-xs">SEG</div>
+                </div>
               </div>
             </div>
 
-            {/* Bônus 1 */}
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "30px", border: "2px solid #BFA46F", position: "relative" }}>
-              <div style={{ position: "absolute", top: "-15px", left: "20px", background: "#d32f2f", color: "#fff", padding: "8px 20px", borderRadius: "20px", fontSize: "0.9rem", fontWeight: "700" }}>
-                BÔNUS #1
-              </div>
-              
-              <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp" alt="Guia Peças-Chave" style={{ width: "120px", borderRadius: "10px" }} />
-              </div>
-              
-              <h3 style={{ fontSize: "1.2rem", fontWeight: "700", color: "#d32f2f", marginBottom: "15px", textAlign: "center" }}>
-                Guia das 12 Peças Estratégicas
-              </h3>
-              
-              <p style={{ fontSize: "0.95rem", color: "#444", textAlign: "center", marginBottom: "15px" }}>
-                As únicas 12 peças que você precisa ter no guarda-roupa para criar looks infinitos e nunca mais ficar sem roupa.
-              </p>
-              
-              <div style={{ textAlign: "center", fontSize: "1rem", color: "#666" }}>
-                Valor: <span style={{ textDecoration: "line-through" }}>R$ 297,00</span>
-              </div>
-            </div>
-
-            {/* Bônus 2 */}
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "30px", border: "2px solid #BFA46F", position: "relative" }}>
-              <div style={{ position: "absolute", top: "-15px", left: "20px", background: "#d32f2f", color: "#fff", padding: "8px 20px", borderRadius: "20px", fontSize: "0.9rem", fontWeight: "700" }}>
-                BÔNUS #2
-              </div>
-              
-              <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                <img src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp" alt="Manual Visagismo" style={{ width: "120px", borderRadius: "10px" }} />
-              </div>
-              
-              <h3 style={{ fontSize: "1.2rem", fontWeight: "700", color: "#d32f2f", marginBottom: "15px", textAlign: "center" }}>
-                Manual de Visagismo Facial
-              </h3>
-              
-              <p style={{ fontSize: "0.95rem", color: "#444", textAlign: "center", marginBottom: "15px" }}>
-                Descubra os cortes, penteados e acessórios ideais para o formato do seu rosto e realce sua beleza natural.
-              </p>
-              
-              <div style={{ textAlign: "center", fontSize: "1rem", color: "#666" }}>
-                Valor: <span style={{ textDecoration: "line-through" }}>R$ 203,00</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Por que tão barato? */}
-          <div style={{ background: "linear-gradient(45deg, #f8f5f2, #fff)", padding: "30px", borderRadius: "20px", marginBottom: "30px", border: "2px solid #BFA46F" }}>
-            <h3 style={{ fontSize: "1.5rem", fontWeight: "700", color: "#222", marginBottom: "20px", textAlign: "center" }}>
-              "Gisele, Por Que Está Tão Barato?"
-            </h3>
-            
-            <p style={{ fontSize: "1.1rem", color: "#444", textAlign: "center", marginBottom: "15px" }}>
-              Simples: <strong>Eu quero que TODA mulher tenha acesso a esse conhecimento.</strong>
-            </p>
-            
-            <p style={{ fontSize: "1rem", color: "#444", textAlign: "center", marginBottom: "15px" }}>
-              Uma única consultoria presencial comigo custa R$ 890,00. Mas criei este guia para democratizar o conhecimento e ajudar milhares de mulheres ao mesmo tempo.
-            </p>
-            
-            <p style={{ fontSize: "1rem", color: "#444", textAlign: "center", fontWeight: "600" }}>
-              Este preço promocional é para as <span style={{ color: "#d32f2f" }}>primeiras 500 mulheres</span> que tiverem coragem de se transformar hoje.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* SEÇÃO DE PREÇO PRINCIPAL */}
-      <section style={{ background: "#222", padding: "50px 0", color: "#fff" }}>
-        <div style={{ maxWidth: 500, margin: "0 auto", textAlign: "center", padding: "0 20px" }}>
-          <div style={{ background: "linear-gradient(45deg, #BFA46F, #d4b87a)", padding: "40px", borderRadius: "25px", border: "4px solid #fff" }}>
-            <h3 style={{ fontSize: "1.8rem", fontWeight: "800", marginBottom: "20px", color: "#fff" }}>
-              🔥 OFERTA ESPECIAL - LIMITADA
-            </h3>
-            
-            <div style={{ marginBottom: "20px" }}>
-              <p style={{ fontSize: "1.1rem", marginBottom: "10px", textDecoration: "line-through", opacity: "0.8" }}>
-                Valor normal: R$ 897,00
-              </p>
-              <p style={{ fontSize: "3rem", fontWeight: "900", margin: "0", textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}>
-                R$ 39,90
-              </p>
-              <p style={{ fontSize: "1.2rem", fontWeight: "700", margin: "10px 0" }}>
-                ou 5x de R$ 8,83 sem juros
-              </p>
-            </div>
-            
-            <div style={{ background: "rgba(255,255,255,0.2)", padding: "15px", borderRadius: "15px", marginBottom: "25px" }}>
-              <p style={{ fontSize: "1.1rem", fontWeight: "700", margin: "0" }}>
-                💰 Economia de R$ 857,10 (95% OFF)
-              </p>
-            </div>
-            
-            <div style={{ marginBottom: "25px" }}>
-              <CountdownTimer 
-                initialHours={2} 
-                initialMinutes={47} 
-                initialSeconds={33}
-                className="justify-center"
-              />
-            </div>
-            
-            <a
-              href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
-              onClick={() => handleCTAClick("main-offer")}
-              style={{
-                display: "inline-block",
-                background: "#fff",
-                color: "#BFA46F",
-                fontWeight: "900",
-                fontSize: "1.3rem",
-                padding: "20px 40px",
-                borderRadius: "50px",
-                textDecoration: "none",
-                boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
-                letterSpacing: "1px",
-                transition: "all 0.3s ease",
-                textTransform: "uppercase",
-                border: "3px solid #fff",
-              }}
-              onMouseOver={(e) => {
-                e.target.style.transform = "scale(1.05)";
-                e.target.style.boxShadow = "0 12px 35px rgba(0,0,0,0.4)";
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = "scale(1)";
-                e.target.style.boxShadow = "0 8px 25px rgba(0,0,0,0.3)";
-              }}
+            <Button 
+              onClick={() => handleCTAClick("hero")}
+              size="lg"
+              className="bg-gradient-to-r from-[#B89B7A] to-[#A38A69] hover:from-[#A38A69] hover:to-[#8F7A6A] text-white text-xl px-12 py-6 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 mb-4"
             >
-              🛒 GARANTIR MINHA VAGA AGORA
-            </a>
+              <Zap className="w-6 h-6 mr-3" />
+              DESCOBRIR MEU ESTILO AGORA
+              <ArrowRight className="w-6 h-6 ml-3" />
+            </Button>
             
-            <p style={{ fontSize: "0.9rem", marginTop: "15px", opacity: "0.9" }}>
-              ✅ Acesso imediato por email<br />
-              ✅ Garantia incondicional de 7 dias<br />
-              ✅ Pagamento 100% seguro
+            <p className="text-sm text-[#8F7A6A] mb-8">
+              🔒 Pagamento 100% Seguro • ✅ Acesso Imediato • 🎯 Garantia de 7 dias
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="relative">
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_600/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+                alt="Gisele Galvão - Consultora de Imagem"
+                className="w-full max-w-md mx-auto rounded-2xl shadow-2xl"
+              />
+              <div className="absolute -bottom-4 -right-4 bg-[#B89B7A] text-white rounded-full p-4 shadow-lg">
+                <Star className="w-8 h-8" />
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="flex items-center gap-4 bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                <div className="bg-green-100 rounded-full p-3">
+                  <Users className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-[#432818]">+12.847 Transformações</h3>
+                  <p className="text-[#8F7A6A] text-sm">Mulheres que descobriram seu estilo único</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4 bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                <div className="bg-blue-100 rounded-full p-3">
+                  <Clock className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-[#432818]">7 Minutos para Descobrir</h3>
+                  <p className="text-[#8F7A6A] text-sm">Quiz cientificamente validado</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4 bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                <div className="bg-purple-100 rounded-full p-3">
+                  <Shield className="w-6 h-6 text-purple-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-[#432818]">Garantia Total</h3>
+                  <p className="text-[#8F7A6A] text-sm">7 dias para testar sem riscos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção de Dor Emocional */}
+      <section className="py-16 px-4 bg-gradient-to-b from-white to-[#f9f4ef]">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#432818] mb-8">
+            Você se Reconhece em Alguma dessas Situações?
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {[
+              {
+                icon: "😫",
+                title: "Armário Lotado, Nada para Vestir",
+                description: "Gasta horas escolhendo roupa e sempre sente que 'não tem nada' que combine"
+              },
+              {
+                icon: "💸",
+                title: "Compras por Impulso que se Arrependeu",
+                description: "Já comprou peças 'lindas' que nunca usou porque não sabia como combinar"
+              },
+              {
+                icon: "😔",
+                title: "Se Sente Sem Estilo Próprio",
+                description: "Copia looks das redes sociais mas nunca fica igual ou se sente 'você'"
+              },
+              {
+                icon: "🤔",
+                title: "Não Sabe o que te Favorece",
+                description: "Fica perdida sobre cores, modelagens e tecidos que realmente te valorizam"
+              }
+            ].map((item, index) => (
+              <Card key={index} className="border-l-4 border-l-[#B89B7A] hover:shadow-lg transition-all duration-300">
+                <CardContent className="p-6">
+                  <div className="text-3xl mb-3">{item.icon}</div>
+                  <h3 className="font-semibold text-[#432818] mb-2">{item.title}</h3>
+                  <p className="text-[#8F7A6A]">{item.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-lg mb-8">
+            <p className="text-red-800 text-lg font-medium">
+              <strong>A consequência?</strong> Você perde tempo, dinheiro e autoestima todos os dias. 
+              Continua comprando por impulso, acumulando roupas que não usa e se sentindo perdida na sua própria identidade.
+            </p>
+          </div>
+
+          <Button 
+            onClick={() => handleCTAClick("pain")}
+            size="lg"
+            className="bg-gradient-to-r from-[#B89B7A] to-[#A38A69] hover:from-[#A38A69] hover:to-[#8F7A6A] text-white text-lg px-10 py-4 rounded-full shadow-xl"
+          >
+            QUERO DESCOBRIR MEU ESTILO ÚNICO
+          </Button>
+        </div>
+      </section>
+
+      {/* Prova Social Fortalecida */}
+      <section className="py-16 px-4 bg-[#f9f4ef]">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-[#432818] mb-12">
+            O que Dizem as +12.847 Mulheres que Já Descobriram seu Estilo
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {[
+              {
+                name: "Marina S., 34 anos",
+                text: "Finalmente entendi por que certas roupas não ficavam bem em mim! O quiz me ajudou a identificar meu estilo e agora me visto com muito mais confiança. Economizei uma fortuna parando de comprar por impulso!",
+                stars: 5,
+                location: "São Paulo, SP"
+              },
+              {
+                name: "Carla M., 28 anos", 
+                text: "Eram anos me sentindo perdida no meu guarda-roupa. Depois do quiz, descobri que sou Clássica Moderna e isso mudou TUDO! Meus looks ficaram incríveis e recebo elogios toda semana.",
+                stars: 5,
+                location: "Rio de Janeiro, RJ"
+              },
+              {
+                name: "Ana Paula L., 42 anos",
+                text: "Pensava que não tinha mais idade para ter estilo próprio. O Manual da Gisele me mostrou que estava completamente errada! Hoje me sinto mais jovem e confiante do que aos 30.",
+                stars: 5,
+                location: "Belo Horizonte, MG"
+              }
+            ].map((testimonial, index) => (
+              <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardContent className="p-6">
+                  <div className="flex mb-3">
+                    {[...Array(testimonial.stars)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-[#432818] mb-4 italic">"{testimonial.text}"</p>
+                  <div className="border-t pt-3">
+                    <p className="font-semibold text-[#B89B7A]">{testimonial.name}</p>
+                    <p className="text-sm text-[#8F7A6A]">{testimonial.location}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <div className="bg-[#B89B7A]/10 rounded-xl p-8 max-w-2xl mx-auto">
+              <h3 className="text-2xl font-bold text-[#432818] mb-4">
+                Resultados Comprovados
+              </h3>
+              <div className="grid grid-cols-3 gap-6">
+                <div>
+                  <div className="text-3xl font-bold text-[#B89B7A]">97%</div>
+                  <div className="text-sm text-[#8F7A6A]">Descobriram seu estilo</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-[#B89B7A]">89%</div>
+                  <div className="text-sm text-[#8F7A6A]">Economizaram dinheiro</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-[#B89B7A]">94%</div>
+                  <div className="text-sm text-[#8F7A6A]">Mais autoestima</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Oferta Irresistível */}
+      <section className="py-16 px-4 bg-gradient-to-br from-[#B89B7A] to-[#A38A69] text-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <Badge className="bg-yellow-400 text-yellow-900 mb-6 px-6 py-3 text-lg font-bold">
+            🎯 OFERTA ESPECIAL - HOJE APENAS
+          </Badge>
+          
+          <h2 className="text-4xl md:text-5xl font-bold mb-8">
+            Manual de Estilo Contemporâneo
+            <span className="block text-yellow-300">Descubra Seu Estilo em 7 Minutos</span>
+          </h2>
+
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-8">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="text-left space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Check className="w-6 h-6 text-green-300" />
+                    <span>Quiz Científico de Identificação de Estilo</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Check className="w-6 h-6 text-green-300" />
+                    <span>Manual Completo com seu Perfil Único</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Check className="w-6 h-6 text-green-300" />
+                    <span>Cores que te Valorizam</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Check className="w-6 h-6 text-green-300" />
+                    <span>Modelagens Ideais para seu Corpo</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Check className="w-6 h-6 text-green-300" />
+                    <span>Guia de Compras Inteligentes</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-sm text-gray-300 line-through mb-2">De R$ 197,00</div>
+                <div className="text-5xl font-bold text-yellow-300 mb-2">R$ 47</div>
+                <div className="text-lg">à vista no PIX</div>
+                <div className="text-sm mt-2">ou 3x de R$ 16,70</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-yellow-400 text-yellow-900 rounded-xl p-6 mb-8">
+            <h3 className="text-2xl font-bold mb-4">🎁 BÔNUS EXCLUSIVOS (Valor: R$ 297)</h3>
+            <div className="grid md:grid-cols-3 gap-4 text-sm">
+              <div>
+                <strong>Guia de Visagismo</strong>
+                <p>Cortes e cores de cabelo ideais</p>
+              </div>
+              <div>
+                <strong>Peças-Chave Essenciais</strong>
+                <p>Lista das 20 peças que não podem faltar</p>
+              </div>
+              <div>
+                <strong>Combinações Prontas</strong>
+                <p>30 looks montados para cada estilo</p>
+              </div>
+            </div>
+          </div>
+
+          <Button 
+            onClick={() => handleCTAClick("offer")}
+            size="lg"
+            className="bg-yellow-400 hover:bg-yellow-300 text-yellow-900 text-2xl px-16 py-8 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 mb-6"
+          >
+            <Zap className="w-8 h-8 mr-4" />
+            QUERO MEU MANUAL AGORA!
+            <ArrowRight className="w-8 h-8 ml-4" />
+          </Button>
+
+          <div className="flex items-center justify-center gap-6 text-sm">
+            <div className="flex items-center gap-2">
+              <Shield className="w-5 h-5" />
+              <span>Garantia 7 dias</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5" />
+              <span>Acesso imediato</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="w-5 h-5" />
+              <span>Pagamento seguro</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Por que tão barato? */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-[#432818] mb-8">
+            "Por que tão barato se vale muito mais?"
+          </h2>
+          
+          <div className="bg-[#f9f4ef] rounded-xl p-8 text-left">
+            <p className="text-[#432818] text-lg leading-relaxed mb-6">
+              <strong>Simples:</strong> Minha missão é democratizar o acesso ao conhecimento de estilo e imagem. 
+              Uma consultoria presencial comigo custa R$ 1.200. Este manual contém 80% do que ensino nas consultorias.
+            </p>
+            
+            <p className="text-[#432818] text-lg leading-relaxed mb-6">
+              Prefiro impactar milhares de mulheres com um preço acessível do que apenas algumas poucas com um preço alto.
+            </p>
+            
+            <p className="text-[#B89B7A] font-semibold text-xl">
+              Você está investindo em conhecimento que vai usar para o resto da vida!
             </p>
           </div>
         </div>
       </section>
 
-      {/* DEPOIMENTOS DETALHADOS */}
-      <section style={{ background: "#faf9f6", padding: "60px 0" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "0 20px" }}>
-          <h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "800", marginBottom: "50px", color: "#222" }}>
-            O Que Dizem as +3.000 Mulheres Que Já Se Transformaram
+      {/* Seção de Autoridade */}
+      <section className="py-16 px-4 bg-[#f9f4ef]">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-[#432818] mb-12">
+            Quem é Gisele Galvão?
           </h2>
           
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "30px" }}>
-            {/* Depoimento 1 */}
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "30px", boxShadow: "0 10px 30px rgba(0,0,0,0.1)", border: "2px solid #BFA46F" }}>
-              <div style={{ display: "flex", marginBottom: "15px" }}>
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} style={{ color: "#FFD700", fontSize: "1.2rem" }}>⭐</span>
-                ))}
-              </div>
-              
-              <p style={{ fontSize: "1.1rem", color: "#444", fontStyle: "italic", marginBottom: "20px", lineHeight: "1.6" }}>
-                "Gente, eu não acreditava que ia funcionar tão rápido! Em 3 dias seguindo o método da Gisele, recebi 2 elogios no trabalho. Meu chefe até perguntou se eu tinha mudado alguma coisa porque estava 'radiante'. Pela primeira vez em anos me sinto EU mesma!"
-              </p>
-              
-              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                <img 
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/adriana-antes-depois.webp" 
-                  alt="Adriana S." 
-                  style={{ width: "60px", height: "60px", borderRadius: "50%", objectFit: "cover" }}
-                />
-                <div>
-                  <div style={{ fontWeight: "700", color: "#BFA46F", fontSize: "1.1rem" }}>Adriana S.</div>
-                  <div style={{ fontSize: "0.9rem", color: "#666" }}>Executiva, 34 anos</div>
-                </div>
-              </div>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <img 
+                src="https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+                alt="Gisele Galvão - Consultora de Imagem"
+                className="w-full rounded-2xl shadow-xl"
+              />
             </div>
-
-            {/* Depoimento 2 */}
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "30px", boxShadow: "0 10px 30px rgba(0,0,0,0.1)", border: "2px solid #BFA46F" }}>
-              <div style={{ display: "flex", marginBottom: "15px" }}>
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} style={{ color: "#FFD700", fontSize: "1.2rem" }}>⭐</span>
-                ))}
-              </div>
+            
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-[#B89B7A]">
+                Consultora de Imagem & Personal Stylist
+              </h3>
               
-              <p style={{ fontSize: "1.1rem", color: "#444", fontStyle: "italic", marginBottom: "20px", lineHeight: "1.6" }}>
-                "Chorei quando vi a diferença! Eram as MESMAS roupas, mas seguindo as dicas de combinação e cores do guia, parecia que eu tinha um guarda-roupa novo. Economizei mais de R$ 2.000 que ia gastar em roupas novas. Melhor investimento da minha vida!"
-              </p>
-              
-              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                <img 
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/mariangela-antes-depois.webp" 
-                  alt="Mariangela M." 
-                  style={{ width: "60px", height: "60px", borderRadius: "50%", objectFit: "cover" }}
-                />
-                <div>
-                  <div style={{ fontWeight: "700", color: "#BFA46F", fontSize: "1.1rem" }}>Mariangela M.</div>
-                  <div style={{ fontSize: "0.9rem", color: "#666" }}>Empresária, 42 anos</div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Check className="w-6 h-6 text-green-600" />
+                  <span>+15 anos de experiência em consultoria de imagem</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Check className="w-6 h-6 text-green-600" />
+                  <span>+2.000 mulheres atendidas presencialmente</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Check className="w-6 h-6 text-green-600" />
+                  <span>Formação em Consultoria de Imagem pela AICI</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Check className="w-6 h-6 text-green-600" />
+                  <span>Especialização em Visagismo e Coloração Pessoal</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Check className="w-6 h-6 text-green-600" />
+                  <span>+180K seguidores no Instagram</span>
                 </div>
               </div>
-            </div>
-
-            {/* Depoimento 3 */}
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "30px", boxShadow: "0 10px 30px rgba(0,0,0,0.1)", border: "2px solid #BFA46F" }}>
-              <div style={{ display: "flex", marginBottom: "15px" }}>
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} style={{ color: "#FFD700", fontSize: "1.2rem" }}>⭐</span>
-                ))}
-              </div>
               
-              <p style={{ fontSize: "1.1rem", color: "#444", fontStyle: "italic", marginBottom: "20px", lineHeight: "1.6" }}>
-                "Minha autoestima estava no chão depois da gravidez. Nada ficava bem, me sentia feia e sem graça. O método da Gisele me ensinou a trabalhar com meu novo corpo e hoje me sinto mais poderosa que antes! Meu marido não para de elogiar 💕"
-              </p>
-              
-              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                <div style={{ width: "60px", height: "60px", borderRadius: "50%", background: "#BFA46F", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: "700", fontSize: "1.2rem" }}>
-                  CF
-                </div>
-                <div>
-                  <div style={{ fontWeight: "700", color: "#BFA46F", fontSize: "1.1rem" }}>Carla F.</div>
-                  <div style={{ fontSize: "0.9rem", color: "#666" }}>Mãe e Designer, 29 anos</div>
-                </div>
-              </div>
+              <blockquote className="bg-white p-6 rounded-lg border-l-4 border-[#B89B7A] italic">
+                "Minha missão é ajudar mulheres a descobrirem sua essência através do seu estilo único. 
+                Quando você se veste de acordo com quem realmente é, sua autoestima e confiança se transformam."
+              </blockquote>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ PARA QUEBRAR OBJEÇÕES */}
-      <section style={{ background: "#fff", padding: "60px 0" }}>
-        <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 20px" }}>
-          <h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "800", marginBottom: "40px", color: "#222" }}>
-            Perguntas Frequentes (Suas Dúvidas Respondidas)
+      {/* FAQ */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-[#432818] mb-12">
+            Perguntas Frequentes
           </h2>
           
-          <div style={{ space: "20px" }}>
-            {faqData.map((faq, index) => (
-              <div key={index} style={{ background: "#f8f5f2", borderRadius: "15px", marginBottom: "15px", overflow: "hidden", border: "2px solid #BFA46F" }}>
-                <button
-                  onClick={() => toggleFAQ(index)}
-                  style={{
-                    width: "100%",
-                    padding: "20px",
-                    background: "transparent",
-                    border: "none",
-                    textAlign: "left",
-                    fontSize: "1.1rem",
-                    fontWeight: "700",
-                    color: "#222",
-                    cursor: "pointer",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  {faq.question}
-                  <span style={{ fontSize: "1.5rem", color: "#BFA46F" }}>
-                    {faqOpen === index ? "−" : "+"}
-                  </span>
-                </button>
-                
-                {faqOpen === index && (
-                  <div style={{ padding: "0 20px 20px 20px", fontSize: "1rem", color: "#444", lineHeight: "1.6" }}>
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
+          <div className="space-y-4">
+            {[
+              {
+                question: "Quanto tempo leva para fazer o quiz?",
+                answer: "O quiz leva entre 5 a 7 minutos para ser concluído. É rápido, mas muito preciso!"
+              },
+              {
+                question: "Como recebo o resultado?",
+                answer: "Assim que finalizar o quiz, você recebe seu manual personalizado por email instantaneamente."
+              },
+              {
+                question: "O manual funciona para qualquer idade?",
+                answer: "Sim! O método funciona para mulheres de 18 a 80 anos. O estilo não tem idade!"
+              },
+              {
+                question: "E se eu não gostar do resultado?",
+                answer: "Você tem 7 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do seu dinheiro."
+              },
+              {
+                question: "O método funciona para qualquer tipo de corpo?",
+                answer: "Absolutamente! O quiz identifica seu estilo pessoal e adapta as recomendações para seu biotipo específico."
+              },
+              {
+                question: "Posso pagar no cartão?",
+                answer: "Sim! Aceitamos PIX (R$ 47) ou cartão em até 3x de R$ 16,70 sem juros."
+              }
+            ].map((faq, index) => (
+              <Card key={index} className="border-2 border-[#B89B7A]/20">
+                <CardContent className="p-0">
+                  <button
+                    onClick={() => toggleFAQ(index)}
+                    className="w-full p-6 text-left flex justify-between items-center hover:bg-[#f9f4ef] transition-colors"
+                  >
+                    <h3 className="font-semibold text-[#432818]">{faq.question}</h3>
+                    <ChevronDown className={`w-5 h-5 text-[#B89B7A] transition-transform ${openFAQ === index ? 'rotate-180' : ''}`} />
+                  </button>
+                  {openFAQ === index && (
+                    <div className="px-6 pb-6">
+                      <p className="text-[#8F7A6A]">{faq.answer}</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* GARANTIA VISUAL */}
-      <section style={{ background: "#f8f5f2", padding: "50px 0" }}>
-        <div style={{ maxWidth: 700, margin: "0 auto", padding: "0 20px" }}>
-          <div style={{ background: "#fff", borderRadius: "25px", padding: "40px", textAlign: "center", border: "3px solid #4CAF50", boxShadow: "0 10px 30px rgba(76, 175, 80, 0.2)" }}>
-            <div style={{ fontSize: "4rem", marginBottom: "20px" }}>🛡️</div>
-            
-            <h3 style={{ fontSize: "1.8rem", fontWeight: "800", color: "#4CAF50", marginBottom: "20px" }}>
-              Garantia Total de 7 Dias
-            </h3>
-            
-            <p style={{ fontSize: "1.2rem", color: "#444", marginBottom: "20px", lineHeight: "1.6" }}>
-              Teste o método completo por <strong>7 dias</strong>. Se não ficar 100% satisfeita com os resultados, devolvemos todo seu dinheiro na hora.
-            </p>
-            
-            <p style={{ fontSize: "1.1rem", color: "#666", fontWeight: "600" }}>
-              Sem perguntas. Sem burocracia. Simples assim.
-            </p>
-            
-            <div style={{ background: "#4CAF50", color: "#fff", padding: "15px", borderRadius: "10px", marginTop: "20px" }}>
-              <p style={{ fontSize: "1rem", fontWeight: "700", margin: 0 }}>
-                ✅ Risco ZERO para você • ✅ Satisfação garantida • ✅ Reembolso imediato
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA FINAL */}
-      <section style={{ background: "linear-gradient(135deg, #BFA46F 0%, #d4b87a 100%)", padding: "60px 0", color: "#fff", textAlign: "center" }}>
-        <div style={{ maxWidth: 600, margin: "0 auto", padding: "0 20px" }}>
-          <h2 style={{ fontSize: "2.5rem", fontWeight: "900", marginBottom: "20px", textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}>
-            ⏰ Não Deixe Esta Oportunidade Passar!
+      {/* CTA Final */}
+      <section className="py-16 px-4 bg-gradient-to-r from-[#B89B7A] to-[#A38A69] text-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Chegou a Hora de se Descobrir!
           </h2>
           
-          <p style={{ fontSize: "1.3rem", marginBottom: "25px", fontWeight: "600" }}>
-            Enquanto você pensa, <strong>outras mulheres estão se transformando</strong> agora mesmo.
+          <p className="text-xl mb-8 opacity-90">
+            Pare de perder tempo, dinheiro e autoestima. Descubra seu estilo único hoje e transforme sua relação com a moda para sempre.
           </p>
-          
-          <div style={{ background: "rgba(255,255,255,0.2)", padding: "20px", borderRadius: "15px", marginBottom: "30px" }}>
-            <p style={{ fontSize: "1.1rem", fontWeight: "700", margin: 0 }}>
-              Este preço especial de R$ 39,90 é válido apenas por:
-            </p>
-            <div style={{ marginTop: "15px" }}>
-              <CountdownTimer 
-                initialHours={2} 
-                initialMinutes={47} 
-                initialSeconds={33}
-                className="justify-center"
-              />
+
+          <div className="bg-red-500 text-white rounded-xl p-6 mb-8 max-w-md mx-auto">
+            <p className="text-sm mb-2 font-medium">⏰ Últimas horas desta oferta:</p>
+            <div className="flex justify-center gap-4 text-2xl font-bold">
+              <div className="bg-white/20 rounded-lg px-3 py-2">
+                <span>{String(timeLeft.hours).padStart(2, '0')}</span>
+                <div className="text-xs">HRS</div>
+              </div>
+              <div className="bg-white/20 rounded-lg px-3 py-2">
+                <span>{String(timeLeft.minutes).padStart(2, '0')}</span>
+                <div className="text-xs">MIN</div>
+              </div>
+              <div className="bg-white/20 rounded-lg px-3 py-2">
+                <span>{String(timeLeft.seconds).padStart(2, '0')}</span>
+                <div className="text-xs">SEG</div>
+              </div>
             </div>
           </div>
           
-          <a
-            href="https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
+          <Button 
             onClick={() => handleCTAClick("final")}
-            style={{
-              display: "inline-block",
-              background: "#fff",
-              color: "#BFA46F",
-              fontWeight: "900",
-              fontSize: "1.4rem",
-              padding: "25px 50px",
-              borderRadius: "50px",
-              textDecoration: "none",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
-              letterSpacing: "1px",
-              transition: "all 0.3s ease",
-              textTransform: "uppercase",
-              border: "4px solid #fff",
-              marginBottom: "20px",
-            }}
-            onMouseOver={(e) => {
-              e.target.style.transform = "scale(1.05)";
-              e.target.style.boxShadow = "0 15px 40px rgba(0,0,0,0.4)";
-            }}
-            onMouseOut={(e) => {
-              e.target.style.transform = "scale(1)";
-              e.target.style.boxShadow = "0 10px 30px rgba(0,0,0,0.3)";
-            }}
+            size="lg"
+            className="bg-yellow-400 hover:bg-yellow-300 text-yellow-900 text-2xl px-16 py-8 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 mb-6"
           >
-            🔥 SIM! QUERO MINHA TRANSFORMAÇÃO AGORA
-          </a>
+            <Zap className="w-8 h-8 mr-4" />
+            SIM, QUERO DESCOBRIR MEU ESTILO!
+            <ArrowRight className="w-8 h-8 ml-4" />
+          </Button>
           
-          <p style={{ fontSize: "1rem", opacity: "0.9", marginTop: "15px" }}>
-            ✅ Acesso imediato • ✅ Garantia de 7 dias • ✅ Suporte total
+          <p className="text-sm opacity-75">
+            🔒 Compra 100% Segura • ✅ Acesso Imediato • 🎯 Garantia de 7 dias ou seu dinheiro de volta
           </p>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer style={{ background: "#222", color: "#fff", textAlign: "center", padding: "30px 0", fontSize: "0.9rem" }}>
-        <div style={{ maxWidth: "800px", margin: "0 auto", padding: "0 20px" }}>
-          <p style={{ marginBottom: "15px" }}>
-            © {new Date().getFullYear()} Gisele Galvão | Todos os direitos reservados.
-          </p>
-          <p style={{ fontSize: "0.8rem", opacity: "0.8" }}>
-            Este site não é afiliado ao Facebook, Google ou Hotmart.<br />
-            Resultados podem variar de pessoa para pessoa.
-          </p>
-        </div>
-      </footer>
     </div>
   );
-}
+};
+
+export default QuizDescubraSeuEstilo;
