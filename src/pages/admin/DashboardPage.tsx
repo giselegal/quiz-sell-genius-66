@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AdminSidebar } from '../../components/admin/AdminSidebar';
@@ -36,11 +37,11 @@ const DashboardPage: React.FC = () => {
               {/* Rota principal - Overview */}
               <Route index element={<DashboardOverview />} />
               
-              {/* Rotas do dashboard */}
+              {/* Rotas do dashboard conforme solicitado */}
               <Route path="quiz" element={<QuizPage />} />
               <Route path="ab-tests" element={<ABTestPage />} />
               <Route path="settings" element={<SettingsPage />} />
-              <Route path="creative-analytics" element={<CreativesPage />} />
+              <Route path="criativos" element={<CreativesPage />} />
               <Route path="analytics" element={<AnalyticsPage />} />
               <Route path="editor" element={<EditorPage />} />
               

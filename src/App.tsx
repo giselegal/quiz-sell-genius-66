@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -28,49 +29,18 @@ const QuizDescubraSeuEstilo = lazy(() => import('./pages/quiz-descubra-seu-estil
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-// Avalia se o dispositivo tem performance limitada
-const isLowPerformanceDevice = () => {
-  const memory = (navigator as any).deviceMemory;
-  if (memory && memory < 4) return true;
-  
-  const cpuCores = navigator.hardwareConcurrency;
-  if (cpuCores && cpuCores < 4) return true;
-  
-  return false;
-};
-
-// Função para prefetch de componentes
-const prefetchComponent = (componentLoader: () => Promise<any>) => {
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      componentLoader();
-    });
-  } else {
-    setTimeout(() => {
-      componentLoader();
-    }, 2000);
-  }
-};
-
 const App = () => {
-  const lowPerformance = isLowPerformanceDevice();
-
   // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
       loadFacebookPixel();
       captureUTMParameters();
       
-      // Prefetch da página de resultado
-      if (!lowPerformance) {
-        prefetchComponent(() => import('./pages/ResultPage'));
-      }
-      
-      console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
+      console.log('App initialized with essential routes only');
     } catch (error) {
       console.error('Erro ao inicializar aplicativo:', error);
     }
-  }, [lowPerformance]);
+  }, []);
 
   return (
     <AuthProvider>
@@ -83,7 +53,7 @@ const App = () => {
             <Suspense fallback={<LoadingFallback />}>
               <ABTestRedirect>
                 <Routes>
-                  {/* Rotas principais em SPA */}
+                  {/* Rotas principais */}
                   <Route path="/" element={<QuizPage />} />
                   <Route path="/resultado" element={<ResultPage />} />
                   <Route path="/descubra-seu-estilo" element={<QuizDescubraSeuEstilo />} />

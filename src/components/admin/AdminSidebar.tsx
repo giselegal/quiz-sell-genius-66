@@ -10,7 +10,8 @@ import {
   Eye,
   Target,
   Code,
-  TrendingUp
+  TrendingUp,
+  Home
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -18,7 +19,7 @@ const sidebarItems = [
   {
     title: 'Dashboard',
     href: '/admin',
-    icon: BarChart3
+    icon: Home
   },
   {
     title: 'Quiz',
@@ -33,15 +34,16 @@ const sidebarItems = [
   {
     title: 'Configurações',
     href: '/admin/settings',
-    icon: Settings
+    icon: Settings,
+    description: 'Pixel, UTM, URL, Tokens API'
   },
   {
     title: 'Criativos',
-    href: '/admin/creative-analytics',
+    href: '/admin/criativos',
     icon: TrendingUp
   },
   {
-    title: 'Analytics',
+    title: 'Análise de Métricas',
     href: '/admin/analytics',
     icon: BarChart3
   },
@@ -72,14 +74,24 @@ export function AdminSidebar() {
               key={item.href}
               to={item.href}
               className={cn(
-                'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+                'flex flex-col gap-1 px-4 py-3 rounded-lg transition-colors',
                 isActive 
                   ? 'bg-[#B89B7A] text-white' 
                   : 'text-[#432818] hover:bg-[#F5F2E9]'
               )}
             >
-              <Icon className="w-5 h-5" />
-              <span className="font-medium">{item.title}</span>
+              <div className="flex items-center gap-3">
+                <Icon className="w-5 h-5" />
+                <span className="font-medium">{item.title}</span>
+              </div>
+              {item.description && (
+                <span className={cn(
+                  "text-xs ml-8",
+                  isActive ? "text-white/70" : "text-[#8F7A6A]"
+                )}>
+                  {item.description}
+                </span>
+              )}
             </Link>
           );
         })}
