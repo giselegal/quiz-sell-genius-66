@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useQuizLogic } from '../hooks/useQuizLogic';
@@ -163,11 +164,9 @@ const QuizPage: React.FC = () => {
       // Salva a resposta estratégica usando o hook useQuizLogic
       saveStrategicAnswer(response.questionId, finalOptions);
       
-      // Rastreia a resposta para analytics - fixed signature
-      trackQuizAnswer(
-        response.questionId, 
-        finalOptions.join(', ')
-      );
+      // Rastreia a resposta para analytics
+      trackQuizAnswer(response.questionId, finalOptions.join(', '));
+      
       const currentProgress = ((currentStrategicQuestionIndex + totalQuestions + 1) / 
                               (totalQuestions + strategicQuestions.length)) * 100;
       if (currentProgress >= 45 && currentProgress <= 55) {
@@ -224,11 +223,8 @@ const QuizPage: React.FC = () => {
   const handleAnswerSubmitInternal = useCallback((response: UserResponse) => {
     try {
       handleAnswer(response.questionId, response.selectedOptions);
-      // Fixed signature - removed extra arguments
-      trackQuizAnswer(
-        response.questionId, 
-        response.selectedOptions.join(', ')
-      );
+      trackQuizAnswer(response.questionId, response.selectedOptions.join(', '));
+      
       const currentProgress = ((currentQuestionIndex + 1) / 
                               (totalQuestions + strategicQuestions.length)) * 100;
       if (currentProgress >= 20 && currentProgress <= 30) {
@@ -286,12 +282,7 @@ const QuizPage: React.FC = () => {
       } else {
         calculateResults();
         setShowingTransition(true); // Mostra MainTransition
-        trackQuizAnswer(
-          "quiz_main_complete", 
-          "completed", 
-          totalQuestions, 
-          totalQuestions + strategicQuestions.length
-        );
+        trackQuizAnswer('quiz_main_complete', 'completed');
       }
     }
   }, [
@@ -300,9 +291,7 @@ const QuizPage: React.FC = () => {
     calculatedRequiredOptions, 
     isLastQuestion, 
     handleNext, 
-    calculateResults, 
-    totalQuestions,
-    strategicQuestions.length
+    calculateResults
   ]);
 
   const currentQuestionTypeForNav = showingStrategicQuestions ? 'strategic' : 'normal';
@@ -335,7 +324,7 @@ const QuizPage: React.FC = () => {
           ? (currentStrategicQuestionIndex === strategicQuestions.length - 1 
               ? () => { 
                   setShowingFinalTransition(true);  
-                  trackQuizComplete(); // Fixed - removed extra arguments
+                  trackQuizComplete();
                   // Manual progression to results will be triggered by button click
                 }
               : goToNextStrategicQuestion // Chama a nova função para avançar

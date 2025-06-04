@@ -1,6 +1,4 @@
 
-import { getAnalyticsEvents } from './analytics';
-
 // Function to track a generic event
 export const trackEvent = (event_name: string, params?: object) => {
   if (typeof window !== 'undefined' && window.gtag) {

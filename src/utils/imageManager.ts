@@ -214,9 +214,13 @@ export const preloadImages = (images: Array<{ src: string; id: string; alt?: str
   return preloadImagesByUrls(urls, options);
 };
 
-// Add missing function
+// Add missing functions
 export const preloadImagesByIds = (ids: string[], options?: PreloadOptions) => {
   // Convert IDs to URLs - this is a simplified implementation
   const urls = ids.map(id => `/images/${id}`);
   return preloadImagesByUrls(urls, options);
+};
+
+export const preloadImagesByCategory = (category: string, options?: Omit<PreloadOptions, 'onProgress' | 'onComplete'>) => {
+  return preloadCriticalImages(category, options);
 };

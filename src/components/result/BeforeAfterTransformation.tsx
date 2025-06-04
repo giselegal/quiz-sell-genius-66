@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -8,16 +9,27 @@ import { ArrowRight, Check, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface BeforeAfterTransformationProps {
-  primaryStyle: StyleResult;
+  primaryStyle?: StyleResult;
   onContinue?: () => void;
+  handleCTAClick?: () => void;
 }
 
 export const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps> = ({
   primaryStyle,
-  onContinue
+  onContinue,
+  handleCTAClick
 }) => {
   const [activeTab, setActiveTab] = useState('before');
   const [showAnimation, setShowAnimation] = useState(false);
+  
+  // Default style if none provided
+  const defaultStyle: StyleResult = {
+    category: 'Natural',
+    score: 0,
+    percentage: 0
+  };
+  
+  const style = primaryStyle || defaultStyle;
   
   useEffect(() => {
     // Start animation after a delay
@@ -31,11 +43,38 @@ export const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps>
   const handleContinue = () => {
     if (onContinue) {
       onContinue();
+    } else if (handleCTAClick) {
+      handleCTAClick();
     }
   };
   
   const getStyleSpecificContent = () => {
-    switch (primaryStyle.category) {
+    if (!style?.category) {
+      return {
+        before: {
+          title: "Antes da Transformação",
+          description: "Você provavelmente está usando roupas que não refletem sua verdadeira essência e personalidade.",
+          points: [
+            "Peças que não valorizam seu tipo físico",
+            "Cores que não harmonizam com seu tom de pele",
+            "Estilos que não expressam sua personalidade",
+            "Combinações sem coerência visual"
+          ]
+        },
+        after: {
+          title: "Depois da Transformação",
+          description: "Ao incorporar elementos do seu estilo dominante, você expressará naturalmente sua personalidade através das roupas.",
+          points: [
+            "Peças que valorizam suas características físicas",
+            "Cores que realçam seu tom de pele",
+            "Estilos que expressam sua personalidade",
+            "Combinações harmoniosas e coerentes"
+          ]
+        }
+      };
+    }
+
+    switch (style.category) {
       case 'Romântico':
         return {
           before: {
@@ -143,7 +182,7 @@ export const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps>
           Sua Transformação de Estilo
         </CardTitle>
         <CardDescription>
-          Descubra como o conhecimento do seu estilo {primaryStyle.category} pode transformar sua imagem
+          Descubra como o conhecimento do seu estilo {style.category} pode transformar sua imagem
         </CardDescription>
       </CardHeader>
       
@@ -235,7 +274,7 @@ export const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps>
                   Pronta para transformar seu estilo e sua imagem?
                 </p>
                 <p className="text-gray-600 text-sm mb-4">
-                  Descubra como aplicar seu estilo {primaryStyle.category} no seu dia a dia
+                  Descubra como aplicar seu estilo {style.category} no seu dia a dia
                 </p>
               </motion.div>
             </div>
