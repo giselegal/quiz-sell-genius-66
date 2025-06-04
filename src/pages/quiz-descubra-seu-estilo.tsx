@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Clock, Star, Check } from 'lucide-react';
+import { ArrowRight, Shield, Clock, Star, Check, Frown, ShoppingBag, Timer, User } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { trackPixelEvent } from '@/utils/facebookPixel';
 import { useUtmParameters } from '@/hooks/useUtmParameters';
@@ -26,27 +25,27 @@ const DescubraSeuEstilo: React.FC = () => {
       value: 39.99,
       currency: 'BRL'
     });
-    window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
+    window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB', '_blank');
   };
 
   const painPoints = [
     {
-      icon: "😔",
+      icon: <Frown className="h-8 w-8 text-[#B89B7A] mx-auto" />,
       title: "Guarda-roupa lotado, mas nada para vestir",
       description: "Você tem muitas roupas, mas sempre sente que não tem nada adequado para usar."
     },
     {
-      icon: "💸",
+      icon: <ShoppingBag className="h-8 w-8 text-[#B89B7A] mx-auto" />,
       title: "Compras que nunca usa",
       description: "Gastou dinheiro em peças que pareciam perfeitas na loja, mas nunca combinaram com nada."
     },
     {
-      icon: "⏰",
+      icon: <Timer className="h-8 w-8 text-[#B89B7A] mx-auto" />,
       title: "Perde tempo se arrumando",
       description: "Demora muito para escolher o que vestir e ainda assim não se sente confiante."
     },
     {
-      icon: "🤷‍♀️",
+      icon: <User className="h-8 w-8 text-[#B89B7A] mx-auto" />,
       title: "Imagem não reflete quem você é",
       description: "Sente que sua aparência não comunica sua verdadeira personalidade e essência."
     }
@@ -140,19 +139,17 @@ const DescubraSeuEstilo: React.FC = () => {
               A verdade é que ter um armário lotado não significa ter um guarda-roupa funcional. Pelo contrário, muitas vezes isso só aumenta a ansiedade na hora de se vestir e o sentimento de que "nada fica bom em mim".
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {painPoints.map((point, index) => (
-              <Card key={index} className="border-[#B89B7A]/20 hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4">{point.icon}</div>
-                  <h3 className="text-lg font-semibold text-[#432818] mb-3">{point.title}</h3>
+              <Card key={index} className="border-[#B89B7A]/20 hover:shadow-lg transition-shadow duration-300 rounded-lg">
+                <CardContent className="p-6 text-center flex flex-col items-center">
+                  {point.icon}
+                  <h3 className="text-base md:text-lg font-semibold text-[#432818] mb-2 mt-4">{point.title}</h3>
                   <p className="text-[#8F7A6A] text-sm">{point.description}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
-          
           <div className="text-center mt-12">
             <p className="text-lg text-[#8F7A6A] italic max-w-4xl mx-auto">
               Isso acontece porque você ainda não descobriu seu estilo predominante - aquele que está alinhado com sua personalidade, valores e essência. Sem esse conhecimento, você continua comprando peças aleatórias que não conversam entre si e não expressam quem você é.
@@ -242,14 +239,14 @@ const DescubraSeuEstilo: React.FC = () => {
               <img 
                 src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp" 
                 alt="Mockup tablet com guia de imagem e estilo" 
-                className="w-full rounded-lg shadow-lg"
+                className="w-full rounded-lg shadow-lg object-cover h-auto"
               />
             </div>
             <div className="space-y-4">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <Check className="h-6 w-6 text-[#B89B7A] flex-shrink-0 mt-0.5" />
-                  <span className="text-[#432818]">{benefit}</span>
+                  <span className="text-[#432818] text-base md:text-lg">{benefit}</span>
                 </div>
               ))}
             </div>
