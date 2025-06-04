@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
@@ -26,6 +25,7 @@ const LoadingFallback = () => (
 // Lazy loading das páginas essenciais
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
+const ResultPage = lazy(() => import("./pages/ResultPage"));
 const QuizDescubraSeuEstilo = lazy(
   () => import("./pages/quiz-descubra-seu-estilo")
 );
@@ -68,6 +68,7 @@ const App = () => {
                 {/* Rota do quiz específica */}
                 <Route path="/quiz" element={<QuizPage />} />
                 {/* Rotas do teste A/B */}
+                <Route path="/resultado" element={<ResultPage />} />
                 <Route
                   path="/descubra-seu-estilo"
                   element={<QuizDescubraSeuEstilo />}
