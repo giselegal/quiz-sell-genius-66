@@ -16,6 +16,12 @@ import { trackPixelEvent } from "@/utils/facebookPixel";
 import { useUtmParameters } from "@/hooks/useUtmParameters";
 import MentorSection from "@/components/result/MentorSection";
 
+// Adiciona declaração global para window.ctaClickProcessing
+// @ts-expect-error
+if (!("ctaClickProcessing" in window)) {
+  (window as Window & { ctaClickProcessing?: boolean }).ctaClickProcessing = false;
+}
+
 const DescubraSeuEstilo: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { captureUtmParameters } = useUtmParameters();
@@ -29,16 +35,34 @@ const DescubraSeuEstilo: React.FC = () => {
     });
   }, [captureUtmParameters]);
 
-  const handleCTAClick = () => {
-    trackPixelEvent("InitiateCheckout", {
-      content_name: "Quiz de Estilo Completo",
-      value: 39.99,
-      currency: "BRL",
-    });
-    window.open(
-      "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB",
-      "_blank"
-    );
+  const handleCTAClick = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (typeof window !== 'undefined') {
+      // @ts-expect-error
+      if (window.ctaClickProcessing) return;
+      // @ts-expect-error
+      window.ctaClickProcessing = true;
+
+      trackPixelEvent("InitiateCheckout", {
+        content_name: "Quiz de Estilo Completo",
+        value: 39.99,
+        currency: "BRL",
+      });
+      const checkoutUrl =
+        "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
+      if (window.innerWidth >= 768) {
+        window.open(checkoutUrl, "_blank");
+      } else {
+        window.location.href = checkoutUrl;
+      }
+      setTimeout(() => {
+        // @ts-expect-error
+        window.ctaClickProcessing = false;
+      }, 1000);
+    }
   };
 
   const painPoints = [
