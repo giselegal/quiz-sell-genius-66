@@ -61,11 +61,18 @@ export interface ImageDiagnosticResult {
     optimizedImages: number;
     totalSize: number;
     potentialSavings: number;
+    totalImagesRendered?: number;
+    totalImagesWithIssues?: number;
+    totalDownloadedBytes?: number;
+    estimatedPerformanceImpact?: number;
   };
   detailedIssues?: Array<{
     type: string;
     severity: 'low' | 'medium' | 'high';
     description: string;
     recommendation: string;
+    url?: string;
+    dimensions?: { width: number; height: number };
+    issues?: any[];
   }>;
 }

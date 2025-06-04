@@ -1,3 +1,4 @@
+
 import { getAnalyticsEvents } from './analytics';
 
 // Function to track a generic event
@@ -65,7 +66,7 @@ export const trackPageView = (pagePath: string, additionalData?: Record<string, 
   console.log(`[Analytics] Page view: ${pagePath}`, additionalData);
 };
 
-// Quiz specific tracking functions - fixed signatures
+// Quiz specific tracking functions
 export const trackQuizStart = (userName?: string, userEmail?: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'quiz_start', {
@@ -77,17 +78,15 @@ export const trackQuizStart = (userName?: string, userEmail?: string) => {
   console.log('[Analytics] Quiz Start:', { userName, userEmail });
 };
 
-export const trackQuizAnswer = (questionId: string, answer: string, questionIndex?: number, totalQuestions?: number) => {
+export const trackQuizAnswer = (questionId: string, answer: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'quiz_answer', {
       event_category: 'engagement',
       question_id: questionId,
-      answer: answer,
-      question_index: questionIndex,
-      total_questions: totalQuestions
+      answer: answer
     });
   }
-  console.log('[Analytics] Quiz Answer:', { questionId, answer, questionIndex, totalQuestions });
+  console.log('[Analytics] Quiz Answer:', { questionId, answer });
 };
 
 export const trackQuizComplete = (result?: any) => {
@@ -111,6 +110,7 @@ export const trackResultView = (resultType: string, data?: any) => {
   console.log('[Analytics] Result View:', { resultType, data });
 };
 
+// Fix getCreativePerformance to accept no arguments
 export const getCreativePerformance = async () => {
   // Mock implementation for now
   return {
@@ -123,7 +123,7 @@ export const getCreativePerformance = async () => {
   };
 };
 
-// Export getAnalyticsEvents
+// Export getAnalyticsEvents properly
 export const getAnalyticsEvents = () => {
   return [];
 };
@@ -290,7 +290,7 @@ export const captureUTMParameters = () => {
   return utmParams;
 };
 
-export const initFacebookPixel = () => {
+export const initFacebookPixel = (pixelData?: any) => {
   if (typeof window === 'undefined') return;
   
   const pixelId = process.env.REACT_APP_FACEBOOK_PIXEL_ID || '1234567890123456';

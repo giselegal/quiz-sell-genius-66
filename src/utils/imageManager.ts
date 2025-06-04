@@ -1,6 +1,7 @@
+
 import { ImageOptimizationOptions } from './images/types';
 
-export const getOptimizedImageUrl = (src: string, options?: { width?: number; height?: number; quality?: number }) => {
+export const getOptimizedImageUrl = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }) => {
   if (!src) return '';
   
   // For now, return the original URL
@@ -21,6 +22,7 @@ interface PreloadOptions {
   batchSize?: number;
   onProgress?: (loaded: number, total: number) => void;
   onComplete?: () => void;
+  format?: string;
 }
 
 export const preloadImagesByUrls = (
@@ -38,7 +40,7 @@ export const preloadImagesByUrls = (
           (url) =>
             new Promise<void>((resolveImage) => {
               const img = new Image();
-              img.src = getOptimizedImageUrl(url, { quality });
+              img.src = getOptimizedImageUrl(url, { quality, format: options.format });
               img.onload = () => {
                 loaded++;
                 options.onProgress?.(loaded, total);
@@ -71,7 +73,7 @@ export const preloadCriticalImages = async (
   context: 'strategic' | 'results' | 'transformation' | 'bonus' | 'testimonials' | string[],
   options: Omit<PreloadOptions, 'onProgress' | 'onComplete'> = {}
 ): Promise<void> => {
-  const { quality = 75, batchSize = 3 } = options;
+  const { quality = 75, batchSize = 3, format } = options;
   let imageUrls: string[] = [];
 
   if (typeof context === 'string') {
@@ -177,7 +179,7 @@ export const preloadCriticalImages = async (
   // Remove duplicates
   imageUrls = [...new Set(imageUrls)];
 
-  return preloadImagesByUrls(imageUrls, { quality, batchSize });
+  return preloadImagesByUrls(imageUrls, { quality, batchSize, format });
 };
 
 export const getImageMetadata = (src: string) => {
@@ -202,12 +204,19 @@ export const isImagePreloaded = (src: string): boolean => {
   return img.complete;
 };
 
-export const getOptimizedImage = (src: string, options?: { width?: number; height?: number; quality?: number }) => {
+export const getOptimizedImage = (src: string, options?: { width?: number; height?: number; quality?: number; format?: string }) => {
   // For now, delegate to existing function
   return getOptimizedImageUrl(src, options);
 };
 
-export const preloadImages = (images: Array<{ src: string; id: string; alt?: string; category?: string; preloadPriority?: number }>, options?: { quality?: number; batchSize?: number }) => {
+export const preloadImages = (images: Array<{ src: string; id: string; alt?: string; category?: string; preloadPriority?: number }>, options?: { quality?: number; batchSize?: number; format?: string }) => {
   const urls = images.map(img => img.src);
+  return preloadImagesByUrls(urls, options);
+};
+
+// Add missing function
+export const preloadImagesByIds = (ids: string[], options?: PreloadOptions) => {
+  // Convert IDs to URLs - this is a simplified implementation
+  const urls = ids.map(id => `/images/${id}`);
   return preloadImagesByUrls(urls, options);
 };

@@ -269,3 +269,5 @@ export const BeforeAfterTransformation: React.FC<BeforeAfterTransformationProps>
     </Card>
   );
 };
+
+export default BeforeAfterTransformation;

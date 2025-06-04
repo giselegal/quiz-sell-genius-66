@@ -17,7 +17,7 @@ export interface QuizComponentData {
   type: string;
   content: any;
   position: number;
-  data?: any; // Added missing data property
+  data?: any;
 }
 
 export type BlockType =
@@ -47,7 +47,7 @@ export type BlockType =
   | "integrations"
   | "legal"
   | "custom-code"
-  | "heading"     // Added missing types
+  | "heading"
   | "paragraph";
 
 export interface UserResponse {
@@ -58,7 +58,7 @@ export interface UserResponse {
 export interface QuizQuestion {
   id: string;
   title: string;
-  type: 'image' | 'text';
+  type: 'image' | 'text' | 'both'; // Added 'both' to the union
   options: QuizOption[];
   multiSelect: number;
   imageUrl?: string;
@@ -69,5 +69,5 @@ export interface QuizOption {
   text: string;
   styleCategory: string;
   imageUrl?: string;
-  points?: number; // Added missing points property
+  points?: number;
 }
