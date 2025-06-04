@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAdminAuth } from '@/context/AdminAuthContext';
+import AdminLogin from './AdminLogin';
 
 interface AdminRouteProps {
   children: React.ReactNode;
@@ -12,34 +12,23 @@ export const AdminRoute: React.FC<AdminRouteProps> = ({
   children, 
   requireEditor = false 
 }) => {
-  const { user } = useAuth();
+  const { isAdminAuthenticated, isLoading } = useAdminAuth();
   
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  // Removidas verificações de isAdmin e hasEditorAccess que não existem no contexto
-  // Simplificando para verificação básica de usuário logado
-  
-  if (requireEditor) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Acesso Negado
-          </h2>
-          <p className="text-gray-600 mb-4">
-            Você não tem permissão para acessar o editor Enhanced.
-          </p>
-          <button 
-            onClick={() => window.history.back()}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Voltar
-          </button>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
+  }
+  
+  if (!isAdminAuthenticated) {
+    return <AdminLogin />;
+  }
+  
+  // Para features específicas de editor, pode adicionar verificações futuras aqui
+  if (requireEditor) {
+    // Por enquanto, admin tem acesso a tudo
   }
   
   return <>{children}</>;

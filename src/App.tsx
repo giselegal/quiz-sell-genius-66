@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
 import { QuizProvider } from "./context/QuizContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
@@ -9,6 +10,7 @@ import { loadFacebookPixel } from "./utils/facebookPixel";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import CriticalCSSLoader from "./components/CriticalCSSLoader";
 import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
+import { AdminRoute } from "./components/admin/AdminRoute";
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -71,8 +73,17 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   element={<QuizDescubraSeuEstilo />}
                 />
-                {/* Admin */}
-                <Route path="/admin/*" element={<DashboardPage />} />
+                {/* Admin - protegido com AdminAuthProvider */}
+                <Route 
+                  path="/admin/*" 
+                  element={
+                    <AdminAuthProvider>
+                      <AdminRoute>
+                        <DashboardPage />
+                      </AdminRoute>
+                    </AdminAuthProvider>
+                  } 
+                />
                 {/* 404 */}
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
