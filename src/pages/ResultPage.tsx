@@ -895,6 +895,31 @@ const ResultPage: React.FC = () => {
       <div className="hidden">
         <BuildInfo />
       </div>
+
+      {/* Rodapé simples e elegante */}
+      <footer className="mt-20 lg:mt-28 border-t border-[#B89B7A]/15 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef]">
+        <div className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-6xl">
+          <div className="text-center space-y-4">
+            {/* Links de política */}
+            <div className="mb-6">
+              <a 
+                href="/politica-privacidade" 
+                className="text-[#5D4A3A] hover:text-[#B89B7A] transition-colors duration-300 font-medium text-sm lg:text-base underline decoration-[#B89B7A]/30 hover:decoration-[#B89B7A] underline-offset-4"
+              >
+                Política de Privacidade
+              </a>
+            </div>
+
+            {/* Linha decorativa */}
+            <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6"></div>
+
+            {/* Copyright */}
+            <p className="text-[#8F7A6A] text-sm lg:text-base font-medium">
+              © 2025 Gisele Galvão. Todos os direitos reservados.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
