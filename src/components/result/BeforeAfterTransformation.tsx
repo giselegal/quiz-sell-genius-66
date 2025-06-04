@@ -41,19 +41,19 @@ interface TransformationItem {
 const transformations: TransformationItem[] = [
   {
     image:
-      "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
+      "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_1200/v1745519979/Captura_de_tela_2025-03-31_034324_pmdn8y.webp",
     name: "Adriana",
     id: "transformation-adriana",
-    width: 800,
-    height: 1000,
+    width: 1200,
+    height: 1500,
   },
   {
     image:
-      "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_80,w_800/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
+      "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_1200/v1745522326/Captura_de_tela_2025-03-31_034324_cpugfj.webp",
     name: "Mariangela",
     id: "transformation-mariangela",
-    width: 800,
-    height: 1000,
+    width: 1200,
+    height: 1500,
   },
 ];
 
