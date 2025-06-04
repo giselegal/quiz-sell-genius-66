@@ -10,7 +10,7 @@ export const LANDING_PAGE_AB_TEST: ABTestConfig = {
     description: 'Página de Resultado Original'
   },
   variantB: {
-    route: '/quiz-descubra-seu-estilo',
+    route: '/descubra-seu-estilo',
     description: 'Landing Page Quiz Estilo'
   },
   trafficSplit: 50 // 50% para cada versão

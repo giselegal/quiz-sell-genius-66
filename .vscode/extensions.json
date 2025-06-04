@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    "github.copilot",
+    "github.copilot-chat",
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense",
+    "ms-vscode.vscode-json",
+    "yzhang.markdown-all-in-one",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode.remote-repositories",
+    "tabnine.tabnine-vscode"
+  ],
+  "unwantedRecommendations": []
+}
