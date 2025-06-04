@@ -1,7 +1,7 @@
 
 // Type definitions for Facebook Pixel and Google Analytics
 interface Window {
-  fbq?: (...args: any[]) => void;
+  fbq?: any;
   gtag?: any;
   _fbq?: any;
 }

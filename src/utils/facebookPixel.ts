@@ -1,10 +1,17 @@
-
 // Facebook Pixel utility functions
 import {
   getPixelId,
   getCurrentFunnelConfig,
   trackFunnelEvent,
 } from "../services/pixelManager";
+
+// Define types for fbq function
+declare global {
+  interface Window {
+    fbq?: any;
+    _fbq?: any;
+  }
+}
 
 /**
  * Initialize Facebook Pixel with the provided ID
