@@ -814,7 +814,7 @@ const DescubraSeuEstilo: React.FC = () => {
             </h2>
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto">
               Muitas mulheres possuem armários repletos de roupas, mas sentem dificuldade em criar 
-              looks que realmente expressem sua personalidade e as façam sentir-se confiantes e autênticas.
+              looks que realmente expressem sua personalidade e as façam sentir-se confiantes.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -835,10 +835,10 @@ const DescubraSeuEstilo: React.FC = () => {
           </div>
           <div className="text-center mt-12">
             <p className="text-lg text-[#8F7A6A] italic max-w-4xl mx-auto">
-              A chave está em descobrir seu estilo predominante - aquele que reflete sua personalidade, 
-              valores e essência autêntica. Com essa clareza, você criará um guarda-roupa harmonioso 
-              onde cada peça conversa entre si e expressa verdadeiramente quem você é.
-            </p>
+              A chave está em descobrir seu estilo - aquele que reflete sua personalidade, 
+              valores e essência. Com essa clareza, você criará um guarda-roupa harmonioso 
+              onde cada peça conversa entre si e expressa verdadeiramente quem você é. 
+                          </p>
           </div>
         </div>
       </section>
@@ -858,8 +858,6 @@ const DescubraSeuEstilo: React.FC = () => {
               Seu Guia Completo Para um Estilo Autêntico
             </h2>
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto mb-8">
-              Apresento um método completo que irá revelar seu estilo predominante 
-              e transformar sua relação com a moda de forma elegante e autêntica.
             </p>
           </div>
 
@@ -888,7 +886,7 @@ const DescubraSeuEstilo: React.FC = () => {
                 </h3>
                 <p className="text-[#8F7A6A]">
                   Um método preciso que analisa suas preferências reais e
-                  identifica seu estilo predominante entre os 7 estilos
+                  identifica seu estilo predominante entre os 8 estilos
                   universais.
                 </p>
               </CardContent>
@@ -901,7 +899,7 @@ const DescubraSeuEstilo: React.FC = () => {
                 </h3>
                 <p className="text-[#8F7A6A]">
                   Específico para o seu resultado no Quiz, com orientações
-                  práticas para valorizar seu tipo físico e expressar sua
+                  práticas para valorizar e expressar sua
                   personalidade.
                 </p>
               </CardContent>
@@ -958,9 +956,9 @@ const DescubraSeuEstilo: React.FC = () => {
 
           <div className="text-center mt-12">
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto italic">
-              Como você descobrirá, 55% da comunicação é visual, 38% é tom de
-              voz e apenas 7% é verbal. Isso significa que sua imagem comunica
-              muito antes de você falar qualquer coisa!
+              Com o nosso método, você não apenas descobrirá seu estilo, mas
+              também aprenderá a usá-lo como uma ferramenta poderosa para
+              expressar sua autenticidade e aumentar sua confiança.
             </p>
           </div>
         </div>
@@ -1039,17 +1037,15 @@ const DescubraSeuEstilo: React.FC = () => {
                     Como identificar o formato do seu rosto
                   </span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-[#B89B7A]" />
-                  <span className="text-sm text-[#432818]">
-                    Cortes de cabelo que valorizam seus traços
+                <l                  <span className="text-sm text-[#432818]">
+                    Acessórios e Cortes de cabelo que valorizam seus traços
+                  </span>        Acessórios e Cortes de cabelo que valorizam seus traços
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-[#B89B7A]" />
                   <span className="text-sm text-[#432818]">
-                    Acessórios e maquiagem personalizados
-                  </span>
+                </span>
                 </li>
               </ul>
             </div>
@@ -1116,7 +1112,7 @@ const DescubraSeuEstilo: React.FC = () => {
             </div>
             <p className="text-[#8F7A6A]">
               Estou tão confiante de que estes materiais vão transformar sua
-              relação com a moda e sua imagem pessoal que ofereço uma garantia
+              relação com a sua imagem pessoal que ofereço uma garantia
               incondicional de 7 dias.
             </p>
           </div>
@@ -1169,13 +1165,22 @@ const DescubraSeuEstilo: React.FC = () => {
               Quero Transformar Minha Imagem Agora!
             </span>
             <span className="md:hidden">Quero Minha Transformação!</span>
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <Arrow            Pense bem: quanto você já gastou com roupas que nunca usou? Este
+            investimento em autoconhecimento vai muito além de roupas - é um
+            investimento em você mesma.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default DescubraSeuEstilo;
+="ml-2 h-5 w-5" />
           </Button>
 
           <p className="text-sm text-[#8F7A6A] mt-4">
-            Pense bem: quanto você já gastou com roupas que nunca usou? Este
-            investimento em autoconhecimento vai muito além de roupas - é um
-            investimento em você mesma.
+             
           </p>
         </div>
       </section>
