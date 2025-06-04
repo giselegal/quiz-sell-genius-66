@@ -82,7 +82,7 @@ const tokens = {
     sm: '0.5rem',    // 8px
     md: '0.75rem',   // 12px
     lg: '1rem',      // 16px
-    xl: '1.25rem',   // 20px
+    xl: '1.25rem',    // 20px
     '2xl': '1.5rem', // 24px
     full: '9999px',
   },
@@ -177,7 +177,6 @@ const ResultPage: React.FC = () => {
   // Estados de interação melhorados
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showBottomBar, setShowBottomBar] = useState(false);
   const [activeSection, setActiveSection] = useState('primary-style');
 
   // Timer otimizado
@@ -234,13 +233,6 @@ const ResultPage: React.FC = () => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > 120);
-
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const scrolledToBottom = scrollTop + windowHeight >= documentHeight - 1000;
-
-      setShowBottomBar(scrolledToBottom);
 
       // Tracking de seção ativa
       const sections = [
@@ -395,44 +387,6 @@ const ResultPage: React.FC = () => {
               </div>
             </button>
           ))}
-        </div>
-      </div>
-
-      {/* Sticky CTA melhorada */}
-      <div className={`fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-xl border-t border-[#B89B7A]/20 py-4 px-4 z-40 transition-all duration-500 ${
-        showBottomBar ? 'translate-y-0' : 'translate-y-full'
-      }`}>
-        <div className="container mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-center sm:text-left">
-            <p className="text-sm font-semibold text-[#2C1810] mb-1">
-              Guia de Estilo Completo + Bônus Exclusivos
-            </p>
-            <div className="flex items-center justify-center sm:justify-start gap-3">
-              <span className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                5x R$ 8,83
-              </span>
-              <span className="text-xs text-[#8F7A6A] bg-[#f9f4ef] px-2 py-1 rounded-full">
-                ou R$ 39,90 à vista
-              </span>
-            </div>
-          </div>
-          <Button 
-            onClick={handleCTAClick} 
-            className="text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 w-full sm:w-auto group"
-            style={{
-              background: 'linear-gradient(135deg, #4CAF50 0%, #43a047 100%)',
-              boxShadow: tokens.shadows.cta,
-              transform: isButtonHovered ? 'translateY(-2px) scale(1.02)' : 'translateY(0) scale(1)',
-            }}
-            onMouseEnter={() => setIsButtonHovered(true)} 
-            onMouseLeave={() => setIsButtonHovered(false)}
-            type="button"
-          >
-            <span className="flex items-center justify-center gap-2">
-              <ShoppingCart className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-              Adquirir Agora
-            </span>
-          </Button>
         </div>
       </div>
 
