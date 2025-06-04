@@ -22,7 +22,6 @@ import {
 } from "@/utils/analytics";
 import {
   hotmartWebhookManager,
-  storeUserForHotmart,
 } from "@/utils/hotmartWebhook";
 
 // Seções carregadas via lazy
@@ -106,13 +105,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
   useEffect(() => {
     if (typeof window !== "undefined" && user?.email) {
       // Track quiz completion
-      trackEvent("quiz_completed", "Quiz", primaryStyle.category, {
-        primary_style: primaryStyle.category,
-        primary_percentage: primaryStyle.percentage,
-        secondary_styles: secondaryStyles.map((s) => s.category).join(", "),
-        user_name: userName,
-        page_url: window.location.href,
-      });
+      trackEvent("quiz_completed", "Quiz", primaryStyle.category);
 
       // Store data for Hotmart webhook correlation
       hotmartWebhookManager.storeQuizCompletionData(user.email, {
