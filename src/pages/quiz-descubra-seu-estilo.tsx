@@ -504,18 +504,27 @@ const realTestimonials = [
 
 // Função para lidar com cliques em CTAs
 const handleCTAClick = (buttonId: string, action: string = "Comprar Agora") => {
-  const emailInput = document.querySelector('input[type="email"]') as HTMLInputElement;
-  trackButtonClick(buttonId, action, "quiz_offer_page");
-  
-  if (emailInput?.value) {
-    storeUserForHotmart(emailInput.value, {
-      funnel_step: "quiz_offer_checkout",
-      page_url: window.location.href,
-    });
-  }
-  
-  // Redirecionar para checkout
-  window.open("https://pay.hotmart.com/exemplo", "_blank");
+  return (event: React.MouseEvent) => {
+    event.preventDefault();
+    const emailInput = document.querySelector('input[type="email"]') as HTMLInputElement;
+    trackButtonClick(buttonId, action, "quiz_offer_page");
+    
+    if (emailInput?.value) {
+      storeUserForHotmart(emailInput.value, {
+        funnel_step: "quiz_offer_checkout",
+        page_url: window.location.href,
+      });
+    }
+    
+    // Redirecionar para checkout
+    const checkoutUrl = "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
+    
+    if (window.innerWidth >= 768) {
+      window.open(checkoutUrl, "_blank");
+    } else {
+      window.location.href = checkoutUrl;
+    }
+  };
 };
 
 // Componente de Popup de Prova Social Dinâmica
@@ -763,7 +772,7 @@ const DescubraSeuEstilo: React.FC = () => {
 
               <div className="flex justify-center md:justify-start">
                 <Button
-                  onClick={handleCTAClick}
+                  onClick={handleCTAClick("hero-cta", "Descobrir Meu Estilo")}
                   size="lg"
                   className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 >
@@ -1147,7 +1156,7 @@ const DescubraSeuEstilo: React.FC = () => {
           </div>
 
           <Button
-            onClick={handleCTAClick}
+            onClick={handleCTAClick("final-cta", "Quero Transformar Minha Imagem")}
             size="lg"
             className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 w-full md:w-auto"
           >
