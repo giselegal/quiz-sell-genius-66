@@ -1,7 +1,6 @@
-
 import { type BankImage, getAllImages, getImageById } from '@/data/imageBank';
 import { optimizeCloudinaryUrl } from './optimization';
-import { PreloadOptions } from './types';
+import { PreloadOptions, ImageCacheEntry } from './types';
 import { updateImageCache, hasImageWithStatus } from './caching';
 
 /**
@@ -288,5 +287,38 @@ export const getLowQualityImage = (url: string, options: { width?: number, quali
     width: placeholderWidth,
     format: 'auto',
     crop: 'limit'
+  });
+};
+
+/**
+ * Pré-carrega uma imagem
+ * @param url URL da imagem para pré-carregar
+ * @param options Opções de pré-carregamento
+ */
+export const preloadImage = (url: string, options: PreloadOptions = {}): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    
+    const cacheEntry: Partial<ImageCacheEntry> = {
+      url,
+      timestamp: Date.now(),
+      loadStatus: 'loading',
+      metadata: {
+        url,
+        format: options.format === 'auto' ? 'webp' : (options.format || 'webp')
+      }
+    };
+
+    img.onload = () => {
+      cacheEntry.loadStatus = 'loaded';
+      resolve();
+    };
+
+    img.onerror = () => {
+      cacheEntry.loadStatus = 'error';
+      reject(new Error(`Failed to preload image: ${url}`));
+    };
+
+    img.src = url;
   });
 };

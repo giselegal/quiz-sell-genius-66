@@ -1,4 +1,3 @@
-
 import { StyleResult } from '@/types/quiz';
 
 // Define StyleCategory to match existing types
@@ -95,5 +94,13 @@ export const getDefaultStyle = (): StyleResult => {
     description: 'Seu estilo é caracterizado pela simplicidade e conforto.',
     score: 100,
     percentage: 100
+  };
+};
+
+export const createStyleResult = (category: string, score: number): StyleResult => {
+  return {
+    category,
+    score,
+    percentage: Math.round((score / 10) * 100)
   };
 };

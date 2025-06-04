@@ -131,9 +131,11 @@ function renderSectionContent(
     case 'offer.hero':
       return (
         <HeroSection 
-          primaryStyle={primaryStyle}
           title={content.title}
           subtitle={content.subtitle}
+          imageUrl={content.heroImage}
+          ctaText={content.ctaText || 'Clique aqui'}
+          onCtaClick={() => console.log('CTA clicked')}
         />
       );
     

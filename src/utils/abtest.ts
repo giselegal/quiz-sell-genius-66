@@ -1,4 +1,5 @@
 import { trackButtonClick } from './analytics';
+import { ABTestVariant } from '@/types/abtest';
 
 export type ABTestVariant = 'A' | 'B';
 
@@ -174,3 +175,40 @@ export function clearForcedABTestVariant(testName: string) {
   sessionStorage.removeItem('ab_test_user_key');
   console.log(`🔧 A/B Test: Removendo forçamento para o teste ${testName}`);
 }
+
+export const logABTestView = (testName: string, variant: ABTestVariant, page: string = 'unknown') => {
+  try {
+    const logEntry = JSON.stringify({
+      test_name: testName,
+      variant: variant,
+      timestamp: new Date().toISOString(),
+      page: page
+    });
+    
+    const existingLogs = localStorage.getItem('ab_test_views') || '[]';
+    const logs = JSON.parse(existingLogs);
+    logs.push(JSON.parse(logEntry));
+    localStorage.setItem('ab_test_views', JSON.stringify(logs));
+  } catch (error) {
+    console.error('Error logging AB test view:', error);
+  }
+};
+
+export const logABTestConversion = (testName: string, variant: ABTestVariant, conversionType: string, page: string = 'unknown') => {
+  try {
+    const logEntry = JSON.stringify({
+      test_name: testName,
+      variant: variant,
+      conversion_type: conversionType,
+      timestamp: new Date().toISOString(),
+      page: page
+    });
+    
+    const existingLogs = localStorage.getItem('ab_test_conversions') || '[]';
+    const logs = JSON.parse(existingLogs);
+    logs.push(JSON.parse(logEntry));
+    localStorage.setItem('ab_test_conversions', JSON.stringify(logs));
+  } catch (error) {
+    console.error('Error logging AB test conversion:', error);
+  }
+};
