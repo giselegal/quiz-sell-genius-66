@@ -1,3 +1,4 @@
+
 {
   "github": {
     "autoSyncFromGithub": true,
@@ -13,7 +14,8 @@
     "liveEditing": true,
     "enhancedSync": true,
     "visualEditor": true,
-    "forceSync": true
+    "forceSync": true,
+    "webhookAlternative": true
   },
   "editor": {
     "enableLiveMode": true,
@@ -22,6 +24,13 @@
   },
   "sync": {
     "forced": true,
-    "timestamp": 1748993249
+    "timestamp": 1748993249,
+    "method": "webhook-alternative",
+    "tokenRequired": false
+  },
+  "scripts": {
+    "prepare": "node scripts/prepare-lovable.js",
+    "sync": "node scripts/manual-sync.js",
+    "test": "node scripts/test-sync.js"
   }
 }

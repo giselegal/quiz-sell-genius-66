@@ -106,9 +106,10 @@ export default defineConfig(({ mode }) => ({
     devSourcemap: mode === 'development',
   },
 
-  // Lovable integration configuration
+  // Lovable integration configuration (sem token)
   define: {
     __LOVABLE_PROJECT_ID__: JSON.stringify("quiz-sell-genius-66"),
     __LOVABLE_ENABLED__: JSON.stringify(true),
+    __LOVABLE_SYNC_METHOD__: JSON.stringify("webhook-alternative"),
   },
 }));
