@@ -1080,11 +1080,13 @@ const DescubraSeuEstilo: React.FC = () => {
               >
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
-                    <img
-                      src={testimonial.image}
-                      alt={testimonial.author}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
+                    {testimonial.image && (
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.author}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    )}
                     <div>
                       <p className="font-medium text-[#432818]">
                         {testimonial.author}
