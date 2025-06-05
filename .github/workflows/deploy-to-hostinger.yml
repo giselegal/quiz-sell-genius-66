@@ -26,7 +26,14 @@ jobs:
         
       - name: Prepare deployment package
         run: |
-          cd dist || exit 1
+          echo "[DEBUG] Listando arquivos antes do build:"
+          ls -lah
+          echo "[DEBUG] Rodando build..."
+          cd ..
+          npm run build
+          echo "[DEBUG] Listando arquivos após build:"
+          ls -lah dist || { echo '[ERRO] Diretório dist não encontrado!'; exit 2; }
+          cd dist || exit 2
           # Corrigir o .htaccess para domínio raiz
           cat << 'HTACCESS' > .htaccess
 # Configurações otimizadas para React app no domínio raiz
