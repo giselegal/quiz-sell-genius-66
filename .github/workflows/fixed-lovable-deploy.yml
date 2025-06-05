@@ -108,7 +108,7 @@ jobs:
           EOF
           
           # Corrigir o registro do service worker no index.html
-          sed -i 's|navigator.serviceWorker.register(\'/sw.js\', { scope: \'/|navigator.serviceWorker.register(\'/quiz-de-estilo/sw.js\', { scope: \'/quiz-de-estilo/|g' dist/index.html
+          sed -i "s|navigator.serviceWorker.register('/sw.js', { scope: '/|navigator.serviceWorker.register('/quiz-de-estilo/sw.js', { scope: '/quiz-de-estilo/|g" dist/index.html
         
       - name: Create .htaccess file
         run: |
