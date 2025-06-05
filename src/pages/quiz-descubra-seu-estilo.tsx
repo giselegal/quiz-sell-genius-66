@@ -490,8 +490,6 @@ const realTestimonials = [
     text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
     rating: 5,
     location: "Engenheira",
-    image:
-      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
   },
   {
     name: "Patrícia Paranhos",
@@ -499,8 +497,6 @@ const realTestimonials = [
     text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
     rating: 5,
     location: "Advogada",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
   },
   {
     name: "Sônia Spier",
@@ -508,8 +504,6 @@ const realTestimonials = [
     text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
     rating: 5,
     location: "Terapeuta",
-    image:
-      "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=100&h=100&fit=crop&crop=face",
   },
 ];
 
@@ -1076,13 +1070,6 @@ const DescubraSeuEstilo: React.FC = () => {
               >
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
-                    {testimonial.image && (
-                      <img
-                        src={testimonial.image}
-                        alt={testimonial.author}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    )}
                     <div>
                       <p className="font-medium text-[#432818]">
                         {testimonial.author}
@@ -1173,9 +1160,9 @@ const DescubraSeuEstilo: React.FC = () => {
             className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 w-full md:w-auto"
           >
             <span className="hidden md:inline">
-              Quero Transformar Minha Imagem Agora!
+              Quero Descobrir Meu Estilo!
             </span>
-            <span className="md:hidden">Quero Minha Transformação!</span>
+            <span className="md:hidden">Descobrir Meu Estilo!</span>
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
 
