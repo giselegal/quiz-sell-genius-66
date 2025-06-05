@@ -1172,7 +1172,7 @@ const DescubraSeuEstilo: React.FC = () => {
               "Quero Transformar Minha Imagem"
             )}
             size="lg"
-            className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 w-full md:w-auto"
+            className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
           >
             <span className="hidden md:inline">
               Quero Transformar Minha Imagem Agora!
