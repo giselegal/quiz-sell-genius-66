@@ -194,11 +194,11 @@ jobs:
           
       # Corrigir o problema da duplicação de pastas no FTP
       - name: Deploy to Hostinger (Caminho Correto)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ftp.giselegalvao.com.br
           username: u116045488.giselegalvao
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /public_html/quiz-de-estilo/
+          server-dir: /u116045488/domains/giselegalvao.com.br/public_html/quiz-de-estilo/
           dangerous-clean-slate: true

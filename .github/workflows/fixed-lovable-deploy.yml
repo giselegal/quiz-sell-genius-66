@@ -186,7 +186,7 @@ jobs:
           path: dist/
 
       - name: Deploy to Hostinger
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ftp.giselegalvao.com.br
           username: u116045488.giselegalvao

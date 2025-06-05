@@ -30,11 +30,11 @@ jobs:
           ../scripts/deploy-prepare.sh
 
       - name: Deploy to Hostinger Root Domain
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: \${{ secrets.FTP_SERVER }}
-          username: \${{ secrets.FTP_USERNAME }}
-          password: \${{ secrets.FTP_PASSWORD }}
+          server: ftp.giselegalvao.com.br
+          username: u116045488.giselegalvao
+          password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /public_html/
+          server-dir: /u116045488/domains/giselegalvao.com.br/public_html/
           dangerous-clean-slate: true # ⚠️ Cuidado: Isso apaga todos os arquivos do diretório de destino
