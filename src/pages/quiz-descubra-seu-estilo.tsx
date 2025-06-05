@@ -752,6 +752,21 @@ const DescubraSeuEstilo: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAF9F7]">
+      {/* Header com preço */}
+      <header className="py-4 px-4 sm:px-6 sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <img
+            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+            alt="Gisele Galvão - Logo da Marca"
+            className="h-auto object-contain max-w-[150px] sm:max-w-[180px]"
+          />
+          <div className="text-right">
+            <div className="text-2xl font-bold text-green-600">5x R$ 8,83</div>
+            <div className="text-sm text-gray-600">ou R$ 39,00 à vista</div>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="py-8 md:py-16 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
@@ -783,7 +798,7 @@ const DescubraSeuEstilo: React.FC = () => {
                   className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <span className="hidden md:inline">
-                    Descobrir Meu Estilo Por R$ 39,99
+                    Descobrir Meu Estilo - 5x R$ 8,83
                   </span>
                   <span className="md:hidden">Descobrir Meu Estilo</span>
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -1114,8 +1129,8 @@ const DescubraSeuEstilo: React.FC = () => {
           <div className="bg-gradient-to-r from-[#B89B7A] to-[#A68A6A] rounded-2xl p-8 text-white mb-8">
             <h3 className="text-2xl font-playfair mb-4">Investimento Único</h3>
             <div className="text-center mb-6">
-              <span className="text-4xl font-bold">R$ 39,99</span>
-              <p className="text-white/80">Pagamento único, sem mensalidades</p>
+              <span className="text-4xl font-bold">R$ 39,00</span>
+              <p className="text-white/80">à vista ou 5x de R$ 8,83</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4 text-left mb-6">
