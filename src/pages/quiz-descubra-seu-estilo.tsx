@@ -509,24 +509,22 @@ const realTestimonials = [
 
 // Função para lidar com cliques em CTAs
 const handleCTAClick = (buttonId: string, action: string = "Comprar Agora") => {
+  // Corrigido: retorna uma função para ser usada no onClick
   return (event: React.MouseEvent) => {
     event.preventDefault();
     const emailInput = document.querySelector(
       'input[type="email"]'
     ) as HTMLInputElement;
     trackButtonClick(buttonId, action, "quiz_offer_page");
-
     if (emailInput?.value) {
       storeUserForHotmart(emailInput.value, {
         funnel_step: "quiz_offer_checkout",
         page_url: window.location.href,
       });
     }
-
     // Redirecionar para checkout
     const checkoutUrl =
       "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
-
     if (window.innerWidth >= 768) {
       window.open(checkoutUrl, "_blank");
     } else {
