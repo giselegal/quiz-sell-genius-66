@@ -1140,20 +1140,6 @@ const DescubraSeuEstilo: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
-# 1. Execute o tagger do Lovable para marcar os componentes
-npm run lovable:prepare
-
-# 2. Adicione todas as alterações ao Git
-git add .
-
-# 3. Faça o commit das alterações
-git commit -m "Descrição das suas alterações"
-
-# 4. Envie as alterações para o GitHub
-git push origin main
-
-# 5. Rodar o build ou o projeto
-npm run build    
                   <span className="text-sm">Compra segura</span>
                 </div>
                 <div className="flex items-center gap-2">
