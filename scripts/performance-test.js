@@ -1,19 +1,20 @@
 #!/usr/bin/env node
 
 // Script para executar testes de performance automatizados
-const puppeteer = require('puppeteer');
-const lighthouse = require('lighthouse');
-const chromeLauncher = require('chrome-launcher');
+import puppeteer from 'puppeteer';
+import lighthouse from 'lighthouse';
+import * as chromeLauncher from 'chrome-launcher';
+import fs from 'fs';
 
 async function runPerformanceTests() {
   console.log('🚀 Iniciando testes de performance automatizados...\n');
 
   const testUrls = [
-    'http://localhost:5173',
-    'http://localhost:5173/quiz',
-    'http://localhost:5173/quiz-descubra-seu-estilo',
-    'http://localhost:5173/resultado',
-    'http://localhost:5173/admin'
+    'http://localhost:8081',
+    'http://localhost:8081/quiz',
+    'http://localhost:8081/quiz-descubra-seu-estilo',
+    'http://localhost:8081/resultado',
+    'http://localhost:8081/admin'
   ];
 
   const results = [];
@@ -221,7 +222,7 @@ function generateReport(results) {
     results
   };
 
-  require('fs').writeFileSync(
+  fs.writeFileSync(
     'performance-report.json',
     JSON.stringify(reportData, null, 2)
   );
@@ -230,8 +231,4 @@ function generateReport(results) {
 }
 
 // Executar testes se chamado diretamente
-if (require.main === module) {
-  runPerformanceTests().catch(console.error);
-}
-
-module.exports = { runPerformanceTests };
+runPerformanceTests().catch(console.error);
