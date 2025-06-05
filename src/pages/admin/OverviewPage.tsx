@@ -66,16 +66,37 @@ const OverviewPage: React.FC = () => {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-1">
-          Visão geral do desempenho dos seus quizzes e campanhas
-          <Badge
-            variant="outline"
-            className="ml-2 text-green-600 border-green-600"
-          >
-            Dados Reais
-          </Badge>
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+            <p className="text-gray-600 mt-1">
+              Visão geral do desempenho dos seus quizzes e campanhas
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            {metrics.isRealData ? (
+              <Badge
+                variant="default"
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Zap className="h-3 w-3 mr-1" />
+                Dados Reais da Hotmart
+              </Badge>
+            ) : (
+              <Badge
+                variant="outline"
+                className="text-yellow-600 border-yellow-600"
+              >
+                Dados Simulados
+              </Badge>
+            )}
+            <Badge variant="secondary" className="text-xs">
+              {metrics.dataSource === 'hotmart' && 'Hotmart Webhook'}
+              {metrics.dataSource === 'google-analytics' && 'Google Analytics'}
+              {metrics.dataSource === 'simulated' && 'Simulação'}
+            </Badge>
+          </div>
+        </div>
       </div>
 
       {/* Métricas Principais */}

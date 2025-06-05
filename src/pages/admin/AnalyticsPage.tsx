@@ -76,13 +76,30 @@ const AnalyticsPage: React.FC = () => {
           </h1>
           <p className="text-[#8F7A6A] mt-2">
             Análise detalhada do desempenho dos seus quizzes
-            <Badge
-              variant="outline"
-              className="ml-2 text-green-600 border-green-600"
-            >
-              Dados Reais
-            </Badge>
           </p>
+          <div className="flex items-center space-x-2 mt-2">
+            {metrics.isRealData ? (
+              <Badge
+                variant="default"
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <BarChart3 className="h-3 w-3 mr-1" />
+                Dados Reais da Hotmart
+              </Badge>
+            ) : (
+              <Badge
+                variant="outline"
+                className="text-yellow-600 border-yellow-600"
+              >
+                Dados Simulados
+              </Badge>
+            )}
+            <Badge variant="secondary" className="text-xs">
+              {metrics.dataSource === 'hotmart' && 'Hotmart Webhook'}
+              {metrics.dataSource === 'google-analytics' && 'Google Analytics'}
+              {metrics.dataSource === 'simulated' && 'Simulação'}
+            </Badge>
+          </div>
         </div>
         <Button className="bg-[#B89B7A] hover:bg-[#A0895B] text-white">
           <Download className="w-4 h-4 mr-2" />
