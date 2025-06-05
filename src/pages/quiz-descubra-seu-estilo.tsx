@@ -485,29 +485,29 @@ const benefits = [
 
 const realTestimonials = [
   {
-    name: "Marina Silva",
-    author: "Marina Silva",
-    text: "Descobri meu estilo e agora me sinto muito mais confiante! O quiz mudou minha forma de me vestir.",
+    name: "Mariangela",
+    author: "Mariangela, Engenheira",
+    text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
     rating: 5,
-    location: "São Paulo, SP",
+    location: "Engenheira",
     image:
       "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
   },
   {
-    name: "Ana Carolina",
-    author: "Ana Carolina",
-    text: "Finalmente entendi quais cores e modelos ficam melhores em mim. Recomendo!",
+    name: "Patrícia Paranhos",
+    author: "Patrícia Paranhos, Advogada",
+    text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
     rating: 5,
-    location: "Rio de Janeiro, RJ",
+    location: "Advogada",
     image:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
   },
   {
-    name: "Juliana Santos",
-    author: "Juliana Santos",
-    text: "Economizei muito dinheiro depois que aprendi a comprar apenas o que realmente me valoriza.",
+    name: "Sônia Spier",
+    author: "Sônia Spier, Terapeuta",
+    text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
     rating: 5,
-    location: "Belo Horizonte, MG",
+    location: "Terapeuta",
     image:
       "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=100&h=100&fit=crop&crop=face",
   },
@@ -1172,7 +1172,7 @@ const DescubraSeuEstilo: React.FC = () => {
               "Quero Transformar Minha Imagem"
             )}
             size="lg"
-            className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
+            className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 w-full md:w-auto"
           >
             <span className="hidden md:inline">
               Quero Transformar Minha Imagem Agora!
