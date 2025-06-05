@@ -70,6 +70,11 @@ const App = () => {
                 {/* Rotas do teste A/B */}
                 <Route path="/resultado" element={<ResultPage />} />
                 <Route
+                  path="/quiz-descubra-seu-estilo"
+                  element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Manter rota antiga para compatibilidade */}
+                <Route
                   path="/descubra-seu-estilo"
                   element={<QuizDescubraSeuEstilo />}
                 />
