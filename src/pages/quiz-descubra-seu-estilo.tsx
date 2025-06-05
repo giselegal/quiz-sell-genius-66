@@ -767,14 +767,13 @@ const DescubraSeuEstilo: React.FC = () => {
               </div>
 
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair text-[#432818] text-center md:text-left leading-tight">
-                Descubra Seu Estilo Autêntico!
+                Chega de um guarda-roupa lotado e da sensação de que nada
+                combina com você.
               </h1>
 
               <p className="text-lg md:text-xl text-[#8F7A6A] text-center md:text-left">
-                Chega de um guarda-roupa lotado e da sensação de que nada
-                combina com você. Descubra seu Estilo e aprenda a montar looks
-                que realmente refletem sua essência, com praticidade e
-                confiança.
+                Descubra seu Estilo e aprenda a montar looks que realmente
+                refletem sua essência, com praticidade e confiança.
               </p>
 
               <div className="flex justify-center md:justify-start">
