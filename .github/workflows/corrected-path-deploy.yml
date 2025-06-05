@@ -1,28 +1,28 @@
 name: Implantação Corrigida (Sem Duplicação)
 
 on:
-  workflow_dispatch:  # Apenas gatilho manual para segurança inicial
+  workflow_dispatch: # Apenas gatilho manual para segurança inicial
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          
+          node-version: "18"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build project
         run: npm run build
-        
+
       - name: Setup Service Worker for subdirectory
         run: |
           # Verificar e corrigir o Service Worker
@@ -113,27 +113,27 @@ jobs:
             );
           });
           EOF
-          
+
           # Corrigir o registro do service worker no index.html
           sed -i "s|navigator.serviceWorker.register('/sw.js'|navigator.serviceWorker.register('/quiz-de-estilo/sw.js'|g" dist/index.html
           sed -i "s|scope: '/'|scope: '/quiz-de-estilo/'|g" dist/index.html
-      
+
       - name: Create .htaccess file
         run: |
           cat << 'EOF' > dist/.htaccess
           # Configurações otimizadas para Hostinger (Apache)
-          
+
           # Habilitar reescrita de URL para SPA (crucial para React Router)
           <IfModule mod_rewrite.c>
               RewriteEngine On
               RewriteBase /quiz-de-estilo/
-          
+
               # Se o arquivo solicitado não existir fisicamente, redirecionar para index.html
               RewriteCond %{REQUEST_FILENAME} !-f
               RewriteCond %{REQUEST_FILENAME} !-d
               RewriteRule ^(.*)$ index.html [L,QSA]
           </IfModule>
-          
+
           # Definir tipos MIME corretos
           <IfModule mod_mime.c>
               # JavaScript
@@ -153,7 +153,7 @@ jobs:
               AddType image/png .png
               AddType image/jpeg .jpg .jpeg
           </IfModule>
-          
+
           # Desabilitar sniffing de MIME types
           <IfModule mod_headers.c>
               Header set X-Content-Type-Options "nosniff"
@@ -174,29 +174,29 @@ jobs:
               </FilesMatch>
           </IfModule>
           EOF
-          
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-files
           path: dist/
-          
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-files
           path: dist/
-          
+
       # Corrigir o problema da duplicação de pastas no FTP
       - name: Deploy to Hostinger (Caminho Correto)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.giselegalvao.com.br
+          server: 185.158.133.1
           username: u116045488.giselegalvao
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
