@@ -777,7 +777,10 @@ const DescubraSeuEstilo: React.FC = () => {
               </h1>
 
               <p className="text-lg md:text-xl text-[#8F7A6A] text-center md:text-left">
-                Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu Estilo e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.
+                Chega de um guarda-roupa lotado e da sensação de que nada
+                combina com você. Descubra seu Estilo e aprenda a montar looks
+                que realmente refletem sua essência, com praticidade e
+                confiança.
               </p>
 
               <div className="flex justify-center md:justify-start">
@@ -838,10 +841,9 @@ const DescubraSeuEstilo: React.FC = () => {
           </div>
           <div className="text-center mt-12">
             <p className="text-lg text-[#8F7A6A] italic max-w-4xl mx-auto">
-              A chave está em descobrir seu estilo - aquele que reflete sua
-              personalidade, valores e essência. Com essa clareza, você criará
-              um guarda-roupa harmonioso onde cada peça conversa entre si e
-              expressa verdadeiramente quem você é.
+              A solução está em descobrir seu estilo autêntico. Com essa
+              clareza, você criará um guarda-roupa harmonioso que expressa
+              verdadeiramente quem você é.
             </p>
           </div>
         </div>
