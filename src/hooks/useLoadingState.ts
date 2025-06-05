@@ -30,6 +30,18 @@ export const useLoadingState = ({
     // Verificar se os resultados foram pré-carregados para acelerar a transição
     const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
     
+    // Detecção de dispositivo de baixo desempenho
+    const nav = navigator as Navigator & {
+      deviceMemory?: number;
+      connection?: { effectiveType?: string };
+    };
+    
+    const isLowPerfDevice = (
+      (nav.deviceMemory && nav.deviceMemory < 2) ||
+      navigator.hardwareConcurrency < 2 ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    );
+    
     // Se os resultados já foram pré-carregados, reduzimos drasticamente o tempo
     // de carregamento para quase instantâneo para evitar o skeleton desnecessário
     const effectiveMinDuration = hasPreloadedResults ? 50 : minDuration;
@@ -74,7 +86,11 @@ export const useLoadingState = ({
   useEffect(() => {
     if (isLoading) {
       // Check if device seems to be low-performance
-      const memory = (navigator as any).deviceMemory;
+      const nav = navigator as Navigator & {
+        deviceMemory?: number;
+      };
+      
+      const memory = nav.deviceMemory;
       const cpuCores = navigator.hardwareConcurrency;
       
       if ((memory && memory < 2) || (cpuCores && cpuCores < 2)) {
