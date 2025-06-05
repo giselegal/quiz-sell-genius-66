@@ -1036,15 +1036,17 @@ const DescubraSeuEstilo: React.FC = () => {
                     Como identificar o formato do seu rosto
                   </span>
                 </li>
-                <l                  <span className="text-sm text-[#432818]">
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-[#B89B7A]" />
+                  <span className="text-sm text-[#432818]">
                     Acessórios e Cortes de cabelo que valorizam seus traços
-                  </span>        Acessórios e Cortes de cabelo que valorizam seus traços
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-[#B89B7A]" />
                   <span className="text-sm text-[#432818]">
-                </span>
+                    Maquiagem que harmoniza com seu estilo
+                  </span>
                 </li>
               </ul>
             </div>
@@ -1164,22 +1166,13 @@ const DescubraSeuEstilo: React.FC = () => {
               Quero Transformar Minha Imagem Agora!
             </span>
             <span className="md:hidden">Quero Minha Transformação!</span>
-            <Arrow            Pense bem: quanto você já gastou com roupas que nunca usou? Este
-            investimento em autoconhecimento vai muito além de roupas - é um
-            investimento em você mesma.
-          </p>
-        </div>
-      </section>
-    </div>
-  );
-};
-
-export default DescubraSeuEstilo;
-="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
 
           <p className="text-sm text-[#8F7A6A] mt-4">
-             
+            Pense bem: quanto você já gastou com roupas que nunca usou? Este
+            investimento em autoconhecimento vai muito além de roupas - é um
+            investimento em você mesma.
           </p>
         </div>
       </section>
