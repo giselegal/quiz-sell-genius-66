@@ -773,15 +773,11 @@ const DescubraSeuEstilo: React.FC = () => {
               </div>
 
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair text-[#432818] text-center md:text-left leading-tight">
-                Descubra Seu Estilo Autêntico e Transforme Seu Guarda-Roupa em
-                um Aliado da Sua Imagem Pessoal
+                Descubra Seu Estilo Autêntico!
               </h1>
 
               <p className="text-lg md:text-xl text-[#8F7A6A] text-center md:text-left">
-                Chega de um guarda-roupa lotado e da sensação de que nada
-                combina com você. Descubra seu estilo predominante e aprenda a
-                montar looks que realmente refletem sua essência, com
-                praticidade e confiança.
+                Chega de um guarda-roupa lotado e da sensação de que nada combina com você. Descubra seu Estilo e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.
               </p>
 
               <div className="flex justify-center md:justify-start">
@@ -818,12 +814,10 @@ const DescubraSeuEstilo: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              A Jornada Para Descobrir Seu Estilo Autêntico Começa Aqui
+              Você Reconhece Esses Problemas?
             </h2>
             <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto">
-              Muitas mulheres possuem armários repletos de roupas, mas sentem
-              dificuldade em criar looks que realmente expressem sua
-              personalidade e as façam sentir-se confiantes.
+              Armário cheio, mas nada para vestir? Você não está sozinha.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
