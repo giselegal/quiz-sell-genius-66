@@ -752,21 +752,6 @@ const DescubraSeuEstilo: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAF9F7]">
-      {/* Header com preço */}
-      <header className="py-4 px-4 sm:px-6 sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <img
-            src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-            alt="Gisele Galvão - Logo da Marca"
-            className="h-auto object-contain max-w-[150px] sm:max-w-[180px]"
-          />
-          <div className="text-right">
-            <div className="text-2xl font-bold text-green-600">5x R$ 8,83</div>
-            <div className="text-sm text-gray-600">ou R$ 39,00 à vista</div>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="py-8 md:py-16 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
