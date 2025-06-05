@@ -7,128 +7,93 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { captureUTMParameters } from "./utils/analytics";
 import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
-import { OptimizedLoading } from "@/components/ui/OptimizedLoading";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import CriticalCSSLoader from "./components/CriticalCSSLoader";
 import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
 import { AdminRoute } from "./components/admin/AdminRoute";
-import { usePerformanceOptimization } from "@/hooks/usePerformanceOptimization";
 
-// Lazy loading das páginas com preload inteligente
-const LandingPage = lazy(() =>
-  import("./pages/LandingPage").then((module) => {
-    // Preload próximas páginas prováveis
-    import("./components/QuizPage");
-    return module;
-  })
+// Componente de loading para Suspense
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="text-center">
+      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
+      <p className="mt-4 text-gray-600">Carregando...</p>
+    </div>
+  </div>
 );
 
-const QuizPage = lazy(() =>
-  import("./components/QuizPage").then((module) => {
-    // Preload página de resultado
-    import("./pages/ResultPage");
-    return module;
-  })
-);
-
+// Lazy loading das páginas essenciais
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const QuizPage = lazy(() => import("./components/QuizPage"));
 const ResultPage = lazy(() => import("./pages/ResultPage"));
-
-const QuizDescubraSeuEstilo = lazy(() => import("./pages/quiz-descubra-seu-estilo"));
-
-// Admin pages com lazy loading mais conservador
+const QuizDescubraSeuEstilo = lazy(
+  () => import("./pages/quiz-descubra-seu-estilo")
+);
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
-  const { settings, isLowPerformanceDevice } = usePerformanceOptimization();
-
   // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
-      // Carregar analytics de forma assíncrona para não bloquear o rendering
-      if (!isLowPerformanceDevice) {
-        setTimeout(() => {
-          loadFacebookPixelDynamic();
-          captureUTMParameters();
-        }, 1000);
-      } else {
-        // Para dispositivos de baixo desempenho, aguardar mais tempo
-        setTimeout(() => {
-          loadFacebookPixelDynamic();
-          captureUTMParameters();
-        }, 3000);
-      }
+      loadFacebookPixelDynamic();
+      captureUTMParameters();
 
-      console.log("App initialized with performance optimizations");
+      console.log("App initialized with essential routes only");
     } catch (error) {
       console.error("Erro ao inicializar aplicativo:", error);
     }
-  }, [isLowPerformanceDevice]);
+  }, []);
 
   return (
     <AuthProvider>
       <QuizProvider>
         <TooltipProvider>
-          {/* Critical CSS Loading */}
-          <CriticalCSSLoader
-            cssContent={initialCriticalCSS}
-            id="initial-critical"
-            removeOnLoad={true}
-            removeDelay={2000}
-          />
-          <CriticalCSSLoader
-            cssContent={heroCriticalCSS}
-            id="hero-critical"
-            removeOnLoad={true}
-            removeDelay={3000}
-          />
-
           <Router>
-            <Suspense fallback={<OptimizedLoading message="Carregando página..." size="md" />}>
-              <Routes>
-                {/* Rota principal */}
-                <Route path="/" element={<LandingPage />} />
+            <CriticalCSSLoader
+              cssContent={initialCriticalCSS}
+              id="initial-critical"
+              removeOnLoad={true}
+            />
+            <CriticalCSSLoader
+              cssContent={heroCriticalCSS}
+              id="hero-critical"
+              removeOnLoad={true}
+            />
 
-                {/* Quiz routes */}
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                {/* Página inicial com teste A/B */}
+                <Route path="/" element={<LandingPage />} />
+                {/* Rota do quiz específica */}
                 <Route path="/quiz" element={<QuizPage />} />
+                {/* Rotas do teste A/B */}
+                <Route path="/resultado" element={<ResultPage />} />
                 <Route
                   path="/quiz-descubra-seu-estilo"
                   element={<QuizDescubraSeuEstilo />}
                 />
+                {/* Manter rota antiga para compatibilidade */}
                 <Route
                   path="/descubra-seu-estilo"
                   element={<QuizDescubraSeuEstilo />}
                 />
-
-                {/* Resultado */}
-                <Route path="/resultado" element={<ResultPage />} />
-
-                {/* Admin routes com proteção */}
+                {/* Admin - protegido com AdminAuthProvider */}
                 <Route
                   path="/admin/*"
                   element={
                     <AdminAuthProvider>
                       <AdminRoute>
-                        <Suspense
-                          fallback={
-                            <OptimizedLoading
-                              message="Carregando admin..."
-                              minimal={isLowPerformanceDevice}
-                            />
-                          }
-                        >
-                          <DashboardPage />
-                        </Suspense>
+                        <DashboardPage />
                       </AdminRoute>
                     </AdminAuthProvider>
                   }
                 />
-
                 {/* 404 */}
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
           </Router>
-
           <Toaster />
         </TooltipProvider>
       </QuizProvider>
