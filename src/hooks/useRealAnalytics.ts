@@ -22,7 +22,7 @@ export interface AnalyticsMetrics {
   isLoading: boolean;
   error: string | null;
   isRealData?: boolean;
-  dataSource?: 'hotmart' | 'simulated' | 'google-analytics';
+  dataSource?: "hotmart" | "simulated" | "google-analytics";
 }
 
 // Função para obter dados reais do Facebook Pixel via gtag e dados da Hotmart
@@ -30,22 +30,24 @@ const fetchRealTimeMetrics = async (): Promise<Partial<AnalyticsMetrics>> => {
   try {
     // Primeiro, verificar se há dados reais da Hotmart
     const hotmartMetrics = hotmartWebhookManager.getAnalyticsMetrics();
-    
+
     if (hotmartMetrics && hotmartWebhookManager.hasRealSalesData()) {
       console.log("[Analytics] Usando dados reais da Hotmart:", hotmartMetrics);
-      
+
       // Adicionar indicador de que são dados reais
       return {
         ...hotmartMetrics,
         // Marcar como dados reais para mostrar no dashboard
         isRealData: true,
-        dataSource: 'hotmart' as const
+        dataSource: "hotmart" as const,
       };
     }
 
     // Se não há dados da Hotmart, usar sistema anterior (simulado)
-    console.log("[Analytics] Dados da Hotmart não disponíveis, usando dados simulados");
-    
+    console.log(
+      "[Analytics] Dados da Hotmart não disponíveis, usando dados simulados"
+    );
+
     // Verifica se o gtag está disponível
     if (typeof window === "undefined" || !window.gtag) {
       throw new Error("Google Analytics não está disponível");
@@ -66,7 +68,7 @@ const fetchRealTimeMetrics = async (): Promise<Partial<AnalyticsMetrics>> => {
         return {
           ...parsed.metrics,
           isRealData: false,
-          dataSource: 'simulated' as const
+          dataSource: "simulated" as const,
         };
       }
     }
@@ -115,7 +117,7 @@ const fetchRealTimeMetrics = async (): Promise<Partial<AnalyticsMetrics>> => {
               },
             ],
             isRealData: false,
-            dataSource: 'google-analytics' as const,
+            dataSource: "google-analytics" as const,
           };
 
           // Salva os dados no localStorage com timestamp
@@ -154,7 +156,7 @@ export const useRealAnalytics = (): AnalyticsMetrics => {
     isLoading: true,
     error: null,
     isRealData: false,
-    dataSource: 'simulated',
+    dataSource: "simulated",
   });
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
   TrendingUp,
@@ -10,6 +11,8 @@ import {
   BarChart3,
   Zap,
   Loader2,
+  FlaskConical,
+  Trash2,
 } from "lucide-react";
 import {
   useRealAnalytics,
@@ -20,6 +23,31 @@ import {
 
 const OverviewPage: React.FC = () => {
   const metrics = useRealAnalytics();
+
+  // Funções para testar a integração Hotmart
+  const handleSimulateHotmartSales = () => {
+    if (typeof window !== "undefined" && (window as any).simulateHotmartSales) {
+      (window as any).simulateHotmartSales();
+      // Recarregar a página para ver os novos dados
+      window.location.reload();
+    } else {
+      alert(
+        "Função de simulação não disponível. Verifique se o simulador foi carregado."
+      );
+    }
+  };
+
+  const handleClearTestData = () => {
+    if (typeof window !== "undefined" && (window as any).clearHotmartTestData) {
+      (window as any).clearHotmartTestData();
+      // Recarregar a página para ver os dados limpos
+      window.location.reload();
+    } else {
+      alert(
+        "Função de limpeza não disponível. Verifique se o simulador foi carregado."
+      );
+    }
+  };
 
   // Componente de loading
   if (metrics.isLoading) {
@@ -68,7 +96,9 @@ const OverviewPage: React.FC = () => {
       <div>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Dashboard Overview
+            </h1>
             <p className="text-gray-600 mt-1">
               Visão geral do desempenho dos seus quizzes e campanhas
             </p>
@@ -91,12 +121,50 @@ const OverviewPage: React.FC = () => {
               </Badge>
             )}
             <Badge variant="secondary" className="text-xs">
-              {metrics.dataSource === 'hotmart' && 'Hotmart Webhook'}
-              {metrics.dataSource === 'google-analytics' && 'Google Analytics'}
-              {metrics.dataSource === 'simulated' && 'Simulação'}
+              {metrics.dataSource === "hotmart" && "Hotmart Webhook"}
+              {metrics.dataSource === "google-analytics" && "Google Analytics"}
+              {metrics.dataSource === "simulated" && "Simulação"}
             </Badge>
           </div>
         </div>
+
+        {/* Botões de Teste da Integração Hotmart - Apenas em desenvolvimento */}
+        {process.env.NODE_ENV === "development" && (
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-blue-900">
+                🧪 Teste de Integração Hotmart
+              </h3>
+              <span className="text-xs text-blue-600">
+                Modo Desenvolvimento
+              </span>
+            </div>
+            <div className="flex space-x-2">
+              <Button
+                onClick={handleSimulateHotmartSales}
+                size="sm"
+                variant="outline"
+                className="text-blue-600 border-blue-300 hover:bg-blue-100"
+              >
+                <FlaskConical className="h-4 w-4 mr-2" />
+                Simular 5 Vendas
+              </Button>
+              <Button
+                onClick={handleClearTestData}
+                size="sm"
+                variant="outline"
+                className="text-red-600 border-red-300 hover:bg-red-100"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Limpar Dados de Teste
+              </Button>
+            </div>
+            <p className="text-xs text-blue-600 mt-2">
+              Use estes botões para simular vendas da Hotmart e testar como os
+              dados reais aparecem no dashboard.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Métricas Principais */}

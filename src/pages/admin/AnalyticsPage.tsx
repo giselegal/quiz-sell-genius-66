@@ -10,6 +10,9 @@ import {
   Target,
   Download,
   Loader2,
+  FlaskConical,
+  Trash2,
+  Zap,
 } from "lucide-react";
 import {
   useRealAnalytics,
@@ -20,6 +23,31 @@ import {
 
 const AnalyticsPage: React.FC = () => {
   const metrics = useRealAnalytics();
+
+  // Funções para testar a integração Hotmart
+  const handleSimulateHotmartSales = () => {
+    if (typeof window !== "undefined" && (window as any).simulateHotmartSales) {
+      (window as any).simulateHotmartSales();
+      // Recarregar a página para ver os novos dados
+      window.location.reload();
+    } else {
+      alert(
+        "Função de simulação não disponível. Verifique se o simulador foi carregado."
+      );
+    }
+  };
+
+  const handleClearTestData = () => {
+    if (typeof window !== "undefined" && (window as any).clearHotmartTestData) {
+      (window as any).clearHotmartTestData();
+      // Recarregar a página para ver os dados limpos
+      window.location.reload();
+    } else {
+      alert(
+        "Função de limpeza não disponível. Verifique se o simulador foi carregado."
+      );
+    }
+  };
 
   // Componente de loading
   if (metrics.isLoading) {
@@ -95,9 +123,9 @@ const AnalyticsPage: React.FC = () => {
               </Badge>
             )}
             <Badge variant="secondary" className="text-xs">
-              {metrics.dataSource === 'hotmart' && 'Hotmart Webhook'}
-              {metrics.dataSource === 'google-analytics' && 'Google Analytics'}
-              {metrics.dataSource === 'simulated' && 'Simulação'}
+              {metrics.dataSource === "hotmart" && "Hotmart Webhook"}
+              {metrics.dataSource === "google-analytics" && "Google Analytics"}
+              {metrics.dataSource === "simulated" && "Simulação"}
             </Badge>
           </div>
         </div>

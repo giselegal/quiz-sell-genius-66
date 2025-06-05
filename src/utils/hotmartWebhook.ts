@@ -56,7 +56,7 @@ export interface HotmartSaleData {
   value: number;
   currency: string;
   timestamp: string;
-  status: 'approved' | 'canceled' | 'refunded';
+  status: "approved" | "canceled" | "refunded";
   utm_parameters?: {
     utm_source?: string;
     utm_medium?: string;
@@ -343,7 +343,10 @@ export class HotmartWebhookManager {
   }
 
   // Armazenar dados de venda para analytics
-  private storeSaleData(data: HotmartWebhookData, userData?: UserAnalyticsData | null): void {
+  private storeSaleData(
+    data: HotmartWebhookData,
+    userData?: UserAnalyticsData | null
+  ): void {
     try {
       const saleData: HotmartSaleData = {
         transactionId: data.data.transaction.id,
@@ -354,7 +357,7 @@ export class HotmartWebhookManager {
         value: data.data.purchase.price.value,
         currency: data.data.purchase.price.currency_value,
         timestamp: data.timestamp,
-        status: 'approved',
+        status: "approved",
         utm_parameters: userData?.utm_parameters,
         commission: data.data.purchase.commission?.value,
         affiliateName: data.data.affiliate?.name,
@@ -363,13 +366,15 @@ export class HotmartWebhookManager {
 
       // Recuperar vendas existentes
       const existingSales = this.getStoredSales();
-      
+
       // Adicionar nova venda (evitar duplicatas)
-      const updatedSales = existingSales.filter(sale => sale.transactionId !== saleData.transactionId);
+      const updatedSales = existingSales.filter(
+        (sale) => sale.transactionId !== saleData.transactionId
+      );
       updatedSales.push(saleData);
 
       // Armazenar vendas atualizadas
-      localStorage.setItem('hotmart_sales_data', JSON.stringify(updatedSales));
+      localStorage.setItem("hotmart_sales_data", JSON.stringify(updatedSales));
 
       // Calcular e armazenar métricas atualizadas
       const metrics = this.calculateMetricsFromSales(updatedSales);
@@ -377,21 +382,30 @@ export class HotmartWebhookManager {
         metrics,
         timestamp: new Date().getTime(),
       };
-      localStorage.setItem('hotmart_analytics_metrics', JSON.stringify(metricsData));
+      localStorage.setItem(
+        "hotmart_analytics_metrics",
+        JSON.stringify(metricsData)
+      );
 
-      console.log('[Hotmart Webhook] Dados de venda armazenados:', saleData);
+      console.log("[Hotmart Webhook] Dados de venda armazenados:", saleData);
     } catch (error) {
-      console.error('[Hotmart Webhook] Erro ao armazenar dados de venda:', error);
+      console.error(
+        "[Hotmart Webhook] Erro ao armazenar dados de venda:",
+        error
+      );
     }
   }
 
   // Recuperar dados de vendas armazenados
   private getStoredSales(): HotmartSaleData[] {
     try {
-      const stored = localStorage.getItem('hotmart_sales_data');
+      const stored = localStorage.getItem("hotmart_sales_data");
       return stored ? JSON.parse(stored) : [];
     } catch (error) {
-      console.error('[Hotmart Webhook] Erro ao recuperar dados de vendas:', error);
+      console.error(
+        "[Hotmart Webhook] Erro ao recuperar dados de vendas:",
+        error
+      );
       return [];
     }
   }
@@ -401,44 +415,55 @@ export class HotmartWebhookManager {
     try {
       const salesData = this.getStoredSales();
       const currentMetrics = this.calculateMetricsFromSales(salesData);
-      
+
       // Salvar métricas calculadas
       const metricsData = {
         metrics: currentMetrics,
         timestamp: new Date().getTime(),
-        source: 'hotmart'
+        source: "hotmart",
       };
-      
-      localStorage.setItem('hotmart_analytics_metrics', JSON.stringify(metricsData));
-      
-      console.log('[Hotmart Webhook] Métricas atualizadas:', currentMetrics);
+
+      localStorage.setItem(
+        "hotmart_analytics_metrics",
+        JSON.stringify(metricsData)
+      );
+
+      console.log("[Hotmart Webhook] Métricas atualizadas:", currentMetrics);
     } catch (error) {
-      console.error('[Hotmart Webhook] Erro ao atualizar métricas:', error);
+      console.error("[Hotmart Webhook] Erro ao atualizar métricas:", error);
     }
   }
 
   // Calcular métricas a partir das vendas
-  private calculateMetricsFromSales(sales: HotmartSaleData[]): Partial<import('../hooks/useRealAnalytics').AnalyticsMetrics> {
-    const approvedSales = sales.filter(sale => sale.status === 'approved');
+  private calculateMetricsFromSales(
+    sales: HotmartSaleData[]
+  ): Partial<import("../hooks/useRealAnalytics").AnalyticsMetrics> {
+    const approvedSales = sales.filter((sale) => sale.status === "approved");
     const today = new Date();
     const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-    const recentSales = approvedSales.filter(sale => new Date(sale.timestamp) >= thirtyDaysAgo);
-    
-    const totalRevenue = approvedSales.reduce((sum, sale) => sum + sale.value, 0);
+    const recentSales = approvedSales.filter(
+      (sale) => new Date(sale.timestamp) >= thirtyDaysAgo
+    );
+
+    const totalRevenue = approvedSales.reduce(
+      (sum, sale) => sum + sale.value,
+      0
+    );
     const totalSales = approvedSales.length;
-    
+
     // Calcular performance por UTM
     const utmPerformance: { [key: string]: number } = {};
-    approvedSales.forEach(sale => {
+    approvedSales.forEach((sale) => {
       if (sale.utm_parameters?.utm_content) {
-        utmPerformance[sale.utm_parameters.utm_content] = 
+        utmPerformance[sale.utm_parameters.utm_content] =
           (utmPerformance[sale.utm_parameters.utm_content] || 0) + sale.value;
       }
     });
 
     // Agrupar por produto
-    const productSales: { [key: string]: { sales: number; revenue: number } } = {};
-    approvedSales.forEach(sale => {
+    const productSales: { [key: string]: { sales: number; revenue: number } } =
+      {};
+    approvedSales.forEach((sale) => {
       if (!productSales[sale.productName]) {
         productSales[sale.productName] = { sales: 0, revenue: 0 };
       }
@@ -454,13 +479,23 @@ export class HotmartWebhookManager {
     return {
       totalResponses: totalSales,
       revenue: totalRevenue,
-      conversionRate: totalSales > 0 ? (totalSales / Math.max(totalSales * 10, 100)) * 100 : 0, // Estimativa baseada em vendas
-      roi: totalRevenue > 0 ? ((totalRevenue - (totalRevenue * 0.3)) / (totalRevenue * 0.3)) * 100 : 0, // ROI estimado
+      conversionRate:
+        totalSales > 0
+          ? (totalSales / Math.max(totalSales * 10, 100)) * 100
+          : 0, // Estimativa baseada em vendas
+      roi:
+        totalRevenue > 0
+          ? ((totalRevenue - totalRevenue * 0.3) / (totalRevenue * 0.3)) * 100
+          : 0, // ROI estimado
       stylePerformance: utmPerformance,
       topProducts,
       responsesTrend: recentSales.length > 0 ? 15 : 0, // Tendência positiva se há vendas recentes
       conversionTrend: recentSales.length > 0 ? 5 : 0,
-      revenueTrend: recentSales.reduce((sum, sale) => sum + sale.value, 0) > totalRevenue * 0.3 ? 10 : 0,
+      revenueTrend:
+        recentSales.reduce((sum, sale) => sum + sale.value, 0) >
+        totalRevenue * 0.3
+          ? 10
+          : 0,
       roiTrend: recentSales.length > 0 ? 20 : 0,
     };
   }
@@ -581,30 +616,32 @@ export class HotmartWebhookManager {
     return this.getStoredSales();
   }
 
-  public getAnalyticsMetrics(): Partial<import('../hooks/useRealAnalytics').AnalyticsMetrics> | null {
+  public getAnalyticsMetrics(): Partial<
+    import("../hooks/useRealAnalytics").AnalyticsMetrics
+  > | null {
     try {
-      const stored = localStorage.getItem('hotmart_analytics_metrics');
+      const stored = localStorage.getItem("hotmart_analytics_metrics");
       if (stored) {
         const data = JSON.parse(stored);
         // Verificar se os dados não são muito antigos (máximo 5 minutos)
         const now = new Date().getTime();
         const dataAge = now - (data.timestamp || 0);
         const fiveMinutes = 5 * 60 * 1000;
-        
+
         if (dataAge < fiveMinutes) {
           return data.metrics;
         }
       }
-      
+
       // Se não há dados recentes, calcular novamente
       const salesData = this.getStoredSales();
       if (salesData.length > 0) {
         return this.calculateMetricsFromSales(salesData);
       }
-      
+
       return null;
     } catch (error) {
-      console.error('[Hotmart Webhook] Erro ao recuperar métricas:', error);
+      console.error("[Hotmart Webhook] Erro ao recuperar métricas:", error);
       return null;
     }
   }
@@ -617,13 +654,13 @@ export class HotmartWebhookManager {
   public getTotalRevenue(): number {
     const salesData = this.getStoredSales();
     return salesData
-      .filter(sale => sale.status === 'approved')
+      .filter((sale) => sale.status === "approved")
       .reduce((sum, sale) => sum + sale.value, 0);
   }
 
   public getTotalSales(): number {
     const salesData = this.getStoredSales();
-    return salesData.filter(sale => sale.status === 'approved').length;
+    return salesData.filter((sale) => sale.status === "approved").length;
   }
 }
 
