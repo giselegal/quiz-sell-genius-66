@@ -13,7 +13,7 @@ Failed to connect, are you sure your server works via FTP or FTPS?
 
 1. **✅ Workflow com múltiplas tentativas:**
 
-   - Tentativa 1: IP (185.158.133.1)
+   - Tentativa 1: IP (147.93.39.155)
    - Tentativa 2: Domínio (giselegalvao.com.br)
    - Tentativa 3: FTPS (protocolo seguro)
 
@@ -44,7 +44,7 @@ Failed to connect, are you sure your server works via FTP or FTPS?
 
 ### **2. Configurações do Workflow:**
 
-- **Server:** `185.158.133.1` (IP correto da Hostinger)
+- **Server:** `147.93.39.155` (IP correto da Hostinger)
 - **Username:** `u116045488`
 - **Diretório:** `/home/u116045488/domains/giselegalvao.com.br/public_html/`
 - **Action:** `SamKirkland/FTP-Deploy-Action@v4.3.5`

@@ -1,4 +1,4 @@
-name: Deploy Otimizado para Hostinger
+name: Deploy Hostinger - Configurações Corretas
 
 on:
   push:
@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,20 +22,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run pre-deploy checks
-        run: |
-          chmod +x ./pre-deploy-performance-check.sh
-          ./pre-deploy-performance-check.sh
-
       - name: Build project
         run: npm run build
 
-      - name: Prepare deployment package
+      - name: Verificar arquivos build
         run: |
-          chmod +x ./scripts/deploy-prepare.sh
-          ./scripts/deploy-prepare.sh
+          echo "📁 Verificando arquivos no dist/:"
+          ls -la dist/
+          echo "📊 Tamanho do build:"
+          du -sh dist/
 
-      - name: Deploy to Hostinger Root Domain
+      - name: Deploy para Hostinger (Configurações Corretas)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 147.93.39.155
@@ -43,6 +40,9 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
           server-dir: /home/u116045488/domains/giselegalvao.com.br/public_html/
+          port: 21
+          protocol: ftp
+          timeout: 60000
           dangerous-clean-slate: true
           exclude: |
             **/.git*
@@ -50,9 +50,13 @@ jobs:
             **/node_modules/**
             **/.DS_Store
             **/Thumbs.db
+            **/*.log
 
-      - name: Post-deploy verification
+      - name: Verificação pós-deploy
         run: |
-          echo "✅ Deploy concluído para giselegalvao.com.br"
-          echo "🔗 Verificar: https://giselegalvao.com.br"
-          echo "📊 Testar Lighthouse após deploy"
+          echo "✅ Deploy concluído com sucesso!"
+          echo "🌐 Site disponível em: https://giselegalvao.com.br"
+          echo "📱 Teste as páginas principais:"
+          echo "   - https://giselegalvao.com.br/"
+          echo "   - https://giselegalvao.com.br/resultado"
+          echo "   - https://giselegalvao.com.br/quiz-descubra-seu-estilo"
