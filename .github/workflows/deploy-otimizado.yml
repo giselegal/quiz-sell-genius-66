@@ -39,10 +39,10 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 185.158.133.1
-          username: u116045488.giselegalvao
+          username: u116045488
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /u116045488/domains/giselegalvao.com.br/public_html/
+          server-dir: /home/u116045488/domains/giselegalvao.com.br/public_html/
           dangerous-clean-slate: true
           exclude: |
             **/.git*

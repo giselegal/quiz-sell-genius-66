@@ -197,8 +197,15 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: 185.158.133.1
-          username: u116045488.giselegalvao
+          username: u116045488
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /u116045488/domains/giselegalvao.com.br/public_html/quiz-de-estilo/
+          server-dir: /home/u116045488/domains/giselegalvao.com.br/public_html/quiz-de-estilo/
           dangerous-clean-slate: true
+          timeout: 60000
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            **/Thumbs.db

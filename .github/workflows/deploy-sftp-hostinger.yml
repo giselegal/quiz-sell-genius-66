@@ -30,28 +30,54 @@ jobs:
           chmod +x ./scripts/deploy-prepare.sh
           ./scripts/deploy-prepare.sh
 
-      - name: Deploy via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: u116045488.giselegalvao
-          server: giselegalvao.com.br
-          port: 22
-          password: ${{ secrets.FTP_PASSWORD }}
-          local_path: "./dist/*"
-          remote_path: "/public_html/"
-          sftp_only: true
+      - name: Deploy via SFTP (IP Correto)
+        continue-on-error: true
+        id: deploy_sftp_ip
+        run: |
+          echo "Tentando deploy via SFTP com IP 185.158.133.1..."
+          sshpass -p "${{ secrets.FTP_PASSWORD }}" sftp -o StrictHostKeyChecking=no -P 22 u116045488@185.158.133.1 << 'EOF'
+          cd /home/u116045488/domains/giselegalvao.com.br/public_html/
+          put -r dist/* .
+          quit
+          EOF
 
-      - name: Deploy alternativo via SCP
-        if: failure()
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: giselegalvao.com.br
-          username: u116045488.giselegalvao
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 22
-          source: "dist/*"
-          target: "/public_html/"
-          strip_components: 1
+      - name: Deploy via SFTP (Hostname)
+        if: steps.deploy_sftp_ip.outcome == 'failure'
+        continue-on-error: true
+        id: deploy_sftp_domain
+        run: |
+          echo "Tentando deploy via SFTP com hostname..."
+          sshpass -p "${{ secrets.FTP_PASSWORD }}" sftp -o StrictHostKeyChecking=no -P 22 u116045488@giselegalvao.com.br << 'EOF'
+          cd /home/u116045488/domains/giselegalvao.com.br/public_html/
+          put -r dist/* .
+          quit
+          EOF
+
+      - name: Deploy alternativo via rsync/SSH
+        if: steps.deploy_sftp_ip.outcome == 'failure' && steps.deploy_sftp_domain.outcome == 'failure'
+        continue-on-error: true
+        id: deploy_rsync
+        run: |
+          echo "Tentando deploy via rsync..."
+          sudo apt-get update && sudo apt-get install -y sshpass rsync
+          sshpass -p "${{ secrets.FTP_PASSWORD }}" rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no -p 22" \
+            ./dist/ u116045488@185.158.133.1:/home/u116045488/domains/giselegalvao.com.br/public_html/
+
+      - name: Check SFTP deploy result
+        run: |
+          if [ "${{ steps.deploy_sftp_ip.outcome }}" == "success" ]; then
+            echo "✅ Deploy SFTP realizado com sucesso via IP (185.158.133.1)"
+          elif [ "${{ steps.deploy_sftp_domain.outcome }}" == "success" ]; then
+            echo "✅ Deploy SFTP realizado com sucesso via hostname"
+          elif [ "${{ steps.deploy_rsync.outcome }}" == "success" ]; then
+            echo "✅ Deploy rsync realizado com sucesso"
+          else
+            echo "❌ Todas as tentativas de deploy SFTP/SSH falharam"
+            echo "📋 Verifique se SSH/SFTP está habilitado no painel Hostinger"
+            echo "ℹ️  Muitos provedores de hospedagem compartilhada não oferecem acesso SSH/SFTP"
+            echo "ℹ️  Recomenda-se usar o workflow FTP principal: deploy-to-hostinger.yml"
+            exit 1
+          fi
 
       - name: Post-deploy verification
         run: |

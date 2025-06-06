@@ -45,8 +45,8 @@ Failed to connect, are you sure your server works via FTP or FTPS?
 ### **2. Configurações do Workflow:**
 
 - **Server:** `185.158.133.1` (IP correto da Hostinger)
-- **Username:** `u116045488.giselegalvao`
-- **Diretório:** `/u116045488/domains/giselegalvao.com.br/public_html/`
+- **Username:** `u116045488`
+- **Diretório:** `/home/u116045488/domains/giselegalvao.com.br/public_html/`
 - **Action:** `SamKirkland/FTP-Deploy-Action@v4.3.5`
 
 ### **3. Scripts Automáticos:**
@@ -88,7 +88,7 @@ git push origin main
 ## 📋 **CHECKLIST DE VERIFICAÇÃO**
 
 - [ ] Secret `FTP_PASSWORD` configurado no GitHub
-- [ ] Workflow atualizado com IP correto (185.158.133.1)
+- [ ] Workflow atualizado com IP correto (147.93.39.155)
 - [ ] Scripts com permissão de execução
 - [ ] Diretório de destino correto configurado
 - [ ] Exclusões de arquivos desnecessários configuradas
@@ -104,7 +104,7 @@ git push origin main
 ### **Se o deploy falhar:**
 
 1. Verifique se o secret `FTP_PASSWORD` está correto
-2. Confirme se o IP 185.158.133.1 ainda é válido
+2. Confirme se o IP 147.93.39.155 ainda é válido
 3. Verifique os logs do GitHub Actions
 4. Teste a conexão FTP manualmente
 

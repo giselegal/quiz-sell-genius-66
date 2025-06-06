@@ -39,7 +39,7 @@ jobs:
         continue-on-error: true
         id: deploy_ip
         with:
-          server: 147.93.39.155
+          server: 185.158.133.1
           username: u116045488
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
@@ -99,7 +99,7 @@ jobs:
       - name: Check deploy result
         run: |
           if [ "${{ steps.deploy_ip.outcome }}" == "success" ]; then
-            echo "✅ Deploy realizado com sucesso via IP (147.93.39.155)"
+            echo "✅ Deploy realizado com sucesso via IP (185.158.133.1)"
           elif [ "${{ steps.deploy_domain.outcome }}" == "success" ]; then
             echo "✅ Deploy realizado com sucesso via hostname (ftp.giselegalvao.com.br)"
           elif [ "${{ steps.deploy_ftps.outcome }}" == "success" ]; then
