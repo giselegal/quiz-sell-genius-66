@@ -2,20 +2,25 @@
 
 ## ✅ Configurações Técnicas Completas
 
-### 1. **Workflows GitHub Actions** 
+### 1. **Workflows GitHub Actions**
+
 Todos os workflows estão configurados com as informações corretas da Hostinger:
+
 - **Servidor FTP**: `185.158.133.1` (IP correto da Hostinger)
 - **Usuário**: `u116045488`
 - **Diretório**: `/home/u116045488/domains/giselegalvao.com.br/public_html/`
 
 ### 2. **Arquivos .htaccess**
+
 Configurados para SPA React com:
+
 - ✅ Rewrite rules para rotas do React Router
 - ✅ MIME types corretos para JavaScript/TypeScript
 - ✅ Headers de segurança
 - ✅ Configurações de cache otimizadas
 
 ### 3. **Build Command**
+
 Use sempre: `npm run build:hostinger` (inclui cópia automática do .htaccess)
 
 ## 🔧 Ações Necessárias do Usuário
@@ -49,6 +54,7 @@ Para reativar a sincronização automática com Lovable:
 3. Reative o auto-sync
 
 OU execute o script:
+
 ```bash
 ./reativar-lovable.sh
 ```
@@ -64,6 +70,7 @@ OU execute o script:
 ## 🎯 URLs de Teste
 
 Após o deploy, teste:
+
 - **Site principal**: https://giselegalvao.com.br
 - **Quiz**: https://giselegalvao.com.br/quiz-descubra-seu-estilo
 - **Resultado**: https://giselegalvao.com.br/resultado
