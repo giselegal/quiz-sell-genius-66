@@ -3,6 +3,7 @@
 ## 📊 STATUS ATUAL
 
 ### ✅ ARQUIVOS .HTACCESS ENCONTRADOS:
+
 1. `/public/.htaccess` - ✅ Principal (configurado para raiz)
 2. `/dist/.htaccess` - ✅ Cópia gerada no build
 3. `/.htaccess` - ⚠️ Na raiz (não usado)
@@ -12,6 +13,7 @@
 ## 🎯 CONFIGURAÇÃO ATUAL (CORRETA)
 
 ### Para deploy na RAIZ (giselegalvao.com.br):
+
 ```apache
 RewriteBase /
 RewriteRule ^resultado/?$ index.html [L]
@@ -23,11 +25,13 @@ Header set X-Content-Type-Options "nosniff"
 ## 🚨 PROBLEMAS IDENTIFICADOS
 
 ### 1. CONFLITO DE WORKFLOWS:
+
 - `fixed-lovable-deploy.yml` → Cria .htaccess para `/quiz-de-estilo/`
 - `corrected-path-deploy.yml` → Cria .htaccess para subdiretório
 - Workflows principais → Usa .htaccess da raiz
 
 ### 2. INCONSISTÊNCIA DE CAMINHOS:
+
 - Alguns workflows fazem deploy para raiz
 - Outros workflows fazem deploy para subdiretório
 - .htaccess diferentes para cada situação
@@ -35,15 +39,19 @@ Header set X-Content-Type-Options "nosniff"
 ## ✅ RECOMENDAÇÕES
 
 ### 1. PADRONIZAR DEPLOY:
+
 **Decisão:** Deploy sempre na RAIZ (`giselegalvao.com.br`)
+
 - Server-dir: `/home/u116045488/domains/giselegalvao.com.br/public_html/`
 - RewriteBase: `/`
 
 ### 2. LIMPAR WORKFLOWS DESNECESSÁRIOS:
+
 - Manter apenas: `deploy-hostinger-correto.yml`
 - Remover: workflows que fazem deploy em subdiretório
 
 ### 3. USAR .HTACCESS PRINCIPAL:
+
 - Arquivo: `/public/.htaccess` ✅
 - Build: Vite copia automaticamente para `/dist/`
 - Deploy: FTP envia junto com outros arquivos
@@ -51,12 +59,14 @@ Header set X-Content-Type-Options "nosniff"
 ## 🔧 CORREÇÕES APLICADAS
 
 ### ✅ ARQUIVO PRINCIPAL ESTÁ CORRETO:
+
 - RewriteBase para raiz ✅
 - Rotas específicas configuradas ✅
 - MIME types corretos ✅
 - Headers de segurança ✅
 
 ### ✅ BUILD AUTOMÁTICO:
+
 - Vite copia .htaccess automaticamente ✅
 - Deploy FTP envia .htaccess junto ✅
 
