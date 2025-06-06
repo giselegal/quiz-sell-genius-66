@@ -35,7 +35,7 @@ jobs:
       - name: Deploy para Hostinger (Configurações Corretas)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: 147.93.39.155
+          server: 185.158.133.1
           username: u116045488
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
