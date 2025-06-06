@@ -1,5 +1,41 @@
 # 🚀 Configuração FTP GitHub + Hostinger - GUIA COMPLETO
 
+## 🚨 **ERRO TIMEOUT - SOLUÇÕES IMPLEMENTADAS**
+
+### **Problema identificado:**
+
+```
+Error: Timeout (control socket)
+Failed to connect, are you sure your server works via FTP or FTPS?
+```
+
+### **Soluções aplicadas:**
+
+1. **✅ Workflow com múltiplas tentativas:**
+
+   - Tentativa 1: IP (185.158.133.1)
+   - Tentativa 2: Domínio (giselegalvao.com.br)
+   - Tentativa 3: FTPS (protocolo seguro)
+
+2. **✅ Workflow SFTP alternativo:**
+
+   - Arquivo: `deploy-sftp-hostinger.yml`
+   - Usa SFTP (porta 22) em vez de FTP (porta 21)
+   - Mais comum em hospedagens modernas
+
+3. **✅ Script de verificação:**
+   - Execute: `./verificar-ftp-hostinger.sh`
+   - Guia para verificar configurações no painel Hostinger
+
+### **Como verificar configurações corretas:**
+
+1. **Acesse o painel da Hostinger**
+2. **Files → FTP Accounts**
+3. **Anote:**
+   - Server/Host (pode ser diferente de 185.158.133.1)
+   - Port (21 para FTP, 22 para SFTP)
+   - Protocol (FTP, FTPS ou SFTP)
+
 ## ✅ **CONFIGURAÇÕES APLICADAS**
 
 ### **1. GitHub Secrets Necessários:**

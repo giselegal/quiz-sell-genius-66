@@ -1,0 +1,59 @@
+name: Deploy SFTP para Hostinger (Alternativo)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Prepare deployment package
+        run: |
+          chmod +x ./scripts/deploy-prepare.sh
+          ./scripts/deploy-prepare.sh
+
+      - name: Deploy via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: u116045488.giselegalvao
+          server: giselegalvao.com.br
+          port: 22
+          password: ${{ secrets.FTP_PASSWORD }}
+          local_path: "./dist/*"
+          remote_path: "/public_html/"
+          sftp_only: true
+
+      - name: Deploy alternativo via SCP
+        if: failure()
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: giselegalvao.com.br
+          username: u116045488.giselegalvao
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 22
+          source: "dist/*"
+          target: "/public_html/"
+          strip_components: 1
+
+      - name: Post-deploy verification
+        run: |
+          echo "✅ Deploy SFTP concluído para giselegalvao.com.br"
+          echo "🔗 Verificar: https://giselegalvao.com.br"

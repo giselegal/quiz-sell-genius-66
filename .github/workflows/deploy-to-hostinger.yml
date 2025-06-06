@@ -34,20 +34,84 @@ jobs:
           chmod +x ./scripts/deploy-prepare.sh
           ./scripts/deploy-prepare.sh
 
-      - name: Deploy to Hostinger Root Domain
+      - name: Deploy to Hostinger Root Domain (Tentativa 1 - IP Correto)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        continue-on-error: true
+        id: deploy_ip
         with:
-          server: 185.158.133.1
-          username: u116045488.giselegalvao
+          server: 147.93.39.155
+          username: u116045488
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: /u116045488/domains/giselegalvao.com.br/public_html/
+          server-dir: /home/u116045488/domains/giselegalvao.com.br/public_html/
+          port: 21
+          protocol: ftp
+          timeout: 60000
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             **/.DS_Store
             **/Thumbs.db
+
+      - name: Deploy to Hostinger Root Domain (Tentativa 2 - Hostname)
+        if: steps.deploy_ip.outcome == 'failure'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        continue-on-error: true
+        id: deploy_domain
+        with:
+          server: ftp.giselegalvao.com.br
+          username: u116045488
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: /home/u116045488/domains/giselegalvao.com.br/public_html/
+          port: 21
+          protocol: ftp
+          timeout: 60000
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            **/Thumbs.db
+
+      - name: Deploy to Hostinger Root Domain (Tentativa 3 - FTPS)
+        if: steps.deploy_ip.outcome == 'failure' && steps.deploy_domain.outcome == 'failure'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        continue-on-error: true
+        id: deploy_ftps
+        with:
+          server: ftp.giselegalvao.com.br
+          username: u116045488
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: /home/u116045488/domains/giselegalvao.com.br/public_html/
+          port: 21
+          protocol: ftps
+          timeout: 60000
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            **/Thumbs.db
+
+      - name: Check deploy result
+        run: |
+          if [ "${{ steps.deploy_ip.outcome }}" == "success" ]; then
+            echo "✅ Deploy realizado com sucesso via IP (147.93.39.155)"
+          elif [ "${{ steps.deploy_domain.outcome }}" == "success" ]; then
+            echo "✅ Deploy realizado com sucesso via hostname (ftp.giselegalvao.com.br)"
+          elif [ "${{ steps.deploy_ftps.outcome }}" == "success" ]; then
+            echo "✅ Deploy realizado com sucesso via FTPS"
+          else
+            echo "❌ Todas as tentativas de deploy falharam"
+            echo "📋 Verifique:"
+            echo "   - Se o secret FTP_PASSWORD está correto"
+            echo "   - Se a conta FTP está ativa no painel Hostinger"
+            echo "   - Se as configurações FTP estão corretas"
+            exit 1
+          fi
 
       - name: Post-deploy verification
         run: |
