@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -104,6 +103,18 @@ export default defineConfig(({ mode }) => ({
   
   css: {
     devSourcemap: mode === 'development',
+  },
+
+  // Configuração do preview (para npm run preview)
+  preview: {
+    host: '0.0.0.0',
+    port: 5173,
+    strictPort: false,
+    cors: true,
+    headers: {
+      'X-Content-Type-Options': 'nosniff',
+      'Access-Control-Allow-Origin': '*',
+    }
   },
 
   // Lovable integration configuration (sem token)
