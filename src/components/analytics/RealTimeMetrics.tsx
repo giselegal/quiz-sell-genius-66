@@ -118,7 +118,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ analyticsData,
       // Se há dados reais, usar eles
       if (Object.keys(hourlyData).length > 0) {
         const currentHour = now.getHours().toString().padStart(2, '0') + ':00';
-        const currentData = hourlyData[currentHour] || { visitors: new Set(), conversions: 0, revenue: 0 };
+        const currentData = hourlyData[currentHour] || { visitors: new Set<string>(), conversions: 0, revenue: 0 };
         
         const newDataPoint = {
           time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
