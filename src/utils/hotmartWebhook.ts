@@ -214,7 +214,22 @@ class HotmartWebhookManager {
 // Instância singleton
 export const hotmartWebhookManager = new HotmartWebhookManager();
 
+// Função auxiliar para armazenar dados do usuário para tracking
+export const storeUserForHotmart = (userData: { name?: string; email?: string }) => {
+  try {
+    const hotmartUserData = {
+      timestamp: new Date().toISOString(),
+      ...userData
+    };
+    localStorage.setItem('hotmart_user_data', JSON.stringify(hotmartUserData));
+    console.log('[Hotmart] Dados do usuário armazenados para tracking:', hotmartUserData);
+  } catch (error) {
+    console.error('[Hotmart] Erro ao armazenar dados do usuário:', error);
+  }
+};
+
 // Para uso no console do navegador durante desenvolvimento
 if (typeof window !== "undefined") {
   (window as any).hotmartWebhookManager = hotmartWebhookManager;
+  (window as any).storeUserForHotmart = storeUserForHotmart;
 }
