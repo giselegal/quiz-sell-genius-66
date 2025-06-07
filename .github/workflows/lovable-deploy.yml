@@ -1,0 +1,32 @@
+name: Lovable Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/components/lovable/**'
+      - 'public/lovable-uploads/**'
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install Dependencies
+        run: npm ci
+        
+      - name: Build Project
+        run: npm run build
+        
+      - name: Deploy to Server
+        # Adicione aqui os comandos para deploy ao seu servidor
+        run: echo "Deployment would happen here"
