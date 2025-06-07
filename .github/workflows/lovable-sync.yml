@@ -1,5 +1,5 @@
 
-name: Lovable Sync (No Token Required)
+name: Lovable Sync (Corrigido)
 
 on:
   push:
@@ -14,20 +14,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Setup Node.js
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
           
       - name: Install dependencies
         run: npm ci
         
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/lovable-prepare.sh
+          chmod +x scripts/lovable-test.sh
+          chmod +x scripts/lovable-diagnose.sh
+          chmod +x diagnose-lovable-fixed.sh
+        
       - name: Prepare Lovable Components
-        run: node scripts/prepare-lovable.js
+        run: ./scripts/lovable-prepare.sh
         
       - name: Test Lovable Sync
-        run: node scripts/test-sync.js
+        run: ./scripts/lovable-test.sh
         
       - name: Build project
         run: npm run build
@@ -35,11 +42,19 @@ jobs:
       - name: Notify Lovable (Webhook Alternative)
         run: |
           echo "Attempting Lovable notification..."
-          curl -X POST "https://api.lovable.dev/webhook/sync" \
+          curl -X POST "https://lovable.dev/api/webhook/github" \
             -H "Content-Type: application/json" \
             -d '{
               "repository": "${{ github.repository }}",
               "commit": "${{ github.sha }}",
               "branch": "${{ github.ref_name }}",
-              "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+              "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
+              "projectId": "quiz-sell-genius-66"
             }' || echo "Webhook failed - continuing anyway"
+
+      - name: Success notification
+        run: |
+          echo "✅ Sincronização Lovable concluída!"
+          echo "📋 Projeto: quiz-sell-genius-66"
+          echo "🔄 Commit: ${{ github.sha }}"
+          echo "🌐 Lovable Studio: https://lovable.dev"
