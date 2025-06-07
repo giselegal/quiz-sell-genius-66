@@ -1,67 +1,136 @@
 // Simulador de dados da Hotmart para demonstração
 // Este arquivo pode ser usado para testar a integração sem depender de webhooks reais
 
-import { hotmartWebhookManager } from "./hotmartWebhook";
+import { hotmartWebhookManager, HotmartWebhookData } from "./hotmartWebhook";
 
 // Função para simular vendas da Hotmart
 export const simulateHotmartSales = () => {
   console.log("🧪 Simulando vendas da Hotmart...");
 
-  // Dados de vendas simuladas
-  const testSales = [
+  // Dados de vendas simuladas - usando formato correto do webhook
+  const testSales: HotmartWebhookData[] = [
     {
-      transactionId: "HM-2025-001",
-      value: 197.0,
-      utmSource: "google",
-      utmMedium: "cpc",
-      utmCampaign: "quiz-personality-google",
-      status: "completed" as const,
+      event: "PURCHASE_COMPLETE",
+      webhook_id: "test-webhook-001",
       timestamp: new Date().toISOString(),
+      data: {
+        purchase: {
+          transaction: "HM-2025-001",
+          status: "APPROVED",
+          checkout_country: "BR",
+          approved_date: new Date().toISOString(),
+        },
+        buyer: {
+          email: "test1@example.com",
+          name: "Usuário Teste 1",
+          document: "123.456.789-00",
+        },
+        transaction: {
+          id: "HM-2025-001",
+          timestamp: new Date().toISOString(),
+        },
+      },
     },
     {
-      transactionId: "HM-2025-002",
-      value: 197.0,
-      utmSource: "facebook",
-      utmMedium: "ads",
-      utmCampaign: "quiz-retargeting-fb",
-      status: "completed" as const,
-      timestamp: new Date(Date.now() - 3600000).toISOString(), // 1 hora atrás
+      event: "PURCHASE_COMPLETE",
+      webhook_id: "test-webhook-002",
+      timestamp: new Date(Date.now() - 3600000).toISOString(),
+      data: {
+        purchase: {
+          transaction: "HM-2025-002",
+          status: "APPROVED",
+          checkout_country: "BR",
+          approved_date: new Date(Date.now() - 3600000).toISOString(),
+        },
+        buyer: {
+          email: "test2@example.com",
+          name: "Usuário Teste 2",
+          document: "987.654.321-00",
+        },
+        transaction: {
+          id: "HM-2025-002",
+          timestamp: new Date(Date.now() - 3600000).toISOString(),
+        },
+      },
     },
     {
-      transactionId: "HM-2025-003",
-      value: 197.0,
-      utmSource: "instagram",
-      utmMedium: "stories",
-      utmCampaign: "quiz-social-ig",
-      status: "completed" as const,
-      timestamp: new Date(Date.now() - 7200000).toISOString(), // 2 horas atrás
+      event: "PURCHASE_COMPLETE",
+      webhook_id: "test-webhook-003",
+      timestamp: new Date(Date.now() - 7200000).toISOString(),
+      data: {
+        purchase: {
+          transaction: "HM-2025-003",
+          status: "APPROVED",
+          checkout_country: "BR",
+          approved_date: new Date(Date.now() - 7200000).toISOString(),
+        },
+        buyer: {
+          email: "test3@example.com",
+          name: "Usuário Teste 3",
+          document: "543.210.987-00",
+        },
+        transaction: {
+          id: "HM-2025-003",
+          timestamp: new Date(Date.now() - 7200000).toISOString(),
+        },
+      },
     },
     {
-      transactionId: "HM-2025-004",
-      value: 197.0,
-      utmSource: "email",
-      utmMedium: "newsletter",
-      utmCampaign: "quiz-email-campaign",
-      status: "completed" as const,
-      timestamp: new Date(Date.now() - 10800000).toISOString(), // 3 horas atrás
+      event: "PURCHASE_COMPLETE",
+      webhook_id: "test-webhook-004",
+      timestamp: new Date(Date.now() - 10800000).toISOString(),
+      data: {
+        purchase: {
+          transaction: "HM-2025-004",
+          status: "APPROVED",
+          checkout_country: "BR",
+          approved_date: new Date(Date.now() - 10800000).toISOString(),
+        },
+        buyer: {
+          email: "test4@example.com",
+          name: "Usuário Teste 4",
+          document: "876.543.210-00",
+        },
+        transaction: {
+          id: "HM-2025-004",
+          timestamp: new Date(Date.now() - 10800000).toISOString(),
+        },
+      },
     },
     {
-      transactionId: "HM-2025-005",
-      value: 197.0,
-      utmSource: "direct",
-      utmMedium: "organic",
-      utmCampaign: "quiz-direct-access",
-      status: "completed" as const,
-      timestamp: new Date(Date.now() - 14400000).toISOString(), // 4 horas atrás
+      event: "PURCHASE_COMPLETE",
+      webhook_id: "test-webhook-005",
+      timestamp: new Date(Date.now() - 14400000).toISOString(),
+      data: {
+        purchase: {
+          transaction: "HM-2025-005",
+          status: "APPROVED",
+          checkout_country: "BR",
+          approved_date: new Date(Date.now() - 14400000).toISOString(),
+        },
+        buyer: {
+          email: "test5@example.com",
+          name: "Usuário Teste 5",
+          document: "321.654.987-00",
+        },
+        transaction: {
+          id: "HM-2025-005",
+          timestamp: new Date(Date.now() - 14400000).toISOString(),
+        },
+      },
     },
   ];
 
-  // Armazenar cada venda usando o sistema existente
-  testSales.forEach((sale) => {
-    hotmartWebhookManager.storeSaleData(sale);
+  // Processar cada venda usando o sistema de webhook existente
+  testSales.forEach(async (saleData) => {
+    try {
+      await hotmartWebhookManager.processWebhook(saleData);
+    } catch (error) {
+      console.error("Erro ao processar venda simulada:", error);
+    }
   });
 
-  console.log(`✅ ${testSales.length} vendas simuladas adicionadas`);
+  console.log(`✅ ${testSales.length} vendas simuladas processadas`);
   console.log("📊 Total de revenue:", hotmartWebhookManager.getTotalRevenue());
   console.log("📈 Total de vendas:", hotmartWebhookManager.getTotalSales());
 

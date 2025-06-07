@@ -43,13 +43,11 @@ export class HotmartWebhookSimulator {
         buyer: {
           email,
           name: "Usuário Teste",
+          document: "123.456.789-00", // Adicionando documento obrigatório
         },
         transaction: {
           id: transactionId || `T${Date.now()}`,
-          status:
-            event === "PURCHASE_COMPLETE" || event === "PURCHASE_APPROVED"
-              ? "APPROVED"
-              : "CANCELED",
+          timestamp: new Date().toISOString(), // Fix: adicionando timestamp obrigatório
         },
       },
     };

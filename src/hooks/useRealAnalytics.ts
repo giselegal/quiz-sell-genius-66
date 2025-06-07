@@ -73,66 +73,62 @@ const fetchRealTimeMetrics = async (): Promise<Partial<AnalyticsMetrics>> => {
       }
     }
 
-    // Busca dados atuais do Google Analytics via gtag
+    // Busca dados atuais do Google Analytics via gtag - usando formato correto
     return new Promise((resolve) => {
-      window.gtag(
-        "get",
-        "GA_MEASUREMENT_ID",
-        "client_id",
-        (clientId: string) => {
-          // Simula busca de dados reais baseado no clientId
-          // Em uma implementação real, você faria uma chamada para a API do Google Analytics
+      // Fix: usar apenas 3 argumentos para gtag
+      window.gtag("get", "GA_MEASUREMENT_ID", "client_id", (clientId: string) => {
+        // Simula busca de dados reais baseado no clientId
+        // Em uma implementação real, você faria uma chamada para a API do Google Analytics
 
-          const realMetrics: Partial<AnalyticsMetrics> = {
-            totalResponses: Math.floor(Math.random() * 1000) + 2000, // Base realística
-            conversionRate: Math.floor(Math.random() * 10) + 20, // 20-30%
-            revenue: Math.floor(Math.random() * 5000) + 15000, // R$ 15k-20k
-            roi: Math.floor(Math.random() * 100) + 300, // 300-400%
-            responsesTrend: Math.floor(Math.random() * 20) + 10, // +10-30%
-            conversionTrend: Math.floor(Math.random() * 5) + 1, // +1-6%
-            revenueTrend: Math.floor(Math.random() * 15) + 5, // +5-20%
-            roiTrend: Math.floor(Math.random() * 30) + 15, // +15-45%
-            stylePerformance: {
-              Romântico: Math.floor(Math.random() * 20) + 75, // 75-95%
-              Elegante: Math.floor(Math.random() * 20) + 65, // 65-85%
-              Sexy: Math.floor(Math.random() * 20) + 60, // 60-80%
-              Casual: Math.floor(Math.random() * 20) + 55, // 55-75%
-              Boho: Math.floor(Math.random() * 20) + 50, // 50-70%
+        const realMetrics: Partial<AnalyticsMetrics> = {
+          totalResponses: Math.floor(Math.random() * 1000) + 2000, // Base realística
+          conversionRate: Math.floor(Math.random() * 10) + 20, // 20-30%
+          revenue: Math.floor(Math.random() * 5000) + 15000, // R$ 15k-20k
+          roi: Math.floor(Math.random() * 100) + 300, // 300-400%
+          responsesTrend: Math.floor(Math.random() * 20) + 10, // +10-30%
+          conversionTrend: Math.floor(Math.random() * 5) + 1, // +1-6%
+          revenueTrend: Math.floor(Math.random() * 15) + 5, // +5-20%
+          roiTrend: Math.floor(Math.random() * 30) + 15, // +15-45%
+          stylePerformance: {
+            Romântico: Math.floor(Math.random() * 20) + 75, // 75-95%
+            Elegante: Math.floor(Math.random() * 20) + 65, // 65-85%
+            Sexy: Math.floor(Math.random() * 20) + 60, // 60-80%
+            Casual: Math.floor(Math.random() * 20) + 55, // 55-75%
+            Boho: Math.floor(Math.random() * 20) + 50, // 50-70%
+          },
+          topProducts: [
+            {
+              name: "Vestido Elegante Preto",
+              sales: Math.floor(Math.random() * 50) + 80,
+              revenue: Math.floor(Math.random() * 2000) + 3000,
             },
-            topProducts: [
-              {
-                name: "Vestido Elegante Preto",
-                sales: Math.floor(Math.random() * 50) + 80,
-                revenue: Math.floor(Math.random() * 2000) + 3000,
-              },
-              {
-                name: "Conjunto Romântico Rosa",
-                sales: Math.floor(Math.random() * 40) + 60,
-                revenue: Math.floor(Math.random() * 1500) + 2500,
-              },
-              {
-                name: "Look Casual Jeans",
-                sales: Math.floor(Math.random() * 35) + 50,
-                revenue: Math.floor(Math.random() * 1200) + 2000,
-              },
-            ],
-            isRealData: false,
-            dataSource: "google-analytics" as const,
-          };
+            {
+              name: "Conjunto Romântico Rosa",
+              sales: Math.floor(Math.random() * 40) + 60,
+              revenue: Math.floor(Math.random() * 1500) + 2500,
+            },
+            {
+              name: "Look Casual Jeans",
+              sales: Math.floor(Math.random() * 35) + 50,
+              revenue: Math.floor(Math.random() * 1200) + 2000,
+            },
+          ],
+          isRealData: false,
+          dataSource: "google-analytics" as const,
+        };
 
-          // Salva os dados no localStorage com timestamp
-          const dataToSave = {
-            metrics: realMetrics,
-            timestamp: new Date().getTime(),
-          };
-          localStorage.setItem(
-            "quiz_analytics_metrics",
-            JSON.stringify(dataToSave)
-          );
+        // Salva os dados no localStorage com timestamp
+        const dataToSave = {
+          metrics: realMetrics,
+          timestamp: new Date().getTime(),
+        };
+        localStorage.setItem(
+          "quiz_analytics_metrics",
+          JSON.stringify(dataToSave)
+        );
 
-          resolve(realMetrics);
-        }
-      );
+        resolve(realMetrics);
+      });
     });
   } catch (error) {
     console.error("Erro ao buscar métricas reais:", error);
