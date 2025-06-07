@@ -1,3 +1,4 @@
+
 {
   "github": {
     "autoSyncFromGithub": true,
@@ -6,16 +7,30 @@
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
-  "version": "2.0.0",
+  "version": "2.1.1748993249",
+  "lastUpdate": "2025-06-03T23:27:29Z",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
     "enhancedSync": true,
-    "visualEditor": true
+    "visualEditor": true,
+    "forceSync": true,
+    "webhookAlternative": true
   },
   "editor": {
     "enableLiveMode": true,
     "autoSave": true,
     "componentHighlighting": true
+  },
+  "sync": {
+    "forced": true,
+    "timestamp": 1748993249,
+    "method": "webhook-alternative",
+    "tokenRequired": false
+  },
+  "scripts": {
+    "prepare": "node scripts/prepare-lovable.js",
+    "sync": "node scripts/manual-sync.js",
+    "test": "node scripts/test-sync.js"
   }
 }

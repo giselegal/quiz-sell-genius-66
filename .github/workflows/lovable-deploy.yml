@@ -2,11 +2,8 @@ name: Lovable Deployment
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - 'src/components/lovable/**'
-      - 'public/lovable-uploads/**'
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build_and_deploy:
@@ -20,13 +17,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
           
       - name: Install Dependencies
         run: npm ci
         
+      - name: Run Lovable Tagger
+        run: npm run lovable:prepare
+        
       - name: Build Project
         run: npm run build
         
-      - name: Deploy to Server
-        # Adicione aqui os comandos para deploy ao seu servidor
-        run: echo "Deployment would happen here"
+      - name: Deploy to Lovable
+        env:
+          LOVABLE_TOKEN: ${{ secrets.LOVABLE_TOKEN }}
+        run: |
+          echo "Deploying to production..."
+          # Adicionar comandos específicos de deploy aqui
