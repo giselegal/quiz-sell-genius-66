@@ -4,7 +4,7 @@
 
 Sistema completo de teste A/B implementado para comparar o desempenho entre duas páginas de landing:
 - **Versão A**: `/resultado` (Pixel ID: 1311550759901086)
-- **Versão B**: `/quiz-descubra-seu-estilo` (Pixel ID: 1038647624890676)
+- **Versão B**: `/quiz-descubra-seu-estilo` (Pixel ID: 1311550759901086 - Unificado)
 
 ## 🎯 Funcionalidades Implementadas
 
@@ -65,7 +65,7 @@ pixelId: '1311550759901086'
 route: '/resultado'
 
 // Versão B  
-pixelId: '1038647624890676'
+pixelId: '1311550759901086'
 route: '/quiz-descubra-seu-estilo'
 ```
 

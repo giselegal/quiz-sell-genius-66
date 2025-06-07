@@ -12,20 +12,20 @@ interface FunnelConfig {
 }
 
 export const FUNNEL_CONFIGS: Record<string, FunnelConfig> = {
-  // Funnel 1 - Quiz como isca
+  // Teste A - Quiz separado + página de resultado
   "default": {
     pixelId: "1311550759901086",
-    token: "EAAEJYWeJHLABOwGC1ZC1GxRfJBAAIBHFB4kYqIFrNyoyuRpnRLyNp7L2VZBop3sGuyzchC6XkD1EfBrlxmCoMxTZCBEWrP2DwZBOPu5fZBKZCZBybZBG9xAxaSFJJzk3VZB4i08EKFImWmsKhYXWK9RdtfR0eZCQaoNHFm4rGmby9LNjvZAcuVYEAX6M2e0vSfdB96vWQZDZD",
-    utmCampaign: "Teste Lovable - Por Fora",
-    funnelName: "quiz_isca",
+    token: "EAAEJYWeJHLABOZCPfFdzFEgAh8lHkcZAH1hJpVMmuU81MBETMnbfHVTRE41HqxkowK2eZCbF1oLmHyyFTR0v4AJQkUHotjqwzQ6issC2PQVOsbMc2yaZCcZCiErmmS7ghVCeHJDBi3txBnnRcmPpaaAi4qZCiTSsBtQMgg8GdLUsYZCbMMMIsgYLvgRYDrOiAZDZD",
+    utmCampaign: "Teste_A_Quiz_Separado",
+    funnelName: "teste_a_quiz_separado",
     ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
   },
-  // Funnel 2 - Quiz embutido na oferta
+  // Teste B - Quiz como parte da oferta (página de venda direta)
   "quiz-descubra-seu-estilo": {
-    pixelId: "1038647624890676",
-    token: "EAAEJYWeJHLABOwGC1ZC1GxRfJBAAIBHFB4kYqIFrNyoyuRpnRLyNp7L2VZBop3sGuyzchC6XkD1EfBrlxmCoMxTZCBEWrP2DwZBOPu5fZBKZCZBybZBG9xAxaSFJJzk3VZB4i08EKFImWmsKhYXWK9RdtfR0eZCQaoNHFm4rGmby9LNjvZAcuVYEAX6M2e0vSfdB96vWQZDZD",
-    utmCampaign: "Teste Lovable - Por Dentro",
-    funnelName: "quiz_embutido",
+    pixelId: "1311550759901086",
+    token: "EAAEJYWeJHLABOZCPfFdzFEgAh8lHkcZAH1hJpVMmuU81MBETMnbfHVTRE41HqxkowK2eZCbF1oLmHyyFTR0v4AJQkUHotjqwzQ6issC2PQVOsbMc2yaZCcZCiErmmS7ghVCeHJDBi3txBnnRcmPpaaAi4qZCiTSsBtQMgg8GdLUsYZCbMMMIsgYLvgRYDrOiAZDZD",
+    utmCampaign: "Teste_B_Quiz_Embutido",
+    funnelName: "teste_b_quiz_embutido",
     ctaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912"
   }
 };
@@ -86,15 +86,16 @@ export const getCtaUrl = (): string => {
 /**
  * Marca evento específico de funil para análises
  */
-export const trackFunnelEvent = (eventName: string, eventData: Record<string, any> = {}): void => {
+export const trackFunnelEvent = (eventName: string, eventData: Record<string, unknown> = {}): void => {
   const funnelConfig = getCurrentFunnelConfig();
   
   // Adiciona informações do funil aos dados do evento
   const enrichedData = {
     ...eventData,
     funnel_id: funnelConfig.funnelName,
-    funnel_name: funnelConfig.funnelName === 'quiz_isca' ? 'Quiz como Isca' : 'Quiz Embutido',
-    funnel_campaign: funnelConfig.utmCampaign
+    funnel_name: funnelConfig.funnelName === 'teste_a_quiz_separado' ? 'Teste A - Quiz Separado' : 'Teste B - Quiz Embutido',
+    funnel_campaign: funnelConfig.utmCampaign,
+    pixel_id: funnelConfig.pixelId
   };
   
   // Registra no console para debugging

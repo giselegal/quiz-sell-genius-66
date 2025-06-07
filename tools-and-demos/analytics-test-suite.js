@@ -131,7 +131,7 @@ const AnalyticsTestSuite = {
       // Verificar se há pixels configurados
       const pixelConfigs = {
         'default': '1311550759901086',
-        'quiz-descubra-seu-estilo': '1038647624890676'
+        'quiz-descubra-seu-estilo': '1311550759901086'
       };
       
       const pixelId = pixelConfigs[detectedFunnel];

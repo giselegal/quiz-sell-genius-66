@@ -275,7 +275,7 @@ const ABTestComparison: React.FC<ABTestComparisonProps> = ({ timeRange = '7d' })
       const eventsB = events.filter(e => 
         e.timestamp >= dayStart && 
         e.timestamp < dayEnd && 
-        e.customData?.pixel_id === '1038647624890676'
+        e.customData?.campaign_source === 'Teste_B_Quiz_Embutido'
       );
 
       const visitorsA = new Set(eventsA.filter(e => e.eventName === 'PageView').map(e => e.customData?.session_id)).size;

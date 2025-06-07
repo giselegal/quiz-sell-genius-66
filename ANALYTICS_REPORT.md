@@ -36,7 +36,7 @@ Este relatório apresenta uma análise abrangente da implementação de analytic
 - Status: ✅ ATIVO
 
 **Funil 2 - Quiz Embutido**
-- Pixel ID: `1038647624890676`
+- Pixel ID: `1311550759901086` (Unificado)
 - Campanha UTM: "Teste Lovable - Por Dentro"
 - Funil: `quiz_embutido`
 - Status: ✅ ATIVO
