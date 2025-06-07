@@ -37,7 +37,30 @@ jobs:
         echo "=== CHECKING index.html ==="
         ls -la dist/index.html || echo "❌ index.html not found"
         
-    - name: 🚀 Deploy to Hostinger via FTP
+    - name: 🚀 Deploy to Hostinger via FTP (Primary)
+      id: deploy-primary
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      continue-on-error: true
+      with:
+        server: files.000webhost.com
+        username: u116045488
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/
+        server-dir: /public_html/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/.DS_Store
+          **/.vscode/**
+          **/README.md
+        timeout: 600000
+        log-level: verbose
+        protocol: ftp
+        port: 21
+        
+    - name: 🔄 Deploy to Hostinger via FTP (Fallback - Direct IP)
+      if: steps.deploy-primary.outcome == 'failure'
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: 185.158.133.1
@@ -52,8 +75,22 @@ jobs:
           **/.DS_Store
           **/.vscode/**
           **/README.md
-        timeout: 300000
+        timeout: 600000
         log-level: verbose
+        protocol: ftp
+        port: 21
+        security: loose
+        
+    - name: 📡 Deploy via SFTP (Alternative Method)
+      if: steps.deploy-primary.outcome == 'failure'
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      with:
+        server: 185.158.133.1
+        username: u116045488
+        password: ${{ secrets.FTP_PASSWORD }}
+        local_path: './dist/*'
+        remote_path: '/home/u116045488/domains/giselegalvao.com.br/public_html/'
+        sftpArgs: '-o ConnectTimeout=10'
         
     - name: ✅ Deployment Success
       run: |
