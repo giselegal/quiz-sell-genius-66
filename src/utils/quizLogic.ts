@@ -7,12 +7,13 @@ export const calculateStyleResult = (responses: any[]): { primaryStyle: StyleRes
   // Mock calculation for now - replace with actual logic
   const mockPrimaryStyle: StyleResult = {
     category: 'Romântico',
-    percentage: 85
+    percentage: 85,
+    score: 42
   };
 
   const mockSecondaryStyles: StyleResult[] = [
-    { category: 'Elegante', percentage: 65 },
-    { category: 'Natural', percentage: 45 }
+    { category: 'Elegante', percentage: 65, score: 32 },
+    { category: 'Natural', percentage: 45, score: 22 }
   ];
 
   return {
