@@ -16,7 +16,6 @@ export const simulateHotmartSales = () => {
       data: {
         purchase: {
           transaction: "HM-2025-001",
-          status: "APPROVED",
           checkout_country: "BR",
           approved_date: new Date().toISOString(),
         },
@@ -38,7 +37,6 @@ export const simulateHotmartSales = () => {
       data: {
         purchase: {
           transaction: "HM-2025-002",
-          status: "APPROVED",
           checkout_country: "BR",
           approved_date: new Date(Date.now() - 3600000).toISOString(),
         },
@@ -60,7 +58,6 @@ export const simulateHotmartSales = () => {
       data: {
         purchase: {
           transaction: "HM-2025-003",
-          status: "APPROVED",
           checkout_country: "BR",
           approved_date: new Date(Date.now() - 7200000).toISOString(),
         },
@@ -82,7 +79,6 @@ export const simulateHotmartSales = () => {
       data: {
         purchase: {
           transaction: "HM-2025-004",
-          status: "APPROVED",
           checkout_country: "BR",
           approved_date: new Date(Date.now() - 10800000).toISOString(),
         },
@@ -104,7 +100,6 @@ export const simulateHotmartSales = () => {
       data: {
         purchase: {
           transaction: "HM-2025-005",
-          status: "APPROVED",
           checkout_country: "BR",
           approved_date: new Date(Date.now() - 14400000).toISOString(),
         },

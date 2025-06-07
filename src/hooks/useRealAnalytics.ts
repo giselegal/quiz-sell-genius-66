@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { trackEvent } from "@/utils/analytics";
 import { hotmartWebhookManager } from "@/utils/hotmartWebhook";
@@ -73,10 +74,9 @@ const fetchRealTimeMetrics = async (): Promise<Partial<AnalyticsMetrics>> => {
       }
     }
 
-    // Busca dados atuais do Google Analytics via gtag - usando formato correto
+    // Busca dados atuais do Google Analytics via gtag - Fix: usar apenas 2 argumentos
     return new Promise((resolve) => {
-      // Fix: usar apenas 3 argumentos para gtag
-      window.gtag("get", "GA_MEASUREMENT_ID", "client_id", (clientId: string) => {
+      window.gtag("get", "GA_MEASUREMENT_ID", (clientId: string) => {
         // Simula busca de dados reais baseado no clientId
         // Em uma implementação real, você faria uma chamada para a API do Google Analytics
 
