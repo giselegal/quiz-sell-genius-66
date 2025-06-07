@@ -298,7 +298,15 @@ const ResultPage: React.FC = () => {
   if (isLoading) return <ResultSkeleton />;
 
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
+  
+  // Verificação de segurança para categoria existente no styleConfig
+  const styleInfo = styleConfig[category as keyof typeof styleConfig];
+  if (!styleInfo) {
+    console.error(`Category "${category}" not found in styleConfig`);
+    return <ErrorState />;
+  }
+  
+  const { image, guideImage, description } = styleInfo;
 
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
