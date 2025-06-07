@@ -16,23 +16,28 @@ O sistema Lovable foi configurado com múltiplas soluções para garantir sincro
 ### 🚀 Como Usar
 
 #### Reativação Completa
+
 ```bash
 ./reativar-lovable.sh
 ```
 
 #### Sincronização Manual
+
 ```bash
 node scripts/manual-sync.js
 ```
 
 #### Via VS Code Tasks
+
 - `Ctrl+Shift+P` → "Tasks: Run Task"
 - Selecione "Reativar Lovable Sync" ou "Lovable: Sync Manual"
 
 ### 🔧 Solução de Problemas
 
 #### 1. Lovable não está sincronizando
+
 **Solução:**
+
 ```bash
 # Execute o script de reativação
 ./reativar-lovable.sh
@@ -42,17 +47,21 @@ node scripts/manual-sync.js
 ```
 
 #### 2. Verificar se token está configurado
+
 **No GitHub:**
+
 1. Acesse: https://github.com/vdp2025/quiz-sell-genius-66/settings/secrets/actions
 2. Verifique se existe `LOVABLE_TOKEN`
 
 #### 3. Verificar configurações no Lovable Studio
+
 1. Acesse: https://lovable.dev
 2. Abra o projeto "Quiz Sell Genius"
 3. Vá para Project Settings → GitHub
 4. Verifique se auto-sync está ativado
 
 #### 4. Testar conectividade
+
 ```bash
 node scripts/test-sync.js
 ```
@@ -60,12 +69,14 @@ node scripts/test-sync.js
 ### 📊 Monitoramento
 
 #### Verificar última sincronização
+
 ```bash
 cat .lovable | grep lastUpdate
 cat .lovable-trigger
 ```
 
 #### Verificar logs do GitHub Actions
+
 1. Acesse: https://github.com/vdp2025/quiz-sell-genius-66/actions
 2. Verifique workflows:
    - "Sincronização Lovable Automática"
@@ -89,12 +100,14 @@ cat .lovable-trigger
 Se ainda houver problemas:
 
 1. **Verifique conectividade:**
+
    ```bash
    curl -s --head https://lovable.dev
    curl -s --head https://api.lovable.dev
    ```
 
 2. **Verifique status do git:**
+
    ```bash
    git status
    git log --oneline -5

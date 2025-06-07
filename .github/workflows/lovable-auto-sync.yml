@@ -2,33 +2,33 @@ name: Sincronização Lovable Automática
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   schedule:
     # Executa a cada 6 horas
-    - cron: '0 */6 * * *'
-  workflow_dispatch:  # Permite execução manual
+    - cron: "0 */6 * * *"
+  workflow_dispatch: # Permite execução manual
 
 jobs:
   sync-lovable:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          
+          node-version: "18"
+
       - name: Update Lovable sync timestamp
         run: |
           echo "🔄 Atualizando timestamp de sincronização do Lovable..."
           CURRENT_TIMESTAMP=$(date +%s)
           echo "LOVABLE_FORCE_SYNC=$CURRENT_TIMESTAMP" > .lovable-trigger
-          
+
           # Atualizar configuração .lovable se existir
           if [ -f ".lovable" ]; then
             # Criar backup
@@ -45,12 +45,12 @@ jobs:
               console.log('✅ Configuração .lovable atualizada');
             "
           fi
-          
+
       - name: Commit and push if changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          
+
           if [ -n "$(git status --porcelain)" ]; then
             git add .lovable-trigger .lovable
             git commit -m "🔄 Auto-sync: Atualização timestamp Lovable ($CURRENT_TIMESTAMP)"
@@ -59,7 +59,7 @@ jobs:
           else
             echo "ℹ️ Nenhuma alteração para commitar"
           fi
-          
+
       - name: Notify Lovable webhook (if configured)
         run: |
           if [ -n "${{ secrets.LOVABLE_WEBHOOK_URL }}" ]; then
