@@ -4,7 +4,7 @@
 
 Sistema completo de teste A/B implementado para comparar o desempenho entre duas páginas de landing:
 - **Versão A**: `/resultado` (Pixel ID: 1311550759901086)
-- **Versão B**: `/quiz-descubra-seu-estilo` (Pixel ID: 1311550759901086 - Unificado)
+- **Versão B**: `/quiz-descubra-seu-estilo` (Pixel ID: 1038647624890676)
 
 ## 🎯 Funcionalidades Implementadas
 
@@ -60,29 +60,13 @@ Sistema completo de teste A/B implementado para comparar o desempenho entre duas
 
 ### Pixels Facebook Configurados
 ```javascript
-// Configuração Unificada para Teste A/B
-// Pixel ID único para ambas as variantes
-const PIXEL_ID_UNIFICADO = '1311550759901086';
-
 // Versão A
-// pixelId: PIXEL_ID_UNIFICADO
-// route: '/resultado'
-// campaign_source: 'Teste_A_Quiz_Separado'
+pixelId: '1311550759901086'
+route: '/resultado'
 
-// Versão B
-// pixelId: PIXEL_ID_UNIFICADO
-// route: '/quiz-descubra-seu-estilo'
-// campaign_source: 'Teste_B_Quiz_Embutido'
-
-// Exemplo de como o pixelManager.ts agora lida com isso:
-// const config = {
-//   pixelId: PIXEL_ID_UNIFICADO,
-//   token: "SEU_TOKEN_DE_ACESSO_AQUI", // Substituído pelo token real no código
-//   testVariant: identifyTestVariant(), // 'A' ou 'B'
-//   campaignSource: identifyTestVariant() === 'A' ? 'Teste_A_Quiz_Separado' : 'Teste_B_Quiz_Embutido',
-//   funnelName: identifyTestVariant() === 'A' ? FUNNEL_CONFIGS.default.funnelName : FUNNEL_CONFIGS['quiz-descubra-seu-estilo'].funnelName,
-//   ctaUrl: identifyTestVariant() === 'A' ? FUNNEL_CONFIGS.default.ctaUrl : FUNNEL_CONFIGS['quiz-descubra-seu-estilo'].ctaUrl,
-// };
+// Versão B  
+pixelId: '1038647624890676'
+route: '/quiz-descubra-seu-estilo'
 ```
 
 ### Distribuição A/B

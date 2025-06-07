@@ -15,7 +15,7 @@ echo ""
 
 echo "🔬 2. FUNCIONALIDADES DO TESTE A/B"
 echo "   ✅ Comparação Versão A (/resultado) vs Versão B (/quiz-descubra-seu-estilo)"
-echo "   ✅ Pixels Facebook configurados (1311550759901086 unificado para ambos os testes)"
+echo "   ✅ Pixels Facebook configurados (1311550759901086 vs 1038647624890676)"
 echo "   ✅ Sistema de redirecionamento automático 50/50"
 echo ""
 

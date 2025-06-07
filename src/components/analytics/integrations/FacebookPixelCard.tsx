@@ -9,7 +9,6 @@ import { toast } from '@/components/ui/use-toast';
 import { EventTrackingCard } from './EventTrackingCard';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp, Info } from 'lucide-react';
-import { PIXEL_CONFIG } from '@/config/pixelConfig';
 
 interface FacebookPixelCardProps {
   initialId?: string;
@@ -22,12 +21,11 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   initialEnabled = false,
   testFunction
 }) => {
-  // Usa o pixel único configurado
   const [fbPixelId, setFbPixelId] = useState(() => {
     try {
-      return localStorage.getItem('fb_pixel_id') || PIXEL_CONFIG.PIXEL_ID;
+      return localStorage.getItem('fb_pixel_id') || initialId || '1311550759901086';
     } catch (e) {
-      return PIXEL_CONFIG.PIXEL_ID;
+      return initialId || '1311550759901086';
     }
   });
   
@@ -42,9 +40,9 @@ export const FacebookPixelCard: React.FC<FacebookPixelCardProps> = ({
   
   const [fbAccessToken, setFbAccessToken] = useState(() => {
     try {
-      return localStorage.getItem('fb_access_token') || PIXEL_CONFIG.ACCESS_TOKEN;
+      return localStorage.getItem('fb_access_token') || '';
     } catch (e) {
-      return PIXEL_CONFIG.ACCESS_TOKEN;
+      return '';
     }
   });
 
