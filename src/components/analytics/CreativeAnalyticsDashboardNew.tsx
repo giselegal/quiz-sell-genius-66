@@ -34,6 +34,27 @@ interface CreativeStats {
   cost_per_lead: number;
 }
 
+interface MetricCardProps {
+  icon: React.ComponentType<{ size?: number | string; className?: string; style?: React.CSSProperties }>;
+  title: string;
+  value: string;
+  subtitle?: string;
+  trend?: number;
+  color?: string;
+}
+
+interface RealCreativeData {
+  creative_name: string;
+  page_views: number;
+  quiz_starts: number;
+  quiz_completions: number;
+  leads: number;
+  purchases: number;
+  revenue: number;
+  conversion_rate: string;
+  cost_per_lead: number;
+}
+
 const CreativeAnalyticsDashboardNew: React.FC = () => {
   const [creativesData, setCreativesData] = useState<Record<string, CreativeStats>>({});
   const [selectedPeriod, setSelectedPeriod] = useState<number>(7);
@@ -60,43 +81,70 @@ const CreativeAnalyticsDashboardNew: React.FC = () => {
     const loadCreativeData = async () => {
       setIsLoading(true);
       try {
-        // Mock data for now since getCreativePerformance doesn't work as expected
-        const mockData: Record<string, CreativeStats> = {
-          'creative-1': {
-            creative_name: 'Elegante Mulher Vestido',
-            page_views: 1250,
-            quiz_starts: 890,
-            quiz_completions: 678,
-            leads: 234,
-            purchases: 45,
-            revenue: 4500,
-            conversion_rate: '2.3',
-            cost_per_lead: 15.50
-          },
-          'creative-2': {
-            creative_name: 'Casual Moderna',
-            page_views: 980,
-            quiz_starts: 720,
-            quiz_completions: 540,
-            leads: 180,
-            purchases: 32,
-            revenue: 3200,
-            conversion_rate: '1.8',
-            cost_per_lead: 18.20
-          },
-          'creative-3': {
-            creative_name: 'Romântica Floral',
-            page_views: 756,
-            quiz_starts: 456,
-            quiz_completions: 389,
-            leads: 145,
-            purchases: 28,
-            revenue: 2800,
-            conversion_rate: '1.9',
-            cost_per_lead: 16.90
-          }
-        };
-        setCreativesData(mockData);
+        // Importar a função getCreativePerformance
+        const { getCreativePerformance } = await import('@/utils/analytics.js');
+        
+        // Buscar dados reais do localStorage (função JS é síncrona)
+        const realData = getCreativePerformance(selectedPeriod);
+        
+        // Se não há dados reais, usar dados mock como fallback
+        if (Object.keys(realData).length === 0) {
+          console.log('Nenhum dado real encontrado, usando dados mock...');
+          const mockData: Record<string, CreativeStats> = {
+            'creative-1': {
+              creative_name: 'Elegante Mulher Vestido',
+              page_views: 1250,
+              quiz_starts: 890,
+              quiz_completions: 678,
+              leads: 234,
+              purchases: 45,
+              revenue: 4500,
+              conversion_rate: '2.3',
+              cost_per_lead: 15.50
+            },
+            'creative-2': {
+              creative_name: 'Casual Moderna',
+              page_views: 980,
+              quiz_starts: 720,
+              quiz_completions: 540,
+              leads: 180,
+              purchases: 32,
+              revenue: 3200,
+              conversion_rate: '1.8',
+              cost_per_lead: 18.20
+            },
+            'creative-3': {
+              creative_name: 'Romântica Floral',
+              page_views: 756,
+              quiz_starts: 456,
+              quiz_completions: 389,
+              leads: 145,
+              purchases: 28,
+              revenue: 2800,
+              conversion_rate: '1.9',
+              cost_per_lead: 16.90
+            }
+          };
+          setCreativesData(mockData);
+        } else {
+          console.log('Dados reais carregados:', realData);
+          // Converter os dados reais para o formato esperado
+          const formattedData: Record<string, CreativeStats> = {};
+          Object.entries(realData as Record<string, RealCreativeData>).forEach(([key, value]) => {
+            formattedData[key] = {
+              creative_name: value.creative_name,
+              page_views: value.page_views,
+              quiz_starts: value.quiz_starts,
+              quiz_completions: value.quiz_completions,
+              leads: value.leads,
+              purchases: value.purchases,
+              revenue: value.revenue,
+              conversion_rate: value.conversion_rate.replace('%', ''), // Remove % for calculation
+              cost_per_lead: value.cost_per_lead
+            };
+          });
+          setCreativesData(formattedData);
+        }
       } catch (error) {
         console.error('Erro ao carregar dados de criativos:', error);
         setCreativesData({});
@@ -157,7 +205,7 @@ const CreativeAnalyticsDashboardNew: React.FC = () => {
     );
   };
 
-  const MetricCard = ({ icon: Icon, title, value, subtitle, trend, color }: any) => (
+  const MetricCard = ({ icon: Icon, title, value, subtitle, trend, color }: MetricCardProps) => (
     <Card className="border-0 shadow-sm hover:shadow-md transition-all duration-300" 
           style={{ backgroundColor: brandColors.background }}>
       <CardContent className="p-6">
@@ -376,7 +424,7 @@ const CreativeAnalyticsDashboardNew: React.FC = () => {
 
       {/* Toggle de Visualização */}
       <div className="mb-6">
-        <div className="flex bg-white rounded-lg p-1 shadow-sm border inline-flex">
+        <div className="flex bg-white rounded-lg p-1 shadow-sm border">
           <Button
             variant={selectedView === 'overview' ? "default" : "ghost"}
             size="sm"

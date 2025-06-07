@@ -31,13 +31,33 @@ import {
   RefreshCw 
 } from 'lucide-react';
 
+interface AnalyticsEvent {
+  event_name: string;
+  timestamp: number;
+  date: string;
+  utm_content?: string;
+  utm_source?: string;
+  utm_campaign?: string;
+  value?: number;
+  currency?: string;
+  email?: string;
+}
+
+interface RealTimeDataPoint {
+  time: string;
+  visitors: number;
+  conversions: number;
+  revenue: string;
+  avgSession: number;
+}
+
 interface RealTimeMetricsProps {
-  analyticsData: any;
+  analyticsData: AnalyticsEvent[];
   loading?: boolean;
 }
 
 export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ analyticsData, loading = false }) => {
-  const [realTimeData, setRealTimeData] = useState<any[]>([]);
+  const [realTimeData, setRealTimeData] = useState<RealTimeDataPoint[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [autoRefresh, setAutoRefresh] = useState(true);
 
@@ -54,6 +74,72 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ analyticsData,
   }, [autoRefresh]);
 
   const generateRealTimeData = () => {
+    try {
+      // Tentar buscar dados reais do localStorage
+      const events = JSON.parse(localStorage.getItem('all_tracked_events') || '[]');
+      const now = new Date();
+      
+      // Filtrar eventos das últimas 24 horas
+      const today = events.filter((event: AnalyticsEvent) => {
+        const eventDate = new Date(event.timestamp || event.date);
+        const hoursDiff = (now.getTime() - eventDate.getTime()) / (1000 * 60 * 60);
+        return hoursDiff <= 24;
+      });
+      
+      // Agrupar por hora
+      const hourlyData: Record<string, { visitors: Set<string>; conversions: number; revenue: number; sessions: string[] }> = {};
+      today.forEach((event: AnalyticsEvent) => {
+        const eventTime = new Date(event.timestamp || event.date);
+        const hour = eventTime.getHours();
+        const hourKey = `${hour.toString().padStart(2, '0')}:00`;
+        
+        if (!hourlyData[hourKey]) {
+          hourlyData[hourKey] = {
+            visitors: new Set(),
+            conversions: 0,
+            revenue: 0,
+            sessions: []
+          };
+        }
+        
+        // Contabilizar visitantes únicos por IP/sessão simulada
+        const visitorId = event.utm_source + event.utm_campaign + Math.floor(Math.random() * 100);
+        hourlyData[hourKey].visitors.add(visitorId);
+        
+        if (event.event_name === 'Lead' || event.event_name === 'Purchase') {
+          hourlyData[hourKey].conversions++;
+        }
+        
+        if (event.event_name === 'Purchase' && event.value) {
+          hourlyData[hourKey].revenue += parseFloat(event.value.toString()) || 0;
+        }
+      });
+      
+      // Se há dados reais, usar eles
+      if (Object.keys(hourlyData).length > 0) {
+        const currentHour = now.getHours().toString().padStart(2, '0') + ':00';
+        const currentData = hourlyData[currentHour] || { visitors: new Set(), conversions: 0, revenue: 0 };
+        
+        const newDataPoint = {
+          time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          timestamp: now.getTime(),
+          visitors: currentData.visitors.size,
+          conversions: currentData.conversions,
+          revenue: currentData.revenue.toFixed(2),
+          avgSession: Math.floor(Math.random() * 180) + 60, // Ainda simulado
+        };
+        
+        setRealTimeData(prev => {
+          const updated = [...prev, newDataPoint];
+          return updated.slice(-20);
+        });
+        return;
+      }
+    } catch (error) {
+      console.log('Erro ao buscar dados reais, usando simulados:', error);
+    }
+    
+    // Fallback para dados simulados se não há dados reais
     const now = new Date();
     const newDataPoint = {
       time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
@@ -61,12 +147,11 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ analyticsData,
       visitors: Math.floor(Math.random() * 50) + 10,
       conversions: Math.floor(Math.random() * 10) + 1,
       revenue: (Math.random() * 500 + 100).toFixed(2),
-      avgSession: Math.floor(Math.random() * 180) + 60, // segundos
+      avgSession: Math.floor(Math.random() * 180) + 60,
     };
 
     setRealTimeData(prev => {
       const updated = [...prev, newDataPoint];
-      // Manter apenas os últimos 20 pontos
       return updated.slice(-20);
     });
   };
@@ -258,7 +343,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ analyticsData,
                     <YAxis />
                     <Tooltip 
                       labelFormatter={(label) => `Horário: ${label}`}
-                      formatter={(value: any, name: string) => [value, name === 'visitors' ? 'Visitantes' : name]}
+                      formatter={(value: number | string, name: string) => [value, name === 'visitors' ? 'Visitantes' : name]}
                     />
                     <Area 
                       type="monotone" 
@@ -288,7 +373,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ analyticsData,
                     <YAxis />
                     <Tooltip 
                       labelFormatter={(label) => `Horário: ${label}`}
-                      formatter={(value: any) => [value, 'Conversões']}
+                      formatter={(value: number | string) => [value, 'Conversões']}
                     />
                     <Line 
                       type="monotone" 
@@ -323,7 +408,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ analyticsData,
                     <YAxis />
                     <Tooltip 
                       labelFormatter={(label) => `Horário: ${label}`}
-                      formatter={(value: any) => [`R$ ${value}`, 'Receita Acumulada']}
+                      formatter={(value: number | string) => [`R$ ${value}`, 'Receita Acumulada']}
                     />
                     <Area 
                       type="monotone" 
