@@ -1,0 +1,67 @@
+name: 🚀 Deploy to Hostinger
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: 🌐 Build and Deploy to Hostinger
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: 🔧 Install dependencies
+      run: npm ci
+      
+    - name: 🏗️ Build project for Hostinger
+      run: npm run build:hostinger
+      
+    - name: 📋 Verify build output
+      run: |
+        echo "=== BUILD VERIFICATION ==="
+        ls -la dist/
+        echo "=== CHECKING .htaccess ==="
+        ls -la dist/.htaccess || echo "⚠️ .htaccess not found"
+        echo "=== CHECKING index.html ==="
+        ls -la dist/index.html || echo "❌ index.html not found"
+        
+    - name: 🚀 Deploy to Hostinger via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: 185.158.133.1
+        username: u116045488
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/
+        server-dir: /home/u116045488/domains/giselegalvao.com.br/public_html/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/.DS_Store
+          **/.vscode/**
+          **/README.md
+        timeout: 300000
+        log-level: verbose
+        
+    - name: ✅ Deployment Success
+      run: |
+        echo "🎉 Deployment completed successfully!"
+        echo "🌐 Site URL: https://giselegalvao.com.br"
+        echo "📊 Check deployment at: https://giselegalvao.com.br"
+        
+    - name: 🧪 Post-deployment verification
+      run: |
+        echo "=== TESTING DEPLOYMENT ==="
+        curl -I https://giselegalvao.com.br || echo "⚠️ Site verification failed"
