@@ -60,13 +60,29 @@ Sistema completo de teste A/B implementado para comparar o desempenho entre duas
 
 ### Pixels Facebook Configurados
 ```javascript
-// Versão A
-pixelId: '1311550759901086'
-route: '/resultado'
+// Configuração Unificada para Teste A/B
+// Pixel ID único para ambas as variantes
+const PIXEL_ID_UNIFICADO = '1311550759901086';
 
-// Versão B  
-pixelId: '1311550759901086'
-route: '/quiz-descubra-seu-estilo'
+// Versão A
+// pixelId: PIXEL_ID_UNIFICADO
+// route: '/resultado'
+// campaign_source: 'Teste_A_Quiz_Separado'
+
+// Versão B
+// pixelId: PIXEL_ID_UNIFICADO
+// route: '/quiz-descubra-seu-estilo'
+// campaign_source: 'Teste_B_Quiz_Embutido'
+
+// Exemplo de como o pixelManager.ts agora lida com isso:
+// const config = {
+//   pixelId: PIXEL_ID_UNIFICADO,
+//   token: "SEU_TOKEN_DE_ACESSO_AQUI", // Substituído pelo token real no código
+//   testVariant: identifyTestVariant(), // 'A' ou 'B'
+//   campaignSource: identifyTestVariant() === 'A' ? 'Teste_A_Quiz_Separado' : 'Teste_B_Quiz_Embutido',
+//   funnelName: identifyTestVariant() === 'A' ? FUNNEL_CONFIGS.default.funnelName : FUNNEL_CONFIGS['quiz-descubra-seu-estilo'].funnelName,
+//   ctaUrl: identifyTestVariant() === 'A' ? FUNNEL_CONFIGS.default.ctaUrl : FUNNEL_CONFIGS['quiz-descubra-seu-estilo'].ctaUrl,
+// };
 ```
 
 ### Distribuição A/B
