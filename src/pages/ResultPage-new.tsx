@@ -32,7 +32,7 @@ import {
   Users,
   Sparkles,
   Trophy,
-  Flame,
+  Fire,
   Crown,
   Gem,
   Palette,
@@ -49,7 +49,10 @@ import { trackButtonClick } from "@/utils/analytics";
 import BuildInfo from "@/components/BuildInfo";
 import SecurePurchaseElement from "@/components/result/SecurePurchaseElement";
 import { useAuth } from "@/context/AuthContext";
-import { OptimizedImage } from "@/components/ui/optimized-image";
+import { ProgressiveImage } from "@/components/ui/progressive-image";
+import { ResourcePreloader } from "@/components/ui/resource-preloader";
+import { PerformanceMonitor } from "@/components/ui/performance-monitor";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 // Lazy loaded components
 const BeforeAfterTransformation = lazy(
@@ -234,7 +237,7 @@ const ImageWithFallback: React.FC<{
       {!isLoaded && (
         <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
       )}
-      <OptimizedImage
+      <ProgressiveImage
         src={src}
         alt={alt}
         className={`w-full h-full object-cover transition-opacity duration-300 ${
@@ -250,14 +253,9 @@ const ImageWithFallback: React.FC<{
 };
 
 // Performance check para otimizações dinâmicas
-interface ExtendedNavigator extends Navigator {
-  deviceMemory?: number;
-}
-
 const isLowPerformance =
   typeof navigator !== "undefined" &&
-  (navigator.hardwareConcurrency <= 2 ||
-    (navigator as ExtendedNavigator).deviceMemory <= 2);
+  (navigator.hardwareConcurrency <= 2 || (navigator as any).deviceMemory <= 2);
 
 // Hotmart webhook integration
 const hotmartWebhookData = {
@@ -270,18 +268,9 @@ const hotmartWebhookData = {
   },
 };
 
-interface HotmartWindow extends Window {
-  hotmart?: {
-    track: (eventType: string, data: Record<string, unknown>) => void;
-  };
-}
-
-const trackHotmartConversion = (
-  eventType: string,
-  additionalData: Record<string, unknown> = {}
-) => {
-  if (typeof window !== "undefined" && (window as HotmartWindow).hotmart) {
-    (window as HotmartWindow).hotmart!.track(eventType, {
+const trackHotmartConversion = (eventType: string, additionalData = {}) => {
+  if (typeof window !== "undefined" && (window as any).hotmart) {
+    (window as any).hotmart.track(eventType, {
       ...hotmartWebhookData,
       ...additionalData,
       timestamp: new Date().toISOString(),
@@ -318,24 +307,22 @@ const ResultPage: React.FC = () => {
 
   // Dados computados otimizados
   const styleData = useMemo(() => {
-    if (!primaryStyle || !(primaryStyle.category in styleConfig)) {
+    if (!primaryStyle || !styleConfig[primaryStyle]) {
       return null;
     }
     return {
-      ...styleConfig[primaryStyle.category],
-      category: primaryStyle.category,
-      name: primaryStyle.category,
+      ...styleConfig[primaryStyle],
+      category: primaryStyle,
     };
   }, [primaryStyle]);
 
   const secondaryStylesData = useMemo(() => {
     if (!secondaryStyles || secondaryStyles.length === 0) return [];
     return secondaryStyles
-      .filter((style) => style.category in styleConfig)
+      .filter((style) => styleConfig[style])
       .map((style) => ({
-        ...styleConfig[style.category],
-        category: style.category,
-        name: style.category,
+        ...styleConfig[style],
+        category: style,
       }));
   }, [secondaryStyles]);
 
@@ -397,28 +384,36 @@ const ResultPage: React.FC = () => {
 
   // Handlers otimizados
   const handleCTAClick = useCallback(() => {
-    trackButtonClick("cta_purchase");
+    trackButtonClick("cta_purchase", {
+      style: primaryStyle,
+      section: "main_cta",
+      user_id: user?.id,
+    });
 
     trackHotmartConversion("purchase_intent", {
       primary_style: primaryStyle,
       secondary_styles: secondaryStyles,
-      user_id: user?.email || "anonymous",
+      user_id: user?.id,
     });
 
     // Redirect para checkout
     window.open("https://pay.hotmart.com/V87924838J?checkoutMode=10", "_blank");
-  }, [primaryStyle, secondaryStyles, user?.email]);
+  }, [primaryStyle, secondaryStyles, user?.id]);
 
   const handleSecondaryPurchase = useCallback(
     (category: string) => {
-      trackButtonClick("secondary_style_purchase");
+      trackButtonClick("secondary_style_purchase", {
+        style: category,
+        primary_style: primaryStyle,
+        user_id: user?.id,
+      });
 
       trackHotmartConversion("secondary_purchase", {
         selected_style: category,
         primary_style: primaryStyle,
       });
     },
-    [primaryStyle]
+    [primaryStyle, user?.id]
   );
 
   // Early returns para estados de error/loading
@@ -431,7 +426,7 @@ const ResultPage: React.FC = () => {
   }
 
   if (!styleData) {
-    return <ErrorState />;
+    return <ErrorState message="Dados do estilo não encontrados" />;
   }
 
   // Grid de produtos com imagens dinâmicas por categoria
@@ -450,6 +445,9 @@ const ResultPage: React.FC = () => {
       className={`min-h-screen ${globalStyles}`}
       style={{ background: tokens.colors.background }}
     >
+      <ResourcePreloader />
+      <PerformanceMonitor />
+
       {/* Header fixo melhorado */}
       <header
         className={`
@@ -552,10 +550,22 @@ const ResultPage: React.FC = () => {
                       ✨ Características do Seu Estilo:
                     </h3>
                     <div className="grid gap-3">
-                      <p className="text-[#8F7A6A] italic">
-                        Características detalhadas serão personalizadas no curso
-                        completo.
-                      </p>
+                      {styleData.characteristics?.map((char, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-3"
+                        >
+                          <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full flex-shrink-0"></div>
+                          <span className="text-[#5D4A3A] leading-relaxed">
+                            {char}
+                          </span>
+                        </div>
+                      )) || (
+                        <p className="text-[#8F7A6A] italic">
+                          Características detalhadas serão personalizadas no
+                          curso completo.
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -659,9 +669,7 @@ const ResultPage: React.FC = () => {
                       </p>
 
                       <Button
-                        onClick={() =>
-                          handleSecondaryPurchase(style.category as string)
-                        }
+                        onClick={() => handleSecondaryPurchase(style.category)}
                         variant="outline"
                         className="w-full border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white transition-all duration-300"
                       >
@@ -692,7 +700,7 @@ const ResultPage: React.FC = () => {
                     <div className="aspect-square relative overflow-hidden">
                       <ImageWithFallback
                         src={getProductImage(category)}
-                        alt={`Curso ${category}`}
+                        alt={`Curso ${config.name}`}
                         onLoad={() => handleImageLoad("product")}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
@@ -707,7 +715,7 @@ const ResultPage: React.FC = () => {
                       {/* Overlay com informações */}
                       <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                         <h4 className="font-serif text-lg font-semibold mb-1">
-                          {category}
+                          {config.name}
                         </h4>
                         <p className="text-sm text-white/90 line-clamp-2">
                           {config.description}
@@ -814,7 +822,7 @@ const ResultPage: React.FC = () => {
                   <div className="flex items-center justify-center space-x-3">
                     <ShoppingCart className="w-6 h-6" />
                     <span>GARANTIR MINHA TRANSFORMAÇÃO</span>
-                    <Flame className="w-6 h-6" />
+                    <Fire className="w-6 h-6" />
                   </div>
                 </Button>
 
@@ -840,63 +848,27 @@ const ResultPage: React.FC = () => {
           </section>
 
           {/* Seções adicionais com lazy loading */}
-          <Suspense
-            fallback={
-              <div className="flex justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A]"></div>
-              </div>
-            }
-          >
+          <Suspense fallback={<LoadingSpinner />}>
             <BeforeAfterTransformation />
           </Suspense>
 
-          <Suspense
-            fallback={
-              <div className="flex justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A]"></div>
-              </div>
-            }
-          >
+          <Suspense fallback={<LoadingSpinner />}>
             <MotivationSection />
           </Suspense>
 
-          <Suspense
-            fallback={
-              <div className="flex justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A]"></div>
-              </div>
-            }
-          >
+          <Suspense fallback={<LoadingSpinner />}>
             <BonusSection />
           </Suspense>
 
-          <Suspense
-            fallback={
-              <div className="flex justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A]"></div>
-              </div>
-            }
-          >
+          <Suspense fallback={<LoadingSpinner />}>
             <Testimonials />
           </Suspense>
 
-          <Suspense
-            fallback={
-              <div className="flex justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A]"></div>
-              </div>
-            }
-          >
+          <Suspense fallback={<LoadingSpinner />}>
             <GuaranteeSection />
           </Suspense>
 
-          <Suspense
-            fallback={
-              <div className="flex justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A]"></div>
-              </div>
-            }
-          >
+          <Suspense fallback={<LoadingSpinner />}>
             <MentorSection />
           </Suspense>
 
