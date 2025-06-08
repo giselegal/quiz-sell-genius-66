@@ -11,7 +11,8 @@ import {
   Target,
   Code,
   TrendingUp,
-  Home
+  Home,
+  Edit3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -20,6 +21,13 @@ const sidebarItems = [
     title: 'Dashboard',
     href: '/admin',
     icon: Home
+  },
+  {
+    title: 'EDITOR COMPLETO',
+    href: '/admin/editor',
+    icon: Edit3,
+    description: 'Editor Visual QuizOffer - Edição Completa',
+    highlight: true
   },
   {
     title: 'Quiz',
@@ -68,26 +76,36 @@ export function AdminSidebar() {
         {sidebarItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
+          const isHighlight = item.highlight;
           
           return (
             <Link
               key={item.href}
               to={item.href}
               className={cn(
-                'flex flex-col gap-1 px-4 py-3 rounded-lg transition-colors',
+                'flex flex-col gap-1 px-4 py-3 rounded-lg transition-colors border-2',
                 isActive 
-                  ? 'bg-[#B89B7A] text-white' 
-                  : 'text-[#432818] hover:bg-[#F5F2E9]'
+                  ? 'bg-[#B89B7A] text-white border-[#B89B7A]' 
+                  : isHighlight
+                    ? 'text-white bg-gradient-to-r from-[#B89B7A] to-[#8F7A6A] border-[#D4C4A0] hover:from-[#A08968] hover:to-[#7A6A5A] shadow-lg'
+                    : 'text-[#432818] hover:bg-[#F5F2E9] border-transparent'
               )}
             >
               <div className="flex items-center gap-3">
-                <Icon className="w-5 h-5" />
-                <span className="font-medium">{item.title}</span>
+                <Icon className={cn(
+                  "w-5 h-5",
+                  isHighlight && !isActive ? "animate-pulse" : ""
+                )} />
+                <span className={cn(
+                  "font-medium",
+                  isHighlight && !isActive ? "font-bold text-lg" : ""
+                )}>{item.title}</span>
               </div>
               {item.description && (
                 <span className={cn(
                   "text-xs ml-8",
-                  isActive ? "text-white/70" : "text-[#8F7A6A]"
+                  isActive ? "text-white/70" : 
+                  isHighlight ? "text-white/90 font-medium" : "text-[#8F7A6A]"
                 )}>
                   {item.description}
                 </span>
