@@ -16,36 +16,40 @@ const VisualEditorPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
 
   const createDefaultEditorData = React.useCallback((): VisualEditorData => {
-    const pageId = id || `page_${Date.now()}`;
     return {
       editorState: {
         elements: [],
         selectedElementId: null,
+        hoveredElementId: null,
+        viewport: "desktop",
+        zoomLevel: 1,
+        isPreviewMode: false,
         globalStyles: {
           fontFamily: "Inter, sans-serif",
           primaryColor: "#B89B7A",
           secondaryColor: "#A38A69",
           backgroundColor: "#FAF9F7",
-          textColor: "#333333",
+          containerMaxWidth: "1200px",
+          customCSS: "",
         },
         settings: {
           snapToGrid: true,
           gridSize: 8,
           showGrid: false,
-          responsiveMode: "desktop",
+          showRulers: false,
+          showBoundingBoxes: false,
+          autoSave: true,
+          autoSaveInterval: 30,
         },
       },
       pageInfo: {
-        id: pageId,
         title: "Nova Página",
         description: "Descrição da página",
-        slug: `pagina-${pageId}`,
-        isPublished: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        slug: `pagina-${Date.now()}`,
+        published: false,
       },
     };
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     const loadEditorData = async () => {
@@ -125,28 +129,38 @@ const VisualEditorPage: React.FC = () => {
     try {
       setSaving(true);
       
-      // Atualizar timestamp
+      // Usar o ID da URL ou gerar um novo se não existir
+      const pageId = id || `page_${Date.now()}`;
+      
+      // Atualizar dados com timestamp
       const updatedData = {
         ...data,
         pageInfo: {
           ...data.pageInfo,
-          updatedAt: new Date().toISOString(),
+          // Adicionar timestamp para rastrear mudanças
         },
       };
 
       // Salvar no localStorage
-      const storageKey = `visual_editor_page_${updatedData.pageInfo.id}`;
+      const storageKey = `visual_editor_page_${pageId}`;
       localStorage.setItem(storageKey, JSON.stringify(updatedData));
 
       // Manter lista de páginas salvas
       const pagesListKey = "visual_editor_pages_list";
       const existingPages = JSON.parse(localStorage.getItem(pagesListKey) || "[]");
-      const pageIndex = existingPages.findIndex((p: { id: string }) => p.id === updatedData.pageInfo.id);
+      
+      const pageInfo = {
+        id: pageId,
+        ...updatedData.pageInfo,
+        updatedAt: new Date().toISOString(),
+      };
+      
+      const pageIndex = existingPages.findIndex((p: { id: string }) => p.id === pageId);
       
       if (pageIndex >= 0) {
-        existingPages[pageIndex] = updatedData.pageInfo;
+        existingPages[pageIndex] = pageInfo;
       } else {
-        existingPages.push(updatedData.pageInfo);
+        existingPages.push(pageInfo);
       }
       
       localStorage.setItem(pagesListKey, JSON.stringify(existingPages));
@@ -161,7 +175,7 @@ const VisualEditorPage: React.FC = () => {
 
       // Se for uma nova página, redirecionar com o ID
       if (!id) {
-        navigate(`/visual-editor/${updatedData.pageInfo.id}`, { replace: true });
+        navigate(`/visual-editor/${pageId}`, { replace: true });
       }
     } catch (error) {
       console.error("Erro ao salvar página:", error);
@@ -177,8 +191,9 @@ const VisualEditorPage: React.FC = () => {
 
   const handlePreview = () => {
     if (editorData) {
-      // Abrir preview em nova aba
-      const previewUrl = `/preview/${editorData.pageInfo.id}`;
+      // Usar o ID da URL ou gerar um temporário
+      const pageId = id || 'preview';
+      const previewUrl = `/preview/${pageId}`;
       window.open(previewUrl, '_blank');
     }
   };
@@ -193,16 +208,15 @@ const VisualEditorPage: React.FC = () => {
         ...editorData,
         pageInfo: {
           ...editorData.pageInfo,
-          isPublished: !editorData.pageInfo.isPublished,
-          updatedAt: new Date().toISOString(),
+          published: !editorData.pageInfo.published,
         },
       };
 
       await handleSave(publishedData);
 
       toast({
-        title: publishedData.pageInfo.isPublished ? "Página publicada" : "Página despublicada",
-        description: publishedData.pageInfo.isPublished 
+        title: publishedData.pageInfo.published ? "Página publicada" : "Página despublicada",
+        description: publishedData.pageInfo.published 
           ? "Sua página está agora disponível publicamente."
           : "Sua página foi removida do acesso público.",
       });
@@ -259,7 +273,7 @@ const VisualEditorPage: React.FC = () => {
               {editorData.pageInfo.title}
             </h1>
             <p className="text-xs text-gray-500">
-              {editorData.pageInfo.isPublished ? "Publicada" : "Rascunho"}
+              {editorData.pageInfo.published ? "Publicada" : "Rascunho"}
             </p>
           </div>
         </div>
