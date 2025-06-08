@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Edit, Eye, Save, Palette, Type } from 'lucide-react';
+import { Edit, Eye, Save, Palette, Type, ArrowLeft } from 'lucide-react';
+import QuizOfferPageVisualEditor from '@/components/visual-editor/QuizOfferPageVisualEditor';
 
 const EditorPage: React.FC = () => {
+  const [activeEditor, setActiveEditor] = useState<string | null>(null);
+
+  if (activeEditor === 'quiz-offer') {
+    return (
+      <div className="h-screen">
+        <div className="bg-white border-b p-4">
+          <Button 
+            variant="ghost" 
+            onClick={() => setActiveEditor(null)}
+            className="flex items-center gap-2 text-[#432818] hover:text-[#B89B7A]"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Voltar ao Dashboard
+          </Button>
+        </div>
+        <QuizOfferPageVisualEditor />
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
@@ -18,18 +39,18 @@ const EditorPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setActiveEditor('quiz-offer')}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Edit className="h-5 w-5" />
-              Quiz Principal
+              Editor Visual Completo
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-[#8F7A6A]">Edite o conteúdo e design do quiz</p>
-            <Button variant="outline" className="w-full">
+            <p className="text-sm text-[#8F7A6A]">Editor completo da página de quiz e oferta com design ao vivo</p>
+            <Button variant="outline" className="w-full bg-[#B89B7A] hover:bg-[#A0895B] text-white border-[#B89B7A]">
               <Eye className="w-4 h-4 mr-2" />
-              Abrir Editor
+              Abrir Editor Completo
             </Button>
           </CardContent>
         </Card>
