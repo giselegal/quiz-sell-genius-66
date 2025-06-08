@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit, Eye, Save, Palette, Type, ArrowLeft } from "lucide-react";
-import QuizOfferPageVisualEditor from "@/components/visual-editor/QuizOfferPageVisualEditor";
+
+// Lazy loading do editor para evitar problemas de importação
+const QuizOfferPageVisualEditor = React.lazy(() => 
+  import("@/components/visual-editor/QuizOfferPageVisualEditor")
+);
 
 const EditorPage: React.FC = () => {
   const [activeEditor, setActiveEditor] = useState<string | null>(null);
