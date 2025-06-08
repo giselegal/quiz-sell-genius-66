@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useRouter } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import QuizResult from '@/components/QuizResult';
 import { useQuizLogic } from '@/hooks/useQuizLogic';
 import { trackOfferClick } from '@/utils/analytics';
@@ -15,7 +15,7 @@ const ResultPage: React.FC = () => {
   const [userName, setUserName] = useState<string>('Visitante');
   const [offerClicked, setOfferClicked] = useState(false);
   const [config, setConfig] = useState<ResultPageConfig | null>(null);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user && user.userName) {
@@ -31,9 +31,9 @@ const ResultPage: React.FC = () => {
   useEffect(() => {
     if (!quizResult) {
       // Redirect to quiz if no result is available
-      router.push('/quiz-descubra-seu-estilo');
+      navigate('/quiz-descubra-seu-estilo');
     }
-  }, [quizResult, router]);
+  }, [quizResult, navigate]);
 
   useEffect(() => {
     const loadConfig = async () => {
@@ -70,12 +70,11 @@ const ResultPage: React.FC = () => {
         style_category: quizResult.primaryStyle.category,
         user_name: userName,
         timestamp: new Date().toISOString(),
-        // Convert StyleResult to proper record format
         style_data: {
           category: quizResult.primaryStyle.category,
           score: quizResult.primaryStyle.score,
           percentage: quizResult.primaryStyle.percentage
-        } as Record<string, unknown>
+        }
       };
 
       await trackOfferClick(eventData);
@@ -87,7 +86,7 @@ const ResultPage: React.FC = () => {
 
   const handleRetakeQuiz = () => {
     resetQuiz();
-    router.push('/quiz-descubra-seu-estilo');
+    navigate('/quiz-descubra-seu-estilo');
   };
 
   if (!quizResult) {

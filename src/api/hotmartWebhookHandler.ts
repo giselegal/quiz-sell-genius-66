@@ -1,8 +1,18 @@
 
-import { NextApiRequest, NextApiResponse } from 'next';
 import { hotmartWebhookManager, HotmartWebhookPayload } from '../utils/hotmartWebhook';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+// Simple request/response interfaces for this Vite project
+interface Request {
+  method: string;
+  body: any;
+}
+
+interface Response {
+  status: (code: number) => Response;
+  json: (data: any) => Response;
+}
+
+export default async function handler(req: Request, res: Response) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
