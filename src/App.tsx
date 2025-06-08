@@ -32,6 +32,10 @@ const QuizDescubraSeuEstilo = lazy(
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
+// Lazy loading das páginas do editor visual
+const EditorDashboard = lazy(() => import("./pages/EditorDashboard"));
+const VisualEditorPage = lazy(() => import("./pages/VisualEditorPage"));
+
 const App = () => {
   // Inicializar analytics na montagem do componente
   useEffect(() => {

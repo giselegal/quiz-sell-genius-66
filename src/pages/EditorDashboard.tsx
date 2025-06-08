@@ -63,6 +63,19 @@ export const EditorDashboard: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const filterPages = () => {
+      if (!searchQuery.trim()) {
+        setFilteredPages(pages);
+      } else {
+        const filtered = pages.filter(
+          (page) =>
+            page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            page.description.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredPages(filtered);
+      }
+    };
+    
     filterPages();
   }, [pages, searchQuery]);
 
@@ -100,19 +113,6 @@ export const EditorDashboard: React.FC = () => {
       toast.error("Erro ao carregar páginas");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const filterPages = () => {
-    if (!searchQuery.trim()) {
-      setFilteredPages(pages);
-    } else {
-      const filtered = pages.filter(
-        (page) =>
-          page.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          page.description.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredPages(filtered);
     }
   };
 
