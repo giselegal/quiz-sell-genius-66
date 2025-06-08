@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Edit, Eye, Save, Palette, Type, ArrowLeft } from "lucide-react";
 
 // Lazy loading do editor para evitar problemas de importação
-const QuizOfferPageVisualEditor = React.lazy(() => 
-  import("@/components/visual-editor/QuizOfferPageVisualEditor")
+const QuizOfferPageVisualEditor = React.lazy(
+  () => import("@/components/visual-editor/QuizOfferPageVisualEditor")
 );
 
 const EditorPage: React.FC = () => {
@@ -24,7 +24,20 @@ const EditorPage: React.FC = () => {
             Voltar ao Dashboard
           </Button>
         </div>
-        <QuizOfferPageVisualEditor />
+        <React.Suspense
+          fallback={
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#B89B7A]"></div>
+                <p className="mt-4 text-[#8F7A6A]">
+                  Carregando editor visual...
+                </p>
+              </div>
+            </div>
+          }
+        >
+          <QuizOfferPageVisualEditor />
+        </React.Suspense>
       </div>
     );
   }
