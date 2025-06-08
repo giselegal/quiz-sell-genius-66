@@ -24,16 +24,21 @@ export interface ElementStyle {
   color?: string;
   fontSize?: string;
   fontWeight?: string;
-  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  textAlign?: "left" | "center" | "right" | "justify";
   border?: string;
   borderRadius?: string;
   boxShadow?: string;
   display?: string;
-  flexDirection?: 'row' | 'column';
-  justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around';
-  alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch';
+  flexDirection?: "row" | "column";
+  justifyContent?:
+    | "flex-start"
+    | "flex-end"
+    | "center"
+    | "space-between"
+    | "space-around";
+  alignItems?: "flex-start" | "flex-end" | "center" | "stretch";
   gap?: string;
-  position?: 'static' | 'relative' | 'absolute' | 'fixed';
+  position?: "static" | "relative" | "absolute" | "fixed";
   top?: string | number;
   left?: string | number;
   right?: string | number;
@@ -78,7 +83,7 @@ export interface VisualEditorState {
   globalStyles: GlobalStyles;
   selectedElementId: string | null;
   hoveredElementId: string | null;
-  viewport: 'desktop' | 'tablet' | 'mobile';
+  viewport: "desktop" | "tablet" | "mobile";
   zoomLevel: number;
   isPreviewMode: boolean;
   settings: EditorSettings;
@@ -119,5 +124,5 @@ export interface DraggedComponent {
 export interface DropZone {
   id: string;
   elementId?: string;
-  position: 'before' | 'after' | 'inside';
+  position: "before" | "after" | "inside";
 }

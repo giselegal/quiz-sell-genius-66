@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface UndoRedoState<T> {
   past: T[];
@@ -6,7 +6,10 @@ interface UndoRedoState<T> {
   future: T[];
 }
 
-export const useUndoRedo = <T>(initialState: T, maxHistorySize: number = 50) => {
+export const useUndoRedo = <T>(
+  initialState: T,
+  maxHistorySize: number = 50
+) => {
   const [state, setState] = useState<UndoRedoState<T>>({
     past: [],
     present: initialState,
@@ -17,41 +20,46 @@ export const useUndoRedo = <T>(initialState: T, maxHistorySize: number = 50) => 
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   // Salvar estado com debounce para evitar muitas entradas no histórico
-  const saveState = useCallback((newState?: T) => {
-    const stateToSave = newState || state.present;
-    
-    // Cancelar timeout anterior
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+  const saveState = useCallback(
+    (newState?: T) => {
+      const stateToSave = newState || state.present;
 
-    // Criar novo timeout
-    timeoutRef.current = setTimeout(() => {
-      // Verificar se o estado realmente mudou
-      if (JSON.stringify(stateToSave) !== JSON.stringify(lastSavedRef.current)) {
-        setState(prev => {
-          const newPast = [...prev.past, prev.present];
-          
-          // Limitar o tamanho do histórico
-          if (newPast.length > maxHistorySize) {
-            newPast.shift();
-          }
-
-          lastSavedRef.current = stateToSave;
-
-          return {
-            past: newPast,
-            present: stateToSave,
-            future: [],
-          };
-        });
+      // Cancelar timeout anterior
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
-    }, 500); // Debounce de 500ms
-  }, [state.present, maxHistorySize]);
+
+      // Criar novo timeout
+      timeoutRef.current = setTimeout(() => {
+        // Verificar se o estado realmente mudou
+        if (
+          JSON.stringify(stateToSave) !== JSON.stringify(lastSavedRef.current)
+        ) {
+          setState((prev) => {
+            const newPast = [...prev.past, prev.present];
+
+            // Limitar o tamanho do histórico
+            if (newPast.length > maxHistorySize) {
+              newPast.shift();
+            }
+
+            lastSavedRef.current = stateToSave;
+
+            return {
+              past: newPast,
+              present: stateToSave,
+              future: [],
+            };
+          });
+        }
+      }, 500); // Debounce de 500ms
+    },
+    [state.present, maxHistorySize]
+  );
 
   // Undo
   const undo = useCallback(() => {
-    setState(prev => {
+    setState((prev) => {
       if (prev.past.length === 0) return prev;
 
       const previous = prev.past[prev.past.length - 1];
@@ -69,7 +77,7 @@ export const useUndoRedo = <T>(initialState: T, maxHistorySize: number = 50) => 
 
   // Redo
   const redo = useCallback(() => {
-    setState(prev => {
+    setState((prev) => {
       if (prev.future.length === 0) return prev;
 
       const next = prev.future[0];
@@ -91,7 +99,7 @@ export const useUndoRedo = <T>(initialState: T, maxHistorySize: number = 50) => 
 
   // Atualizar estado atual
   const updatePresent = useCallback((newState: T) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       present: newState,
     }));
@@ -99,7 +107,7 @@ export const useUndoRedo = <T>(initialState: T, maxHistorySize: number = 50) => 
 
   // Limpar histórico
   const clearHistory = useCallback(() => {
-    setState(prev => ({
+    setState((prev) => ({
       past: [],
       present: prev.present,
       future: [],

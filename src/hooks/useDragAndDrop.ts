@@ -1,9 +1,9 @@
-import { useDrag, useDrop } from 'react-dnd';
-import { useCallback } from 'react';
+import { useDrag, useDrop } from "react-dnd";
+import { useCallback } from "react";
 
 export const ITEM_TYPES = {
-  COMPONENT: 'component',
-  ELEMENT: 'element',
+  COMPONENT: "component",
+  ELEMENT: "element",
 };
 
 // Hook para elementos arrastáveis da biblioteca
@@ -76,9 +76,12 @@ export const useSortable = (
   items: any[],
   onReorder: (startIndex: number, endIndex: number) => void
 ) => {
-  const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
-    onReorder(dragIndex, hoverIndex);
-  }, [onReorder]);
+  const moveItem = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      onReorder(dragIndex, hoverIndex);
+    },
+    [onReorder]
+  );
 
   return { moveItem };
 };
@@ -96,12 +99,13 @@ export const useDropBetween = (
 
       if (!clientOffset || !hoverBoundingRect) return;
 
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
       // Determinar se está na metade superior ou inferior
       const isTop = hoverClientY < hoverMiddleY;
-      
+
       return { isTop };
     },
     drop: (item, monitor) => {
@@ -110,7 +114,8 @@ export const useDropBetween = (
 
       if (!clientOffset || !hoverBoundingRect) return;
 
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
       const targetIndex = hoverClientY < hoverMiddleY ? index : index + 1;
@@ -119,14 +124,15 @@ export const useDropBetween = (
     collect: (monitor) => {
       const clientOffset = monitor.getClientOffset();
       const hoverBoundingRect = (drop as any).current?.getBoundingClientRect();
-      
+
       let isOverTop = false;
       let isOverBottom = false;
 
       if (monitor.isOver() && clientOffset && hoverBoundingRect) {
-        const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+        const hoverMiddleY =
+          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
         const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-        
+
         isOverTop = hoverClientY < hoverMiddleY;
         isOverBottom = hoverClientY >= hoverMiddleY;
       }

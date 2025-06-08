@@ -1,15 +1,14 @@
+import React, { useState, useCallback } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-import React, { useState, useCallback } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-
-import { ComponentLibrarySidebar } from './sidebar/ComponentLibrarySidebar';
-import { EditorCanvas } from './canvas/EditorCanvas';
-import { EditorToolbar } from './toolbar/EditorToolbar';
-import { ElementPropertiesPanel } from './properties/ElementPropertiesPanel';
-import { useEditorState } from '@/hooks/useEditorState';
-import { useUndoRedo } from '@/hooks/useUndoRedo';
-import type { VisualEditorData, ElementUpdate } from '@/types/visualEditor';
+import { ComponentLibrarySidebar } from "./sidebar/ComponentLibrarySidebar";
+import { EditorCanvas } from "./canvas/EditorCanvas";
+import { EditorToolbar } from "./toolbar/EditorToolbar";
+import { ElementPropertiesPanel } from "./properties/ElementPropertiesPanel";
+import { useEditorState } from "@/hooks/useEditorState";
+import { useUndoRedo } from "@/hooks/useUndoRedo";
+import type { VisualEditorData, ElementUpdate } from "@/types/visualEditor";
 
 interface VisualEditorProps {
   initialData?: VisualEditorData;
@@ -17,10 +16,18 @@ interface VisualEditorProps {
   onPreview?: () => void;
 }
 
-export function VisualEditor({ initialData, onSave, onPreview }: VisualEditorProps) {
-  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+export function VisualEditor({
+  initialData,
+  onSave,
+  onPreview,
+}: VisualEditorProps) {
+  const [selectedElementId, setSelectedElementId] = useState<string | null>(
+    null
+  );
   const [isPreviewMode, setIsPreviewMode] = useState(false);
-  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [viewportMode, setViewportMode] = useState<
+    "desktop" | "tablet" | "mobile"
+  >("desktop");
 
   // Editor state management
   const {
@@ -37,61 +44,70 @@ export function VisualEditor({ initialData, onSave, onPreview }: VisualEditorPro
   } = useEditorState(initialData);
 
   // Undo/Redo functionality
-  const {
-    canUndo,
-    canRedo,
-    undo,
-    redo,
-    saveState,
-  } = useUndoRedo(editorState);
+  const { canUndo, canRedo, undo, redo, saveState } = useUndoRedo(editorState);
 
   // Handlers
   const handleElementSelect = useCallback((elementId: string) => {
     setSelectedElementId(elementId);
   }, []);
 
-  const handleElementUpdate = useCallback((elementId: string, updates: ElementUpdate) => {
-    updateElement(elementId, updates);
-    saveState();
-  }, [updateElement, saveState]);
+  const handleElementUpdate = useCallback(
+    (elementId: string, updates: ElementUpdate) => {
+      updateElement(elementId, updates);
+      saveState();
+    },
+    [updateElement, saveState]
+  );
 
-  const handleElementAdd = useCallback((componentType: string, position?: number) => {
-    const newElementId = addElement(componentType, position);
-    setSelectedElementId(newElementId);
-    saveState();
-  }, [addElement, saveState]);
+  const handleElementAdd = useCallback(
+    (componentType: string, position?: number) => {
+      const newElementId = addElement(componentType, position);
+      setSelectedElementId(newElementId);
+      saveState();
+    },
+    [addElement, saveState]
+  );
 
-  const handleElementMove = useCallback((elementId: string, direction: 'up' | 'down') => {
-    moveElement(elementId, direction);
-    saveState();
-  }, [moveElement, saveState]);
+  const handleElementMove = useCallback(
+    (elementId: string, direction: "up" | "down") => {
+      moveElement(elementId, direction);
+      saveState();
+    },
+    [moveElement, saveState]
+  );
 
-  const handleElementDelete = useCallback((elementId: string) => {
-    removeElement(elementId);
-    setSelectedElementId(null);
-    saveState();
-  }, [removeElement, saveState]);
+  const handleElementDelete = useCallback(
+    (elementId: string) => {
+      removeElement(elementId);
+      setSelectedElementId(null);
+      saveState();
+    },
+    [removeElement, saveState]
+  );
 
-  const handleElementDuplicate = useCallback((elementId: string) => {
-    duplicateElement(elementId);
-    saveState();
-  }, [duplicateElement, saveState]);
+  const handleElementDuplicate = useCallback(
+    (elementId: string) => {
+      duplicateElement(elementId);
+      saveState();
+    },
+    [duplicateElement, saveState]
+  );
 
   const handleSave = useCallback(() => {
     const dataToSave = {
       ...editorState,
       metadata: {
         lastModified: new Date().toISOString(),
-        version: '1.0.0',
+        version: "1.0.0",
       },
     };
-    
+
     if (onSave) {
       onSave(dataToSave);
     }
-    
+
     // Salvar no localStorage como backup
-    localStorage.setItem('quiz-editor-backup', exportState());
+    localStorage.setItem("quiz-editor-backup", exportState());
   }, [editorState, onSave, exportState]);
 
   const handlePreviewToggle = useCallback(() => {
@@ -112,8 +128,8 @@ export function VisualEditor({ initialData, onSave, onPreview }: VisualEditorPro
   }, [redo]);
 
   // Obter elemento selecionado
-  const selectedElement = selectedElementId 
-    ? editorState.elements.find(el => el.id === selectedElementId) 
+  const selectedElement = selectedElementId
+    ? editorState.elements.find((el) => el.id === selectedElementId)
     : null;
 
   return (
@@ -158,7 +174,9 @@ export function VisualEditor({ initialData, onSave, onPreview }: VisualEditorPro
           {!isPreviewMode && selectedElement && (
             <ElementPropertiesPanel
               element={selectedElement}
-              onUpdate={(updates) => handleElementUpdate(selectedElementId!, updates)}
+              onUpdate={(updates) =>
+                handleElementUpdate(selectedElementId!, updates)
+              }
               onClose={() => setSelectedElementId(null)}
             />
           )}

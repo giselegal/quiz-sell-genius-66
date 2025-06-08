@@ -1,20 +1,25 @@
-import React, { useRef, useState, useCallback } from 'react';
-import { useDrop } from 'react-dnd';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Edit3, 
-  Move, 
-  Copy, 
-  Trash2, 
-  Eye, 
+import React, { useRef, useState, useCallback } from "react";
+import { useDrop } from "react-dnd";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Edit3,
+  Move,
+  Copy,
+  Trash2,
+  Eye,
   EyeOff,
   Settings,
   ChevronUp,
   ChevronDown,
-  MoreVertical
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+  MoreVertical,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface CanvasElement {
   id: string;
@@ -30,12 +35,12 @@ interface EditorCanvasProps {
   selectedElementId: string | null;
   onElementSelect: (id: string) => void;
   onElementUpdate: (id: string, updates: Partial<CanvasElement>) => void;
-  onElementMove: (id: string, direction: 'up' | 'down') => void;
+  onElementMove: (id: string, direction: "up" | "down") => void;
   onElementDelete: (id: string) => void;
   onElementDuplicate: (id: string) => void;
   onElementAdd: (type: string, position?: number) => void;
   isPreviewMode: boolean;
-  viewportMode: 'desktop' | 'tablet' | 'mobile';
+  viewportMode: "desktop" | "tablet" | "mobile";
 }
 
 export const EditorCanvas: React.FC<EditorCanvasProps> = ({
@@ -48,13 +53,13 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
   onElementDuplicate,
   onElementAdd,
   isPreviewMode,
-  viewportMode
+  viewportMode,
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
 
   const [{ isOver, canDrop }, drop] = useDrop({
-    accept: 'component',
+    accept: "component",
     drop: (item: { type: string }, monitor) => {
       if (!monitor.didDrop()) {
         const position = draggedOverIndex ?? elements.length;
@@ -71,12 +76,12 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
 
   const getViewportStyles = () => {
     switch (viewportMode) {
-      case 'mobile':
-        return { width: '375px', minHeight: '667px' };
-      case 'tablet':
-        return { width: '768px', minHeight: '1024px' };
+      case "mobile":
+        return { width: "375px", minHeight: "667px" };
+      case "tablet":
+        return { width: "768px", minHeight: "1024px" };
       default:
-        return { width: '100%', minHeight: '100vh' };
+        return { width: "100%", minHeight: "100vh" };
     }
   };
 
@@ -87,7 +92,7 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
     return (
       <div
         key={element.id}
-        className={`relative group ${!isVisible ? 'opacity-50' : ''}`}
+        className={`relative group ${!isVisible ? "opacity-50" : ""}`}
         onMouseEnter={() => setDraggedOverIndex(index)}
         onMouseLeave={() => setDraggedOverIndex(null)}
       >
@@ -100,9 +105,9 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
         <div
           className={`
             relative transition-all duration-200
-            ${!isPreviewMode ? 'hover:ring-2 hover:ring-purple-200' : ''}
-            ${isSelected ? 'ring-2 ring-purple-500' : ''}
-            ${element.locked ? 'pointer-events-none' : ''}
+            ${!isPreviewMode ? "hover:ring-2 hover:ring-purple-200" : ""}
+            ${isSelected ? "ring-2 ring-purple-500" : ""}
+            ${element.locked ? "pointer-events-none" : ""}
           `}
           onClick={() => !isPreviewMode && onElementSelect(element.id)}
         >
@@ -110,7 +115,7 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
           {!isPreviewMode && isSelected && (
             <div className="absolute -top-10 left-0 z-50 flex items-center gap-1 bg-purple-600 text-white px-2 py-1 rounded-lg shadow-lg">
               <span className="text-xs font-medium">{element.type}</span>
-              
+
               <div className="flex items-center gap-1 ml-2">
                 <Button
                   size="sm"
@@ -118,20 +123,20 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
                   className="w-6 h-6 p-0 text-white hover:bg-purple-700"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onElementMove(element.id, 'up');
+                    onElementMove(element.id, "up");
                   }}
                   disabled={index === 0}
                 >
                   <ChevronUp className="w-3 h-3" />
                 </Button>
-                
+
                 <Button
                   size="sm"
                   variant="ghost"
                   className="w-6 h-6 p-0 text-white hover:bg-purple-700"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onElementMove(element.id, 'down');
+                    onElementMove(element.id, "down");
                   }}
                   disabled={index === elements.length - 1}
                 >
@@ -149,17 +154,27 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => onElementDuplicate(element.id)}>
+                    <DropdownMenuItem
+                      onClick={() => onElementDuplicate(element.id)}
+                    >
                       <Copy className="w-4 h-4 mr-2" />
                       Duplicar
                     </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={() => onElementUpdate(element.id, { visible: !element.visible })}
+                    <DropdownMenuItem
+                      onClick={() =>
+                        onElementUpdate(element.id, {
+                          visible: !element.visible,
+                        })
+                      }
                     >
-                      {element.visible ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-                      {element.visible ? 'Ocultar' : 'Mostrar'}
+                      {element.visible ? (
+                        <EyeOff className="w-4 h-4 mr-2" />
+                      ) : (
+                        <Eye className="w-4 h-4 mr-2" />
+                      )}
+                      {element.visible ? "Ocultar" : "Mostrar"}
                     </DropdownMenuItem>
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                       onClick={() => onElementDelete(element.id)}
                       className="text-red-600"
                     >
@@ -196,9 +211,13 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
           ref={canvasRef}
           className={`
             bg-white shadow-lg rounded-lg overflow-hidden relative
-            ${!isPreviewMode && isOver && canDrop ? 'ring-2 ring-purple-300' : ''}
+            ${
+              !isPreviewMode && isOver && canDrop
+                ? "ring-2 ring-purple-300"
+                : ""
+            }
           `}
-          style={{ minHeight: '600px' }}
+          style={{ minHeight: "600px" }}
         >
           {/* Empty State */}
           {elements.length === 0 && !isPreviewMode && (
@@ -208,7 +227,9 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
                   <Edit3 className="w-8 h-8" />
                 </div>
                 <h3 className="text-lg font-medium mb-2">Canvas Vazio</h3>
-                <p className="text-sm">Arraste componentes da biblioteca para começar</p>
+                <p className="text-sm">
+                  Arraste componentes da biblioteca para começar
+                </p>
               </div>
             </div>
           )}
@@ -229,9 +250,10 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
           </AnimatePresence>
 
           {/* Final Drop Zone */}
-          {!isPreviewMode && elements.length > 0 && draggedOverIndex === elements.length && isOver && (
-            <div className="h-0.5 bg-purple-500 mx-4" />
-          )}
+          {!isPreviewMode &&
+            elements.length > 0 &&
+            draggedOverIndex === elements.length &&
+            isOver && <div className="h-0.5 bg-purple-500 mx-4" />}
         </div>
       </div>
     </div>
@@ -250,70 +272,83 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({
   element,
   isSelected,
   isPreviewMode,
-  onUpdate
+  onUpdate,
 }) => {
-  const handleContentEdit = useCallback((newContent: string) => {
-    onUpdate({ content: { ...element.content, text: newContent } });
-  }, [element.content, onUpdate]);
+  const handleContentEdit = useCallback(
+    (newContent: string) => {
+      onUpdate({ content: { ...element.content, text: newContent } });
+    },
+    [element.content, onUpdate]
+  );
 
   // Render different element types
   switch (element.type) {
-    case 'heading':
+    case "heading":
       return (
-        <div 
-          className={`p-4 ${element.style?.className || ''}`}
+        <div
+          className={`p-4 ${element.style?.className || ""}`}
           style={element.style}
         >
-          <h1 
-            className={`text-3xl font-bold ${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
+          <h1
+            className={`text-3xl font-bold ${
+              isSelected && !isPreviewMode ? "outline-none" : ""
+            }`}
             contentEditable={!isPreviewMode}
             suppressContentEditableWarning={true}
-            onBlur={(e) => handleContentEdit(e.target.textContent || '')}
+            onBlur={(e) => handleContentEdit(e.target.textContent || "")}
           >
-            {element.content?.text || 'Título Principal'}
+            {element.content?.text || "Título Principal"}
           </h1>
         </div>
       );
 
-    case 'text':
+    case "text":
       return (
-        <div 
-          className={`p-4 ${element.style?.className || ''}`}
+        <div
+          className={`p-4 ${element.style?.className || ""}`}
           style={element.style}
         >
-          <p 
-            className={`text-base ${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
+          <p
+            className={`text-base ${
+              isSelected && !isPreviewMode ? "outline-none" : ""
+            }`}
             contentEditable={!isPreviewMode}
             suppressContentEditableWarning={true}
-            onBlur={(e) => handleContentEdit(e.target.textContent || '')}
+            onBlur={(e) => handleContentEdit(e.target.textContent || "")}
           >
-            {element.content?.text || 'Este é um parágrafo de texto. Clique para editar.'}
+            {element.content?.text ||
+              "Este é um parágrafo de texto. Clique para editar."}
           </p>
         </div>
       );
 
-    case 'button':
+    case "button":
       return (
         <div className="p-4 text-center">
-          <button 
-            className={`px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors ${element.style?.className || ''}`}
+          <button
+            className={`px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors ${
+              element.style?.className || ""
+            }`}
             style={element.style}
             contentEditable={!isPreviewMode}
             suppressContentEditableWarning={true}
-            onBlur={(e) => handleContentEdit(e.target.textContent || '')}
+            onBlur={(e) => handleContentEdit(e.target.textContent || "")}
           >
-            {element.content?.text || 'Clique Aqui'}
+            {element.content?.text || "Clique Aqui"}
           </button>
         </div>
       );
 
-    case 'image':
+    case "image":
       return (
         <div className="p-4">
-          <img 
-            src={element.content?.src || 'https://via.placeholder.com/400x200?text=Imagem'}
-            alt={element.content?.alt || 'Imagem'}
-            className={`w-full rounded-lg ${element.style?.className || ''}`}
+          <img
+            src={
+              element.content?.src ||
+              "https://via.placeholder.com/400x200?text=Imagem"
+            }
+            alt={element.content?.alt || "Imagem"}
+            className={`w-full rounded-lg ${element.style?.className || ""}`}
             style={element.style}
           />
         </div>
