@@ -1,16 +1,54 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { VisualEditor } from '@/components/visual-editor/VisualEditor';
 import VisualEditorLayout from '@/components/visual-editor/VisualEditorLayout';
 import { QuizQuestion } from '@/types/quiz';
 import { useToast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Save } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  ArrowLeft, 
+  Save, 
+  Eye, 
+  Download, 
+  Upload, 
+  Settings,
+  Share2,
+  FileText,
+  Zap,
+  Layers
+} from 'lucide-react';
+
+interface EditorPageData {
+  id: string;
+  name: string;
+  description: string;
+  content: any;
+  questions?: QuizQuestion[];
+  lastModified: string;
+  isPublished: boolean;
+}
 
 const VisualEditorPage: React.FC = () => {
-  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
+  const { id, mode } = useParams<{ id?: string; mode?: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [editorData, setEditorData] = useState<EditorPageData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [activeEditorMode, setActiveEditorMode] = useState(mode || 'visual');
+
+  // Estados do formulário de configurações
+  const [pageName, setPageName] = useState('');
+  const [pageDescription, setPageDescription] = useState('');
 
   useEffect(() => {
     // Carregar perguntas do localStorage ou de uma API
