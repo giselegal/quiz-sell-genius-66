@@ -82,6 +82,11 @@ const App = () => {
                   path="/descubra-seu-estilo"
                   element={<QuizDescubraSeuEstilo />}
                 />
+                {/* Editor Visual - Dashboard e Editor */}
+                <Route path="/editor-dashboard" element={<EditorDashboard />} />
+                <Route path="/visual-editor" element={<VisualEditorPage />} />
+                <Route path="/visual-editor/:id" element={<VisualEditorPage />} />
+                
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route
                   path="/admin/*"

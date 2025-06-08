@@ -180,13 +180,3 @@ export function EditorToolbar({
     </div>
   );
 };
-          onClick={onSave}
-          className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          Salvar
-        </Button>
-      </div>
-    </div>
-  );
-}
