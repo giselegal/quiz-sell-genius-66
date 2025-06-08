@@ -69,10 +69,32 @@ export const EditorDashboard: React.FC = () => {
   const loadPages = async () => {
     try {
       setLoading(true);
+      // Carregar páginas do visual editor
       const pagesList = JSON.parse(
-        localStorage.getItem("quiz-editor-pages") || "[]"
+        localStorage.getItem("visual_editor_pages_list") || "[]"
       );
-      setPages(pagesList);
+      
+      // Converter para o formato esperado pelo dashboard
+      const convertedPages = pagesList.map((page: {
+        id: string;
+        title: string;
+        description: string;
+        updatedAt?: string;
+        createdAt?: string;
+        published?: boolean;
+        views?: number;
+        conversions?: number;
+      }) => ({
+        id: page.id,
+        name: page.title,
+        description: page.description,
+        lastModified: page.updatedAt || page.createdAt || new Date().toISOString(),
+        isPublished: page.published || false,
+        views: page.views || 0,
+        conversions: page.conversions || 0,
+      }));
+      
+      setPages(convertedPages);
     } catch (error) {
       console.error("Erro ao carregar páginas:", error);
       toast.error("Erro ao carregar páginas");
@@ -95,11 +117,11 @@ export const EditorDashboard: React.FC = () => {
   };
 
   const handleCreateNew = () => {
-    navigate("/editor/page/new");
+    navigate("/visual-editor");
   };
 
   const handleEditPage = (pageId: string) => {
-    navigate(`/editor/page/${pageId}`);
+    navigate(`/visual-editor/${pageId}`);
   };
 
   const handlePreviewPage = (pageId: string) => {
@@ -108,42 +130,46 @@ export const EditorDashboard: React.FC = () => {
 
   const handleDuplicatePage = async (pageId: string) => {
     try {
-      const originalData = localStorage.getItem(`quiz-editor-page-${pageId}`);
+      const originalData = localStorage.getItem(`visual_editor_page_${pageId}`);
       if (!originalData) {
         toast.error("Página não encontrada");
         return;
       }
 
       const parsedData = JSON.parse(originalData);
-      const newId =
-        Date.now().toString(36) + Math.random().toString(36).substr(2);
+      const newId = `page_${Date.now()}`;
 
       const duplicatedData = {
         ...parsedData,
-        id: newId,
-        name: `${parsedData.name} (Cópia)`,
-        lastModified: new Date().toISOString(),
-        isPublished: false,
+        pageInfo: {
+          ...parsedData.pageInfo,
+          title: `${parsedData.pageInfo.title} (Cópia)`,
+          slug: `${parsedData.pageInfo.slug}-copia-${Date.now()}`,
+          published: false,
+        },
       };
 
       localStorage.setItem(
-        `quiz-editor-page-${newId}`,
+        `visual_editor_page_${newId}`,
         JSON.stringify(duplicatedData)
       );
 
       const newPageSummary = {
         id: newId,
-        name: duplicatedData.name,
-        description: duplicatedData.description,
-        lastModified: duplicatedData.lastModified,
-        isPublished: false,
+        title: duplicatedData.pageInfo.title,
+        description: duplicatedData.pageInfo.description,
+        updatedAt: new Date().toISOString(),
+        published: false,
       };
 
-      setPages((prev) => [...prev, newPageSummary]);
-      localStorage.setItem(
-        "quiz-editor-pages",
-        JSON.stringify([...pages, newPageSummary])
-      );
+      // Atualizar lista de páginas
+      const pagesListKey = "visual_editor_pages_list";
+      const existingPages = JSON.parse(localStorage.getItem(pagesListKey) || "[]");
+      const updatedPagesList = [...existingPages, newPageSummary];
+      localStorage.setItem(pagesListKey, JSON.stringify(updatedPagesList));
+
+      // Recarregar páginas
+      await loadPages();
 
       toast.success("Página duplicada com sucesso!");
     } catch (error) {
@@ -156,10 +182,17 @@ export const EditorDashboard: React.FC = () => {
     if (!confirm("Tem certeza que deseja excluir esta página?")) return;
 
     try {
-      localStorage.removeItem(`quiz-editor-page-${pageId}`);
-      const updatedPages = pages.filter((page) => page.id !== pageId);
-      setPages(updatedPages);
-      localStorage.setItem("quiz-editor-pages", JSON.stringify(updatedPages));
+      // Remover dados da página
+      localStorage.removeItem(`visual_editor_page_${pageId}`);
+      
+      // Atualizar lista de páginas
+      const pagesListKey = "visual_editor_pages_list";
+      const existingPages = JSON.parse(localStorage.getItem(pagesListKey) || "[]");
+      const updatedPages = existingPages.filter((page: { id: string }) => page.id !== pageId);
+      localStorage.setItem(pagesListKey, JSON.stringify(updatedPages));
+
+      // Recarregar páginas
+      await loadPages();
 
       toast.success("Página excluída com sucesso!");
     } catch (error) {

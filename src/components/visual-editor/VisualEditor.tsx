@@ -97,11 +97,11 @@ export function VisualEditor({
     const dataToSave: VisualEditorData = {
       editorState,
       pageInfo: {
-        title: 'Página sem título',
-        description: '',
+        title: "Página sem título",
+        description: "",
         slug: `page-${Date.now()}`,
-        published: false
-      }
+        published: false,
+      },
     };
 
     if (onSave) {

@@ -55,12 +55,12 @@ const VisualEditorPage: React.FC = () => {
     const loadEditorData = async () => {
       try {
         setLoading(true);
-        
+
         // Se temos um ID, carregamos dados existentes
         if (id) {
           const storageKey = `visual_editor_page_${id}`;
           const savedData = localStorage.getItem(storageKey);
-          
+
           if (savedData) {
             const parsedData = JSON.parse(savedData) as VisualEditorData;
             setEditorData(parsedData);
@@ -93,45 +93,13 @@ const VisualEditorPage: React.FC = () => {
     loadEditorData();
   }, [id, toast, createDefaultEditorData]);
 
-  const createDefaultEditorData = (): VisualEditorData => {
-    const pageId = id || `page_${Date.now()}`;
-    return {
-      editorState: {
-        elements: [],
-        selectedElementId: null,
-        globalStyles: {
-          fontFamily: "Inter, sans-serif",
-          primaryColor: "#B89B7A",
-          secondaryColor: "#A38A69",
-          backgroundColor: "#FAF9F7",
-          textColor: "#333333",
-        },
-        settings: {
-          snapToGrid: true,
-          gridSize: 8,
-          showGrid: false,
-          responsiveMode: "desktop",
-        },
-      },
-      pageInfo: {
-        id: pageId,
-        title: "Nova Página",
-        description: "Descrição da página",
-        slug: `pagina-${pageId}`,
-        isPublished: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    };
-  };
-
   const handleSave = async (data: VisualEditorData) => {
     try {
       setSaving(true);
-      
+
       // Usar o ID da URL ou gerar um novo se não existir
       const pageId = id || `page_${Date.now()}`;
-      
+
       // Atualizar dados com timestamp
       const updatedData = {
         ...data,
@@ -147,22 +115,26 @@ const VisualEditorPage: React.FC = () => {
 
       // Manter lista de páginas salvas
       const pagesListKey = "visual_editor_pages_list";
-      const existingPages = JSON.parse(localStorage.getItem(pagesListKey) || "[]");
-      
+      const existingPages = JSON.parse(
+        localStorage.getItem(pagesListKey) || "[]"
+      );
+
       const pageInfo = {
         id: pageId,
         ...updatedData.pageInfo,
         updatedAt: new Date().toISOString(),
       };
-      
-      const pageIndex = existingPages.findIndex((p: { id: string }) => p.id === pageId);
-      
+
+      const pageIndex = existingPages.findIndex(
+        (p: { id: string }) => p.id === pageId
+      );
+
       if (pageIndex >= 0) {
         existingPages[pageIndex] = pageInfo;
       } else {
         existingPages.push(pageInfo);
       }
-      
+
       localStorage.setItem(pagesListKey, JSON.stringify(existingPages));
 
       // Atualizar estado local
@@ -192,9 +164,9 @@ const VisualEditorPage: React.FC = () => {
   const handlePreview = () => {
     if (editorData) {
       // Usar o ID da URL ou gerar um temporário
-      const pageId = id || 'preview';
+      const pageId = id || "preview";
       const previewUrl = `/preview/${pageId}`;
-      window.open(previewUrl, '_blank');
+      window.open(previewUrl, "_blank");
     }
   };
 
@@ -203,7 +175,7 @@ const VisualEditorPage: React.FC = () => {
 
     try {
       setSaving(true);
-      
+
       const publishedData = {
         ...editorData,
         pageInfo: {
@@ -215,8 +187,10 @@ const VisualEditorPage: React.FC = () => {
       await handleSave(publishedData);
 
       toast({
-        title: publishedData.pageInfo.published ? "Página publicada" : "Página despublicada",
-        description: publishedData.pageInfo.published 
+        title: publishedData.pageInfo.published
+          ? "Página publicada"
+          : "Página despublicada",
+        description: publishedData.pageInfo.published
           ? "Sua página está agora disponível publicamente."
           : "Sua página foi removida do acesso público.",
       });
@@ -247,7 +221,9 @@ const VisualEditorPage: React.FC = () => {
     return (
       <div className="h-screen flex items-center justify-center bg-[#FAF9F7]">
         <div className="text-center">
-          <div className="text-red-500 mb-4">Erro ao carregar dados do editor</div>
+          <div className="text-red-500 mb-4">
+            Erro ao carregar dados do editor
+          </div>
           <Button onClick={() => navigate("/dashboard")}>
             Voltar ao Dashboard
           </Button>
@@ -265,9 +241,9 @@ const VisualEditorPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Voltar ao Dashboard
           </Button>
-          
+
           <div className="h-6 w-px bg-[#B89B7A]/20" />
-          
+
           <div className="flex flex-col">
             <h1 className="text-sm font-medium text-gray-900">
               {editorData.pageInfo.title}
@@ -287,20 +263,20 @@ const VisualEditorPage: React.FC = () => {
             <Eye className="h-4 w-4 mr-2" />
             Visualizar
           </Button>
-          
+
           <Button
             variant="outline"
             onClick={handlePublish}
             disabled={saving}
             className={`border-[#B89B7A]/30 ${
-              editorData.pageInfo.isPublished
+              editorData.pageInfo.published
                 ? "text-orange-600 hover:bg-orange-50"
                 : "text-green-600 hover:bg-green-50"
             }`}
           >
-            {editorData.pageInfo.isPublished ? "Despublicar" : "Publicar"}
+            {editorData.pageInfo.published ? "Despublicar" : "Publicar"}
           </Button>
-          
+
           <Button
             onClick={() => handleSave(editorData)}
             disabled={saving}
@@ -314,10 +290,7 @@ const VisualEditorPage: React.FC = () => {
 
       {/* Editor */}
       <div className="flex-1 overflow-hidden">
-        <VisualEditor
-          initialData={editorData}
-          onSave={handleSave}
-        />
+        <VisualEditor initialData={editorData} onSave={handleSave} />
       </div>
     </div>
   );

@@ -20,15 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-interface CanvasElement {
-  id: string;
-  type: string;
-  content: any;
-  style: any;
-  visible: boolean;
-  locked: boolean;
-}
+import type { CanvasElement } from "@/types/visualEditor";
 
 interface EditorCanvasProps {
   elements: CanvasElement[];
@@ -285,10 +277,7 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({
   switch (element.type) {
     case "heading":
       return (
-        <div
-          className={`p-4 ${element.style?.className || ""}`}
-          style={element.style}
-        >
+        <div className="p-4" style={element.style}>
           <h1
             className={`text-3xl font-bold ${
               isSelected && !isPreviewMode ? "outline-none" : ""
@@ -304,10 +293,7 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({
 
     case "text":
       return (
-        <div
-          className={`p-4 ${element.style?.className || ""}`}
-          style={element.style}
-        >
+        <div className="p-4" style={element.style}>
           <p
             className={`text-base ${
               isSelected && !isPreviewMode ? "outline-none" : ""
@@ -326,9 +312,7 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({
       return (
         <div className="p-4 text-center">
           <button
-            className={`px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors ${
-              element.style?.className || ""
-            }`}
+            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             style={element.style}
             contentEditable={!isPreviewMode}
             suppressContentEditableWarning={true}
@@ -348,7 +332,7 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({
               "https://via.placeholder.com/400x200?text=Imagem"
             }
             alt={element.content?.alt || "Imagem"}
-            className={`w-full rounded-lg ${element.style?.className || ""}`}
+            className="w-full rounded-lg"
             style={element.style}
           />
         </div>
