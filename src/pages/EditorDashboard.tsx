@@ -75,7 +75,7 @@ export const EditorDashboard: React.FC = () => {
         setFilteredPages(filtered);
       }
     };
-    
+
     filterPages();
   }, [pages, searchQuery]);
 
@@ -86,27 +86,30 @@ export const EditorDashboard: React.FC = () => {
       const pagesList = JSON.parse(
         localStorage.getItem("visual_editor_pages_list") || "[]"
       );
-      
+
       // Converter para o formato esperado pelo dashboard
-      const convertedPages = pagesList.map((page: {
-        id: string;
-        title: string;
-        description: string;
-        updatedAt?: string;
-        createdAt?: string;
-        published?: boolean;
-        views?: number;
-        conversions?: number;
-      }) => ({
-        id: page.id,
-        name: page.title,
-        description: page.description,
-        lastModified: page.updatedAt || page.createdAt || new Date().toISOString(),
-        isPublished: page.published || false,
-        views: page.views || 0,
-        conversions: page.conversions || 0,
-      }));
-      
+      const convertedPages = pagesList.map(
+        (page: {
+          id: string;
+          title: string;
+          description: string;
+          updatedAt?: string;
+          createdAt?: string;
+          published?: boolean;
+          views?: number;
+          conversions?: number;
+        }) => ({
+          id: page.id,
+          name: page.title,
+          description: page.description,
+          lastModified:
+            page.updatedAt || page.createdAt || new Date().toISOString(),
+          isPublished: page.published || false,
+          views: page.views || 0,
+          conversions: page.conversions || 0,
+        })
+      );
+
       setPages(convertedPages);
     } catch (error) {
       console.error("Erro ao carregar páginas:", error);
@@ -164,7 +167,9 @@ export const EditorDashboard: React.FC = () => {
 
       // Atualizar lista de páginas
       const pagesListKey = "visual_editor_pages_list";
-      const existingPages = JSON.parse(localStorage.getItem(pagesListKey) || "[]");
+      const existingPages = JSON.parse(
+        localStorage.getItem(pagesListKey) || "[]"
+      );
       const updatedPagesList = [...existingPages, newPageSummary];
       localStorage.setItem(pagesListKey, JSON.stringify(updatedPagesList));
 
@@ -184,11 +189,15 @@ export const EditorDashboard: React.FC = () => {
     try {
       // Remover dados da página
       localStorage.removeItem(`visual_editor_page_${pageId}`);
-      
+
       // Atualizar lista de páginas
       const pagesListKey = "visual_editor_pages_list";
-      const existingPages = JSON.parse(localStorage.getItem(pagesListKey) || "[]");
-      const updatedPages = existingPages.filter((page: { id: string }) => page.id !== pageId);
+      const existingPages = JSON.parse(
+        localStorage.getItem(pagesListKey) || "[]"
+      );
+      const updatedPages = existingPages.filter(
+        (page: { id: string }) => page.id !== pageId
+      );
       localStorage.setItem(pagesListKey, JSON.stringify(updatedPages));
 
       // Recarregar páginas
