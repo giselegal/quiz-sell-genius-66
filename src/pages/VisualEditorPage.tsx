@@ -1,240 +1,309 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { VisualEditor } from "@/components/visual-editor/VisualEditor";
-import VisualEditorLayout from "@/components/visual-editor/VisualEditorLayout";
-import { QuizQuestion } from "@/types/quiz";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  ArrowLeft,
-  Save,
-  Eye,
-  Download,
-  Upload,
-  Settings,
-  Share2,
-  FileText,
-  Zap,
-  Layers,
-} from "lucide-react";
-
-interface EditorPageData {
-  id: string;
-  name: string;
-  description: string;
-  content: any;
-  questions?: QuizQuestion[];
-  lastModified: string;
-  isPublished: boolean;
-}
+import { ArrowLeft, Save, Eye } from "lucide-react";
+import type { VisualEditorData } from "@/types/visualEditor";
 
 const VisualEditorPage: React.FC = () => {
-  const { id, mode } = useParams<{ id?: string; mode?: string }>();
+  const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [editorData, setEditorData] = useState<EditorPageData | null>(null);
+  const [editorData, setEditorData] = useState<VisualEditorData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [activeEditorMode, setActiveEditorMode] = useState(mode || "visual");
+  const [saving, setSaving] = useState(false);
 
-  // Estados do formulário de configurações
-  const [pageName, setPageName] = useState("");
-  const [pageDescription, setPageDescription] = useState("");
+  const createDefaultEditorData = React.useCallback((): VisualEditorData => {
+    const pageId = id || `page_${Date.now()}`;
+    return {
+      editorState: {
+        elements: [],
+        selectedElementId: null,
+        globalStyles: {
+          fontFamily: "Inter, sans-serif",
+          primaryColor: "#B89B7A",
+          secondaryColor: "#A38A69",
+          backgroundColor: "#FAF9F7",
+          textColor: "#333333",
+        },
+        settings: {
+          snapToGrid: true,
+          gridSize: 8,
+          showGrid: false,
+          responsiveMode: "desktop",
+        },
+      },
+      pageInfo: {
+        id: pageId,
+        title: "Nova Página",
+        description: "Descrição da página",
+        slug: `pagina-${pageId}`,
+        isPublished: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    };
+  }, [id]);
 
   useEffect(() => {
-    // Carregar perguntas do localStorage ou de uma API
-    const loadQuestions = async () => {
+    const loadEditorData = async () => {
       try {
         setLoading(true);
-        const savedQuestions = localStorage.getItem("quiz_editor_questions");
-
-        if (savedQuestions) {
-          setQuestions(JSON.parse(savedQuestions));
+        
+        // Se temos um ID, carregamos dados existentes
+        if (id) {
+          const storageKey = `visual_editor_page_${id}`;
+          const savedData = localStorage.getItem(storageKey);
+          
+          if (savedData) {
+            const parsedData = JSON.parse(savedData) as VisualEditorData;
+            setEditorData(parsedData);
+          } else {
+            // Página não encontrada, redirecionar ou criar nova
+            toast({
+              title: "Página não encontrada",
+              description: "Criando uma nova página.",
+              variant: "default",
+            });
+            setEditorData(createDefaultEditorData());
+          }
         } else {
-          // Se não houver perguntas salvas, criar algumas de exemplo
-          const defaultQuestions: QuizQuestion[] = [
-            {
-              id: `question-${Date.now()}-1`,
-              title: "Qual estilo de roupa você prefere no dia a dia?",
-              type: "image",
-              multiSelect: 1,
-              options: [
-                {
-                  id: `option-${Date.now()}-1`,
-                  text: "Roupas confortáveis e práticas",
-                  styleCategory: "Natural",
-                  points: 3,
-                  imageUrl: "https://placehold.co/300x400?text=Estilo+Natural",
-                },
-                {
-                  id: `option-${Date.now()}-2`,
-                  text: "Peças elegantes e sofisticadas",
-                  styleCategory: "Clássico",
-                  points: 3,
-                  imageUrl: "https://placehold.co/300x400?text=Estilo+Clássico",
-                },
-                {
-                  id: `option-${Date.now()}-3`,
-                  text: "Looks modernos e minimalistas",
-                  styleCategory: "Contemporâneo",
-                  points: 3,
-                  imageUrl:
-                    "https://placehold.co/300x400?text=Estilo+Contemporâneo",
-                },
-                {
-                  id: `option-${Date.now()}-4`,
-                  text: "Peças românticas e delicadas",
-                  styleCategory: "Romântico",
-                  points: 3,
-                  imageUrl:
-                    "https://placehold.co/300x400?text=Estilo+Romântico",
-                },
-              ],
-            },
-            {
-              id: `question-${Date.now()}-2`,
-              title: "Como você descreveria sua personalidade?",
-              type: "text",
-              multiSelect: 2,
-              options: [
-                {
-                  id: `option-${Date.now()}-5`,
-                  text: "Prática e objetiva",
-                  styleCategory: "Natural",
-                  points: 2,
-                },
-                {
-                  id: `option-${Date.now()}-6`,
-                  text: "Sofisticada e tradicional",
-                  styleCategory: "Clássico",
-                  points: 2,
-                },
-                {
-                  id: `option-${Date.now()}-7`,
-                  text: "Criativa e expressiva",
-                  styleCategory: "Criativo",
-                  points: 2,
-                },
-                {
-                  id: `option-${Date.now()}-8`,
-                  text: "Sensual e marcante",
-                  styleCategory: "Sexy",
-                  points: 2,
-                },
-              ],
-            },
-          ];
-
-          setQuestions(defaultQuestions);
+          // Nova página
+          setEditorData(createDefaultEditorData());
         }
       } catch (error) {
-        console.error("Erro ao carregar perguntas:", error);
+        console.error("Erro ao carregar dados do editor:", error);
         toast({
           title: "Erro ao carregar",
-          description: "Não foi possível carregar as perguntas do quiz.",
+          description: "Não foi possível carregar os dados da página.",
           variant: "destructive",
         });
+        setEditorData(createDefaultEditorData());
       } finally {
         setLoading(false);
       }
     };
 
-    loadQuestions();
-  }, [toast]);
+    loadEditorData();
+  }, [id, toast, createDefaultEditorData]);
 
-  const handleSave = async (updatedQuestions: QuizQuestion[]) => {
+  const createDefaultEditorData = (): VisualEditorData => {
+    const pageId = id || `page_${Date.now()}`;
+    return {
+      editorState: {
+        elements: [],
+        selectedElementId: null,
+        globalStyles: {
+          fontFamily: "Inter, sans-serif",
+          primaryColor: "#B89B7A",
+          secondaryColor: "#A38A69",
+          backgroundColor: "#FAF9F7",
+          textColor: "#333333",
+        },
+        settings: {
+          snapToGrid: true,
+          gridSize: 8,
+          showGrid: false,
+          responsiveMode: "desktop",
+        },
+      },
+      pageInfo: {
+        id: pageId,
+        title: "Nova Página",
+        description: "Descrição da página",
+        slug: `pagina-${pageId}`,
+        isPublished: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    };
+  };
+
+  const handleSave = async (data: VisualEditorData) => {
     try {
-      // Salvar no localStorage
-      localStorage.setItem(
-        "quiz_editor_questions",
-        JSON.stringify(updatedQuestions)
-      );
+      setSaving(true);
+      
+      // Atualizar timestamp
+      const updatedData = {
+        ...data,
+        pageInfo: {
+          ...data.pageInfo,
+          updatedAt: new Date().toISOString(),
+        },
+      };
 
-      // Aqui você poderia salvar em uma API também
+      // Salvar no localStorage
+      const storageKey = `visual_editor_page_${updatedData.pageInfo.id}`;
+      localStorage.setItem(storageKey, JSON.stringify(updatedData));
+
+      // Manter lista de páginas salvas
+      const pagesListKey = "visual_editor_pages_list";
+      const existingPages = JSON.parse(localStorage.getItem(pagesListKey) || "[]");
+      const pageIndex = existingPages.findIndex((p: { id: string }) => p.id === updatedData.pageInfo.id);
+      
+      if (pageIndex >= 0) {
+        existingPages[pageIndex] = updatedData.pageInfo;
+      } else {
+        existingPages.push(updatedData.pageInfo);
+      }
+      
+      localStorage.setItem(pagesListKey, JSON.stringify(existingPages));
+
+      // Atualizar estado local
+      setEditorData(updatedData);
 
       toast({
-        title: "Quiz salvo com sucesso",
+        title: "Página salva com sucesso",
         description: "Todas as alterações foram salvas.",
       });
+
+      // Se for uma nova página, redirecionar com o ID
+      if (!id) {
+        navigate(`/visual-editor/${updatedData.pageInfo.id}`, { replace: true });
+      }
     } catch (error) {
-      console.error("Erro ao salvar quiz:", error);
+      console.error("Erro ao salvar página:", error);
       toast({
         title: "Erro ao salvar",
-        description: "Não foi possível salvar as alterações do quiz.",
+        description: "Não foi possível salvar as alterações da página.",
         variant: "destructive",
       });
+    } finally {
+      setSaving(false);
     }
   };
 
-  const handleDuplicateQuiz = () => {
-    // Implementar a lógica de duplicação do quiz
-    const duplicatedQuiz = JSON.parse(JSON.stringify(questions));
+  const handlePreview = () => {
+    if (editorData) {
+      // Abrir preview em nova aba
+      const previewUrl = `/preview/${editorData.pageInfo.id}`;
+      window.open(previewUrl, '_blank');
+    }
+  };
 
-    // Gerar novos IDs para todas as perguntas e opções
-    const newQuiz = duplicatedQuiz.map((question: QuizQuestion) => ({
-      ...question,
-      id: `question-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      options: question.options.map((option) => ({
-        ...option,
-        id: `option-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      })),
-    }));
+  const handlePublish = async () => {
+    if (!editorData) return;
 
-    // Salvar o quiz duplicado com um novo nome
-    localStorage.setItem(
-      "quiz_editor_questions_duplicate",
-      JSON.stringify(newQuiz)
-    );
+    try {
+      setSaving(true);
+      
+      const publishedData = {
+        ...editorData,
+        pageInfo: {
+          ...editorData.pageInfo,
+          isPublished: !editorData.pageInfo.isPublished,
+          updatedAt: new Date().toISOString(),
+        },
+      };
 
-    toast({
-      title: "Quiz duplicado",
-      description: "Uma cópia do quiz foi criada com sucesso.",
-    });
+      await handleSave(publishedData);
+
+      toast({
+        title: publishedData.pageInfo.isPublished ? "Página publicada" : "Página despublicada",
+        description: publishedData.pageInfo.isPublished 
+          ? "Sua página está agora disponível publicamente."
+          : "Sua página foi removida do acesso público.",
+      });
+    } catch (error) {
+      console.error("Erro ao publicar/despublicar página:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível alterar o status de publicação.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-[#FAF9F7]">
-        <div className="animate-pulse text-[#B89B7A]">Carregando editor...</div>
+        <div className="text-center">
+          <div className="animate-spin h-8 w-8 border-2 border-[#B89B7A] border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="text-[#B89B7A]">Carregando editor visual...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!editorData) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-[#FAF9F7]">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">Erro ao carregar dados do editor</div>
+          <Button onClick={() => navigate("/dashboard")}>
+            Voltar ao Dashboard
+          </Button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="bg-white border-b border-[#B89B7A]/20 p-2 flex items-center justify-between">
-        <Button variant="ghost" onClick={() => navigate(-1)}>
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Voltar
-        </Button>
+    <div className="h-screen flex flex-col bg-[#FAF9F7]">
+      {/* Header */}
+      <div className="bg-white border-b border-[#B89B7A]/20 px-4 py-2 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" onClick={() => navigate("/dashboard")}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Voltar ao Dashboard
+          </Button>
+          
+          <div className="h-6 w-px bg-[#B89B7A]/20" />
+          
+          <div className="flex flex-col">
+            <h1 className="text-sm font-medium text-gray-900">
+              {editorData.pageInfo.title}
+            </h1>
+            <p className="text-xs text-gray-500">
+              {editorData.pageInfo.isPublished ? "Publicada" : "Rascunho"}
+            </p>
+          </div>
+        </div>
 
         <div className="flex items-center gap-2">
           <Button
-            className="bg-[#B89B7A] hover:bg-[#A38A69] text-white"
-            onClick={() => handleSave(questions)}
+            variant="outline"
+            onClick={handlePreview}
+            className="border-[#B89B7A]/30 text-[#B89B7A] hover:bg-[#B89B7A]/5"
           >
-            <Save className="h-4 w-4 mr-1" />
-            Salvar Quiz
+            <Eye className="h-4 w-4 mr-2" />
+            Visualizar
+          </Button>
+          
+          <Button
+            variant="outline"
+            onClick={handlePublish}
+            disabled={saving}
+            className={`border-[#B89B7A]/30 ${
+              editorData.pageInfo.isPublished
+                ? "text-orange-600 hover:bg-orange-50"
+                : "text-green-600 hover:bg-green-50"
+            }`}
+          >
+            {editorData.pageInfo.isPublished ? "Despublicar" : "Publicar"}
+          </Button>
+          
+          <Button
+            onClick={() => handleSave(editorData)}
+            disabled={saving}
+            className="bg-[#B89B7A] hover:bg-[#A38A69] text-white"
+          >
+            <Save className="h-4 w-4 mr-2" />
+            {saving ? "Salvando..." : "Salvar"}
           </Button>
         </div>
       </div>
 
-      <div className="flex-1">
-        <VisualEditorLayout initialQuestions={questions} onSave={handleSave} />
+      {/* Editor */}
+      <div className="flex-1 overflow-hidden">
+        <VisualEditor
+          initialData={editorData}
+          onSave={handleSave}
+        />
       </div>
     </div>
   );

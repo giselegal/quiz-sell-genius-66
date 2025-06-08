@@ -94,12 +94,14 @@ export function VisualEditor({
   );
 
   const handleSave = useCallback(() => {
-    const dataToSave = {
-      ...editorState,
-      metadata: {
-        lastModified: new Date().toISOString(),
-        version: "1.0.0",
-      },
+    const dataToSave: VisualEditorData = {
+      editorState,
+      pageInfo: {
+        title: 'Página sem título',
+        description: '',
+        slug: `page-${Date.now()}`,
+        published: false
+      }
     };
 
     if (onSave) {
