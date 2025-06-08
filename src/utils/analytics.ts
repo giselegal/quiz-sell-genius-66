@@ -90,15 +90,15 @@ export const addUtmParamsToEvent = (eventData: Record<string, any>) => {
 };
 
 // Additional missing exports
-export const trackButtonClick = (buttonId: string, buttonText: string, pageName: string, eventData: Record<string, any> = {}) => {
+export const trackButtonClick = (buttonId: string, buttonText?: string, pageName?: string, eventData: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
   
   // Google Analytics
   if (window.gtag) {
     window.gtag('event', 'button_click', {
       button_id: buttonId,
-      button_text: buttonText,
-      page_name: pageName,
+      button_text: buttonText || buttonId,
+      page_name: pageName || 'unknown',
       ...eventData
     });
   }
@@ -108,13 +108,13 @@ export const trackButtonClick = (buttonId: string, buttonText: string, pageName:
     window.dataLayer.push({
       event: 'button_click',
       buttonId,
-      buttonText,
-      pageName,
+      buttonText: buttonText || buttonId,
+      pageName: pageName || 'unknown',
       ...eventData
     });
   }
   
-  console.log(`[Analytics] Button click: ${buttonText} (${buttonId}) on ${pageName}`, eventData);
+  console.log(`[Analytics] Button click: ${buttonText || buttonId} (${buttonId}) on ${pageName || 'unknown'}`, eventData);
 };
 
 export const captureUTMParameters = () => {
@@ -188,9 +188,9 @@ export const initFacebookPixel = () => {
   }
 };
 
-export const trackQuizStart = (quizId: string, eventData: Record<string, any> = {}) => {
+export const trackQuizStart = (quizId?: string, eventData: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
-  const data = { quiz_id: quizId, ...eventData };
+  const data = { quiz_id: quizId || 'default_quiz', ...eventData };
 
   if (window.gtag) {
     window.gtag('event', 'quiz_start', data);
@@ -201,12 +201,17 @@ export const trackQuizStart = (quizId: string, eventData: Record<string, any> = 
   if (window.dataLayer) {
     window.dataLayer.push({ event: 'quiz_start', ...data });
   }
-  console.log(`[Analytics] Quiz started: ${quizId}`, data);
+  console.log(`[Analytics] Quiz started: ${quizId || 'default_quiz'}`, data);
 };
 
-export const trackQuizAnswer = (quizId: string, questionId: string, answer: string, eventData: Record<string, any> = {}) => {
+export const trackQuizAnswer = (quizId?: string, questionId?: string, answer?: string, eventData: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
-  const data = { quiz_id: quizId, question_id: questionId, answer: answer, ...eventData };
+  const data = { 
+    quiz_id: quizId || 'default_quiz', 
+    question_id: questionId || 'unknown', 
+    answer: answer || 'unknown', 
+    ...eventData 
+  };
 
   if (window.gtag) {
     window.gtag('event', 'quiz_answer', data);
@@ -214,12 +219,12 @@ export const trackQuizAnswer = (quizId: string, questionId: string, answer: stri
   if (window.dataLayer) {
     window.dataLayer.push({ event: 'quiz_answer', ...data });
   }
-  console.log(`[Analytics] Quiz answer: ${questionId} - ${answer}`, data);
+  console.log(`[Analytics] Quiz answer: ${questionId || 'unknown'} - ${answer || 'unknown'}`, data);
 };
 
-export const trackQuizComplete = (quizId: string, eventData: Record<string, any> = {}) => {
+export const trackQuizComplete = (quizId?: string, eventData: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
-  const data = { quiz_id: quizId, ...eventData };
+  const data = { quiz_id: quizId || 'default_quiz', ...eventData };
 
   if (window.gtag) {
     window.gtag('event', 'quiz_complete', data);
@@ -227,12 +232,16 @@ export const trackQuizComplete = (quizId: string, eventData: Record<string, any>
   if (window.dataLayer) {
     window.dataLayer.push({ event: 'quiz_complete', ...data });
   }
-  console.log(`[Analytics] Quiz completed: ${quizId}`, data);
+  console.log(`[Analytics] Quiz completed: ${quizId || 'default_quiz'}`, data);
 };
 
-export const trackResultView = (quizId: string, resultId: string, eventData: Record<string, any> = {}) => {
+export const trackResultView = (quizId?: string, resultId?: string, eventData: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
-  const data = { quiz_id: quizId, result_id: resultId, ...eventData };
+  const data = { 
+    quiz_id: quizId || 'default_quiz', 
+    result_id: resultId || 'unknown_result', 
+    ...eventData 
+  };
 
   if (window.gtag) {
     window.gtag('event', 'result_view', data);
@@ -243,7 +252,7 @@ export const trackResultView = (quizId: string, resultId: string, eventData: Rec
   if (window.dataLayer) {
     window.dataLayer.push({ event: 'result_view', ...data });
   }
-  console.log(`[Analytics] Result view: ${quizId} - ${resultId}`, data);
+  console.log(`[Analytics] Result view: ${quizId || 'default_quiz'} - ${resultId || 'unknown_result'}`, data);
 };
 
 export const getAnalyticsEvents = () => {

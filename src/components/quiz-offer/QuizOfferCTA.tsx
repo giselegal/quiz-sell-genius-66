@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,7 +20,7 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
   const handleCTAClick = () => {
     trackButtonClick('main-cta', 'Comprar Quiz Completo', 'cta-section');
     // Registrar início de checkout
-    trackSaleConversion(39.0, 'BRL', 'Quiz de Estilo Completo');
+    trackSaleConversion('quiz@example.com', 39.0);
     // Redirecionar para checkout
     window.location.href = getCtaUrl();
   };
