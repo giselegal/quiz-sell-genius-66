@@ -50,4 +50,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
           server-dir: /u116045488/domains/giselegalvao.com.br/public_html/
-          dangerous-clean-slate: true
+          dangerous-clean-slate: truecd /workspaces/quiz-sell-genius-66 && git add . && git commit -m "✅ Ativar configurações Lovable - $(date)" && git push origin main
