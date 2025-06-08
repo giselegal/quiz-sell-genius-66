@@ -1,3 +1,4 @@
+
 import { HotmartPurchase, HotmartBuyer } from '@/types/hotmart';
 
 export const simulateHotmartPurchase = (email: string, name: string): HotmartPurchase => {
@@ -28,7 +29,7 @@ export const simulateHotmartPurchase = (email: string, name: string): HotmartPur
       buyer: {
         email,
         name,
-        document: '000.000.000-00' // Adding required document property
+        document: '000.000.000-00'
       } as HotmartBuyer,
       producer: {
         name: 'Gisele Galvão'

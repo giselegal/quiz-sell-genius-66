@@ -19,11 +19,15 @@ export const QuizIntroPreview: React.FC<QuizIntroPreviewProps> = ({
   onUpdateComponent,
   isPreviewMode
 }) => {
+  const handleStartQuiz = (name: string) => {
+    console.log('Quiz started with name:', name);
+  };
+
   if (isPreviewMode) {
     // Renderizar o componente real do quiz
     return (
       <div className="h-full">
-        <QuizIntro />
+        <QuizIntro onStart={handleStartQuiz} />
       </div>
     );
   }
@@ -33,7 +37,7 @@ export const QuizIntroPreview: React.FC<QuizIntroPreviewProps> = ({
     <div className="h-full bg-[#FAF9F7] relative">
       {/* Background do quiz atual */}
       <div className="absolute inset-0 opacity-50">
-        <QuizIntro />
+        <QuizIntro onStart={handleStartQuiz} />
       </div>
       
       {/* Overlay editável */}
