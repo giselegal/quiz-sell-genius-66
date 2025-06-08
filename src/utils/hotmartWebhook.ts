@@ -1,7 +1,7 @@
 
 import { HotmartPurchase, HotmartBuyer } from '@/types/hotmart';
 import { getUserDataForEmail, storeUserForHotmart } from './userManagement';
-import { trackSaleConversion } from './analytics';
+import { trackConversion } from './analytics';
 
 export interface HotmartWebhookPayload {
   event: string;
@@ -14,8 +14,13 @@ export const hotmartWebhookManager = {
       const purchaseData = payload as HotmartPurchase;
       
       if (purchaseData.event === 'PURCHASE_COMPLETE') {
-        // Track conversion
-        trackSaleConversion(purchaseData.data.buyer.email, purchaseData.data.purchase.price.value);
+        // Track conversion using the available trackConversion function
+        trackConversion('purchase', {
+          email: purchaseData.data.buyer.email,
+          value: purchaseData.data.purchase.price.value,
+          currency: purchaseData.data.purchase.price.currency_code,
+          product_name: purchaseData.data.product.name
+        });
         
         // Store user data
         const userData = getUserDataForEmail(purchaseData.data.buyer.email);
