@@ -307,6 +307,7 @@ const ResultPage: React.FC = () => {
   const { category } = primaryStyle;
   const { image, guideImage, description } = styleConfig[category];
 
+  // Corrigir a função handleCTAClick para usar o tipo correto
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -324,7 +325,7 @@ const ResultPage: React.FC = () => {
     if (user?.email) {
       // Armazenar dados do usuário com UTMs para correlação futura
       storeUserForHotmart(user.email, {
-        quiz_results: primaryStyle,
+        quiz_results: primaryStyle as Record<string, unknown>, // Type assertion to fix compatibility
         funnel_step: "checkout_initiation",
         page_url: window.location.href,
       });

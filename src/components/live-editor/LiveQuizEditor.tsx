@@ -15,11 +15,10 @@ import {
   Play,
   Pause
 } from 'lucide-react';
-import { StagesSidebar } from './sidebar/StagesSidebar';
-import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
-import { LivePreview } from './preview/LivePreview';
-import { PropertiesSidebar } from './sidebar/PropertiesSidebar';
-import { EditorToolbar } from './toolbar/EditorToolbar';
+import StagesSidebar from './sidebar/StagesSidebar';
+import ComponentsSidebar from './sidebar/ComponentsSidebar';
+import LivePreview from './preview/LivePreview';
+import PropertiesSidebar from './sidebar/PropertiesSidebar';
 import { useLiveEditor } from '@/hooks/useLiveEditor';
 import { toast } from '@/components/ui/use-toast';
 

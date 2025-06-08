@@ -1,117 +1,45 @@
-// Simulador de Webhook Hotmart para testes
-// Este arquivo simula o recebimento de webhooks da Hotmart no frontend
+import { HotmartPurchase, HotmartBuyer } from '@/types/hotmart';
 
-import { hotmartWebhookManager, HotmartWebhookData } from "./hotmartWebhook";
-
-export class HotmartWebhookSimulator {
-  private static instance: HotmartWebhookSimulator;
-
-  public static getInstance(): HotmartWebhookSimulator {
-    if (!HotmartWebhookSimulator.instance) {
-      HotmartWebhookSimulator.instance = new HotmartWebhookSimulator();
-    }
-    return HotmartWebhookSimulator.instance;
-  }
-
-  /**
-   * Simula o recebimento de um webhook da Hotmart
-   */
-  public async simulateWebhook(
-    email: string,
-    event:
-      | "PURCHASE_COMPLETE"
-      | "PURCHASE_APPROVED"
-      | "PURCHASE_CANCELED"
-      | "PURCHASE_REFUNDED",
-    transactionId?: string
-  ): Promise<void> {
-    const webhookData: HotmartWebhookData = {
-      event,
-      webhook_id:
-        "agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df",
-      timestamp: new Date().toISOString(),
-      data: {
-        purchase: {
-          transaction: transactionId || `T${Date.now()}`,
-          status:
-            event === "PURCHASE_COMPLETE" || event === "PURCHASE_APPROVED"
-              ? "APPROVED"
-              : "CANCELED",
-          checkout_country: "BR",
-          approved_date: new Date().toISOString(),
+export const simulateHotmartPurchase = (email: string, name: string): HotmartPurchase => {
+  return {
+    id: `sim-${Date.now()}`,
+    event: 'PURCHASE_COMPLETE',
+    version: '2.0.0',
+    data: {
+      purchase: {
+        id: `purchase-${Date.now()}`,
+        transaction: `trans-${Date.now()}`,
+        payment_type: 'CREDIT_CARD',
+        payment_engine: 'HOTMART',
+        installments_number: 1,
+        price: {
+          currency_code: 'BRL',
+          value: 197.00
         },
-        buyer: {
+        product: {
+          id: '1234567',
+          name: 'Guia da Moda'
+        },
+        customer: {
           email,
-          name: "Usuário Teste",
-        },
-        transaction: {
-          id: transactionId || `T${Date.now()}`,
-          status:
-            event === "PURCHASE_COMPLETE" || event === "PURCHASE_APPROVED"
-              ? "APPROVED"
-              : "CANCELED",
-        },
+          name
+        }
       },
-    };
-
-    console.log("[Webhook Simulator] Simulando webhook:", webhookData);
-
-    try {
-      await hotmartWebhookManager.processWebhook(webhookData);
-      console.log("[Webhook Simulator] ✅ Webhook processado com sucesso!");
-    } catch (error) {
-      console.error("[Webhook Simulator] ❌ Erro ao processar webhook:", error);
-      throw error;
+      buyer: {
+        email,
+        name,
+        document: '000.000.000-00' // Adding required document property
+      } as HotmartBuyer,
+      producer: {
+        name: 'Gisele Galvão'
+      },
+      product: {
+        id: '1234567',
+        name: 'Guia da Moda'
+      },
+      offer: {
+        code: 'OFFER10'
+      }
     }
-  }
-
-  /**
-   * Testa o fluxo completo: usuário faz checkout → webhook é recebido
-   */
-  public async testCompleteFlow(email: string): Promise<void> {
-    console.log("[Webhook Simulator] 🧪 Iniciando teste completo para:", email);
-
-    // 1. Simular que o usuário fez um checkout
-    console.log("[Webhook Simulator] 1️⃣ Simulando checkout...");
-
-    // 2. Aguardar um pouco (simular delay real)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // 3. Simular webhook de compra completa
-    console.log("[Webhook Simulator] 2️⃣ Simulando webhook...");
-    await this.simulateWebhook(email, "PURCHASE_COMPLETE");
-
-    console.log("[Webhook Simulator] ✅ Teste completo finalizado!");
-  }
-}
-
-// Instância global
-export const webhookSimulator = HotmartWebhookSimulator.getInstance();
-
-// Funções utilitárias para uso direto
-export const simulateHotmartPurchase = (
-  email: string,
-  transactionId?: string
-) => {
-  return webhookSimulator.simulateWebhook(
-    email,
-    "PURCHASE_COMPLETE",
-    transactionId
-  );
+  };
 };
-
-export const testWebhookFlow = (email: string) => {
-  return webhookSimulator.testCompleteFlow(email);
-};
-
-// Para usar no console do navegador
-if (typeof window !== "undefined") {
-  (window as any).hotmartWebhookSimulator = webhookSimulator;
-  (window as any).simulateHotmartPurchase = simulateHotmartPurchase;
-  (window as any).testWebhookFlow = testWebhookFlow;
-
-  console.log("🎯 Hotmart Webhook Simulator carregado!");
-  console.log("📝 Use no console:");
-  console.log('   simulateHotmartPurchase("email@exemplo.com")');
-  console.log('   testWebhookFlow("email@exemplo.com")');
-}
