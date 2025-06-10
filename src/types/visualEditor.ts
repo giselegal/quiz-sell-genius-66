@@ -1,128 +1,80 @@
-// Visual Editor specific types
 
-export interface ElementContent {
-  text?: string;
-  src?: string;
-  alt?: string;
-  href?: string;
-  placeholder?: string;
-  label?: string;
-  options?: string[];
-  value?: string | number | boolean;
-  html?: string;
-  backgroundColor?: string;
-  borderColor?: string;
-  textColor?: string;
-}
+export type BlockType = 
+  | 'text' 
+  | 'title' 
+  | 'image' 
+  | 'video' 
+  | 'audio' 
+  | 'button' 
+  | 'input' 
+  | 'email' 
+  | 'phone' 
+  | 'checkbox' 
+  | 'radio' 
+  | 'option' 
+  | 'testimonial' 
+  | 'price' 
+  | 'alert' 
+  | 'arguments' 
+  | 'carousel' 
+  | 'chart' 
+  | 'progress' 
+  | 'script' 
+  | 'spacer' 
+  | 'terms';
 
-export interface ElementStyle {
-  width?: string | number;
-  height?: string | number;
-  padding?: string;
-  margin?: string;
-  backgroundColor?: string;
-  color?: string;
-  fontSize?: string;
-  fontWeight?: string;
-  textAlign?: "left" | "center" | "right" | "justify";
-  border?: string;
-  borderRadius?: string;
-  boxShadow?: string;
-  display?: string;
-  flexDirection?: "row" | "column";
-  justifyContent?:
-    | "flex-start"
-    | "flex-end"
-    | "center"
-    | "space-between"
-    | "space-around";
-  alignItems?: "flex-start" | "flex-end" | "center" | "stretch";
-  gap?: string;
-  position?: "static" | "relative" | "absolute" | "fixed";
-  top?: string | number;
-  left?: string | number;
-  right?: string | number;
-  bottom?: string | number;
-  zIndex?: number;
-  opacity?: number;
-  transform?: string;
-  transition?: string;
-}
-
-export interface CanvasElement {
+export interface VisualElement {
   id: string;
-  type: string;
-  content: ElementContent;
-  style: ElementStyle;
+  type: BlockType;
+  stageId: string;
+  order: number;
+  content: {
+    text?: string;
+    html?: string;
+    src?: string;
+    alt?: string;
+    href?: string;
+    placeholder?: string;
+    options?: string[];
+    value?: any;
+    [key: string]: any;
+  };
+  style: {
+    width?: string;
+    height?: string;
+    padding?: string;
+    margin?: string;
+    backgroundColor?: string;
+    color?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    textAlign?: 'left' | 'center' | 'right';
+    borderRadius?: string;
+    border?: string;
+    [key: string]: any;
+  };
   visible: boolean;
   locked: boolean;
+}
+
+export interface VisualStage {
+  id: string;
+  title: string;
   order: number;
-}
-
-export interface GlobalStyles {
-  backgroundColor: string;
-  fontFamily: string;
-  primaryColor: string;
-  secondaryColor: string;
-  containerMaxWidth: string;
-  customCSS: string;
-}
-
-export interface EditorSettings {
-  showGrid: boolean;
-  snapToGrid: boolean;
-  gridSize: number;
-  showRulers: boolean;
-  showBoundingBoxes: boolean;
-  autoSave: boolean;
-  autoSaveInterval: number;
-}
-
-export interface VisualEditorState {
-  elements: CanvasElement[];
-  globalStyles: GlobalStyles;
-  selectedElementId: string | null;
-  hoveredElementId: string | null;
-  viewport: "desktop" | "tablet" | "mobile";
-  zoomLevel: number;
-  isPreviewMode: boolean;
-  settings: EditorSettings;
-}
-
-export interface VisualEditorData {
-  editorState: VisualEditorState;
-  pageInfo: {
-    title: string;
-    description: string;
-    slug: string;
-    published: boolean;
+  type: 'quiz' | 'result' | 'sales';
+  settings: {
+    showHeader: boolean;
+    showProgress: boolean;
+    allowBack: boolean;
+    backgroundColor?: string;
+    [key: string]: any;
   };
 }
 
-export interface ElementUpdate {
-  content?: Partial<ElementContent>;
-  style?: Partial<ElementStyle>;
-  visible?: boolean;
-  locked?: boolean;
-}
-
-export interface ComponentTemplate {
-  id: string;
-  name: string;
-  category: string;
-  icon: string;
-  isPremium: boolean;
-  defaultContent: ElementContent;
-  defaultStyle: ElementStyle;
-}
-
-export interface DraggedComponent {
-  type: string;
-  template: ComponentTemplate;
-}
-
-export interface DropZone {
-  id: string;
-  elementId?: string;
-  position: "before" | "after" | "inside";
+export interface VisualEditorState {
+  elements: VisualElement[];
+  stages: VisualStage[];
+  activeStageId: string | null;
+  history: VisualEditorState[];
+  historyIndex: number;
 }
