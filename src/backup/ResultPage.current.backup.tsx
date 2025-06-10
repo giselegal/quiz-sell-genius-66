@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -83,11 +84,14 @@ const ResultPage: React.FC = () => {
       guide: true
     }));
   }, [primaryStyle, globalStyles.logo]);
+
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
+
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
+
   const {
     category
   } = primaryStyle;
@@ -96,10 +100,47 @@ const ResultPage: React.FC = () => {
     guideImage,
     description
   } = styleConfig[category];
+
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
+
+  return (
+    <div className="min-h-screen bg-[#FAF9F7]">
+      {/* Content goes here */}
+      <main className="container mx-auto px-4 py-8">
+        <Card className="p-6">
+          <h1 className="text-2xl font-bold mb-4">Seu Resultado</h1>
+          {primaryStyle && (
+            <div>
+              <h2 className="text-xl font-semibold">Estilo: {category}</h2>
+              <p className="text-gray-600 mt-2">{description}</p>
+              
+              <div className="mt-6">
+                <img 
+                  src={image} 
+                  alt={`Estilo ${category}`}
+                  className="w-full max-w-md mx-auto rounded-lg shadow-lg"
+                />
+              </div>
+
+              <div className="mt-8 text-center">
+                <Button 
+                  onClick={handleCTAClick}
+                  className="bg-[#B89B7A] hover:bg-[#A08469] text-white px-8 py-3"
+                >
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  Transformar Meu Estilo
+                </Button>
+              </div>
+            </div>
+          )}
+        </Card>
+      </main>
+    </div>
+  );
+};
 
 export default ResultPage;
