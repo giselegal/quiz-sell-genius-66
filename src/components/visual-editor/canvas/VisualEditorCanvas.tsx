@@ -1,13 +1,10 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Plus, Edit3 } from 'lucide-react';
-import { VisualElement, VisualStage, BlockType } from '@/types/visualEditor';
-import { StageTab } from './StageTab';
 import { ElementRenderer } from './ElementRenderer';
-import { ITEM_TYPES } from '@/hooks/useDragAndDrop';
+import { VisualElement, VisualStage, BlockType } from '@/types/visualEditor';
+import { Edit3 } from 'lucide-react';
 
 interface VisualEditorCanvasProps {
   elements: VisualElement[];
@@ -16,10 +13,10 @@ interface VisualEditorCanvasProps {
   selectedElementId: string | null;
   isPreviewMode: boolean;
   viewportMode: 'desktop' | 'tablet' | 'mobile';
-  onElementSelect: (id: string) => void;
-  onElementUpdate: (id: string, updates: Partial<VisualElement>) => void;
-  onElementDelete: (id: string) => void;
-  onElementMove: (id: string, direction: 'up' | 'down') => void;
+  onElementSelect: (elementId: string) => void;
+  onElementUpdate: (elementId: string, updates: any) => void;
+  onElementDelete: (elementId: string) => void;
+  onElementMove: (elementId: string, direction: 'up' | 'down') => void;
   onElementAdd: (type: BlockType, position?: number) => void;
   onStageAdd: () => void;
   onStageSelect: (stageId: string) => void;
@@ -43,15 +40,11 @@ export const VisualEditorCanvas: React.FC<VisualEditorCanvasProps> = ({
   const canvasRef = useRef<HTMLDivElement>(null);
   const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
 
-  const currentStageElements = elements
-    .filter(el => el.stageId === activeStageId)
-    .sort((a, b) => a.order - b.order);
-
   const [{ isOver, canDrop }, drop] = useDrop({
-    accept: ITEM_TYPES.COMPONENT,
+    accept: 'component',
     drop: (item: { type: BlockType }, monitor) => {
       if (!monitor.didDrop()) {
-        const position = draggedOverIndex ?? currentStageElements.length;
+        const position = draggedOverIndex ?? stageElements.length;
         onElementAdd(item.type, position);
       }
     },
@@ -62,6 +55,10 @@ export const VisualEditorCanvas: React.FC<VisualEditorCanvasProps> = ({
   });
 
   drop(canvasRef);
+
+  // Filter elements for the active stage
+  const stageElements = elements.filter(el => el.stageId === activeStageId);
+  const activeStage = stages.find(stage => stage.id === activeStageId);
 
   const getViewportStyles = () => {
     switch (viewportMode) {
@@ -75,96 +72,103 @@ export const VisualEditorCanvas: React.FC<VisualEditorCanvasProps> = ({
   };
 
   return (
-    <div className="flex-1 bg-gray-100 flex flex-col">
-      {/* Stage Tabs */}
-      {!isPreviewMode && (
-        <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center gap-2 overflow-x-auto">
-          {stages.map(stage => (
-            <StageTab
-              key={stage.id}
-              stage={stage}
-              isActive={stage.id === activeStageId}
-              onClick={() => onStageSelect(stage.id)}
-            />
-          ))}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onStageAdd}
-            className="ml-2 text-gray-500 hover:text-gray-700"
-          >
-            <Plus className="w-4 h-4 mr-1" />
-            Nova Etapa
-          </Button>
+    <div className="flex-1 bg-gray-100 p-4 overflow-auto">
+      {/* Stage Header */}
+      {activeStage && !isPreviewMode && (
+        <div className="mb-4 bg-white rounded-lg p-3 shadow-sm border">
+          <h2 className="text-lg font-semibold text-gray-900">{activeStage.title}</h2>
+          <p className="text-sm text-gray-500">
+            {stageElements.length} componente{stageElements.length !== 1 ? 's' : ''}
+          </p>
         </div>
       )}
 
-      {/* Canvas Area */}
-      <div className="flex-1 p-4 overflow-auto">
-        <div className="mx-auto" style={getViewportStyles()}>
-          <div
-            ref={canvasRef}
-            className={`bg-white shadow-lg rounded-lg overflow-hidden relative min-h-[600px] ${
-              !isPreviewMode && isOver && canDrop ? 'ring-2 ring-blue-300' : ''
-            }`}
-          >
-            {/* Empty State */}
-            {currentStageElements.length === 0 && !isPreviewMode && (
-              <div className="flex items-center justify-center h-96 text-gray-500">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Edit3 className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-2">Canvas Vazio</h3>
-                  <p className="text-sm mb-4">
-                    Arraste componentes da biblioteca ou clique para adicionar
-                  </p>
-                  <Button onClick={() => onElementAdd('text')}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar Texto
-                  </Button>
+      <div className="mx-auto" style={getViewportStyles()}>
+        <div
+          ref={canvasRef}
+          className={`
+            bg-white shadow-lg rounded-lg overflow-hidden relative
+            ${!isPreviewMode && isOver && canDrop ? 'ring-2 ring-blue-300' : ''}
+          `}
+          style={{ minHeight: '600px' }}
+        >
+          {/* Empty State */}
+          {stageElements.length === 0 && !isPreviewMode && (
+            <div className="flex items-center justify-center h-96 text-gray-500">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Edit3 className="w-8 h-8" />
                 </div>
+                <h3 className="text-lg font-medium mb-2">Canvas Vazio</h3>
+                <p className="text-sm">
+                  {activeStage ? 
+                    `Adicione componentes à etapa "${activeStage.title}"` : 
+                    'Selecione uma etapa para começar a editar'
+                  }
+                </p>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Elements */}
+          {/* No Stage Selected */}
+          {!activeStageId && !isPreviewMode && (
+            <div className="flex items-center justify-center h-96 text-gray-500">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Edit3 className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-medium mb-2">Nenhuma Etapa Selecionada</h3>
+                <p className="text-sm">
+                  Selecione uma etapa na barra lateral para começar a editar
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Elements */}
+          {stageElements.length > 0 && (
             <AnimatePresence>
-              {currentStageElements.map((element, index) => (
-                <motion.div
-                  key={element.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  onMouseEnter={() => !isPreviewMode && setDraggedOverIndex(index)}
-                  onMouseLeave={() => !isPreviewMode && setDraggedOverIndex(null)}
-                >
-                  {/* Drop Zone Indicator */}
-                  {!isPreviewMode && draggedOverIndex === index && isOver && (
-                    <div className="h-2 bg-blue-200 border-2 border-dashed border-blue-400 rounded mx-4 mb-2" />
-                  )}
+              {stageElements
+                .sort((a, b) => a.order - b.order)
+                .map((element, index) => (
+                  <motion.div
+                    key={element.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    onMouseEnter={() => setDraggedOverIndex(index)}
+                    onMouseLeave={() => setDraggedOverIndex(null)}
+                  >
+                    {/* Drop Zone Indicator */}
+                    {!isPreviewMode && draggedOverIndex === index && isOver && (
+                      <div className="h-0.5 bg-blue-500 mx-4 mb-2" />
+                    )}
 
-                  <ElementRenderer
-                    element={element}
-                    isSelected={selectedElementId === element.id}
-                    isPreviewMode={isPreviewMode}
-                    onSelect={() => onElementSelect(element.id)}
-                    onUpdate={(updates) => onElementUpdate(element.id, updates)}
-                    onDelete={() => onElementDelete(element.id)}
-                    onMoveUp={() => onElementMove(element.id, 'up')}
-                    onMoveDown={() => onElementMove(element.id, 'down')}
-                    canMoveUp={index > 0}
-                    canMoveDown={index < currentStageElements.length - 1}
-                  />
-                </motion.div>
-              ))}
+                    <ElementRenderer
+                      element={element}
+                      isSelected={selectedElementId === element.id}
+                      isPreviewMode={isPreviewMode}
+                      onSelect={() => onElementSelect(element.id)}
+                      onUpdate={(updates) => onElementUpdate(element.id, updates)}
+                      onDelete={() => onElementDelete(element.id)}
+                      onMoveUp={index > 0 ? () => onElementMove(element.id, 'up') : undefined}
+                      onMoveDown={index < stageElements.length - 1 ? () => onElementMove(element.id, 'down') : undefined}
+                    />
+
+                    {/* Bottom Drop Zone */}
+                    {!isPreviewMode && draggedOverIndex === index + 1 && isOver && (
+                      <div className="h-0.5 bg-blue-500 mx-4 mt-2" />
+                    )}
+                  </motion.div>
+                ))}
             </AnimatePresence>
+          )}
 
-            {/* Final Drop Zone */}
-            {!isPreviewMode && currentStageElements.length > 0 && draggedOverIndex === currentStageElements.length && isOver && (
-              <div className="h-2 bg-blue-200 border-2 border-dashed border-blue-400 rounded mx-4 mt-2" />
-            )}
-          </div>
+          {/* Final Drop Zone */}
+          {!isPreviewMode && stageElements.length > 0 && draggedOverIndex === stageElements.length && isOver && (
+            <div className="h-0.5 bg-blue-500 mx-4 mt-4" />
+          )}
         </div>
       </div>
     </div>

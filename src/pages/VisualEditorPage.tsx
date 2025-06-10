@@ -3,7 +3,7 @@ import React, { useState, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { VisualEditorToolbar } from '@/components/visual-editor/toolbar/VisualEditorToolbar';
-import { ComponentLibrary } from '@/components/visual-editor/sidebar/ComponentLibrary';
+import { UnifiedSidebar } from '@/components/visual-editor/sidebar/UnifiedSidebar';
 import { VisualEditorCanvas } from '@/components/visual-editor/canvas/VisualEditorCanvas';
 import { PropertiesPanel } from '@/components/visual-editor/properties/VisualEditorProperties';
 import { useVisualEditor } from '@/hooks/useVisualEditor';
@@ -65,7 +65,14 @@ const VisualEditorPage: React.FC = () => {
         
         <div className="flex flex-1 overflow-hidden">
           {!isPreviewMode && (
-            <ComponentLibrary onComponentAdd={handleElementAdd} />
+            <UnifiedSidebar
+              stages={stages}
+              activeStageId={activeStageId}
+              onStageSelect={setActiveStage}
+              onStageAdd={addStage}
+              onComponentAdd={handleElementAdd}
+              elements={elements}
+            />
           )}
           
           <VisualEditorCanvas
