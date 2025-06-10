@@ -154,6 +154,8 @@ export const VisualEditorCanvas: React.FC<VisualEditorCanvasProps> = ({
                       onDelete={() => onElementDelete(element.id)}
                       onMoveUp={index > 0 ? () => onElementMove(element.id, 'up') : undefined}
                       onMoveDown={index < stageElements.length - 1 ? () => onElementMove(element.id, 'down') : undefined}
+                      canMoveUp={index > 0}
+                      canMoveDown={index < stageElements.length - 1}
                     />
 
                     {/* Bottom Drop Zone */}

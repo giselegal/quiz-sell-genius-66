@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -23,7 +22,7 @@ import {
   DollarSign,
   AlertTriangle,
   BarChart3,
-  Carousel,
+  Images,
   TrendingUp,
   Code,
   Minus,
@@ -107,7 +106,7 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
     {
       title: 'Avançado',
       components: [
-        { type: 'carousel', icon: Carousel, label: 'Carrossel' },
+        { type: 'carousel', icon: Images, label: 'Carrossel' },
         { type: 'chart', icon: BarChart3, label: 'Gráfico' },
         { type: 'progress', icon: TrendingUp, label: 'Progresso' },
         { type: 'script', icon: Code, label: 'Script' },
