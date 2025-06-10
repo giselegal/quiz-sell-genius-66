@@ -1,0 +1,140 @@
+
+import React, { useRef, useState } from 'react';
+import { useDrop } from 'react-dnd';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ResultPageElementRenderer } from './ResultPageElementRenderer';
+import { ResultPageElement, ResultPageBlockType } from '@/types/resultPageEditor';
+import { StyleResult } from '@/types/quiz';
+import { Edit3 } from 'lucide-react';
+
+interface ResultPageCanvasProps {
+  elements: ResultPageElement[];
+  primaryStyle: StyleResult;
+  selectedElementId: string | null;
+  isPreviewMode: boolean;
+  viewportMode: 'desktop' | 'tablet' | 'mobile';
+  onElementSelect: (elementId: string) => void;
+  onElementUpdate: (elementId: string, updates: any) => void;
+  onElementDelete: (elementId: string) => void;
+  onElementMove: (elementId: string, direction: 'up' | 'down') => void;
+  onElementAdd: (type: ResultPageBlockType, position?: number) => void;
+}
+
+export const ResultPageCanvas: React.FC<ResultPageCanvasProps> = ({
+  elements,
+  primaryStyle,
+  selectedElementId,
+  isPreviewMode,
+  viewportMode,
+  onElementSelect,
+  onElementUpdate,
+  onElementDelete,
+  onElementMove,
+  onElementAdd
+}) => {
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
+
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: 'component',
+    drop: (item: { type: ResultPageBlockType }, monitor) => {
+      if (!monitor.didDrop()) {
+        const position = draggedOverIndex ?? elements.length;
+        onElementAdd(item.type, position);
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  });
+
+  drop(canvasRef);
+
+  const getViewportStyles = () => {
+    switch (viewportMode) {
+      case 'mobile':
+        return { width: '375px', minHeight: '667px' };
+      case 'tablet':
+        return { width: '768px', minHeight: '1024px' };
+      default:
+        return { width: '100%', minHeight: '100vh' };
+    }
+  };
+
+  const sortedElements = elements.sort((a, b) => a.order - b.order);
+
+  return (
+    <div className="flex-1 bg-gray-100 p-4 overflow-auto">
+      <div className="mx-auto" style={getViewportStyles()}>
+        <div
+          ref={canvasRef}
+          className={`
+            bg-white shadow-lg rounded-lg overflow-hidden relative
+            ${!isPreviewMode && isOver && canDrop ? 'ring-2 ring-blue-300' : ''}
+          `}
+          style={{ minHeight: '600px' }}
+        >
+          {/* Empty State */}
+          {elements.length === 0 && !isPreviewMode && (
+            <div className="flex items-center justify-center h-96 text-gray-500">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Edit3 className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-medium mb-2">Página de Resultado Vazia</h3>
+                <p className="text-sm">
+                  Adicione componentes da sidebar para começar a construir sua página de resultado
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Elements */}
+          {sortedElements.length > 0 && (
+            <AnimatePresence>
+              {sortedElements.map((element, index) => (
+                <motion.div
+                  key={element.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  onMouseEnter={() => setDraggedOverIndex(index)}
+                  onMouseLeave={() => setDraggedOverIndex(null)}
+                >
+                  {/* Drop Zone Indicator */}
+                  {!isPreviewMode && draggedOverIndex === index && isOver && (
+                    <div className="h-0.5 bg-blue-500 mx-4 mb-2" />
+                  )}
+
+                  <ResultPageElementRenderer
+                    element={element}
+                    primaryStyle={primaryStyle}
+                    isSelected={selectedElementId === element.id}
+                    isPreviewMode={isPreviewMode}
+                    onSelect={() => onElementSelect(element.id)}
+                    onUpdate={(updates) => onElementUpdate(element.id, updates)}
+                    onDelete={() => onElementDelete(element.id)}
+                    onMoveUp={index > 0 ? () => onElementMove(element.id, 'up') : undefined}
+                    onMoveDown={index < sortedElements.length - 1 ? () => onElementMove(element.id, 'down') : undefined}
+                  />
+
+                  {/* Bottom Drop Zone */}
+                  {!isPreviewMode && draggedOverIndex === index + 1 && isOver && (
+                    <div className="h-0.5 bg-blue-500 mx-4 mt-2" />
+                  )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          )}
+
+          {/* Final Drop Zone */}
+          {!isPreviewMode && sortedElements.length > 0 && draggedOverIndex === sortedElements.length && isOver && (
+            <div className="h-0.5 bg-blue-500 mx-4 mt-4" />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
