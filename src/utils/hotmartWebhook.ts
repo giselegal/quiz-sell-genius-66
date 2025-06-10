@@ -1,41 +1,37 @@
 
-import { HotmartPurchase, HotmartBuyer } from '@/types/hotmart';
-import { getUserDataForEmail, storeUserForHotmart } from './userManagement';
-import { trackConversion } from './analytics';
-
-export interface HotmartWebhookPayload {
-  event: string;
-  data: any;
+// Utilidade para integração com webhook do Hotmart
+interface UserData {
+  quiz_results?: any;
+  funnel_step?: string;
+  page_url?: string;
+  timestamp?: number;
 }
 
+// Manager para webhook do Hotmart
 export const hotmartWebhookManager = {
-  async processWebhook(payload: any) {
-    try {
-      const purchaseData = payload as HotmartPurchase;
-      
-      if (purchaseData.event === 'PURCHASE_COMPLETE') {
-        // Track conversion using the available trackConversion function
-        trackConversion('purchase', {
-          email: purchaseData.data.buyer.email,
-          value: purchaseData.data.purchase.price.value,
-          currency: purchaseData.data.purchase.price.currency_code,
-          product_name: purchaseData.data.product.name
-        });
-        
-        // Store user data
-        const userData = getUserDataForEmail(purchaseData.data.buyer.email);
-        if (userData) {
-          console.log('[Hotmart] Correlação encontrada:', userData);
-        }
-      }
-      
-      return { success: true };
-    } catch (error) {
-      console.error('[Hotmart] Erro no webhook:', error);
-      return { success: false, error };
-    }
+  isEnabled: () => {
+    return process.env.NODE_ENV === 'production';
   }
 };
 
-// Export the function that was missing
-export { storeUserForHotmart };
+// Função para armazenar dados do usuário para correlação futura
+export const storeUserForHotmart = (email: string, data: UserData) => {
+  if (!email || !hotmartWebhookManager.isEnabled()) {
+    console.log('[Hotmart] Webhook disabled or missing email');
+    return;
+  }
+
+  const userData = {
+    ...data,
+    timestamp: Date.now(),
+    email
+  };
+
+  // Armazenar no localStorage para correlação futura
+  try {
+    localStorage.setItem(`hotmart_user_${email}`, JSON.stringify(userData));
+    console.log('[Hotmart] User data stored for correlation:', email);
+  } catch (error) {
+    console.error('[Hotmart] Error storing user data:', error);
+  }
+};
