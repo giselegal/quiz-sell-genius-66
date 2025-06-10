@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -8,7 +9,17 @@ import { EditorToolbar } from "./toolbar/EditorToolbar";
 import { ElementPropertiesPanel } from "./properties/ElementPropertiesPanel";
 import { useEditorState } from "@/hooks/useEditorState";
 import { useUndoRedo } from "@/hooks/useUndoRedo";
-import type { VisualEditorData, ElementUpdate } from "@/types/visualEditor";
+import type { VisualEditorState, ElementUpdate } from "@/types/visualEditor";
+
+interface VisualEditorData {
+  editorState: VisualEditorState;
+  pageInfo: {
+    title: string;
+    description: string;
+    slug: string;
+    published: boolean;
+  };
+}
 
 interface VisualEditorProps {
   initialData?: VisualEditorData;

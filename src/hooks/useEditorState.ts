@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import type {
-  CanvasElement,
+  VisualElement,
   VisualEditorState,
   VisualEditorData,
   ElementUpdate,
@@ -32,6 +32,20 @@ const defaultSettings: EditorSettings = {
 
 const defaultEditorState: VisualEditorState = {
   elements: [],
+  stages: [{
+    id: 'stage-1',
+    title: 'Etapa 1',
+    order: 0,
+    type: 'quiz',
+    settings: {
+      showHeader: true,
+      showProgress: true,
+      allowBack: true
+    }
+  }],
+  activeStageId: 'stage-1',
+  history: [],
+  historyIndex: -1,
   globalStyles: defaultGlobalStyles,
   selectedElementId: null,
   hoveredElementId: null,
@@ -46,7 +60,7 @@ const getComponentDefaults = (
   type: string
 ): { content: ElementContent; style: ElementStyle } => {
   const defaults = {
-    heading: {
+    title: {
       content: { text: "Nova seção" },
       style: {
         fontSize: "32px",
@@ -56,7 +70,7 @@ const getComponentDefaults = (
         margin: "10px 0",
       },
     },
-    paragraph: {
+    text: {
       content: { text: "Digite seu texto aqui..." },
       style: {
         fontSize: "16px",
@@ -85,14 +99,6 @@ const getComponentDefaults = (
         margin: "10px 0",
       },
     },
-    divider: {
-      content: {},
-      style: {
-        height: "1px",
-        backgroundColor: "#e5e7eb",
-        margin: "20px 0",
-      },
-    },
     spacer: {
       content: {},
       style: {
@@ -102,7 +108,7 @@ const getComponentDefaults = (
     },
   };
 
-  return defaults[type as keyof typeof defaults] || defaults.paragraph;
+  return defaults[type as keyof typeof defaults] || defaults.text;
 };
 
 export function useEditorState(initialData?: VisualEditorData) {
@@ -143,9 +149,10 @@ export function useEditorState(initialData?: VisualEditorData) {
       const order =
         position !== undefined ? position : editorState.elements.length;
 
-      const newElement: CanvasElement = {
+      const newElement: VisualElement = {
         id,
-        type: componentType,
+        type: componentType as any,
+        stageId: editorState.activeStageId || editorState.stages[0]?.id || 'stage-1',
         content,
         style,
         visible: true,
@@ -175,7 +182,7 @@ export function useEditorState(initialData?: VisualEditorData) {
       nextElementId.current += 1;
       return id;
     },
-    [editorState.elements.length, saveToLocalStorage]
+    [editorState.elements.length, editorState.activeStageId, editorState.stages, saveToLocalStorage]
   );
 
   const updateElement = useCallback(
@@ -263,7 +270,7 @@ export function useEditorState(initialData?: VisualEditorData) {
         );
         if (!elementToDuplicate) return prev;
 
-        const newElement: CanvasElement = {
+        const newElement: VisualElement = {
           ...elementToDuplicate,
           id: uuidv4(),
           order: elementToDuplicate.order + 1,
@@ -290,7 +297,7 @@ export function useEditorState(initialData?: VisualEditorData) {
       setEditorState((prev) => {
         const newState = {
           ...prev,
-          globalStyles: { ...prev.globalStyles, ...updates },
+          globalStyles: { ...prev.globalStyles!, ...updates },
         };
         saveToLocalStorage(newState);
         return newState;

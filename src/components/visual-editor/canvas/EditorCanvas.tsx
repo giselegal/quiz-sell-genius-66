@@ -20,13 +20,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { CanvasElement } from "@/types/visualEditor";
+import type { VisualElement } from "@/types/visualEditor";
 
 interface EditorCanvasProps {
-  elements: CanvasElement[];
+  elements: VisualElement[];
   selectedElementId: string | null;
   onElementSelect: (id: string) => void;
-  onElementUpdate: (id: string, updates: Partial<CanvasElement>) => void;
+  onElementUpdate: (id: string, updates: Partial<VisualElement>) => void;
   onElementMove: (id: string, direction: "up" | "down") => void;
   onElementDelete: (id: string) => void;
   onElementDuplicate: (id: string) => void;
@@ -77,7 +77,7 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
     }
   };
 
-  const renderElement = (element: CanvasElement, index: number) => {
+  const renderElement = (element: VisualElement, index: number) => {
     const isSelected = selectedElementId === element.id;
     const isVisible = element.visible;
 
@@ -254,10 +254,10 @@ export const EditorCanvas: React.FC<EditorCanvasProps> = ({
 
 // Element Renderer Component
 interface ElementRendererProps {
-  element: CanvasElement;
+  element: VisualElement;
   isSelected: boolean;
   isPreviewMode: boolean;
-  onUpdate: (updates: Partial<CanvasElement>) => void;
+  onUpdate: (updates: Partial<VisualElement>) => void;
 }
 
 const ElementRenderer: React.FC<ElementRendererProps> = ({
@@ -275,7 +275,7 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({
 
   // Render different element types
   switch (element.type) {
-    case "heading":
+    case "title":
       return (
         <div className="p-4" style={element.style}>
           <h1
@@ -348,3 +348,5 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({
       );
   }
 };
+
+export default EditorCanvas;

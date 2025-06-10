@@ -4,7 +4,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { VisualEditorToolbar } from '@/components/visual-editor/toolbar/VisualEditorToolbar';
 import { ComponentLibrary } from '@/components/visual-editor/sidebar/ComponentLibrary';
-import { EditorCanvas } from '@/components/visual-editor/canvas/VisualEditorCanvas';
+import { VisualEditorCanvas } from '@/components/visual-editor/canvas/VisualEditorCanvas';
 import { PropertiesPanel } from '@/components/visual-editor/properties/VisualEditorProperties';
 import { useVisualEditor } from '@/hooks/useVisualEditor';
 import { BlockType } from '@/types/visualEditor';
@@ -68,7 +68,7 @@ const VisualEditorPage: React.FC = () => {
             <ComponentLibrary onComponentAdd={handleElementAdd} />
           )}
           
-          <EditorCanvas
+          <VisualEditorCanvas
             elements={elements}
             stages={stages}
             activeStageId={activeStageId}
