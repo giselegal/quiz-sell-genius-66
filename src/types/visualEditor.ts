@@ -1,4 +1,3 @@
-
 export type BlockType = 
   | 'text' 
   | 'title' 
@@ -21,7 +20,10 @@ export type BlockType =
   | 'progress' 
   | 'script' 
   | 'spacer' 
-  | 'terms';
+  | 'terms'
+  | 'loading'
+  | 'level'
+  | 'calendar';
 
 export interface ElementContent {
   text?: string;

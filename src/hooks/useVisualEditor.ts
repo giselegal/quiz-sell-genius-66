@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useRef } from 'react';
 import { VisualElement, VisualStage, VisualEditorState, BlockType } from '@/types/visualEditor';
 import { toast } from '@/components/ui/use-toast';
@@ -207,6 +206,12 @@ const getDefaultContent = (type: BlockType): any => {
       return { placeholder: 'seu@email.com', type: 'email' };
     case 'phone':
       return { placeholder: '(11) 99999-9999', type: 'tel' };
+    case 'loading':
+      return { text: 'Carregando...', type: 'spinner' };
+    case 'level':
+      return { level: 1, maxLevel: 5, label: 'Nível' };
+    case 'calendar':
+      return { placeholder: 'Selecione uma data', type: 'date' };
     default:
       return {};
   }
@@ -229,6 +234,12 @@ const getDefaultStyle = (type: BlockType): any => {
       };
     case 'image':
       return { width: '100%', height: 'auto', borderRadius: '0.5rem' };
+    case 'loading':
+      return { textAlign: 'center', padding: '1rem', color: '#666' };
+    case 'level':
+      return { display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem' };
+    case 'calendar':
+      return { width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #ccc' };
     default:
       return {};
   }
