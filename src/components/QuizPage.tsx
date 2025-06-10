@@ -43,7 +43,7 @@ const QuizPage: React.FC = () => {
       storeUserForHotmart(user.userName, {
         name: user.userName,
         quizStarted: true,
-        timestamp: new Date().toISOString()
+        timestamp: Date.now()
       });
     }
   }, [user?.userName]);
