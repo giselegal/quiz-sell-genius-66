@@ -52,7 +52,6 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
     return elements.filter(el => el.stageId === stageId).length;
   };
 
-  // Lista simplificada de componentes como na imagem
   const components = [
     { type: 'title', icon: Type, label: 'Título' },
     { type: 'text', icon: FileText, label: 'Texto' },
@@ -77,53 +76,55 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
   ];
 
   return (
-    <div className="w-80 bg-gray-900 text-white flex flex-col h-full">
-      {/* Seção de Etapas */}
-      <div className="p-4 border-b border-gray-700">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-medium text-gray-200 text-sm">Etapas</h3>
-          <Button
-            onClick={onStageAdd}
-            size="sm"
-            variant="ghost"
-            className="h-6 w-6 p-0 text-gray-400 hover:text-white hover:bg-gray-700"
-          >
-            <Plus className="w-3 h-3" />
-          </Button>
-        </div>
-        
-        <div className="space-y-1">
-          {stages.map((stage, index) => (
-            <div
-              key={stage.id}
-              className={`
-                flex items-center gap-3 px-2 py-2 rounded cursor-pointer transition-colors text-sm
-                ${activeStageId === stage.id 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }
-              `}
-              onClick={() => onStageSelect(stage.id)}
+    <div className="w-80 bg-white border-r border-gray-200 flex h-full">
+      {/* Coluna de Etapas */}
+      <div className="w-40 bg-gray-50 border-r border-gray-200 flex flex-col h-full">
+        <div className="p-3 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium text-gray-900 text-sm">Etapas</h3>
+            <Button
+              onClick={onStageAdd}
+              size="sm"
+              variant="ghost"
+              className="h-6 w-6 p-0 text-gray-600 hover:text-gray-900 hover:bg-gray-200"
             >
-              <MoreHorizontal className="w-3 h-3 text-gray-500" />
-              <div className="flex-1 min-w-0">
-                <span className="truncate">{stage.title}</span>
-              </div>
-              <Badge 
-                variant="secondary" 
-                className="text-xs bg-gray-700 text-gray-300 border-0"
+              <Plus className="w-3 h-3" />
+            </Button>
+          </div>
+          
+          <div className="space-y-1">
+            {stages.map((stage, index) => (
+              <div
+                key={stage.id}
+                className={`
+                  flex items-center gap-2 px-2 py-2 rounded cursor-pointer transition-colors text-sm
+                  ${activeStageId === stage.id 
+                    ? 'bg-blue-100 text-blue-900 border border-blue-200' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                  }
+                `}
+                onClick={() => onStageSelect(stage.id)}
               >
-                {getElementCountForStage(stage.id)}
-              </Badge>
-            </div>
-          ))}
+                <MoreHorizontal className="w-3 h-3 text-gray-400" />
+                <div className="flex-1 min-w-0">
+                  <span className="truncate text-xs">{stage.title}</span>
+                </div>
+                <Badge 
+                  variant="secondary" 
+                  className="text-xs bg-gray-200 text-gray-600 border-0 px-1"
+                >
+                  {getElementCountForStage(stage.id)}
+                </Badge>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Seção de Componentes */}
+      {/* Coluna de Componentes */}
       <div className="flex-1 flex flex-col">
-        <div className="p-4 border-b border-gray-700">
-          <h3 className="font-medium text-gray-200 text-sm">Componentes</h3>
+        <div className="p-3 border-b border-gray-200">
+          <h3 className="font-medium text-gray-900 text-sm">Componentes</h3>
         </div>
 
         <ScrollArea className="flex-1">
@@ -135,7 +136,7 @@ export const UnifiedSidebar: React.FC<UnifiedSidebarProps> = ({
                   key={component.type}
                   variant="ghost"
                   size="sm"
-                  className="w-full justify-start gap-3 h-9 px-3 mb-1 text-gray-300 hover:bg-gray-700 hover:text-white"
+                  className="w-full justify-start gap-3 h-9 px-3 mb-1 text-gray-700 hover:bg-gray-100"
                   onClick={() => onComponentAdd(component.type as BlockType)}
                 >
                   <Icon className="w-4 h-4" />
