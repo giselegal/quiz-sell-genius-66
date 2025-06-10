@@ -1,8 +1,10 @@
 
+import { tokens } from "@/config/designTokens";
+
 export const createGlobalStyles = () => ({
-  primaryColor: '#B89B7A',
-  secondaryColor: '#432818',
-  textColor: '#1A1818',
-  backgroundColor: '#fffaf7',
+  primaryColor: tokens.colors.primary,
+  secondaryColor: tokens.colors.secondary,
+  textColor: tokens.colors.text,
+  backgroundColor: tokens.colors.background,
   fontFamily: 'Playfair Display'
 });
