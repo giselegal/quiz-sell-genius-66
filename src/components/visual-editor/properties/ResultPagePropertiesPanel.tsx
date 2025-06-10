@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { X } from 'lucide-react';
+import { X, Trash2 } from 'lucide-react';
 import { ResultPageBlock } from '@/types/resultPageBlocks';
 
 interface ResultPagePropertiesPanelProps {
@@ -25,193 +25,168 @@ export const ResultPagePropertiesPanel: React.FC<ResultPagePropertiesPanelProps>
   onDelete
 }) => {
   const block = blocks.find(b => b.id === blockId);
-  
+
   if (!block) {
-    return (
-      <div className="w-80 bg-white border-l border-gray-200 p-4">
-        <p className="text-gray-500">Nenhum bloco selecionado</p>
-      </div>
-    );
+    return null;
   }
 
-  const updateContent = (path: string, value: any) => {
-    const [section, field] = path.split('.');
-    onUpdate(blockId, {
-      content: {
-        ...block.content,
-        [section]: {
-          ...block.content[section as keyof typeof block.content],
-          [field]: value
-        }
+  const handleContentUpdate = (path: string, value: any) => {
+    const pathArray = path.split('.');
+    const updatedContent = { ...block.content };
+    
+    let current = updatedContent;
+    for (let i = 0; i < pathArray.length - 1; i++) {
+      if (!current[pathArray[i]]) {
+        current[pathArray[i]] = {};
       }
-    });
+      current = current[pathArray[i]];
+    }
+    current[pathArray[pathArray.length - 1]] = value;
+
+    onUpdate(blockId, { content: updatedContent });
   };
 
-  const renderHeaderProperties = () => {
-    const content = block.content.header || {};
-    return (
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="logo">URL do Logo</Label>
-          <Input
-            id="logo"
-            value={content.logo || ''}
-            onChange={(e) => updateContent('header.logo', e.target.value)}
-            placeholder="URL da imagem do logo"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="logoAlt">Texto Alternativo</Label>
-          <Input
-            id="logoAlt"
-            value={content.logoAlt || ''}
-            onChange={(e) => updateContent('header.logoAlt', e.target.value)}
-            placeholder="Texto alternativo do logo"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="logoHeight">Altura do Logo (px)</Label>
-          <Input
-            id="logoHeight"
-            type="number"
-            value={content.logoHeight || 80}
-            onChange={(e) => updateContent('header.logoHeight', parseInt(e.target.value))}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="userName">Nome do Usuário</Label>
-          <Input
-            id="userName"
-            value={content.userName || ''}
-            onChange={(e) => updateContent('header.userName', e.target.value)}
-            placeholder="Nome que aparecerá no cabeçalho"
-          />
-        </div>
-      </div>
-    );
-  };
-
-  const renderStyleResultProperties = () => {
-    const content = block.content.styleResult || {};
-    return (
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="description">Descrição Personalizada</Label>
-          <Textarea
-            id="description"
-            rows={4}
-            value={content.description || ''}
-            onChange={(e) => updateContent('styleResult.description', e.target.value)}
-            placeholder="Descrição personalizada para o estilo..."
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="customImage">Imagem Personalizada (URL)</Label>
-          <Input
-            id="customImage"
-            value={content.customImage || ''}
-            onChange={(e) => updateContent('styleResult.customImage', e.target.value)}
-            placeholder="URL da imagem personalizada"
-          />
-        </div>
-        <div className="flex items-center space-x-2">
-          <Switch
-            id="showSecondaryStyles"
-            checked={content.showSecondaryStyles !== false}
-            onCheckedChange={(checked) => updateContent('styleResult.showSecondaryStyles', checked)}
-          />
-          <Label htmlFor="showSecondaryStyles">Mostrar Estilos Secundários</Label>
-        </div>
-      </div>
-    );
-  };
-
-  const renderCTAProperties = () => {
-    const content = block.content.cta || {};
-    return (
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="title">Título</Label>
-          <Input
-            id="title"
-            value={content.title || ''}
-            onChange={(e) => updateContent('cta.title', e.target.value)}
-            placeholder="Título do CTA"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="subtitle">Subtítulo</Label>
-          <Textarea
-            id="subtitle"
-            rows={2}
-            value={content.subtitle || ''}
-            onChange={(e) => updateContent('cta.subtitle', e.target.value)}
-            placeholder="Subtítulo do CTA"
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-2">
-            <Label htmlFor="regularPrice">Preço Normal</Label>
-            <Input
-              id="regularPrice"
-              value={content.regularPrice || ''}
-              onChange={(e) => updateContent('cta.regularPrice', e.target.value)}
-              placeholder="R$ 175,00"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="salePrice">Preço Promocional</Label>
-            <Input
-              id="salePrice"
-              value={content.salePrice || ''}
-              onChange={(e) => updateContent('cta.salePrice', e.target.value)}
-              placeholder="R$ 39,00"
-            />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="installments">Parcelamento</Label>
-          <Input
-            id="installments"
-            value={content.installments || ''}
-            onChange={(e) => updateContent('cta.installments', e.target.value)}
-            placeholder="4X de R$ 10,86"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="ctaText">Texto do Botão</Label>
-          <Input
-            id="ctaText"
-            value={content.ctaText || ''}
-            onChange={(e) => updateContent('cta.ctaText', e.target.value)}
-            placeholder="Texto do botão de ação"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="ctaUrl">URL do Botão</Label>
-          <Input
-            id="ctaUrl"
-            value={content.ctaUrl || ''}
-            onChange={(e) => updateContent('cta.ctaUrl', e.target.value)}
-            placeholder="https://..."
-          />
-        </div>
-      </div>
-    );
-  };
-
-  const renderProperties = () => {
+  const renderPropertiesForType = () => {
     switch (block.type) {
       case 'header':
-        return renderHeaderProperties();
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="logo">URL do Logo</Label>
+              <Input
+                id="logo"
+                value={block.content.header?.logo || ''}
+                onChange={(e) => handleContentUpdate('header.logo', e.target.value)}
+                placeholder="URL da imagem do logo"
+              />
+            </div>
+            <div>
+              <Label htmlFor="logoAlt">Texto Alternativo do Logo</Label>
+              <Input
+                id="logoAlt"
+                value={block.content.header?.logoAlt || ''}
+                onChange={(e) => handleContentUpdate('header.logoAlt', e.target.value)}
+                placeholder="Texto alternativo"
+              />
+            </div>
+            <div>
+              <Label htmlFor="logoHeight">Altura do Logo (px)</Label>
+              <Input
+                id="logoHeight"
+                type="number"
+                value={block.content.header?.logoHeight || 80}
+                onChange={(e) => handleContentUpdate('header.logoHeight', parseInt(e.target.value))}
+              />
+            </div>
+            <div>
+              <Label htmlFor="userName">Nome do Usuário</Label>
+              <Input
+                id="userName"
+                value={block.content.header?.userName || ''}
+                onChange={(e) => handleContentUpdate('header.userName', e.target.value)}
+                placeholder="Nome para exibir"
+              />
+            </div>
+          </div>
+        );
+
       case 'styleResult':
-        return renderStyleResultProperties();
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="description">Descrição</Label>
+              <Textarea
+                id="description"
+                value={block.content.styleResult?.description || ''}
+                onChange={(e) => handleContentUpdate('styleResult.description', e.target.value)}
+                placeholder="Descrição do resultado do estilo"
+                rows={3}
+              />
+            </div>
+            <div>
+              <Label htmlFor="customImage">Imagem Personalizada</Label>
+              <Input
+                id="customImage"
+                value={block.content.styleResult?.customImage || ''}
+                onChange={(e) => handleContentUpdate('styleResult.customImage', e.target.value)}
+                placeholder="URL da imagem personalizada"
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="showSecondaryStyles"
+                checked={block.content.styleResult?.showSecondaryStyles || false}
+                onCheckedChange={(checked) => handleContentUpdate('styleResult.showSecondaryStyles', checked)}
+              />
+              <Label htmlFor="showSecondaryStyles">Mostrar estilos secundários</Label>
+            </div>
+          </div>
+        );
+
       case 'cta':
-        return renderCTAProperties();
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="title">Título</Label>
+              <Input
+                id="title"
+                value={block.content.cta?.title || ''}
+                onChange={(e) => handleContentUpdate('cta.title', e.target.value)}
+                placeholder="Título do CTA"
+              />
+            </div>
+            <div>
+              <Label htmlFor="subtitle">Subtítulo</Label>
+              <Input
+                id="subtitle"
+                value={block.content.cta?.subtitle || ''}
+                onChange={(e) => handleContentUpdate('cta.subtitle', e.target.value)}
+                placeholder="Subtítulo"
+              />
+            </div>
+            <div>
+              <Label htmlFor="regularPrice">Preço Regular</Label>
+              <Input
+                id="regularPrice"
+                value={block.content.cta?.regularPrice || ''}
+                onChange={(e) => handleContentUpdate('cta.regularPrice', e.target.value)}
+                placeholder="R$ 175,00"
+              />
+            </div>
+            <div>
+              <Label htmlFor="salePrice">Preço Promocional</Label>
+              <Input
+                id="salePrice"
+                value={block.content.cta?.salePrice || ''}
+                onChange={(e) => handleContentUpdate('cta.salePrice', e.target.value)}
+                placeholder="R$ 39,00"
+              />
+            </div>
+            <div>
+              <Label htmlFor="ctaText">Texto do Botão</Label>
+              <Input
+                id="ctaText"
+                value={block.content.cta?.ctaText || ''}
+                onChange={(e) => handleContentUpdate('cta.ctaText', e.target.value)}
+                placeholder="Texto do botão"
+              />
+            </div>
+            <div>
+              <Label htmlFor="ctaUrl">URL do Botão</Label>
+              <Input
+                id="ctaUrl"
+                value={block.content.cta?.ctaUrl || ''}
+                onChange={(e) => handleContentUpdate('cta.ctaUrl', e.target.value)}
+                placeholder="URL de destino"
+              />
+            </div>
+          </div>
+        );
+
       default:
         return (
-          <div className="text-gray-500 text-center py-8">
-            <p>Propriedades para "{block.type}" não implementadas ainda</p>
+          <div className="text-center text-gray-500 py-4">
+            <p>Propriedades para o tipo "{block.type}" ainda não implementadas</p>
           </div>
         );
     }
@@ -226,27 +201,41 @@ export const ResultPagePropertiesPanel: React.FC<ResultPagePropertiesPanelProps>
         </Button>
       </div>
 
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-2">Tipo</h4>
-            <p className="text-sm text-gray-600 capitalize">{block.type}</p>
-          </div>
+      <div className="flex-1 overflow-auto p-4">
+        <Card className="mb-4">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium capitalize">
+              {block.type} Block
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            {renderPropertiesForType()}
+          </CardContent>
+        </Card>
 
-          {renderProperties()}
-
-          <div className="pt-4 border-t border-gray-200">
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => onDelete(block.id)}
-              className="w-full"
-            >
-              Excluir Bloco
-            </Button>
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="visible"
+              checked={block.visible}
+              onCheckedChange={(checked) => onUpdate(blockId, { visible: checked })}
+            />
+            <Label htmlFor="visible">Visível</Label>
           </div>
         </div>
-      </ScrollArea>
+      </div>
+
+      <div className="p-4 border-t border-gray-200">
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => onDelete(blockId)}
+          className="w-full"
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Excluir Bloco
+        </Button>
+      </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ import {
   Star,
   Gift,
   User,
-  Header,
+  Layout,
   Zap,
   Target,
   Award
@@ -28,7 +28,7 @@ export const ResultPageSidebar: React.FC<ResultPageSidebarProps> = ({
   primaryStyle
 }) => {
   const resultComponents = [
-    { type: 'header', icon: Header, label: 'Cabeçalho', color: 'text-gray-600' },
+    { type: 'header', icon: Layout, label: 'Cabeçalho', color: 'text-gray-600' },
     { type: 'styleResult', icon: Trophy, label: 'Resultado do Estilo', color: 'text-yellow-600' },
     { type: 'transformation', icon: Zap, label: 'Transformações', color: 'text-purple-600' },
     { type: 'motivation', icon: Target, label: 'Motivação', color: 'text-blue-600' },
