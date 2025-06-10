@@ -3,34 +3,34 @@ import React, { useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ResultPageElementRenderer } from './ResultPageElementRenderer';
-import { ResultPageElement, ResultPageBlockType } from '@/types/resultPageEditor';
+import { ResultPageBlock, ResultPageBlockType } from '@/types/resultPageBlocks';
 import { StyleResult } from '@/types/quiz';
 import { Edit3 } from 'lucide-react';
 
 interface ResultPageCanvasProps {
-  elements: ResultPageElement[];
+  blocks: ResultPageBlock[];
   primaryStyle: StyleResult;
-  selectedElementId: string | null;
+  selectedBlockId: string | null;
   isPreviewMode: boolean;
   viewportMode: 'desktop' | 'tablet' | 'mobile';
-  onElementSelect: (elementId: string) => void;
-  onElementUpdate: (elementId: string, updates: any) => void;
-  onElementDelete: (elementId: string) => void;
-  onElementMove: (elementId: string, direction: 'up' | 'down') => void;
-  onElementAdd: (type: ResultPageBlockType, position?: number) => void;
+  onSelectBlock: (blockId: string) => void;
+  onUpdateBlock: (blockId: string, updates: any) => void;
+  onDeleteBlock: (blockId: string) => void;
+  onMoveBlock: (blockId: string, direction: 'up' | 'down') => void;
+  onAddBlock: (type: ResultPageBlockType, position?: number) => void;
 }
 
 export const ResultPageCanvas: React.FC<ResultPageCanvasProps> = ({
-  elements,
+  blocks,
   primaryStyle,
-  selectedElementId,
+  selectedBlockId,
   isPreviewMode,
   viewportMode,
-  onElementSelect,
-  onElementUpdate,
-  onElementDelete,
-  onElementMove,
-  onElementAdd
+  onSelectBlock,
+  onUpdateBlock,
+  onDeleteBlock,
+  onMoveBlock,
+  onAddBlock
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
@@ -39,8 +39,8 @@ export const ResultPageCanvas: React.FC<ResultPageCanvasProps> = ({
     accept: 'component',
     drop: (item: { type: ResultPageBlockType }, monitor) => {
       if (!monitor.didDrop()) {
-        const position = draggedOverIndex ?? elements.length;
-        onElementAdd(item.type, position);
+        const position = draggedOverIndex ?? blocks.length;
+        onAddBlock(item.type, position);
       }
     },
     collect: (monitor) => ({
@@ -62,7 +62,7 @@ export const ResultPageCanvas: React.FC<ResultPageCanvasProps> = ({
     }
   };
 
-  const sortedElements = elements.sort((a, b) => a.order - b.order);
+  const sortedBlocks = blocks.sort((a, b) => a.order - b.order);
 
   return (
     <div className="flex-1 bg-gray-100 p-4 overflow-auto">
@@ -76,7 +76,7 @@ export const ResultPageCanvas: React.FC<ResultPageCanvasProps> = ({
           style={{ minHeight: '600px' }}
         >
           {/* Empty State */}
-          {elements.length === 0 && !isPreviewMode && (
+          {blocks.length === 0 && !isPreviewMode && (
             <div className="flex items-center justify-center h-96 text-gray-500">
               <div className="text-center">
                 <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -90,12 +90,12 @@ export const ResultPageCanvas: React.FC<ResultPageCanvasProps> = ({
             </div>
           )}
 
-          {/* Elements */}
-          {sortedElements.length > 0 && (
+          {/* Blocks */}
+          {sortedBlocks.length > 0 && (
             <AnimatePresence>
-              {sortedElements.map((element, index) => (
+              {sortedBlocks.map((block, index) => (
                 <motion.div
-                  key={element.id}
+                  key={block.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
@@ -109,15 +109,15 @@ export const ResultPageCanvas: React.FC<ResultPageCanvasProps> = ({
                   )}
 
                   <ResultPageElementRenderer
-                    element={element}
+                    block={block}
                     primaryStyle={primaryStyle}
-                    isSelected={selectedElementId === element.id}
+                    isSelected={selectedBlockId === block.id}
                     isPreviewMode={isPreviewMode}
-                    onSelect={() => onElementSelect(element.id)}
-                    onUpdate={(updates) => onElementUpdate(element.id, updates)}
-                    onDelete={() => onElementDelete(element.id)}
-                    onMoveUp={index > 0 ? () => onElementMove(element.id, 'up') : undefined}
-                    onMoveDown={index < sortedElements.length - 1 ? () => onElementMove(element.id, 'down') : undefined}
+                    onSelect={() => onSelectBlock(block.id)}
+                    onUpdate={(updates) => onUpdateBlock(block.id, updates)}
+                    onDelete={() => onDeleteBlock(block.id)}
+                    onMoveUp={index > 0 ? () => onMoveBlock(block.id, 'up') : undefined}
+                    onMoveDown={index < sortedBlocks.length - 1 ? () => onMoveBlock(block.id, 'down') : undefined}
                   />
 
                   {/* Bottom Drop Zone */}
@@ -130,7 +130,7 @@ export const ResultPageCanvas: React.FC<ResultPageCanvasProps> = ({
           )}
 
           {/* Final Drop Zone */}
-          {!isPreviewMode && sortedElements.length > 0 && draggedOverIndex === sortedElements.length && isOver && (
+          {!isPreviewMode && sortedBlocks.length > 0 && draggedOverIndex === sortedBlocks.length && isOver && (
             <div className="h-0.5 bg-blue-500 mx-4 mt-4" />
           )}
         </div>

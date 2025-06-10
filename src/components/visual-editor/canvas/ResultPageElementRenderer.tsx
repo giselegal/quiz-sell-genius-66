@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { ResultPageElement } from '@/types/resultPageEditor';
+import { ResultPageBlock } from '@/types/resultPageBlocks';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { Trash2, MoveUp, MoveDown, Edit } from 'lucide-react';
 
 interface ResultPageElementRendererProps {
-  element: ResultPageElement;
+  block: ResultPageBlock;
   primaryStyle: StyleResult;
   isSelected: boolean;
   isPreviewMode: boolean;
@@ -18,7 +18,7 @@ interface ResultPageElementRendererProps {
 }
 
 export const ResultPageElementRenderer: React.FC<ResultPageElementRendererProps> = ({
-  element,
+  block,
   primaryStyle,
   isSelected,
   isPreviewMode,
@@ -28,8 +28,30 @@ export const ResultPageElementRenderer: React.FC<ResultPageElementRendererProps>
   onMoveUp,
   onMoveDown
 }) => {
-  const renderElementContent = () => {
-    switch (element.type) {
+  const renderBlockContent = () => {
+    switch (block.type) {
+      case 'header':
+        return (
+          <div className="p-6 bg-white border-b">
+            <div className="flex items-center justify-center">
+              <img
+                src={block.content.header?.logo || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"}
+                alt={block.content.header?.logoAlt || "Logo"}
+                style={{ height: `${block.content.header?.logoHeight || 80}px` }}
+                className="h-auto"
+              />
+            </div>
+            <div className="text-center mt-4">
+              <h1 className="text-xl font-medium">
+                Olá {block.content.header?.userName || 'Visitante'}, seu Estilo Predominante é:
+              </h1>
+              <h2 className="text-2xl font-bold text-[#B89B7A] mt-2">
+                {primaryStyle.category}
+              </h2>
+            </div>
+          </div>
+        );
+
       case 'styleResult':
         return (
           <div className="p-6 bg-[#FAF9F7] rounded-lg">
@@ -41,130 +63,184 @@ export const ResultPageElementRenderer: React.FC<ResultPageElementRendererProps>
                 {primaryStyle.percentage}% de compatibilidade
               </div>
               <p className="text-[#5A5A5A]">
-                {element.content.description || `Descubra tudo sobre o estilo ${primaryStyle.category}`}
+                {block.content.styleResult?.description || `Descubra tudo sobre o estilo ${primaryStyle.category}`}
               </p>
             </div>
           </div>
         );
 
-      case 'hero':
+      case 'transformation':
         return (
-          <div className="bg-[#fff7f3] rounded-lg overflow-hidden" style={element.style}>
-            <div className="p-6 text-center">
-              <h1 className="text-3xl font-bold text-[#aa6b5d] mb-4">
-                {element.content.title || 'SEU RESULTADO ESTÁ PRONTO!'}
-              </h1>
-              <p className="text-[#1A1818]/80 mb-4">
-                {element.content.subtitle || 'Descubra tudo sobre seu estilo único'}
-              </p>
-              {element.content.heroImage && (
-                <img
-                  src={element.content.heroImage}
-                  alt="Hero"
-                  className="w-full max-w-md mx-auto rounded-lg"
-                />
-              )}
+          <div className="p-6">
+            <h3 className="text-xl font-bold mb-4 text-center">
+              {block.content.transformation?.title || 'Transformações Reais'}
+            </h3>
+            <p className="text-center text-gray-600">
+              {block.content.transformation?.description || 'Veja como outras mulheres transformaram seu estilo'}
+            </p>
+          </div>
+        );
+
+      case 'motivation':
+        return (
+          <div className="p-6 bg-gray-50">
+            <h3 className="text-xl font-bold mb-4 text-center">
+              {block.content.motivation?.title || 'Por que Descobrir seu Estilo é Importante?'}
+            </h3>
+            <p className="text-center text-gray-600 mb-6">
+              {block.content.motivation?.subtitle || 'Transforme sua relação com a moda'}
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              {block.content.motivation?.items?.map((item, index) => (
+                <div key={index} className="bg-white p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2">{item.title}</h4>
+                  <p className="text-sm text-gray-600">{item.description}</p>
+                </div>
+              ))}
             </div>
           </div>
         );
 
-      case 'pricing':
+      case 'bonus':
         return (
-          <div className="text-center space-y-6 p-6 bg-[#fff7f3] rounded-lg" style={element.style}>
-            <div className="space-y-2">
-              {element.content.regularPrice && (
-                <p className="text-[#666] line-through">
-                  De R$ {element.content.regularPrice}
-                </p>
-              )}
-              {element.content.salePrice && (
-                <p className="text-2xl font-bold text-[#aa6b5d]">
-                  Por R$ {element.content.salePrice}
-                </p>
-              )}
+          <div className="p-6">
+            <h3 className="text-xl font-bold mb-6 text-center">
+              {block.content.bonus?.title || 'Bônus Exclusivos'}
+            </h3>
+            <div className="grid gap-4">
+              {block.content.bonus?.bonuses?.map((bonus, index) => (
+                <div key={index} className="border p-4 rounded-lg">
+                  <h4 className="font-semibold">{bonus.title}</h4>
+                  <p className="text-sm text-gray-600 mt-1">{bonus.description}</p>
+                  {bonus.value && (
+                    <p className="text-[#B89B7A] font-bold mt-2">{bonus.value}</p>
+                  )}
+                </div>
+              ))}
             </div>
-            
-            <Button className="w-full bg-[#aa6b5d] hover:bg-[#8f5a4c] text-white p-6 text-lg">
-              {element.content.buttonText || 'COMPRAR AGORA'}
-            </Button>
-            
-            {element.content.urgencyText && (
-              <p className="text-sm text-[#aa6b5d]">{element.content.urgencyText}</p>
-            )}
           </div>
         );
 
       case 'testimonials':
         return (
-          <div style={element.style}>
-            <h3 className="text-xl font-bold mb-6 text-[#aa6b5d] text-center">
-              {element.content.title || 'O que estão dizendo'}
+          <div className="p-6 bg-gray-50">
+            <h3 className="text-xl font-bold mb-6 text-center">
+              {block.content.testimonials?.title || 'O que nossas clientes estão dizendo'}
             </h3>
-            {element.content.testimonialsImage ? (
-              <img
-                src={element.content.testimonialsImage}
-                alt="Depoimentos"
-                className="w-full h-auto rounded-lg mx-auto"
-              />
-            ) : (
-              <div className="bg-gray-100 h-48 flex items-center justify-center rounded-lg">
-                <p className="text-gray-400">Adicione uma imagem de depoimentos</p>
-              </div>
-            )}
+            <div className="grid gap-4">
+              {block.content.testimonials?.testimonials?.map((testimonial, index) => (
+                <div key={index} className="bg-white p-4 rounded-lg">
+                  <p className="italic mb-2">"{testimonial.text}"</p>
+                  <p className="font-semibold text-sm">- {testimonial.author}</p>
+                  {testimonial.rating && (
+                    <div className="flex mt-1">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <span key={i} className="text-yellow-400">★</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         );
 
       case 'guarantee':
         return (
-          <div className="flex flex-col md:flex-row items-center gap-6 p-6 bg-[#fff7f3] rounded-lg" style={element.style}>
-            {element.content.image && (
-              <div className="w-24 h-24 flex-shrink-0">
-                <img
-                  src={element.content.image}
-                  alt="Garantia"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            )}
-            <div className="flex-1">
-              <h3 className="text-xl font-bold mb-2 text-[#aa6b5d]">
-                {element.content.title || 'Garantia de 7 dias'}
+          <div className="p-6 bg-green-50 rounded-lg">
+            <div className="text-center">
+              <h3 className="text-xl font-bold mb-2">
+                {block.content.guarantee?.title || 'Garantia de Satisfação'}
               </h3>
-              <p className="text-[#1A1818]/80">
-                {element.content.text || 'Se você não ficar 100% satisfeita, devolvemos seu dinheiro.'}
+              <p className="text-gray-600">
+                {block.content.guarantee?.description || '7 dias para testar sem risco'}
               </p>
             </div>
           </div>
         );
 
-      case 'title':
+      case 'mentor':
         return (
-          <h2 className="text-2xl font-bold text-[#432818]" style={element.style}>
-            {element.content.text || 'Título'}
-          </h2>
+          <div className="p-6">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              {block.content.mentor?.image && (
+                <img
+                  src={block.content.mentor.image}
+                  alt={block.content.mentor?.name || 'Mentora'}
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+              )}
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-xl font-bold">
+                  {block.content.mentor?.name || 'Gisele Galvão'}
+                </h3>
+                <p className="text-[#B89B7A] font-medium mb-2">
+                  {block.content.mentor?.title || 'Consultora de Imagem e Estilo'}
+                </p>
+                <p className="text-gray-600">
+                  {block.content.mentor?.description || 'Especialista em coloração pessoal'}
+                </p>
+              </div>
+            </div>
+          </div>
         );
 
-      case 'text':
+      case 'cta':
         return (
-          <p className="text-[#5A5A5A]" style={element.style}>
-            {element.content.text || 'Texto de exemplo'}
-          </p>
+          <div className="p-6 bg-gradient-to-br from-[#B89B7A] to-[#A08660] text-white rounded-lg">
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-2">
+                {block.content.cta?.title || 'Transforme Seu Estilo Hoje'}
+              </h3>
+              <p className="mb-4">
+                {block.content.cta?.subtitle || 'Guia Completo + Bônus Exclusivos'}
+              </p>
+              <div className="mb-4">
+                {block.content.cta?.regularPrice && (
+                  <p className="line-through text-white/80">
+                    De {block.content.cta.regularPrice}
+                  </p>
+                )}
+                {block.content.cta?.salePrice && (
+                  <p className="text-2xl font-bold">
+                    Por {block.content.cta.salePrice}
+                  </p>
+                )}
+                {block.content.cta?.installments && (
+                  <p className="text-sm">
+                    ou {block.content.cta.installments}
+                  </p>
+                )}
+              </div>
+              <Button className="bg-white text-[#B89B7A] hover:bg-gray-100 font-bold py-3 px-8">
+                {block.content.cta?.ctaText || 'Quero meu Guia de Estilo Agora'}
+              </Button>
+            </div>
+          </div>
         );
 
-      case 'image':
+      case 'footer':
         return (
-          <img
-            src={element.content.src || 'https://placehold.co/400x200?text=Imagem'}
-            alt={element.content.alt || 'Imagem'}
-            className="w-full h-auto rounded-lg"
-            style={element.style}
-          />
+          <div className="p-6 bg-gray-800 text-white">
+            <div className="text-center">
+              <p className="mb-4">
+                {block.content.footer?.companyName || 'Gisele Galvão - Consultoria de Imagem'}
+              </p>
+              <div className="flex justify-center gap-4 text-sm">
+                {block.content.footer?.links?.map((link, index) => (
+                  <a key={index} href={link.url} className="hover:text-gray-300">
+                    {link.text}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
         );
 
       default:
         return (
           <div className="p-4 bg-gray-100 rounded-lg">
-            <p className="text-gray-600">Componente: {element.type}</p>
+            <p className="text-gray-600">Componente: {block.type}</p>
           </div>
         );
     }
@@ -181,7 +257,7 @@ export const ResultPageElementRenderer: React.FC<ResultPageElementRendererProps>
       onClick={!isPreviewMode ? onSelect : undefined}
       style={{ margin: '8px' }}
     >
-      {/* Element Controls */}
+      {/* Block Controls */}
       {!isPreviewMode && isSelected && (
         <div className="absolute -top-2 -right-2 flex gap-1 z-10">
           {onMoveUp && (
@@ -203,9 +279,9 @@ export const ResultPageElementRenderer: React.FC<ResultPageElementRendererProps>
         </div>
       )}
 
-      {/* Element Content */}
+      {/* Block Content */}
       <div className="w-full">
-        {renderElementContent()}
+        {renderBlockContent()}
       </div>
     </div>
   );
