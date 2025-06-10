@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ResultPageVisualEditor } from '@/components/visual-editor/ResultPageVisualEditor';
+import { ResultPageBuilder } from '@/components/visual-editor/ResultPageBuilder';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Eye } from 'lucide-react';
@@ -79,7 +79,7 @@ const ResultPageVisualEditorPage: React.FC = () => {
 
       {/* Editor */}
       <div className="flex-1">
-        <ResultPageVisualEditor
+        <ResultPageBuilder
           primaryStyle={primaryStyle}
           onSave={handleSave}
           onPreview={handlePreview}
