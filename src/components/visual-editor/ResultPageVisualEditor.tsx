@@ -5,7 +5,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { VisualEditorToolbar } from './toolbar/VisualEditorToolbar';
 import { ResultPageSidebar } from './sidebar/ResultPageSidebar';
 import { ResultPageCanvas } from './canvas/ResultPageCanvas';
-import { PropertiesPanel } from './properties/VisualEditorProperties';
 import { useResultPageVisualEditor } from '@/hooks/useResultPageVisualEditor';
 import { ResultPageBlockType } from '@/types/resultPageEditor';
 import { StyleResult } from '@/types/quiz';
@@ -99,15 +98,33 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
           />
           
           {!isPreviewMode && selectedElementId && (
-            <PropertiesPanel
-              elementId={selectedElementId}
-              element={elements.find(el => el.id === selectedElementId)}
-              onUpdate={(updates) => handleElementUpdate(selectedElementId, updates)}
-              onClose={() => setSelectedElementId(null)}
-            />
+            <div className="w-80 bg-white border-l border-gray-200 p-4">
+              <div className="mb-4">
+                <h3 className="font-semibold text-gray-900">Propriedades</h3>
+                <button
+                  onClick={() => setSelectedElementId(null)}
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                >
+                  Fechar
+                </button>
+              </div>
+              {/* Simplified properties panel for now */}
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  Elemento selecionado: {selectedElementId}
+                </p>
+                <button
+                  onClick={() => handleElementUpdate(selectedElementId, {})}
+                  className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                >
+                  Atualizar
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>
     </DndProvider>
   );
 };
+

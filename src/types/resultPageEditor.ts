@@ -37,3 +37,9 @@ export interface ResultPageEditorProps {
   onSave?: (config: any) => void;
   onPreview?: () => void;
 }
+
+// Helper type para converter ResultPageElement para VisualElement quando necessário
+export type ResultPageElementAsVisual = Omit<ResultPageElement, 'type'> & {
+  type: BlockType;
+};
+
