@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useGlobalStyles } from "@/hooks/useGlobalStyles";
+import { useAuth } from "@/context/AuthContext";
+import { useLoadingState } from "@/hooks/useLoadingState";
 import { useIsLowPerformanceDevice } from "@/hooks/use-mobile";
 import { tokens } from "@/config/designTokens";
 
@@ -14,23 +16,76 @@ export const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({
 }) => {
   const { primaryStyle } = useQuiz();
   const { globalStyles } = useGlobalStyles();
+  const { user } = useAuth();
   const isLowPerformance = useIsLowPerformanceDevice();
+  const { isLoading, completeLoading } = useLoadingState({
+    minDuration: isLowPerformance ? 100 : 300,
+    disableTransitions: isLowPerformance,
+  });
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("primary-style");
+  const [imagesLoaded, setImagesLoaded] = useState({
+    style: false,
+    guide: false,
+  });
 
+  // Effect para controle de carregamento otimizado
   useEffect(() => {
+    if (!primaryStyle) return;
     window.scrollTo(0, 0);
-  }, []);
 
+    // Verificar se os resultados foram pré-carregados
+    const hasPreloadedResults = localStorage.getItem("preloadedResults") === "true";
+    
+    if (hasPreloadedResults) {
+      console.log('[ResultPageWrapper] Resultados pré-carregados detectados, acelerando carregamento');
+      setImagesLoaded({ style: true, guide: true });
+      completeLoading();
+      return;
+    }
+
+    // Timeout de segurança para dispositivos mais lentos
+    const safetyTimeout = setTimeout(() => {
+      console.log('[ResultPageWrapper] Safety timeout ativado, finalizando carregamento');
+      setImagesLoaded({ style: true, guide: true });
+      completeLoading();
+    }, isLowPerformance ? 1500 : 2500);
+
+    // Simular carregamento de recursos críticos
+    const criticalResourcesTimeout = setTimeout(() => {
+      setImagesLoaded(prev => ({ ...prev, style: true }));
+    }, 200);
+
+    const secondaryResourcesTimeout = setTimeout(() => {
+      setImagesLoaded(prev => ({ ...prev, guide: true }));
+    }, 600);
+
+    return () => {
+      clearTimeout(safetyTimeout);
+      clearTimeout(criticalResourcesTimeout);
+      clearTimeout(secondaryResourcesTimeout);
+    };
+  }, [primaryStyle, globalStyles.logo, completeLoading, isLowPerformance]);
+
+  // Effect para finalizar carregamento quando todas as imagens estão prontas
+  useEffect(() => {
+    if (imagesLoaded.style && imagesLoaded.guide) {
+      console.log('[ResultPageWrapper] Todas as imagens carregadas, finalizando loading');
+      completeLoading();
+    }
+  }, [imagesLoaded, completeLoading]);
+
+  // Scroll tracking e navegação
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > 120);
 
+      // Tracking de seção ativa
       const sections = [
         "primary-style",
-        "transformations",
+        "transformations", 
         "motivation",
         "bonuses",
         "testimonials",
