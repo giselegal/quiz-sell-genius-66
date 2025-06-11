@@ -1,13 +1,21 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { ResultPageBlock } from '@/types/resultPageBlocks';
 import { StyleResult } from '@/types/quiz';
-import { ShoppingCart, ArrowDown, Clock, Shield, CheckCircle, Award, TrendingUp, Hourglass } from 'lucide-react';
+import { 
+  ShoppingCart, 
+  Clock, 
+  Shield, 
+  CheckCircle, 
+  Award, 
+  ArrowDown,
+  TrendingUp,
+  Hourglass
+} from 'lucide-react';
 import { tokens } from '@/config/designTokens';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
-import ProgressiveImage from '@/components/ui/progressive-image';
+import { Button } from '@/components/ui/button';
 
 interface CTABlockProps {
   block: ResultPageBlock;
@@ -28,49 +36,6 @@ export const CTABlock: React.FC<CTABlockProps> = ({
 }) => {
   const content = block.content.cta || {};
 
-  // Timer countdown
-  const [timer, setTimer] = useState({
-    hours: 2,
-    minutes: 59,
-    seconds: 59,
-  });
-
-  useEffect(() => {
-    const countdownInterval = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer.seconds > 0) {
-          return { ...prevTimer, seconds: prevTimer.seconds - 1 };
-        } else if (prevTimer.minutes > 0) {
-          return { ...prevTimer, minutes: prevTimer.minutes - 1, seconds: 59 };
-        } else if (prevTimer.hours > 0) {
-          return { hours: prevTimer.hours - 1, minutes: 59, seconds: 59 };
-        } else {
-          return { hours: 2, minutes: 59, seconds: 59 };
-        }
-      });
-    }, 1000);
-
-    return () => clearInterval(countdownInterval);
-  }, []);
-
-  const handleCTAClick = () => {
-    if (isPreviewMode) {
-      window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
-    }
-  };
-
-  // Guide images mapping
-  const guideImages = {
-    Natural: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071344/GUIA_NATURAL_fzp6fc.webp",
-    Clássico: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp",
-    Contemporâneo: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp",
-    Elegante: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071342/GUIA_ELEGANTE_asez1q.webp",
-    Romântico: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp",
-    Sexy: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071349/GUIA_SEXY_t5x2ov.webp",
-    Dramático: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp",
-    Criativo: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071342/GUIA_CRIATIVO_ntbzph.webp"
-  };
-
   return (
     <div
       className={`
@@ -82,79 +47,44 @@ export const CTABlock: React.FC<CTABlockProps> = ({
     >
       <section id="cta" className="scroll-mt-24 mb-24 lg:mb-28">
         <div
-          className="relative overflow-hidden rounded-3xl p-8 lg:p-16 border text-center"
-          style={{
-            background: `linear-gradient(135deg, ${tokens.colors.backgroundCard}, ${tokens.colors.backgroundAlt}, ${tokens.colors.backgroundCard})`,
-            borderColor: `${tokens.colors.primary}/20`,
-            boxShadow: tokens.shadows.xl
-          }}
+          className="relative overflow-hidden bg-gradient-to-br from-white via-[#fff7f3] to-[#f9f4ef] rounded-3xl p-8 lg:p-16 border border-[#B89B7A]/20 text-center"
+          style={{ boxShadow: tokens.shadows.xl }}
         >
           {/* Background decorativo */}
-          <div 
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: `linear-gradient(135deg, ${tokens.colors.primary}05, transparent, ${tokens.colors.secondary}05)`
-            }}
-          ></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#B89B7A]/5 via-transparent to-[#aa6b5d]/5 pointer-events-none"></div>
 
-          <AnimatedWrapper animation="fade" show={true} duration={600} delay={200}>
+          <AnimatedWrapper
+            animation="fade"
+            show={true}
+            duration={600}
+            delay={200}
+          >
             <div className="relative z-10">
               {/* Header da CTA */}
               <div className="mb-16 lg:mb-20">
                 <div className="inline-flex items-center gap-4 mb-8">
-                  <div 
-                    className="w-20 h-px"
-                    style={{
-                      background: `linear-gradient(to right, transparent, ${tokens.colors.primary}, transparent)`
-                    }}
-                  ></div>
-                  <div 
-                    className="w-6 h-6 rounded-full animate-pulse shadow-lg"
-                    style={{
-                      background: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`
-                    }}
-                  ></div>
-                  <div 
-                    className="w-20 h-px"
-                    style={{
-                      background: `linear-gradient(to right, transparent, ${tokens.colors.primary}, transparent)`
-                    }}
-                  ></div>
+                  <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                  <div className="w-6 h-6 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full animate-pulse shadow-lg"></div>
+                  <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
                 </div>
 
                 <h2 className="text-4xl lg:text-6xl xl:text-7xl font-playfair font-bold leading-tight mb-8">
-                  <span 
-                    className="bg-gradient-to-r bg-clip-text text-transparent block mb-4"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, ${tokens.colors.text}, ${tokens.colors.secondary}, ${tokens.colors.text})`
-                    }}
-                  >
+                  <span className="bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent block mb-4">
                     {content.title || "Desperte Sua Confiança"}
                   </span>
-                  <span className="block" style={{ color: tokens.colors.secondary }}>
+                  <span className="text-[#aa6b5d] block">
                     {content.subtitle || "Com Seu Estilo Único!"}
                   </span>
                 </h2>
 
-                <p 
-                  className="text-xl lg:text-2xl font-medium mb-6"
-                  style={{ color: tokens.colors.textSecondary }}
-                >
+                <p className="text-xl lg:text-2xl text-[#5D4A3A] font-medium mb-6">
                   Guia {primaryStyle.category} Personalizado + Bônus Exclusivos
                 </p>
 
-                <div 
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border"
-                  style={{
-                    background: `linear-gradient(to right, ${tokens.colors.primary}10, ${tokens.colors.secondary}10)`,
-                    borderColor: `${tokens.colors.primary}/20`
-                  }}
-                >
-                  <Clock className="w-4 h-4" style={{ color: tokens.colors.secondary }} />
-                  <span className="text-sm font-medium" style={{ color: tokens.colors.secondary }}>
-                    Oferta por tempo limitado: {String(timer.hours).padStart(2, '0')}:
-                    {String(timer.minutes).padStart(2, '0')}:
-                    {String(timer.seconds).padStart(2, '0')}
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 px-4 py-2 rounded-full border border-[#B89B7A]/20">
+                  <Clock className="w-4 h-4 text-[#aa6b5d]" />
+                  <span className="text-sm font-medium text-[#aa6b5d]">
+                    {content.urgencyText || "Oferta por tempo limitado"}
                   </span>
                 </div>
               </div>
@@ -164,7 +94,7 @@ export const CTABlock: React.FC<CTABlockProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
                   {[
                     {
-                      src: guideImages[primaryStyle.category] || guideImages.Natural,
+                      src: content.productImage || "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071344/GUIA_NATURAL_fzp6fc.webp",
                       title: `Manual de Estilo ${primaryStyle.category}`,
                       subtitle: "Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única.",
                       badge: "GUIA PRINCIPAL",
@@ -190,23 +120,19 @@ export const CTABlock: React.FC<CTABlockProps> = ({
                   ].map((product, index) => (
                     <div
                       key={index}
-                      className={`group bg-white rounded-2xl p-6 lg:p-8 border transition-all duration-500 hover:scale-105 hover:shadow-2xl relative ${
+                      className={`group bg-white rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative ${
                         index === 2 ? "md:col-span-2 xl:col-span-1" : ""
                       }`}
-                      style={{ 
-                        borderColor: `${tokens.colors.primary}/15`,
-                        boxShadow: tokens.shadows.lg 
-                      }}
+                      style={{ boxShadow: tokens.shadows.lg }}
                     >
                       {/* Badge premium */}
                       <div className="absolute -top-4 -right-4 z-10">
                         <span
-                          className="text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12"
-                          style={{
-                            background: index === 0
-                              ? `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`
-                              : `linear-gradient(to right, ${tokens.colors.secondary}, ${tokens.colors.primary})`
-                          }}
+                          className={`text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12 ${
+                            index === 0
+                              ? "bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]"
+                              : "bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]"
+                          }`}
                         >
                           {product.badge}
                         </span>
@@ -214,51 +140,43 @@ export const CTABlock: React.FC<CTABlockProps> = ({
 
                       {/* Imagem do produto */}
                       <div
-                        className="relative mb-6 rounded-xl p-4 overflow-hidden"
+                        className="relative mb-6 bg-gradient-to-br from-[#f9f4ef] to-[#fff7f3] rounded-xl p-4 overflow-hidden"
                         style={{
-                          background: `linear-gradient(135deg, ${tokens.colors.backgroundAlt}, ${tokens.colors.backgroundCard})`,
                           boxShadow: tokens.shadows.sm,
-                          aspectRatio: index === 0 ? "4.6/5" : index === 1 ? "6/3.5" : "3/4.5",
+                          aspectRatio:
+                            index === 0
+                              ? "4.6/5"
+                              : index === 1
+                              ? "6/3.5"
+                              : "3/4.5",
                         }}
                       >
-                        <ProgressiveImage
+                        <img
                           src={product.src}
                           alt={product.title}
                           className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
-                          loading={product.priority ? "eager" : "lazy"}
                         />
 
                         {/* Overlay de hover */}
-                        <div 
-                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl"
-                          style={{
-                            background: `linear-gradient(to top, ${tokens.colors.primary}10, transparent)`
-                          }}
-                        ></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#B89B7A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl"></div>
                       </div>
 
                       {/* Conteúdo do produto */}
                       <div className="text-left space-y-4">
-                        <h4 
-                          className="font-bold text-lg lg:text-xl leading-tight"
-                          style={{ color: tokens.colors.text }}
-                        >
+                        <h4 className="font-bold text-[#2C1810] text-lg lg:text-xl leading-tight">
                           {product.title}
                         </h4>
-                        <p 
-                          className="text-sm lg:text-base leading-relaxed"
-                          style={{ color: tokens.colors.textSecondary }}
-                        >
+                        <p className="text-sm lg:text-base text-[#5D4A3A] leading-relaxed">
                           {product.subtitle}
                         </p>
 
                         {/* Preço original */}
-                        <div className="pt-4 border-t" style={{ borderColor: `${tokens.colors.primary}/10` }}>
+                        <div className="pt-4 border-t border-[#B89B7A]/10">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
+                            <span className="text-sm font-medium text-[#8F7A6A]">
                               Valor individual:
                             </span>
-                            <span className="text-lg font-bold line-through" style={{ color: tokens.colors.primary }}>
+                            <span className="text-lg font-bold text-[#B89B7A] line-through">
                               {product.originalPrice}
                             </span>
                           </div>
@@ -272,63 +190,47 @@ export const CTABlock: React.FC<CTABlockProps> = ({
               {/* Resumo de valor */}
               <div className="max-w-lg mx-auto mb-12">
                 <div
-                  className="relative bg-white rounded-2xl p-8 lg:p-10 border-4 border-double overflow-hidden"
+                  className="relative bg-white rounded-2xl p-8 lg:p-10 border-4 border-double border-[#B89B7A]/30 overflow-hidden"
                   style={{
-                    borderColor: `${tokens.colors.primary}/30`,
-                    boxShadow: `0 20px 40px ${tokens.colors.primary}15, 0 0 0 1px rgba(255,255,255,0.8) inset`,
-                    background: `linear-gradient(135deg, rgba(255,255,255,0.95) 0%, ${tokens.colors.backgroundAlt}95 100%)`
+                    boxShadow:
+                      "0 20px 40px rgba(184,155,122,0.15), 0 0 0 1px rgba(255,255,255,0.8) inset",
+                    background:
+                      "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(249,244,239,0.95) 100%)",
                   }}
                 >
                   {/* Background decorativo */}
-                  <div 
-                    className="absolute top-0 right-0 w-32 h-32 rounded-full transform translate-x-16 -translate-y-16"
-                    style={{
-                      background: `linear-gradient(135deg, ${tokens.colors.primary}10, transparent)`
-                    }}
-                  ></div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#B89B7A]/10 to-transparent rounded-full transform translate-x-16 -translate-y-16"></div>
 
                   <div className="relative z-10 text-center space-y-6">
-                    <p 
-                      className="text-lg lg:text-xl font-semibold"
-                      style={{ color: tokens.colors.textSecondary }}
-                    >
+                    <p className="text-lg lg:text-xl font-semibold text-[#5D4A3A]">
                       De{" "}
-                      <span className="font-bold text-xl lg:text-2xl line-through" style={{ color: tokens.colors.primary }}>
-                        R$ 175,00
+                      <span className="font-bold text-[#B89B7A] text-xl lg:text-2xl line-through">
+                        {content.regularPrice || "R$ 175,00"}
                       </span>{" "}
                       por apenas:
                     </p>
 
                     <div className="space-y-2">
-                      <p 
-                        className="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r bg-clip-text text-transparent"
-                        style={{
-                          backgroundImage: `linear-gradient(to right, ${tokens.colors.primary}, ${tokens.colors.secondary})`
-                        }}
-                      >
-                        {content.price || "R$ 39,90"}
+                      <p className="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                        {content.salePrice || "R$ 39,90"}
                       </p>
-                      <p className="text-lg lg:text-xl font-bold" style={{ color: tokens.colors.success }}>
+                      <p className="text-lg lg:text-xl font-bold text-[#4CAF50]">
                         {content.installments || "ou 5x de R$ 8,83"}
                       </p>
                     </div>
 
-                    <div 
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full border"
-                      style={{
-                        background: `linear-gradient(to right, ${tokens.colors.success}10, ${tokens.colors.successDark}10)`,
-                        borderColor: `${tokens.colors.success}/20`
-                      }}
-                    >
-                      <TrendingUp className="w-4 h-4" style={{ color: tokens.colors.success }} />
-                      <span className="text-sm font-bold" style={{ color: tokens.colors.success }}>
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4CAF50]/10 to-[#43a047]/10 px-4 py-2 rounded-full border border-[#4CAF50]/20">
+                      <TrendingUp className="w-4 h-4 text-[#4CAF50]" />
+                      <span className="text-sm font-bold text-[#4CAF50]">
                         Economia de R$ 135,10 (77% OFF)
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-center gap-2 text-sm" style={{ color: tokens.colors.textMuted }}>
+                    <div className="flex items-center justify-center gap-2 text-[#8F7A6A] text-sm">
                       <Hourglass className="w-4 h-4 animate-pulse" />
-                      <span>Esta oferta expira quando você sair desta página</span>
+                      <span>
+                        Esta oferta expira quando você sair desta página
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -337,17 +239,20 @@ export const CTABlock: React.FC<CTABlockProps> = ({
               {/* CTA Button principal */}
               <div className="text-center">
                 <Button
-                  onClick={handleCTAClick}
                   className="group relative text-white font-bold py-6 px-8 sm:px-12 lg:px-16 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
                   style={{
-                    background: "linear-gradient(135deg, #4CAF50 0%, #43a047 50%, #388e3c 100%)",
-                    boxShadow: "0 20px 40px rgba(76, 175, 80, 0.3), 0 0 0 1px rgba(255,255,255,0.2) inset"
+                    background:
+                      "linear-gradient(135deg, #4CAF50 0%, #43a047 50%, #388e3c 100%)",
+                    boxShadow:
+                      "0 20px 40px rgba(76, 175, 80, 0.3), 0 0 0 1px rgba(255,255,255,0.2) inset",
                   }}
                   type="button"
                 >
                   <span
                     className="flex items-center justify-center gap-2 sm:gap-3"
-                    style={{ fontSize: "clamp(0.875rem, 2.5vw, 1.25rem)" }}
+                    style={{
+                      fontSize: "clamp(0.875rem, 2.5vw, 1.25rem)",
+                    }}
                   >
                     <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 transition-transform duration-300 group-hover:scale-110 flex-shrink-0" />
                     <span className="leading-tight">
@@ -361,17 +266,17 @@ export const CTABlock: React.FC<CTABlockProps> = ({
                 </Button>
 
                 {/* Garantias de segurança */}
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm" style={{ color: tokens.colors.textMuted }}>
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-[#8F7A6A]">
                   <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4" style={{ color: tokens.colors.primary }} />
+                    <Shield className="w-4 h-4 text-[#B89B7A]" />
                     <span>Pagamento 100% Seguro</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4" style={{ color: tokens.colors.primary }} />
+                    <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
                     <span>Acesso Imediato</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Award className="w-4 h-4" style={{ color: tokens.colors.primary }} />
+                    <Award className="w-4 h-4 text-[#B89B7A]" />
                     <span>Garantia de 7 Dias</span>
                   </div>
                 </div>
