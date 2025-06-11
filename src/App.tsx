@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { AuthProvider } from '@/context/AuthContext';
 import ResultPage from './pages/ResultPage';
 import VisualEditorPage from './pages/VisualEditorPage';
 import ResultVisualEditorPage from './pages/ResultVisualEditorPage';
@@ -50,20 +51,22 @@ const AdminDashboard = () => {
 
 function App() {
   return (
-    <TooltipProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<ResultPage />} />
-          <Route path="/descubra-seu-estilo" element={<ResultPage />} />
-          <Route path="/resultado" element={<ResultPage />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/visual-editor/:id" element={<VisualEditorPage />} />
-          <Route path="/result-visual-editor/:id" element={<ResultVisualEditorPage />} />
-          <Route path="/result-page-editor" element={<ResultPageVisualEditorPage />} />
-        </Routes>
-        <Toaster />
-      </Router>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<ResultPage />} />
+            <Route path="/descubra-seu-estilo" element={<ResultPage />} />
+            <Route path="/resultado" element={<ResultPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/visual-editor/:id" element={<VisualEditorPage />} />
+            <Route path="/result-visual-editor/:id" element={<ResultVisualEditorPage />} />
+            <Route path="/result-page-editor" element={<ResultPageVisualEditorPage />} />
+          </Routes>
+          <Toaster />
+        </Router>
+      </TooltipProvider>
+    </AuthProvider>
   );
 }
 
