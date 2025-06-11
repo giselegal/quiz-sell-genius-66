@@ -14,6 +14,7 @@ import { CTABlock } from './blocks/CTABlock';
 import { ResultHeaderBlock } from './blocks/ResultHeaderBlock';
 import { TransitionBlock } from './blocks/TransitionBlock';
 import { FinalCtaBlock } from './blocks/FinalCtaBlock';
+import { ResultHeaderBlockContent, TransitionBlockContent, FinalCtaBlockContent } from '@/types/resultPageBlocks';
 
 interface BlockRendererProps {
   block: EditorBlock;
@@ -25,7 +26,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect })
     case 'header':
       return <HeaderBlock content={block.content} onClick={onSelect} />;
     case 'result-header':
-      return <ResultHeaderBlock content={block.content} onClick={onSelect} />;
+      return <ResultHeaderBlock content={block.content as ResultHeaderBlockContent} onClick={onSelect} />;
     case 'hero-section':
       return <HeroBlock content={block.content} onClick={onSelect} />;
     case 'bonus-carousel':
@@ -43,9 +44,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ block, onSelect })
     case 'guarantee':
       return <GuaranteeBlock content={block.content} onClick={onSelect} />;
     case 'transition':
-      return <TransitionBlock content={block.content} onClick={onSelect} />;
+      return <TransitionBlock content={block.content as TransitionBlockContent} onClick={onSelect} />;
     case 'final-cta':
-      return <FinalCtaBlock content={block.content} onClick={onSelect} />;
+      return <FinalCtaBlock content={block.content as FinalCtaBlockContent} onClick={onSelect} />;
     case 'cta':
       return <CTABlock content={block.content} onClick={onSelect} />;
     case 'products':

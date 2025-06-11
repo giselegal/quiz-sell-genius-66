@@ -26,9 +26,10 @@ export type BlockType =
 // Add missing EditorBlock type which was imported across many files
 export interface EditorBlock extends Block {
   id: string;
-  type: BlockType;
-  content: EditableContent;
+  type: BlockType | 'result-header' | 'transition' | 'final-cta';
+  content: EditableContent | any; // Allow any content type for result page blocks
   order: number;
+  visible?: boolean;
   settings?: Record<string, any>;
 }
 

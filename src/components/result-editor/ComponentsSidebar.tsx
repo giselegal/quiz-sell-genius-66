@@ -1,164 +1,126 @@
 
 import React from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ResultPageBlockType } from '@/types/resultPageBlocks';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
-  FileText, 
+  Type, 
+  AlignLeft, 
   Image, 
+  List, 
   Star, 
-  MessageSquare, 
+  DollarSign, 
   Shield, 
-  User, 
-  Target, 
-  Gift,
+  MousePointer,
+  User,
   ArrowRight,
-  ShoppingCart,
-  Sparkles,
-  Zap
+  ShoppingCart
 } from 'lucide-react';
+import { ResultPageBlockType } from '@/types/resultPageBlocks';
 
 interface ComponentsSidebarProps {
-  onComponentSelect: (type: ResultPageBlockType) => void;
+  onAddBlock: (type: ResultPageBlockType) => void;
 }
 
 export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
-  onComponentSelect
+  onAddBlock
 }) => {
-  const componentGroups = [
+  const components = [
     {
-      title: 'Estrutura Principal',
-      components: [
-        {
-          type: 'result-header' as ResultPageBlockType,
-          name: 'Cabeçalho de Resultado',
-          icon: Sparkles,
-          description: 'Header personalizado com resultado do quiz'
-        },
-        {
-          type: 'styleResult' as ResultPageBlockType,
-          name: 'Resultado do Estilo',
-          icon: Star,
-          description: 'Mostra o estilo predominante do usuário'
-        }
-      ]
+      type: 'result-header' as ResultPageBlockType,
+      name: 'Cabeçalho Resultado',
+      icon: User,
+      description: 'Seção com nome do usuário e estilo predominante'
     },
     {
-      title: 'Conteúdo Persuasivo',
-      components: [
-        {
-          type: 'transformation' as ResultPageBlockType,
-          name: 'Transformações',
-          icon: Zap,
-          description: 'Antes e depois de clientes'
-        },
-        {
-          type: 'motivation' as ResultPageBlockType,
-          name: 'Motivação',
-          icon: Target,
-          description: 'Seção motivacional sobre estilo'
-        },
-        {
-          type: 'bonus' as ResultPageBlockType,
-          name: 'Bônus',
-          icon: Gift,
-          description: 'Lista de bônus inclusos'
-        },
-        {
-          type: 'testimonials' as ResultPageBlockType,
-          name: 'Depoimentos',
-          icon: MessageSquare,
-          description: 'Testimoniais de clientes'
-        },
-        {
-          type: 'guarantee' as ResultPageBlockType,
-          name: 'Garantia',
-          icon: Shield,
-          description: 'Garantia de satisfação'
-        },
-        {
-          type: 'mentor' as ResultPageBlockType,
-          name: 'Mentora',
-          icon: User,
-          description: 'Apresentação da especialista'
-        }
-      ]
+      type: 'transition' as ResultPageBlockType,
+      name: 'Seção Transição',
+      icon: ArrowRight,
+      description: 'Seção de transição motivacional'
     },
     {
-      title: 'Conversão',
-      components: [
-        {
-          type: 'transition' as ResultPageBlockType,
-          name: 'Transição',
-          icon: ArrowRight,
-          description: 'Seção de transição motivacional'
-        },
-        {
-          type: 'final-cta' as ResultPageBlockType,
-          name: 'CTA Final',
-          icon: ShoppingCart,
-          description: 'Call-to-action com produtos e timer'
-        }
-      ]
+      type: 'final-cta' as ResultPageBlockType,
+      name: 'CTA Final',
+      icon: ShoppingCart,
+      description: 'Call-to-action final com produtos e ofertas'
     },
     {
-      title: 'Básicos',
-      components: [
-        {
-          type: 'header' as ResultPageBlockType,
-          name: 'Cabeçalho',
-          icon: FileText,
-          description: 'Cabeçalho simples'
-        },
-        {
-          type: 'cta' as ResultPageBlockType,
-          name: 'CTA Simples',
-          icon: Target,
-          description: 'Botão de call-to-action básico'
-        }
-      ]
+      type: 'header' as ResultPageBlockType,
+      name: 'Cabeçalho',
+      icon: Type,
+      description: 'Título e navegação da página'
+    },
+    {
+      type: 'headline' as ResultPageBlockType,
+      name: 'Título',
+      icon: Type,
+      description: 'Título principal e subtítulo'
+    },
+    {
+      type: 'text' as ResultPageBlockType,
+      name: 'Texto',
+      icon: AlignLeft,
+      description: 'Parágrafo de texto simples'
+    },
+    {
+      type: 'benefits' as ResultPageBlockType,
+      name: 'Benefícios',
+      icon: List,
+      description: 'Lista de benefícios ou recursos'
+    },
+    {
+      type: 'testimonials' as ResultPageBlockType,
+      name: 'Depoimentos',
+      icon: Star,
+      description: 'Seção de depoimentos e avaliações'
+    },
+    {
+      type: 'guarantee' as ResultPageBlockType,
+      name: 'Garantia',
+      icon: Shield,
+      description: 'Seção de garantia e segurança'
+    },
+    {
+      type: 'cta' as ResultPageBlockType,
+      name: 'Call to Action',
+      icon: MousePointer,
+      description: 'Botão de ação principal'
     }
   ];
 
   return (
-    <div className="h-full flex flex-col border-r bg-white">
-      <div className="p-4 border-b">
+    <div className="w-80 bg-white border-r border-[#B89B7A]/20 flex flex-col">
+      <div className="p-4 border-b border-[#B89B7A]/20">
         <h2 className="font-semibold text-[#432818]">Componentes</h2>
-        <p className="text-xs text-[#8F7A6A] mt-1">Arraste para o canvas</p>
+        <p className="text-sm text-[#8F7A6A]">Arraste para adicionar ao canvas</p>
       </div>
-      
+
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-6">
-          {componentGroups.map((group) => (
-            <div key={group.title}>
-              <h3 className="text-sm font-medium mb-3 text-[#8F7A6A] uppercase tracking-wide">
-                {group.title}
-              </h3>
-              <div className="grid gap-2">
-                {group.components.map((component) => {
-                  const Icon = component.icon;
-                  return (
-                    <Button
-                      key={component.type}
-                      variant="outline"
-                      className="flex flex-col h-auto py-3 px-3 items-start text-left hover:bg-[#B89B7A]/10 hover:border-[#B89B7A] transition-all"
-                      onClick={() => onComponentSelect(component.type)}
-                    >
-                      <div className="flex items-center gap-2 mb-1 w-full">
-                        <Icon className="w-4 h-4 text-[#B89B7A] flex-shrink-0" />
-                        <span className="text-sm font-medium text-[#432818]">
-                          {component.name}
-                        </span>
-                      </div>
-                      <p className="text-xs text-[#8F7A6A] leading-tight">
-                        {component.description}
-                      </p>
-                    </Button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+        <div className="p-4 space-y-2">
+          {components.map((component) => {
+            const IconComponent = component.icon;
+            return (
+              <Card 
+                key={component.type}
+                className="p-3 hover:bg-[#FAF9F7] cursor-pointer transition-colors border-[#B89B7A]/20"
+                onClick={() => onAddBlock(component.type)}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#B89B7A]/10 flex items-center justify-center flex-shrink-0">
+                    <IconComponent className="w-4 h-4 text-[#B89B7A]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-[#432818] text-sm mb-1">
+                      {component.name}
+                    </h3>
+                    <p className="text-xs text-[#8F7A6A] leading-relaxed">
+                      {component.description}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
         </div>
       </ScrollArea>
     </div>

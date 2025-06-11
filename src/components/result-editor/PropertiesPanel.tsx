@@ -7,6 +7,7 @@ import { EditorBlock } from '@/types/editor';
 import { ResultHeaderBlockEditor } from './block-editors/ResultHeaderBlockEditor';
 import { TransitionBlockEditor } from './block-editors/TransitionBlockEditor';
 import { FinalCtaBlockEditor } from './block-editors/FinalCtaBlockEditor';
+import { ResultHeaderBlockContent, TransitionBlockContent, FinalCtaBlockContent } from '@/types/resultPageBlocks';
 
 interface PropertiesPanelProps {
   selectedBlockId: string | null;
@@ -47,7 +48,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   }
 
   const handleUpdate = (updates: any) => {
-    onUpdate(selectedBlock.id, updates);
+    onUpdate(selectedBlock.id, { ...selectedBlock.content, ...updates });
   };
 
   const renderEditor = () => {
@@ -55,21 +56,21 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
       case 'result-header':
         return (
           <ResultHeaderBlockEditor
-            content={selectedBlock.content}
+            content={selectedBlock.content as ResultHeaderBlockContent}
             onUpdate={handleUpdate}
           />
         );
       case 'transition':
         return (
           <TransitionBlockEditor
-            content={selectedBlock.content}
+            content={selectedBlock.content as TransitionBlockContent}
             onUpdate={handleUpdate}
           />
         );
       case 'final-cta':
         return (
           <FinalCtaBlockEditor
-            content={selectedBlock.content}
+            content={selectedBlock.content as FinalCtaBlockContent}
             onUpdate={handleUpdate}
           />
         );
