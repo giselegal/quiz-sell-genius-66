@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -98,14 +97,9 @@ export const ResultPageBuilder: React.FC<ResultPageBuilderProps> = ({
           
           {!isPreviewMode && selectedBlockId && (
             <ResultPagePropertiesPanel
-              blockId={selectedBlockId}
-              blocks={blocks}
-              onUpdate={(blockId, updates) => updateBlock(blockId, updates)}
+              block={blocks.find(b => b.id === selectedBlockId) || null}
+              onUpdate={(updates) => updateBlock(selectedBlockId, updates)}
               onClose={() => setSelectedBlockId(null)}
-              onDelete={(blockId) => {
-                deleteBlock(blockId);
-                setSelectedBlockId(null);
-              }}
             />
           )}
         </div>
@@ -113,3 +107,5 @@ export const ResultPageBuilder: React.FC<ResultPageBuilderProps> = ({
     </DndProvider>
   );
 };
+
+export default ResultPageBuilder;

@@ -1,30 +1,51 @@
+
 import React, { useCallback } from 'react';
-import { Stage } from '@/types/quiz';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { tokens } from '@/config/designTokens';
 
 interface StageResultComponentProps {
-  stage: Stage;
-  onUpdate: (stageId: string, updates: Partial<Stage>) => void;
+  data: {
+    category?: string;
+    description?: string;
+    score?: number;
+    [key: string]: any;
+  };
+  style?: {
+    backgroundColor?: string;
+    textColor?: string;
+    [key: string]: any;
+  };
+  isSelected?: boolean;
 }
 
-const StageResultComponent: React.FC<StageResultComponentProps> = ({ stage, onUpdate }) => {
+const StageResultComponent: React.FC<StageResultComponentProps> = ({ 
+  data, 
+  style, 
+  isSelected 
+}) => {
   const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    onUpdate(stage.id, { description: e.target.value });
-  }, [onUpdate, stage.id]);
+    // This would typically update through a parent callback
+    console.log('Description changed:', e.target.value);
+  }, []);
 
   const handleCategoryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    onUpdate(stage.id, { category: e.target.value });
-  }, [onUpdate, stage.id]);
+    console.log('Category changed:', e.target.value);
+  }, []);
 
   const handleScoreChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newScore = parseInt(e.target.value, 10) || 0;
-    onUpdate(stage.id, { score: newScore });
-  }, [onUpdate, stage.id]);
+    console.log('Score changed:', newScore);
+  }, []);
 
   return (
-    <div className="space-y-4">
+    <div 
+      className={`space-y-4 p-4 ${isSelected ? 'ring-2 ring-blue-500 rounded' : ''}`}
+      style={{
+        backgroundColor: style?.backgroundColor || 'transparent',
+        color: style?.textColor || 'inherit'
+      }}
+    >
       <h3 
         className="text-lg font-semibold"
         style={{ color: tokens.colors.text }}
@@ -37,7 +58,7 @@ const StageResultComponent: React.FC<StageResultComponentProps> = ({ stage, onUp
         <Input
           type="text"
           id="category"
-          value={stage.category || ''}
+          value={data.category || ''}
           onChange={handleCategoryChange}
           placeholder="Ex: Elegante"
         />
@@ -48,7 +69,7 @@ const StageResultComponent: React.FC<StageResultComponentProps> = ({ stage, onUp
         <Input
           type="text"
           id="description"
-          value={stage.description || ''}
+          value={data.description || ''}
           onChange={handleDescriptionChange}
           placeholder="Ex: Você tem um estilo elegante..."
         />
@@ -59,7 +80,7 @@ const StageResultComponent: React.FC<StageResultComponentProps> = ({ stage, onUp
         <Input
           type="number"
           id="score"
-          value={stage.score || 0}
+          value={data.score || 0}
           onChange={handleScoreChange}
           placeholder="0"
         />

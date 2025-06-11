@@ -44,8 +44,10 @@ export const ResultPageElementRenderer: React.FC<ResultPageElementRendererProps>
     const commonProps = {
       block,
       primaryStyle,
-      onClick: !isPreviewMode ? onSelect : undefined,
-      isSelected: isSelected && !isPreviewMode
+      isSelected,
+      isPreviewMode,
+      onSelect,
+      onClick: !isPreviewMode ? onSelect : undefined
     };
 
     switch (block.type) {
