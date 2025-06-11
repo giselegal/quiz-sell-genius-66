@@ -6,8 +6,8 @@ import { useIsLowPerformanceDevice } from "@/hooks/use-mobile";
 import { ResultPageWrapper } from "@/components/layout/ResultPageWrapper";
 import SectionTitle from "@/components/common/SectionTitle";
 import ResultHeaderSection from "@/components/quiz-sections/ResultHeaderSection";
-import { TransitionSection } from "@/components/quiz-sections/TransitionSection";
-import { FinalCtaSection } from "@/components/quiz-sections/FinalCtaSection";
+import TransitionSection from "@/components/quiz-sections/TransitionSection";
+import FinalCtaSection from "@/components/quiz-sections/FinalCtaSection";
 import { AnimatedWrapper } from "@/components/ui/animated-wrapper";
 
 // Lazy-loaded sections for better performance

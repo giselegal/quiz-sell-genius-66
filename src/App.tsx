@@ -1,39 +1,94 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import LoginPage from './pages/LoginPage';
-import AdminPage from './pages/AdminPage';
-import ResultPage from './pages/ResultPage';
-import { QuizProvider } from './context/QuizContext';
-import ResultPageVisualEditorPage from './pages/ResultPageVisualEditorPage';
-import VisualEditorPage from './pages/VisualEditorPage';
-import EnhancedQuizBuilder from './components/enhanced-editor/EnhancedQuizBuilder';
-import ResultPageEditorPage from './pages/admin/ResultPageEditorPage';
+import React, { Suspense, lazy, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
+import { QuizProvider } from "./context/QuizContext";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+import { captureUTMParameters } from "./utils/analytics";
+import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import CriticalCSSLoader from "./components/CriticalCSSLoader";
+import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
+import { AdminRoute } from "./components/admin/AdminRoute";
+
+// Componente de loading para Suspense
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="text-center">
+      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
+      <p className="mt-4 text-gray-600">Carregando...</p>
+    </div>
+  </div>
+);
+
+// Lazy loading das páginas essenciais
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const QuizPage = lazy(() => import("./components/QuizPage"));
+const ResultPage = lazy(() => import("./pages/ResultPage"));
+const QuizDescubraSeuEstilo = lazy(
+  () => import("./pages/quiz-descubra-seu-estilo")
+);
+const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+
+// Lazy loading das páginas do editor visual
+const EditorDashboard = lazy(() => import("./pages/EditorDashboard"));
+const VisualEditorPage = lazy(() => import("./pages/VisualEditorPage"));
+const ResultPageVisualEditorPage = lazy(() => import("./pages/ResultPageVisualEditorPage"));
 
 function App() {
+  // Inicializar analytics na montagem do componente
+  useEffect(() => {
+    try {
+      loadFacebookPixelDynamic();
+      captureUTMParameters();
+
+      console.log("App initialized with essential routes only");
+    } catch (error) {
+      console.error("Erro ao inicializar aplicativo:", error);
+    }
+  }, []);
+
   return (
     <Router>
-      <AuthProvider>
-        <QuizProvider>
-          <div className="App">
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/resultado" element={<ResultPage />} />
-              
-              {/* Visual Editor Routes */}
-              <Route path="/admin/visual-editor" element={<VisualEditorPage />} />
-              <Route path="/admin/result-page-editor/:id" element={<ResultPageVisualEditorPage />} />
-              
-              {/* Enhanced Quiz Builder */}
-              <Route path="/admin/quiz-builder" element={<EnhancedQuizBuilder />} />
-              
-              {/* Unified Result Page Editor */}
-              <Route path="/result-page-editor" element={<ResultPageEditorPage />} />
-            </Routes>
-          </div>
-        </QuizProvider>
-      </AuthProvider>
+      <Routes>
+        {/* Página inicial com teste A/B */}
+        <Route path="/" element={<LandingPage />} />
+        {/* Rota do quiz específica */}
+        <Route path="/quiz" element={<QuizPage />} />
+        {/* Rotas do teste A/B */}
+        <Route path="/resultado" element={<ResultPage />} />
+        <Route
+          path="/quiz-descubra-seu-estilo"
+          element={<QuizDescubraSeuEstilo />}
+        />
+        {/* Manter rota antiga para compatibilidade */}
+        <Route
+          path="/descubra-seu-estilo"
+          element={<QuizDescubraSeuEstilo />}
+        />
+        {/* Editor Visual - Dashboard e Editor */}
+        <Route path="/editor-dashboard" element={<EditorDashboard />} />
+        <Route path="/visual-editor" element={<VisualEditorPage />} />
+        <Route path="/visual-editor/:id" element={<VisualEditorPage />} />
+        
+        {/* Admin - protegido com AdminAuthProvider */}
+        <Route
+          path="/admin/*"
+          element={
+            <AdminAuthProvider>
+              <AdminRoute>
+                <DashboardPage />
+              </AdminRoute>
+            </AdminAuthProvider>
+          }
+        />
+        {/* 404 */}
+        <Route path="*" element={<NotFoundPage />} />
+        
+        <Route path="/editor/resultado/:styleType" element={<ResultPageVisualEditorPage />} />
+      </Routes>
     </Router>
   );
 }

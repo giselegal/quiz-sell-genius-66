@@ -1,10 +1,10 @@
 
-import React, { useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Plus, Eye, Monitor, Smartphone } from 'lucide-react';
-import { VisualElement, VisualStage } from '@/types/visualEditor';
+import React, { useRef, useState, useCallback } from 'react';
+import { useDrop } from 'react-dnd';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ElementRenderer } from './ElementRenderer';
-import { cn } from '@/lib/utils';
+import { VisualElement, VisualStage, BlockType } from '@/types/visualEditor';
+import { Edit3 } from 'lucide-react';
 
 interface VisualEditorCanvasProps {
   elements: VisualElement[];
@@ -14,10 +14,10 @@ interface VisualEditorCanvasProps {
   isPreviewMode: boolean;
   viewportMode: 'desktop' | 'tablet' | 'mobile';
   onElementSelect: (elementId: string) => void;
-  onElementUpdate: (elementId: string, updates: Partial<VisualElement>) => void;
+  onElementUpdate: (elementId: string, updates: any) => void;
   onElementDelete: (elementId: string) => void;
   onElementMove: (elementId: string, direction: 'up' | 'down') => void;
-  onElementAdd: (type: any, position?: number) => void;
+  onElementAdd: (type: BlockType, position?: number) => void;
   onStageAdd: () => void;
   onStageSelect: (stageId: string) => void;
 }
@@ -37,131 +37,139 @@ export const VisualEditorCanvas: React.FC<VisualEditorCanvasProps> = ({
   onStageAdd,
   onStageSelect
 }) => {
-  const [showAddMenu, setShowAddMenu] = useState(false);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
 
-  const activeStageElements = elements.filter(el => el.stageId === activeStageId);
-  const sortedElements = activeStageElements.sort((a, b) => a.order - b.order);
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: 'component',
+    drop: (item: { type: BlockType }, monitor) => {
+      if (!monitor.didDrop()) {
+        const position = draggedOverIndex ?? stageElements.length;
+        onElementAdd(item.type, position);
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  });
 
-  const handleMoveElement = useCallback((elementId: string, direction: 'up' | 'down') => {
-    onElementMove(elementId, direction);
-  }, [onElementMove]);
+  drop(canvasRef);
+
+  // Filter elements for the active stage
+  const stageElements = elements.filter(el => el.stageId === activeStageId);
+  const activeStage = stages.find(stage => stage.id === activeStageId);
 
   const getViewportStyles = () => {
     switch (viewportMode) {
       case 'mobile':
-        return 'max-w-sm mx-auto';
+        return { width: '375px', minHeight: '667px' };
       case 'tablet':
-        return 'max-w-2xl mx-auto';
+        return { width: '768px', minHeight: '1024px' };
       default:
-        return 'max-w-6xl mx-auto';
+        return { width: '100%', minHeight: '100vh' };
     }
   };
 
-  const quickAddElements = [
-    { type: 'title', label: 'Título', icon: '📝' },
-    { type: 'text', label: 'Texto', icon: '📄' },
-    { type: 'button', label: 'Botão', icon: '🔘' },
-    { type: 'image', label: 'Imagem', icon: '🖼️' },
-    { type: 'spacer', label: 'Espaçador', icon: '📏' }
-  ];
-
   return (
-    <div className="flex-1 bg-[#FAF9F7] relative overflow-auto">
-      {/* Canvas Header */}
-      {!isPreviewMode && (
-        <div className="sticky top-0 bg-white border-b border-[#B89B7A]/20 p-4 z-40">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <h3 className="font-medium text-[#432818]">
-                Canvas - {stages.find(s => s.id === activeStageId)?.title || 'Página'}
-              </h3>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowAddMenu(!showAddMenu)}
-                  className="text-[#432818] border-[#B89B7A]/30"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Adicionar
-                </Button>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-[#8F7A6A]">
-                {viewportMode === 'desktop' && <Monitor className="w-4 h-4" />}
-                {viewportMode === 'tablet' && <Monitor className="w-4 h-4" />}
-                {viewportMode === 'mobile' && <Smartphone className="w-4 h-4" />}
-              </span>
-            </div>
-          </div>
-
-          {/* Quick Add Menu */}
-          {showAddMenu && (
-            <div className="absolute top-full left-4 mt-2 bg-white border border-[#B89B7A]/20 rounded-lg shadow-lg p-2 z-50">
-              <div className="grid grid-cols-2 gap-2">
-                {quickAddElements.map((element) => (
-                  <Button
-                    key={element.type}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      onElementAdd(element.type);
-                      setShowAddMenu(false);
-                    }}
-                    className="flex items-center gap-2 text-left justify-start"
-                  >
-                    <span>{element.icon}</span>
-                    <span>{element.label}</span>
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
+    <div className="flex-1 bg-gray-100 p-4 overflow-auto">
+      {/* Stage Header */}
+      {activeStage && !isPreviewMode && (
+        <div className="mb-4 bg-white rounded-lg p-3 shadow-sm border">
+          <h2 className="text-lg font-semibold text-gray-900">{activeStage.title}</h2>
+          <p className="text-sm text-gray-500">
+            {stageElements.length} componente{stageElements.length !== 1 ? 's' : ''}
+          </p>
         </div>
       )}
 
-      {/* Canvas Content */}
-      <div className={cn("p-8", getViewportStyles())}>
-        <div className="bg-white min-h-[600px] rounded-lg shadow-lg overflow-hidden">
-          {sortedElements.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-96 text-center">
-              <div className="text-6xl mb-4">🎨</div>
-              <h3 className="text-xl font-medium text-[#432818] mb-2">
-                Canvas Vazio
-              </h3>
-              <p className="text-[#8F7A6A] mb-6">
-                Adicione elementos para começar a criar sua página
-              </p>
-              {!isPreviewMode && (
-                <Button
-                  onClick={() => onElementAdd('title')}
-                  className="bg-[#B89B7A] hover:bg-[#8F7A6A]"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Adicionar Primeiro Elemento
-                </Button>
-              )}
+      <div className="mx-auto" style={getViewportStyles()}>
+        <div
+          ref={canvasRef}
+          className={`
+            bg-white shadow-lg rounded-lg overflow-hidden relative
+            ${!isPreviewMode && isOver && canDrop ? 'ring-2 ring-blue-300' : ''}
+          `}
+          style={{ minHeight: '600px' }}
+        >
+          {/* Empty State */}
+          {stageElements.length === 0 && !isPreviewMode && (
+            <div className="flex items-center justify-center h-96 text-gray-500">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Edit3 className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-medium mb-2">Canvas Vazio</h3>
+                <p className="text-sm">
+                  {activeStage ? 
+                    `Adicione componentes à etapa "${activeStage.title}"` : 
+                    'Selecione uma etapa para começar a editar'
+                  }
+                </p>
+              </div>
             </div>
-          ) : (
-            <div className="space-y-4 p-6">
-              {sortedElements.map((element, index) => (
-                <ElementRenderer
-                  key={element.id}
-                  element={element}
-                  isSelected={selectedElementId === element.id}
-                  isPreviewMode={isPreviewMode}
-                  onSelect={() => onElementSelect(element.id)}
-                  onUpdate={(updates) => onElementUpdate(element.id, updates)}
-                  onDelete={() => onElementDelete(element.id)}
-                  onMoveUp={() => handleMoveElement(element.id, 'up')}
-                  onMoveDown={() => handleMoveElement(element.id, 'down')}
-                  canMoveUp={index > 0}
-                  canMoveDown={index < sortedElements.length - 1}
-                />
-              ))}
+          )}
+
+          {/* No Stage Selected */}
+          {!activeStageId && !isPreviewMode && (
+            <div className="flex items-center justify-center h-96 text-gray-500">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Edit3 className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-medium mb-2">Nenhuma Etapa Selecionada</h3>
+                <p className="text-sm">
+                  Selecione uma etapa na barra lateral para começar a editar
+                </p>
+              </div>
             </div>
+          )}
+
+          {/* Elements */}
+          {stageElements.length > 0 && (
+            <AnimatePresence>
+              {stageElements
+                .sort((a, b) => a.order - b.order)
+                .map((element, index) => (
+                  <motion.div
+                    key={element.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    onMouseEnter={() => setDraggedOverIndex(index)}
+                    onMouseLeave={() => setDraggedOverIndex(null)}
+                  >
+                    {/* Drop Zone Indicator */}
+                    {!isPreviewMode && draggedOverIndex === index && isOver && (
+                      <div className="h-0.5 bg-blue-500 mx-4 mb-2" />
+                    )}
+
+                    <ElementRenderer
+                      element={element}
+                      isSelected={selectedElementId === element.id}
+                      isPreviewMode={isPreviewMode}
+                      onSelect={() => onElementSelect(element.id)}
+                      onUpdate={(updates) => onElementUpdate(element.id, updates)}
+                      onDelete={() => onElementDelete(element.id)}
+                      onMoveUp={index > 0 ? () => onElementMove(element.id, 'up') : undefined}
+                      onMoveDown={index < stageElements.length - 1 ? () => onElementMove(element.id, 'down') : undefined}
+                      canMoveUp={index > 0}
+                      canMoveDown={index < stageElements.length - 1}
+                    />
+
+                    {/* Bottom Drop Zone */}
+                    {!isPreviewMode && draggedOverIndex === index + 1 && isOver && (
+                      <div className="h-0.5 bg-blue-500 mx-4 mt-2" />
+                    )}
+                  </motion.div>
+                ))}
+            </AnimatePresence>
+          )}
+
+          {/* Final Drop Zone */}
+          {!isPreviewMode && stageElements.length > 0 && draggedOverIndex === stageElements.length && isOver && (
+            <div className="h-0.5 bg-blue-500 mx-4 mt-4" />
           )}
         </div>
       </div>

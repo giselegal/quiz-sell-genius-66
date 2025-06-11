@@ -25,10 +25,6 @@ import FAQBlockPreview from './block-previews/FAQBlockPreview';
 import CarouselBlockPreview from './block-previews/CarouselBlockPreview';
 import CustomCodeBlockPreview from './block-previews/CustomCodeBlockPreview';
 import AnimationBlockPreview from './block-previews/AnimationBlockPreview';
-import { ResultHeaderSectionPreview } from './block-previews/ResultHeaderSectionPreview';
-import { TransitionSectionPreview } from './block-previews/TransitionSectionPreview';
-import { FinalCtaSectionPreview } from './block-previews/FinalCtaSectionPreview';
-import { ResultHeaderBlockContent, TransitionBlockContent, FinalCtaBlockContent } from '@/types/resultPageBlocks';
 
 interface BlockRendererProps {
   block: Block;
@@ -52,12 +48,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     switch (block.type) {
       case 'header':
         return <HeaderBlockPreview content={block.content} />;
-      case 'result-header':
-        return <ResultHeaderSectionPreview content={block.content as ResultHeaderBlockContent} />;
-      case 'transition':
-        return <TransitionSectionPreview content={block.content as TransitionBlockContent} />;
-      case 'final-cta':
-        return <FinalCtaSectionPreview content={block.content as FinalCtaBlockContent} />;
       case 'headline':
         return <HeadlineBlockPreview content={block.content} />;
       case 'text':

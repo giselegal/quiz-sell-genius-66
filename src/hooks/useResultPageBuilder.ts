@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { ResultPageBlock, ResultPageBlockType } from '@/types/resultPageBlocks';
 import { StyleResult } from '@/types/quiz';
@@ -12,52 +13,6 @@ export const useResultPageBuilder = (primaryStyle: StyleResult, secondaryStyles?
 
   const getDefaultContentForBlockType = useCallback((type: ResultPageBlockType): any => {
     switch (type) {
-      case 'result-header':
-        return {
-          userName: "Visitante",
-          primaryStyle: {
-            category: primaryStyle.category,
-            percentage: primaryStyle.percentage || 85
-          },
-          secondaryStyles: secondaryStyles?.map(style => ({
-            category: style.category,
-            percentage: style.percentage || 0
-          })) || [],
-          showPersonalization: true,
-          showSecondaryStyles: true
-        };
-      case 'transition':
-        return {
-          title: "Chegou o Momento de Agir",
-          description: "Não deixe para depois a transformação que você pode começar agora!",
-          showDecorations: true,
-          backgroundColor: "#f8f9fa"
-        };
-      case 'final-cta':
-        return {
-          products: [
-            {
-              id: "1",
-              name: "Guia Completo de Estilo",
-              description: "Transforme seu visual com dicas personalizadas",
-              originalPrice: 97,
-              salePrice: 39,
-              image: ""
-            }
-          ],
-          timer: {
-            enabled: true,
-            duration: 60,
-            message: "Oferta por tempo limitado!"
-          },
-          discount: {
-            percentage: 60,
-            message: "60% de desconto por tempo limitado!"
-          },
-          buttonText: "QUERO TRANSFORMAR MEU ESTILO AGORA",
-          buttonColor: "#22c55e",
-          hotmartUrl: "https://pay.hotmart.com/exemplo"
-        };
       case 'header':
         return {
           header: {
@@ -187,7 +142,7 @@ export const useResultPageBuilder = (primaryStyle: StyleResult, secondaryStyles?
       default:
         return {};
     }
-  }, [primaryStyle, secondaryStyles]);
+  }, [primaryStyle]);
 
   const addBlock = useCallback((type: ResultPageBlockType, position?: number) => {
     const blockId = generateId();
