@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ResultPageBuilder } from '@/components/visual-editor/ResultPageBuilder';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
@@ -54,32 +54,11 @@ const ResultPageVisualEditorPage: React.FC = () => {
 
   return (
     <div className="h-screen flex flex-col">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar
-          </Button>
-          <div>
-            <h1 className="font-semibold">Editor Visual da Página de Resultado</h1>
-            <p className="text-sm text-gray-600">Criando uma página que se adapta a qualquer estilo</p>
-          </div>
-        </div>
-        <Button variant="outline" size="sm" onClick={handlePreview}>
-          <Eye className="w-4 h-4 mr-2" />
-          Visualizar Página Real
-        </Button>
-      </div>
-
-      {/* Editor */}
-      <div className="flex-1">
-        <ResultPageBuilder
-          primaryStyle={primaryStyle}
-          onSave={handleSave}
-          onPreview={handlePreview}
-        />
-      </div>
+      <ResultPageBuilder
+        primaryStyle={primaryStyle}
+        onSave={handleSave}
+        onPreview={handlePreview}
+      />
     </div>
   );
 };
