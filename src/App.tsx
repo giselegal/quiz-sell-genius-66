@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import QuizPage from './pages/QuizPage';
 import ResultPage from './pages/ResultPage';
 import AdminDashboard from './components/admin/AdminDashboard';
 import VisualEditorPage from './pages/VisualEditorPage';
@@ -15,8 +14,8 @@ function App() {
     <TooltipProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<QuizPage />} />
-          <Route path="/descubra-seu-estilo" element={<QuizPage />} />
+          <Route path="/" element={<ResultPage />} />
+          <Route path="/descubra-seu-estilo" element={<ResultPage />} />
           <Route path="/resultado" element={<ResultPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/visual-editor/:id" element={<VisualEditorPage />} />

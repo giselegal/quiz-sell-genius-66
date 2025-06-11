@@ -7,6 +7,7 @@ import { UnifiedSidebar } from '@/components/visual-editor/sidebar/UnifiedSideba
 import { VisualEditorCanvas } from '@/components/visual-editor/canvas/VisualEditorCanvas';
 import { PropertiesPanel } from '@/components/visual-editor/properties/VisualEditorProperties';
 import { useVisualEditor } from '@/hooks/useVisualEditor';
+import { useVisualEditorPersistence } from '@/hooks/useVisualEditorPersistence';
 import { BlockType } from '@/types/visualEditor';
 
 const VisualEditorPage: React.FC = () => {
@@ -24,12 +25,13 @@ const VisualEditorPage: React.FC = () => {
     moveElement,
     addStage,
     setActiveStage,
-    saveProject,
     canUndo,
     canRedo,
     undo,
     redo
   } = useVisualEditor();
+
+  const { saveEditorState, isSaving } = useVisualEditorPersistence();
 
   const handleElementAdd = useCallback((type: BlockType, position?: number) => {
     const elementId = addElement(type, activeStageId, position);
@@ -45,8 +47,19 @@ const VisualEditorPage: React.FC = () => {
   }, [updateElement]);
 
   const handleSave = useCallback(async () => {
-    await saveProject();
-  }, [saveProject]);
+    const editorState = {
+      elements,
+      stages,
+      activeStageId,
+      history: [],
+      historyIndex: 0,
+      selectedElementId,
+      viewport: viewportMode,
+      isPreviewMode
+    };
+    
+    await saveEditorState('default-project', editorState);
+  }, [saveEditorState, elements, stages, activeStageId, selectedElementId, viewportMode, isPreviewMode]);
 
   return (
     <DndProvider backend={HTML5Backend}>
