@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UnifiedResultPageEditor } from '@/components/result-editor/UnifiedResultPageEditor';
+import { RealComponentVisualEditor } from '@/components/editor/visual/RealComponentVisualEditor';
 import { StyleResult } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -98,7 +98,7 @@ const ResultPageEditorPage: React.FC = () => {
               Voltar
             </Button>
             <h1 className="text-xl font-playfair text-[#432818]">
-              Editor de Página de Resultado
+              Editor Visual - Componentes Reais
             </h1>
           </div>
           
@@ -116,7 +116,7 @@ const ResultPageEditorPage: React.FC = () => {
 
       {/* Editor */}
       <div className="flex-1">
-        <UnifiedResultPageEditor
+        <RealComponentVisualEditor
           primaryStyle={primaryStyle}
           secondaryStyles={secondaryStyles}
         />
