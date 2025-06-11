@@ -1,144 +1,159 @@
 
-import { BlockType, EditableContent } from '@/types/editor';
-import { BorderRadiusType } from '@/types/styleTypes';
+import { EditorBlock } from '@/types/editor';
 
-export const getDefaultContentForType = (type: BlockType): EditableContent => {
+export const getDefaultContentForType = (type: EditorBlock['type']) => {
   switch (type) {
-    case 'headline':
+    case 'result-header':
+      return {
+        userName: '',
+        primaryStyle: {
+          category: 'Natural',
+          percentage: 85
+        },
+        secondaryStyles: [
+          { category: 'Clássico', percentage: 12 },
+          { category: 'Contemporâneo', percentage: 8 }
+        ],
+        showPersonalization: true,
+        showSecondaryStyles: true
+      };
+
+    case 'transition':
+      return {
+        title: 'Chegou o Momento de Agir',
+        description: 'Não deixe para depois a transformação que você pode começar agora!',
+        showDecorations: true,
+        backgroundColor: '#f8f9fa'
+      };
+
+    case 'final-cta':
+      return {
+        products: [
+          {
+            id: 'manual-personalizado',
+            name: 'Manual de Estilo Personalizado',
+            description: 'Guia completo do seu estilo com dicas exclusivas',
+            originalPrice: 97,
+            salePrice: 39.90
+          },
+          {
+            id: 'bonus-1',
+            name: 'Bônus: Guia de Cores',
+            description: 'Descubra as cores que mais valorizam você',
+            originalPrice: 47,
+            salePrice: 0
+          },
+          {
+            id: 'bonus-2',
+            name: 'Bônus: Checklist de Compras',
+            description: 'Lista prática para renovar seu guarda-roupa',
+            originalPrice: 27,
+            salePrice: 0
+          }
+        ],
+        timer: {
+          enabled: true,
+          duration: 30,
+          message: 'Oferta válida por tempo limitado!'
+        },
+        discount: {
+          percentage: 75,
+          message: '75% OFF - Apenas hoje!'
+        },
+        buttonText: 'QUERO TRANSFORMAR MEU ESTILO AGORA',
+        buttonColor: '#22c55e',
+        hotmartUrl: ''
+      };
+
+    case 'header':
       return {
         title: 'Título Principal',
-        subtitle: 'Subtítulo ou descrição',
-        alignment: 'center' as const,
-        style: {
-          backgroundColor: '#ffffff',
-          color: '#432818',
-          paddingY: '24px',
-          paddingX: '16px',
-          borderRadius: 'md' as BorderRadiusType
-        }
+        subtitle: 'Subtítulo explicativo',
+        showLogo: true
       };
+
+    case 'hero-section':
+      return {
+        title: 'Transforme seu estilo',
+        subtitle: 'Descubra seu potencial único',
+        buttonText: 'Começar Agora',
+        backgroundImage: '',
+        showButton: true
+      };
+
+    case 'bonus-carousel':
+      return {
+        title: 'Bônus Exclusivos',
+        bonuses: [
+          { title: 'Bônus 1', description: 'Descrição do primeiro bônus' },
+          { title: 'Bônus 2', description: 'Descrição do segundo bônus' }
+        ]
+      };
+
+    case 'headline':
+      return {
+        title: 'Seu Título Aqui',
+        subtitle: 'Subtítulo complementar',
+        alignment: 'center' as const
+      };
+
     case 'text':
       return {
-        text: 'Este é um bloco de texto. Clique para editar.',
-        alignment: 'left' as const,
-        style: {
-          backgroundColor: '#F9F5F1',
-          color: '#8F7A6A',
-          paddingY: '16px',
-          paddingX: '16px',
-          borderRadius: 'md' as BorderRadiusType
-        }
+        content: 'Adicione seu texto aqui. Você pode usar **negrito** e *itálico* para destacar partes importantes.',
+        alignment: 'left' as const
       };
-    case 'image':
-      return {
-        imageUrl: 'https://via.placeholder.com/800x400?text=Imagem',
-        imageAlt: 'Descrição da imagem',
-        alignment: 'center' as const,
-        style: {
-          paddingY: '16px',
-          paddingX: '16px',
-          borderRadius: 'md' as BorderRadiusType
-        }
-      };
-    case 'pricing':
-      return {
-        title: 'Oferta Especial',
-        price: 'R$ 197',
-        regularPrice: 'R$ 397',
-        ctaText: 'Comprar Agora',
-        ctaUrl: '#comprar',
-        alignment: 'center' as const,
-        style: {
-          backgroundColor: '#ffffff',
-          color: '#432818',
-          buttonColor: '#B89B7A',
-          paddingY: '24px',
-          paddingX: '16px',
-          borderRadius: 'md' as BorderRadiusType
-        }
-      };
+
     case 'benefits':
       return {
         title: 'Benefícios',
         benefits: [
-          'Benefício 1: Descrição do primeiro benefício.',
-          'Benefício 2: Descrição do segundo benefício.',
-          'Benefício 3: Descrição do terceiro benefício.'
-        ],
-        alignment: 'left' as const,
-        style: {
-          backgroundColor: '#ffffff',
-          color: '#432818',
-          paddingY: '24px',
-          paddingX: '16px',
-          borderRadius: 'md' as BorderRadiusType
-        }
+          'Benefício 1',
+          'Benefício 2', 
+          'Benefício 3'
+        ]
       };
+
     case 'testimonials':
       return {
-        title: 'Depoimentos',
+        title: 'O que nossos clientes dizem',
         testimonials: [
           {
-            id: '1',
-            name: 'Ana Silva',
-            text: 'Adorei o resultado do quiz! Realmente reflete meu estilo pessoal.',
-            image: 'https://via.placeholder.com/100'
-          },
-          {
-            id: '2',
-            name: 'Carlos Mendes',
-            text: 'A consultoria foi incrível, agora sei exatamente o que combina comigo.',
-            image: 'https://via.placeholder.com/100'
+            name: 'Maria Silva',
+            content: 'Excelente produto!',
+            image: '',
+            rating: 5
           }
-        ],
-        alignment: 'center' as const,
-        style: {
-          backgroundColor: '#F9F5F1',
-          color: '#432818',
-          paddingY: '24px',
-          paddingX: '16px',
-          borderRadius: 'md' as BorderRadiusType
-        }
+        ]
       };
+
+    case 'pricing':
+      return {
+        title: 'Escolha seu plano',
+        plans: [
+          {
+            name: 'Básico',
+            price: 'R$ 97',
+            features: ['Recurso 1', 'Recurso 2']
+          }
+        ]
+      };
+
     case 'guarantee':
       return {
         title: 'Garantia de Satisfação',
-        text: '7 dias de garantia incondicional. Se você não ficar satisfeito, devolvemos seu dinheiro.',
-        imageUrl: 'https://via.placeholder.com/200?text=Selo+de+Garantia',
-        alignment: 'center' as const,
-        style: {
-          backgroundColor: '#ffffff',
-          color: '#432818',
-          paddingY: '24px',
-          paddingX: '16px',
-          borderRadius: 'md' as BorderRadiusType
-        }
+        description: 'Garantia de 30 dias ou seu dinheiro de volta',
+        period: '30 dias'
       };
-    case 'header':
+
+    case 'cta':
       return {
-        title: 'VOCÊ DESCOBRIU SEU ESTILO',
-        subtitle: 'Agora é hora de aplicar com clareza — e se vestir de você',
-        logo: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
-        logoAlt: 'Logo da marca',
-        alignment: 'center' as const,
-        style: {
-          backgroundColor: 'transparent',
-          color: '#432818',
-          paddingY: '16px',
-          paddingX: '16px',
-          borderRadius: 'none' as BorderRadiusType
-        }
+        title: 'Pronto para começar?',
+        buttonText: 'Clique Aqui',
+        buttonUrl: '#',
+        description: 'Não perca esta oportunidade!'
       };
-      
-    // Add more default content types as needed
+
     default:
-      return {
-        text: 'Conteúdo para editar',
-        alignment: 'left' as const,
-        style: {
-          paddingY: '16px',
-          paddingX: '16px'
-        }
-      };
+      return {};
   }
 };
