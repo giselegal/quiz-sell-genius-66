@@ -61,7 +61,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
         return (
           <Tag
             style={commonStyle}
-            className={`${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
+            className={`font-playfair text-[#432818] ${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
             contentEditable={!isPreviewMode}
             suppressContentEditableWarning={true}
             onBlur={(e) => handleContentEdit(e.currentTarget.textContent || '')}
@@ -74,7 +74,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
         return (
           <p
             style={commonStyle}
-            className={`${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
+            className={`text-[#8F7A6A] ${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
             contentEditable={!isPreviewMode}
             suppressContentEditableWarning={true}
             onBlur={(e) => handleContentEdit(e.currentTarget.textContent || '')}
@@ -87,7 +87,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
         return (
           <button
             style={commonStyle}
-            className={`${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
+            className={`bg-[#B89B7A] text-white px-6 py-3 rounded-lg hover:bg-[#8F7A6A] transition-colors ${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
             contentEditable={!isPreviewMode}
             suppressContentEditableWarning={true}
             onBlur={(e) => handleContentEdit(e.currentTarget.textContent || '')}
@@ -102,6 +102,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
             src={element.content.src || 'https://via.placeholder.com/400x200?text=Imagem'}
             alt={element.content.alt || 'Imagem'}
             style={commonStyle}
+            className="rounded-lg shadow-lg"
           />
         );
 
@@ -113,14 +114,14 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
             type={element.content.type || 'text'}
             placeholder={element.content.placeholder || 'Digite aqui...'}
             style={commonStyle}
-            className="border border-gray-300 rounded px-3 py-2 w-full"
+            className="border border-[#B89B7A]/30 rounded px-3 py-2 w-full focus:border-[#B89B7A] focus:outline-none"
           />
         );
 
       case 'video':
         return (
-          <div style={commonStyle} className="aspect-video bg-gray-200 rounded flex items-center justify-center">
-            <span className="text-gray-500">Vídeo: {element.content.src || 'URL não definida'}</span>
+          <div style={commonStyle} className="aspect-video bg-[#FAF9F7] rounded flex items-center justify-center border border-[#B89B7A]/20">
+            <span className="text-[#8F7A6A]">Vídeo: {element.content.src || 'URL não definida'}</span>
           </div>
         );
 
@@ -130,20 +131,20 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
             style={{ 
               ...commonStyle, 
               height: element.style.height || '2rem',
-              backgroundColor: isSelected && !isPreviewMode ? '#f3f4f6' : 'transparent'
+              backgroundColor: isSelected && !isPreviewMode ? '#FAF9F7' : 'transparent'
             }}
-            className={isSelected && !isPreviewMode ? 'border border-dashed border-gray-400' : ''}
+            className={isSelected && !isPreviewMode ? 'border border-dashed border-[#B89B7A]' : ''}
           >
             {isSelected && !isPreviewMode && (
-              <span className="text-xs text-gray-500 p-1">Espaçador</span>
+              <span className="text-xs text-[#8F7A6A] p-1">Espaçador</span>
             )}
           </div>
         );
 
       default:
         return (
-          <div style={commonStyle} className="p-4 bg-gray-100 border-2 border-dashed border-gray-300 rounded">
-            <p className="text-gray-500 text-center text-sm">
+          <div style={commonStyle} className="p-4 bg-[#FAF9F7] border-2 border-dashed border-[#B89B7A]/30 rounded">
+            <p className="text-[#8F7A6A] text-center text-sm">
               Componente: {element.type}
             </p>
           </div>
@@ -154,9 +155,9 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
   return (
     <div
       className={`relative group transition-all duration-200 ${
-        !isPreviewMode ? 'hover:ring-2 hover:ring-blue-200' : ''
+        !isPreviewMode ? 'hover:ring-2 hover:ring-[#B89B7A]/40' : ''
       } ${
-        isSelected ? 'ring-2 ring-blue-500' : ''
+        isSelected ? 'ring-2 ring-[#B89B7A]' : ''
       } ${
         element.locked ? 'pointer-events-none' : ''
       }`}
@@ -164,14 +165,14 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
     >
       {/* Element Controls */}
       {!isPreviewMode && isSelected && (
-        <div className="absolute -top-10 left-0 z-50 flex items-center gap-1 bg-blue-600 text-white px-2 py-1 rounded-lg shadow-lg">
+        <div className="absolute -top-10 left-0 z-50 flex items-center gap-1 bg-[#B89B7A] text-white px-2 py-1 rounded-lg shadow-lg">
           <span className="text-xs font-medium">{element.type}</span>
 
           <div className="flex items-center gap-1 ml-2">
             <Button
               size="sm"
               variant="ghost"
-              className="w-6 h-6 p-0 text-white hover:bg-blue-700"
+              className="w-6 h-6 p-0 text-white hover:bg-[#8F7A6A]"
               onClick={(e) => {
                 e.stopPropagation();
                 onMoveUp();
@@ -184,7 +185,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
             <Button
               size="sm"
               variant="ghost"
-              className="w-6 h-6 p-0 text-white hover:bg-blue-700"
+              className="w-6 h-6 p-0 text-white hover:bg-[#8F7A6A]"
               onClick={(e) => {
                 e.stopPropagation();
                 onMoveDown();
@@ -199,12 +200,12 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="w-6 h-6 p-0 text-white hover:bg-blue-700"
+                  className="w-6 h-6 p-0 text-white hover:bg-[#8F7A6A]"
                 >
                   <MoreVertical className="w-3 h-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent className="bg-white z-[9999]">
                 <DropdownMenuItem
                   onClick={() => onUpdate({ visible: !element.visible })}
                 >
