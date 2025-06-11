@@ -8,31 +8,26 @@ import { ArrowLeft, Eye } from 'lucide-react';
 
 const ResultPageVisualEditorPage: React.FC = () => {
   const navigate = useNavigate();
-  const { styleType } = useParams<{ styleType: string }>();
   const [primaryStyle, setPrimaryStyle] = useState<StyleResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load or create style data
-    if (styleType) {
-      const mockStyle: StyleResult = {
-        category: styleType as any,
-        score: 100,
-        percentage: 100
-      };
-      setPrimaryStyle(mockStyle);
-    }
+    // Create a default style for the editor - will be dynamic based on user data
+    const defaultStyle: StyleResult = {
+      category: "Natural" as any,
+      score: 100,
+      percentage: 85
+    };
+    setPrimaryStyle(defaultStyle);
     setIsLoading(false);
-  }, [styleType]);
+  }, []);
 
   const handleSave = (config: any) => {
     console.log('Salvando configuração da página de resultado:', config);
   };
 
   const handlePreview = () => {
-    if (styleType) {
-      window.open(`/resultado?style=${styleType}`, '_blank');
-    }
+    window.open('/resultado', '_blank');
   };
 
   if (isLoading) {
@@ -47,7 +42,7 @@ const ResultPageVisualEditorPage: React.FC = () => {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-lg mb-4">Estilo não encontrado</p>
+          <p className="text-lg mb-4">Erro ao carregar o editor</p>
           <Button onClick={() => navigate('/admin')}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
@@ -67,13 +62,13 @@ const ResultPageVisualEditorPage: React.FC = () => {
             Voltar
           </Button>
           <div>
-            <h1 className="font-semibold">Editor da Página de Resultado</h1>
-            <p className="text-sm text-gray-600">Estilo: {primaryStyle.category}</p>
+            <h1 className="font-semibold">Editor Visual da Página de Resultado</h1>
+            <p className="text-sm text-gray-600">Criando uma página que se adapta a qualquer estilo</p>
           </div>
         </div>
         <Button variant="outline" size="sm" onClick={handlePreview}>
           <Eye className="w-4 h-4 mr-2" />
-          Visualizar Página
+          Visualizar Página Real
         </Button>
       </div>
 
