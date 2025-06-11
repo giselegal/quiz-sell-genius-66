@@ -8,14 +8,14 @@ import ResultHeader from '@/components/quiz-result/ResultHeader';
 import PrimaryStyleCard from '@/components/quiz-result/PrimaryStyleCard';
 import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
 import OfferCard from '@/components/quiz-result/sales/OfferCard';
-import { captureQuizCompletionEvent } from '@/utils/analytics';
 import { useUtmParameters } from '@/hooks/useUtmParameters';
 
 const ResultPage: React.FC = () => {
-  const { quizResult, userName } = useQuiz();
+  const { primaryStyle, secondaryStyles } = useQuiz();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const { utmParameters } = useUtmParameters();
+  const [userName, setUserName] = useState('Visitante');
+  const { utmParams } = useUtmParameters();
 
   useEffect(() => {
     // Simular loading mínimo para experiência suave
@@ -27,19 +27,27 @@ const ResultPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!quizResult || !userName) {
+    // Get user name from localStorage
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+      setUserName(storedName);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!primaryStyle) {
       console.log('Redirecionando para quiz - dados incompletos');
       navigate('/quiz');
       return;
     }
 
-    // Capturar evento de conclusão do quiz
-    captureQuizCompletionEvent({
-      primaryStyle: quizResult.primaryStyle.category,
+    // Log completion event (simplified)
+    console.log('Quiz completed:', {
+      primaryStyle: primaryStyle.category,
       userName: userName,
-      utmParameters: utmParameters
+      utmParams: utmParams
     });
-  }, [quizResult, userName, navigate, utmParameters]);
+  }, [primaryStyle, userName, navigate, utmParams]);
 
   if (isLoading) {
     return (
@@ -57,11 +65,9 @@ const ResultPage: React.FC = () => {
     );
   }
 
-  if (!quizResult || !userName) {
+  if (!primaryStyle) {
     return null; // O useEffect já fez o redirect
   }
-
-  const { primaryStyle, secondaryStyles } = quizResult;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#fffaf7] to-white">
