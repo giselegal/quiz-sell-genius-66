@@ -1,9 +1,7 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { FinalCtaBlockContent } from '@/types/resultPageBlocks';
+import { Button } from '@/components/ui/button';
 
 interface FinalCtaBlockProps {
   content: FinalCtaBlockContent;
@@ -14,64 +12,64 @@ export const FinalCtaBlock: React.FC<FinalCtaBlockProps> = ({
   content,
   onClick
 }) => {
-  const products = content.products || [];
-  const hasProducts = products.length > 0;
-
   return (
     <div
       className="border-2 border-dashed border-transparent hover:border-[#B89B7A] rounded-lg transition-all cursor-pointer"
       onClick={onClick}
     >
-      <div className="bg-gradient-to-br from-[#432818] to-[#8F7A6A] text-white p-8 rounded-2xl">
-        {content.timer?.enabled && (
-          <div className="text-center mb-8">
-            <Badge className="bg-red-500 text-white px-4 py-2 text-lg animate-pulse">
-              ⏰ {content.timer.message || 'Oferta por tempo limitado!'}
-            </Badge>
-          </div>
-        )}
+      <div className="bg-gradient-to-br from-[#FAF9F7] to-[#F5F3F0] py-16 lg:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {content.timer?.enabled && (
+            <div className="bg-red-600 text-white px-6 py-3 rounded-lg mb-8 inline-block">
+              <p className="font-semibold">
+                {content.timer.message || 'Oferta por tempo limitado!'}
+              </p>
+            </div>
+          )}
 
-        <div className="text-center mb-8">
-          <h2 className="text-3xl lg:text-4xl font-playfair font-bold mb-4">
+          <h2 className="text-3xl lg:text-4xl font-playfair font-bold mb-8 text-[#432818]">
             Transforme Seu Estilo Agora
           </h2>
-          {content.discount && (
-            <p className="text-xl text-[#B89B7A]">
-              {content.discount.message || `${content.discount.percentage}% OFF - Oferta Especial!`}
-            </p>
-          )}
-        </div>
 
-        {hasProducts && (
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {products.map((product, index) => (
-              <Card key={product.id} className="p-6 bg-white text-[#432818]">
-                <h3 className="font-bold text-lg mb-2">{product.name}</h3>
-                <p className="text-sm text-[#8F7A6A] mb-4">{product.description}</p>
-                <div className="text-center">
-                  <div className="text-sm line-through text-gray-500">
-                    R$ {product.originalPrice.toFixed(2)}
-                  </div>
-                  <div className="text-2xl font-bold text-[#B89B7A]">
-                    R$ {product.salePrice.toFixed(2)}
+          {content.products && content.products.length > 0 && (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-12">
+              {content.products.map((product) => (
+                <div key={product.id} className="bg-white rounded-xl p-6 shadow-lg border border-[#B89B7A]/20">
+                  <h3 className="font-semibold text-[#432818] mb-2">{product.name}</h3>
+                  <p className="text-[#8F7A6A] text-sm mb-4">{product.description}</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-gray-500 line-through text-sm">
+                        R$ {product.originalPrice.toFixed(2)}
+                      </span>
+                      <span className="text-[#B89B7A] font-bold text-xl ml-2">
+                        R$ {product.salePrice.toFixed(2)}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </Card>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
 
-        <div className="text-center">
+          {content.discount && (
+            <div className="bg-green-100 border border-green-300 rounded-lg p-4 mb-8 inline-block">
+              <p className="text-green-800 font-semibold">
+                {content.discount.message || `${content.discount.percentage}% de desconto!`}
+              </p>
+            </div>
+          )}
+
           <Button
             size="lg"
-            className="text-xl px-12 py-6 font-bold text-white transform hover:scale-105 transition-all"
+            className="text-xl px-12 py-6 rounded-xl font-bold"
             style={{ backgroundColor: content.buttonColor || '#22c55e' }}
           >
             {content.buttonText || 'QUERO TRANSFORMAR MEU ESTILO AGORA'}
           </Button>
-          
-          <p className="text-sm mt-4 text-white/80">
-            🔒 Pagamento 100% seguro via Hotmart
+
+          <p className="text-[#8F7A6A] text-sm mt-4">
+            Acesso imediato após a confirmação do pagamento
           </p>
         </div>
       </div>

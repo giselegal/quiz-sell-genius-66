@@ -1,14 +1,15 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { StyleResult } from '@/types/quiz';
+import { VisualEditorToolbar } from './toolbar/VisualEditorToolbar';
 import { ResultPageSidebar } from './sidebar/ResultPageSidebar';
-import { ResultPageCanvas } from './canvas/ResultPageCanvas';
-import { Button } from '@/components/ui/button';
-import { Save, Eye, Monitor, Tablet, Smartphone } from 'lucide-react';
-import { useResultPageVisualEditor } from '@/hooks/useResultPageVisualEditor';
+import { useResultPageBuilder } from '@/hooks/useResultPageBuilder';
+import { ResultPageBlockType } from '@/types/resultPageBlocks';
+import { StyleResult } from '@/types/quiz';
+import { BlockRenderer } from '@/components/result-editor/BlockRenderer';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ResultPageBuilderProps {
   primaryStyle: StyleResult;
@@ -23,9 +24,6 @@ export const ResultPageBuilder: React.FC<ResultPageBuilderProps> = ({
   onSave,
   onPreview
 }) => {
-  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [showProperties, setShowProperties] = useState(true);
-  
   const {
     blocks,
     selectedBlockId,
@@ -35,13 +33,23 @@ export const ResultPageBuilder: React.FC<ResultPageBuilderProps> = ({
     addBlock,
     updateBlock,
     deleteBlock,
-    saveProject
-  } = useResultPageVisualEditor(primaryStyle, secondaryStyles);
+    moveBlock,
+    saveConfiguration
+  } = useResultPageBuilder(primaryStyle, secondaryStyles);
+
+  const handleElementAdd = (type: ResultPageBlockType) => {
+    const elementId = addBlock(type);
+    setSelectedBlockId(elementId);
+  };
 
   const handleSave = async () => {
-    const success = await saveProject();
+    const success = await saveConfiguration();
     if (success && onSave) {
-      onSave({ blocks, primaryStyle, secondaryStyles });
+      onSave({
+        blocks,
+        primaryStyle,
+        secondaryStyles
+      });
     }
   };
 
@@ -52,145 +60,94 @@ export const ResultPageBuilder: React.FC<ResultPageBuilderProps> = ({
     }
   };
 
-  const getViewportClasses = () => {
-    switch (viewportMode) {
-      case 'mobile':
-        return 'max-w-sm mx-auto';
-      case 'tablet':
-        return 'max-w-2xl mx-auto';
-      default:
-        return 'max-w-6xl mx-auto';
-    }
-  };
-
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="h-full flex flex-col bg-gray-50">
-        {/* Toolbar */}
-        <div className="bg-white border-b border-gray-200 px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <h1 className="text-lg font-semibold text-gray-900">
-                Editor da Página de Resultado
-              </h1>
-              <div className="text-sm text-gray-600">
-                Estilo: {primaryStyle.category}
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              {/* Viewport controls */}
-              <div className="flex items-center border border-gray-300 rounded-lg">
-                <Button
-                  variant={viewportMode === 'desktop' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewportMode('desktop')}
-                  className="rounded-r-none"
-                >
-                  <Monitor className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewportMode === 'tablet' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewportMode('tablet')}
-                  className="rounded-none border-x border-gray-300"
-                >
-                  <Tablet className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewportMode === 'mobile' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setViewportMode('mobile')}
-                  className="rounded-l-none"
-                >
-                  <Smartphone className="w-4 h-4" />
-                </Button>
-              </div>
-              
-              <Button variant="outline" size="sm" onClick={handlePreview}>
-                <Eye className="w-4 h-4 mr-2" />
-                {isPreviewMode ? 'Editar' : 'Preview'}
-              </Button>
-              
-              <Button size="sm" onClick={handleSave}>
-                <Save className="w-4 h-4 mr-2" />
-                Salvar
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Main content */}
-        <div className="flex-1 overflow-hidden">
-          <ResizablePanelGroup direction="horizontal" className="h-full">
-            {/* Sidebar */}
-            {!isPreviewMode && (
-              <>
-                <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-                  <ResultPageSidebar
-                    onComponentAdd={addBlock}
-                    primaryStyle={primaryStyle}
-                  />
-                </ResizablePanel>
-                <ResizableHandle withHandle />
-              </>
-            )}
-            
-            {/* Canvas */}
-            <ResizablePanel defaultSize={isPreviewMode ? 100 : 60}>
-              <div className={`h-full bg-gray-100 overflow-auto ${getViewportClasses()}`}>
-                <ResultPageCanvas
-                  blocks={blocks}
-                  primaryStyle={primaryStyle}
-                  secondaryStyles={secondaryStyles}
-                  selectedBlockId={selectedBlockId}
-                  isPreviewMode={isPreviewMode}
-                  onBlockSelect={setSelectedBlockId}
-                  onBlockUpdate={updateBlock}
-                  onBlockDelete={deleteBlock}
-                />
-              </div>
+      <div className="h-screen flex flex-col bg-gray-50">
+        <VisualEditorToolbar
+          isPreviewing={isPreviewMode}
+          onPreviewToggle={handlePreview}
+          onSave={handleSave}
+          canUndo={false}
+          canRedo={false}
+          onUndo={() => {}}
+          onRedo={() => {}}
+          viewportMode="desktop"
+          onViewportChange={() => {}}
+        />
+        
+        <ResizablePanelGroup direction="horizontal" className="flex-1">
+          {!isPreviewMode && (
+            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+              <ResultPageSidebar
+                onComponentAdd={handleElementAdd}
+                primaryStyle={primaryStyle}
+              />
             </ResizablePanel>
-            
-            {/* Properties Panel */}
-            {!isPreviewMode && selectedBlockId && showProperties && (
-              <>
-                <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={20} minSize={15} maxSize={35}>
-                  <div className="h-full bg-white border-l border-gray-200 p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-gray-900">Propriedades</h3>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSelectedBlockId(null)}
-                      >
-                        ✕
-                      </Button>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <p className="text-sm text-gray-600">
-                        Bloco selecionado: {selectedBlockId}
-                      </p>
-                      
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => {
-                          deleteBlock(selectedBlockId);
-                          setSelectedBlockId(null);
-                        }}
-                      >
-                        Excluir Bloco
-                      </Button>
+          )}
+          
+          {!isPreviewMode && <ResizableHandle withHandle />}
+          
+          <ResizablePanel defaultSize={isPreviewMode ? 100 : 55}>
+            <div className="h-full bg-gray-100 p-4 overflow-hidden">
+              <ScrollArea className="h-full">
+                <div className="mx-auto max-w-5xl">
+                  <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div className="space-y-4 p-4">
+                      {blocks.length === 0 ? (
+                        <div className="text-center py-20 text-gray-500">
+                          <p className="text-xl mb-2">Nenhum componente adicionado</p>
+                          <p>Clique nos componentes da sidebar para começar</p>
+                        </div>
+                      ) : (
+                        blocks
+                          .sort((a, b) => a.order - b.order)
+                          .map((block) => (
+                            <BlockRenderer
+                              key={block.id}
+                              block={block}
+                              primaryStyle={primaryStyle}
+                              isSelected={selectedBlockId === block.id}
+                              onSelect={() => setSelectedBlockId(block.id)}
+                              onUpdate={(content) => updateBlock(block.id, { content })}
+                            />
+                          ))
+                      )}
                     </div>
                   </div>
-                </ResizablePanel>
-              </>
-            )}
-          </ResizablePanelGroup>
-        </div>
+                </div>
+              </ScrollArea>
+            </div>
+          </ResizablePanel>
+          
+          {!isPreviewMode && <ResizableHandle withHandle />}
+          
+          {!isPreviewMode && selectedBlockId && (
+            <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
+              <div className="h-full bg-white border-l border-gray-200 p-4">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="font-semibold text-gray-900">Propriedades</h3>
+                  <button
+                    onClick={() => setSelectedBlockId(null)}
+                    className="text-sm text-gray-500 hover:text-gray-700"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-600">
+                    Elemento selecionado: {selectedBlockId}
+                  </p>
+                  <button
+                    onClick={() => deleteBlock(selectedBlockId)}
+                    className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+                  >
+                    Remover Componente
+                  </button>
+                </div>
+              </div>
+            </ResizablePanel>
+          )}
+        </ResizablePanelGroup>
       </div>
     </DndProvider>
   );

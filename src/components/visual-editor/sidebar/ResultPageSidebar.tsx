@@ -12,7 +12,9 @@ import {
   Shield, 
   Star,
   Crown,
-  Zap
+  Zap,
+  User,
+  ArrowRight
 } from 'lucide-react';
 import { ResultPageBlockType } from '@/types/resultPageBlocks';
 import { StyleResult } from '@/types/quiz';
@@ -23,6 +25,27 @@ interface ResultPageSidebarProps {
 }
 
 const RESULT_PAGE_COMPONENTS = [
+  {
+    type: 'result-header' as ResultPageBlockType,
+    name: 'Cabeçalho Resultado',
+    icon: User,
+    description: 'Seção com nome do usuário e estilo predominante',
+    category: 'Resultado'
+  },
+  {
+    type: 'transition' as ResultPageBlockType,
+    name: 'Seção Transição',
+    icon: ArrowRight,
+    description: 'Seção de transição motivacional',
+    category: 'Educacional'
+  },
+  {
+    type: 'final-cta' as ResultPageBlockType,
+    name: 'CTA Final',
+    icon: ShoppingCart,
+    description: 'Call-to-action final com produtos e ofertas',
+    category: 'Conversão'
+  },
   {
     type: 'header' as ResultPageBlockType,
     name: 'Cabeçalho',
@@ -96,14 +119,14 @@ const RESULT_PAGE_COMPONENTS = [
 ];
 
 const CATEGORIES = [
-  { id: 'Estrutura', name: 'Estrutura', color: 'bg-blue-100 text-blue-800' },
   { id: 'Resultado', name: 'Resultado', color: 'bg-purple-100 text-purple-800' },
-  { id: 'Social Proof', name: 'Social Proof', color: 'bg-green-100 text-green-800' },
   { id: 'Educacional', name: 'Educacional', color: 'bg-yellow-100 text-yellow-800' },
+  { id: 'Conversão', name: 'Conversão', color: 'bg-red-100 text-red-800' },
+  { id: 'Estrutura', name: 'Estrutura', color: 'bg-blue-100 text-blue-800' },
+  { id: 'Social Proof', name: 'Social Proof', color: 'bg-green-100 text-green-800' },
   { id: 'Oferta', name: 'Oferta', color: 'bg-orange-100 text-orange-800' },
   { id: 'Segurança', name: 'Segurança', color: 'bg-gray-100 text-gray-800' },
-  { id: 'Autoridade', name: 'Autoridade', color: 'bg-indigo-100 text-indigo-800' },
-  { id: 'Conversão', name: 'Conversão', color: 'bg-red-100 text-red-800' }
+  { id: 'Autoridade', name: 'Autoridade', color: 'bg-indigo-100 text-indigo-800' }
 ];
 
 export const ResultPageSidebar: React.FC<ResultPageSidebarProps> = ({
