@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useGlobalStyles } from "@/hooks/useGlobalStyles";
@@ -6,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useLoadingState } from "@/hooks/useLoadingState";
 import { useIsLowPerformanceDevice } from "@/hooks/use-mobile";
 import { tokens } from "@/config/designTokens";
+import ResultHeaderSection from "@/components/quiz-sections/ResultHeaderSection";
 
 interface ResultPageWrapperProps {
   children: React.ReactNode;
@@ -14,7 +14,7 @@ interface ResultPageWrapperProps {
 export const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({
   children,
 }) => {
-  const { primaryStyle } = useQuiz();
+  const { primaryStyle, secondaryStyles } = useQuiz();
   const { globalStyles } = useGlobalStyles();
   const { user } = useAuth();
   const isLowPerformance = useIsLowPerformanceDevice();
@@ -29,6 +29,12 @@ export const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({
     style: false,
     guide: false,
   });
+
+  // Callback para quando as imagens carregam
+  const handleImageLoad = useCallback((imageType: "style" | "guide") => {
+    console.log(`[ResultPageWrapper] Imagem ${imageType} carregada`);
+    setImagesLoaded(prev => ({ ...prev, [imageType]: true }));
+  }, []);
 
   // Effect para controle de carregamento otimizado
   useEffect(() => {
@@ -252,6 +258,15 @@ export const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({
       </div>
 
       <main className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-6xl relative z-10">
+        {/* Renderizar o ResultHeaderSection como primeiro componente */}
+        <ResultHeaderSection
+          primaryStyle={primaryStyle}
+          secondaryStyles={secondaryStyles || []}
+          user={user}
+          isLowPerformance={isLowPerformance}
+          onImageLoad={handleImageLoad}
+        />
+        
         {children}
       </main>
 
