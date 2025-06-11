@@ -1,11 +1,14 @@
+
 import React, { useEffect, useState, useCallback } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useGlobalStyles } from "@/hooks/useGlobalStyles";
 import { useAuth } from "@/context/AuthContext";
 import { useLoadingState } from "@/hooks/useLoadingState";
 import { useIsLowPerformanceDevice } from "@/hooks/use-mobile";
+import { useScrollTracking } from "@/hooks/useScrollTracking";
 import { tokens } from "@/config/designTokens";
-import ResultHeaderSection from "@/components/quiz-sections/ResultHeaderSection";
+import { CustomStyles } from "@/components/result/CustomStyles";
+import { NavigationDots } from "@/components/result/NavigationDots";
 
 interface ResultPageWrapperProps {
   children: React.ReactNode;
@@ -14,17 +17,16 @@ interface ResultPageWrapperProps {
 export const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({
   children,
 }) => {
-  const { primaryStyle, secondaryStyles } = useQuiz();
+  const { primaryStyle } = useQuiz();
   const { globalStyles } = useGlobalStyles();
   const { user } = useAuth();
   const isLowPerformance = useIsLowPerformanceDevice();
+  const { isScrolled, activeSection, scrollToSection } = useScrollTracking();
   const { isLoading, completeLoading } = useLoadingState({
     minDuration: isLowPerformance ? 100 : 300,
     disableTransitions: isLowPerformance,
   });
 
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("primary-style");
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
     guide: false,
@@ -82,47 +84,6 @@ export const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({
     }
   }, [imagesLoaded, completeLoading]);
 
-  // Scroll tracking e navegação
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 120);
-
-      // Tracking de seção ativa
-      const sections = [
-        "primary-style",
-        "transformations", 
-        "motivation",
-        "bonuses",
-        "testimonials",
-        "guarantee",
-        "mentor",
-        "cta",
-      ];
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const element = document.getElementById(sections[i]);
-        if (element?.getBoundingClientRect().top <= 250) {
-          setActiveSection(sections[i]);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToSection = useCallback((sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      window.scrollTo({
-        top: section.offsetTop - 100,
-        behavior: "smooth",
-      });
-    }
-  }, []);
-
   if (!primaryStyle) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -140,27 +101,7 @@ export const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({
         fontFamily: globalStyles.fontFamily || "Inter, system-ui, sans-serif",
       }}
     >
-      {/* Scrollbar personalizada e Focus states */}
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-          ::-webkit-scrollbar { width: 6px; }
-          ::-webkit-scrollbar-track { background: ${tokens.colors.borderLight}; }
-          ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(to bottom, ${tokens.colors.primary}, ${tokens.colors.secondary}); 
-            border-radius: 3px; 
-          }
-          ::-webkit-scrollbar-thumb:hover { 
-            background: linear-gradient(to bottom, ${tokens.colors.secondary}, ${tokens.colors.primary}); 
-          }
-          html { scroll-behavior: smooth; }
-          button:focus-visible, a:focus-visible { 
-            outline: 2px solid ${tokens.colors.primary}; 
-            outline-offset: 2px; 
-          }
-        `,
-        }}
-      />
+      <CustomStyles />
 
       {/* Background decorativo */}
       <div className="fixed inset-0 pointer-events-none">
@@ -208,65 +149,13 @@ export const ResultPageWrapper: React.FC<ResultPageWrapperProps> = ({
       </header>
 
       {/* Navigation dots */}
-      <div
-        className={`fixed right-6 top-1/2 transform -translate-y-1/2 z-40 transition-all duration-500 ${
-          isScrolled ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
-        }`}
-      >
-        <div 
-          className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-lg"
-          style={{
-            border: `1px solid ${tokens.colors.border}`,
-            boxShadow: tokens.shadows.lg
-          }}
-        >
-          {[
-            { id: "primary-style", label: "Seu Estilo" },
-            { id: "transformations", label: "Transformações" },
-            { id: "motivation", label: "Motivação" },
-            { id: "bonuses", label: "Bônus" },
-            { id: "testimonials", label: "Depoimentos" },
-            { id: "guarantee", label: "Garantia" },
-            { id: "cta", label: "Adquirir" },
-          ].map((section) => (
-            <button
-              key={section.id}
-              onClick={() => scrollToSection(section.id)}
-              className={`group relative w-2 h-2 rounded-full transition-all duration-300 ${
-                activeSection === section.id
-                  ? "scale-125 shadow-md"
-                  : "hover:scale-110"
-              }`}
-              style={{
-                backgroundColor: activeSection === section.id
-                  ? tokens.colors.primary
-                  : tokens.colors.textLight
-              }}
-              aria-label={`Ir para seção ${section.label}`}
-            >
-              <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                <div 
-                  className="text-white text-xs px-2 py-1 rounded whitespace-nowrap"
-                  style={{ backgroundColor: tokens.colors.text }}
-                >
-                  {section.label}
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
+      <NavigationDots
+        isVisible={isScrolled}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+      />
 
       <main className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-6xl relative z-10">
-        {/* Renderizar o ResultHeaderSection como primeiro componente */}
-        <ResultHeaderSection
-          primaryStyle={primaryStyle}
-          secondaryStyles={secondaryStyles || []}
-          user={user}
-          isLowPerformance={isLowPerformance}
-          onImageLoad={handleImageLoad}
-        />
-        
         {children}
       </main>
 
