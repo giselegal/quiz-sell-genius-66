@@ -6,7 +6,7 @@ import { Save, Eye, EyeOff, Plus, Settings } from 'lucide-react';
 import { StyleResult } from '@/types/quiz';
 import { toast } from '@/components/ui/use-toast';
 import { ResultPageWrapper } from '@/components/layout/ResultPageWrapper';
-import { ResultHeaderSection } from '@/components/quiz-sections/ResultHeaderSection';
+import ResultHeaderSection from '@/components/quiz-sections/ResultHeaderSection';
 import { TransitionSection } from '@/components/quiz-sections/TransitionSection';
 import { FinalCtaSection } from '@/components/quiz-sections/FinalCtaSection';
 import SectionTitle from '@/components/common/SectionTitle';

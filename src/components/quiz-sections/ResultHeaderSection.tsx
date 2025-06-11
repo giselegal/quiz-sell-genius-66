@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -17,13 +16,13 @@ interface ResultHeaderSectionProps {
   onImageLoad: (imageType: "style" | "guide") => void;
 }
 
-export default function ResultHeaderSection({
+const ResultHeaderSection: React.FC<ResultHeaderSectionProps> = ({
   primaryStyle,
   secondaryStyles,
   user,
   isLowPerformance,
   onImageLoad,
-}: ResultHeaderSectionProps) {
+}) => {
   const { category } = primaryStyle;
   const { image, guideImage } = styleConfig[category];
 
@@ -247,4 +246,7 @@ export default function ResultHeaderSection({
       </Card>
     </section>
   );
-}
+};
+
+export { ResultHeaderSection };
+export default ResultHeaderSection;
