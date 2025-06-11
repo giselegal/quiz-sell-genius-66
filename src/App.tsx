@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
@@ -37,7 +38,7 @@ const EditorDashboard = lazy(() => import("./pages/EditorDashboard"));
 const VisualEditorPage = lazy(() => import("./pages/VisualEditorPage"));
 const ResultPageVisualEditorPage = lazy(() => import("./pages/ResultPageVisualEditorPage"));
 
-function App() {
+const App: React.FC = () => {
   // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
@@ -52,45 +53,47 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        {/* Página inicial com teste A/B */}
-        <Route path="/" element={<LandingPage />} />
-        {/* Rota do quiz específica */}
-        <Route path="/quiz" element={<QuizPage />} />
-        {/* Rotas do teste A/B */}
-        <Route path="/resultado" element={<ResultPage />} />
-        <Route
-          path="/quiz-descubra-seu-estilo"
-          element={<QuizDescubraSeuEstilo />}
-        />
-        {/* Manter rota antiga para compatibilidade */}
-        <Route
-          path="/descubra-seu-estilo"
-          element={<QuizDescubraSeuEstilo />}
-        />
-        {/* Editor Visual - Dashboard e Editor */}
-        <Route path="/editor-dashboard" element={<EditorDashboard />} />
-        <Route path="/visual-editor" element={<VisualEditorPage />} />
-        <Route path="/visual-editor/:id" element={<VisualEditorPage />} />
-        
-        {/* Admin - protegido com AdminAuthProvider */}
-        <Route
-          path="/admin/*"
-          element={
-            <AdminAuthProvider>
-              <AdminRoute>
-                <DashboardPage />
-              </AdminRoute>
-            </AdminAuthProvider>
-          }
-        />
-        {/* 404 */}
-        <Route path="*" element={<NotFoundPage />} />
-        
-        <Route path="/editor/resultado/:styleType" element={<ResultPageVisualEditorPage />} />
-      </Routes>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          {/* Página inicial com teste A/B */}
+          <Route path="/" element={<LandingPage />} />
+          {/* Rota do quiz específica */}
+          <Route path="/quiz" element={<QuizPage />} />
+          {/* Rotas do teste A/B */}
+          <Route path="/resultado" element={<ResultPage />} />
+          <Route
+            path="/quiz-descubra-seu-estilo"
+            element={<QuizDescubraSeuEstilo />}
+          />
+          {/* Manter rota antiga para compatibilidade */}
+          <Route
+            path="/descubra-seu-estilo"
+            element={<QuizDescubraSeuEstilo />}
+          />
+          {/* Editor Visual - Dashboard e Editor */}
+          <Route path="/editor-dashboard" element={<EditorDashboard />} />
+          <Route path="/visual-editor" element={<VisualEditorPage />} />
+          <Route path="/visual-editor/:id" element={<VisualEditorPage />} />
+          
+          {/* Admin - protegido com AdminAuthProvider */}
+          <Route
+            path="/admin/*"
+            element={
+              <AdminAuthProvider>
+                <AdminRoute>
+                  <DashboardPage />
+                </AdminRoute>
+              </AdminAuthProvider>
+            }
+          />
+          {/* 404 */}
+          <Route path="*" element={<NotFoundPage />} />
+          
+          <Route path="/editor/resultado/:styleType" element={<ResultPageVisualEditorPage />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
-}
+};
 
 export default App;
