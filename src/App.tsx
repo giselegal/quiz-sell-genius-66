@@ -51,6 +51,7 @@ function App() {
   }, []);
 
   return (
+<<<<<<< HEAD
     <Router>
       <Routes>
         {/* Página inicial com teste A/B */}
@@ -90,6 +91,71 @@ function App() {
         <Route path="/editor/resultado/:styleType" element={<ResultPageVisualEditorPage />} />
       </Routes>
     </Router>
+=======
+    <AuthProvider>
+      <QuizProvider>
+        <TooltipProvider>
+          <Router>
+            <CriticalCSSLoader
+              cssContent={initialCriticalCSS}
+              id="initial-critical"
+              removeOnLoad={true}
+            />
+            <CriticalCSSLoader
+              cssContent={heroCriticalCSS}
+              id="hero-critical"
+              removeOnLoad={true}
+            />
+
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                {/* Página inicial com teste A/B */}
+                <Route path="/" element={<LandingPage />} />
+                {/* Rota do quiz específica */}
+                <Route path="/quiz" element={<QuizPage />} />
+                {/* Rotas do teste A/B */}
+                <Route path="/resultado" element={<ResultPage />} />
+                <Route
+                  path="/quiz-descubra-seu-estilo"
+                  element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Manter rota antiga para compatibilidade */}
+                <Route
+                  path="/descubra-seu-estilo"
+                  element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Editor Visual - Dashboard e Editor */}
+                <Route path="/editor" element={<EditorDashboard />} />
+                <Route path="/editor-dashboard" element={<EditorDashboard />} />
+                <Route path="/dashboard-editor" element={<EditorDashboard />} />
+                <Route path="/visual-editor" element={<VisualEditorPage />} />
+                <Route
+                  path="/visual-editor/:id"
+                  element={<VisualEditorPage />}
+                />
+                <Route path="/editor/:id" element={<VisualEditorPage />} />
+
+                {/* Admin - protegido com AdminAuthProvider */}
+                <Route
+                  path="/admin/*"
+                  element={
+                    <AdminAuthProvider>
+                      <AdminRoute>
+                        <DashboardPage />
+                      </AdminRoute>
+                    </AdminAuthProvider>
+                  }
+                />
+                {/* 404 */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </Router>
+          <Toaster />
+        </TooltipProvider>
+      </QuizProvider>
+    </AuthProvider>
+>>>>>>> 739c308 (WIP: Visual Editor implementation and dashboard integration)
   );
 }
 

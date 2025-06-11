@@ -1,12 +1,11 @@
-
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { 
-  Eye, 
-  Save, 
-  Download, 
-  Undo, 
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  Eye,
+  Save,
+  Download,
+  Undo,
   Redo,
   Monitor,
   Tablet,
@@ -14,9 +13,9 @@ import {
   Share,
   Settings,
   Layers,
-  EyeOff
-} from 'lucide-react';
-import { exportProjectAsJson } from '@/utils/exportUtils';
+  EyeOff,
+} from "lucide-react";
+import { exportProjectAsJson } from "@/utils/exportUtils";
 
 interface EditorToolbarProps {
   isPreviewing: boolean;
@@ -27,8 +26,8 @@ interface EditorToolbarProps {
   canRedo?: boolean;
   onUndo?: () => void;
   onRedo?: () => void;
-  viewportMode?: 'desktop' | 'tablet' | 'mobile';
-  onViewportChange?: (mode: 'desktop' | 'tablet' | 'mobile') => void;
+  viewportMode?: "desktop" | "tablet" | "mobile";
+  onViewportChange?: (mode: "desktop" | "tablet" | "mobile") => void;
   onShare?: () => void;
   onSettings?: () => void;
 }
@@ -42,10 +41,10 @@ export function EditorToolbar({
   canRedo = false,
   onUndo,
   onRedo,
-  viewportMode = 'desktop',
+  viewportMode = "desktop",
   onViewportChange,
   onShare,
-  onSettings
+  onSettings,
 }: EditorToolbarProps) {
   const handleExport = () => {
     if (config) {
@@ -104,25 +103,25 @@ export function EditorToolbar({
           <>
             <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
               <Button
-                variant={viewportMode === 'desktop' ? 'default' : 'ghost'}
+                variant={viewportMode === "desktop" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => onViewportChange('desktop')}
+                onClick={() => onViewportChange("desktop")}
                 className="w-8 h-8 p-0"
               >
                 <Monitor className="w-4 h-4" />
               </Button>
               <Button
-                variant={viewportMode === 'tablet' ? 'default' : 'ghost'}
+                variant={viewportMode === "tablet" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => onViewportChange('tablet')}
+                onClick={() => onViewportChange("tablet")}
                 className="w-8 h-8 p-0"
               >
                 <Tablet className="w-4 h-4" />
               </Button>
               <Button
-                variant={viewportMode === 'mobile' ? 'default' : 'ghost'}
+                variant={viewportMode === "mobile" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => onViewportChange('mobile')}
+                onClick={() => onViewportChange("mobile")}
                 className="w-8 h-8 p-0"
               >
                 <Smartphone className="w-4 h-4" />
@@ -134,13 +133,17 @@ export function EditorToolbar({
 
         {/* Preview Mode */}
         <Button
-          variant={isPreviewing ? 'default' : 'ghost'}
+          variant={isPreviewing ? "default" : "ghost"}
           size="sm"
           onClick={onPreviewToggle}
           className="flex items-center gap-2"
         >
-          {isPreviewing ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-          {isPreviewing ? 'Editar' : 'Visualizar'}
+          {isPreviewing ? (
+            <EyeOff className="w-4 h-4" />
+          ) : (
+            <Eye className="w-4 h-4" />
+          )}
+          {isPreviewing ? "Editar" : "Visualizar"}
         </Button>
       </div>
 
@@ -153,15 +156,11 @@ export function EditorToolbar({
               <Share className="w-4 h-4" />
             </Button>
           )}
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleExport}
-          >
+
+          <Button variant="ghost" size="sm" onClick={handleExport}>
             <Download className="w-4 h-4" />
           </Button>
-          
+
           {onSettings && (
             <Button variant="ghost" size="sm" onClick={onSettings}>
               <Settings className="w-4 h-4" />
@@ -179,4 +178,4 @@ export function EditorToolbar({
       </div>
     </div>
   );
-};
+}
