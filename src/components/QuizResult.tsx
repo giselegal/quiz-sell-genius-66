@@ -86,7 +86,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
           config?.globalStyles?.backgroundColor ||
           sharedStyles.colors.background,
         color:
-          config?.globalStyles?.textColor || sharedStyles.colors.textPrimary,
+          config?.globalStyles?.textColor || sharedStyles.colors.text,
       }}
     >
       <ContentContainer size="md">

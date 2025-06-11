@@ -1,77 +1,71 @@
-
-import React from 'react';
-import { QuizComponentData } from '@/types/quizBuilder';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { ContentContainer } from '@/components/shared/ContentContainer';
-import { GridLayout } from '@/components/shared/GridLayout';
-import { sharedStyles } from '@/styles/sharedStyles';
+import React, { useCallback } from 'react';
+import { Stage } from '@/types/quiz';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { tokens } from '@/config/designTokens';
 
 interface StageResultComponentProps {
-  data: QuizComponentData['data'];
-  style: QuizComponentData['style'];
-  isSelected: boolean;
+  stage: Stage;
+  onUpdate: (stageId: string, updates: Partial<Stage>) => void;
 }
 
-const StageResultComponent: React.FC<StageResultComponentProps> = ({ 
-  data, 
-  style, 
-  isSelected 
-}) => {
+const StageResultComponent: React.FC<StageResultComponentProps> = ({ stage, onUpdate }) => {
+  const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onUpdate(stage.id, { description: e.target.value });
+  }, [onUpdate, stage.id]);
+
+  const handleCategoryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onUpdate(stage.id, { category: e.target.value });
+  }, [onUpdate, stage.id]);
+
+  const handleScoreChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newScore = parseInt(e.target.value, 10) || 0;
+    onUpdate(stage.id, { score: newScore });
+  }, [onUpdate, stage.id]);
+
   return (
-    <div 
-      className={cn(
-        "w-full",
-        isSelected && "ring-2 ring-inset ring-[#B89B7A]/20"
-      )}
-      style={{
-        backgroundColor: style?.backgroundColor || sharedStyles.colors.background,
-        color: style?.textColor || sharedStyles.colors.textPrimary,
-        borderRadius: `${style?.borderRadius || 0}px`,
-        padding: `${style?.paddingY || 16}px ${style?.paddingX || 16}px`,
-      }}
-    >
-      <ContentContainer size="md">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-playfair mb-2">
-            {data.title || 'Seu Resultado de Estilo Pessoal'}
-          </h2>
-          
-          <p className="text-lg text-[#432818]/80">
-            {data.subtitle || 'Baseado nas suas escolhas, calculamos seu estilo predominante'}
-          </p>
-        </div>
-        
-        <GridLayout columns={2} gap="lg" className="mb-8">
-          <div>
-            <img
-              src={data.offerImageUrl || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"}
-              alt="Guia Completo de Estilo"
-              className="w-full rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-          <div>
-            <img
-              src={data.authorImageUrl || "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921536/Sem_nome_1080_x_1000_px_z0chuv.webp"}
-              alt="Autor do Guia"
-              className="w-full rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-        </GridLayout>
-        
-        <div className="flex justify-center">
-          <Button className="bg-[#B89B7A] hover:bg-[#A38A69] text-white px-6 py-3 rounded-md text-lg">
-            {data.callToActionText || 'Conhecer o Guia Completo'}
-          </Button>
-        </div>
-        
-        <div className="mt-6 text-sm text-[#432818]/60 text-center">
-          {data.stageTitle || 'Resultado'} • {data.stageNumber || 7} de 7
-        </div>
-      </ContentContainer>
+    <div className="space-y-4">
+      <h3 
+        className="text-lg font-semibold"
+        style={{ color: tokens.colors.text }}
+      >
+        Configurações do Resultado
+      </h3>
+      
+      <div>
+        <Label htmlFor="category">Categoria</Label>
+        <Input
+          type="text"
+          id="category"
+          value={stage.category || ''}
+          onChange={handleCategoryChange}
+          placeholder="Ex: Elegante"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="description">Descrição</Label>
+        <Input
+          type="text"
+          id="description"
+          value={stage.description || ''}
+          onChange={handleDescriptionChange}
+          placeholder="Ex: Você tem um estilo elegante..."
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="score">Pontuação</Label>
+        <Input
+          type="number"
+          id="score"
+          value={stage.score || 0}
+          onChange={handleScoreChange}
+          placeholder="0"
+        />
+      </div>
     </div>
   );
 };
 
 export default StageResultComponent;
-
