@@ -24,31 +24,31 @@ export const ResultHeaderBlockEditor: React.FC<ResultHeaderBlockEditorProps> = (
           <Label htmlFor="userName">Nome do Usuário</Label>
           <Input
             id="userName"
-            value={content.userName || ''}
+            value={content.userName || 'Visitante'}
             onChange={(e) => onUpdate({ userName: e.target.value })}
-            placeholder="Nome personalizado (opcional)"
+            placeholder="Nome do usuário"
           />
         </div>
 
         <div>
-          <Label htmlFor="styleCategory">Estilo Principal</Label>
+          <Label htmlFor="primaryStyleCategory">Estilo Principal</Label>
           <Input
-            id="styleCategory"
+            id="primaryStyleCategory"
             value={content.primaryStyle?.category || ''}
             onChange={(e) => onUpdate({ 
               primaryStyle: { 
                 ...content.primaryStyle, 
                 category: e.target.value 
-              }
+              } 
             })}
-            placeholder="Natural, Clássico, etc."
+            placeholder="Nome do estilo principal"
           />
         </div>
 
         <div>
-          <Label htmlFor="stylePercentage">Porcentagem do Estilo (%)</Label>
+          <Label htmlFor="primaryStylePercentage">Porcentagem do Estilo Principal</Label>
           <Input
-            id="stylePercentage"
+            id="primaryStylePercentage"
             type="number"
             min="0"
             max="100"
@@ -57,8 +57,9 @@ export const ResultHeaderBlockEditor: React.FC<ResultHeaderBlockEditorProps> = (
               primaryStyle: { 
                 ...content.primaryStyle, 
                 percentage: parseInt(e.target.value) 
-              }
+              } 
             })}
+            placeholder="Porcentagem"
           />
         </div>
 
