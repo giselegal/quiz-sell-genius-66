@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -52,7 +53,9 @@ function App() {
           path="/reset-password/:token"
           element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><ResetPasswordPage /></AuthLayout>}
         />
-        <Route path="/" element={<QuizIntro />} />
+        <Route path="/" element={<QuizIntro onStart={(nome: string, email?: string) => {
+          console.log('Quiz started:', nome, email);
+        }} />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/quiz-descubra-seu-estilo" element={<QuizPage />} />
         <Route path="/resultado" element={<ResultPage />} />
