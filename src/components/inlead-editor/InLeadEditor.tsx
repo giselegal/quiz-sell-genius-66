@@ -1,22 +1,14 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Play, 
   Eye, 
   Save, 
-  Settings, 
   Smartphone,
   Monitor,
   Tablet,
-  Plus,
-  Edit3,
-  Image,
-  Type,
-  MousePointer,
-  Palette
+  Plus
 } from 'lucide-react';
 import { InLeadSidebar } from './InLeadSidebar';
 import { InLeadCanvas } from './InLeadCanvas';

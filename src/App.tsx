@@ -1,127 +1,83 @@
-import React, { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import { AdminAuthProvider } from "./context/AdminAuthContext";
-import { QuizProvider } from "./context/QuizContext";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster } from "@/components/ui/toaster";
-import { captureUTMParameters } from "./utils/analytics";
-import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import CriticalCSSLoader from "./components/CriticalCSSLoader";
-import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
-import { AdminRoute } from "./components/admin/AdminRoute";
-
-// Componente de loading para Suspense
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-screen bg-gray-50">
-    <div className="text-center">
-      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
-      <p className="mt-4 text-gray-600">Carregando...</p>
-    </div>
-  </div>
-);
-
-// Lazy loading das páginas essenciais
-const LandingPage = lazy(() => import("./pages/LandingPage"));
-const QuizPage = lazy(() => import("./components/QuizPage"));
-const ResultPage = lazy(() => import("./pages/ResultPage"));
-const QuizDescubraSeuEstilo = lazy(
-  () => import("./pages/quiz-descubra-seu-estilo")
-);
-const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
-const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-
-// Lazy loading das páginas do editor visual
-const EditorDashboard = lazy(() => import("./pages/EditorDashboard"));
-const VisualEditorPage = lazy(() => import("./pages/VisualEditorPage"));
-const ResultPageVisualEditorPage = lazy(() => import("./pages/ResultPageVisualEditorPage"));
-
-// Nova página do editor ao vivo
-const LiveEditorPage = lazy(() => import("./pages/admin/LiveEditorPage"));
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { AuthLayout } from '@/layouts/AuthLayout';
+import { AdminLayout } from '@/layouts/AdminLayout';
+import LoginPage from '@/pages/LoginPage';
+import RegisterPage from '@/pages/RegisterPage';
+import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
+import HomePage from '@/pages/HomePage';
+import NotFoundPage from '@/pages/NotFoundPage';
+import DashboardPage from '@/pages/DashboardPage';
+import QuizBuilderPage from '@/pages/QuizBuilderPage';
+import AnalyticsPage from '@/pages/AnalyticsPage';
+import CreativesPage from '@/pages/CreativesPage';
+import SettingsPage from '@/pages/SettingsPage';
+import EditorPage from '@/pages/EditorPage';
+import QuizPage from '@/pages/QuizPage';
+import ResultPage from '@/pages/ResultPage';
+import QuizOfferPage from '@/pages/QuizOfferPage';
+import QuizEditorPage from '@/pages/QuizEditorPage';
+import LiveEditorPage from '@/pages/LiveEditorPage';
+import ResultPageEditorPage from '@/pages/ResultPageEditorPage';
+import ABTestPage from '@/pages/ABTestPage';
+import QuizIntro from '@/components/QuizIntro';
+import InLeadEditorPage from '@/pages/InLeadEditorPage';
 
 function App() {
-  // Inicializar analytics na montagem do componente
-  useEffect(() => {
-    try {
-      loadFacebookPixelDynamic();
-      captureUTMParameters();
+  const { authData, checkAuth } = useAuth();
+  const location = useLocation();
 
-      console.log("App initialized with essential routes only");
-    } catch (error) {
-      console.error("Erro ao inicializar aplicativo:", error);
-    }
-  }, []);
+  useEffect(() => {
+    checkAuth();
+  }, [location.pathname, checkAuth]);
 
   return (
-    <AuthProvider>
-      <QuizProvider>
-        <TooltipProvider>
-          <Router>
-            <CriticalCSSLoader
-              cssContent={initialCriticalCSS}
-              id="initial-critical"
-              removeOnLoad={true}
-            />
-            <CriticalCSSLoader
-              cssContent={heroCriticalCSS}
-              id="hero-critical"
-              removeOnLoad={true}
-            />
-
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                {/* Página inicial com teste A/B */}
-                <Route path="/" element={<LandingPage />} />
-                {/* Rota do quiz específica */}
-                <Route path="/quiz" element={<QuizPage />} />
-                {/* Rotas do teste A/B */}
-                <Route path="/resultado" element={<ResultPage />} />
-                <Route
-                  path="/quiz-descubra-seu-estilo"
-                  element={<QuizDescubraSeuEstilo />}
-                />
-                {/* Manter rota antiga para compatibilidade */}
-                <Route
-                  path="/descubra-seu-estilo"
-                  element={<QuizDescubraSeuEstilo />}
-                />
-                {/* Editor Visual - Dashboard e Editor */}
-                <Route path="/editor" element={<EditorDashboard />} />
-                <Route path="/editor-dashboard" element={<EditorDashboard />} />
-                <Route path="/dashboard-editor" element={<EditorDashboard />} />
-                <Route path="/visual-editor" element={<VisualEditorPage />} />
-                <Route
-                  path="/visual-editor/:id"
-                  element={<VisualEditorPage />}
-                />
-                <Route path="/editor/:id" element={<VisualEditorPage />} />
-                <Route path="/editor/resultado/:styleType" element={<ResultPageVisualEditorPage />} />
-
-                {/* Editor Ao Vivo */}
-                <Route path="/live-editor" element={<LiveEditorPage />} />
-                <Route path="/editor-ao-vivo" element={<LiveEditorPage />} />
-
-                {/* Admin - protegido com AdminAuthProvider */}
-                <Route
-                  path="/admin/*"
-                  element={
-                    <AdminAuthProvider>
-                      <AdminRoute>
-                        <DashboardPage />
-                      </AdminRoute>
-                    </AdminAuthProvider>
-                  }
-                />
-                {/* 404 */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
-          </Router>
-          <Toaster />
-        </TooltipProvider>
-      </QuizProvider>
-    </AuthProvider>
+    <div className="min-h-screen bg-gray-50">
+      <Routes>
+        <Route
+          path="/login"
+          element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><LoginPage /></AuthLayout>}
+        />
+        <Route
+          path="/register"
+          element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><RegisterPage /></AuthLayout>}
+        />
+        <Route
+          path="/forgot-password"
+          element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><ForgotPasswordPage /></AuthLayout>}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><ResetPasswordPage /></AuthLayout>}
+        />
+        <Route path="/" element={<QuizIntro />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/quiz-descubra-seu-estilo" element={<QuizPage />} />
+        <Route path="/resultado" element={<ResultPage />} />
+        
+        {/* InLead Editor Route */}
+        <Route path="/inlead-editor" element={<InLeadEditorPage />} />
+        
+        <Route path="/quiz-offer" element={<QuizOfferPage />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="quiz-builder" element={<QuizBuilderPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="creatives" element={<CreativesPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path="editor" element={<EditorPage />} />
+          <Route path="quiz-editor" element={<QuizEditorPage />} />
+          <Route path="live-editor" element={<LiveEditorPage />} />
+          <Route path="result-editor" element={<ResultPageEditorPage />} />
+          <Route path="ab-test" element={<ABTestPage />} />
+        </Route>
+        
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
   );
 }
 
