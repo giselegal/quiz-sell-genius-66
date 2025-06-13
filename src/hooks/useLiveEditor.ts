@@ -1,9 +1,8 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { quizQuestions } from '@/data/quizQuestions';
 import { strategicQuestions } from '@/data/strategicQuestions';
-import { styleConfig } from '@/data/styleConfig';
+import { styleConfig } from '@/config/styleConfig';
 
 export interface EditorStage {
   id: string;
@@ -187,10 +186,10 @@ const createResultStage = (): EditorStage => ({
         showAllStyles: true,
         styles: Object.entries(styleConfig).map(([key, config]) => ({
           category: key,
-          name: config.name,
+          name: key,
           description: config.description,
           image: config.guideImage,
-          characteristics: config.characteristics
+          characteristics: []
         }))
       },
       style: {},
