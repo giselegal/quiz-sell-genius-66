@@ -106,7 +106,7 @@ const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
               <Card
                 key={component.id}
                 className={`p-3 cursor-pointer transition-all hover:shadow-md border ${getColorClasses(component.color)}`}
-                onClick={() => onAddComponent(component.type)}
+                onClick={() => onAddComponent(component.id)}
               >
                 <div className="flex items-center gap-3">
                   <IconComponent className="w-5 h-5" />
