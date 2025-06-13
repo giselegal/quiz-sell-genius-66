@@ -15,7 +15,12 @@ import {
   DollarSign,
   ShoppingCart,
   Award,
-  Users
+  Users,
+  Grid3X3,
+  Heart,
+  Shield,
+  Target,
+  Palette
 } from 'lucide-react';
 import { EditorStage } from '@/hooks/useLiveEditor';
 
@@ -44,20 +49,22 @@ const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       ],
       question: [
         { id: 'question-title', name: 'Título da Questão', icon: Type, color: 'purple' },
-        { id: 'options-grid', name: 'Grade de Opções', icon: Layout, color: 'blue' },
+        { id: 'options-grid', name: 'Grade de Opções', icon: Grid3X3, color: 'blue' },
         { id: 'progress-bar', name: 'Barra de Progresso', icon: Timer, color: 'orange' }
       ],
       result: [
-        { id: 'style-card', name: 'Card do Estilo', icon: Award, color: 'green' },
+        { id: 'result-header', name: 'Cabeçalho do Resultado', icon: Award, color: 'yellow' },
+        { id: 'style-card', name: 'Card dos Estilos', icon: Palette, color: 'green' },
         { id: 'testimonials', name: 'Depoimentos', icon: MessageCircle, color: 'blue' },
         { id: 'transformation', name: 'Transformação', icon: Star, color: 'yellow' }
       ],
       offer: [
         { id: 'pricing', name: 'Preços', icon: DollarSign, color: 'green' },
         { id: 'product-grid', name: 'Grade de Produtos', icon: ShoppingCart, color: 'blue' },
-        { id: 'guarantee', name: 'Garantia', icon: Award, color: 'yellow' },
+        { id: 'guarantee', name: 'Garantia', icon: Shield, color: 'yellow' },
         { id: 'social-proof', name: 'Prova Social', icon: Users, color: 'purple' },
-        { id: 'countdown', name: 'Contador', icon: Timer, color: 'red' }
+        { id: 'countdown', name: 'Contador', icon: Timer, color: 'red' },
+        { id: 'testimonials', name: 'Depoimentos', icon: Heart, color: 'pink' }
       ]
     };
 
@@ -77,7 +84,8 @@ const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       yellow: 'bg-yellow-50 text-yellow-700 border-yellow-200 hover:bg-yellow-100',
       red: 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100',
       gray: 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100',
-      orange: 'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100'
+      orange: 'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100',
+      pink: 'bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100'
     };
     return colors[color as keyof typeof colors] || colors.gray;
   };
@@ -124,7 +132,8 @@ const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
       <div className="p-4 border-t border-gray-700">
         <div className="text-xs text-gray-400 space-y-1">
           <p>💡 Clique para adicionar</p>
-          <p>🎨 Arraste para reordenar</p>
+          <p>🎨 Componentes pré-configurados</p>
+          <p>📱 Preview responsivo</p>
         </div>
       </div>
     </div>

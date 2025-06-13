@@ -1,16 +1,13 @@
 
-import { QuizQuestion } from '../types/quiz';
+import { QuizQuestion } from '@/types/quiz';
 import { selfPerceptionQuestions } from './questions/selfPerceptionQuestions';
 import { styleExperienceQuestions } from './questions/styleExperienceQuestions';
 import { purchaseIntentQuestions } from './questions/purchaseIntentQuestions';
 import { desiredOutcomesQuestions } from './questions/desiredOutcomesQuestions';
 
-// Concatenate all strategic questions in the correct order
 export const strategicQuestions: QuizQuestion[] = [
-  ...selfPerceptionQuestions,
-  ...styleExperienceQuestions,
-  ...purchaseIntentQuestions,
-  ...desiredOutcomesQuestions
+  ...selfPerceptionQuestions,    // Questões strategic-1 e strategic-2
+  ...styleExperienceQuestions,   // Questões strategic-3 e strategic-4
+  ...purchaseIntentQuestions,    // Questões strategic-5 e strategic-6
+  ...desiredOutcomesQuestions    // Questão strategic-7
 ];
-
-console.log('Strategic questions loaded:', strategicQuestions.length);
