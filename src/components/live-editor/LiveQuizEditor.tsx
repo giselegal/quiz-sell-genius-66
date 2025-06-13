@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -59,6 +58,29 @@ const LiveQuizEditor: React.FC = () => {
 
   const activeStage = stages.find(stage => stage.id === activeStageId);
   const selectedComponent = activeStage?.components.find(comp => comp.id === selectedComponentId);
+
+  const handleAddStage = (type: 'intro' | 'question' | 'result' | 'offer') => {
+    // For now, we'll add a question stage by default since that's most common
+    console.log('Add stage:', type);
+    // This would typically call a method from useLiveEditor hook
+  };
+
+  const handleUpdateStage = (stageId: string, updates: any) => {
+    console.log('Update stage:', stageId, updates);
+    // This would typically call a method from useLiveEditor hook
+  };
+
+  const handleDeleteStage = (stageId: string) => {
+    console.log('Delete stage:', stageId);
+    // This would typically call a method from useLiveEditor hook
+  };
+
+  const handleDeleteComponent = () => {
+    if (selectedComponentId && activeStageId) {
+      deleteComponent(activeStageId, selectedComponentId);
+      setSelectedComponent(null);
+    }
+  };
 
   const handleAddComponent = (componentType: string) => {
     if (!activeStageId) return;
@@ -283,6 +305,9 @@ const LiveQuizEditor: React.FC = () => {
                 stages={stages}
                 activeStageId={activeStageId}
                 onStageSelect={setActiveStage}
+                onAddStage={handleAddStage}
+                onUpdateStage={handleUpdateStage}
+                onDeleteStage={handleDeleteStage}
               />
             </TabsContent>
 
@@ -301,6 +326,8 @@ const LiveQuizEditor: React.FC = () => {
                     updateComponent(activeStageId, selectedComponentId, updates);
                   }
                 }}
+                onUpdateStage={handleUpdateStage}
+                onDeleteComponent={handleDeleteComponent}
               />
             </TabsContent>
           </Tabs>
