@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
@@ -37,6 +36,9 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const EditorDashboard = lazy(() => import("./pages/EditorDashboard"));
 const VisualEditorPage = lazy(() => import("./pages/VisualEditorPage"));
 const ResultPageVisualEditorPage = lazy(() => import("./pages/ResultPageVisualEditorPage"));
+
+// Nova página do editor ao vivo
+const LiveEditorPage = lazy(() => import("./pages/admin/LiveEditorPage"));
 
 function App() {
   // Inicializar analytics na montagem do componente
@@ -95,6 +97,10 @@ function App() {
                 />
                 <Route path="/editor/:id" element={<VisualEditorPage />} />
                 <Route path="/editor/resultado/:styleType" element={<ResultPageVisualEditorPage />} />
+
+                {/* Editor Ao Vivo */}
+                <Route path="/live-editor" element={<LiveEditorPage />} />
+                <Route path="/editor-ao-vivo" element={<LiveEditorPage />} />
 
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route

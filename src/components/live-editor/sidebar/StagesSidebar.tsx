@@ -5,16 +5,12 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   Plus, 
-  GripVertical, 
-  Eye, 
   Settings, 
+  Eye,
   Trash2,
-  FileText,
-  HelpCircle,
-  Target,
-  ShoppingCart
+  ChevronRight
 } from 'lucide-react';
-import { EditorStage } from '../LiveQuizEditor';
+import { EditorStage } from '@/hooks/useLiveEditor';
 
 interface StagesSidebarProps {
   stages: EditorStage[];
@@ -35,137 +31,89 @@ const StagesSidebar: React.FC<StagesSidebarProps> = ({
 }) => {
   const getStageIcon = (type: EditorStage['type']) => {
     switch (type) {
-      case 'intro': return <FileText className="w-4 h-4" />;
-      case 'question': return <HelpCircle className="w-4 h-4" />;
-      case 'result': return <Target className="w-4 h-4" />;
-      case 'offer': return <ShoppingCart className="w-4 h-4" />;
-      default: return <FileText className="w-4 h-4" />;
+      case 'intro': return '🏠';
+      case 'question': return '❓';
+      case 'result': return '🎯';
+      case 'offer': return '💰';
+      default: return '📄';
     }
   };
 
   const getStageColor = (type: EditorStage['type']) => {
     switch (type) {
-      case 'intro': return 'bg-blue-500';
-      case 'question': return 'bg-purple-500';
-      case 'result': return 'bg-green-500';
-      case 'offer': return 'bg-orange-500';
-      default: return 'bg-gray-500';
+      case 'intro': return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'question': return 'bg-purple-50 text-purple-700 border-purple-200';
+      case 'result': return 'bg-green-50 text-green-700 border-green-200';
+      case 'offer': return 'bg-orange-50 text-orange-700 border-orange-200';
+      default: return 'bg-gray-50 text-gray-700 border-gray-200';
     }
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-[#252A3A] border-r border-gray-700">
       {/* Header */}
       <div className="p-4 border-b border-gray-700">
-        <h3 className="text-sm font-semibold text-white mb-3">Etapas do Funil</h3>
-        
-        {/* Botões de Adicionar */}
-        <div className="space-y-2">
+        <h2 className="text-lg font-semibold text-white mb-3">Etapas do Quiz</h2>
+        <div className="flex gap-2">
           <Button
-            onClick={() => onAddStage('intro')}
-            variant="outline"
             size="sm"
-            className="w-full justify-start text-xs border-gray-600 text-gray-300 hover:text-white"
-          >
-            <Plus className="w-3 h-3 mr-2" />
-            Introdução
-          </Button>
-          
-          <Button
             onClick={() => onAddStage('question')}
-            variant="outline"
-            size="sm"
-            className="w-full justify-start text-xs border-gray-600 text-gray-300 hover:text-white"
+            className="bg-[#B89B7A] hover:bg-[#A1835D] text-white text-xs"
           >
-            <Plus className="w-3 h-3 mr-2" />
-            Questão
-          </Button>
-          
-          <Button
-            onClick={() => onAddStage('result')}
-            variant="outline"
-            size="sm"
-            className="w-full justify-start text-xs border-gray-600 text-gray-300 hover:text-white"
-          >
-            <Plus className="w-3 h-3 mr-2" />
-            Resultado
-          </Button>
-          
-          <Button
-            onClick={() => onAddStage('offer')}
-            variant="outline"
-            size="sm"
-            className="w-full justify-start text-xs border-gray-600 text-gray-300 hover:text-white"
-          >
-            <Plus className="w-3 h-3 mr-2" />
-            Oferta
+            <Plus className="w-3 h-3 mr-1" />
+            Nova Questão
           </Button>
         </div>
       </div>
 
-      {/* Lista de Etapas */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
-        {stages.map((stage, index) => (
+      {/* Stages List */}
+      <div className="flex-1 overflow-y-auto p-2 space-y-1">
+        {stages.map((stage) => (
           <Card
             key={stage.id}
-            className={`p-3 cursor-pointer transition-all border ${
-              activeStageId === stage.id
-                ? 'border-[#B89B7A] bg-[#B89B7A]/10'
-                : 'border-gray-600 bg-[#1A1F2C] hover:border-gray-500'
+            className={`p-3 cursor-pointer transition-all hover:shadow-md ${
+              activeStageId === stage.id 
+                ? 'bg-[#B89B7A] text-white shadow-md' 
+                : 'bg-[#2A2F3E] text-gray-300 hover:bg-[#323749]'
             }`}
             onClick={() => onStageSelect(stage.id)}
           >
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 flex-1">
-                <GripVertical className="w-3 h-3 text-gray-500" />
-                <div className={`w-2 h-2 rounded-full ${getStageColor(stage.type)}`} />
-                <span className="text-xs font-medium text-white">
-                  Etapa {index + 1}
-                </span>
+                <span className="text-lg">{getStageIcon(stage.type)}</span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-sm truncate">{stage.name}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge 
+                      variant="secondary" 
+                      className={`text-xs ${getStageColor(stage.type)}`}
+                    >
+                      {stage.type}
+                    </Badge>
+                    {stage.components.length > 0 && (
+                      <Badge variant="outline" className="text-xs">
+                        {stage.components.length} componentes
+                      </Badge>
+                    )}
+                  </div>
+                </div>
               </div>
               
               <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-6 h-6 p-0 text-gray-400 hover:text-white"
-                >
-                  <Settings className="w-3 h-3" />
-                </Button>
-                
-                {stages.length > 1 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="w-6 h-6 p-0 text-gray-400 hover:text-red-400"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteStage(stage.id);
-                    }}
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </Button>
+                {activeStageId === stage.id && (
+                  <ChevronRight className="w-4 h-4" />
                 )}
               </div>
             </div>
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {getStageIcon(stage.type)}
-                <span className="text-xs text-gray-300 truncate max-w-20">
-                  {stage.name}
-                </span>
-              </div>
-              
-              <Badge 
-                variant="secondary" 
-                className="text-xs bg-gray-700 text-gray-300"
-              >
-                {stage.components.length}
-              </Badge>
-            </div>
           </Card>
         ))}
+      </div>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-gray-700">
+        <div className="text-xs text-gray-400">
+          Total: {stages.length} etapas
+        </div>
       </div>
     </div>
   );

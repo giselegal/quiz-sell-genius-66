@@ -1,13 +1,71 @@
 
-import { useState, useCallback } from 'react';
-import { EditorStage, EditorComponent } from '@/components/live-editor/LiveQuizEditor';
-import { toast } from '@/components/ui/use-toast';
+import { useState, useCallback, useEffect } from 'react';
+import { StyleResult } from '@/types/quiz';
+
+export interface EditorStage {
+  id: string;
+  name: string;
+  type: 'intro' | 'question' | 'result' | 'offer';
+  order: number;
+  components: EditorComponent[];
+  settings: Record<string, any>;
+}
+
+export interface EditorComponent {
+  id: string;
+  type: string;
+  content: Record<string, any>;
+  style: Record<string, any>;
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+}
 
 export const useLiveEditor = () => {
   const [stages, setStages] = useState<EditorStage[]>([]);
   const [activeStageId, setActiveStageId] = useState<string | null>(null);
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+
+  // Initialize with default stages
+  useEffect(() => {
+    const defaultStages: EditorStage[] = [
+      {
+        id: 'intro',
+        name: 'Introdução',
+        type: 'intro',
+        order: 0,
+        components: [],
+        settings: {}
+      },
+      ...Array.from({ length: 10 }, (_, i) => ({
+        id: `question-${i + 1}`,
+        name: `Questão ${i + 1}`,
+        type: 'question' as const,
+        order: i + 1,
+        components: [],
+        settings: { questionIndex: i }
+      })),
+      {
+        id: 'result',
+        name: 'Resultado',
+        type: 'result',
+        order: 11,
+        components: [],
+        settings: {}
+      },
+      {
+        id: 'offer',
+        name: 'Oferta',
+        type: 'offer',
+        order: 12,
+        components: [],
+        settings: {}
+      }
+    ];
+
+    setStages(defaultStages);
+    setActiveStageId('intro');
+  }, []);
 
   const setActiveStage = useCallback((stageId: string) => {
     setActiveStageId(stageId);
@@ -19,7 +77,7 @@ export const useLiveEditor = () => {
   }, []);
 
   const addStage = useCallback((stage: EditorStage) => {
-    setStages(prev => [...prev, stage]);
+    setStages(prev => [...prev, stage].sort((a, b) => a.order - b.order));
   }, []);
 
   const updateStage = useCallback((stageId: string, updates: Partial<EditorStage>) => {
@@ -31,10 +89,9 @@ export const useLiveEditor = () => {
   const deleteStage = useCallback((stageId: string) => {
     setStages(prev => prev.filter(stage => stage.id !== stageId));
     if (activeStageId === stageId) {
-      setActiveStageId(null);
-      setSelectedComponentId(null);
+      setActiveStageId(stages[0]?.id || null);
     }
-  }, [activeStageId]);
+  }, [activeStageId, stages]);
 
   const addComponent = useCallback((stageId: string, component: EditorComponent) => {
     setStages(prev => prev.map(stage => 
@@ -49,8 +106,8 @@ export const useLiveEditor = () => {
       stage.id === stageId 
         ? {
             ...stage,
-            components: stage.components.map(component =>
-              component.id === componentId ? { ...component, ...updates } : component
+            components: stage.components.map(comp => 
+              comp.id === componentId ? { ...comp, ...updates } : comp
             )
           }
         : stage
@@ -60,41 +117,35 @@ export const useLiveEditor = () => {
   const deleteComponent = useCallback((stageId: string, componentId: string) => {
     setStages(prev => prev.map(stage => 
       stage.id === stageId 
-        ? { ...stage, components: stage.components.filter(c => c.id !== componentId) }
+        ? { ...stage, components: stage.components.filter(comp => comp.id !== componentId) }
         : stage
     ));
-  }, []);
+    if (selectedComponentId === componentId) {
+      setSelectedComponentId(null);
+    }
+  }, [selectedComponentId]);
 
   const togglePreview = useCallback(() => {
     setIsPreviewMode(prev => !prev);
-    setSelectedComponentId(null);
   }, []);
 
   const saveEditor = useCallback(async () => {
-    try {
-      // Salvar no localStorage por enquanto
-      localStorage.setItem('liveEditor', JSON.stringify({
-        stages,
-        activeStageId,
-        lastSaved: new Date().toISOString()
-      }));
-      return true;
-    } catch (error) {
-      console.error('Error saving editor:', error);
-      throw error;
-    }
+    const editorData = {
+      stages,
+      activeStageId,
+      timestamp: new Date().toISOString()
+    };
+    
+    localStorage.setItem('liveQuizEditor', JSON.stringify(editorData));
+    console.log('Editor saved:', editorData);
   }, [stages, activeStageId]);
 
   const loadEditor = useCallback(() => {
-    try {
-      const saved = localStorage.getItem('liveEditor');
-      if (saved) {
-        const data = JSON.parse(saved);
-        setStages(data.stages || []);
-        setActiveStageId(data.activeStageId || null);
-      }
-    } catch (error) {
-      console.error('Error loading editor:', error);
+    const savedData = localStorage.getItem('liveQuizEditor');
+    if (savedData) {
+      const data = JSON.parse(savedData);
+      setStages(data.stages || []);
+      setActiveStageId(data.activeStageId || null);
     }
   }, []);
 
