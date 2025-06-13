@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -326,7 +327,11 @@ const LiveQuizEditor: React.FC = () => {
                     updateComponent(activeStageId, selectedComponentId, updates);
                   }
                 }}
-                onUpdateStage={handleUpdateStage}
+                onUpdateStage={(updates) => {
+                  if (activeStageId) {
+                    handleUpdateStage(activeStageId, updates);
+                  }
+                }}
                 onDeleteComponent={handleDeleteComponent}
               />
             </TabsContent>
