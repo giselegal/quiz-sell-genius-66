@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -52,12 +51,19 @@ const templates: Template[] = [
         type: 'intro',
         components: [
           {
+            id: 'hero-intro',
             type: 'hero',
             content: {
               title: 'Descubra Seu Estilo Único em 3 Minutos',
               subtitle: 'Quiz personalizado que revela seu estilo autêntico',
               buttonText: 'Começar Descoberta'
-            }
+            },
+            style: {
+              backgroundColor: '#FAF9F7',
+              textColor: '#432818'
+            },
+            position: { x: 0, y: 0 },
+            size: { width: 100, height: 400 }
           }
         ]
       }
