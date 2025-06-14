@@ -14,6 +14,7 @@ interface AuthData {
 
 interface AuthContextType {
   authData: AuthData | null;
+  user: User | null; // Add this for compatibility
   login: (name: string, email?: string) => void;
   logout: () => void;
   checkAuth: () => void;
@@ -65,7 +66,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ authData, login, logout, checkAuth }}>
+    <AuthContext.Provider value={{ 
+      authData, 
+      user: authData?.user || null, // Provide user for compatibility
+      login, 
+      logout, 
+      checkAuth 
+    }}>
       {children}
     </AuthContext.Provider>
   );
