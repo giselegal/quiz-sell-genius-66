@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import QuizIntro from '@/components/QuizIntro';
-import { QuizPage } from '@/components/QuizPage';
+import QuizPage from '@/components/QuizPage';
 
 const HomePage: React.FC = () => {
   const [showQuiz, setShowQuiz] = useState(false);
