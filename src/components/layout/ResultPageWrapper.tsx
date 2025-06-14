@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useGlobalStyles } from "@/hooks/useGlobalStyles";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useLoadingState } from "@/hooks/useLoadingState";
 import { useIsLowPerformanceDevice } from "@/hooks/use-mobile";
 import { tokens } from "@/config/designTokens";

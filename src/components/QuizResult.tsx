@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleResult } from "../types/quiz";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { ContentContainer } from "./shared/ContentContainer";
 import { GridLayout } from "./shared/GridLayout";
 import ResultHeader from "./quiz-result/ResultHeader";

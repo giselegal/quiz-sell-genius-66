@@ -1,8 +1,7 @@
-
 import { useState } from 'react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import Logo from './ui/logo';
 
 interface QuizWelcomeProps {
