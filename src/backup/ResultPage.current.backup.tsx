@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { Header } from '@/components/result/Header';
+import Header from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
@@ -23,7 +22,7 @@ import ResultSkeleton from '@/components/result/ResultSkeleton';
 import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ResultPage: React.FC = () => {
   const {

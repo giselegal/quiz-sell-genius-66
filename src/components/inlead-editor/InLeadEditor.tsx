@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { InLeadSidebar } from './InLeadSidebar';
-import { InLeadCanvas } from './InLeadCanvas';
-import { InLeadPreview } from './InLeadPreview';
+import InLeadSidebar from './InLeadSidebar';
+import InLeadCanvas from './InLeadCanvas';
+import InLeadPreview from './InLeadPreview';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
