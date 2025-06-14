@@ -18,7 +18,10 @@ const InLeadPreview: React.FC<InLeadPreviewProps> = ({ page }) => {
                 <p className="text-sm text-gray-500 mb-2">
                   {element.type} - {element.id}
                 </p>
-                <div style={element.style}>
+                <div style={{
+                  ...element.style,
+                  textAlign: element.style.textAlign as 'left' | 'center' | 'right' | 'justify' | undefined
+                }}>
                   {element.content.text || element.content.question || 'Preview content'}
                 </div>
               </div>
