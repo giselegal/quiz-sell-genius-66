@@ -57,14 +57,15 @@ function App() {
         <Route path="/quiz-descubra-seu-estilo" element={<QuizPage />} />
         <Route path="/resultado" element={<ResultPage />} />
         
-        {/* Hub de Editores - Página principal para escolher editor */}
+        {/* Editores na Raiz - Acesso Direto */}
         <Route path="/editors" element={<EditorsHubPage />} />
-        
-        {/* Editores Públicos - Acesso direto para desenvolvimento/testes */}
         <Route path="/unified-editor" element={<UnifiedEditorPage />} />
         <Route path="/visual-editor" element={<VisualEditorPage />} />
         <Route path="/result-visual-editor" element={<ResultVisualEditorPage />} />
         <Route path="/inlead-editor" element={<InLeadEditorPage />} />
+        <Route path="/quiz-editor" element={<QuizEditorPage />} />
+        <Route path="/live-editor" element={<LiveEditorPage />} />
+        <Route path="/result-editor" element={<ResultPageEditorPage />} />
         
         <Route path="/quiz-offer" element={<QuizOfferPage />} />
         
@@ -77,16 +78,7 @@ function App() {
           <Route path="creatives" element={<CreativesPage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="editor" element={<EditorPage />} />
-          <Route path="quiz-editor" element={<QuizEditorPage />} />
-          <Route path="live-editor" element={<LiveEditorPage />} />
-          <Route path="result-editor" element={<ResultPageEditorPage />} />
           <Route path="ab-test" element={<ABTestPage />} />
-          
-          {/* Editores Admin - Versões integradas no painel admin */}
-          <Route path="unified-editor" element={<UnifiedEditorPage />} />
-          <Route path="visual-editor" element={<VisualEditorPage />} />
-          <Route path="result-visual-editor" element={<ResultVisualEditorPage />} />
-          <Route path="editors" element={<EditorsHubPage />} />
         </Route>
         
         <Route path="*" element={<NotFoundPage />} />

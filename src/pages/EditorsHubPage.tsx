@@ -13,6 +13,7 @@ import {
   Settings,
   FileText
 } from 'lucide-react';
+import { ROUTES } from '@/utils/routes';
 
 const EditorsHubPage: React.FC = () => {
   const { user, isDemoMode } = useAuth();
@@ -23,28 +24,28 @@ const EditorsHubPage: React.FC = () => {
       title: 'Funil Completo',
       description: 'Criar quiz + página de resultado + página de vendas',
       icon: Rocket,
-      path: '/unified-editor',
+      path: ROUTES.EDITORS.UNIFIED,
       color: 'bg-blue-600'
     },
     {
       title: 'Apenas Quiz',
       description: 'Criar ou editar apenas o quiz interativo',
       icon: FileText,
-      path: '/visual-editor',
+      path: ROUTES.EDITORS.VISUAL,
       color: 'bg-green-600'
     },
     {
       title: 'Página de Resultado',
       description: 'Editar layout da página de resultado do quiz',
       icon: Target,
-      path: '/result-visual-editor',
+      path: ROUTES.EDITORS.RESULT_VISUAL,
       color: 'bg-purple-600'
     },
     {
       title: 'Landing Page',
       description: 'Criar landing pages com InLead Editor',
       icon: TrendingUp,
-      path: '/inlead-editor',
+      path: ROUTES.EDITORS.INLEAD,
       color: 'bg-orange-600'
     }
   ];
@@ -59,7 +60,7 @@ const EditorsHubPage: React.FC = () => {
                 Hub de Editores
               </h1>
               <p className="text-gray-600 mt-2">
-                Escolha o editor ideal para sua necessidade
+                Todos os editores do projeto em um só lugar
               </p>
             </div>
             
@@ -136,8 +137,8 @@ const EditorsHubPage: React.FC = () => {
             <div className="flex items-center space-x-3">
               <Users className="w-8 h-8 text-blue-600" />
               <div>
-                <div className="text-2xl font-bold text-gray-900">156</div>
-                <div className="text-sm text-gray-600">Quizzes Criados</div>
+                <div className="text-2xl font-bold text-gray-900">7</div>
+                <div className="text-sm text-gray-600">Editores Disponíveis</div>
               </div>
             </div>
           </Card>
@@ -146,8 +147,8 @@ const EditorsHubPage: React.FC = () => {
             <div className="flex items-center space-x-3">
               <Target className="w-8 h-8 text-green-600" />
               <div>
-                <div className="text-2xl font-bold text-gray-900">89%</div>
-                <div className="text-sm text-gray-600">Taxa de Conversão</div>
+                <div className="text-2xl font-bold text-gray-900">100%</div>
+                <div className="text-sm text-gray-600">Acesso Direto</div>
               </div>
             </div>
           </Card>
@@ -156,8 +157,8 @@ const EditorsHubPage: React.FC = () => {
             <div className="flex items-center space-x-3">
               <TrendingUp className="w-8 h-8 text-purple-600" />
               <div>
-                <div className="text-2xl font-bold text-gray-900">2.4x</div>
-                <div className="text-sm text-gray-600">ROI Médio</div>
+                <div className="text-2xl font-bold text-gray-900">Raiz</div>
+                <div className="text-sm text-gray-600">Localização</div>
               </div>
             </div>
           </Card>

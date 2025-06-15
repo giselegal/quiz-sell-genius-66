@@ -8,8 +8,11 @@ import {
   ShoppingCart, 
   BarChart3, 
   Palette,
-  Zap
+  Zap,
+  Edit,
+  Monitor
 } from 'lucide-react';
+import { ROUTES } from '@/utils/routes';
 
 interface EditorRoute {
   path: string;
@@ -20,34 +23,46 @@ interface EditorRoute {
 
 const editorRoutes: EditorRoute[] = [
   {
-    path: '/unified-editor',
+    path: ROUTES.EDITORS.UNIFIED,
     label: 'Editor Unificado',
     icon: Layers,
     description: 'Editor completo com Quiz + Resultado + Vendas'
   },
   {
-    path: '/visual-editor',
+    path: ROUTES.EDITORS.VISUAL,
     label: 'Editor de Quiz',
     icon: FileText,
     description: 'Editor visual para quizzes interativos'
   },
   {
-    path: '/result-visual-editor',
+    path: ROUTES.EDITORS.RESULT_VISUAL,
     label: 'Editor de Resultado',
     icon: BarChart3,
     description: 'Editor visual para páginas de resultado'
   },
   {
-    path: '/inlead-editor',
+    path: ROUTES.EDITORS.INLEAD,
     label: 'InLead Editor',
     icon: Zap,
     description: 'Editor avançado para landing pages'
   },
   {
-    path: '/admin/live-editor',
+    path: ROUTES.EDITORS.QUIZ,
+    label: 'Quiz Editor',
+    icon: Edit,
+    description: 'Editor específico para perguntas e respostas'
+  },
+  {
+    path: ROUTES.EDITORS.LIVE,
     label: 'Live Editor',
     icon: Palette,
-    description: 'Editor ao vivo no painel admin'
+    description: 'Editor ao vivo com preview em tempo real'
+  },
+  {
+    path: ROUTES.EDITORS.RESULT,
+    label: 'Result Editor',
+    icon: Monitor,
+    description: 'Editor para páginas de resultado personalizadas'
   }
 ];
 
@@ -62,7 +77,7 @@ export const EditorNavigation: React.FC = () => {
           Editores Disponíveis
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
           {editorRoutes.map((route) => {
             const Icon = route.icon;
             const isActive = location.pathname === route.path;

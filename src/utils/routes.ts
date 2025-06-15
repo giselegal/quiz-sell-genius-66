@@ -5,6 +5,18 @@ export const ROUTES = {
   RESULTADO: '/resultado',
   DESCUBRA_SEU_ESTILO: '/descubra-seu-estilo',
   
+  // Editores na Raiz
+  EDITORS: {
+    HUB: '/editors',
+    UNIFIED: '/unified-editor',
+    VISUAL: '/visual-editor',
+    RESULT_VISUAL: '/result-visual-editor',
+    INLEAD: '/inlead-editor',
+    QUIZ: '/quiz-editor',
+    LIVE: '/live-editor',
+    RESULT: '/result-editor'
+  },
+  
   // Rotas administrativas
   ADMIN: {
     ROOT: '/admin',
@@ -23,6 +35,7 @@ export function isValidRoute(path: string): boolean {
     ROUTES.HOME,
     ROUTES.RESULTADO,
     ROUTES.DESCUBRA_SEU_ESTILO,
+    ...Object.values(ROUTES.EDITORS),
     ROUTES.ADMIN.ROOT,
     ROUTES.ADMIN.DASHBOARD,
     ROUTES.ADMIN.QUIZ,
