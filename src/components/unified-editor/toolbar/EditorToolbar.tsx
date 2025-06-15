@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Eye, EyeOff, Save, Template } from 'lucide-react';
+import { Eye, EyeOff, Save, Layout } from 'lucide-react';
 
 interface EditorToolbarProps {
   isPreviewing: boolean;
@@ -32,7 +32,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           size="sm"
           onClick={onOpenTemplateModal}
         >
-          <Template className="w-4 h-4 mr-2" />
+          <Layout className="w-4 h-4 mr-2" />
           Templates
         </Button>
         
