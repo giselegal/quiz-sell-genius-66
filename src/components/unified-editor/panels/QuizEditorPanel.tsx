@@ -1,85 +1,58 @@
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import React from 'react';
 
 interface QuizEditorPanelProps {
   isVisible: boolean;
-  isPreviewing?: boolean;
+  isPreviewing: boolean;
 }
 
-const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isVisible, isPreviewing = false }) => {
-  const [selectedStyle, setSelectedStyle] = useState<"Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo">("Natural");
-  const [quizConfig, setQuizConfig] = useState({
-    title: 'Descubra Seu Estilo Pessoal',
-    description: 'Um quiz para descobrir seu estilo único',
-    questionsCount: 15
-  });
-
+const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ 
+  isVisible, 
+  isPreviewing 
+}) => {
   if (!isVisible) return null;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Editor do Quiz</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
-          <Label htmlFor="quiz-title">Título do Quiz</Label>
-          <Input
-            id="quiz-title"
-            value={quizConfig.title}
-            onChange={(e) => setQuizConfig(prev => ({ ...prev, title: e.target.value }))}
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="quiz-description">Descrição</Label>
-          <Textarea
-            id="quiz-description"
-            value={quizConfig.description}
-            onChange={(e) => setQuizConfig(prev => ({ ...prev, description: e.target.value }))}
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="style-select">Estilo Padrão</Label>
-          <Select value={selectedStyle} onValueChange={(value: any) => setSelectedStyle(value)}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Natural">Natural</SelectItem>
-              <SelectItem value="Clássico">Clássico</SelectItem>
-              <SelectItem value="Contemporâneo">Contemporâneo</SelectItem>
-              <SelectItem value="Elegante">Elegante</SelectItem>
-              <SelectItem value="Romântico">Romântico</SelectItem>
-              <SelectItem value="Sexy">Sexy</SelectItem>
-              <SelectItem value="Dramático">Dramático</SelectItem>
-              <SelectItem value="Criativo">Criativo</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <Label htmlFor="questions-count">Número de Questões</Label>
-          <Input
-            id="questions-count"
-            type="number"
-            value={quizConfig.questionsCount}
-            onChange={(e) => setQuizConfig(prev => ({ ...prev, questionsCount: parseInt(e.target.value) }))}
-          />
-        </div>
-
-        <Button className="w-full">
-          Salvar Configurações do Quiz
-        </Button>
-      </CardContent>
-    </Card>
+    <div className="h-full flex flex-col bg-white">
+      <div className="border-b p-4">
+        <h2 className="text-xl font-semibold">Editor de Quiz</h2>
+        <p className="text-sm text-gray-600">Crie e edite seu quiz interativo</p>
+      </div>
+      
+      <div className="flex-1 p-6">
+        {isPreviewing ? (
+          <div className="h-full bg-gray-50 rounded-lg p-8">
+            <h1 className="text-3xl font-bold mb-4">Preview do Quiz</h1>
+            <div className="bg-white rounded-lg p-6 shadow">
+              <h2 className="text-xl font-semibold mb-4">Pergunta de Exemplo</h2>
+              <p className="text-gray-600 mb-4">Esta é uma visualização do seu quiz.</p>
+              <div className="space-y-2">
+                <button className="w-full p-3 text-left border rounded hover:bg-gray-50">
+                  Opção A
+                </button>
+                <button className="w-full p-3 text-left border rounded hover:bg-gray-50">
+                  Opção B
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="h-full">
+            <h3 className="text-lg font-medium mb-4">Configurações do Quiz</h3>
+            <div className="space-y-4">
+              <div className="p-4 border rounded-lg">
+                <h4 className="font-medium mb-2">Perguntas</h4>
+                <p className="text-sm text-gray-600">Configure as perguntas do seu quiz</p>
+              </div>
+              <div className="p-4 border rounded-lg">
+                <h4 className="font-medium mb-2">Estilo Visual</h4>
+                <p className="text-sm text-gray-600">Personalize a aparência</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
