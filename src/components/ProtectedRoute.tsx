@@ -8,9 +8,10 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { authData } = useAuth();
+  const { authData, isDemoMode } = useAuth();
 
-  if (!authData) {
+  // Permitir acesso se há dados de auth OU se está em modo demo
+  if (!authData && !isDemoMode) {
     return <Navigate to="/login" replace />;
   }
 

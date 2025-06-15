@@ -1,12 +1,9 @@
 
 import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { UnifiedEditorLayout } from '@/components/editor/UnifiedEditorLayout';
 import { StyleResult } from '@/types/quiz';
 
 const ResultVisualEditorPage: React.FC = () => {
-  const { user } = useAuth();
-  
   // Obter estilo primário do localStorage ou usar padrão
   const getDefaultPrimaryStyle = (): StyleResult => {
     try {

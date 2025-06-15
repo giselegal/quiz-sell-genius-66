@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthLayout } from '@/layouts/AuthLayout';
@@ -67,6 +66,8 @@ function App() {
         <Route path="/inlead-editor" element={<InLeadEditorPage />} />
         
         <Route path="/quiz-offer" element={<QuizOfferPage />} />
+        
+        {/* Rotas Admin Protegidas */}
         <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />

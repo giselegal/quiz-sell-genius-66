@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 const EditorsHubPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const navigate = useNavigate();
 
   const workflows = [
@@ -63,20 +63,27 @@ const EditorsHubPage: React.FC = () => {
               </p>
             </div>
             
-            {user && (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-600">
-                  Logado como: <strong>{user.userName}</strong>
+            <div className="flex items-center space-x-4">
+              {isDemoMode && (
+                <span className="text-sm text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
+                  Modo Demo
                 </span>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/admin/dashboard')}
-                >
-                  <Settings className="w-4 h-4 mr-2" />
-                  Dashboard Admin
-                </Button>
-              </div>
-            )}
+              )}
+              
+              {user && (
+                <span className="text-sm text-gray-600">
+                  Usuário: <strong>{user.userName}</strong>
+                </span>
+              )}
+              
+              <Button
+                variant="outline"
+                onClick={() => navigate('/admin/dashboard')}
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Dashboard Admin
+              </Button>
+            </div>
           </div>
         </div>
       </div>

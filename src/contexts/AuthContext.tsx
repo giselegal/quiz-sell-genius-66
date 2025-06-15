@@ -14,28 +14,44 @@ interface AuthData {
 
 interface AuthContextType {
   authData: AuthData | null;
-  user: User | null; // Add this for compatibility
+  user: User | null;
   login: (name: string, email?: string) => void;
   logout: () => void;
   checkAuth: () => void;
+  isDemoMode: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Usuário demo para desenvolvimento
+const DEMO_USER: User = {
+  userName: 'Demo User',
+  email: 'demo@example.com',
+  role: 'admin'
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [authData, setAuthData] = useState<AuthData | null>(() => {
+  const [authData, setAuthData] = useState<AuthData | null>(null);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+
+  useEffect(() => {
+    // Verificar se existe usuário salvo
     const savedName = localStorage.getItem('userName');
     const savedEmail = localStorage.getItem('userEmail');
     const savedRole = localStorage.getItem('userRole');
     
-    return savedName ? { 
-      user: {
-        userName: savedName,
-        ...(savedEmail && { email: savedEmail }),
-        ...(savedRole && { role: savedRole })
-      }
-    } : null;
-  });
+    if (savedName) {
+      const userData: User = { userName: savedName };
+      if (savedEmail) userData.email = savedEmail;
+      if (savedRole) userData.role = savedRole;
+      
+      setAuthData({ user: userData });
+    } else {
+      // Se não há usuário salvo, ativar modo demo
+      setAuthData({ user: DEMO_USER });
+      setIsDemoMode(true);
+    }
+  }, []);
 
   const login = (name: string, email?: string) => {
     const userData: User = { userName: name };
@@ -45,33 +61,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       localStorage.setItem('userEmail', email);
     }
     
-    const savedRole = localStorage.getItem('userRole');
-    if (savedRole) {
-      userData.role = savedRole;
-    }
+    const savedRole = localStorage.getItem('userRole') || 'admin';
+    userData.role = savedRole;
     
     setAuthData({ user: userData });
+    setIsDemoMode(false);
     localStorage.setItem('userName', name);
+    localStorage.setItem('userRole', savedRole);
   };
 
   const logout = () => {
-    setAuthData(null);
+    setAuthData({ user: DEMO_USER });
+    setIsDemoMode(true);
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userRole');
   };
 
   const checkAuth = () => {
-    // Implementation for checking auth state
+    // Manter estado atual
   };
 
   return (
     <AuthContext.Provider value={{ 
       authData, 
-      user: authData?.user || null, // Provide user for compatibility
+      user: authData?.user || null,
       login, 
       logout, 
-      checkAuth 
+      checkAuth,
+      isDemoMode
     }}>
       {children}
     </AuthContext.Provider>
