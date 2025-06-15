@@ -1,7 +1,6 @@
 
-import React, { useEffect } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import LoginPage from '@/pages/LoginPage';
@@ -29,33 +28,27 @@ import UnifiedEditorPage from '@/pages/UnifiedEditorPage';
 import VisualEditorPage from '@/pages/VisualEditorPage';
 import ResultVisualEditorPage from '@/pages/ResultVisualEditorPage';
 import EditorsHubPage from '@/pages/EditorsHubPage';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 function App() {
-  const { authData, checkAuth } = useAuth();
-  const location = useLocation();
-
-  useEffect(() => {
-    checkAuth();
-  }, [location.pathname, checkAuth]);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Routes>
         <Route
           path="/login"
-          element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><LoginPage /></AuthLayout>}
+          element={<AuthLayout><LoginPage /></AuthLayout>}
         />
         <Route
           path="/register"
-          element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><RegisterPage /></AuthLayout>}
+          element={<AuthLayout><RegisterPage /></AuthLayout>}
         />
         <Route
           path="/forgot-password"
-          element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><ForgotPasswordPage /></AuthLayout>}
+          element={<AuthLayout><ForgotPasswordPage /></AuthLayout>}
         />
         <Route
           path="/reset-password/:token"
-          element={authData ? <Navigate to="/admin/dashboard" replace /> : <AuthLayout><ResetPasswordPage /></AuthLayout>}
+          element={<AuthLayout><ResetPasswordPage /></AuthLayout>}
         />
         <Route path="/" element={<QuizIntro onStart={(nome: string, email?: string) => {
           console.log('Quiz started:', nome, email);
@@ -74,7 +67,7 @@ function App() {
         <Route path="/inlead-editor" element={<InLeadEditorPage />} />
         
         <Route path="/quiz-offer" element={<QuizOfferPage />} />
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="quiz-builder" element={<QuizBuilderPage />} />
