@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { UnifiedEditorLayout } from '@/components/editor/UnifiedEditorLayout';
+import { UnifiedVisualEditor } from '@/components/unified-editor/UnifiedVisualEditor';
 import { StyleResult } from '@/types/quiz';
 
 const UnifiedEditorPage: React.FC = () => {
@@ -28,11 +28,14 @@ const UnifiedEditorPage: React.FC = () => {
 
   const primaryStyle = getDefaultPrimaryStyle();
   
+  console.log('UnifiedEditorPage carregando com estilo:', primaryStyle);
+  
   return (
-    <div className="unified-editor-page h-screen overflow-hidden">
-      <div className="h-full bg-gray-50">
-        <UnifiedEditorLayout primaryStyle={primaryStyle} />
-      </div>
+    <div className="unified-editor-page h-screen w-full overflow-hidden bg-gray-50">
+      <UnifiedVisualEditor 
+        primaryStyle={primaryStyle} 
+        initialActiveTab="result"
+      />
     </div>
   );
 };
