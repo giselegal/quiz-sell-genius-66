@@ -80,8 +80,8 @@
 /* Imagem da opção - Sem corte, proporção fixa */
 .option-image {
   width: 100%;
-  height: 160px; /* Altura fixa para consistência */
-  object-fit: cover;
+  height: 180px; /* Altura maior no mobile para dar mais destaque */
+  object-fit: cover; /* Mobile: pode cortar para dar destaque */
   object-position: center;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -94,27 +94,42 @@
 @media (min-width: 640px) {
   .option-image {
     height: 180px;
+    object-fit: contain; /* Desktop: mostra imagem completa sem cortar */
+    background-color: #f8f9fa;
   }
 }
 
 @media (min-width: 1024px) {
   .option-image {
     height: 200px;
+    object-fit: contain; /* Desktop: mostra imagem completa sem cortar */
+    background-color: #f8f9fa;
   }
 }
 
-/* Labels e indicadores - Sem tick de seleção */
+/* Labels e indicadores - Menor no mobile para dar destaque à imagem */
 .option-label {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: 0.5rem;
+  left: 0.5rem;
   z-index: 20;
-  font-size: 0.75rem;
+  font-size: 0.625rem; /* Menor no mobile */
   font-weight: 600;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.375rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(8px);
+}
+
+/* Desktop: tamanho normal do label */
+@media (min-width: 640px) {
+  .option-label {
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+  }
 }
 
 .option-label.default {
@@ -144,18 +159,18 @@
   padding: 1.5rem 1rem;
 }
 
-/* Mobile: menos padding */
+/* Mobile: menos padding e mais destaque à imagem */
 @media (max-width: 639px) {
   .option-content {
-    padding: 0.75rem;
+    padding: 0.5rem; /* Menos padding geral */
   }
 
   .option-content.with-image {
-    padding: 0.75rem 0.75rem 0.875rem 0.75rem;
+    padding: 0.5rem 0.75rem 0.75rem 0.75rem; /* Menos padding superior */
   }
 
   .option-content.text-only {
-    padding: 1.25rem 0.75rem;
+    padding: 1rem 0.75rem;
   }
 }
 
@@ -183,18 +198,31 @@
   font-size: 1.125rem;
 }
 
-/* Fontes menores no mobile */
+/* Fontes menores no mobile para dar destaque à imagem */
 @media (max-width: 639px) {
   .option-title.small {
-    font-size: 0.8rem;
+    font-size: 0.75rem; /* Ainda menor no mobile */
   }
 
   .option-title.medium {
-    font-size: 0.875rem;
+    font-size: 0.8rem; /* Ainda menor no mobile */
   }
 
   .option-title.large {
-    font-size: 1rem;
+    font-size: 0.875rem; /* Ainda menor no mobile */
+  }
+  
+  /* Texto mais discreto no mobile quando há imagem */
+  .option-content.with-image .option-title {
+    color: #6b7280; /* Cor mais sutil */
+    font-size: 0.75rem !important; /* Força tamanho menor */
+    line-height: 1.3;
+  }
+  
+  /* Palavras estratégicas ainda destacadas */
+  .option-content.with-image .option-title .strategic-word {
+    color: #374151; /* Cor um pouco mais forte para destaque */
+    font-weight: 700;
   }
 }
 
@@ -222,6 +250,14 @@
   border-top: 1px solid #f3f4f6;
 }
 
+/* Mobile: footer mais discreto */
+@media (max-width: 639px) {
+  .option-footer {
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+  }
+}
+
 .option-category {
   font-size: 0.75rem;
   color: #6b7280;
@@ -240,6 +276,19 @@
   padding: 0.375rem 0.625rem;
   border-radius: 0.5rem;
   border: 1px solid rgba(184, 155, 122, 0.15);
+}
+
+/* Mobile: categoria e pontos mais discretos */
+@media (max-width: 639px) {
+  .option-category {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .option-points {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
 }
 
 /* Animações de entrada */
