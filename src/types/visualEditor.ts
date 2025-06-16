@@ -1,4 +1,3 @@
-
 export type BlockType = 
   | 'text' 
   | 'title' 
@@ -71,7 +70,7 @@ export interface VisualElement {
   locked: boolean;
 }
 
-// Alias for compatibility with other components
+// Alias for compatibility with other components - UPDATED
 export type CanvasElement = VisualElement;
 
 export interface VisualStage {
