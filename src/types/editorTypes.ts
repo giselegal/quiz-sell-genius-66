@@ -30,6 +30,30 @@ export function convertToModernCanvasElement(legacy: LegacyCanvasElement): Visua
   };
 }
 
+// Block interface for editor compatibility
+export interface Block {
+  id: string;
+  type: BlockType;
+  content: any;
+  order: number;
+}
+
+// Editor state interface
+export interface EditorState {
+  selectedBlockId: string | null;
+  isPreviewing: boolean;
+  blocks: Block[];
+  isGlobalStylesOpen: boolean;
+}
+
+// Block manipulation actions interface
+export interface BlockManipulationActions {
+  handleAddBlock: (type: Block['type']) => string;
+  handleUpdateBlock: (id: string, content: any) => void;
+  handleDeleteBlock: (id: string) => void;
+  handleReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
+}
+
 // Modern editor props interface
 export interface EditorProps {
   selectedStyle: {
