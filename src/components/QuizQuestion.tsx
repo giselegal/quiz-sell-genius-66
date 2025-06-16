@@ -14,6 +14,7 @@ interface QuizQuestionProps {
   onPrevious?: () => void;
   canProceed?: boolean;
   showNavigationButtons?: boolean;
+  isStrategicQuestion?: boolean;
 }
 
 export const QuizQuestion: React.FC<QuizQuestionProps> = ({
@@ -25,7 +26,8 @@ export const QuizQuestion: React.FC<QuizQuestionProps> = ({
   onNext,
   onPrevious,
   canProceed = false,
-  showNavigationButtons = false
+  showNavigationButtons = false,
+  isStrategicQuestion = false
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(currentAnswers);
   const [hasAutoAdvanced, setHasAutoAdvanced] = useState(false);

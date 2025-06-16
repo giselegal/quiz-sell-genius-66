@@ -1,37 +1,22 @@
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import QuizIntro from '@/components/QuizIntro';
-import QuizFinalTransition from '@/components/QuizFinalTransition';
-import QuizResult from '@/components/QuizResult';
-import QuizOfferPage from '@/components/QuizOfferPage';
-import { QuizContent } from '@/components/QuizContent';
-import { StrategicQuestions } from '@/components/quiz/StrategicQuestions';
-import { DetailedStepsPanel } from './steps/DetailedStepsPanel';
-import { ComponentsPalette } from './sidebar/ComponentsPalette';
-import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
-import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
-import { useVisualEditor } from '@/hooks/useVisualEditor';
-import { useQuizLogic } from '@/hooks/useQuizLogic';
-import { StyleResult, UserResponse } from '@/types/quiz';
+import { Separator } from '@/components/ui/separator';
 import { 
   Eye, 
+  Settings, 
   Save, 
-  Monitor, 
-  Tablet, 
-  Smartphone
+  Download,
+  Upload,
+  RefreshCw,
+  Play
 } from 'lucide-react';
-
-interface Stage {
-  id: string;
-  name: string;
-  type: 'intro' | 'quiz' | 'strategic' | 'transition' | 'result' | 'offer';
-  component: React.FC<any>;
-  subStages?: Array<{ id: string; name: string; index: number }>;
-}
+import { useVisualEditor } from '@/hooks/useVisualEditor';
+import { DetailedStepsPanel } from './steps/DetailedStepsPanel';
+import { QuizContent } from '@/components/QuizContent';
+import { useQuizLogic } from '@/hooks/useQuizLogic';
+import { UserResponse } from '@/types/quiz';
 
 interface ModernVisualEditorProps {
   funnelId: string;
@@ -42,373 +27,266 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave
 }) => {
-  const { editorState, setActiveStage } = useVisualEditor();
+  const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
   
+  const {
+    elements,
+    stages,
+    activeStageId,
+    addElement,
+    updateElement,
+    removeElement,
+    setActiveStage,
+    exportState,
+    importState,
+    undo,
+    redo
+  } = useVisualEditor();
+
   // Quiz logic integration
   const {
-    currentQuestion,
     currentQuestionIndex,
-    currentAnswers,
-    handleAnswer,
-    handleNext,
-    handlePrevious,
-    quizCompleted,
-    strategicAnswers,
-    handleStrategicAnswer,
     totalQuestions,
-    isInitialLoadComplete,
-    allQuestions
+    currentQuestion,
+    showingStrategicQuestions,
+    currentStrategicQuestionIndex,
+    totalStrategicQuestions,
+    currentAnswers,
+    handleAnswerSubmit,
+    handleNextClick,
+    handlePrevious,
+    resetQuiz
   } = useQuizLogic();
 
-  const [currentStage, setCurrentStage] = useState<string>('intro');
-  const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
-  const [currentQuestionInStage, setCurrentQuestionInStage] = useState<number>(0);
-  const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState<number>(0);
-  const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
-  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
-  const [mockUser] = useState({ userName: 'Usuário de Teste' });
+  const currentStage = stages.find(stage => stage.id === activeStageId);
 
-  // Create stages with sub-stages for quiz questions
-  const [stages] = useState<Stage[]>(() => {
-    const quizSubStages = allQuestions.map((question, index) => ({
-      id: `quiz-question-${index + 1}`,
-      name: `Questão ${index + 1}`,
-      index
-    }));
-
-    const strategicSubStages = Array.from({ length: 7 }, (_, index) => ({
-      id: `strategic-question-${index + 1}`,
-      name: `Estratégica ${index + 1}`,
-      index
-    }));
-
-    return [
-      { 
-        id: 'intro', 
-        name: 'Intro', 
-        type: 'intro',
-        component: QuizIntro 
-      },
-      { 
-        id: 'quiz', 
-        name: 'Quiz', 
-        type: 'quiz',
-        component: QuizContent,
-        subStages: quizSubStages
-      },
-      { 
-        id: 'strategic', 
-        name: 'Perguntas Estratégicas', 
-        type: 'strategic',
-        component: StrategicQuestions,
-        subStages: strategicSubStages
-      },
-      { 
-        id: 'transition', 
-        name: 'Transição', 
-        type: 'transition',
-        component: QuizFinalTransition 
-      },
-      { 
-        id: 'result', 
-        name: 'Resultado', 
-        type: 'result',
-        component: QuizResult 
-      },
-      { 
-        id: 'offer', 
-        name: 'Oferta', 
-        type: 'offer',
-        component: QuizOfferPage 
-      },
-    ];
+  // Generate stages with sub-stages for detailed navigation
+  const stagesWithSubStages = stages.map(stage => {
+    if (stage.id === 'quiz') {
+      return {
+        ...stage,
+        subStages: Array.from({ length: totalQuestions }, (_, index) => ({
+          id: `question-${index}`,
+          name: `Questão ${index + 1}`,
+          index
+        }))
+      };
+    }
+    if (stage.id === 'strategic') {
+      return {
+        ...stage,
+        subStages: Array.from({ length: totalStrategicQuestions }, (_, index) => ({
+          id: `strategic-${index}`,
+          name: `Estratégica ${index + 1}`,
+          index
+        }))
+      };
+    }
+    return stage;
   });
 
-  // Mock data for testing
-  const mockPrimaryStyle: StyleResult = {
-    category: 'Elegante',
-    score: 85,
-    percentage: 85
-  };
-
-  const mockSecondaryStyles: StyleResult[] = [
-    { category: 'Romântico', score: 70, percentage: 70 },
-    { category: 'Clássico', score: 65, percentage: 65 }
-  ];
-
-  const handleSave = useCallback(() => {
-    console.log('Saving editor state...');
-    if (onSave) {
-      onSave({
-        stages,
-        currentStage,
-        editorState
-      });
-    }
-  }, [stages, currentStage, editorState, onSave]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      handleSave();
-    }, 10000);
-
-    return () => clearInterval(intervalId);
-  }, [handleSave]);
-
   const handleStageSelect = (stageId: string, subStageIndex?: number) => {
-    const stageIndex = stages.findIndex(s => s.id === stageId);
-    setCurrentStage(stageId);
-    setCurrentStageIndex(stageIndex);
     setActiveStage(stageId);
     
+    // If navigating to a specific question, update quiz state
     if (stageId === 'quiz' && subStageIndex !== undefined) {
-      setCurrentQuestionInStage(subStageIndex);
-    } else if (stageId === 'strategic' && subStageIndex !== undefined) {
-      setCurrentStrategicQuestionIndex(subStageIndex);
+      // Logic to navigate to specific question would go here
+      console.log(`Navigating to quiz question ${subStageIndex}`);
+    }
+    if (stageId === 'strategic' && subStageIndex !== undefined) {
+      console.log(`Navigating to strategic question ${subStageIndex}`);
     }
   };
 
-  const handleComponentSelect = (componentType: string) => {
-    setSelectedComponent(componentType);
-    console.log('Componente selecionado:', componentType);
+  const handleSave = () => {
+    const editorData = {
+      elements,
+      stages,
+      activeStageId,
+      timestamp: new Date().toISOString()
+    };
+    
+    onSave?.(editorData);
+    console.log('Editor state saved:', editorData);
   };
 
-  const handleAnswerSubmit = (response: UserResponse) => {
-    if (currentStage === 'strategic') {
-      handleStrategicAnswer(response.questionId, response.selectedOptions);
-    } else {
-      handleAnswer(response.questionId, response.selectedOptions);
-    }
+  const handleQuizAnswerSubmit = (response: UserResponse) => {
+    handleAnswerSubmit(response);
   };
 
-  const renderCurrentStage = () => {
-    if (!isInitialLoadComplete && currentStage === 'quiz') {
-      return (
-        <div className="p-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
-          <p className="text-[#432818]">Carregando quiz...</p>
-        </div>
-      );
-    }
+  const renderStageContent = () => {
+    if (!currentStage) return null;
 
-    switch (currentStage) {
+    switch (currentStage.id) {
       case 'intro':
         return (
-          <QuizIntro 
-            onStart={(userName) => {
-              console.log('Quiz iniciado por:', userName);
-              setCurrentStage('quiz');
-            }} 
-          />
+          <div className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Introdução do Quiz</h2>
+            <p className="text-gray-600">Conteúdo da página de introdução</p>
+          </div>
         );
-      
+
       case 'quiz':
         return (
           <QuizContent
-            user={mockUser}
-            currentQuestionIndex={currentQuestionInStage}
+            user={{ userName: 'Editor User' }}
+            currentQuestionIndex={currentQuestionIndex}
             totalQuestions={totalQuestions}
             showingStrategicQuestions={false}
-            currentStrategicQuestionIndex={0}
-            currentQuestion={allQuestions[currentQuestionInStage]}
+            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+            currentQuestion={currentQuestion}
             currentAnswers={currentAnswers}
-            handleAnswerSubmit={handleAnswerSubmit}
-            handleNextClick={() => {
-              if (currentQuestionInStage < totalQuestions - 1) {
-                setCurrentQuestionInStage(prev => prev + 1);
-              } else {
-                setCurrentStage('strategic');
-                setCurrentStrategicQuestionIndex(0);
-              }
-            }}
-            handlePrevious={() => {
-              if (currentQuestionInStage > 0) {
-                setCurrentQuestionInStage(prev => prev - 1);
-              }
-            }}
+            handleAnswerSubmit={handleQuizAnswerSubmit}
+            handleNextClick={handleNextClick}
+            handlePrevious={handlePrevious}
+            showHeader={false}
           />
         );
-      
+
       case 'strategic':
         return (
-          <StrategicQuestions
-            currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={strategicAnswers}
-            onAnswer={handleAnswerSubmit}
+          <QuizContent
+            user={{ userName: 'Editor User' }}
+            currentQuestionIndex={currentQuestionIndex}
+            totalQuestions={totalQuestions}
+            showingStrategicQuestions={true}
+            currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+            currentQuestion={currentQuestion}
+            currentAnswers={currentAnswers}
+            handleAnswerSubmit={handleQuizAnswerSubmit}
+            handleNextClick={handleNextClick}
+            handlePrevious={handlePrevious}
+            showHeader={false}
           />
         );
-      
+
       case 'transition':
         return (
-          <QuizFinalTransition 
-            onShowResult={() => setCurrentStage('result')}
-          />
+          <div className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Transição</h2>
+            <p className="text-gray-600">Página de transição entre quiz e resultado</p>
+          </div>
         );
-      
+
       case 'result':
         return (
-          <QuizResult
-            primaryStyle={mockPrimaryStyle}
-            secondaryStyles={mockSecondaryStyles}
-          />
+          <div className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Resultado do Quiz</h2>
+            <p className="text-gray-600">Página de apresentação dos resultados</p>
+          </div>
         );
-      
+
       case 'offer':
-        return <QuizOfferPage />;
-      
-      default:
         return (
           <div className="p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Etapa não encontrada</h2>
-            <p className="text-gray-600">A etapa selecionada não existe.</p>
+            <h2 className="text-2xl font-bold mb-4">Oferta Final</h2>
+            <p className="text-gray-600">Página de apresentação da oferta</p>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="p-8 text-center text-gray-500">
+            Selecione uma etapa para visualizar
           </div>
         );
     }
   };
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3 flex-shrink-0">
-        <div className="flex items-center justify-between">
+    <div className="h-screen flex bg-[#FAF9F7]">
+      {/* Left Panel - Steps */}
+      <div className="w-80 border-r border-gray-200 bg-white">
+        <DetailedStepsPanel
+          stages={stagesWithSubStages}
+          currentStage={activeStageId}
+          currentSubStageIndex={showingStrategicQuestions ? currentStrategicQuestionIndex : currentQuestionIndex}
+          onStageSelect={handleStageSelect}
+          totalQuestions={totalQuestions}
+          totalStrategicQuestions={totalStrategicQuestions}
+        />
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Toolbar */}
+        <div className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-6">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-gray-900">Editor Visual Moderno</h1>
-            <Badge variant="outline" className="border-blue-500 text-blue-700">
-              {funnelId}
-            </Badge>
-            <Badge variant="secondary">
-              {stages.find(s => s.id === currentStage)?.name}
-            </Badge>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            {/* Viewport Controls */}
-            <div className="flex items-center border rounded-lg">
+            <h1 className="text-lg font-semibold text-gray-900">
+              Editor Visual - {currentStage?.name || 'Carregando...'}
+            </h1>
+            
+            <div className="flex gap-2">
               <Button
-                variant={viewportMode === 'desktop' ? 'default' : 'ghost'}
+                variant="outline"
                 size="sm"
-                onClick={() => setViewportMode('desktop')}
-                className="rounded-r-none"
+                onClick={() => setViewMode('desktop')}
+                className={viewMode === 'desktop' ? 'bg-gray-100' : ''}
               >
-                <Monitor className="w-4 h-4" />
+                Desktop
               </Button>
               <Button
-                variant={viewportMode === 'tablet' ? 'default' : 'ghost'}
+                variant="outline"
                 size="sm"
-                onClick={() => setViewportMode('tablet')}
-                className="rounded-none border-x"
+                onClick={() => setViewMode('mobile')}
+                className={viewMode === 'mobile' ? 'bg-gray-100' : ''}
               >
-                <Tablet className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewportMode === 'mobile' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewportMode('mobile')}
-                className="rounded-l-none"
-              >
-                <Smartphone className="w-4 h-4" />
+                Mobile
               </Button>
             </div>
+          </div>
 
-            {/* Preview Toggle */}
+          <div className="flex items-center gap-2">
             <Button
-              variant={isPreviewMode ? 'default' : 'outline'}
+              variant="outline"
               size="sm"
               onClick={() => setIsPreviewMode(!isPreviewMode)}
             >
               <Eye className="w-4 h-4 mr-2" />
-              {isPreviewMode ? 'Edição' : 'Preview'}
+              {isPreviewMode ? 'Editar' : 'Preview'}
             </Button>
-
-            {/* Save Button */}
-            <Button onClick={handleSave} size="sm">
+            
+            <Separator orientation="vertical" className="h-6" />
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={undo}
+            >
+              Desfazer
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={redo}
+            >
+              Refazer
+            </Button>
+            
+            <Button
+              size="sm"
+              onClick={handleSave}
+              className="bg-[#B89B7A] hover:bg-[#A0895B] text-white"
+            >
               <Save className="w-4 h-4 mr-2" />
               Salvar
             </Button>
           </div>
         </div>
-      </div>
 
-      {/* Main Content - Resizable 4 Columns Layout */}
-      <div className="flex-1 overflow-hidden">
-        <ResizablePanelGroup direction="horizontal" className="h-full">
-          {/* Left Column - Detailed Steps Panel */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <div className="h-full bg-white border-r border-gray-200">
-              <DetailedStepsPanel
-                stages={stages}
-                currentStage={currentStage}
-                currentSubStageIndex={
-                  currentStage === 'quiz' ? currentQuestionInStage :
-                  currentStage === 'strategic' ? currentStrategicQuestionIndex :
-                  undefined
-                }
-                onStageSelect={handleStageSelect}
-                totalQuestions={totalQuestions}
-                totalStrategicQuestions={7}
-              />
+        {/* Content Preview Area */}
+        <div className="flex-1 overflow-auto">
+          <div className={`mx-auto transition-all duration-300 ${
+            viewMode === 'mobile' ? 'max-w-md' : 'max-w-7xl'
+          }`}>
+            <div className="min-h-full bg-white shadow-sm">
+              {renderStageContent()}
             </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Second Column - Components Palette */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <div className="h-full bg-gray-50 border-r border-gray-200">
-              <ComponentsPalette
-                onComponentSelect={handleComponentSelect}
-                selectedComponent={selectedComponent}
-              />
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Third Column - Editor Canvas */}
-          <ResizablePanel defaultSize={40} minSize={30}>
-            <div className="h-full overflow-auto bg-gray-100 p-6">
-              <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
-                viewportMode === 'desktop' ? 'max-w-6xl' :
-                viewportMode === 'tablet' ? 'max-w-2xl' :
-                'max-w-sm'
-              }`}>
-                {renderCurrentStage()}
-              </div>
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Fourth Column - Configuration Panel */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <div className="h-full bg-white border-l border-gray-200">
-              <div className="h-full overflow-auto">
-                <StageConfigurationPanel
-                  stageName={stages.find(s => s.id === currentStage)?.name || ''}
-                  stageType={currentStage}
-                />
-              </div>
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </div>
-
-      {/* Option Configuration Modal */}
-      {showOptionConfig && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <OptionConfigurationPanel
-            isOpen={showOptionConfig}
-            onClose={() => setShowOptionConfig(false)}
-            optionId={selectedOptionId || ''}
-            onConfigUpdate={(config) => {
-              console.log('Configuração atualizada:', config);
-            }}
-          />
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
