@@ -1,9 +1,10 @@
+
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { generateId } from '@/utils/idGenerator';
 
 export interface EditorElement {
   id: string;
-  type: 'heading' | 'text' | 'image' | 'button' | 'video' | 'spacer' | 'divider' | 'pricing' | 'testimonial' | 'countdown' | 'faq' | 'input' | 'checkbox';
+  type: 'heading' | 'text' | 'image' | 'button' | 'video' | 'spacer' | 'divider' | 'pricing' | 'testimonial' | 'countdown' | 'faq' | 'input' | 'checkbox' | 'quiz-header' | 'quiz-question';
   content: Record<string, any>;
   style: Record<string, any>;
   position: { x: number; y: number };

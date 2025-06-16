@@ -1,9 +1,16 @@
+
 import React, { useState } from 'react';
 import { EditorElement } from '@/hooks/useModernEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Trash2, Move, Settings, Copy } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { 
+  Trash2, 
+  Copy, 
+  Move, 
+  Edit,
+  ArrowLeft
+} from 'lucide-react';
 
 interface ModernElementRendererProps {
   element: EditorElement;
@@ -26,211 +33,6 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
 
   const renderContent = () => {
     switch (element.type) {
-      case 'heading':
-        const HeadingTag = element.content.level || 'h2';
-        return (
-          <HeadingTag 
-            style={element.style}
-            className="m-0"
-          >
-            {element.content.text || 'Título'}
-          </HeadingTag>
-        );
-      
-      case 'text':
-        return (
-          <p style={element.style} className="m-0">
-            {element.content.text || 'Texto aqui...'}
-          </p>
-        );
-      
-      case 'button':
-        return (
-          <button
-            style={element.style}
-            className="border-none cursor-pointer transition-all hover:opacity-90"
-            onClick={(e) => {
-              if (!isPreviewMode) e.preventDefault();
-            }}
-          >
-            {element.content.text || 'Botão'}
-          </button>
-        );
-      
-      case 'image':
-        return (
-          <div style={element.style} className="bg-gray-200 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
-            {element.content.src ? (
-              <img 
-                src={element.content.src} 
-                alt={element.content.alt || 'Imagem'}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-gray-500 text-sm">Clique para adicionar imagem</span>
-            )}
-          </div>
-        );
-
-      case 'pricing':
-        return (
-          <div style={element.style} className="max-w-sm">
-            <div className="text-center">
-              <h3 className="text-xl font-bold mb-2">{element.content.title}</h3>
-              <div className="mb-4">
-                <span className="text-3xl font-bold text-green-600">{element.content.price}</span>
-                {element.content.originalPrice && (
-                  <span className="text-lg line-through text-gray-500 ml-2">{element.content.originalPrice}</span>
-                )}
-              </div>
-              <p className="text-gray-600 mb-4">{element.content.description}</p>
-              <ul className="text-sm space-y-2">
-                {element.content.features?.map((feature: string, index: number) => (
-                  <li key={index} className="flex items-center">
-                    <span className="text-green-500 mr-2">✓</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        );
-
-      case 'testimonial':
-        return (
-          <div style={element.style}>
-            <div className="flex items-start space-x-4">
-              {element.content.avatar && (
-                <img 
-                  src={element.content.avatar} 
-                  alt={element.content.author}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-              )}
-              <div className="flex-1">
-                <p className="italic mb-3">"{element.content.text}"</p>
-                <div className="flex items-center space-x-1 mb-2">
-                  {[...Array(element.content.rating || 5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400">⭐</span>
-                  ))}
-                </div>
-                <p className="font-semibold">{element.content.author}</p>
-                {element.content.role && (
-                  <p className="text-sm text-gray-600">{element.content.role}</p>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'countdown':
-        return (
-          <div style={element.style}>
-            <h3 className="text-lg font-bold mb-4 text-center">{element.content.title}</h3>
-            <div className="grid grid-cols-4 gap-4 text-center">
-              <div>
-                <div className="text-2xl font-bold">23</div>
-                <div className="text-sm opacity-75">Dias</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold">15</div>
-                <div className="text-sm opacity-75">Horas</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold">42</div>
-                <div className="text-sm opacity-75">Min</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold">18</div>
-                <div className="text-sm opacity-75">Seg</div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'faq':
-        return (
-          <div style={element.style}>
-            <h3 className="text-lg font-bold mb-4">{element.content.title}</h3>
-            <div className="space-y-3">
-              {element.content.items?.map((item: any, index: number) => (
-                <div key={index} className="border-b border-gray-200 pb-3">
-                  <h4 className="font-semibold mb-2">{item.question}</h4>
-                  <p className="text-gray-600 text-sm">{item.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-
-      case 'input':
-        return (
-          <div style={element.style}>
-            {element.content.label && (
-              <label className="block text-sm font-medium mb-2">{element.content.label}</label>
-            )}
-            <Input
-              type={element.content.type || 'text'}
-              placeholder={element.content.placeholder}
-              required={element.content.required}
-              className="w-full"
-            />
-          </div>
-        );
-
-      case 'checkbox':
-        return (
-          <div style={element.style} className="flex items-center space-x-2">
-            <Checkbox 
-              checked={element.content.checked}
-              required={element.content.required}
-            />
-            <label className="text-sm">{element.content.label}</label>
-          </div>
-        );
-      
-      case 'video':
-        return (
-          <div style={element.style} className="bg-gray-900 rounded flex items-center justify-center">
-            {element.content.src ? (
-              <video 
-                src={element.content.src} 
-                controls
-                className="w-full h-full"
-              />
-            ) : (
-              <span className="text-white text-sm">Clique para adicionar vídeo</span>
-            )}
-          </div>
-        );
-      
-      case 'spacer':
-        return (
-          <div 
-            style={{ height: element.content.height || 40 }}
-            className="w-full bg-transparent"
-          >
-            {!isPreviewMode && (
-              <div className="w-full h-full border border-dashed border-gray-300 flex items-center justify-center">
-                <span className="text-xs text-gray-400">Espaçador ({element.content.height || 40}px)</span>
-              </div>
-            )}
-          </div>
-        );
-      
-      case 'divider':
-        return (
-          <hr 
-            style={{
-              ...element.style,
-              borderStyle: element.content.style || 'solid',
-              borderColor: element.content.color || '#e5e7eb',
-              borderWidth: '1px 0 0 0',
-              margin: 0
-            }}
-          />
-        );
-      
       case 'quiz-header':
         return (
           <div style={element.style} className="w-full">
@@ -238,9 +40,7 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
               <div className="flex flex-row w-full justify-center relative">
                 {element.content.showBackButton && (
                   <button className="absolute left-0 p-2 hover:bg-gray-100 rounded-md">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l-7-7 7-7M19 12H5" />
-                    </svg>
+                    <ArrowLeft className="w-4 h-4" />
                   </button>
                 )}
                 <div className="flex flex-col w-full items-center gap-4">
@@ -307,24 +107,162 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
           </div>
         );
 
+      case 'heading':
+        const HeadingTag = element.content.level || 'h2';
+        return (
+          <div style={element.style}>
+            <HeadingTag className="font-bold text-gray-900">
+              {element.content.text || 'Novo Título'}
+            </HeadingTag>
+          </div>
+        );
+
+      case 'text':
+        return (
+          <div style={element.style}>
+            <p className="text-gray-700 leading-relaxed">
+              {element.content.text || 'Digite seu texto aqui...'}
+            </p>
+          </div>
+        );
+
+      case 'button':
+        return (
+          <div style={element.style}>
+            <Button 
+              className="w-full"
+              onClick={(e) => !isPreviewMode && e.preventDefault()}
+            >
+              {element.content.text || 'Clique aqui'}
+            </Button>
+          </div>
+        );
+
+      case 'image':
+        return (
+          <div style={element.style}>
+            <img 
+              src={element.content.src || 'https://via.placeholder.com/400x200'} 
+              alt={element.content.alt || 'Imagem'} 
+              className="w-full h-auto rounded"
+            />
+          </div>
+        );
+
+      case 'spacer':
+        return (
+          <div 
+            style={{
+              ...element.style,
+              height: element.content.height || 40,
+              border: '2px dashed #fbbf24',
+              borderRadius: '8px'
+            }}
+            className="w-full"
+          />
+        );
+
+      case 'divider':
+        return (
+          <div style={element.style}>
+            <hr className="border-gray-300" />
+          </div>
+        );
+
+      case 'pricing':
+        return (
+          <div style={element.style} className="text-center space-y-4 p-6 border rounded-lg">
+            <h3 className="text-xl font-bold">{element.content.title || 'Plano Premium'}</h3>
+            <div className="text-3xl font-bold text-blue-600">
+              {element.content.price || 'R$ 97'}
+            </div>
+            {element.content.originalPrice && (
+              <div className="text-lg line-through text-gray-500">
+                {element.content.originalPrice}
+              </div>
+            )}
+            <p className="text-gray-600">{element.content.description}</p>
+            <Button className="w-full">Comprar Agora</Button>
+          </div>
+        );
+
+      case 'testimonial':
+        return (
+          <div style={element.style} className="p-6 bg-gray-50 rounded-lg">
+            <p className="text-gray-700 mb-4">"{element.content.text}"</p>
+            <div className="flex items-center gap-3">
+              {element.content.avatar && (
+                <img src={element.content.avatar} alt="" className="w-10 h-10 rounded-full" />
+              )}
+              <div>
+                <div className="font-medium">{element.content.author}</div>
+                <div className="text-sm text-gray-500">{element.content.role}</div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'countdown':
+        return (
+          <div style={element.style} className="text-center p-6 bg-gray-900 text-white rounded-lg">
+            <h3 className="text-xl font-bold mb-4">{element.content.title}</h3>
+            <div className="text-2xl font-mono">00:00:00:00</div>
+          </div>
+        );
+
+      case 'faq':
+        return (
+          <div style={element.style} className="space-y-4">
+            <h3 className="text-xl font-bold">{element.content.title}</h3>
+            {(element.content.items || []).map((item: any, index: number) => (
+              <div key={index} className="border rounded-lg p-4">
+                <h4 className="font-medium mb-2">{item.question}</h4>
+                <p className="text-gray-600">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        );
+
+      case 'input':
+        return (
+          <div style={element.style} className="space-y-2">
+            <label className="text-sm font-medium">{element.content.label}</label>
+            <Input 
+              placeholder={element.content.placeholder}
+              type={element.content.type || 'text'}
+            />
+          </div>
+        );
+
+      case 'checkbox':
+        return (
+          <div style={element.style} className="flex items-center gap-2">
+            <input 
+              type="checkbox" 
+              checked={element.content.checked || false}
+              onChange={() => {}}
+            />
+            <label>{element.content.label}</label>
+          </div>
+        );
+
+      case 'video':
+        return (
+          <div style={element.style}>
+            <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+              <span className="text-gray-500">Vídeo</span>
+            </div>
+          </div>
+        );
+
       default:
         return <div>Componente não suportado</div>;
     }
   };
 
-  const elementStyle = {
-    position: 'absolute' as const,
-    left: element.position.x,
-    top: element.position.y,
-    width: element.size.width,
-    height: element.type === 'spacer' ? element.content.height || 40 : element.size.height,
-    cursor: isPreviewMode ? 'default' : 'pointer',
-    zIndex: isSelected ? 10 : 1,
-  };
-
   if (isPreviewMode) {
     return (
-      <div style={elementStyle}>
+      <div className="w-full">
         {renderContent()}
       </div>
     );
@@ -332,11 +270,10 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
 
   return (
     <div
-      style={elementStyle}
       onClick={onSelect}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`group transition-all ${
+      className={`relative w-full group transition-all cursor-pointer ${
         isSelected 
           ? 'ring-2 ring-blue-500 ring-offset-2' 
           : isHovered 
@@ -348,11 +285,11 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
       
       {/* Toolbar de controles */}
       {(isSelected || isHovered) && (
-        <div className="absolute -top-10 left-0 bg-white border border-gray-200 rounded-md shadow-lg flex items-center gap-1 p-1 z-20">
+        <div className="absolute top-2 right-2 flex gap-1 bg-white shadow-lg rounded border p-1 z-10">
           <Button
             size="sm"
             variant="ghost"
-            className="w-6 h-6 p-0 hover:bg-gray-100"
+            className="h-6 w-6 p-0"
             title="Mover"
           >
             <Move className="w-3 h-3" />
@@ -360,15 +297,15 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
           <Button
             size="sm"
             variant="ghost"
-            className="w-6 h-6 p-0 hover:bg-gray-100"
-            title="Configurações"
+            className="h-6 w-6 p-0"
+            title="Editar"
           >
-            <Settings className="w-3 h-3" />
+            <Edit className="w-3 h-3" />
           </Button>
           <Button
             size="sm"
             variant="ghost"
-            className="w-6 h-6 p-0 hover:bg-gray-100"
+            className="h-6 w-6 p-0"
             title="Duplicar"
           >
             <Copy className="w-3 h-3" />
@@ -376,8 +313,11 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
           <Button
             size="sm"
             variant="ghost"
-            onClick={onDelete}
-            className="w-6 h-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+            className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
             title="Excluir"
           >
             <Trash2 className="w-3 h-3" />
@@ -387,7 +327,7 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
       
       {/* Label do tipo */}
       {isSelected && (
-        <div className="absolute -bottom-6 left-0 bg-blue-500 text-white text-xs px-2 py-1 rounded z-20">
+        <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs px-2 py-1 rounded-br">
           {element.type}
         </div>
       )}

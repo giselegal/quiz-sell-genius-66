@@ -20,7 +20,7 @@ import {
   ChevronDown,
   ChevronRight,
   ListChecks,
-  Header
+  Layout
 } from 'lucide-react';
 
 interface ModernSidebarProps {
@@ -32,7 +32,7 @@ const componentCategories = [
     title: 'Quiz',
     defaultOpen: true,
     items: [
-      { type: 'quiz-header', label: 'Header', icon: Header, color: 'text-purple-600' },
+      { type: 'quiz-header', label: 'Header', icon: Layout, color: 'text-purple-600' },
       { type: 'quiz-question', label: 'Questão', icon: ListChecks, color: 'text-blue-600' },
     ]
   },

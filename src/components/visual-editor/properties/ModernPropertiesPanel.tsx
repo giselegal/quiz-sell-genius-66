@@ -1,12 +1,13 @@
+
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { EditorElement } from '@/hooks/useModernEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Trash2, Settings, Copy } from 'lucide-react';
-import { EditorElement } from '@/hooks/useModernEditor';
+import { Separator } from '@/components/ui/separator';
+import { Trash2, Copy, Move } from 'lucide-react';
 
 interface ModernPropertiesPanelProps {
   selectedElement: EditorElement | undefined;
@@ -23,14 +24,14 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
 }) => {
   if (!selectedElement) {
     return (
-      <div className="h-full bg-white border-l border-gray-200 p-4">
-        <div className="text-center text-gray-500 mt-8">
-          <Settings className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-          <h3 className="font-medium mb-2">Nenhum elemento selecionado</h3>
-          <p className="text-sm">
-            Selecione um elemento no canvas para editar suas propriedades.
-          </p>
-        </div>
+      <div className="h-full bg-white border-l border-gray-200 p-4 flex flex-col items-center justify-center text-center">
+        <div className="text-4xl mb-4">🎯</div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          Propriedades
+        </h3>
+        <p className="text-sm text-gray-500">
+          Selecione um elemento no canvas para editar suas propriedades
+        </p>
       </div>
     );
   }
@@ -223,11 +224,11 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
           <>
             <div className="space-y-2">
               <Label htmlFor="text">Texto</Label>
-              <Textarea
+              <Input
                 id="text"
                 value={selectedElement.content.text || ''}
                 onChange={(e) => updateContent('text', e.target.value)}
-                rows={2}
+                placeholder="Digite o título"
               />
             </div>
             <div className="space-y-2">
@@ -244,8 +245,6 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
                   <SelectItem value="h2">H2</SelectItem>
                   <SelectItem value="h3">H3</SelectItem>
                   <SelectItem value="h4">H4</SelectItem>
-                  <SelectItem value="h5">H5</SelectItem>
-                  <SelectItem value="h6">H6</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -260,6 +259,7 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
               id="text"
               value={selectedElement.content.text || ''}
               onChange={(e) => updateContent('text', e.target.value)}
+              placeholder="Digite o texto"
               rows={4}
             />
           </div>
@@ -274,6 +274,7 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
                 id="text"
                 value={selectedElement.content.text || ''}
                 onChange={(e) => updateContent('text', e.target.value)}
+                placeholder="Texto do botão"
               />
             </div>
             <div className="space-y-2">
@@ -282,7 +283,7 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
                 id="url"
                 value={selectedElement.content.url || ''}
                 onChange={(e) => updateContent('url', e.target.value)}
-                placeholder="https://"
+                placeholder="https://..."
               />
             </div>
           </>
@@ -297,7 +298,7 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
                 id="src"
                 value={selectedElement.content.src || ''}
                 onChange={(e) => updateContent('src', e.target.value)}
-                placeholder="https://"
+                placeholder="https://..."
               />
             </div>
             <div className="space-y-2">
@@ -306,6 +307,7 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
                 id="alt"
                 value={selectedElement.content.alt || ''}
                 onChange={(e) => updateContent('alt', e.target.value)}
+                placeholder="Descrição da imagem"
               />
             </div>
           </>
@@ -319,7 +321,9 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
               id="height"
               type="number"
               value={selectedElement.content.height || 40}
-              onChange={(e) => updateContent('height', parseInt(e.target.value))}
+              onChange={(e) => updateContent('height', Number(e.target.value))}
+              min="10"
+              max="200"
             />
           </div>
         );
@@ -331,26 +335,25 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
 
   return (
     <div className="h-full bg-white border-l border-gray-200 overflow-y-auto">
-      <div className="p-4">
+      <div className="p-4 space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-semibold text-gray-900">Propriedades</h2>
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900">Propriedades</h3>
+          <div className="flex gap-1">
             <Button
-              variant="outline"
               size="sm"
+              variant="outline"
               onClick={onDuplicateElement}
-              className="text-blue-500 hover:text-blue-700"
-              title="Duplicar elemento"
+              title="Duplicar"
             >
               <Copy className="w-4 h-4" />
             </Button>
             <Button
-              variant="outline"
               size="sm"
+              variant="outline"
               onClick={() => onDeleteElement(selectedElement.id)}
               className="text-red-500 hover:text-red-700"
-              title="Excluir elemento"
+              title="Excluir"
             >
               <Trash2 className="w-4 h-4" />
             </Button>
@@ -358,95 +361,89 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
         </div>
 
         {/* Element Info */}
-        <Card className="p-3 mb-6">
-          <div className="text-sm">
-            <span className="font-medium">Tipo: </span>
-            <span className="capitalize">{selectedElement.type}</span>
+        <div className="space-y-2">
+          <Label>Tipo de Elemento</Label>
+          <div className="px-3 py-2 bg-gray-100 rounded text-sm font-medium capitalize">
+            {selectedElement.type.replace('-', ' ')}
           </div>
-          <div className="text-sm text-gray-500">
-            ID: {selectedElement.id.slice(0, 8)}...
-          </div>
-        </Card>
+        </div>
+
+        <Separator />
 
         {/* Content Controls */}
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-sm font-medium text-gray-900 mb-3">Conteúdo</h3>
-            <div className="space-y-4">
-              {renderContentControls()}
+        <div className="space-y-4">
+          <h4 className="font-medium text-gray-900">Conteúdo</h4>
+          {renderContentControls()}
+        </div>
+
+        <Separator />
+
+        {/* Position & Size */}
+        <div className="space-y-4">
+          <h4 className="font-medium text-gray-900">Posição e Tamanho</h4>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label className="text-xs">X</Label>
+              <Input
+                type="number"
+                value={selectedElement.position.x}
+                onChange={(e) => updatePosition('x', Number(e.target.value))}
+                size="sm"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Y</Label>
+              <Input
+                type="number"
+                value={selectedElement.position.y}
+                onChange={(e) => updatePosition('y', Number(e.target.value))}
+                size="sm"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Largura</Label>
+              <Input
+                type="number"
+                value={selectedElement.size.width}
+                onChange={(e) => updateSize('width', Number(e.target.value))}
+                size="sm"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Altura</Label>
+              <Input
+                type="number"
+                value={selectedElement.size.height}
+                onChange={(e) => updateSize('height', Number(e.target.value))}
+                size="sm"
+              />
             </div>
           </div>
+        </div>
 
-          {/* Position & Size */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-900 mb-3">Posição & Tamanho</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-2">
-                <Label htmlFor="x">X</Label>
-                <Input
-                  id="x"
-                  type="number"
-                  value={selectedElement.position.x}
-                  onChange={(e) => updatePosition('x', parseInt(e.target.value))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="y">Y</Label>
-                <Input
-                  id="y"
-                  type="number"
-                  value={selectedElement.position.y}
-                  onChange={(e) => updatePosition('y', parseInt(e.target.value))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="width">Largura</Label>
-                <Input
-                  id="width"
-                  type="number"
-                  value={selectedElement.size.width}
-                  onChange={(e) => updateSize('width', parseInt(e.target.value))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="height">Altura</Label>
-                <Input
-                  id="height"
-                  type="number"
-                  value={selectedElement.size.height}
-                  onChange={(e) => updateSize('height', parseInt(e.target.value))}
-                />
-              </div>
+        <Separator />
+
+        {/* Style Controls */}
+        <div className="space-y-4">
+          <h4 className="font-medium text-gray-900">Estilo</h4>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label className="text-xs">Cor de Fundo</Label>
+              <Input
+                type="color"
+                value={selectedElement.style.backgroundColor || '#ffffff'}
+                onChange={(e) => updateStyle('backgroundColor', e.target.value)}
+                size="sm"
+              />
             </div>
-          </div>
-
-          {/* Style Controls */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-900 mb-3">Estilo</h3>
-            <div className="space-y-4">
-              {selectedElement.type !== 'spacer' && selectedElement.type !== 'divider' && (
-                <div className="space-y-2">
-                  <Label htmlFor="color">Cor do Texto</Label>
-                  <Input
-                    id="color"
-                    type="color"
-                    value={selectedElement.style.color || '#000000'}
-                    onChange={(e) => updateStyle('color', e.target.value)}
-                  />
-                </div>
-              )}
-              
-              {selectedElement.type === 'button' && (
-                <div className="space-y-2">
-                  <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-                  <Input
-                    id="backgroundColor"
-                    type="color"
-                    value={selectedElement.style.backgroundColor || '#3b82f6'}
-                    onChange={(e) => updateStyle('backgroundColor', e.target.value)}
-                  />
-                </div>
-              )}
+            <div className="space-y-1">
+              <Label className="text-xs">Cor do Texto</Label>
+              <Input
+                type="color"
+                value={selectedElement.style.color || '#000000'}
+                onChange={(e) => updateStyle('color', e.target.value)}
+                size="sm"
+              />
             </div>
           </div>
         </div>
