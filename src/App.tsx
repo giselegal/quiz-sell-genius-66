@@ -8,6 +8,7 @@ import QuizDescubraSeuEstilo from '@/pages/quiz-descubra-seu-estilo';
 import ResultPage from '@/pages/ResultPage';
 import UnifiedEditorPage from '@/pages/UnifiedEditorPage';
 import QuizIntro from '@/components/QuizIntro';
+import QuizOfferPageVisualEditor from '@/components/editors/QuizOfferPageVisualEditor';
 
 function App() {
   console.log('🚀 App component rendering - Simplified SPA routes');
@@ -32,6 +33,9 @@ function App() {
         
         {/* Editor unificado */}
         <Route path="/unified-editor" element={<UnifiedEditorPage />} />
+        
+        {/* Editor Visual Quiz Offer */}
+        <Route path="/quiz-offer-editor" element={<QuizOfferPageVisualEditor />} />
         
         {/* 404 para rotas não encontradas */}
         <Route path="*" element={<NotFoundPage />} />

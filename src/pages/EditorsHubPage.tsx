@@ -21,32 +21,11 @@ const EditorsHubPage: React.FC = () => {
 
   const workflows = [
     {
-      title: 'Funil Completo',
+      title: 'Editor Unificado',
       description: 'Criar quiz + página de resultado + página de vendas',
       icon: Rocket,
-      path: ROUTES.EDITORS.UNIFIED,
+      path: ROUTES.UNIFIED_EDITOR,
       color: 'bg-blue-600'
-    },
-    {
-      title: 'Apenas Quiz',
-      description: 'Criar ou editar apenas o quiz interativo',
-      icon: FileText,
-      path: ROUTES.EDITORS.VISUAL,
-      color: 'bg-green-600'
-    },
-    {
-      title: 'Página de Resultado',
-      description: 'Editar layout da página de resultado do quiz',
-      icon: Target,
-      path: ROUTES.EDITORS.RESULT_VISUAL,
-      color: 'bg-purple-600'
-    },
-    {
-      title: 'Landing Page',
-      description: 'Criar landing pages com InLead Editor',
-      icon: TrendingUp,
-      path: ROUTES.EDITORS.INLEAD,
-      color: 'bg-orange-600'
     }
   ];
 
@@ -60,7 +39,7 @@ const EditorsHubPage: React.FC = () => {
                 Hub de Editores
               </h1>
               <p className="text-gray-600 mt-2">
-                Todos os editores do projeto em um só lugar
+                Editor unificado para o projeto
               </p>
             </div>
             
@@ -79,10 +58,10 @@ const EditorsHubPage: React.FC = () => {
               
               <Button
                 variant="outline"
-                onClick={() => navigate('/admin/dashboard')}
+                onClick={() => navigate('/')}
               >
                 <Settings className="w-4 h-4 mr-2" />
-                Dashboard Admin
+                Voltar ao Quiz
               </Button>
             </div>
           </div>
@@ -93,7 +72,7 @@ const EditorsHubPage: React.FC = () => {
         {/* Workflows Principais */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Fluxos de Trabalho Recomendados
+            Editor Disponível
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -137,8 +116,8 @@ const EditorsHubPage: React.FC = () => {
             <div className="flex items-center space-x-3">
               <Users className="w-8 h-8 text-blue-600" />
               <div>
-                <div className="text-2xl font-bold text-gray-900">7</div>
-                <div className="text-sm text-gray-600">Editores Disponíveis</div>
+                <div className="text-2xl font-bold text-gray-900">1</div>
+                <div className="text-sm text-gray-600">Editor Ativo</div>
               </div>
             </div>
           </Card>
@@ -157,8 +136,8 @@ const EditorsHubPage: React.FC = () => {
             <div className="flex items-center space-x-3">
               <TrendingUp className="w-8 h-8 text-purple-600" />
               <div>
-                <div className="text-2xl font-bold text-gray-900">Raiz</div>
-                <div className="text-sm text-gray-600">Localização</div>
+                <div className="text-2xl font-bold text-gray-900">SPA</div>
+                <div className="text-sm text-gray-600">Arquitetura</div>
               </div>
             </div>
           </Card>

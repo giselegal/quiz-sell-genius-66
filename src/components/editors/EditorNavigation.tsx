@@ -23,46 +23,10 @@ interface EditorRoute {
 
 const editorRoutes: EditorRoute[] = [
   {
-    path: ROUTES.EDITORS.UNIFIED,
+    path: ROUTES.UNIFIED_EDITOR,
     label: 'Editor Unificado',
     icon: Layers,
     description: 'Editor completo com Quiz + Resultado + Vendas'
-  },
-  {
-    path: ROUTES.EDITORS.VISUAL,
-    label: 'Editor de Quiz',
-    icon: FileText,
-    description: 'Editor visual para quizzes interativos'
-  },
-  {
-    path: ROUTES.EDITORS.RESULT_VISUAL,
-    label: 'Editor de Resultado',
-    icon: BarChart3,
-    description: 'Editor visual para páginas de resultado'
-  },
-  {
-    path: ROUTES.EDITORS.INLEAD,
-    label: 'InLead Editor',
-    icon: Zap,
-    description: 'Editor avançado para landing pages'
-  },
-  {
-    path: ROUTES.EDITORS.QUIZ,
-    label: 'Quiz Editor',
-    icon: Edit,
-    description: 'Editor específico para perguntas e respostas'
-  },
-  {
-    path: ROUTES.EDITORS.LIVE,
-    label: 'Live Editor',
-    icon: Palette,
-    description: 'Editor ao vivo com preview em tempo real'
-  },
-  {
-    path: ROUTES.EDITORS.RESULT,
-    label: 'Result Editor',
-    icon: Monitor,
-    description: 'Editor para páginas de resultado personalizadas'
   }
 ];
 
