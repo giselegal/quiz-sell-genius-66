@@ -48,4 +48,3 @@ export const CanvasItem: React.FC<CanvasItemProps> = ({
     </div>
   );
 };
-</CanvasItem>

@@ -52,4 +52,3 @@ export const CanvasHeader: React.FC<CanvasHeaderProps> = ({
     </div>
   );
 };
-</CanvasHeader>
