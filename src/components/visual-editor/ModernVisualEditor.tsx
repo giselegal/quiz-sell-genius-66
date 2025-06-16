@@ -4,15 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import QuizIntro from '@/components/QuizIntro';
-import QuizFinalTransition from '@/components/QuizFinalTransition';
-import QuizResult from '@/components/QuizResult';
-import QuizOfferPage from '@/components/QuizOfferPage';
 import { StepsPanel } from './steps/StepsPanel';
 import { ComponentsPalette } from './sidebar/ComponentsPalette';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
 import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
-import { StyleResult } from '@/types/quiz';
+import { EditableCanvas } from './canvas/EditableCanvas';
 import { 
   Eye, 
   Save, 
@@ -24,7 +20,14 @@ import {
 interface Stage {
   id: string;
   name: string;
-  component: React.FC;
+  type: 'intro' | 'quiz' | 'transition' | 'result' | 'offer';
+}
+
+interface CanvasElement {
+  id: string;
+  type: 'headline' | 'text' | 'image' | 'form' | 'button';
+  content: any;
+  order: number;
 }
 
 interface ModernVisualEditorProps {
@@ -37,35 +40,71 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   onSave
 }) => {
   const [currentStage, setCurrentStage] = useState<string>('intro');
-  const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
-  const [stages, setStages] = useState<Stage[]>([
-    { id: 'intro', name: 'Intro', component: QuizIntro },
-    { id: 'quiz', name: 'Quiz', component: () => <div>Quiz</div> },
-    { id: 'transition', name: 'Transição', component: QuizFinalTransition },
-    { id: 'result', name: 'Resultado', component: QuizResult },
-    { id: 'offer', name: 'Oferta', component: QuizOfferPage },
+  const [stages] = useState<Stage[]>([
+    { id: 'intro', name: 'Intro', type: 'intro' },
+    { id: 'quiz', name: 'Quiz', type: 'quiz' },
+    { id: 'transition', name: 'Transição', type: 'transition' },
+    { id: 'result', name: 'Resultado', type: 'result' },
+    { id: 'offer', name: 'Oferta', type: 'offer' },
   ]);
   const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
   const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
-
-  // Mock data for testing - using proper StyleResult types
-  const mockPrimaryStyle: StyleResult = {
-    category: 'Elegante',
-    score: 85,
-    percentage: 85
-  };
-
-  const mockSecondaryStyles: StyleResult[] = [
-    { category: 'Romântico', score: 70, percentage: 70 },
-    { category: 'Clássico', score: 65, percentage: 65 }
-  ];
+  
+  // Canvas elements state
+  const [canvasElements, setCanvasElements] = useState<CanvasElement[]>([
+    {
+      id: '1',
+      type: 'headline',
+      content: { text: 'Teste de Estilo Pessoal', level: 1 },
+      order: 0
+    },
+    {
+      id: '2',
+      type: 'image',
+      content: {
+        src: 'https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png',
+        alt: 'Imagem do quiz',
+        width: 640,
+        height: 480
+      },
+      order: 1
+    },
+    {
+      id: '3',
+      type: 'form',
+      content: {
+        label: 'NOME',
+        placeholder: 'Digite seu nome aqui...',
+        required: true,
+        type: 'text'
+      },
+      order: 2
+    },
+    {
+      id: '4',
+      type: 'button',
+      content: { text: 'Continuar' },
+      order: 3
+    }
+  ]);
+  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
 
   const handleSave = useCallback(() => {
-    console.log('Saving...');
-  }, []);
+    const data = {
+      stages,
+      currentStage,
+      canvasElements,
+      settings: {
+        viewportMode,
+        isPreviewMode
+      }
+    };
+    console.log('Saving:', data);
+    onSave?.(data);
+  }, [stages, currentStage, canvasElements, viewportMode, isPreviewMode, onSave]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -76,53 +115,84 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   }, [handleSave]);
 
   const handleStageSelect = (stageId: string) => {
-    const stageIndex = stages.findIndex(s => s.id === stageId);
     setCurrentStage(stageId);
-    setCurrentStageIndex(stageIndex);
+    setSelectedElementId(null);
   };
 
   const handleComponentSelect = (componentType: string) => {
     setSelectedComponent(componentType);
-    console.log('Componente selecionado:', componentType);
+    handleElementAdd(componentType);
   };
 
-  const renderCurrentStage = () => {
-    switch (currentStage) {
-      case 'intro':
-        return <QuizIntro onStart={() => setCurrentStage('quiz')} />;
-      
-      case 'quiz':
-        return (
-          <div className="p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Quiz em Desenvolvimento</h2>
-            <p className="text-gray-600 mb-6">Esta seção será implementada com as questões do quiz.</p>
-            <Button onClick={() => setCurrentStage('transition')}>
-              Simular Finalização do Quiz
-            </Button>
-          </div>
-        );
-      
-      case 'transition':
-        return (
-          <QuizFinalTransition 
-            onShowResult={() => setCurrentStage('result')}
-          />
-        );
-      
-      case 'result':
-        return (
-          <QuizResult
-            primaryStyle={mockPrimaryStyle}
-            secondaryStyles={mockSecondaryStyles}
-          />
-        );
-      
-      case 'offer':
-        return <QuizOfferPage />;
-      
+  const handleElementAdd = (type: string, position?: number) => {
+    const newElement: CanvasElement = {
+      id: `element-${Date.now()}`,
+      type: type as any,
+      content: getDefaultContent(type),
+      order: position ?? canvasElements.length
+    };
+
+    setCanvasElements(prev => [...prev, newElement]);
+    setSelectedElementId(newElement.id);
+  };
+
+  const getDefaultContent = (type: string) => {
+    switch (type) {
+      case 'headline':
+        return { text: 'Novo Título', level: 1 };
+      case 'text':
+        return { text: 'Novo texto', size: 'base', align: 'left' };
+      case 'image':
+        return { 
+          src: 'https://via.placeholder.com/400x200',
+          alt: 'Nova imagem',
+          width: 400,
+          height: 200
+        };
+      case 'form':
+        return {
+          label: 'Novo Campo',
+          placeholder: 'Digite aqui...',
+          required: false,
+          type: 'text'
+        };
+      case 'button':
+        return { text: 'Novo Botão' };
       default:
-        return null;
+        return {};
     }
+  };
+
+  const handleElementUpdate = (id: string, content: any) => {
+    setCanvasElements(prev =>
+      prev.map(el => el.id === id ? { ...el, content } : el)
+    );
+  };
+
+  const handleElementDelete = (id: string) => {
+    setCanvasElements(prev => prev.filter(el => el.id !== id));
+    if (selectedElementId === id) {
+      setSelectedElementId(null);
+    }
+  };
+
+  const handleElementReorder = (draggedId: string, targetId: string) => {
+    const draggedIndex = canvasElements.findIndex(el => el.id === draggedId);
+    const targetIndex = canvasElements.findIndex(el => el.id === targetId);
+    
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    const newElements = [...canvasElements];
+    const [draggedElement] = newElements.splice(draggedIndex, 1);
+    newElements.splice(targetIndex, 0, draggedElement);
+
+    // Update order values
+    const updatedElements = newElements.map((el, index) => ({
+      ...el,
+      order: index
+    }));
+
+    setCanvasElements(updatedElements);
   };
 
   return (
@@ -221,7 +291,16 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 viewportMode === 'tablet' ? 'max-w-2xl' :
                 'max-w-sm'
               }`}>
-                {renderCurrentStage()}
+                <EditableCanvas
+                  elements={canvasElements}
+                  selectedElementId={selectedElementId}
+                  isPreviewMode={isPreviewMode}
+                  onElementSelect={setSelectedElementId}
+                  onElementUpdate={handleElementUpdate}
+                  onElementAdd={handleElementAdd}
+                  onElementReorder={handleElementReorder}
+                  onElementDelete={handleElementDelete}
+                />
               </div>
             </div>
           </ResizablePanel>
