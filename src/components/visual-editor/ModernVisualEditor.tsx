@@ -1,386 +1,292 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Monitor, Tablet } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import QuizIntro from '@/components/QuizIntro';
 import QuizFinalTransition from '@/components/QuizFinalTransition';
 import QuizResult from '@/components/QuizResult';
 import QuizOfferPage from '@/components/QuizOfferPage';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
 import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
-import { toast } from '@/components/ui/use-toast';
+import { StyleResult } from '@/types/quiz';
+import { 
+  Play, 
+  Square, 
+  Settings, 
+  Eye, 
+  Save, 
+  Monitor, 
+  Tablet, 
+  Smartphone,
+  ArrowLeft,
+  ArrowRight,
+  Plus
+} from 'lucide-react';
 
-interface Page {
+interface Stage {
   id: string;
   name: string;
-  type: string;
-  questionIndex?: number;
-}
-
-interface ComponentProps {
-  text?: string;
-  level?: number;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  src?: string;
-  alt?: string;
-}
-
-interface Component {
-  id: string;
-  type: string;
-  props?: ComponentProps;
+  component: React.FC;
 }
 
 interface ModernVisualEditorProps {
   funnelId: string;
-  onSave: (data: any) => void;
+  onSave?: (data: any) => void;
 }
 
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave
 }) => {
-  const [showEditor, setShowEditor] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentPageId, setCurrentPageId] = useState('cover');
-  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [showOptionConfig, setShowOptionConfig] = useState(false);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [loading, setLoading] = useState(true);
-  
-  const [realComponentConfig, setRealComponentConfig] = useState({
-    intro: {
-      title: 'Descubra seu Estilo Ideal',
-      description: 'Responda algumas perguntas e encontre o estilo que mais combina com você!',
-      logoImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      backgroundImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      buttonText: 'Começar o Quiz'
-    },
-    transitions: {
-      transitionTitle: 'Estamos quase lá...',
-      transitionDescription: 'Mais algumas perguntinhas rápidas para garantir o melhor resultado!',
-      transitionImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      buttonText: 'Continuar'
-    },
-    result: {
-      resultTitle: 'Seu Estilo é...',
-      resultDescription: 'Com base nas suas respostas, identificamos que seu estilo predominante é...',
-      primaryColor: '#000000',
-      secondaryColor: '#000000',
-      textColor: '#000000',
-      backgroundImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      buttonText: 'Ver Mais'
-    },
-    offer: {
-      offerTitle: 'Oferta Exclusiva',
-      offerDescription: 'Aproveite nossa oferta especial para você!',
-      offerImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      buttonText: 'Comprar Agora'
-    }
-  });
-
-  const [pages, setPages] = useState([
-    { id: 'cover', name: 'Capa', type: 'intro' },
-    { id: 'question1', name: 'Questão 1', type: 'question', questionIndex: 0 },
-    { id: 'question2', name: 'Questão 2', type: 'question', questionIndex: 1 },
-    { id: 'question3', name: 'Questão 3', type: 'question', questionIndex: 2 },
-    { id: 'question4', name: 'Questão 4', type: 'question', questionIndex: 3 },
-    { id: 'question5', name: 'Questão 5', type: 'question', questionIndex: 4 },
-    { id: 'transition1', name: 'Transição 1', type: 'transition-strategic' },
-    { id: 'strategic1', name: 'Estratégica 1', type: 'strategic', questionIndex: 0 },
-    { id: 'strategic2', name: 'Estratégica 2', type: 'strategic', questionIndex: 1 },
-    { id: 'transition2', name: 'Transição 2', type: 'transition-result' },
-    { id: 'result', name: 'Resultado', type: 'result' },
-    { id: 'offer', name: 'Oferta', type: 'offer' }
+  const [currentStage, setCurrentStage] = useState<string>('intro');
+  const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
+  const [stages, setStages] = useState<Stage[]>([
+    { id: 'intro', name: 'Intro', component: QuizIntro },
+    { id: 'quiz', name: 'Quiz', component: () => <div>Quiz</div> },
+    { id: 'transition', name: 'Transição', component: QuizFinalTransition },
+    { id: 'result', name: 'Resultado', component: QuizResult },
+    { id: 'offer', name: 'Oferta', component: QuizOfferPage },
   ]);
+  const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
+  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
 
-  const [questions, setQuestions] = useState<any[]>([]);
-  const [strategicQuestions, setStrategicQuestions] = useState<any[]>([]);
+  // Mock data for testing - using proper StyleResult types
+  const mockPrimaryStyle: StyleResult = {
+    category: 'Elegante',
+    score: 85,
+    percentage: 85
+  };
+
+  const mockSecondaryStyles: StyleResult[] = [
+    { category: 'Romântico', score: 70, percentage: 70 },
+    { category: 'Clássico', score: 65, percentage: 65 }
+  ];
 
   useEffect(() => {
-    const mockPages = [
-      { id: 'cover', name: 'Capa', type: 'intro' },
-      { id: 'question1', name: 'Questão 1', type: 'question', questionIndex: 0 },
-      { id: 'question2', name: 'Questão 2', type: 'question', questionIndex: 1 },
-      { id: 'question3', name: 'Questão 3', type: 'question', questionIndex: 2 },
-      { id: 'question4', name: 'Questão 4', type: 'question', questionIndex: 3 },
-      { id: 'question5', name: 'Questão 5', type: 'question', questionIndex: 4 },
-      { id: 'transition1', name: 'Transição 1', type: 'transition-strategic' },
-      { id: 'strategic1', name: 'Estratégica 1', type: 'strategic', questionIndex: 0 },
-      { id: 'strategic2', name: 'Estratégica 2', type: 'strategic', questionIndex: 1 },
-      { id: 'transition2', name: 'Transição 2', type: 'transition-result' },
-      { id: 'result', name: 'Resultado', type: 'result' },
-      { id: 'offer', name: 'Oferta', type: 'offer' }
-    ];
+    // Auto-save every 10 seconds
+    const intervalId = setInterval(() => {
+      handleSave();
+    }, 10000);
 
-    const mockQuestions = [
-      {
-        id: 'q1',
-        title: 'Qual sua cor favorita?',
-        type: 'text',
-        options: [
-          { id: 'o1', text: 'Azul', styleCategory: 'Clássico' },
-          { id: 'o2', text: 'Verde', styleCategory: 'Natural' },
-          { id: 'o3', text: 'Vermelho', styleCategory: 'Sexy' },
-          { id: 'o4', text: 'Preto', styleCategory: 'Dramático' }
-        ],
-        multiSelect: 1
-      }
-    ];
+    return () => clearInterval(intervalId);
+  }, [handleSave]);
 
-    const mockStrategicQuestions = [
-      {
-        id: 'sq1',
-        title: 'Em qual ocasião você se sente mais confiante?',
-        type: 'text',
-        options: [
-          { id: 'so1', text: 'Festa', styleCategory: 'Sexy' },
-          { id: 'so2', text: 'Trabalho', styleCategory: 'Clássico' }
-        ],
-        multiSelect: 1
-      }
-    ];
-
-    setQuestions(mockQuestions);
-    setStrategicQuestions(mockStrategicQuestions);
-    setLoading(false);
+  const handleSave = useCallback(() => {
+    // Implement your save logic here
+    console.log('Saving...');
   }, []);
 
-  const currentPage = pages.find(page => page.id === currentPageId);
-
-  const updateRealComponentConfig = (section: string, key: string, value: any) => {
-    const newConfig = {
-      ...realComponentConfig,
-      [section]: {
-        ...realComponentConfig[section],
-        [key]: value
-      }
-    };
-    setRealComponentConfig(newConfig);
-    setHasUnsavedChanges(true);
-  };
-
-  const handleSave = () => {
-    const editorData = {
-      funnelId,
-      pages,
-      currentPageId,
-      config: realComponentConfig,
-      timestamp: new Date().toISOString()
-    };
-    onSave(editorData);
-    setHasUnsavedChanges(false);
-    toast({
-      title: 'Quiz salvo com sucesso!',
-      description: 'Todas as alterações foram salvas.'
-    });
-  };
-
-  const getViewportDimensions = () => {
-    switch (viewportMode) {
-      case 'mobile':
-        return { width: '320px', height: '568px' };
-      case 'tablet':
-        return { width: '768px', height: '1024px' };
-      case 'desktop':
-        return { width: '100%', height: '100%' };
-      default:
-        return { width: '100%', height: '100%' };
+  const handleNextStage = () => {
+    if (currentStageIndex < stages.length - 1) {
+      setCurrentStageIndex(currentStageIndex + 1);
+      setCurrentStage(stages[currentStageIndex + 1].id);
     }
   };
 
-  const ViewportControls = () => (
-    <div className="flex items-center justify-center gap-2">
-      <Button
-        variant={viewportMode === 'mobile' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setViewportMode('mobile')}
-      >
-        📱 Mobile
-      </Button>
-      <Button
-        variant={viewportMode === 'tablet' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setViewportMode('tablet')}
-      >
-        <Tablet className="w-4 h-4 mr-2" />
-        Tablet
-      </Button>
-      <Button
-        variant={viewportMode === 'desktop' ? 'default' : 'outline'}
-        size="sm"
-        onClick={() => setViewportMode('desktop')}
-      >
-        <Monitor className="w-4 h-4 mr-2" />
-        Desktop
-      </Button>
-    </div>
-  );
-
-  const renderCurrentComponent = () => {
-    if (!currentPage) return null;
-
-    if (loading) {
-      return (
-        <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4" />
-              <p className="text-gray-600">Carregando questões...</p>
-            </div>
-          </div>
-        </div>
-      );
+  const handlePreviousStage = () => {
+    if (currentStageIndex > 0) {
+      setCurrentStageIndex(currentStageIndex - 1);
+      setCurrentStage(stages[currentStageIndex - 1].id);
     }
+  };
 
-    const mockQuizResult = {
-      primaryStyle: {
-        category: 'Elegante',
-        score: 85,
-        percentage: 85
-      },
-      secondaryStyles: [
-        {
-          category: 'Romântico',
-          score: 70,
-          percentage: 70
-        }
-      ]
-    };
-
-    switch (currentPage.type) {
+  const renderCurrentStage = () => {
+    switch (currentStage) {
       case 'intro':
+        return <QuizIntro onStart={() => setCurrentStage('quiz')} />;
+      
+      case 'quiz':
         return (
-          <QuizIntro
-            onStart={(name: string) => {
-              console.log('Quiz started with name:', name);
-              setCurrentPageId('question1');
-            }}
+          <div className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Quiz em Desenvolvimento</h2>
+            <p className="text-gray-600 mb-6">Esta seção será implementada com as questões do quiz.</p>
+            <Button onClick={() => setCurrentStage('transition')}>
+              Simular Finalização do Quiz
+            </Button>
+          </div>
+        );
+      
+      case 'transition':
+        return (
+          <QuizFinalTransition 
+            onShowResult={() => setCurrentStage('result')}
           />
         );
-
-      case 'transition-result':
-        return (
-          <QuizFinalTransition
-            onShowResult={() => {
-              console.log('Showing result...');
-              setCurrentPageId('result');
-            }}
-          />
-        );
-
+      
       case 'result':
         return (
           <QuizResult
-            primaryStyle={mockQuizResult.primaryStyle}
-            secondaryStyles={mockQuizResult.secondaryStyles}
-            onReset={() => {
-              console.log('Resetting quiz...');
-              setCurrentPageId('cover');
-            }}
+            primaryStyle={mockPrimaryStyle}
+            secondaryStyles={mockSecondaryStyles}
+            onViewOffer={() => setCurrentStage('offer')}
           />
         );
-
+      
       case 'offer':
         return <QuizOfferPage />;
-
+      
       default:
-        return (
-          <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
-            <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg text-center">
-              <h2 className="text-xl font-semibold mb-4">
-                {currentPage.name}
-              </h2>
-              <p className="text-gray-600 mb-4">
-                Tipo: {currentPage.type}
-              </p>
-              <p className="text-sm text-gray-500">
-                Esta página está em desenvolvimento...
-              </p>
-            </div>
-          </div>
-        );
+        return null;
     }
   };
 
   return (
-    <div className="h-screen flex bg-gray-50">
-      {/* Sidebar esquerda */}
-      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-        <div className="p-4 border-b border-gray-200">
-          <h1 className="text-lg font-semibold text-gray-900">Editor Visual</h1>
-          <p className="text-sm text-gray-500">Quiz: {funnelId}</p>
-        </div>
-
-        <ScrollArea className="flex-1">
-          <div className="p-4">
-            <StageConfigurationPanel
-              stageName={currentPage?.name || 'Página'}
-              stageType={currentPage?.type || 'unknown'}
-              currentOptions={[]}
-              onOptionUpdate={() => {}}
-            />
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <h1 className="text-xl font-bold text-gray-900">Editor Visual Moderno</h1>
+            <Badge variant="outline" className="border-blue-500 text-blue-700">
+              {funnelId}
+            </Badge>
           </div>
-        </ScrollArea>
+          
+          <div className="flex items-center gap-3">
+            {/* Viewport Controls */}
+            <div className="flex items-center border rounded-lg">
+              <Button
+                variant={viewportMode === 'desktop' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewportMode('desktop')}
+                className="rounded-r-none"
+              >
+                <Monitor className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={viewportMode === 'tablet' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewportMode('tablet')}
+                className="rounded-none border-x"
+              >
+                <Tablet className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={viewportMode === 'mobile' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewportMode('mobile')}
+                className="rounded-l-none"
+              >
+                <Smartphone className="w-4 h-4" />
+              </Button>
+            </div>
 
-        <div className="p-4 border-t border-gray-200">
-          <Button
-            onClick={handleSave}
-            className="w-full"
-            disabled={!hasUnsavedChanges}
-          >
-            💾 Salvar {hasUnsavedChanges && '*'}
-          </Button>
+            {/* Preview Toggle */}
+            <Button
+              variant={isPreviewMode ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setIsPreviewMode(!isPreviewMode)}
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              {isPreviewMode ? 'Edição' : 'Preview'}
+            </Button>
+
+            {/* Save Button */}
+            <Button onClick={handleSave} size="sm">
+              <Save className="w-4 h-4 mr-2" />
+              Salvar
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Área principal */}
-      <div className="flex-1 flex flex-col">
-        {/* Toolbar */}
-        <div className="bg-white border-b border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <ViewportControls />
-            <div className="flex items-center gap-2">
-              {pages.map((page) => (
-                <Button
-                  key={page.id}
-                  variant={currentPageId === page.id ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setCurrentPageId(page.id)}
-                  className="text-xs"
-                >
-                  {page.name}
-                </Button>
-              ))}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Sidebar - Stage Navigation */}
+        {!isPreviewMode && (
+          <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+            <div className="p-4 border-b border-gray-200">
+              <h2 className="font-semibold text-gray-900 mb-3">Etapas do Funil</h2>
+              <div className="space-y-2">
+                {stages.map((stage) => (
+                  <Button
+                    key={stage.id}
+                    variant={currentStage === stage.id ? 'default' : 'ghost'}
+                    className="w-full justify-start"
+                    onClick={() => setCurrentStage(stage.id)}
+                  >
+                    {stage.name}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            
+            <div className="flex-1 p-4">
+              <StageConfigurationPanel
+                stageName={stages.find(s => s.id === currentStage)?.name || ''}
+                stageType={currentStage}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Main Canvas */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Stage Controls */}
+          {!isPreviewMode && (
+            <div className="bg-gray-100 border-b border-gray-200 p-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handlePreviousStage}
+                    disabled={currentStageIndex === 0}
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </Button>
+                  <span className="text-sm font-medium">
+                    Etapa {currentStageIndex + 1} de {stages.length}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleNextStage}
+                    disabled={currentStageIndex === stages.length - 1}
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Configurar Etapa
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Adicionar Componente
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Canvas Area */}
+          <div className="flex-1 overflow-auto bg-gray-100 p-6">
+            <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
+              viewportMode === 'desktop' ? 'max-w-6xl' :
+              viewportMode === 'tablet' ? 'max-w-2xl' :
+              'max-w-sm'
+            }`}>
+              {renderCurrentStage()}
             </div>
           </div>
         </div>
 
-        {/* Preview */}
-        <div className="flex-1 bg-gray-100 p-4">
-          <div
-            className="mx-auto bg-white shadow-lg rounded-lg overflow-hidden"
-            style={getViewportDimensions()}
-          >
-            {renderCurrentComponent()}
-          </div>
-        </div>
-      </div>
-
-      {/* Configuration Panel */}
-      {showOptionConfig && (
-        <div className="fixed top-4 right-4 z-50">
+        {/* Right Panel - Component Configuration */}
+        {!isPreviewMode && showOptionConfig && (
           <OptionConfigurationPanel
             isOpen={showOptionConfig}
             onClose={() => setShowOptionConfig(false)}
             optionId={selectedOptionId || ''}
             onConfigUpdate={(config) => {
-              console.log('Option config updated:', config);
+              console.log('Configuração atualizada:', config);
             }}
           />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
