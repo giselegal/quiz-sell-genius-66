@@ -1,365 +1,279 @@
+import React, { useState, useCallback } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import QuizIntro from '@/components/QuizIntro';
-import QuizFinalTransition from '@/components/QuizFinalTransition';
-import QuizResult from '@/components/QuizResult';
-import QuizOfferPage from '@/components/QuizOfferPage';
-import StageQuestionComponent from '@/components/quiz-builder/components/StageQuestionComponent';
-import { DetailedStepsPanel } from './steps/DetailedStepsPanel';
-import { ComponentsPalette } from './sidebar/ComponentsPalette';
-import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
-import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
-import { StyleResult } from '@/types/quiz';
-import { useQuestionData } from '@/utils/supabaseQuestionMapper';
-import { 
-  Eye, 
-  Save, 
-  Monitor, 
-  Tablet, 
-  Smartphone
-} from 'lucide-react';
+import { ComponentLibrarySidebar } from "./sidebar/ComponentLibrarySidebar";
+import { EditorCanvas } from "./canvas/EditorCanvas";
+import { EditorToolbar } from "./toolbar/EditorToolbar";
+import { ElementPropertiesPanel } from "./properties/ElementPropertiesPanel";
+import { useEditorState } from "@/hooks/useEditorState";
+import { useUndoRedo } from "@/hooks/useUndoRedo";
+import type { VisualEditorState, ElementUpdate } from "@/types/visualEditor";
+import { EditableQuizIntro } from './intro/EditableQuizIntro';
+
+interface VisualEditorData {
+  editorState: VisualEditorState;
+  pageInfo: {
+    title: string;
+    description: string;
+    slug: string;
+    published: boolean;
+  };
+}
 
 interface ModernVisualEditorProps {
   funnelId: string;
-  onSave?: (data: any) => void;
+  onSave?: (data: VisualEditorData) => void;
+  onPreview?: () => void;
 }
 
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave
 }) => {
-  const [currentStage, setCurrentStage] = useState<string>('intro');
-  const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
-  const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
-  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  const [selectedElementId, setSelectedElementId] = useState<string | null>(
+    null
+  );
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [viewportMode, setViewportMode] = useState<
+    "desktop" | "tablet" | "mobile"
+  >("desktop");
 
-  // Hook para carregar dados das questões
-  const { questions, strategicQuestions, loading, error, getQuestionForStep } = useQuestionData();
+  // Editor state management
+  const {
+    editorState,
+    addElement,
+    updateElement,
+    removeElement,
+    moveElement,
+    duplicateElement,
+    updateGlobalStyles,
+    reorderElements,
+    exportState,
+    importState,
+  } = useEditorState();
 
-  // Mock data for testing - using proper StyleResult types
-  const mockPrimaryStyle: StyleResult = {
-    category: 'Elegante',
-    score: 85,
-    percentage: 85
-  };
+  // Undo/Redo functionality
+  const { canUndo, canRedo, undo, redo, saveState } = useUndoRedo(editorState);
 
-  const mockSecondaryStyles: StyleResult[] = [
-    { category: 'Romântico', score: 70, percentage: 70 },
-    { category: 'Clássico', score: 65, percentage: 65 }
-  ];
-
-  const handleSave = useCallback(() => {
-    console.log('Saving...');
+  // Handlers
+  const handleElementSelect = useCallback((elementId: string) => {
+    setSelectedElementId(elementId);
   }, []);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      handleSave();
-    }, 10000);
+  const handleElementUpdate = useCallback(
+    (elementId: string, updates: ElementUpdate) => {
+      updateElement(elementId, updates);
+      saveState();
+    },
+    [updateElement, saveState]
+  );
 
-    return () => clearInterval(intervalId);
-  }, [handleSave]);
+  const handleElementAdd = useCallback(
+    (componentType: string, position?: number) => {
+      const newElementId = addElement(componentType, position);
+      setSelectedElementId(newElementId);
+      saveState();
+    },
+    [addElement, saveState]
+  );
 
-  const handleStageSelect = (stageId: string) => {
-    setCurrentStage(stageId);
-    // Update stage index based on the selected stage
-    const stageMap: { [key: string]: number } = {
-      'intro': 0,
-      'quiz': 1,
-      'q1': 1, 'q2': 1, 'q3': 1, 'q4': 1, 'q5': 1,
-      'q6': 1, 'q7': 1, 'q8': 1, 'q9': 1, 'q10': 1,
-      'strategic1': 2, 'strategic2': 2, 'strategic3': 2,
-      'transition': 3,
-      'result': 4,
-      'offer': 5
-    };
-    setCurrentStageIndex(stageMap[stageId] || 0);
-  };
+  const handleElementMove = useCallback(
+    (elementId: string, direction: "up" | "down") => {
+      moveElement(elementId, direction);
+      saveState();
+    },
+    [moveElement, saveState]
+  );
 
-  const handleComponentSelect = (componentType: string) => {
-    setSelectedComponent(componentType);
-    console.log('Componente selecionado:', componentType);
-  };
+  const handleElementDelete = useCallback(
+    (elementId: string) => {
+      removeElement(elementId);
+      setSelectedElementId(null);
+      saveState();
+    },
+    [removeElement, saveState]
+  );
 
-  const handleAddQuestion = () => {
-    console.log('Adicionando nova questão...');
-  };
+  const handleElementDuplicate = useCallback(
+    (elementId: string) => {
+      duplicateElement(elementId);
+      saveState();
+    },
+    [duplicateElement, saveState]
+  );
 
-  const getQuestionData = (stageId: string) => {
-    // Mapear stageId para questionId
-    if (stageId.startsWith('q')) {
-      const questionNumber = stageId.substring(1);
-      return questions.find(q => q.id === questionNumber);
-    }
-    
-    if (stageId.startsWith('strategic')) {
-      const strategicNumber = stageId.replace('strategic', '');
-      const strategicId = `strategic-${strategicNumber}`;
-      return strategicQuestions.find(q => q.id === strategicId);
-    }
-    
-    return null;
-  };
-
-  const renderQuestionStage = (stageId: string) => {
-    const questionData = getQuestionData(stageId);
-    
-    if (!questionData) {
-      return (
-        <div className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Questão em Carregamento</h2>
-          <p className="text-gray-600">
-            {loading ? 'Carregando dados da questão...' : 'Questão não encontrada'}
-          </p>
-        </div>
-      );
-    }
-
-    // Preparar dados para o StageQuestionComponent
-    const componentData = {
-      title: questionData.title,
-      question: questionData.title,
-      options: questionData.options.map(opt => opt.text),
-      optionImages: questionData.options.map(opt => opt.imageUrl).filter(Boolean),
-      displayType: questionData.type || 'text',
-      multiSelect: questionData.multiSelect || 1,
-      backgroundColorQuestion: '#FFFAF0',
-      textColorQuestion: '#432818',
-      stageNumber: parseInt(stageId.replace(/\D/g, '')) || 1,
-      totalStages: 10,
-      stageTitle: questionData.title
+  const handleSave = useCallback(() => {
+    const dataToSave: VisualEditorData = {
+      editorState,
+      pageInfo: {
+        title: "Página sem título",
+        description: "",
+        slug: `page-${Date.now()}`,
+        published: false,
+      },
     };
 
-    return (
-      <StageQuestionComponent
-        data={componentData}
-        style={{}}
-        isSelected={false}
-      />
-    );
-  };
+    if (onSave) {
+      onSave(dataToSave);
+    }
 
-  const renderCurrentStage = () => {
-    switch (currentStage) {
+    // Salvar no localStorage como backup
+    localStorage.setItem("quiz-editor-backup", exportState());
+  }, [editorState, onSave, exportState]);
+
+  const handlePreviewToggle = useCallback(() => {
+    setIsPreviewMode(!isPreviewMode);
+    if (onPreview) {
+      onPreview();
+    }
+  }, [isPreviewMode, onPreview]);
+
+  const handleUndo = useCallback(() => {
+    undo();
+    setSelectedElementId(null);
+  }, [undo]);
+
+  const handleRedo = useCallback(() => {
+    redo();
+    setSelectedElementId(null);
+  }, [redo]);
+
+  // Obter elemento selecionado
+  const selectedElement = selectedElementId
+    ? editorState.elements.find((el) => el.id === selectedElementId)
+    : null;
+
+    const activeStage = editorState.stages.find(stage => stage.id === editorState.activeStageId);
+
+  const renderStageContent = () => {
+    if (!activeStage) return null;
+
+    switch (activeStage.id) {
       case 'intro':
-        return <QuizIntro onStart={() => setCurrentStage('q1')} />;
-      
-      case 'quiz':
-        return renderQuestionStage('q1');
-      
-      case 'q1':
-      case 'q2':
-      case 'q3':
-      case 'q4':
-      case 'q5':
-      case 'q6':
-      case 'q7':
-      case 'q8':
-      case 'q9':
-      case 'q10':
-        return renderQuestionStage(currentStage);
-      
-      case 'strategic1':
-      case 'strategic2':
-      case 'strategic3':
-        return renderQuestionStage(currentStage);
-      
+        return (
+          <EditableQuizIntro 
+            isPreviewMode={isPreviewMode}
+            onStart={(name) => console.log('Quiz started with name:', name)}
+          />
+        );
+
+      case 'questions':
+        return (
+          <div className="flex items-center justify-center h-96 text-gray-500">
+            <div className="text-center">
+              <h3 className="text-lg font-medium mb-2">Questões do Quiz</h3>
+              <p className="text-sm">Adicione e configure as questões aqui.</p>
+            </div>
+          </div>
+        );
+
+      case 'strategic':
+        return (
+          <div className="flex items-center justify-center h-96 text-gray-500">
+            <div className="text-center">
+              <h3 className="text-lg font-medium mb-2">Questões Estratégicas</h3>
+              <p className="text-sm">Defina as questões estratégicas aqui.</p>
+            </div>
+          </div>
+        );
+
       case 'transition':
         return (
-          <QuizFinalTransition 
-            onShowResult={() => setCurrentStage('result')}
-          />
+          <div className="flex items-center justify-center h-96 text-gray-500">
+            <div className="text-center">
+              <h3 className="text-lg font-medium mb-2">Página de Transição</h3>
+              <p className="text-sm">Configure a transição para a próxima etapa.</p>
+            </div>
+          </div>
         );
-      
+
       case 'result':
         return (
-          <QuizResult
-            primaryStyle={mockPrimaryStyle}
-            secondaryStyles={mockSecondaryStyles}
-          />
+          <div className="flex items-center justify-center h-96 text-gray-500">
+            <div className="text-center">
+              <h3 className="text-lg font-medium mb-2">Página de Resultado</h3>
+              <p className="text-sm">Ajuste a página de resultado aqui.</p>
+            </div>
+          </div>
         );
-      
+
       case 'offer':
-        return <QuizOfferPage />;
-      
+        return (
+          <div className="flex items-center justify-center h-96 text-gray-500">
+            <div className="text-center">
+              <h3 className="text-lg font-medium mb-2">Página de Oferta</h3>
+              <p className="text-sm">Configure a página de oferta final.</p>
+            </div>
+          </div>
+        );
+
       default:
-        return null;
+        return (
+          <div className="flex items-center justify-center h-96 text-gray-500">
+            <div className="text-center">
+              <h3 className="text-lg font-medium mb-2">Etapa não implementada</h3>
+              <p className="text-sm">Tipo: {activeStage.id}</p>
+            </div>
+          </div>
+        );
     }
   };
 
-  const getStageName = (stageId: string): string => {
-    const stageNames: { [key: string]: string } = {
-      'intro': 'Introdução',
-      'quiz': 'Quiz',
-      'q1': 'Questão 1', 'q2': 'Questão 2', 'q3': 'Questão 3', 'q4': 'Questão 4', 'q5': 'Questão 5',
-      'q6': 'Questão 6', 'q7': 'Questão 7', 'q8': 'Questão 8', 'q9': 'Questão 9', 'q10': 'Questão 10',
-      'strategic1': 'Questão Estratégica 1', 'strategic2': 'Questão Estratégica 2', 'strategic3': 'Questão Estratégica 3',
-      'transition': 'Transição',
-      'result': 'Resultado',
-      'offer': 'Oferta'
-    };
-    return stageNames[stageId] || 'Etapa';
-  };
-
-  if (loading) {
-    return (
-      <div className="h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando dados das questões...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Erro ao carregar questões: {error}</p>
-          <Button onClick={() => window.location.reload()}>Tentar Novamente</Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3 flex-shrink-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-gray-900">Editor Visual Moderno</h1>
-            <Badge variant="outline" className="border-blue-500 text-blue-700">
-              {funnelId}
-            </Badge>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            {/* Viewport Controls */}
-            <div className="flex items-center border rounded-lg">
-              <Button
-                variant={viewportMode === 'desktop' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewportMode('desktop')}
-                className="rounded-r-none"
-              >
-                <Monitor className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewportMode === 'tablet' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewportMode('tablet')}
-                className="rounded-none border-x"
-              >
-                <Tablet className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewportMode === 'mobile' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewportMode('mobile')}
-                className="rounded-l-none"
-              >
-                <Smartphone className="w-4 h-4" />
-              </Button>
-            </div>
+    <DndProvider backend={HTML5Backend}>
+      <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+        {/* Toolbar */}
+        <EditorToolbar
+          isPreviewing={isPreviewMode}
+          onPreviewToggle={handlePreviewToggle}
+          onSave={handleSave}
+          config={editorState}
+          canUndo={canUndo}
+          canRedo={canRedo}
+          onUndo={handleUndo}
+          onRedo={handleRedo}
+          viewportMode={viewportMode}
+          onViewportChange={setViewportMode}
+        />
 
-            {/* Preview Toggle */}
-            <Button
-              variant={isPreviewMode ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setIsPreviewMode(!isPreviewMode)}
-            >
-              <Eye className="w-4 h-4 mr-2" />
-              {isPreviewMode ? 'Edição' : 'Preview'}
-            </Button>
+        {/* Main Editor Area */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Component Library Sidebar */}
+          {!isPreviewMode && (
+            <ComponentLibrarySidebar onComponentAdd={handleElementAdd} />
+          )}
 
-            {/* Save Button */}
-            <Button onClick={handleSave} size="sm">
-              <Save className="w-4 h-4 mr-2" />
-              Salvar
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content - Resizable 4 Columns Layout */}
-      <div className="flex-1 overflow-hidden">
-        <ResizablePanelGroup direction="horizontal" className="h-full">
-          {/* Left Column - Detailed Steps Panel */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <div className="h-full bg-white border-r border-gray-200">
-              <DetailedStepsPanel
-                currentStage={currentStage}
-                onStageSelect={handleStageSelect}
-                onAddQuestion={handleAddQuestion}
-              />
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Second Column - Components Palette */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <div className="h-full bg-gray-50 border-r border-gray-200">
-              <ComponentsPalette
-                onComponentSelect={handleComponentSelect}
-                selectedComponent={selectedComponent}
-              />
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Third Column - Editor Canvas */}
-          <ResizablePanel defaultSize={40} minSize={30}>
-            <div className="h-full overflow-auto bg-gray-100 p-6">
-              <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
-                viewportMode === 'desktop' ? 'max-w-6xl' :
-                viewportMode === 'tablet' ? 'max-w-2xl' :
-                'max-w-sm'
-              }`}>
-                {renderCurrentStage()}
-              </div>
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Fourth Column - Configuration Panel */}
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <div className="h-full bg-white border-l border-gray-200">
-              <div className="h-full overflow-auto">
-                <StageConfigurationPanel
-                  stageName={getStageName(currentStage)}
-                  stageType={currentStage}
-                />
-              </div>
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </div>
-
-      {/* Option Configuration Modal */}
-      {showOptionConfig && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <OptionConfigurationPanel
-            isOpen={showOptionConfig}
-            onClose={() => setShowOptionConfig(false)}
-            optionId={selectedOptionId || ''}
-            onConfigUpdate={(config) => {
-              console.log('Configuração atualizada:', config);
-            }}
+          {/* Canvas */}
+          <EditorCanvas
+            elements={editorState.elements}
+            stages={editorState.stages}
+            activeStageId={editorState.activeStageId}
+            selectedElementId={selectedElementId}
+            onElementSelect={handleElementSelect}
+            onElementUpdate={handleElementUpdate}
+            onElementMove={handleElementMove}
+            onElementDelete={handleElementDelete}
+            onElementDuplicate={handleElementDuplicate}
+            onElementAdd={handleElementAdd}
+            onStageAdd={() => {}}
+            onStageSelect={() => {}}
+            isPreviewMode={isPreviewMode}
+            viewportMode={viewportMode}
           />
+
+          {/* Properties Panel */}
+          {!isPreviewMode && selectedElement && (
+            <ElementPropertiesPanel
+              element={selectedElement}
+              onUpdate={(updates) =>
+                handleElementUpdate(selectedElementId!, updates)
+              }
+              onClose={() => setSelectedElementId(null)}
+            />
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    </DndProvider>
   );
-};
+}
