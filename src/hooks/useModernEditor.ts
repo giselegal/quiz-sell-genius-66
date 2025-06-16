@@ -35,6 +35,8 @@ export interface EditorElement {
   };
   order: number;
   stepId: string;
+  visible?: boolean;
+  locked?: boolean;
 }
 
 interface EditorState {
@@ -217,6 +219,8 @@ export const useModernEditor = () => {
       style: getDefaultStyle(type),
       order: index !== undefined ? index : editorState.elements.length,
       stepId: stepId || 'default',
+      visible: true,
+      locked: false,
     };
 
     const newElements = [...editorState.elements];
