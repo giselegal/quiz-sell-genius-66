@@ -1,4 +1,5 @@
 
+
 export type BlockType = 
   | 'text' 
   | 'title' 
@@ -30,6 +31,13 @@ export type BlockType =
   | 'question-title'
   | 'question-options';
 
+export interface QuestionOption {
+  id: string;
+  text: string;
+  styleCategory: string;
+  points: number;
+}
+
 export interface ElementContent {
   text?: string;
   html?: string;
@@ -37,10 +45,14 @@ export interface ElementContent {
   alt?: string;
   href?: string;
   placeholder?: string;
-  options?: string[];
+  options?: string[] | QuestionOption[];
   value?: any;
   level?: string;
   type?: string;
+  title?: string;
+  imageUrl?: string;
+  label?: string;
+  multiSelect?: boolean;
   [key: string]: any;
 }
 
@@ -138,3 +150,4 @@ export interface VisualEditorData {
     published: boolean;
   };
 }
+
