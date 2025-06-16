@@ -7,6 +7,7 @@ import QuizPage from '@/components/QuizPage';
 import QuizDescubraSeuEstilo from '@/pages/quiz-descubra-seu-estilo';
 import ResultPage from '@/pages/ResultPage';
 import UnifiedEditorPage from '@/pages/UnifiedEditorPage';
+import ModernEditorPage from '@/pages/ModernEditorPage';
 import QuizIntro from '@/components/QuizIntro';
 import QuizOfferPageVisualEditor from '@/components/editors/QuizOfferPageVisualEditor';
 import { Button } from '@/components/ui/button';
@@ -57,6 +58,9 @@ function App() {
         
         {/* Editor Visual Quiz Offer */}
         <Route path="/quiz-offer-editor" element={<QuizOfferPageVisualEditor />} />
+        
+        {/* Novo Editor Visual Moderno */}
+        <Route path="/modern-editor" element={<ModernEditorPage />} />
         
         {/* 404 para rotas não encontradas */}
         <Route path="*" element={<NotFoundPage />} />
