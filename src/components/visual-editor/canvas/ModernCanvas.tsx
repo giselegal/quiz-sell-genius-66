@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { Plus, Eye, Monitor, Tablet, Smartphone } from 'lucide-react';
+import { ModernElementRenderer } from './ModernElementRenderer';
 import { EditorElement } from '@/hooks/useModernEditor';
 
 interface ModernCanvasProps {
@@ -22,196 +20,77 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
   onSelectElement,
   onUpdateElement,
   onDeleteElement,
-  onAddElement,
   isPreviewMode,
   viewport
 }) => {
-  const getViewportSize = () => {
+  // Sort elements by order
+  const sortedElements = [...elements].sort((a, b) => a.order - b.order);
+
+  const getCanvasStyle = () => {
     switch (viewport) {
       case 'mobile':
-        return 'max-w-sm';
+        return { maxWidth: '375px', margin: '0 auto' };
       case 'tablet':
-        return 'max-w-2xl';
-      case 'desktop':
+        return { maxWidth: '768px', margin: '0 auto' };
       default:
-        return 'max-w-6xl';
+        return { width: '100%' };
     }
   };
 
-  const getViewportIcon = () => {
-    switch (viewport) {
-      case 'mobile':
-        return <Smartphone className="w-4 h-4" />;
-      case 'tablet':
-        return <Tablet className="w-4 h-4" />;
-      case 'desktop':
-      default:
-        return <Monitor className="w-4 h-4" />;
-    }
-  };
-
-  const renderElement = (element: EditorElement) => {
-    const isSelected = selectedElementId === element.id;
+  const handleMoveUp = (elementId: string) => {
+    const element = elements.find(el => el.id === elementId);
+    if (!element || element.order <= 1) return;
     
-    return (
-      <div
-        key={element.id}
-        className={`relative p-4 border-2 border-dashed transition-colors cursor-pointer ${
-          isSelected 
-            ? 'border-blue-500 bg-blue-50' 
-            : 'border-gray-200 hover:border-gray-300'
-        }`}
-        onClick={() => onSelectElement(element.id)}
-      >
-        {/* Element content based on type */}
-        <div className="min-h-[60px] flex items-center justify-center">
-          {element.type === 'heading' && (
-            <h2 className="text-2xl font-bold text-gray-800">
-              {element.content.text || 'Título'}
-            </h2>
-          )}
-          
-          {element.type === 'text' && (
-            <p className="text-gray-600">
-              {element.content.text || 'Texto de exemplo'}
-            </p>
-          )}
-          
-          {element.type === 'image' && (
-            <div className="w-full h-32 bg-gray-200 flex items-center justify-center rounded">
-              {element.content.src ? (
-                <img 
-                  src={element.content.src} 
-                  alt={element.content.alt || 'Imagem'} 
-                  className="max-w-full max-h-full object-cover rounded"
-                />
-              ) : (
-                <span className="text-gray-500">Imagem</span>
-              )}
-            </div>
-          )}
-          
-          {element.type === 'button' && (
-            <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-              {element.content.text || 'Botão'}
-            </button>
-          )}
-          
-          {element.type === 'quiz-title' && (
-            <h1 className="text-4xl font-bold text-center text-gray-800">
-              {element.content.text || 'Título do Quiz'}
-            </h1>
-          )}
-          
-          {element.type === 'quiz-description' && (
-            <p className="text-lg text-center text-gray-600">
-              {element.content.text || 'Descrição do quiz aqui'}
-            </p>
-          )}
-          
-          {element.type === 'start-button' && (
-            <button className="px-8 py-4 bg-green-600 text-white text-lg rounded-lg hover:bg-green-700 transition-colors">
-              {element.content.text || 'Iniciar Quiz'}
-            </button>
-          )}
-          
-          {element.type === 'progress-bar' && (
-            <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-blue-500 transition-all duration-300"
-                style={{ width: `${element.content.progress || 30}%` }}
-              />
-            </div>
-          )}
-          
-          {element.type === 'question-title' && (
-            <h3 className="text-xl font-semibold text-gray-800">
-              {element.content.text || 'Sua pergunta aqui?'}
-            </h3>
-          )}
-          
-          {element.type === 'question-options' && (
-            <div className="space-y-3 w-full">
-              {(element.content.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
-                <button
-                  key={index}
-                  className="w-full p-3 text-left border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-          )}
-          
-          {/* Fallback for unknown types */}
-          {!['heading', 'text', 'image', 'button', 'quiz-title', 'quiz-description', 'start-button', 'progress-bar', 'question-title', 'question-options'].includes(element.type) && (
-            <div className="text-gray-500 text-center">
-              <div className="text-sm font-medium">{element.type}</div>
-              <div className="text-xs">Componente não implementado</div>
-            </div>
-          )}
-        </div>
-        
-        {/* Selection overlay */}
-        {isSelected && (
-          <div className="absolute inset-0 border-2 border-blue-500 pointer-events-none" />
-        )}
-      </div>
-    );
+    onUpdateElement(elementId, { order: element.order - 1 });
+  };
+
+  const handleMoveDown = (elementId: string) => {
+    const element = elements.find(el => el.id === elementId);
+    const maxOrder = Math.max(...elements.map(el => el.order));
+    if (!element || element.order >= maxOrder) return;
+    
+    onUpdateElement(elementId, { order: element.order + 1 });
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-50">
-      {/* Canvas Header */}
-      <div className="p-4 bg-white border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {getViewportIcon()}
-            <span className="text-sm font-medium text-gray-700">
-              {viewport === 'mobile' ? 'Mobile' : viewport === 'tablet' ? 'Tablet' : 'Desktop'}
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            {isPreviewMode && (
-              <div className="flex items-center gap-1 text-green-600">
-                <Eye className="w-4 h-4" />
-                <span className="text-sm font-medium">Preview</span>
+    <div className="h-full bg-gray-50 overflow-auto">
+      <div className="min-h-full" style={getCanvasStyle()}>
+        {sortedElements.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center p-8">
+              <div className="text-gray-400 text-lg mb-4">
+                Canvas vazio
               </div>
-            )}
+              <p className="text-gray-500 text-sm">
+                Selecione uma etapa e adicione componentes da barra lateral
+              </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={`${isPreviewMode ? '' : 'min-h-screen'}`}>
+            {sortedElements.map((element, index) => {
+              const canMoveUp = index > 0;
+              const canMoveDown = index < sortedElements.length - 1;
+              
+              return (
+                <ModernElementRenderer
+                  key={element.id}
+                  element={element}
+                  isSelected={selectedElementId === element.id}
+                  isPreviewMode={isPreviewMode}
+                  onSelect={() => onSelectElement(element.id)}
+                  onUpdate={(updates) => onUpdateElement(element.id, updates)}
+                  onDelete={() => onDeleteElement(element.id)}
+                  onMoveUp={() => handleMoveUp(element.id)}
+                  onMoveDown={() => handleMoveDown(element.id)}
+                  canMoveUp={canMoveUp}
+                  canMoveDown={canMoveDown}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
-
-      {/* Canvas Content */}
-      <ScrollArea className="flex-1">
-        <div className="p-8">
-          <div className={`mx-auto ${getViewportSize()} bg-white min-h-[600px] shadow-lg rounded-lg overflow-hidden`}>
-            {elements.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center p-8 text-gray-500">
-                <Plus className="w-12 h-12 mb-4" />
-                <h3 className="text-lg font-medium mb-2">Nenhum componente adicionado</h3>
-                <p className="text-center mb-4">
-                  Selecione componentes na barra lateral para começar a construir sua tela.
-                </p>
-                <Button 
-                  onClick={() => onAddElement('heading')}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Adicionar Título
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4 p-4">
-                {elements
-                  .sort((a, b) => a.order - b.order)
-                  .map(renderElement)}
-              </div>
-            )}
-          </div>
-        </div>
-      </ScrollArea>
     </div>
   );
 };
