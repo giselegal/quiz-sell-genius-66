@@ -1,4 +1,3 @@
-
 import React, { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
@@ -18,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { EditorElement } from '@/hooks/useModernEditor';
 import { MarqueeElement } from './elements/MarqueeElement';
+import { FixedHeaderElement } from './elements/FixedHeaderElement';
 
 interface ModernElementRendererProps {
   element: EditorElement;
@@ -55,6 +55,18 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
   if (element.type === 'marquee') {
     return (
       <MarqueeElement
+        element={element}
+        isSelected={isSelected}
+        isPreviewMode={isPreviewMode}
+        onSelect={onSelect}
+        onUpdate={onUpdate}
+      />
+    );
+  }
+
+  if (element.type === 'fixed-header') {
+    return (
+      <FixedHeaderElement
         element={element}
         isSelected={isSelected}
         isPreviewMode={isPreviewMode}
