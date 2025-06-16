@@ -11,10 +11,8 @@ import QuizOfferPage from '@/components/QuizOfferPage';
 import { StepsPanel } from './steps/StepsPanel';
 import { ComponentsPalette } from './sidebar/ComponentsPalette';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
-import { VisualCanvasLayout } from './canvas/VisualCanvasLayout';
-import { useVisualEditor } from '@/hooks/useVisualEditor';
+import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
 import { StyleResult } from '@/types/quiz';
-import { BlockType } from '@/types/visualEditor';
 import { 
   Eye, 
   Save, 
@@ -49,21 +47,9 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   ]);
   const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
   const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+  const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
-
-  // Visual Editor Hook
-  const {
-    elements,
-    stages: visualStages,
-    activeStageId,
-    addElement,
-    updateElement,
-    deleteElement,
-    moveElement,
-    setActiveStage,
-    saveProject
-  } = useVisualEditor();
 
   // Mock data for testing - using proper StyleResult types
   const mockPrimaryStyle: StyleResult = {
@@ -77,11 +63,9 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     { category: 'Clássico', score: 65, percentage: 65 }
   ];
 
-  const handleSave = useCallback(async () => {
+  const handleSave = useCallback(() => {
     console.log('Saving...');
-    await saveProject();
-    onSave?.(elements);
-  }, [saveProject, elements, onSave]);
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -95,28 +79,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     const stageIndex = stages.findIndex(s => s.id === stageId);
     setCurrentStage(stageId);
     setCurrentStageIndex(stageIndex);
-    setActiveStage(stageId);
   };
 
   const handleComponentSelect = (componentType: string) => {
     setSelectedComponent(componentType);
-    const elementId = addElement(componentType as BlockType, currentStage);
-    setSelectedElementId(elementId);
-  };
-
-  const handleElementSelect = (elementId: string) => {
-    setSelectedElementId(elementId);
-  };
-
-  const handleElementUpdate = (elementId: string, updates: any) => {
-    updateElement(elementId, updates);
-  };
-
-  const handleElementDelete = (elementId: string) => {
-    deleteElement(elementId);
-    if (selectedElementId === elementId) {
-      setSelectedElementId(null);
-    }
+    console.log('Componente selecionado:', componentType);
   };
 
   const renderCurrentStage = () => {
@@ -248,28 +215,15 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           {/* Third Column - Editor Canvas */}
           <ResizablePanel defaultSize={45} minSize={30}>
-            {isPreviewMode ? (
-              <div className="h-full overflow-auto bg-gray-100 p-6">
-                <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
-                  viewportMode === 'desktop' ? 'max-w-6xl' :
-                  viewportMode === 'tablet' ? 'max-w-2xl' :
-                  'max-w-sm'
-                }`}>
-                  {renderCurrentStage()}
-                </div>
+            <div className="h-full overflow-auto bg-gray-100 p-6">
+              <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
+                viewportMode === 'desktop' ? 'max-w-6xl' :
+                viewportMode === 'tablet' ? 'max-w-2xl' :
+                'max-w-sm'
+              }`}>
+                {renderCurrentStage()}
               </div>
-            ) : (
-              <VisualCanvasLayout
-                elements={elements}
-                selectedElementId={selectedElementId}
-                isPreviewMode={isPreviewMode}
-                viewportMode={viewportMode}
-                currentStage={currentStage}
-                onElementSelect={handleElementSelect}
-                onElementUpdate={handleElementUpdate}
-                onElementDelete={handleElementDelete}
-              />
-            )}
+            </div>
           </ResizablePanel>
 
           <ResizableHandle withHandle />
@@ -287,6 +241,20 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
+
+      {/* Option Configuration Modal */}
+      {showOptionConfig && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <OptionConfigurationPanel
+            isOpen={showOptionConfig}
+            onClose={() => setShowOptionConfig(false)}
+            optionId={selectedOptionId || ''}
+            onConfigUpdate={(config) => {
+              console.log('Configuração atualizada:', config);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
