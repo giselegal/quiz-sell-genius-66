@@ -21,12 +21,6 @@ import {
   Smartphone
 } from 'lucide-react';
 
-interface Stage {
-  id: string;
-  name: string;
-  component: React.FC;
-}
-
 interface ModernVisualEditorProps {
   funnelId: string;
   onSave?: (data: any) => void;
@@ -38,13 +32,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 }) => {
   const [currentStage, setCurrentStage] = useState<string>('intro');
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
-  const [stages, setStages] = useState<Stage[]>([
-    { id: 'intro', name: 'Intro', component: QuizIntro },
-    { id: 'quiz', name: 'Quiz', component: () => <div>Quiz</div> },
-    { id: 'transition', name: 'Transição', component: QuizFinalTransition },
-    { id: 'result', name: 'Resultado', component: QuizResult },
-    { id: 'offer', name: 'Oferta', component: QuizOfferPage },
-  ]);
   const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
   const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
@@ -76,9 +63,19 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   }, [handleSave]);
 
   const handleStageSelect = (stageId: string) => {
-    const stageIndex = stages.findIndex(s => s.id === stageId);
     setCurrentStage(stageId);
-    setCurrentStageIndex(stageIndex);
+    // Update stage index based on the selected stage
+    const stageMap: { [key: string]: number } = {
+      'intro': 0,
+      'quiz': 1,
+      'q1': 1, 'q2': 1, 'q3': 1, 'q4': 1, 'q5': 1,
+      'q6': 1, 'q7': 1, 'q8': 1, 'q9': 1, 'q10': 1,
+      'strategic1': 2, 'strategic2': 2, 'strategic3': 2,
+      'transition': 3,
+      'result': 4,
+      'offer': 5
+    };
+    setCurrentStageIndex(stageMap[stageId] || 0);
   };
 
   const handleComponentSelect = (componentType: string) => {
@@ -162,6 +159,20 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   };
 
+  const getStageName = (stageId: string): string => {
+    const stageNames: { [key: string]: string } = {
+      'intro': 'Introdução',
+      'quiz': 'Quiz',
+      'q1': 'Questão 1', 'q2': 'Questão 2', 'q3': 'Questão 3', 'q4': 'Questão 4', 'q5': 'Questão 5',
+      'q6': 'Questão 6', 'q7': 'Questão 7', 'q8': 'Questão 8', 'q9': 'Questão 9', 'q10': 'Questão 10',
+      'strategic1': 'Questão Estratégica 1', 'strategic2': 'Questão Estratégica 2', 'strategic3': 'Questão Estratégica 3',
+      'transition': 'Transição',
+      'result': 'Resultado',
+      'offer': 'Oferta'
+    };
+    return stageNames[stageId] || 'Etapa';
+  };
+
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
@@ -229,7 +240,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
             <div className="h-full bg-white border-r border-gray-200">
               <DetailedStepsPanel
-                stages={stages}
                 currentStage={currentStage}
                 onStageSelect={handleStageSelect}
                 onAddQuestion={handleAddQuestion}
@@ -271,7 +281,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             <div className="h-full bg-white border-l border-gray-200">
               <div className="h-full overflow-auto">
                 <StageConfigurationPanel
-                  stageName={stages.find(s => s.id === currentStage)?.name || ''}
+                  stageName={getStageName(currentStage)}
                   stageType={currentStage}
                 />
               </div>

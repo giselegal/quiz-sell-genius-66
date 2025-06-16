@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -26,14 +25,12 @@ interface DetailedStage {
 }
 
 interface DetailedStepsPanelProps {
-  stages: DetailedStage[];
   currentStage: string;
   onStageSelect: (stageId: string) => void;
   onAddQuestion?: () => void;
 }
 
 export const DetailedStepsPanel: React.FC<DetailedStepsPanelProps> = ({
-  stages,
   currentStage,
   onStageSelect,
   onAddQuestion
