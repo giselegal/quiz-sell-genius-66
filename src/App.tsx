@@ -32,6 +32,8 @@ import EditorsHubPage from '@/pages/EditorsHubPage';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 function App() {
+  console.log('🚀 App component rendering - Router context should be available');
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <Routes>
