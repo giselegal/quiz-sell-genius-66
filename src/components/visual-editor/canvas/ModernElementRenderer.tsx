@@ -42,7 +42,6 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  // Don't render if element is not visible
   if (element.visible === false && !isSelected) {
     return null;
   }
@@ -57,208 +56,272 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
 
   const renderElementContent = () => {
     switch (element.type) {
-      case 'heading':
-      case 'quiz-title':
-      case 'question-title':
+      case 'brand-header':
         return (
-          <h1 
-            style={element.style}
-            className={`${isEditing ? 'ring-2 ring-blue-500' : ''}`}
-            onClick={() => !isPreviewMode && setIsEditing(true)}
-            onBlur={() => setIsEditing(false)}
-            contentEditable={isEditing}
-            suppressContentEditableWarning
-            onInput={(e) => {
-              if (isEditing) {
-                handleContentChange({ text: e.currentTarget.textContent });
-              }
-            }}
-          >
-            {element.content.text || 'Título'}
+          <header style={element.style} className="w-full">
+            <div className="container mx-auto max-w-lg">
+              {element.content.text || 'Header da Marca'}
+            </div>
+          </header>
+        );
+
+      case 'brand-logo':
+        return (
+          <div className="flex flex-col items-center">
+            <img 
+              src={element.content.image || 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_120,h_50,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'} 
+              alt={element.content.alt || 'Logo'}
+              style={element.style}
+              className="object-contain"
+            />
+          </div>
+        );
+
+      case 'brand-divider':
+        return (
+          <div style={element.style} className="mx-auto"></div>
+        );
+
+      case 'quiz-hero-title':
+        return (
+          <h1 style={element.style} className="px-2">
+            <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa lotado e da sensação de que nada combina com{' '}
+            <span className="text-[#B89B7A]">Você</span>.
           </h1>
         );
 
-      case 'text':
+      case 'quiz-hero-image':
+        return (
+          <div className="w-full flex justify-center">
+            <div style={element.style} className="overflow-hidden bg-[#F8F5F0]">
+              <img 
+                src={element.content.image || 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_85,w_300,c_limit/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp'} 
+                alt={element.content.alt || 'Imagem do quiz'}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        );
+
       case 'quiz-description':
         return (
-          <p 
-            style={element.style}
-            className={`${isEditing ? 'ring-2 ring-blue-500' : ''}`}
-            onClick={() => !isPreviewMode && setIsEditing(true)}
-            onBlur={() => setIsEditing(false)}
-            contentEditable={isEditing}
-            suppressContentEditableWarning
-            onInput={(e) => {
-              if (isEditing) {
-                handleContentChange({ text: e.currentTarget.textContent });
-              }
-            }}
-          >
-            {element.content.text || 'Texto'}
+          <p style={element.style}>
+            Em poucos minutos, descubra seu{' '}
+            <span className="font-semibold text-[#B89B7A]">
+              Estilo Predominante
+            </span>{' '}
+            — e aprenda a montar looks que realmente refletem sua{' '}
+            <span className="font-semibold text-[#432818]">
+              essência
+            </span>, com
+            praticidade e{' '}
+            <span className="font-semibold text-[#432818]">
+              confiança
+            </span>.
           </p>
         );
 
-      case 'button':
-      case 'start-button':
-      case 'cta-button':
-      case 'purchase-button':
+      case 'quiz-form':
         return (
-          <button 
-            style={element.style}
-            className={`${isEditing ? 'ring-2 ring-blue-500' : ''}`}
-            onClick={(e) => {
-              if (!isPreviewMode) {
-                e.preventDefault();
-                setIsEditing(true);
-              }
-            }}
-            onBlur={() => setIsEditing(false)}
-          >
-            {isEditing ? (
-              <input
-                type="text"
-                value={element.content.text || 'Botão'}
-                onChange={(e) => handleContentChange({ text: e.target.value })}
-                className="bg-transparent border-none outline-none text-center w-full"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    setIsEditing(false);
-                  }
-                }}
-                autoFocus
-              />
-            ) : (
-              element.content.text || 'Botão'
-            )}
+          <div style={element.style}>
+            <form className="w-full space-y-6">
+              <div>
+                <label className="block text-xs font-semibold text-[#432818] mb-1.5">
+                  NOME <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Digite seu nome"
+                  className="w-full p-2.5 bg-[#FEFEFE] rounded-md border-2 border-[#B89B7A] focus:ring-2 focus:ring-[#A1835D] focus:ring-offset-2"
+                />
+              </div>
+              <button
+                type="button"
+                className="w-full py-3 px-4 text-sm font-semibold rounded-md shadow-md bg-[#B89B7A] text-white hover:bg-[#A1835D] transition-all duration-300"
+              >
+                Quero Descobrir meu Estilo Agora!
+              </button>
+            </form>
+          </div>
+        );
+
+      case 'quiz-input':
+        return (
+          <div>
+            <label className="block text-xs font-semibold text-[#432818] mb-1.5">
+              {element.content.label || 'NOME'} <span className="text-red-500">*</span>
+            </label>
+            <input
+              style={element.style}
+              type="text"
+              placeholder={element.content.placeholder || 'Digite seu nome'}
+              className="focus:ring-2 focus:ring-[#A1835D] focus:ring-offset-2 focus:outline-none"
+            />
+          </div>
+        );
+
+      case 'quiz-button':
+        return (
+          <button style={element.style} className="hover:bg-[#A1835D] hover:shadow-lg transform hover:scale-[1.01]">
+            {element.content.text || 'Botão'}
           </button>
         );
 
-      case 'image':
-      case 'logo':
+      case 'question-header':
         return (
-          <div style={element.style}>
-            <img 
-              src={element.content.image || 'https://via.placeholder.com/400x300'} 
-              alt={element.content.alt || 'Imagem'} 
-              style={{ width: '100%', height: 'auto' }}
-              className={`${isEditing ? 'ring-2 ring-blue-500' : ''}`}
-            />
-            {!isPreviewMode && (
-              <div className="mt-2">
-                <input
-                  type="url"
-                  placeholder="URL da imagem"
-                  value={element.content.image || ''}
-                  onChange={(e) => handleContentChange({ image: e.target.value })}
-                  className="w-full p-2 border rounded text-sm"
-                />
-              </div>
-            )}
-          </div>
-        );
-
-      case 'question-options':
-        return (
-          <div style={element.style} className="grid gap-4">
-            {element.content.options?.map((option, index) => (
-              <div key={index} className="p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer">
-                {option.image && (
-                  <img 
-                    src={option.image} 
-                    alt={option.text} 
-                    className="w-full h-32 object-cover rounded mb-2"
-                  />
-                )}
-                <p className="text-center font-medium">{option.text}</p>
-              </div>
-            )) || <div className="text-gray-500">Nenhuma opção definida</div>}
-          </div>
-        );
-
-      case 'result-display':
-        return (
-          <div style={element.style} className="text-center">
-            <h2 className="text-2xl font-bold mb-4">{element.content.text || 'Resultado'}</h2>
-            {element.content.subtitle && (
-              <p className="text-gray-600">{element.content.subtitle}</p>
-            )}
-          </div>
-        );
-
-      case 'offer-preview':
-      case 'offer-hero':
-        return (
-          <div style={element.style} className="text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-lg">
-            <h2 className="text-3xl font-bold mb-4">{element.content.text || 'Oferta Especial'}</h2>
-            {element.content.subtitle && (
-              <p className="text-xl opacity-90">{element.content.subtitle}</p>
-            )}
-          </div>
-        );
-
-      case 'pricing':
-        return (
-          <div style={element.style} className="text-center bg-green-50 p-6 rounded-lg border-2 border-green-200">
-            <div className="text-3xl font-bold text-green-600 mb-2">
-              {element.content.text || 'R$ 247'}
-            </div>
-            {element.content.subtitle && (
-              <p className="text-gray-600">{element.content.subtitle}</p>
-            )}
-          </div>
-        );
-
-      case 'benefits-list':
-        return (
-          <div style={element.style}>
-            <h3 className="text-xl font-bold mb-4">{element.content.text || 'Benefícios'}</h3>
-            <ul className="space-y-2">
-              {element.content.options?.map((benefit, index) => (
-                <li key={index} className="flex items-center">
-                  <span className="text-green-500 mr-2">✓</span>
-                  {benefit.text}
-                </li>
-              )) || <li className="text-gray-500">Nenhum benefício definido</li>}
-            </ul>
-          </div>
-        );
-
-      case 'header':
-        return (
-          <header style={element.style} className="bg-white shadow-sm border-b p-4">
+          <header style={element.style}>
             <div className="container mx-auto">
-              <h1 className="text-xl font-bold">{element.content.text || 'Cabeçalho'}</h1>
+              <div className="flex items-center justify-between">
+                <img 
+                  src="https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_80,h_32,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+                  alt="Logo"
+                  className="h-8"
+                />
+                <span className="text-sm text-gray-600">Questão 2 de 8</span>
+              </div>
             </div>
           </header>
         );
 
       case 'progress-bar':
         return (
-          <div style={element.style} className="w-full bg-gray-200 rounded-full h-2 mb-4">
+          <div style={element.style}>
             <div 
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
-              style={{ width: `${element.content.progress || 0}%` }}
+              className="h-full bg-[#B89B7A] rounded-full transition-all duration-300"
+              style={{ width: `${element.content.progress || 25}%` }}
             ></div>
           </div>
         );
 
-      case 'navigation-buttons':
+      case 'question-title':
         return (
-          <div style={element.style} className="flex justify-between gap-4">
-            <Button variant="outline">Anterior</Button>
-            <Button>Próximo</Button>
+          <h2 style={element.style}>
+            {element.content.text || 'Qual dessas opções mais combina com você?'}
+          </h2>
+        );
+
+      case 'question-options-grid':
+        return (
+          <div style={element.style}>
+            {/* Grid será renderizado pelos question-option-card individuais */}
           </div>
         );
 
-      case 'spacer':
+      case 'question-option-card':
         return (
           <div 
-            style={{ 
-              height: element.style.height || '2rem',
-              ...element.style 
-            }} 
-            className="w-full"
-          />
+            style={element.style}
+            className="hover:shadow-lg hover:border-[#B89B7A] hover:bg-[#FAF9F7] group"
+          >
+            {element.content.image && (
+              <img 
+                src={element.content.image} 
+                alt={element.content.text}
+                className="w-full h-32 object-cover rounded-lg mb-3"
+              />
+            )}
+            <h3 className="font-medium text-[#432818] group-hover:text-[#B89B7A] transition-colors">
+              {element.content.text || 'Opção de Resposta'}
+            </h3>
+            {element.content.description && (
+              <p className="text-sm text-gray-600 mt-2">{element.content.description}</p>
+            )}
+          </div>
+        );
+
+      case 'result-hero':
+        return (
+          <section style={element.style}>
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-4 font-playfair">
+                Seu Estilo: Elegante
+              </h1>
+              <p className="text-xl opacity-90">
+                Você tem um gosto refinado e sofisticado que se reflete em suas escolhas de moda.
+              </p>
+            </div>
+          </section>
+        );
+
+      case 'result-title':
+        return (
+          <h2 style={element.style}>
+            {element.content.text || 'Seu Estilo: Elegante'}
+          </h2>
+        );
+
+      case 'result-subtitle':
+        return (
+          <p style={element.style}>
+            {element.content.text || 'Você tem um gosto refinado e sofisticado.'}
+          </p>
+        );
+
+      case 'offer-section':
+        return (
+          <section style={element.style}>
+            <h3 className="text-2xl font-bold text-[#432818] mb-4 font-playfair">
+              Transforme Seu Guarda-Roupa
+            </h3>
+            <p className="text-lg text-gray-700 mb-6">
+              Consultoria personalizada baseada no seu estilo único
+            </p>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="text-left">
+                <h4 className="font-semibold text-[#432818] mb-2">O que você vai receber:</h4>
+                <ul className="space-y-2">
+                  <li className="flex items-center">
+                    <span className="text-[#B89B7A] mr-2">✓</span>
+                    Análise completa do seu estilo
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-[#B89B7A] mr-2">✓</span>
+                    Consultoria personalizada
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-[#B89B7A] mr-2">✓</span>
+                    Guia de compras exclusivo
+                  </li>
+                </ul>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600 mb-2">R$ 247</div>
+                <div className="text-lg line-through text-gray-500">R$ 497</div>
+                <div className="text-sm text-red-600 font-semibold">50% OFF por tempo limitado</div>
+              </div>
+            </div>
+          </section>
+        );
+
+      case 'price-highlight':
+        return (
+          <div className="text-center">
+            {element.content.original_price && (
+              <div className="text-lg line-through text-gray-500 mb-2">
+                {element.content.original_price}
+              </div>
+            )}
+            <div style={element.style}>
+              {element.content.text || 'R$ 247'}
+            </div>
+            {element.content.discount && (
+              <div className="text-lg text-red-600 font-semibold mt-2">
+                {element.content.discount}
+              </div>
+            )}
+          </div>
+        );
+
+      case 'cta-button':
+        return (
+          <div className="text-center">
+            <button 
+              style={element.style}
+              className="hover:bg-[#8F7A6A] hover:shadow-xl hover:scale-105 active:scale-95"
+            >
+              {element.content.text || 'Garantir Minha Vaga Agora'}
+            </button>
+          </div>
         );
 
       default:
@@ -281,12 +344,10 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
       }`}
       onClick={onSelect}
     >
-      {/* Element Content */}
       <div className={element.locked ? 'opacity-60' : ''}>
         {renderElementContent()}
       </div>
 
-      {/* Controls Overlay (only in edit mode) */}
       {!isPreviewMode && isSelected && (
         <div className="absolute -top-10 left-0 right-0 flex items-center justify-between bg-white border rounded-lg shadow-lg p-2 z-10">
           <div className="flex items-center gap-1">
@@ -352,7 +413,6 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
         </div>
       )}
 
-      {/* Locked indicator */}
       {element.locked && !isPreviewMode && (
         <div className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded">
           <Lock className="h-3 w-3" />

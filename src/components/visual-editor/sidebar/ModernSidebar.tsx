@@ -4,145 +4,167 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { 
+  Layout, 
   Type, 
   Image, 
-  Video, 
   MousePointer, 
-  Layout,
+  Palette,
+  FileImage,
   Minus,
-  MessageSquare,
+  Sparkles,
+  User,
+  ArrowRight,
   Star,
-  Target,
-  ShoppingBag,
-  CreditCard,
-  Shield,
-  BarChart3,
-  Play,
-  CheckCircle,
-  Timer,
   Gift,
-  Users,
-  Award
+  DollarSign,
+  Zap
 } from 'lucide-react';
-import { StepType } from '@/hooks/useStepsManager';
 
 interface ModernSidebarProps {
   onAddElement: (type: string) => void;
-  activeStepType?: StepType;
+  activeStepType?: string;
 }
 
-export const ModernSidebar: React.FC<ModernSidebarProps> = ({ 
+export const ModernSidebar: React.FC<ModernSidebarProps> = ({
   onAddElement,
-  activeStepType 
+  activeStepType
 }) => {
-  const getComponentsForStepType = (stepType?: StepType) => {
-    const commonComponents = [
-      { type: 'heading', label: 'Título', icon: Type },
-      { type: 'text', label: 'Texto', icon: Type },
-      { type: 'image', label: 'Imagem', icon: Image },
-      { type: 'video', label: 'Vídeo', icon: Video },
-      { type: 'button', label: 'Botão', icon: MousePointer },
-      { type: 'spacer', label: 'Espaçador', icon: Minus },
-    ];
+  const brandElements = [
+    { type: 'brand-header', label: 'Header da Marca', icon: Layout },
+    { type: 'brand-logo', label: 'Logo', icon: FileImage },
+    { type: 'brand-divider', label: 'Divisor Dourado', icon: Minus },
+  ];
 
-    switch (stepType) {
+  const quizIntroElements = [
+    { type: 'quiz-hero-title', label: 'Título Principal', icon: Type },
+    { type: 'quiz-hero-image', label: 'Imagem Hero', icon: Image },
+    { type: 'quiz-description', label: 'Descrição', icon: Type },
+    { type: 'quiz-form', label: 'Formulário Completo', icon: Layout },
+    { type: 'quiz-input', label: 'Campo de Nome', icon: User },
+    { type: 'quiz-button', label: 'Botão CTA', icon: MousePointer },
+  ];
+
+  const questionElements = [
+    { type: 'question-header', label: 'Cabeçalho', icon: Layout },
+    { type: 'progress-bar', label: 'Barra de Progresso', icon: ArrowRight },
+    { type: 'question-title', label: 'Título da Questão', icon: Type },
+    { type: 'question-options-grid', label: 'Grid de Opções', icon: Layout },
+    { type: 'question-option-card', label: 'Card de Opção', icon: MousePointer },
+  ];
+
+  const resultElements = [
+    { type: 'result-hero', label: 'Hero do Resultado', icon: Sparkles },
+    { type: 'result-title', label: 'Título do Estilo', icon: Star },
+    { type: 'result-subtitle', label: 'Descrição do Estilo', icon: Type },
+    { type: 'offer-section', label: 'Seção de Oferta', icon: Gift },
+  ];
+
+  const offerElements = [
+    { type: 'price-highlight', label: 'Preço em Destaque', icon: DollarSign },
+    { type: 'cta-button', label: 'Botão de Compra', icon: Zap },
+    { type: 'offer-section', label: 'Seção de Benefícios', icon: Gift },
+  ];
+
+  const getElementsForStep = () => {
+    switch (activeStepType) {
       case 'quiz-intro':
-        return [
-          { type: 'header', label: 'Cabeçalho', icon: Layout },
-          { type: 'logo', label: 'Logo', icon: Image },
-          { type: 'quiz-title', label: 'Título do Quiz', icon: Type },
-          { type: 'quiz-description', label: 'Descrição', icon: Type },
-          { type: 'start-button', label: 'Botão Iniciar', icon: Play },
-          { type: 'testimonials', label: 'Depoimentos', icon: Star },
-          ...commonComponents
-        ];
-        
+        return [...brandElements, ...quizIntroElements];
       case 'quiz-question':
-        return [
-          { type: 'header', label: 'Cabeçalho', icon: Layout },
-          { type: 'progress-bar', label: 'Barra de Progresso', icon: BarChart3 },
-          { type: 'question-title', label: 'Pergunta', icon: MessageSquare },
-          { type: 'question-options', label: 'Opções de Resposta', icon: CheckCircle },
-          { type: 'navigation-buttons', label: 'Botões de Navegação', icon: MousePointer },
-          ...commonComponents
-        ];
-        
+        return [...brandElements, ...questionElements];
       case 'quiz-result':
-        return [
-          { type: 'header', label: 'Cabeçalho', icon: Layout },
-          { type: 'result-display', label: 'Exibição do Resultado', icon: Target },
-          { type: 'result-description', label: 'Descrição do Resultado', icon: Type },
-          { type: 'secondary-results', label: 'Resultados Secundários', icon: BarChart3 },
-          { type: 'offer-preview', label: 'Preview da Oferta', icon: Gift },
-          { type: 'cta-button', label: 'Botão de Ação', icon: MousePointer },
-          { type: 'testimonials', label: 'Depoimentos', icon: Star },
-          ...commonComponents
-        ];
-        
+        return [...brandElements, ...resultElements];
       case 'offer-page':
-        return [
-          { type: 'header', label: 'Cabeçalho', icon: Layout },
-          { type: 'offer-hero', label: 'Hero da Oferta', icon: ShoppingBag },
-          { type: 'pricing', label: 'Preços', icon: CreditCard },
-          { type: 'benefits-list', label: 'Lista de Benefícios', icon: CheckCircle },
-          { type: 'guarantee', label: 'Garantia', icon: Shield },
-          { type: 'testimonials', label: 'Depoimentos', icon: Star },
-          { type: 'urgency-timer', label: 'Timer de Urgência', icon: Timer },
-          { type: 'social-proof', label: 'Prova Social', icon: Users },
-          { type: 'bonus-section', label: 'Seção de Bônus', icon: Gift },
-          { type: 'purchase-button', label: 'Botão de Compra', icon: MousePointer },
-          ...commonComponents
-        ];
-        
+        return [...brandElements, ...offerElements];
       default:
-        return [
-          { type: 'header', label: 'Cabeçalho', icon: Layout },
-          { type: 'terms', label: 'Termos', icon: Type },
-          { type: 'marquee', label: 'Marquee', icon: BarChart3 },
-          ...commonComponents
-        ];
+        return [...brandElements, ...quizIntroElements, ...questionElements, ...resultElements, ...offerElements];
     }
   };
 
-  const components = getComponentsForStepType(activeStepType);
-
-  const getStepTypeLabel = (stepType?: StepType) => {
-    switch (stepType) {
-      case 'quiz-intro': return 'Capa do Quiz';
-      case 'quiz-question': return 'Questão';
-      case 'quiz-result': return 'Resultado';
-      case 'offer-page': return 'Página de Oferta';
-      default: return 'Geral';
-    }
-  };
+  const renderElementGroup = (title: string, elements: Array<{ type: string; label: string; icon: any }>) => (
+    <div className="space-y-3">
+      <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+        {title}
+      </h3>
+      <div className="grid gap-2">
+        {elements.map((element) => {
+          const Icon = element.icon;
+          return (
+            <Button
+              key={element.type}
+              variant="outline"
+              className="justify-start h-auto p-3 text-left hover:bg-[#FAF9F7] hover:border-[#B89B7A] transition-colors group"
+              onClick={() => onAddElement(element.type)}
+            >
+              <Icon className="h-4 w-4 mr-3 text-[#8F7A6A] group-hover:text-[#B89B7A] transition-colors" />
+              <span className="text-sm">{element.label}</span>
+            </Button>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
-    <div className="h-full border-r border-gray-200 bg-white">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900">Componentes</h2>
+    <div className="h-full bg-white border-r border-gray-200">
+      <div className="p-4 border-b">
+        <h2 className="font-semibold text-gray-900">Componentes</h2>
         {activeStepType && (
           <p className="text-sm text-gray-600 mt-1">
-            {getStepTypeLabel(activeStepType)}
+            {activeStepType === 'quiz-intro' && 'Página Inicial do Quiz'}
+            {activeStepType === 'quiz-question' && 'Página de Questão'}
+            {activeStepType === 'quiz-result' && 'Página de Resultado'}
+            {activeStepType === 'offer-page' && 'Página de Vendas'}
           </p>
         )}
       </div>
       
-      <ScrollArea className="h-[calc(100%-80px)]">
-        <div className="p-4 space-y-2">
-          {components.map((component) => {
-            const Icon = component.icon;
-            return (
-              <Button
-                key={component.type}
-                variant="outline"
-                className="w-full justify-start h-12 text-left"
-                onClick={() => onAddElement(component.type)}
-              >
-                <Icon className="mr-3 h-4 w-4 text-gray-500" />
-                <span className="text-sm">{component.label}</span>
-              </Button>
-            );
-          })}
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-6">
+          {activeStepType === 'quiz-intro' && (
+            <>
+              {renderElementGroup('Marca', brandElements)}
+              <Separator />
+              {renderElementGroup('Quiz Intro', quizIntroElements)}
+            </>
+          )}
+          
+          {activeStepType === 'quiz-question' && (
+            <>
+              {renderElementGroup('Marca', brandElements)}
+              <Separator />
+              {renderElementGroup('Questão', questionElements)}
+            </>
+          )}
+          
+          {activeStepType === 'quiz-result' && (
+            <>
+              {renderElementGroup('Marca', brandElements)}
+              <Separator />
+              {renderElementGroup('Resultado', resultElements)}
+            </>
+          )}
+          
+          {activeStepType === 'offer-page' && (
+            <>
+              {renderElementGroup('Marca', brandElements)}
+              <Separator />
+              {renderElementGroup('Oferta', offerElements)}
+            </>
+          )}
+          
+          {!activeStepType && (
+            <>
+              {renderElementGroup('Marca', brandElements)}
+              <Separator />
+              {renderElementGroup('Quiz Intro', quizIntroElements)}
+              <Separator />
+              {renderElementGroup('Questão', questionElements)}
+              <Separator />
+              {renderElementGroup('Resultado', resultElements)}
+              <Separator />
+              {renderElementGroup('Oferta', offerElements)}
+            </>
+          )}
         </div>
       </ScrollArea>
     </div>

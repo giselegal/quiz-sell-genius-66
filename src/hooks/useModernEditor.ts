@@ -65,65 +65,192 @@ export const useModernEditor = () => {
     };
 
     switch (type) {
-      case 'heading':
-      case 'quiz-title':
+      case 'brand-header':
+        return {
+          background: 'linear-gradient(to bottom, #ffffff, #f9fafb)',
+          padding: '2rem 1rem',
+          textAlign: 'center' as const,
+          width: '100%',
+        };
+      case 'brand-logo':
+        return {
+          width: '120px',
+          height: '50px',
+          margin: '0 auto 0.5rem auto',
+          display: 'block',
+        };
+      case 'brand-divider':
+        return {
+          height: '3px',
+          backgroundColor: '#B89B7A',
+          borderRadius: '9999px',
+          width: '300px',
+          maxWidth: '90%',
+          margin: '0 auto',
+        };
+      case 'quiz-hero-title':
         return {
           fontSize: '2rem',
-          fontWeight: 'bold',
+          fontWeight: '400',
           textAlign: 'center' as const,
-          color: '#1a1a1a',
-          marginBottom: '1rem',
-          ...baseStyles,
+          color: '#432818',
+          fontFamily: '"Playfair Display", serif',
+          lineHeight: '1.2',
+          marginBottom: '2rem',
+          padding: '0 1rem',
         };
-      case 'text':
-      case 'quiz-description':
-        return {
-          fontSize: '1rem',
-          lineHeight: '1.6',
-          color: '#4a4a4a',
-          textAlign: 'left' as const,
-          ...baseStyles,
-        };
-      case 'button':
-      case 'start-button':
-      case 'cta-button':
-      case 'purchase-button':
-        return {
-          backgroundColor: '#007bff',
-          color: 'white',
-          padding: '0.75rem 1.5rem',
-          borderRadius: '0.5rem',
-          border: 'none',
-          cursor: 'pointer',
-          fontSize: '1rem',
-          fontWeight: '600',
-          textAlign: 'center' as const,
-          display: 'inline-block',
-          ...baseStyles,
-        };
-      case 'image':
-      case 'logo':
+      case 'quiz-hero-image':
         return {
           width: '100%',
-          height: 'auto',
+          maxWidth: '300px',
+          aspectRatio: '1.47',
           borderRadius: '0.5rem',
-          ...baseStyles,
+          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+          margin: '1rem auto',
+          display: 'block',
+        };
+      case 'quiz-description':
+        return {
+          fontSize: '0.875rem',
+          lineHeight: '1.6',
+          color: '#6b7280',
+          textAlign: 'center' as const,
+          padding: '0 1rem',
+          marginBottom: '2rem',
+        };
+      case 'quiz-form':
+        return {
+          width: '100%',
+          maxWidth: '400px',
+          margin: '0 auto',
+          padding: '0 1rem',
+        };
+      case 'quiz-input':
+        return {
+          width: '100%',
+          padding: '0.625rem',
+          backgroundColor: '#FEFEFE',
+          borderRadius: '0.375rem',
+          border: '2px solid #B89B7A',
+          fontSize: '1rem',
+          marginBottom: '1.5rem',
+        };
+      case 'quiz-button':
+        return {
+          width: '100%',
+          padding: '0.75rem 1rem',
+          backgroundColor: '#B89B7A',
+          color: 'white',
+          borderRadius: '0.375rem',
+          border: 'none',
+          fontSize: '0.875rem',
+          fontWeight: '600',
+          cursor: 'pointer',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          transition: 'all 0.3s ease',
+        };
+      case 'question-header':
+        return {
+          backgroundColor: 'white',
+          borderBottom: '1px solid #e5e7eb',
+          padding: '1rem',
+          position: 'sticky',
+          top: '0',
+          zIndex: '10',
+        };
+      case 'progress-bar':
+        return {
+          width: '100%',
+          height: '8px',
+          backgroundColor: '#f3f4f6',
+          borderRadius: '9999px',
+          marginBottom: '2rem',
+        };
+      case 'progress-fill':
+        return {
+          height: '100%',
+          backgroundColor: '#B89B7A',
+          borderRadius: '9999px',
+          transition: 'width 0.3s ease',
         };
       case 'question-title':
         return {
           fontSize: '1.5rem',
           fontWeight: 'bold',
           textAlign: 'center' as const,
-          color: '#1a1a1a',
+          color: '#432818',
           marginBottom: '2rem',
-          ...baseStyles,
+          fontFamily: '"Playfair Display", serif',
         };
-      case 'question-options':
+      case 'question-options-grid':
         return {
           display: 'grid',
           gap: '1rem',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          ...baseStyles,
+          margin: '2rem 0',
+        };
+      case 'question-option-card':
+        return {
+          padding: '1.5rem',
+          border: '2px solid #e5e7eb',
+          borderRadius: '0.75rem',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          textAlign: 'center' as const,
+          backgroundColor: 'white',
+        };
+      case 'result-hero':
+        return {
+          background: 'linear-gradient(135deg, #B89B7A 0%, #8F7A6A 100%)',
+          color: 'white',
+          padding: '3rem 2rem',
+          textAlign: 'center' as const,
+          borderRadius: '1rem',
+          margin: '2rem auto',
+          maxWidth: '600px',
+        };
+      case 'result-title':
+        return {
+          fontSize: '2.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          fontFamily: '"Playfair Display", serif',
+        };
+      case 'result-subtitle':
+        return {
+          fontSize: '1.25rem',
+          opacity: '0.9',
+          marginBottom: '2rem',
+        };
+      case 'offer-section':
+        return {
+          backgroundColor: '#FAF9F7',
+          padding: '3rem 2rem',
+          borderRadius: '1rem',
+          margin: '2rem 0',
+          textAlign: 'center' as const,
+        };
+      case 'price-highlight':
+        return {
+          fontSize: '3rem',
+          fontWeight: 'bold',
+          color: '#16a34a',
+          marginBottom: '1rem',
+          fontFamily: '"Playfair Display", serif',
+        };
+      case 'cta-button':
+        return {
+          backgroundColor: '#B89B7A',
+          color: 'white',
+          padding: '1rem 2rem',
+          borderRadius: '0.5rem',
+          border: 'none',
+          fontSize: '1.125rem',
+          fontWeight: '600',
+          cursor: 'pointer',
+          boxShadow: '0 10px 25px rgba(184, 155, 122, 0.3)',
+          transition: 'all 0.3s ease',
+          transform: 'translateY(0)',
         };
       default:
         return {
@@ -135,64 +262,75 @@ export const useModernEditor = () => {
 
   const getDefaultContent = (type: string) => {
     switch (type) {
-      case 'heading':
-        return { text: 'Novo Título' };
-      case 'text':
-        return { text: 'Novo texto. Clique para editar.' };
-      case 'button':
-        return { text: 'Clique aqui', href: '#' };
-      case 'image':
+      case 'brand-header':
+        return { text: 'Header da Marca' };
+      case 'brand-logo':
         return { 
-          image: 'https://via.placeholder.com/400x300', 
-          alt: 'Imagem' 
+          image: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_120,h_50,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+          alt: 'Logo Gisele Galvão'
         };
-      case 'logo':
+      case 'brand-divider':
+        return { text: '' };
+      case 'quiz-hero-title':
         return { 
-          image: 'https://via.placeholder.com/200x100?text=LOGO', 
-          alt: 'Logo' 
+          text: 'Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.',
+          highlight: 'Chega'
         };
-      case 'quiz-title':
-        return { text: 'Descubra Seu Estilo Pessoal' };
+      case 'quiz-hero-image':
+        return { 
+          image: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_85,w_300,c_limit/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp',
+          alt: 'Descubra seu estilo predominante e transforme seu guarda-roupa'
+        };
       case 'quiz-description':
-        return { text: 'Responda algumas perguntas e descubra qual estilo combina mais com você!' };
-      case 'start-button':
-        return { text: 'Começar Quiz', href: '#quiz' };
+        return { 
+          text: 'Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.'
+        };
+      case 'quiz-form':
+        return { text: 'Formulário de entrada' };
+      case 'quiz-input':
+        return { 
+          placeholder: 'Digite seu nome',
+          label: 'NOME *',
+          required: true
+        };
+      case 'quiz-button':
+        return { 
+          text: 'Quero Descobrir meu Estilo Agora!',
+          disabled_text: 'Digite seu nome para continuar'
+        };
+      case 'question-header':
+        return { text: 'Cabeçalho da Questão' };
+      case 'progress-bar':
+        return { progress: 40 };
       case 'question-title':
         return { text: 'Qual dessas opções mais combina com você?' };
-      case 'question-options':
+      case 'question-options-grid':
+        return { text: 'Grid de Opções' };
+      case 'question-option-card':
         return { 
-          options: [
-            { text: 'Opção 1', image: 'https://via.placeholder.com/150x150?text=1', value: 'option1' },
-            { text: 'Opção 2', image: 'https://via.placeholder.com/150x150?text=2', value: 'option2' },
-            { text: 'Opção 3', image: 'https://via.placeholder.com/150x150?text=3', value: 'option3' },
-            { text: 'Opção 4', image: 'https://via.placeholder.com/150x150?text=4', value: 'option4' },
-          ]
+          text: 'Opção de Resposta',
+          image: 'https://via.placeholder.com/150x150?text=Opção',
+          description: 'Descrição da opção'
         };
-      case 'result-display':
-        return { text: 'Seu Estilo: Elegante', subtitle: 'Você tem um gosto refinado e sofisticado' };
-      case 'offer-preview':
-        return { text: 'Transforme seu guarda-roupa', subtitle: 'Consultoria personalizada baseada no seu estilo' };
+      case 'result-hero':
+        return { text: 'Seção Hero do Resultado' };
+      case 'result-title':
+        return { text: 'Seu Estilo: Elegante' };
+      case 'result-subtitle':
+        return { text: 'Você tem um gosto refinado e sofisticado que se reflete em suas escolhas de moda.' };
+      case 'offer-section':
+        return { text: 'Seção de Oferta' };
+      case 'price-highlight':
+        return { 
+          text: 'R$ 247',
+          original_price: 'R$ 497',
+          discount: '50% OFF'
+        };
       case 'cta-button':
-        return { text: 'Ver Oferta Especial', href: '#offer' };
-      case 'offer-hero':
-        return { text: 'Oferta Especial para o Seu Estilo', subtitle: 'Consultoria personalizada com 50% de desconto' };
-      case 'pricing':
         return { 
-          text: 'De R$ 497 por apenas R$ 247',
-          subtitle: 'Oferta válida por tempo limitado'
+          text: 'Garantir Minha Vaga Agora',
+          href: '#comprar'
         };
-      case 'benefits-list':
-        return { 
-          text: 'O que você vai receber:',
-          options: [
-            { text: '✓ Análise completa do seu estilo', value: 'analise' },
-            { text: '✓ Consultoria personalizada', value: 'consultoria' },
-            { text: '✓ Guia de compras exclusivo', value: 'guia' },
-            { text: '✓ Suporte por 30 dias', value: 'suporte' },
-          ]
-        };
-      case 'purchase-button':
-        return { text: 'Garantir Minha Vaga Agora', href: '#comprar' };
       default:
         return { text: 'Conteúdo' };
     }
@@ -226,7 +364,6 @@ export const useModernEditor = () => {
     const newElements = [...editorState.elements];
     if (index !== undefined) {
       newElements.splice(index, 0, newElement);
-      // Reorder elements after insertion
       newElements.forEach((el, i) => el.order = i);
     } else {
       newElements.push(newElement);
@@ -244,42 +381,48 @@ export const useModernEditor = () => {
     switch (stepType) {
       case 'quiz-intro':
         templateElements = [
-          { type: 'header', order: 0 },
-          { type: 'logo', order: 1 },
-          { type: 'quiz-title', order: 2 },
-          { type: 'quiz-description', order: 3 },
-          { type: 'image', order: 4 },
-          { type: 'start-button', order: 5 },
+          { type: 'brand-header', order: 0 },
+          { type: 'brand-logo', order: 1 },
+          { type: 'brand-divider', order: 2 },
+          { type: 'quiz-hero-title', order: 3 },
+          { type: 'quiz-hero-image', order: 4 },
+          { type: 'quiz-description', order: 5 },
+          { type: 'quiz-form', order: 6 },
+          { type: 'quiz-input', order: 7 },
+          { type: 'quiz-button', order: 8 },
         ];
         break;
       case 'quiz-question':
         templateElements = [
-          { type: 'header', order: 0 },
+          { type: 'question-header', order: 0 },
           { type: 'progress-bar', order: 1 },
           { type: 'question-title', order: 2 },
-          { type: 'question-options', order: 3 },
-          { type: 'navigation-buttons', order: 4 },
+          { type: 'question-options-grid', order: 3 },
+          { type: 'question-option-card', order: 4 },
+          { type: 'question-option-card', order: 5 },
+          { type: 'question-option-card', order: 6 },
+          { type: 'question-option-card', order: 7 },
         ];
         break;
       case 'quiz-result':
         templateElements = [
-          { type: 'header', order: 0 },
-          { type: 'result-display', order: 1 },
-          { type: 'result-description', order: 2 },
-          { type: 'image', order: 3 },
-          { type: 'offer-preview', order: 4 },
-          { type: 'cta-button', order: 5 },
+          { type: 'brand-header', order: 0 },
+          { type: 'result-hero', order: 1 },
+          { type: 'result-title', order: 2 },
+          { type: 'result-subtitle', order: 3 },
+          { type: 'quiz-hero-image', order: 4 },
+          { type: 'offer-section', order: 5 },
+          { type: 'cta-button', order: 6 },
         ];
         break;
       case 'offer-page':
         templateElements = [
-          { type: 'header', order: 0 },
-          { type: 'offer-hero', order: 1 },
-          { type: 'pricing', order: 2 },
-          { type: 'benefits-list', order: 3 },
-          { type: 'testimonials', order: 4 },
-          { type: 'guarantee', order: 5 },
-          { type: 'purchase-button', order: 6 },
+          { type: 'brand-header', order: 0 },
+          { type: 'quiz-hero-title', order: 1 },
+          { type: 'price-highlight', order: 2 },
+          { type: 'offer-section', order: 3 },
+          { type: 'quiz-description', order: 4 },
+          { type: 'cta-button', order: 5 },
         ];
         break;
     }
@@ -291,6 +434,8 @@ export const useModernEditor = () => {
       style: getDefaultStyle(template.type!),
       order: template.order!,
       stepId,
+      visible: true,
+      locked: false,
     }));
 
     const allElements = [...editorState.elements, ...newElements];
@@ -318,7 +463,6 @@ export const useModernEditor = () => {
     const insertIndex = newElements.findIndex(el => el.id === id) + 1;
     newElements.splice(insertIndex, 0, newElement);
     
-    // Reorder elements after insertion
     newElements.forEach((el, i) => el.order = i);
     
     saveState(newElements);
@@ -327,7 +471,6 @@ export const useModernEditor = () => {
 
   const deleteElement = useCallback((id: string) => {
     const newElements = editorState.elements.filter(el => el.id !== id);
-    // Reorder elements after deletion
     newElements.forEach((el, i) => el.order = i);
     
     saveState(newElements);
@@ -376,13 +519,11 @@ export const useModernEditor = () => {
   }, []);
 
   const save = useCallback(async () => {
-    // Simulate save operation
     const data = {
       elements: editorState.elements,
       timestamp: new Date().toISOString(),
     };
     
-    // Here you would typically send data to your backend
     console.log('Saving editor data:', data);
     
     return data;
