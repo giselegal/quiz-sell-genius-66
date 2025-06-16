@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ModernSidebar } from './sidebar/ModernSidebar';
 import { ModernCanvas } from './canvas/ModernCanvas';
@@ -97,9 +96,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     try {
       const data = await save();
       
-      // Include steps data
+      // Include steps data - fix spread operator error
       const fullData = {
-        ...data,
+        elements: data.elements || [],
+        timestamp: data.timestamp || new Date().toISOString(),
         steps,
         activeStepId,
         funnelId

@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 
 export interface EditorElement {
@@ -6,6 +5,8 @@ export interface EditorElement {
   type: string;
   stepId: string;
   order: number;
+  visible: boolean;
+  locked: boolean;
   content: {
     text?: string;
     src?: string;
@@ -46,6 +47,8 @@ export const useModernEditor = () => {
             type: 'quiz-title',
             stepId,
             order: 1,
+            visible: true,
+            locked: false,
             content: { text: 'Descubra Seu Estilo Pessoal' },
             style: { textAlign: 'center', fontSize: '3rem', fontWeight: 'bold' }
           },
@@ -54,6 +57,8 @@ export const useModernEditor = () => {
             type: 'quiz-description',
             stepId,
             order: 2,
+            visible: true,
+            locked: false,
             content: { text: 'Responda algumas perguntas e descubra qual estilo combina mais com você.' },
             style: { textAlign: 'center', fontSize: '1.125rem' }
           },
@@ -62,6 +67,8 @@ export const useModernEditor = () => {
             type: 'start-button',
             stepId,
             order: 3,
+            visible: true,
+            locked: false,
             content: { text: 'Começar Quiz' },
             style: { textAlign: 'center' }
           }
@@ -74,6 +81,8 @@ export const useModernEditor = () => {
             type: 'progress-bar',
             stepId,
             order: 1,
+            visible: true,
+            locked: false,
             content: { progress: 25 },
             style: {}
           },
@@ -82,6 +91,8 @@ export const useModernEditor = () => {
             type: 'question-title',
             stepId,
             order: 2,
+            visible: true,
+            locked: false,
             content: { text: 'Qual dessas opções mais combina com você?' },
             style: { textAlign: 'center', fontSize: '1.25rem', fontWeight: '600' }
           },
@@ -90,6 +101,8 @@ export const useModernEditor = () => {
             type: 'question-options',
             stepId,
             order: 3,
+            visible: true,
+            locked: false,
             content: { options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'] },
             style: {}
           }
@@ -102,6 +115,8 @@ export const useModernEditor = () => {
             type: 'heading',
             stepId,
             order: 1,
+            visible: true,
+            locked: false,
             content: { text: 'Seu Resultado' },
             style: { textAlign: 'center', fontSize: '2rem', fontWeight: 'bold' }
           },
@@ -110,6 +125,8 @@ export const useModernEditor = () => {
             type: 'result-display',
             stepId,
             order: 2,
+            visible: true,
+            locked: false,
             content: { text: 'Seu estilo é: Elegante' },
             style: { textAlign: 'center', fontSize: '1.5rem' }
           },
@@ -118,6 +135,8 @@ export const useModernEditor = () => {
             type: 'cta-button',
             stepId,
             order: 3,
+            visible: true,
+            locked: false,
             content: { text: 'Ver Oferta Especial' },
             style: { textAlign: 'center' }
           }
@@ -130,6 +149,8 @@ export const useModernEditor = () => {
             type: 'offer-hero',
             stepId,
             order: 1,
+            visible: true,
+            locked: false,
             content: { text: 'Oferta Especial para Você!' },
             style: { textAlign: 'center', fontSize: '2.5rem', fontWeight: 'bold' }
           },
@@ -138,6 +159,8 @@ export const useModernEditor = () => {
             type: 'pricing',
             stepId,
             order: 2,
+            visible: true,
+            locked: false,
             content: { text: 'De R$ 297 por apenas R$ 97' },
             style: { textAlign: 'center', fontSize: '1.5rem' }
           },
@@ -146,6 +169,8 @@ export const useModernEditor = () => {
             type: 'purchase-button',
             stepId,
             order: 3,
+            visible: true,
+            locked: false,
             content: { text: 'Comprar Agora' },
             style: { textAlign: 'center' }
           }
@@ -162,6 +187,8 @@ export const useModernEditor = () => {
       type,
       stepId: stepId || 'default',
       order: position !== undefined ? position : elements.length,
+      visible: true,
+      locked: false,
       content: {
         text: type === 'heading' ? 'Novo Título' : 
               type === 'text' ? 'Novo texto' :
