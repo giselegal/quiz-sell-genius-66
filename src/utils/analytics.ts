@@ -3,8 +3,6 @@
  * Utilitários para tracking e analytics
  */
 
-// Remove duplicate window declarations - use the existing ones from types/window.d.ts
-
 /**
  * Registra clique em botão
  */
