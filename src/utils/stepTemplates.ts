@@ -1,41 +1,36 @@
 import { EditorElement } from '@/hooks/useModernEditor';
-import { quizQuestions } from '@/data/quizQuestions';
-import { strategicQuestions } from '@/data/strategicQuestions';
-import { extractQuestionIdFromStepId } from '@/utils/idGenerator';
+import { getQuestionByStepId } from '@/utils/supabaseQuestionMapper';
 
 export interface StepTemplate {
   components: Partial<EditorElement>[];
 }
 
+// Cache para questões carregadas do Supabase
+let questionsCache: any[] = [];
+let strategicQuestionsCache: any[] = [];
+
+// Função para definir cache de questões
+export const setQuestionsCache = (questions: any[], strategicQuestions: any[]) => {
+  questionsCache = questions;
+  strategicQuestionsCache = strategicQuestions;
+  console.log(`📋 Questions cache updated: ${questions.length} regular, ${strategicQuestions.length} strategic`);
+};
+
 // Função para obter dados da questão de forma robusta
 const getQuestionDataById = (stepId: string, stepType: string) => {
-  const questionId = extractQuestionIdFromStepId(stepId);
+  console.log(`🎯 Getting question data for step ${stepId} of type ${stepType}`);
   
-  if (stepType === 'quiz-question' && questionId) {
-    const question = quizQuestions.find(q => q.id === questionId);
+  // Usar cache se disponível
+  if (questionsCache.length > 0 || strategicQuestionsCache.length > 0) {
+    const question = getQuestionByStepId(stepId, questionsCache, strategicQuestionsCache);
     if (question) {
-      console.log(`✅ Found quiz question data for ID ${questionId}:`, question.title);
+      console.log(`✅ Found cached question data for ${stepId}:`, question.title);
       return question;
-    } else {
-      console.warn(`⚠️ Quiz question not found for ID ${questionId}`);
-      // Fallback para primeira questão se não encontrar
-      return quizQuestions[0];
-    }
-  } 
-  
-  if (stepType === 'strategic-question' && questionId) {
-    const question = strategicQuestions.find(q => q.id === questionId);
-    if (question) {
-      console.log(`✅ Found strategic question data for ID ${questionId}:`, question.title);
-      return question;
-    } else {
-      console.warn(`⚠️ Strategic question not found for ID ${questionId}`);
-      // Fallback para primeira questão estratégica se não encontrar
-      return strategicQuestions[0];
     }
   }
   
-  return undefined;
+  console.warn(`⚠️ No cached question data found for step ${stepId}`);
+  return null;
 };
 
 export const createQuizIntroTemplate = (stepId: string): StepTemplate => {
@@ -104,10 +99,34 @@ export const createQuizQuestionTemplate = (stepId: string, questionData?: any): 
   
   if (!question) {
     console.error(`❌ No question data available for quiz question step ${stepId}`);
-    return { components: [] };
+    return { 
+      components: [
+        {
+          type: 'question-header',
+          content: {
+            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
+            showProgress: true,
+            currentStep: 1,
+            totalSteps: 10
+          },
+          order: 0,
+          stepId
+        },
+        {
+          type: 'question-title',
+          content: {
+            title: 'Carregando questão...',
+            questionNumber: 1
+          },
+          order: 1,
+          stepId
+        }
+      ]
+    };
   }
   
-  const questionIndex = parseInt(question.id) - 1;
+  const questionIndex = parseInt(question.id) - 1 || 0;
+  const totalQuestions = questionsCache.length || 10;
   
   return {
     components: [
@@ -117,7 +136,7 @@ export const createQuizQuestionTemplate = (stepId: string, questionData?: any): 
           logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
           showProgress: true,
           currentStep: questionIndex + 1,
-          totalSteps: quizQuestions.length
+          totalSteps: totalQuestions
         },
         order: 0,
         stepId
@@ -126,8 +145,8 @@ export const createQuizQuestionTemplate = (stepId: string, questionData?: any): 
         type: 'progress-bar',
         content: {
           current: questionIndex + 1,
-          total: quizQuestions.length,
-          percentage: ((questionIndex + 1) / quizQuestions.length) * 100
+          total: totalQuestions,
+          percentage: ((questionIndex + 1) / totalQuestions) * 100
         },
         order: 1,
         stepId
@@ -172,11 +191,40 @@ export const createStrategicQuestionTemplate = (stepId: string, questionData?: a
   
   if (!question) {
     console.error(`❌ No question data available for strategic question step ${stepId}`);
-    return { components: [] };
+    return { 
+      components: [
+        {
+          type: 'question-header',
+          content: {
+            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
+            showProgress: true,
+            currentStep: 11,
+            totalSteps: 17
+          },
+          order: 0,
+          stepId
+        },
+        {
+          type: 'question-title',
+          content: {
+            title: 'Carregando questão estratégica...',
+            questionNumber: 11,
+            isStrategic: true
+          },
+          order: 1,
+          stepId
+        }
+      ]
+    };
   }
   
+  // Para questões estratégicas, calcular posição no fluxo total
   const questionIdParts = question.id.split('-');
   const questionIndex = questionIdParts.length > 1 ? parseInt(questionIdParts[1]) - 1 : 0;
+  const totalRegularQuestions = questionsCache.length || 10;
+  const totalStrategicQuestions = strategicQuestionsCache.length || 7;
+  const currentStep = totalRegularQuestions + questionIndex + 1;
+  const totalSteps = totalRegularQuestions + totalStrategicQuestions;
   
   return {
     components: [
@@ -185,8 +233,8 @@ export const createStrategicQuestionTemplate = (stepId: string, questionData?: a
         content: {
           logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
           showProgress: true,
-          currentStep: quizQuestions.length + questionIndex + 1,
-          totalSteps: quizQuestions.length + strategicQuestions.length
+          currentStep,
+          totalSteps
         },
         order: 0,
         stepId
@@ -194,9 +242,9 @@ export const createStrategicQuestionTemplate = (stepId: string, questionData?: a
       {
         type: 'progress-bar',
         content: {
-          current: quizQuestions.length + questionIndex + 1,
-          total: quizQuestions.length + strategicQuestions.length,
-          percentage: ((quizQuestions.length + questionIndex + 1) / (quizQuestions.length + strategicQuestions.length)) * 100
+          current: currentStep,
+          total: totalSteps,
+          percentage: (currentStep / totalSteps) * 100
         },
         order: 1,
         stepId
@@ -205,7 +253,7 @@ export const createStrategicQuestionTemplate = (stepId: string, questionData?: a
         type: 'question-title',
         content: {
           title: question.title,
-          questionNumber: quizQuestions.length + questionIndex + 1,
+          questionNumber: currentStep,
           isStrategic: true
         },
         order: 2,
