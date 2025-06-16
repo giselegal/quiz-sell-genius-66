@@ -19,7 +19,7 @@ export const EditableHeading: React.FC<EditableHeadingProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(content.text || 'Título');
-  const inputRef = useRef<HTMLElement>(null);
+  const inputRef = useRef<HTMLHeadingElement>(null);
 
   const level = content.level || 1;
 
@@ -70,7 +70,6 @@ export const EditableHeading: React.FC<EditableHeadingProps> = ({
   };
 
   const commonProps = {
-    ref: inputRef,
     className: `
       min-w-full text-center transition-all duration-200
       ${getHeadingClasses()}
@@ -83,25 +82,25 @@ export const EditableHeading: React.FC<EditableHeadingProps> = ({
     onDoubleClick: handleDoubleClick,
     onBlur: handleBlur,
     onKeyDown: handleKeyDown,
-    onInput: (e: React.FormEvent<HTMLElement>) => setText(e.currentTarget.textContent || ''),
+    onInput: (e: React.FormEvent<HTMLHeadingElement>) => setText(e.currentTarget.textContent || ''),
     children: text
   };
 
   // Renderizar o heading correto baseado no level
   switch (level) {
     case 1:
-      return <h1 {...commonProps} />;
+      return <h1 ref={inputRef} {...commonProps} />;
     case 2:
-      return <h2 {...commonProps} />;
+      return <h2 ref={inputRef} {...commonProps} />;
     case 3:
-      return <h3 {...commonProps} />;
+      return <h3 ref={inputRef} {...commonProps} />;
     case 4:
-      return <h4 {...commonProps} />;
+      return <h4 ref={inputRef} {...commonProps} />;
     case 5:
-      return <h5 {...commonProps} />;
+      return <h5 ref={inputRef} {...commonProps} />;
     case 6:
-      return <h6 {...commonProps} />;
+      return <h6 ref={inputRef} {...commonProps} />;
     default:
-      return <h1 {...commonProps} />;
+      return <h1 ref={inputRef} {...commonProps} />;
   }
 };

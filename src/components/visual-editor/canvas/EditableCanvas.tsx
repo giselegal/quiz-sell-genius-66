@@ -5,6 +5,8 @@ import { VerticalCanvasHeader } from './VerticalCanvasHeader';
 import { VerticalCanvasItem } from './VerticalCanvasItem';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDrop } from 'react-dnd';
 
 interface CanvasElement {
@@ -25,7 +27,7 @@ interface EditableCanvasProps {
   onElementDelete: (id: string) => void;
 }
 
-export const EditableCanvas: React.FC<EditableCanvasProps> = ({
+const CanvasContent: React.FC<EditableCanvasProps> = ({
   elements,
   selectedElementId,
   isPreviewMode,
@@ -113,5 +115,13 @@ export const EditableCanvas: React.FC<EditableCanvasProps> = ({
         </div>
       </ScrollArea>
     </div>
+  );
+};
+
+export const EditableCanvas: React.FC<EditableCanvasProps> = (props) => {
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <CanvasContent {...props} />
+    </DndProvider>
   );
 };
