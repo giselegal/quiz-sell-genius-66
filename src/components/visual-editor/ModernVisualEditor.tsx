@@ -17,7 +17,7 @@ import {
   Smartphone
 } from 'lucide-react';
 
-interface Stage {
+interface EditorStage {
   id: string;
   name: string;
   type: 'intro' | 'quiz' | 'transition' | 'result' | 'offer';
@@ -40,7 +40,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   onSave
 }) => {
   const [currentStage, setCurrentStage] = useState<string>('intro');
-  const [stages] = useState<Stage[]>([
+  const [stages] = useState<EditorStage[]>([
     { id: 'intro', name: 'Intro', type: 'intro' },
     { id: 'quiz', name: 'Quiz', type: 'quiz' },
     { id: 'transition', name: 'Transição', type: 'transition' },

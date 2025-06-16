@@ -19,10 +19,9 @@ export const EditableHeading: React.FC<EditableHeadingProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(content.text || 'Título');
-  const inputRef = useRef<HTMLHeadingElement>(null);
+  const inputRef = useRef<HTMLElement>(null);
 
   const level = content.level || 1;
-  const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -70,24 +69,39 @@ export const EditableHeading: React.FC<EditableHeadingProps> = ({
     }
   };
 
-  return (
-    <HeadingTag
-      ref={inputRef}
-      className={`
-        min-w-full text-center transition-all duration-200
-        ${getHeadingClasses()}
-        ${!isPreviewMode && !isEditing ? 'hover:bg-gray-100 cursor-pointer' : ''}
-        ${isSelected && !isPreviewMode ? 'ring-2 ring-blue-500 ring-offset-2' : ''}
-        ${isEditing ? 'outline-none bg-white' : ''}
-      `}
-      contentEditable={isEditing}
-      suppressContentEditableWarning={true}
-      onDoubleClick={handleDoubleClick}
-      onBlur={handleBlur}
-      onKeyDown={handleKeyDown}
-      onInput={(e) => setText(e.currentTarget.textContent || '')}
-    >
-      {text}
-    </HeadingTag>
-  );
+  const commonProps = {
+    ref: inputRef,
+    className: `
+      min-w-full text-center transition-all duration-200
+      ${getHeadingClasses()}
+      ${!isPreviewMode && !isEditing ? 'hover:bg-gray-100 cursor-pointer' : ''}
+      ${isSelected && !isPreviewMode ? 'ring-2 ring-blue-500 ring-offset-2' : ''}
+      ${isEditing ? 'outline-none bg-white' : ''}
+    `,
+    contentEditable: isEditing,
+    suppressContentEditableWarning: true,
+    onDoubleClick: handleDoubleClick,
+    onBlur: handleBlur,
+    onKeyDown: handleKeyDown,
+    onInput: (e: React.FormEvent<HTMLElement>) => setText(e.currentTarget.textContent || ''),
+    children: text
+  };
+
+  // Renderizar o heading correto baseado no level
+  switch (level) {
+    case 1:
+      return <h1 {...commonProps} />;
+    case 2:
+      return <h2 {...commonProps} />;
+    case 3:
+      return <h3 {...commonProps} />;
+    case 4:
+      return <h4 {...commonProps} />;
+    case 5:
+      return <h5 {...commonProps} />;
+    case 6:
+      return <h6 {...commonProps} />;
+    default:
+      return <h1 {...commonProps} />;
+  }
 };
