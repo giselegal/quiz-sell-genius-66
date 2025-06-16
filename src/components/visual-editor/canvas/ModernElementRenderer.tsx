@@ -46,7 +46,7 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
   }, [element.content, onUpdate]);
 
   const handleDoubleClick = useCallback(() => {
-    if (!isPreviewMode && ['text', 'heading', 'button'].includes(element.type)) {
+    if (!isPreviewMode && ['text', 'heading', 'button', 'terms'].includes(element.type)) {
       setIsEditing(true);
     }
   }, [isPreviewMode, element.type]);
@@ -83,6 +83,24 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
     };
 
     switch (element.type) {
+      case 'terms':
+        return (
+          <p
+            style={commonStyle}
+            className="w-full text-xs opacity-75 text-center max-w-sm mx-auto my-2"
+            contentEditable={!isPreviewMode && isEditing}
+            suppressContentEditableWarning={true}
+            onBlur={(e) => {
+              const newText = e.currentTarget.innerHTML;
+              handleContentEdit(newText, 'html');
+            }}
+            onDoubleClick={handleDoubleClick}
+            dangerouslySetInnerHTML={{
+              __html: element.content.html || 'Ao clicar em alguma das opções, você concorda com os <b>Termos de utilização e serviço</b>, <b>Política de privacidade</b>, <b>Política de subscrição</b> e <b>Política de cookies</b>'
+            }}
+          />
+        );
+
       case 'quiz-header':
         return (
           <div 
