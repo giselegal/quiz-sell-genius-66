@@ -1,192 +1,37 @@
-import React, { useState, useCallback } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { ComponentsPalette } from './sidebar/ComponentsPalette';
-import { VisualEditorCanvas } from './canvas/VisualEditorCanvas';
-import { StepsPanel } from './steps/StepsPanel';
-import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
+
+import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Play, Save, Eye, EyeOff, Monitor, Tablet, Smartphone } from 'lucide-react';
-import type { VisualElement, VisualStage, BlockType } from '@/types/visualEditor';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { StepsPanel } from './steps/StepsPanel';
+import { ComponentsPalette } from './sidebar/ComponentsPalette';
+import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
+import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
+import { EditableCanvas } from './canvas/EditableCanvas';
+import { useSupabaseQuestions } from '@/hooks/useSupabaseQuestions';
+import { 
+  Eye, 
+  Save, 
+  Monitor, 
+  Tablet, 
+  Smartphone
+} from 'lucide-react';
 
-// Mock data with proper typing
-const mockElements: VisualElement[] = [
-  {
-    id: 'element-1',
-    type: 'headline',
-    stageId: 'stage-intro',
-    order: 0,
-    content: {
-      text: 'Descubra Seu Estilo Pessoal',
-      level: 'h1'
-    },
-    style: {
-      fontSize: '2.5rem',
-      fontWeight: 'bold',
-      textAlign: 'center' as const,
-      color: '#1a202c'
-    },
-    visible: true,
-    locked: false
-  },
-  {
-    id: 'element-2',
-    type: 'text',
-    stageId: 'stage-intro',
-    order: 1,
-    content: {
-      text: 'Responda algumas perguntas simples e descubra qual é o seu estilo predominante.'
-    },
-    style: {
-      fontSize: '1.125rem',
-      textAlign: 'center' as const,
-      color: '#4a5568'
-    },
-    visible: true,
-    locked: false
-  },
-  {
-    id: 'element-3',
-    type: 'button',
-    stageId: 'stage-intro',
-    order: 2,
-    content: {
-      text: 'Começar Quiz'
-    },
-    style: {
-      backgroundColor: '#3182ce',
-      color: '#ffffff',
-      padding: '12px 24px',
-      textAlign: 'center' as const
-    },
-    visible: true,
-    locked: false
-  },
-  {
-    id: 'element-4',
-    type: 'question-title',
-    stageId: 'stage-question-1',
-    order: 0,
-    content: {
-      text: 'Qual dessas opções mais combina com você?'
-    },
-    style: {
-      fontSize: '1.875rem',
-      fontWeight: 'semibold',
-      textAlign: 'center' as const,
-      color: '#1a202c'
-    },
-    visible: true,
-    locked: false
-  },
-  {
-    id: 'element-5',
-    type: 'question-options',
-    stageId: 'stage-question-1',
-    order: 1,
-    content: {
-      options: [
-        {
-          id: 'opt-1',
-          text: 'Gosto de roupas clássicas e atemporais',
-          imageUrl: 'https://via.placeholder.com/300x200',
-          styleCategory: 'classic',
-          points: 10
-        },
-        {
-          id: 'opt-2',
-          text: 'Prefiro looks modernos e tendência',
-          imageUrl: 'https://via.placeholder.com/300x200',
-          styleCategory: 'modern',
-          points: 10
-        },
-        {
-          id: 'opt-3',
-          text: 'Adoro um estilo mais despojado',
-          imageUrl: 'https://via.placeholder.com/300x200',
-          styleCategory: 'casual',
-          points: 10
-        },
-        {
-          id: 'opt-4',
-          text: 'Gosto de ousar com looks únicos',
-          imageUrl: 'https://via.placeholder.com/300x200',
-          styleCategory: 'bold',
-          points: 10
-        }
-      ],
-      multiSelect: false
-    },
-    style: {
-      padding: '20px'
-    },
-    visible: true,
-    locked: false
-  }
-];
+interface EditorStage {
+  id: string;
+  name: string;
+  type: 'intro' | 'quiz' | 'transition' | 'result' | 'offer' | 'strategic';
+  questionData?: any;
+  order?: number;
+}
 
-const mockStages: VisualStage[] = [
-  {
-    id: 'stage-intro',
-    title: 'Introdução',
-    order: 0,
-    type: 'intro',
-    settings: {
-      showHeader: true,
-      showProgress: false,
-      allowBack: false,
-      backgroundColor: '#ffffff'
-    }
-  },
-  {
-    id: 'stage-question-1',
-    title: 'Questão 1',
-    order: 1,
-    type: 'quiz',
-    settings: {
-      showHeader: true,
-      showProgress: true,
-      allowBack: true,
-      backgroundColor: '#ffffff'
-    }
-  },
-  {
-    id: 'stage-question-2',
-    title: 'Questão 2',
-    order: 2,
-    type: 'quiz',
-    settings: {
-      showHeader: true,
-      showProgress: true,
-      allowBack: true,
-      backgroundColor: '#ffffff'
-    }
-  },
-  {
-    id: 'stage-result',
-    title: 'Resultado',
-    order: 3,
-    type: 'result',
-    settings: {
-      showHeader: false,
-      showProgress: false,
-      allowBack: false,
-      backgroundColor: '#f7fafc'
-    }
-  },
-  {
-    id: 'stage-offer',
-    title: 'Oferta',
-    order: 4,
-    type: 'offer',
-    settings: {
-      showHeader: false,
-      showProgress: false,
-      allowBack: true,
-      backgroundColor: '#ffffff'
-    }
-  }
-];
+interface CanvasElement {
+  id: string;
+  type: 'headline' | 'text' | 'image' | 'form' | 'button' | 'question-title' | 'question-options';
+  content: any;
+  order: number;
+}
 
 interface ModernVisualEditorProps {
   funnelId: string;
@@ -197,246 +42,406 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave
 }) => {
-  const [editorState, setEditorState] = useState({
-    elements: mockElements,
-    stages: mockStages,
-    activeStageId: 'stage-intro',
-    selectedElementId: null,
-    isPreviewMode: false,
-    viewportMode: 'desktop' as 'desktop' | 'tablet' | 'mobile',
-    settings: {
-      showGrid: false,
-      snapToGrid: true,
-      gridSize: 8,
-      showRulers: false,
-      showBoundingBoxes: false,
-      autoSave: true,
-      autoSaveInterval: 30000
-    }
-  });
+  const { questions, strategicQuestions, loading, error } = useSupabaseQuestions();
+  const [stages, setStages] = useState<EditorStage[]>([]);
+  const [currentStage, setCurrentStage] = useState<string>('intro');
+  const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
+  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  
+  // Canvas elements state
+  const [canvasElements, setCanvasElements] = useState<CanvasElement[]>([]);
+  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
 
-  const handleElementAdd = useCallback((type: BlockType, position?: number) => {
-    const newId = `element-${Date.now()}`;
-    const stageElements = editorState.elements.filter(el => el.stageId === editorState.activeStageId);
-    const order = position !== undefined ? position : stageElements.length;
+  // Generate stages from Supabase data
+  useEffect(() => {
+    if (!loading && (questions.length > 0 || strategicQuestions.length > 0)) {
+      const newStages: EditorStage[] = [];
 
-    const getDefaultContent = (elementType: BlockType) => {
-      switch (elementType) {
-        case 'headline':
-          return { text: 'Novo Título', level: 'h2' };
-        case 'text':
-          return { text: 'Novo texto...' };
-        case 'button':
-          return { text: 'Clique aqui' };
-        case 'image':
-          return { src: 'https://via.placeholder.com/400x300', alt: 'Nova imagem' };
-        case 'question-title':
-          return { text: 'Nova pergunta?' };
-        case 'question-options':
-          return {
-            options: [
-              { id: 'opt-1', text: 'Opção 1', styleCategory: 'default', points: 5 },
-              { id: 'opt-2', text: 'Opção 2', styleCategory: 'default', points: 5 }
-            ],
-            multiSelect: false
-          };
-        default:
-          return {};
-      }
-    };
-
-    const getDefaultStyle = (elementType: BlockType) => {
-      switch (elementType) {
-        case 'headline':
-          return { fontSize: '1.875rem', fontWeight: 'bold', textAlign: 'center' as const };
-        case 'text':
-          return { fontSize: '1rem', textAlign: 'left' as const };
-        case 'button':
-          return { backgroundColor: '#3182ce', color: '#ffffff', padding: '12px 24px', textAlign: 'center' as const };
-        default:
-          return {};
-      }
-    };
-
-    const newElement: VisualElement = {
-      id: newId,
-      type,
-      stageId: editorState.activeStageId!,
-      order,
-      content: getDefaultContent(type),
-      style: getDefaultStyle(type),
-      visible: true,
-      locked: false
-    };
-
-    setEditorState(prev => ({
-      ...prev,
-      elements: [...prev.elements, newElement],
-      selectedElementId: newId
-    }));
-  }, [editorState.activeStageId, editorState.elements]);
-
-  const handleElementUpdate = useCallback((elementId: string, updates: any) => {
-    setEditorState(prev => ({
-      ...prev,
-      elements: prev.elements.map(el => 
-        el.id === elementId ? { ...el, ...updates } : el
-      )
-    }));
-  }, []);
-
-  const handleElementDelete = useCallback((elementId: string) => {
-    setEditorState(prev => ({
-      ...prev,
-      elements: prev.elements.filter(el => el.id !== elementId),
-      selectedElementId: prev.selectedElementId === elementId ? null : prev.selectedElementId
-    }));
-  }, []);
-
-  const handleElementMove = useCallback((elementId: string, direction: 'up' | 'down') => {
-    setEditorState(prev => {
-      const elements = [...prev.elements];
-      const stageElements = elements
-        .filter(el => el.stageId === prev.activeStageId)
-        .sort((a, b) => a.order - b.order);
-      
-      const elementIndex = stageElements.findIndex(el => el.id === elementId);
-      if (elementIndex === -1) return prev;
-
-      const newIndex = direction === 'up' ? elementIndex - 1 : elementIndex + 1;
-      if (newIndex < 0 || newIndex >= stageElements.length) return prev;
-
-      const element = stageElements[elementIndex];
-      const swapElement = stageElements[newIndex];
-
-      const updatedElements = elements.map(el => {
-        if (el.id === element.id) return { ...el, order: swapElement.order };
-        if (el.id === swapElement.id) return { ...el, order: element.order };
-        return el;
+      // 1. Intro stage
+      newStages.push({
+        id: 'intro',
+        name: 'Introdução',
+        type: 'intro',
+        order: 0
       });
 
-      return { ...prev, elements: updatedElements };
-    });
-  }, []);
+      // 2. Regular questions (1-10)
+      questions.forEach((question, index) => {
+        newStages.push({
+          id: `question-${question.id}`,
+          name: `Questão ${index + 1}`,
+          type: 'quiz',
+          questionData: question,
+          order: index + 1
+        });
+      });
 
-  const handleElementSelect = useCallback((elementId: string) => {
-    setEditorState(prev => ({ ...prev, selectedElementId: elementId }));
-  }, []);
+      // 3. Transition to strategic questions
+      if (strategicQuestions.length > 0) {
+        newStages.push({
+          id: 'transition-strategic',
+          name: 'Transição Estratégica',
+          type: 'transition',
+          order: questions.length + 1
+        });
 
-  const handleStageSelect = useCallback((stageId: string) => {
-    setEditorState(prev => ({
-      ...prev,
-      activeStageId: stageId,
-      selectedElementId: null
-    }));
-  }, []);
-
-  const handleStageAdd = useCallback(() => {
-    const newStageId = `stage-${Date.now()}`;
-    const newStage: VisualStage = {
-      id: newStageId,
-      title: 'Nova Etapa',
-      order: editorState.stages.length,
-      type: 'quiz',
-      settings: {
-        showHeader: true,
-        showProgress: true,
-        allowBack: true,
-        backgroundColor: '#ffffff'
+        // 4. Strategic questions
+        strategicQuestions.forEach((question, index) => {
+          newStages.push({
+            id: `strategic-${question.id}`,
+            name: `Estratégica ${index + 1}`,
+            type: 'strategic',
+            questionData: question,
+            order: questions.length + 2 + index
+          });
+        });
       }
-    };
 
-    setEditorState(prev => ({
-      ...prev,
-      stages: [...prev.stages, newStage],
-      activeStageId: newStageId
-    }));
-  }, [editorState.stages.length]);
+      // 5. Final stages
+      const finalOrder = questions.length + strategicQuestions.length + 2;
+      newStages.push(
+        {
+          id: 'transition-result',
+          name: 'Transição Resultado',
+          type: 'transition',
+          order: finalOrder
+        },
+        {
+          id: 'result',
+          name: 'Resultado',
+          type: 'result',
+          order: finalOrder + 1
+        },
+        {
+          id: 'offer',
+          name: 'Oferta',
+          type: 'offer',
+          order: finalOrder + 2
+        }
+      );
 
-  const handleViewportChange = useCallback((mode: 'desktop' | 'tablet' | 'mobile') => {
-    setEditorState(prev => ({ ...prev, viewportMode: mode }));
-  }, []);
+      setStages(newStages);
+      console.log('✅ Generated stages from Supabase:', newStages.length);
+    }
+  }, [questions, strategicQuestions, loading]);
 
-  const handlePreviewToggle = useCallback(() => {
-    setEditorState(prev => ({ ...prev, isPreviewMode: !prev.isPreviewMode }));
-  }, []);
+  // Generate canvas elements based on current stage
+  useEffect(() => {
+    const currentStageData = stages.find(s => s.id === currentStage);
+    if (!currentStageData) return;
 
-  const handleSave = useCallback(() => {
-    const saveData = {
-      funnelId,
-      stages: editorState.stages,
-      elements: editorState.elements,
-      settings: editorState.settings,
-      lastModified: new Date().toISOString()
-    };
+    let elements: CanvasElement[] = [];
 
-    if (onSave) {
-      onSave(saveData);
+    switch (currentStageData.type) {
+      case 'intro':
+        elements = [
+          {
+            id: 'intro-headline',
+            type: 'headline',
+            content: { text: 'Descubra Seu Estilo Pessoal', level: 1 },
+            order: 0
+          },
+          {
+            id: 'intro-image',
+            type: 'image',
+            content: {
+              src: 'https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png',
+              alt: 'Quiz de estilo',
+              width: 640,
+              height: 480
+            },
+            order: 1
+          },
+          {
+            id: 'intro-form',
+            type: 'form',
+            content: {
+              label: 'SEU NOME',
+              placeholder: 'Digite seu nome aqui...',
+              required: true,
+              type: 'text'
+            },
+            order: 2
+          },
+          {
+            id: 'intro-button',
+            type: 'button',
+            content: { text: 'Começar Quiz' },
+            order: 3
+          }
+        ];
+        break;
+
+      case 'quiz':
+      case 'strategic':
+        const questionData = currentStageData.questionData;
+        if (questionData) {
+          elements = [
+            {
+              id: 'question-title',
+              type: 'question-title',
+              content: { text: questionData.title || 'Título da questão' },
+              order: 0
+            },
+            {
+              id: 'question-options',
+              type: 'question-options',
+              content: { 
+                options: questionData.options || [],
+                multiSelect: questionData.multiSelect || false
+              },
+              order: 1
+            }
+          ];
+        }
+        break;
+
+      case 'transition':
+        elements = [
+          {
+            id: 'transition-headline',
+            type: 'headline',
+            content: { text: 'Você está indo muito bem!', level: 2 },
+            order: 0
+          },
+          {
+            id: 'transition-text',
+            type: 'text',
+            content: { text: 'Vamos continuar...' },
+            order: 1
+          },
+          {
+            id: 'transition-button',
+            type: 'button',
+            content: { text: 'Continuar' },
+            order: 2
+          }
+        ];
+        break;
+
+      case 'result':
+        elements = [
+          {
+            id: 'result-headline',
+            type: 'headline',
+            content: { text: 'Seu Resultado Está Pronto!', level: 1 },
+            order: 0
+          },
+          {
+            id: 'result-text',
+            type: 'text',
+            content: { text: 'Descobrimos seu estilo predominante baseado nas suas respostas.' },
+            order: 1
+          },
+          {
+            id: 'result-button',
+            type: 'button',
+            content: { text: 'Ver Oferta Especial' },
+            order: 2
+          }
+        ];
+        break;
+
+      case 'offer':
+        elements = [
+          {
+            id: 'offer-headline',
+            type: 'headline',
+            content: { text: 'Oferta Especial Para Você!', level: 1 },
+            order: 0
+          },
+          {
+            id: 'offer-text',
+            type: 'text',
+            content: { text: 'Baseado no seu estilo, temos uma consultoria exclusiva com desconto especial.' },
+            order: 1
+          },
+          {
+            id: 'offer-button',
+            type: 'button',
+            content: { text: 'Quero Aproveitar' },
+            order: 2
+          }
+        ];
+        break;
     }
 
-    localStorage.setItem(`editor-${funnelId}`, JSON.stringify(saveData));
-    console.log('Editor saved:', saveData);
-  }, [funnelId, editorState, onSave]);
+    setCanvasElements(elements);
+    setSelectedElementId(null);
+  }, [currentStage, stages]);
 
-  const currentStage = editorState.stages.find(stage => stage.id === editorState.activeStageId);
-  const selectedElement = editorState.elements.find(el => el.id === editorState.selectedElementId);
-
-  const getQuestionData = () => {
-    if (!currentStage || !currentStage.type.includes('quiz')) return null;
-
-    const stageElements = editorState.elements.filter(el => el.stageId === editorState.activeStageId);
-    const questionTitle = stageElements.find(el => el.type === 'question-title');
-    const questionOptions = stageElements.find(el => el.type === 'question-options');
-
-    return {
-      id: currentStage.id,
-      title: questionTitle?.content.text || '',
-      type: 'multiple-choice',
-      multiSelect: questionOptions?.content.multiSelect || false,
-      options: questionOptions?.content.options || []
+  const handleSave = useCallback(() => {
+    const data = {
+      stages,
+      currentStage,
+      canvasElements,
+      settings: {
+        viewportMode,
+        isPreviewMode
+      }
     };
+    console.log('Saving:', data);
+    onSave?.(data);
+  }, [stages, currentStage, canvasElements, viewportMode, isPreviewMode, onSave]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      handleSave();
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [handleSave]);
+
+  const handleStageSelect = (stageId: string) => {
+    setCurrentStage(stageId);
+    setSelectedElementId(null);
   };
 
-  // Convert stages for StepsPanel compatibility
-  const editorStages = editorState.stages.map(stage => ({
-    id: stage.id,
-    name: stage.title,
-    type: stage.type
-  }));
+  const handleComponentSelect = (componentType: string) => {
+    setSelectedComponent(componentType);
+    handleElementAdd(componentType);
+  };
+
+  const handleElementAdd = (type: string, position?: number) => {
+    const newElement: CanvasElement = {
+      id: `element-${Date.now()}`,
+      type: type as any,
+      content: getDefaultContent(type),
+      order: position ?? canvasElements.length
+    };
+
+    setCanvasElements(prev => [...prev, newElement]);
+    setSelectedElementId(newElement.id);
+  };
+
+  const getDefaultContent = (type: string) => {
+    switch (type) {
+      case 'headline':
+        return { text: 'Novo Título', level: 1 };
+      case 'text':
+        return { text: 'Novo texto', size: 'base', align: 'left' };
+      case 'image':
+        return { 
+          src: 'https://via.placeholder.com/400x200',
+          alt: 'Nova imagem',
+          width: 400,
+          height: 200
+        };
+      case 'form':
+        return {
+          label: 'Novo Campo',
+          placeholder: 'Digite aqui...',
+          required: false,
+          type: 'text'
+        };
+      case 'button':
+        return { text: 'Novo Botão' };
+      case 'question-title':
+        return { text: 'Nova Questão' };
+      case 'question-options':
+        return { options: [], multiSelect: false };
+      default:
+        return {};
+    }
+  };
+
+  const handleElementUpdate = (id: string, content: any) => {
+    setCanvasElements(prev =>
+      prev.map(el => el.id === id ? { ...el, content } : el)
+    );
+  };
+
+  const handleElementDelete = (id: string) => {
+    setCanvasElements(prev => prev.filter(el => el.id !== id));
+    if (selectedElementId === id) {
+      setSelectedElementId(null);
+    }
+  };
+
+  const handleElementReorder = (draggedId: string, targetId: string) => {
+    const draggedIndex = canvasElements.findIndex(el => el.id === draggedId);
+    const targetIndex = canvasElements.findIndex(el => el.id === targetId);
+    
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    const newElements = [...canvasElements];
+    const [draggedElement] = newElements.splice(draggedIndex, 1);
+    newElements.splice(targetIndex, 0, draggedElement);
+
+    const updatedElements = newElements.map((el, index) => ({
+      ...el,
+      order: index
+    }));
+
+    setCanvasElements(updatedElements);
+  };
+
+  if (loading) {
+    return (
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando questões do Supabase...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Erro ao carregar questões: {error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Tentar Novamente
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="h-screen bg-gray-50 flex flex-col">
-        {/* Header Toolbar */}
-        <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-3 flex-shrink-0">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold text-gray-900">Editor Visual</h1>
-            <div className="text-sm text-gray-500">
-              Funil: {funnelId}
-            </div>
+            <h1 className="text-xl font-bold text-gray-900">Editor Visual - Quiz Supabase</h1>
+            <Badge variant="outline" className="border-blue-500 text-blue-700">
+              {funnelId}
+            </Badge>
+            <Badge variant="secondary">
+              {questions.length} questões • {strategicQuestions.length} estratégicas
+            </Badge>
           </div>
-
-          <div className="flex items-center gap-2">
+          
+          <div className="flex items-center gap-3">
             {/* Viewport Controls */}
-            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+            <div className="flex items-center border rounded-lg">
               <Button
-                variant={editorState.viewportMode === 'desktop' ? 'default' : 'ghost'}
+                variant={viewportMode === 'desktop' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => handleViewportChange('desktop')}
+                onClick={() => setViewportMode('desktop')}
+                className="rounded-r-none"
               >
                 <Monitor className="w-4 h-4" />
               </Button>
               <Button
-                variant={editorState.viewportMode === 'tablet' ? 'default' : 'ghost'}
+                variant={viewportMode === 'tablet' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => handleViewportChange('tablet')}
+                onClick={() => setViewportMode('tablet')}
+                className="rounded-none border-x"
               >
                 <Tablet className="w-4 h-4" />
               </Button>
               <Button
-                variant={editorState.viewportMode === 'mobile' ? 'default' : 'ghost'}
+                variant={viewportMode === 'mobile' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => handleViewportChange('mobile')}
+                onClick={() => setViewportMode('mobile')}
+                className="rounded-l-none"
               >
                 <Smartphone className="w-4 h-4" />
               </Button>
@@ -444,12 +449,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
             {/* Preview Toggle */}
             <Button
-              variant={editorState.isPreviewMode ? 'default' : 'outline'}
+              variant={isPreviewMode ? 'default' : 'outline'}
               size="sm"
-              onClick={handlePreviewToggle}
+              onClick={() => setIsPreviewMode(!isPreviewMode)}
             >
-              {editorState.isPreviewMode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              {editorState.isPreviewMode ? 'Editar' : 'Preview'}
+              <Eye className="w-4 h-4 mr-2" />
+              {isPreviewMode ? 'Edição' : 'Preview'}
             </Button>
 
             {/* Save Button */}
@@ -459,62 +464,88 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             </Button>
           </div>
         </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left Sidebar - Components */}
-          {!editorState.isPreviewMode && (
-            <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-              <ComponentsPalette
-                onComponentSelect={handleElementAdd}
-                selectedComponent={null}
+      {/* Main Content - Resizable 4 Columns Layout */}
+      <div className="flex-1 overflow-hidden">
+        <ResizablePanelGroup direction="horizontal" className="h-full">
+          {/* Left Column - Steps Panel */}
+          <ResizablePanel defaultSize={15} minSize={10} maxSize={25}>
+            <div className="h-full bg-white border-r border-gray-200">
+              <StepsPanel
+                stages={stages}
+                currentStage={currentStage}
+                onStageSelect={handleStageSelect}
               />
             </div>
-          )}
+          </ResizablePanel>
 
-          {/* Center - Canvas */}
-          <VisualEditorCanvas
-            elements={editorState.elements}
-            stages={editorState.stages}
-            activeStageId={editorState.activeStageId}
-            selectedElementId={editorState.selectedElementId}
-            isPreviewMode={editorState.isPreviewMode}
-            viewportMode={editorState.viewportMode}
-            onElementSelect={handleElementSelect}
-            onElementUpdate={handleElementUpdate}
-            onElementDelete={handleElementDelete}
-            onElementMove={handleElementMove}
-            onElementAdd={handleElementAdd}
-            onStageAdd={handleStageAdd}
-            onStageSelect={handleStageSelect}
-          />
+          <ResizableHandle withHandle />
 
-          {/* Right Sidebar - Steps and Properties */}
-          {!editorState.isPreviewMode && (
-            <div className="w-80 bg-white border-l border-gray-200 flex flex-col">
-              {/* Steps Panel */}
-              <div className="h-1/2 border-b border-gray-200">
-                <StepsPanel
-                  stages={editorStages}
-                  currentStage={editorState.activeStageId || ''}
-                  onStageSelect={handleStageSelect}
+          {/* Second Column - Components Palette */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <div className="h-full bg-gray-50 border-r border-gray-200">
+              <ComponentsPalette
+                onComponentSelect={handleComponentSelect}
+                selectedComponent={selectedComponent}
+              />
+            </div>
+          </ResizablePanel>
+
+          <ResizableHandle withHandle />
+
+          {/* Third Column - Editor Canvas */}
+          <ResizablePanel defaultSize={45} minSize={30}>
+            <div className="h-full overflow-auto bg-gray-100 p-6">
+              <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
+                viewportMode === 'desktop' ? 'max-w-6xl' :
+                viewportMode === 'tablet' ? 'max-w-2xl' :
+                'max-w-sm'
+              }`}>
+                <EditableCanvas
+                  elements={canvasElements}
+                  selectedElementId={selectedElementId}
+                  isPreviewMode={isPreviewMode}
+                  onElementSelect={setSelectedElementId}
+                  onElementUpdate={handleElementUpdate}
+                  onElementAdd={handleElementAdd}
+                  onElementReorder={handleElementReorder}
+                  onElementDelete={handleElementDelete}
                 />
               </div>
+            </div>
+          </ResizablePanel>
 
-              {/* Configuration Panel */}
-              <div className="h-1/2">
-                {currentStage && (
-                  <StageConfigurationPanel
-                    stageName={currentStage.title}
-                    stageType={currentStage.type}
-                    questionData={getQuestionData()}
-                  />
-                )}
+          <ResizableHandle withHandle />
+
+          {/* Fourth Column - Configuration Panel */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <div className="h-full bg-white border-l border-gray-200">
+              <div className="h-full overflow-auto">
+                <StageConfigurationPanel
+                  stageName={stages.find(s => s.id === currentStage)?.name || ''}
+                  stageType={currentStage}
+                  questionData={stages.find(s => s.id === currentStage)?.questionData}
+                />
               </div>
             </div>
-          )}
-        </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
-    </DndProvider>
+
+      {/* Option Configuration Modal */}
+      {showOptionConfig && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <OptionConfigurationPanel
+            isOpen={showOptionConfig}
+            onClose={() => setShowOptionConfig(false)}
+            optionId={selectedOptionId || ''}
+            onConfigUpdate={(config) => {
+              console.log('Configuração atualizada:', config);
+            }}
+          />
+        </div>
+      )}
+    </div>
   );
 };

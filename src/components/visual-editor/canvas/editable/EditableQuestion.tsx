@@ -1,7 +1,14 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import type { QuestionOption } from '@/types/visualEditor';
+
+interface QuestionOption {
+  id: string;
+  text: string;
+  imageUrl?: string;
+  styleCategory: string;
+  points: number;
+}
 
 interface EditableQuestionProps {
   content: {

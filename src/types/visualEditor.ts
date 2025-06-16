@@ -30,14 +30,6 @@ export type BlockType =
   | 'question-title'
   | 'question-options';
 
-export interface QuestionOption {
-  id: string;
-  text: string;
-  imageUrl?: string;
-  styleCategory: string;
-  points: number;
-}
-
 export interface ElementContent {
   text?: string;
   html?: string;
@@ -45,11 +37,10 @@ export interface ElementContent {
   alt?: string;
   href?: string;
   placeholder?: string;
-  options?: QuestionOption[] | string[];
+  options?: string[];
   value?: any;
   level?: string;
   type?: string;
-  multiSelect?: boolean;
   [key: string]: any;
 }
 
