@@ -90,7 +90,7 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
             <h3 className="text-sm font-medium text-gray-700 uppercase tracking-wide">
               {category.title}
             </h3>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-2">
               {category.components.map((component) => (
                 <ComponentItem
                   key={component.type}
