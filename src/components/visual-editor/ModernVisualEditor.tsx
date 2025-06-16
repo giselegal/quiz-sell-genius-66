@@ -13,162 +13,43 @@ import {
   Eye,
   Code
 } from 'lucide-react';
+
 import { VisualEditorCanvas } from './canvas/VisualEditorCanvas';
 import { StepsPanel } from './steps/StepsPanel';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
 import { ComponentsPalette } from './sidebar/ComponentsPalette';
-import { BlockType, VisualElement, ElementContent, ElementStyle } from '@/types/visualEditor';
+import type { VisualElement, VisualStage, VisualEditorState, BlockType } from '@/types/visualEditor';
 
-interface EditorStage {
-  id: string;
-  name: string;
-  title: string;
-  type: 'intro' | 'quiz' | 'strategic' | 'transition' | 'result' | 'offer';
-  order: number;
-  settings: {
-    showHeader: boolean;
-    showProgress: boolean;
-    allowBack: boolean;
-    backgroundColor: string;
-  };
-}
-
-interface ModernVisualEditorProps {
-  funnelId: string;
-  onSave?: (data: any) => void;
-}
-
-// Helper function to get default content and style for elements
-const getDefaultElementProps = (type: BlockType): { content: ElementContent; style: ElementStyle } => {
-  switch (type) {
-    case 'headline':
-      return {
-        content: { text: 'Novo Título', level: '2' },
-        style: { fontSize: '2rem', textAlign: 'center', color: '#000000' }
-      };
-    case 'text':
-      return {
-        content: { text: 'Novo texto' },
-        style: { fontSize: '1rem', textAlign: 'left', color: '#666666' }
-      };
-    case 'button':
-      return {
-        content: { text: 'Clique aqui' },
-        style: { backgroundColor: '#3b82f6', color: '#ffffff', padding: '12px 24px' }
-      };
-    case 'image':
-      return {
-        content: { src: 'https://via.placeholder.com/400x200', alt: 'Imagem' },
-        style: { width: '100%', height: 'auto' }
-      };
-    case 'form':
-      return {
-        content: { placeholder: 'Digite aqui...', label: 'Campo' },
-        style: { width: '100%', padding: '8px' }
-      };
-    case 'question-title':
-      return {
-        content: { text: 'Título da questão' },
-        style: { fontSize: '1.5rem', textAlign: 'center', fontWeight: 'bold' }
-      };
-    case 'question-options':
-      return {
-        content: { 
-          text: 'Qual é sua preferência?',
-          options: [
-            { id: '1', text: 'Opção A', styleCategory: 'classic', points: 1 },
-            { id: '2', text: 'Opção B', styleCategory: 'modern', points: 2 }
-          ],
-          multiSelect: false
-        },
-        style: { width: '100%' }
-      };
-    default:
-      return {
-        content: { text: 'Novo elemento' },
-        style: {}
-      };
-  }
-};
-
-const mockStages: EditorStage[] = [
+const mockStages = [
   {
     id: 'intro-1',
     name: 'Introdução',
-    title: 'Introdução',
-    order: 0,
-    type: 'intro',
-    settings: {
-      showHeader: true,
-      showProgress: true,
-      allowBack: false,
-      backgroundColor: '#ffffff'
-    }
+    type: 'intro' as const,
   },
   {
     id: 'question-1',
-    name: 'Questão 1', 
-    title: 'Questão 1',
-    order: 1,
-    type: 'quiz',
-    settings: {
-      showHeader: true,
-      showProgress: true,
-      allowBack: true,
-      backgroundColor: '#ffffff'
-    }
+    name: 'Questão 1',
+    type: 'quiz' as const,
   },
   {
     id: 'question-2',
     name: 'Questão 2',
-    title: 'Questão 2', 
-    order: 2,
-    type: 'quiz',
-    settings: {
-      showHeader: true,
-      showProgress: true,
-      allowBack: true,
-      backgroundColor: '#ffffff'
-    }
+    type: 'quiz' as const,
   },
   {
     id: 'strategic-1',
     name: 'Questão Estratégica',
-    title: 'Questão Estratégica',
-    order: 3,
-    type: 'strategic',
-    settings: {
-      showHeader: true,
-      showProgress: true,
-      allowBack: true,
-      backgroundColor: '#ffffff'
-    }
+    type: 'strategic' as const,
   },
   {
     id: 'result-1',
     name: 'Resultado',
-    title: 'Resultado',
-    order: 4,
-    type: 'result',
-    settings: {
-      showHeader: true,
-      showProgress: false,
-      allowBack: false,
-      backgroundColor: '#ffffff'
-    }
+    type: 'result' as const,
   },
   {
     id: 'offer-1',
     name: 'Oferta',
-    title: 'Oferta',
-    order: 5,
-    type: 'offer',
-    settings: {
-      showHeader: false,
-      showProgress: false,
-      allowBack: false,
-      backgroundColor: '#ffffff'
-    }
+    type: 'offer' as const,
   }
 ];
 
@@ -178,7 +59,7 @@ const mockElements: VisualElement[] = [
     type: 'headline',
     stageId: 'intro-1',
     order: 0,
-    content: { text: 'Bem-vindo ao Quiz', level: '1' },
+    content: { text: 'Bem-vindo ao Quiz' },
     style: { fontSize: '2rem', textAlign: 'center', color: '#000000' },
     visible: true,
     locked: false
@@ -205,19 +86,75 @@ const mockElements: VisualElement[] = [
   }
 ];
 
+const getDefaultElementContent = (type: BlockType) => {
+  switch (type) {
+    case 'headline':
+      return { text: 'Novo Título' };
+    case 'text':
+      return { text: 'Novo texto' };
+    case 'button':
+      return { text: 'Botão' };
+    case 'image':
+      return { src: '', alt: 'Nova imagem' };
+    case 'question-title':
+      return { text: 'Nova pergunta' };
+    case 'question-options':
+      return { 
+        options: [
+          'Opção A',
+          'Opção B',
+          'Opção C',
+          'Opção D'
+        ],
+        multiSelect: false 
+      };
+    default:
+      return {};
+  }
+};
+
+const getDefaultElementStyle = (type: BlockType) => {
+  switch (type) {
+    case 'headline':
+      return { fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' };
+    case 'text':
+      return { fontSize: '1rem', textAlign: 'left' };
+    case 'button':
+      return { backgroundColor: '#3b82f6', color: '#ffffff', padding: '12px 24px' };
+    default:
+      return {};
+  }
+};
+
+interface ModernVisualEditorProps {
+  funnelId: string;
+  onSave?: (data: any) => void;
+}
+
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave
 }) => {
-  const [editorState, setEditorState] = useState({
+  const [editorState, setEditorState] = useState<VisualEditorState>({
     elements: mockElements,
-    stages: mockStages,
+    stages: mockStages.map(stage => ({
+      id: stage.id,
+      title: stage.name,
+      order: mockStages.indexOf(stage),
+      type: stage.type,
+      settings: {
+        showHeader: true,
+        showProgress: true,
+        allowBack: stage.type !== 'intro',
+        backgroundColor: '#ffffff'
+      }
+    })),
     activeStageId: mockStages[0]?.id || null,
     history: [],
     historyIndex: -1,
-    selectedElementId: null as string | null,
-    hoveredElementId: null as string | null,
-    viewport: 'desktop' as 'desktop' | 'tablet' | 'mobile',
+    selectedElementId: null,
+    hoveredElementId: null,
+    viewport: 'desktop',
     zoomLevel: 100,
     isPreviewMode: false,
     settings: {
@@ -231,7 +168,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   });
 
-  const [selectedPanel, setSelectedPanel] = useState<'stages' | 'config'>('stages');
+  const [selectedPanel, setSelectedPanel] = useState<'stages' | 'components' | 'properties'>('stages');
 
   const handleElementSelect = useCallback((elementId: string) => {
     setEditorState(prev => ({
@@ -274,18 +211,16 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     });
   }, []);
 
-  const handleElementAdd = useCallback((type: BlockType, position?: number) => {
+  const handleComponentSelect = useCallback((componentType: string) => {
     if (!editorState.activeStageId) return;
 
-    const { content, style } = getDefaultElementProps(type);
-    
     const newElement: VisualElement = {
       id: `element-${Date.now()}`,
-      type,
+      type: componentType as BlockType,
       stageId: editorState.activeStageId,
-      order: position ?? editorState.elements.filter(el => el.stageId === editorState.activeStageId).length,
-      content,
-      style,
+      order: editorState.elements.filter(el => el.stageId === editorState.activeStageId).length,
+      content: getDefaultElementContent(componentType as BlockType),
+      style: getDefaultElementStyle(componentType as BlockType),
       visible: true,
       locked: false
     };
@@ -298,9 +233,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   }, [editorState.activeStageId, editorState.elements]);
 
   const handleStageAdd = useCallback(() => {
-    const newStage: EditorStage = {
+    const newStage: VisualStage = {
       id: `stage-${Date.now()}`,
-      name: `Nova Etapa ${editorState.stages.length + 1}`,
       title: `Nova Etapa ${editorState.stages.length + 1}`,
       order: editorState.stages.length,
       type: 'quiz',
@@ -345,7 +279,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         published: false
       }
     };
-    
+
     onSave?.(data);
     console.log('Salvando dados do editor:', data);
   }, [editorState, funnelId, onSave]);
@@ -357,14 +291,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="h-screen flex flex-col bg-gray-50">
-        {/* Top Toolbar */}
+        {/* Header */}
         <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
           <div className="flex items-center gap-4">
             <h1 className="text-lg font-semibold text-gray-900">
               Editor Visual
             </h1>
-            
-            {/* Viewport Switcher */}
             <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
               <Button
                 variant={editorState.viewport === 'desktop' ? 'default' : 'outline'}
@@ -396,90 +328,98 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               {editorState.isPreviewMode ? 'Editar' : 'Preview'}
             </Button>
             <Button size="sm" onClick={handleSave}>
-              <Save className="w-4 h-4 mr-2" />
+              <Save className="w-4 h-4" />
               Salvar
             </Button>
           </div>
         </div>
 
-        {/* Main Editor */}
-        <div className="flex-1 overflow-hidden">
-          <ResizablePanelGroup direction="horizontal" className="h-full">
-            {/* Left Sidebar */}
-            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-              <div className="h-full bg-white border-r border-gray-200 flex flex-col">
-                {/* Panel Tabs */}
-                <div className="flex border-b border-gray-200">
-                  <button
-                    className={`flex-1 px-3 py-2 text-sm font-medium ${
-                      selectedPanel === 'stages' ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'
-                    }`}
+        {/* Main Content */}
+        <ResizablePanelGroup direction="horizontal" className="flex-1">
+          {/* Left Sidebar */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <div className="h-full bg-white border-r border-gray-200">
+              <div className="border-b border-gray-200 p-2">
+                <div className="flex rounded-lg bg-gray-100 p-1">
+                  <Button
+                    variant={selectedPanel === 'stages' ? 'default' : 'ghost'}
+                    size="sm"
+                    className="flex-1"
                     onClick={() => setSelectedPanel('stages')}
                   >
                     Etapas
-                  </button>
-                  <button
-                    className={`flex-1 px-3 py-2 text-sm font-medium ${
-                      selectedPanel === 'config' ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                    onClick={() => setSelectedPanel('config')}
+                  </Button>
+                  <Button
+                    variant={selectedPanel === 'components' ? 'default' : 'ghost'}
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => setSelectedPanel('components')}
                   >
                     Componentes
-                  </button>
-                </div>
-
-                {/* Panel Content */}
-                <div className="flex-1 overflow-hidden">
-                  {selectedPanel === 'stages' ? (
-                    <StepsPanel
-                      stages={editorState.stages}
-                      currentStage={editorState.activeStageId || ''}
-                      onStageSelect={handleStageSelect}
-                    />
-                  ) : (
-                    <ComponentsPalette onElementAdd={handleElementAdd} />
-                  )}
+                  </Button>
                 </div>
               </div>
-            </ResizablePanel>
 
-            <ResizableHandle withHandle />
-
-            {/* Canvas */}
-            <ResizablePanel defaultSize={60}>
-              <VisualEditorCanvas
-                elements={stageElements}
-                stages={editorState.stages}
-                activeStageId={editorState.activeStageId}
-                selectedElementId={editorState.selectedElementId}
-                isPreviewMode={editorState.isPreviewMode}
-                viewportMode={editorState.viewport}
-                onElementSelect={handleElementSelect}
-                onElementUpdate={handleElementUpdate}
-                onElementDelete={handleElementDelete}
-                onElementMove={handleElementMove}
-                onElementAdd={handleElementAdd}
-                onStageAdd={handleStageAdd}
-                onStageSelect={handleStageSelect}
-              />
-            </ResizablePanel>
-
-            <ResizableHandle withHandle />
-
-            {/* Right Sidebar */}
-            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-              <div className="h-full bg-white border-l border-gray-200">
-                {activeStage && (
-                  <StageConfigurationPanel
-                    stageName={activeStage.title}
-                    stageType={activeStage.type}
-                    questionData={selectedElement?.type === 'question-options' ? selectedElement.content : undefined}
+              <ScrollArea className="h-[calc(100%-60px)]">
+                {selectedPanel === 'stages' && (
+                  <StepsPanel
+                    stages={mockStages}
+                    currentStage={editorState.activeStageId || ''}
+                    onStageSelect={handleStageSelect}
                   />
                 )}
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </div>
+                {selectedPanel === 'components' && (
+                  <ComponentsPalette
+                    onComponentSelect={handleComponentSelect}
+                    selectedComponent={null}
+                  />
+                )}
+              </ScrollArea>
+            </div>
+          </ResizablePanel>
+
+          <ResizableHandle />
+
+          {/* Canvas */}
+          <ResizablePanel defaultSize={60}>
+            <VisualEditorCanvas
+              elements={stageElements}
+              selectedElementId={editorState.selectedElementId}
+              isPreviewMode={editorState.isPreviewMode}
+              onElementSelect={handleElementSelect}
+              onElementUpdate={handleElementUpdate}
+              onElementDelete={handleElementDelete}
+              onElementMove={handleElementMove}
+            />
+          </ResizablePanel>
+
+          <ResizableHandle />
+
+          {/* Right Sidebar - Properties */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <div className="h-full bg-white border-l border-gray-200">
+              <StageConfigurationPanel
+                stage={activeStage}
+                selectedElement={selectedElement}
+                onStageUpdate={(updates) => {
+                  if (activeStage) {
+                    setEditorState(prev => ({
+                      ...prev,
+                      stages: prev.stages.map(stage =>
+                        stage.id === activeStage.id ? { ...stage, ...updates } : stage
+                      )
+                    }));
+                  }
+                }}
+                onElementUpdate={(updates) => {
+                  if (selectedElement) {
+                    handleElementUpdate(selectedElement.id, updates);
+                  }
+                }}
+              />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
     </DndProvider>
   );
