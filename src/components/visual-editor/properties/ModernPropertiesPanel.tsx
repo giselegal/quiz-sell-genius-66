@@ -6,19 +6,21 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Trash2, Settings } from 'lucide-react';
+import { Trash2, Settings, Copy } from 'lucide-react';
 import { EditorElement } from '@/hooks/useModernEditor';
 
 interface ModernPropertiesPanelProps {
   selectedElement: EditorElement | undefined;
   onUpdateElement: (id: string, updates: Partial<EditorElement>) => void;
   onDeleteElement: (id: string) => void;
+  onDuplicateElement: () => void;
 }
 
 export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
   selectedElement,
   onUpdateElement,
-  onDeleteElement
+  onDeleteElement,
+  onDuplicateElement
 }) => {
   if (!selectedElement) {
     return (
@@ -177,14 +179,26 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-semibold text-gray-900">Propriedades</h2>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onDeleteElement(selectedElement.id)}
-            className="text-red-500 hover:text-red-700"
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onDuplicateElement}
+              className="text-blue-500 hover:text-blue-700"
+              title="Duplicar elemento"
+            >
+              <Copy className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDeleteElement(selectedElement.id)}
+              className="text-red-500 hover:text-red-700"
+              title="Excluir elemento"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
 
         {/* Element Info */}
