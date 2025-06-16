@@ -8,11 +8,13 @@ import QuizIntro from '@/components/QuizIntro';
 import QuizFinalTransition from '@/components/QuizFinalTransition';
 import QuizResult from '@/components/QuizResult';
 import QuizOfferPage from '@/components/QuizOfferPage';
+import StageQuestionComponent from '@/components/quiz-builder/components/StageQuestionComponent';
 import { DetailedStepsPanel } from './steps/DetailedStepsPanel';
 import { ComponentsPalette } from './sidebar/ComponentsPalette';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
 import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
 import { StyleResult } from '@/types/quiz';
+import { useQuestionData } from '@/utils/supabaseQuestionMapper';
 import { 
   Eye, 
   Save, 
@@ -37,6 +39,9 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+
+  // Hook para carregar dados das questões
+  const { questions, strategicQuestions, loading, error, getQuestionForStep } = useQuestionData();
 
   // Mock data for testing - using proper StyleResult types
   const mockPrimaryStyle: StyleResult = {
@@ -85,15 +90,70 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
   const handleAddQuestion = () => {
     console.log('Adicionando nova questão...');
-    // Aqui você implementaria a lógica para adicionar uma nova questão
+  };
+
+  const getQuestionData = (stageId: string) => {
+    // Mapear stageId para questionId
+    if (stageId.startsWith('q')) {
+      const questionNumber = stageId.substring(1);
+      return questions.find(q => q.id === questionNumber);
+    }
+    
+    if (stageId.startsWith('strategic')) {
+      const strategicNumber = stageId.replace('strategic', '');
+      const strategicId = `strategic-${strategicNumber}`;
+      return strategicQuestions.find(q => q.id === strategicId);
+    }
+    
+    return null;
+  };
+
+  const renderQuestionStage = (stageId: string) => {
+    const questionData = getQuestionData(stageId);
+    
+    if (!questionData) {
+      return (
+        <div className="p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">Questão em Carregamento</h2>
+          <p className="text-gray-600">
+            {loading ? 'Carregando dados da questão...' : 'Questão não encontrada'}
+          </p>
+        </div>
+      );
+    }
+
+    // Preparar dados para o StageQuestionComponent
+    const componentData = {
+      title: questionData.title,
+      question: questionData.title,
+      options: questionData.options.map(opt => opt.text),
+      optionImages: questionData.options.map(opt => opt.imageUrl).filter(Boolean),
+      displayType: questionData.type || 'text',
+      multiSelect: questionData.multiSelect || 1,
+      backgroundColorQuestion: '#FFFAF0',
+      textColorQuestion: '#432818',
+      stageNumber: parseInt(stageId.replace(/\D/g, '')) || 1,
+      totalStages: 10,
+      stageTitle: questionData.title
+    };
+
+    return (
+      <StageQuestionComponent
+        data={componentData}
+        style={{}}
+        isSelected={false}
+      />
+    );
   };
 
   const renderCurrentStage = () => {
     switch (currentStage) {
       case 'intro':
-        return <QuizIntro onStart={() => setCurrentStage('quiz')} />;
+        return <QuizIntro onStart={() => setCurrentStage('q1')} />;
       
       case 'quiz':
+        return renderQuestionStage('q1');
+      
       case 'q1':
       case 'q2':
       case 'q3':
@@ -104,37 +164,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       case 'q8':
       case 'q9':
       case 'q10':
-        return (
-          <div className="p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">
-              {currentStage.startsWith('q') ? `Questão ${currentStage.slice(1)}` : 'Quiz em Desenvolvimento'}
-            </h2>
-            <p className="text-gray-600 mb-6">
-              {currentStage.startsWith('q') ? 
-                'Esta questão pode ser editada inline no editor.' : 
-                'Esta seção será implementada com as questões do quiz.'
-              }
-            </p>
-            <Button onClick={() => setCurrentStage('transition')}>
-              Simular Finalização do Quiz
-            </Button>
-          </div>
-        );
+        return renderQuestionStage(currentStage);
       
       case 'strategic1':
       case 'strategic2':
       case 'strategic3':
-        return (
-          <div className="p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Questão Estratégica</h2>
-            <p className="text-gray-600 mb-6">
-              Esta é uma questão estratégica para coleta de dados.
-            </p>
-            <Button onClick={() => setCurrentStage('transition')}>
-              Próxima Questão
-            </Button>
-          </div>
-        );
+        return renderQuestionStage(currentStage);
       
       case 'transition':
         return (
@@ -172,6 +207,28 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     };
     return stageNames[stageId] || 'Etapa';
   };
+
+  if (loading) {
+    return (
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando dados das questões...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Erro ao carregar questões: {error}</p>
+          <Button onClick={() => window.location.reload()}>Tentar Novamente</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">

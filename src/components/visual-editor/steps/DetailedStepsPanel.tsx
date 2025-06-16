@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { useQuestionData } from '@/utils/supabaseQuestionMapper';
 import { 
   Play, 
   HelpCircle, 
@@ -35,70 +37,90 @@ export const DetailedStepsPanel: React.FC<DetailedStepsPanelProps> = ({
   onStageSelect,
   onAddQuestion
 }) => {
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['questions']));
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['questions', 'strategic']));
+  const { questions, strategicQuestions, loading } = useQuestionData();
 
-  // Mock data for detailed questions - in real app this would come from props
-  const detailedStages: DetailedStage[] = [
-    {
-      id: 'intro',
-      name: 'Introdução',
-      type: 'intro',
-      component: () => <div>Intro</div>,
-      order: 0
-    },
-    {
-      id: 'questions',
-      name: 'Questões do Quiz',
-      type: 'question',
-      component: () => <div>Questions</div>,
-      order: 1,
-      subStages: [
-        { id: 'q1', name: 'Qual seu estilo preferido?', type: 'question', component: () => <div>Q1</div>, order: 1 },
-        { id: 'q2', name: 'Que cores você gosta?', type: 'question', component: () => <div>Q2</div>, order: 2 },
-        { id: 'q3', name: 'Qual ocasião você quer?', type: 'question', component: () => <div>Q3</div>, order: 3 },
-        { id: 'q4', name: 'Que peças você prefere?', type: 'question', component: () => <div>Q4</div>, order: 4 },
-        { id: 'q5', name: 'Qual seu orçamento?', type: 'question', component: () => <div>Q5</div>, order: 5 },
-        { id: 'q6', name: 'Que acessórios você usa?', type: 'question', component: () => <div>Q6</div>, order: 6 },
-        { id: 'q7', name: 'Qual seu biotipo?', type: 'question', component: () => <div>Q7</div>, order: 7 },
-        { id: 'q8', name: 'Que estampas você gosta?', type: 'question', component: () => <div>Q8</div>, order: 8 },
-        { id: 'q9', name: 'Qual sua personalidade?', type: 'question', component: () => <div>Q9</div>, order: 9 },
-        { id: 'q10', name: 'Que inspirações você tem?', type: 'question', component: () => <div>Q10</div>, order: 10 }
-      ]
-    },
-    {
-      id: 'strategic',
-      name: 'Questões Estratégicas',
-      type: 'question',
-      component: () => <div>Strategic</div>,
-      order: 2,
-      subStages: [
-        { id: 'strategic1', name: 'Qual seu nome?', type: 'question', component: () => <div>S1</div>, order: 1 },
-        { id: 'strategic2', name: 'Qual seu email?', type: 'question', component: () => <div>S2</div>, order: 2 },
-        { id: 'strategic3', name: 'Qual seu WhatsApp?', type: 'question', component: () => <div>S3</div>, order: 3 }
-      ]
-    },
-    {
-      id: 'transition',
-      name: 'Transição',
-      type: 'transition',
-      component: () => <div>Transition</div>,
-      order: 3
-    },
-    {
-      id: 'result',
-      name: 'Resultado',
-      type: 'result',
-      component: () => <div>Result</div>,
-      order: 4
-    },
-    {
-      id: 'offer',
-      name: 'Página de Oferta',
-      type: 'offer',
-      component: () => <div>Offer</div>,
-      order: 5
+  // Gerar stages dinamicamente baseado nos dados das questões
+  const generateDetailedStages = (): DetailedStage[] => {
+    const stages: DetailedStage[] = [
+      {
+        id: 'intro',
+        name: 'Introdução',
+        type: 'intro',
+        component: () => <div>Intro</div>,
+        order: 0
+      }
+    ];
+
+    // Adicionar questões regulares
+    if (questions.length > 0) {
+      const questionSubStages = questions.map((question, index) => ({
+        id: `q${question.id}`,
+        name: question.title.length > 50 ? `${question.title.substring(0, 50)}...` : question.title,
+        type: 'question' as const,
+        component: () => <div>Q{question.id}</div>,
+        order: index + 1
+      }));
+
+      stages.push({
+        id: 'questions',
+        name: 'Questões do Quiz',
+        type: 'question',
+        component: () => <div>Questions</div>,
+        order: 1,
+        subStages: questionSubStages
+      });
     }
-  ];
+
+    // Adicionar questões estratégicas
+    if (strategicQuestions.length > 0) {
+      const strategicSubStages = strategicQuestions.map((question, index) => ({
+        id: `strategic${index + 1}`,
+        name: question.title.length > 50 ? `${question.title.substring(0, 50)}...` : question.title,
+        type: 'question' as const,
+        component: () => <div>S{index + 1}</div>,
+        order: index + 1
+      }));
+
+      stages.push({
+        id: 'strategic',
+        name: 'Questões Estratégicas',
+        type: 'question',
+        component: () => <div>Strategic</div>,
+        order: 2,
+        subStages: strategicSubStages
+      });
+    }
+
+    // Adicionar etapas finais
+    stages.push(
+      {
+        id: 'transition',
+        name: 'Transição',
+        type: 'transition',
+        component: () => <div>Transition</div>,
+        order: 3
+      },
+      {
+        id: 'result',
+        name: 'Resultado',
+        type: 'result',
+        component: () => <div>Result</div>,
+        order: 4
+      },
+      {
+        id: 'offer',
+        name: 'Página de Oferta',
+        type: 'offer',
+        component: () => <div>Offer</div>,
+        order: 5
+      }
+    );
+
+    return stages;
+  };
+
+  const detailedStages = generateDetailedStages();
 
   const getStageIcon = (type: string) => {
     switch (type) {
@@ -178,6 +200,27 @@ export const DetailedStepsPanel: React.FC<DetailedStepsPanelProps> = ({
       </Button>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="h-full flex flex-col">
+        <div className="p-4 border-b border-gray-200">
+          <h2 className="font-semibold text-gray-900 mb-2">Etapas do Quiz</h2>
+          <div className="animate-pulse">
+            <div className="h-4 bg-gray-200 rounded mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+          </div>
+        </div>
+        <div className="flex-1 p-4">
+          <div className="space-y-2">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-12 bg-gray-200 rounded animate-pulse"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex flex-col">
