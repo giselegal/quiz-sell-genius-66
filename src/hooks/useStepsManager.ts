@@ -1,14 +1,17 @@
 
 import { useState, useCallback } from 'react';
+import { quizQuestions } from '@/data/quizQuestions';
+import { strategicQuestions } from '@/data/strategicQuestions';
 
-export type StepType = 'quiz-intro' | 'quiz-question' | 'quiz-result' | 'offer-page';
+export type StepType = 'quiz-intro' | 'quiz-question' | 'strategic-question' | 'quiz-transition' | 'quiz-result' | 'offer-page';
 
 interface Step {
   id: string;
   title: string;
   type: StepType;
   order: number;
-  subType?: string; // Para diferentes tipos de questões
+  subType?: string;
+  questionData?: any; // Para armazenar dados da questão
   templateComponents?: string[];
   settings?: {
     questionType?: 'multiple-choice' | 'single-choice' | 'scale' | 'text';
@@ -18,28 +21,106 @@ interface Step {
   };
 }
 
-export const useStepsManager = () => {
-  const [steps, setSteps] = useState<Step[]>([
-    {
-      id: 'step-1',
-      title: 'Capa do Quiz',
-      type: 'quiz-intro',
-      order: 1,
+const generateAllQuizSteps = (): Step[] => {
+  const steps: Step[] = [];
+  let order = 0;
+
+  // 1. Capa do Quiz
+  steps.push({
+    id: 'step-intro',
+    title: 'Capa do Quiz',
+    type: 'quiz-intro',
+    order: order++,
+    templateComponents: [],
+    settings: { showProgress: false, allowBack: false }
+  });
+
+  // 2. Questões Normais (1-10)
+  quizQuestions.forEach((question, index) => {
+    steps.push({
+      id: `step-question-${question.id}`,
+      title: `Questão ${index + 1}: ${question.title.substring(0, 30)}...`,
+      type: 'quiz-question',
+      order: order++,
+      questionData: question,
       templateComponents: [],
       settings: {
-        showProgress: false,
-        allowBack: false
+        questionType: 'multiple-choice',
+        showProgress: true,
+        allowBack: true
       }
-    }
-  ]);
-  
-  const [activeStepId, setActiveStepId] = useState<string>('step-1');
+    });
+  });
+
+  // 3. Transição 1
+  steps.push({
+    id: 'step-transition-1',
+    title: 'Transição: Conhecendo Você Melhor',
+    type: 'quiz-transition',
+    order: order++,
+    templateComponents: [],
+    settings: { showProgress: true, allowBack: true }
+  });
+
+  // 4. Questões Estratégicas (1-7)
+  strategicQuestions.forEach((question, index) => {
+    steps.push({
+      id: `step-strategic-${question.id}`,
+      title: `Questão Estratégica ${index + 1}: ${question.title.substring(0, 25)}...`,
+      type: 'strategic-question',
+      order: order++,
+      questionData: question,
+      templateComponents: [],
+      settings: {
+        questionType: 'single-choice',
+        showProgress: true,
+        allowBack: true
+      }
+    });
+  });
+
+  // 5. Transição 2
+  steps.push({
+    id: 'step-transition-2',
+    title: 'Transição: Preparando Resultado',
+    type: 'quiz-transition',
+    order: order++,
+    templateComponents: [],
+    settings: { showProgress: true, allowBack: true }
+  });
+
+  // 6. Resultado
+  steps.push({
+    id: 'step-result',
+    title: 'Resultado do Quiz',
+    type: 'quiz-result',
+    order: order++,
+    templateComponents: [],
+    settings: { showProgress: false, allowBack: true }
+  });
+
+  // 7. Oferta
+  steps.push({
+    id: 'step-offer',
+    title: 'Página de Oferta',
+    type: 'offer-page',
+    order: order++,
+    templateComponents: [],
+    settings: { showProgress: false, allowBack: true }
+  });
+
+  return steps;
+};
+
+export const useStepsManager = () => {
+  const [steps, setSteps] = useState<Step[]>(generateAllQuizSteps());
+  const [activeStepId, setActiveStepId] = useState<string>('step-intro');
 
   const getStepTypeInfo = (type: StepType) => {
     switch (type) {
       case 'quiz-intro':
         return {
-          icon: '🏠',
+          icon: '📋',
           color: 'bg-blue-500',
           lightColor: 'bg-blue-100',
           textColor: 'text-blue-700',
@@ -47,15 +128,31 @@ export const useStepsManager = () => {
         };
       case 'quiz-question':
         return {
-          icon: '❓',
+          icon: '🎯',
           color: 'bg-purple-500',
           lightColor: 'bg-purple-100',
           textColor: 'text-purple-700',
           label: 'Questão'
         };
+      case 'strategic-question':
+        return {
+          icon: '💭',
+          color: 'bg-indigo-500',
+          lightColor: 'bg-indigo-100',
+          textColor: 'text-indigo-700',
+          label: 'Questão Estratégica'
+        };
+      case 'quiz-transition':
+        return {
+          icon: '⚡',
+          color: 'bg-yellow-500',
+          lightColor: 'bg-yellow-100',
+          textColor: 'text-yellow-700',
+          label: 'Transição'
+        };
       case 'quiz-result':
         return {
-          icon: '🎯',
+          icon: '🎉',
           color: 'bg-green-500',
           lightColor: 'bg-green-100',
           textColor: 'text-green-700',
@@ -84,27 +181,14 @@ export const useStepsManager = () => {
     const newStepNumber = steps.length + 1;
     const typeInfo = getStepTypeInfo(type);
     
-    // Gerar título específico baseado no tipo
-    let title = '';
-    if (type === 'quiz-intro') {
-      title = 'Capa do Quiz';
-    } else if (type === 'quiz-question') {
-      const questionNumber = steps.filter(s => s.type === 'quiz-question').length + 1;
-      title = `Questão ${questionNumber}`;
-    } else if (type === 'quiz-result') {
-      title = 'Página de Resultado';
-    } else if (type === 'offer-page') {
-      title = 'Página de Oferta';
-    }
-    
     const newStep: Step = {
       id: `step-${Date.now()}`,
-      title,
+      title: `Nova ${typeInfo.label}`,
       type,
       order: newStepNumber,
       templateComponents: [],
       settings: {
-        questionType: type === 'quiz-question' ? 'multiple-choice' : undefined,
+        questionType: type === 'quiz-question' ? 'multiple-choice' : 'single-choice',
         showProgress: type !== 'quiz-intro',
         allowBack: type !== 'quiz-intro',
         autoAdvance: false
@@ -119,23 +203,20 @@ export const useStepsManager = () => {
 
   const addQuizIntroStep = useCallback(() => addStep('quiz-intro'), [addStep]);
   const addQuizQuestionStep = useCallback(() => addStep('quiz-question'), [addStep]);
+  const addStrategicQuestionStep = useCallback(() => addStep('strategic-question'), [addStep]);
+  const addQuizTransitionStep = useCallback(() => addStep('quiz-transition'), [addStep]);
   const addQuizResultStep = useCallback(() => addStep('quiz-result'), [addStep]);
   const addOfferPageStep = useCallback(() => addStep('offer-page'), [addStep]);
 
   const deleteStep = useCallback((stepId: string) => {
     setSteps(prev => {
       const filteredSteps = prev.filter(step => step.id !== stepId);
-      // Reordenar etapas restantes
       return filteredSteps.map((step, index) => ({
         ...step,
-        order: index + 1,
-        title: step.type === 'quiz-question' 
-          ? `Questão ${filteredSteps.filter((s, i) => i <= index && s.type === 'quiz-question').length}`
-          : step.title
+        order: index,
       }));
     });
     
-    // Selecionar primeira etapa se a atual foi deletada
     if (activeStepId === stepId && steps.length > 1) {
       const remainingSteps = steps.filter(step => step.id !== stepId);
       if (remainingSteps.length > 0) {
@@ -148,23 +229,11 @@ export const useStepsManager = () => {
     const stepToDuplicate = steps.find(step => step.id === stepId);
     if (!stepToDuplicate) return;
 
-    const newStepNumber = steps.length + 1;
-    let title = '';
-    
-    if (stepToDuplicate.type === 'quiz-question') {
-      const questionNumber = steps.filter(s => s.type === 'quiz-question').length + 1;
-      title = `Questão ${questionNumber}`;
-    } else {
-      title = `${stepToDuplicate.title} (Cópia)`;
-    }
-    
     const newStep: Step = {
+      ...stepToDuplicate,
       id: `step-${Date.now()}`,
-      title,
-      type: stepToDuplicate.type,
-      order: newStepNumber,
-      templateComponents: [...(stepToDuplicate.templateComponents || [])],
-      settings: { ...stepToDuplicate.settings }
+      title: `${stepToDuplicate.title} (Cópia)`,
+      order: steps.length,
     };
     
     setSteps(prev => [...prev, newStep]);
@@ -199,8 +268,13 @@ export const useStepsManager = () => {
     setActiveStepId(stepId);
   }, []);
 
-  // Get active step
   const activeStep = steps.find(step => step.id === activeStepId);
+
+  const resetToDefaultSteps = useCallback(() => {
+    const defaultSteps = generateAllQuizSteps();
+    setSteps(defaultSteps);
+    setActiveStepId('step-intro');
+  }, []);
 
   return {
     steps,
@@ -209,6 +283,8 @@ export const useStepsManager = () => {
     addStep,
     addQuizIntroStep,
     addQuizQuestionStep,
+    addStrategicQuestionStep,
+    addQuizTransitionStep,
     addQuizResultStep,
     addOfferPageStep,
     deleteStep,
@@ -217,6 +293,7 @@ export const useStepsManager = () => {
     updateStep,
     reorderStep,
     selectStep,
+    resetToDefaultSteps,
     getStepTypeInfo
   };
 };

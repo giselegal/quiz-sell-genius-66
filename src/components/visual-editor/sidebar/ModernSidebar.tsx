@@ -8,7 +8,6 @@ import {
   Type, 
   Image, 
   MousePointer, 
-  Palette,
   FileImage,
   Minus,
   Sparkles,
@@ -17,7 +16,10 @@ import {
   Star,
   Gift,
   DollarSign,
-  Zap
+  Zap,
+  BarChart3,
+  CheckCircle,
+  Heart
 } from 'lucide-react';
 
 interface ModernSidebarProps {
@@ -46,10 +48,22 @@ export const ModernSidebar: React.FC<ModernSidebarProps> = ({
 
   const questionElements = [
     { type: 'question-header', label: 'Cabeçalho', icon: Layout },
-    { type: 'progress-bar', label: 'Barra de Progresso', icon: ArrowRight },
+    { type: 'progress-bar', label: 'Barra de Progresso', icon: BarChart3 },
     { type: 'question-title', label: 'Título da Questão', icon: Type },
     { type: 'question-options-grid', label: 'Grid de Opções', icon: Layout },
     { type: 'question-option-card', label: 'Card de Opção', icon: MousePointer },
+  ];
+
+  const strategicQuestionElements = [
+    { type: 'question-header', label: 'Cabeçalho', icon: Layout },
+    { type: 'progress-bar', label: 'Barra de Progresso', icon: BarChart3 },
+    { type: 'question-title', label: 'Título da Questão', icon: Type },
+    { type: 'question-option-card', label: 'Opção de Texto', icon: MousePointer },
+  ];
+
+  const transitionElements = [
+    { type: 'transition-hero', label: 'Hero de Transição', icon: Sparkles },
+    { type: 'transition-continue', label: 'Botão Continuar', icon: ArrowRight },
   ];
 
   const resultElements = [
@@ -60,9 +74,9 @@ export const ModernSidebar: React.FC<ModernSidebarProps> = ({
   ];
 
   const offerElements = [
+    { type: 'offer-section', label: 'Seção de Benefícios', icon: Gift },
     { type: 'price-highlight', label: 'Preço em Destaque', icon: DollarSign },
     { type: 'cta-button', label: 'Botão de Compra', icon: Zap },
-    { type: 'offer-section', label: 'Seção de Benefícios', icon: Gift },
   ];
 
   const getElementsForStep = () => {
@@ -71,12 +85,16 @@ export const ModernSidebar: React.FC<ModernSidebarProps> = ({
         return [...brandElements, ...quizIntroElements];
       case 'quiz-question':
         return [...brandElements, ...questionElements];
+      case 'strategic-question':
+        return [...brandElements, ...strategicQuestionElements];
+      case 'quiz-transition':
+        return [...brandElements, ...transitionElements];
       case 'quiz-result':
         return [...brandElements, ...resultElements];
       case 'offer-page':
         return [...brandElements, ...offerElements];
       default:
-        return [...brandElements, ...quizIntroElements, ...questionElements, ...resultElements, ...offerElements];
+        return [...brandElements, ...quizIntroElements];
     }
   };
 
@@ -104,16 +122,32 @@ export const ModernSidebar: React.FC<ModernSidebarProps> = ({
     </div>
   );
 
+  const getStepTitle = () => {
+    switch (activeStepType) {
+      case 'quiz-intro':
+        return 'Capa do Quiz';
+      case 'quiz-question':
+        return 'Questão Normal';
+      case 'strategic-question':
+        return 'Questão Estratégica';
+      case 'quiz-transition':
+        return 'Página de Transição';
+      case 'quiz-result':
+        return 'Página de Resultado';
+      case 'offer-page':
+        return 'Página de Oferta';
+      default:
+        return 'Componentes';
+    }
+  };
+
   return (
     <div className="h-full bg-white border-r border-gray-200">
       <div className="p-4 border-b">
         <h2 className="font-semibold text-gray-900">Componentes</h2>
         {activeStepType && (
           <p className="text-sm text-gray-600 mt-1">
-            {activeStepType === 'quiz-intro' && 'Página Inicial do Quiz'}
-            {activeStepType === 'quiz-question' && 'Página de Questão'}
-            {activeStepType === 'quiz-result' && 'Página de Resultado'}
-            {activeStepType === 'offer-page' && 'Página de Vendas'}
+            {getStepTitle()}
           </p>
         )}
       </div>
@@ -133,6 +167,22 @@ export const ModernSidebar: React.FC<ModernSidebarProps> = ({
               {renderElementGroup('Marca', brandElements)}
               <Separator />
               {renderElementGroup('Questão', questionElements)}
+            </>
+          )}
+          
+          {activeStepType === 'strategic-question' && (
+            <>
+              {renderElementGroup('Marca', brandElements)}
+              <Separator />
+              {renderElementGroup('Questão Estratégica', strategicQuestionElements)}
+            </>
+          )}
+          
+          {activeStepType === 'quiz-transition' && (
+            <>
+              {renderElementGroup('Marca', brandElements)}
+              <Separator />
+              {renderElementGroup('Transição', transitionElements)}
             </>
           )}
           
@@ -157,12 +207,6 @@ export const ModernSidebar: React.FC<ModernSidebarProps> = ({
               {renderElementGroup('Marca', brandElements)}
               <Separator />
               {renderElementGroup('Quiz Intro', quizIntroElements)}
-              <Separator />
-              {renderElementGroup('Questão', questionElements)}
-              <Separator />
-              {renderElementGroup('Resultado', resultElements)}
-              <Separator />
-              {renderElementGroup('Oferta', offerElements)}
             </>
           )}
         </div>

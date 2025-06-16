@@ -45,6 +45,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     activeStep,
     addQuizIntroStep,
     addQuizQuestionStep,
+    addStrategicQuestionStep,
+    addQuizTransitionStep,
     addQuizResultStep,
     addOfferPageStep,
     deleteStep,
@@ -68,7 +70,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   };
 
-  const handleStepAdd = (type: 'quiz-intro' | 'quiz-question' | 'quiz-result' | 'offer-page') => {
+  const handleStepAdd = (type: 'quiz-intro' | 'quiz-question' | 'strategic-question' | 'quiz-transition' | 'quiz-result' | 'offer-page') => {
     let stepId: string;
     
     switch (type) {
@@ -77,6 +79,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         break;
       case 'quiz-question':
         stepId = addQuizQuestionStep();
+        break;
+      case 'strategic-question':
+        stepId = addStrategicQuestionStep();
+        break;
+      case 'quiz-transition':
+        stepId = addQuizTransitionStep();
         break;
       case 'quiz-result':
         stepId = addQuizResultStep();

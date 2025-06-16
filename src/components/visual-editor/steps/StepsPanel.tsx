@@ -1,23 +1,16 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { Plus, ChevronDown } from 'lucide-react';
 import { StepButton } from './StepButton';
-import { useToast } from '@/hooks/use-toast';
 import { StepType } from '@/hooks/useStepsManager';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
 
 interface Step {
   id: string;
   title: string;
   type: StepType;
   order: number;
+  questionData?: any;
 }
 
 interface StepsPanelProps {
@@ -36,61 +29,44 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
   steps,
   activeStepId,
   onStepSelect,
-  onStepAdd,
   onStepEdit,
   onStepDelete,
   onStepDuplicate,
-  onStepReorder,
   getStepTypeInfo
 }) => {
-  const { toast } = useToast();
-
-  const handleStepAdd = (type: StepType) => {
-    onStepAdd(type);
-    const typeInfo = getStepTypeInfo(type);
-    toast({
-      title: `Nova ${typeInfo.label} adicionada`,
-      description: `Uma nova ${typeInfo.label.toLowerCase()} foi criada no funil.`,
-    });
-  };
-
   const handleStepDelete = (stepId: string) => {
     if (steps.length <= 1) {
-      toast({
-        title: "Não é possível excluir",
-        description: "O funil deve ter pelo menos uma etapa.",
-        variant: "destructive"
-      });
       return;
     }
-    
     onStepDelete(stepId);
-    toast({
-      title: "Etapa excluída",
-      description: "A etapa foi removida do funil.",
-    });
   };
 
   const handleStepDuplicate = (stepId: string) => {
     onStepDuplicate(stepId);
-    toast({
-      title: "Etapa duplicada",
-      description: "Uma cópia da etapa foi criada.",
-    });
   };
 
-  const stepTypes = [
-    { type: 'quiz-intro' as StepType, label: 'Capa do Quiz', icon: '🏠' },
-    { type: 'quiz-question' as StepType, label: 'Questão', icon: '❓' },
-    { type: 'quiz-result' as StepType, label: 'Resultado', icon: '🎯' },
-    { type: 'offer-page' as StepType, label: 'Página de Oferta', icon: '💰' },
-  ];
+  // Organizar etapas por grupos
+  const introSteps = steps.filter(step => step.type === 'quiz-intro');
+  const questionSteps = steps.filter(step => step.type === 'quiz-question');
+  const transition1Steps = steps.filter(step => step.type === 'quiz-transition' && step.id === 'step-transition-1');
+  const strategicSteps = steps.filter(step => step.type === 'strategic-question');
+  const transition2Steps = steps.filter(step => step.type === 'quiz-transition' && step.id === 'step-transition-2');
+  const resultSteps = steps.filter(step => step.type === 'quiz-result');
+  const offerSteps = steps.filter(step => step.type === 'offer-page');
 
-  return (
-    <div className="w-full min-h-[3rem] relative border-b overflow-auto md:max-w-[13rem] border-r bg-zinc-900">
-      <ScrollArea className="relative overflow-hidden flex md:grid h-full">
-        <div className="flex flex-col">
-          {steps
+  const renderStepGroup = (title: string, groupSteps: Step[], showSeparator = true) => {
+    if (groupSteps.length === 0) return null;
+    
+    return (
+      <div>
+        <div className="px-3 py-2">
+          <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            {title}
+          </h3>
+        </div>
+        
+        <div className="space-y-1">
+          {groupSteps
             .sort((a, b) => a.order - b.order)
             .map((step) => {
               const typeInfo = getStepTypeInfo(step.type);
@@ -110,37 +86,31 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
                 />
               );
             })}
-          
-          {/* Add step dropdown button */}
-          <div className="grid md:p-1 relative">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="justify-start text-zinc-100 hover:bg-zinc-700 hover:text-white"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Adicionar Etapa
-                  <ChevronDown className="ml-auto h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-zinc-800 border-zinc-700">
-                {stepTypes.map((stepType) => (
-                  <DropdownMenuItem
-                    key={stepType.type}
-                    onClick={() => handleStepAdd(stepType.type)}
-                    className="text-zinc-100 hover:bg-zinc-700 cursor-pointer"
-                  >
-                    <span className="mr-2">{stepType.icon}</span>
-                    {stepType.label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          
-          {/* Bottom padding */}
-          <div className="py-10" />
+        </div>
+        
+        {showSeparator && <Separator className="my-3 bg-zinc-700" />}
+      </div>
+    );
+  };
+
+  return (
+    <div className="w-full min-h-[3rem] relative border-b overflow-auto md:max-w-[16rem] border-r bg-zinc-900">
+      <div className="p-3 border-b border-zinc-700">
+        <h2 className="text-sm font-semibold text-zinc-100">Etapas do Quiz</h2>
+        <p className="text-xs text-zinc-400 mt-1">
+          {steps.length} etapas • Quiz Completo
+        </p>
+      </div>
+      
+      <ScrollArea className="relative overflow-hidden flex md:grid h-full">
+        <div className="flex flex-col pb-20">
+          {renderStepGroup('📋 Capa', introSteps)}
+          {renderStepGroup('🎯 Questões (1-10)', questionSteps)}
+          {renderStepGroup('⚡ Transição', transition1Steps)}
+          {renderStepGroup('💭 Questões Estratégicas (1-7)', strategicSteps)}
+          {renderStepGroup('⚡ Finalização', transition2Steps)}
+          {renderStepGroup('🎉 Resultado', resultSteps)}
+          {renderStepGroup('💰 Oferta', offerSteps, false)}
         </div>
       </ScrollArea>
     </div>

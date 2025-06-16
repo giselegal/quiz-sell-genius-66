@@ -376,71 +376,55 @@ export const useModernEditor = () => {
   }, [editorState.elements]);
 
   const addStepTemplate = useCallback((stepType: string, stepId: string) => {
-    let templateElements: Partial<EditorElement>[] = [];
+    const templates = {
+      'quiz-intro': [
+        { type: 'brand-header', content: { title: 'Descubra Seu Estilo Único', subtitle: 'Quiz desenvolvido pela especialista Gisele Galvão' } },
+        { type: 'quiz-hero-title', content: { title: 'Qual é o Seu Estilo Único?' } },
+        { type: 'quiz-hero-image', content: { imageUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp' } },
+        { type: 'quiz-description', content: { text: 'Responda algumas perguntas e descubra qual estilo combina perfeitamente com sua personalidade e lifestyle. Um quiz rápido e divertido que vai transformar sua forma de se vestir!' } },
+        { type: 'quiz-form', content: {} },
+      ],
+      'quiz-question': [
+        { type: 'question-header', content: { currentQuestion: 1, totalQuestions: 17 } },
+        { type: 'progress-bar', content: { progress: 10 } },
+        { type: 'question-title', content: { title: 'Qual dessas opções mais combina com você?' } },
+        { type: 'question-options-grid', content: {} },
+      ],
+      'strategic-question': [
+        { type: 'question-header', content: { currentQuestion: 11, totalQuestions: 17 } },
+        { type: 'progress-bar', content: { progress: 65 } },
+        { type: 'question-title', content: { title: 'Como você se sente em relação ao seu estilo pessoal hoje?' } },
+        { type: 'question-option-card', content: { text: 'Completamente perdida, não sei o que combina comigo' } },
+        { type: 'question-option-card', content: { text: 'Tenho algumas ideias, mas não sei como aplicá-las' } },
+        { type: 'question-option-card', content: { text: 'Conheço meu estilo, mas quero refiná-lo' } },
+      ],
+      'quiz-transition': [
+        { type: 'brand-header', content: { title: 'Ótimo Progresso!', subtitle: 'Você está indo muito bem' } },
+        { type: 'transition-hero', content: { title: 'Perfeito! Agora vamos conhecer você melhor...', subtitle: 'Algumas perguntas estratégicas para personalizar ainda mais seu resultado' } },
+        { type: 'transition-continue', content: { text: 'Continuar →' } },
+      ],
+      'quiz-result': [
+        { type: 'brand-header', content: { title: 'Seu Resultado Está Pronto!', subtitle: 'Parabéns por completar o quiz' } },
+        { type: 'result-hero', content: { title: 'Parabéns! Descobrimos seu estilo!', subtitle: 'Aqui está sua análise personalizada completa' } },
+        { type: 'result-title', content: { title: 'Seu Estilo é: Elegante', styleType: 'Elegante' } },
+        { type: 'result-subtitle', content: { text: 'Você possui um estilo sofisticado e refinado, priorizando qualidade, elegância e peças atemporais que transmitem confiança e bom gosto.' } },
+        { type: 'offer-section', content: { title: 'Quer descobrir mais sobre seu estilo?', subtitle: 'Temos um guia completo personalizado para você' } },
+      ],
+      'offer-page': [
+        { type: 'brand-header', content: { title: 'Oferta Especial para Você', subtitle: 'Transforme seu estilo hoje mesmo' } },
+        { type: 'offer-section', content: { title: 'Transforme Seu Estilo Hoje Mesmo', subtitle: 'Guias completos personalizados para seu estilo único' } },
+        { type: 'price-highlight', content: { originalPrice: '497,00', currentPrice: '97,00', installments: 'ou 3x de R$ 32,33' } },
+        { type: 'cta-button', content: { text: 'Quero Meu Guia Agora! 🛍️', guarantee: '✅ Garantia de 7 dias • Pagamento 100% seguro' } },
+      ]
+    };
 
-    switch (stepType) {
-      case 'quiz-intro':
-        templateElements = [
-          { type: 'brand-header', order: 0 },
-          { type: 'brand-logo', order: 1 },
-          { type: 'brand-divider', order: 2 },
-          { type: 'quiz-hero-title', order: 3 },
-          { type: 'quiz-hero-image', order: 4 },
-          { type: 'quiz-description', order: 5 },
-          { type: 'quiz-form', order: 6 },
-          { type: 'quiz-input', order: 7 },
-          { type: 'quiz-button', order: 8 },
-        ];
-        break;
-      case 'quiz-question':
-        templateElements = [
-          { type: 'question-header', order: 0 },
-          { type: 'progress-bar', order: 1 },
-          { type: 'question-title', order: 2 },
-          { type: 'question-options-grid', order: 3 },
-          { type: 'question-option-card', order: 4 },
-          { type: 'question-option-card', order: 5 },
-          { type: 'question-option-card', order: 6 },
-          { type: 'question-option-card', order: 7 },
-        ];
-        break;
-      case 'quiz-result':
-        templateElements = [
-          { type: 'brand-header', order: 0 },
-          { type: 'result-hero', order: 1 },
-          { type: 'result-title', order: 2 },
-          { type: 'result-subtitle', order: 3 },
-          { type: 'quiz-hero-image', order: 4 },
-          { type: 'offer-section', order: 5 },
-          { type: 'cta-button', order: 6 },
-        ];
-        break;
-      case 'offer-page':
-        templateElements = [
-          { type: 'brand-header', order: 0 },
-          { type: 'quiz-hero-title', order: 1 },
-          { type: 'price-highlight', order: 2 },
-          { type: 'offer-section', order: 3 },
-          { type: 'quiz-description', order: 4 },
-          { type: 'cta-button', order: 5 },
-        ];
-        break;
+    const template = templates[stepType as keyof typeof templates];
+    if (template) {
+      template.forEach((elementTemplate, index) => {
+        addElement(elementTemplate.type, elementTemplate.content, stepId, index);
+      });
     }
-
-    const newElements = templateElements.map(template => ({
-      id: generateId(),
-      type: template.type!,
-      content: getDefaultContent(template.type!),
-      style: getDefaultStyle(template.type!),
-      order: template.order!,
-      stepId,
-      visible: true,
-      locked: false,
-    }));
-
-    const allElements = [...editorState.elements, ...newElements];
-    saveState(allElements);
-  }, [editorState.elements]);
+  }, [addElement]);
 
   const updateElement = useCallback((id: string, updates: Partial<EditorElement>) => {
     const newElements = editorState.elements.map(el => 
@@ -549,6 +533,6 @@ export const useModernEditor = () => {
     undo,
     redo,
     save,
-    getElementsByStep,
+    getElementsByStep
   };
 };
