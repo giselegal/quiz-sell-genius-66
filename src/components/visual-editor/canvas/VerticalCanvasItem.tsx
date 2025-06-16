@@ -2,15 +2,13 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { EditableHeading } from './editable/EditableHeading';
-import { EditableImage } from './editable/EditableImage';
-import { EditableInput } from './editable/EditableInput';
-import { EditableButton } from './editable/EditableButton';
-import { EditableText } from './editable/EditableText';
+import { Button } from '@/components/ui/button';
+import { Trash2, GripVertical, Edit3 } from 'lucide-react';
+import { ElementRenderer } from './ElementRenderer';
 
 interface CanvasElement {
   id: string;
-  type: 'headline' | 'text' | 'image' | 'form' | 'button';
+  type: 'headline' | 'text' | 'image' | 'form' | 'button' | 'question-title' | 'question-options';
   content: any;
   order: number;
 }
@@ -39,7 +37,7 @@ export const VerticalCanvasItem: React.FC<VerticalCanvasItemProps> = ({
     transform,
     transition,
     isDragging,
-  } = useSortable({
+  } = useSortable({ 
     id: element.id,
     disabled: isPreviewMode
   });
@@ -50,69 +48,66 @@ export const VerticalCanvasItem: React.FC<VerticalCanvasItemProps> = ({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const renderElement = () => {
-    const commonProps = {
-      content: element.content,
-      isSelected,
-      isPreviewMode,
-      onUpdate,
-    };
-
-    switch (element.type) {
-      case 'headline':
-        return <EditableHeading {...commonProps} />;
-      case 'text':
-        return <EditableText {...commonProps} />;
-      case 'image':
-        return <EditableImage {...commonProps} />;
-      case 'form':
-        return <EditableInput {...commonProps} />;
-      case 'button':
-        return <EditableButton {...commonProps} />;
-      default:
-        return <div>Tipo de elemento desconhecido: {element.type}</div>;
-    }
-  };
-
   return (
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...(!isPreviewMode ? listeners : {})}
       className={`
-        group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative self-auto mr-auto
-        ${!isPreviewMode ? 'cursor-move' : ''}
+        relative group mb-4 
+        ${!isPreviewMode ? 'hover:bg-gray-50 hover:border border-gray-200 rounded-lg' : ''}
+        ${isSelected && !isPreviewMode ? 'bg-blue-50 border-2 border-blue-300 rounded-lg' : ''}
+        ${!isPreviewMode ? 'p-3' : ''}
       `}
       onClick={!isPreviewMode ? onSelect : undefined}
     >
-      <div
-        className={`
-          min-h-[1.25rem] min-w-full relative self-auto box-border
-          ${!isPreviewMode ? 'group-hover/canvas-item:border-2 border-dashed hover:border-2' : ''}
-          ${isSelected && !isPreviewMode ? 'border-2 border-blue-500' : 'border-transparent'}
-          rounded-md transition-all duration-200
-        `}
-        style={{ 
-          opacity: 1,
-          willChange: 'transform',
-          flexBasis: '100%'
-        }}
-      >
-        {renderElement()}
-      </div>
+      {/* Drag Handle and Controls */}
+      {!isPreviewMode && (
+        <div className="absolute -left-8 top-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 w-6 p-0 cursor-grab active:cursor-grabbing"
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical className="h-3 w-3" />
+          </Button>
+        </div>
+      )}
 
-      {/* Delete button for editor mode */}
+      {/* Delete Button */}
       {!isPreviewMode && isSelected && (
-        <button
-          className="absolute top-2 right-2 z-10 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete();
-          }}
-        >
-          ×
-        </button>
+        <div className="absolute -right-8 top-2 flex flex-col gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 w-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+          >
+            <Trash2 className="h-3 w-3" />
+          </Button>
+        </div>
+      )}
+
+      {/* Element Content */}
+      <ElementRenderer 
+        type={element.type} 
+        content={element.content}
+        isSelected={isSelected}
+        isPreviewMode={isPreviewMode}
+        onUpdate={onUpdate}
+      />
+
+      {/* Element Type Badge */}
+      {!isPreviewMode && isSelected && (
+        <div className="absolute top-1 left-1">
+          <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">
+            {element.type}
+          </span>
+        </div>
       )}
     </div>
   );

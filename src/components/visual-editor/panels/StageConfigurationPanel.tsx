@@ -1,324 +1,185 @@
 
-import React, { useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-
-interface OptionData {
-  id: string;
-  label: string;
-  text: string;
-  imageUrl?: string;
-  alt?: string;
-}
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface StageConfigurationPanelProps {
   stageName: string;
   stageType: string;
-  currentOptions?: OptionData[];
-  onOptionUpdate?: (optionId: string, field: string, value: string) => void;
+  questionData?: any;
 }
 
 export const StageConfigurationPanel: React.FC<StageConfigurationPanelProps> = ({
   stageName,
   stageType,
-  currentOptions = [],
-  onOptionUpdate
+  questionData
 }) => {
-  const [showLogo, setShowLogo] = useState(true);
-  const [showProgress, setShowProgress] = useState(true);
-  const [returnButton, setReturnButton] = useState(false);
-  const [layoutColumns, setLayoutColumns] = useState('2');
-  const [direction, setDirection] = useState('vertical');
-  const [spacing, setSpacing] = useState(16);
-  const [imageHeight, setImageHeight] = useState(120);
-  const [padding, setPadding] = useState(20);
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
-  const [borderRadius, setBorderRadius] = useState(8);
-  const [maxWidth, setMaxWidth] = useState('100');
-
-  // Função para aplicar configurações automaticamente
-  const applyConfiguration = (key: string, value: any) => {
-    console.log(`Aplicando configuração: ${key} = ${value}`);
-    // Aqui você pode adicionar lógica para aplicar as configurações em tempo real
+  const getStageTypeInfo = (type: string) => {
+    if (type.startsWith('question-')) return { label: 'Questão Regular', color: 'bg-blue-500' };
+    if (type.startsWith('strategic-')) return { label: 'Questão Estratégica', color: 'bg-purple-500' };
+    if (type === 'intro') return { label: 'Introdução', color: 'bg-green-500' };
+    if (type === 'transition') return { label: 'Transição', color: 'bg-yellow-500' };
+    if (type === 'result') return { label: 'Resultado', color: 'bg-orange-500' };
+    if (type === 'offer') return { label: 'Oferta', color: 'bg-red-500' };
+    return { label: 'Desconhecido', color: 'bg-gray-500' };
   };
 
+  const typeInfo = getStageTypeInfo(stageType);
+
   return (
-    <div className="space-y-4">
-      {/* Header da Etapa */}
-      <div className="bg-[#B89B7A]/5 rounded-lg p-3">
-        <h3 className="font-medium text-[#8B7355] mb-1">Configurações da Etapa</h3>
-        <div className="text-sm text-[#8B7355]/70">
-          <div className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs inline-block">
-            {stageName}
-          </div>
-          <div className="text-xs mt-1">Tipo: {stageType} • Ordem: 0</div>
+    <div className="h-full flex flex-col">
+      <div className="p-4 border-b border-gray-200">
+        <h3 className="text-lg font-semibold mb-2">Configurações</h3>
+        <div className="flex items-center gap-2 mb-2">
+          <Badge className={`${typeInfo.color} text-white`}>
+            {typeInfo.label}
+          </Badge>
+          <span className="text-sm text-gray-600">{stageName}</span>
         </div>
       </div>
 
-      {/* Layout das Opções */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium text-[#8B7355]">Layout das Opções</Label>
-        <Select value={layoutColumns} onValueChange={(value) => {
-          setLayoutColumns(value);
-          applyConfiguration('layoutColumns', value);
-        }}>
-          <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="auto">Automático</SelectItem>
-            <SelectItem value="1">1 Coluna</SelectItem>
-            <SelectItem value="2">2 Colunas</SelectItem>
-            <SelectItem value="3">3 Colunas</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Direção */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium text-[#8B7355]">Direção</Label>
-        <Select value={direction} onValueChange={(value) => {
-          setDirection(value);
-          applyConfiguration('direction', value);
-        }}>
-          <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="vertical">Vertical</SelectItem>
-            <SelectItem value="horizontal">Horizontal</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Espaçamento entre elementos */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium text-[#8B7355]">Espaçamento entre elementos: {spacing}px</Label>
-        <Slider
-          value={[spacing]}
-          onValueChange={([value]) => {
-            setSpacing(value);
-            applyConfiguration('spacing', value);
-          }}
-          min={8}
-          max={32}
-          step={4}
-          className="w-full"
-        />
-      </div>
-
-      {/* Altura das imagens */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium text-[#8B7355]">Altura das imagens: {imageHeight}px</Label>
-        <Slider
-          value={[imageHeight]}
-          onValueChange={([value]) => {
-            setImageHeight(value);
-            applyConfiguration('imageHeight', value);
-          }}
-          min={80}
-          max={300}
-          step={10}
-          className="w-full"
-        />
-      </div>
-
-      {/* Padding interno */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium text-[#8B7355]">Padding interno: {padding}px</Label>
-        <Slider
-          value={[padding]}
-          onValueChange={([value]) => {
-            setPadding(value);
-            applyConfiguration('padding', value);
-          }}
-          min={0}
-          max={40}
-          step={4}
-          className="w-full"
-        />
-      </div>
-
-      {/* Cor de Fundo */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium text-[#8B7355]">Cor de Fundo</Label>
-        <div className="flex gap-2">
-          <Input
-            type="color"
-            value={backgroundColor}
-            onChange={(e) => {
-              setBackgroundColor(e.target.value);
-              applyConfiguration('backgroundColor', e.target.value);
-            }}
-            className="w-12 h-8 p-0 border-0 rounded"
-          />
-          <Input
-            type="text"
-            value={backgroundColor}
-            onChange={(e) => {
-              setBackgroundColor(e.target.value);
-              applyConfiguration('backgroundColor', e.target.value);
-            }}
-            placeholder="#ffffff"
-            className="flex-1 border-[#B89B7A]/30 focus:border-[#B89B7A]"
-          />
-        </div>
-      </div>
-
-      {/* Border Radius */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium text-[#8B7355]">Border Radius: {borderRadius}px</Label>
-        <Slider
-          value={[borderRadius]}
-          onValueChange={([value]) => {
-            setBorderRadius(value);
-            applyConfiguration('borderRadius', value);
-          }}
-          min={0}
-          max={24}
-          step={2}
-          className="w-full"
-        />
-      </div>
-
-      {/* Largura Máxima */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium text-[#8B7355]">Largura Máxima</Label>
-        <Select value={maxWidth} onValueChange={(value) => {
-          setMaxWidth(value);
-          applyConfiguration('maxWidth', value);
-        }}>
-          <SelectTrigger className="border-[#B89B7A]/30 focus:border-[#B89B7A]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="100">Largura Total (100%)</SelectItem>
-            <SelectItem value="80">80%</SelectItem>
-            <SelectItem value="60">60%</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Editor de Opções para Questões */}
-      {(stageType === 'question' || stageType === 'strategic') && currentOptions.length > 0 && (
-        <>
-          <Separator />
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#8B7355] rounded-full"></div>
-              <Label className="text-sm font-medium text-[#8B7355]">Editar Opções da Questão</Label>
-            </div>
-            
-            {currentOptions.map((option) => (
-              <div key={option.id} className="border border-[#B89B7A]/20 rounded-lg p-3 bg-white space-y-3">
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="border-[#B89B7A] text-[#8B7355]">
-                    {option.label}
-                  </Badge>
-                  <Label className="text-xs font-medium text-[#8B7355]">Opção {option.label}</Label>
-                </div>
-                
-                {/* Texto da Opção */}
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-4">
+          {/* Question Data Section */}
+          {questionData && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm">Dados da Questão</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
                 <div>
-                  <Label className="text-xs text-[#8B7355]">Texto</Label>
-                  <Input
-                    value={option.text}
-                    onChange={(e) => onOptionUpdate?.(option.id, 'text', e.target.value)}
-                    className="mt-1 border-[#B89B7A]/30 focus:border-[#B89B7A] text-sm"
-                    placeholder={`Digite o texto da opção ${option.label}...`}
+                  <Label htmlFor="question-title" className="text-xs">Título</Label>
+                  <Textarea
+                    id="question-title"
+                    value={questionData.title || ''}
+                    readOnly
+                    className="mt-1 text-sm bg-gray-50"
+                    rows={2}
                   />
                 </div>
-                
-                {/* URL da Imagem */}
+
                 <div>
-                  <Label className="text-xs text-[#8B7355]">URL da Imagem</Label>
+                  <Label className="text-xs">Tipo</Label>
                   <Input
-                    value={option.imageUrl || ''}
-                    onChange={(e) => onOptionUpdate?.(option.id, 'imageUrl', e.target.value)}
-                    className="mt-1 border-[#B89B7A]/30 focus:border-[#B89B7A] text-sm"
-                    placeholder="https://exemplo.com/imagem.jpg"
+                    value={questionData.type || 'N/A'}
+                    readOnly
+                    className="mt-1 text-sm bg-gray-50"
                   />
                 </div>
-                
-                {/* Preview da Imagem */}
-                {option.imageUrl && (
-                  <div className="mt-2">
-                    <Label className="text-xs text-[#8B7355]">Preview</Label>
-                    <div className="mt-1 w-full h-20 border border-[#B89B7A]/20 rounded overflow-hidden bg-gray-50">
-                      <img 
-                        src={option.imageUrl} 
-                        alt={option.alt || option.text}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
+
+                <div>
+                  <Label className="text-xs">Seleções Necessárias</Label>
+                  <Input
+                    value={questionData.multiSelect || 1}
+                    readOnly
+                    className="mt-1 text-sm bg-gray-50"
+                  />
+                </div>
+
+                {/* Options */}
+                {questionData.options && questionData.options.length > 0 && (
+                  <div>
+                    <Label className="text-xs mb-2 block">Opções ({questionData.options.length})</Label>
+                    <div className="space-y-2 max-h-40 overflow-y-auto">
+                      {questionData.options.map((option: any, index: number) => (
+                        <div key={option.id} className="p-2 bg-gray-50 rounded text-xs">
+                          <div className="font-medium">
+                            {String.fromCharCode(65 + index)}) {option.text}
+                          </div>
+                          <div className="text-gray-500 mt-1">
+                            Categoria: {option.styleCategory} | Pontos: {option.points}
+                          </div>
+                          {option.imageUrl && (
+                            <div className="mt-1">
+                              <img 
+                                src={option.imageUrl} 
+                                alt={option.text}
+                                className="w-16 h-12 object-cover rounded"
+                                onError={(e) => {
+                                  e.currentTarget.src = 'https://via.placeholder.com/64x48/ccc/666?text=Img';
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* General Configuration */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Configurações Gerais</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <Label htmlFor="stage-name" className="text-xs">Nome da Etapa</Label>
+                <Input
+                  id="stage-name"
+                  value={stageName}
+                  className="mt-1 text-sm"
+                  placeholder="Nome da etapa"
+                />
               </div>
-            ))}
-          </div>
-        </>
-      )}
 
-      {/* Configurações de Header */}
-      <Separator />
-      <div className="space-y-3">
-        <Label className="text-sm font-medium text-[#8B7355]">Configurações de Header</Label>
-        
-        <div className="flex items-center justify-between">
-          <Label className="text-sm text-[#8B7355]">Mostrar Logo</Label>
-          <Switch
-            checked={showLogo}
-            onCheckedChange={(checked) => {
-              setShowLogo(checked);
-              applyConfiguration('showLogo', checked);
-            }}
-          />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <Label className="text-sm text-[#8B7355]">Mostrar Progresso</Label>
-          <Switch
-            checked={showProgress}
-            onCheckedChange={(checked) => {
-              setShowProgress(checked);
-              applyConfiguration('showProgress', checked);
-            }}
-          />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <Label className="text-sm text-[#8B7355]">Botão Voltar</Label>
-          <Switch
-            checked={returnButton}
-            onCheckedChange={(checked) => {
-              setReturnButton(checked);
-              applyConfiguration('returnButton', checked);
-            }}
-          />
-        </div>
+              <div>
+                <Label htmlFor="stage-description" className="text-xs">Descrição</Label>
+                <Textarea
+                  id="stage-description"
+                  placeholder="Descrição da etapa..."
+                  className="mt-1 text-sm"
+                  rows={3}
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Botão de Salvar Configurações */}
-        <div className="pt-4 border-t border-[#B89B7A]/20">
-          <Button 
-            onClick={() => {
-              console.log('Salvando todas as configurações...');
-              // Aqui você implementaria o salvamento real
-            }}
-            className="w-full bg-[#B89B7A] hover:bg-[#8B7355] text-white"
-          >
-            💾 Salvar Configurações
-          </Button>
+          {/* Stage Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Ações</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Button variant="outline" size="sm" className="w-full text-xs">
+                Duplicar Etapa
+              </Button>
+              <Button variant="outline" size="sm" className="w-full text-xs">
+                Exportar Configuração
+              </Button>
+              <Button variant="destructive" size="sm" className="w-full text-xs">
+                Excluir Etapa
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Debug Info */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xs text-gray-500">Debug Info</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <pre className="text-xs text-gray-500 overflow-auto">
+                ID: {stageType}
+                {questionData && (
+                  <>
+                    <br />Questão ID: {questionData.id}
+                    <br />Opções: {questionData.options?.length || 0}
+                  </>
+                )}
+              </pre>
+            </CardContent>
+          </Card>
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
 };

@@ -1,18 +1,24 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
+import { EditableQuestion } from './editable/EditableQuestion';
 
 interface ElementRendererProps {
   type: string;
   content: any;
+  isSelected?: boolean;
+  isPreviewMode?: boolean;
+  onUpdate?: (content: any) => void;
 }
 
 export const ElementRenderer: React.FC<ElementRendererProps> = ({
   type,
-  content
+  content,
+  isSelected = false,
+  isPreviewMode = false,
+  onUpdate = () => {}
 }) => {
   switch (type) {
     case 'headline':
@@ -21,7 +27,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
           className="min-w-full text-3xl font-bold text-center"
           data-sentry-component="EditableHeading"
         >
-          {content.title || 'Título'}
+          {content.title || content.text || 'Título'}
         </h1>
       );
       
@@ -32,13 +38,30 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
         </p>
       );
       
+    case 'question-title':
+      return (
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
+          {content.text || 'Título da questão'}
+        </h2>
+      );
+      
+    case 'question-options':
+      return (
+        <EditableQuestion
+          content={content}
+          isSelected={isSelected}
+          isPreviewMode={isPreviewMode}
+          onUpdate={onUpdate}
+        />
+      );
+      
     case 'image':
       return (
         <div className="grid" data-sentry-component="EditableImage">
           <div className="text-lg">
             <div className="text-lg flex items-center justify-center">
               <img 
-                src={content.imageUrl || 'https://via.placeholder.com/640x480'} 
+                src={content.imageUrl || content.src || 'https://via.placeholder.com/640x480'} 
                 width="640" 
                 height="480" 
                 alt={content.alt || 'Imagem'} 
