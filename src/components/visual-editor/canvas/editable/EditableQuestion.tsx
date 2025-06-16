@@ -171,125 +171,83 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
 
       {/* Question Options - Responsive Grid Layout */}
       <div className="space-y-4">
-        {/* Grid container with responsive columns */}
-        <div
-          className={`
-          grid gap-3 w-full
-          ${
-            content.options?.some((option) => option.imageUrl)
-              ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2"
-              : "grid-cols-1"
-          }
-        `}
-        >
+        {/* Grid container using custom CSS classes */}
+        <div className="options-grid with-images">
           {content.options?.map((option, index) => (
             <div
               key={option.id}
               className={`
-                relative group border-2 rounded-xl overflow-hidden cursor-pointer transition-all duration-300
-                ${
-                  selectedOptions.includes(option.id)
-                    ? "border-[#B89B7A] bg-gradient-to-br from-[#B89B7A]/5 to-[#B89B7A]/10 shadow-lg scale-[1.02]"
-                    : "border-gray-200 hover:border-[#B89B7A]/50 hover:shadow-md hover:scale-[1.01]"
-                }
-                ${!isPreviewMode ? "hover:scale-[1.01]" : ""}
-                ${
-                  option.imageUrl
-                    ? "min-h-[240px] sm:min-h-[280px]"
-                    : "min-h-[60px]"
-                }
+                option-card group focus:outline-none focus:ring-2 focus:ring-[#B89B7A] focus:ring-offset-2
+                ${selectedOptions.includes(option.id) ? "selected" : ""}
               `}
               onClick={() => handleOptionClick(option.id)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleOptionClick(option.id);
+                }
+              }}
             >
-              {/* Option Label - Better positioning */}
-              <div className="absolute top-2 left-2 z-20">
+              {/* Option Label without tick */}
+              <div className="absolute top-3 left-3 z-10">
                 <span
                   className={`
-                  text-xs font-bold px-2.5 py-1 rounded-full shadow-md backdrop-blur-sm
-                  ${
-                    selectedOptions.includes(option.id)
-                      ? "bg-[#B89B7A] text-white"
-                      : "bg-white/90 text-gray-700 border border-gray-200"
-                  }
+                  option-label
+                  ${selectedOptions.includes(option.id) ? "selected" : "default"}
                 `}
                 >
                   {String.fromCharCode(65 + index)}
                 </span>
               </div>
 
-              {/* Selection Indicator - Better visibility */}
-              {selectedOptions.includes(option.id) && (
-                <div className="absolute top-2 right-2 z-20">
-                  <div className="w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center shadow-md">
-                    <svg
-                      className="w-3.5 h-3.5 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              )}
-
-              {/* Option Image - Improved responsive sizing */}
+              {/* Option Image using CSS classes */}
               {option.imageUrl && (
                 <div className="relative overflow-hidden">
                   <img
                     src={option.imageUrl}
                     alt={option.text}
-                    className={`
-                      w-full object-cover transition-transform duration-300 group-hover:scale-105
-                      ${option.imageUrl ? "h-36 sm:h-44" : "h-24"}
-                    `}
+                    className="option-image"
                     onError={(e) => {
                       e.currentTarget.src =
-                        "https://via.placeholder.com/400x280/f3f4f6/9ca3af?text=Imagem+Não+Encontrada";
+                        "https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Imagem+Não+Encontrada";
                     }}
                   />
-                  {/* Improved overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {/* Subtle overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               )}
 
-              {/* Option Content - Better spacing and typography */}
-              <div className={`p-3 ${option.imageUrl ? "space-y-2" : "py-4"}`}>
-                <h4
-                  className={`
-                  font-semibold text-gray-900 leading-tight
-                  ${
-                    option.imageUrl
-                      ? "text-sm sm:text-base"
-                      : "text-base sm:text-lg"
-                  }
-                  ${option.imageUrl ? "line-clamp-2" : "line-clamp-3"}
-                `}
-                >
-                  {option.text}
+              {/* Option Content using CSS classes */}
+              <div className={`option-content ${option.imageUrl ? "with-image" : "text-only"}`}>
+                <h4 className="option-title medium">
+                  {/* Parse text to highlight strategic words */}
+                  {option.text.split(' ').map((word, wordIndex) => {
+                    // Strategic words to highlight
+                    const strategicWords = ['elegante', 'clássico', 'moderno', 'casual', 'sofisticado', 'romântico', 'minimalista', 'vintage', 'luxo', 'confortável', 'estiloso', 'chique', 'trendy', 'fashion', 'contemporâneo', 'tradicional'];
+                    const isStrategic = strategicWords.some(sw => 
+                      word.toLowerCase().replace(/[.,!?;]/g, '').includes(sw.toLowerCase())
+                    );
+                    
+                    return (
+                      <span key={wordIndex} className={isStrategic ? 'strategic-word' : ''}>
+                        {word}{wordIndex < option.text.split(' ').length - 1 ? ' ' : ''}
+                      </span>
+                    );
+                  })}
                 </h4>
 
-                {/* Category and Points - Improved layout */}
-                <div className="flex justify-between items-center pt-2 border-t border-gray-100">
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                {/* Category and Points using CSS classes */}
+                <div className="option-footer">
+                  <span className="option-category">
                     {option.styleCategory}
                   </span>
-                  <span className="text-xs font-medium text-[#B89B7A] bg-[#B89B7A]/10 px-2 py-1 rounded-full">
+                  <span className="option-points">
                     {option.points} pts
                   </span>
                 </div>
               </div>
-
-              {/* Interactive hover effect border */}
-              <div
-                className={`
-                absolute inset-0 border-2 border-transparent rounded-xl transition-all duration-300 pointer-events-none
-                ${!isPreviewMode ? "group-hover:border-[#B89B7A]/30" : ""}
-              `}
-              />
             </div>
           )) || (
             <div className="col-span-full text-center py-12 text-gray-500 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50/50">

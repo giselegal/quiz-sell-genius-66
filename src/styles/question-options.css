@@ -44,131 +44,131 @@
   }
 }
 
-/* Opção individual */
+/* Opção individual - Design mais elegante */
 .option-card {
   position: relative;
-  border: 2px solid #e5e7eb;
-  border-radius: 0.75rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 1rem;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .option-card:hover {
   border-color: #b89b7a;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transform: scale(1.01);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(184, 155, 122, 0.1);
+  transform: translateY(-2px);
 }
 
 .option-card.selected {
   border-color: #b89b7a;
   background: linear-gradient(
     135deg,
-    rgba(184, 155, 122, 0.05) 0%,
-    rgba(184, 155, 122, 0.1) 100%
+    rgba(184, 155, 122, 0.03) 0%,
+    rgba(184, 155, 122, 0.08) 100%
   );
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
-  transform: scale(1.02);
+  box-shadow: 
+    0 8px 25px rgba(184, 155, 122, 0.15),
+    0 0 0 1px rgba(184, 155, 122, 0.2);
+  transform: translateY(-3px);
 }
 
-/* Imagem da opção */
+/* Imagem da opção - Sem corte, proporção fixa */
 .option-image {
   width: 100%;
+  height: 160px; /* Altura fixa para consistência */
   object-fit: cover;
-  transition: transform 0.3s ease;
+  object-position: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .option-card:hover .option-image {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
-/* Responsividade das imagens */
-.option-image.small {
-  height: 120px;
-}
-
-.option-image.medium {
-  height: 160px;
-}
-
-.option-image.large {
-  height: 200px;
-}
-
+/* Responsividade das imagens - Maior no desktop */
 @media (min-width: 640px) {
-  .option-image.small {
-    height: 144px;
-  }
-
-  .option-image.medium {
-    height: 176px;
-  }
-
-  .option-image.large {
-    height: 224px;
+  .option-image {
+    height: 180px;
   }
 }
 
-/* Labels e indicadores */
+@media (min-width: 1024px) {
+  .option-image {
+    height: 200px;
+  }
+}
+
+/* Labels e indicadores - Sem tick de seleção */
 .option-label {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  top: 0.75rem;
+  left: 0.75rem;
   z-index: 20;
   font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.375rem 0.625rem;
-  border-radius: 9999px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(4px);
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
 }
 
 .option-label.default {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   color: #374151;
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(229, 231, 235, 0.8);
 }
 
 .option-label.selected {
   background: #b89b7a;
   color: white;
+  box-shadow: 0 4px 12px rgba(184, 155, 122, 0.3);
 }
 
-.selection-indicator {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  z-index: 20;
-  width: 1.5rem;
-  height: 1.5rem;
-  background: #b89b7a;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
+/* Removemos o selection-indicator completamente */
 
-/* Conteúdo da opção */
+/* Conteúdo da opção - Melhor padding e espaçamento */
 .option-content {
-  padding: 0.75rem;
-}
-
-.option-content.with-image {
-  padding-top: 0.5rem;
-}
-
-.option-content.text-only {
   padding: 1rem;
 }
 
-/* Título da opção */
+.option-content.with-image {
+  padding: 0.875rem 1rem 1rem 1rem;
+}
+
+.option-content.text-only {
+  padding: 1.5rem 1rem;
+}
+
+/* Mobile: menos padding */
+@media (max-width: 639px) {
+  .option-content {
+    padding: 0.75rem;
+  }
+
+  .option-content.with-image {
+    padding: 0.75rem 0.75rem 0.875rem 0.75rem;
+  }
+
+  .option-content.text-only {
+    padding: 1.25rem 0.75rem;
+  }
+}
+
+/* Título da opção - Fonte regular com destaque */
 .option-title {
-  font-weight: 600;
+  font-weight: 400; /* Regular por padrão */
   color: #111827;
-  line-height: 1.25;
+  line-height: 1.4;
   margin-bottom: 0.5rem;
+}
+
+.option-title .strategic-word {
+  font-weight: 700; /* Negrito para palavras estratégicas */
 }
 
 .option-title.small {
@@ -181,6 +181,21 @@
 
 .option-title.large {
   font-size: 1.125rem;
+}
+
+/* Fontes menores no mobile */
+@media (max-width: 639px) {
+  .option-title.small {
+    font-size: 0.8rem;
+  }
+
+  .option-title.medium {
+    font-size: 0.875rem;
+  }
+
+  .option-title.large {
+    font-size: 1rem;
+  }
 }
 
 @media (min-width: 640px) {
@@ -197,30 +212,34 @@
   }
 }
 
-/* Footer da opção */
+/* Footer da opção - Mais elegante */
 .option-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
   border-top: 1px solid #f3f4f6;
 }
 
 .option-category {
   font-size: 0.75rem;
   color: #6b7280;
-  background: #f3f4f6;
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
+  background: #f8fafc;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  font-weight: 500;
 }
 
 .option-points {
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #b89b7a;
-  background: rgba(184, 155, 122, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
+  background: rgba(184, 155, 122, 0.08);
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(184, 155, 122, 0.15);
 }
 
 /* Animações de entrada */
