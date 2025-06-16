@@ -1,17 +1,26 @@
-
-import React from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { VerticalCanvasHeader } from './VerticalCanvasHeader';
-import { VerticalCanvasItem } from './VerticalCanvasItem';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useDrop } from 'react-dnd';
+import React from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { VerticalCanvasHeader } from "./VerticalCanvasHeader";
+import { VerticalCanvasItem } from "./VerticalCanvasItem";
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrop } from "react-dnd";
 
 interface CanvasElement {
   id: string;
-  type: 'headline' | 'text' | 'image' | 'form' | 'button';
+  type:
+    | "headline"
+    | "text"
+    | "image"
+    | "form"
+    | "button"
+    | "question-title"
+    | "question-options";
   content: any;
   order: number;
 }
@@ -35,10 +44,10 @@ const CanvasContent: React.FC<EditableCanvasProps> = ({
   onElementUpdate,
   onElementAdd,
   onElementReorder,
-  onElementDelete
+  onElementDelete,
 }) => {
   const [{ isOver }, drop] = useDrop({
-    accept: 'component',
+    accept: "component",
     drop: (item: { type: string }, monitor) => {
       if (!monitor.didDrop()) {
         onElementAdd(item.type, elements.length);
@@ -51,7 +60,7 @@ const CanvasContent: React.FC<EditableCanvasProps> = ({
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    
+
     if (over && active.id !== over.id) {
       onElementReorder(active.id as string, over.id as string);
     }
@@ -60,10 +69,10 @@ const CanvasContent: React.FC<EditableCanvasProps> = ({
   const sortedElements = [...elements].sort((a, b) => a.order - b.order);
 
   return (
-    <div 
+    <div
       ref={drop}
       className={`relative w-full overflow-auto z-10 ${
-        isOver ? 'bg-blue-50' : ''
+        isOver ? "bg-blue-50" : ""
       }`}
     >
       <ScrollArea className="h-full w-full">
@@ -81,7 +90,7 @@ const CanvasContent: React.FC<EditableCanvasProps> = ({
                 onDragEnd={handleDragEnd}
               >
                 <SortableContext
-                  items={sortedElements.map(el => el.id)}
+                  items={sortedElements.map((el) => el.id)}
                   strategy={verticalListSortingStrategy}
                 >
                   <div className="flex flex-col gap-4 pb-10">
@@ -100,7 +109,9 @@ const CanvasContent: React.FC<EditableCanvasProps> = ({
                           isSelected={selectedElementId === element.id}
                           isPreviewMode={isPreviewMode}
                           onSelect={() => onElementSelect(element.id)}
-                          onUpdate={(content) => onElementUpdate(element.id, content)}
+                          onUpdate={(content) =>
+                            onElementUpdate(element.id, content)
+                          }
                           onDelete={() => onElementDelete(element.id)}
                         />
                       ))

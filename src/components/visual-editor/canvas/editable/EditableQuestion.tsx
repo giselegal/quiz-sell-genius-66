@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { Plus, Edit3, Upload, Trash2 } from "lucide-react";
 
 interface QuestionOption {
   id: string;
@@ -54,46 +63,55 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
   };
 
   const handleOptionTextChange = (optionId: string, newText: string) => {
-    const updatedOptions = content.options?.map(option => 
-      option.id === optionId ? { ...option, text: newText } : option
-    ) || [];
-    
+    const updatedOptions =
+      content.options?.map((option) =>
+        option.id === optionId ? { ...option, text: newText } : option
+      ) || [];
+
     onUpdate({
       ...content,
-      options: updatedOptions
+      options: updatedOptions,
     });
   };
 
   const handleOptionPointsChange = (optionId: string, newPoints: number) => {
-    const updatedOptions = content.options?.map(option => 
-      option.id === optionId ? { ...option, points: newPoints } : option
-    ) || [];
-    
+    const updatedOptions =
+      content.options?.map((option) =>
+        option.id === optionId ? { ...option, points: newPoints } : option
+      ) || [];
+
     onUpdate({
       ...content,
-      options: updatedOptions
+      options: updatedOptions,
     });
   };
 
-  const handleOptionCategoryChange = (optionId: string, newCategory: string) => {
-    const updatedOptions = content.options?.map(option => 
-      option.id === optionId ? { ...option, styleCategory: newCategory } : option
-    ) || [];
-    
+  const handleOptionCategoryChange = (
+    optionId: string,
+    newCategory: string
+  ) => {
+    const updatedOptions =
+      content.options?.map((option) =>
+        option.id === optionId
+          ? { ...option, styleCategory: newCategory }
+          : option
+      ) || [];
+
     onUpdate({
       ...content,
-      options: updatedOptions
+      options: updatedOptions,
     });
   };
 
   const handleOptionImageChange = (optionId: string, newImageUrl: string) => {
-    const updatedOptions = content.options?.map(option => 
-      option.id === optionId ? { ...option, imageUrl: newImageUrl } : option
-    ) || [];
-    
+    const updatedOptions =
+      content.options?.map((option) =>
+        option.id === optionId ? { ...option, imageUrl: newImageUrl } : option
+      ) || [];
+
     onUpdate({
       ...content,
-      options: updatedOptions
+      options: updatedOptions,
     });
   };
 
@@ -103,30 +121,31 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
       text: "Nova opção",
       styleCategory: "Clássico",
       points: 10,
-      imageUrl: undefined
+      imageUrl: undefined,
     };
 
     const updatedOptions = [...(content.options || []), newOption];
-    
+
     onUpdate({
       ...content,
-      options: updatedOptions
+      options: updatedOptions,
     });
   };
 
   const handleRemoveOption = (optionId: string) => {
-    const updatedOptions = content.options?.filter(option => option.id !== optionId) || [];
-    
+    const updatedOptions =
+      content.options?.filter((option) => option.id !== optionId) || [];
+
     onUpdate({
       ...content,
-      options: updatedOptions
+      options: updatedOptions,
     });
   };
 
   const handleMultiSelectToggle = () => {
     onUpdate({
       ...content,
-      multiSelect: !content.multiSelect
+      multiSelect: !content.multiSelect,
     });
   };
 
@@ -153,7 +172,7 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
               className="text-2xl font-bold text-gray-900 mb-4 w-full text-center bg-transparent border-b-2 border-dashed border-gray-300 focus:border-blue-500 focus:outline-none"
               placeholder="Digite o título da questão..."
             />
-            
+
             {/* Question Settings */}
             <div className="flex justify-center items-center gap-4 text-sm">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -165,9 +184,9 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
                 />
                 <span className="text-gray-600">Seleção múltipla</span>
               </label>
-              
+
               <span className="text-gray-400">|</span>
-              
+
               <span className="text-gray-600">
                 {content.options?.length || 0} opções
               </span>
@@ -261,18 +280,24 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
                   {/* Editable Text */}
                   <Input
                     value={option.text}
-                    onChange={(e) => handleOptionTextChange(option.id, e.target.value)}
+                    onChange={(e) =>
+                      handleOptionTextChange(option.id, e.target.value)
+                    }
                     className="font-semibold text-gray-900 border-dashed"
                     placeholder="Texto da opção..."
                   />
-                  
+
                   {/* Image URL Input */}
                   <div className="space-y-1">
-                    <label className="text-xs text-gray-500">URL da Imagem (opcional)</label>
+                    <label className="text-xs text-gray-500">
+                      URL da Imagem (opcional)
+                    </label>
                     <div className="flex gap-2">
                       <Input
                         value={option.imageUrl || ""}
-                        onChange={(e) => handleOptionImageChange(option.id, e.target.value)}
+                        onChange={(e) =>
+                          handleOptionImageChange(option.id, e.target.value)
+                        }
                         className="text-xs"
                         placeholder="https://exemplo.com/imagem.jpg"
                       />
@@ -292,9 +317,11 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
               {/* Style Category & Points */}
               {!isPreviewMode && (
                 <div className="flex justify-between items-center mt-3 pt-2 border-t border-gray-100 gap-2">
-                  <Select 
-                    value={option.styleCategory} 
-                    onValueChange={(value) => handleOptionCategoryChange(option.id, value)}
+                  <Select
+                    value={option.styleCategory}
+                    onValueChange={(value) =>
+                      handleOptionCategoryChange(option.id, value)
+                    }
                   >
                     <SelectTrigger className="text-xs h-7 w-20">
                       <SelectValue />
@@ -308,19 +335,24 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
                       <SelectItem value="Minimalista">Minimalista</SelectItem>
                     </SelectContent>
                   </Select>
-                  
+
                   <div className="flex items-center gap-1">
                     <Input
                       type="number"
                       value={option.points}
-                      onChange={(e) => handleOptionPointsChange(option.id, parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        handleOptionPointsChange(
+                          option.id,
+                          parseInt(e.target.value) || 0
+                        )
+                      }
                       className="text-xs font-medium text-[#B89B7A] w-12 h-7 text-center border-dashed"
                       min="0"
                       max="100"
                     />
                     <span className="text-xs text-gray-400">pts</span>
                   </div>
-                  
+
                   <Button
                     variant="ghost"
                     size="sm"
@@ -332,7 +364,7 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
                   </Button>
                 </div>
               )}
-              
+
               {/* Preview mode points display */}
               {isPreviewMode && (
                 <div className="flex justify-between items-center mt-3 pt-2 border-t border-gray-100">
@@ -385,7 +417,7 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
             </div>
           </div>
         )}
-        
+
         {/* Add Option Button - Only in Edit Mode */}
         {!isPreviewMode && content.options && content.options.length > 0 && (
           <div className="col-span-full">
@@ -405,15 +437,18 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
       <div className="text-center pt-4">
         {isPreviewMode ? (
           <div className="space-y-2">
-            <Button 
-              className="px-8 py-3" 
+            <Button
+              className="px-8 py-3"
               disabled={selectedOptions.length === 0}
             >
               Continuar
             </Button>
             {selectedOptions.length === 0 && (
               <p className="text-xs text-gray-500">
-                {content.multiSelect ? "Selecione uma ou mais opções" : "Selecione uma opção"} para continuar
+                {content.multiSelect
+                  ? "Selecione uma ou mais opções"
+                  : "Selecione uma opção"}{" "}
+                para continuar
               </p>
             )}
           </div>
@@ -421,21 +456,19 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
           <div className="space-y-3 p-4 bg-gray-50 rounded-lg">
             <div className="flex justify-between text-sm text-gray-600">
               <span>Total de opções: {content.options?.length || 0}</span>
-              <span>Tipo: {content.multiSelect ? "Múltipla seleção" : "Seleção única"}</span>
+              <span>
+                Tipo:{" "}
+                {content.multiSelect ? "Múltipla seleção" : "Seleção única"}
+              </span>
             </div>
-            
+
             {(content.options?.length || 0) === 0 && (
               <p className="text-xs text-amber-600 bg-amber-50 p-2 rounded">
                 ⚠️ Adicione pelo menos uma opção para que a questão funcione
               </p>
             )}
-            
-            <Button 
-              variant="secondary"
-              size="sm"
-              className="w-full"
-              disabled
-            >
+
+            <Button variant="secondary" size="sm" className="w-full" disabled>
               <Edit3 className="w-4 h-4 mr-2" />
               Modo de Edição - Preview para testar
             </Button>
