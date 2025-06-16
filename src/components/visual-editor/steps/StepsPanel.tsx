@@ -49,8 +49,8 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
     onStepAdd(type);
     const typeInfo = getStepTypeInfo(type);
     toast({
-      title: `Nova etapa de ${typeInfo.label} adicionada`,
-      description: `Uma nova etapa de ${typeInfo.label.toLowerCase()} foi criada no funil.`,
+      title: `Nova ${typeInfo.label} adicionada`,
+      description: `Uma nova ${typeInfo.label.toLowerCase()} foi criada no funil.`,
     });
   };
 
@@ -80,9 +80,10 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
   };
 
   const stepTypes = [
-    { type: 'quiz' as StepType, label: 'Quiz', icon: '❓' },
-    { type: 'result' as StepType, label: 'Resultado', icon: '🎯' },
-    { type: 'offer' as StepType, label: 'Oferta', icon: '💰' },
+    { type: 'quiz-intro' as StepType, label: 'Capa do Quiz', icon: '🏠' },
+    { type: 'quiz-question' as StepType, label: 'Questão', icon: '❓' },
+    { type: 'quiz-result' as StepType, label: 'Resultado', icon: '🎯' },
+    { type: 'offer-page' as StepType, label: 'Página de Oferta', icon: '💰' },
   ];
 
   return (

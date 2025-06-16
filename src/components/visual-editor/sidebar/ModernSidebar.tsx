@@ -16,7 +16,13 @@ import {
   ShoppingBag,
   CreditCard,
   Shield,
-  BarChart3
+  BarChart3,
+  Play,
+  CheckCircle,
+  Timer,
+  Gift,
+  Users,
+  Award
 } from 'lucide-react';
 import { StepType } from '@/hooks/useStepsManager';
 
@@ -40,30 +46,51 @@ export const ModernSidebar: React.FC<ModernSidebarProps> = ({
     ];
 
     switch (stepType) {
-      case 'quiz':
+      case 'quiz-intro':
         return [
           { type: 'header', label: 'Cabeçalho', icon: Layout },
-          { type: 'quiz-header', label: 'Título do Quiz', icon: Type },
-          { type: 'quiz-question', label: 'Pergunta', icon: MessageSquare },
-          { type: 'terms', label: 'Termos', icon: Type },
+          { type: 'logo', label: 'Logo', icon: Image },
+          { type: 'quiz-title', label: 'Título do Quiz', icon: Type },
+          { type: 'quiz-description', label: 'Descrição', icon: Type },
+          { type: 'start-button', label: 'Botão Iniciar', icon: Play },
+          { type: 'testimonials', label: 'Depoimentos', icon: Star },
           ...commonComponents
         ];
         
-      case 'result':
+      case 'quiz-question':
         return [
           { type: 'header', label: 'Cabeçalho', icon: Layout },
-          { type: 'result-display', label: 'Resultado', icon: Target },
-          { type: 'marquee', label: 'Depoimentos', icon: Star },
+          { type: 'progress-bar', label: 'Barra de Progresso', icon: BarChart3 },
+          { type: 'question-title', label: 'Pergunta', icon: MessageSquare },
+          { type: 'question-options', label: 'Opções de Resposta', icon: CheckCircle },
+          { type: 'navigation-buttons', label: 'Botões de Navegação', icon: MousePointer },
           ...commonComponents
         ];
         
-      case 'offer':
+      case 'quiz-result':
         return [
           { type: 'header', label: 'Cabeçalho', icon: Layout },
-          { type: 'offer-hero', label: 'Oferta Principal', icon: ShoppingBag },
+          { type: 'result-display', label: 'Exibição do Resultado', icon: Target },
+          { type: 'result-description', label: 'Descrição do Resultado', icon: Type },
+          { type: 'secondary-results', label: 'Resultados Secundários', icon: BarChart3 },
+          { type: 'offer-preview', label: 'Preview da Oferta', icon: Gift },
+          { type: 'cta-button', label: 'Botão de Ação', icon: MousePointer },
+          { type: 'testimonials', label: 'Depoimentos', icon: Star },
+          ...commonComponents
+        ];
+        
+      case 'offer-page':
+        return [
+          { type: 'header', label: 'Cabeçalho', icon: Layout },
+          { type: 'offer-hero', label: 'Hero da Oferta', icon: ShoppingBag },
           { type: 'pricing', label: 'Preços', icon: CreditCard },
+          { type: 'benefits-list', label: 'Lista de Benefícios', icon: CheckCircle },
           { type: 'guarantee', label: 'Garantia', icon: Shield },
           { type: 'testimonials', label: 'Depoimentos', icon: Star },
+          { type: 'urgency-timer', label: 'Timer de Urgência', icon: Timer },
+          { type: 'social-proof', label: 'Prova Social', icon: Users },
+          { type: 'bonus-section', label: 'Seção de Bônus', icon: Gift },
+          { type: 'purchase-button', label: 'Botão de Compra', icon: MousePointer },
           ...commonComponents
         ];
         
@@ -81,9 +108,10 @@ export const ModernSidebar: React.FC<ModernSidebarProps> = ({
 
   const getStepTypeLabel = (stepType?: StepType) => {
     switch (stepType) {
-      case 'quiz': return 'Quiz';
-      case 'result': return 'Resultado';
-      case 'offer': return 'Oferta';
+      case 'quiz-intro': return 'Capa do Quiz';
+      case 'quiz-question': return 'Questão';
+      case 'quiz-result': return 'Resultado';
+      case 'offer-page': return 'Página de Oferta';
       default: return 'Geral';
     }
   };

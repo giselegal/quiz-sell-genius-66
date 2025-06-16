@@ -1,259 +1,153 @@
-import { useState, useCallback, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { StepType } from './useStepsManager';
+
+import { useState, useCallback } from 'react';
 
 export interface EditorElement {
   id: string;
   type: string;
-  content: Record<string, any>;
-  style: Record<string, any>;
-  position: { x: number; y: number };
-  visible: boolean;
-  locked: boolean;
+  stepId: string;
   order: number;
-  stepId?: string; // Associate element with step
+  content: {
+    text?: string;
+    src?: string;
+    alt?: string;
+    href?: string;
+    options?: string[];
+    progress?: number;
+    [key: string]: any;
+  };
+  style: {
+    backgroundColor?: string;
+    color?: string;
+    padding?: string;
+    margin?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    textAlign?: 'left' | 'center' | 'right';
+    [key: string]: any;
+  };
 }
 
-export interface EditorState {
-  elements: EditorElement[];
-  selectedElementId: string | null;
-  isPreviewMode: boolean;
-  history: EditorElement[][];
-  historyIndex: number;
-}
+export const useModernEditor = () => {
+  const [elements, setElements] = useState<EditorElement[]>([]);
+  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [history, setHistory] = useState<EditorElement[][]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
 
-export const useModernEditor = (initialData?: any) => {
-  const [state, setState] = useState<EditorState>({
-    elements: initialData?.elements || [],
-    selectedElementId: null,
-    isPreviewMode: false,
-    history: [initialData?.elements || []],
-    historyIndex: 0
-  });
-
-  // Auto-save functionality
-  useEffect(() => {
-    const autoSaveTimer = setInterval(() => {
-      if (state.elements.length > 0) {
-        localStorage.setItem('modern-editor-autosave', JSON.stringify({
-          elements: state.elements,
-          timestamp: Date.now()
-        }));
-      }
-    }, 30000); // Auto-save every 30 seconds
-
-    return () => clearInterval(autoSaveTimer);
-  }, [state.elements]);
-
-  const saveToHistory = useCallback((elements: EditorElement[]) => {
-    setState(prev => {
-      const newHistory = prev.history.slice(0, prev.historyIndex + 1);
-      newHistory.push([...elements]);
-      
-      return {
-        ...prev,
-        history: newHistory.slice(-50), // Keep last 50 states
-        historyIndex: Math.min(newHistory.length - 1, 49)
-      };
-    });
-  }, []);
-
-  const addElement = useCallback((type: string, position?: { x: number; y: number }, stepId?: string) => {
-    const newElement: EditorElement = {
-      id: uuidv4(),
-      type,
-      content: getDefaultContent(type),
-      style: {},
-      position: position || { x: 0, y: 0 },
-      visible: true,
-      locked: false,
-      order: state.elements.length,
-      stepId
-    };
-
-    const newElements = [...state.elements, newElement];
-    
-    setState(prev => ({
-      ...prev,
-      elements: newElements,
-      selectedElementId: newElement.id
-    }));
-
-    saveToHistory(newElements);
-    
-    return newElement.id;
-  }, [state.elements, saveToHistory]);
-
-  const addStepTemplate = useCallback((stepType: StepType, stepId: string) => {
-    const templateElements = getStepTemplate(stepType, stepId);
-    const newElements = [...state.elements, ...templateElements];
-    
-    setState(prev => ({
-      ...prev,
-      elements: newElements
-    }));
-
-    saveToHistory(newElements);
-    
-    return templateElements.map(el => el.id);
-  }, [state.elements, saveToHistory]);
-
-  const getStepTemplate = (stepType: StepType, stepId: string): EditorElement[] => {
-    const baseOrder = state.elements.length;
+  // Template components for different step types
+  const getTemplateComponents = (stepType: string, stepId: string): EditorElement[] => {
+    const baseId = Date.now();
     
     switch (stepType) {
-      case 'quiz':
+      case 'quiz-intro':
         return [
           {
-            id: uuidv4(),
-            type: 'header',
-            content: getDefaultContent('header'),
-            style: {},
-            position: { x: 0, y: 0 },
-            visible: true,
-            locked: false,
-            order: baseOrder,
-            stepId
+            id: `${baseId}-1`,
+            type: 'quiz-title',
+            stepId,
+            order: 1,
+            content: { text: 'Descubra Seu Estilo Pessoal' },
+            style: { textAlign: 'center', fontSize: '3rem', fontWeight: 'bold' }
           },
           {
-            id: uuidv4(),
-            type: 'quiz-header',
-            content: getDefaultContent('quiz-header'),
-            style: {},
-            position: { x: 0, y: 100 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 1,
-            stepId
+            id: `${baseId}-2`,
+            type: 'quiz-description',
+            stepId,
+            order: 2,
+            content: { text: 'Responda algumas perguntas e descubra qual estilo combina mais com você.' },
+            style: { textAlign: 'center', fontSize: '1.125rem' }
           },
           {
-            id: uuidv4(),
-            type: 'quiz-question',
-            content: getDefaultContent('quiz-question'),
-            style: {},
-            position: { x: 0, y: 200 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 2,
-            stepId
-          },
-          {
-            id: uuidv4(),
-            type: 'terms',
-            content: getDefaultContent('terms'),
-            style: {},
-            position: { x: 0, y: 300 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 3,
-            stepId
+            id: `${baseId}-3`,
+            type: 'start-button',
+            stepId,
+            order: 3,
+            content: { text: 'Começar Quiz' },
+            style: { textAlign: 'center' }
           }
         ];
         
-      case 'result':
+      case 'quiz-question':
         return [
           {
-            id: uuidv4(),
-            type: 'header',
-            content: getDefaultContent('header'),
-            style: {},
-            position: { x: 0, y: 0 },
-            visible: true,
-            locked: false,
-            order: baseOrder,
-            stepId
+            id: `${baseId}-1`,
+            type: 'progress-bar',
+            stepId,
+            order: 1,
+            content: { progress: 25 },
+            style: {}
           },
           {
-            id: uuidv4(),
+            id: `${baseId}-2`,
+            type: 'question-title',
+            stepId,
+            order: 2,
+            content: { text: 'Qual dessas opções mais combina com você?' },
+            style: { textAlign: 'center', fontSize: '1.25rem', fontWeight: '600' }
+          },
+          {
+            id: `${baseId}-3`,
+            type: 'question-options',
+            stepId,
+            order: 3,
+            content: { options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'] },
+            style: {}
+          }
+        ];
+        
+      case 'quiz-result':
+        return [
+          {
+            id: `${baseId}-1`,
+            type: 'heading',
+            stepId,
+            order: 1,
+            content: { text: 'Seu Resultado' },
+            style: { textAlign: 'center', fontSize: '2rem', fontWeight: 'bold' }
+          },
+          {
+            id: `${baseId}-2`,
             type: 'result-display',
-            content: getDefaultContent('result-display'),
-            style: {},
-            position: { x: 0, y: 100 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 1,
-            stepId
+            stepId,
+            order: 2,
+            content: { text: 'Seu estilo é: Elegante' },
+            style: { textAlign: 'center', fontSize: '1.5rem' }
           },
           {
-            id: uuidv4(),
-            type: 'marquee',
-            content: getDefaultContent('marquee'),
-            style: {},
-            position: { x: 0, y: 200 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 2,
-            stepId
-          },
-          {
-            id: uuidv4(),
-            type: 'button',
-            content: { ...getDefaultContent('button'), text: 'Ver Oferta Especial' },
-            style: {},
-            position: { x: 0, y: 300 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 3,
-            stepId
+            id: `${baseId}-3`,
+            type: 'cta-button',
+            stepId,
+            order: 3,
+            content: { text: 'Ver Oferta Especial' },
+            style: { textAlign: 'center' }
           }
         ];
         
-      case 'offer':
+      case 'offer-page':
         return [
           {
-            id: uuidv4(),
-            type: 'header',
-            content: getDefaultContent('header'),
-            style: {},
-            position: { x: 0, y: 0 },
-            visible: true,
-            locked: false,
-            order: baseOrder,
-            stepId
-          },
-          {
-            id: uuidv4(),
+            id: `${baseId}-1`,
             type: 'offer-hero',
-            content: getDefaultContent('offer-hero'),
-            style: {},
-            position: { x: 0, y: 100 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 1,
-            stepId
+            stepId,
+            order: 1,
+            content: { text: 'Oferta Especial para Você!' },
+            style: { textAlign: 'center', fontSize: '2.5rem', fontWeight: 'bold' }
           },
           {
-            id: uuidv4(),
+            id: `${baseId}-2`,
             type: 'pricing',
-            content: getDefaultContent('pricing'),
-            style: {},
-            position: { x: 0, y: 200 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 2,
-            stepId
+            stepId,
+            order: 2,
+            content: { text: 'De R$ 297 por apenas R$ 97' },
+            style: { textAlign: 'center', fontSize: '1.5rem' }
           },
           {
-            id: uuidv4(),
-            type: 'guarantee',
-            content: getDefaultContent('guarantee'),
-            style: {},
-            position: { x: 0, y: 300 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 3,
-            stepId
-          },
-          {
-            id: uuidv4(),
-            type: 'button',
-            content: { ...getDefaultContent('button'), text: 'Comprar Agora' },
-            style: {},
-            position: { x: 0, y: 400 },
-            visible: true,
-            locked: false,
-            order: baseOrder + 4,
-            stepId
+            id: `${baseId}-3`,
+            type: 'purchase-button',
+            stepId,
+            order: 3,
+            content: { text: 'Comprar Agora' },
+            style: { textAlign: 'center' }
           }
         ];
         
@@ -262,284 +156,112 @@ export const useModernEditor = (initialData?: any) => {
     }
   };
 
-  const getDefaultContent = (type: string): Record<string, any> => {
-    switch (type) {
-      case 'header':
-        return {
-          logoUrl: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
-          logoAlt: 'Logo',
-          showBackButton: true,
-          showProgress: true,
-          currentStep: 1,
-          totalSteps: 7,
-          backgroundColor: '#FFFFFF'
-        };
+  const addElement = useCallback((type: string, position?: number, stepId?: string) => {
+    const newElement: EditorElement = {
+      id: `element-${Date.now()}`,
+      type,
+      stepId: stepId || 'default',
+      order: position !== undefined ? position : elements.length,
+      content: {
+        text: type === 'heading' ? 'Novo Título' : 
+              type === 'text' ? 'Novo texto' :
+              type === 'button' ? 'Botão' : '',
+        ...(type === 'image' && { src: '', alt: 'Imagem' }),
+        ...(type === 'question-options' && { options: ['Opção 1', 'Opção 2'] })
+      },
+      style: {
+        backgroundColor: '#ffffff',
+        color: '#000000',
+        padding: '16px',
+        margin: '0px'
+      }
+    };
 
-      case 'terms':
-        return {
-          html: 'Ao clicar em alguma das opções, você concorda com os <b>Termos de utilização e serviço</b>, <b>Política de privacidade</b>, <b>Política de subscrição</b> e <b>Política de cookies</b>'
-        };
+    setElements(prev => [...prev, newElement]);
+    setSelectedElementId(newElement.id);
+    
+    return newElement.id;
+  }, [elements.length]);
 
-      case 'fixed-header':
-        return {
-          logoUrl: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
-          logoAlt: 'Logo',
-          showBackButton: true,
-          showProgress: true,
-          currentStep: 1,
-          totalSteps: 7,
-          backgroundColor: '#FFFFFF',
-          logoSize: '96px'
-        };
-
-      case 'quiz-header':
-        return {
-          title: 'Descobrir Seu Estilo',
-          subtitle: 'Responda algumas perguntas e descubra qual é o seu estilo único!'
-        };
-      
-      case 'quiz-question':
-        return {
-          question: 'Qual destas opções mais combina com você?',
-          options: ['Opção A', 'Opção B', 'Opção C', 'Opção D']
-        };
-
-      case 'result-display':
-        return {
-          title: 'Seu Estilo é',
-          primaryStyle: 'Elegante',
-          percentage: 85,
-          description: 'Você tem um estilo sofisticado e refinado.'
-        };
-
-      case 'offer-hero':
-        return {
-          title: 'Oferta Especial para Você!',
-          subtitle: 'Transforme seu estilo com nosso programa personalizado',
-          price: 'R$ 297',
-          originalPrice: 'R$ 597',
-          discount: '50% OFF'
-        };
-
-      case 'pricing':
-        return {
-          title: 'Preço Especial',
-          price: 'R$ 297',
-          originalPrice: 'R$ 597',
-          installments: '12x de R$ 29,70',
-          features: ['Consultoria personalizada', 'Material exclusivo', 'Suporte 24/7']
-        };
-
-      case 'guarantee':
-        return {
-          title: 'Garantia de 30 dias',
-          description: 'Se não ficar satisfeito, devolvemos 100% do seu dinheiro'
-        };
-      
-      case 'heading':
-        return {
-          text: 'Título Principal',
-          level: 'h2'
-        };
-      
-      case 'text':
-        return {
-          text: 'Este é um parágrafo de texto. Clique duas vezes para editar.'
-        };
-      
-      case 'button':
-        return {
-          text: 'Clique Aqui',
-          variant: 'primary'
-        };
-      
-      case 'image':
-        return {
-          src: 'https://via.placeholder.com/400x200?text=Imagem',
-          alt: 'Imagem'
-        };
-      
-      case 'video':
-        return {
-          src: '',
-          autoplay: false,
-          controls: true
-        };
-      
-      case 'spacer':
-        return {
-          height: '2rem'
-        };
-      
-      case 'marquee':
-        return {
-          testimonials: [
-            {
-              id: '1',
-              name: 'Jack',
-              username: '@jack',
-              avatar: 'https://avatar.vercel.sh/jack',
-              content: 'Nunca vi nada como isso antes. É incrível. Eu amei!'
-            },
-            {
-              id: '2',
-              name: 'Jill',
-              username: '@jill',
-              avatar: 'https://avatar.vercel.sh/jill',
-              content: 'Não sei o que dizer. Estou sem palavras. Isso é incrível.'
-            },
-            {
-              id: '3',
-              name: 'John',
-              username: '@john',
-              avatar: 'https://avatar.vercel.sh/john',
-              content: 'Produto fantástico! Superou todas as minhas expectativas.'
-            }
-          ],
-          duration: '40s',
-          gap: '1rem',
-          direction: 'left',
-          pauseOnHover: true,
-          showGradients: true,
-          cardWidth: '256px'
-        };
-      
-      default:
-        return {
-          text: `Componente ${type}`
-        };
-    }
-  };
+  const addStepTemplate = useCallback((stepType: string, stepId: string) => {
+    const templateComponents = getTemplateComponents(stepType, stepId);
+    setElements(prev => [...prev, ...templateComponents]);
+  }, []);
 
   const updateElement = useCallback((id: string, updates: Partial<EditorElement>) => {
-    const newElements = state.elements.map(el => 
-      el.id === id ? { ...el, ...updates } : el
-    );
-    
-    setState(prev => ({
-      ...prev,
-      elements: newElements
-    }));
-
-    saveToHistory(newElements);
-  }, [state.elements, saveToHistory]);
+    setElements(prev => prev.map(element => 
+      element.id === id ? { ...element, ...updates } : element
+    ));
+  }, []);
 
   const duplicateElement = useCallback((id: string) => {
-    const elementToDuplicate = state.elements.find(el => el.id === id);
-    if (!elementToDuplicate) return '';
+    const elementToDuplicate = elements.find(el => el.id === id);
+    if (!elementToDuplicate) return;
 
     const newElement: EditorElement = {
       ...elementToDuplicate,
-      id: uuidv4(),
-      position: {
-        x: elementToDuplicate.position.x + 20,
-        y: elementToDuplicate.position.y + 20
-      },
-      order: state.elements.length
+      id: `element-${Date.now()}`,
+      order: elementToDuplicate.order + 1
     };
 
-    const newElements = [...state.elements, newElement];
-    
-    setState(prev => ({
-      ...prev,
-      elements: newElements,
-      selectedElementId: newElement.id
-    }));
-
-    saveToHistory(newElements);
-    
+    setElements(prev => [...prev, newElement]);
     return newElement.id;
-  }, [state.elements, saveToHistory]);
+  }, [elements]);
 
   const deleteElement = useCallback((id: string) => {
-    const newElements = state.elements.filter(el => el.id !== id);
-    
-    setState(prev => ({
-      ...prev,
-      elements: newElements,
-      selectedElementId: prev.selectedElementId === id ? null : prev.selectedElementId
-    }));
-
-    saveToHistory(newElements);
-  }, [state.elements, saveToHistory]);
+    setElements(prev => prev.filter(element => element.id !== id));
+    if (selectedElementId === id) {
+      setSelectedElementId(null);
+    }
+  }, [selectedElementId]);
 
   const selectElement = useCallback((id: string | null) => {
-    setState(prev => ({
-      ...prev,
-      selectedElementId: id
-    }));
+    setSelectedElementId(id);
   }, []);
 
   const togglePreview = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      isPreviewMode: !prev.isPreviewMode,
-      selectedElementId: null
-    }));
+    setIsPreviewMode(prev => !prev);
   }, []);
 
   const undo = useCallback(() => {
-    if (state.historyIndex > 0) {
-      const prevElements = state.history[state.historyIndex - 1];
-      setState(prev => ({
-        ...prev,
-        elements: [...prevElements],
-        historyIndex: prev.historyIndex - 1,
-        selectedElementId: null
-      }));
+    if (historyIndex > 0) {
+      setHistoryIndex(prev => prev - 1);
+      setElements(history[historyIndex - 1]);
     }
-  }, [state.historyIndex, state.history]);
+  }, [history, historyIndex]);
 
   const redo = useCallback(() => {
-    if (state.historyIndex < state.history.length - 1) {
-      const nextElements = state.history[state.historyIndex + 1];
-      setState(prev => ({
-        ...prev,
-        elements: [...nextElements],
-        historyIndex: prev.historyIndex + 1,
-        selectedElementId: null
-      }));
+    if (historyIndex < history.length - 1) {
+      setHistoryIndex(prev => prev + 1);
+      setElements(history[historyIndex + 1]);
     }
-  }, [state.historyIndex, state.history]);
+  }, [history, historyIndex]);
 
   const save = useCallback(async () => {
-    const data = {
-      elements: state.elements,
-      timestamp: Date.now()
-    };
-    
-    // Save to localStorage as backup
-    localStorage.setItem('modern-editor-saved', JSON.stringify(data));
-    
-    return data;
-  }, [state.elements]);
-
-  const loadAutoSave = useCallback(() => {
-    const autoSave = localStorage.getItem('modern-editor-autosave');
-    if (autoSave) {
-      const data = JSON.parse(autoSave);
-      setState(prev => ({
-        ...prev,
-        elements: data.elements || [],
-        selectedElementId: null
-      }));
-      saveToHistory(data.elements || []);
-    }
-  }, [saveToHistory]);
+    // Simulate save operation
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          elements,
+          timestamp: new Date().toISOString()
+        });
+      }, 500);
+    });
+  }, [elements]);
 
   const getElementsByStep = useCallback((stepId: string) => {
-    return state.elements.filter(el => el.stepId === stepId);
-  }, [state.elements]);
+    return elements.filter(element => element.stepId === stepId);
+  }, [elements]);
+
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < history.length - 1;
 
   return {
-    // State
-    elements: state.elements,
-    selectedElementId: state.selectedElementId,
-    isPreviewMode: state.isPreviewMode,
-    canUndo: state.historyIndex > 0,
-    canRedo: state.historyIndex < state.history.length - 1,
-    
-    // Actions
+    elements,
+    selectedElementId,
+    isPreviewMode,
+    canUndo,
+    canRedo,
     addElement,
     addStepTemplate,
     updateElement,
@@ -550,7 +272,6 @@ export const useModernEditor = (initialData?: any) => {
     undo,
     redo,
     save,
-    loadAutoSave,
     getElementsByStep
   };
 };

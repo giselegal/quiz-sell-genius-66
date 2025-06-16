@@ -1,7 +1,9 @@
 
-import React, { useCallback } from 'react';
+import React from 'react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Plus, Eye, Monitor, Tablet, Smartphone } from 'lucide-react';
 import { EditorElement } from '@/hooks/useModernEditor';
-import { ModernElementRenderer } from './ModernElementRenderer';
 
 interface ModernCanvasProps {
   elements: EditorElement[];
@@ -9,11 +11,9 @@ interface ModernCanvasProps {
   onSelectElement: (id: string | null) => void;
   onUpdateElement: (id: string, updates: Partial<EditorElement>) => void;
   onDeleteElement: (id: string) => void;
-  onAddElement: (type: string, position?: { x: number; y: number }) => void;
+  onAddElement: (type: string) => void;
   isPreviewMode: boolean;
   viewport: 'desktop' | 'tablet' | 'mobile';
-  showGrid?: boolean;
-  className?: string;
 }
 
 export const ModernCanvas: React.FC<ModernCanvasProps> = ({
@@ -24,129 +24,194 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
   onDeleteElement,
   onAddElement,
   isPreviewMode,
-  viewport,
-  showGrid = true,
-  className = ''
+  viewport
 }) => {
-  const handleCanvasClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onSelectElement(null);
-    }
-  };
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    const componentType = e.dataTransfer.getData('text/plain');
-    
-    if (componentType) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      onAddElement(componentType, { x: Math.max(0, x - 100), y: Math.max(0, y - 50) });
-    }
-  }, [onAddElement]);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-  }, []);
-
-  const getCanvasStyle = () => {
-    const baseStyle = {
-      minHeight: '100vh',
-      position: 'relative' as const,
-    };
-
-    if (showGrid && !isPreviewMode) {
-      return {
-        ...baseStyle,
-        backgroundImage: `
-          linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)
-        `,
-        backgroundSize: '20px 20px',
-      };
-    }
-
-    return baseStyle;
-  };
-
-  const getViewportWidth = () => {
+  const getViewportSize = () => {
     switch (viewport) {
       case 'mobile':
         return 'max-w-sm';
       case 'tablet':
         return 'max-w-2xl';
+      case 'desktop':
       default:
-        return 'w-full max-w-4xl';
+        return 'max-w-6xl';
     }
   };
 
-  if (elements.length === 0 && !isPreviewMode) {
+  const getViewportIcon = () => {
+    switch (viewport) {
+      case 'mobile':
+        return <Smartphone className="w-4 h-4" />;
+      case 'tablet':
+        return <Tablet className="w-4 h-4" />;
+      case 'desktop':
+      default:
+        return <Monitor className="w-4 h-4" />;
+    }
+  };
+
+  const renderElement = (element: EditorElement) => {
+    const isSelected = selectedElementId === element.id;
+    
     return (
-      <div 
-        className="h-full flex items-center justify-center bg-gray-50"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
+      <div
+        key={element.id}
+        className={`relative p-4 border-2 border-dashed transition-colors cursor-pointer ${
+          isSelected 
+            ? 'border-blue-500 bg-blue-50' 
+            : 'border-gray-200 hover:border-gray-300'
+        }`}
+        onClick={() => onSelectElement(element.id)}
       >
-        <div className="text-center">
-          <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
-            <svg className="w-12 h-12 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Comece criando seu quiz
-          </h3>
-          <p className="text-gray-500 max-w-sm mb-4">
-            Arraste componentes da sidebar ou clique neles para começar a construir seu quiz interativo.
-          </p>
-          <div className="text-sm text-gray-400">
-            💡 Dica: Comece com um Header e depois adicione questões
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="h-full overflow-auto bg-gray-50">
-      <div className="p-4 md:p-8">
-        <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 ${getViewportWidth()} ${className}`}>
-          <div
-            style={getCanvasStyle()}
-            onClick={handleCanvasClick}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            className="relative min-h-[80vh]"
-          >
-            {/* Quiz Canvas Layout */}
-            <div className="flex flex-col gap-4 p-6">
-              {/* Drop indicator */}
-              <div className="absolute inset-0 pointer-events-none">
-                {!isPreviewMode && (
-                  <div className="absolute top-4 left-4 text-xs text-gray-400 bg-white px-2 py-1 rounded shadow-sm z-20">
-                    {viewport === 'mobile' ? '📱 Mobile' : viewport === 'tablet' ? '📟 Tablet' : '🖥️ Desktop'}
-                  </div>
-                )}
-              </div>
-
-              {elements.map((element) => (
-                <ModernElementRenderer
-                  key={element.id}
-                  element={element}
-                  isSelected={selectedElementId === element.id}
-                  isPreviewMode={isPreviewMode}
-                  onSelect={() => onSelectElement(element.id)}
-                  onUpdate={(updates) => onUpdateElement(element.id, updates)}
-                  onDelete={() => onDeleteElement(element.id)}
+        {/* Element content based on type */}
+        <div className="min-h-[60px] flex items-center justify-center">
+          {element.type === 'heading' && (
+            <h2 className="text-2xl font-bold text-gray-800">
+              {element.content.text || 'Título'}
+            </h2>
+          )}
+          
+          {element.type === 'text' && (
+            <p className="text-gray-600">
+              {element.content.text || 'Texto de exemplo'}
+            </p>
+          )}
+          
+          {element.type === 'image' && (
+            <div className="w-full h-32 bg-gray-200 flex items-center justify-center rounded">
+              {element.content.src ? (
+                <img 
+                  src={element.content.src} 
+                  alt={element.content.alt || 'Imagem'} 
+                  className="max-w-full max-h-full object-cover rounded"
                 />
+              ) : (
+                <span className="text-gray-500">Imagem</span>
+              )}
+            </div>
+          )}
+          
+          {element.type === 'button' && (
+            <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+              {element.content.text || 'Botão'}
+            </button>
+          )}
+          
+          {element.type === 'quiz-title' && (
+            <h1 className="text-4xl font-bold text-center text-gray-800">
+              {element.content.text || 'Título do Quiz'}
+            </h1>
+          )}
+          
+          {element.type === 'quiz-description' && (
+            <p className="text-lg text-center text-gray-600">
+              {element.content.text || 'Descrição do quiz aqui'}
+            </p>
+          )}
+          
+          {element.type === 'start-button' && (
+            <button className="px-8 py-4 bg-green-600 text-white text-lg rounded-lg hover:bg-green-700 transition-colors">
+              {element.content.text || 'Iniciar Quiz'}
+            </button>
+          )}
+          
+          {element.type === 'progress-bar' && (
+            <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-blue-500 transition-all duration-300"
+                style={{ width: `${element.content.progress || 30}%` }}
+              />
+            </div>
+          )}
+          
+          {element.type === 'question-title' && (
+            <h3 className="text-xl font-semibold text-gray-800">
+              {element.content.text || 'Sua pergunta aqui?'}
+            </h3>
+          )}
+          
+          {element.type === 'question-options' && (
+            <div className="space-y-3 w-full">
+              {(element.content.options || ['Opção 1', 'Opção 2', 'Opção 3']).map((option, index) => (
+                <button
+                  key={index}
+                  className="w-full p-3 text-left border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                >
+                  {option}
+                </button>
               ))}
             </div>
+          )}
+          
+          {/* Fallback for unknown types */}
+          {!['heading', 'text', 'image', 'button', 'quiz-title', 'quiz-description', 'start-button', 'progress-bar', 'question-title', 'question-options'].includes(element.type) && (
+            <div className="text-gray-500 text-center">
+              <div className="text-sm font-medium">{element.type}</div>
+              <div className="text-xs">Componente não implementado</div>
+            </div>
+          )}
+        </div>
+        
+        {/* Selection overlay */}
+        {isSelected && (
+          <div className="absolute inset-0 border-2 border-blue-500 pointer-events-none" />
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="h-full flex flex-col bg-gray-50">
+      {/* Canvas Header */}
+      <div className="p-4 bg-white border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {getViewportIcon()}
+            <span className="text-sm font-medium text-gray-700">
+              {viewport === 'mobile' ? 'Mobile' : viewport === 'tablet' ? 'Tablet' : 'Desktop'}
+            </span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            {isPreviewMode && (
+              <div className="flex items-center gap-1 text-green-600">
+                <Eye className="w-4 h-4" />
+                <span className="text-sm font-medium">Preview</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Canvas Content */}
+      <ScrollArea className="flex-1">
+        <div className="p-8">
+          <div className={`mx-auto ${getViewportSize()} bg-white min-h-[600px] shadow-lg rounded-lg overflow-hidden`}>
+            {elements.length === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center p-8 text-gray-500">
+                <Plus className="w-12 h-12 mb-4" />
+                <h3 className="text-lg font-medium mb-2">Nenhum componente adicionado</h3>
+                <p className="text-center mb-4">
+                  Selecione componentes na barra lateral para começar a construir sua tela.
+                </p>
+                <Button 
+                  onClick={() => onAddElement('heading')}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Adicionar Título
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4 p-4">
+                {elements
+                  .sort((a, b) => a.order - b.order)
+                  .map(renderElement)}
+              </div>
+            )}
+          </div>
+        </div>
+      </ScrollArea>
     </div>
   );
 };
