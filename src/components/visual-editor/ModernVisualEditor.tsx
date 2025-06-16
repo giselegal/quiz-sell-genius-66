@@ -6,6 +6,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { ComponentLibrarySidebar } from "./sidebar/ComponentLibrarySidebar";
 import { EditorToolbar } from "./toolbar/EditorToolbar";
 import { ElementPropertiesPanel } from "./properties/ElementPropertiesPanel";
+import { DetailedStepsPanel } from "./steps/DetailedStepsPanel";
 import { useEditorState } from "@/hooks/useEditorState";
 import { useUndoRedo } from "@/hooks/useUndoRedo";
 import type { VisualEditorState, ElementUpdate } from "@/types/visualEditor";
@@ -145,7 +146,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     ? editorState.elements.find((el) => el.id === selectedElementId)
     : null;
 
-    const activeStage = editorState.stages.find(stage => stage.id === editorState.activeStageId);
+  const activeStage = editorState.stages.find(stage => stage.id === editorState.activeStageId);
 
   const renderStageContent = () => {
     if (!activeStage) return null;
@@ -240,6 +241,28 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
         {/* Main Editor Area */}
         <div className="flex flex-1 overflow-hidden">
+          {/* Steps Panel */}
+          {!isPreviewMode && (
+            <div className="w-80 border-r border-gray-200 bg-white">
+              <DetailedStepsPanel
+                currentStage={editorState.activeStageId || 'intro'}
+                onStageSelect={(stageId) => {
+                  // Atualizar o stage ativo no editor state
+                  const updatedEditorState = {
+                    ...editorState,
+                    activeStageId: stageId
+                  };
+                  // Como não temos um método direto para isso, vamos usar importState
+                  importState(JSON.stringify(updatedEditorState));
+                }}
+                onAddQuestion={() => {
+                  // Implementar adição de questão se necessário
+                  console.log('Add question functionality');
+                }}
+              />
+            </div>
+          )}
+
           {/* Component Library Sidebar */}
           {!isPreviewMode && (
             <ComponentLibrarySidebar onComponentAdd={handleElementAdd} />
