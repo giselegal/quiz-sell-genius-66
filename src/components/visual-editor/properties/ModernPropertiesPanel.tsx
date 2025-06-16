@@ -6,11 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Trash2, Copy, Move } from 'lucide-react';
+import { Trash2, Copy, Settings } from 'lucide-react';
 
 interface ModernPropertiesPanelProps {
-  selectedElement: EditorElement | undefined;
+  selectedElement?: EditorElement;
   onUpdateElement: (id: string, updates: Partial<EditorElement>) => void;
   onDeleteElement: (id: string) => void;
   onDuplicateElement: () => void;
@@ -24,14 +25,16 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
 }) => {
   if (!selectedElement) {
     return (
-      <div className="h-full bg-white border-l border-gray-200 p-4 flex flex-col items-center justify-center text-center">
-        <div className="text-4xl mb-4">🎯</div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          Propriedades
-        </h3>
-        <p className="text-sm text-gray-500">
-          Selecione um elemento no canvas para editar suas propriedades
-        </p>
+      <div className="h-full bg-white border-l border-gray-200 p-4">
+        <div className="flex flex-col items-center justify-center h-32 text-center">
+          <Settings className="w-8 h-8 text-gray-400 mb-2" />
+          <h3 className="text-sm font-medium text-gray-900 mb-1">
+            Nenhum elemento selecionado
+          </h3>
+          <p className="text-xs text-gray-500">
+            Selecione um elemento para editar suas propriedades
+          </p>
+        </div>
       </div>
     );
   }
@@ -48,190 +51,182 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
     });
   };
 
-  const updatePosition = (key: 'x' | 'y', value: number) => {
+  const updatePosition = (key: 'x' | 'y', value: string) => {
+    const numValue = parseFloat(value) || 0;
     onUpdateElement(selectedElement.id, {
-      position: { ...selectedElement.position, [key]: value }
+      position: { ...selectedElement.position, [key]: numValue }
     });
   };
 
-  const updateSize = (key: 'width' | 'height', value: number) => {
+  const updateSize = (key: 'width' | 'height', value: string) => {
+    const numValue = parseFloat(value) || 0;
     onUpdateElement(selectedElement.id, {
-      size: { ...selectedElement.size, [key]: value }
+      size: { ...selectedElement.size, [key]: numValue }
     });
   };
 
-  const addOption = () => {
-    const currentOptions = selectedElement.content.options || [];
-    const nextLetter = String.fromCharCode(65 + currentOptions.length); // A, B, C, D...
-    const newOption = {
-      id: nextLetter,
-      text: `Opção ${nextLetter}`,
-      styleCategory: 'Natural'
-    };
-    updateContent('options', [...currentOptions, newOption]);
-  };
-
-  const removeOption = (index: number) => {
-    const currentOptions = selectedElement.content.options || [];
-    const newOptions = currentOptions.filter((_: any, i: number) => i !== index);
-    updateContent('options', newOptions);
-  };
-
-  const updateOption = (index: number, field: string, value: string) => {
-    const currentOptions = [...(selectedElement.content.options || [])];
-    currentOptions[index] = { ...currentOptions[index], [field]: value };
-    updateContent('options', currentOptions);
-  };
-
-  const renderContentControls = () => {
+  const renderContentFields = () => {
     switch (selectedElement.type) {
       case 'quiz-header':
         return (
-          <>
-            <div className="space-y-2">
-              <Label htmlFor="title">Título do Quiz</Label>
-              <Input
-                id="title"
-                value={selectedElement.content.title || ''}
-                onChange={(e) => updateContent('title', e.target.value)}
-                placeholder="Nome do seu quiz"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="logo">URL do Logo</Label>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="logo">Logo URL</Label>
               <Input
                 id="logo"
                 value={selectedElement.content.logo || ''}
                 onChange={(e) => updateContent('logo', e.target.value)}
-                placeholder="https://..."
+                placeholder="https://exemplo.com/logo.png"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="progress">Progresso (%)</Label>
+            
+            <div>
+              <Label htmlFor="title">Título</Label>
               <Input
-                id="progress"
-                type="number"
-                min="0"
-                max="100"
-                value={selectedElement.content.progress || 0}
-                onChange={(e) => updateContent('progress', Number(e.target.value))}
+                id="title"
+                value={selectedElement.content.title || ''}
+                onChange={(e) => updateContent('title', e.target.value)}
+                placeholder="Título do Quiz"
               />
             </div>
-            <div className="flex items-center space-x-2">
+
+            <div className="flex items-center gap-2">
               <input
                 type="checkbox"
                 id="showProgress"
                 checked={selectedElement.content.showProgress || false}
                 onChange={(e) => updateContent('showProgress', e.target.checked)}
               />
-              <Label htmlFor="showProgress">Mostrar barra de progresso</Label>
+              <Label htmlFor="showProgress">Mostrar Progresso</Label>
             </div>
-            <div className="flex items-center space-x-2">
+
+            {selectedElement.content.showProgress && (
+              <div>
+                <Label htmlFor="progress">Progresso (%)</Label>
+                <Input
+                  id="progress"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={selectedElement.content.progress || 0}
+                  onChange={(e) => updateContent('progress', parseInt(e.target.value))}
+                />
+              </div>
+            )}
+
+            <div className="flex items-center gap-2">
               <input
                 type="checkbox"
                 id="showBackButton"
                 checked={selectedElement.content.showBackButton || false}
                 onChange={(e) => updateContent('showBackButton', e.target.checked)}
               />
-              <Label htmlFor="showBackButton">Mostrar botão voltar</Label>
+              <Label htmlFor="showBackButton">Mostrar Botão Voltar</Label>
             </div>
-          </>
+          </div>
         );
 
       case 'quiz-question':
         return (
-          <>
-            <div className="space-y-2">
+          <div className="space-y-4">
+            <div>
               <Label htmlFor="question">Pergunta</Label>
               <Textarea
                 id="question"
                 value={selectedElement.content.question || ''}
                 onChange={(e) => updateContent('question', e.target.value)}
-                placeholder="Digite sua pergunta"
-                rows={2}
+                placeholder="Digite sua pergunta aqui..."
+                rows={3}
               />
             </div>
-            
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label>Opções de Resposta</Label>
-                <Button
-                  size="sm"
-                  onClick={addOption}
-                  className="text-xs"
-                >
-                  + Adicionar
-                </Button>
+
+            <div>
+              <Label>Opções de Resposta</Label>
+              <div className="space-y-2 mt-2">
+                {(selectedElement.content.options || []).map((option: any, index: number) => (
+                  <div key={index} className="space-y-2 p-3 border rounded">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">{option.id})</span>
+                      <Input
+                        value={option.text || ''}
+                        onChange={(e) => {
+                          const newOptions = [...(selectedElement.content.options || [])];
+                          newOptions[index] = { ...option, text: e.target.value };
+                          updateContent('options', newOptions);
+                        }}
+                        placeholder={`Opção ${option.id}`}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`style-${index}`}>Categoria de Estilo</Label>
+                      <Input
+                        id={`style-${index}`}
+                        value={option.styleCategory || ''}
+                        onChange={(e) => {
+                          const newOptions = [...(selectedElement.content.options || [])];
+                          newOptions[index] = { ...option, styleCategory: e.target.value };
+                          updateContent('options', newOptions);
+                        }}
+                        placeholder="Ex: Natural, Clássico, etc."
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
               
-              {(selectedElement.content.options || []).map((option: any, index: number) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-3 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Opção {option.id}</span>
-                    {(selectedElement.content.options || []).length > 1 && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => removeOption(index)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Remover
-                      </Button>
-                    )}
-                  </div>
-                  <Textarea
-                    value={option.text || ''}
-                    onChange={(e) => updateOption(index, 'text', e.target.value)}
-                    placeholder={`Texto da opção ${option.id}`}
-                    rows={2}
-                  />
-                  <Select
-                    value={option.styleCategory || 'Natural'}
-                    onValueChange={(value) => updateOption(index, 'styleCategory', value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Natural">Natural</SelectItem>
-                      <SelectItem value="Clássico">Clássico</SelectItem>
-                      <SelectItem value="Contemporâneo">Contemporâneo</SelectItem>
-                      <SelectItem value="Elegante">Elegante</SelectItem>
-                      <SelectItem value="Romântico">Romântico</SelectItem>
-                      <SelectItem value="Sexy">Sexy</SelectItem>
-                      <SelectItem value="Dramático">Dramático</SelectItem>
-                      <SelectItem value="Criativo">Criativo</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              ))}
+              <Button
+                onClick={() => {
+                  const currentOptions = selectedElement.content.options || [];
+                  const nextLetter = String.fromCharCode(65 + currentOptions.length);
+                  const newOption = {
+                    id: nextLetter,
+                    text: `Nova opção ${nextLetter}`,
+                    styleCategory: ''
+                  };
+                  updateContent('options', [...currentOptions, newOption]);
+                }}
+                className="w-full mt-2"
+                variant="outline"
+              >
+                Adicionar Opção
+              </Button>
             </div>
-            
-            <div className="flex items-center space-x-2">
+
+            <div className="flex items-center gap-2">
               <input
                 type="checkbox"
                 id="multiSelect"
                 checked={selectedElement.content.multiSelect || false}
                 onChange={(e) => updateContent('multiSelect', e.target.checked)}
               />
-              <Label htmlFor="multiSelect">Permitir múltiplas seleções</Label>
+              <Label htmlFor="multiSelect">Múltipla Escolha</Label>
             </div>
-          </>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="required"
+                checked={selectedElement.content.required || false}
+                onChange={(e) => updateContent('required', e.target.checked)}
+              />
+              <Label htmlFor="required">Campo Obrigatório</Label>
+            </div>
+          </div>
         );
 
       case 'heading':
         return (
-          <>
-            <div className="space-y-2">
+          <div className="space-y-4">
+            <div>
               <Label htmlFor="text">Texto</Label>
               <Input
                 id="text"
                 value={selectedElement.content.text || ''}
                 onChange={(e) => updateContent('text', e.target.value)}
-                placeholder="Digite o título"
+                placeholder="Digite o título..."
               />
             </div>
-            <div className="space-y-2">
+            <div>
               <Label htmlFor="level">Nível</Label>
               <Select
                 value={selectedElement.content.level || 'h2'}
@@ -245,21 +240,23 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
                   <SelectItem value="h2">H2</SelectItem>
                   <SelectItem value="h3">H3</SelectItem>
                   <SelectItem value="h4">H4</SelectItem>
+                  <SelectItem value="h5">H5</SelectItem>
+                  <SelectItem value="h6">H6</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-          </>
+          </div>
         );
 
       case 'text':
         return (
-          <div className="space-y-2">
+          <div>
             <Label htmlFor="text">Texto</Label>
             <Textarea
               id="text"
               value={selectedElement.content.text || ''}
               onChange={(e) => updateContent('text', e.target.value)}
-              placeholder="Digite o texto"
+              placeholder="Digite seu texto..."
               rows={4}
             />
           </div>
@@ -267,41 +264,41 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
 
       case 'button':
         return (
-          <>
-            <div className="space-y-2">
+          <div className="space-y-4">
+            <div>
               <Label htmlFor="text">Texto do Botão</Label>
               <Input
                 id="text"
                 value={selectedElement.content.text || ''}
                 onChange={(e) => updateContent('text', e.target.value)}
-                placeholder="Texto do botão"
+                placeholder="Clique aqui"
               />
             </div>
-            <div className="space-y-2">
+            <div>
               <Label htmlFor="url">URL</Label>
               <Input
                 id="url"
                 value={selectedElement.content.url || ''}
                 onChange={(e) => updateContent('url', e.target.value)}
-                placeholder="https://..."
+                placeholder="https://exemplo.com"
               />
             </div>
-          </>
+          </div>
         );
 
       case 'image':
         return (
-          <>
-            <div className="space-y-2">
+          <div className="space-y-4">
+            <div>
               <Label htmlFor="src">URL da Imagem</Label>
               <Input
                 id="src"
                 value={selectedElement.content.src || ''}
                 onChange={(e) => updateContent('src', e.target.value)}
-                placeholder="https://..."
+                placeholder="https://exemplo.com/imagem.jpg"
               />
             </div>
-            <div className="space-y-2">
+            <div>
               <Label htmlFor="alt">Texto Alternativo</Label>
               <Input
                 id="alt"
@@ -310,39 +307,47 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
                 placeholder="Descrição da imagem"
               />
             </div>
-          </>
+          </div>
         );
 
       case 'spacer':
         return (
-          <div className="space-y-2">
+          <div>
             <Label htmlFor="height">Altura (px)</Label>
             <Input
               id="height"
               type="number"
               value={selectedElement.content.height || 40}
-              onChange={(e) => updateContent('height', Number(e.target.value))}
+              onChange={(e) => updateContent('height', parseInt(e.target.value))}
               min="10"
-              max="200"
+              max="500"
             />
           </div>
         );
 
       default:
-        return null;
+        return (
+          <div>
+            <p className="text-sm text-gray-500">
+              Propriedades específicas não disponíveis para este tipo de elemento.
+            </p>
+          </div>
+        );
     }
   };
 
   return (
     <div className="h-full bg-white border-l border-gray-200 overflow-y-auto">
-      <div className="p-4 space-y-6">
+      <div className="p-4">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">Propriedades</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold text-gray-900">
+            Propriedades
+          </h2>
           <div className="flex gap-1">
             <Button
               size="sm"
-              variant="outline"
+              variant="ghost"
               onClick={onDuplicateElement}
               title="Duplicar"
             >
@@ -350,102 +355,130 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
             </Button>
             <Button
               size="sm"
-              variant="outline"
+              variant="ghost"
               onClick={() => onDeleteElement(selectedElement.id)}
-              className="text-red-500 hover:text-red-700"
               title="Excluir"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4 text-red-500" />
             </Button>
           </div>
         </div>
 
-        {/* Element Info */}
-        <div className="space-y-2">
-          <Label>Tipo de Elemento</Label>
-          <div className="px-3 py-2 bg-gray-100 rounded text-sm font-medium capitalize">
-            {selectedElement.type.replace('-', ' ')}
+        {/* Element Type */}
+        <div className="mb-4">
+          <div className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+            {selectedElement.type}
           </div>
         </div>
 
-        <Separator />
+        <div className="space-y-6">
+          {/* Content */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Conteúdo</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {renderContentFields()}
+            </CardContent>
+          </Card>
 
-        {/* Content Controls */}
-        <div className="space-y-4">
-          <h4 className="font-medium text-gray-900">Conteúdo</h4>
-          {renderContentControls()}
-        </div>
+          {/* Position & Size */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Posição e Tamanho</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <Label htmlFor="x">X</Label>
+                  <Input
+                    id="x"
+                    type="number"
+                    value={selectedElement.position.x}
+                    onChange={(e) => updatePosition('x', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="y">Y</Label>
+                  <Input
+                    id="y"
+                    type="number"
+                    value={selectedElement.position.y}
+                    onChange={(e) => updatePosition('y', e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <Label htmlFor="width">Largura</Label>
+                  <Input
+                    id="width"
+                    type="number"
+                    value={selectedElement.size.width}
+                    onChange={(e) => updateSize('width', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="height">Altura</Label>
+                  <Input
+                    id="height"
+                    type="number"
+                    value={selectedElement.size.height}
+                    onChange={(e) => updateSize('height', e.target.value)}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-        <Separator />
-
-        {/* Position & Size */}
-        <div className="space-y-4">
-          <h4 className="font-medium text-gray-900">Posição e Tamanho</h4>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-1">
-              <Label className="text-xs">X</Label>
-              <Input
-                type="number"
-                value={selectedElement.position.x}
-                onChange={(e) => updatePosition('x', Number(e.target.value))}
-                size="sm"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs">Y</Label>
-              <Input
-                type="number"
-                value={selectedElement.position.y}
-                onChange={(e) => updatePosition('y', Number(e.target.value))}
-                size="sm"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs">Largura</Label>
-              <Input
-                type="number"
-                value={selectedElement.size.width}
-                onChange={(e) => updateSize('width', Number(e.target.value))}
-                size="sm"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs">Altura</Label>
-              <Input
-                type="number"
-                value={selectedElement.size.height}
-                onChange={(e) => updateSize('height', Number(e.target.value))}
-                size="sm"
-              />
-            </div>
-          </div>
-        </div>
-
-        <Separator />
-
-        {/* Style Controls */}
-        <div className="space-y-4">
-          <h4 className="font-medium text-gray-900">Estilo</h4>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-1">
-              <Label className="text-xs">Cor de Fundo</Label>
-              <Input
-                type="color"
-                value={selectedElement.style.backgroundColor || '#ffffff'}
-                onChange={(e) => updateStyle('backgroundColor', e.target.value)}
-                size="sm"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs">Cor do Texto</Label>
-              <Input
-                type="color"
-                value={selectedElement.style.color || '#000000'}
-                onChange={(e) => updateStyle('color', e.target.value)}
-                size="sm"
-              />
-            </div>
-          </div>
+          {/* Style */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Estilo</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="backgroundColor">Cor de Fundo</Label>
+                <Input
+                  id="backgroundColor"
+                  type="color"
+                  value={selectedElement.style.backgroundColor || '#ffffff'}
+                  onChange={(e) => updateStyle('backgroundColor', e.target.value)}
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="color">Cor do Texto</Label>
+                <Input
+                  id="color"
+                  type="color"
+                  value={selectedElement.style.color || '#000000'}
+                  onChange={(e) => updateStyle('color', e.target.value)}
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="padding">Padding</Label>
+                <Input
+                  id="padding"
+                  value={selectedElement.style.padding || '0px'}
+                  onChange={(e) => updateStyle('padding', e.target.value)}
+                  placeholder="Ex: 20px ou 10px 20px"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="borderRadius">Border Radius</Label>
+                <Input
+                  id="borderRadius"
+                  value={selectedElement.style.borderRadius || '0px'}
+                  onChange={(e) => updateStyle('borderRadius', e.target.value)}
+                  placeholder="Ex: 8px"
+                />
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

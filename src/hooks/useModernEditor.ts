@@ -1,10 +1,9 @@
-
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { generateId } from '@/utils/idGenerator';
 
 export interface EditorElement {
   id: string;
-  type: 'heading' | 'text' | 'image' | 'button' | 'video' | 'spacer' | 'divider' | 'pricing' | 'testimonial' | 'countdown' | 'faq' | 'input' | 'checkbox' | 'quiz-header' | 'quiz-question';
+  type: 'heading' | 'text' | 'image' | 'button' | 'video' | 'spacer' | 'divider' | 'pricing' | 'testimonial' | 'countdown' | 'faq' | 'input' | 'checkbox' | 'quiz-header' | 'quiz-question' | 'alert' | 'arguments' | 'audio' | 'loading' | 'carousel' | 'chart' | 'compare' | 'confetti' | 'options' | 'list' | 'marquee' | 'level' | 'charts' | 'script' | 'terms';
   content: Record<string, any>;
   style: Record<string, any>;
   position: { x: number; y: number };
@@ -197,6 +196,57 @@ const getDefaultContent = (type: string) => {
       showBackButton: true,
       title: 'Quiz de Estilo'
     },
+    alert: {
+      text: 'Esta é uma mensagem de alerta importante!',
+      type: 'warning'
+    },
+    arguments: {
+      title: 'Por que escolher nosso produto?',
+      items: [
+        'Resultados comprovados em 30 dias',
+        'Suporte 24/7 especializado',
+        'Garantia de satisfação ou dinheiro de volta'
+      ]
+    },
+    audio: {
+      src: '',
+      title: 'Arquivo de Áudio',
+      duration: '00:00'
+    },
+    loading: {
+      text: 'Carregando...',
+      type: 'spinner'
+    },
+    carousel: {
+      items: [
+        { src: '', title: 'Item 1' },
+        { src: '', title: 'Item 2' },
+        { src: '', title: 'Item 3' }
+      ]
+    },
+    confetti: {
+      text: 'Parabéns! Você conseguiu!',
+      animation: 'celebration'
+    },
+    compare: {
+      leftTitle: 'Sem o Produto',
+      rightTitle: 'Com o Produto',
+      leftItems: ['Problema 1', 'Problema 2'],
+      rightItems: ['Solução 1', 'Solução 2']
+    },
+    options: {
+      title: 'Escolha uma opção:',
+      options: ['Opção A', 'Opção B', 'Opção C'],
+      multiSelect: false
+    },
+    list: {
+      title: 'Lista de Benefícios',
+      items: ['Benefício 1', 'Benefício 2', 'Benefício 3']
+    },
+    marquee: {
+      text: 'Oferta especial por tempo limitado!',
+      speed: 'normal'
+    },
     pricing: { 
       title: 'Plano Premium',
       price: 'R$ 97',
@@ -264,6 +314,61 @@ const getDefaultStyle = (type: string) => {
       padding: '20px',
       borderRadius: '0px'
     },
+    alert: {
+      backgroundColor: '#fef3c7',
+      padding: '16px',
+      borderRadius: '8px',
+      border: '1px solid #f59e0b'
+    },
+    arguments: {
+      backgroundColor: '#f9fafb',
+      padding: '24px',
+      borderRadius: '12px'
+    },
+    audio: {
+      backgroundColor: '#f3f4f6',
+      padding: '16px',
+      borderRadius: '8px'
+    },
+    loading: {
+      backgroundColor: 'transparent',
+      padding: '32px',
+      textAlign: 'center'
+    },
+    carousel: {
+      backgroundColor: '#f3f4f6',
+      borderRadius: '12px',
+      overflow: 'hidden'
+    },
+    confetti: {
+      backgroundColor: '#8b5cf6',
+      color: '#ffffff',
+      padding: '32px',
+      borderRadius: '12px',
+      textAlign: 'center'
+    },
+    compare: {
+      backgroundColor: '#ffffff',
+      padding: '24px',
+      borderRadius: '12px',
+      border: '1px solid #e5e7eb'
+    },
+    options: {
+      backgroundColor: '#ffffff',
+      padding: '20px',
+      borderRadius: '8px'
+    },
+    list: {
+      backgroundColor: '#ffffff',
+      padding: '20px',
+      borderRadius: '8px'
+    },
+    marquee: {
+      backgroundColor: '#3b82f6',
+      color: '#ffffff',
+      padding: '8px',
+      fontSize: '14px'
+    },
     pricing: {
       backgroundColor: '#ffffff',
       border: '2px solid #e5e7eb',
@@ -313,6 +418,16 @@ const getDefaultSize = (type: string) => {
     divider: { width: 400, height: 20 },
     'quiz-question': { width: 600, height: 400 },
     'quiz-header': { width: 600, height: 120 },
+    alert: { width: 400, height: 80 },
+    arguments: { width: 400, height: 250 },
+    audio: { width: 350, height: 80 },
+    loading: { width: 200, height: 120 },
+    carousel: { width: 500, height: 200 },
+    confetti: { width: 300, height: 150 },
+    compare: { width: 500, height: 200 },
+    options: { width: 400, height: 200 },
+    list: { width: 350, height: 180 },
+    marquee: { width: 600, height: 40 },
     pricing: { width: 320, height: 400 },
     testimonial: { width: 400, height: 200 },
     countdown: { width: 400, height: 150 },
