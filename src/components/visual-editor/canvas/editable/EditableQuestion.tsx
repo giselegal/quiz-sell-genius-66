@@ -50,9 +50,6 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
     });
   };
 
-  // Verificar se há imagens nas opções
-  const hasImages = content.options?.some(option => option.imageUrl);
-
   return (
     <div className={`space-y-6 ${isSelected && !isPreviewMode ? 'ring-2 ring-blue-500 ring-offset-2 rounded-lg p-4' : ''}`}>
       {/* Question Title */}
@@ -73,15 +70,12 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
       </div>
 
       {/* Question Options */}
-      <div className={hasImages ? "grid grid-cols-1 md:grid-cols-2 gap-4" : "space-y-3"}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {content.options?.map((option, index) => (
           <div
             key={option.id}
             className={`
-              ${hasImages 
-                ? 'border-2 rounded-lg p-4 cursor-pointer transition-all duration-200' 
-                : 'border rounded-lg p-3 cursor-pointer transition-all duration-200 hover:shadow-sm'
-              }
+              border-2 rounded-lg p-4 cursor-pointer transition-all duration-200
               ${selectedOptions.includes(option.id) 
                 ? 'border-blue-500 bg-blue-50' 
                 : 'border-gray-200 hover:border-gray-300'
@@ -91,18 +85,16 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
             onClick={() => handleOptionClick(option.id)}
           >
             {/* Option Label */}
-            <div className={`flex items-center ${hasImages ? 'mb-2' : 'mb-1'}`}>
+            <div className="flex items-center mb-2">
               <span className="bg-gray-800 text-white text-sm font-bold px-2 py-1 rounded mr-2">
                 {String.fromCharCode(65 + index)}
               </span>
-              {hasImages && (
-                <span className="font-medium text-gray-900">
-                  Opção {index + 1}
-                </span>
-              )}
+              <span className="font-medium text-gray-900">
+                Opção {index + 1}
+              </span>
             </div>
 
-            {/* Option Image (only if exists) */}
+            {/* Option Image */}
             {option.imageUrl && (
               <div className="mb-3">
                 <img
@@ -117,7 +109,7 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
             )}
 
             {/* Option Text */}
-            <p className={`text-gray-700 ${hasImages ? 'text-sm' : 'text-base font-medium'}`}>
+            <p className="text-gray-700 text-sm">
               {option.text}
             </p>
 
