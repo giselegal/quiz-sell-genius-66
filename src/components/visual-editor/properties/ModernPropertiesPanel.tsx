@@ -1,17 +1,19 @@
 
-import React from 'react';
-import { EditorElement } from '@/hooks/useModernEditor';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Trash2, Copy, Settings } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { X, Plus, Trash2, Settings, Eye, EyeOff, Copy } from 'lucide-react';
+import { EditorElement } from '@/hooks/useModernEditor';
 
 interface ModernPropertiesPanelProps {
-  selectedElement?: EditorElement;
+  selectedElement: EditorElement | null;
   onUpdateElement: (id: string, updates: Partial<EditorElement>) => void;
   onDeleteElement: (id: string) => void;
   onDuplicateElement: () => void;
@@ -23,463 +25,373 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
   onDeleteElement,
   onDuplicateElement
 }) => {
+  const [activeTab, setActiveTab] = useState<'content' | 'style' | 'advanced'>('content');
+
   if (!selectedElement) {
     return (
-      <div className="h-full bg-white border-l border-gray-200 p-4">
-        <div className="flex flex-col items-center justify-center h-32 text-center">
-          <Settings className="w-8 h-8 text-gray-400 mb-2" />
-          <h3 className="text-sm font-medium text-gray-900 mb-1">
-            Nenhum elemento selecionado
-          </h3>
-          <p className="text-xs text-gray-500">
-            Selecione um elemento para editar suas propriedades
-          </p>
+      <div className="h-full bg-white border-l border-gray-200 flex flex-col">
+        <div className="p-4 border-b">
+          <h2 className="font-semibold text-gray-900">Propriedades</h2>
+        </div>
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="text-center text-gray-500">
+            <Settings className="w-12 h-12 mx-auto mb-3 opacity-50" />
+            <p className="text-sm">Selecione um elemento para editar suas propriedades</p>
+          </div>
         </div>
       </div>
     );
   }
 
-  const updateContent = (key: string, value: any) => {
+  const updateContent = (updates: any) => {
     onUpdateElement(selectedElement.id, {
-      content: { ...selectedElement.content, [key]: value }
+      content: { ...selectedElement.content, ...updates }
     });
   };
 
-  const updateStyle = (key: string, value: any) => {
+  const updateStyle = (updates: any) => {
     onUpdateElement(selectedElement.id, {
-      style: { ...selectedElement.style, [key]: value }
+      style: { ...selectedElement.style, ...updates }
     });
   };
 
-  const updatePosition = (key: 'x' | 'y', value: string) => {
-    const numValue = parseFloat(value) || 0;
-    onUpdateElement(selectedElement.id, {
-      position: { ...selectedElement.position, [key]: numValue }
-    });
-  };
+  const renderMarqueeProperties = () => {
+    const testimonials = selectedElement.content.testimonials || [];
+    
+    const addTestimonial = () => {
+      const newTestimonials = [...testimonials, {
+        id: Date.now().toString(),
+        name: 'Nome',
+        username: '@usuario',
+        avatar: `https://avatar.vercel.sh/${Date.now()}`,
+        content: 'Depoimento aqui...'
+      }];
+      updateContent({ testimonials: newTestimonials });
+    };
 
-  const updateSize = (key: 'width' | 'height', value: string) => {
-    const numValue = parseFloat(value) || 0;
-    onUpdateElement(selectedElement.id, {
-      size: { ...selectedElement.size, [key]: numValue }
-    });
-  };
+    const updateTestimonial = (index: number, updates: any) => {
+      const newTestimonials = [...testimonials];
+      newTestimonials[index] = { ...newTestimonials[index], ...updates };
+      updateContent({ testimonials: newTestimonials });
+    };
 
-  const renderContentFields = () => {
-    switch (selectedElement.type) {
-      case 'quiz-header':
-        return (
-          <div className="space-y-4">
+    const removeTestimonial = (index: number) => {
+      const newTestimonials = testimonials.filter((_: any, i: number) => i !== index);
+      updateContent({ testimonials: newTestimonials });
+    };
+
+    return (
+      <div className="space-y-6">
+        {/* Animation Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Animação</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="logo">Logo URL</Label>
+              <Label htmlFor="duration">Duração</Label>
               <Input
-                id="logo"
-                value={selectedElement.content.logo || ''}
-                onChange={(e) => updateContent('logo', e.target.value)}
-                placeholder="https://exemplo.com/logo.png"
+                id="duration"
+                value={selectedElement.content.duration || '40s'}
+                onChange={(e) => updateContent({ duration: e.target.value })}
+                placeholder="40s"
               />
             </div>
             
             <div>
-              <Label htmlFor="title">Título</Label>
+              <Label htmlFor="gap">Espaçamento</Label>
               <Input
-                id="title"
-                value={selectedElement.content.title || ''}
-                onChange={(e) => updateContent('title', e.target.value)}
-                placeholder="Título do Quiz"
+                id="gap"
+                value={selectedElement.content.gap || '1rem'}
+                onChange={(e) => updateContent({ gap: e.target.value })}
+                placeholder="1rem"
               />
             </div>
 
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="showProgress"
-                checked={selectedElement.content.showProgress || false}
-                onChange={(e) => updateContent('showProgress', e.target.checked)}
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="pauseOnHover"
+                checked={selectedElement.content.pauseOnHover !== false}
+                onCheckedChange={(checked) => updateContent({ pauseOnHover: checked })}
               />
-              <Label htmlFor="showProgress">Mostrar Progresso</Label>
+              <Label htmlFor="pauseOnHover">Pausar no hover</Label>
             </div>
 
-            {selectedElement.content.showProgress && (
-              <div>
-                <Label htmlFor="progress">Progresso (%)</Label>
-                <Input
-                  id="progress"
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={selectedElement.content.progress || 0}
-                  onChange={(e) => updateContent('progress', parseInt(e.target.value))}
-                />
-              </div>
-            )}
-
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="showBackButton"
-                checked={selectedElement.content.showBackButton || false}
-                onChange={(e) => updateContent('showBackButton', e.target.checked)}
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="showGradients"
+                checked={selectedElement.content.showGradients !== false}
+                onCheckedChange={(checked) => updateContent({ showGradients: checked })}
               />
-              <Label htmlFor="showBackButton">Mostrar Botão Voltar</Label>
-            </div>
-          </div>
-        );
-
-      case 'quiz-question':
-        return (
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="question">Pergunta</Label>
-              <Textarea
-                id="question"
-                value={selectedElement.content.question || ''}
-                onChange={(e) => updateContent('question', e.target.value)}
-                placeholder="Digite sua pergunta aqui..."
-                rows={3}
-              />
+              <Label htmlFor="showGradients">Mostrar gradientes</Label>
             </div>
 
             <div>
-              <Label>Opções de Resposta</Label>
-              <div className="space-y-2 mt-2">
-                {(selectedElement.content.options || []).map((option: any, index: number) => (
-                  <div key={index} className="space-y-2 p-3 border rounded">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">{option.id})</span>
+              <Label htmlFor="cardWidth">Largura dos cards</Label>
+              <Input
+                id="cardWidth"
+                value={selectedElement.content.cardWidth || '256px'}
+                onChange={(e) => updateContent({ cardWidth: e.target.value })}
+                placeholder="256px"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Testimonials */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-sm">Depoimentos</CardTitle>
+            <Button onClick={addTestimonial} size="sm" variant="outline">
+              <Plus className="w-4 h-4 mr-1" />
+              Adicionar
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {testimonials.map((testimonial: any, index: number) => (
+              <Card key={testimonial.id || index} className="relative">
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="secondary" className="text-xs">
+                      #{index + 1}
+                    </Badge>
+                    <Button
+                      onClick={() => removeTestimonial(index)}
+                      size="sm"
+                      variant="ghost"
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-xs">Nome</Label>
                       <Input
-                        value={option.text || ''}
-                        onChange={(e) => {
-                          const newOptions = [...(selectedElement.content.options || [])];
-                          newOptions[index] = { ...option, text: e.target.value };
-                          updateContent('options', newOptions);
-                        }}
-                        placeholder={`Opção ${option.id}`}
+                        value={testimonial.name}
+                        onChange={(e) => updateTestimonial(index, { name: e.target.value })}
+                        placeholder="Nome"
+                        className="text-xs"
                       />
                     </div>
                     <div>
-                      <Label htmlFor={`style-${index}`}>Categoria de Estilo</Label>
+                      <Label className="text-xs">Username</Label>
                       <Input
-                        id={`style-${index}`}
-                        value={option.styleCategory || ''}
-                        onChange={(e) => {
-                          const newOptions = [...(selectedElement.content.options || [])];
-                          newOptions[index] = { ...option, styleCategory: e.target.value };
-                          updateContent('options', newOptions);
-                        }}
-                        placeholder="Ex: Natural, Clássico, etc."
+                        value={testimonial.username}
+                        onChange={(e) => updateTestimonial(index, { username: e.target.value })}
+                        placeholder="@usuario"
+                        className="text-xs"
                       />
                     </div>
                   </div>
-                ))}
+                  
+                  <div>
+                    <Label className="text-xs">Avatar URL</Label>
+                    <Input
+                      value={testimonial.avatar}
+                      onChange={(e) => updateTestimonial(index, { avatar: e.target.value })}
+                      placeholder="https://avatar.vercel.sh/nome"
+                      className="text-xs"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label className="text-xs">Depoimento</Label>
+                    <Textarea
+                      value={testimonial.content}
+                      onChange={(e) => updateTestimonial(index, { content: e.target.value })}
+                      placeholder="Escreva o depoimento aqui..."
+                      className="text-xs"
+                      rows={2}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+            
+            {testimonials.length === 0 && (
+              <div className="text-center py-4 text-gray-500">
+                <p className="text-sm">Nenhum depoimento adicionado</p>
+                <p className="text-xs">Clique em "Adicionar" para criar o primeiro</p>
               </div>
-              
-              <Button
-                onClick={() => {
-                  const currentOptions = selectedElement.content.options || [];
-                  const nextLetter = String.fromCharCode(65 + currentOptions.length);
-                  const newOption = {
-                    id: nextLetter,
-                    text: `Nova opção ${nextLetter}`,
-                    styleCategory: ''
-                  };
-                  updateContent('options', [...currentOptions, newOption]);
-                }}
-                className="w-full mt-2"
-                variant="outline"
-              >
-                Adicionar Opção
-              </Button>
-            </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
 
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="multiSelect"
-                checked={selectedElement.content.multiSelect || false}
-                onChange={(e) => updateContent('multiSelect', e.target.checked)}
-              />
-              <Label htmlFor="multiSelect">Múltipla Escolha</Label>
-            </div>
+  const renderContentTab = () => {
+    if (selectedElement.type === 'marquee') {
+      return renderMarqueeProperties();
+    }
 
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="required"
-                checked={selectedElement.content.required || false}
-                onChange={(e) => updateContent('required', e.target.checked)}
-              />
-              <Label htmlFor="required">Campo Obrigatório</Label>
-            </div>
-          </div>
-        );
-
-      case 'heading':
-        return (
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="text">Texto</Label>
-              <Input
-                id="text"
-                value={selectedElement.content.text || ''}
-                onChange={(e) => updateContent('text', e.target.value)}
-                placeholder="Digite o título..."
-              />
-            </div>
-            <div>
-              <Label htmlFor="level">Nível</Label>
-              <Select
-                value={selectedElement.content.level || 'h2'}
-                onValueChange={(value) => updateContent('level', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="h1">H1</SelectItem>
-                  <SelectItem value="h2">H2</SelectItem>
-                  <SelectItem value="h3">H3</SelectItem>
-                  <SelectItem value="h4">H4</SelectItem>
-                  <SelectItem value="h5">H5</SelectItem>
-                  <SelectItem value="h6">H6</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        );
-
-      case 'text':
-        return (
+    return (
+      <div className="space-y-4">
+        {/* Standard content properties */}
+        {(['text', 'heading', 'button'].includes(selectedElement.type)) && (
           <div>
             <Label htmlFor="text">Texto</Label>
             <Textarea
               id="text"
               value={selectedElement.content.text || ''}
-              onChange={(e) => updateContent('text', e.target.value)}
-              placeholder="Digite seu texto..."
-              rows={4}
+              onChange={(e) => updateContent({ text: e.target.value })}
+              placeholder="Digite o texto aqui..."
+              rows={3}
             />
           </div>
-        );
+        )}
 
-      case 'button':
-        return (
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="text">Texto do Botão</Label>
-              <Input
-                id="text"
-                value={selectedElement.content.text || ''}
-                onChange={(e) => updateContent('text', e.target.value)}
-                placeholder="Clique aqui"
-              />
-            </div>
-            <div>
-              <Label htmlFor="url">URL</Label>
-              <Input
-                id="url"
-                value={selectedElement.content.url || ''}
-                onChange={(e) => updateContent('url', e.target.value)}
-                placeholder="https://exemplo.com"
-              />
-            </div>
-          </div>
-        );
-
-      case 'image':
-        return (
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="src">URL da Imagem</Label>
-              <Input
-                id="src"
-                value={selectedElement.content.src || ''}
-                onChange={(e) => updateContent('src', e.target.value)}
-                placeholder="https://exemplo.com/imagem.jpg"
-              />
-            </div>
-            <div>
-              <Label htmlFor="alt">Texto Alternativo</Label>
-              <Input
-                id="alt"
-                value={selectedElement.content.alt || ''}
-                onChange={(e) => updateContent('alt', e.target.value)}
-                placeholder="Descrição da imagem"
-              />
-            </div>
-          </div>
-        );
-
-      case 'spacer':
-        return (
+        {selectedElement.type === 'heading' && (
           <div>
-            <Label htmlFor="height">Altura (px)</Label>
+            <Label htmlFor="level">Nível</Label>
+            <Select 
+              value={selectedElement.content.level || 'h2'}
+              onValueChange={(value) => updateContent({ level: value })}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="h1">H1 - Título Principal</SelectItem>
+                <SelectItem value="h2">H2 - Subtítulo</SelectItem>
+                <SelectItem value="h3">H3 - Título Menor</SelectItem>
+                <SelectItem value="h4">H4 - Título Pequeno</SelectItem>
+                <SelectItem value="h5">H5 - Título Muito Pequeno</SelectItem>
+                <SelectItem value="h6">H6 - Título Mínimo</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {['image', 'video'].includes(selectedElement.type) && (
+          <div>
+            <Label htmlFor="src">URL</Label>
+            <Input
+              id="src"
+              value={selectedElement.content.src || ''}
+              onChange={(e) => updateContent({ src: e.target.value })}
+              placeholder="https://exemplo.com/arquivo"
+            />
+          </div>
+        )}
+
+        {selectedElement.type === 'image' && (
+          <div>
+            <Label htmlFor="alt">Texto Alternativo</Label>
+            <Input
+              id="alt"
+              value={selectedElement.content.alt || ''}
+              onChange={(e) => updateContent({ alt: e.target.value })}
+              placeholder="Descrição da imagem"
+            />
+          </div>
+        )}
+
+        {selectedElement.type === 'spacer' && (
+          <div>
+            <Label htmlFor="height">Altura</Label>
             <Input
               id="height"
-              type="number"
-              value={selectedElement.content.height || 40}
-              onChange={(e) => updateContent('height', parseInt(e.target.value))}
-              min="10"
-              max="500"
+              value={selectedElement.content.height || '2rem'}
+              onChange={(e) => updateContent({ height: e.target.value })}
+              placeholder="2rem"
             />
           </div>
-        );
-
-      default:
-        return (
-          <div>
-            <p className="text-sm text-gray-500">
-              Propriedades específicas não disponíveis para este tipo de elemento.
-            </p>
-          </div>
-        );
-    }
+        )}
+      </div>
+    );
   };
 
   return (
-    <div className="h-full bg-white border-l border-gray-200 overflow-y-auto">
-      <div className="p-4">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-gray-900">
-            Propriedades
-          </h2>
-          <div className="flex gap-1">
+    <div className="h-full bg-white border-l border-gray-200 flex flex-col">
+      {/* Header */}
+      <div className="p-4 border-b">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-semibold text-gray-900">Propriedades</h2>
+          <div className="flex items-center gap-1">
             <Button
-              size="sm"
               variant="ghost"
-              onClick={onDuplicateElement}
-              title="Duplicar"
+              size="sm"
+              onClick={() => onUpdateElement(selectedElement.id, { visible: !selectedElement.visible })}
             >
+              {selectedElement.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={onDuplicateElement}>
               <Copy className="w-4 h-4" />
             </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => onDeleteElement(selectedElement.id)}
-              title="Excluir"
-            >
-              <Trash2 className="w-4 h-4 text-red-500" />
-            </Button>
           </div>
         </div>
-
-        {/* Element Type */}
-        <div className="mb-4">
-          <div className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+        
+        <div className="flex items-center gap-2 mb-4">
+          <Badge variant="secondary" className="text-xs">
             {selectedElement.type}
+          </Badge>
+          <span className="text-xs text-gray-500">#{selectedElement.id.slice(0, 8)}</span>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex border-b">
+          {['content', 'style', 'advanced'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as any)}
+              className={`px-3 py-2 text-xs font-medium capitalize ${
+                activeTab === tab
+                  ? 'border-b-2 border-blue-500 text-blue-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {tab === 'content' ? 'Conteúdo' : tab === 'style' ? 'Estilo' : 'Avançado'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {activeTab === 'content' && renderContentTab()}
+        
+        {activeTab === 'style' && (
+          <div className="space-y-4">
+            <p className="text-sm text-gray-500">Configurações de estilo em desenvolvimento...</p>
           </div>
-        </div>
+        )}
+        
+        {activeTab === 'advanced' && (
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="visible"
+                checked={selectedElement.visible}
+                onCheckedChange={(checked) => onUpdateElement(selectedElement.id, { visible: checked })}
+              />
+              <Label htmlFor="visible">Visível</Label>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="locked"
+                checked={selectedElement.locked}
+                onCheckedChange={(checked) => onUpdateElement(selectedElement.id, { locked: checked })}
+              />
+              <Label htmlFor="locked">Bloqueado</Label>
+            </div>
+          </div>
+        )}
+      </div>
 
-        <div className="space-y-6">
-          {/* Content */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Conteúdo</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {renderContentFields()}
-            </CardContent>
-          </Card>
-
-          {/* Position & Size */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Posição e Tamanho</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Label htmlFor="x">X</Label>
-                  <Input
-                    id="x"
-                    type="number"
-                    value={selectedElement.position.x}
-                    onChange={(e) => updatePosition('x', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="y">Y</Label>
-                  <Input
-                    id="y"
-                    type="number"
-                    value={selectedElement.position.y}
-                    onChange={(e) => updatePosition('y', e.target.value)}
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Label htmlFor="width">Largura</Label>
-                  <Input
-                    id="width"
-                    type="number"
-                    value={selectedElement.size.width}
-                    onChange={(e) => updateSize('width', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="height">Altura</Label>
-                  <Input
-                    id="height"
-                    type="number"
-                    value={selectedElement.size.height}
-                    onChange={(e) => updateSize('height', e.target.value)}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Style */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Estilo</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="backgroundColor">Cor de Fundo</Label>
-                <Input
-                  id="backgroundColor"
-                  type="color"
-                  value={selectedElement.style.backgroundColor || '#ffffff'}
-                  onChange={(e) => updateStyle('backgroundColor', e.target.value)}
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="color">Cor do Texto</Label>
-                <Input
-                  id="color"
-                  type="color"
-                  value={selectedElement.style.color || '#000000'}
-                  onChange={(e) => updateStyle('color', e.target.value)}
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="padding">Padding</Label>
-                <Input
-                  id="padding"
-                  value={selectedElement.style.padding || '0px'}
-                  onChange={(e) => updateStyle('padding', e.target.value)}
-                  placeholder="Ex: 20px ou 10px 20px"
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="borderRadius">Border Radius</Label>
-                <Input
-                  id="borderRadius"
-                  value={selectedElement.style.borderRadius || '0px'}
-                  onChange={(e) => updateStyle('borderRadius', e.target.value)}
-                  placeholder="Ex: 8px"
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      {/* Actions */}
+      <div className="border-t p-4">
+        <Button
+          variant="destructive"
+          className="w-full"
+          onClick={() => onDeleteElement(selectedElement.id)}
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Excluir Elemento
+        </Button>
       </div>
     </div>
   );
