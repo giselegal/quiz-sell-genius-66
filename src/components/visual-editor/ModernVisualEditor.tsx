@@ -8,11 +8,15 @@ import QuizIntro from '@/components/QuizIntro';
 import QuizFinalTransition from '@/components/QuizFinalTransition';
 import QuizResult from '@/components/QuizResult';
 import QuizOfferPage from '@/components/QuizOfferPage';
-import { StepsPanel } from './steps/StepsPanel';
+import { QuizContent } from '@/components/QuizContent';
+import { StrategicQuestions } from '@/components/quiz/StrategicQuestions';
+import { DetailedStepsPanel } from './steps/DetailedStepsPanel';
 import { ComponentsPalette } from './sidebar/ComponentsPalette';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
 import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
-import { StyleResult } from '@/types/quiz';
+import { useVisualEditor } from '@/hooks/useVisualEditor';
+import { useQuizLogic } from '@/hooks/useQuizLogic';
+import { StyleResult, UserResponse } from '@/types/quiz';
 import { 
   Eye, 
   Save, 
@@ -24,7 +28,9 @@ import {
 interface Stage {
   id: string;
   name: string;
-  component: React.FC;
+  type: 'intro' | 'quiz' | 'strategic' | 'transition' | 'result' | 'offer';
+  component: React.FC<any>;
+  subStages?: Array<{ id: string; name: string; index: number }>;
 }
 
 interface ModernVisualEditorProps {
@@ -36,22 +42,92 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave
 }) => {
+  const { editorState, setActiveStage } = useVisualEditor();
+  
+  // Quiz logic integration
+  const {
+    currentQuestion,
+    currentQuestionIndex,
+    currentAnswers,
+    handleAnswer,
+    handleNext,
+    handlePrevious,
+    quizCompleted,
+    strategicAnswers,
+    handleStrategicAnswer,
+    totalQuestions,
+    isInitialLoadComplete,
+    allQuestions
+  } = useQuizLogic();
+
   const [currentStage, setCurrentStage] = useState<string>('intro');
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
-  const [stages, setStages] = useState<Stage[]>([
-    { id: 'intro', name: 'Intro', component: QuizIntro },
-    { id: 'quiz', name: 'Quiz', component: () => <div>Quiz</div> },
-    { id: 'transition', name: 'Transição', component: QuizFinalTransition },
-    { id: 'result', name: 'Resultado', component: QuizResult },
-    { id: 'offer', name: 'Oferta', component: QuizOfferPage },
-  ]);
+  const [currentQuestionInStage, setCurrentQuestionInStage] = useState<number>(0);
+  const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState<number>(0);
   const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
   const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  const [mockUser] = useState({ userName: 'Usuário de Teste' });
 
-  // Mock data for testing - using proper StyleResult types
+  // Create stages with sub-stages for quiz questions
+  const [stages] = useState<Stage[]>(() => {
+    const quizSubStages = allQuestions.map((question, index) => ({
+      id: `quiz-question-${index + 1}`,
+      name: `Questão ${index + 1}`,
+      index
+    }));
+
+    const strategicSubStages = Array.from({ length: 7 }, (_, index) => ({
+      id: `strategic-question-${index + 1}`,
+      name: `Estratégica ${index + 1}`,
+      index
+    }));
+
+    return [
+      { 
+        id: 'intro', 
+        name: 'Intro', 
+        type: 'intro',
+        component: QuizIntro 
+      },
+      { 
+        id: 'quiz', 
+        name: 'Quiz', 
+        type: 'quiz',
+        component: QuizContent,
+        subStages: quizSubStages
+      },
+      { 
+        id: 'strategic', 
+        name: 'Perguntas Estratégicas', 
+        type: 'strategic',
+        component: StrategicQuestions,
+        subStages: strategicSubStages
+      },
+      { 
+        id: 'transition', 
+        name: 'Transição', 
+        type: 'transition',
+        component: QuizFinalTransition 
+      },
+      { 
+        id: 'result', 
+        name: 'Resultado', 
+        type: 'result',
+        component: QuizResult 
+      },
+      { 
+        id: 'offer', 
+        name: 'Oferta', 
+        type: 'offer',
+        component: QuizOfferPage 
+      },
+    ];
+  });
+
+  // Mock data for testing
   const mockPrimaryStyle: StyleResult = {
     category: 'Elegante',
     score: 85,
@@ -64,8 +140,15 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   ];
 
   const handleSave = useCallback(() => {
-    console.log('Saving...');
-  }, []);
+    console.log('Saving editor state...');
+    if (onSave) {
+      onSave({
+        stages,
+        currentStage,
+        editorState
+      });
+    }
+  }, [stages, currentStage, editorState, onSave]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -75,10 +158,17 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     return () => clearInterval(intervalId);
   }, [handleSave]);
 
-  const handleStageSelect = (stageId: string) => {
+  const handleStageSelect = (stageId: string, subStageIndex?: number) => {
     const stageIndex = stages.findIndex(s => s.id === stageId);
     setCurrentStage(stageId);
     setCurrentStageIndex(stageIndex);
+    setActiveStage(stageId);
+    
+    if (stageId === 'quiz' && subStageIndex !== undefined) {
+      setCurrentQuestionInStage(subStageIndex);
+    } else if (stageId === 'strategic' && subStageIndex !== undefined) {
+      setCurrentStrategicQuestionIndex(subStageIndex);
+    }
   };
 
   const handleComponentSelect = (componentType: string) => {
@@ -86,20 +176,69 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     console.log('Componente selecionado:', componentType);
   };
 
+  const handleAnswerSubmit = (response: UserResponse) => {
+    if (currentStage === 'strategic') {
+      handleStrategicAnswer(response.questionId, response.selectedOptions);
+    } else {
+      handleAnswer(response.questionId, response.selectedOptions);
+    }
+  };
+
   const renderCurrentStage = () => {
+    if (!isInitialLoadComplete && currentStage === 'quiz') {
+      return (
+        <div className="p-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
+          <p className="text-[#432818]">Carregando quiz...</p>
+        </div>
+      );
+    }
+
     switch (currentStage) {
       case 'intro':
-        return <QuizIntro onStart={() => setCurrentStage('quiz')} />;
+        return (
+          <QuizIntro 
+            onStart={(userName) => {
+              console.log('Quiz iniciado por:', userName);
+              setCurrentStage('quiz');
+            }} 
+          />
+        );
       
       case 'quiz':
         return (
-          <div className="p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Quiz em Desenvolvimento</h2>
-            <p className="text-gray-600 mb-6">Esta seção será implementada com as questões do quiz.</p>
-            <Button onClick={() => setCurrentStage('transition')}>
-              Simular Finalização do Quiz
-            </Button>
-          </div>
+          <QuizContent
+            user={mockUser}
+            currentQuestionIndex={currentQuestionInStage}
+            totalQuestions={totalQuestions}
+            showingStrategicQuestions={false}
+            currentStrategicQuestionIndex={0}
+            currentQuestion={allQuestions[currentQuestionInStage]}
+            currentAnswers={currentAnswers}
+            handleAnswerSubmit={handleAnswerSubmit}
+            handleNextClick={() => {
+              if (currentQuestionInStage < totalQuestions - 1) {
+                setCurrentQuestionInStage(prev => prev + 1);
+              } else {
+                setCurrentStage('strategic');
+                setCurrentStrategicQuestionIndex(0);
+              }
+            }}
+            handlePrevious={() => {
+              if (currentQuestionInStage > 0) {
+                setCurrentQuestionInStage(prev => prev - 1);
+              }
+            }}
+          />
+        );
+      
+      case 'strategic':
+        return (
+          <StrategicQuestions
+            currentQuestionIndex={currentStrategicQuestionIndex}
+            answers={strategicAnswers}
+            onAnswer={handleAnswerSubmit}
+          />
         );
       
       case 'transition':
@@ -121,7 +260,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         return <QuizOfferPage />;
       
       default:
-        return null;
+        return (
+          <div className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Etapa não encontrada</h2>
+            <p className="text-gray-600">A etapa selecionada não existe.</p>
+          </div>
+        );
     }
   };
 
@@ -134,6 +278,9 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             <h1 className="text-xl font-bold text-gray-900">Editor Visual Moderno</h1>
             <Badge variant="outline" className="border-blue-500 text-blue-700">
               {funnelId}
+            </Badge>
+            <Badge variant="secondary">
+              {stages.find(s => s.id === currentStage)?.name}
             </Badge>
           </div>
           
@@ -188,13 +335,20 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       {/* Main Content - Resizable 4 Columns Layout */}
       <div className="flex-1 overflow-hidden">
         <ResizablePanelGroup direction="horizontal" className="h-full">
-          {/* Left Column - Steps Panel */}
-          <ResizablePanel defaultSize={15} minSize={10} maxSize={25}>
+          {/* Left Column - Detailed Steps Panel */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
             <div className="h-full bg-white border-r border-gray-200">
-              <StepsPanel
+              <DetailedStepsPanel
                 stages={stages}
                 currentStage={currentStage}
+                currentSubStageIndex={
+                  currentStage === 'quiz' ? currentQuestionInStage :
+                  currentStage === 'strategic' ? currentStrategicQuestionIndex :
+                  undefined
+                }
                 onStageSelect={handleStageSelect}
+                totalQuestions={totalQuestions}
+                totalStrategicQuestions={7}
               />
             </div>
           </ResizablePanel>
@@ -214,7 +368,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizableHandle withHandle />
 
           {/* Third Column - Editor Canvas */}
-          <ResizablePanel defaultSize={45} minSize={30}>
+          <ResizablePanel defaultSize={40} minSize={30}>
             <div className="h-full overflow-auto bg-gray-100 p-6">
               <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
                 viewportMode === 'desktop' ? 'max-w-6xl' :
