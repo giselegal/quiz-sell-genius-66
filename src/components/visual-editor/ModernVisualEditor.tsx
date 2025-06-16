@@ -1,44 +1,21 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import {
-  Button,
-  Menu,
-  Edit3,
-  X
-} from 'lucide-react';
-import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  QuizIntro
-} from './QuizIntro';
-import {
-  QuizFinalTransition
-} from './QuizFinalTransition';
-import {
-  QuizResult
-} from './QuizResult';
-import {
-  QuizOfferPage
-} from './QuizOfferPage';
-import {
-  CanvasLayout,
-  CanvasHeader,
-  CanvasContent,
-  CanvasFooter,
-  EditableHeadingCanvas,
-  EditableOptionsCanvas,
-  EditableImageOptions
-} from '@/components/editor/CanvasLayout';
-import {
-  OptionConfigurationPanel
-} from '@/components/editor/ConfigurationPanel';
-import { toast } from "@/components/ui/use-toast"
-import {
-  QuizQuestion,
-  QuizOption
-} from '@/types/quiz';
-import {
-  useStepsManager
-} from '@/hooks/useStepsManager';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
+
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Edit3, Eye, Smartphone, Tablet, Monitor, Menu, X } from 'lucide-react';
+import { CanvasLayout, CanvasHeader, CanvasContent, EditableHeadingCanvas, EditableSpacerCanvas, EditableButtonCanvas, CanvasFooter } from '@/components/editor/CanvasLayout';
+import { EditableImageOptions } from '@/components/editor/EditableImageOptions';
+import { OptionConfigurationPanel } from '@/components/editor/ConfigurationPanel';
+import { useSupabaseQuestions } from '@/hooks/useSupabaseQuestions';
+import { toast } from '@/components/ui/use-toast';
+import QuizIntro from '@/components/QuizIntro';
+import QuizFinalTransition from '@/components/QuizFinalTransition';
+import QuizResult from '@/components/QuizResult';
+import QuizOfferPage from '@/components/QuizOfferPage';
 
 interface ModernVisualEditorProps {
   funnelId: string;
@@ -46,163 +23,133 @@ interface ModernVisualEditorProps {
 }
 
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId, onSave }) => {
+  const [pages, setPages] = useState<any[]>([]);
+  const [currentPageId, setCurrentPageId] = useState('');
   const [showEditor, setShowEditor] = useState(true);
+  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentPageId, setCurrentPageId] = useState('cover');
-  const [selectedComponentId, setSelectedComponentId] = useState(null);
-  const [selectedOptionId, setSelectedOptionId] = useState(null);
-  const [showOptionConfig, setShowOptionConfig] = useState(false);
+  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [viewportMode, setViewportMode] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
-  const [loading, setLoading] = useState(true);
+  const [showOptionConfig, setShowOptionConfig] = useState(false);
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+
+  const { questions, strategicQuestions, loading, error } = useSupabaseQuestions();
 
   const [realComponentConfig, setRealComponentConfig] = useState({
     intro: {
-      title: 'Descubra seu Estilo Ideal',
-      description: 'Responda algumas perguntas e encontre o estilo que mais combina com você!',
-      logoImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      backgroundImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      buttonText: 'Começar o Quiz'
+      title: 'DESCUBRA SEU ESTILO PESSOAL',
+      subtitle: 'Quiz personalizado para descobrir seu estilo único',
+      description: 'Responda às perguntas e descubra qual estilo combina mais com você!',
+      buttonText: 'COMEÇAR QUIZ',
+      logoImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_120,h_50,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp',
+      backgroundImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_avif,q_85,w_300,c_limit/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.avif',
+      backgroundColor: '#FEFEFE',
+      textColor: '#432818',
+      buttonColor: '#B89B7A'
+    },
+    questions: {
+      backgroundColor: '#FEFEFE',
+      textColor: '#432818',
+      optionColor: '#F8F5F0',
+      selectedColor: '#B89B7A',
+      borderColor: '#E5E7EB'
     },
     transitions: {
-      transitionTitle: 'Estamos quase lá...',
-      transitionDescription: 'Mais algumas perguntinhas rápidas para garantir o melhor resultado!',
-      transitionImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      buttonText: 'Continuar'
+      backgroundColor: '#FEFEFE',
+      textColor: '#432818',
+      primaryColor: '#B89B7A',
+      buttonColor: '#B89B7A',
+      cardBackground: '#F8F5F0'
     },
     result: {
-      resultTitle: 'Seu Estilo é...',
-      resultDescription: 'Com base nas suas respostas, identificamos que seu estilo predominante é...',
-      primaryColor: '#000000',
-      secondaryColor: '#000000',
-      textColor: '#000000',
-      backgroundImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      buttonText: 'Ver Mais'
+      title: 'Seu Resultado Está Pronto!',
+      subtitle: 'Descobrimos seu estilo predominante',
+      description: 'Com base nas suas respostas, identificamos características únicas do seu perfil',
+      backgroundColor: '#FEFEFE',
+      textColor: '#432818',
+      primaryColor: '#B89B7A',
+      cardBackground: '#F8F5F0',
+      buttonColor: '#B89B7A',
+      resultImage: 'https://via.placeholder.com/400x300/B89B7A/FFFFFF?text=Seu+Resultado'
     },
     offer: {
-      offerTitle: 'Oferta Exclusiva',
-      offerDescription: 'Aproveite nossa oferta especial para você!',
-      offerImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
-      buttonText: 'Comprar Agora'
+      title: 'Oferta Especial Para Você!',
+      subtitle: 'Baseado no seu estilo, temos uma seleção exclusiva',
+      description: 'Aproveite nossa consultoria personalizada com 50% de desconto',
+      buttonText: 'QUERO APROVEITAR',
+      originalPrice: 'R$ 297,00',
+      finalPrice: 'R$ 147,00',
+      backgroundColor: '#432818',
+      textColor: '#FFFFFF',
+      buttonColor: '#B89B7A',
+      features: [
+        'Consultoria personalizada de estilo',
+        'Análise completa do seu guarda-roupa',
+        'Guia de compras personalizado',
+        'Suporte por 30 dias'
+      ]
     }
   });
 
-  const [pages, setPages] = useState([
-    { id: 'cover', name: 'Capa', type: 'intro' },
-    { id: 'question1', name: 'Questão 1', type: 'question', questionIndex: 0 },
-    { id: 'question2', name: 'Questão 2', type: 'question', questionIndex: 1 },
-    { id: 'question3', name: 'Questão 3', type: 'question', questionIndex: 2 },
-    { id: 'question4', name: 'Questão 4', type: 'question', questionIndex: 3 },
-    { id: 'question5', name: 'Questão 5', type: 'question', questionIndex: 4 },
-    { id: 'transition1', name: 'Transição 1', type: 'transition-strategic' },
-    { id: 'strategic1', name: 'Estratégica 1', type: 'strategic', questionIndex: 0 },
-    { id: 'strategic2', name: 'Estratégica 2', type: 'strategic', questionIndex: 1 },
-    { id: 'transition2', name: 'Transição 2', type: 'transition-result' },
-    { id: 'result', name: 'Resultado', type: 'result' },
-    { id: 'offer', name: 'Oferta', type: 'offer' }
-  ]);
-
-  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [strategicQuestions, setStrategicQuestions] = useState<QuizQuestion[]>([]);
+  useEffect(() => {
+    if (pages.length === 0 && !loading && (questions.length > 0 || strategicQuestions.length > 0)) {
+      const newPages = [
+        { id: 'intro', name: '🏠 Introdução/Capa', type: 'intro' },
+        ...questions.slice(0, 9).map((_, index) => ({
+          id: `question-${index}`,
+          name: `❓ Questão ${index + 1}`,
+          type: 'question',
+          questionIndex: index
+        })),
+        { id: 'transition-strategic', name: '⏳ Transição → Estratégicas', type: 'transition-strategic' },
+        ...strategicQuestions.slice(0, 6).map((_, index) => ({
+          id: `strategic-${index}`,
+          name: `🎯 Estratégica ${index + 1}`,
+          type: 'strategic',
+          questionIndex: index
+        })),
+        { id: 'capture', name: '📧 Captura de Email', type: 'capture' },
+        { id: 'transition-result', name: '⏳ Transição → Resultado', type: 'transition-result' },
+        { id: 'result', name: '🎉 Resultado', type: 'result' },
+        { id: 'offer', name: '💰 Oferta', type: 'offer' }
+      ];
+      setPages(newPages);
+      setCurrentPageId('intro');
+    }
+  }, [questions.length, strategicQuestions.length, loading, pages.length]);
 
   useEffect(() => {
-    // Mock data for questions
-    const mockQuestions: QuizQuestion[] = [
-      {
-        id: 'q1',
-        title: 'Qual sua cor favorita?',
-        type: 'text',
-        options: [
-          { id: 'o1', text: 'Azul', styleCategory: 'Clássico' },
-          { id: 'o2', text: 'Verde', styleCategory: 'Natural' },
-          { id: 'o3', text: 'Vermelho', styleCategory: 'Sexy' },
-          { id: 'o4', text: 'Preto', styleCategory: 'Dramático' }
-        ],
-        multiSelect: 1
-      },
-      {
-        id: 'q2',
-        title: 'Que tipo de roupa você prefere?',
-        type: 'text',
-        options: [
-          { id: 'o5', text: 'Casual', styleCategory: 'Natural' },
-          { id: 'o6', text: 'Formal', styleCategory: 'Clássico' },
-          { id: 'o7', text: 'Moderna', styleCategory: 'Contemporâneo' },
-          { id: 'o8', text: 'Elegante', styleCategory: 'Elegante' }
-        ],
-        multiSelect: 1
-      },
-      {
-        id: 'q3',
-        title: 'Qual acessório te define?',
-        type: 'text',
-        options: [
-          { id: 'o9', text: 'Colar', styleCategory: 'Romântico' },
-          { id: 'o10', text: 'Brinco', styleCategory: 'Elegante' },
-          { id: 'o11', text: 'Pulseira', styleCategory: 'Criativo' },
-          { id: 'o12', text: 'Anel', styleCategory: 'Sexy' }
-        ],
-        multiSelect: 1
-      },
-      {
-        id: 'q4',
-        title: 'O que não pode faltar no seu guarda-roupa?',
-        type: 'text',
-        options: [
-          { id: 'o13', text: 'Jeans', styleCategory: 'Natural' },
-          { id: 'o14', text: 'Blazer', styleCategory: 'Clássico' },
-          { id: 'o15', text: 'Vestido', styleCategory: 'Romântico' },
-          { id: 'o16', text: 'Saia', styleCategory: 'Sexy' }
-        ],
-        multiSelect: 1
-      },
-      {
-        id: 'q5',
-        title: 'Qual seu sapato ideal?',
-        type: 'text',
-        options: [
-          { id: 'o17', text: 'Tênis', styleCategory: 'Natural' },
-          { id: 'o18', text: 'Salto Alto', styleCategory: 'Sexy' },
-          { id: 'o19', text: 'Sapatilha', styleCategory: 'Romântico' },
-          { id: 'o20', text: 'Bota', styleCategory: 'Dramático' }
-        ],
-        multiSelect: 1
+    const savedIntroConfig = localStorage.getItem('editorCoverConfig');
+    const savedOfferConfig = localStorage.getItem('editorOfferConfig');
+    
+    if (savedIntroConfig) {
+      try {
+        const parsed = JSON.parse(savedIntroConfig);
+        setRealComponentConfig(prev => ({
+          ...prev,
+          intro: { ...prev.intro, ...parsed }
+        }));
+      } catch (error) {
+        console.error('Error loading intro config:', error);
       }
-    ];
-
-    const mockStrategicQuestions: QuizQuestion[] = [
-      {
-        id: 'sq1',
-        title: 'Em qual ocasião você se sente mais confiante?',
-        type: 'text',
-        options: [
-          { id: 'so1', text: 'Festa', styleCategory: 'Sexy' },
-          { id: 'so2', text: 'Trabalho', styleCategory: 'Clássico' },
-          { id: 'so3', text: 'Dia a dia', styleCategory: 'Natural' },
-          { id: 'so4', text: 'Evento social', styleCategory: 'Elegante' }
-        ],
-        multiSelect: 1
-      },
-      {
-        id: 'sq2',
-        title: 'O que te inspira na moda?',
-        type: 'text',
-        options: [
-          { id: 'so5', text: 'Tendências', styleCategory: 'Contemporâneo' },
-          { id: 'so6', text: 'Ícones de estilo', styleCategory: 'Clássico' },
-          { id: 'so7', text: 'Sua intuição', styleCategory: 'Criativo' },
-          { id: 'so8', text: 'Conforto', styleCategory: 'Natural' }
-        ],
-        multiSelect: 1
+    }
+    
+    if (savedOfferConfig) {
+      try {
+        const parsed = JSON.parse(savedOfferConfig);
+        setRealComponentConfig(prev => ({
+          ...prev,
+          offer: { ...prev.offer, ...parsed }
+        }));
+      } catch (error) {
+        console.error('Error loading offer config:', error);
       }
-    ];
-
-    setQuestions(mockQuestions);
-    setStrategicQuestions(mockStrategicQuestions);
-    setLoading(false);
+    }
   }, []);
 
-  const updateRealComponentConfig = (section, key, value) => {
+  const currentPage = pages.find(p => p.id === currentPageId);
+
+  const updateRealComponentConfig = (section: string, key: string, value: any) => {
     const newConfig = {
       ...realComponentConfig,
       [section]: {
@@ -212,7 +159,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
     };
     setRealComponentConfig(newConfig);
     setHasUnsavedChanges(true);
-
+    
     if (section === 'intro') {
       localStorage.setItem('editorCoverConfig', JSON.stringify(newConfig.intro));
     } else if (section === 'offer') {
@@ -228,13 +175,13 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
       config: realComponentConfig,
       timestamp: new Date().toISOString()
     };
-
+    
     onSave(editorData);
     setHasUnsavedChanges(false);
     
     toast({
-      title: "Quiz salvo com sucesso!",
-      description: "Todas as alterações foram salvas."
+      title: 'Quiz salvo com sucesso!',
+      description: 'Todas as alterações foram salvas.'
     });
   };
 
@@ -252,40 +199,46 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
   };
 
   const ViewportControls = () => (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center gap-2 p-2 bg-gray-100 rounded-lg">
       <Button
         variant={viewportMode === 'mobile' ? 'default' : 'outline'}
         size="sm"
         onClick={() => setViewportMode('mobile')}
+        className="flex items-center gap-1"
       >
-        📱 Mobile
+        <Smartphone className="w-4 h-4" />
+        <span className="hidden sm:inline">Mobile</span>
       </Button>
       <Button
         variant={viewportMode === 'tablet' ? 'default' : 'outline'}
         size="sm"
         onClick={() => setViewportMode('tablet')}
+        className="flex items-center gap-1"
       >
-        <Tablet className="w-4 h-4 mr-2" /> Tablet
+        <Tablet className="w-4 h-4" />
+        <span className="hidden sm:inline">Tablet</span>
       </Button>
       <Button
         variant={viewportMode === 'desktop' ? 'default' : 'outline'}
         size="sm"
         onClick={() => setViewportMode('desktop')}
+        className="flex items-center gap-1"
       >
-        <Monitor className="w-4 h-4 mr-2" /> Desktop
+        <Monitor className="w-4 h-4" />
+        <span className="hidden sm:inline">Desktop</span>
       </Button>
     </div>
   );
 
   const renderCurrentComponent = () => {
     if (!currentPage) return null;
-
+    
     if (loading) {
       return (
         <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
           <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4" />
               <p className="text-gray-600">Carregando questões...</p>
             </div>
           </div>
@@ -293,77 +246,69 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
       );
     }
 
-    // Mock quiz result data with valid style categories
     const mockQuizResult = {
       primaryStyle: {
-        category: 'Elegante' as const, // Fixed: using valid category
+        category: 'Elegante' as const,
         score: 85,
         percentage: 85
       },
       secondaryStyles: [
         {
-          category: 'Romântico' as const, // Fixed: using valid category
+          category: 'Romântico' as const,
           score: 72,
           percentage: 72
-        },
-        {
-          category: 'Clássico' as const,
-          score: 68,
-          percentage: 68
         }
-      ],
-      totalSelections: 10,
-      userName: 'Usuário'
+      ]
     };
 
     switch (currentPage.type) {
       case 'intro':
         return (
           <QuizIntro 
-            config={realComponentConfig.intro}
-            onConfigUpdate={(key, value) => updateRealComponentConfig('intro', key, value)}
+            onStart={(name: string) => {
+              console.log('Quiz started with name:', name);
+            }}
           />
         );
-      
+
       case 'question':
         const question = questions[currentPage.questionIndex];
         if (!question) return <div>Questão não encontrada</div>;
         
         return (
           <CanvasLayout>
-            <CanvasHeader
+            <CanvasHeader 
               logoUrl={realComponentConfig.intro.logoImage}
-              progress={((currentPage.questionIndex + 1) / questions.length) * 100}
+              progress={(currentPage.questionIndex + 1) / questions.length * 100}
             />
             <CanvasContent>
               <EditableHeadingCanvas
-                id={`question-title-${currentPage.questionIndex}`}
+                id={`question-${currentPage.questionIndex}`}
                 text={question.title}
-                isSelected={selectedComponentId === `question-title-${currentPage.questionIndex}`}
-                onSelect={() => setSelectedComponentId(`question-title-${currentPage.questionIndex}`)}
-                onTextChange={(text) => console.log('Update question title:', text)}
+                isSelected={selectedComponentId === `question-${currentPage.questionIndex}`}
+                onSelect={() => setSelectedComponentId(`question-${currentPage.questionIndex}`)}
+                onTextChange={(text) => console.log('Question text changed:', text)}
               />
               
               <EditableImageOptions
-                id={`question-options-${currentPage.questionIndex}`}
-                options={question.options.map(opt => ({
+                id={`options-${currentPage.questionIndex}`}
+                options={question.options?.map((opt: any, idx: number) => ({
                   id: opt.id,
-                  label: String.fromCharCode(65 + question.options.indexOf(opt)),
+                  label: String.fromCharCode(65 + idx),
                   text: opt.text,
                   imageUrl: opt.imageUrl,
-                  alt: opt.text
-                }))}
-                isSelected={selectedComponentId === `question-options-${currentPage.questionIndex}`}
-                onSelect={() => setSelectedComponentId(`question-options-${currentPage.questionIndex}`)}
+                  alt: opt.alt
+                })) || []}
+                isSelected={selectedComponentId === `options-${currentPage.questionIndex}`}
+                onSelect={() => setSelectedComponentId(`options-${currentPage.questionIndex}`)}
                 onOptionClick={(optionId) => console.log('Option clicked:', optionId)}
+                onOptionUpdate={(optionId, field, value) => console.log('Option updated:', optionId, field, value)}
                 onConfigureOption={(optionId) => {
                   setSelectedOptionId(optionId);
                   setShowOptionConfig(true);
                 }}
-                columns={2}
               />
             </CanvasContent>
-            <CanvasFooter />
           </CanvasLayout>
         );
 
@@ -373,49 +318,46 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
         
         return (
           <CanvasLayout>
-            <CanvasHeader
+            <CanvasHeader 
               logoUrl={realComponentConfig.intro.logoImage}
-              progress={80 + (currentPage.questionIndex * 5)}
+              progress={80 + (currentPage.questionIndex + 1) / strategicQuestions.length * 20}
             />
             <CanvasContent>
               <EditableHeadingCanvas
-                id={`strategic-title-${currentPage.questionIndex}`}
+                id={`strategic-${currentPage.questionIndex}`}
                 text={strategicQuestion.title}
-                isSelected={selectedComponentId === `strategic-title-${currentPage.questionIndex}`}
-                onSelect={() => setSelectedComponentId(`strategic-title-${currentPage.questionIndex}`)}
-                onTextChange={(text) => console.log('Update strategic title:', text)}
+                isSelected={selectedComponentId === `strategic-${currentPage.questionIndex}`}
+                onSelect={() => setSelectedComponentId(`strategic-${currentPage.questionIndex}`)}
+                onTextChange={(text) => console.log('Strategic question text changed:', text)}
               />
               
               <EditableImageOptions
                 id={`strategic-options-${currentPage.questionIndex}`}
-                options={strategicQuestion.options.map(opt => ({
+                options={strategicQuestion.options?.map((opt: any, idx: number) => ({
                   id: opt.id,
-                  label: String.fromCharCode(65 + strategicQuestion.options.indexOf(opt)),
+                  label: String.fromCharCode(65 + idx),
                   text: opt.text,
                   imageUrl: opt.imageUrl,
-                  alt: opt.text
-                }))}
+                  alt: opt.alt
+                })) || []}
                 isSelected={selectedComponentId === `strategic-options-${currentPage.questionIndex}`}
                 onSelect={() => setSelectedComponentId(`strategic-options-${currentPage.questionIndex}`)}
                 onOptionClick={(optionId) => console.log('Strategic option clicked:', optionId)}
+                onOptionUpdate={(optionId, field, value) => console.log('Strategic option updated:', optionId, field, value)}
                 onConfigureOption={(optionId) => {
                   setSelectedOptionId(optionId);
                   setShowOptionConfig(true);
                 }}
-                columns={1}
               />
             </CanvasContent>
-            <CanvasFooter />
           </CanvasLayout>
         );
 
       case 'transition-strategic':
       case 'transition-result':
-      case 'capture':
         return (
           <QuizFinalTransition 
-            config={realComponentConfig.transitions}
-            onConfigUpdate={(key, value) => updateRealComponentConfig('transitions', key, value)}
+            onContinue={() => console.log('Transition continue clicked')}
           />
         );
 
@@ -423,136 +365,109 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
         return (
           <QuizResult 
             result={mockQuizResult}
-            config={realComponentConfig.result}
-            onConfigUpdate={(key, value) => updateRealComponentConfig('result', key, value)}
+            onViewOffer={() => console.log('View offer clicked')}
           />
         );
 
       case 'offer':
         return (
-          <QuizOfferPage 
-            config={realComponentConfig.offer}
-            // Fixed: removed invalid props onAccept and onDecline
-          />
+          <QuizOfferPage />
         );
 
       default:
-        return <div>Página não encontrada</div>;
+        return <div>Tipo de página não reconhecido: {currentPage.type}</div>;
     }
   };
 
-  const dimensions = getViewportDimensions();
+  if (error) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-red-600 mb-2">Erro ao carregar dados</h2>
+          <p className="text-gray-600">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex bg-gray-50 overflow-hidden">
-      {/* Mobile menu overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setIsMobileMenuOpen(false)} />
-      )}
-
-      {/* Left Sidebar - Pages Navigation */}
-      <div className={`${showEditor ? 'w-80' : 'w-0'} bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 overflow-hidden ${isMobileMenuOpen ? 'fixed inset-y-0 left-0 z-50 lg:relative' : 'hidden lg:block'}`}>
-        <div className="p-4 border-b border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Páginas do Quiz</h2>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSave}
-                disabled={!hasUnsavedChanges}
-              >
-                💾 Salvar
-              </Button>
+      {/* Sidebar - Editor Controls */}
+      <div className={`${showEditor ? 'w-80' : 'w-0'} transition-all duration-300 bg-white border-r border-gray-200 overflow-hidden`}>
+        <div className="h-full flex flex-col">
+          {/* Header */}
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Quiz Editor</h2>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowEditor(!showEditor)}
-                className="lg:hidden"
+                onClick={() => setShowEditor(false)}
+                className="md:hidden"
               >
                 <X className="w-4 h-4" />
               </Button>
             </div>
+            
+            <ViewportControls />
           </div>
 
-          <ViewportControls />
-        </div>
-
-        <ScrollArea className="flex-1">
-          <div className="p-4 space-y-2">
-            {pages.map((page) => (
-              <Button
-                key={page.id}
-                variant={currentPageId === page.id ? "default" : "ghost"}
-                className="w-full justify-start h-auto p-3 text-left"
-                onClick={() => setCurrentPageId(page.id)}
-              >
-                <div>
-                  <div className="font-medium">{page.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {page.type}
-                  </div>
+          {/* Pages List */}
+          <div className="flex-1 overflow-hidden">
+            <div className="p-4">
+              <h3 className="text-sm font-medium text-gray-700 mb-3">Páginas do Quiz</h3>
+              <ScrollArea className="h-[calc(100vh-200px)]">
+                <div className="space-y-2">
+                  {pages.map((page) => (
+                    <button
+                      key={page.id}
+                      onClick={() => setCurrentPageId(page.id)}
+                      className={`w-full text-left p-3 rounded-lg text-sm transition-colors ${
+                        currentPageId === page.id
+                          ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                          : 'hover:bg-gray-50 text-gray-700'
+                      }`}
+                    >
+                      {page.name}
+                    </button>
+                  ))}
                 </div>
-              </Button>
-            ))}
+              </ScrollArea>
+            </div>
           </div>
-        </ScrollArea>
+
+          {/* Footer */}
+          <div className="p-4 border-t border-gray-200">
+            <Button 
+              onClick={handleSave}
+              className="w-full"
+              disabled={!hasUnsavedChanges}
+            >
+              {hasUnsavedChanges ? 'Salvar Alterações' : 'Salvo'}
+            </Button>
+          </div>
+        </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Toolbar */}
-        <div className="bg-white border-b border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden"
-              >
-                <Menu className="w-4 h-4" />
-              </Button>
-              
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowEditor(!showEditor)}
-                  className="hidden lg:flex"
-                >
-                  <Edit3 className="w-4 h-4 mr-1" />
-                  {showEditor ? 'Ocultar' : 'Mostrar'} Editor
-                </Button>
-              </div>
-            </div>
+      {/* Mobile Menu Button */}
+      {!showEditor && (
+        <Button
+          onClick={() => setShowEditor(true)}
+          className="fixed top-4 left-4 z-50 md:hidden"
+          size="sm"
+        >
+          <Menu className="w-4 h-4" />
+        </Button>
+      )}
 
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">
-                {currentPage?.name || 'Selecione uma página'}
-              </span>
-              
-              {hasUnsavedChanges && (
-                <div className="w-2 h-2 bg-orange-500 rounded-full" title="Alterações não salvas" />
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Preview Area */}
-        <div className="flex-1 bg-gray-100 overflow-auto">
-          <div className="flex items-center justify-center min-h-full p-4">
-            <div
-              className="bg-white shadow-xl rounded-lg overflow-hidden transition-all duration-300"
-              style={{
-                width: dimensions.width,
-                height: dimensions.height,
-                minHeight: viewportMode === 'desktop' ? '600px' : dimensions.height,
-                maxWidth: '100%'
-              }}
-            >
-              {renderCurrentComponent()}
-            </div>
+      {/* Main Canvas */}
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full flex items-center justify-center bg-gray-100 p-4">
+          <div 
+            className="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300"
+            style={getViewportDimensions()}
+          >
+            {renderCurrentComponent()}
           </div>
         </div>
       </div>
@@ -566,11 +481,9 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
           setSelectedOptionId(null);
         }}
         onUpdate={(optionId, field, value) => {
-          console.log('Update option:', optionId, field, value);
+          console.log('Option config updated:', optionId, field, value);
         }}
       />
     </div>
   );
 };
-
-import { Tablet, Monitor } from 'lucide-react';
