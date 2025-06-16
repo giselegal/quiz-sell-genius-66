@@ -1,40 +1,28 @@
-
 import React, { useState, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Monitor, 
-  Tablet, 
-  Smartphone, 
-  Save, 
-  Play, 
-  Settings,
-  Plus,
+import {
+  Monitor,
+  Tablet,
+  Smartphone,
+  Save,
   Eye,
   Code
 } from 'lucide-react';
 import { VisualEditorCanvas } from './canvas/VisualEditorCanvas';
 import { StepsPanel } from './steps/StepsPanel';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
-import { ComponentsPalette } from './palette/ComponentsPalette';
-import { VisualElement, VisualStage, BlockType, VisualEditorState } from '@/types/visualEditor';
+import { ComponentsPalette } from './sidebar/ComponentsPalette';
 
-export interface ModernVisualEditorProps {
-  funnelId: string;
-  onSave?: (data: any) => void;
-}
-
-// Mock data para demonstração
-const mockStages: VisualStage[] = [
+const mockStages = [
   {
     id: 'intro-1',
     title: 'Introdução',
     order: 0,
-    type: 'intro',
+    type: 'intro' as const,
     settings: {
       showHeader: true,
       showProgress: true,
@@ -46,7 +34,7 @@ const mockStages: VisualStage[] = [
     id: 'question-1',
     title: 'Questão 1',
     order: 1,
-    type: 'quiz',
+    type: 'quiz' as const,
     settings: {
       showHeader: true,
       showProgress: true,
@@ -58,7 +46,7 @@ const mockStages: VisualStage[] = [
     id: 'question-2',
     title: 'Questão 2',
     order: 2,
-    type: 'quiz',
+    type: 'quiz' as const,
     settings: {
       showHeader: true,
       showProgress: true,
@@ -70,7 +58,7 @@ const mockStages: VisualStage[] = [
     id: 'strategic-1',
     title: 'Questão Estratégica',
     order: 3,
-    type: 'strategic',
+    type: 'strategic' as const,
     settings: {
       showHeader: true,
       showProgress: true,
@@ -82,7 +70,7 @@ const mockStages: VisualStage[] = [
     id: 'result-1',
     title: 'Resultado',
     order: 4,
-    type: 'result',
+    type: 'result' as const,
     settings: {
       showHeader: true,
       showProgress: false,
@@ -94,7 +82,7 @@ const mockStages: VisualStage[] = [
     id: 'offer-1',
     title: 'Oferta',
     order: 5,
-    type: 'offer',
+    type: 'offer' as const,
     settings: {
       showHeader: false,
       showProgress: false,
@@ -104,30 +92,30 @@ const mockStages: VisualStage[] = [
   }
 ];
 
-const mockElements: VisualElement[] = [
+const mockElements = [
   {
     id: 'element-1',
-    type: 'headline',
+    type: 'headline' as const,
     stageId: 'intro-1',
     order: 0,
     content: { text: 'Bem-vindo ao Quiz', level: '1' },
-    style: { fontSize: '2rem', textAlign: 'center', color: '#000000' },
+    style: { fontSize: '2rem', textAlign: 'center' as const, color: '#000000' },
     visible: true,
     locked: false
   },
   {
     id: 'element-2',
-    type: 'text',
+    type: 'text' as const,
     stageId: 'intro-1',
     order: 1,
     content: { text: 'Descubra seu estilo pessoal em apenas alguns minutos!' },
-    style: { fontSize: '1.2rem', textAlign: 'center', color: '#666666' },
+    style: { fontSize: '1.2rem', textAlign: 'center' as const, color: '#666666' },
     visible: true,
     locked: false
   },
   {
     id: 'element-3',
-    type: 'button',
+    type: 'button' as const,
     stageId: 'intro-1',
     order: 2,
     content: { text: 'Começar Quiz' },
@@ -137,11 +125,16 @@ const mockElements: VisualElement[] = [
   }
 ];
 
-export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
-  funnelId,
-  onSave
+interface ModernVisualEditorProps {
+  funnelId: string;
+  onSave?: (data: any) => void;
+}
+
+export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ 
+  funnelId, 
+  onSave 
 }) => {
-  const [editorState, setEditorState] = useState<VisualEditorState>({
+  const [editorState, setEditorState] = useState({
     elements: mockElements,
     stages: mockStages,
     activeStageId: mockStages[0]?.id || null,
@@ -149,7 +142,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     historyIndex: -1,
     selectedElementId: null,
     hoveredElementId: null,
-    viewport: 'desktop',
+    viewport: 'desktop' as const,
     zoomLevel: 100,
     isPreviewMode: false,
     settings: {
@@ -163,9 +156,9 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   });
 
-  const [selectedPanel, setSelectedPanel] = useState<'components' | 'stages' | 'config'>('stages');
+  const [selectedPanel, setSelectedPanel] = useState<string>('stages');
 
-  const handleElementSelect = useCallback((elementId: string) => {
+  const handleElementSelect = useCallback((elementId: string | null) => {
     setEditorState(prev => ({
       ...prev,
       selectedElementId: elementId
@@ -206,12 +199,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     });
   }, []);
 
-  const handleElementAdd = useCallback((type: BlockType, position?: number) => {
+  const handleElementAdd = useCallback((type: string, position?: number) => {
     if (!editorState.activeStageId) return;
     
-    const newElement: VisualElement = {
+    const newElement = {
       id: `element-${Date.now()}`,
-      type,
+      type: type as any,
       stageId: editorState.activeStageId,
       order: position ?? editorState.elements.filter(el => el.stageId === editorState.activeStageId).length,
       content: {},
@@ -228,11 +221,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   }, [editorState.activeStageId, editorState.elements]);
 
   const handleStageAdd = useCallback(() => {
-    const newStage: VisualStage = {
+    const newStage = {
       id: `stage-${Date.now()}`,
       title: `Nova Etapa ${editorState.stages.length + 1}`,
       order: editorState.stages.length,
-      type: 'quiz',
+      type: 'quiz' as const,
       settings: {
         showHeader: true,
         showProgress: true,
@@ -286,10 +279,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="h-screen flex flex-col bg-gray-50">
-        {/* Header Toolbar */}
+        {/* Top Toolbar */}
         <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold text-gray-900">Editor Visual</h1>
+            <h1 className="text-lg font-semibold text-gray-900">
+              Editor Visual
+            </h1>
             
             {/* Viewport Controls */}
             <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
@@ -317,10 +312,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             </div>
           </div>
           
+          {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={handlePreviewToggle}>
               {editorState.isPreviewMode ? <Code className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              {editorState.isPreviewMode ? 'Editar' : 'Visualizar'}
+              {editorState.isPreviewMode ? 'Editar' : 'Preview'}
             </Button>
             <Button onClick={handleSave}>
               <Save className="w-4 h-4 mr-2" />
@@ -333,46 +329,39 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         <div className="flex-1 overflow-hidden">
           <ResizablePanelGroup direction="horizontal">
             {/* Left Sidebar */}
-            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <ResizablePanel defaultSize={250} minSize={200} maxSize={400}>
               <div className="h-full bg-white border-r border-gray-200">
-                {/* Sidebar Tabs */}
-                <div className="border-b border-gray-200 p-2">
-                  <div className="flex gap-1">
-                    <Button
-                      variant={selectedPanel === 'stages' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setSelectedPanel('stages')}
-                      className="flex-1"
-                    >
-                      Etapas
-                    </Button>
-                    <Button
-                      variant={selectedPanel === 'components' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setSelectedPanel('components')}
-                      className="flex-1"
-                    >
-                      Componentes
-                    </Button>
-                  </div>
+                <div className="h-12 border-b border-gray-200 flex">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={`h-full rounded-none flex-1 ${selectedPanel === 'stages' ? 'bg-gray-100' : ''}`}
+                    onClick={() => setSelectedPanel('stages')}
+                  >
+                    Etapas
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={`h-full rounded-none flex-1 ${selectedPanel === 'components' ? 'bg-gray-100' : ''}`}
+                    onClick={() => setSelectedPanel('components')}
+                  >
+                    Componentes
+                  </Button>
                 </div>
-
-                {/* Sidebar Content */}
-                <ScrollArea className="h-[calc(100vh-120px)]">
-                  {selectedPanel === 'stages' && (
+                
+                <ScrollArea className="h-[calc(100%-48px)]">
+                  {selectedPanel === 'stages' ? (
                     <StepsPanel
-                      stages={editorState.stages.map(stage => ({
-                        id: stage.id,
-                        name: stage.title,
-                        type: stage.type
-                      }))}
+                      stages={editorState.stages}
                       currentStage={editorState.activeStageId || ''}
                       onStageSelect={handleStageSelect}
                     />
-                  )}
-                  
-                  {selectedPanel === 'components' && (
-                    <ComponentsPalette onComponentAdd={handleElementAdd} />
+                  ) : (
+                    <ComponentsPalette
+                      onComponentSelect={handleElementAdd}
+                      selectedComponent={null}
+                    />
                   )}
                 </ScrollArea>
               </div>
@@ -380,29 +369,27 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
             <ResizableHandle />
 
-            {/* Main Canvas */}
-            <ResizablePanel defaultSize={60}>
-              <VisualEditorCanvas
-                elements={editorState.elements}
-                stages={editorState.stages}
-                activeStageId={editorState.activeStageId}
-                selectedElementId={editorState.selectedElementId}
-                isPreviewMode={editorState.isPreviewMode}
-                viewportMode={editorState.viewport}
-                onElementSelect={handleElementSelect}
-                onElementUpdate={handleElementUpdate}
-                onElementDelete={handleElementDelete}
-                onElementMove={handleElementMove}
-                onElementAdd={handleElementAdd}
-                onStageAdd={handleStageAdd}
-                onStageSelect={handleStageSelect}
-              />
+            {/* Canvas Area */}
+            <ResizablePanel defaultSize={400}>
+              <div className="h-full bg-gray-100 overflow-hidden">
+                <VisualEditorCanvas
+                  elements={stageElements as any}
+                  selectedElementId={editorState.selectedElementId}
+                  isPreviewMode={editorState.isPreviewMode}
+                  viewport={editorState.viewport}
+                  onElementSelect={handleElementSelect}
+                  onElementUpdate={handleElementUpdate}
+                  onElementDelete={handleElementDelete}
+                  onElementMove={handleElementMove}
+                  onElementAdd={handleElementAdd}
+                />
+              </div>
             </ResizablePanel>
 
             <ResizableHandle />
 
             {/* Right Sidebar */}
-            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <ResizablePanel defaultSize={300} minSize={250} maxSize={400}>
               <div className="h-full bg-white border-l border-gray-200">
                 <StageConfigurationPanel
                   stageName={activeStage?.title || 'Sem etapa selecionada'}
