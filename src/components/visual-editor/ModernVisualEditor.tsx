@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -24,6 +23,8 @@ import { ModernSidebar } from './sidebar/ModernSidebar';
 import { ModernCanvas } from './canvas/ModernCanvas';
 import { ModernPropertiesPanel } from './properties/ModernPropertiesPanel';
 import { useModernEditor } from '@/hooks/useModernEditor';
+import { StepsPanel } from './steps/StepsPanel';
+import { useStepsManager } from '@/hooks/useStepsManager';
 
 interface ModernVisualEditorProps {
   funnelId?: string;
@@ -157,6 +158,19 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo, handleSave, handleDuplicateElement, selectedElementId, deleteElement, toast]);
 
+  // Add steps management
+  const {
+    steps,
+    activeStepId: activeStep,
+    addStep,
+    deleteStep,
+    duplicateStep,
+    editStep,
+    reorderStep,
+    selectStep
+  } = useStepsManager();
+
+  // Update viewport classes function
   const getViewportClasses = () => {
     switch (viewport) {
       case 'mobile':
@@ -280,6 +294,22 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         {/* Main Editor Area */}
         <div className="flex-1 overflow-hidden">
           <ResizablePanelGroup direction="horizontal" className="h-full">
+            {/* Steps Panel - New first column */}
+            <ResizablePanel defaultSize={15} minSize={10} maxSize={25}>
+              <StepsPanel
+                steps={steps}
+                activeStepId={activeStep}
+                onStepSelect={selectStep}
+                onStepAdd={addStep}
+                onStepEdit={editStep}
+                onStepDelete={deleteStep}
+                onStepDuplicate={duplicateStep}
+                onStepReorder={reorderStep}
+              />
+            </ResizablePanel>
+
+            <ResizableHandle withHandle />
+
             {/* Left Sidebar - Components */}
             <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
               <ModernSidebar onAddElement={handleAddElement} />
@@ -288,7 +318,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             <ResizableHandle withHandle />
 
             {/* Canvas Area */}
-            <ResizablePanel defaultSize={60}>
+            <ResizablePanel defaultSize={45}>
               <div className="h-full bg-gray-50 relative">
                 <ModernCanvas
                   elements={elements}
