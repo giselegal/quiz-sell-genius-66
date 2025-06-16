@@ -83,6 +83,17 @@ export const useModernEditor = (initialData?: any) => {
 
   const getDefaultContent = (type: string): Record<string, any> => {
     switch (type) {
+      case 'header':
+        return {
+          logoUrl: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
+          logoAlt: 'Logo',
+          showBackButton: true,
+          showProgress: true,
+          currentStep: 1,
+          totalSteps: 7,
+          backgroundColor: '#FFFFFF'
+        };
+
       case 'terms':
         return {
           html: 'Ao clicar em alguma das opções, você concorda com os <b>Termos de utilização e serviço</b>, <b>Política de privacidade</b>, <b>Política de subscrição</b> e <b>Política de cookies</b>'

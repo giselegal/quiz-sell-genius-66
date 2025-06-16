@@ -7,7 +7,8 @@ import {
   MoreVertical,
   Eye,
   EyeOff,
-  Copy
+  Copy,
+  ArrowLeft
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -18,6 +19,7 @@ import {
 import { EditorElement } from '@/hooks/useModernEditor';
 import { MarqueeElement } from './elements/MarqueeElement';
 import { FixedHeaderElement } from './elements/FixedHeaderElement';
+import { Progress } from '@/components/ui/progress';
 
 interface ModernElementRendererProps {
   element: EditorElement;
@@ -83,6 +85,59 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
     };
 
     switch (element.type) {
+      case 'header':
+        const {
+          logoUrl = 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
+          logoAlt = 'Logo',
+          showBackButton = true,
+          showProgress = true,
+          currentStep = 1,
+          totalSteps = 7,
+          backgroundColor = '#FFFFFF'
+        } = element.content;
+
+        const progressValue = totalSteps > 0 ? (currentStep / totalSteps) * 100 : 0;
+
+        return (
+          <div 
+            style={{...commonStyle, backgroundColor}}
+            className="grid gap-4 opacity-100"
+          >
+            <div className="flex flex-row w-full h-auto justify-center relative">
+              {showBackButton && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost hover:bg-primary hover:text-foreground h-10 w-10 absolute left-0"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+              )}
+              
+              <div className="flex flex-col w-full max-w-sm justify-start items-center gap-4">
+                <img
+                  width="96"
+                  height="96"
+                  className="max-w-24 object-cover"
+                  alt={logoAlt}
+                  src={logoUrl}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'https://via.placeholder.com/96x96?text=Logo';
+                  }}
+                />
+                
+                {showProgress && (
+                  <Progress 
+                    value={progressValue} 
+                    className="relative w-full overflow-hidden rounded-full bg-zinc-300 h-2"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        );
+
       case 'terms':
         return (
           <p
