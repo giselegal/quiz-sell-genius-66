@@ -15,7 +15,8 @@ import AnalyticsPage from '@/pages/AnalyticsPage';
 import CreativesPage from '@/pages/CreativesPage';
 import SettingsPage from '@/pages/SettingsPage';
 import EditorPage from '@/pages/EditorPage';
-import QuizPage from '@/pages/QuizPage';
+import QuizPage from '@/components/QuizPage';
+import QuizDescubraSeuEstilo from '@/pages/quiz-descubra-seu-estilo';
 import ResultPage from '@/pages/ResultPage';
 import QuizOfferPage from '@/pages/QuizOfferPage';
 import QuizEditorPage from '@/pages/QuizEditorPage';
@@ -54,7 +55,9 @@ function App() {
           console.log('Quiz started:', nome, email);
         }} />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/quiz-descubra-seu-estilo" element={<QuizPage />} />
+        <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/quiz-descubra-seu-estilo" element={<QuizDescubraSeuEstilo />} />
+        <Route path="/descubra-seu-estilo" element={<QuizDescubraSeuEstilo />} />
         <Route path="/resultado" element={<ResultPage />} />
         
         {/* Editores na Raiz - Acesso Direto */}

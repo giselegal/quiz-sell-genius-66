@@ -4,6 +4,8 @@ export const ROUTES = {
   HOME: '/',
   RESULTADO: '/resultado',
   DESCUBRA_SEU_ESTILO: '/descubra-seu-estilo',
+  QUIZ_DESCUBRA_SEU_ESTILO: '/quiz-descubra-seu-estilo',
+  QUIZ: '/quiz',
   
   // Editores na Raiz
   EDITORS: {
@@ -35,6 +37,8 @@ export function isValidRoute(path: string): boolean {
     ROUTES.HOME,
     ROUTES.RESULTADO,
     ROUTES.DESCUBRA_SEU_ESTILO,
+    ROUTES.QUIZ_DESCUBRA_SEU_ESTILO,
+    ROUTES.QUIZ,
     ...Object.values(ROUTES.EDITORS),
     ROUTES.ADMIN.ROOT,
     ROUTES.ADMIN.DASHBOARD,

@@ -9,8 +9,23 @@
 /                           /index.html                 200
 /resultado                  /index.html                 200
 /descubra-seu-estilo        /index.html                 200
+/quiz-descubra-seu-estilo   /index.html                 200
+/quiz                       /index.html                 200
+
+# Editores
+/editors                    /index.html                 200
+/unified-editor             /index.html                 200
+/visual-editor              /index.html                 200
+/result-visual-editor       /index.html                 200
+/inlead-editor              /index.html                 200
+/quiz-editor                /index.html                 200
+/live-editor                /index.html                 200
+/result-editor              /index.html                 200
 
 # Impedir erros 404 em recarregamentos de página
 /resultado/*                /index.html                 200
 /descubra-seu-estilo/*      /index.html                 200
+/quiz-descubra-seu-estilo/* /index.html                 200
+/quiz/*                     /index.html                 200
 /admin/*                    /index.html                 200
+/editors/*                  /index.html                 200

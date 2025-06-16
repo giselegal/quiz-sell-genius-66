@@ -6,6 +6,10 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import App from './App.tsx';
 import './index.css';
 
+// Debug da rota atual
+console.log('🔍 Rota atual:', window.location.pathname);
+console.log('🔍 URL completa:', window.location.href);
+
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error('Root element not found');
