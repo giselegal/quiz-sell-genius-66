@@ -5,15 +5,16 @@
     "branch": "main"
   },
   "projectName": "Quiz Sell Genius",
-  "projectId": "quiz-sell-genius-66", 
-  "version": "2.1.1750115024",
-  "lastUpdate": "2025-06-16T23:03:44Z",
+  "projectId": "quiz-sell-genius-66",
+  "version": "2.1.1750116045",
+  "lastUpdate": "2025-06-16T23:20:45Z",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
     "enhancedSync": true,
     "visualEditor": true,
-    "forceSync": true
+    "forceSync": true,
+    "webhookAlternative": true
   },
   "editor": {
     "enableLiveMode": true,
@@ -22,6 +23,13 @@
   },
   "sync": {
     "forced": true,
-    "timestamp": 1750115024
+    "timestamp": 1750116045,
+    "method": "webhook-alternative",
+    "tokenRequired": false
+  },
+  "scripts": {
+    "prepare": "node scripts/prepare-lovable.js",
+    "sync": "node scripts/manual-sync.js",
+    "test": "node scripts/test-sync.js"
   }
 }
