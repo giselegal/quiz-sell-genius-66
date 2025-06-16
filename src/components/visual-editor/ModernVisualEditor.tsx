@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -6,21 +7,17 @@ import QuizIntro from '@/components/QuizIntro';
 import QuizFinalTransition from '@/components/QuizFinalTransition';
 import QuizResult from '@/components/QuizResult';
 import QuizOfferPage from '@/components/QuizOfferPage';
+import { StepsPanel } from './steps/StepsPanel';
+import { ComponentsPalette } from './sidebar/ComponentsPalette';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
 import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
 import { StyleResult } from '@/types/quiz';
 import { 
-  Play, 
-  Square, 
-  Settings, 
   Eye, 
   Save, 
   Monitor, 
   Tablet, 
-  Smartphone,
-  ArrowLeft,
-  ArrowRight,
-  Plus
+  Smartphone
 } from 'lucide-react';
 
 interface Stage {
@@ -51,6 +48,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
 
   // Mock data for testing - using proper StyleResult types
   const mockPrimaryStyle: StyleResult = {
@@ -65,12 +63,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   ];
 
   const handleSave = useCallback(() => {
-    // Implement your save logic here
     console.log('Saving...');
   }, []);
 
   useEffect(() => {
-    // Auto-save every 10 seconds
     const intervalId = setInterval(() => {
       handleSave();
     }, 10000);
@@ -78,18 +74,15 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     return () => clearInterval(intervalId);
   }, [handleSave]);
 
-  const handleNextStage = () => {
-    if (currentStageIndex < stages.length - 1) {
-      setCurrentStageIndex(currentStageIndex + 1);
-      setCurrentStage(stages[currentStageIndex + 1].id);
-    }
+  const handleStageSelect = (stageId: string) => {
+    const stageIndex = stages.findIndex(s => s.id === stageId);
+    setCurrentStage(stageId);
+    setCurrentStageIndex(stageIndex);
   };
 
-  const handlePreviousStage = () => {
-    if (currentStageIndex > 0) {
-      setCurrentStageIndex(currentStageIndex - 1);
-      setCurrentStage(stages[currentStageIndex - 1].id);
-    }
+  const handleComponentSelect = (componentType: string) => {
+    setSelectedComponent(componentType);
+    console.log('Componente selecionado:', componentType);
   };
 
   const renderCurrentStage = () => {
@@ -134,7 +127,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3">
+      <div className="bg-white border-b border-gray-200 px-6 py-3 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h1 className="text-xl font-bold text-gray-900">Editor Visual Moderno</h1>
@@ -191,77 +184,27 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         </div>
       </div>
 
+      {/* Main Content - 3 Columns Layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar - Stage Navigation */}
-        {!isPreviewMode && (
-          <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-            <div className="p-4 border-b border-gray-200">
-              <h2 className="font-semibold text-gray-900 mb-3">Etapas do Funil</h2>
-              <div className="space-y-2">
-                {stages.map((stage) => (
-                  <Button
-                    key={stage.id}
-                    variant={currentStage === stage.id ? 'default' : 'ghost'}
-                    className="w-full justify-start"
-                    onClick={() => setCurrentStage(stage.id)}
-                  >
-                    {stage.name}
-                  </Button>
-                ))}
-              </div>
-            </div>
-            
-            <div className="flex-1 p-4">
-              <StageConfigurationPanel
-                stageName={stages.find(s => s.id === currentStage)?.name || ''}
-                stageType={currentStage}
-              />
-            </div>
-          </div>
-        )}
+        {/* Left Column - Steps Panel */}
+        <div className="w-64 bg-white border-r border-gray-200 flex-shrink-0">
+          <StepsPanel
+            stages={stages}
+            currentStage={currentStage}
+            onStageSelect={handleStageSelect}
+          />
+        </div>
 
-        {/* Main Canvas */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Stage Controls */}
-          {!isPreviewMode && (
-            <div className="bg-gray-100 border-b border-gray-200 p-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handlePreviousStage}
-                    disabled={currentStageIndex === 0}
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                  </Button>
-                  <span className="text-sm font-medium">
-                    Etapa {currentStageIndex + 1} de {stages.length}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleNextStage}
-                    disabled={currentStageIndex === stages.length - 1}
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div>
+        {/* Center Column - Components Palette */}
+        <div className="w-72 bg-gray-50 border-r border-gray-200 flex-shrink-0">
+          <ComponentsPalette
+            onComponentSelect={handleComponentSelect}
+            selectedComponent={selectedComponent}
+          />
+        </div>
 
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Configurar Etapa
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar Componente
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-
+        {/* Right Column - Editor Canvas + Configuration Panel */}
+        <div className="flex-1 flex overflow-hidden">
           {/* Canvas Area */}
           <div className="flex-1 overflow-auto bg-gray-100 p-6">
             <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
@@ -272,10 +215,22 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               {renderCurrentStage()}
             </div>
           </div>
-        </div>
 
-        {/* Right Panel - Component Configuration */}
-        {!isPreviewMode && showOptionConfig && (
+          {/* Configuration Panel */}
+          <div className="w-80 bg-white border-l border-gray-200 flex-shrink-0">
+            <div className="h-full overflow-auto">
+              <StageConfigurationPanel
+                stageName={stages.find(s => s.id === currentStage)?.name || ''}
+                stageType={currentStage}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Option Configuration Modal */}
+      {showOptionConfig && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <OptionConfigurationPanel
             isOpen={showOptionConfig}
             onClose={() => setShowOptionConfig(false)}
@@ -284,8 +239,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               console.log('Configuração atualizada:', config);
             }}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
