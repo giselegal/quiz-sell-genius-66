@@ -28,6 +28,46 @@ interface ModernVisualEditorProps {
   onPreview?: () => void;
 }
 
+// Detailed Steps Panel Component
+const DetailedStepsPanel: React.FC<{
+  stages: any[];
+  activeStageId: string | null;
+  onStageSelect: (stageId: string) => void;
+}> = ({ stages, activeStageId, onStageSelect }) => {
+  return (
+    <div className="w-64 bg-white border-r border-gray-200 p-4">
+      <h3 className="font-semibold text-gray-900 mb-4">Etapas do Quiz</h3>
+      <div className="space-y-2">
+        {stages.map((stage, index) => (
+          <button
+            key={stage.id}
+            onClick={() => onStageSelect(stage.id)}
+            className={`w-full text-left p-3 rounded-lg border transition-all ${
+              activeStageId === stage.id
+                ? 'bg-blue-50 border-blue-200 text-blue-900'
+                : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${
+                activeStageId === stage.id
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-300 text-gray-600'
+              }`}>
+                {index + 1}
+              </div>
+              <div>
+                <div className="font-medium text-sm">{stage.title}</div>
+                <div className="text-xs text-gray-500 capitalize">{stage.type}</div>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave,
@@ -53,6 +93,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     reorderElements,
     exportState,
     importState,
+    setActiveStage,
   } = useEditorState();
 
   // Undo/Redo functionality
@@ -141,12 +182,17 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     setSelectedElementId(null);
   }, [redo]);
 
+  const handleStageSelect = useCallback((stageId: string) => {
+    setActiveStage(stageId);
+    setSelectedElementId(null);
+  }, [setActiveStage]);
+
   // Obter elemento selecionado
   const selectedElement = selectedElementId
     ? editorState.elements.find((el) => el.id === selectedElementId)
     : null;
 
-    const activeStage = editorState.stages.find(stage => stage.id === editorState.activeStageId);
+  const activeStage = editorState.stages.find(stage => stage.id === editorState.activeStageId);
 
   const renderStageContent = () => {
     if (!activeStage) return null;
@@ -241,6 +287,15 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
         {/* Main Editor Area */}
         <div className="flex flex-1 overflow-hidden">
+          {/* Steps Panel */}
+          {!isPreviewMode && (
+            <DetailedStepsPanel
+              stages={editorState.stages}
+              activeStageId={editorState.activeStageId}
+              onStageSelect={handleStageSelect}
+            />
+          )}
+
           {/* Component Library Sidebar */}
           {!isPreviewMode && (
             <ComponentLibrarySidebar onComponentAdd={handleElementAdd} />
