@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { quizQuestions } from '@/data/quizQuestions';
 import { strategicQuestions } from '@/data/strategicQuestions';
@@ -35,14 +34,14 @@ const generateAllQuizSteps = (): Step[] => {
     settings: { showProgress: false, allowBack: false }
   });
 
-  // 2. Questões Normais (1-10)
+  // 2. Questões Normais (1-10) - com dados reais das questões
   quizQuestions.forEach((question, index) => {
     steps.push({
       id: `step-question-${question.id}`,
-      title: `Questão ${index + 1}: ${question.title.substring(0, 30)}...`,
+      title: `Questão ${index + 1}`,
       type: 'quiz-question',
       order: order++,
-      questionData: question,
+      questionData: question, // Dados reais da questão
       templateComponents: [],
       settings: {
         questionType: 'multiple-choice',
@@ -62,14 +61,14 @@ const generateAllQuizSteps = (): Step[] => {
     settings: { showProgress: true, allowBack: true }
   });
 
-  // 4. Questões Estratégicas (1-7)
+  // 4. Questões Estratégicas (1-7) - com dados reais das questões
   strategicQuestions.forEach((question, index) => {
     steps.push({
       id: `step-strategic-${question.id}`,
-      title: `Questão Estratégica ${index + 1}: ${question.title.substring(0, 25)}...`,
+      title: `Questão Estratégica ${index + 1}`,
       type: 'strategic-question',
       order: order++,
-      questionData: question,
+      questionData: question, // Dados reais da questão estratégica
       templateComponents: [],
       settings: {
         questionType: 'single-choice',
@@ -177,7 +176,7 @@ export const useStepsManager = () => {
     }
   };
 
-  const addStep = useCallback((type: StepType = 'quiz-question') => {
+  const addStep = useCallback((type: StepType = 'quiz-question', questionData?: any) => {
     const newStepNumber = steps.length + 1;
     const typeInfo = getStepTypeInfo(type);
     
@@ -186,6 +185,7 @@ export const useStepsManager = () => {
       title: `Nova ${typeInfo.label}`,
       type,
       order: newStepNumber,
+      questionData, // Incluir dados da questão se fornecidos
       templateComponents: [],
       settings: {
         questionType: type === 'quiz-question' ? 'multiple-choice' : 'single-choice',

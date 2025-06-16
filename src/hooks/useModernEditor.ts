@@ -1,4 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
+import { getStepTemplate } from '@/utils/stepTemplates';
+import { quizQuestions } from '@/data/quizQuestions';
+import { strategicQuestions } from '@/data/strategicQuestions';
 
 export interface EditorElement {
   id: string;
@@ -59,7 +62,64 @@ export const useModernEditor = () => {
 
   const addStepTemplate = useCallback((stepType: string, stepId: string) => {
     console.log(`Adding template for step type: ${stepType}, step ID: ${stepId}`);
-    // Add template elements based on step type
+    
+    // Get question data based on step type and ID
+    let questionData = undefined;
+    
+    if (stepType === 'quiz-question') {
+      // Extract question number from stepId if it follows pattern "step-question-X"
+      const questionMatch = stepId.match(/step-question-(\d+)/);
+      if (questionMatch) {
+        const questionId = questionMatch[1];
+        questionData = quizQuestions.find(q => q.id === questionId);
+      }
+    } else if (stepType === 'strategic-question') {
+      // Extract strategic question ID from stepId if it follows pattern "step-strategic-X"
+      const strategicMatch = stepId.match(/step-strategic-(.+)/);
+      if (strategicMatch) {
+        const questionId = strategicMatch[1];
+        questionData = strategicQuestions.find(q => q.id === questionId);
+      }
+    }
+    
+    // Get the template for this step type
+    const template = getStepTemplate(stepType, stepId, questionData);
+    
+    // Add all template components to the step
+    const newElements: EditorElement[] = [];
+    
+    template.components.forEach((component, index) => {
+      const newElement: EditorElement = {
+        id: `element-${Date.now()}-${index}`,
+        type: component.type || 'text',
+        content: component.content || {},
+        position: { x: 0, y: 0 },
+        size: { width: 100, height: 50 },
+        order: component.order || index,
+        stepId,
+        style: component.style || {}
+      };
+      
+      newElements.push(newElement);
+    });
+    
+    // Add all elements at once
+    if (newElements.length > 0) {
+      setState(prev => {
+        const updatedElements = [...prev.elements, ...newElements];
+        const newHistory = prev.history.slice(0, prev.historyIndex + 1);
+        newHistory.push(updatedElements);
+        
+        return {
+          ...prev,
+          elements: updatedElements,
+          history: newHistory,
+          historyIndex: newHistory.length - 1
+        };
+      });
+      
+      console.log(`Successfully added ${newElements.length} template components for ${stepType}`);
+    }
   }, []);
 
   const updateElement = useCallback((id: string, updates: Partial<EditorElement>) => {
