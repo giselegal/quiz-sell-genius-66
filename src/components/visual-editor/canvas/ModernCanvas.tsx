@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { EditorElement } from '@/hooks/useModernEditor';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -24,7 +23,7 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
   isPreviewMode,
   viewport
 }) => {
-  // Sort elements by order
+  // Sort elements by order to ensure correct sequence
   const sortedElements = [...elements].sort((a, b) => a.order - b.order);
 
   const getViewportClass = () => {
@@ -47,22 +46,22 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
       <div
         key={element.id}
         className={`
-          relative group cursor-pointer p-2 rounded-md transition-all
-          ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'}
-          ${!isPreviewMode ? 'border border-dashed border-gray-200 hover:border-blue-300' : ''}
+          relative group cursor-pointer transition-all
+          ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50 rounded-md' : 'hover:bg-gray-50 rounded-md'}
+          ${!isPreviewMode ? 'border border-dashed border-transparent hover:border-blue-300' : ''}
         `}
         onClick={() => onSelectElement(element.id)}
       >
         {renderElementContent(element)}
         
         {!isPreviewMode && (
-          <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onDeleteElement(element.id);
               }}
-              className="bg-red-500 text-white rounded p-1 text-xs hover:bg-red-600"
+              className="bg-red-500 text-white rounded p-1 text-xs hover:bg-red-600 shadow-lg"
             >
               ×
             </button>
@@ -183,7 +182,7 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
         return (
           <button 
             className={`
-              w-full py-3 px-6 rounded-md font-medium transition-all
+              w-full py-3 px-6 rounded-md font-medium transition-all my-4
               ${element.content.variant === 'primary' 
                 ? 'bg-blue-600 text-white hover:bg-blue-700' 
                 : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
@@ -194,6 +193,13 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
           >
             {element.content.text || 'Botão'}
           </button>
+        );
+      
+      case 'brand-divider':
+        return (
+          <div className="flex justify-center my-4">
+            <div className="w-24 h-0.5 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
+          </div>
         );
       
       case 'transition-hero':
@@ -283,13 +289,6 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
           </div>
         );
       
-      case 'brand-divider':
-        return (
-          <div className="flex justify-center my-4">
-            <div className="w-24 h-0.5 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
-          </div>
-        );
-      
       default:
         return (
           <div className="p-4 bg-gray-100 rounded-md">
@@ -314,7 +313,7 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
           )}
           
           {sortedElements.length > 0 ? (
-            <div className="space-y-4">
+            <div className="space-y-2">
               {sortedElements.map(renderElement)}
             </div>
           ) : (
@@ -322,7 +321,7 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
               <div className="text-center">
                 <p className="text-gray-500 mb-2">Nenhum componente nesta etapa</p>
                 <p className="text-sm text-gray-400">
-                  {!isPreviewMode ? 'Adicione componentes da barra lateral' : 'Esta etapa está vazia'}
+                  {!isPreviewMode ? 'Adicione componentes da barra lateral ou aguarde o carregamento automático' : 'Esta etapa está vazia'}
                 </p>
               </div>
             </div>

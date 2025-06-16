@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ModernSidebar } from './sidebar/ModernSidebar';
 import { ModernCanvas } from './canvas/ModernCanvas';
 import { ModernToolbar } from './toolbar/ModernToolbar';
@@ -19,7 +19,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   onSave
 }) => {
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('lg');
-  const [hasAutoPopulated, setHasAutoPopulated] = useState(false);
+  const hasInitializedRef = useRef(false);
 
   const {
     elements,
@@ -38,7 +38,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     redo,
     save,
     getElementsByStep,
-    autoPopulateStep
+    autoPopulateStep,
+    resetPopulatedSteps
   } = useModernEditor();
 
   const {
@@ -60,19 +61,25 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     getStepTypeInfo
   } = useStepsManager();
 
-  // Auto-populate all steps on initialization
+  // Single initialization effect to prevent multiple executions
   useEffect(() => {
-    if (!hasAutoPopulated && steps.length > 0) {
-      console.log('Auto-populating all steps with their templates...');
+    if (!hasInitializedRef.current && steps.length > 0) {
+      console.log('Initializing steps auto-population...');
+      hasInitializedRef.current = true;
       
-      steps.forEach(step => {
-        autoPopulateStep(step.id, step.type);
-      });
-      
-      setHasAutoPopulated(true);
-      console.log(`Auto-populated ${steps.length} steps`);
+      // Use a timeout to ensure stable state before population
+      const initTimeout = setTimeout(() => {
+        steps.forEach((step, index) => {
+          setTimeout(() => {
+            console.log(`Auto-populating step ${index + 1}/${steps.length}: ${step.id} (${step.type})`);
+            autoPopulateStep(step.id, step.type);
+          }, index * 50); // Stagger population to prevent conflicts
+        });
+      }, 200);
+
+      return () => clearTimeout(initTimeout);
     }
-  }, [steps, autoPopulateStep, hasAutoPopulated]);
+  }, [steps, autoPopulateStep]);
 
   const handleAddElement = (type: string) => {
     if (activeStepId) {
@@ -112,15 +119,16 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         return;
     }
     
-    // Add template elements for the new step
-    addStepTemplate(type, stepId);
+    // Add template elements for the new step with slight delay
+    setTimeout(() => {
+      addStepTemplate(type, stepId);
+    }, 100);
   };
 
   const handleSave = async () => {
     try {
       const data = await save();
       
-      // Include steps data - fix spread operator error
       const fullData = {
         elements: data.elements || [],
         timestamp: data.timestamp || new Date().toISOString(),
@@ -148,7 +156,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     updateElement(id, updates);
   };
 
-  // Get elements for active step
+  // Get elements for active step with proper sorting
   const activeStepElements = activeStepId ? getElementsByStep(activeStepId) : [];
   const selectedElement = activeStepElements.find(el => el.id === selectedElementId);
 

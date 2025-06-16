@@ -1,7 +1,8 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { getStepTemplate } from '@/utils/stepTemplates';
 import { quizQuestions } from '@/data/quizQuestions';
 import { strategicQuestions } from '@/data/strategicQuestions';
+import { generateComponentId } from '@/utils/idGenerator';
 
 export interface EditorElement {
   id: string;
@@ -33,13 +34,41 @@ export const useModernEditor = () => {
     populatedSteps: new Set()
   });
 
-  // Auto-populate steps that haven't been populated yet
-  const autoPopulateStep = useCallback((stepId: string, stepType: string) => {
-    if (state.populatedSteps.has(stepId)) {
-      return; // Already populated
+  const isPopulatingRef = useRef(false);
+  const populationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Debounced auto-populate to prevent multiple executions
+  const debouncedAutoPopulate = useCallback((stepId: string, stepType: string) => {
+    if (populationTimeoutRef.current) {
+      clearTimeout(populationTimeoutRef.current);
     }
 
+    populationTimeoutRef.current = setTimeout(() => {
+      if (!state.populatedSteps.has(stepId) && !isPopulatingRef.current) {
+        autoPopulateStep(stepId, stepType);
+      }
+    }, 100);
+  }, [state.populatedSteps]);
+
+  // Clean up existing elements for a step before adding new ones
+  const cleanStepElements = useCallback((stepId: string) => {
+    setState(prev => ({
+      ...prev,
+      elements: prev.elements.filter(el => el.stepId !== stepId)
+    }));
+  }, []);
+
+  // Auto-populate steps with proper locking mechanism
+  const autoPopulateStep = useCallback((stepId: string, stepType: string) => {
+    if (state.populatedSteps.has(stepId) || isPopulatingRef.current) {
+      return;
+    }
+
+    isPopulatingRef.current = true;
     console.log(`Auto-populating step ${stepId} with type ${stepType}`);
+    
+    // Clean existing elements for this step first
+    cleanStepElements(stepId);
     
     // Get question data based on step type and ID
     let questionData = undefined;
@@ -61,17 +90,17 @@ export const useModernEditor = () => {
     // Get the template for this step type
     const template = getStepTemplate(stepType, stepId, questionData);
     
-    // Add all template components to the step
+    // Add all template components to the step with proper ordering
     const newElements: EditorElement[] = [];
     
     template.components.forEach((component, index) => {
       const newElement: EditorElement = {
-        id: `element-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
+        id: generateComponentId(stepId, component.type || 'unknown', index),
         type: component.type || 'text',
         content: component.content || {},
         position: { x: 0, y: 0 },
         size: { width: 100, height: 50 },
-        order: component.order || index,
+        order: index, // Use index as order to ensure proper sequence
         stepId,
         style: component.style || {}
       };
@@ -79,37 +108,52 @@ export const useModernEditor = () => {
       newElements.push(newElement);
     });
     
-    // Add all elements at once
+    // Add all elements at once with proper state update
     if (newElements.length > 0) {
-      setState(prev => {
-        const updatedElements = [...prev.elements, ...newElements];
-        const newHistory = prev.history.slice(0, prev.historyIndex + 1);
-        newHistory.push(updatedElements);
+      setTimeout(() => {
+        setState(prev => {
+          const filteredElements = prev.elements.filter(el => el.stepId !== stepId);
+          const updatedElements = [...filteredElements, ...newElements].sort((a, b) => {
+            if (a.stepId === b.stepId) {
+              return a.order - b.order;
+            }
+            return 0;
+          });
+          
+          const newHistory = prev.history.slice(0, prev.historyIndex + 1);
+          newHistory.push(updatedElements);
+          
+          const newPopulatedSteps = new Set(prev.populatedSteps);
+          newPopulatedSteps.add(stepId);
+          
+          return {
+            ...prev,
+            elements: updatedElements,
+            history: newHistory,
+            historyIndex: newHistory.length - 1,
+            populatedSteps: newPopulatedSteps
+          };
+        });
         
-        const newPopulatedSteps = new Set(prev.populatedSteps);
-        newPopulatedSteps.add(stepId);
-        
-        return {
-          ...prev,
-          elements: updatedElements,
-          history: newHistory,
-          historyIndex: newHistory.length - 1,
-          populatedSteps: newPopulatedSteps
-        };
-      });
-      
-      console.log(`Successfully auto-populated ${newElements.length} template components for step ${stepId}`);
+        isPopulatingRef.current = false;
+        console.log(`Successfully auto-populated ${newElements.length} template components for step ${stepId}`);
+      }, 50);
+    } else {
+      isPopulatingRef.current = false;
     }
-  }, [state.populatedSteps]);
+  }, [state.populatedSteps, cleanStepElements]);
 
   const addElement = useCallback((type: string, content: any = {}, stepId: string) => {
+    const stepElements = state.elements.filter(el => el.stepId === stepId);
+    const nextOrder = stepElements.length;
+
     const newElement: EditorElement = {
-      id: `element-${Date.now()}`,
+      id: generateComponentId(stepId, type, nextOrder),
       type,
       content,
       position: { x: 0, y: 0 },
       size: { width: 100, height: 50 },
-      order: state.elements.filter(el => el.stepId === stepId).length,
+      order: nextOrder,
       stepId,
       style: {}
     };
@@ -132,8 +176,17 @@ export const useModernEditor = () => {
   }, [state.elements]);
 
   const addStepTemplate = useCallback((stepType: string, stepId: string) => {
-    autoPopulateStep(stepId, stepType);
-  }, [autoPopulateStep]);
+    debouncedAutoPopulate(stepId, stepType);
+  }, [debouncedAutoPopulate]);
+
+  // Reset populated steps (for debugging/testing)
+  const resetPopulatedSteps = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      populatedSteps: new Set(),
+      elements: []
+    }));
+  }, []);
 
   const updateElement = useCallback((id: string, updates: Partial<EditorElement>) => {
     setState(prev => {
@@ -156,10 +209,14 @@ export const useModernEditor = () => {
     const element = state.elements.find(el => el.id === id);
     if (!element) return;
 
+    const stepElements = state.elements.filter(el => el.stepId === element.stepId);
+    const nextOrder = stepElements.length;
+
     const newElement: EditorElement = {
       ...element,
-      id: `element-${Date.now()}`,
-      position: { x: element.position.x + 20, y: element.position.y + 20 }
+      id: generateComponentId(element.stepId, element.type, nextOrder),
+      position: { x: element.position.x + 20, y: element.position.y + 20 },
+      order: nextOrder
     };
 
     setState(prev => {
@@ -237,11 +294,22 @@ export const useModernEditor = () => {
   }, [state.elements]);
 
   const getElementsByStep = useCallback((stepId: string) => {
-    return state.elements.filter(el => el.stepId === stepId);
+    return state.elements
+      .filter(el => el.stepId === stepId)
+      .sort((a, b) => a.order - b.order);
   }, [state.elements]);
 
   const canUndo = useMemo(() => state.historyIndex > 0, [state.historyIndex]);
   const canRedo = useMemo(() => state.historyIndex < state.history.length - 1, [state.historyIndex, state.history.length]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (populationTimeoutRef.current) {
+        clearTimeout(populationTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return {
     elements: state.elements,
@@ -260,6 +328,7 @@ export const useModernEditor = () => {
     redo,
     save,
     getElementsByStep,
-    autoPopulateStep
+    autoPopulateStep,
+    resetPopulatedSteps
   };
 };
