@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Monitor, Tablet, Smartphone, Save, Menu, Edit3, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button, Monitor, Tablet } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { QuizIntro } from '@/components/QuizIntro';
-import { QuizFinalTransition } from '@/components/QuizFinalTransition';
-import { QuizResult } from '@/components/QuizResult';
-import { QuizOfferPage } from '@/components/QuizOfferPage';
-import { QuizContent } from '@/components/QuizContent';
-import { toast } from '@/components/ui/use-toast';
+import QuizIntro from '@/components/QuizIntro';
+import QuizFinalTransition from '@/components/QuizFinalTransition';
+import QuizResult from '@/components/QuizResult';
+import QuizOfferPage from '@/components/QuizOfferPage';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
 import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
+import { toast } from '@/components/ui/use-toast';
 
 interface Page {
   id: string;
   name: string;
-  type: 'intro' | 'question' | 'strategic' | 'transition-strategic' | 'transition-result' | 'result' | 'offer';
+  type: string;
   questionIndex?: number;
 }
 
-interface Question {
+interface ComponentProps {
+  text?: string;
+  level?: number;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  src?: string;
+  alt?: string;
+}
+
+interface Component {
   id: string;
-  text: string;
-  options: { id: string; text: string; }[];
+  type: string;
+  props?: ComponentProps;
 }
 
 interface ModernVisualEditorProps {
@@ -29,274 +35,160 @@ interface ModernVisualEditorProps {
   onSave: (data: any) => void;
 }
 
-export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ 
-  funnelId, 
-  onSave 
+export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
+  funnelId,
+  onSave
 }) => {
+  const [showEditor, setShowEditor] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [currentPageId, setCurrentPageId] = useState<string>('intro');
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [isConfigurationPanelOpen, setIsConfigurationPanelOpen] = useState(false);
+  const [currentPageId, setCurrentPageId] = useState('cover');
+  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [showOptionConfig, setShowOptionConfig] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [loading, setLoading] = useState(true);
+  
   const [realComponentConfig, setRealComponentConfig] = useState({
     intro: {
-      userName: 'Visitante',
-      title: 'Descubra o Seu Estilo Ideal',
-      description: 'Responda algumas perguntas e veja o resultado',
-      logoImage: 'https://uploads-ssl.webflow.com/64b4c9959224725311145643/64b4c99592247253111456a8_Frame%2017.svg',
-      backgroundImage: 'https://uploads-ssl.webflow.com/64b4c9959224725311145643/64b4c99592247253111456a8_Frame%2017.svg',
-      buttonText: 'Começar'
+      title: 'Descubra seu Estilo Ideal',
+      description: 'Responda algumas perguntas e encontre o estilo que mais combina com você!',
+      logoImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
+      backgroundImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
+      buttonText: 'Começar o Quiz'
+    },
+    transitions: {
+      transitionTitle: 'Estamos quase lá...',
+      transitionDescription: 'Mais algumas perguntinhas rápidas para garantir o melhor resultado!',
+      transitionImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
+      buttonText: 'Continuar'
+    },
+    result: {
+      resultTitle: 'Seu Estilo é...',
+      resultDescription: 'Com base nas suas respostas, identificamos que seu estilo predominante é...',
+      primaryColor: '#000000',
+      secondaryColor: '#000000',
+      textColor: '#000000',
+      backgroundImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
+      buttonText: 'Ver Mais'
+    },
+    offer: {
+      offerTitle: 'Oferta Exclusiva',
+      offerDescription: 'Aproveite nossa oferta especial para você!',
+      offerImage: 'https://uploads-ssl.webflow.com/64b05491983999339793b19e/64b05491983999339793b241_Group%201741.svg',
+      buttonText: 'Comprar Agora'
     }
   });
 
-  const pages: Page[] = [
-    { id: 'intro', name: 'Página Inicial', type: 'intro' },
-    { id: 'question1', name: 'Pergunta 1', type: 'question', questionIndex: 0 },
-    { id: 'question2', name: 'Pergunta 2', type: 'question', questionIndex: 1 },
-    { id: 'strategic1', name: 'Pergunta Estratégica 1', type: 'strategic', questionIndex: 0 },
-    { id: 'strategic2', name: 'Pergunta Estratégica 2', type: 'strategic', questionIndex: 1 },
-    { id: 'transition-strategic', name: 'Transição Estratégica', type: 'transition-strategic' },
-    { id: 'transition-result', name: 'Transição Resultado', type: 'transition-result' },
-    { id: 'result', name: 'Página de Resultado', type: 'result' },
-    { id: 'offer', name: 'Página de Oferta', type: 'offer' },
-  ];
+  const [pages, setPages] = useState([
+    { id: 'cover', name: 'Capa', type: 'intro' },
+    { id: 'question1', name: 'Questão 1', type: 'question', questionIndex: 0 },
+    { id: 'question2', name: 'Questão 2', type: 'question', questionIndex: 1 },
+    { id: 'question3', name: 'Questão 3', type: 'question', questionIndex: 2 },
+    { id: 'question4', name: 'Questão 4', type: 'question', questionIndex: 3 },
+    { id: 'question5', name: 'Questão 5', type: 'question', questionIndex: 4 },
+    { id: 'transition1', name: 'Transição 1', type: 'transition-strategic' },
+    { id: 'strategic1', name: 'Estratégica 1', type: 'strategic', questionIndex: 0 },
+    { id: 'strategic2', name: 'Estratégica 2', type: 'strategic', questionIndex: 1 },
+    { id: 'transition2', name: 'Transição 2', type: 'transition-result' },
+    { id: 'result', name: 'Resultado', type: 'result' },
+    { id: 'offer', name: 'Oferta', type: 'offer' }
+  ]);
 
-  const questions: Question[] = [
-    {
-      id: 'q1',
-      text: 'Qual a sua cor favorita?',
-      options: [
-        { id: 'opt1', text: 'Azul' },
-        { id: 'opt2', text: 'Verde' },
-        { id: 'opt3', text: 'Vermelho' },
-        { id: 'opt4', text: 'Amarelo' },
-      ],
-    },
-    {
-      id: 'q2',
-      text: 'Qual seu animal favorito?',
-      options: [
-        { id: 'opt5', text: 'Cachorro' },
-        { id: 'opt6', text: 'Gato' },
-        { id: 'opt7', text: 'Pássaro' },
-        { id: 'opt8', text: 'Peixe' },
-      ],
-    },
-  ];
-
-  const strategicQuestions: Question[] = [
-    {
-      id: 'sq1',
-      text: 'O que você mais valoriza em um produto?',
-      options: [
-        { id: 'sopt1', text: 'Qualidade' },
-        { id: 'sopt2', text: 'Preço' },
-      ],
-    },
-    {
-      id: 'sq2',
-      text: 'Como você prefere comprar?',
-      options: [
-        { id: 'sopt3', text: 'Online' },
-        { id: 'sopt4', text: 'Na loja' },
-      ],
-    },
-  ];
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [strategicQuestions, setStrategicQuestions] = useState<any[]>([]);
 
   useEffect(() => {
-    // Simulação de carregamento de dados
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    const mockPages = [
+      { id: 'cover', name: 'Capa', type: 'intro' },
+      { id: 'question1', name: 'Questão 1', type: 'question', questionIndex: 0 },
+      { id: 'question2', name: 'Questão 2', type: 'question', questionIndex: 1 },
+      { id: 'question3', name: 'Questão 3', type: 'question', questionIndex: 2 },
+      { id: 'question4', name: 'Questão 4', type: 'question', questionIndex: 3 },
+      { id: 'question5', name: 'Questão 5', type: 'question', questionIndex: 4 },
+      { id: 'transition1', name: 'Transição 1', type: 'transition-strategic' },
+      { id: 'strategic1', name: 'Estratégica 1', type: 'strategic', questionIndex: 0 },
+      { id: 'strategic2', name: 'Estratégica 2', type: 'strategic', questionIndex: 1 },
+      { id: 'transition2', name: 'Transição 2', type: 'transition-result' },
+      { id: 'result', name: 'Resultado', type: 'result' },
+      { id: 'offer', name: 'Oferta', type: 'offer' }
+    ];
+
+    const mockQuestions = [
+      {
+        id: 'q1',
+        title: 'Qual sua cor favorita?',
+        type: 'text',
+        options: [
+          { id: 'o1', text: 'Azul', styleCategory: 'Clássico' },
+          { id: 'o2', text: 'Verde', styleCategory: 'Natural' },
+          { id: 'o3', text: 'Vermelho', styleCategory: 'Sexy' },
+          { id: 'o4', text: 'Preto', styleCategory: 'Dramático' }
+        ],
+        multiSelect: 1
+      }
+    ];
+
+    const mockStrategicQuestions = [
+      {
+        id: 'sq1',
+        title: 'Em qual ocasião você se sente mais confiante?',
+        type: 'text',
+        options: [
+          { id: 'so1', text: 'Festa', styleCategory: 'Sexy' },
+          { id: 'so2', text: 'Trabalho', styleCategory: 'Clássico' }
+        ],
+        multiSelect: 1
+      }
+    ];
+
+    setQuestions(mockQuestions);
+    setStrategicQuestions(mockStrategicQuestions);
+    setLoading(false);
   }, []);
 
+  const currentPage = pages.find(page => page.id === currentPageId);
+
+  const updateRealComponentConfig = (section: string, key: string, value: any) => {
+    const newConfig = {
+      ...realComponentConfig,
+      [section]: {
+        ...realComponentConfig[section],
+        [key]: value
+      }
+    };
+    setRealComponentConfig(newConfig);
+    setHasUnsavedChanges(true);
+  };
+
   const handleSave = () => {
-    // Simulação de salvamento
-    toast({
-      title: 'Progresso Salvo!',
-      description: 'As alterações foram salvas com sucesso.',
-    });
+    const editorData = {
+      funnelId,
+      pages,
+      currentPageId,
+      config: realComponentConfig,
+      timestamp: new Date().toISOString()
+    };
+    onSave(editorData);
     setHasUnsavedChanges(false);
-    onSave({ funnelId, data: 'Dados simulados do editor' });
+    toast({
+      title: 'Quiz salvo com sucesso!',
+      description: 'Todas as alterações foram salvas.'
+    });
   };
 
   const getViewportDimensions = () => {
     switch (viewportMode) {
       case 'mobile':
-        return { width: 375, height: 667 };
+        return { width: '320px', height: '568px' };
       case 'tablet':
-        return { width: 768, height: 1024 };
+        return { width: '768px', height: '1024px' };
+      case 'desktop':
+        return { width: '100%', height: '100%' };
       default:
-        return { width: 1280, height: 720 };
+        return { width: '100%', height: '100%' };
     }
   };
-
-  const renderCurrentComponent = () => {
-    if (!currentPage) return null;
-    
-    if (loading) {
-      return (
-        <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4" />
-              <p className="text-gray-600">Carregando questões...</p>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    const mockQuizResult = {
-      primaryStyle: {
-        category: "Elegante" as const,
-        score: 85,
-        percentage: 85
-      },
-      secondaryStyles: [
-        {
-          category: "Romântico" as const,
-          score: 65,
-          percentage: 65
-        }
-      ]
-    };
-
-    switch (currentPage.type) {
-      case 'intro':
-        return (
-          <QuizIntro
-            userName={realComponentConfig.intro.userName || 'Visitante'}
-            title={realComponentConfig.intro.title}
-            description={realComponentConfig.intro.description}
-            logo={realComponentConfig.intro.logoImage}
-            backgroundImage={realComponentConfig.intro.backgroundImage}
-            buttonText={realComponentConfig.intro.buttonText}
-            onStartQuiz={() => setCurrentPageId('question1')}
-          />
-        );
-
-      case 'transition-strategic':
-        return (
-          <QuizFinalTransition
-            onShowResult={() => setCurrentPageId('strategic1')}
-          />
-        );
-
-      case 'transition-result':
-        return (
-          <QuizFinalTransition
-            onShowResult={() => setCurrentPageId('result')}
-          />
-        );
-
-      case 'result':
-        return (
-          <QuizResult
-            primaryStyle={mockQuizResult.primaryStyle}
-            secondaryStyles={mockQuizResult.secondaryStyles}
-            onViewOffer={() => setCurrentPageId('offer')}
-          />
-        );
-
-      case 'offer':
-        return (
-          <QuizOfferPage />
-        );
-
-      case 'question':
-        const questionIndex = currentPage.questionIndex || 0;
-        const currentQuestion = questions[questionIndex];
-        
-        if (!currentQuestion) {
-          return (
-            <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
-              <div className="text-center">
-                <p className="text-gray-600">Questão não encontrada</p>
-              </div>
-            </div>
-          );
-        }
-
-        return (
-          <QuizContent
-            user={{ userName: 'Preview User' }}
-            currentQuestionIndex={questionIndex}
-            totalQuestions={questions.length}
-            showingStrategicQuestions={false}
-            currentStrategicQuestionIndex={0}
-            currentQuestion={currentQuestion}
-            currentAnswers={[]}
-            handleAnswerSubmit={() => {}}
-            handleNextClick={() => {
-              const nextPageIndex = pages.findIndex(p => p.id === currentPageId) + 1;
-              if (nextPageIndex < pages.length) {
-                setCurrentPageId(pages[nextPageIndex].id);
-              }
-            }}
-            handlePrevious={() => {
-              const currentPageIndex = pages.findIndex(p => p.id === currentPageId);
-              if (currentPageIndex > 0) {
-                setCurrentPageId(pages[currentPageIndex - 1].id);
-              }
-            }}
-          />
-        );
-
-      case 'strategic':
-        const strategicIndex = currentPage.questionIndex || 0;
-        const currentStrategicQuestion = strategicQuestions[strategicIndex];
-        
-        if (!currentStrategicQuestion) {
-          return (
-            <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
-              <div className="text-center">
-                <p className="text-gray-600">Questão estratégica não encontrada</p>
-              </div>
-            </div>
-          );
-        }
-
-        return (
-          <QuizContent
-            user={{ userName: 'Preview User' }}
-            currentQuestionIndex={0}
-            totalQuestions={2}
-            showingStrategicQuestions={true}
-            currentStrategicQuestionIndex={strategicIndex}
-            currentQuestion={currentStrategicQuestion}
-            currentAnswers={[]}
-            handleAnswerSubmit={() => {}}
-            handleNextClick={() => {
-              const nextPageIndex = pages.findIndex(p => p.id === currentPageId) + 1;
-              if (nextPageIndex < pages.length) {
-                setCurrentPageId(pages[nextPageIndex].id);
-              }
-            }}
-            handlePrevious={() => {
-              const currentPageIndex = pages.findIndex(p => p.id === currentPageId);
-              if (currentPageIndex > 0) {
-                setCurrentPageId(pages[currentPageIndex - 1].id);
-              }
-            }}
-          />
-        );
-
-      default:
-        return (
-          <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
-            <div className="text-center">
-              <p className="text-gray-600">Tipo de página não reconhecido: {currentPage.type}</p>
-            </div>
-          </div>
-        );
-    }
-  };
-
-  const currentPage = pages.find(page => page.id === currentPageId);
 
   const ViewportControls = () => (
     <div className="flex items-center justify-center gap-2">
@@ -326,102 +218,169 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     </div>
   );
 
-  return (
-    <div className="h-screen flex flex-col bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden"
-          >
-            <Menu className="w-4 h-4" />
-          </Button>
-          <h1 className="text-xl font-semibold text-gray-800">Editor Visual</h1>
-          {hasUnsavedChanges && (
-            <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded">
-              Alterações não salvas
-            </span>
-          )}
+  const renderCurrentComponent = () => {
+    if (!currentPage) return null;
+
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4" />
+              <p className="text-gray-600">Carregando questões...</p>
+            </div>
+          </div>
         </div>
-        
-        <div className="flex items-center gap-2">
-          <ViewportControls />
+      );
+    }
+
+    const mockQuizResult = {
+      primaryStyle: {
+        category: 'Elegante',
+        score: 85,
+        percentage: 85
+      },
+      secondaryStyles: [
+        {
+          category: 'Romântico',
+          score: 70,
+          percentage: 70
+        }
+      ]
+    };
+
+    switch (currentPage.type) {
+      case 'intro':
+        return (
+          <QuizIntro
+            onStart={(name: string) => {
+              console.log('Quiz started with name:', name);
+              setCurrentPageId('question1');
+            }}
+          />
+        );
+
+      case 'transition-result':
+        return (
+          <QuizFinalTransition
+            onShowResult={() => {
+              console.log('Showing result...');
+              setCurrentPageId('result');
+            }}
+          />
+        );
+
+      case 'result':
+        return (
+          <QuizResult
+            primaryStyle={mockQuizResult.primaryStyle}
+            secondaryStyles={mockQuizResult.secondaryStyles}
+            onReset={() => {
+              console.log('Resetting quiz...');
+              setCurrentPageId('cover');
+            }}
+          />
+        );
+
+      case 'offer':
+        return <QuizOfferPage />;
+
+      default:
+        return (
+          <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
+            <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg text-center">
+              <h2 className="text-xl font-semibold mb-4">
+                {currentPage.name}
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Tipo: {currentPage.type}
+              </p>
+              <p className="text-sm text-gray-500">
+                Esta página está em desenvolvimento...
+              </p>
+            </div>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="h-screen flex bg-gray-50">
+      {/* Sidebar esquerda */}
+      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-4 border-b border-gray-200">
+          <h1 className="text-lg font-semibold text-gray-900">Editor Visual</h1>
+          <p className="text-sm text-gray-500">Quiz: {funnelId}</p>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-4">
+            <StageConfigurationPanel
+              stageName={currentPage?.name || 'Página'}
+              stageType={currentPage?.type || 'unknown'}
+              currentOptions={[]}
+              onOptionUpdate={() => {}}
+            />
+          </div>
+        </ScrollArea>
+
+        <div className="p-4 border-t border-gray-200">
           <Button
             onClick={handleSave}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="w-full"
+            disabled={!hasUnsavedChanges}
           >
-            <Save className="w-4 h-4 mr-2" />
-            Salvar
+            💾 Salvar {hasUnsavedChanges && '*'}
           </Button>
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar */}
-        <div className={`bg-white border-r w-80 flex-shrink-0 ${isMobileMenuOpen ? 'block' : 'hidden md:block'}`}>
-          <div className="h-full flex flex-col">
-            <div className="p-4 border-b">
-              <h2 className="font-medium text-gray-800 mb-3">Páginas do Funil</h2>
-              <ScrollArea className="h-64">
-                <div className="space-y-1">
-                  {pages.map((page) => (
-                    <Button
-                      key={page.id}
-                      variant={currentPageId === page.id ? 'default' : 'ghost'}
-                      className="w-full justify-start text-sm"
-                      onClick={() => setCurrentPageId(page.id)}
-                    >
-                      {page.name}
-                    </Button>
-                  ))}
-                </div>
-              </ScrollArea>
-            </div>
-            
-            <div className="flex-1 p-4">
-              <div className="space-y-4">
-                <h3 className="font-medium text-gray-800">Configurações</h3>
-                <p className="text-sm text-gray-600">
-                  Selecione uma página para ver as opções de configuração.
-                </p>
-                {currentPage && (
-                  <>
-                    {/* Stage Configuration Panel */}
-                    <StageConfigurationPanel
-                      stageName={currentPage.name}
-                      stageType={currentPage.type}
-                      currentOptions={questions[0]?.options.map(opt => ({
-                        id: opt.id,
-                        label: opt.id,
-                        text: opt.text
-                      }))}
-                      onOptionUpdate={(optionId, field, value) => {
-                        console.log(`Updating option ${optionId} field ${field} with value ${value}`);
-                      }}
-                    />
-                  </>
-                )}
-              </div>
+      {/* Área principal */}
+      <div className="flex-1 flex flex-col">
+        {/* Toolbar */}
+        <div className="bg-white border-b border-gray-200 p-4">
+          <div className="flex items-center justify-between">
+            <ViewportControls />
+            <div className="flex items-center gap-2">
+              {pages.map((page) => (
+                <Button
+                  key={page.id}
+                  variant={currentPageId === page.id ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setCurrentPageId(page.id)}
+                  className="text-xs"
+                >
+                  {page.name}
+                </Button>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Preview Area */}
-        <div className="flex-1 bg-gray-100 overflow-auto">
-          <div className="p-4">
-            <div 
-              className="mx-auto bg-white shadow-lg overflow-hidden"
-              style={getViewportDimensions()}
-            >
-              {renderCurrentComponent()}
-            </div>
+        {/* Preview */}
+        <div className="flex-1 bg-gray-100 p-4">
+          <div
+            className="mx-auto bg-white shadow-lg rounded-lg overflow-hidden"
+            style={getViewportDimensions()}
+          >
+            {renderCurrentComponent()}
           </div>
         </div>
       </div>
+
+      {/* Configuration Panel */}
+      {showOptionConfig && (
+        <div className="fixed top-4 right-4 z-50">
+          <OptionConfigurationPanel
+            isOpen={showOptionConfig}
+            onClose={() => setShowOptionConfig(false)}
+            optionId={selectedOptionId || ''}
+            onConfigUpdate={(config) => {
+              console.log('Option config updated:', config);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
