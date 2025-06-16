@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { EditorElement } from '@/hooks/useModernEditor';
 import { Button } from '@/components/ui/button';
@@ -232,6 +231,82 @@ export const ModernElementRenderer: React.FC<ModernElementRendererProps> = ({
           />
         );
       
+      case 'quiz-header':
+        return (
+          <div style={element.style} className="w-full">
+            <div className="flex flex-col gap-4 md:gap-6 p-3 md:p-5">
+              <div className="flex flex-row w-full justify-center relative">
+                {element.content.showBackButton && (
+                  <button className="absolute left-0 p-2 hover:bg-gray-100 rounded-md">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l-7-7 7-7M19 12H5" />
+                    </svg>
+                  </button>
+                )}
+                <div className="flex flex-col w-full items-center gap-4">
+                  {element.content.logo && (
+                    <img 
+                      src={element.content.logo} 
+                      alt="Logo" 
+                      className="w-24 h-24 object-cover rounded"
+                    />
+                  )}
+                  {element.content.showProgress && (
+                    <div className="w-full max-w-md">
+                      <div className="w-full bg-zinc-300 rounded-full h-2">
+                        <div 
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                          style={{ width: `${element.content.progress || 0}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'quiz-question':
+        return (
+          <div style={element.style} className="w-full">
+            <div className="flex flex-col gap-4">
+              <h1 className="text-3xl font-bold text-center">
+                {element.content.question || 'Digite sua pergunta aqui'}
+              </h1>
+              
+              {element.content.spacer && (
+                <div className="py-2 border-dashed border-yellow-500 border rounded-lg" />
+              )}
+              
+              <div className="flex flex-col gap-2">
+                {(element.content.options || []).map((option: any, index: number) => (
+                  <button
+                    key={index}
+                    className="w-full border border-zinc-200 bg-white hover:bg-blue-50 hover:border-blue-300 rounded-md p-4 transition-all duration-200 hover:shadow-lg text-left group"
+                    onClick={(e) => !isPreviewMode && e.preventDefault()}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="font-medium text-gray-600 group-hover:text-blue-600">
+                          {option.id})
+                        </span>
+                        <span className="text-base">
+                          {option.text || `Opção ${option.id}`}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              
+              <button className="w-full bg-blue-600 text-white rounded-md py-3 px-4 font-medium hover:bg-blue-700 transition-colors">
+                Continuar
+              </button>
+            </div>
+          </div>
+        );
+
       default:
         return <div>Componente não suportado</div>;
     }

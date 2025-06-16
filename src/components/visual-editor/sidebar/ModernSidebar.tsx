@@ -18,7 +18,9 @@ import {
   FormInput,
   CheckSquare,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  ListChecks,
+  Header
 } from 'lucide-react';
 
 interface ModernSidebarProps {
@@ -27,8 +29,16 @@ interface ModernSidebarProps {
 
 const componentCategories = [
   {
-    title: 'Básicos',
+    title: 'Quiz',
     defaultOpen: true,
+    items: [
+      { type: 'quiz-header', label: 'Header', icon: Header, color: 'text-purple-600' },
+      { type: 'quiz-question', label: 'Questão', icon: ListChecks, color: 'text-blue-600' },
+    ]
+  },
+  {
+    title: 'Básicos',
+    defaultOpen: false,
     items: [
       { type: 'heading', label: 'Título', icon: Type, color: 'text-blue-600' },
       { type: 'text', label: 'Texto', icon: FileText, color: 'text-green-600' },
@@ -53,7 +63,7 @@ const componentCategories = [
   },
   {
     title: 'Vendas',
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       { type: 'pricing', label: 'Preço', icon: DollarSign, color: 'text-green-500' },
       { type: 'testimonial', label: 'Depoimento', icon: MessageSquare, color: 'text-blue-500' },

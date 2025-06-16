@@ -79,14 +79,14 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
       case 'tablet':
         return 'max-w-2xl';
       default:
-        return 'w-full';
+        return 'w-full max-w-4xl';
     }
   };
 
   if (elements.length === 0 && !isPreviewMode) {
     return (
       <div 
-        className="h-full flex items-center justify-center"
+        className="h-full flex items-center justify-center bg-gray-50"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
@@ -97,13 +97,13 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
             </svg>
           </div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Comece criando sua página
+            Comece criando seu quiz
           </h3>
           <p className="text-gray-500 max-w-sm mb-4">
-            Arraste componentes da sidebar ou clique neles para começar a construir sua página.
+            Arraste componentes da sidebar ou clique neles para começar a construir seu quiz interativo.
           </p>
           <div className="text-sm text-gray-400">
-            💡 Dica: Use Ctrl+Z para desfazer e Ctrl+Y para refazer
+            💡 Dica: Comece com um Header e depois adicione questões
           </div>
         </div>
       </div>
@@ -112,35 +112,38 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
 
   return (
     <div className="h-full overflow-auto bg-gray-50">
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 ${getViewportWidth()} ${className}`}>
           <div
             style={getCanvasStyle()}
             onClick={handleCanvasClick}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            className="relative"
+            className="relative min-h-[80vh]"
           >
-            {/* Drop indicator */}
-            <div className="absolute inset-0 pointer-events-none">
-              {!isPreviewMode && (
-                <div className="absolute top-4 left-4 text-xs text-gray-400 bg-white px-2 py-1 rounded shadow-sm">
-                  {viewport === 'mobile' ? '📱 Mobile' : viewport === 'tablet' ? '📟 Tablet' : '🖥️ Desktop'}
-                </div>
-              )}
-            </div>
+            {/* Quiz Canvas Layout */}
+            <div className="flex flex-col gap-4 p-6">
+              {/* Drop indicator */}
+              <div className="absolute inset-0 pointer-events-none">
+                {!isPreviewMode && (
+                  <div className="absolute top-4 left-4 text-xs text-gray-400 bg-white px-2 py-1 rounded shadow-sm z-20">
+                    {viewport === 'mobile' ? '📱 Mobile' : viewport === 'tablet' ? '📟 Tablet' : '🖥️ Desktop'}
+                  </div>
+                )}
+              </div>
 
-            {elements.map((element) => (
-              <ModernElementRenderer
-                key={element.id}
-                element={element}
-                isSelected={selectedElementId === element.id}
-                isPreviewMode={isPreviewMode}
-                onSelect={() => onSelectElement(element.id)}
-                onUpdate={(updates) => onUpdateElement(element.id, updates)}
-                onDelete={() => onDeleteElement(element.id)}
-              />
-            ))}
+              {elements.map((element) => (
+                <ModernElementRenderer
+                  key={element.id}
+                  element={element}
+                  isSelected={selectedElementId === element.id}
+                  isPreviewMode={isPreviewMode}
+                  onSelect={() => onSelectElement(element.id)}
+                  onUpdate={(updates) => onUpdateElement(element.id, updates)}
+                  onDelete={() => onDeleteElement(element.id)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

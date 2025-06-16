@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,8 +59,165 @@ export const ModernPropertiesPanel: React.FC<ModernPropertiesPanelProps> = ({
     });
   };
 
+  const addOption = () => {
+    const currentOptions = selectedElement.content.options || [];
+    const nextLetter = String.fromCharCode(65 + currentOptions.length); // A, B, C, D...
+    const newOption = {
+      id: nextLetter,
+      text: `Opção ${nextLetter}`,
+      styleCategory: 'Natural'
+    };
+    updateContent('options', [...currentOptions, newOption]);
+  };
+
+  const removeOption = (index: number) => {
+    const currentOptions = selectedElement.content.options || [];
+    const newOptions = currentOptions.filter((_: any, i: number) => i !== index);
+    updateContent('options', newOptions);
+  };
+
+  const updateOption = (index: number, field: string, value: string) => {
+    const currentOptions = [...(selectedElement.content.options || [])];
+    currentOptions[index] = { ...currentOptions[index], [field]: value };
+    updateContent('options', currentOptions);
+  };
+
   const renderContentControls = () => {
     switch (selectedElement.type) {
+      case 'quiz-header':
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="title">Título do Quiz</Label>
+              <Input
+                id="title"
+                value={selectedElement.content.title || ''}
+                onChange={(e) => updateContent('title', e.target.value)}
+                placeholder="Nome do seu quiz"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="logo">URL do Logo</Label>
+              <Input
+                id="logo"
+                value={selectedElement.content.logo || ''}
+                onChange={(e) => updateContent('logo', e.target.value)}
+                placeholder="https://..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="progress">Progresso (%)</Label>
+              <Input
+                id="progress"
+                type="number"
+                min="0"
+                max="100"
+                value={selectedElement.content.progress || 0}
+                onChange={(e) => updateContent('progress', Number(e.target.value))}
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="showProgress"
+                checked={selectedElement.content.showProgress || false}
+                onChange={(e) => updateContent('showProgress', e.target.checked)}
+              />
+              <Label htmlFor="showProgress">Mostrar barra de progresso</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="showBackButton"
+                checked={selectedElement.content.showBackButton || false}
+                onChange={(e) => updateContent('showBackButton', e.target.checked)}
+              />
+              <Label htmlFor="showBackButton">Mostrar botão voltar</Label>
+            </div>
+          </>
+        );
+
+      case 'quiz-question':
+        return (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="question">Pergunta</Label>
+              <Textarea
+                id="question"
+                value={selectedElement.content.question || ''}
+                onChange={(e) => updateContent('question', e.target.value)}
+                placeholder="Digite sua pergunta"
+                rows={2}
+              />
+            </div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label>Opções de Resposta</Label>
+                <Button
+                  size="sm"
+                  onClick={addOption}
+                  className="text-xs"
+                >
+                  + Adicionar
+                </Button>
+              </div>
+              
+              {(selectedElement.content.options || []).map((option: any, index: number) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Opção {option.id}</span>
+                    {(selectedElement.content.options || []).length > 1 && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => removeOption(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Remover
+                      </Button>
+                    )}
+                  </div>
+                  <Textarea
+                    value={option.text || ''}
+                    onChange={(e) => updateOption(index, 'text', e.target.value)}
+                    placeholder={`Texto da opção ${option.id}`}
+                    rows={2}
+                  />
+                  <Select
+                    value={option.styleCategory || 'Natural'}
+                    onValueChange={(value) => updateOption(index, 'styleCategory', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Natural">Natural</SelectItem>
+                      <SelectItem value="Clássico">Clássico</SelectItem>
+                      <SelectItem value="Contemporâneo">Contemporâneo</SelectItem>
+                      <SelectItem value="Elegante">Elegante</SelectItem>
+                      <SelectItem value="Romântico">Romântico</SelectItem>
+                      <SelectItem value="Sexy">Sexy</SelectItem>
+                      <SelectItem value="Dramático">Dramático</SelectItem>
+                      <SelectItem value="Criativo">Criativo</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="multiSelect"
+                checked={selectedElement.content.multiSelect || false}
+                onChange={(e) => updateContent('multiSelect', e.target.checked)}
+              />
+              <Label htmlFor="multiSelect">Permitir múltiplas seleções</Label>
+            </div>
+          </>
+        );
+
       case 'heading':
         return (
           <>

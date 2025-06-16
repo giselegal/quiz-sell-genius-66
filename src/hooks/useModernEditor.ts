@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { generateId } from '@/utils/idGenerator';
 
@@ -179,6 +178,24 @@ const getDefaultContent = (type: string) => {
     video: { src: '', thumbnail: '' },
     spacer: { height: 40 },
     divider: { style: 'solid', color: '#e5e7eb' },
+    'quiz-question': {
+      question: 'Como você define o seu jeito de Ser?',
+      options: [
+        { id: 'A', text: 'Sou espontânea e descontraída, adoro coisas simples.', styleCategory: 'Natural' },
+        { id: 'B', text: 'Gosto de organização, sou uma pessoa séria e conservadora.', styleCategory: 'Clássico' },
+        { id: 'C', text: 'Sou prática e objetiva, valorizo a funcionalidade.', styleCategory: 'Contemporâneo' },
+        { id: 'D', text: 'Sou exigente e sofisticada, cuidadosa nas minhas escolhas.', styleCategory: 'Elegante' }
+      ],
+      multiSelect: false,
+      required: true
+    },
+    'quiz-header': {
+      logo: 'https://cakto-quiz-br01.b-cdn.net/uploads/47fd613e-91a9-48cf-bd52-a9d4e180d5ab.png',
+      showProgress: true,
+      progress: 25,
+      showBackButton: true,
+      title: 'Quiz de Estilo'
+    },
     pricing: { 
       title: 'Plano Premium',
       price: 'R$ 97',
@@ -237,6 +254,15 @@ const getDefaultStyle = (type: string) => {
     video: { borderRadius: '8px' },
     spacer: {},
     divider: { margin: '20px 0' },
+    'quiz-question': {
+      padding: '0px',
+      backgroundColor: 'transparent'
+    },
+    'quiz-header': {
+      backgroundColor: '#ffffff',
+      padding: '20px',
+      borderRadius: '0px'
+    },
     pricing: {
       backgroundColor: '#ffffff',
       border: '2px solid #e5e7eb',
@@ -284,6 +310,8 @@ const getDefaultSize = (type: string) => {
     video: { width: 400, height: 225 },
     spacer: { width: 400, height: 40 },
     divider: { width: 400, height: 20 },
+    'quiz-question': { width: 600, height: 400 },
+    'quiz-header': { width: 600, height: 120 },
     pricing: { width: 320, height: 400 },
     testimonial: { width: 400, height: 200 },
     countdown: { width: 400, height: 150 },
