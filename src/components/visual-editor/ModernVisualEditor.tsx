@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import QuizIntro from '@/components/QuizIntro';
 import QuizFinalTransition from '@/components/QuizFinalTransition';
 import QuizResult from '@/components/QuizResult';
@@ -184,48 +185,61 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         </div>
       </div>
 
-      {/* Main Content - 3 Columns Layout */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Column - Steps Panel */}
-        <div className="w-64 bg-white border-r border-gray-200 flex-shrink-0">
-          <StepsPanel
-            stages={stages}
-            currentStage={currentStage}
-            onStageSelect={handleStageSelect}
-          />
-        </div>
-
-        {/* Center Column - Components Palette */}
-        <div className="w-72 bg-gray-50 border-r border-gray-200 flex-shrink-0">
-          <ComponentsPalette
-            onComponentSelect={handleComponentSelect}
-            selectedComponent={selectedComponent}
-          />
-        </div>
-
-        {/* Right Column - Editor Canvas + Configuration Panel */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Canvas Area */}
-          <div className="flex-1 overflow-auto bg-gray-100 p-6">
-            <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
-              viewportMode === 'desktop' ? 'max-w-6xl' :
-              viewportMode === 'tablet' ? 'max-w-2xl' :
-              'max-w-sm'
-            }`}>
-              {renderCurrentStage()}
-            </div>
-          </div>
-
-          {/* Configuration Panel */}
-          <div className="w-80 bg-white border-l border-gray-200 flex-shrink-0">
-            <div className="h-full overflow-auto">
-              <StageConfigurationPanel
-                stageName={stages.find(s => s.id === currentStage)?.name || ''}
-                stageType={currentStage}
+      {/* Main Content - Resizable 4 Columns Layout */}
+      <div className="flex-1 overflow-hidden">
+        <ResizablePanelGroup direction="horizontal" className="h-full">
+          {/* Left Column - Steps Panel */}
+          <ResizablePanel defaultSize={15} minSize={10} maxSize={25}>
+            <div className="h-full bg-white border-r border-gray-200">
+              <StepsPanel
+                stages={stages}
+                currentStage={currentStage}
+                onStageSelect={handleStageSelect}
               />
             </div>
-          </div>
-        </div>
+          </ResizablePanel>
+
+          <ResizableHandle withHandle />
+
+          {/* Second Column - Components Palette */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <div className="h-full bg-gray-50 border-r border-gray-200">
+              <ComponentsPalette
+                onComponentSelect={handleComponentSelect}
+                selectedComponent={selectedComponent}
+              />
+            </div>
+          </ResizablePanel>
+
+          <ResizableHandle withHandle />
+
+          {/* Third Column - Editor Canvas */}
+          <ResizablePanel defaultSize={45} minSize={30}>
+            <div className="h-full overflow-auto bg-gray-100 p-6">
+              <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
+                viewportMode === 'desktop' ? 'max-w-6xl' :
+                viewportMode === 'tablet' ? 'max-w-2xl' :
+                'max-w-sm'
+              }`}>
+                {renderCurrentStage()}
+              </div>
+            </div>
+          </ResizablePanel>
+
+          <ResizableHandle withHandle />
+
+          {/* Fourth Column - Configuration Panel */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+            <div className="h-full bg-white border-l border-gray-200">
+              <div className="h-full overflow-auto">
+                <StageConfigurationPanel
+                  stageName={stages.find(s => s.id === currentStage)?.name || ''}
+                  stageType={currentStage}
+                />
+              </div>
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
 
       {/* Option Configuration Modal */}
