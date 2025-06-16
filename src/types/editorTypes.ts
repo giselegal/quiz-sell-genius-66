@@ -2,11 +2,11 @@
 // Editor Types Compatibility Layer
 // This file ensures type compatibility across different editor components
 
-import { CanvasElement as VisualEditorCanvasElement, BlockType } from './visualEditor';
+import { CanvasElement, BlockType } from './visualEditor';
 import { Block } from './editor';
 
-// Re-export the main types to ensure consistency
-export type { VisualEditorCanvasElement as CanvasElement };
+// Re-export the unified types to ensure consistency
+export type { CanvasElement };
 export type { BlockType };
 export type { Block };
 
@@ -23,7 +23,7 @@ export interface LegacyCanvasElement {
 }
 
 // Type converter function for legacy support
-export function convertToModernCanvasElement(legacy: LegacyCanvasElement): VisualEditorCanvasElement {
+export function convertToModernCanvasElement(legacy: LegacyCanvasElement): CanvasElement {
   return {
     ...legacy,
     type: legacy.type as BlockType, // Type assertion since we know it's compatible

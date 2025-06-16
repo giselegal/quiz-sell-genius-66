@@ -60,18 +60,7 @@ export interface ElementStyle {
   [key: string]: any;
 }
 
-export interface VisualElement {
-  id: string;
-  type: BlockType;
-  stageId: string;
-  order: number;
-  content: ElementContent;
-  style: ElementStyle;
-  visible: boolean;
-  locked: boolean;
-}
-
-// Primary CanvasElement definition - this is the source of truth
+// Primary CanvasElement definition - this is the single source of truth
 export interface CanvasElement {
   id: string;
   type: BlockType;
@@ -83,8 +72,8 @@ export interface CanvasElement {
   locked: boolean;
 }
 
-// Ensure VisualElement is compatible with CanvasElement
-export type { CanvasElement as VisualElement_Compatible };
+// Ensure VisualElement is just an alias to CanvasElement for backward compatibility
+export type VisualElement = CanvasElement;
 
 export interface VisualStage {
   id: string;
