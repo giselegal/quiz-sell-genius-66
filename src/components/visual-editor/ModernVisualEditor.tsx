@@ -194,7 +194,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
             <ModernPropertiesPanel
               selectedElement={selectedElement}
-              onUpdate={handleElementUpdate}
+              onUpdate={(updates) => {
+                if (selectedElementId) {
+                  handleElementUpdate(selectedElementId, updates);
+                }
+              }}
               onClose={() => selectElement(null)}
             />
           </ResizablePanel>
