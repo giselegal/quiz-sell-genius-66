@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { StepType } from './useStepsManager';
 
 export interface EditorElement {
   id: string;
@@ -10,6 +11,7 @@ export interface EditorElement {
   visible: boolean;
   locked: boolean;
   order: number;
+  stepId?: string; // Associate element with step
 }
 
 export interface EditorState {
@@ -56,7 +58,7 @@ export const useModernEditor = (initialData?: any) => {
     });
   }, []);
 
-  const addElement = useCallback((type: string, position?: { x: number; y: number }) => {
+  const addElement = useCallback((type: string, position?: { x: number; y: number }, stepId?: string) => {
     const newElement: EditorElement = {
       id: uuidv4(),
       type,
@@ -65,7 +67,8 @@ export const useModernEditor = (initialData?: any) => {
       position: position || { x: 0, y: 0 },
       visible: true,
       locked: false,
-      order: state.elements.length
+      order: state.elements.length,
+      stepId
     };
 
     const newElements = [...state.elements, newElement];
@@ -80,6 +83,184 @@ export const useModernEditor = (initialData?: any) => {
     
     return newElement.id;
   }, [state.elements, saveToHistory]);
+
+  const addStepTemplate = useCallback((stepType: StepType, stepId: string) => {
+    const templateElements = getStepTemplate(stepType, stepId);
+    const newElements = [...state.elements, ...templateElements];
+    
+    setState(prev => ({
+      ...prev,
+      elements: newElements
+    }));
+
+    saveToHistory(newElements);
+    
+    return templateElements.map(el => el.id);
+  }, [state.elements, saveToHistory]);
+
+  const getStepTemplate = (stepType: StepType, stepId: string): EditorElement[] => {
+    const baseOrder = state.elements.length;
+    
+    switch (stepType) {
+      case 'quiz':
+        return [
+          {
+            id: uuidv4(),
+            type: 'header',
+            content: getDefaultContent('header'),
+            style: {},
+            position: { x: 0, y: 0 },
+            visible: true,
+            locked: false,
+            order: baseOrder,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'quiz-header',
+            content: getDefaultContent('quiz-header'),
+            style: {},
+            position: { x: 0, y: 100 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 1,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'quiz-question',
+            content: getDefaultContent('quiz-question'),
+            style: {},
+            position: { x: 0, y: 200 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 2,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'terms',
+            content: getDefaultContent('terms'),
+            style: {},
+            position: { x: 0, y: 300 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 3,
+            stepId
+          }
+        ];
+        
+      case 'result':
+        return [
+          {
+            id: uuidv4(),
+            type: 'header',
+            content: getDefaultContent('header'),
+            style: {},
+            position: { x: 0, y: 0 },
+            visible: true,
+            locked: false,
+            order: baseOrder,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'result-display',
+            content: getDefaultContent('result-display'),
+            style: {},
+            position: { x: 0, y: 100 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 1,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'marquee',
+            content: getDefaultContent('marquee'),
+            style: {},
+            position: { x: 0, y: 200 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 2,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'button',
+            content: { ...getDefaultContent('button'), text: 'Ver Oferta Especial' },
+            style: {},
+            position: { x: 0, y: 300 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 3,
+            stepId
+          }
+        ];
+        
+      case 'offer':
+        return [
+          {
+            id: uuidv4(),
+            type: 'header',
+            content: getDefaultContent('header'),
+            style: {},
+            position: { x: 0, y: 0 },
+            visible: true,
+            locked: false,
+            order: baseOrder,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'offer-hero',
+            content: getDefaultContent('offer-hero'),
+            style: {},
+            position: { x: 0, y: 100 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 1,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'pricing',
+            content: getDefaultContent('pricing'),
+            style: {},
+            position: { x: 0, y: 200 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 2,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'guarantee',
+            content: getDefaultContent('guarantee'),
+            style: {},
+            position: { x: 0, y: 300 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 3,
+            stepId
+          },
+          {
+            id: uuidv4(),
+            type: 'button',
+            content: { ...getDefaultContent('button'), text: 'Comprar Agora' },
+            style: {},
+            position: { x: 0, y: 400 },
+            visible: true,
+            locked: false,
+            order: baseOrder + 4,
+            stepId
+          }
+        ];
+        
+      default:
+        return [];
+    }
+  };
 
   const getDefaultContent = (type: string): Record<string, any> => {
     switch (type) {
@@ -121,6 +302,38 @@ export const useModernEditor = (initialData?: any) => {
         return {
           question: 'Qual destas opções mais combina com você?',
           options: ['Opção A', 'Opção B', 'Opção C', 'Opção D']
+        };
+
+      case 'result-display':
+        return {
+          title: 'Seu Estilo é',
+          primaryStyle: 'Elegante',
+          percentage: 85,
+          description: 'Você tem um estilo sofisticado e refinado.'
+        };
+
+      case 'offer-hero':
+        return {
+          title: 'Oferta Especial para Você!',
+          subtitle: 'Transforme seu estilo com nosso programa personalizado',
+          price: 'R$ 297',
+          originalPrice: 'R$ 597',
+          discount: '50% OFF'
+        };
+
+      case 'pricing':
+        return {
+          title: 'Preço Especial',
+          price: 'R$ 297',
+          originalPrice: 'R$ 597',
+          installments: '12x de R$ 29,70',
+          features: ['Consultoria personalizada', 'Material exclusivo', 'Suporte 24/7']
+        };
+
+      case 'guarantee':
+        return {
+          title: 'Garantia de 30 dias',
+          description: 'Se não ficar satisfeito, devolvemos 100% do seu dinheiro'
         };
       
       case 'heading':
@@ -314,6 +527,10 @@ export const useModernEditor = (initialData?: any) => {
     }
   }, [saveToHistory]);
 
+  const getElementsByStep = useCallback((stepId: string) => {
+    return state.elements.filter(el => el.stepId === stepId);
+  }, [state.elements]);
+
   return {
     // State
     elements: state.elements,
@@ -324,6 +541,7 @@ export const useModernEditor = (initialData?: any) => {
     
     // Actions
     addElement,
+    addStepTemplate,
     updateElement,
     duplicateElement,
     deleteElement,
@@ -332,6 +550,7 @@ export const useModernEditor = (initialData?: any) => {
     undo,
     redo,
     save,
-    loadAutoSave
+    loadAutoSave,
+    getElementsByStep
   };
 };
