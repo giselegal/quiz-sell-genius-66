@@ -64,6 +64,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     { category: 'Clássico', score: 65, percentage: 65 }
   ];
 
+  const handleSave = useCallback(() => {
+    // Implement your save logic here
+    console.log('Saving...');
+  }, []);
+
   useEffect(() => {
     // Auto-save every 10 seconds
     const intervalId = setInterval(() => {
@@ -72,11 +77,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
     return () => clearInterval(intervalId);
   }, [handleSave]);
-
-  const handleSave = useCallback(() => {
-    // Implement your save logic here
-    console.log('Saving...');
-  }, []);
 
   const handleNextStage = () => {
     if (currentStageIndex < stages.length - 1) {
@@ -120,7 +120,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <QuizResult
             primaryStyle={mockPrimaryStyle}
             secondaryStyles={mockSecondaryStyles}
-            onViewOffer={() => setCurrentStage('offer')}
           />
         );
       
