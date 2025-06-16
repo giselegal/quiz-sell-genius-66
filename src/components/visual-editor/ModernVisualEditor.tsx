@@ -8,7 +8,7 @@ import QuizIntro from '@/components/QuizIntro';
 import QuizFinalTransition from '@/components/QuizFinalTransition';
 import QuizResult from '@/components/QuizResult';
 import QuizOfferPage from '@/components/QuizOfferPage';
-import { StepsPanel } from './steps/StepsPanel';
+import { DetailedStepsPanel } from './steps/DetailedStepsPanel';
 import { ComponentsPalette } from './sidebar/ComponentsPalette';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
 import { OptionConfigurationPanel } from './panels/OptionConfigurationPanel';
@@ -86,18 +86,55 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     console.log('Componente selecionado:', componentType);
   };
 
+  const handleAddQuestion = () => {
+    console.log('Adicionando nova questão...');
+    // Aqui você implementaria a lógica para adicionar uma nova questão
+  };
+
   const renderCurrentStage = () => {
     switch (currentStage) {
       case 'intro':
         return <QuizIntro onStart={() => setCurrentStage('quiz')} />;
       
       case 'quiz':
+      case 'q1':
+      case 'q2':
+      case 'q3':
+      case 'q4':
+      case 'q5':
+      case 'q6':
+      case 'q7':
+      case 'q8':
+      case 'q9':
+      case 'q10':
         return (
           <div className="p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Quiz em Desenvolvimento</h2>
-            <p className="text-gray-600 mb-6">Esta seção será implementada com as questões do quiz.</p>
+            <h2 className="text-2xl font-bold mb-4">
+              {currentStage.startsWith('q') ? `Questão ${currentStage.slice(1)}` : 'Quiz em Desenvolvimento'}
+            </h2>
+            <p className="text-gray-600 mb-6">
+              {currentStage.startsWith('q') ? 
+                'Esta questão pode ser editada inline no editor.' : 
+                'Esta seção será implementada com as questões do quiz.'
+              }
+            </p>
             <Button onClick={() => setCurrentStage('transition')}>
               Simular Finalização do Quiz
+            </Button>
+          </div>
+        );
+      
+      case 'strategic1':
+      case 'strategic2':
+      case 'strategic3':
+        return (
+          <div className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Questão Estratégica</h2>
+            <p className="text-gray-600 mb-6">
+              Esta é uma questão estratégica para coleta de dados.
+            </p>
+            <Button onClick={() => setCurrentStage('transition')}>
+              Próxima Questão
             </Button>
           </div>
         );
@@ -188,13 +225,14 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       {/* Main Content - Resizable 4 Columns Layout */}
       <div className="flex-1 overflow-hidden">
         <ResizablePanelGroup direction="horizontal" className="h-full">
-          {/* Left Column - Steps Panel */}
-          <ResizablePanel defaultSize={15} minSize={10} maxSize={25}>
+          {/* Left Column - Detailed Steps Panel */}
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
             <div className="h-full bg-white border-r border-gray-200">
-              <StepsPanel
+              <DetailedStepsPanel
                 stages={stages}
                 currentStage={currentStage}
                 onStageSelect={handleStageSelect}
+                onAddQuestion={handleAddQuestion}
               />
             </div>
           </ResizablePanel>
@@ -214,7 +252,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizableHandle withHandle />
 
           {/* Third Column - Editor Canvas */}
-          <ResizablePanel defaultSize={45} minSize={30}>
+          <ResizablePanel defaultSize={40} minSize={30}>
             <div className="h-full overflow-auto bg-gray-100 p-6">
               <div className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
                 viewportMode === 'desktop' ? 'max-w-6xl' :
