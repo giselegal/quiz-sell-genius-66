@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { 
   Type, 
   Image, 
-  Button as ButtonIcon, 
+  ButtonIcon, 
   Layout,
   Video,
   Star,

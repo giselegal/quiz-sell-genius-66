@@ -1,237 +1,200 @@
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { 
-  ChevronUp, 
-  ChevronDown, 
-  Trash2, 
-  MoreVertical,
-  Eye,
-  EyeOff 
-} from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { VisualElement } from '@/types/visualEditor';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
 
 interface ElementRendererProps {
-  element: VisualElement;
-  isSelected: boolean;
-  isPreviewMode: boolean;
-  onSelect: () => void;
-  onUpdate: (updates: Partial<VisualElement>) => void;
-  onDelete: () => void;
-  onMoveUp: () => void;
-  onMoveDown: () => void;
-  canMoveUp: boolean;
-  canMoveDown: boolean;
+  type: string;
+  content: any;
 }
 
 export const ElementRenderer: React.FC<ElementRendererProps> = ({
-  element,
-  isSelected,
-  isPreviewMode,
-  onSelect,
-  onUpdate,
-  onDelete,
-  onMoveUp,
-  onMoveDown,
-  canMoveUp,
-  canMoveDown
+  type,
+  content
 }) => {
-  const handleContentEdit = useCallback((newContent: string) => {
-    onUpdate({
-      content: { ...element.content, text: newContent }
-    });
-  }, [element.content, onUpdate]);
-
-  const renderElement = () => {
-    const commonStyle = {
-      ...element.style,
-      opacity: element.visible ? 1 : 0.5
-    };
-
-    switch (element.type) {
-      case 'title':
-        const level = element.content.level || 'h2';
-        const Tag = level as keyof JSX.IntrinsicElements;
-        return (
-          <Tag
-            style={commonStyle}
-            className={`${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
-            contentEditable={!isPreviewMode}
-            suppressContentEditableWarning={true}
-            onBlur={(e) => handleContentEdit(e.currentTarget.textContent || '')}
-          >
-            {element.content.text || 'Título Principal'}
-          </Tag>
-        );
-
-      case 'text':
-        return (
-          <p
-            style={commonStyle}
-            className={`${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
-            contentEditable={!isPreviewMode}
-            suppressContentEditableWarning={true}
-            onBlur={(e) => handleContentEdit(e.currentTarget.textContent || '')}
-          >
-            {element.content.text || 'Clique para editar este texto'}
-          </p>
-        );
-
-      case 'button':
-        return (
-          <button
-            style={commonStyle}
-            className={`${isSelected && !isPreviewMode ? 'outline-none' : ''}`}
-            contentEditable={!isPreviewMode}
-            suppressContentEditableWarning={true}
-            onBlur={(e) => handleContentEdit(e.currentTarget.textContent || '')}
-          >
-            {element.content.text || 'Clique Aqui'}
-          </button>
-        );
-
-      case 'image':
-        return (
-          <img
-            src={element.content.src || 'https://via.placeholder.com/400x200?text=Imagem'}
-            alt={element.content.alt || 'Imagem'}
-            style={commonStyle}
-          />
-        );
-
-      case 'input':
-      case 'email':
-      case 'phone':
-        return (
-          <input
-            type={element.content.type || 'text'}
-            placeholder={element.content.placeholder || 'Digite aqui...'}
-            style={commonStyle}
-            className="border border-gray-300 rounded px-3 py-2 w-full"
-          />
-        );
-
-      case 'video':
-        return (
-          <div style={commonStyle} className="aspect-video bg-gray-200 rounded flex items-center justify-center">
-            <span className="text-gray-500">Vídeo: {element.content.src || 'URL não definida'}</span>
-          </div>
-        );
-
-      case 'spacer':
-        return (
-          <div
-            style={{ 
-              ...commonStyle, 
-              height: element.style.height || '2rem',
-              backgroundColor: isSelected && !isPreviewMode ? '#f3f4f6' : 'transparent'
-            }}
-            className={isSelected && !isPreviewMode ? 'border border-dashed border-gray-400' : ''}
-          >
-            {isSelected && !isPreviewMode && (
-              <span className="text-xs text-gray-500 p-1">Espaçador</span>
-            )}
-          </div>
-        );
-
-      default:
-        return (
-          <div style={commonStyle} className="p-4 bg-gray-100 border-2 border-dashed border-gray-300 rounded">
-            <p className="text-gray-500 text-center text-sm">
-              Componente: {element.type}
-            </p>
-          </div>
-        );
-    }
-  };
-
-  return (
-    <div
-      className={`relative group transition-all duration-200 ${
-        !isPreviewMode ? 'hover:ring-2 hover:ring-blue-200' : ''
-      } ${
-        isSelected ? 'ring-2 ring-blue-500' : ''
-      } ${
-        element.locked ? 'pointer-events-none' : ''
-      }`}
-      onClick={() => !isPreviewMode && onSelect()}
-    >
-      {/* Element Controls */}
-      {!isPreviewMode && isSelected && (
-        <div className="absolute -top-10 left-0 z-50 flex items-center gap-1 bg-blue-600 text-white px-2 py-1 rounded-lg shadow-lg">
-          <span className="text-xs font-medium">{element.type}</span>
-
-          <div className="flex items-center gap-1 ml-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-6 h-6 p-0 text-white hover:bg-blue-700"
-              onClick={(e) => {
-                e.stopPropagation();
-                onMoveUp();
-              }}
-              disabled={!canMoveUp}
-            >
-              <ChevronUp className="w-3 h-3" />
-            </Button>
-
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-6 h-6 p-0 text-white hover:bg-blue-700"
-              onClick={(e) => {
-                e.stopPropagation();
-                onMoveDown();
-              }}
-              disabled={!canMoveDown}
-            >
-              <ChevronDown className="w-3 h-3" />
-            </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="w-6 h-6 p-0 text-white hover:bg-blue-700"
-                >
-                  <MoreVertical className="w-3 h-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem
-                  onClick={() => onUpdate({ visible: !element.visible })}
-                >
-                  {element.visible ? (
-                    <EyeOff className="w-4 h-4 mr-2" />
-                  ) : (
-                    <Eye className="w-4 h-4 mr-2" />
-                  )}
-                  {element.visible ? 'Ocultar' : 'Mostrar'}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={onDelete}
-                  className="text-red-600"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Deletar
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+  switch (type) {
+    case 'headline':
+      return (
+        <h1 
+          className="min-w-full text-3xl font-bold text-center"
+          data-sentry-component="EditableHeading"
+        >
+          {content.title || 'Título'}
+        </h1>
+      );
+      
+    case 'text':
+      return (
+        <p className="text-lg text-gray-700 leading-relaxed">
+          {content.text || 'Texto de exemplo'}
+        </p>
+      );
+      
+    case 'image':
+      return (
+        <div className="grid" data-sentry-component="EditableImage">
+          <div className="text-lg">
+            <div className="text-lg flex items-center justify-center">
+              <img 
+                src={content.imageUrl || 'https://via.placeholder.com/640x480'} 
+                width="640" 
+                height="480" 
+                alt={content.alt || 'Imagem'} 
+                className="object-cover w-full h-auto rounded-lg max-w-96"
+              />
+            </div>
           </div>
         </div>
-      )}
-
-      {/* Element Content */}
-      <div className="p-2">
-        {renderElement()}
-      </div>
-    </div>
-  );
+      );
+      
+    case 'button':
+      return (
+        <Button 
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 min-w-full h-14"
+          data-sentry-element="Button"
+          data-sentry-component="EditableButton"
+        >
+          {content.text || 'Continuar'}
+        </Button>
+      );
+      
+    case 'form':
+    case 'cta':
+      return (
+        <div className="grid w-full items-center gap-1.5" data-sentry-component="EditableInput">
+          <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            {content.label || 'NOME'} <span>*</span>
+          </Label>
+          <Input 
+            className="flex h-10 w-full rounded-md border border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-inherit placeholder:opacity-50 text-base text-left p-4"
+            placeholder={content.placeholder || 'Digite seu nome aqui...'}
+            type="text"
+            value=""
+          />
+        </div>
+      );
+      
+    case 'countdown':
+      return (
+        <div className="text-center space-y-2">
+          <div className="text-2xl font-bold text-red-600">
+            {content.time || '05:00'}
+          </div>
+          <p className="text-sm text-gray-600">
+            {content.message || 'Tempo limitado!'}
+          </p>
+        </div>
+      );
+      
+    case 'pricing':
+      return (
+        <div className="text-center space-y-4">
+          {content.regularPrice && (
+            <p className="text-lg line-through text-gray-500">
+              R$ {content.regularPrice}
+            </p>
+          )}
+          <p className="text-3xl font-bold text-green-600">
+            R$ {content.salePrice || '97,00'}
+          </p>
+        </div>
+      );
+      
+    case 'testimonial':
+      return (
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <p className="italic text-gray-700 mb-2">
+            "{content.quote || 'Depoimento incrível sobre o produto...'}"
+          </p>
+          <p className="font-semibold text-gray-900">
+            {content.author || 'Cliente Satisfeito'}
+          </p>
+        </div>
+      );
+      
+    case 'rating':
+      return (
+        <div className="flex items-center justify-center gap-1">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <span key={star} className="text-yellow-400 text-xl">⭐</span>
+          ))}
+          <span className="ml-2 text-gray-600">
+            {content.rating || '5.0'} ({content.reviews || '127'} avaliações)
+          </span>
+        </div>
+      );
+      
+    case 'social-proof':
+      return (
+        <div className="text-center">
+          <div className="text-2xl font-bold text-blue-600">
+            {content.number || '1.247'}
+          </div>
+          <p className="text-sm text-gray-600">
+            {content.label || 'pessoas já compraram'}
+          </p>
+        </div>
+      );
+      
+    case 'guarantee':
+      return (
+        <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg">
+          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+            🛡️
+          </div>
+          <div>
+            <h4 className="font-semibold text-green-800">
+              {content.title || 'Garantia de 30 dias'}
+            </h4>
+            <p className="text-green-700 text-sm">
+              {content.description || '100% do seu dinheiro de volta'}
+            </p>
+          </div>
+        </div>
+      );
+      
+    case 'bonus':
+      return (
+        <div className="border-2 border-dashed border-yellow-400 p-4 rounded-lg bg-yellow-50">
+          <h4 className="font-bold text-yellow-800 mb-2">
+            🎁 {content.title || 'Bônus Exclusivo'}
+          </h4>
+          <p className="text-yellow-700">
+            {content.description || 'Receba este bônus incrível gratuitamente!'}
+          </p>
+        </div>
+      );
+      
+    case 'divider':
+      return (
+        <hr className="border-gray-300 my-4" />
+      );
+      
+    case 'spacer':
+      return (
+        <div 
+          className="w-full" 
+          style={{ height: content.height || '20px' }}
+        />
+      );
+      
+    case 'container':
+      return (
+        <div 
+          className="border-2 border-dashed border-gray-300 rounded-lg p-4 min-h-[100px] flex items-center justify-center"
+          style={content.style}
+        >
+          <span className="text-gray-400">Container - Arraste componentes aqui</span>
+        </div>
+      );
+      
+    default:
+      return (
+        <div className="p-4 border-2 border-dashed border-red-300 rounded bg-red-50 text-red-700">
+          <p>Tipo de componente não implementado: {type}</p>
+        </div>
+      );
+  }
 };
