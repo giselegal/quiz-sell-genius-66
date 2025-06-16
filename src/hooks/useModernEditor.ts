@@ -1,10 +1,10 @@
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { generateId } from '@/utils/idGenerator';
 
 export interface EditorElement {
   id: string;
-  type: 'heading' | 'text' | 'image' | 'button' | 'video' | 'spacer' | 'divider';
+  type: 'heading' | 'text' | 'image' | 'button' | 'video' | 'spacer' | 'divider' | 'pricing' | 'testimonial' | 'countdown' | 'faq' | 'input' | 'checkbox';
   content: Record<string, any>;
   style: Record<string, any>;
   position: { x: number; y: number };
@@ -18,23 +18,47 @@ export const useModernEditor = (initialData?: any) => {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [history, setHistory] = useState<EditorElement[][]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [isDragging, setIsDragging] = useState(false);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
+
+  // Auto-save functionality
+  useEffect(() => {
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+    
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      localStorage.setItem('modern-editor-autosave', JSON.stringify({
+        elements,
+        timestamp: Date.now()
+      }));
+    }, 2000);
+
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [elements]);
 
   const addToHistory = useCallback((newElements: EditorElement[]) => {
     setHistory(prev => {
       const newHistory = prev.slice(0, historyIndex + 1);
       newHistory.push([...newElements]);
-      return newHistory.slice(-50); // Keep last 50 states
+      return newHistory.slice(-50);
     });
     setHistoryIndex(prev => Math.min(prev + 1, 49));
   }, [historyIndex]);
 
-  const addElement = useCallback((type: string) => {
+  const addElement = useCallback((type: string, position?: { x: number; y: number }) => {
+    const defaultPosition = position || { x: 50 + elements.length * 20, y: 50 + elements.length * 20 };
+    
     const newElement: EditorElement = {
       id: generateId(),
       type: type as EditorElement['type'],
       content: getDefaultContent(type),
       style: getDefaultStyle(type),
-      position: { x: 50, y: 50 },
+      position: defaultPosition,
       size: getDefaultSize(type)
     };
 
@@ -51,6 +75,25 @@ export const useModernEditor = (initialData?: any) => {
     );
     setElements(newElements);
     addToHistory(newElements);
+  }, [elements, addToHistory]);
+
+  const duplicateElement = useCallback((id: string) => {
+    const elementToDuplicate = elements.find(el => el.id === id);
+    if (!elementToDuplicate) return;
+
+    const newElement: EditorElement = {
+      ...elementToDuplicate,
+      id: generateId(),
+      position: {
+        x: elementToDuplicate.position.x + 20,
+        y: elementToDuplicate.position.y + 20
+      }
+    };
+
+    const newElements = [...elements, newElement];
+    setElements(newElements);
+    addToHistory(newElements);
+    return newElement.id;
   }, [elements, addToHistory]);
 
   const deleteElement = useCallback((id: string) => {
@@ -91,26 +134,39 @@ export const useModernEditor = (initialData?: any) => {
       version: '1.0'
     };
     
-    // Simulate save operation
+    localStorage.setItem('modern-editor-save', JSON.stringify(data));
     console.log('Saving editor data:', data);
     
     return data;
   }, [elements]);
 
+  const loadAutoSave = useCallback(() => {
+    const autoSave = localStorage.getItem('modern-editor-autosave');
+    if (autoSave) {
+      const data = JSON.parse(autoSave);
+      setElements(data.elements || []);
+      addToHistory(data.elements || []);
+    }
+  }, [addToHistory]);
+
   return {
     elements,
     selectedElementId,
     isPreviewMode,
+    isDragging,
     canUndo: historyIndex > 0,
     canRedo: historyIndex < history.length - 1,
     addElement,
     updateElement,
+    duplicateElement,
     deleteElement,
     selectElement,
     togglePreview,
+    setIsDragging,
     undo,
     redo,
-    save
+    save,
+    loadAutoSave
   };
 };
 
@@ -122,7 +178,47 @@ const getDefaultContent = (type: string) => {
     image: { src: '', alt: 'Imagem' },
     video: { src: '', thumbnail: '' },
     spacer: { height: 40 },
-    divider: { style: 'solid', color: '#e5e7eb' }
+    divider: { style: 'solid', color: '#e5e7eb' },
+    pricing: { 
+      title: 'Plano Premium',
+      price: 'R$ 97',
+      originalPrice: 'R$ 197',
+      description: 'Acesso completo por 12 meses',
+      features: ['Acesso vitalício', 'Suporte premium', 'Atualizações gratuitas']
+    },
+    testimonial: {
+      text: 'Este produto mudou minha vida! Recomendo para todos.',
+      author: 'João Silva',
+      role: 'Empresário',
+      avatar: '',
+      rating: 5
+    },
+    countdown: {
+      title: 'Oferta especial termina em:',
+      endDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      showDays: true,
+      showHours: true,
+      showMinutes: true,
+      showSeconds: true
+    },
+    faq: {
+      title: 'Perguntas Frequentes',
+      items: [
+        { question: 'Como funciona?', answer: 'É muito simples de usar...' },
+        { question: 'Quanto custa?', answer: 'Temos vários planos...' }
+      ]
+    },
+    input: {
+      label: 'Seu nome',
+      placeholder: 'Digite seu nome...',
+      type: 'text',
+      required: true
+    },
+    checkbox: {
+      label: 'Eu aceito os termos de uso',
+      checked: false,
+      required: true
+    }
   };
   return defaults[type] || {};
 };
@@ -140,7 +236,41 @@ const getDefaultStyle = (type: string) => {
     image: { borderRadius: '4px' },
     video: { borderRadius: '8px' },
     spacer: {},
-    divider: { margin: '20px 0' }
+    divider: { margin: '20px 0' },
+    pricing: {
+      backgroundColor: '#ffffff',
+      border: '2px solid #e5e7eb',
+      borderRadius: '12px',
+      padding: '24px',
+      textAlign: 'center'
+    },
+    testimonial: {
+      backgroundColor: '#f9fafb',
+      borderRadius: '12px',
+      padding: '24px',
+      border: '1px solid #e5e7eb'
+    },
+    countdown: {
+      backgroundColor: '#1f2937',
+      color: '#ffffff',
+      borderRadius: '12px',
+      padding: '24px',
+      textAlign: 'center'
+    },
+    faq: {
+      backgroundColor: '#ffffff',
+      borderRadius: '8px',
+      padding: '20px'
+    },
+    input: {
+      width: '100%',
+      padding: '12px',
+      borderRadius: '6px',
+      border: '1px solid #d1d5db'
+    },
+    checkbox: {
+      padding: '12px'
+    }
   };
   return defaults[type] || {};
 };
@@ -153,7 +283,13 @@ const getDefaultSize = (type: string) => {
     image: { width: 300, height: 200 },
     video: { width: 400, height: 225 },
     spacer: { width: 400, height: 40 },
-    divider: { width: 400, height: 20 }
+    divider: { width: 400, height: 20 },
+    pricing: { width: 320, height: 400 },
+    testimonial: { width: 400, height: 200 },
+    countdown: { width: 400, height: 150 },
+    faq: { width: 400, height: 300 },
+    input: { width: 300, height: 50 },
+    checkbox: { width: 250, height: 40 }
   };
   return defaults[type] || { width: 300, height: 100 };
 };

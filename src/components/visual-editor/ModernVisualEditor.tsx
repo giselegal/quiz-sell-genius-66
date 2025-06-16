@@ -1,10 +1,11 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Play, 
   Eye, 
@@ -15,7 +16,9 @@ import {
   Tablet, 
   Smartphone,
   Settings,
-  Layers
+  Layers,
+  RotateCcw,
+  Zap
 } from 'lucide-react';
 import { ModernSidebar } from './sidebar/ModernSidebar';
 import { ModernCanvas } from './canvas/ModernCanvas';
@@ -41,28 +44,118 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     canRedo,
     addElement,
     updateElement,
+    duplicateElement,
     deleteElement,
     selectElement,
     togglePreview,
     undo,
     redo,
-    save
+    save,
+    loadAutoSave
   } = useModernEditor(initialData);
 
   const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [showGrid, setShowGrid] = useState(true);
+  const { toast } = useToast();
+
+  // Load autosave on mount
+  useEffect(() => {
+    const hasAutoSave = localStorage.getItem('modern-editor-autosave');
+    if (hasAutoSave && !initialData?.elements?.length) {
+      toast({
+        title: "Auto-save encontrado",
+        description: "Deseja carregar o último rascunho salvo?",
+        action: (
+          <Button onClick={() => {
+            loadAutoSave();
+            toast({ title: "Rascunho carregado!" });
+          }}>
+            Carregar
+          </Button>
+        )
+      });
+    }
+  }, [loadAutoSave, initialData, toast]);
 
   const handleSave = useCallback(async () => {
-    const data = await save();
-    if (onSave) {
-      onSave(data);
+    try {
+      const data = await save();
+      if (onSave) {
+        onSave(data);
+      }
+      toast({
+        title: "✅ Salvo com sucesso!",
+        description: "Suas alterações foram salvas."
+      });
+    } catch (error) {
+      toast({
+        title: "❌ Erro ao salvar",
+        description: "Tente novamente em alguns segundos.",
+        variant: "destructive"
+      });
     }
-  }, [save, onSave]);
+  }, [save, onSave, toast]);
 
-  const handleAddElement = useCallback((type: string) => {
-    const newElementId = addElement(type);
+  const handleAddElement = useCallback((type: string, position?: { x: number; y: number }) => {
+    const newElementId = addElement(type, position);
     selectElement(newElementId);
-  }, [addElement, selectElement]);
+    toast({
+      title: "Componente adicionado",
+      description: `${type} foi adicionado ao canvas.`
+    });
+  }, [addElement, selectElement, toast]);
+
+  const handleDuplicateElement = useCallback(() => {
+    if (selectedElementId) {
+      const newElementId = duplicateElement(selectedElementId);
+      selectElement(newElementId);
+      toast({
+        title: "Elemento duplicado",
+        description: "Uma cópia foi criada."
+      });
+    }
+  }, [selectedElementId, duplicateElement, selectElement, toast]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key) {
+          case 'z':
+            e.preventDefault();
+            if (e.shiftKey) {
+              redo();
+            } else {
+              undo();
+            }
+            break;
+          case 'y':
+            e.preventDefault();
+            redo();
+            break;
+          case 's':
+            e.preventDefault();
+            handleSave();
+            break;
+          case 'd':
+            e.preventDefault();
+            handleDuplicateElement();
+            break;
+        }
+      }
+      
+      if (e.key === 'Delete' && selectedElementId) {
+        deleteElement(selectedElementId);
+        toast({
+          title: "Elemento excluído",
+          description: "O elemento foi removido do canvas."
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [undo, redo, handleSave, handleDuplicateElement, selectedElementId, deleteElement, toast]);
 
   const getViewportClasses = () => {
     switch (viewport) {
@@ -92,6 +185,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   </Badge>
                 )}
               </div>
+              
+              {/* Auto-save indicator */}
+              <div className="flex items-center gap-1 text-xs text-gray-500">
+                <Zap className="w-3 h-3" />
+                Auto-save ativo
+              </div>
             </div>
 
             {/* Center Section - Viewport Controls */}
@@ -101,6 +200,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 size="sm"
                 onClick={() => setViewport('desktop')}
                 className="px-3"
+                title="Desktop (Ctrl+1)"
               >
                 <Monitor className="w-4 h-4" />
               </Button>
@@ -109,6 +209,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 size="sm"
                 onClick={() => setViewport('tablet')}
                 className="px-3"
+                title="Tablet (Ctrl+2)"
               >
                 <Tablet className="w-4 h-4" />
               </Button>
@@ -117,6 +218,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 size="sm"
                 onClick={() => setViewport('mobile')}
                 className="px-3"
+                title="Mobile (Ctrl+3)"
               >
                 <Smartphone className="w-4 h-4" />
               </Button>
@@ -129,6 +231,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 size="sm"
                 onClick={undo}
                 disabled={!canUndo}
+                title="Desfazer (Ctrl+Z)"
               >
                 <Undo className="w-4 h-4" />
               </Button>
@@ -137,13 +240,26 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 size="sm"
                 onClick={redo}
                 disabled={!canRedo}
+                title="Refazer (Ctrl+Y)"
               >
                 <Redo className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  loadAutoSave();
+                  toast({ title: "Rascunho carregado!" });
+                }}
+                title="Carregar último rascunho"
+              >
+                <RotateCcw className="w-4 h-4" />
               </Button>
               <Button
                 variant={isPreviewMode ? 'default' : 'outline'}
                 size="sm"
                 onClick={togglePreview}
+                title="Alternar preview"
               >
                 <Eye className="w-4 h-4 mr-2" />
                 {isPreviewMode ? 'Editando' : 'Preview'}
@@ -152,6 +268,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 onClick={handleSave}
                 size="sm"
                 className="bg-blue-600 hover:bg-blue-700"
+                title="Salvar (Ctrl+S)"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Salvar
@@ -179,6 +296,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   onSelectElement={selectElement}
                   onUpdateElement={updateElement}
                   onDeleteElement={deleteElement}
+                  onAddElement={handleAddElement}
                   isPreviewMode={isPreviewMode}
                   viewport={viewport}
                   showGrid={showGrid}
@@ -195,9 +313,28 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 selectedElement={elements.find(el => el.id === selectedElementId)}
                 onUpdateElement={updateElement}
                 onDeleteElement={deleteElement}
+                onDuplicateElement={handleDuplicateElement}
               />
             </ResizablePanel>
           </ResizablePanelGroup>
+        </div>
+
+        {/* Status bar */}
+        <div className="bg-white border-t border-gray-200 px-4 py-2">
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <div className="flex items-center gap-4">
+              <span>{elements.length} elementos</span>
+              <span>Zoom: 100%</span>
+              <span>Grid: {showGrid ? 'On' : 'Off'}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span>Ctrl+S para salvar</span>
+              <span>•</span>
+              <span>Del para excluir</span>
+              <span>•</span>
+              <span>Ctrl+D para duplicar</span>
+            </div>
+          </div>
         </div>
       </div>
     </DndProvider>
