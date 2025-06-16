@@ -8,6 +8,7 @@ export interface EditorElement {
   size: { width: number; height: number };
   order: number;
   stepId: string;
+  style?: Record<string, any>;
 }
 
 interface EditorState {
@@ -35,7 +36,8 @@ export const useModernEditor = () => {
       position: { x: 0, y: 0 },
       size: { width: 100, height: 50 },
       order: state.elements.filter(el => el.stepId === stepId).length,
-      stepId
+      stepId,
+      style: {}
     };
 
     setState(prev => {
