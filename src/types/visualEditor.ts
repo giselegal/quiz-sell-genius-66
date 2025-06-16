@@ -1,3 +1,4 @@
+
 export type BlockType = 
   | 'text' 
   | 'title' 
@@ -70,8 +71,20 @@ export interface VisualElement {
   locked: boolean;
 }
 
-// Alias for compatibility with other components - UPDATED
-export type CanvasElement = VisualElement;
+// Primary CanvasElement definition - this is the source of truth
+export interface CanvasElement {
+  id: string;
+  type: BlockType;
+  stageId: string;
+  order: number;
+  content: ElementContent;
+  style: ElementStyle;
+  visible: boolean;
+  locked: boolean;
+}
+
+// Ensure VisualElement is compatible with CanvasElement
+export type { CanvasElement as VisualElement_Compatible };
 
 export interface VisualStage {
   id: string;
