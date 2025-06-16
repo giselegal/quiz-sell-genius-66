@@ -1,458 +1,419 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable-panels';
+
+import React, { useState, useCallback } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
-  Play, 
+  Monitor, 
+  Tablet, 
+  Smartphone, 
   Save, 
-  Undo, 
-  Redo, 
-  Eye, 
-  EyeOff,
-  Plus,
-  Monitor,
-  Tablet,
-  Smartphone,
+  Play, 
   Settings,
-  Palette,
-  Type,
-  Image as ImageIcon,
-  Square,
-  MousePointer,
-  FormInput,
-  MessageSquare,
-  HelpCircle
+  Plus,
+  Eye,
+  Code
 } from 'lucide-react';
-
-import { VerticalCanvasItem } from './canvas/VerticalCanvasItem';
+import { VisualEditorCanvas } from './canvas/VisualEditorCanvas';
 import { StepsPanel } from './steps/StepsPanel';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
-import { VisualElement, VisualStage, VisualEditorState, BlockType } from '@/types/visualEditor';
+import { ComponentsPalette } from './palette/ComponentsPalette';
+import { VisualElement, VisualStage, BlockType, VisualEditorState } from '@/types/visualEditor';
 
-interface ModernVisualEditorProps {
+export interface ModernVisualEditorProps {
   funnelId: string;
   onSave?: (data: any) => void;
 }
 
-const mockElements: VisualElement[] = [
-  {
-    id: '1',
-    type: 'headline',
-    stageId: '1',
-    order: 1,
-    content: {
-      text: 'Título da Página',
-    },
-    style: {},
-    visible: true,
-    locked: false,
-  },
-  {
-    id: '2',
-    type: 'text',
-    stageId: '1',
-    order: 2,
-    content: {
-      text: 'Texto de apresentação da página.',
-    },
-    style: {},
-    visible: true,
-    locked: false,
-  },
-  {
-    id: '3',
-    type: 'image',
-    stageId: '1',
-    order: 3,
-    content: {
-      src: 'https://images.unsplash.com/photo-1682685797497-f296491f8c69?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60',
-      alt: 'Imagem ilustrativa',
-    },
-    style: {},
-    visible: true,
-    locked: false,
-  },
-  {
-    id: '4',
-    type: 'button',
-    stageId: '1',
-    order: 4,
-    content: {
-      text: 'Avançar',
-    },
-    style: {},
-    visible: true,
-    locked: false,
-  },
-];
-
+// Mock data para demonstração
 const mockStages: VisualStage[] = [
   {
-    id: '1',
-    title: 'Página Inicial',
-    order: 1,
+    id: 'intro-1',
+    title: 'Introdução',
+    order: 0,
     type: 'intro',
     settings: {
-      showHeader: false,
-      showProgress: false,
+      showHeader: true,
+      showProgress: true,
       allowBack: false,
-    },
+      backgroundColor: '#ffffff'
+    }
   },
   {
-    id: '2',
-    title: 'Quiz 1',
+    id: 'question-1',
+    title: 'Questão 1',
+    order: 1,
+    type: 'quiz',
+    settings: {
+      showHeader: true,
+      showProgress: true,
+      allowBack: true,
+      backgroundColor: '#ffffff'
+    }
+  },
+  {
+    id: 'question-2',
+    title: 'Questão 2',
     order: 2,
     type: 'quiz',
     settings: {
       showHeader: true,
       showProgress: true,
       allowBack: true,
-    },
+      backgroundColor: '#ffffff'
+    }
   },
   {
-    id: '3',
-    title: 'Resultado',
+    id: 'strategic-1',
+    title: 'Questão Estratégica',
     order: 3,
+    type: 'strategic',
+    settings: {
+      showHeader: true,
+      showProgress: true,
+      allowBack: true,
+      backgroundColor: '#ffffff'
+    }
+  },
+  {
+    id: 'result-1',
+    title: 'Resultado',
+    order: 4,
     type: 'result',
     settings: {
       showHeader: true,
       showProgress: false,
       allowBack: false,
-    },
+      backgroundColor: '#ffffff'
+    }
   },
+  {
+    id: 'offer-1',
+    title: 'Oferta',
+    order: 5,
+    type: 'offer',
+    settings: {
+      showHeader: false,
+      showProgress: false,
+      allowBack: false,
+      backgroundColor: '#ffffff'
+    }
+  }
+];
+
+const mockElements: VisualElement[] = [
+  {
+    id: 'element-1',
+    type: 'headline',
+    stageId: 'intro-1',
+    order: 0,
+    content: { text: 'Bem-vindo ao Quiz', level: '1' },
+    style: { fontSize: '2rem', textAlign: 'center', color: '#000000' },
+    visible: true,
+    locked: false
+  },
+  {
+    id: 'element-2',
+    type: 'text',
+    stageId: 'intro-1',
+    order: 1,
+    content: { text: 'Descubra seu estilo pessoal em apenas alguns minutos!' },
+    style: { fontSize: '1.2rem', textAlign: 'center', color: '#666666' },
+    visible: true,
+    locked: false
+  },
+  {
+    id: 'element-3',
+    type: 'button',
+    stageId: 'intro-1',
+    order: 2,
+    content: { text: 'Começar Quiz' },
+    style: { backgroundColor: '#3b82f6', color: '#ffffff', padding: '12px 24px' },
+    visible: true,
+    locked: false
+  }
 ];
 
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave
 }) => {
-  const [canvasElements, setCanvasElements] = useState<VisualElement[]>(mockElements);
-  const [mockStages, setMockStages] = useState<VisualStage[]>(mockStages);
-  const [activeStageId, setActiveStageId] = useState<string | null>(mockStages[0].id);
-  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
-  const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
-  const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-
-  const viewportClass = useMemo(() => {
-    switch (viewport) {
-      case 'tablet':
-        return 'max-w-3xl';
-      case 'mobile':
-        return 'max-w-sm';
-      default:
-        return 'max-w-5xl';
+  const [editorState, setEditorState] = useState<VisualEditorState>({
+    elements: mockElements,
+    stages: mockStages,
+    activeStageId: mockStages[0]?.id || null,
+    history: [],
+    historyIndex: -1,
+    selectedElementId: null,
+    hoveredElementId: null,
+    viewport: 'desktop',
+    zoomLevel: 100,
+    isPreviewMode: false,
+    settings: {
+      showGrid: false,
+      snapToGrid: true,
+      gridSize: 10,
+      showRulers: false,
+      showBoundingBoxes: true,
+      autoSave: true,
+      autoSaveInterval: 30000
     }
-  }, [viewport]);
+  });
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
+  const [selectedPanel, setSelectedPanel] = useState<'components' | 'stages' | 'config'>('stages');
 
-    if (!over) return;
-
-    if (active.id !== over.id) {
-      setCanvasElements((items) => {
-        const oldIndex = items.findIndex(item => item.id === active.id);
-        const newIndex = items.findIndex(item => item.id === over.id);
-
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
+  const handleElementSelect = useCallback((elementId: string) => {
+    setEditorState(prev => ({
+      ...prev,
+      selectedElementId: elementId
+    }));
   }, []);
 
-  const handleElementUpdate = (elementId: string, updates: Partial<VisualElement>) => {
-    setCanvasElements(elements =>
-      elements.map(element =>
-        element.id === elementId ? { ...element, ...updates } : element
+  const handleElementUpdate = useCallback((elementId: string, updates: any) => {
+    setEditorState(prev => ({
+      ...prev,
+      elements: prev.elements.map(el => 
+        el.id === elementId ? { ...el, ...updates } : el
       )
-    );
-  };
+    }));
+  }, []);
 
-  const handleElementDelete = (elementId: string) => {
-    setCanvasElements(elements =>
-      elements.filter(element => element.id !== elementId)
-    );
-  };
+  const handleElementDelete = useCallback((elementId: string) => {
+    setEditorState(prev => ({
+      ...prev,
+      elements: prev.elements.filter(el => el.id !== elementId),
+      selectedElementId: prev.selectedElementId === elementId ? null : prev.selectedElementId
+    }));
+  }, []);
+
+  const handleElementMove = useCallback((elementId: string, direction: 'up' | 'down') => {
+    setEditorState(prev => {
+      const elements = [...prev.elements];
+      const elementIndex = elements.findIndex(el => el.id === elementId);
+      
+      if (elementIndex === -1) return prev;
+      
+      const targetIndex = direction === 'up' ? elementIndex - 1 : elementIndex + 1;
+      
+      if (targetIndex < 0 || targetIndex >= elements.length) return prev;
+      
+      [elements[elementIndex], elements[targetIndex]] = [elements[targetIndex], elements[elementIndex]];
+      
+      return { ...prev, elements };
+    });
+  }, []);
+
+  const handleElementAdd = useCallback((type: BlockType, position?: number) => {
+    if (!editorState.activeStageId) return;
+    
+    const newElement: VisualElement = {
+      id: `element-${Date.now()}`,
+      type,
+      stageId: editorState.activeStageId,
+      order: position ?? editorState.elements.filter(el => el.stageId === editorState.activeStageId).length,
+      content: {},
+      style: {},
+      visible: true,
+      locked: false
+    };
+    
+    setEditorState(prev => ({
+      ...prev,
+      elements: [...prev.elements, newElement],
+      selectedElementId: newElement.id
+    }));
+  }, [editorState.activeStageId, editorState.elements]);
+
+  const handleStageAdd = useCallback(() => {
+    const newStage: VisualStage = {
+      id: `stage-${Date.now()}`,
+      title: `Nova Etapa ${editorState.stages.length + 1}`,
+      order: editorState.stages.length,
+      type: 'quiz',
+      settings: {
+        showHeader: true,
+        showProgress: true,
+        allowBack: true,
+        backgroundColor: '#ffffff'
+      }
+    };
+    
+    setEditorState(prev => ({
+      ...prev,
+      stages: [...prev.stages, newStage],
+      activeStageId: newStage.id
+    }));
+  }, [editorState.stages.length]);
+
+  const handleStageSelect = useCallback((stageId: string) => {
+    setEditorState(prev => ({
+      ...prev,
+      activeStageId: stageId,
+      selectedElementId: null
+    }));
+  }, []);
+
+  const handleViewportChange = useCallback((viewport: 'desktop' | 'tablet' | 'mobile') => {
+    setEditorState(prev => ({ ...prev, viewport }));
+  }, []);
+
+  const handlePreviewToggle = useCallback(() => {
+    setEditorState(prev => ({ ...prev, isPreviewMode: !prev.isPreviewMode }));
+  }, []);
+
+  const handleSave = useCallback(() => {
+    const data = {
+      editorState,
+      pageInfo: {
+        title: 'Quiz Visual Editor',
+        description: 'Editor visual para criação de quizzes',
+        slug: funnelId,
+        published: false
+      }
+    };
+    
+    onSave?.(data);
+    console.log('Salvando dados do editor:', data);
+  }, [editorState, funnelId, onSave]);
+
+  const activeStage = editorState.stages.find(stage => stage.id === editorState.activeStageId);
+  const stageElements = editorState.elements.filter(el => el.stageId === editorState.activeStageId);
+  const selectedElement = editorState.elements.find(el => el.id === editorState.selectedElementId);
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col">
-      {/* Header Section */}
-      <div className="bg-white border-b border-gray-200 p-4">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon">
-              <HelpCircle className="h-4 w-4" />
-            </Button>
-            <h1 className="text-lg font-semibold">Editor Visual</h1>
-            <Badge variant="secondary">Funnel ID: {funnelId}</Badge>
+    <DndProvider backend={HTML5Backend}>
+      <div className="h-screen flex flex-col bg-gray-50">
+        {/* Header Toolbar */}
+        <div className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4">
+          <div className="flex items-center gap-4">
+            <h1 className="text-lg font-semibold text-gray-900">Editor Visual</h1>
+            
+            {/* Viewport Controls */}
+            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+              <Button
+                variant={editorState.viewport === 'desktop' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => handleViewportChange('desktop')}
+              >
+                <Monitor className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={editorState.viewport === 'tablet' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => handleViewportChange('tablet')}
+              >
+                <Tablet className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={editorState.viewport === 'mobile' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => handleViewportChange('mobile')}
+              >
+                <Smartphone className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
-
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" onClick={() => setIsPreviewMode(!isPreviewMode)}>
-              {isPreviewMode ? (
-                <>
-                  <EyeOff className="h-4 w-4 mr-2" />
-                  Voltar para Editar
-                </>
-              ) : (
-                <>
-                  <Eye className="h-4 w-4 mr-2" />
-                  Visualizar
-                </>
-              )}
+          
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handlePreviewToggle}>
+              {editorState.isPreviewMode ? <Code className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {editorState.isPreviewMode ? 'Editar' : 'Visualizar'}
             </Button>
-            <Button size="sm" onClick={() => onSave?.(canvasElements)}>
-              <Save className="h-4 w-4 mr-2" />
+            <Button onClick={handleSave}>
+              <Save className="w-4 h-4 mr-2" />
               Salvar
             </Button>
           </div>
         </div>
-      </div>
-      
-      <div className="flex-1 overflow-hidden">
-        <ResizablePanelGroup direction="horizontal" className="h-full">
-          {/* Steps Panel */}
-          <ResizablePanel defaultSize={15} minSize={12} maxSize={25}>
-            <div className="h-full border-r border-gray-200 bg-white">
-              <StepsPanel 
-                stages={mockStages}
-                currentStage={activeStageId || ''}
-                onStageSelect={setActiveStageId}
-              />
-            </div>
-          </ResizablePanel>
 
-          <ResizableHandle />
-
-          {/* Main Editor Area */}
-          <ResizablePanel defaultSize={60} minSize={40}>
-            <div className="h-full flex flex-col bg-white">
-              {/* Viewport Controls */}
-              <div className="bg-gray-100 border-b border-gray-200 p-2">
-                <div className="container mx-auto flex items-center justify-end space-x-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setViewport('desktop')}
-                    active={viewport === 'desktop'}
-                  >
-                    <Monitor className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setViewport('tablet')}
-                    active={viewport === 'tablet'}
-                  >
-                    <Tablet className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setViewport('mobile')}
-                    active={viewport === 'mobile'}
-                  >
-                    <Smartphone className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              
-              {/* Canvas Area */}
-              <div className="flex-1 overflow-hidden">
-                <ScrollArea className="h-full">
-                  <div className={`p-6 ${viewportClass}`}>
-                    <div className="mx-auto bg-white shadow-lg rounded-lg min-h-screen">
-                      <DndContext
-                        collisionDetection={closestCenter}
-                        onDragEnd={handleDragEnd}
-                      >
-                        <SortableContext
-                          items={canvasElements.map(el => el.id)}
-                          strategy={verticalListSortingStrategy}
-                        >
-                          <div className="space-y-4 p-6">
-                            {canvasElements.map((element) => (
-                              <VerticalCanvasItem
-                                key={element.id}
-                                element={element}
-                                isSelected={selectedElementId === element.id}
-                                isPreviewMode={isPreviewMode}
-                                onSelect={() => setSelectedElementId(element.id)}
-                                onUpdate={(content) => handleElementUpdate(element.id, { content })}
-                                onDelete={() => handleElementDelete(element.id)}
-                              />
-                            ))}
-                          </div>
-                        </SortableContext>
-                      </DndContext>
-                    </div>
+        {/* Main Content */}
+        <div className="flex-1 overflow-hidden">
+          <ResizablePanelGroup direction="horizontal">
+            {/* Left Sidebar */}
+            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+              <div className="h-full bg-white border-r border-gray-200">
+                {/* Sidebar Tabs */}
+                <div className="border-b border-gray-200 p-2">
+                  <div className="flex gap-1">
+                    <Button
+                      variant={selectedPanel === 'stages' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedPanel('stages')}
+                      className="flex-1"
+                    >
+                      Etapas
+                    </Button>
+                    <Button
+                      variant={selectedPanel === 'components' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedPanel('components')}
+                      className="flex-1"
+                    >
+                      Componentes
+                    </Button>
                   </div>
+                </div>
+
+                {/* Sidebar Content */}
+                <ScrollArea className="h-[calc(100vh-120px)]">
+                  {selectedPanel === 'stages' && (
+                    <StepsPanel
+                      stages={editorState.stages.map(stage => ({
+                        id: stage.id,
+                        name: stage.title,
+                        type: stage.type
+                      }))}
+                      currentStage={editorState.activeStageId || ''}
+                      onStageSelect={handleStageSelect}
+                    />
+                  )}
+                  
+                  {selectedPanel === 'components' && (
+                    <ComponentsPalette onComponentAdd={handleElementAdd} />
+                  )}
                 </ScrollArea>
               </div>
-            </div>
-          </ResizablePanel>
+            </ResizablePanel>
 
-          <ResizableHandle />
+            <ResizableHandle />
 
-          {/* Properties Panel */}
-          <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
-            <div className="h-full border-l border-gray-200 bg-white">
-              <Tabs defaultValue="content" className="h-full flex flex-col">
-                <TabsList className="shrink-0 border-b">
-                  <TabsTrigger value="content">Conteúdo</TabsTrigger>
-                  <TabsTrigger value="style">Estilo</TabsTrigger>
-                  <TabsTrigger value="settings">Ajustes</TabsTrigger>
-                </TabsList>
-                <TabsContent value="content" className="h-full p-4">
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <Type className="mr-2 h-4 w-4" />
-                          Texto
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Edite o texto do elemento selecionado.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <ImageIcon className="mr-2 h-4 w-4" />
-                          Imagem
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Configure a imagem do elemento selecionado.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <FormInput className="mr-2 h-4 w-4" />
-                          Formulário
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Configure os campos do formulário.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <MessageSquare className="mr-2 h-4 w-4" />
-                          Opções
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Configure as opções do elemento.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="style" className="h-full p-4">
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <Palette className="mr-2 h-4 w-4" />
-                          Cores
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Altere as cores do elemento selecionado.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <Type className="mr-2 h-4 w-4" />
-                          Tipografia
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Altere a tipografia do elemento selecionado.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <Square className="mr-2 h-4 w-4" />
-                          Tamanho
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Altere o tamanho do elemento selecionado.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="settings" className="h-full p-4">
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <MousePointer className="mr-2 h-4 w-4" />
-                          Interatividade
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Configure a interatividade do elemento selecionado.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="w-full space-y-3">
-                    <CardHeader>
-                      <CardTitle>
-                        <div className="flex items-center">
-                          <ImageIcon className="mr-2 h-4 w-4" />
-                          Visibilidade
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        Configure a visibilidade do elemento selecionado.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+            {/* Main Canvas */}
+            <ResizablePanel defaultSize={60}>
+              <VisualEditorCanvas
+                elements={editorState.elements}
+                stages={editorState.stages}
+                activeStageId={editorState.activeStageId}
+                selectedElementId={editorState.selectedElementId}
+                isPreviewMode={editorState.isPreviewMode}
+                viewportMode={editorState.viewport}
+                onElementSelect={handleElementSelect}
+                onElementUpdate={handleElementUpdate}
+                onElementDelete={handleElementDelete}
+                onElementMove={handleElementMove}
+                onElementAdd={handleElementAdd}
+                onStageAdd={handleStageAdd}
+                onStageSelect={handleStageSelect}
+              />
+            </ResizablePanel>
+
+            <ResizableHandle />
+
+            {/* Right Sidebar */}
+            <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+              <div className="h-full bg-white border-l border-gray-200">
+                <StageConfigurationPanel
+                  stageName={activeStage?.title || 'Sem etapa selecionada'}
+                  stageType={activeStage?.type || 'unknown'}
+                  questionData={selectedElement?.content}
+                />
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </div>
       </div>
-    </div>
+    </DndProvider>
   );
 };
