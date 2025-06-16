@@ -247,29 +247,64 @@ export const OptionConfigurationPanel: React.FC<OptionConfigurationPanelProps> =
             </div>
           </TabsContent>
 
-          <TabsContent value="imagem" className="p-4 space-y-4">
+          <TabsContent value="imagem" className="p-4 space-y-6">
+            {/* Layout das Opções */}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium text-[#8B7355]">Layout das Opções</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex flex-col items-center gap-2 h-auto p-3 border-[#B89B7A]/30 text-[#8B7355] hover:bg-[#B89B7A]/10"
+                >
+                  <div className="w-8 h-6 bg-[#B89B7A]/20 rounded grid grid-cols-2 gap-0.5">
+                    <div className="bg-[#B89B7A] rounded-sm"></div>
+                    <div className="bg-[#B89B7A] rounded-sm"></div>
+                  </div>
+                  <span className="text-xs">2 Colunas</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex flex-col items-center gap-2 h-auto p-3 border-[#B89B7A]/30 text-[#8B7355] hover:bg-[#B89B7A]/10"
+                >
+                  <div className="w-8 h-6 bg-[#B89B7A]/20 rounded grid grid-cols-3 gap-0.5">
+                    <div className="bg-[#B89B7A] rounded-sm"></div>
+                    <div className="bg-[#B89B7A] rounded-sm"></div>
+                    <div className="bg-[#B89B7A] rounded-sm"></div>
+                  </div>
+                  <span className="text-xs">3 Colunas</span>
+                </Button>
+              </div>
+            </div>
+
             {/* Altura das imagens */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-[#8B7355]">Altura das imagens: 120px</Label>
+              <Label className="text-sm font-medium text-[#8B7355]">Altura das imagens: 192px</Label>
               <Slider
-                defaultValue={[120]}
-                min={80}
+                defaultValue={[192]}
+                min={120}
                 max={300}
-                step={10}
+                step={12}
                 className="w-full"
               />
+              <div className="text-xs text-[#8B7355]/70">Recomendado: 192px para melhor proporção</div>
             </div>
 
             {/* Border Radius */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-[#8B7355]">Border Radius: 8px</Label>
+              <Label className="text-sm font-medium text-[#8B7355]">Arredondamento: 12px</Label>
               <Slider
-                defaultValue={[8]}
+                defaultValue={[12]}
                 min={0}
                 max={24}
                 step={2}
                 className="w-full"
               />
+              <div className="flex justify-between text-xs text-[#8B7355]/70">
+                <span>Quadrado</span>
+                <span>Arredondado</span>
+              </div>
             </div>
 
             {/* Ajuste da Imagem */}
@@ -280,31 +315,120 @@ export const OptionConfigurationPanel: React.FC<OptionConfigurationPanelProps> =
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="cover">Cobrir (Cover)</SelectItem>
-                  <SelectItem value="contain">Conter (Contain)</SelectItem>
-                  <SelectItem value="fill">Preencher (Fill)</SelectItem>
+                  <SelectItem value="cover">Cobrir - Preenche todo espaço</SelectItem>
+                  <SelectItem value="contain">Conter - Imagem completa visível</SelectItem>
+                  <SelectItem value="fill">Preencher - Distorção permitida</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            {/* Posição da Imagem */}
+            {/* Efeitos Visuais */}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium text-[#8B7355]">Efeitos Visuais</Label>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs text-[#8B7355]">Sombra</Label>
+                  <Select defaultValue="medium">
+                    <SelectTrigger className="w-24 h-8 border-[#B89B7A]/30">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Nenhuma</SelectItem>
+                      <SelectItem value="small">Sutil</SelectItem>
+                      <SelectItem value="medium">Média</SelectItem>
+                      <SelectItem value="large">Intensa</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs text-[#8B7355]">Hover (Ampliar)</Label>
+                  <Select defaultValue="scale-105">
+                    <SelectTrigger className="w-24 h-8 border-[#B89B7A]/30">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Desligado</SelectItem>
+                      <SelectItem value="scale-102">Sutil</SelectItem>
+                      <SelectItem value="scale-105">Médio</SelectItem>
+                      <SelectItem value="scale-110">Intenso</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+
+            {/* Espaçamento entre opções */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-[#8B7355]">Posição da Imagem</Label>
-              <div className="grid grid-cols-3 gap-1">
-                {[
-                  'top left', 'top center', 'top right',
-                  'center left', 'center center', 'center right',
-                  'bottom left', 'bottom center', 'bottom right'
-                ].map((position) => (
-                  <Button
-                    key={position}
-                    variant="outline"
-                    size="sm"
-                    className="text-xs p-2 border-[#B89B7A]/30 text-[#8B7355] hover:bg-[#B89B7A]/10"
-                  >
-                    {position.split(' ').map(word => word.charAt(0).toUpperCase()).join('')}
-                  </Button>
-                ))}
+              <Label className="text-sm font-medium text-[#8B7355]">Espaçamento entre opções: 16px</Label>
+              <Slider
+                defaultValue={[16]}
+                min={8}
+                max={32}
+                step={4}
+                className="w-full"
+              />
+            </div>
+
+            {/* Cores de Estado */}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium text-[#8B7355]">Cores de Estado</Label>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <Label className="text-xs text-[#8B7355]">Cor de Seleção</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="color"
+                      defaultValue="#B89B7A"
+                      className="w-12 h-8 p-0 border-0 rounded"
+                    />
+                    <Input
+                      defaultValue="#B89B7A"
+                      placeholder="#B89B7A"
+                      className="flex-1 text-xs border-[#B89B7A]/30 focus:border-[#B89B7A]"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs text-[#8B7355]">Cor de Hover</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="color"
+                      defaultValue="#D4C4A8"
+                      className="w-12 h-8 p-0 border-0 rounded"
+                    />
+                    <Input
+                      defaultValue="#D4C4A8"
+                      placeholder="#D4C4A8"
+                      className="flex-1 text-xs border-[#B89B7A]/30 focus:border-[#B89B7A]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Preview das Configurações */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-[#8B7355]">Preview</Label>
+              <div className="border border-[#B89B7A]/30 rounded-lg p-3 bg-gray-50">
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-white border-2 border-[#B89B7A] rounded-xl overflow-hidden shadow-md transform scale-105">
+                    <div className="h-16 bg-gradient-to-br from-[#B89B7A] to-[#8B7355]"></div>
+                    <div className="p-2">
+                      <div className="h-2 bg-[#B89B7A]/20 rounded mb-1"></div>
+                      <div className="h-1.5 bg-[#B89B7A]/10 rounded w-2/3"></div>
+                    </div>
+                  </div>
+                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                    <div className="h-16 bg-gray-200"></div>
+                    <div className="p-2">
+                      <div className="h-2 bg-gray-200 rounded mb-1"></div>
+                      <div className="h-1.5 bg-gray-100 rounded w-2/3"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-xs text-center text-[#8B7355]/70 mt-2">
+                  Selecionada vs Normal
+                </div>
               </div>
             </div>
           </TabsContent>
