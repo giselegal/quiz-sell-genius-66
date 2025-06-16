@@ -74,7 +74,11 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
       </div>
 
       {/* Question Options */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className={`grid gap-4 ${
+        content.options?.some(option => option.imageUrl) 
+          ? 'grid-cols-1 md:grid-cols-2' 
+          : 'grid-cols-1'
+      }`}>
         {content.options?.map((option, index) => (
           <div
             key={option.id}
