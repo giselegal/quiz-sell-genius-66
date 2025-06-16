@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -29,7 +30,8 @@ interface ModernVisualEditorProps {
 
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
-  onSave
+  onSave,
+  onPreview
 }) => {
   const [selectedElementId, setSelectedElementId] = useState<string | null>(
     null
@@ -244,23 +246,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             <ComponentLibrarySidebar onComponentAdd={handleElementAdd} />
           )}
 
-          {/* Canvas */}
-          <EditorCanvas
-            elements={editorState.elements}
-            stages={editorState.stages}
-            activeStageId={editorState.activeStageId}
-            selectedElementId={selectedElementId}
-            onElementSelect={handleElementSelect}
-            onElementUpdate={handleElementUpdate}
-            onElementMove={handleElementMove}
-            onElementDelete={handleElementDelete}
-            onElementDuplicate={handleElementDuplicate}
-            onElementAdd={handleElementAdd}
-            onStageAdd={() => {}}
-            onStageSelect={() => {}}
-            isPreviewMode={isPreviewMode}
-            viewportMode={viewportMode}
-          />
+          {/* Canvas - Renderiza conteúdo baseado na stage ativa */}
+          <div className="flex-1 bg-gray-100 p-4 overflow-auto">
+            <div className="mx-auto bg-white shadow-lg rounded-lg overflow-hidden" style={{ width: "100%", minHeight: "600px" }}>
+              {renderStageContent()}
+            </div>
+          </div>
 
           {/* Properties Panel */}
           {!isPreviewMode && selectedElement && (
