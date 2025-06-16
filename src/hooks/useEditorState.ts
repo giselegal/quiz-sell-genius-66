@@ -1,141 +1,349 @@
+import { useState, useCallback, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
+import type {
+  VisualElement,
+  VisualEditorState,
+  VisualEditorData,
+  ElementUpdate,
+  ElementContent,
+  ElementStyle,
+  GlobalStyles,
+  EditorSettings,
+} from "../types/visualEditor";
 
-import { useState, useCallback } from 'react';
-import type { VisualEditorState, ElementUpdate, CanvasElement } from '@/types/visualEditor';
-import { generateId } from '@/utils/idGenerator';
+const defaultGlobalStyles: GlobalStyles = {
+  backgroundColor: "#ffffff",
+  fontFamily: "Inter, sans-serif",
+  primaryColor: "#2563eb",
+  secondaryColor: "#64748b",
+  containerMaxWidth: "1200px",
+  customCSS: "",
+};
 
-interface VisualEditorData {
-  editorState: VisualEditorState;
-  pageInfo: {
-    title: string;
-    description: string;
-    slug: string;
-    published: boolean;
+const defaultSettings: EditorSettings = {
+  showGrid: false,
+  snapToGrid: false,
+  gridSize: 20,
+  showRulers: false,
+  showBoundingBoxes: false,
+  autoSave: true,
+  autoSaveInterval: 30000,
+};
+
+const defaultEditorState: VisualEditorState = {
+  elements: [],
+  stages: [{
+    id: 'stage-1',
+    title: 'Etapa 1',
+    order: 0,
+    type: 'quiz',
+    settings: {
+      showHeader: true,
+      showProgress: true,
+      allowBack: true
+    }
+  }],
+  activeStageId: 'stage-1',
+  history: [],
+  historyIndex: -1,
+  globalStyles: defaultGlobalStyles,
+  selectedElementId: null,
+  hoveredElementId: null,
+  viewport: "desktop",
+  zoomLevel: 100,
+  isPreviewMode: false,
+  settings: defaultSettings,
+};
+
+// Component templates for different element types
+const getComponentDefaults = (
+  type: string
+): { content: ElementContent; style: ElementStyle } => {
+  const defaults = {
+    title: {
+      content: { text: "Nova seção" },
+      style: {
+        fontSize: "32px",
+        fontWeight: "bold",
+        textAlign: "center" as const,
+        padding: "20px",
+        margin: "10px 0",
+      },
+    },
+    text: {
+      content: { text: "Digite seu texto aqui..." },
+      style: {
+        fontSize: "16px",
+        textAlign: "left" as const,
+        padding: "10px",
+        margin: "10px 0",
+      },
+    },
+    button: {
+      content: { text: "Clique aqui", href: "#" },
+      style: {
+        backgroundColor: "#2563eb",
+        color: "#ffffff",
+        padding: "12px 24px",
+        borderRadius: "6px",
+        textAlign: "center" as const,
+        display: "inline-block",
+        margin: "10px 0",
+      },
+    },
+    image: {
+      content: { src: "https://via.placeholder.com/400x300", alt: "Imagem" },
+      style: {
+        width: "100%",
+        height: "auto",
+        margin: "10px 0",
+      },
+    },
+    spacer: {
+      content: {},
+      style: {
+        height: "40px",
+        margin: "10px 0",
+      },
+    },
   };
-}
 
-export const useEditorState = (initialData?: VisualEditorData) => {
+  return defaults[type as keyof typeof defaults] || defaults.text;
+};
+
+export function useEditorState(initialData?: VisualEditorData) {
   const [editorState, setEditorState] = useState<VisualEditorState>(() => {
     if (initialData?.editorState) {
       return initialData.editorState;
     }
-    
-    return {
-      elements: [],
-      stages: [],
-      activeStageId: null,
-      history: [],
-      historyIndex: -1,
-      globalStyles: {
-        backgroundColor: '#ffffff',
-        fontFamily: 'Inter, sans-serif',
-        primaryColor: '#3b82f6',
-        secondaryColor: '#6b7280',
-        containerMaxWidth: '1200px',
-        customCSS: ''
+
+    // Try to load from localStorage
+    const savedState = localStorage.getItem("visual-editor-state");
+    if (savedState) {
+      try {
+        const parsed = JSON.parse(savedState);
+        return { ...defaultEditorState, ...parsed };
+      } catch (error) {
+        console.warn("Failed to parse saved editor state:", error);
       }
-    };
+    }
+
+    return defaultEditorState;
   });
 
-  const addElement = useCallback((componentType: string, position?: number): string => {
-    const newElement: CanvasElement = {
-      id: generateId(),
-      type: componentType as any,
-      stageId: editorState.activeStageId || 'default',
-      order: position ?? editorState.elements.length,
-      content: {},
-      style: {},
-      visible: true,
-      locked: false
-    };
+  const nextElementId = useRef(editorState.elements.length + 1);
 
-    setEditorState(prev => ({
-      ...prev,
-      elements: [...prev.elements, newElement]
-    }));
-
-    return newElement.id;
-  }, [editorState.activeStageId, editorState.elements.length]);
-
-  const updateElement = useCallback((elementId: string, updates: ElementUpdate) => {
-    setEditorState(prev => ({
-      ...prev,
-      elements: prev.elements.map(el => 
-        el.id === elementId ? { ...el, ...updates } : el
-      )
-    }));
+  // Auto-save to localStorage
+  const saveToLocalStorage = useCallback((state: VisualEditorState) => {
+    try {
+      localStorage.setItem("visual-editor-state", JSON.stringify(state));
+    } catch (error) {
+      console.warn("Failed to save editor state to localStorage:", error);
+    }
   }, []);
 
-  const removeElement = useCallback((elementId: string) => {
-    setEditorState(prev => ({
-      ...prev,
-      elements: prev.elements.filter(el => el.id !== elementId)
-    }));
-  }, []);
+  const addElement = useCallback(
+    (componentType: string, position?: number): string => {
+      const id = uuidv4();
+      const { content, style } = getComponentDefaults(componentType);
+      const order =
+        position !== undefined ? position : editorState.elements.length;
 
-  const moveElement = useCallback((elementId: string, direction: "up" | "down") => {
-    setEditorState(prev => {
-      const elements = [...prev.elements];
-      const index = elements.findIndex(el => el.id === elementId);
-      
-      if (index === -1) return prev;
-      
-      const newIndex = direction === "up" ? index - 1 : index + 1;
-      
-      if (newIndex < 0 || newIndex >= elements.length) return prev;
-      
-      [elements[index], elements[newIndex]] = [elements[newIndex], elements[index]];
-      
-      return { ...prev, elements };
-    });
-  }, []);
-
-  const duplicateElement = useCallback((elementId: string) => {
-    setEditorState(prev => {
-      const element = prev.elements.find(el => el.id === elementId);
-      if (!element) return prev;
-      
-      const duplicated: CanvasElement = {
-        ...element,
-        id: generateId(),
-        order: element.order + 1
+      const newElement: VisualElement = {
+        id,
+        type: componentType as any,
+        stageId: editorState.activeStageId || editorState.stages[0]?.id || 'stage-1',
+        content,
+        style,
+        visible: true,
+        locked: false,
+        order,
       };
-      
-      return {
-        ...prev,
-        elements: [...prev.elements, duplicated]
-      };
-    });
-  }, []);
 
-  const updateGlobalStyles = useCallback((styles: any) => {
-    setEditorState(prev => ({
-      ...prev,
-      globalStyles: { ...prev.globalStyles, ...styles }
-    }));
-  }, []);
+      setEditorState((prev) => {
+        const newElements = [...prev.elements];
 
-  const reorderElements = useCallback((sourceIndex: number, destinationIndex: number) => {
-    setEditorState(prev => {
-      const elements = [...prev.elements];
-      const [removed] = elements.splice(sourceIndex, 1);
-      elements.splice(destinationIndex, 0, removed);
-      
-      return { ...prev, elements };
-    });
-  }, []);
+        if (position !== undefined) {
+          // Insert at specific position and update order of subsequent elements
+          newElements.splice(position, 0, newElement);
+          newElements.forEach((el, index) => {
+            el.order = index;
+          });
+        } else {
+          // Add to end
+          newElements.push(newElement);
+        }
+
+        const newState = { ...prev, elements: newElements };
+        saveToLocalStorage(newState);
+        return newState;
+      });
+
+      nextElementId.current += 1;
+      return id;
+    },
+    [editorState.elements.length, editorState.activeStageId, editorState.stages, saveToLocalStorage]
+  );
+
+  const updateElement = useCallback(
+    (elementId: string, updates: ElementUpdate) => {
+      setEditorState((prev) => {
+        const newElements = prev.elements.map((el) => {
+          if (el.id === elementId) {
+            return {
+              ...el,
+              content: updates.content
+                ? { ...el.content, ...updates.content }
+                : el.content,
+              style: updates.style
+                ? { ...el.style, ...updates.style }
+                : el.style,
+              visible:
+                updates.visible !== undefined ? updates.visible : el.visible,
+              locked: updates.locked !== undefined ? updates.locked : el.locked,
+            };
+          }
+          return el;
+        });
+
+        const newState = { ...prev, elements: newElements };
+        saveToLocalStorage(newState);
+        return newState;
+      });
+    },
+    [saveToLocalStorage]
+  );
+
+  const removeElement = useCallback(
+    (elementId: string) => {
+      setEditorState((prev) => {
+        const newElements = prev.elements
+          .filter((el) => el.id !== elementId)
+          .map((el, index) => ({ ...el, order: index }));
+
+        const newState = { ...prev, elements: newElements };
+        saveToLocalStorage(newState);
+        return newState;
+      });
+    },
+    [saveToLocalStorage]
+  );
+
+  const moveElement = useCallback(
+    (elementId: string, direction: "up" | "down") => {
+      setEditorState((prev) => {
+        const elementIndex = prev.elements.findIndex(
+          (el) => el.id === elementId
+        );
+        if (elementIndex === -1) return prev;
+
+        const newElements = [...prev.elements];
+        const targetIndex =
+          direction === "up" ? elementIndex - 1 : elementIndex + 1;
+
+        if (targetIndex < 0 || targetIndex >= newElements.length) return prev;
+
+        // Swap elements
+        [newElements[elementIndex], newElements[targetIndex]] = [
+          newElements[targetIndex],
+          newElements[elementIndex],
+        ];
+
+        // Update order
+        newElements.forEach((el, index) => {
+          el.order = index;
+        });
+
+        const newState = { ...prev, elements: newElements };
+        saveToLocalStorage(newState);
+        return newState;
+      });
+    },
+    [saveToLocalStorage]
+  );
+
+  const duplicateElement = useCallback(
+    (elementId: string) => {
+      setEditorState((prev) => {
+        const elementToDuplicate = prev.elements.find(
+          (el) => el.id === elementId
+        );
+        if (!elementToDuplicate) return prev;
+
+        const newElement: VisualElement = {
+          ...elementToDuplicate,
+          id: uuidv4(),
+          order: elementToDuplicate.order + 1,
+        };
+
+        const newElements = [...prev.elements];
+        newElements.splice(elementToDuplicate.order + 1, 0, newElement);
+
+        // Update order for subsequent elements
+        newElements.forEach((el, index) => {
+          el.order = index;
+        });
+
+        const newState = { ...prev, elements: newElements };
+        saveToLocalStorage(newState);
+        return newState;
+      });
+    },
+    [saveToLocalStorage]
+  );
+
+  const updateGlobalStyles = useCallback(
+    (updates: Partial<GlobalStyles>) => {
+      setEditorState((prev) => {
+        const newState = {
+          ...prev,
+          globalStyles: { ...prev.globalStyles!, ...updates },
+        };
+        saveToLocalStorage(newState);
+        return newState;
+      });
+    },
+    [saveToLocalStorage]
+  );
+
+  const reorderElements = useCallback(
+    (startIndex: number, endIndex: number) => {
+      setEditorState((prev) => {
+        const newElements = [...prev.elements];
+        const [removed] = newElements.splice(startIndex, 1);
+        newElements.splice(endIndex, 0, removed);
+
+        // Update order
+        newElements.forEach((el, index) => {
+          el.order = index;
+        });
+
+        const newState = { ...prev, elements: newElements };
+        saveToLocalStorage(newState);
+        return newState;
+      });
+    },
+    [saveToLocalStorage]
+  );
 
   const exportState = useCallback(() => {
     return JSON.stringify(editorState);
   }, [editorState]);
 
-  const importState = useCallback((stateJson: string) => {
-    try {
-      const newState = JSON.parse(stateJson);
-      setEditorState(newState);
-    } catch (error) {
-      console.error('Failed to import state:', error);
-    }
-  }, []);
+  const importState = useCallback(
+    (stateJson: string) => {
+      try {
+        const imported = JSON.parse(stateJson);
+        const newState = { ...defaultEditorState, ...imported };
+        setEditorState(newState);
+        saveToLocalStorage(newState);
+      } catch (error) {
+        console.error("Failed to import state:", error);
+        throw new Error("Invalid state format");
+      }
+    },
+    [saveToLocalStorage]
+  );
 
   return {
     editorState,
@@ -147,6 +355,6 @@ export const useEditorState = (initialData?: VisualEditorData) => {
     updateGlobalStyles,
     reorderElements,
     exportState,
-    importState
+    importState,
   };
-};
+}
