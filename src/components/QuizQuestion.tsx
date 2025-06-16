@@ -1,182 +1,145 @@
 
 import React, { useState, useEffect } from 'react';
-import { QuizQuestion as QuizQuestionType, UserResponse } from '@/types/quiz';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { QuizQuestion as QuizQuestionType, UserResponse } from '../types/quiz';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { QuizOption } from './quiz/QuizOption';
+import { highlightStrategicWords } from '@/utils/textHighlight';
+import { Button } from './ui/button';
+import { ArrowRight } from 'lucide-react';
+import { useQuestionScroll } from '@/hooks/useQuestionScroll';
+import { StaggeredOptionAnimations } from './effects/StaggeredOptionAnimations';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
-  showQuestionImage?: boolean;
   autoAdvance?: boolean;
-  onNext?: () => void;
-  onPrevious?: () => void;
-  canProceed?: boolean;
-  showNavigationButtons?: boolean;
-  isStrategicQuestion?: boolean;
+  hideTitle?: boolean;
+  showQuestionImage?: boolean;
+  isStrategicQuestion?: boolean; // Nova prop
 }
 
-export const QuizQuestion: React.FC<QuizQuestionProps> = ({
+const QuizQuestion: React.FC<QuizQuestionProps> = ({
   question,
   onAnswer,
   currentAnswers,
-  showQuestionImage = true,
-  autoAdvance = true,
-  onNext,
-  onPrevious,
-  canProceed = false,
-  showNavigationButtons = false,
+  autoAdvance = false,
+  hideTitle = false,
+  showQuestionImage = false,
   isStrategicQuestion = false
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(currentAnswers);
-  const [hasAutoAdvanced, setHasAutoAdvanced] = useState(false);
+  const isMobile = useIsMobile();
+  const hasImageOptions = question.type !== 'text';
+  const [imageError, setImageError] = useState(false);
+  const { scrollToQuestion } = useQuestionScroll();
 
   useEffect(() => {
-    setSelectedOptions(currentAnswers);
-    setHasAutoAdvanced(false);
-  }, [question.id, currentAnswers]);
+    scrollToQuestion(question.id);
+  }, [question.id, scrollToQuestion]);
 
-  const handleOptionClick = (optionId: string) => {
-    let newSelection: string[];
+  const handleOptionSelect = (optionId: string) => {
+    let newSelectedOptions: string[];
     
-    if (selectedOptions.includes(optionId)) {
-      newSelection = selectedOptions.filter(id => id !== optionId);
+    if (currentAnswers.includes(optionId)) {
+      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
+      if (isStrategicQuestion) {
+        return; // Não permite desmarcar a opção em questões estratégicas
+      }
+      newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
-      if (selectedOptions.length >= question.multiSelect) {
-        newSelection = [...selectedOptions.slice(1), optionId];
+      if (isStrategicQuestion) {
+        // Para questões estratégicas, substituímos qualquer seleção anterior
+        newSelectedOptions = [optionId];
+      } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
+        newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
-        newSelection = [...selectedOptions, optionId];
+        newSelectedOptions = [...currentAnswers, optionId];
       }
     }
-
-    setSelectedOptions(newSelection);
     
-    const response: UserResponse = {
+    onAnswer({ 
       questionId: question.id,
-      selectedOptions: newSelection
-    };
-    
-    onAnswer(response);
-
-    // Auto advance if enabled and we have enough selections
-    if (autoAdvance && newSelection.length === question.multiSelect && !hasAutoAdvanced) {
-      setHasAutoAdvanced(true);
-      setTimeout(() => {
-        onNext?.();
-      }, 500);
-    }
+      selectedOptions: newSelectedOptions
+    });
   };
-
+  
+  const getGridColumns = () => {
+    if (question.type === 'text') {
+      if (isStrategicQuestion) {
+        return "grid-cols-1 gap-3 px-2";
+      }
+      return isMobile ? "grid-cols-1 gap-3 px-2" : "grid-cols-1 gap-4 px-4";
+    }
+    return isMobile ? "grid-cols-2 gap-1 px-0.5" : "grid-cols-2 gap-3 px-2";
+  };
+  
   return (
-    <div className="w-full max-w-5xl mx-auto">
-      {/* Question Title */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#432818] mb-4 leading-tight">
-          {question.title}
-        </h2>
-        
-        {question.type !== 'text' && showQuestionImage && question.imageUrl && (
-          <div className="mb-6">
-            <img 
-              src={question.imageUrl} 
-              alt="Imagem da questão"
-              className="mx-auto rounded-lg shadow-lg max-w-full h-auto max-h-96 object-cover"
-            />
-          </div>
-        )}
-        
-        <p className="text-[#8F7A6A] text-lg">
-          Escolha {question.multiSelect} {question.multiSelect === 1 ? 'opção' : 'opções'}:
-        </p>
-      </div>
-
-      {/* Options Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {question.options.map((option) => {
-          const isSelected = selectedOptions.includes(option.id);
+    <div className={cn("w-full max-w-6xl mx-auto pb-5 relative", 
+      isMobile && "px-2", 
+      isStrategicQuestion && "max-w-3xl strategic-question",
+      question.type === 'text' && !isStrategicQuestion && "text-only-question"
+    )} id={`question-${question.id}`}>
+      {!hideTitle && (
+        <>
+          <h2 className={cn(
+            "font-playfair text-center mb-5 px-3 pt-3 text-brand-coffee font-semibold tracking-normal",
+            isMobile ? "text-base" : "text-base sm:text-xl",
+            isStrategicQuestion && "strategic-question-title text-[#432818] mb-6 font-bold whitespace-pre-line",
+            isStrategicQuestion && isMobile && "text-[1.25rem] sm:text-2xl", // Texto maior para questões estratégicas em mobile
+            question.type === 'text' && !isStrategicQuestion && ".text-only-question & " && "text-[1.15rem] sm:text-xl" // Texto maior para títulos em questões só texto
+          )}>
+            {highlightStrategicWords(question.title)}
+          </h2>
           
-          return (
-            <div
-              key={option.id}
-              onClick={() => handleOptionClick(option.id)}
-              className={`relative cursor-pointer transition-all duration-300 rounded-xl overflow-hidden shadow-md hover:shadow-lg ${
-                isSelected 
-                  ? 'ring-4 ring-[#B89B7A] ring-opacity-60 transform scale-105' 
-                  : 'hover:transform hover:scale-102'
-              }`}
-            >
-              {question.type !== 'text' && option.imageUrl && (
-                <div className="aspect-square w-full">
-                  <img 
-                    src={option.imageUrl} 
-                    alt={option.text}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              
-              <div className={`p-4 ${
-                question.type === 'text' 
-                  ? 'min-h-[80px] flex items-center justify-center' 
-                  : 'bg-white'
-              } ${
-                isSelected ? 'bg-[#B89B7A] text-white' : 'bg-white text-[#432818]'
-              }`}>
-                <p className={`text-center font-medium ${
-                  question.type === 'text' ? 'text-lg' : 'text-base'
-                }`}>
-                  {option.text}
-                </p>
-              </div>
-              
-              {isSelected && (
-                <div className="absolute top-3 right-3 w-6 h-6 bg-[#B89B7A] rounded-full flex items-center justify-center">
-                  <div className="w-3 h-3 bg-white rounded-full"></div>
-                </div>
-              )}
+          {isStrategicQuestion && question.imageUrl && !imageError && showQuestionImage && (
+            <div className="w-full mb-6">
+              <img 
+                src={question.imageUrl} 
+                alt="Question visual" 
+                className="w-full max-w-md mx-auto rounded-lg shadow-sm" 
+                onError={() => {
+                  console.error(`Failed to load image: ${question.imageUrl}`);
+                  setImageError(true);
+                }}
+              />
             </div>
-          );
-        })}
-      </div>
-
-      {/* Selection Counter */}
-      <div className="text-center mb-6">
-        <p className="text-[#8F7A6A]">
-          {selectedOptions.length} de {question.multiSelect} selecionadas
-        </p>
-        
-        <div className="w-full bg-gray-200 rounded-full h-2 mt-2 max-w-md mx-auto">
-          <div 
-            className="bg-[#B89B7A] h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(selectedOptions.length / question.multiSelect) * 100}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Navigation Buttons (when not auto-advancing) */}
-      {showNavigationButtons && (
-        <div className="flex justify-between items-center mt-8">
-          <Button
-            variant="outline"
-            onClick={onPrevious}
-            className="flex items-center gap-2"
-            disabled={!onPrevious}
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Anterior
-          </Button>
-
-          <Button
-            onClick={onNext}
-            disabled={!canProceed || !onNext}
-            className="flex items-center gap-2 bg-[#B89B7A] hover:bg-[#A0895B] text-white"
-          >
-            Próxima
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        </div>
+          )}
+        </>
       )}
+      
+      <div className="w-full">
+        <StaggeredOptionAnimations 
+          questionId={question.id}
+          isVisible={true}
+          className={cn(
+            "grid h-full",
+            getGridColumns(),
+            hasImageOptions && "mb-4 relative",
+            isStrategicQuestion && "gap-4"
+          )}
+        >
+          {question.options.map((option, index) => (
+            <QuizOption 
+              key={option.id} 
+              option={option} 
+              isSelected={currentAnswers.includes(option.id)} 
+              onSelect={handleOptionSelect}
+              type={question.type}
+              questionId={question.id}
+              isDisabled={
+                (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
+                (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
+                  currentAnswers.length >= question.multiSelect)
+              }
+              isStrategicOption={isStrategicQuestion}
+            />
+          ))}
+        </StaggeredOptionAnimations>
+      </div>
     </div>
   );
 };
+
+export { QuizQuestion };
+
