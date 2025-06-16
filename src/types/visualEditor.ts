@@ -1,3 +1,4 @@
+
 export type BlockType = 
   | 'text' 
   | 'title' 
@@ -23,7 +24,11 @@ export type BlockType =
   | 'terms'
   | 'loading'
   | 'level'
-  | 'calendar';
+  | 'calendar'
+  | 'headline'
+  | 'form'
+  | 'question-title'
+  | 'question-options';
 
 export interface ElementContent {
   text?: string;
@@ -73,7 +78,7 @@ export interface VisualStage {
   id: string;
   title: string;
   order: number;
-  type: 'quiz' | 'result' | 'sales';
+  type: 'intro' | 'quiz' | 'strategic' | 'transition' | 'result' | 'offer';
   settings: {
     showHeader: boolean;
     showProgress: boolean;

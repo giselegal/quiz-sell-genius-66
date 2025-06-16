@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 interface EditorStage {
   id: string;
   name: string;
-  type: 'intro' | 'quiz' | 'transition' | 'result' | 'offer';
+  type: 'intro' | 'quiz' | 'strategic' | 'transition' | 'result' | 'offer';
 }
 
 interface StepsPanelProps {
