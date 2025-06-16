@@ -4,7 +4,6 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { ComponentLibrarySidebar } from "./sidebar/ComponentLibrarySidebar";
-import { EditorCanvas } from "./canvas/EditorCanvas";
 import { EditorToolbar } from "./toolbar/EditorToolbar";
 import { ElementPropertiesPanel } from "./properties/ElementPropertiesPanel";
 import { useEditorState } from "@/hooks/useEditorState";
