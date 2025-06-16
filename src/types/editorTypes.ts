@@ -3,10 +3,12 @@
 // This file ensures type compatibility across different editor components
 
 import { CanvasElement as VisualEditorCanvasElement, BlockType } from './visualEditor';
+import { Block } from './editor';
 
 // Re-export the main types to ensure consistency
 export type { VisualEditorCanvasElement as CanvasElement };
 export type { BlockType };
+export type { Block };
 
 // Legacy compatibility - if needed
 export interface LegacyCanvasElement {
@@ -28,14 +30,6 @@ export function convertToModernCanvasElement(legacy: LegacyCanvasElement): Visua
     content: legacy.content || {},
     style: legacy.style || {}
   };
-}
-
-// Block interface for editor compatibility
-export interface Block {
-  id: string;
-  type: BlockType;
-  content: any;
-  order: number;
 }
 
 // Editor state interface
