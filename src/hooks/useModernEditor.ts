@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { getStepTemplate } from '@/utils/stepTemplates';
 import { quizQuestions } from '@/data/quizQuestions';
 import { strategicQuestions } from '@/data/strategicQuestions';
@@ -20,6 +20,7 @@ interface EditorState {
   isPreviewMode: boolean;
   history: EditorElement[][];
   historyIndex: number;
+  populatedSteps: Set<string>;
 }
 
 export const useModernEditor = () => {
@@ -28,8 +29,78 @@ export const useModernEditor = () => {
     selectedElementId: null,
     isPreviewMode: false,
     history: [[]],
-    historyIndex: 0
+    historyIndex: 0,
+    populatedSteps: new Set()
   });
+
+  // Auto-populate steps that haven't been populated yet
+  const autoPopulateStep = useCallback((stepId: string, stepType: string) => {
+    if (state.populatedSteps.has(stepId)) {
+      return; // Already populated
+    }
+
+    console.log(`Auto-populating step ${stepId} with type ${stepType}`);
+    
+    // Get question data based on step type and ID
+    let questionData = undefined;
+    
+    if (stepType === 'quiz-question') {
+      const questionMatch = stepId.match(/step-question-(\d+)/);
+      if (questionMatch) {
+        const questionId = questionMatch[1];
+        questionData = quizQuestions.find(q => q.id === questionId);
+      }
+    } else if (stepType === 'strategic-question') {
+      const strategicMatch = stepId.match(/step-strategic-(.+)/);
+      if (strategicMatch) {
+        const questionId = strategicMatch[1];
+        questionData = strategicQuestions.find(q => q.id === questionId);
+      }
+    }
+    
+    // Get the template for this step type
+    const template = getStepTemplate(stepType, stepId, questionData);
+    
+    // Add all template components to the step
+    const newElements: EditorElement[] = [];
+    
+    template.components.forEach((component, index) => {
+      const newElement: EditorElement = {
+        id: `element-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
+        type: component.type || 'text',
+        content: component.content || {},
+        position: { x: 0, y: 0 },
+        size: { width: 100, height: 50 },
+        order: component.order || index,
+        stepId,
+        style: component.style || {}
+      };
+      
+      newElements.push(newElement);
+    });
+    
+    // Add all elements at once
+    if (newElements.length > 0) {
+      setState(prev => {
+        const updatedElements = [...prev.elements, ...newElements];
+        const newHistory = prev.history.slice(0, prev.historyIndex + 1);
+        newHistory.push(updatedElements);
+        
+        const newPopulatedSteps = new Set(prev.populatedSteps);
+        newPopulatedSteps.add(stepId);
+        
+        return {
+          ...prev,
+          elements: updatedElements,
+          history: newHistory,
+          historyIndex: newHistory.length - 1,
+          populatedSteps: newPopulatedSteps
+        };
+      });
+      
+      console.log(`Successfully auto-populated ${newElements.length} template components for step ${stepId}`);
+    }
+  }, [state.populatedSteps]);
 
   const addElement = useCallback((type: string, content: any = {}, stepId: string) => {
     const newElement: EditorElement = {
@@ -61,66 +132,8 @@ export const useModernEditor = () => {
   }, [state.elements]);
 
   const addStepTemplate = useCallback((stepType: string, stepId: string) => {
-    console.log(`Adding template for step type: ${stepType}, step ID: ${stepId}`);
-    
-    // Get question data based on step type and ID
-    let questionData = undefined;
-    
-    if (stepType === 'quiz-question') {
-      // Extract question number from stepId if it follows pattern "step-question-X"
-      const questionMatch = stepId.match(/step-question-(\d+)/);
-      if (questionMatch) {
-        const questionId = questionMatch[1];
-        questionData = quizQuestions.find(q => q.id === questionId);
-      }
-    } else if (stepType === 'strategic-question') {
-      // Extract strategic question ID from stepId if it follows pattern "step-strategic-X"
-      const strategicMatch = stepId.match(/step-strategic-(.+)/);
-      if (strategicMatch) {
-        const questionId = strategicMatch[1];
-        questionData = strategicQuestions.find(q => q.id === questionId);
-      }
-    }
-    
-    // Get the template for this step type
-    const template = getStepTemplate(stepType, stepId, questionData);
-    
-    // Add all template components to the step
-    const newElements: EditorElement[] = [];
-    
-    template.components.forEach((component, index) => {
-      const newElement: EditorElement = {
-        id: `element-${Date.now()}-${index}`,
-        type: component.type || 'text',
-        content: component.content || {},
-        position: { x: 0, y: 0 },
-        size: { width: 100, height: 50 },
-        order: component.order || index,
-        stepId,
-        style: component.style || {}
-      };
-      
-      newElements.push(newElement);
-    });
-    
-    // Add all elements at once
-    if (newElements.length > 0) {
-      setState(prev => {
-        const updatedElements = [...prev.elements, ...newElements];
-        const newHistory = prev.history.slice(0, prev.historyIndex + 1);
-        newHistory.push(updatedElements);
-        
-        return {
-          ...prev,
-          elements: updatedElements,
-          history: newHistory,
-          historyIndex: newHistory.length - 1
-        };
-      });
-      
-      console.log(`Successfully added ${newElements.length} template components for ${stepType}`);
-    }
-  }, []);
+    autoPopulateStep(stepId, stepType);
+  }, [autoPopulateStep]);
 
   const updateElement = useCallback((id: string, updates: Partial<EditorElement>) => {
     setState(prev => {
@@ -246,6 +259,7 @@ export const useModernEditor = () => {
     undo,
     redo,
     save,
-    getElementsByStep
+    getElementsByStep,
+    autoPopulateStep
   };
 };

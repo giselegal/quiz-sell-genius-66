@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ModernSidebar } from './sidebar/ModernSidebar';
 import { ModernCanvas } from './canvas/ModernCanvas';
 import { ModernToolbar } from './toolbar/ModernToolbar';
@@ -19,6 +19,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   onSave
 }) => {
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('lg');
+  const [hasAutoPopulated, setHasAutoPopulated] = useState(false);
 
   const {
     elements,
@@ -36,7 +37,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     undo,
     redo,
     save,
-    getElementsByStep
+    getElementsByStep,
+    autoPopulateStep
   } = useModernEditor();
 
   const {
@@ -57,6 +59,20 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     selectStep,
     getStepTypeInfo
   } = useStepsManager();
+
+  // Auto-populate all steps on initialization
+  useEffect(() => {
+    if (!hasAutoPopulated && steps.length > 0) {
+      console.log('Auto-populating all steps with their templates...');
+      
+      steps.forEach(step => {
+        autoPopulateStep(step.id, step.type);
+      });
+      
+      setHasAutoPopulated(true);
+      console.log(`Auto-populated ${steps.length} steps`);
+    }
+  }, [steps, autoPopulateStep, hasAutoPopulated]);
 
   const handleAddElement = (type: string) => {
     if (activeStepId) {
