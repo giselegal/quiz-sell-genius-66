@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { getStepTemplate } from '@/utils/stepTemplates';
 import { quizQuestions } from '@/data/quizQuestions';
 import { strategicQuestions } from '@/data/strategicQuestions';
-import { generateComponentId } from '@/utils/idGenerator';
+import { generateComponentId, extractQuestionIdFromStepId } from '@/utils/idGenerator';
 
 export interface EditorElement {
   id: string;
@@ -22,6 +22,8 @@ interface EditorState {
   history: EditorElement[][];
   historyIndex: number;
   populatedSteps: Set<string>;
+  isInitializing: boolean;
+  failedSteps: Set<string>;
 }
 
 export const useModernEditor = () => {
@@ -31,117 +33,169 @@ export const useModernEditor = () => {
     isPreviewMode: false,
     history: [[]],
     historyIndex: 0,
-    populatedSteps: new Set()
+    populatedSteps: new Set(),
+    isInitializing: false,
+    failedSteps: new Set()
   });
 
   const isPopulatingRef = useRef(false);
-  const populationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const initializationPromiseRef = useRef<Promise<void> | null>(null);
 
-  // Debounced auto-populate to prevent multiple executions
-  const debouncedAutoPopulate = useCallback((stepId: string, stepType: string) => {
-    if (populationTimeoutRef.current) {
-      clearTimeout(populationTimeoutRef.current);
+  // Função para buscar dados da questão baseado no stepId
+  const getQuestionData = useCallback((stepId: string, stepType: string) => {
+    const questionId = extractQuestionIdFromStepId(stepId);
+    
+    if (stepType === 'quiz-question' && questionId) {
+      return quizQuestions.find(q => q.id === questionId);
+    } else if (stepType === 'strategic-question' && questionId) {
+      return strategicQuestions.find(q => q.id === questionId);
     }
-
-    populationTimeoutRef.current = setTimeout(() => {
-      if (!state.populatedSteps.has(stepId) && !isPopulatingRef.current) {
-        autoPopulateStep(stepId, stepType);
-      }
-    }, 100);
-  }, [state.populatedSteps]);
-
-  // Clean up existing elements for a step before adding new ones
-  const cleanStepElements = useCallback((stepId: string) => {
-    setState(prev => ({
-      ...prev,
-      elements: prev.elements.filter(el => el.stepId !== stepId)
-    }));
+    
+    return undefined;
   }, []);
 
-  // Auto-populate steps with proper locking mechanism
-  const autoPopulateStep = useCallback((stepId: string, stepType: string) => {
-    if (state.populatedSteps.has(stepId) || isPopulatingRef.current) {
-      return;
+  // Função melhorada para popular uma etapa específica
+  const populateStepSafely = useCallback(async (stepId: string, stepType: string): Promise<boolean> => {
+    if (state.populatedSteps.has(stepId)) {
+      console.log(`Step ${stepId} already populated, skipping`);
+      return true;
     }
 
-    isPopulatingRef.current = true;
-    console.log(`Auto-populating step ${stepId} with type ${stepType}`);
-    
-    // Clean existing elements for this step first
-    cleanStepElements(stepId);
-    
-    // Get question data based on step type and ID
-    let questionData = undefined;
-    
-    if (stepType === 'quiz-question') {
-      const questionMatch = stepId.match(/step-question-(\d+)/);
-      if (questionMatch) {
-        const questionId = questionMatch[1];
-        questionData = quizQuestions.find(q => q.id === questionId);
+    try {
+      console.log(`🚀 Starting population for step: ${stepId} (${stepType})`);
+      
+      // Obter dados da questão se necessário
+      const questionData = getQuestionData(stepId, stepType);
+      
+      if ((stepType === 'quiz-question' || stepType === 'strategic-question') && !questionData) {
+        console.warn(`⚠️ No question data found for step ${stepId}`);
+        setState(prev => ({ ...prev, failedSteps: new Set(prev.failedSteps).add(stepId) }));
+        return false;
       }
-    } else if (stepType === 'strategic-question') {
-      const strategicMatch = stepId.match(/step-strategic-(.+)/);
-      if (strategicMatch) {
-        const questionId = strategicMatch[1];
-        questionData = strategicQuestions.find(q => q.id === questionId);
+
+      // Obter template da etapa
+      const template = getStepTemplate(stepType, stepId, questionData);
+      
+      if (!template.components || template.components.length === 0) {
+        console.warn(`⚠️ No template components for step ${stepId}`);
+        setState(prev => ({ ...prev, failedSteps: new Set(prev.failedSteps).add(stepId) }));
+        return false;
       }
-    }
-    
-    // Get the template for this step type
-    const template = getStepTemplate(stepType, stepId, questionData);
-    
-    // Add all template components to the step with proper ordering
-    const newElements: EditorElement[] = [];
-    
-    template.components.forEach((component, index) => {
-      const newElement: EditorElement = {
+
+      // Criar elementos do template
+      const newElements: EditorElement[] = template.components.map((component, index) => ({
         id: generateComponentId(stepId, component.type || 'unknown', index),
         type: component.type || 'text',
         content: component.content || {},
         position: { x: 0, y: 0 },
         size: { width: 100, height: 50 },
-        order: index, // Use index as order to ensure proper sequence
+        order: index,
         stepId,
         style: component.style || {}
-      };
-      
-      newElements.push(newElement);
-    });
-    
-    // Add all elements at once with proper state update
-    if (newElements.length > 0) {
-      setTimeout(() => {
-        setState(prev => {
-          const filteredElements = prev.elements.filter(el => el.stepId !== stepId);
-          const updatedElements = [...filteredElements, ...newElements].sort((a, b) => {
-            if (a.stepId === b.stepId) {
-              return a.order - b.order;
-            }
-            return 0;
-          });
-          
-          const newHistory = prev.history.slice(0, prev.historyIndex + 1);
-          newHistory.push(updatedElements);
-          
-          const newPopulatedSteps = new Set(prev.populatedSteps);
-          newPopulatedSteps.add(stepId);
-          
-          return {
-            ...prev,
-            elements: updatedElements,
-            history: newHistory,
-            historyIndex: newHistory.length - 1,
-            populatedSteps: newPopulatedSteps
-          };
+      }));
+
+      // Atualizar estado com novos elementos
+      setState(prev => {
+        const filteredElements = prev.elements.filter(el => el.stepId !== stepId);
+        const updatedElements = [...filteredElements, ...newElements].sort((a, b) => {
+          if (a.stepId === b.stepId) return a.order - b.order;
+          return 0;
         });
         
-        isPopulatingRef.current = false;
-        console.log(`Successfully auto-populated ${newElements.length} template components for step ${stepId}`);
-      }, 50);
-    } else {
+        const newHistory = prev.history.slice(0, prev.historyIndex + 1);
+        newHistory.push(updatedElements);
+        
+        const newPopulatedSteps = new Set(prev.populatedSteps);
+        newPopulatedSteps.add(stepId);
+        
+        return {
+          ...prev,
+          elements: updatedElements,
+          history: newHistory,
+          historyIndex: newHistory.length - 1,
+          populatedSteps: newPopulatedSteps
+        };
+      });
+
+      console.log(`✅ Successfully populated step ${stepId} with ${newElements.length} components`);
+      return true;
+      
+    } catch (error) {
+      console.error(`❌ Failed to populate step ${stepId}:`, error);
+      setState(prev => ({ ...prev, failedSteps: new Set(prev.failedSteps).add(stepId) }));
+      return false;
+    }
+  }, [state.populatedSteps, getQuestionData]);
+
+  // Auto-populate com Promise.all para inicialização sequencial
+  const autoPopulateStep = useCallback(async (stepId: string, stepType: string) => {
+    if (isPopulatingRef.current) {
+      console.log(`Population already in progress, queuing ${stepId}`);
+      return;
+    }
+
+    isPopulatingRef.current = true;
+    
+    try {
+      await populateStepSafely(stepId, stepType);
+    } finally {
       isPopulatingRef.current = false;
     }
-  }, [state.populatedSteps, cleanStepElements]);
+  }, [populateStepSafely]);
+
+  // Inicialização em lote para múltiplas etapas
+  const initializeSteps = useCallback(async (steps: Array<{ id: string; type: string }>) => {
+    if (state.isInitializing || initializationPromiseRef.current) {
+      await initializationPromiseRef.current;
+      return;
+    }
+
+    setState(prev => ({ ...prev, isInitializing: true }));
+    console.log(`🔄 Initializing ${steps.length} steps...`);
+
+    const initPromise = Promise.resolve().then(async () => {
+      const results = await Promise.allSettled(
+        steps.map(async (step, index) => {
+          // Pequeno delay entre etapas para evitar conflitos
+          await new Promise(resolve => setTimeout(resolve, index * 100));
+          return populateStepSafely(step.id, step.type);
+        })
+      );
+
+      const succeeded = results.filter(r => r.status === 'fulfilled' && r.value).length;
+      console.log(`✅ Initialization complete: ${succeeded}/${steps.length} steps populated successfully`);
+    });
+
+    initializationPromiseRef.current = initPromise;
+    
+    try {
+      await initPromise;
+    } finally {
+      setState(prev => ({ ...prev, isInitializing: false }));
+      initializationPromiseRef.current = null;
+    }
+  }, [state.isInitializing, populateStepSafely]);
+
+  // Função para retry de etapas falhadas
+  const retryFailedSteps = useCallback(async () => {
+    const failedStepsArray = Array.from(state.failedSteps);
+    if (failedStepsArray.length === 0) return;
+
+    console.log(`🔄 Retrying ${failedStepsArray.length} failed steps...`);
+    setState(prev => ({ ...prev, failedSteps: new Set() }));
+
+    for (const stepId of failedStepsArray) {
+      // Tentar determinar o tipo da etapa pelo ID
+      let stepType = 'quiz-question';
+      if (stepId.includes('intro')) stepType = 'quiz-intro';
+      else if (stepId.includes('strategic')) stepType = 'strategic-question';
+      else if (stepId.includes('transition')) stepType = 'quiz-transition';
+      else if (stepId.includes('result')) stepType = 'quiz-result';
+      else if (stepId.includes('offer')) stepType = 'offer-page';
+
+      await populateStepSafely(stepId, stepType);
+    }
+  }, [state.failedSteps, populateStepSafely]);
 
   const addElement = useCallback((type: string, content: any = {}, stepId: string) => {
     const stepElements = state.elements.filter(el => el.stepId === stepId);
@@ -176,17 +230,8 @@ export const useModernEditor = () => {
   }, [state.elements]);
 
   const addStepTemplate = useCallback((stepType: string, stepId: string) => {
-    debouncedAutoPopulate(stepId, stepType);
-  }, [debouncedAutoPopulate]);
-
-  // Reset populated steps (for debugging/testing)
-  const resetPopulatedSteps = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      populatedSteps: new Set(),
-      elements: []
-    }));
-  }, []);
+    autoPopulateStep(stepId, stepType);
+  }, [autoPopulateStep]);
 
   const updateElement = useCallback((id: string, updates: Partial<EditorElement>) => {
     setState(prev => {
@@ -299,22 +344,24 @@ export const useModernEditor = () => {
       .sort((a, b) => a.order - b.order);
   }, [state.elements]);
 
+  const resetPopulatedSteps = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      populatedSteps: new Set(),
+      failedSteps: new Set(),
+      elements: []
+    }));
+  }, []);
+
   const canUndo = useMemo(() => state.historyIndex > 0, [state.historyIndex]);
   const canRedo = useMemo(() => state.historyIndex < state.history.length - 1, [state.historyIndex, state.history.length]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (populationTimeoutRef.current) {
-        clearTimeout(populationTimeoutRef.current);
-      }
-    };
-  }, []);
 
   return {
     elements: state.elements,
     selectedElementId: state.selectedElementId,
     isPreviewMode: state.isPreviewMode,
+    isInitializing: state.isInitializing,
+    failedSteps: state.failedSteps,
     canUndo,
     canRedo,
     addElement,
@@ -329,6 +376,8 @@ export const useModernEditor = () => {
     save,
     getElementsByStep,
     autoPopulateStep,
+    initializeSteps,
+    retryFailedSteps,
     resetPopulatedSteps
   };
 };

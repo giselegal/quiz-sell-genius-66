@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ModernSidebar } from './sidebar/ModernSidebar';
 import { ModernCanvas } from './canvas/ModernCanvas';
@@ -8,6 +9,8 @@ import { useModernEditor } from '@/hooks/useModernEditor';
 import { useStepsManager } from '@/hooks/useStepsManager';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { toast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { RefreshCw, AlertCircle } from 'lucide-react';
 
 interface ModernVisualEditorProps {
   funnelId: string;
@@ -25,6 +28,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     elements,
     selectedElementId,
     isPreviewMode,
+    isInitializing,
+    failedSteps,
     canUndo,
     canRedo,
     addElement,
@@ -38,7 +43,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     redo,
     save,
     getElementsByStep,
-    autoPopulateStep,
+    initializeSteps,
+    retryFailedSteps,
     resetPopulatedSteps
   } = useModernEditor();
 
@@ -61,25 +67,31 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     getStepTypeInfo
   } = useStepsManager();
 
-  // Single initialization effect to prevent multiple executions
+  // Inicialização melhorada com Promise.all
   useEffect(() => {
     if (!hasInitializedRef.current && steps.length > 0) {
-      console.log('Initializing steps auto-population...');
+      console.log('🚀 Starting enhanced steps initialization...');
       hasInitializedRef.current = true;
       
-      // Use a timeout to ensure stable state before population
-      const initTimeout = setTimeout(() => {
-        steps.forEach((step, index) => {
-          setTimeout(() => {
-            console.log(`Auto-populating step ${index + 1}/${steps.length}: ${step.id} (${step.type})`);
-            autoPopulateStep(step.id, step.type);
-          }, index * 50); // Stagger population to prevent conflicts
+      // Preparar lista de etapas para inicialização
+      const stepsToInitialize = steps.map(step => ({
+        id: step.id,
+        type: step.type
+      }));
+      
+      // Usar a nova função de inicialização em lote
+      initializeSteps(stepsToInitialize).then(() => {
+        console.log('✅ All steps initialization completed');
+      }).catch((error) => {
+        console.error('❌ Steps initialization failed:', error);
+        toast({
+          title: "Erro na inicialização",
+          description: "Algumas etapas podem não ter sido carregadas corretamente.",
+          variant: "destructive"
         });
-      }, 200);
-
-      return () => clearTimeout(initTimeout);
+      });
     }
-  }, [steps, autoPopulateStep]);
+  }, [steps, initializeSteps]);
 
   const handleAddElement = (type: string) => {
     if (activeStepId) {
@@ -119,7 +131,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         return;
     }
     
-    // Add template elements for the new step with slight delay
+    // Adicionar template para a nova etapa
     setTimeout(() => {
       addStepTemplate(type, stepId);
     }, 100);
@@ -156,6 +168,23 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     updateElement(id, updates);
   };
 
+  const handleRetryFailed = () => {
+    retryFailedSteps();
+    toast({
+      title: "Tentando novamente",
+      description: "Recarregando etapas que falharam...",
+    });
+  };
+
+  const handleReset = () => {
+    resetPopulatedSteps();
+    hasInitializedRef.current = false;
+    toast({
+      title: "Reset realizado",
+      description: "Todas as etapas serão recarregadas...",
+    });
+  };
+
   // Get elements for active step with proper sorting
   const activeStepElements = activeStepId ? getElementsByStep(activeStepId) : [];
   const selectedElement = activeStepElements.find(el => el.id === selectedElementId);
@@ -188,6 +217,40 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         onViewportChange={setViewportSize}
         onSave={handleSave}
       />
+      
+      {/* Debug panel - mostrar apenas se há problemas */}
+      {(isInitializing || failedSteps.size > 0) && (
+        <div className="bg-blue-50 border-b border-blue-200 px-4 py-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {isInitializing && (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin text-blue-600" />
+                  <span className="text-sm text-blue-700">Carregando etapas...</span>
+                </>
+              )}
+              {failedSteps.size > 0 && (
+                <>
+                  <AlertCircle className="w-4 h-4 text-orange-600" />
+                  <span className="text-sm text-orange-700">
+                    {failedSteps.size} etapa(s) com problemas
+                  </span>
+                </>
+              )}
+            </div>
+            <div className="flex gap-2">
+              {failedSteps.size > 0 && (
+                <Button size="sm" variant="outline" onClick={handleRetryFailed}>
+                  Tentar Novamente
+                </Button>
+              )}
+              <Button size="sm" variant="outline" onClick={handleReset}>
+                Reset
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="flex-1 flex overflow-hidden">
         <StepsPanel

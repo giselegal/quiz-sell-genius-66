@@ -1,11 +1,42 @@
-
 import { EditorElement } from '@/hooks/useModernEditor';
 import { quizQuestions } from '@/data/quizQuestions';
 import { strategicQuestions } from '@/data/strategicQuestions';
+import { extractQuestionIdFromStepId } from '@/utils/idGenerator';
 
 export interface StepTemplate {
   components: Partial<EditorElement>[];
 }
+
+// Função para obter dados da questão de forma robusta
+const getQuestionDataById = (stepId: string, stepType: string) => {
+  const questionId = extractQuestionIdFromStepId(stepId);
+  
+  if (stepType === 'quiz-question' && questionId) {
+    const question = quizQuestions.find(q => q.id === questionId);
+    if (question) {
+      console.log(`✅ Found quiz question data for ID ${questionId}:`, question.title);
+      return question;
+    } else {
+      console.warn(`⚠️ Quiz question not found for ID ${questionId}`);
+      // Fallback para primeira questão se não encontrar
+      return quizQuestions[0];
+    }
+  } 
+  
+  if (stepType === 'strategic-question' && questionId) {
+    const question = strategicQuestions.find(q => q.id === questionId);
+    if (question) {
+      console.log(`✅ Found strategic question data for ID ${questionId}:`, question.title);
+      return question;
+    } else {
+      console.warn(`⚠️ Strategic question not found for ID ${questionId}`);
+      // Fallback para primeira questão estratégica se não encontrar
+      return strategicQuestions[0];
+    }
+  }
+  
+  return undefined;
+};
 
 export const createQuizIntroTemplate = (stepId: string): StepTemplate => {
   return {
@@ -68,8 +99,15 @@ export const createQuizIntroTemplate = (stepId: string): StepTemplate => {
 };
 
 export const createQuizQuestionTemplate = (stepId: string, questionData?: any): StepTemplate => {
-  const questionIndex = questionData ? parseInt(questionData.id) - 1 : 0;
-  const question = questionData || quizQuestions[questionIndex] || quizQuestions[0];
+  // Usar função robusta para obter dados da questão
+  const question = questionData || getQuestionDataById(stepId, 'quiz-question');
+  
+  if (!question) {
+    console.error(`❌ No question data available for quiz question step ${stepId}`);
+    return { components: [] };
+  }
+  
+  const questionIndex = parseInt(question.id) - 1;
   
   return {
     components: [
@@ -106,7 +144,7 @@ export const createQuizQuestionTemplate = (stepId: string, questionData?: any): 
       {
         type: 'question-options-grid',
         content: {
-          options: question.options,
+          options: question.options || [],
           layout: question.type === 'image' ? 'grid' : 'list',
           multiSelect: question.multiSelect > 1,
           maxSelections: question.multiSelect
@@ -129,8 +167,16 @@ export const createQuizQuestionTemplate = (stepId: string, questionData?: any): 
 };
 
 export const createStrategicQuestionTemplate = (stepId: string, questionData?: any): StepTemplate => {
-  const questionIndex = questionData ? parseInt(questionData.id.split('-')[1]) - 1 : 0;
-  const question = questionData || strategicQuestions[questionIndex] || strategicQuestions[0];
+  // Usar função robusta para obter dados da questão estratégica
+  const question = questionData || getQuestionDataById(stepId, 'strategic-question');
+  
+  if (!question) {
+    console.error(`❌ No question data available for strategic question step ${stepId}`);
+    return { components: [] };
+  }
+  
+  const questionIdParts = question.id.split('-');
+  const questionIndex = questionIdParts.length > 1 ? parseInt(questionIdParts[1]) - 1 : 0;
   
   return {
     components: [
@@ -168,7 +214,7 @@ export const createStrategicQuestionTemplate = (stepId: string, questionData?: a
       {
         type: 'question-option-card',
         content: {
-          options: question.options,
+          options: question.options || [],
           layout: 'list',
           multiSelect: false,
           maxSelections: 1
@@ -333,6 +379,8 @@ export const createOfferPageTemplate = (stepId: string): StepTemplate => {
 };
 
 export const getStepTemplate = (stepType: string, stepId: string, questionData?: any): StepTemplate => {
+  console.log(`🎯 Getting template for step ${stepId} of type ${stepType}`);
+  
   switch (stepType) {
     case 'quiz-intro':
       return createQuizIntroTemplate(stepId);
@@ -347,6 +395,7 @@ export const getStepTemplate = (stepType: string, stepId: string, questionData?:
     case 'offer-page':
       return createOfferPageTemplate(stepId);
     default:
+      console.warn(`⚠️ Unknown step type: ${stepType}`);
       return { components: [] };
   }
 };
