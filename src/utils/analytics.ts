@@ -1,5 +1,3 @@
-
-
 /**
  * Utilitários para tracking e analytics
  */
@@ -219,4 +217,3 @@ export const storeAnalyticsEvent = (event: any) => {
     console.error('Error storing analytics event:', error);
   }
 };
-
