@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,24 +6,23 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Edit3, Eye, Smartphone, Tablet, Monitor, Menu, X } from 'lucide-react';
-import { CanvasLayout, CanvasHeader, CanvasContent, EditableHeadingCanvas, EditableSpacerCanvas, EditableOptionsCanvas, EditableButtonCanvas, CanvasFooter } from '@/components/editor/CanvasLayout';
+import { CanvasLayout, CanvasHeader, CanvasContent, EditableHeadingCanvas, EditableSpacerCanvas, EditableButtonCanvas, CanvasFooter } from '@/components/editor/CanvasLayout';
 import { EditableImageOptions } from '@/components/editor/EditableImageOptions';
-import { OptionConfigurationPanel, StageConfigurationPanel } from '@/components/editor/ConfigurationPanel';
+import { OptionConfigurationPanel } from '@/components/editor/ConfigurationPanel';
 import { useSupabaseQuestions } from '@/hooks/useSupabaseQuestions';
 import { toast } from '@/components/ui/use-toast';
 
-// Import real quiz components for faithful layouts
+// Import existing components
 import QuizIntro from '@/components/QuizIntro';
 import QuizFinalTransition from '@/components/QuizFinalTransition';
-import QuizResult from '@/components/quiz/QuizResult';
-import QuizOffer from '@/components/quiz/QuizOffer';
+import QuizResult from '@/components/QuizResult';
+import QuizOfferPage from '@/components/QuizOfferPage';
 
 interface EditorPage {
   id: string;
   name: string;
   type: 'intro' | 'question' | 'transition-strategic' | 'strategic' | 'capture' | 'transition-result' | 'result' | 'offer';
   questionIndex?: number;
-  stepIndex?: number;
 }
 
 interface ModernVisualEditorProps {
@@ -33,6 +31,7 @@ interface ModernVisualEditorProps {
 }
 
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId, onSave }) => {
+  
   const [pages, setPages] = useState<EditorPage[]>([]);
   const [currentPageId, setCurrentPageId] = useState<string>('');
   const [showEditor, setShowEditor] = useState(true);
@@ -101,6 +100,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
     }
   });
 
+  // Initialize pages when Supabase data is loaded
   useEffect(() => {
     if (pages.length === 0 && !loading && (questions.length > 0 || strategicQuestions.length > 0)) {
       const newPages: EditorPage[] = [
@@ -128,7 +128,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
     }
   }, [questions.length, strategicQuestions.length, loading, pages.length]);
 
-  // Load saved config from localStorage
+  // Load saved configurations
   useEffect(() => {
     const savedIntroConfig = localStorage.getItem('editorCoverConfig');
     const savedOfferConfig = localStorage.getItem('editorOfferConfig');
@@ -171,7 +171,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
     setRealComponentConfig(newConfig);
     setHasUnsavedChanges(true);
     
-    // Save to localStorage
     if (section === 'intro') {
       localStorage.setItem('editorCoverConfig', JSON.stringify(newConfig.intro));
     } else if (section === 'offer') {
@@ -193,11 +192,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
     
     toast({
       title: "Quiz salvo com sucesso!",
-      description: "Todas as alterações foram salvas.",
+      description: "Todas as alterações foram salvas."
     });
   };
 
-  // Viewport dimensions for responsive preview
   const getViewportDimensions = () => {
     switch (viewportMode) {
       case 'mobile':
@@ -259,18 +257,31 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
       );
     }
 
-    if (error) {
-      return (
-        <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-            <div className="text-center">
-              <p className="text-red-600 mb-4">Erro ao carregar questões</p>
-              <p className="text-gray-600 text-sm">{error}</p>
-            </div>
-          </div>
-        </div>
-      );
-    }
+    // Mock data for results
+    const mockResults = [
+      {
+        category: 'Clássico Elegante',
+        percentage: 75,
+        description: 'Seu estilo reflete sofisticação e atemporalidade.',
+        characteristics: [
+          'Prefere peças básicas e versáteis',
+          'Valoriza qualidade sobre quantidade',
+          'Gosta de cores neutras e sóbrias'
+        ],
+        recommendations: [
+          'Invista em peças chave de boa qualidade',
+          'Combine texturas para criar interesse visual',
+          'Adicione acessórios clássicos ao look'
+        ]
+      },
+      {
+        category: 'Romântico Feminino',
+        percentage: 60,
+        description: 'Você adora detalhes delicados e femininos.',
+        characteristics: ['Gosta de estampas florais', 'Prefere silhuetas fluidas'],
+        recommendations: ['Use tecidos leves', 'Aposte em tons pastéis']
+      }
+    ];
 
     switch (currentPage.type) {
       case 'intro':
@@ -291,11 +302,23 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
           );
         }
         
+        // Canvas editável baseado na estrutura analisada com imagens responsivas
+        const realImageUrls = [
+          'https://cakto-quiz-br01.b-cdn.net/uploads/b2fefbd6-0e7d-4582-ba8b-2896addff401.png',
+          'https://cakto-quiz-br01.b-cdn.net/uploads/b15ba435-ffdf-4cc4-babf-db387ddd5966.png',
+          'https://cakto-quiz-br01.b-cdn.net/uploads/5932c580-f01e-4d7d-a205-fb28de5ac3ef.png',
+          'https://cakto-quiz-br01.b-cdn.net/uploads/41147537-a827-4186-b335-f927bfb60584.png',
+          'https://cakto-quiz-br01.b-cdn.net/uploads/bea71e05-26ef-457f-82e5-f1557f80f667.png',
+          'https://cakto-quiz-br01.b-cdn.net/uploads/a5839aa4-5fdd-4f28-9b5e-212f76bc7f8b.png',
+          'https://cakto-quiz-br01.b-cdn.net/uploads/1a64dd93-e81e-4c69-8e9a-a7929f61ec4c.png',
+          'https://cakto-quiz-br01.b-cdn.net/uploads/4f5b215c-b36c-429f-9006-14d957e6ddd0.png'
+        ];
+        
         const questionImageOptions = questionData.options?.map((option: any, index: number) => ({
           id: `option-${index}`,
-          label: String.fromCharCode(65 + index),
+          label: String.fromCharCode(65 + index), // A, B, C, etc.
           text: option.text,
-          imageUrl: option.imageUrl,
+          imageUrl: realImageUrls[index] || option.imageUrl,
           alt: `${String.fromCharCode(65 + index)}) ${option.text}`
         })) || [];
 
@@ -362,70 +385,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
         );
       
       case 'strategic':
-        const strategicIndex = currentPage.questionIndex || 0;
-        const strategicQuestion = strategicQuestions[strategicIndex];
         
-        if (!strategicQuestion) {
-          return (
-            <div className="min-h-screen bg-[#fffaf7] flex items-center justify-center p-4">
-              <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-xl font-bold text-center mb-4">Questão Estratégica {strategicIndex + 1}</h2>
-                <p className="text-center text-gray-600">Questão estratégica não encontrada</p>
-              </div>
-            </div>
-          );
-        }
-        
-        return (
-          <div className="min-h-screen bg-[#fffaf7] flex flex-col">
-            <div className="container mx-auto px-4 py-8 w-full max-w-5xl flex-1">
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <div className="text-center mb-6">
-                  <h1 className="text-2xl font-bold text-[#432818] mb-2">
-                    Questão Estratégica {strategicIndex + 1} de {strategicQuestions.length}
-                  </h1>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-[#D4AF37] h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${((strategicIndex + 1) / strategicQuestions.length) * 100}%` }}
-                    />
-                  </div>
-                </div>
-                
-                <h2 className="text-xl font-semibold text-[#432818] mb-6 text-center">
-                  {strategicQuestion.title}
-                </h2>
-                
-                <div className="space-y-3">
-                  {strategicQuestion.options?.map((option: any, index: number) => (
-                    <button
-                      key={index}
-                      className="w-full p-4 text-left border border-[#D4AF37] rounded-lg hover:bg-[#fff9e6] transition-colors"
-                    >
-                      <div className="flex items-center">
-                        <span className="font-semibold text-[#432818] mr-3">
-                          {String.fromCharCode(65 + index)})
-                        </span>
-                        <span className="text-[#3a3a3a]">{option.text}</span>
-                      </div>
-                    </button>
-                  )) || (
-                    <div className="text-center text-gray-500 py-8">
-                      Nenhuma opção disponível para esta questão
-                    </div>
-                  )}
-                </div>
-                
-                <div className="mt-8 text-center">
-                  <button className="bg-[#D4AF37] text-white px-8 py-3 rounded-lg hover:bg-[#b8941f] transition-colors">
-                    Continuar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      
       case 'transition-strategic':
         return <QuizFinalTransition onShowResult={() => console.log('Show strategic questions')} />;
       
@@ -459,33 +419,23 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
       case 'result':
         return (
           <QuizResult
-            results={[
+            primaryStyle={{
+              category: 'Clássico Elegante',
+              percentage: 75
+            }}
+            secondaryStyles={[
               {
-                category: 'Clássico Elegante',
-                percentage: 75,
-                description: 'Seu estilo reflete sofisticação e atemporalidade.',
-                characteristics: [
-                  'Prefere peças básicas e versáteis',
-                  'Valoriza qualidade sobre quantidade',
-                  'Gosta de cores neutras e sóbrias'
-                ],
-                recommendations: [
-                  'Invista em peças chave de boa qualidade',
-                  'Combine texturas para criar interesse visual',
-                  'Adicione acessórios clássicos ao look'
-                ]
+                category: 'Romântico Feminino',
+                percentage: 60
               }
             ]}
-            userName="Preview User"
-            onRestart={() => {}}
-            onShare={() => {}}
-            onDownload={() => {}}
+            onReset={() => {}}
           />
         );
       
       case 'offer':
         return (
-          <QuizOffer
+          <QuizOfferPage
             onAccept={() => {}}
             onDecline={() => {}}
           />
@@ -496,193 +446,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
     }
   };
 
-  const renderEditorPanel = () => {
-    if (!currentPage) return null;
-
-    switch (currentPage.type) {
-      case 'intro':
-        return (
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Editar Introdução do Quiz</h3>
-            
-            <div>
-              <Label htmlFor="intro-title">Título Principal</Label>
-              <Textarea
-                id="intro-title"
-                value={realComponentConfig.intro.title}
-                onChange={(e) => updateRealComponentConfig('intro', 'title', e.target.value)}
-                rows={2}
-                className="mt-1"
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="intro-subtitle">Subtítulo</Label>
-              <Textarea
-                id="intro-subtitle"
-                value={realComponentConfig.intro.subtitle}
-                onChange={(e) => updateRealComponentConfig('intro', 'subtitle', e.target.value)}
-                rows={2}
-                className="mt-1"
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="intro-description">Descrição</Label>
-              <Textarea
-                id="intro-description"
-                value={realComponentConfig.intro.description}
-                onChange={(e) => updateRealComponentConfig('intro', 'description', e.target.value)}
-                rows={3}
-                className="mt-1"
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="intro-button-text">Texto do Botão</Label>
-              <Input
-                id="intro-button-text"
-                value={realComponentConfig.intro.buttonText}
-                onChange={(e) => updateRealComponentConfig('intro', 'buttonText', e.target.value)}
-                className="mt-1"
-              />
-            </div>
-            
-            <Separator />
-            <h4 className="font-semibold">Imagens</h4>
-            
-            <div>
-              <Label htmlFor="intro-logo">URL da Logo</Label>
-              <Input
-                id="intro-logo"
-                value={realComponentConfig.intro.logoImage}
-                onChange={(e) => updateRealComponentConfig('intro', 'logoImage', e.target.value)}
-                placeholder="https://..."
-                className="mt-1"
-              />
-              <div className="mt-2">
-                <img 
-                  src={realComponentConfig.intro.logoImage} 
-                  alt="Logo preview" 
-                  className="h-12 object-contain border rounded"
-                  onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/120x50/ccc/666?text=Logo' }}
-                />
-              </div>
-            </div>
-            
-            <Separator />
-            <h4 className="font-semibold">Cores</h4>
-            
-            <div>
-              <Label htmlFor="intro-bg-color">Cor de Fundo</Label>
-              <div className="flex gap-2 mt-1">
-                <Input
-                  type="color"
-                  value={realComponentConfig.intro.backgroundColor}
-                  onChange={(e) => updateRealComponentConfig('intro', 'backgroundColor', e.target.value)}
-                  className="w-16 h-10"
-                />
-                <Input
-                  value={realComponentConfig.intro.backgroundColor}
-                  onChange={(e) => updateRealComponentConfig('intro', 'backgroundColor', e.target.value)}
-                />
-              </div>
-            </div>
-            
-            <div>
-              <Label htmlFor="intro-button-color">Cor do Botão</Label>
-              <div className="flex gap-2 mt-1">
-                <Input
-                  type="color"
-                  value={realComponentConfig.intro.buttonColor}
-                  onChange={(e) => updateRealComponentConfig('intro', 'buttonColor', e.target.value)}
-                  className="w-16 h-10"
-                />
-                <Input
-                  value={realComponentConfig.intro.buttonColor}
-                  onChange={(e) => updateRealComponentConfig('intro', 'buttonColor', e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'question':
-      case 'strategic':
-        const questionIndex = currentPage.questionIndex || 0;
-        const isStrategic = currentPage.type === 'strategic';
-        const questionData = isStrategic ? strategicQuestions[questionIndex] : questions[questionIndex];
-        
-        return (
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">
-              Editar {isStrategic ? 'Questão Estratégica' : 'Questão'} {questionIndex + 1}
-            </h3>
-            
-            <div>
-              <Label htmlFor="question-title">Título da Questão</Label>
-              <Textarea
-                id="question-title"
-                value={questionData?.title || ''}
-                onChange={(e) => {
-                  console.log('Updating question:', e.target.value);
-                  setHasUnsavedChanges(true);
-                }}
-                rows={2}
-                className="mt-1"
-                placeholder="Digite o título da questão..."
-              />
-            </div>
-
-            <Separator />
-            <h4 className="font-semibold">Opções de Resposta</h4>
-            
-            {questionData?.options?.map((option, index) => (
-              <div key={index} className="space-y-2">
-                <Label htmlFor={`option-${index}`}>
-                  Opção {String.fromCharCode(65 + index)}
-                </Label>
-                <Textarea
-                  id={`option-${index}`}
-                  value={option.text || ''}
-                  onChange={(e) => {
-                    console.log(`Updating option ${index}:`, e.target.value);
-                    setHasUnsavedChanges(true);
-                  }}
-                  rows={2}
-                  className="mt-1"
-                  placeholder={`Digite a opção ${String.fromCharCode(65 + index)}...`}
-                />
-                {option.imageUrl && (
-                  <div className="mt-2">
-                    <img 
-                      src={option.imageUrl} 
-                      alt={`Option ${index} preview`} 
-                      className="h-20 w-20 object-cover border rounded"
-                      onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/80x80/ccc/666?text=Img' }}
-                    />
-                  </div>
-                )}
-              </div>
-            )) || (
-              <div className="text-gray-500 text-center p-4">
-                Nenhuma opção encontrada para esta questão
-              </div>
-            )}
-          </div>
-        );
-
-      default:
-        return (
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Editor em desenvolvimento</h3>
-            <p className="text-sm text-gray-600">
-              Este tipo de componente ainda não possui editor personalizado.
-            </p>
-          </div>
-        );
-    }
-  };
+  
 
   const { width, height } = getViewportDimensions();
 
@@ -746,8 +510,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
         {/* Header */}
         <div className="bg-white border-b border-gray-200 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0">
-            <h1 className="font-semibold text-xl lg:block hidden">Editor Visual Quiz</h1>
-            <h1 className="font-semibold text-lg lg:hidden">Quiz Editor</h1>
+            <h1 className="font-semibold text-xl lg:block hidden">Editor CaktoQuiz</h1>
+            <h1 className="font-semibold text-lg lg:hidden">CaktoQuiz</h1>
             <div className="text-sm text-gray-600 truncate">
               {currentPage?.name} - {currentPage?.type}
             </div>
@@ -783,32 +547,36 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
               disabled={!hasUnsavedChanges}
               size="sm"
             >
-              Salvar Quiz
+              Salvar
             </Button>
           </div>
         </div>
 
-        {/* Main Content Area */}
+        {/* Content Area */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Canvas Area */}
-          <div className="flex-1 overflow-auto bg-gray-50">
-            <div 
-              className="mx-auto bg-white shadow-lg min-h-full"
-              style={{ 
-                width: width,
-                height: viewportMode === 'desktop' ? 'auto' : height,
-                maxWidth: viewportMode === 'desktop' ? '100%' : width
-              }}
-            >
+          {/* Preview Area */}
+          <div 
+            className="flex-1 bg-gray-50 overflow-auto"
+            style={{ 
+              maxWidth: viewportMode === 'desktop' ? '100%' : width,
+              maxHeight: viewportMode === 'desktop' ? '100%' : height 
+            }}
+          >
+            <div className="w-full h-full">
               {renderCurrentComponent()}
             </div>
           </div>
 
-          {/* Properties Panel */}
+          {/* Editor Panel */}
           {showEditor && (
             <div className="w-80 bg-white border-l border-gray-200 overflow-auto">
               <div className="p-4">
-                {renderEditorPanel()}
+                <h3 className="font-semibold text-lg mb-4">Editor de Propriedades</h3>
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-600">
+                    Selecione um componente no preview para editar suas propriedades.
+                  </p>
+                </div>
               </div>
             </div>
           )}
@@ -822,10 +590,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({ funnelId
         onClose={() => {
           setShowOptionConfig(false);
           setSelectedOptionId(null);
-        }}
-        onUpdate={(optionId, field, value) => {
-          console.log('Option config updated:', optionId, field, value);
-          setHasUnsavedChanges(true);
         }}
       />
     </div>
