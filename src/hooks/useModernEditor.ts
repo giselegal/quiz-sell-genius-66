@@ -1,7 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { getStepTemplate } from '@/utils/stepTemplates';
-import { quizQuestions } from '@/data/quizQuestions';
-import { strategicQuestions } from '@/data/strategicQuestions';
+import { useSupabaseQuestions } from '@/hooks/useSupabaseQuestions';
 import { generateComponentId, extractQuestionIdFromStepId } from '@/utils/idGenerator';
 
 export interface EditorElement {
@@ -40,19 +39,22 @@ export const useModernEditor = () => {
 
   const isPopulatingRef = useRef(false);
   const initializationPromiseRef = useRef<Promise<void> | null>(null);
+  
+  // Usar dados do Supabase
+  const { questions, strategicQuestions } = useSupabaseQuestions();
 
   // Função para buscar dados da questão baseado no stepId
   const getQuestionData = useCallback((stepId: string, stepType: string) => {
     const questionId = extractQuestionIdFromStepId(stepId);
     
     if (stepType === 'quiz-question' && questionId) {
-      return quizQuestions.find(q => q.id === questionId);
+      return questions.find(q => q.id === questionId);
     } else if (stepType === 'strategic-question' && questionId) {
       return strategicQuestions.find(q => q.id === questionId);
     }
     
     return undefined;
-  }, []);
+  }, [questions, strategicQuestions]);
 
   // Função melhorada para popular uma etapa específica
   const populateStepSafely = useCallback(async (stepId: string, stepType: string): Promise<boolean> => {
