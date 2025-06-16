@@ -11,7 +11,8 @@ import {
   VisualElement, 
   VisualStage, 
   BlockType, 
-  ElementUpdate 
+  ElementUpdate,
+  QuestionOption
 } from '@/types/visualEditor';
 
 interface ModernVisualEditorProps {
@@ -116,7 +117,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           options: [
             { id: 'opt1', text: 'Opção 1', styleCategory: 'Natural', points: 1 },
             { id: 'opt2', text: 'Opção 2', styleCategory: 'Clássico', points: 1 }
-          ],
+          ] as QuestionOption[],
           multiSelect: false
         };
       default:
@@ -263,7 +264,16 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     multiSelect: 1,
     options: editorState.elements
       .filter(el => el.stageId === activeStage.id && el.type === 'question-options')
-      .flatMap(el => el.content.options || [])
+      .flatMap(el => {
+        const options = el.content.options;
+        if (Array.isArray(options) && options.length > 0) {
+          // Check if it's QuestionOption[] or string[]
+          if (typeof options[0] === 'object' && 'id' in options[0]) {
+            return options as QuestionOption[];
+          }
+        }
+        return [];
+      })
   } : undefined;
 
   return (
