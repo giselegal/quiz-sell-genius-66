@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { 
   Type, 
   Image, 
-  ButtonIcon, 
+  MousePointer, 
   Layout,
   Video,
   Star,
@@ -41,7 +41,7 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
     {
       title: 'Interação',
       components: [
-        { type: 'button', label: 'Botão', icon: ButtonIcon, description: 'Botão de ação' },
+        { type: 'button', label: 'Botão', icon: MousePointer, description: 'Botão de ação' },
         { type: 'cta', label: 'CTA', icon: ShoppingCart, description: 'Call to Action' },
         { type: 'form', label: 'Formulário', icon: Layout, description: 'Campos de entrada' },
       ]

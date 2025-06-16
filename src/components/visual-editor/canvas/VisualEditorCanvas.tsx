@@ -2,7 +2,7 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ElementRenderer } from './ElementRenderer';
+import { VisualElementRenderer } from './VisualElementRenderer';
 import { VisualElement, VisualStage, BlockType } from '@/types/visualEditor';
 import { Edit3 } from 'lucide-react';
 
@@ -145,7 +145,7 @@ export const VisualEditorCanvas: React.FC<VisualEditorCanvasProps> = ({
                       <div className="h-0.5 bg-blue-500 mx-4 mb-2" />
                     )}
 
-                    <ElementRenderer
+                    <VisualElementRenderer
                       element={element}
                       isSelected={selectedElementId === element.id}
                       isPreviewMode={isPreviewMode}
