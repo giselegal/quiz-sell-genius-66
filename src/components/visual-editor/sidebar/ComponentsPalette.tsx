@@ -1,12 +1,13 @@
 
 import React from 'react';
 import { ComponentItem } from '../../unified-editor/sidebar/ComponentItem';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { 
   Type, 
   Image, 
   Button as ButtonIcon, 
   Layout,
-  Separator,
   Video,
   Star,
   ShoppingCart,
@@ -65,7 +66,7 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
     {
       title: 'Layout',
       components: [
-        { type: 'divider', label: 'Divisor', icon: Separator, description: 'Linha separadora' },
+        { type: 'divider', label: 'Divisor', icon: Layout, description: 'Linha separadora' },
         { type: 'spacer', label: 'Espaço', icon: Layout, description: 'Espaçamento vertical' },
         { type: 'container', label: 'Container', icon: Layout, description: 'Agrupamento' },
       ]
