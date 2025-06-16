@@ -1,91 +1,39 @@
 
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthLayout } from '@/layouts/AuthLayout';
-import { AdminLayout } from '@/layouts/AdminLayout';
-import LoginPage from '@/pages/LoginPage';
-import RegisterPage from '@/pages/RegisterPage';
-import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
-import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import HomePage from '@/pages/HomePage';
 import NotFoundPage from '@/pages/NotFoundPage';
-import DashboardPage from '@/pages/DashboardPage';
-import QuizBuilderPage from '@/pages/QuizBuilderPage';
-import AnalyticsPage from '@/pages/AnalyticsPage';
-import CreativesPage from '@/pages/CreativesPage';
-import SettingsPage from '@/pages/SettingsPage';
-import EditorPage from '@/pages/EditorPage';
 import QuizPage from '@/components/QuizPage';
 import QuizDescubraSeuEstilo from '@/pages/quiz-descubra-seu-estilo';
 import ResultPage from '@/pages/ResultPage';
-import QuizOfferPage from '@/pages/QuizOfferPage';
-import QuizEditorPage from '@/pages/QuizEditorPage';
-import LiveEditorPage from '@/pages/LiveEditorPage';
-import ResultPageEditorPage from '@/pages/ResultPageEditorPage';
-import ABTestPage from '@/pages/ABTestPage';
-import QuizIntro from '@/components/QuizIntro';
-import InLeadEditorPage from '@/pages/InLeadEditorPage';
 import UnifiedEditorPage from '@/pages/UnifiedEditorPage';
-import VisualEditorPage from '@/pages/VisualEditorPage';
-import ResultVisualEditorPage from '@/pages/ResultVisualEditorPage';
-import EditorsHubPage from '@/pages/EditorsHubPage';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import QuizIntro from '@/components/QuizIntro';
 
 function App() {
-  console.log('🚀 App component rendering - Router context should be available');
+  console.log('🚀 App component rendering - Simplified SPA routes');
   
   return (
     <div className="min-h-screen bg-gray-50">
       <Routes>
-        <Route
-          path="/login"
-          element={<AuthLayout><LoginPage /></AuthLayout>}
-        />
-        <Route
-          path="/register"
-          element={<AuthLayout><RegisterPage /></AuthLayout>}
-        />
-        <Route
-          path="/forgot-password"
-          element={<AuthLayout><ForgotPasswordPage /></AuthLayout>}
-        />
-        <Route
-          path="/reset-password/:token"
-          element={<AuthLayout><ResetPasswordPage /></AuthLayout>}
-        />
+        {/* Rota principal - Quiz Intro */}
         <Route path="/" element={<QuizIntro onStart={(nome: string, email?: string) => {
           console.log('Quiz started:', nome, email);
         }} />} />
-        <Route path="/home" element={<HomePage />} />
+        
+        {/* Quiz principal */}
         <Route path="/quiz" element={<QuizPage />} />
+        
+        {/* Quiz específico de estilo */}
         <Route path="/quiz-descubra-seu-estilo" element={<QuizDescubraSeuEstilo />} />
         <Route path="/descubra-seu-estilo" element={<QuizDescubraSeuEstilo />} />
+        
+        {/* Página de resultados */}
         <Route path="/resultado" element={<ResultPage />} />
         
-        {/* Editores na Raiz - Acesso Direto */}
-        <Route path="/editors" element={<EditorsHubPage />} />
+        {/* Editor unificado */}
         <Route path="/unified-editor" element={<UnifiedEditorPage />} />
-        <Route path="/visual-editor" element={<VisualEditorPage />} />
-        <Route path="/result-visual-editor" element={<ResultVisualEditorPage />} />
-        <Route path="/inlead-editor" element={<InLeadEditorPage />} />
-        <Route path="/quiz-editor" element={<QuizEditorPage />} />
-        <Route path="/live-editor" element={<LiveEditorPage />} />
-        <Route path="/result-editor" element={<ResultPageEditorPage />} />
         
-        <Route path="/quiz-offer" element={<QuizOfferPage />} />
-        
-        {/* Rotas Admin Protegidas */}
-        <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
-          <Route index element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="quiz-builder" element={<QuizBuilderPage />} />
-          <Route path="analytics" element={<AnalyticsPage />} />
-          <Route path="creatives" element={<CreativesPage />} />
-          <Route path="settings" element={<SettingsPage />} />
-          <Route path="editor" element={<EditorPage />} />
-          <Route path="ab-test" element={<ABTestPage />} />
-        </Route>
-        
+        {/* 404 para rotas não encontradas */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>

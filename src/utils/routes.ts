@@ -1,64 +1,23 @@
 
 export const ROUTES = {
-  // Rotas públicas principais
+  // Rotas principais do SPA
   HOME: '/',
+  QUIZ: '/quiz',
   RESULTADO: '/resultado',
   DESCUBRA_SEU_ESTILO: '/descubra-seu-estilo',
   QUIZ_DESCUBRA_SEU_ESTILO: '/quiz-descubra-seu-estilo',
-  QUIZ: '/quiz',
-  
-  // Editores na Raiz
-  EDITORS: {
-    HUB: '/editors',
-    UNIFIED: '/unified-editor',
-    VISUAL: '/visual-editor',
-    RESULT_VISUAL: '/result-visual-editor',
-    INLEAD: '/inlead-editor',
-    QUIZ: '/quiz-editor',
-    LIVE: '/live-editor',
-    RESULT: '/result-editor'
-  },
-  
-  // Rotas administrativas
-  ADMIN: {
-    ROOT: '/admin',
-    DASHBOARD: '/admin',
-    QUIZ: '/admin/quiz',
-    AB_TESTS: '/admin/ab-tests',
-    SETTINGS: '/admin/settings',
-    CRIATIVOS: '/admin/criativos',
-    ANALYTICS: '/admin/analytics',
-    EDITOR: '/admin/editor'
-  }
+  UNIFIED_EDITOR: '/unified-editor'
 }
 
 export function isValidRoute(path: string): boolean {
-  const allRoutes = [
+  const validRoutes = [
     ROUTES.HOME,
+    ROUTES.QUIZ,
     ROUTES.RESULTADO,
     ROUTES.DESCUBRA_SEU_ESTILO,
     ROUTES.QUIZ_DESCUBRA_SEU_ESTILO,
-    ROUTES.QUIZ,
-    ...Object.values(ROUTES.EDITORS),
-    ROUTES.ADMIN.ROOT,
-    ROUTES.ADMIN.DASHBOARD,
-    ROUTES.ADMIN.QUIZ,
-    ROUTES.ADMIN.AB_TESTS,
-    ROUTES.ADMIN.SETTINGS,
-    ROUTES.ADMIN.CRIATIVOS,
-    ROUTES.ADMIN.ANALYTICS,
-    ROUTES.ADMIN.EDITOR
+    ROUTES.UNIFIED_EDITOR
   ];
   
-  // Verificar rotas exatas
-  if (allRoutes.includes(path)) {
-    return true;
-  }
-  
-  // Verificar rotas admin com wildcards
-  if (path.startsWith('/admin/') && path.length > '/admin/'.length) {
-    return true;
-  }
-  
-  return false;
+  return validRoutes.includes(path);
 }
