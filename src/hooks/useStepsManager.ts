@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
-import { quizQuestions } from '@/data/quizQuestions';
-import { strategicQuestions } from '@/data/strategicQuestions';
+
+import { useState, useCallback, useEffect } from 'react';
+import { useSupabaseQuestions } from '@/hooks/useSupabaseQuestions';
 
 export type StepType = 'quiz-intro' | 'quiz-question' | 'strategic-question' | 'quiz-transition' | 'quiz-result' | 'offer-page';
 
@@ -10,7 +10,7 @@ interface Step {
   type: StepType;
   order: number;
   subType?: string;
-  questionData?: any; // Para armazenar dados da questão
+  questionData?: any;
   templateComponents?: string[];
   settings?: {
     questionType?: 'multiple-choice' | 'single-choice' | 'scale' | 'text';
@@ -20,9 +20,11 @@ interface Step {
   };
 }
 
-const generateAllQuizSteps = (): Step[] => {
+const generateStepsFromSupabase = (questions: any[], strategicQuestions: any[]): Step[] => {
   const steps: Step[] = [];
   let order = 0;
+
+  console.log('🔄 Generating steps from Supabase data', { questions: questions.length, strategicQuestions: strategicQuestions.length });
 
   // 1. Capa do Quiz
   steps.push({
@@ -34,14 +36,14 @@ const generateAllQuizSteps = (): Step[] => {
     settings: { showProgress: false, allowBack: false }
   });
 
-  // 2. Questões Normais (1-10) - com dados reais das questões
-  quizQuestions.forEach((question, index) => {
+  // 2. Questões Normais (1-10)
+  questions.forEach((question, index) => {
     steps.push({
       id: `step-question-${question.id}`,
       title: `Questão ${index + 1}`,
       type: 'quiz-question',
       order: order++,
-      questionData: question, // Dados reais da questão
+      questionData: question,
       templateComponents: [],
       settings: {
         questionType: 'multiple-choice',
@@ -61,14 +63,14 @@ const generateAllQuizSteps = (): Step[] => {
     settings: { showProgress: true, allowBack: true }
   });
 
-  // 4. Questões Estratégicas (1-7) - com dados reais das questões
+  // 4. Questões Estratégicas
   strategicQuestions.forEach((question, index) => {
     steps.push({
       id: `step-strategic-${question.id}`,
       title: `Questão Estratégica ${index + 1}`,
       type: 'strategic-question',
       order: order++,
-      questionData: question, // Dados reais da questão estratégica
+      questionData: question,
       templateComponents: [],
       settings: {
         questionType: 'single-choice',
@@ -108,12 +110,36 @@ const generateAllQuizSteps = (): Step[] => {
     settings: { showProgress: false, allowBack: true }
   });
 
+  console.log('✅ Generated steps from Supabase:', steps.length);
   return steps;
 };
 
 export const useStepsManager = () => {
-  const [steps, setSteps] = useState<Step[]>(generateAllQuizSteps());
+  const [steps, setSteps] = useState<Step[]>([]);
   const [activeStepId, setActiveStepId] = useState<string>('step-intro');
+  const [isInitialized, setIsInitialized] = useState(false);
+  
+  const { questions, strategicQuestions, loading, error } = useSupabaseQuestions();
+
+  // Gerar etapas quando os dados do Supabase estiverem disponíveis
+  useEffect(() => {
+    if (!loading && !error && (questions.length > 0 || strategicQuestions.length > 0) && !isInitialized) {
+      console.log('🚀 Initializing steps with Supabase data');
+      const generatedSteps = generateStepsFromSupabase(questions, strategicQuestions);
+      setSteps(generatedSteps);
+      setIsInitialized(true);
+    }
+  }, [questions, strategicQuestions, loading, error, isInitialized]);
+
+  // Fallback para dados locais se Supabase falhar
+  useEffect(() => {
+    if (!loading && error && !isInitialized) {
+      console.warn('⚠️ Supabase failed, using fallback empty steps');
+      const fallbackSteps = generateStepsFromSupabase([], []);
+      setSteps(fallbackSteps);
+      setIsInitialized(true);
+    }
+  }, [loading, error, isInitialized]);
 
   const getStepTypeInfo = (type: StepType) => {
     switch (type) {
@@ -185,7 +211,7 @@ export const useStepsManager = () => {
       title: `Nova ${typeInfo.label}`,
       type,
       order: newStepNumber,
-      questionData, // Incluir dados da questão se fornecidos
+      questionData,
       templateComponents: [],
       settings: {
         questionType: type === 'quiz-question' ? 'multiple-choice' : 'single-choice',
@@ -271,15 +297,16 @@ export const useStepsManager = () => {
   const activeStep = steps.find(step => step.id === activeStepId);
 
   const resetToDefaultSteps = useCallback(() => {
-    const defaultSteps = generateAllQuizSteps();
+    const defaultSteps = generateStepsFromSupabase(questions, strategicQuestions);
     setSteps(defaultSteps);
     setActiveStepId('step-intro');
-  }, []);
+  }, [questions, strategicQuestions]);
 
   return {
     steps,
     activeStepId,
     activeStep,
+    isInitialized,
     addStep,
     addQuizIntroStep,
     addQuizQuestionStep,

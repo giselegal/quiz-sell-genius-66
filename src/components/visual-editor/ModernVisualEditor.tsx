@@ -5,6 +5,7 @@ import { ModernCanvas } from './canvas/ModernCanvas';
 import { ModernToolbar } from './toolbar/ModernToolbar';
 import { StepsPanel } from './steps/StepsPanel';
 import { ModernPropertiesPanel } from './properties/ModernPropertiesPanel';
+import { EditorDebugPanel } from './debug/EditorDebugPanel';
 import { useModernEditor } from '@/hooks/useModernEditor';
 import { useStepsManager } from '@/hooks/useStepsManager';
 import { useSupabaseQuestions } from '@/hooks/useSupabaseQuestions';
@@ -12,7 +13,7 @@ import { setQuestionsCache } from '@/utils/stepTemplates';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-import { RefreshCw, AlertCircle, Database } from 'lucide-react';
+import { RefreshCw, AlertCircle, Database, Bug } from 'lucide-react';
 
 interface ModernVisualEditorProps {
   funnelId: string;
@@ -24,6 +25,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   onSave
 }) => {
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('lg');
+  const [isDebugVisible, setIsDebugVisible] = useState(false);
   const hasInitializedRef = useRef(false);
 
   // Hook para questões do Supabase
@@ -62,6 +64,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     steps,
     activeStepId,
     activeStep,
+    isInitialized: stepsInitialized,
     addQuizIntroStep,
     addQuizQuestionStep,
     addStrategicQuestionStep,
@@ -85,25 +88,36 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   }, [supabaseQuestions, supabaseStrategicQuestions]);
 
-  // Inicialização melhorada aguardando questões do Supabase
+  // Inicialização sequencial aguardando tanto questões quanto etapas
   useEffect(() => {
-    if (!hasInitializedRef.current && 
-        steps.length > 0 && 
-        !questionsLoading && 
-        (supabaseQuestions.length > 0 || supabaseStrategicQuestions.length > 0)) {
+    const shouldInitialize = !hasInitializedRef.current && 
+                            stepsInitialized && 
+                            steps.length > 0 && 
+                            !questionsLoading;
+
+    if (shouldInitialize) {
+      console.log('🚀 Starting enhanced steps initialization...', {
+        stepsCount: steps.length,
+        questionsCount: supabaseQuestions.length,
+        strategicCount: supabaseStrategicQuestions.length
+      });
       
-      console.log('🚀 Starting enhanced steps initialization with Supabase data...');
       hasInitializedRef.current = true;
       
-      // Preparar lista de etapas para inicialização
+      // Preparar lista de etapas para inicialização com dados das questões
       const stepsToInitialize = steps.map(step => ({
         id: step.id,
-        type: step.type
+        type: step.type,
+        questionData: step.questionData // Incluir dados da questão se disponível
       }));
       
       // Usar a nova função de inicialização em lote
       initializeSteps(stepsToInitialize).then(() => {
-        console.log('✅ All steps initialization completed with Supabase data');
+        console.log('✅ All steps initialization completed');
+        toast({
+          title: "Editor carregado",
+          description: "Todas as etapas foram inicializadas com sucesso.",
+        });
       }).catch((error) => {
         console.error('❌ Steps initialization failed:', error);
         toast({
@@ -113,7 +127,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         });
       });
     }
-  }, [steps, initializeSteps, questionsLoading, supabaseQuestions, supabaseStrategicQuestions]);
+  }, [steps, stepsInitialized, initializeSteps, questionsLoading, supabaseQuestions, supabaseStrategicQuestions]);
 
   const handleAddElement = (type: string) => {
     if (activeStepId) {
@@ -240,8 +254,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         onSave={handleSave}
       />
       
-      {/* Status panel - mostrar carregamento do Supabase e problemas */}
-      {(questionsLoading || isInitializing || failedSteps.size > 0 || questionsError) && (
+      {/* Status panel melhorado */}
+      {(questionsLoading || isInitializing || !stepsInitialized || failedSteps.size > 0 || questionsError) && (
         <div className="bg-blue-50 border-b border-blue-200 px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -251,10 +265,16 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   <span className="text-sm text-blue-700">Carregando questões do Supabase...</span>
                 </>
               )}
-              {!questionsLoading && isInitializing && (
+              {!questionsLoading && !stepsInitialized && (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin text-blue-600" />
-                  <span className="text-sm text-blue-700">Inicializando etapas com dados do Supabase...</span>
+                  <span className="text-sm text-blue-700">Inicializando etapas...</span>
+                </>
+              )}
+              {!questionsLoading && stepsInitialized && isInitializing && (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin text-blue-600" />
+                  <span className="text-sm text-blue-700">Carregando templates...</span>
                 </>
               )}
               {questionsError && (
@@ -271,11 +291,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   </span>
                 </>
               )}
-              {!questionsLoading && !isInitializing && !questionsError && (
+              {!questionsLoading && stepsInitialized && !isInitializing && !questionsError && (
                 <div className="flex items-center gap-2">
                   <Database className="w-4 h-4 text-green-600" />
                   <span className="text-sm text-green-700">
-                    {supabaseQuestions.length} questões e {supabaseStrategicQuestions.length} questões estratégicas carregadas
+                    ✅ {steps.length} etapas | {supabaseQuestions.length} questões | {supabaseStrategicQuestions.length} estratégicas
                   </span>
                 </div>
               )}
@@ -288,6 +308,13 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               )}
               <Button size="sm" variant="outline" onClick={handleReset}>
                 Reset
+              </Button>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                onClick={() => setIsDebugVisible(!isDebugVisible)}
+              >
+                <Bug className="w-3 h-3" />
               </Button>
             </div>
           </div>
@@ -345,6 +372,15 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
+
+      {/* Debug Panel */}
+      <EditorDebugPanel
+        steps={steps}
+        activeStepId={activeStepId}
+        elements={elements}
+        isVisible={isDebugVisible}
+        onToggle={() => setIsDebugVisible(!isDebugVisible)}
+      />
     </div>
   );
 };

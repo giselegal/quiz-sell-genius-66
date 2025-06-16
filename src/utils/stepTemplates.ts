@@ -1,5 +1,5 @@
 import { EditorElement } from '@/hooks/useModernEditor';
-import { getQuestionByStepId } from '@/utils/supabaseQuestionMapper';
+import { getQuestionByStepId, validateQuestionData } from '@/utils/supabaseQuestionMapper';
 
 export interface StepTemplate {
   components: Partial<EditorElement>[];
@@ -23,14 +23,41 @@ const getQuestionDataById = (stepId: string, stepType: string) => {
   // Usar cache se disponível
   if (questionsCache.length > 0 || strategicQuestionsCache.length > 0) {
     const question = getQuestionByStepId(stepId, questionsCache, strategicQuestionsCache);
-    if (question) {
-      console.log(`✅ Found cached question data for ${stepId}:`, question.title);
+    if (question && validateQuestionData(stepId, question)) {
+      console.log(`✅ Found and validated cached question data for ${stepId}:`, question.title);
       return question;
     }
   }
   
-  console.warn(`⚠️ No cached question data found for step ${stepId}`);
+  console.warn(`⚠️ No valid cached question data found for step ${stepId}`);
   return null;
+};
+
+// Função para gerar componente de progresso baseado no tipo de questão
+const createProgressComponent = (stepId: string, currentStep: number, totalSteps: number): Partial<EditorElement> => {
+  return {
+    type: 'progress-bar',
+    content: {
+      current: currentStep,
+      total: totalSteps,
+      percentage: Math.round((currentStep / totalSteps) * 100)
+    },
+    order: 1,
+    stepId
+  };
+};
+
+// Função para gerar cabeçalho da questão
+const createQuestionHeader = (stepId: string): Partial<EditorElement> => {
+  return {
+    type: 'question-header',
+    content: {
+      logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
+      showProgress: true
+    },
+    order: 0,
+    stepId
+  };
 };
 
 export const createQuizIntroTemplate = (stepId: string): StepTemplate => {
@@ -101,24 +128,24 @@ export const createQuizQuestionTemplate = (stepId: string, questionData?: any): 
     console.error(`❌ No question data available for quiz question step ${stepId}`);
     return { 
       components: [
-        {
-          type: 'question-header',
-          content: {
-            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
-            showProgress: true,
-            currentStep: 1,
-            totalSteps: 10
-          },
-          order: 0,
-          stepId
-        },
+        createQuestionHeader(stepId),
         {
           type: 'question-title',
           content: {
             title: 'Carregando questão...',
             questionNumber: 1
           },
-          order: 1,
+          order: 2,
+          stepId
+        },
+        {
+          type: 'quiz-button',
+          content: {
+            text: 'Aguarde...',
+            variant: 'primary',
+            disabled: true
+          },
+          order: 3,
           stepId
         }
       ]
@@ -127,35 +154,17 @@ export const createQuizQuestionTemplate = (stepId: string, questionData?: any): 
   
   const questionIndex = parseInt(question.id) - 1 || 0;
   const totalQuestions = questionsCache.length || 10;
+  const currentStep = questionIndex + 1;
   
   return {
     components: [
-      {
-        type: 'question-header',
-        content: {
-          logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
-          showProgress: true,
-          currentStep: questionIndex + 1,
-          totalSteps: totalQuestions
-        },
-        order: 0,
-        stepId
-      },
-      {
-        type: 'progress-bar',
-        content: {
-          current: questionIndex + 1,
-          total: totalQuestions,
-          percentage: ((questionIndex + 1) / totalQuestions) * 100
-        },
-        order: 1,
-        stepId
-      },
+      createQuestionHeader(stepId),
+      createProgressComponent(stepId, currentStep, totalQuestions),
       {
         type: 'question-title',
         content: {
           title: question.title,
-          questionNumber: questionIndex + 1
+          questionNumber: currentStep
         },
         order: 2,
         stepId
@@ -166,7 +175,7 @@ export const createQuizQuestionTemplate = (stepId: string, questionData?: any): 
           options: question.options || [],
           layout: question.type === 'image' ? 'grid' : 'list',
           multiSelect: question.multiSelect > 1,
-          maxSelections: question.multiSelect
+          maxSelections: question.multiSelect || 3
         },
         order: 3,
         stepId
@@ -193,17 +202,7 @@ export const createStrategicQuestionTemplate = (stepId: string, questionData?: a
     console.error(`❌ No question data available for strategic question step ${stepId}`);
     return { 
       components: [
-        {
-          type: 'question-header',
-          content: {
-            logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
-            showProgress: true,
-            currentStep: 11,
-            totalSteps: 17
-          },
-          order: 0,
-          stepId
-        },
+        createQuestionHeader(stepId),
         {
           type: 'question-title',
           content: {
@@ -211,7 +210,7 @@ export const createStrategicQuestionTemplate = (stepId: string, questionData?: a
             questionNumber: 11,
             isStrategic: true
           },
-          order: 1,
+          order: 2,
           stepId
         }
       ]
@@ -228,27 +227,8 @@ export const createStrategicQuestionTemplate = (stepId: string, questionData?: a
   
   return {
     components: [
-      {
-        type: 'question-header',
-        content: {
-          logoUrl: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp',
-          showProgress: true,
-          currentStep,
-          totalSteps
-        },
-        order: 0,
-        stepId
-      },
-      {
-        type: 'progress-bar',
-        content: {
-          current: currentStep,
-          total: totalSteps,
-          percentage: (currentStep / totalSteps) * 100
-        },
-        order: 1,
-        stepId
-      },
+      createQuestionHeader(stepId),
+      createProgressComponent(stepId, currentStep, totalSteps),
       {
         type: 'question-title',
         content: {
@@ -446,4 +426,20 @@ export const getStepTemplate = (stepType: string, stepId: string, questionData?:
       console.warn(`⚠️ Unknown step type: ${stepType}`);
       return { components: [] };
   }
+};
+
+// Função para debug e validação
+export const debugStepTemplate = (stepType: string, stepId: string) => {
+  const template = getStepTemplate(stepType, stepId);
+  console.log(`🔍 Debug template for ${stepId}:`, {
+    stepType,
+    stepId,
+    componentsCount: template.components.length,
+    hasQuestionData: template.components.some(c => c.content?.options),
+    cacheStatus: {
+      questions: questionsCache.length,
+      strategicQuestions: strategicQuestionsCache.length
+    }
+  });
+  return template;
 };
