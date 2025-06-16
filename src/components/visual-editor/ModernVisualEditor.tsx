@@ -1,21 +1,15 @@
-
 import React, { useState, useCallback } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ComponentsPalette } from './sidebar/ComponentsPalette';
 import { VisualEditorCanvas } from './canvas/VisualEditorCanvas';
-import { StepsPanel } from './panels/StepsPanel';
+import { StepsPanel } from './steps/StepsPanel';
 import { StageConfigurationPanel } from './panels/StageConfigurationPanel';
-import { VisualElement, VisualStage, BlockType } from '@/types/visualEditor';
 import { Button } from '@/components/ui/button';
 import { Play, Save, Eye, EyeOff, Monitor, Tablet, Smartphone } from 'lucide-react';
+import type { VisualElement, VisualStage, BlockType } from '@/types/visualEditor';
 
-interface ModernVisualEditorProps {
-  funnelId: string;
-  onSave?: (data: any) => void;
-}
-
-// Mock data for demonstration
+// Mock data with proper typing
 const mockElements: VisualElement[] = [
   {
     id: 'element-1',
@@ -194,6 +188,11 @@ const mockStages: VisualStage[] = [
   }
 ];
 
+interface ModernVisualEditorProps {
+  funnelId: string;
+  onSave?: (data: any) => void;
+}
+
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave
@@ -202,7 +201,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     elements: mockElements,
     stages: mockStages,
     activeStageId: 'stage-intro',
-    selectedElementId: null as string | null,
+    selectedElementId: null,
     isPreviewMode: false,
     viewportMode: 'desktop' as 'desktop' | 'tablet' | 'mobile',
     settings: {
@@ -216,7 +215,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   });
 
-  // Handlers
   const handleElementAdd = useCallback((type: BlockType, position?: number) => {
     const newId = `element-${Date.now()}`;
     const stageElements = editorState.elements.filter(el => el.stageId === editorState.activeStageId);
@@ -235,12 +233,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         case 'question-title':
           return { text: 'Nova pergunta?' };
         case 'question-options':
-          return { 
+          return {
             options: [
               { id: 'opt-1', text: 'Opção 1', styleCategory: 'default', points: 5 },
               { id: 'opt-2', text: 'Opção 2', styleCategory: 'default', points: 5 }
             ],
-            multiSelect: false 
+            multiSelect: false
           };
         default:
           return {};
@@ -282,9 +280,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     setEditorState(prev => ({
       ...prev,
       elements: prev.elements.map(el => 
-        el.id === elementId 
-          ? { ...el, ...updates }
-          : el
+        el.id === elementId ? { ...el, ...updates } : el
       )
     }));
   }, []);
@@ -300,18 +296,19 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   const handleElementMove = useCallback((elementId: string, direction: 'up' | 'down') => {
     setEditorState(prev => {
       const elements = [...prev.elements];
-      const stageElements = elements.filter(el => el.stageId === prev.activeStageId).sort((a, b) => a.order - b.order);
+      const stageElements = elements
+        .filter(el => el.stageId === prev.activeStageId)
+        .sort((a, b) => a.order - b.order);
+      
       const elementIndex = stageElements.findIndex(el => el.id === elementId);
-      
       if (elementIndex === -1) return prev;
-      
+
       const newIndex = direction === 'up' ? elementIndex - 1 : elementIndex + 1;
       if (newIndex < 0 || newIndex >= stageElements.length) return prev;
 
-      // Swap orders
       const element = stageElements[elementIndex];
       const swapElement = stageElements[newIndex];
-      
+
       const updatedElements = elements.map(el => {
         if (el.id === element.id) return { ...el, order: swapElement.order };
         if (el.id === swapElement.id) return { ...el, order: element.order };
@@ -327,10 +324,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   }, []);
 
   const handleStageSelect = useCallback((stageId: string) => {
-    setEditorState(prev => ({ 
-      ...prev, 
+    setEditorState(prev => ({
+      ...prev,
       activeStageId: stageId,
-      selectedElementId: null 
+      selectedElementId: null
     }));
   }, []);
 
@@ -377,24 +374,20 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       onSave(saveData);
     }
 
-    // Auto-save to localStorage
     localStorage.setItem(`editor-${funnelId}`, JSON.stringify(saveData));
-    
     console.log('Editor saved:', saveData);
   }, [funnelId, editorState, onSave]);
 
-  // Get current stage data for configuration panel
   const currentStage = editorState.stages.find(stage => stage.id === editorState.activeStageId);
   const selectedElement = editorState.elements.find(el => el.id === editorState.selectedElementId);
 
-  // Check if the current stage is a question stage and get question data
   const getQuestionData = () => {
     if (!currentStage || !currentStage.type.includes('quiz')) return null;
-    
+
     const stageElements = editorState.elements.filter(el => el.stageId === editorState.activeStageId);
     const questionTitle = stageElements.find(el => el.type === 'question-title');
     const questionOptions = stageElements.find(el => el.type === 'question-options');
-    
+
     return {
       id: currentStage.id,
       title: questionTitle?.content.text || '',
@@ -404,10 +397,17 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     };
   };
 
+  // Convert stages for StepsPanel compatibility
+  const editorStages = editorState.stages.map(stage => ({
+    id: stage.id,
+    name: stage.title,
+    type: stage.type
+  }));
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="h-screen bg-gray-50 flex flex-col">
-        {/* Top Toolbar */}
+        {/* Header Toolbar */}
         <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h1 className="text-lg font-semibold text-gray-900">Editor Visual</h1>
@@ -448,55 +448,31 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               size="sm"
               onClick={handlePreviewToggle}
             >
-              {editorState.isPreviewMode ? (
-                <>
-                  <EyeOff className="w-4 h-4 mr-2" />
-                  Sair da Prévia
-                </>
-              ) : (
-                <>
-                  <Eye className="w-4 h-4 mr-2" />
-                  Prévia
-                </>
-              )}
+              {editorState.isPreviewMode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {editorState.isPreviewMode ? 'Editar' : 'Preview'}
             </Button>
 
             {/* Save Button */}
-            <Button onClick={handleSave}>
+            <Button onClick={handleSave} size="sm">
               <Save className="w-4 h-4 mr-2" />
               Salvar
-            </Button>
-
-            {/* Test Button */}
-            <Button variant="outline">
-              <Play className="w-4 h-4 mr-2" />
-              Testar
             </Button>
           </div>
         </div>
 
-        {/* Main Editor Area */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Left Sidebar - Components Palette */}
+        {/* Main Content */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Left Sidebar - Components */}
           {!editorState.isPreviewMode && (
-            <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-              <ComponentsPalette onElementAdd={handleElementAdd} />
-            </div>
-          )}
-
-          {/* Steps Panel */}
-          {!editorState.isPreviewMode && (
-            <div className="w-64 bg-white border-r border-gray-200">
-              <StepsPanel
-                stages={editorState.stages}
-                activeStageId={editorState.activeStageId}
-                onStageSelect={handleStageSelect}
-                onStageAdd={handleStageAdd}
+            <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+              <ComponentsPalette
+                onComponentSelect={handleElementAdd}
+                selectedComponent={null}
               />
             </div>
           )}
 
-          {/* Main Canvas */}
+          {/* Center - Canvas */}
           <VisualEditorCanvas
             elements={editorState.elements}
             stages={editorState.stages}
@@ -513,14 +489,28 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             onStageSelect={handleStageSelect}
           />
 
-          {/* Right Sidebar - Configuration Panel */}
-          {!editorState.isPreviewMode && currentStage && (
-            <div className="w-80 bg-white border-l border-gray-200">
-              <StageConfigurationPanel
-                stageName={currentStage.title}
-                stageType={currentStage.type}
-                questionData={getQuestionData()}
-              />
+          {/* Right Sidebar - Steps and Properties */}
+          {!editorState.isPreviewMode && (
+            <div className="w-80 bg-white border-l border-gray-200 flex flex-col">
+              {/* Steps Panel */}
+              <div className="h-1/2 border-b border-gray-200">
+                <StepsPanel
+                  stages={editorStages}
+                  currentStage={editorState.activeStageId || ''}
+                  onStageSelect={handleStageSelect}
+                />
+              </div>
+
+              {/* Configuration Panel */}
+              <div className="h-1/2">
+                {currentStage && (
+                  <StageConfigurationPanel
+                    stageName={currentStage.title}
+                    stageType={currentStage.type}
+                    questionData={getQuestionData()}
+                  />
+                )}
+              </div>
             </div>
           )}
         </div>
