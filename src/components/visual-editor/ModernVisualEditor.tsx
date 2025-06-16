@@ -116,8 +116,28 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   };
 
+  const handleElementUpdate = (id: string, updates: Partial<any>) => {
+    updateElement(id, updates);
+  };
+
   // Get elements for active step
   const activeStepElements = activeStepId ? getElementsByStep(activeStepId) : [];
+  const selectedElement = activeStepElements.find(el => el.id === selectedElementId);
+
+  // Convert viewport size to viewport format for ModernCanvas
+  const getViewport = (): 'desktop' | 'tablet' | 'mobile' => {
+    switch (viewportSize) {
+      case 'sm':
+        return 'mobile';
+      case 'md':
+      case 'lg':
+        return 'tablet';
+      case 'xl':
+        return 'desktop';
+      default:
+        return 'desktop';
+    }
+  };
 
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
@@ -160,12 +180,12 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             <ModernCanvas
               elements={activeStepElements}
               selectedElementId={selectedElementId}
+              onSelectElement={selectElement}
+              onUpdateElement={updateElement}
+              onDeleteElement={deleteElement}
+              onAddElement={handleAddElement}
               isPreviewMode={isPreviewMode}
-              viewportSize={viewportSize}
-              onElementSelect={selectElement}
-              onElementUpdate={updateElement}
-              onElementDelete={deleteElement}
-              onElementDuplicate={duplicateElement}
+              viewport={getViewport()}
             />
           </ResizablePanel>
           
@@ -173,8 +193,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           
           <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
             <ModernPropertiesPanel
-              selectedElement={activeStepElements.find(el => el.id === selectedElementId)}
-              onElementUpdate={updateElement}
+              selectedElement={selectedElement}
+              onUpdate={handleElementUpdate}
               onClose={() => selectElement(null)}
             />
           </ResizablePanel>
