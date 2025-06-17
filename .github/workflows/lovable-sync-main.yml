@@ -8,6 +8,10 @@ on:
     - cron: "*/30 * * * *"
   workflow_dispatch: # Permite execução manual
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   sync-lovable:
     runs-on: ubuntu-latest
@@ -17,6 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -39,6 +44,7 @@ jobs:
       - name: Update sync timestamps
         run: |
           CURRENT_TIMESTAMP=$(date +%s)
+          echo "CURRENT_TIMESTAMP=$CURRENT_TIMESTAMP" >> $GITHUB_ENV
           echo "LOVABLE_FORCE_SYNC=$CURRENT_TIMESTAMP" > .lovable-trigger
 
           # Atualizar configuração .lovable se existir
@@ -62,11 +68,12 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Lovable Sync"
-
+          
+          # Check if there are changes to commit
           if [ -n "$(git status --porcelain)" ]; then
             git add .lovable-trigger .lovable .lovable-status
             git commit -m "🔄 Auto-sync Lovable: timestamp $CURRENT_TIMESTAMP [$(date -u +%Y-%m-%d\ %H:%M:%S)]"
-            git push
+            git push origin main
             echo "✅ Alterações commitadas e enviadas"
           else
             echo "ℹ️ Nenhuma alteração para commitar"
