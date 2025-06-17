@@ -1,3 +1,4 @@
+
 /* Question Options Layout Styles */
 
 /* Classe utility para clamp de texto */
@@ -186,35 +187,35 @@
 }
 
 .option-title.small {
-  font-size: 0.875rem;
+  font-size: 0.75rem; /* Diminuído de 0.875rem */
 }
 
 .option-title.medium {
-  font-size: 1rem;
+  font-size: 0.875rem; /* Diminuído de 1rem */
 }
 
 .option-title.large {
-  font-size: 1.125rem;
+  font-size: 1rem; /* Diminuído de 1.125rem */
 }
 
 /* Fontes menores no mobile para dar destaque à imagem */
 @media (max-width: 639px) {
   .option-title.small {
-    font-size: 0.75rem; /* Ainda menor no mobile */
+    font-size: 0.625rem; /* Diminuído de 0.75rem */
   }
 
   .option-title.medium {
-    font-size: 0.8rem; /* Ainda menor no mobile */
+    font-size: 0.7rem; /* Diminuído de 0.8rem */
   }
 
   .option-title.large {
-    font-size: 0.875rem; /* Ainda menor no mobile */
+    font-size: 0.75rem; /* Diminuído de 0.875rem */
   }
 
   /* Texto mais discreto no mobile quando há imagem */
   .option-content.with-image .option-title {
     color: #6b7280; /* Cor mais sutil */
-    font-size: 0.75rem !important; /* Força tamanho menor */
+    font-size: 0.625rem !important; /* Força tamanho menor */
     line-height: 1.3;
   }
 
@@ -227,15 +228,15 @@
 
 @media (min-width: 640px) {
   .option-title.small {
-    font-size: 1rem;
+    font-size: 0.875rem; /* Diminuído de 1rem */
   }
 
   .option-title.medium {
-    font-size: 1.125rem;
+    font-size: 1rem; /* Diminuído de 1.125rem */
   }
 
   .option-title.large {
-    font-size: 1.25rem;
+    font-size: 1.125rem; /* Diminuído de 1.25rem */
   }
 }
 
