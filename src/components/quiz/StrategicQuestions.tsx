@@ -6,7 +6,7 @@ import { strategicQuestions } from '@/data/strategicQuestions';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
 import { preloadCriticalImages, preloadImagesByUrls } from '@/utils/imageManager';
 import OptimizedImage from '../ui/OptimizedImage';
-import { getAllImages } from '@/data/imageBank'; // Importar para acessar o banco de imagens
+import { getAllImages } from '@/data/imageBank';
 
 // Imagens críticas da página de resultados a serem pré-carregadas
 const RESULT_CRITICAL_IMAGES = [
@@ -31,6 +31,15 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
   const resultImagesPreloadStarted = useRef<boolean>(false);
   
+  useEffect(() => {
+    console.log("🎯 StrategicQuestions Debug:", {
+      currentQuestionIndex,
+      totalStrategicQuestions: strategicQuestions.length,
+      currentQuestion: strategicQuestions[currentQuestionIndex],
+      availableQuestions: strategicQuestions.map(q => ({ id: q.id, title: q.title.substring(0, 50) + '...' }))
+    });
+  }, [currentQuestionIndex]);
+
   useEffect(() => {
     if (!imagesPreloaded) {
       // Preload da questão estratégica atual
@@ -91,14 +100,28 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
     }
   }, [currentQuestionIndex]);
 
-  if (currentQuestionIndex >= strategicQuestions.length) return null;
+  if (currentQuestionIndex >= strategicQuestions.length) {
+    console.log("⚠️ Índice de questão estratégica fora do range:", { currentQuestionIndex, total: strategicQuestions.length });
+    return null;
+  }
+
+  const currentStrategicQuestion = strategicQuestions[currentQuestionIndex];
+  
+  if (!currentStrategicQuestion) {
+    console.log("⚠️ Questão estratégica não encontrada para índice:", currentQuestionIndex);
+    return (
+      <div className="text-center p-8">
+        <p className="text-gray-600">Carregando questão estratégica...</p>
+      </div>
+    );
+  }
 
   return (
     <AnimatedWrapper key={mountKey}>
       <QuizQuestion
-        question={strategicQuestions[currentQuestionIndex]}
+        question={currentStrategicQuestion}
         onAnswer={onAnswer}
-        currentAnswers={answers[strategicQuestions[currentQuestionIndex].id] || []}
+        currentAnswers={answers[currentStrategicQuestion.id] || []}
         autoAdvance={false}
         showQuestionImage={true}
         isStrategicQuestion={true}
