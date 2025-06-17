@@ -23,7 +23,13 @@ import {
   Maximize,
   Minimize,
 } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 
 interface QuestionOption {
@@ -500,7 +506,6 @@ export const ModernConfigurationPanel: React.FC<
                   </p>
                 </CardHeader>
                 <CardContent className="pt-0 space-y-4">
-                  
                   {/* Title Font Size */}
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
@@ -509,7 +514,10 @@ export const ModernConfigurationPanel: React.FC<
                         Tamanho do Título
                       </Label>
                     </div>
-                    <Select value={titleFontSize} onValueChange={setTitleFontSize}>
+                    <Select
+                      value={titleFontSize}
+                      onValueChange={setTitleFontSize}
+                    >
                       <SelectTrigger className="bg-white border-purple-200 focus:border-purple-400">
                         <SelectValue />
                       </SelectTrigger>
@@ -517,7 +525,9 @@ export const ModernConfigurationPanel: React.FC<
                         <SelectItem value="small">Pequeno (14px)</SelectItem>
                         <SelectItem value="medium">Médio (16px)</SelectItem>
                         <SelectItem value="large">Grande (20px)</SelectItem>
-                        <SelectItem value="xlarge">Extra Grande (24px)</SelectItem>
+                        <SelectItem value="xlarge">
+                          Extra Grande (24px)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -538,7 +548,9 @@ export const ModernConfigurationPanel: React.FC<
                         <SelectItem value="small">Pequeno (12px)</SelectItem>
                         <SelectItem value="medium">Médio (14px)</SelectItem>
                         <SelectItem value="large">Grande (16px)</SelectItem>
-                        <SelectItem value="xlarge">Extra Grande (18px)</SelectItem>
+                        <SelectItem value="xlarge">
+                          Extra Grande (18px)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <p className="text-xs text-gray-500">
@@ -562,7 +574,9 @@ export const ModernConfigurationPanel: React.FC<
                         <SelectItem value="small">Pequeno (150px)</SelectItem>
                         <SelectItem value="medium">Médio (200px)</SelectItem>
                         <SelectItem value="large">Grande (250px)</SelectItem>
-                        <SelectItem value="xlarge">Extra Grande (300px)</SelectItem>
+                        <SelectItem value="xlarge">
+                          Extra Grande (300px)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <p className="text-xs text-gray-500">
@@ -609,15 +623,39 @@ export const ModernConfigurationPanel: React.FC<
                     <div className="space-y-2 text-xs text-gray-600">
                       <div className="flex justify-between">
                         <span>Título:</span>
-                        <span className="font-medium">{titleFontSize === 'small' ? '14px' : titleFontSize === 'medium' ? '16px' : titleFontSize === 'large' ? '20px' : '24px'}</span>
+                        <span className="font-medium">
+                          {titleFontSize === "small"
+                            ? "14px"
+                            : titleFontSize === "medium"
+                            ? "16px"
+                            : titleFontSize === "large"
+                            ? "20px"
+                            : "24px"}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Opções:</span>
-                        <span className="font-medium">{fontSize === 'small' ? '12px' : fontSize === 'medium' ? '14px' : fontSize === 'large' ? '16px' : '18px'}</span>
+                        <span className="font-medium">
+                          {fontSize === "small"
+                            ? "12px"
+                            : fontSize === "medium"
+                            ? "14px"
+                            : fontSize === "large"
+                            ? "16px"
+                            : "18px"}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Imagens:</span>
-                        <span className="font-medium">{imageSize === 'small' ? '150px' : imageSize === 'medium' ? '200px' : imageSize === 'large' ? '250px' : '300px'}</span>
+                        <span className="font-medium">
+                          {imageSize === "small"
+                            ? "150px"
+                            : imageSize === "medium"
+                            ? "200px"
+                            : imageSize === "large"
+                            ? "250px"
+                            : "300px"}
+                        </span>
                       </div>
                     </div>
                   </div>
