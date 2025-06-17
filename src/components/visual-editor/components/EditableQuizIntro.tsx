@@ -35,9 +35,9 @@ interface EditableQuizIntroProps {
  * Aceita props customizáveis para título, subtítulo e texto do botão
  */
 export const EditableQuizIntro: React.FC<EditableQuizIntroProps> = ({
-  title = "Descubra Seu Estilo Único",
-  subtitle = "Um quiz personalizado para descobrir qual estilo combina mais com você",
-  buttonText = "Começar Quiz",
+  title = "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+  subtitle = "Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.",
+  buttonText = "Quero Descobrir meu Estilo Agora!",
   onStart,
 }) => {
   const [nome, setNome] = useState("");
@@ -82,10 +82,31 @@ export const EditableQuizIntro: React.FC<EditableQuizIntroProps> = ({
           {/* Título Principal */}
           <div className="space-y-4">
             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-playfair text-[#432818] leading-tight">
-              {title}
+              {title.includes("Chega") && title.includes("Você") ? (
+                <>
+                  <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa
+                  lotado e da sensação de que nada combina com{" "}
+                  <span className="text-[#B89B7A]">Você</span>.
+                </>
+              ) : (
+                title
+              )}
             </h1>
             <p className="text-lg lg:text-xl text-[#6B5B4D] leading-relaxed max-w-lg mx-auto lg:mx-0">
-              {subtitle}
+              {subtitle.includes("Estilo Predominante") ? (
+                <>
+                  Em poucos minutos, descubra seu{" "}
+                  <span className="font-semibold text-[#B89B7A]">
+                    Estilo Predominante
+                  </span>{" "}
+                  — e aprenda a montar looks que realmente refletem sua{" "}
+                  <span className="font-semibold text-[#432818]">essência</span>, com
+                  praticidade e{" "}
+                  <span className="font-semibold text-[#432818]">confiança</span>.
+                </>
+              ) : (
+                subtitle
+              )}
             </p>
           </div>
 

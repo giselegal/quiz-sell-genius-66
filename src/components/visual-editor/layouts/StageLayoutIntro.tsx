@@ -18,12 +18,12 @@ export const StageLayoutIntro: React.FC<StageLayoutIntroProps> = ({
 }) => {
   return (
     <EditableQuizIntro
-      title={stage.title || "Descubra Seu Estilo Único"}
+      title={stage.title || "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você."}
       subtitle={
         stage.subtitle ||
-        "Um quiz personalizado para descobrir qual estilo combina mais com você"
+        "Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança."
       }
-      buttonText={stage.buttonText || "Começar Quiz"}
+      buttonText={stage.buttonText || "Quero Descobrir meu Estilo Agora!"}
       onStart={() => onNext?.()} // Chamada sem parâmetro nome para compatibilidade
     />
   );
