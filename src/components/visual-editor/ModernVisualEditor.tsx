@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/resizable";
 import { StepsPanel } from "./steps/StepsPanel";
 import { ComponentsPalette } from "./sidebar/ComponentsPalette";
-import { StageConfigurationPanel } from "./panels/StageConfigurationPanel";
+import { ModernConfigurationPanel } from "./panels/ModernConfigurationPanel";
 import { OptionConfigurationPanel } from "./panels/OptionConfigurationPanel";
 import { EditableCanvas } from "./canvas/EditableCanvas";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
@@ -553,7 +553,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizablePanel defaultSize={33} minSize={25} maxSize={45}>
             <div className="h-full bg-white border-l border-gray-200">
               <div className="h-full overflow-auto">
-                <StageConfigurationPanel
+                <ModernConfigurationPanel
                   stageName={
                     stages.find((s) => s.id === currentStage)?.name || ""
                   }
