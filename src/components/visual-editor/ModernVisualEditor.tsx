@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
   ResizablePanelGroup,
@@ -492,6 +493,9 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Carregando questões do Supabase...</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Aguarde enquanto carregamos as questões...
+          </p>
         </div>
       </div>
     );
@@ -500,13 +504,51 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   if (error) {
     return (
       <div className="h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">
-            Erro ao carregar questões: {error}
-          </p>
+        <div className="text-center max-w-md">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <p className="text-red-600 mb-2 font-medium">
+              Erro ao carregar questões:
+            </p>
+            <p className="text-red-500 text-sm">{error}</p>
+          </div>
           <Button onClick={() => window.location.reload()}>
             Tentar Novamente
           </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Debug: verificar se temos questões
+  console.log("🔍 Debug ModernVisualEditor:", {
+    loading,
+    error,
+    questionsCount: questions.length,
+    strategicQuestionsCount: strategicQuestions.length,
+    stagesCount: stages.length,
+    currentStage
+  });
+
+  // Se não há questões carregadas, mostrar fallback
+  if (!loading && questions.length === 0 && strategicQuestions.length === 0) {
+    return (
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-yellow-800 mb-2">
+              Nenhuma questão encontrada
+            </h2>
+            <p className="text-yellow-700 mb-4">
+              Parece que não há questões configuradas no Supabase para este quiz.
+            </p>
+            <div className="text-sm text-yellow-600 bg-yellow-100 rounded-md p-3 mb-4">
+              <p className="font-medium">Quiz ID: 550e8400-e29b-41d4-a716-446655440000</p>
+              <p>Verificando questões ativas na tabela quiz_questions</p>
+            </div>
+            <Button onClick={() => window.location.reload()}>
+              Recarregar
+            </Button>
+          </div>
         </div>
       </div>
     );
