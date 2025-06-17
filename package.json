@@ -11,7 +11,7 @@
     "build:funnel": "vite build && cp public/.htaccess dist/.htaccess && cp public/_redirects dist/_redirects",
     "lint": "eslint .",
     "preview": "vite preview",
-    "lovable:prepare": "node lovable-prepare-simple.js"
+    "lovable:prepare": "node scripts/prepare-lovable.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -40,7 +40,7 @@ jobs:
         run: |
           CURRENT_TIMESTAMP=$(date +%s)
           echo "LOVABLE_FORCE_SYNC=$CURRENT_TIMESTAMP" > .lovable-trigger
-          
+
           # Atualizar configuração .lovable se existir
           if [ -f ".lovable" ]; then
             node -e "
