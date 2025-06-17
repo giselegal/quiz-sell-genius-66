@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Plus, Trash2, Type, Settings, Image } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Plus, Trash2, Type, Settings, Image, Upload, Link, Eye, EyeOff, Bold, Italic } from 'lucide-react';
 
 interface QuestionOption {
   id: string;
@@ -36,6 +37,16 @@ export const ModernConfigurationPanel: React.FC<ModernConfigurationPanelProps> =
   questionData,
   onUpdate
 }) => {
+  const [previewMode, setPreviewMode] = useState<{ [key: string]: boolean }>({});
+  const [expandedOptions, setExpandedOptions] = useState<{ [key: string]: boolean }>({});
+  
+  const togglePreview = (optionId: string) => {
+    setPreviewMode(prev => ({ ...prev, [optionId]: !prev[optionId] }));
+  };
+  
+  const toggleExpanded = (optionId: string) => {
+    setExpandedOptions(prev => ({ ...prev, [optionId]: !prev[optionId] }));
+  };
   const getStageTypeInfo = (type: string) => {
     if (type.startsWith('question-')) return { label: 'Questão Regular', color: 'bg-blue-500' };
     if (type.startsWith('strategic-')) return { label: 'Questão Estratégica', color: 'bg-purple-500' };
@@ -64,21 +75,28 @@ export const ModernConfigurationPanel: React.FC<ModernConfigurationPanelProps> =
             <p className="text-sm text-gray-500 mt-1">Configure as opções da questão</p>
           </div>
 
-          {/* Question Title */}
+          {/* Question Title Editor - ENHANCED */}
           {(stageType.startsWith('question-') || stageType.startsWith('strategic-')) && (
-            <Card className="border-0 shadow-sm bg-gray-50/50">
-              <CardContent className="p-4">
+            <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-indigo-50">
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-2">
+                  <Type className="w-4 h-4 text-blue-600" />
+                  <Label className="text-sm font-semibold text-blue-800">Título da Questão</Label>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Type className="w-4 h-4 text-gray-600" />
-                    <Label className="text-sm font-medium text-gray-700">Título da Questão</Label>
-                  </div>
-                  <Input
+                  <Textarea
                     value={questionData?.title || ""}
                     onChange={(e) => onUpdate?.({ ...questionData, title: e.target.value })}
-                    placeholder="Digite o título da questão..."
-                    className="bg-white border-gray-200 focus:border-blue-400 text-sm"
+                    placeholder="Digite o título da sua questão aqui..."
+                    className="min-h-[80px] bg-white border-blue-200 focus:border-blue-400 focus:ring-blue-400 resize-none text-sm leading-relaxed"
+                    maxLength={500}
                   />
+                  <div className="flex justify-between items-center text-xs text-gray-500">
+                    <span>Use um título claro e envolvente</span>
+                    <span>{(questionData?.title || "").length}/500</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -120,13 +138,13 @@ export const ModernConfigurationPanel: React.FC<ModernConfigurationPanelProps> =
                 </CardHeader>
                 <CardContent className="space-y-3 max-h-80 overflow-y-auto pt-0">
                   {questionData?.options?.map((option, index) => (
-                    <div key={option.id} className="bg-white border border-gray-200 rounded-xl p-4 space-y-4 hover:border-gray-300 transition-all duration-200 hover:shadow-sm">
+                    <div key={option.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 transition-all duration-200 hover:shadow-md">
                       
                       {/* Option Header */}
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                         <div className="flex items-center gap-3">
                           {option.imageUrl && (
-                            <div className="w-10 h-10 rounded-lg overflow-hidden border border-gray-200">
+                            <div className="w-12 h-12 rounded-xl overflow-hidden border-2 border-white shadow-sm">
                               <img 
                                 src={option.imageUrl} 
                                 alt="Preview" 
@@ -137,83 +155,180 @@ export const ModernConfigurationPanel: React.FC<ModernConfigurationPanelProps> =
                               />
                             </div>
                           )}
-                          <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                              <span className="text-xs font-medium text-blue-700">{index + 1}</span>
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-sm">
+                              <span className="text-sm font-bold text-white">{index + 1}</span>
                             </div>
-                            <span className="text-sm font-medium text-gray-700">Opção {index + 1}</span>
+                            <div>
+                              <span className="text-sm font-semibold text-gray-800">Opção {index + 1}</span>
+                              <p className="text-xs text-gray-500">
+                                {option.text.length > 0 ? `${option.text.length} caracteres` : 'Sem texto'}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            const updatedOptions = questionData?.options?.filter(opt => opt.id !== option.id) || [];
-                            onUpdate?.({ ...questionData, options: updatedOptions });
-                          }}
-                          className="text-red-500 hover:text-red-700 hover:bg-red-50 h-7 w-7 p-0 rounded-lg"
-                          title="Remover opção"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
-                      </div>
-                      
-                      {/* Option Text */}
-                      <div className="space-y-2">
-                        <Label className="text-xs font-medium text-gray-600 uppercase tracking-wide">Texto da Opção</Label>
-                        <Input
-                          value={option.text}
-                          onChange={(e) => {
-                            const updatedOptions = questionData?.options?.map(opt =>
-                              opt.id === option.id ? { ...opt, text: e.target.value } : opt
-                            ) || [];
-                            onUpdate?.({ ...questionData, options: updatedOptions });
-                          }}
-                          placeholder="Digite o texto da opção..."
-                          className="bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-400 text-sm h-9"
-                        />
-                      </div>
-                      
-                      {/* Image Upload */}
-                      <div className="space-y-3">
-                        <Label className="text-xs font-medium text-gray-600 uppercase tracking-wide">Imagem (Opcional)</Label>
-                        <div className="space-y-2">
-                          <Input
-                            value={option.imageUrl || ""}
-                            onChange={(e) => {
-                              const updatedOptions = questionData?.options?.map(opt =>
-                                opt.id === option.id ? { ...opt, imageUrl: e.target.value } : opt
-                              ) || [];
+                        <div className="flex items-center gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => toggleExpanded(option.id)}
+                            className="text-gray-600 hover:text-gray-800 hover:bg-gray-200 h-8 w-8 p-0 rounded-lg"
+                            title={expandedOptions[option.id] ? "Minimizar" : "Expandir"}
+                          >
+                            {expandedOptions[option.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              const updatedOptions = questionData?.options?.filter(opt => opt.id !== option.id) || [];
                               onUpdate?.({ ...questionData, options: updatedOptions });
                             }}
-                            placeholder="Cole a URL da imagem..."
-                            className="bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-400 text-sm h-9"
-                          />
-                          {option.imageUrl && (
-                            <div className="relative">
-                              <img 
-                                src={option.imageUrl} 
-                                alt="Preview" 
-                                className="w-full h-24 object-cover rounded-lg border border-gray-200"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                }}
-                              />
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => {
-                                  const updatedOptions = questionData?.options?.map(opt =>
-                                    opt.id === option.id ? { ...opt, imageUrl: "" } : opt
-                                  ) || [];
-                                  onUpdate?.({ ...questionData, options: updatedOptions });
-                                }}
-                                className="absolute top-1 right-1 h-6 w-6 p-0 bg-white/80 hover:bg-white border border-gray-200 rounded"
-                              >
-                                <Trash2 className="w-3 h-3 text-gray-600" />
-                              </Button>
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0 rounded-lg"
+                            title="Remover opção"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {/* Option Content - Expandable */}
+                      <div className={`transition-all duration-300 ${expandedOptions[option.id] !== false ? 'block' : 'hidden'}`}>
+                        <div className="p-4 space-y-4">
+                          
+                          {/* Rich Text Editor */}
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                <Type className="w-4 h-4" />
+                                Texto da Opção
+                              </Label>
+                              <div className="flex items-center gap-1">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-6 w-6 p-0 text-gray-500 hover:text-gray-700"
+                                  title="Negrito"
+                                >
+                                  <Bold className="w-3 h-3" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-6 w-6 p-0 text-gray-500 hover:text-gray-700"
+                                  title="Itálico"
+                                >
+                                  <Italic className="w-3 h-3" />
+                                </Button>
+                              </div>
                             </div>
-                          )}
+                            <Textarea
+                              value={option.text}
+                              onChange={(e) => {
+                                const updatedOptions = questionData?.options?.map(opt =>
+                                  opt.id === option.id ? { ...opt, text: e.target.value } : opt
+                                ) || [];
+                                onUpdate?.({ ...questionData, options: updatedOptions });
+                              }}
+                              placeholder="Digite o texto da opção..."
+                              className="min-h-[80px] bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-400 focus:ring-blue-400 resize-none text-sm leading-relaxed"
+                              maxLength={300}
+                            />
+                            <div className="flex justify-between items-center text-xs text-gray-500">
+                              <span>Use texto claro e conciso</span>
+                              <span>{option.text.length}/300</span>
+                            </div>
+                          </div>
+                          
+                          {/* Advanced Image Editor */}
+                          <div className="space-y-3">
+                            <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                              <Image className="w-4 h-4" />
+                              Imagem da Opção
+                            </Label>
+                            
+                            <div className="space-y-3">
+                              {/* Image URL Input */}
+                              <div className="space-y-2">
+                                <div className="flex gap-2">
+                                  <Input
+                                    value={option.imageUrl || ""}
+                                    onChange={(e) => {
+                                      const updatedOptions = questionData?.options?.map(opt =>
+                                        opt.id === option.id ? { ...opt, imageUrl: e.target.value } : opt
+                                      ) || [];
+                                      onUpdate?.({ ...questionData, options: updatedOptions });
+                                    }}
+                                    placeholder="Cole a URL da imagem ou use upload..."
+                                    className="flex-1 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-400 text-sm h-9"
+                                  />
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="px-3 h-9 border-gray-200 hover:border-blue-400"
+                                    title="Upload de imagem"
+                                  >
+                                    <Upload className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                                
+                                {/* Quick Image Gallery */}
+                                <div className="flex gap-2 text-xs">
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-6 px-2 text-gray-500 hover:text-blue-600"
+                                    onClick={() => {
+                                      // Placeholder URLs for demo
+                                      const demoUrls = [
+                                        'https://images.unsplash.com/photo-1441986300917-64674bd600d6?w=400',
+                                        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400',
+                                        'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'
+                                      ];
+                                      const randomUrl = demoUrls[Math.floor(Math.random() * demoUrls.length)];
+                                      const updatedOptions = questionData?.options?.map(opt =>
+                                        opt.id === option.id ? { ...opt, imageUrl: randomUrl } : opt
+                                      ) || [];
+                                      onUpdate?.({ ...questionData, options: updatedOptions });
+                                    }}
+                                  >
+                                    <Link className="w-3 h-3 mr-1" />
+                                    Galeria
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              {/* Image Preview */}
+                              {option.imageUrl && (
+                                <div className="relative group">
+                                  <img 
+                                    src={option.imageUrl} 
+                                    alt="Preview" 
+                                    className="w-full h-32 object-cover rounded-xl border border-gray-200 shadow-sm"
+                                    onError={(e) => {
+                                      e.currentTarget.style.display = 'none';
+                                    }}
+                                  />
+                                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-xl flex items-center justify-center">
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => {
+                                        const updatedOptions = questionData?.options?.map(opt =>
+                                          opt.id === option.id ? { ...opt, imageUrl: "" } : opt
+                                        ) || [];
+                                        onUpdate?.({ ...questionData, options: updatedOptions });
+                                      }}
+                                      className="bg-white/20 hover:bg-white/30 text-white border-white/20"
+                                    >
+                                      <Trash2 className="w-4 h-4 mr-1" />
+                                      Remover
+                                    </Button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

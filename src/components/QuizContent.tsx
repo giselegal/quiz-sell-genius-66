@@ -1,17 +1,18 @@
 
 import React from 'react';
 import { QuizQuestion } from './QuizQuestion';
-import { UserResponse } from '@/types/quiz';
+import { UserResponse, QuizQuestion as QuizQuestionType } from '@/types/quiz';
 import { QuizHeader } from './quiz/QuizHeader';
 import { StrategicQuestions } from './quiz/StrategicQuestions';
+import QuizNavigation from './quiz/QuizNavigation';
 
 interface QuizContentProps {
-  user: any;
+  user: { userName: string } | null;
   currentQuestionIndex: number;
   totalQuestions: number;
   showingStrategicQuestions: boolean;
   currentStrategicQuestionIndex: number;
-  currentQuestion: any;
+  currentQuestion: QuizQuestionType;
   currentAnswers: string[];
   handleAnswerSubmit: (response: UserResponse) => void;
   handleNextClick: () => void;
@@ -38,6 +39,14 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   
   // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length === requiredSelections;
+  
+  // Determine question type for navigation component
+  const currentQuestionType: 'normal' | 'strategic' = showingStrategicQuestions ? 'strategic' : 'normal';
+  
+  // Check if it's the last question
+  const isLastQuestion = showingStrategicQuestions 
+    ? currentStrategicQuestionIndex >= 6 
+    : currentQuestionIndex >= totalQuestions - 1;
 
   return (
     <>
@@ -67,8 +76,19 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
             showQuestionImage={true}
+            isStrategicQuestion={false}
           />
         )}
+        
+        {/* Navigation Component */}
+        <QuizNavigation
+          canProceed={canProceed}
+          onNext={handleNextClick}
+          onPrevious={currentQuestionIndex > 0 ? handlePrevious : undefined}
+          currentQuestionType={currentQuestionType}
+          selectedOptionsCount={currentAnswers?.length || 0}
+          isLastQuestion={isLastQuestion}
+        />
       </div>
     </>
   );
