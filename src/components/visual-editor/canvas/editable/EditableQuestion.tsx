@@ -157,18 +157,7 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
 
               {/* Option Content using CSS classes */}
               <div className={`option-content ${option.imageUrl ? "with-image" : "text-only"}`}>
-                <h4 className="option-title medium">
-                  {/* Parse text to highlight strategic words */}
-                  {option.text.split(" ").map((word, wordIndex) => {
-                // Strategic words to highlight
-                const strategicWords = ["elegante", "clássico", "moderno", "casual", "sofisticado", "romântico", "minimalista", "vintage", "luxo", "confortável", "estiloso", "chique", "trendy", "fashion", "contemporâneo", "tradicional"];
-                const isStrategic = strategicWords.some(sw => word.toLowerCase().replace(/[.,!?;]/g, "").includes(sw.toLowerCase()));
-                return <span key={wordIndex} className={isStrategic ? "strategic-word" : ""}>
-                        {word}
-                        {wordIndex < option.text.split(" ").length - 1 ? " " : ""}
-                      </span>;
-              })}
-                </h4>
+                
 
                 {/* Category and Points using CSS classes */}
                 <div className="option-footer">
