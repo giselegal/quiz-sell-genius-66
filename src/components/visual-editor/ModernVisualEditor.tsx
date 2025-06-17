@@ -15,13 +15,27 @@ import { QuizConfigPanel } from "./panels/QuizConfigPanel";
 import { EditableCanvas } from "./canvas/EditableCanvas";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
 import { useQuizStyles } from "@/hooks/useQuizConfig";
-import { Eye, Save, Monitor, Tablet, Smartphone, Settings } from "lucide-react";
+import { useQuizEditor } from "@/hooks/useQuizEditor";
+import { useEditorSettings } from "@/hooks/useEditorSettings";
+import {
+  Eye,
+  Save,
+  Monitor,
+  Tablet,
+  Smartphone,
+  Settings,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
+
+import { QuizQuestion } from "@/types/quiz";
 
 interface EditorStage {
   id: string;
   name: string;
   type: "intro" | "quiz" | "transition" | "result" | "offer" | "strategic";
-  questionData?: any;
+  questionData?: QuizQuestion;
   order?: number;
 }
 
@@ -35,13 +49,28 @@ interface CanvasElement {
     | "button"
     | "question-title"
     | "question-options";
-  content: any;
+  content: {
+    text?: string;
+    imageUrl?: string;
+    style?: Record<string, string>;
+    properties?: Record<string, unknown>;
+  };
   order: number;
+}
+
+interface EditorSaveData {
+  stages: EditorStage[];
+  currentStage: string;
+  canvasElements: CanvasElement[];
+  settings: {
+    viewportMode: "desktop" | "tablet" | "mobile";
+    isPreviewMode: boolean;
+  };
 }
 
 interface ModernVisualEditorProps {
   funnelId: string;
-  onSave?: (data: any) => void;
+  onSave?: (data: EditorSaveData) => void;
 }
 
 export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
@@ -51,6 +80,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   const { questions, strategicQuestions, loading, error } =
     useSupabaseQuestions();
   const { cssVariables } = useQuizStyles();
+  const { saving, lastSaved, saveQuestion, autoSave, validateQuiz } =
+    useQuizEditor();
   const [stages, setStages] = useState<EditorStage[]>([]);
   const [currentStage, setCurrentStage] = useState<string>("intro");
   const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
@@ -191,7 +222,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         break;
 
       case "quiz":
-      case "strategic":
+      case "strategic": {
         const questionData = currentStageData.questionData;
         if (questionData) {
           elements = [
@@ -213,6 +244,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           ];
         }
         break;
+      }
 
       case "transition":
         elements = [
@@ -292,18 +324,39 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     setSelectedElementId(null);
   }, [currentStage, stages]);
 
-  const handleSave = useCallback(() => {
-    const data = {
-      stages,
-      currentStage,
-      canvasElements,
-      settings: {
-        viewportMode,
-        isPreviewMode,
-      },
-    };
-    console.log("Saving:", data);
-    onSave?.(data);
+  const handleSave = useCallback(async () => {
+    try {
+      // Coletar todas as questões modificadas
+      const allQuestions = [...questions, ...strategicQuestions];
+
+      // Validar antes de salvar
+      const validation = validateQuiz(allQuestions);
+      if (!validation.isValid) {
+        console.error("Validation errors:", validation.errors);
+        return;
+      }
+
+      // Salvar usando o hook de editor
+      const success = await autoSave(allQuestions);
+
+      if (success) {
+        // Dados para compatibilidade com callback existente
+        const data = {
+          stages,
+          currentStage,
+          canvasElements,
+          settings: {
+            viewportMode,
+            isPreviewMode,
+          },
+        };
+
+        console.log("✅ Saved successfully:", data);
+        onSave?.(data);
+      }
+    } catch (error) {
+      console.error("❌ Error saving:", error);
+    }
   }, [
     stages,
     currentStage,
@@ -311,15 +364,35 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     viewportMode,
     isPreviewMode,
     onSave,
+    questions,
+    strategicQuestions,
+    autoSave,
+    validateQuiz,
   ]);
 
+  // Auto-save effect - salva apenas quando há mudanças
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      handleSave();
-    }, 10000);
+    let timeoutId: NodeJS.Timeout;
 
-    return () => clearInterval(intervalId);
-  }, [handleSave]);
+    // Debounce auto-save para evitar salvamentos excessivos
+    const debouncedSave = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(async () => {
+        if (questions.length > 0 || strategicQuestions.length > 0) {
+          const allQuestions = [...questions, ...strategicQuestions];
+          const validation = validateQuiz(allQuestions);
+
+          if (validation.isValid) {
+            await autoSave(allQuestions);
+          }
+        }
+      }, 5000); // Auto-save depois de 5 segundos de inatividade
+    };
+
+    debouncedSave();
+
+    return () => clearTimeout(timeoutId);
+  }, [questions, strategicQuestions, canvasElements, autoSave, validateQuiz]);
 
   const handleStageSelect = (stageId: string) => {
     setCurrentStage(stageId);
@@ -334,7 +407,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   const handleElementAdd = (type: string, position?: number) => {
     const newElement: CanvasElement = {
       id: `element-${Date.now()}`,
-      type: type as any,
+      type: type as CanvasElement["type"],
       content: getDefaultContent(type),
       order: position ?? canvasElements.length,
     };
@@ -374,7 +447,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   };
 
-  const handleElementUpdate = (id: string, content: any) => {
+  const handleElementUpdate = (id: string, content: CanvasElement["content"]) => {
     setCanvasElements((prev) =>
       prev.map((el) => (el.id === id ? { ...el, content } : el))
     );
@@ -453,6 +526,30 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               {questions.length} questões • {strategicQuestions.length}{" "}
               estratégicas
             </Badge>
+
+            {/* Status de validação */}
+            {(() => {
+              const allQuestions = [...questions, ...strategicQuestions];
+              const validation = validateQuiz(allQuestions);
+              return (
+                <Badge
+                  variant={validation.isValid ? "default" : "destructive"}
+                  className={validation.isValid ? "bg-green-500" : ""}
+                >
+                  {validation.isValid ? (
+                    <>
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Válido
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="w-3 h-3 mr-1" />
+                      {validation.errors.length} erro(s)
+                    </>
+                  )}
+                </Badge>
+              );
+            })()}
           </div>
 
           <div className="flex items-center gap-3">
@@ -504,13 +601,91 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               Config
             </Button>
 
+            {/* Validation Button */}
+            {(() => {
+              const allQuestions = [...questions, ...strategicQuestions];
+              const validation = validateQuiz(allQuestions);
+              return (
+                <Button
+                  variant={validation.isValid ? "default" : "destructive"}
+                  size="sm"
+                  onClick={() => {
+                    if (!validation.isValid) {
+                      console.log("Erros de validação:", validation.errors);
+                      // Aqui poderia abrir um modal com os erros detalhados
+                    }
+                  }}
+                >
+                  {validation.isValid ? (
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 mr-2" />
+                  )}
+                  {validation.isValid ? "Válido" : `${validation.errors.length} Erro(s)`}
+                </Button>
+              );
+            })()}
+
             {/* Save Button */}
-            <Button onClick={handleSave} size="sm">
-              <Save className="w-4 h-4 mr-2" />
-              Salvar
+            <Button
+              onClick={handleSave}
+              size="sm"
+              disabled={saving}
+              variant={lastSaved ? "default" : "secondary"}
+            >
+              {saving ? (
+                <Clock className="w-4 h-4 mr-2 animate-spin" />
+              ) : lastSaved ? (
+                <CheckCircle className="w-4 h-4 mr-2" />
+              ) : (
+                <Save className="w-4 h-4 mr-2" />
+              )}
+              {saving ? "Salvando..." : lastSaved ? "Salvo" : "Salvar"}
             </Button>
+
+            {/* Last saved indicator */}
+            {lastSaved && (
+              <div className="text-xs text-muted-foreground">
+                Salvo às {lastSaved.toLocaleTimeString()}
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Painel de validação - aparece apenas quando há erros */}
+        {(() => {
+          const allQuestions = [...questions, ...strategicQuestions];
+          const validation = validateQuiz(allQuestions);
+
+          if (!validation.isValid) {
+            return (
+              <div className="bg-red-50 border-t border-red-200 px-6 py-2">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div className="text-sm">
+                    <p className="font-medium text-red-800 mb-1">
+                      Erros de validação encontrados:
+                    </p>
+                    <ul className="text-red-700 space-y-1">
+                      {validation.errors.slice(0, 3).map((error, index) => (
+                        <li key={index} className="flex items-center gap-1">
+                          <span className="w-1 h-1 bg-red-500 rounded-full" />
+                          {error}
+                        </li>
+                      ))}
+                      {validation.errors.length > 3 && (
+                        <li className="text-red-600">
+                          ... e mais {validation.errors.length - 3} erro(s)
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })()}
       </div>
 
       {/* Main Content - Resizable 4 Columns Layout */}
