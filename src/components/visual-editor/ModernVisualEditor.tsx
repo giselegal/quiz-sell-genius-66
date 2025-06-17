@@ -561,57 +561,61 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       style={cssVariables}
     >
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white shadow-sm flex-shrink-0">
+      <header className="border-b border-gray-200 bg-gradient-to-r from-white to-gray-50 shadow-sm flex-shrink-0">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div>
-                <h1 className="text-xl font-bold text-gray-900 mb-1">
-                  Editor Visual Quiz
-                </h1>
-                <div className="flex items-center gap-3">
-                  <Badge
-                    variant="outline"
-                    className="border-blue-500 text-blue-700 bg-blue-50"
-                  >
-                    {funnelId}
-                  </Badge>
-                  <Badge
-                    variant="secondary"
-                    className="bg-gray-100 text-gray-700"
-                  >
-                    {questions.length} questões • {strategicQuestions.length}{" "}
-                    estratégicas
-                  </Badge>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-sm">
+                  <span className="text-white font-bold text-sm">Q</span>
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900 mb-1">
+                    Quiz Sell Genius
+                  </h1>
+                  <div className="flex items-center gap-3">
+                    <Badge
+                      variant="outline"
+                      className="border-blue-500 text-blue-700 bg-blue-50 font-medium"
+                    >
+                      {funnelId}
+                    </Badge>
+                    <Badge
+                      variant="secondary"
+                      className="bg-gray-100 text-gray-700"
+                    >
+                      {questions.length} questões • {strategicQuestions.length} estratégicas
+                    </Badge>
 
-                  {/* Status de validação */}
-                  {(() => {
-                    const allQuestions = [...questions, ...strategicQuestions];
-                    const validation = validateQuiz(allQuestions);
-                    return (
-                      <Badge
-                        variant={validation.isValid ? "default" : "destructive"}
-                        className={cn(
-                          "font-medium",
-                          validation.isValid
-                            ? "bg-emerald-500 hover:bg-emerald-600"
-                            : "bg-red-500 hover:bg-red-600"
-                        )}
-                      >
-                        {validation.isValid ? (
-                          <>
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                            Válido
-                          </>
-                        ) : (
-                          <>
-                            <AlertCircle className="w-3 h-3 mr-1" />
-                            {validation.errors.length} erro(s)
-                          </>
-                        )}
-                      </Badge>
-                    );
-                  })()}
+                    {/* Status de validação */}
+                    {(() => {
+                      const allQuestions = [...questions, ...strategicQuestions];
+                      const validation = validateQuiz(allQuestions);
+                      return (
+                        <Badge
+                          variant={validation.isValid ? "default" : "destructive"}
+                          className={cn(
+                            "font-medium",
+                            validation.isValid
+                              ? "bg-emerald-500 hover:bg-emerald-600"
+                              : "bg-red-500 hover:bg-red-600"
+                          )}
+                        >
+                          {validation.isValid ? (
+                            <>
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Válido
+                            </>
+                          ) : (
+                            <>
+                              <AlertCircle className="w-3 h-3 mr-1" />
+                              {validation.errors.length} erro(s)
+                            </>
+                          )}
+                        </Badge>
+                      );
+                    })()}
+                  </div>
                 </div>
               </div>
             </div>

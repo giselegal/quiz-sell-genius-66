@@ -30,14 +30,14 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     // Auto-avanço ativado ESPECIFICAMENTE quando 3 opções são selecionadas em questões normais
     const normalCondition =
       currentQuestionType === "normal" && selectedOptionsCount >= 3;
-    
+
     console.log("🔍 Verificando auto-avanço:", {
       canProceed,
       currentQuestionType,
       selectedOptionsCount,
-      shouldAdvance: normalCondition
+      shouldAdvance: normalCondition,
     });
-    
+
     return normalCondition;
   }, [canProceed, currentQuestionType, selectedOptionsCount]);
 
@@ -55,7 +55,11 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
 
       // Auto-avanço ativado para questões normais quando 3+ opções selecionadas
       if (shouldAutoAdvance()) {
-        console.log("🚀 Auto-avanço ATIVADO: avançando em 1200ms para questão normal com", selectedOptionsCount, "opções");
+        console.log(
+          "🚀 Auto-avanço ATIVADO: avançando em 1200ms para questão normal com",
+          selectedOptionsCount,
+          "opções"
+        );
         const newTimer = setTimeout(() => {
           console.log("✅ Executando auto-avanço AGORA!");
           onNext();
@@ -85,7 +89,10 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     if (!canProceed) {
       return currentQuestionType === "strategic"
         ? "Selecione 1 opção para continuar"
-        : `Selecione ${Math.max(0, 3 - selectedOptionsCount)} mais opções para continuar`;
+        : `Selecione ${Math.max(
+            0,
+            3 - selectedOptionsCount
+          )} mais opções para continuar`;
     }
     // Mostrar mensagem de auto-avanço para questões normais quando 3+ opções
     if (currentQuestionType === "normal" && selectedOptionsCount >= 3) {

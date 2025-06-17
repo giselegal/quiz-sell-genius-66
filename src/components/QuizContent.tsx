@@ -34,9 +34,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   const userName = user?.userName || localStorage.getItem("userName") || "";
 
   // Determine the required selections based on question type
-  const requiredSelections = showingStrategicQuestions
-    ? 1
-    : 3; // Always 3 for normal questions
+  const requiredSelections = showingStrategicQuestions ? 1 : 3; // Always 3 for normal questions
 
   // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length >= requiredSelections;
