@@ -2,6 +2,15 @@ import { useState, useEffect } from "react";
 import { EditorState, EditorStep } from "@/types/editor";
 import { loadQuizConfig } from "@/utils/quizStorage";
 
+// Importar do hook original para manter compatibilidade
+import { 
+  useQuizStyles as originalUseQuizStyles,
+  useQuizTheme as originalUseQuizTheme,
+  useQuizBehavior as originalUseQuizBehavior,
+  useQuizLayout as originalUseQuizLayout,
+  useQuizConfig as originalUseQuizConfig
+} from "./useQuizConfig.tsx";
+
 export const useQuizConfig = () => {
   const [config, setConfig] = useState<EditorState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,3 +69,12 @@ export const useQuizConfig = () => {
     getCurrentStepIndex,
   };
 };
+
+// Re-exportar hooks para manter compatibilidade
+export const useQuizStyles = originalUseQuizStyles;
+export const useQuizTheme = originalUseQuizTheme;
+export const useQuizBehavior = originalUseQuizBehavior;
+export const useQuizLayout = originalUseQuizLayout;
+
+// Criar alias para o hook original para não conflitar
+export const useQuizConfigOriginal = originalUseQuizConfig;
