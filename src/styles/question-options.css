@@ -25,7 +25,9 @@
 
 /* Layout baseado no tipo de conteúdo */
 .options-grid.text-only {
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr; /* Sempre uma coluna para texto */
+  max-width: 600px; /* Limita largura para melhor legibilidade */
+  margin: 0 auto; /* Centraliza */
 }
 
 .options-grid.with-images {
@@ -77,10 +79,10 @@
   transform: translateY(-3px);
 }
 
-/* Imagem da opção - Sem corte, proporção fixa */
+/* Imagem da opção - Ligeiramente maior */
 .option-image {
   width: 100%;
-  height: 180px; /* Altura maior no mobile para dar mais destaque */
+  height: 200px; /* Aumentou de 180px para 200px */
   object-fit: cover; /* Mobile: pode cortar para dar destaque */
   object-position: center;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -93,7 +95,7 @@
 /* Responsividade das imagens - Maior no desktop */
 @media (min-width: 640px) {
   .option-image {
-    height: 180px;
+    height: 200px; /* Aumentou de 180px para 200px */
     object-fit: contain; /* Desktop: mostra imagem completa sem cortar */
     background-color: #f8f9fa;
   }
@@ -101,7 +103,7 @@
 
 @media (min-width: 1024px) {
   .option-image {
-    height: 200px;
+    height: 220px; /* Aumentou de 200px para 220px */
     object-fit: contain; /* Desktop: mostra imagem completa sem cortar */
     background-color: #f8f9fa;
   }
