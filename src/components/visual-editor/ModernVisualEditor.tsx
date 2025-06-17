@@ -433,36 +433,51 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     handleElementAdd(componentType);
   };
 
-  const handleElementUpdate = (elementId: string, updates: Partial<{
-    content: Partial<CanvasElement['content']>;
-    style: Record<string, string>;
-    properties: Record<string, unknown>;
-  }>) => {
-    setCanvasElements(prev => prev.map(element => {
-      if (element.id === elementId) {
-        return {
-          ...element,
-          content: updates.content ? { ...element.content, ...updates.content } : element.content,
-          style: updates.style ? { ...element.content.style, ...updates.style } : element.content.style,
-          properties: updates.properties ? { ...element.content.properties, ...updates.properties } : element.content.properties,
-        };
-      }
-      return element;
-    }));
+  const handleElementUpdate = (
+    elementId: string,
+    updates: Partial<{
+      content: Partial<CanvasElement["content"]>;
+      style: Record<string, string>;
+      properties: Record<string, unknown>;
+    }>
+  ) => {
+    setCanvasElements((prev) =>
+      prev.map((element) => {
+        if (element.id === elementId) {
+          return {
+            ...element,
+            content: updates.content
+              ? { ...element.content, ...updates.content }
+              : element.content,
+            style: updates.style
+              ? { ...element.content.style, ...updates.style }
+              : element.content.style,
+            properties: updates.properties
+              ? { ...element.content.properties, ...updates.properties }
+              : element.content.properties,
+          };
+        }
+        return element;
+      })
+    );
   };
 
   const handleResetElement = (elementId: string) => {
-    setCanvasElements(prev => prev.map(element => {
-      if (element.id === elementId) {
-        const defaultContent = getDefaultContent(element.type);
-        return { ...element, content: defaultContent };
-      }
-      return element;
-    }));
+    setCanvasElements((prev) =>
+      prev.map((element) => {
+        if (element.id === elementId) {
+          const defaultContent = getDefaultContent(element.type);
+          return { ...element, content: defaultContent };
+        }
+        return element;
+      })
+    );
   };
 
   const handleDeleteElement = (elementId: string) => {
-    setCanvasElements(prev => prev.filter(element => element.id !== elementId));
+    setCanvasElements((prev) =>
+      prev.filter((element) => element.id !== elementId)
+    );
     if (selectedElementId === elementId) {
       setSelectedElementId(null);
     }
@@ -510,8 +525,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         return {};
     }
   };
-
-
 
   const handleElementDelete = (id: string) => {
     setCanvasElements((prev) => prev.filter((el) => el.id !== id));
@@ -635,16 +648,22 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                       variant="secondary"
                       className="bg-gray-100 text-gray-700"
                     >
-                      {questions.length} questões • {strategicQuestions.length} estratégicas
+                      {questions.length} questões • {strategicQuestions.length}{" "}
+                      estratégicas
                     </Badge>
 
                     {/* Status de validação */}
                     {(() => {
-                      const allQuestions = [...questions, ...strategicQuestions];
+                      const allQuestions = [
+                        ...questions,
+                        ...strategicQuestions,
+                      ];
                       const validation = validateQuiz(allQuestions);
                       return (
                         <Badge
-                          variant={validation.isValid ? "default" : "destructive"}
+                          variant={
+                            validation.isValid ? "default" : "destructive"
+                          }
                           className={cn(
                             "font-medium",
                             validation.isValid
@@ -824,7 +843,9 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   >
                     {isPreviewMode ? (
                       <EditorQuizPreview
-                        currentStage={stages.find(s => s.id === currentStage) || stages[0]}
+                        currentStage={
+                          stages.find((s) => s.id === currentStage) || stages[0]
+                        }
                         questions={questions}
                         strategicQuestions={strategicQuestions}
                         currentAnswers={previewAnswers}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface StageLayoutOfferProps {
   stage: {
@@ -9,8 +9,8 @@ interface StageLayoutOfferProps {
   };
 }
 
-export const StageLayoutOffer: React.FC<StageLayoutOfferProps> = ({ 
-  stage 
+export const StageLayoutOffer: React.FC<StageLayoutOfferProps> = ({
+  stage,
 }) => {
   // Importação dinâmica da página /quiz-descubra-seu-estilo
   return (
@@ -20,10 +20,13 @@ export const StageLayoutOffer: React.FC<StageLayoutOfferProps> = ({
           {stage.title || "Oferta Especial"}
         </h2>
         <p className="text-gray-600 mb-6">
-          {stage.subtitle || "Baseado no seu resultado, temos uma oferta personalizada para você!"}
+          {stage.subtitle ||
+            "Baseado no seu resultado, temos uma oferta personalizada para você!"}
         </p>
         <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">Sua Oferta Personalizada</h3>
+          <h3 className="text-xl font-semibold mb-2">
+            Sua Oferta Personalizada
+          </h3>
           <p className="text-sm opacity-90">
             Descubra produtos selecionados especialmente para o seu estilo único
           </p>

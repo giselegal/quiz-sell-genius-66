@@ -1,5 +1,5 @@
-import React from 'react';
-import { StrategicQuestions } from '../../quiz/StrategicQuestions';
+import React from "react";
+import { StrategicQuestions } from "../../quiz/StrategicQuestions";
 
 interface StageLayoutStrategicProps {
   stage: {
@@ -13,11 +13,11 @@ interface StageLayoutStrategicProps {
   showPrevious?: boolean;
 }
 
-export const StageLayoutStrategic: React.FC<StageLayoutStrategicProps> = ({ 
+export const StageLayoutStrategic: React.FC<StageLayoutStrategicProps> = ({
   stage,
   onNext,
   onPrevious,
-  showPrevious = false
+  showPrevious = false,
 }) => {
   return (
     <StrategicQuestions

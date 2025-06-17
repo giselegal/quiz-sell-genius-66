@@ -56,29 +56,29 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
     if (!selectedElementId) return;
 
     const updates: any = {};
-    
+
     switch (type) {
-      case 'imageSize':
+      case "imageSize":
         setImageSize(value);
         updates.style = { width: `${value[0]}%` };
         break;
-      case 'textSize':
+      case "textSize":
         setTextSize(value);
         updates.style = { fontSize: `${value[0]}px` };
         break;
-      case 'gridColumns':
+      case "gridColumns":
         setGridColumns(value);
         updates.properties = { gridColumns: value[0] };
         break;
-      case 'spacing':
+      case "spacing":
         setSpacing(value);
         updates.style = { gap: `${value[0]}px` };
         break;
-      case 'borderRadius':
+      case "borderRadius":
         setBorderRadius(value);
         updates.style = { borderRadius: `${value[0]}px` };
         break;
-      case 'opacity':
+      case "opacity":
         setOpacity(value);
         updates.style = { opacity: value[0] / 100 };
         break;
@@ -121,7 +121,7 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
           </Badge>
         </div>
       </CardHeader>
-      
+
       <ScrollArea className="flex-1">
         <CardContent className="space-y-6">
           <Tabs defaultValue="layout" className="w-full">
@@ -145,12 +145,16 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Image className="w-4 h-4 text-blue-600" />
-                  <Label className="text-sm font-medium">Tamanho da Imagem</Label>
+                  <Label className="text-sm font-medium">
+                    Tamanho da Imagem
+                  </Label>
                 </div>
                 <div className="space-y-2">
                   <Slider
                     value={imageSize}
-                    onValueChange={(value) => handleSliderChange(value, 'imageSize')}
+                    onValueChange={(value) =>
+                      handleSliderChange(value, "imageSize")
+                    }
                     max={100}
                     min={20}
                     step={5}
@@ -175,7 +179,9 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                 <div className="space-y-2">
                   <Slider
                     value={gridColumns}
-                    onValueChange={(value) => handleSliderChange(value, 'gridColumns')}
+                    onValueChange={(value) =>
+                      handleSliderChange(value, "gridColumns")
+                    }
                     max={4}
                     min={1}
                     step={1}
@@ -183,7 +189,9 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                   />
                   <div className="flex justify-between text-xs text-gray-500">
                     <span>1 col</span>
-                    <span className="font-medium">{gridColumns[0]} colunas</span>
+                    <span className="font-medium">
+                      {gridColumns[0]} colunas
+                    </span>
                     <span>4 cols</span>
                   </div>
                 </div>
@@ -200,7 +208,9 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                 <div className="space-y-2">
                   <Slider
                     value={spacing}
-                    onValueChange={(value) => handleSliderChange(value, 'spacing')}
+                    onValueChange={(value) =>
+                      handleSliderChange(value, "spacing")
+                    }
                     max={50}
                     min={0}
                     step={2}
@@ -220,12 +230,16 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Type className="w-4 h-4 text-purple-600" />
-                  <Label className="text-sm font-medium">Tamanho do Texto</Label>
+                  <Label className="text-sm font-medium">
+                    Tamanho do Texto
+                  </Label>
                 </div>
                 <div className="space-y-2">
                   <Slider
                     value={textSize}
-                    onValueChange={(value) => handleSliderChange(value, 'textSize')}
+                    onValueChange={(value) =>
+                      handleSliderChange(value, "textSize")
+                    }
                     max={32}
                     min={10}
                     step={1}
@@ -250,7 +264,9 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                 <div className="space-y-2">
                   <Slider
                     value={borderRadius}
-                    onValueChange={(value) => handleSliderChange(value, 'borderRadius')}
+                    onValueChange={(value) =>
+                      handleSliderChange(value, "borderRadius")
+                    }
                     max={25}
                     min={0}
                     step={1}
@@ -275,7 +291,9 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                 <div className="space-y-2">
                   <Slider
                     value={opacity}
-                    onValueChange={(value) => handleSliderChange(value, 'opacity')}
+                    onValueChange={(value) =>
+                      handleSliderChange(value, "opacity")
+                    }
                     max={100}
                     min={10}
                     step={5}
@@ -293,13 +311,19 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
             <TabsContent value="content" className="space-y-4 mt-4">
               {/* Controles de Alinhamento */}
               <div className="space-y-3">
-                <Label className="text-sm font-medium">Alinhamento de Texto</Label>
+                <Label className="text-sm font-medium">
+                  Alinhamento de Texto
+                </Label>
                 <div className="flex gap-1">
                   <Button
                     variant="outline"
                     size="sm"
                     className="flex-1"
-                    onClick={() => onElementUpdate(selectedElementId, { style: { textAlign: 'left' } })}
+                    onClick={() =>
+                      onElementUpdate(selectedElementId, {
+                        style: { textAlign: "left" },
+                      })
+                    }
                   >
                     <AlignLeft className="w-4 h-4" />
                   </Button>
@@ -307,7 +331,11 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                     variant="outline"
                     size="sm"
                     className="flex-1"
-                    onClick={() => onElementUpdate(selectedElementId, { style: { textAlign: 'center' } })}
+                    onClick={() =>
+                      onElementUpdate(selectedElementId, {
+                        style: { textAlign: "center" },
+                      })
+                    }
                   >
                     <AlignCenter className="w-4 h-4" />
                   </Button>
@@ -315,7 +343,11 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                     variant="outline"
                     size="sm"
                     className="flex-1"
-                    onClick={() => onElementUpdate(selectedElementId, { style: { textAlign: 'right' } })}
+                    onClick={() =>
+                      onElementUpdate(selectedElementId, {
+                        style: { textAlign: "right" },
+                      })
+                    }
                   >
                     <AlignRight className="w-4 h-4" />
                   </Button>
@@ -332,7 +364,11 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                     variant="outline"
                     size="sm"
                     className="flex-1"
-                    onClick={() => onElementUpdate(selectedElementId, { style: { fontWeight: 'bold' } })}
+                    onClick={() =>
+                      onElementUpdate(selectedElementId, {
+                        style: { fontWeight: "bold" },
+                      })
+                    }
                   >
                     <Bold className="w-4 h-4" />
                   </Button>
@@ -340,7 +376,11 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                     variant="outline"
                     size="sm"
                     className="flex-1"
-                    onClick={() => onElementUpdate(selectedElementId, { style: { fontStyle: 'italic' } })}
+                    onClick={() =>
+                      onElementUpdate(selectedElementId, {
+                        style: { fontStyle: "italic" },
+                      })
+                    }
                   >
                     <Italic className="w-4 h-4" />
                   </Button>
@@ -348,7 +388,11 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                     variant="outline"
                     size="sm"
                     className="flex-1"
-                    onClick={() => onElementUpdate(selectedElementId, { style: { textDecoration: 'underline' } })}
+                    onClick={() =>
+                      onElementUpdate(selectedElementId, {
+                        style: { textDecoration: "underline" },
+                      })
+                    }
                   >
                     <Underline className="w-4 h-4" />
                   </Button>
@@ -363,7 +407,11 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                 <Textarea
                   placeholder="Digite o texto aqui..."
                   className="min-h-[80px] resize-none"
-                  onChange={(e) => onElementUpdate(selectedElementId, { content: { text: e.target.value } })}
+                  onChange={(e) =>
+                    onElementUpdate(selectedElementId, {
+                      content: { text: e.target.value },
+                    })
+                  }
                 />
               </div>
             </TabsContent>

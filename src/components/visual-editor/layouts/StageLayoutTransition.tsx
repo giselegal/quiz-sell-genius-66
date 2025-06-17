@@ -1,5 +1,5 @@
-import React from 'react';
-import { QuizTransition } from '../../QuizTransition';
+import React from "react";
+import QuizTransition from "../../QuizTransition";
 
 interface StageLayoutTransitionProps {
   stage: {
@@ -11,14 +11,16 @@ interface StageLayoutTransitionProps {
   onNext?: () => void;
 }
 
-export const StageLayoutTransition: React.FC<StageLayoutTransitionProps> = ({ 
-  stage, 
-  onNext 
+export const StageLayoutTransition: React.FC<StageLayoutTransitionProps> = ({
+  stage,
+  onNext,
 }) => {
   return (
     <QuizTransition
       title={stage.title || "Analisando suas respostas..."}
-      subtitle={stage.subtitle || "Estamos preparando seu resultado personalizado"}
+      subtitle={
+        stage.subtitle || "Estamos preparando seu resultado personalizado"
+      }
       onNext={onNext}
     />
   );

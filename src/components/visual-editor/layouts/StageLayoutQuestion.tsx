@@ -1,5 +1,5 @@
-import React from 'react';
-import { QuizQuestion } from '../../QuizQuestion';
+import React from "react";
+import { QuizQuestion } from "../../QuizQuestion";
 
 interface StageLayoutQuestionProps {
   stage: {
@@ -22,14 +22,14 @@ interface StageLayoutQuestionProps {
   showNext?: boolean;
 }
 
-export const StageLayoutQuestion: React.FC<StageLayoutQuestionProps> = ({ 
+export const StageLayoutQuestion: React.FC<StageLayoutQuestionProps> = ({
   stage,
   selectedOptions = [],
   onAnswer,
   onNext,
   onPrevious,
   showPrevious = false,
-  showNext = false
+  showNext = false,
 }) => {
   return (
     <QuizQuestion
@@ -42,7 +42,7 @@ export const StageLayoutQuestion: React.FC<StageLayoutQuestionProps> = ({
       onPrevious={onPrevious}
       showPrevious={showPrevious}
       showNext={showNext}
-      multipleChoice={stage.type === 'multiple-choice'}
+      multipleChoice={stage.type === "multiple-choice"}
     />
   );
 };

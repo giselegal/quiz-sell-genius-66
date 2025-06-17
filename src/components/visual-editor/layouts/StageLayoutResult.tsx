@@ -1,5 +1,5 @@
-import React from 'react';
-import { ResultPage } from '../../../pages/ResultPage';
+import React from "react";
+import ResultPage from "../../../pages/ResultPage";
 
 interface StageLayoutResultProps {
   stage: {
@@ -10,10 +10,8 @@ interface StageLayoutResultProps {
   };
 }
 
-export const StageLayoutResult: React.FC<StageLayoutResultProps> = ({ 
-  stage 
+export const StageLayoutResult: React.FC<StageLayoutResultProps> = ({
+  stage,
 }) => {
-  return (
-    <ResultPage />
-  );
+  return <ResultPage />;
 };

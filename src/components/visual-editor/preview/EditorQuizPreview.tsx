@@ -7,7 +7,7 @@ import {
   StageLayoutTransition,
   StageLayoutStrategic,
   StageLayoutResult,
-  StageLayoutOffer
+  StageLayoutOffer,
 } from "../layouts";
 
 interface EditorQuizPreviewProps {
@@ -47,13 +47,14 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
               id: currentStage.id,
               type: currentStage.type,
               title: "Descubra Seu Estilo Único",
-              subtitle: "Um quiz personalizado para descobrir qual estilo combina mais com você",
-              buttonText: "Começar Quiz"
+              subtitle:
+                "Um quiz personalizado para descobrir qual estilo combina mais com você",
+              buttonText: "Começar Quiz",
             }}
             onNext={onNext}
           />
         );
-      
+
       case "quiz":
         if (currentStage.questionData) {
           return (
@@ -66,7 +67,12 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
                 options: currentStage.questionData.options,
               }}
               selectedOptions={currentAnswers}
-              onAnswer={(optionId) => onAnswer({ questionId: currentStage.questionData!.id, selectedOptions: [optionId] })}
+              onAnswer={(optionId) =>
+                onAnswer({
+                  questionId: currentStage.questionData!.id,
+                  selectedOptions: [optionId],
+                })
+              }
               onNext={onNext}
               onPrevious={onPrevious}
               showPrevious={!!onPrevious}
@@ -75,7 +81,7 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
           );
         }
         break;
-      
+
       case "strategic":
         return (
           <StageLayoutStrategic
@@ -83,14 +89,15 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
               id: currentStage.id,
               type: currentStage.type,
               title: "Questões Estratégicas",
-              subtitle: "Algumas perguntas adicionais para personalizar melhor sua experiência"
+              subtitle:
+                "Algumas perguntas adicionais para personalizar melhor sua experiência",
             }}
             onNext={onNext}
             onPrevious={onPrevious}
             showPrevious={!!onPrevious}
           />
         );
-      
+
       case "transition":
         return (
           <StageLayoutTransition
@@ -98,12 +105,12 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
               id: currentStage.id,
               type: currentStage.type,
               title: "Analisando suas respostas...",
-              subtitle: "Estamos preparando seu resultado personalizado"
+              subtitle: "Estamos preparando seu resultado personalizado",
             }}
             onNext={onNext}
           />
         );
-      
+
       case "result":
         return (
           <StageLayoutResult
@@ -111,11 +118,11 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
               id: currentStage.id,
               type: currentStage.type,
               title: "Seu Resultado",
-              subtitle: "Descubra qual estilo combina mais com você"
+              subtitle: "Descubra qual estilo combina mais com você",
             }}
           />
         );
-      
+
       case "offer":
         return (
           <StageLayoutOffer
@@ -123,16 +130,21 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
               id: currentStage.id,
               type: currentStage.type,
               title: "Oferta Especial",
-              subtitle: "Baseado no seu resultado, temos uma oferta personalizada!"
+              subtitle:
+                "Baseado no seu resultado, temos uma oferta personalizada!",
             }}
           />
         );
-      
+
       default:
         return (
           <div className="text-center p-8">
-            <p className="text-gray-500">Preview não disponível para este tipo de etapa</p>
-            <p className="text-sm text-gray-400 mt-2">Tipo: {currentStage.type}</p>
+            <p className="text-gray-500">
+              Preview não disponível para este tipo de etapa
+            </p>
+            <p className="text-sm text-gray-400 mt-2">
+              Tipo: {currentStage.type}
+            </p>
           </div>
         );
     }
@@ -140,12 +152,15 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
 
   // Main render with viewport wrapper
   return (
-    <div 
+    <div
       className={`quiz-preview-container ${viewportMode}-viewport`}
       style={{
-        maxWidth: 
-          viewportMode === "desktop" ? "1024px" : 
-          viewportMode === "tablet" ? "768px" : "420px",
+        maxWidth:
+          viewportMode === "desktop"
+            ? "1024px"
+            : viewportMode === "tablet"
+            ? "768px"
+            : "420px",
         margin: "0 auto",
         padding: "20px",
       }}
