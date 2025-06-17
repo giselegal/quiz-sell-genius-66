@@ -8,7 +8,8 @@ import {
   useQuizTheme as originalUseQuizTheme,
   useQuizBehavior as originalUseQuizBehavior,
   useQuizLayout as originalUseQuizLayout,
-  useQuizConfig as originalUseQuizConfig
+  useQuizConfig as originalUseQuizConfig,
+  QuizConfigProvider as originalQuizConfigProvider
 } from "./useQuizConfig.tsx";
 
 export const useQuizConfig = () => {
@@ -75,6 +76,7 @@ export const useQuizStyles = originalUseQuizStyles;
 export const useQuizTheme = originalUseQuizTheme;
 export const useQuizBehavior = originalUseQuizBehavior;
 export const useQuizLayout = originalUseQuizLayout;
+export const QuizConfigProvider = originalQuizConfigProvider;
 
 // Criar alias para o hook original para não conflitar
 export const useQuizConfigOriginal = originalUseQuizConfig;
