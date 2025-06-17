@@ -2,7 +2,7 @@
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #B89B7A #f1f1f1;
+  scrollbar-color: #b89b7a #f1f1f1;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -15,7 +15,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #B89B7A;
+  background: #b89b7a;
   border-radius: 10px;
   transition: background 0.3s ease;
 }
@@ -72,7 +72,7 @@
 }
 
 .scroll-container:hover .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #B89B7A;
+  background: #b89b7a;
 }
 
 /* Indicador de rolagem */

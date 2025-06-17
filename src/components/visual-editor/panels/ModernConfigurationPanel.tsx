@@ -31,6 +31,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import {
+  useQuizTheme,
+  useQuizBehavior,
+  useQuizLayout,
+} from "@/hooks/useQuizConfig";
 
 interface QuestionOption {
   id: string;
@@ -130,7 +135,8 @@ export const ModernConfigurationPanel: React.FC<
                       onUpdate?.({ ...questionData, title: e.target.value })
                     }
                     placeholder="Digite o título da sua questão aqui..."
-                    className="min-h-[80px] bg-white border-blue-200 focus:border-blue-400 focus:ring-blue-400 resize-none text-sm leading-relaxed"
+                    className="min-h-[80px] border-blue-200 focus:border-blue-400 focus:ring-blue-400 resize-none text-sm leading-relaxed"
+                    style={{ backgroundColor: "#FEFEFE" }}
                     maxLength={500}
                   />
                   <div className="flex justify-between items-center text-xs text-gray-500">
@@ -191,7 +197,8 @@ export const ModernConfigurationPanel: React.FC<
                   {questionData?.options?.map((option, index) => (
                     <div
                       key={option.id}
-                      className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 transition-all duration-200 hover:shadow-md"
+                      className="border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-300 transition-all duration-200 hover:shadow-md"
+                      style={{ backgroundColor: "#FEFEFE" }}
                     >
                       {/* Option Header */}
                       <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
@@ -315,7 +322,8 @@ export const ModernConfigurationPanel: React.FC<
                                 });
                               }}
                               placeholder="Digite o texto da opção..."
-                              className="min-h-[80px] bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-400 focus:ring-blue-400 resize-none text-sm leading-relaxed"
+                              className="min-h-[80px] bg-gray-50 border-gray-200 focus:border-blue-400 focus:ring-blue-400 resize-none text-sm leading-relaxed"
+                              style={{ focus: { backgroundColor: "#FEFEFE" } }}
                               maxLength={300}
                             />
                             <div className="flex justify-between items-center text-xs text-gray-500">
@@ -353,7 +361,10 @@ export const ModernConfigurationPanel: React.FC<
                                       });
                                     }}
                                     placeholder="Cole a URL da imagem ou use upload..."
-                                    className="flex-1 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-400 text-sm h-9"
+                                    className="flex-1 bg-gray-50 border-gray-200 focus:border-blue-400 text-sm h-9"
+                                    style={{
+                                      focus: { backgroundColor: "#FEFEFE" },
+                                    }}
                                   />
                                   <Button
                                     size="sm"
@@ -473,7 +484,10 @@ export const ModernConfigurationPanel: React.FC<
                       </Label>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
+                    <div
+                      className="flex items-center justify-between p-3 rounded-lg border border-gray-200"
+                      style={{ backgroundColor: "#FEFEFE" }}
+                    >
                       <div>
                         <Label className="text-sm font-medium text-gray-700">
                           Seleção múltipla
@@ -530,7 +544,10 @@ export const ModernConfigurationPanel: React.FC<
                       ))}
                     </div>
                     {/* Font Preview */}
-                    <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <div
+                      className="p-3 rounded-lg border border-gray-200"
+                      style={{ backgroundColor: "#FEFEFE" }}
+                    >
                       <p
                         className={`text-gray-800 transition-all duration-300 ${
                           fontSize === "small"
@@ -571,7 +588,10 @@ export const ModernConfigurationPanel: React.FC<
                       ))}
                     </div>
                     {/* Image Size Preview */}
-                    <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <div
+                      className="p-3 rounded-lg border border-gray-200"
+                      style={{ backgroundColor: "#FEFEFE" }}
+                    >
                       <div
                         className={`bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg transition-all duration-300 ${
                           imageSize === "small"
@@ -580,6 +600,7 @@ export const ModernConfigurationPanel: React.FC<
                             ? "h-24"
                             : "h-32"
                         }`}
+                        style={{ backgroundColor: "#FEFEFE" }}
                       >
                         <div className="flex items-center justify-center h-full">
                           <Image className="w-8 h-8 text-gray-400" />
@@ -597,8 +618,14 @@ export const ModernConfigurationPanel: React.FC<
                       <Bold className="w-4 h-4" />
                       Tamanho do Título
                     </Label>
-                    <Select value={titleFontSize} onValueChange={setTitleFontSize}>
-                      <SelectTrigger className="bg-white border-gray-200 focus:border-pink-300 focus:ring-pink-300">
+                    <Select
+                      value={titleFontSize}
+                      onValueChange={setTitleFontSize}
+                    >
+                      <SelectTrigger
+                        className="border-gray-200 focus:border-pink-300 focus:ring-pink-300"
+                        style={{ backgroundColor: "#FEFEFE" }}
+                      >
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>

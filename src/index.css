@@ -3,6 +3,8 @@
 @import "./styles/effects.css";
 @import "./styles/question-options.css";
 @import "./styles/scrollbar.css";
+@import "./styles/quiz-background.css";
+@import "./styles/quiz-dynamic-theme.css";
 /* @import './styles/typography.css'; */ /* MISSING */
 /* @import './styles/animations.css'; */ /* MISSING */
 /* @import './styles/spinner.css'; */ /* MISSING */

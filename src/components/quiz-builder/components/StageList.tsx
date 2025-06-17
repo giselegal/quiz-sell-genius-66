@@ -69,7 +69,11 @@ export const StageList: React.FC<StageListProps> = ({
                           stage.id === activeStageId
                             ? "border-[#B89B7A] bg-[#FAF9F7] shadow-sm scale-[1.02]"
                             : "hover:border-[#B89B7A]/50"
-                        } ${snapshot.isDragging ? "shadow-lg scale-105 rotate-1" : ""}`}
+                        } ${
+                          snapshot.isDragging
+                            ? "shadow-lg scale-105 rotate-1"
+                            : ""
+                        }`}
                         onClick={() => onStageSelect(stage.id)}
                       >
                         <div className="flex items-center justify-between">
@@ -78,7 +82,8 @@ export const StageList: React.FC<StageListProps> = ({
                             onChange={(e) =>
                               handleTitleChange(stage.id, e.target.value)
                             }
-                            className="flex-1 mr-2 text-sm border-none bg-transparent focus:bg-white focus:border-[#B89B7A] transition-all duration-200"
+                            className="flex-1 mr-2 text-sm border-none bg-transparent focus:border-[#B89B7A] transition-all duration-200"
+                            style={{ focus: { backgroundColor: "#FEFEFE" } }}
                             onClick={(e) => e.stopPropagation()}
                           />
                           <Button

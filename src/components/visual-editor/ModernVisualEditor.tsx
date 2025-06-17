@@ -11,9 +11,11 @@ import { StepsPanel } from "./steps/StepsPanel";
 import { ComponentsPalette } from "./sidebar/ComponentsPalette";
 import { ModernConfigurationPanel } from "./panels/ModernConfigurationPanel";
 import { OptionConfigurationPanel } from "./panels/OptionConfigurationPanel";
+import { QuizConfigPanel } from "./panels/QuizConfigPanel";
 import { EditableCanvas } from "./canvas/EditableCanvas";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
-import { Eye, Save, Monitor, Tablet, Smartphone } from "lucide-react";
+import { useQuizStyles } from "@/hooks/useQuizConfig";
+import { Eye, Save, Monitor, Tablet, Smartphone, Settings } from "lucide-react";
 
 interface EditorStage {
   id: string;
@@ -48,6 +50,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 }) => {
   const { questions, strategicQuestions, loading, error } =
     useSupabaseQuestions();
+  const { cssVariables } = useQuizStyles();
   const [stages, setStages] = useState<EditorStage[]>([]);
   const [currentStage, setCurrentStage] = useState<string>("intro");
   const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
@@ -55,6 +58,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     "desktop" | "tablet" | "mobile"
   >("desktop");
   const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
+  const [showQuizConfig, setShowQuizConfig] = useState<boolean>(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null
@@ -428,9 +432,15 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   }
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+    <div
+      className="h-screen bg-gray-50 flex flex-col overflow-hidden quiz-dynamic-theme"
+      style={cssVariables}
+    >
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3 flex-shrink-0">
+      <div
+        className="border-b border-gray-200 px-6 py-3 flex-shrink-0"
+        style={{ backgroundColor: "#FEFEFE" }}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h1 className="text-xl font-bold text-gray-900">
@@ -484,6 +494,16 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               {isPreviewMode ? "Edição" : "Preview"}
             </Button>
 
+            {/* Quiz Config Toggle */}
+            <Button
+              variant={showQuizConfig ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowQuizConfig(!showQuizConfig)}
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Config
+            </Button>
+
             {/* Save Button */}
             <Button onClick={handleSave} size="sm">
               <Save className="w-4 h-4 mr-2" />
@@ -498,7 +518,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         <ResizablePanelGroup direction="horizontal" className="h-full">
           {/* Left Column - Steps Panel */}
           <ResizablePanel defaultSize={12} minSize={8} maxSize={20}>
-            <div className="h-full bg-white border-r border-gray-200">
+            <div
+              className="h-full border-r border-gray-200"
+              style={{ backgroundColor: "#FEFEFE" }}
+            >
               <StepsPanel
                 stages={stages}
                 currentStage={currentStage}
@@ -525,13 +548,14 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizablePanel defaultSize={40} minSize={30} maxSize={60}>
             <div className="h-full overflow-auto bg-gray-100 p-6">
               <div
-                className={`mx-auto bg-white shadow-lg rounded-lg overflow-hidden ${
+                className={`mx-auto shadow-lg rounded-lg overflow-hidden ${
                   viewportMode === "desktop"
                     ? "max-w-4xl"
                     : viewportMode === "tablet"
                     ? "max-w-xl"
                     : "max-w-sm"
                 }`}
+                style={{ backgroundColor: "#FEFEFE" }}
               >
                 <EditableCanvas
                   elements={canvasElements}
@@ -550,8 +574,15 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizableHandle withHandle />
 
           {/* Fourth Column - Configuration Panel (Expanded) */}
-          <ResizablePanel defaultSize={33} minSize={25} maxSize={45}>
-            <div className="h-full bg-white border-l border-gray-200">
+          <ResizablePanel
+            defaultSize={showQuizConfig ? 25 : 33}
+            minSize={showQuizConfig ? 20 : 25}
+            maxSize={showQuizConfig ? 35 : 45}
+          >
+            <div
+              className="h-full border-l border-gray-200"
+              style={{ backgroundColor: "#FEFEFE" }}
+            >
               <div className="h-full overflow-auto">
                 <ModernConfigurationPanel
                   stageName={
@@ -601,6 +632,19 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               </div>
             </div>
           </ResizablePanel>
+
+          {/* Fifth Column - Quiz Configuration Panel (Conditional) */}
+          {showQuizConfig && (
+            <>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                <QuizConfigPanel
+                  isOpen={showQuizConfig}
+                  onToggle={() => setShowQuizConfig(!showQuizConfig)}
+                />
+              </ResizablePanel>
+            </>
+          )}
         </ResizablePanelGroup>
       </div>
 

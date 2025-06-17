@@ -1,25 +1,11 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-  createContext,
-} from "react";
-import {
-  QuizConfig,
-  QuizConfigState,
-  DEFAULT_QUIZ_CONFIG,
-} from "@/types/quiz-config";
+import { useState, useEffect, useCallback, useContext, createContext } from 'react';
+import { QuizConfig, QuizConfigState, DEFAULT_QUIZ_CONFIG } from '@/types/quiz-config';
 
 // Utilitários
 const deepMerge = (target: any, source: any): any => {
   const result = { ...target };
   for (const key in source) {
-    if (
-      source[key] &&
-      typeof source[key] === "object" &&
-      !Array.isArray(source[key])
-    ) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
       result[key] = deepMerge(target[key] || {}, source[key]);
     } else {
       result[key] = source[key];
@@ -29,18 +15,15 @@ const deepMerge = (target: any, source: any): any => {
 };
 
 const validateConfig = (config: Partial<QuizConfig>): boolean => {
-  if (
-    config.theme?.backgroundColor &&
-    !config.theme.backgroundColor.match(/^#[0-9A-Fa-f]{6}$/)
-  ) {
+  if (config.theme?.backgroundColor && !config.theme.backgroundColor.match(/^#[0-9A-Fa-f]{6}$/)) {
     return false;
   }
   return true;
 };
 
 // Storage
-const STORAGE_KEY = "quiz-config-v1";
-const HISTORY_KEY = "quiz-config-history-v1";
+const STORAGE_KEY = 'quiz-config-v1';
+const HISTORY_KEY = 'quiz-config-history-v1';
 
 const saveToStorage = (config: QuizConfig): void => {
   try {
@@ -49,7 +32,7 @@ const saveToStorage = (config: QuizConfig): void => {
     const newHistory = [config, ...history.slice(0, 9)];
     localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
   } catch (error) {
-    console.error("Erro ao salvar configuração:", error);
+    console.error('Erro ao salvar configuração:', error);
   }
 };
 
@@ -61,7 +44,7 @@ const loadFromStorage = (): QuizConfig => {
       return deepMerge(DEFAULT_QUIZ_CONFIG, config);
     }
   } catch (error) {
-    console.error("Erro ao carregar configuração:", error);
+    console.error('Erro ao carregar configuração:', error);
   }
   return DEFAULT_QUIZ_CONFIG;
 };
@@ -71,7 +54,7 @@ const getHistoryFromStorage = (): QuizConfig[] => {
     const stored = localStorage.getItem(HISTORY_KEY);
     return stored ? JSON.parse(stored) : [];
   } catch (error) {
-    console.error("Erro ao carregar histórico:", error);
+    console.error('Erro ao carregar histórico:', error);
     return [];
   }
 };
@@ -91,11 +74,7 @@ interface QuizConfigContextType {
 const QuizConfigContext = createContext<QuizConfigContextType | null>(null);
 
 // Provider
-export const QuizConfigProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const QuizConfigProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, setState] = useState<QuizConfigState>({
     current: loadFromStorage(),
     history: getHistoryFromStorage(),
@@ -106,18 +85,18 @@ export const QuizConfigProvider = ({
 
   const saveConfig = useCallback(async (): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true }));
+      setState(prev => ({ ...prev, isLoading: true }));
       saveToStorage(state.current);
-      setState((prev) => ({
+      setState(prev => ({
         ...prev,
         isDirty: false,
         isLoading: false,
         history: [state.current, ...prev.history.slice(0, 9)],
       }));
     } catch (error) {
-      setState((prev) => ({
+      setState(prev => ({
         ...prev,
-        error: error instanceof Error ? error.message : "Erro ao salvar",
+        error: error instanceof Error ? error.message : 'Erro ao salvar',
         isLoading: false,
       }));
     }
@@ -132,42 +111,38 @@ export const QuizConfigProvider = ({
     }
   }, [state.current, state.isDirty, saveConfig]);
 
-  const updateConfig = useCallback(
-    async (updates: Partial<QuizConfig>): Promise<void> => {
-      try {
-        setState((prev) => ({ ...prev, isLoading: true, error: null }));
+  const updateConfig = useCallback(async (updates: Partial<QuizConfig>): Promise<void> => {
+    try {
+      setState(prev => ({ ...prev, isLoading: true, error: null }));
 
-        if (!validateConfig(updates)) {
-          throw new Error("Configuração inválida");
-        }
-
-        const newConfig: QuizConfig = {
-          ...deepMerge(state.current, updates),
-          lastModified: new Date().toISOString(),
-          version: `${parseInt(state.current.version.split(".")[0])}.${
-            parseInt(state.current.version.split(".")[1]) + 1
-          }.0`,
-        };
-
-        setState((prev) => ({
-          ...prev,
-          current: newConfig,
-          isDirty: true,
-          isLoading: false,
-        }));
-      } catch (error) {
-        setState((prev) => ({
-          ...prev,
-          error: error instanceof Error ? error.message : "Erro desconhecido",
-          isLoading: false,
-        }));
+      if (!validateConfig(updates)) {
+        throw new Error('Configuração inválida');
       }
-    },
-    [state.current]
-  );
+
+      const newConfig: QuizConfig = {
+        ...deepMerge(state.current, updates),
+        lastModified: new Date().toISOString(),
+        version: `${parseInt(state.current.version.split('.')[0])}.${parseInt(state.current.version.split('.')[1]) + 1}.0`,
+      };
+
+      setState(prev => ({
+        ...prev,
+        current: newConfig,
+        isDirty: true,
+        isLoading: false,
+      }));
+
+    } catch (error) {
+      setState(prev => ({
+        ...prev,
+        error: error instanceof Error ? error.message : 'Erro desconhecido',
+        isLoading: false,
+      }));
+    }
+  }, [state.current]);
 
   const resetConfig = useCallback(() => {
-    setState((prev) => ({
+    setState(prev => ({
       ...prev,
       current: { ...DEFAULT_QUIZ_CONFIG },
       isDirty: true,
@@ -175,7 +150,7 @@ export const QuizConfigProvider = ({
   }, []);
 
   const loadConfig = useCallback((config: QuizConfig) => {
-    setState((prev) => ({
+    setState(prev => ({
       ...prev,
       current: deepMerge(DEFAULT_QUIZ_CONFIG, config),
       isDirty: true,
@@ -183,7 +158,7 @@ export const QuizConfigProvider = ({
   }, []);
 
   const revertToVersion = useCallback((version: QuizConfig) => {
-    setState((prev) => ({
+    setState(prev => ({
       ...prev,
       current: { ...version },
       isDirty: true,
@@ -194,22 +169,19 @@ export const QuizConfigProvider = ({
     return JSON.stringify(state.current, null, 2);
   }, [state.current]);
 
-  const importConfig = useCallback(
-    (configJson: string): boolean => {
-      try {
-        const config = JSON.parse(configJson);
-        if (validateConfig(config)) {
-          loadConfig(config);
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error("Erro ao importar configuração:", error);
-        return false;
+  const importConfig = useCallback((configJson: string): boolean => {
+    try {
+      const config = JSON.parse(configJson);
+      if (validateConfig(config)) {
+        loadConfig(config);
+        return true;
       }
-    },
-    [loadConfig]
-  );
+      return false;
+    } catch (error) {
+      console.error('Erro ao importar configuração:', error);
+      return false;
+    }
+  }, [loadConfig]);
 
   const contextValue: QuizConfigContextType = {
     state,
@@ -233,9 +205,7 @@ export const QuizConfigProvider = ({
 export const useQuizConfig = (): QuizConfigContextType => {
   const context = useContext(QuizConfigContext);
   if (!context) {
-    throw new Error(
-      "useQuizConfig deve ser usado dentro de QuizConfigProvider"
-    );
+    throw new Error('useQuizConfig deve ser usado dentro de QuizConfigProvider');
   }
   return context;
 };
@@ -243,13 +213,10 @@ export const useQuizConfig = (): QuizConfigContextType => {
 // Hooks específicos
 export const useQuizTheme = () => {
   const { state, updateConfig } = useQuizConfig();
-
-  const updateTheme = useCallback(
-    (themeUpdates: Partial<QuizConfig["theme"]>) => {
-      return updateConfig({ theme: themeUpdates });
-    },
-    [updateConfig]
-  );
+  
+  const updateTheme = useCallback((themeUpdates: Partial<QuizConfig['theme']>) => {
+    return updateConfig({ theme: themeUpdates });
+  }, [updateConfig]);
 
   return {
     theme: state.current.theme,
@@ -260,13 +227,10 @@ export const useQuizTheme = () => {
 
 export const useQuizBehavior = () => {
   const { state, updateConfig } = useQuizConfig();
-
-  const updateBehavior = useCallback(
-    (behaviorUpdates: Partial<QuizConfig["behavior"]>) => {
-      return updateConfig({ behavior: behaviorUpdates });
-    },
-    [updateConfig]
-  );
+  
+  const updateBehavior = useCallback((behaviorUpdates: Partial<QuizConfig['behavior']>) => {
+    return updateConfig({ behavior: behaviorUpdates });
+  }, [updateConfig]);
 
   return {
     behavior: state.current.behavior,
@@ -277,13 +241,10 @@ export const useQuizBehavior = () => {
 
 export const useQuizLayout = () => {
   const { state, updateConfig } = useQuizConfig();
-
-  const updateLayout = useCallback(
-    (layoutUpdates: Partial<QuizConfig["layout"]>) => {
-      return updateConfig({ layout: layoutUpdates });
-    },
-    [updateConfig]
-  );
+  
+  const updateLayout = useCallback((layoutUpdates: Partial<QuizConfig['layout']>) => {
+    return updateConfig({ layout: layoutUpdates });
+  }, [updateConfig]);
 
   return {
     layout: state.current.layout,
@@ -295,20 +256,20 @@ export const useQuizLayout = () => {
 // Hook para CSS dinâmico
 export const useQuizStyles = () => {
   const { theme, layout } = useQuizConfig().state.current;
-
+  
   const cssVariables = {
-    "--quiz-bg-color": theme.backgroundColor,
-    "--quiz-primary-color": theme.primaryColor,
-    "--quiz-secondary-color": theme.secondaryColor,
-    "--quiz-accent-color": theme.accentColor,
-    "--quiz-text-color": theme.textColor,
-    "--quiz-text-secondary-color": theme.textSecondaryColor,
-    "--quiz-font-family": theme.fontFamily,
-    "--quiz-font-size-title": theme.fontSize.title,
-    "--quiz-font-size-subtitle": theme.fontSize.subtitle,
-    "--quiz-font-size-body": theme.fontSize.body,
-    "--quiz-font-size-small": theme.fontSize.small,
-    "--quiz-border-radius": layout.borderRadius,
+    '--quiz-bg-color': theme.backgroundColor,
+    '--quiz-primary-color': theme.primaryColor,
+    '--quiz-secondary-color': theme.secondaryColor,
+    '--quiz-accent-color': theme.accentColor,
+    '--quiz-text-color': theme.textColor,
+    '--quiz-text-secondary-color': theme.textSecondaryColor,
+    '--quiz-font-family': theme.fontFamily,
+    '--quiz-font-size-title': theme.fontSize.title,
+    '--quiz-font-size-subtitle': theme.fontSize.subtitle,
+    '--quiz-font-size-body': theme.fontSize.body,
+    '--quiz-font-size-small': theme.fontSize.small,
+    '--quiz-border-radius': layout.borderRadius,
   };
 
   return { cssVariables, theme, layout };

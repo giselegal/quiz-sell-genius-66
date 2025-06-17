@@ -27,9 +27,9 @@
 
 /* Layout baseado no tipo de conteúdo - Sempre uma coluna para texto */
 .options-grid.text-only {
-  grid-template-columns: 1fr; 
+  grid-template-columns: 1fr;
   max-width: 700px; /* Aumentado para melhor uso do espaço */
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .options-grid.with-images {
@@ -56,7 +56,7 @@
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: white;
+  background: #fefefe;
   /* Sombra removida por padrão */
 }
 
@@ -96,7 +96,7 @@
   .option-image {
     height: 240px; /* Aumentado para desktop */
     object-fit: contain; /* Desktop: imagem completa sem corte */
-    background-color: #f8f9fa;
+    background-color: #fefefe;
   }
 }
 
@@ -104,7 +104,7 @@
   .option-image {
     height: 260px; /* Ainda maior em telas grandes */
     object-fit: contain;
-    background-color: #f8f9fa;
+    background-color: #fefefe;
   }
 }
 
@@ -134,7 +134,7 @@
 
   .option-content.with-image {
     padding: 0.5rem 0.75rem;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(254, 254, 254, 0.95);
   }
 
   .option-content.text-only {
@@ -238,6 +238,11 @@
   /* Melhor contraste no desktop */
   .option-title {
     color: #111827;
+  }
+
+  /* Cor de fundo das imagens */
+  .option-image {
+    background-color: #fefefe;
   }
 }
 

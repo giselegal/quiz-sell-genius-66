@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '../ui/button';
-import { ChevronLeft, ChevronRight, Check, AlertTriangle } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from "react";
+import { Button } from "../ui/button";
+import { ChevronLeft, ChevronRight, Check, AlertTriangle } from "lucide-react";
 
 interface QuizNavigationProps {
   canProceed: boolean;
   onNext: () => void;
   onPrevious?: () => void;
-  currentQuestionType: 'normal' | 'strategic';
+  currentQuestionType: "normal" | "strategic";
   selectedOptionsCount: number;
   isLastQuestion?: boolean;
 }
@@ -17,17 +17,19 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
   onPrevious,
   currentQuestionType,
   selectedOptionsCount,
-  isLastQuestion = false
+  isLastQuestion = false,
 }) => {
   const [showActivationEffect, setShowActivationEffect] = useState(false);
-  const [autoAdvanceTimer, setAutoAdvanceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [autoAdvanceTimer, setAutoAdvanceTimer] =
+    useState<NodeJS.Timeout | null>(null);
 
   const shouldAutoAdvance = useCallback((): boolean => {
     if (!canProceed) {
       return false;
     }
     // Auto-avanço ativado: questões normais com 3 seleções avançam automaticamente
-    const normalCondition = currentQuestionType === 'normal' && selectedOptionsCount === 3;
+    const normalCondition =
+      currentQuestionType === "normal" && selectedOptionsCount === 3;
     return normalCondition;
   }, [canProceed, currentQuestionType, selectedOptionsCount]);
 
@@ -37,17 +39,17 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
       setAutoAdvanceTimer(null);
     }
 
-    if (canProceed) { 
+    if (canProceed) {
       setShowActivationEffect(true);
       const visualTimer = setTimeout(() => {
         setShowActivationEffect(false);
       }, 2000);
 
       // Auto-avanço ativado para questões normais
-      if (currentQuestionType === 'normal' && shouldAutoAdvance()) {
-        console.log('🚀 Auto-avanço ativado: avançando em 800ms');
+      if (currentQuestionType === "normal" && shouldAutoAdvance()) {
+        console.log("🚀 Auto-avanço ativado: avançando em 800ms");
         const newTimer = setTimeout(() => {
-          console.log('✅ Executando auto-avanço agora');
+          console.log("✅ Executando auto-avanço agora");
           onNext();
         }, 800); // Tempo aumentado para melhor UX
         setAutoAdvanceTimer(newTimer);
@@ -62,33 +64,41 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     } else {
       setShowActivationEffect(false);
     }
-  }, [canProceed, onNext, shouldAutoAdvance, currentQuestionType, autoAdvanceTimer]);
+  }, [
+    canProceed,
+    onNext,
+    shouldAutoAdvance,
+    currentQuestionType,
+    autoAdvanceTimer,
+  ]);
 
   const getHelperText = useCallback((): string => {
     if (!canProceed) {
-      return currentQuestionType === 'strategic'
-        ? 'Selecione 1 opção para continuar'
-        : 'Selecione 3 opções para continuar';
+      return currentQuestionType === "strategic"
+        ? "Selecione 1 opção para continuar"
+        : "Selecione 3 opções para continuar";
     }
     // Mostrar mensagem de auto-avanço para questões normais
-    if (currentQuestionType === 'normal' && canProceed) {
-      return 'Avançando automaticamente...';
+    if (currentQuestionType === "normal" && canProceed) {
+      return "Avançando automaticamente...";
     }
-    return '';
+    return "";
   }, [canProceed, currentQuestionType]);
 
-  const nextButtonText = isLastQuestion ? 'Ver Resultado' : 'Avançar';
+  const nextButtonText = isLastQuestion ? "Ver Resultado" : "Avançar";
 
   return (
     <div className="mt-6 w-full px-4 md:px-0">
       <div className="flex flex-col items-center w-full">
         {/* Texto de ajuda dinâmico */}
         {!canProceed && (
-          <p className="text-sm text-[#8F7A6A] mb-3 text-center">{getHelperText()}</p>
+          <p className="text-sm text-[#8F7A6A] mb-3 text-center">
+            {getHelperText()}
+          </p>
         )}
-        
+
         {/* Feedback de auto-avanço para questões normais */}
-        {canProceed && currentQuestionType === 'normal' && (
+        {canProceed && currentQuestionType === "normal" && (
           <p className="text-sm text-green-600 mb-3 text-center animate-pulse">
             {getHelperText()}
           </p>
@@ -115,15 +125,21 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
               ${
                 canProceed
                   ? `bg-[#b29670] text-white hover:bg-[#a0845c] border-[#b29670] ${
-                      showActivationEffect ? 'scale-105 shadow-lg ring-2 ring-[#b29670] ring-opacity-50' : ''
+                      showActivationEffect
+                        ? "scale-105 shadow-lg ring-2 ring-[#b29670] ring-opacity-50"
+                        : ""
                     }`
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300 hover:scale-100'
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300 hover:scale-100"
               }`}
             aria-label={nextButtonText}
             aria-disabled={!canProceed}
           >
             {nextButtonText}
-            {isLastQuestion ? <Check className="ml-2 h-5 w-5" /> : <ChevronRight className="ml-2 h-5 w-5" />}
+            {isLastQuestion ? (
+              <Check className="ml-2 h-5 w-5" />
+            ) : (
+              <ChevronRight className="ml-2 h-5 w-5" />
+            )}
           </Button>
         </div>
       </div>

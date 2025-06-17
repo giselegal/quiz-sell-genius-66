@@ -13,6 +13,7 @@ import { sharedStyles } from "@/styles/sharedStyles";
 import { ResultPageConfig } from "@/types/resultPageConfig";
 import { cn } from "@/lib/utils";
 import GuaranteeSection from "./result/GuaranteeSection";
+import { useQuizStyles } from "@/hooks/useQuizConfig";
 
 interface QuizResultProps {
   primaryStyle: StyleResult;
@@ -31,6 +32,7 @@ const QuizResult: React.FC<QuizResultProps> = ({
 }) => {
   const { user } = useAuth();
   const [userName, setUserName] = useState<string>("Visitante");
+  const { cssVariables } = useQuizStyles();
 
   useEffect(() => {
     if (user && user.userName) {
@@ -82,11 +84,10 @@ const QuizResult: React.FC<QuizResultProps> = ({
         previewMode ? "max-h-screen overflow-auto" : ""
       )}
       style={{
+        ...cssVariables,
         backgroundColor:
-          config?.globalStyles?.backgroundColor ||
-          sharedStyles.colors.background,
-        color:
-          config?.globalStyles?.textColor || sharedStyles.colors.text,
+          config?.globalStyles?.backgroundColor || "var(--quiz-bg-color)",
+        color: config?.globalStyles?.textColor || "var(--quiz-text-color)",
       }}
     >
       <ContentContainer size="md">
