@@ -841,16 +841,16 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
                   {/* Viewport indicator */}
                   <div className="flex justify-center mt-6">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-slate-200/60 shadow-sm">
+                    <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm">
                       <div
                         className={cn(
                           "w-2 h-2 rounded-full",
-                          viewportMode === "desktop" && "bg-blue-500",
-                          viewportMode === "tablet" && "bg-orange-500",
-                          viewportMode === "mobile" && "bg-green-500"
+                          viewportMode === "desktop" && "bg-gray-600",
+                          viewportMode === "tablet" && "bg-gray-600", 
+                          viewportMode === "mobile" && "bg-gray-600"
                         )}
                       ></div>
-                      <span className="text-sm font-medium text-slate-700">
+                      <span className="text-sm font-medium text-gray-700">
                         {viewportMode === "desktop" && "Desktop"}
                         {viewportMode === "tablet" && "Tablet"}
                         {viewportMode === "mobile" && "Mobile"}
