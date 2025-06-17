@@ -1,21 +1,21 @@
-import React from 'react';
+import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { AlertCircle, CheckCircle, X } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { AlertCircle, CheckCircle, X } from "lucide-react";
 
 interface ValidationError {
   questionId?: string;
   questionTitle?: string;
   message: string;
-  severity: 'error' | 'warning';
+  severity: "error" | "warning";
 }
 
 interface ValidationResult {
@@ -44,21 +44,22 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({
         questionId: questionMatch[1],
         questionTitle: `Questão ${questionMatch[1]}`,
         message: questionMatch[2],
-        severity: 'error',
+        severity: "error",
       };
     }
-    
+
     return {
       message: errorMessage,
-      severity: 'error',
+      severity: "error",
     };
   };
 
   const errors = validation.errors.map(parseError);
-  const warnings = validation.warnings?.map(warning => ({
-    message: warning,
-    severity: 'warning' as const,
-  })) || [];
+  const warnings =
+    validation.warnings?.map((warning) => ({
+      message: warning,
+      severity: "warning" as const,
+    })) || [];
 
   const allIssues = [...errors, ...warnings];
 
@@ -84,13 +85,11 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({
                 {validation.isValid ? "✓ Válido" : `${errors.length} Erro(s)`}
               </Badge>
               {warnings.length > 0 && (
-                <Badge variant="secondary">
-                  {warnings.length} Aviso(s)
-                </Badge>
+                <Badge variant="secondary">{warnings.length} Aviso(s)</Badge>
               )}
             </div>
             <div className="text-sm text-gray-600">
-              {validation.isValid 
+              {validation.isValid
                 ? "Seu quiz está pronto para ser publicado!"
                 : "Corrija os erros abaixo antes de publicar."}
             </div>
@@ -106,28 +105,32 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({
                     <div
                       key={index}
                       className={`flex items-start gap-3 p-3 rounded-lg border ${
-                        issue.severity === 'error' 
-                          ? 'bg-red-50 border-red-200' 
-                          : 'bg-yellow-50 border-yellow-200'
+                        issue.severity === "error"
+                          ? "bg-red-50 border-red-200"
+                          : "bg-yellow-50 border-yellow-200"
                       }`}
                     >
                       <div className="flex-shrink-0">
-                        {issue.severity === 'error' ? (
+                        {issue.severity === "error" ? (
                           <X className="w-4 h-4 text-red-500" />
                         ) : (
                           <AlertCircle className="w-4 h-4 text-yellow-500" />
                         )}
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         {issue.questionTitle && (
                           <p className="font-medium text-sm text-gray-900 mb-1">
                             {issue.questionTitle}
                           </p>
                         )}
-                        <p className={`text-sm ${
-                          issue.severity === 'error' ? 'text-red-700' : 'text-yellow-700'
-                        }`}>
+                        <p
+                          className={`text-sm ${
+                            issue.severity === "error"
+                              ? "text-red-700"
+                              : "text-yellow-700"
+                          }`}
+                        >
                           {issue.message}
                         </p>
                       </div>
@@ -152,7 +155,9 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({
           {/* Dicas */}
           {!validation.isValid && (
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="font-medium text-blue-900 mb-2">💡 Dicas para correção:</h4>
+              <h4 className="font-medium text-blue-900 mb-2">
+                💡 Dicas para correção:
+              </h4>
               <ul className="text-sm text-blue-800 space-y-1">
                 <li>• Todas as questões devem ter título preenchido</li>
                 <li>• Cada questão deve ter pelo menos 2 opções</li>
@@ -164,10 +169,7 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({
 
           {/* Ações */}
           <div className="flex justify-end gap-2">
-            <Button
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
               Fechar
             </Button>
             {!validation.isValid && (

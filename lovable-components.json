@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-17T12:29:41.194Z",
-  "components": 511,
+  "timestamp": "2025-06-17T14:13:16.681Z",
+  "components": 512,
   "files": [
     {
       "name": "App",
@@ -1960,6 +1960,11 @@
     {
       "name": "ResultPageVisualEditor",
       "path": "src/components/visual-editor/ResultPageVisualEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ValidationModal",
+      "path": "src/components/visual-editor/ValidationModal.tsx",
       "type": "typescript"
     },
     {

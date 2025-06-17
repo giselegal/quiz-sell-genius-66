@@ -17,6 +17,8 @@ import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
 import { useQuizStyles } from "@/hooks/useQuizConfig";
 import { useQuizEditor } from "@/hooks/useQuizEditor";
 import { useEditorSettings } from "@/hooks/useEditorSettings";
+import { ValidationModal } from "./ValidationModal";
+import { runEditorTest } from "@/utils/editorTest";
 import {
   Eye,
   Save,
@@ -90,6 +92,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   >("desktop");
   const [showOptionConfig, setShowOptionConfig] = useState<boolean>(false);
   const [showQuizConfig, setShowQuizConfig] = useState<boolean>(false);
+  const [showValidationModal, setShowValidationModal] =
+    useState<boolean>(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null
@@ -447,7 +451,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   };
 
-  const handleElementUpdate = (id: string, content: CanvasElement["content"]) => {
+  const handleElementUpdate = (
+    id: string,
+    content: CanvasElement["content"]
+  ) => {
     setCanvasElements((prev) =>
       prev.map((el) => (el.id === id ? { ...el, content } : el))
     );
@@ -580,7 +587,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 <Smartphone className="w-4 h-4" />
               </Button>
             </div>
-
             {/* Preview Toggle */}
             <Button
               variant={isPreviewMode ? "default" : "outline"}
@@ -590,7 +596,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               <Eye className="w-4 h-4 mr-2" />
               {isPreviewMode ? "Edição" : "Preview"}
             </Button>
-
             {/* Quiz Config Toggle */}
             <Button
               variant={showQuizConfig ? "default" : "outline"}
@@ -600,32 +605,6 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               <Settings className="w-4 h-4 mr-2" />
               Config
             </Button>
-
-            {/* Validation Button */}
-            {(() => {
-              const allQuestions = [...questions, ...strategicQuestions];
-              const validation = validateQuiz(allQuestions);
-              return (
-                <Button
-                  variant={validation.isValid ? "default" : "destructive"}
-                  size="sm"
-                  onClick={() => {
-                    if (!validation.isValid) {
-                      console.log("Erros de validação:", validation.errors);
-                      // Aqui poderia abrir um modal com os erros detalhados
-                    }
-                  }}
-                >
-                  {validation.isValid ? (
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                  ) : (
-                    <AlertCircle className="w-4 h-4 mr-2" />
-                  )}
-                  {validation.isValid ? "Válido" : `${validation.errors.length} Erro(s)`}
-                </Button>
-              );
-            })()}
-
             {/* Save Button */}
             <Button
               onClick={handleSave}
@@ -642,50 +621,14 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               )}
               {saving ? "Salvando..." : lastSaved ? "Salvo" : "Salvar"}
             </Button>
-
             {/* Last saved indicator */}
             {lastSaved && (
               <div className="text-xs text-muted-foreground">
                 Salvo às {lastSaved.toLocaleTimeString()}
               </div>
-            )}
+            )}{" "}
           </div>
         </div>
-
-        {/* Painel de validação - aparece apenas quando há erros */}
-        {(() => {
-          const allQuestions = [...questions, ...strategicQuestions];
-          const validation = validateQuiz(allQuestions);
-
-          if (!validation.isValid) {
-            return (
-              <div className="bg-red-50 border-t border-red-200 px-6 py-2">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-medium text-red-800 mb-1">
-                      Erros de validação encontrados:
-                    </p>
-                    <ul className="text-red-700 space-y-1">
-                      {validation.errors.slice(0, 3).map((error, index) => (
-                        <li key={index} className="flex items-center gap-1">
-                          <span className="w-1 h-1 bg-red-500 rounded-full" />
-                          {error}
-                        </li>
-                      ))}
-                      {validation.errors.length > 3 && (
-                        <li className="text-red-600">
-                          ... e mais {validation.errors.length - 3} erro(s)
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            );
-          }
-          return null;
-        })()}
       </div>
 
       {/* Main Content - Resizable 4 Columns Layout */}
