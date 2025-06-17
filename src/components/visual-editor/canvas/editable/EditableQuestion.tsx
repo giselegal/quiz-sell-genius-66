@@ -195,7 +195,9 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
                 <span
                   className={`
                   option-label
-                  ${selectedOptions.includes(option.id) ? "selected" : "default"}
+                  ${
+                    selectedOptions.includes(option.id) ? "selected" : "default"
+                  }
                 `}
                 >
                   {String.fromCharCode(65 + index)}
@@ -220,19 +222,49 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
               )}
 
               {/* Option Content using CSS classes */}
-              <div className={`option-content ${option.imageUrl ? "with-image" : "text-only"}`}>
+              <div
+                className={`option-content ${
+                  option.imageUrl ? "with-image" : "text-only"
+                }`}
+              >
                 <h4 className="option-title medium">
                   {/* Parse text to highlight strategic words */}
-                  {option.text.split(' ').map((word, wordIndex) => {
+                  {option.text.split(" ").map((word, wordIndex) => {
                     // Strategic words to highlight
-                    const strategicWords = ['elegante', 'clássico', 'moderno', 'casual', 'sofisticado', 'romântico', 'minimalista', 'vintage', 'luxo', 'confortável', 'estiloso', 'chique', 'trendy', 'fashion', 'contemporâneo', 'tradicional'];
-                    const isStrategic = strategicWords.some(sw => 
-                      word.toLowerCase().replace(/[.,!?;]/g, '').includes(sw.toLowerCase())
+                    const strategicWords = [
+                      "elegante",
+                      "clássico",
+                      "moderno",
+                      "casual",
+                      "sofisticado",
+                      "romântico",
+                      "minimalista",
+                      "vintage",
+                      "luxo",
+                      "confortável",
+                      "estiloso",
+                      "chique",
+                      "trendy",
+                      "fashion",
+                      "contemporâneo",
+                      "tradicional",
+                    ];
+                    const isStrategic = strategicWords.some((sw) =>
+                      word
+                        .toLowerCase()
+                        .replace(/[.,!?;]/g, "")
+                        .includes(sw.toLowerCase())
                     );
-                    
+
                     return (
-                      <span key={wordIndex} className={isStrategic ? 'strategic-word' : ''}>
-                        {word}{wordIndex < option.text.split(' ').length - 1 ? ' ' : ''}
+                      <span
+                        key={wordIndex}
+                        className={isStrategic ? "strategic-word" : ""}
+                      >
+                        {word}
+                        {wordIndex < option.text.split(" ").length - 1
+                          ? " "
+                          : ""}
                       </span>
                     );
                   })}
@@ -243,9 +275,7 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
                   <span className="option-category">
                     {option.styleCategory}
                   </span>
-                  <span className="option-points">
-                    {option.points} pts
-                  </span>
+                  <span className="option-points">{option.points} pts</span>
                 </div>
               </div>
             </div>
