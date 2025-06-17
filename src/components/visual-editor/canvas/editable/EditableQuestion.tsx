@@ -136,16 +136,6 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
             handleOptionClick(option.id);
           }
         }}>
-              {/* Option Label without tick */}
-              <div className="absolute top-3 left-3 z-10 bg-transparent">
-                <span className={`
-                  option-label
-                  ${selectedOptions.includes(option.id) ? "selected" : "default"}
-                `}>
-                  {String.fromCharCode(65 + index)}
-                </span>
-              </div>
-
               {/* Option Image using CSS classes */}
               {option.imageUrl && <div className="relative overflow-hidden">
                   <img src={option.imageUrl} alt={option.text} className="option-image" onError={e => {
@@ -157,15 +147,18 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
 
               {/* Option Content using CSS classes */}
               <div className={`option-content ${option.imageUrl ? "with-image" : "text-only"}`}>
-                
-
-                {/* Category and Points using CSS classes */}
-                <div className="option-footer">
-                  <span className="option-category">
-                    {option.styleCategory}
-                  </span>
-                  <span className="option-points">{option.points} pts</span>
-                </div>
+                <h4 className="option-title medium">
+                  {/* Parse text to highlight strategic words */}
+                  {option.text.split(" ").map((word, wordIndex) => {
+                    // Strategic words to highlight
+                    const strategicWords = ["elegante", "clássico", "moderno", "casual", "sofisticado", "romântico", "minimalista", "vintage", "luxo", "confortável", "estiloso", "chique", "trendy", "fashion", "contemporâneo", "tradicional"];
+                    const isStrategic = strategicWords.some(sw => word.toLowerCase().replace(/[.,!?;]/g, "").includes(sw.toLowerCase()));
+                    return <span key={wordIndex} className={isStrategic ? "strategic-word" : ""}>
+                        {word}
+                        {wordIndex < option.text.split(" ").length - 1 ? " " : ""}
+                      </span>;
+                  })}
+                </h4>
               </div>
             </div>) || <div className="col-span-full text-center py-12 text-gray-500 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50/50">
               <div className="flex flex-col items-center space-y-3">
