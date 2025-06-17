@@ -44,7 +44,8 @@ export const StageList: React.FC<StageListProps> = ({
 
   return (
     <div className="h-full flex flex-col space-y-4">
-      <div className="flex-1 overflow-y-auto">
+      {/* Lista de etapas com barra de rolagem */}
+      <div className="flex-1 overflow-y-auto max-h-[60vh] pr-2 custom-scrollbar">
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="stages">
             {(provided) => (
@@ -64,11 +65,11 @@ export const StageList: React.FC<StageListProps> = ({
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`p-2 ${
+                        className={`p-2 transition-all duration-200 cursor-pointer hover:shadow-md ${
                           stage.id === activeStageId
-                            ? "border-[#B89B7A] bg-[#FAF9F7]"
-                            : ""
-                        } ${snapshot.isDragging ? "shadow-md" : ""}`}
+                            ? "border-[#B89B7A] bg-[#FAF9F7] shadow-sm scale-[1.02]"
+                            : "hover:border-[#B89B7A]/50"
+                        } ${snapshot.isDragging ? "shadow-lg scale-105 rotate-1" : ""}`}
                         onClick={() => onStageSelect(stage.id)}
                       >
                         <div className="flex items-center justify-between">
@@ -77,13 +78,13 @@ export const StageList: React.FC<StageListProps> = ({
                             onChange={(e) =>
                               handleTitleChange(stage.id, e.target.value)
                             }
-                            className="flex-1 mr-2"
+                            className="flex-1 mr-2 text-sm border-none bg-transparent focus:bg-white focus:border-[#B89B7A] transition-all duration-200"
                             onClick={(e) => e.stopPropagation()}
                           />
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-red-500 h-8 w-8 p-0"
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0 rounded-full transition-all duration-200"
                             onClick={(e) => {
                               e.stopPropagation();
                               onStageDelete(stage.id);
@@ -103,11 +104,12 @@ export const StageList: React.FC<StageListProps> = ({
         </DragDropContext>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 pt-2">
+      {/* Botões de adicionar etapas */}
+      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-gray-200">
         <Button
           variant="outline"
           size="sm"
-          className="w-full"
+          className="w-full text-xs hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-200"
           onClick={() => onStageAdd("question")}
         >
           <Plus className="h-4 w-4 mr-2" /> Pergunta
@@ -115,7 +117,7 @@ export const StageList: React.FC<StageListProps> = ({
         <Button
           variant="outline"
           size="sm"
-          className="w-full"
+          className="w-full text-xs hover:bg-green-50 hover:border-green-300 hover:text-green-700 transition-all duration-200"
           onClick={() => onStageAdd("result")}
         >
           <Plus className="h-4 w-4 mr-2" /> Resultado
