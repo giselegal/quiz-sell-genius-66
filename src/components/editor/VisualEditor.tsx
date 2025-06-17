@@ -10,7 +10,7 @@ import {
   closestCenter,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { EditorProvider } from "@/contexts/EditorContext";
+import { EditorProvider } from "@/contexts/EditorContext.tsx";
 import { useEditor } from "@/hooks/useEditorNew";
 import { createElement, getCurrentStep } from "@/utils/editorUtils";
 import { EditorNavbar } from "./EditorNavbar";

@@ -169,7 +169,7 @@ export const EditableElement: React.FC<EditableElementProps> = ({
   return (
     <div
       ref={setNodeRef}
-      style={style}
+      style={{ ...style, flexBasis: "100%" }}
       {...attributes}
       {...listeners}
       className={`group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative self-auto mr-auto cursor-pointer ${
@@ -178,7 +178,6 @@ export const EditableElement: React.FC<EditableElementProps> = ({
       onClick={onSelect}
       role="button"
       tabIndex={0}
-      style={{ flexBasis: "100%" }}
     >
       <div
         className={`min-h-[1.25rem] min-w-full relative self-auto box-border customizable-gap group-hover/canvas-item:border-2 border-dashed hover:border-2 border-blue-500 rounded-md ${
