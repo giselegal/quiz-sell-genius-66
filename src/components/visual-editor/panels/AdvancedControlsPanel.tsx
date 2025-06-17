@@ -34,7 +34,7 @@ import {
 
 interface AdvancedControlsPanelProps {
   selectedElementId: string | null;
-  onElementUpdate: (elementId: string, updates: any) => void;
+  onElementUpdate: (elementId: string, updates: Record<string, unknown>) => void;
   onResetElement: (elementId: string) => void;
   onDeleteElement: (elementId: string) => void;
 }
@@ -55,7 +55,7 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
   const handleSliderChange = (value: number[], type: string) => {
     if (!selectedElementId) return;
 
-    const updates: any = {};
+    const updates: Record<string, unknown> = {};
 
     switch (type) {
       case "imageSize":
@@ -89,67 +89,59 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
 
   if (!selectedElementId) {
     return (
-      <Card className="h-full">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Sliders className="w-5 h-5 text-purple-600" />
-            Controles Avançados
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center h-64 text-center text-gray-500">
-            <Settings className="w-12 h-12 mb-3 opacity-50" />
-            <p className="text-sm">
-              Selecione um elemento no canvas para ver os controles avançados
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="p-4 h-full">
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200/60">
+          <Sliders className="w-4 h-4 text-slate-600" />
+          <h3 className="text-sm font-medium text-slate-800">Controles Avançados</h3>
+        </div>
+        <div className="flex flex-col items-center justify-center h-48 text-center text-slate-500">
+          <Settings className="w-8 h-8 mb-2 opacity-40" />
+          <p className="text-xs text-slate-600">
+            Selecione um elemento para editar
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Sliders className="w-5 h-5 text-purple-600" />
-            Controles Avançados
-          </CardTitle>
-          <Badge variant="outline" className="text-xs">
-            Elemento Selecionado
-          </Badge>
+    <div className="p-4 h-full">
+      <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-200/60">
+        <div className="flex items-center gap-2">
+          <Sliders className="w-4 h-4 text-slate-600" />
+          <h3 className="text-sm font-medium text-slate-800">Controles Avançados</h3>
         </div>
-      </CardHeader>
+        <Badge variant="secondary" className="text-xs px-2 py-0.5">
+          Elemento Ativo
+        </Badge>
+      </div>
 
-      <ScrollArea className="flex-1">
-        <CardContent className="space-y-6">
+      <ScrollArea className="h-[calc(100%-4rem)]">
+        <div className="space-y-4">
           <Tabs defaultValue="layout" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="layout" className="text-xs">
+            <TabsList className="grid w-full grid-cols-3 h-8">
+              <TabsTrigger value="layout" className="text-xs h-6">
                 <Layout className="w-3 h-3 mr-1" />
                 Layout
               </TabsTrigger>
-              <TabsTrigger value="style" className="text-xs">
+              <TabsTrigger value="style" className="text-xs h-6">
                 <Palette className="w-3 h-3 mr-1" />
                 Estilo
               </TabsTrigger>
-              <TabsTrigger value="content" className="text-xs">
+              <TabsTrigger value="content" className="text-xs h-6">
                 <Type className="w-3 h-3 mr-1" />
                 Conteúdo
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="layout" className="space-y-4 mt-4">
+            <TabsContent value="layout" className="space-y-3 mt-3">
               {/* Controles de Imagem */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Image className="w-4 h-4 text-blue-600" />
-                  <Label className="text-sm font-medium">
-                    Tamanho da Imagem
-                  </Label>
+                  <Image className="w-3 h-3 text-blue-600" />
+                  <Label className="text-xs font-medium">Tamanho da Imagem</Label>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Slider
                     value={imageSize}
                     onValueChange={(value) =>
@@ -160,7 +152,7 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
                     step={5}
                     className="w-full"
                   />
-                  <div className="flex justify-between text-xs text-gray-500">
+                  <div className="flex justify-between text-xs text-slate-500">
                     <span>20%</span>
                     <span className="font-medium">{imageSize[0]}%</span>
                     <span>100%</span>
@@ -171,10 +163,10 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
               <Separator />
 
               {/* Controles de Grid */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Grid3X3 className="w-4 h-4 text-green-600" />
-                  <Label className="text-sm font-medium">Colunas do Grid</Label>
+                  <Grid3X3 className="w-3 h-3 text-green-600" />
+                  <Label className="text-xs font-medium">Colunas do Grid</Label>
                 </div>
                 <div className="space-y-2">
                   <Slider
@@ -443,8 +435,8 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
               </Button>
             </div>
           </div>
-        </CardContent>
+        </div>
       </ScrollArea>
-    </Card>
+    </div>
   );
 };

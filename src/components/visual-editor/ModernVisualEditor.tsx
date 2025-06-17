@@ -776,11 +776,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         </div>
       </header>
 
-      {/* Main Content - Resizable 5 Columns Layout */}
+      {/* Main Content - Resizable 4 Columns Layout */}
       <div className="flex-1 overflow-hidden bg-slate-50/30">
         <ResizablePanelGroup direction="horizontal" className="h-full">
           {/* First Column - Steps Panel */}
-          <ResizablePanel defaultSize={12} minSize={8} maxSize={18}>
+          <ResizablePanel defaultSize={15} minSize={10} maxSize={20}>
             <div className="h-full border-r border-slate-200/60 bg-white/95 backdrop-blur-sm">
               <StepsPanel
                 stages={stages}
@@ -793,7 +793,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizableHandle withHandle />
 
           {/* Second Column - Components Palette */}
-          <ResizablePanel defaultSize={16} minSize={12} maxSize={22}>
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={25}>
             <div className="h-full bg-white/95 backdrop-blur-sm border-r border-slate-200/60">
               <ComponentsPalette
                 onComponentSelect={handleElementAdd}
@@ -805,7 +805,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizableHandle withHandle />
 
           {/* Third Column - Editor Canvas (Preview) */}
-          <ResizablePanel defaultSize={35} minSize={28} maxSize={50}>
+          <ResizablePanel defaultSize={35} minSize={30} maxSize={50}>
             <div className="h-full bg-gradient-to-br from-slate-50 to-slate-100/50 relative">
               <ScrollArea className="h-full">
                 <div className="p-8 min-h-full">
@@ -870,73 +870,74 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           <ResizableHandle withHandle />
 
-          {/* Fourth Column - Advanced Controls Panel */}
-          <ResizablePanel defaultSize={16} minSize={12} maxSize={22}>
-            <div className="h-full bg-white/95 backdrop-blur-sm border-r border-slate-200/60">
-              <AdvancedControlsPanel
-                selectedElementId={selectedElementId}
-                onElementUpdate={handleElementUpdate}
-                onResetElement={handleResetElement}
-                onDeleteElement={handleDeleteElement}
-              />
-            </div>
-          </ResizablePanel>
-
-          <ResizableHandle withHandle />
-
-          {/* Fifth Column - Configuration Panel */}
+          {/* Fourth Column - Configuration Panel with Advanced Controls */}
           <ResizablePanel
-            defaultSize={showQuizConfig ? 17 : 21}
-            minSize={showQuizConfig ? 14 : 16}
-            maxSize={showQuizConfig ? 25 : 30}
+            defaultSize={showQuizConfig ? 24 : 30}
+            minSize={showQuizConfig ? 20 : 24}
+            maxSize={showQuizConfig ? 35 : 40}
           >
             <div className="h-full bg-white/95 backdrop-blur-sm">
               <div className="h-full overflow-auto">
-                <ModernConfigurationPanel
-                  stageName={
-                    stages.find((s) => s.id === currentStage)?.name || ""
-                  }
-                  stageType={currentStage}
-                  questionData={
-                    stages.find((s) => s.id === currentStage)?.questionData
-                  }
-                  onUpdate={(updatedData) => {
-                    // Update the stage data
-                    setStages((prev) =>
-                      prev.map((stage) =>
-                        stage.id === currentStage
-                          ? { ...stage, questionData: updatedData }
-                          : stage
-                      )
-                    );
+                <div className="flex flex-col h-full">
+                  {/* Modern Configuration Panel */}
+                  <div className="flex-1 min-h-0">
+                    <ModernConfigurationPanel
+                      stageName={
+                        stages.find((s) => s.id === currentStage)?.name || ""
+                      }
+                      stageType={currentStage}
+                      questionData={
+                        stages.find((s) => s.id === currentStage)?.questionData
+                      }
+                      onUpdate={(updatedData) => {
+                        // Update the stage data
+                        setStages((prev) =>
+                          prev.map((stage) =>
+                            stage.id === currentStage
+                              ? { ...stage, questionData: updatedData }
+                              : stage
+                          )
+                        );
 
-                    // Update canvas elements if it's a question
-                    if (
-                      currentStage.startsWith("question-") ||
-                      currentStage.startsWith("strategic-")
-                    ) {
-                      const updatedElements = canvasElements.map((el) => {
-                        if (el.type === "question-title") {
-                          return {
-                            ...el,
-                            content: { text: updatedData.title },
-                          };
+                        // Update canvas elements if it's a question
+                        if (
+                          currentStage.startsWith("question-") ||
+                          currentStage.startsWith("strategic-")
+                        ) {
+                          const updatedElements = canvasElements.map((el) => {
+                            if (el.type === "question-title") {
+                              return {
+                                ...el,
+                                content: { text: updatedData.title },
+                              };
+                            }
+                            if (el.type === "question-options") {
+                              return {
+                                ...el,
+                                content: {
+                                  options: updatedData.options || [],
+                                  multiSelect: updatedData.multiSelect || false,
+                                },
+                              };
+                            }
+                            return el;
+                          });
+                          setCanvasElements(updatedElements);
                         }
-                        if (el.type === "question-options") {
-                          return {
-                            ...el,
-                            content: {
-                              options: updatedData.options || [],
-                              multiSelect: updatedData.multiSelect || false,
-                            },
-                          };
-                        }
-                        return el;
-                      });
-                      setCanvasElements(updatedElements);
-                    }
-                  }}
-                />
+                      }}
+                    />
+                  </div>
+
+                  {/* Advanced Controls Panel */}
+                  <div className="border-t border-slate-200/60 bg-slate-50/50">
+                    <AdvancedControlsPanel
+                      selectedElementId={selectedElementId}
+                      onElementUpdate={handleElementUpdate}
+                      onResetElement={handleResetElement}
+                      onDeleteElement={handleDeleteElement}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </ResizablePanel>
