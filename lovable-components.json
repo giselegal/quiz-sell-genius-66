@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-17T21:30:59.222Z",
-  "components": 521,
+  "timestamp": "2025-06-17T21:49:02.953Z",
+  "components": 522,
   "files": [
     {
       "name": "App",
@@ -2385,6 +2385,11 @@
     {
       "name": "EditorPage",
       "path": "src/pages/EditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorTest",
+      "path": "src/pages/EditorTest.tsx",
       "type": "typescript"
     },
     {

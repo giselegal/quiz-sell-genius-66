@@ -1,3 +1,4 @@
+import { Sliders } from "lucide-react";
 import React, { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -35,6 +36,7 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
+  Sliders,
 } from "lucide-react";
 
 import { QuizQuestion } from "@/types/quiz";

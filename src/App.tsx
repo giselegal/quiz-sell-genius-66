@@ -7,6 +7,7 @@ import QuizDescubraSeuEstilo from "@/pages/quiz-descubra-seu-estilo";
 import ResultPage from "@/pages/ResultPage";
 import UnifiedEditorPage from "@/pages/UnifiedEditorPage";
 import ModernEditorPage from "@/pages/ModernEditorPage";
+import EditorTest from "@/pages/EditorTest";
 import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
 import { Button } from "@/components/ui/button";
@@ -82,6 +83,9 @@ function App() {
           {/* Novo Editor Visual Moderno */}
           <Route path="/modern-editor" element={<ModernEditorPage />} />
           <Route path="/editor" element={<ModernEditorPage />} />
+
+          {/* Página de Teste */}
+          <Route path="/editor-test" element={<EditorTest />} />
 
           {/* Teste de Configuração - Apenas para desenvolvimento */}
           <Route path="/test-config" element={<QuizConfigTest />} />
