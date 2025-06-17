@@ -194,6 +194,37 @@ const QuizPage: React.FC = () => {
     }
   }, [quizCompleted, navigate]);
 
+  // Função para continuar da transição para as questões estratégicas
+  const handleContinueFromTransition = () => {
+    setShowingTransition(false);
+    setShowingStrategicQuestions(true);
+    setCurrentStrategicQuestionIndex(0);
+    
+    trackButtonClick(
+      'transition-continue',
+      'Continuar para Questões Estratégicas',
+      'transition-page',
+      {
+        user_name: user?.userName || 'unknown'
+      }
+    );
+  };
+
+  // Função para lidar com a primeira resposta estratégica na transição
+  const handleTransitionAnswer = (response: UserResponse) => {
+    handleStrategicAnswer(response.questionId, response.selectedOptions);
+    
+    trackQuizAnswer(
+      'quiz-descubra-seu-estilo',
+      `strategic_${response.questionId}`,
+      response.selectedOptions.join(', '),
+      {
+        question_type: 'strategic_transition',
+        user_name: user?.userName || 'unknown'
+      }
+    );
+  };
+
   if (!isInitialLoadComplete) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
@@ -212,10 +243,7 @@ const QuizPage: React.FC = () => {
   if (showingTransition) {
     return (
       <QuizTransition
-        onContinue={() => {
-          setShowingTransition(false);
-          setShowingStrategicQuestions(true);
-        }}
+        onContinue={handleContinueFromTransition}
         onExit={() => navigate('/')}
       />
     );
