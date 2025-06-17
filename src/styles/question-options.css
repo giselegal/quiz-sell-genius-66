@@ -1,4 +1,3 @@
-
 /* Question Options Layout Styles */
 
 /* Classe utility para clamp de texto */
@@ -127,15 +126,37 @@
 /* Mobile: menos padding e mais destaque à imagem */
 @media (max-width: 639px) {
   .option-content {
-    padding: 0.5rem; /* Menos padding geral */
+    padding: 0.25rem; /* Menos padding ainda */
   }
 
   .option-content.with-image {
-    padding: 0.5rem 0.75rem 0.75rem 0.75rem; /* Menos padding superior */
+    padding: 0.25rem 0.5rem 0.5rem 0.5rem; /* Muito menos padding */
+    background: transparent; /* Remove fundo */
   }
 
   .option-content.text-only {
     padding: 1rem 0.75rem;
+  }
+
+  /* Remover sombra das imagens no mobile */
+  .option-card {
+    box-shadow: none; /* Remove sombra padrão no mobile */
+  }
+
+  .option-card:hover {
+    box-shadow: none; /* Remove sombra no hover no mobile */
+    transform: none; /* Remove transformação no hover */
+  }
+
+  /* Sombra apenas na seleção */
+  .option-card.selected {
+    box-shadow: 0 6px 20px rgba(184, 155, 122, 0.25); /* Sombra só na seleção */
+    transform: translateY(-2px);
+  }
+
+  /* Remove efeito de transformação da imagem no mobile */
+  .option-card:hover .option-image {
+    transform: none;
   }
 }
 
@@ -180,8 +201,9 @@
   /* Texto mais discreto no mobile quando há imagem */
   .option-content.with-image .option-title {
     color: #6b7280; /* Cor mais sutil */
-    font-size: 0.625rem !important; /* Força tamanho menor */
-    line-height: 1.3;
+    font-size: 0.55rem !important; /* Ainda menor */
+    line-height: 1.2; /* Diminui altura da linha */
+    margin-bottom: 0.25rem; /* Menos margem inferior */
   }
 
   /* Palavras estratégicas ainda destacadas */
