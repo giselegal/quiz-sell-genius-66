@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-17T23:01:54.786Z",
-  "components": 530,
+  "timestamp": "2025-06-17T23:49:43.594Z",
+  "components": 533,
   "files": [
     {
       "name": "App",
@@ -793,6 +793,11 @@
       "type": "typescript"
     },
     {
+      "name": "ElementRenderer",
+      "path": "src/components/quiz/ElementRenderer.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "LoadingManager",
       "path": "src/components/quiz/LoadingManager.tsx",
       "type": "typescript"
@@ -810,6 +815,11 @@
     {
       "name": "QuizContent",
       "path": "src/components/quiz/QuizContent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizElementRenderer",
+      "path": "src/components/quiz/QuizElementRenderer.tsx",
       "type": "typescript"
     },
     {
@@ -2480,6 +2490,11 @@
     {
       "name": "ModernEditorPage",
       "path": "src/pages/ModernEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "NewQuizPage",
+      "path": "src/pages/NewQuizPage.tsx",
       "type": "typescript"
     },
     {

@@ -17,6 +17,7 @@ import { QuizConfigProvider } from "@/hooks/useQuizConfig";
 import { QuizConfigTest } from "@/components/test/QuizConfigTest";
 import { EditingFlowDemo } from "@/components/demo/EditingFlowDemo";
 import "@/styles/quiz-dynamic-theme.css";
+import { NewQuizPage } from "@/pages/NewQuizPage";
 
 // Componente de botão flutuante para acesso rápido ao editor
 const QuickAccessEditorButton = () => {
@@ -58,6 +59,9 @@ function App() {
           {/* Quiz principal */}
           <Route path="/quiz" element={<QuizPage />} />
 
+          {/* Novo Quiz baseado no editor */}
+          <Route path="/new-quiz" element={<NewQuizPage />} />
+
           {/* Quiz específico de estilo */}
           <Route
             path="/quiz-descubra-seu-estilo"
@@ -92,6 +96,9 @@ function App() {
 
           {/* Demo do Fluxo de Edição */}
           <Route path="/editing-demo" element={<EditingFlowDemo />} />
+
+          {/* Nova Página do Quiz */}
+          <Route path="/new-quiz" element={<NewQuizPage />} />
 
           {/* 404 para rotas não encontradas */}
           <Route path="*" element={<NotFoundPage />} />
