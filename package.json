@@ -16,10 +16,7 @@
     "lovable:sync": "node scripts/manual-sync.js",
     "lovable:force": "node scripts/force-lovable-sync.js",
     "lovable:test": "node scripts/test-sync.js",
-    "lovable:status": "node scripts/lovable-status.js",
-    "lovable:configure-token": "node scripts/configure-token.js",
-    "lovable:set-token": "node scripts/configure-token.js",
-    "lovable:validate-token": "node scripts/validate-token.js"
+    "lovable:status": "node scripts/lovable-status.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
