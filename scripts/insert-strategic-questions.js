@@ -4,11 +4,12 @@
  * Script para inserir as questões estratégicas no banco de dados
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 // Configuração do Supabase
-const supabaseUrl = 'https://txqljpitotmcxntprxiu.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cWxqcGl0b3RtY3hudHByeGl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4NjI3MzQsImV4cCI6MjA2NTQzODczNH0.rHGZV47KUnSJ0fDNXbL-OjuB50BsuzT2IeO_LL-P8ok';
+const supabaseUrl = "https://txqljpitotmcxntprxiu.supabase.co";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cWxqcGl0b3RtY3hudHByeGl1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4NjI3MzQsImV4cCI6MjA2NTQzODczNH0.rHGZV47KUnSJ0fDNXbL-OjuB50BsuzT2IeO_LL-P8ok";
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -208,27 +209,27 @@ const insertStrategicQuestions = async () => {
 
 // Executar a função
 const runUpdate = async () => {
-  console.log('🚀 Iniciando atualização das questões estratégicas...');
-  console.log('📊 Total de questões a inserir:', strategicQuestionsData.length);
-  
+  console.log("🚀 Iniciando atualização das questões estratégicas...");
+  console.log("📊 Total de questões a inserir:", strategicQuestionsData.length);
+
   try {
     const success = await insertStrategicQuestions();
-    
+
     if (success) {
-      console.log('🎉 SUCESSO: Questões estratégicas atualizadas com sucesso!');
+      console.log("🎉 SUCESSO: Questões estratégicas atualizadas com sucesso!");
       process.exit(0);
     } else {
-      console.log('❌ ERRO: Falha ao atualizar questões estratégicas');
+      console.log("❌ ERRO: Falha ao atualizar questões estratégicas");
       process.exit(1);
     }
   } catch (error) {
-    console.error('❌ ERRO CRÍTICO:', error);
+    console.error("❌ ERRO CRÍTICO:", error);
     process.exit(1);
   }
 };
 
-console.log('🔧 Script iniciado...');
+console.log("🔧 Script iniciado...");
 runUpdate().catch((error) => {
-  console.error('❌ Erro na execução:', error);
+  console.error("❌ Erro na execução:", error);
   process.exit(1);
 });
