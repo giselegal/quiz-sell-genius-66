@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import {
   ResizablePanelGroup,
@@ -620,27 +621,27 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   }
 
   return (
-    <div className="h-screen bg-slate-50/50 flex flex-col overflow-hidden">
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Elegant Header */}
-      <header className="border-b border-slate-200/60 bg-white/95 backdrop-blur-sm shadow-sm flex-shrink-0">
-        <div className="px-8 py-5">
+      <header className="border-b border-gray-200 bg-white shadow-sm flex-shrink-0">
+        <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               {/* Brand Identity */}
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-semibold text-lg">Q</span>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">Q</span>
                 </div>
                 <div>
-                  <h1 className="text-xl font-semibold text-slate-900 tracking-tight">
+                  <h1 className="text-lg font-semibold text-gray-900">
                     Quiz Editor
                   </h1>
-                  <div className="flex items-center gap-4 mt-1">
-                    <span className="text-sm text-slate-500 font-medium">
+                  <div className="flex items-center gap-3 mt-0.5">
+                    <span className="text-xs text-gray-500">
                       {funnelId}
                     </span>
-                    <div className="w-1 h-1 bg-slate-300 rounded-full"></div>
-                    <span className="text-sm text-slate-600">
+                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                    <span className="text-xs text-gray-600">
                       {questions.length + strategicQuestions.length} questões
                     </span>
 
@@ -653,10 +654,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                       const validation = validateQuiz(allQuestions);
                       return (
                         <div className="flex items-center gap-2">
-                          <div className="w-1 h-1 bg-slate-300 rounded-full"></div>
+                          <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
                           <div
                             className={cn(
-                              "flex items-center gap-1.5 text-sm",
+                              "flex items-center gap-1.5 text-xs",
                               validation.isValid
                                 ? "text-emerald-600"
                                 : "text-red-500"
@@ -664,7 +665,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                           >
                             <div
                               className={cn(
-                                "w-2 h-2 rounded-full",
+                                "w-1.5 h-1.5 rounded-full",
                                 validation.isValid
                                   ? "bg-emerald-500"
                                   : "bg-red-500"
@@ -685,89 +686,82 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             </div>
 
             <div className="flex items-center gap-4">
-              {/* Viewport Controls - Minimal */}
-              <div className="flex items-center bg-slate-100 rounded-lg p-1">
+              {/* Viewport Controls */}
+              <div className="flex items-center bg-gray-100 rounded-lg p-1">
                 <button
                   onClick={() => setViewportMode("desktop")}
                   className={cn(
-                    "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
+                    "flex items-center justify-center w-7 h-7 rounded-md transition-all",
                     viewportMode === "desktop"
-                      ? "bg-white text-slate-800 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                      ? "bg-white text-gray-800 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
                   )}
                 >
-                  <Monitor className="w-4 h-4" />
+                  <Monitor className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setViewportMode("tablet")}
                   className={cn(
-                    "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
+                    "flex items-center justify-center w-7 h-7 rounded-md transition-all",
                     viewportMode === "tablet"
-                      ? "bg-white text-slate-800 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                      ? "bg-white text-gray-800 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
                   )}
                 >
-                  <Tablet className="w-4 h-4" />
+                  <Tablet className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setViewportMode("mobile")}
                   className={cn(
-                    "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
+                    "flex items-center justify-center w-7 h-7 rounded-md transition-all",
                     viewportMode === "mobile"
-                      ? "bg-white text-slate-800 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                      ? "bg-white text-gray-800 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700"
                   )}
                 >
-                  <Smartphone className="w-4 h-4" />
+                  <Smartphone className="w-3.5 h-3.5" />
                 </button>
               </div>
 
-              {/* Preview Toggle - Minimal */}
-              <button
+              {/* Preview Toggle */}
+              <Button
                 onClick={() => setIsPreviewMode(!isPreviewMode)}
-                className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                  isPreviewMode
-                    ? "bg-slate-800 text-white shadow-sm"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                )}
+                variant={isPreviewMode ? "default" : "outline"}
+                size="sm"
+                className="h-8 gap-2"
               >
-                <Eye className="w-4 h-4" />
+                <Eye className="w-3.5 h-3.5" />
                 {isPreviewMode ? "Editar" : "Preview"}
-              </button>
+              </Button>
 
-              {/* Save Button - Minimal */}
-              <button
+              {/* Save Button */}
+              <Button
                 onClick={handleSave}
                 disabled={saving}
-                className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                  saving
-                    ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                    : "bg-slate-800 text-white hover:bg-slate-900 shadow-sm"
-                )}
+                size="sm"
+                className="h-8 gap-2"
               >
                 {saving ? (
                   <>
-                    <Clock className="w-4 h-4 animate-spin" />
+                    <Clock className="w-3.5 h-3.5 animate-spin" />
                     Salvando
                   </>
                 ) : lastSaved ? (
                   <>
-                    <CheckCircle className="w-4 h-4" />
+                    <CheckCircle className="w-3.5 h-3.5" />
                     Salvo
                   </>
                 ) : (
                   <>
-                    <Save className="w-4 h-4" />
+                    <Save className="w-3.5 h-3.5" />
                     Salvar
                   </>
                 )}
-              </button>
+              </Button>
 
-              {/* Last Saved Indicator */}
+              {/* Last saved indicator */}
               {lastSaved && (
-                <div className="text-xs text-slate-500 px-3 py-1.5 bg-slate-100 rounded-md">
+                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
                   {lastSaved.toLocaleTimeString()}
                 </div>
               )}
@@ -777,11 +771,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       </header>
 
       {/* Main Content - Resizable 4 Columns Layout */}
-      <div className="flex-1 overflow-hidden bg-slate-50/30">
+      <div className="flex-1 overflow-hidden bg-gray-50">
         <ResizablePanelGroup direction="horizontal" className="h-full">
           {/* First Column - Steps Panel */}
           <ResizablePanel defaultSize={15} minSize={10} maxSize={20}>
-            <div className="h-full border-r border-slate-200/60 bg-white/95 backdrop-blur-sm">
+            <div className="h-full border-r border-gray-200 bg-white">
               <StepsPanel
                 stages={stages}
                 currentStage={currentStage}
@@ -794,7 +788,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           {/* Second Column - Components Palette */}
           <ResizablePanel defaultSize={20} minSize={15} maxSize={25}>
-            <div className="h-full bg-white/95 backdrop-blur-sm border-r border-slate-200/60">
+            <div className="h-full bg-white border-r border-gray-200">
               <ComponentsPalette
                 onComponentSelect={handleElementAdd}
                 selectedComponent={selectedElementId}
@@ -806,7 +800,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           {/* Third Column - Editor Canvas (Preview) */}
           <ResizablePanel defaultSize={35} minSize={30} maxSize={50}>
-            <div className="h-full bg-gradient-to-br from-slate-50 to-slate-100/50 relative">
+            <div className="h-full bg-gray-50 relative">
               <ScrollArea className="h-full">
                 <div className="p-8 min-h-full">
                   <div
@@ -870,75 +864,96 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           <ResizableHandle withHandle />
 
-          {/* Fourth Column - Configuration Panel with Advanced Controls */}
+          {/* Fourth Column - Configuration Panel with Tabs */}
           <ResizablePanel
             defaultSize={showQuizConfig ? 24 : 30}
             minSize={showQuizConfig ? 20 : 24}
             maxSize={showQuizConfig ? 35 : 40}
           >
-            <div className="h-full bg-white/95 backdrop-blur-sm">
-              <div className="h-full overflow-auto">
-                <div className="flex flex-col h-full">
-                  {/* Modern Configuration Panel */}
-                  <div className="flex-1 min-h-0">
-                    <ModernConfigurationPanel
-                      stageName={
-                        stages.find((s) => s.id === currentStage)?.name || ""
-                      }
-                      stageType={currentStage}
-                      questionData={
-                        stages.find((s) => s.id === currentStage)?.questionData
-                      }
-                      onUpdate={(updatedData) => {
-                        // Update the stage data
-                        setStages((prev) =>
-                          prev.map((stage) =>
-                            stage.id === currentStage
-                              ? { ...stage, questionData: updatedData }
-                              : stage
-                          )
-                        );
+            <div className="h-full bg-white border-l border-gray-200">
+              <Tabs defaultValue="config" className="h-full flex flex-col">
+                <div className="border-b border-gray-200 bg-gray-50">
+                  <TabsList className="grid w-full grid-cols-2 h-10 bg-transparent rounded-none border-0">
+                    <TabsTrigger 
+                      value="config" 
+                      className="text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-none rounded-none border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 text-gray-600"
+                    >
+                      <Settings className="w-3 h-3 mr-1.5" />
+                      Configurações
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="advanced" 
+                      className="text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-none rounded-none border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 text-gray-600"
+                    >
+                      <Sliders className="w-3 h-3 mr-1.5" />
+                      Avançado
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
 
-                        // Update canvas elements if it's a question
-                        if (
-                          currentStage.startsWith("question-") ||
-                          currentStage.startsWith("strategic-")
-                        ) {
-                          const updatedElements = canvasElements.map((el) => {
-                            if (el.type === "question-title") {
-                              return {
-                                ...el,
-                                content: { text: updatedData.title },
-                              };
-                            }
-                            if (el.type === "question-options") {
-                              return {
-                                ...el,
-                                content: {
-                                  options: updatedData.options || [],
-                                  multiSelect: updatedData.multiSelect || false,
-                                },
-                              };
-                            }
-                            return el;
-                          });
-                          setCanvasElements(updatedElements);
+                <TabsContent value="config" className="flex-1 m-0 overflow-hidden">
+                  <ScrollArea className="h-full">
+                    <div className="p-4">
+                      <ModernConfigurationPanel
+                        stageName={
+                          stages.find((s) => s.id === currentStage)?.name || ""
                         }
-                      }}
-                    />
-                  </div>
+                        stageType={currentStage}
+                        questionData={
+                          stages.find((s) => s.id === currentStage)?.questionData
+                        }
+                        onUpdate={(updatedData) => {
+                          // Update the stage data
+                          setStages((prev) =>
+                            prev.map((stage) =>
+                              stage.id === currentStage
+                                ? { ...stage, questionData: updatedData }
+                                : stage
+                            )
+                          );
 
-                  {/* Advanced Controls Panel */}
-                  <div className="border-t border-slate-200/60 bg-slate-50/50">
+                          // Update canvas elements if it's a question
+                          if (
+                            currentStage.startsWith("question-") ||
+                            currentStage.startsWith("strategic-")
+                          ) {
+                            const updatedElements = canvasElements.map((el) => {
+                              if (el.type === "question-title") {
+                                return {
+                                  ...el,
+                                  content: { text: updatedData.title },
+                                };
+                              }
+                              if (el.type === "question-options") {
+                                return {
+                                  ...el,
+                                  content: {
+                                    options: updatedData.options || [],
+                                    multiSelect: updatedData.multiSelect || false,
+                                  },
+                                };
+                              }
+                              return el;
+                            });
+                            setCanvasElements(updatedElements);
+                          }
+                        }}
+                      />
+                    </div>
+                  </ScrollArea>
+                </TabsContent>
+
+                <TabsContent value="advanced" className="flex-1 m-0 overflow-hidden">
+                  <ScrollArea className="h-full">
                     <AdvancedControlsPanel
                       selectedElementId={selectedElementId}
                       onElementUpdate={handleElementUpdate}
                       onResetElement={handleResetElement}
                       onDeleteElement={handleDeleteElement}
                     />
-                  </div>
-                </div>
-              </div>
+                  </ScrollArea>
+                </TabsContent>
+              </Tabs>
             </div>
           </ResizablePanel>
 

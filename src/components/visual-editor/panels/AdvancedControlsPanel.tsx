@@ -34,7 +34,10 @@ import {
 
 interface AdvancedControlsPanelProps {
   selectedElementId: string | null;
-  onElementUpdate: (elementId: string, updates: Record<string, unknown>) => void;
+  onElementUpdate: (
+    elementId: string,
+    updates: Record<string, unknown>
+  ) => void;
   onResetElement: (elementId: string) => void;
   onDeleteElement: (elementId: string) => void;
 }
@@ -92,7 +95,9 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
       <div className="p-4 h-full">
         <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200/60">
           <Sliders className="w-4 h-4 text-slate-600" />
-          <h3 className="text-sm font-medium text-slate-800">Controles Avançados</h3>
+          <h3 className="text-sm font-medium text-slate-800">
+            Controles Avançados
+          </h3>
         </div>
         <div className="flex flex-col items-center justify-center h-48 text-center text-slate-500">
           <Settings className="w-8 h-8 mb-2 opacity-40" />
@@ -109,7 +114,9 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-200/60">
         <div className="flex items-center gap-2">
           <Sliders className="w-4 h-4 text-slate-600" />
-          <h3 className="text-sm font-medium text-slate-800">Controles Avançados</h3>
+          <h3 className="text-sm font-medium text-slate-800">
+            Controles Avançados
+          </h3>
         </div>
         <Badge variant="secondary" className="text-xs px-2 py-0.5">
           Elemento Ativo
@@ -139,7 +146,9 @@ export const AdvancedControlsPanel: React.FC<AdvancedControlsPanelProps> = ({
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Image className="w-3 h-3 text-blue-600" />
-                  <Label className="text-xs font-medium">Tamanho da Imagem</Label>
+                  <Label className="text-xs font-medium">
+                    Tamanho da Imagem
+                  </Label>
                 </div>
                 <div className="space-y-1">
                   <Slider
