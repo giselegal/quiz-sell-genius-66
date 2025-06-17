@@ -22,6 +22,7 @@ import {
   Sliders,
   Maximize,
   Minimize,
+  Home,
 } from "lucide-react";
 import {
   Select,
@@ -56,12 +57,27 @@ interface ModernConfigurationPanelProps {
   stageName: string;
   stageType: string;
   questionData?: QuestionData;
+  currentStage?: {
+    id: string;
+    title?: string;
+    subtitle?: string;
+    buttonText?: string;
+    type: string;
+  };
   onUpdate?: (data: unknown) => void;
+  onStageUpdate?: (stageId: string, stageData: Record<string, unknown>) => void;
 }
 
 export const ModernConfigurationPanel: React.FC<
   ModernConfigurationPanelProps
-> = ({ stageName, stageType, questionData, onUpdate }) => {
+> = ({
+  stageName,
+  stageType,
+  questionData,
+  currentStage,
+  onUpdate,
+  onStageUpdate,
+}) => {
   const [previewMode, setPreviewMode] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -111,9 +127,83 @@ export const ModernConfigurationPanel: React.FC<
             </div>
             <h2 className="text-lg font-semibold text-gray-900">{stageName}</h2>
             <p className="text-sm text-gray-500 mt-1">
-              Configure as opções da questão
+              {stageType === "intro"
+                ? "Configure a introdução do quiz"
+                : "Configure as opções da questão"}
             </p>
           </div>
+
+          {/* Intro Configuration */}
+          {stageType === "intro" && (
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                    <Home className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900">
+                      Configuração da Introdução
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      Personalize título, subtítulo e botão
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4 pt-0">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Título Principal
+                  </Label>
+                  <Input
+                    placeholder="Ex: Descubra Seu Estilo Único"
+                    className="text-sm"
+                    value={currentStage?.title || ""}
+                    onChange={(e) => {
+                      onStageUpdate?.(currentStage?.id, {
+                        ...currentStage,
+                        title: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Subtítulo
+                  </Label>
+                  <textarea
+                    placeholder="Ex: Um quiz personalizado para descobrir qual estilo combina mais com você"
+                    className="w-full text-sm p-2 border border-gray-200 rounded-md resize-none"
+                    rows={3}
+                    value={currentStage?.subtitle || ""}
+                    onChange={(e) => {
+                      onStageUpdate?.(currentStage?.id, {
+                        ...currentStage,
+                        subtitle: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Texto do Botão
+                  </Label>
+                  <Input
+                    placeholder="Ex: Começar Quiz"
+                    className="text-sm"
+                    value={currentStage?.buttonText || ""}
+                    onChange={(e) => {
+                      onStageUpdate?.(currentStage?.id, {
+                        ...currentStage,
+                        buttonText: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Options Management - MODERN & INTUITIVE */}
           {(stageType.startsWith("question-") ||

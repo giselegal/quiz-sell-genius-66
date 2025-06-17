@@ -637,9 +637,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                     Quiz Editor
                   </h1>
                   <div className="flex items-center gap-3 mt-0.5">
-                    <span className="text-xs text-gray-500">
-                      {funnelId}
-                    </span>
+                    <span className="text-xs text-gray-500">{funnelId}</span>
                     <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
                     <span className="text-xs text-gray-600">
                       {questions.length + strategicQuestions.length} questões
@@ -846,7 +844,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                         className={cn(
                           "w-2 h-2 rounded-full",
                           viewportMode === "desktop" && "bg-gray-600",
-                          viewportMode === "tablet" && "bg-gray-600", 
+                          viewportMode === "tablet" && "bg-gray-600",
                           viewportMode === "mobile" && "bg-gray-600"
                         )}
                       ></div>
@@ -874,15 +872,15 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               <Tabs defaultValue="config" className="h-full flex flex-col">
                 <div className="border-b border-gray-200 bg-gray-50">
                   <TabsList className="grid w-full grid-cols-2 h-10 bg-transparent rounded-none border-0">
-                    <TabsTrigger 
-                      value="config" 
+                    <TabsTrigger
+                      value="config"
                       className="text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-none rounded-none border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 text-gray-600"
                     >
                       <Settings className="w-3 h-3 mr-1.5" />
                       Configurações
                     </TabsTrigger>
-                    <TabsTrigger 
-                      value="advanced" 
+                    <TabsTrigger
+                      value="advanced"
                       className="text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-none rounded-none border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 text-gray-600"
                     >
                       <Sliders className="w-3 h-3 mr-1.5" />
@@ -891,7 +889,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   </TabsList>
                 </div>
 
-                <TabsContent value="config" className="flex-1 m-0 overflow-hidden">
+                <TabsContent
+                  value="config"
+                  className="flex-1 m-0 overflow-hidden"
+                >
                   <ScrollArea className="h-full">
                     <div className="p-4">
                       <ModernConfigurationPanel
@@ -899,8 +900,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                           stages.find((s) => s.id === currentStage)?.name || ""
                         }
                         stageType={currentStage}
+                        currentStage={stages.find((s) => s.id === currentStage)}
                         questionData={
-                          stages.find((s) => s.id === currentStage)?.questionData
+                          stages.find((s) => s.id === currentStage)
+                            ?.questionData
                         }
                         onUpdate={(updatedData) => {
                           // Update the stage data
@@ -929,7 +932,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                                   ...el,
                                   content: {
                                     options: updatedData.options || [],
-                                    multiSelect: updatedData.multiSelect || false,
+                                    multiSelect:
+                                      updatedData.multiSelect || false,
                                   },
                                 };
                               }
@@ -938,12 +942,24 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                             setCanvasElements(updatedElements);
                           }
                         }}
+                        onStageUpdate={(stageId, stageData) => {
+                          setStages((prev) =>
+                            prev.map((stage) =>
+                              stage.id === stageId
+                                ? { ...stage, ...stageData }
+                                : stage
+                            )
+                          );
+                        }}
                       />
                     </div>
                   </ScrollArea>
                 </TabsContent>
 
-                <TabsContent value="advanced" className="flex-1 m-0 overflow-hidden">
+                <TabsContent
+                  value="advanced"
+                  className="flex-1 m-0 overflow-hidden"
+                >
                   <ScrollArea className="h-full">
                     <AdvancedControlsPanel
                       selectedElementId={selectedElementId}

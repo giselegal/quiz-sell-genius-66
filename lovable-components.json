@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-17T19:01:47.029Z",
-  "components": 520,
+  "timestamp": "2025-06-17T19:29:25.255Z",
+  "components": 521,
   "files": [
     {
       "name": "App",
@@ -2140,6 +2140,11 @@
     {
       "name": "MarqueeElement",
       "path": "src/components/visual-editor/canvas/elements/MarqueeElement.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditableQuizIntro",
+      "path": "src/components/visual-editor/components/EditableQuizIntro.tsx",
       "type": "typescript"
     },
     {

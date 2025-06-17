@@ -1,5 +1,5 @@
 import React from "react";
-import QuizIntro from "../../QuizIntro";
+import EditableQuizIntro from "../components/EditableQuizIntro";
 
 interface StageLayoutIntroProps {
   stage: {
@@ -17,14 +17,14 @@ export const StageLayoutIntro: React.FC<StageLayoutIntroProps> = ({
   onNext,
 }) => {
   return (
-    <QuizIntro
+    <EditableQuizIntro
       title={stage.title || "Descubra Seu Estilo Único"}
       subtitle={
         stage.subtitle ||
         "Um quiz personalizado para descobrir qual estilo combina mais com você"
       }
       buttonText={stage.buttonText || "Começar Quiz"}
-      onStart={onNext}
+      onStart={() => onNext?.()} // Chamada sem parâmetro nome para compatibilidade
     />
   );
 };
