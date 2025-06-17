@@ -3,6 +3,7 @@ import { QuizQuestion } from "@/components/QuizQuestion";
 import QuizNavigation from "@/components/quiz/QuizNavigation";
 import { StrategicQuestions } from "@/components/quiz/StrategicQuestions";
 import QuizIntro from "@/components/QuizIntro";
+import QuizTransition from "@/components/QuizTransition";
 import { QuizQuestion as QuizQuestionType, UserResponse } from "@/types/quiz";
 
 interface EditorQuizPreviewProps {
@@ -35,6 +36,7 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
   const isStrategicQuestion = currentStage.type === "strategic";
   const isQuizQuestion = currentStage.type === "quiz" || isStrategicQuestion;
   const isIntroStage = currentStage.type === "intro";
+  const isTransitionStage = currentStage.type === "transition";
 
   // Handle intro stage preview
   if (isIntroStage) {
@@ -62,7 +64,37 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
     );
   }
 
-  // Handle non-quiz stages (transition, result, offer)
+  // Handle transition stage preview
+  if (isTransitionStage) {
+    return (
+      <div 
+        className={`quiz-preview-container transition-preview ${viewportMode}-viewport`}
+        style={{
+          maxWidth: 
+            viewportMode === "desktop" ? "1024px" : 
+            viewportMode === "tablet" ? "768px" : "420px",
+          margin: "0 auto",
+          padding: "20px",
+        }}
+      >
+        {/* Render the original QuizTransition component */}
+        <QuizTransition
+          onContinue={() => console.log("Preview: Transition continue")}
+          onAnswer={(response) => console.log("Preview: Transition answer", response)}
+          currentAnswers={currentAnswers}
+        />
+        
+        {/* Indicador do viewport */}
+        <div className="mt-4 text-center">
+          <span className="inline-block px-3 py-1 text-xs bg-purple-100 text-purple-800 rounded-full">
+            Preview {viewportMode} - Etapa de Transição
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle non-quiz stages (result, offer)
   if (!isQuizQuestion || !currentStage.questionData) {
     return (
       <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
