@@ -677,7 +677,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         <ResizablePanelGroup direction="horizontal" className="h-full">
           {/* Left Column - Steps Panel */}
           <ResizablePanel defaultSize={14} minSize={10} maxSize={22}>
-            <div className="h-full border-r border-gray-200 bg-white shadow-sm">
+            <div className="h-full border-r border-slate-200/60 bg-gradient-to-b from-slate-50 to-white shadow-sm">
               <StepsPanel
                 stages={stages}
                 currentStage={currentStage}
@@ -689,8 +689,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizableHandle withHandle />
 
           {/* Second Column - Components Palette */}
-          <ResizablePanel defaultSize={15} minSize={12} maxSize={25}>
-            <div className="h-full bg-gray-50 border-r border-gray-200">
+          <ResizablePanel defaultSize={16} minSize={12} maxSize={25}>
+            <div className="h-full bg-gradient-to-b from-white to-slate-50/50 border-r border-slate-200/60 shadow-sm">
               <ComponentsPalette
                 onComponentSelect={handleComponentSelect}
                 selectedComponent={selectedComponent}
@@ -701,29 +701,41 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
           <ResizableHandle withHandle />
 
           {/* Third Column - Editor Canvas (Preview Only) */}
-          <ResizablePanel defaultSize={40} minSize={30} maxSize={60}>
-            <div className="h-full overflow-auto bg-gray-100 p-6">
-              <div
-                className={`mx-auto shadow-lg rounded-lg overflow-hidden ${
-                  viewportMode === "desktop"
-                    ? "max-w-4xl"
-                    : viewportMode === "tablet"
-                    ? "max-w-xl"
-                    : "max-w-sm"
-                }`}
-                style={{ backgroundColor: "#FEFEFE" }}
-              >
-                <EditableCanvas
-                  elements={canvasElements}
-                  selectedElementId={selectedElementId}
-                  isPreviewMode={isPreviewMode}
-                  onElementSelect={setSelectedElementId}
-                  onElementUpdate={handleElementUpdate}
-                  onElementAdd={handleElementAdd}
-                  onElementReorder={handleElementReorder}
-                  onElementDelete={handleElementDelete}
-                />
-              </div>
+          <ResizablePanel defaultSize={45} minSize={35} maxSize={60}>
+            <div className="h-full bg-gradient-to-br from-gray-50 to-gray-100 relative">
+              <ScrollArea className="h-full">
+                <div className="p-6 min-h-full">
+                  <div
+                    className={cn(
+                      "mx-auto shadow-xl rounded-xl overflow-hidden transition-all duration-300 ease-in-out border",
+                      viewportMode === "desktop" && "max-w-4xl",
+                      viewportMode === "tablet" && "max-w-2xl",
+                      viewportMode === "mobile" && "max-w-sm"
+                    )}
+                    style={{ backgroundColor: "#FEFEFE" }}
+                  >
+                    <EditableCanvas
+                      elements={canvasElements}
+                      selectedElementId={selectedElementId}
+                      isPreviewMode={isPreviewMode}
+                      onElementSelect={setSelectedElementId}
+                      onElementUpdate={handleElementUpdate}
+                      onElementAdd={handleElementAdd}
+                      onElementReorder={handleElementReorder}
+                      onElementDelete={handleElementDelete}
+                    />
+                  </div>
+
+                  {/* Viewport indicator */}
+                  <div className="flex justify-center mt-4">
+                    <Badge variant="outline" className="bg-white/80 backdrop-blur-sm">
+                      {viewportMode === "desktop" && "🖥️ Desktop"}
+                      {viewportMode === "tablet" && "📱 Tablet"}
+                      {viewportMode === "mobile" && "📱 Mobile"}
+                    </Badge>
+                  </div>
+                </div>
+              </ScrollArea>
             </div>
           </ResizablePanel>
 

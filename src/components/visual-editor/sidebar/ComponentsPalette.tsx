@@ -80,20 +80,20 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
   ];
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-gradient-to-b from-white to-slate-50/50">
       {/* Header */}
-      <div className="p-4 border-b border-gray-100 flex-shrink-0">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+      <div className="p-5 border-b border-slate-100 flex-shrink-0 bg-white/80 backdrop-blur-sm">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
             <Plus className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h2 className="font-semibold text-gray-900">Componentes</h2>
+            <h2 className="font-bold text-slate-800">Componentes</h2>
+            <p className="text-xs text-slate-500 font-medium">
+              Clique para adicionar
+            </p>
           </div>
         </div>
-        <p className="text-sm text-gray-500">
-          Clique para adicionar ao canvas
-        </p>
       </div>
 
       {/* Scrollable Components List */}
@@ -102,17 +102,17 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
           {componentCategories.map((category) => (
             <div key={category.title} className="space-y-3">
               {/* Category Header */}
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-3 mb-3">
                 <div className={cn(
-                  'w-6 h-6 rounded-md flex items-center justify-center',
+                  'w-7 h-7 rounded-xl flex items-center justify-center shadow-sm',
                   category.color
                 )}>
-                  <category.icon className="w-3 h-3" />
+                  <category.icon className="w-3.5 h-3.5" />
                 </div>
-                <h3 className="text-sm font-semibold text-gray-800">
+                <h3 className="text-sm font-bold text-slate-800">
                   {category.title}
                 </h3>
-                <Badge variant="outline" className="text-xs bg-gray-50">
+                <Badge variant="outline" className="text-xs bg-slate-50/80 border-slate-200 shadow-sm">
                   {category.components.length}
                 </Badge>
               </div>
@@ -123,20 +123,20 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
                   <div
                     key={component.type}
                     className={cn(
-                      'group relative p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-md',
+                      'group relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:shadow-lg backdrop-blur-sm',
                       selectedComponent === component.type
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
+                        ? 'border-blue-300 bg-gradient-to-br from-blue-50 to-indigo-50 shadow-md ring-1 ring-blue-100'
+                        : 'border-slate-150 bg-white/80 hover:border-slate-200 hover:bg-slate-50/90'
                     )}
                     onClick={() => onComponentSelect(component.type)}
                   >
                     <div className="flex items-start gap-3">
                       {/* Icon */}
                       <div className={cn(
-                        'w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0',
+                        'w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm transition-all duration-300',
                         selectedComponent === component.type
-                          ? 'bg-blue-500 text-white'
-                          : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
+                          ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md'
+                          : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'
                       )}>
                         <component.icon className="w-4 h-4" />
                       </div>
@@ -145,23 +145,23 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h4 className={cn(
-                            'text-sm font-medium truncate',
+                            'text-sm font-semibold truncate transition-colors duration-200',
                             selectedComponent === component.type
-                              ? 'text-blue-900'
-                              : 'text-gray-900'
+                              ? 'text-slate-800'
+                              : 'text-slate-700 group-hover:text-slate-800'
                           )}>
                             {component.label}
                           </h4>
                           {component.popular && (
                             <Badge 
                               variant="secondary" 
-                              className="bg-yellow-100 text-yellow-800 text-xs px-1 py-0"
+                              className="bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800 text-xs px-2 py-0.5 shadow-sm border-0"
                             >
                               ⭐
                             </Badge>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 line-clamp-2">
+                        <p className="text-xs text-slate-500 line-clamp-2 mt-1">
                           {component.description}
                         </p>
                       </div>
@@ -169,10 +169,10 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
 
                     {/* Hover indicator */}
                     <div className={cn(
-                      'absolute right-2 top-2 w-2 h-2 rounded-full transition-opacity',
+                      'absolute right-3 top-3 w-2.5 h-2.5 rounded-full transition-all duration-300 shadow-sm',
                       selectedComponent === component.type
-                        ? 'bg-blue-500 opacity-100'
-                        : 'bg-gray-300 opacity-0 group-hover:opacity-100'
+                        ? 'bg-gradient-to-r from-blue-400 to-indigo-500 opacity-100 shadow-md'
+                        : 'bg-slate-300 opacity-0 group-hover:opacity-100 group-hover:bg-slate-400'
                     )} />
                   </div>
                 ))}
@@ -183,12 +183,12 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
       </ScrollArea>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-100 flex-shrink-0 bg-gray-50">
-        <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-          <div className="w-4 h-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+      <div className="p-4 border-t border-slate-100 flex-shrink-0 bg-white/60 backdrop-blur-sm">
+        <div className="flex items-center justify-center gap-3 text-xs text-slate-500">
+          <div className="w-4 h-4 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center shadow-sm">
             <Plus className="w-2 h-2 text-white" />
           </div>
-          <span>Clique nos componentes para adicionar</span>
+          <span className="font-medium text-slate-600">Clique nos componentes para adicionar</span>
         </div>
       </div>
     </div>

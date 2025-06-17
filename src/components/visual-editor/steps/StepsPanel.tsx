@@ -20,19 +20,19 @@ interface StepsPanelProps {
 const getStageTypeColor = (type: string) => {
   switch (type) {
     case 'intro':
-      return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+      return 'bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700 shadow-sm';
     case 'quiz':
-      return 'bg-blue-100 text-blue-700 border-blue-200';
+      return 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 shadow-sm';
     case 'strategic':
-      return 'bg-purple-100 text-purple-700 border-purple-200';
+      return 'bg-gradient-to-r from-purple-100 to-violet-100 text-purple-700 shadow-sm';
     case 'transition':
-      return 'bg-amber-100 text-amber-700 border-amber-200';
+      return 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 shadow-sm';
     case 'result':
-      return 'bg-orange-100 text-orange-700 border-orange-200';
+      return 'bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 shadow-sm';
     case 'offer':
-      return 'bg-red-100 text-red-700 border-red-200';
+      return 'bg-gradient-to-r from-rose-100 to-pink-100 text-rose-700 shadow-sm';
     default:
-      return 'bg-gray-100 text-gray-700 border-gray-200';
+      return 'bg-gradient-to-r from-slate-100 to-gray-100 text-slate-600 shadow-sm';
   }
 };
 
@@ -61,61 +61,73 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
   onStageSelect
 }) => {
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
-      <div className="p-4 border-b border-gray-100 flex-shrink-0">
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">
-          Etapas do Quiz
-        </h3>
-        <p className="text-sm text-gray-500">
-          {stages.length} etapa{stages.length !== 1 ? 's' : ''}
-        </p>
+      <div className="p-5 border-b border-slate-100 flex-shrink-0 bg-white/80 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
+            <span className="text-white text-sm font-bold">📋</span>
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-slate-800 mb-0.5">
+              Etapas
+            </h3>
+            <p className="text-xs text-slate-500 font-medium">
+              {stages.length} {stages.length === 1 ? 'etapa' : 'etapas'}
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Scrollable Content */}
-      <ScrollArea className="flex-1 px-2">
-        <div className="p-2 space-y-3">
+      <ScrollArea className="flex-1 px-1">
+        <div className="p-4 space-y-2">
           {stages.map((stage, index) => (
             <div
               key={stage.id}
               className={cn(
-                'group relative transition-all duration-200 ease-in-out',
-                currentStage === stage.id ? 'transform scale-[1.02]' : 'hover:transform hover:scale-[1.01]'
+                'group relative transition-all duration-300 ease-out',
+                currentStage === stage.id ? 'transform scale-[1.02] z-10' : 'hover:transform hover:scale-[1.01]'
               )}
             >
               <Button
                 variant="ghost"
                 className={cn(
-                  'w-full h-auto p-0 rounded-xl border-2 transition-all duration-200',
+                  'w-full h-auto p-0 rounded-2xl border-2 transition-all duration-300 shadow-sm hover:shadow-lg',
                   currentStage === stage.id
-                    ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-md'
-                    : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'
+                    ? 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border-blue-200 shadow-lg ring-1 ring-blue-100'
+                    : 'bg-white border-slate-150 hover:border-slate-200 hover:bg-slate-50/70'
                 )}
                 onClick={() => onStageSelect(stage.id)}
               >
                 <div className="w-full p-4">
                   {/* Stage Number & Icon */}
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center gap-3 mb-3">
                     <div className={cn(
-                      'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold',
+                      'w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold transition-all duration-300 shadow-sm',
                       currentStage === stage.id
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-600'
+                        ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'
                     )}>
                       {index + 1}
                     </div>
-                    <span className="text-lg">
+                    <div className={cn(
+                      'w-8 h-8 rounded-lg flex items-center justify-center text-lg transition-all duration-200',
+                      currentStage === stage.id
+                        ? 'bg-white/50 backdrop-blur-sm'
+                        : 'group-hover:bg-slate-100/70'
+                    )}>
                       {getStageTypeIcon(stage.type)}
-                    </span>
+                    </div>
                   </div>
 
                   {/* Stage Name */}
                   <div className="text-left mb-3">
                     <h4 className={cn(
-                      'font-medium text-sm leading-tight',
+                      'font-semibold text-sm leading-tight transition-colors duration-200',
                       currentStage === stage.id
-                        ? 'text-blue-900'
-                        : 'text-gray-900 group-hover:text-gray-700'
+                        ? 'text-slate-800'
+                        : 'text-slate-700 group-hover:text-slate-800'
                     )}>
                       {stage.name}
                     </h4>
@@ -126,8 +138,9 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
                     <Badge 
                       variant="outline" 
                       className={cn(
-                        'text-xs font-medium px-2 py-1 rounded-full',
-                        getStageTypeColor(stage.type)
+                        'text-xs font-medium px-3 py-1 rounded-full border-0 shadow-sm',
+                        getStageTypeColor(stage.type),
+                        currentStage === stage.id && 'shadow-md'
                       )}
                     >
                       {stage.type}
@@ -137,13 +150,13 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
 
                 {/* Active Indicator */}
                 {currentStage === stage.id && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-500 rounded-r-full" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-gradient-to-b from-blue-400 to-indigo-600 rounded-r-full shadow-sm" />
                 )}
               </Button>
 
               {/* Connector Line */}
               {index < stages.length - 1 && (
-                <div className="absolute left-8 bottom-0 w-px h-3 bg-gray-200 transform translate-y-full" />
+                <div className="absolute left-[18px] bottom-0 w-px h-2 bg-slate-200 transform translate-y-full" />
               )}
             </div>
           ))}
@@ -151,16 +164,17 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
       </ScrollArea>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-100 flex-shrink-0">
-        <div className="text-xs text-gray-500 text-center">
+      <div className="p-4 border-t border-slate-100 flex-shrink-0 bg-white/60 backdrop-blur-sm">
+        <div className="text-xs text-slate-500 text-center bg-slate-50/80 rounded-lg p-2 border border-slate-100">
           {currentStage ? (
-            <span>
-              Editando: <span className="font-medium text-gray-700">
-                {stages.find(s => s.id === currentStage)?.name || 'Etapa'}
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full animate-pulse" />
+              <span className="font-medium text-slate-600">
+                Editando: {stages.find(s => s.id === currentStage)?.name || 'Etapa'}
               </span>
-            </span>
+            </div>
           ) : (
-            'Selecione uma etapa para editar'
+            <span className="text-slate-400">Selecione uma etapa para editar</span>
           )}
         </div>
       </div>
