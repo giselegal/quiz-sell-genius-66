@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -517,129 +518,166 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       style={cssVariables}
     >
       {/* Header */}
-      <div
-        className="border-b border-gray-200 px-6 py-3 flex-shrink-0"
-        style={{ backgroundColor: "#FEFEFE" }}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-gray-900">
-              Editor Visual - Quiz Supabase
-            </h1>
-            <Badge variant="outline" className="border-blue-500 text-blue-700">
-              {funnelId}
-            </Badge>
-            <Badge variant="secondary">
-              {questions.length} questões • {strategicQuestions.length}{" "}
-              estratégicas
-            </Badge>
+      <header className="border-b border-gray-200 bg-white shadow-sm flex-shrink-0">
+        <div className="px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-xl font-bold text-gray-900 mb-1">
+                  Editor Visual Quiz
+                </h1>
+                <div className="flex items-center gap-3">
+                  <Badge variant="outline" className="border-blue-500 text-blue-700 bg-blue-50">
+                    {funnelId}
+                  </Badge>
+                  <Badge variant="secondary" className="bg-gray-100 text-gray-700">
+                    {questions.length} questões • {strategicQuestions.length} estratégicas
+                  </Badge>
 
-            {/* Status de validação */}
-            {(() => {
-              const allQuestions = [...questions, ...strategicQuestions];
-              const validation = validateQuiz(allQuestions);
-              return (
-                <Badge
-                  variant={validation.isValid ? "default" : "destructive"}
-                  className={validation.isValid ? "bg-green-500" : ""}
-                >
-                  {validation.isValid ? (
-                    <>
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      Válido
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="w-3 h-3 mr-1" />
-                      {validation.errors.length} erro(s)
-                    </>
-                  )}
-                </Badge>
-              );
-            })()}
-          </div>
-
-          <div className="flex items-center gap-3">
-            {/* Viewport Controls */}
-            <div className="flex items-center border rounded-lg">
-              <Button
-                variant={viewportMode === "desktop" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewportMode("desktop")}
-                className="rounded-r-none"
-              >
-                <Monitor className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewportMode === "tablet" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewportMode("tablet")}
-                className="rounded-none border-x"
-              >
-                <Tablet className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewportMode === "mobile" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewportMode("mobile")}
-                className="rounded-l-none"
-              >
-                <Smartphone className="w-4 h-4" />
-              </Button>
-            </div>
-            {/* Preview Toggle */}
-            <Button
-              variant={isPreviewMode ? "default" : "outline"}
-              size="sm"
-              onClick={() => setIsPreviewMode(!isPreviewMode)}
-            >
-              <Eye className="w-4 h-4 mr-2" />
-              {isPreviewMode ? "Edição" : "Preview"}
-            </Button>
-            {/* Quiz Config Toggle */}
-            <Button
-              variant={showQuizConfig ? "default" : "outline"}
-              size="sm"
-              onClick={() => setShowQuizConfig(!showQuizConfig)}
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Config
-            </Button>
-            {/* Save Button */}
-            <Button
-              onClick={handleSave}
-              size="sm"
-              disabled={saving}
-              variant={lastSaved ? "default" : "secondary"}
-            >
-              {saving ? (
-                <Clock className="w-4 h-4 mr-2 animate-spin" />
-              ) : lastSaved ? (
-                <CheckCircle className="w-4 h-4 mr-2" />
-              ) : (
-                <Save className="w-4 h-4 mr-2" />
-              )}
-              {saving ? "Salvando..." : lastSaved ? "Salvo" : "Salvar"}
-            </Button>
-            {/* Last saved indicator */}
-            {lastSaved && (
-              <div className="text-xs text-muted-foreground">
-                Salvo às {lastSaved.toLocaleTimeString()}
+                  {/* Status de validação */}
+                  {(() => {
+                    const allQuestions = [...questions, ...strategicQuestions];
+                    const validation = validateQuiz(allQuestions);
+                    return (
+                      <Badge
+                        variant={validation.isValid ? "default" : "destructive"}
+                        className={cn(
+                          "font-medium",
+                          validation.isValid 
+                            ? "bg-emerald-500 hover:bg-emerald-600" 
+                            : "bg-red-500 hover:bg-red-600"
+                        )}
+                      >
+                        {validation.isValid ? (
+                          <>
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Válido
+                          </>
+                        ) : (
+                          <>
+                            <AlertCircle className="w-3 h-3 mr-1" />
+                            {validation.errors.length} erro(s)
+                          </>
+                        )}
+                      </Badge>
+                    );
+                  })()}
+                </div>
               </div>
-            )}{" "}
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* Viewport Controls */}
+              <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                <Button
+                  variant={viewportMode === "desktop" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewportMode("desktop")}
+                  className={cn(
+                    "rounded-none h-9",
+                    viewportMode === "desktop" && "bg-blue-600 hover:bg-blue-700"
+                  )}
+                >
+                  <Monitor className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewportMode === "tablet" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewportMode("tablet")}
+                  className={cn(
+                    "rounded-none border-x h-9",
+                    viewportMode === "tablet" && "bg-blue-600 hover:bg-blue-700"
+                  )}
+                >
+                  <Tablet className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewportMode === "mobile" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewportMode("mobile")}
+                  className={cn(
+                    "rounded-none h-9",
+                    viewportMode === "mobile" && "bg-blue-600 hover:bg-blue-700"
+                  )}
+                >
+                  <Smartphone className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {/* Preview Toggle */}
+              <Button
+                variant={isPreviewMode ? "default" : "outline"}
+                size="sm"
+                onClick={() => setIsPreviewMode(!isPreviewMode)}
+                className={cn(
+                  "h-9",
+                  isPreviewMode && "bg-green-600 hover:bg-green-700"
+                )}
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                {isPreviewMode ? "Edição" : "Preview"}
+              </Button>
+
+              {/* Quiz Config Toggle */}
+              <Button
+                variant={showQuizConfig ? "default" : "outline"}
+                size="sm"
+                onClick={() => setShowQuizConfig(!showQuizConfig)}
+                className={cn(
+                  "h-9",
+                  showQuizConfig && "bg-purple-600 hover:bg-purple-700"
+                )}
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Config
+              </Button>
+
+              {/* Save Button */}
+              <Button
+                onClick={handleSave}
+                size="sm"
+                disabled={saving}
+                variant={lastSaved ? "default" : "secondary"}
+                className={cn(
+                  "h-9 min-w-[100px]",
+                  lastSaved && "bg-green-600 hover:bg-green-700"
+                )}
+              >
+                {saving ? (
+                  <>
+                    <Clock className="w-4 h-4 mr-2 animate-spin" />
+                    Salvando...
+                  </>
+                ) : lastSaved ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Salvo
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Salvar
+                  </>
+                )}
+              </Button>
+
+              {/* Last saved indicator */}
+              {lastSaved && (
+                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+                  {lastSaved.toLocaleTimeString()}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content - Resizable 4 Columns Layout */}
       <div className="flex-1 overflow-hidden">
         <ResizablePanelGroup direction="horizontal" className="h-full">
           {/* Left Column - Steps Panel */}
-          <ResizablePanel defaultSize={12} minSize={8} maxSize={20}>
-            <div
-              className="h-full border-r border-gray-200"
-              style={{ backgroundColor: "#FEFEFE" }}
-            >
+          <ResizablePanel defaultSize={14} minSize={10} maxSize={22}>
+            <div className="h-full border-r border-gray-200 bg-white shadow-sm">
               <StepsPanel
                 stages={stages}
                 currentStage={currentStage}
