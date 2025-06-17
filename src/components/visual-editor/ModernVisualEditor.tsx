@@ -527,11 +527,18 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   Editor Visual Quiz
                 </h1>
                 <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="border-blue-500 text-blue-700 bg-blue-50">
+                  <Badge
+                    variant="outline"
+                    className="border-blue-500 text-blue-700 bg-blue-50"
+                  >
                     {funnelId}
                   </Badge>
-                  <Badge variant="secondary" className="bg-gray-100 text-gray-700">
-                    {questions.length} questões • {strategicQuestions.length} estratégicas
+                  <Badge
+                    variant="secondary"
+                    className="bg-gray-100 text-gray-700"
+                  >
+                    {questions.length} questões • {strategicQuestions.length}{" "}
+                    estratégicas
                   </Badge>
 
                   {/* Status de validação */}
@@ -543,8 +550,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                         variant={validation.isValid ? "default" : "destructive"}
                         className={cn(
                           "font-medium",
-                          validation.isValid 
-                            ? "bg-emerald-500 hover:bg-emerald-600" 
+                          validation.isValid
+                            ? "bg-emerald-500 hover:bg-emerald-600"
                             : "bg-red-500 hover:bg-red-600"
                         )}
                       >
@@ -575,7 +582,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   onClick={() => setViewportMode("desktop")}
                   className={cn(
                     "rounded-none h-9",
-                    viewportMode === "desktop" && "bg-blue-600 hover:bg-blue-700"
+                    viewportMode === "desktop" &&
+                      "bg-blue-600 hover:bg-blue-700"
                   )}
                 >
                   <Monitor className="w-4 h-4" />
@@ -728,7 +736,10 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
                   {/* Viewport indicator */}
                   <div className="flex justify-center mt-4">
-                    <Badge variant="outline" className="bg-white/80 backdrop-blur-sm">
+                    <Badge
+                      variant="outline"
+                      className="bg-white/80 backdrop-blur-sm"
+                    >
                       {viewportMode === "desktop" && "🖥️ Desktop"}
                       {viewportMode === "tablet" && "📱 Tablet"}
                       {viewportMode === "mobile" && "📱 Mobile"}
