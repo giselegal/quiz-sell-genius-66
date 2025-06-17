@@ -2,6 +2,7 @@ import React from "react";
 import { QuizQuestion } from "@/components/QuizQuestion";
 import QuizNavigation from "@/components/quiz/QuizNavigation";
 import { StrategicQuestions } from "@/components/quiz/StrategicQuestions";
+import QuizIntro from "@/components/QuizIntro";
 import { QuizQuestion as QuizQuestionType, UserResponse } from "@/types/quiz";
 
 interface EditorQuizPreviewProps {
@@ -33,7 +34,35 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
 }) => {
   const isStrategicQuestion = currentStage.type === "strategic";
   const isQuizQuestion = currentStage.type === "quiz" || isStrategicQuestion;
+  const isIntroStage = currentStage.type === "intro";
 
+  // Handle intro stage preview
+  if (isIntroStage) {
+    return (
+      <div 
+        className={`quiz-preview-container intro-preview ${viewportMode}-viewport`}
+        style={{
+          maxWidth: 
+            viewportMode === "desktop" ? "1024px" : 
+            viewportMode === "tablet" ? "768px" : "420px",
+          margin: "0 auto",
+          padding: "20px",
+        }}
+      >
+        {/* Render the original QuizIntro component */}
+        <QuizIntro onStart={() => console.log("Preview: Intro started")} />
+        
+        {/* Indicador do viewport */}
+        <div className="mt-4 text-center">
+          <span className="inline-block px-3 py-1 text-xs bg-green-100 text-green-800 rounded-full">
+            Preview {viewportMode} - Etapa de Introdução
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle non-quiz stages (transition, result, offer)
   if (!isQuizQuestion || !currentStage.questionData) {
     return (
       <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
