@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QuizIntro from '@/components/QuizIntro';
@@ -6,6 +5,7 @@ import { QuizContent } from '@/components/QuizContent';
 import { useQuizLogic } from '@/hooks/useQuizLogic';
 import { UserResponse } from '@/types/quiz';
 import { StrategicQuestions } from '@/components/quiz/StrategicQuestions';
+import QuizTransition from '@/components/QuizTransition';
 import { storeUserForHotmart } from '@/utils/hotmartWebhook';
 import {
   trackQuizStart,
@@ -20,6 +20,7 @@ const QuizPage: React.FC = () => {
   const navigate = useNavigate();
   const [hasStarted, setHasStarted] = useState(false);
   const [user, setUser] = useState<{ userName: string } | null>(null);
+  const [showingTransition, setShowingTransition] = useState(false);
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
   const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState(0);
 
@@ -143,7 +144,7 @@ const QuizPage: React.FC = () => {
         );
       } else {
         // Regular questions completed, show strategic questions
-        setShowingStrategicQuestions(true);
+        setShowingTransition(true); // Mostrar página de transição
         setCurrentStrategicQuestionIndex(0);
         
         trackButtonClick(
@@ -206,6 +207,18 @@ const QuizPage: React.FC = () => {
 
   if (!hasStarted) {
     return <QuizIntro onStart={handleStart} />;
+  }
+
+  if (showingTransition) {
+    return (
+      <QuizTransition
+        onContinue={() => {
+          setShowingTransition(false);
+          setShowingStrategicQuestions(true);
+        }}
+        onExit={() => navigate('/')}
+      />
+    );
   }
 
   if (showingStrategicQuestions) {
