@@ -2,7 +2,13 @@ import React from 'react';
 import { QuizIntro } from '../../QuizIntro';
 
 interface StageLayoutIntroProps {
-  stage: any;
+  stage: {
+    id: string;
+    title?: string;
+    subtitle?: string;
+    buttonText?: string;
+    type: string;
+  };
   onNext?: () => void;
 }
 

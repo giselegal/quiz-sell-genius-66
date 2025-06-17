@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-17T17:04:28.703Z",
-  "components": 517,
+  "timestamp": "2025-06-17T18:20:43.479Z",
+  "components": 520,
   "files": [
     {
       "name": "App",
@@ -2158,8 +2158,23 @@
       "type": "typescript"
     },
     {
+      "name": "StageLayoutOffer",
+      "path": "src/components/visual-editor/layouts/StageLayoutOffer.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "StageLayoutQuestion",
       "path": "src/components/visual-editor/layouts/StageLayoutQuestion.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StageLayoutResult",
+      "path": "src/components/visual-editor/layouts/StageLayoutResult.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StageLayoutStrategic",
+      "path": "src/components/visual-editor/layouts/StageLayoutStrategic.tsx",
       "type": "typescript"
     },
     {
