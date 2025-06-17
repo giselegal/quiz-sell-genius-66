@@ -143,13 +143,12 @@ const QuizPage: React.FC = () => {
           }
         );
       } else {
-        // Regular questions completed, show strategic questions
-        setShowingTransition(true); // Mostrar página de transição
-        setCurrentStrategicQuestionIndex(0);
+        // Regular questions completed, show transition page first
+        setShowingTransition(true);
         
         trackButtonClick(
-          'transition-to-strategic',
-          'Iniciar Perguntas Estratégicas',
+          'show-transition',
+          'Mostrar Página de Transição',
           'quiz-transition',
           {
             regular_questions_completed: totalQuestions
@@ -245,6 +244,16 @@ const QuizPage: React.FC = () => {
       <QuizTransition
         onContinue={handleContinueFromTransition}
         onExit={() => navigate('/')}
+      />
+    );
+  }
+
+  if (showingTransition) {
+    return (
+      <QuizTransition
+        onContinue={handleContinueFromTransition}
+        onAnswer={handleTransitionAnswer}
+        currentAnswers={strategicAnswers['550e8400-e29b-41d4-a716-446655440012'] || []}
       />
     );
   }
