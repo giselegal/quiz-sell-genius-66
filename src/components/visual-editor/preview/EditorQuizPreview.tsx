@@ -4,6 +4,8 @@ import QuizNavigation from "@/components/quiz/QuizNavigation";
 import { StrategicQuestions } from "@/components/quiz/StrategicQuestions";
 import QuizIntro from "@/components/QuizIntro";
 import QuizTransition from "@/components/QuizTransition";
+import ResultPage from "@/pages/ResultPage";
+import QuizDescubraSeuEstilo from "@/pages/quiz-descubra-seu-estilo";
 import { QuizQuestion as QuizQuestionType, UserResponse } from "@/types/quiz";
 
 interface EditorQuizPreviewProps {
@@ -37,6 +39,8 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
   const isQuizQuestion = currentStage.type === "quiz" || isStrategicQuestion;
   const isIntroStage = currentStage.type === "intro";
   const isTransitionStage = currentStage.type === "transition";
+  const isResultStage = currentStage.type === "result";
+  const isOfferStage = currentStage.type === "offer";
 
   // Handle intro stage preview
   if (isIntroStage) {
@@ -94,7 +98,59 @@ export const EditorQuizPreview: React.FC<EditorQuizPreviewProps> = ({
     );
   }
 
-  // Handle non-quiz stages (result, offer)
+  // Handle result stage preview
+  if (isResultStage) {
+    return (
+      <div 
+        className={`quiz-preview-container result-preview ${viewportMode}-viewport`}
+        style={{
+          maxWidth: 
+            viewportMode === "desktop" ? "1024px" : 
+            viewportMode === "tablet" ? "768px" : "420px",
+          margin: "0 auto",
+          padding: "20px",
+        }}
+      >
+        {/* Render the original ResultPage component */}
+        <ResultPage />
+        
+        {/* Indicador do viewport */}
+        <div className="mt-4 text-center">
+          <span className="inline-block px-3 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">
+            Preview {viewportMode} - Página de Resultado
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle offer stage preview
+  if (isOfferStage) {
+    return (
+      <div 
+        className={`quiz-preview-container offer-preview ${viewportMode}-viewport`}
+        style={{
+          maxWidth: 
+            viewportMode === "desktop" ? "1024px" : 
+            viewportMode === "tablet" ? "768px" : "420px",
+          margin: "0 auto",
+          padding: "20px",
+        }}
+      >
+        {/* Render the QuizDescubraSeuEstilo component */}
+        <QuizDescubraSeuEstilo />
+        
+        {/* Indicador do viewport */}
+        <div className="mt-4 text-center">
+          <span className="inline-block px-3 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">
+            Preview {viewportMode} - Página de Oferta
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle regular quiz questions
   if (!isQuizQuestion || !currentStage.questionData) {
     return (
       <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">

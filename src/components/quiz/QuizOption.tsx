@@ -137,14 +137,15 @@ const QuizOption: React.FC<QuizOptionProps> = ({
           // Para opções de texto - manter borda e adicionar efeito hover com cor da marca
           type === 'text' && cn(
             "p-4 border transition-all duration-300",
-            isHovered && !isSelected && "border-[#B89B7A] bg-[#B89B7A]/5 shadow-lg"
+            isHovered && !isSelected && "border-[#B89B7A] bg-[#B89B7A]/5 shadow-lg",
+            "bg-[#FEFEFE] shadow-sm hover:shadow-md"
           ),
           
-          // Para opções de imagem - SEM borda na coluna
-          type !== 'text' && "border-0",
-          
-          // Fundo sólido sem transparência e adicionando sombra padrão
-          "bg-[#FEFEFE] shadow-sm hover:shadow-md transition-all duration-300"
+          // Para opções de imagem - SEM fundo, SEM padding, SEM borda para melhor aproveitamento do grid
+          type !== 'text' && cn(
+            "border-0 p-0 bg-transparent shadow-none",
+            "hover:shadow-lg transition-all duration-300"
+          )
         )}
       >
         {type !== 'text' && option.imageUrl && (
@@ -164,7 +165,8 @@ const QuizOption: React.FC<QuizOptionProps> = ({
                 "leading-tight font-medium py-1 px-2 mt-auto text-[#432818] relative", 
                 isMobile ? "text-[0.85rem]" : "text-[0.8rem] sm:text-sm",
                 isStrategicOption && "text-[1rem] sm:text-base font-semibold", // Maior e bold para opções estratégicas
-                "font-inter antialiased" // Fonte mais legível
+                "font-inter antialiased", // Fonte mais legível
+                "bg-white/90 backdrop-blur-sm rounded-b-lg" // Fundo semi-transparente apenas para o texto
               )
             : cn(
                 "leading-relaxed text-[#432818] font-inter antialiased",
@@ -179,7 +181,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
         {/* Indicador de seleção - check com círculo para questões estratégicas */}
         {isSelected && (
           isStrategicOption ? (
-            <div className="absolute -top-1 -right-1 h-7 w-7 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg">
+            <div className="absolute -top-1 -right-1 h-7 w-7 bg-[#b29670] rounded-full flex items-center justify-center shadow-lg z-10">
               <Check
                 className="h-5 w-5 text-white"
                 strokeWidth={3}
@@ -187,7 +189,7 @@ const QuizOption: React.FC<QuizOptionProps> = ({
             </div>
           ) : (
             <Check
-              className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670]"
+              className="absolute -top-0.5 -right-0.5 h-4 w-4 text-[#b29670] z-10"
               strokeWidth={3}
             />
           )
