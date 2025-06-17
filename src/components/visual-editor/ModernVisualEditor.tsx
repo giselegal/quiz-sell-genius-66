@@ -11,16 +11,19 @@ import {
 } from "@/components/ui/resizable";
 import { StepsPanel } from "./steps/StepsPanel";
 import { ComponentsPalette } from "./sidebar/ComponentsPalette";
+import { AdvancedControlsPanel } from "./panels/AdvancedControlsPanel";
 import { ModernConfigurationPanel } from "./panels/ModernConfigurationPanel";
 import { OptionConfigurationPanel } from "./panels/OptionConfigurationPanel";
 import { QuizConfigPanel } from "./panels/QuizConfigPanel";
 import { EditableCanvas } from "./canvas/EditableCanvas";
+import { EditorQuizPreview } from "./preview/EditorQuizPreview";
 import { useSupabaseQuestions } from "@/hooks/useSupabaseQuestions";
 import { useQuizStyles } from "@/hooks/useQuizConfig";
 import { useQuizEditor } from "@/hooks/useQuizEditor";
 import { useEditorSettings } from "@/hooks/useEditorSettings";
 import { ValidationModal } from "./ValidationModal";
 import { runEditorTest } from "@/utils/editorTest";
+import { UserResponse } from "@/types/quiz";
 import {
   Eye,
   Save,
@@ -106,6 +109,26 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   const [selectedElementId, setSelectedElementId] = useState<string | null>(
     null
   );
+
+  // Quiz preview state
+  const [previewAnswers, setPreviewAnswers] = useState<string[]>([]);
+
+  // Preview handlers
+  const handlePreviewAnswer = (response: UserResponse) => {
+    if (response.selectedOptions) {
+      setPreviewAnswers(response.selectedOptions);
+    }
+  };
+
+  const handlePreviewNext = () => {
+    console.log("Preview Next clicked");
+    setPreviewAnswers([]); // Reset answers for next question
+  };
+
+  const handlePreviewPrevious = () => {
+    console.log("Preview Previous clicked");
+    setPreviewAnswers([]);
+  };
 
   // Generate stages from Supabase data
   useEffect(() => {
@@ -408,6 +431,41 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   const handleComponentSelect = (componentType: string) => {
     setSelectedComponent(componentType);
     handleElementAdd(componentType);
+  };
+
+  const handleElementUpdate = (elementId: string, updates: Partial<{
+    content: Partial<CanvasElement['content']>;
+    style: Record<string, string>;
+    properties: Record<string, unknown>;
+  }>) => {
+    setCanvasElements(prev => prev.map(element => {
+      if (element.id === elementId) {
+        return {
+          ...element,
+          content: updates.content ? { ...element.content, ...updates.content } : element.content,
+          style: updates.style ? { ...element.content.style, ...updates.style } : element.content.style,
+          properties: updates.properties ? { ...element.content.properties, ...updates.properties } : element.content.properties,
+        };
+      }
+      return element;
+    }));
+  };
+
+  const handleResetElement = (elementId: string) => {
+    setCanvasElements(prev => prev.map(element => {
+      if (element.id === elementId) {
+        const defaultContent = getDefaultContent(element.type);
+        return { ...element, content: defaultContent };
+      }
+      return element;
+    }));
+  };
+
+  const handleDeleteElement = (elementId: string) => {
+    setCanvasElements(prev => prev.filter(element => element.id !== elementId));
+    if (selectedElementId === elementId) {
+      setSelectedElementId(null);
+    }
   };
 
   const handleElementAdd = (type: string, position?: number) => {
@@ -743,12 +801,14 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           <ResizableHandle withHandle />
 
-          {/* Second Column - Components Palette */}
-          <ResizablePanel defaultSize={16} minSize={12} maxSize={25}>
+          {/* Second Column - Advanced Controls Panel */}
+          <ResizablePanel defaultSize={18} minSize={14} maxSize={28}>
             <div className="h-full bg-gradient-to-b from-white to-slate-50/50 border-r border-slate-200/60 shadow-sm">
-              <ComponentsPalette
-                onComponentSelect={handleComponentSelect}
-                selectedComponent={selectedComponent}
+              <AdvancedControlsPanel
+                selectedElementId={selectedElementId}
+                onElementUpdate={handleElementUpdate}
+                onResetElement={handleResetElement}
+                onDeleteElement={handleDeleteElement}
               />
             </div>
           </ResizablePanel>
@@ -769,16 +829,29 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                     )}
                     style={{ backgroundColor: "#FEFEFE" }}
                   >
-                    <EditableCanvas
-                      elements={canvasElements}
-                      selectedElementId={selectedElementId}
-                      isPreviewMode={isPreviewMode}
-                      onElementSelect={setSelectedElementId}
-                      onElementUpdate={handleElementUpdate}
-                      onElementAdd={handleElementAdd}
-                      onElementReorder={handleElementReorder}
-                      onElementDelete={handleElementDelete}
-                    />
+                    {isPreviewMode ? (
+                      <EditorQuizPreview
+                        currentStage={stages.find(s => s.id === currentStage) || stages[0]}
+                        questions={questions}
+                        strategicQuestions={strategicQuestions}
+                        currentAnswers={previewAnswers}
+                        onAnswer={handlePreviewAnswer}
+                        onNext={handlePreviewNext}
+                        onPrevious={handlePreviewPrevious}
+                        viewportMode={viewportMode}
+                      />
+                    ) : (
+                      <EditableCanvas
+                        elements={canvasElements}
+                        selectedElementId={selectedElementId}
+                        isPreviewMode={isPreviewMode}
+                        onElementSelect={setSelectedElementId}
+                        onElementUpdate={handleElementUpdate}
+                        onElementAdd={handleElementAdd}
+                        onElementReorder={handleElementReorder}
+                        onElementDelete={handleElementDelete}
+                      />
+                    )}
                   </div>
 
                   {/* Viewport indicator */}

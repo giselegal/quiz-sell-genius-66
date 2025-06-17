@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-17T16:36:51.069Z",
-  "components": 512,
+  "timestamp": "2025-06-17T16:47:09.354Z",
+  "components": 514,
   "files": [
     {
       "name": "App",
@@ -2153,6 +2153,11 @@
       "type": "typescript"
     },
     {
+      "name": "AdvancedControlsPanel",
+      "path": "src/components/visual-editor/panels/AdvancedControlsPanel.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "ModernConfigurationPanel",
       "path": "src/components/visual-editor/panels/ModernConfigurationPanel.tsx",
       "type": "typescript"
@@ -2170,6 +2175,11 @@
     {
       "name": "StageConfigurationPanel",
       "path": "src/components/visual-editor/panels/StageConfigurationPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorQuizPreview",
+      "path": "src/components/visual-editor/preview/EditorQuizPreview.tsx",
       "type": "typescript"
     },
     {

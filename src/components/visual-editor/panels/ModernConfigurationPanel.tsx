@@ -115,39 +115,6 @@ export const ModernConfigurationPanel: React.FC<
             </p>
           </div>
 
-          {/* Question Title Editor - ENHANCED */}
-          {(stageType.startsWith("question-") ||
-            stageType.startsWith("strategic-")) && (
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-indigo-50">
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-2">
-                  <Type className="w-4 h-4 text-blue-600" />
-                  <Label className="text-sm font-semibold text-blue-800">
-                    Título da Questão
-                  </Label>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="space-y-3">
-                  <Textarea
-                    value={questionData?.title || ""}
-                    onChange={(e) =>
-                      onUpdate?.({ ...questionData, title: e.target.value })
-                    }
-                    placeholder="Digite o título da sua questão aqui..."
-                    className="min-h-[80px] border-blue-200 focus:border-blue-400 focus:ring-blue-400 resize-none text-sm leading-relaxed"
-                    style={{ backgroundColor: "#FEFEFE" }}
-                    maxLength={500}
-                  />
-                  <div className="flex justify-between items-center text-xs text-gray-500">
-                    <span>Use um título claro e envolvente</span>
-                    <span>{(questionData?.title || "").length}/500</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
           {/* Options Management - MODERN & INTUITIVE */}
           {(stageType.startsWith("question-") ||
             stageType.startsWith("strategic-")) && (
