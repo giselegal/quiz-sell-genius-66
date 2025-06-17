@@ -1,13 +1,11 @@
 
-#!/usr/bin/env node
-
 /**
  * Script para preparar componentes para sincronização com Lovable
  * Funciona sem necessidade de token LOVABLE_TOKEN
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 console.log('🚀 Preparando componentes para Lovable...');
 
