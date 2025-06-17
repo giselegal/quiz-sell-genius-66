@@ -643,24 +643,37 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                     <span className="text-sm text-slate-600">
                       {questions.length + strategicQuestions.length} questões
                     </span>
-                    
+
                     {/* Validation Status */}
                     {(() => {
-                      const allQuestions = [...questions, ...strategicQuestions];
+                      const allQuestions = [
+                        ...questions,
+                        ...strategicQuestions,
+                      ];
                       const validation = validateQuiz(allQuestions);
                       return (
                         <div className="flex items-center gap-2">
                           <div className="w-1 h-1 bg-slate-300 rounded-full"></div>
-                          <div className={cn(
-                            "flex items-center gap-1.5 text-sm",
-                            validation.isValid ? "text-emerald-600" : "text-red-500"
-                          )}>
-                            <div className={cn(
-                              "w-2 h-2 rounded-full",
-                              validation.isValid ? "bg-emerald-500" : "bg-red-500"
-                            )}></div>
+                          <div
+                            className={cn(
+                              "flex items-center gap-1.5 text-sm",
+                              validation.isValid
+                                ? "text-emerald-600"
+                                : "text-red-500"
+                            )}
+                          >
+                            <div
+                              className={cn(
+                                "w-2 h-2 rounded-full",
+                                validation.isValid
+                                  ? "bg-emerald-500"
+                                  : "bg-red-500"
+                              )}
+                            ></div>
                             <span className="font-medium">
-                              {validation.isValid ? "Válido" : `${validation.errors.length} erro(s)`}
+                              {validation.isValid
+                                ? "Válido"
+                                : `${validation.errors.length} erro(s)`}
                             </span>
                           </div>
                         </div>
@@ -678,8 +691,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   onClick={() => setViewportMode("desktop")}
                   className={cn(
                     "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
-                    viewportMode === "desktop" 
-                      ? "bg-white text-slate-800 shadow-sm" 
+                    viewportMode === "desktop"
+                      ? "bg-white text-slate-800 shadow-sm"
                       : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
                   )}
                 >
@@ -689,8 +702,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   onClick={() => setViewportMode("tablet")}
                   className={cn(
                     "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
-                    viewportMode === "tablet" 
-                      ? "bg-white text-slate-800 shadow-sm" 
+                    viewportMode === "tablet"
+                      ? "bg-white text-slate-800 shadow-sm"
                       : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
                   )}
                 >
@@ -700,8 +713,8 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   onClick={() => setViewportMode("mobile")}
                   className={cn(
                     "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
-                    viewportMode === "mobile" 
-                      ? "bg-white text-slate-800 shadow-sm" 
+                    viewportMode === "mobile"
+                      ? "bg-white text-slate-800 shadow-sm"
                       : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
                   )}
                 >
@@ -729,7 +742,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                 disabled={saving}
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                  saving 
+                  saving
                     ? "bg-slate-100 text-slate-400 cursor-not-allowed"
                     : "bg-slate-800 text-white hover:bg-slate-900 shadow-sm"
                 )}
@@ -764,11 +777,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       </header>
 
       {/* Main Content - Resizable 5 Columns Layout */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden bg-slate-50/30">
         <ResizablePanelGroup direction="horizontal" className="h-full">
           {/* First Column - Steps Panel */}
           <ResizablePanel defaultSize={12} minSize={8} maxSize={18}>
-            <div className="h-full border-r border-slate-200/60 bg-gradient-to-b from-slate-50 to-white shadow-sm">
+            <div className="h-full border-r border-slate-200/60 bg-white/95 backdrop-blur-sm">
               <StepsPanel
                 stages={stages}
                 currentStage={currentStage}
@@ -781,7 +794,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           {/* Second Column - Components Palette */}
           <ResizablePanel defaultSize={16} minSize={12} maxSize={22}>
-            <div className="h-full bg-gradient-to-b from-white to-slate-50/50 border-r border-slate-200/60 shadow-sm">
+            <div className="h-full bg-white/95 backdrop-blur-sm border-r border-slate-200/60">
               <ComponentsPalette
                 onComponentSelect={handleElementAdd}
                 selectedComponent={selectedElementId}
@@ -793,17 +806,17 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           {/* Third Column - Editor Canvas (Preview) */}
           <ResizablePanel defaultSize={35} minSize={28} maxSize={50}>
-            <div className="h-full bg-gradient-to-br from-gray-50 to-gray-100 relative">
+            <div className="h-full bg-gradient-to-br from-slate-50 to-slate-100/50 relative">
               <ScrollArea className="h-full">
-                <div className="p-6 min-h-full">
+                <div className="p-8 min-h-full">
                   <div
                     className={cn(
-                      "mx-auto shadow-xl rounded-xl overflow-hidden transition-all duration-300 ease-in-out border",
+                      "mx-auto shadow-2xl rounded-2xl overflow-hidden transition-all duration-300 ease-in-out border border-slate-200/60",
                       viewportMode === "desktop" && "max-w-4xl",
                       viewportMode === "tablet" && "max-w-2xl",
                       viewportMode === "mobile" && "max-w-sm"
                     )}
-                    style={{ backgroundColor: "#FEFEFE" }}
+                    style={{ backgroundColor: "#FFFFFF" }}
                   >
                     {isPreviewMode ? (
                       <EditorQuizPreview
@@ -833,15 +846,22 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
                   </div>
 
                   {/* Viewport indicator */}
-                  <div className="flex justify-center mt-4">
-                    <Badge
-                      variant="outline"
-                      className="bg-white/80 backdrop-blur-sm"
-                    >
-                      {viewportMode === "desktop" && "🖥️ Desktop"}
-                      {viewportMode === "tablet" && "📱 Tablet"}
-                      {viewportMode === "mobile" && "📱 Mobile"}
-                    </Badge>
+                  <div className="flex justify-center mt-6">
+                    <div className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-slate-200/60 shadow-sm">
+                      <div
+                        className={cn(
+                          "w-2 h-2 rounded-full",
+                          viewportMode === "desktop" && "bg-blue-500",
+                          viewportMode === "tablet" && "bg-orange-500",
+                          viewportMode === "mobile" && "bg-green-500"
+                        )}
+                      ></div>
+                      <span className="text-sm font-medium text-slate-700">
+                        {viewportMode === "desktop" && "Desktop"}
+                        {viewportMode === "tablet" && "Tablet"}
+                        {viewportMode === "mobile" && "Mobile"}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </ScrollArea>
@@ -852,7 +872,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           {/* Fourth Column - Advanced Controls Panel */}
           <ResizablePanel defaultSize={16} minSize={12} maxSize={22}>
-            <div className="h-full bg-gradient-to-b from-white to-slate-50/50 border-r border-slate-200/60 shadow-sm">
+            <div className="h-full bg-white/95 backdrop-blur-sm border-r border-slate-200/60">
               <AdvancedControlsPanel
                 selectedElementId={selectedElementId}
                 onElementUpdate={handleElementUpdate}
@@ -870,10 +890,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
             minSize={showQuizConfig ? 14 : 16}
             maxSize={showQuizConfig ? 25 : 30}
           >
-            <div
-              className="h-full border-l border-gray-200"
-              style={{ backgroundColor: "#FEFEFE" }}
-            >
+            <div className="h-full bg-white/95 backdrop-blur-sm">
               <div className="h-full overflow-auto">
                 <ModernConfigurationPanel
                   stageName={

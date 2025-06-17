@@ -60,16 +60,16 @@ export const StepsPanel: React.FC<StepsPanelProps> = ({
   onStageSelect,
 }) => {
   return (
-    <div className="h-full flex flex-col bg-gradient-to-b from-slate-50 to-white">
+    <div className="h-full flex flex-col bg-white/95">
       {/* Header */}
-      <div className="p-5 border-b border-slate-100 flex-shrink-0 bg-white/80 backdrop-blur-sm">
+      <div className="p-6 border-b border-slate-200/60 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
-            <span className="text-white text-sm font-bold">📋</span>
+          <div className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center">
+            <span className="text-white text-sm font-semibold">S</span>
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-800 mb-0.5">Etapas</h3>
-            <p className="text-xs text-slate-500 font-medium">
+            <h3 className="text-base font-semibold text-slate-900">Etapas</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
               {stages.length} {stages.length === 1 ? "etapa" : "etapas"}
             </p>
           </div>

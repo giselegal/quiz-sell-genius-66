@@ -163,16 +163,18 @@ export const ComponentsPalette: React.FC<ComponentsPaletteProps> = ({
   ];
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-b from-white to-slate-50/50">
+    <div className="h-full flex flex-col bg-white/95">
       {/* Header */}
-      <div className="p-5 border-b border-slate-100 flex-shrink-0 bg-white/80 backdrop-blur-sm">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
+      <div className="p-6 border-b border-slate-200/60 flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center">
             <Plus className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h2 className="font-bold text-slate-800">Componentes</h2>
-            <p className="text-xs text-slate-500 font-medium">
+            <h2 className="text-base font-semibold text-slate-900">
+              Componentes
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5">
               Clique para adicionar
             </p>
           </div>
