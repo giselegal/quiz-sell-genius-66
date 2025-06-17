@@ -42,19 +42,25 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     let newSelectedOptions: string[];
     
     if (currentAnswers.includes(optionId)) {
-      // Para questões estratégicas, não permitimos desmarcar a única opção selecionada
+      // Questões estratégicas: não permitem desmarcar (sempre 1 seleção)
       if (isStrategicQuestion) {
-        return; // Não permite desmarcar a opção em questões estratégicas
+        return; // Não permite desmarcar em questões estratégicas
       }
+      // Questões normais: permite desmarcar
       newSelectedOptions = currentAnswers.filter(id => id !== optionId);
     } else {
       if (isStrategicQuestion) {
-        // Para questões estratégicas, substituímos qualquer seleção anterior
+        // Questões estratégicas: máximo 1 seleção (substitui anterior)
         newSelectedOptions = [optionId];
-      } else if (question.multiSelect && currentAnswers.length >= question.multiSelect) {
-        newSelectedOptions = [...currentAnswers.slice(1), optionId];
       } else {
-        newSelectedOptions = [...currentAnswers, optionId];
+        // Questões normais: máximo 3 seleções
+        const maxSelections = 3;
+        if (currentAnswers.length >= maxSelections) {
+          // Remove a primeira seleção e adiciona a nova
+          newSelectedOptions = [...currentAnswers.slice(1), optionId];
+        } else {
+          newSelectedOptions = [...currentAnswers, optionId];
+        }
       }
     }
     
@@ -128,9 +134,10 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
               type={question.type}
               questionId={question.id}
               isDisabled={
+                // Questões estratégicas: desabilita outras opções quando uma está selecionada
                 (isStrategicQuestion && currentAnswers.length > 0 && !currentAnswers.includes(option.id)) || 
-                (!isStrategicQuestion && !currentAnswers.includes(option.id) && 
-                  currentAnswers.length >= question.multiSelect)
+                // Questões normais: desabilita quando já tem 3 seleções e esta não está selecionada
+                (!isStrategicQuestion && !currentAnswers.includes(option.id) && currentAnswers.length >= 3)
               }
               isStrategicOption={isStrategicQuestion}
             />

@@ -1,4 +1,4 @@
-/* Question Options Layout Styles */
+/* Question Options Layout Styles - Versão Melhorada */
 
 /* Classe utility para clamp de texto */
 .line-clamp-2 {
@@ -17,17 +17,19 @@
   overflow: hidden;
 }
 
-/* Grid responsivo para opções */
+/* Grid responsivo para opções - Layout otimizado */
 .options-grid {
   display: grid;
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
 }
 
-/* Layout baseado no tipo de conteúdo */
+/* Layout baseado no tipo de conteúdo - Sempre uma coluna para texto */
 .options-grid.text-only {
-  grid-template-columns: 1fr; /* Sempre uma coluna para texto */
-  max-width: 600px; /* Limita largura para melhor legibilidade */
-  margin: 0 auto; /* Centraliza */
+  grid-template-columns: 1fr; 
+  max-width: 700px; /* Aumentado para melhor uso do espaço */
+  margin: 0 auto; 
 }
 
 .options-grid.with-images {
@@ -46,21 +48,20 @@
   }
 }
 
-/* Opção individual - Design mais elegante */
+/* Opção individual - Design moderno sem sombras padrão */
 .option-card {
   position: relative;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 1.25rem;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  /* Sombra removida por padrão */
 }
 
 .option-card:hover {
   border-color: #b89b7a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(184, 155, 122, 0.1);
   transform: translateY(-2px);
 }
 
@@ -68,162 +69,175 @@
   border-color: #b89b7a;
   background: linear-gradient(
     135deg,
-    rgba(184, 155, 122, 0.03) 0%,
-    rgba(184, 155, 122, 0.08) 100%
+    rgba(184, 155, 122, 0.05) 0%,
+    rgba(184, 155, 122, 0.1) 100%
   );
-  box-shadow: 0 8px 25px rgba(184, 155, 122, 0.15),
-    0 0 0 1px rgba(184, 155, 122, 0.2);
-  transform: translateY(-3px);
+  /* Sombra apenas quando selecionado */
+  box-shadow: 0 10px 30px rgba(184, 155, 122, 0.2),
+    0 0 0 1px rgba(184, 155, 122, 0.3);
+  transform: translateY(-4px);
 }
 
-/* Imagem da opção - Ligeiramente maior */
+/* Imagem da opção - Layout otimizado */
 .option-image {
   width: 100%;
-  height: 200px; /* Aumentou de 180px para 200px */
-  object-fit: cover; /* Mobile: pode cortar para dar destaque */
+  height: 220px; /* Altura aumentada para melhor impacto visual */
+  object-fit: cover; /* Mobile: corte estratégico para destaque */
   object-position: center;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .option-card:hover .option-image {
-  transform: scale(1.03);
+  transform: scale(1.05);
 }
 
-/* Responsividade das imagens - Maior no desktop */
+/* Responsividade das imagens - Desktop com mais altura */
 @media (min-width: 640px) {
   .option-image {
-    height: 200px; /* Aumentou de 180px para 200px */
-    object-fit: contain; /* Desktop: mostra imagem completa sem cortar */
+    height: 240px; /* Aumentado para desktop */
+    object-fit: contain; /* Desktop: imagem completa sem corte */
     background-color: #f8f9fa;
   }
 }
 
 @media (min-width: 1024px) {
   .option-image {
-    height: 220px; /* Aumentou de 200px para 220px */
-    object-fit: contain; /* Desktop: mostra imagem completa sem cortar */
+    height: 260px; /* Ainda maior em telas grandes */
+    object-fit: contain;
     background-color: #f8f9fa;
   }
 }
 
-/* Labels removidos - interface mais limpa */
-
-/* Removemos o selection-indicator completamente */
-
-/* Conteúdo da opção - Melhor padding e espaçamento */
+/* Conteúdo da opção - Melhor organização do espaçamento */
 .option-content {
-  padding: 1rem;
+  padding: 1.25rem;
 }
 
 .option-content.with-image {
-  padding: 0.875rem 1rem 1rem 1rem;
+  padding: 1rem 1.25rem 1.25rem 1.25rem;
 }
 
 .option-content.text-only {
-  padding: 1.5rem 1rem;
+  padding: 2rem 1.5rem; /* Mais espaço para opções só texto */
+  min-height: 120px; /* Altura mínima para consistência */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-/* Mobile: menos padding e mais destaque à imagem */
+/* Mobile: prioriza a imagem, texto mais discreto */
 @media (max-width: 639px) {
   .option-content {
-    padding: 0.25rem; /* Menos padding ainda */
+    padding: 0.5rem;
   }
 
   .option-content.with-image {
-    padding: 0.25rem 0.5rem 0.5rem 0.5rem; /* Muito menos padding */
-    background: transparent; /* Remove fundo */
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.95);
   }
 
   .option-content.text-only {
-    padding: 1rem 0.75rem;
+    padding: 1.5rem 1rem;
+    min-height: 100px;
   }
 
-  /* Remover sombra das imagens no mobile */
+  /* Remove efeitos visuais no mobile para performance */
   .option-card {
-    box-shadow: none; /* Remove sombra padrão no mobile */
+    box-shadow: none;
   }
 
   .option-card:hover {
-    box-shadow: none; /* Remove sombra no hover no mobile */
-    transform: none; /* Remove transformação no hover */
+    box-shadow: none;
+    transform: none;
   }
 
-  /* Sombra apenas na seleção */
+  /* Sombra sutil apenas na seleção */
   .option-card.selected {
-    box-shadow: 0 6px 20px rgba(184, 155, 122, 0.25); /* Sombra só na seleção */
-    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(184, 155, 122, 0.3);
+    transform: translateY(-3px);
   }
 
-  /* Remove efeito de transformação da imagem no mobile */
+  /* Evita transformação da imagem no mobile */
   .option-card:hover .option-image {
     transform: none;
   }
 }
 
-/* Título da opção - Fonte regular com destaque */
+/* Título da opção - Tipografia melhorada */
 .option-title {
-  font-weight: 400; /* Regular por padrão */
-  color: #111827;
+  font-weight: 500; /* Meio termo entre regular e bold */
+  color: #1f2937;
   line-height: 1.4;
   margin-bottom: 0.5rem;
+  transition: color 0.2s ease;
 }
 
 .option-title .strategic-word {
-  font-weight: 700; /* Negrito para palavras estratégicas */
+  font-weight: 700; /* Bold para palavras estratégicas */
+  color: #b89b7a; /* Cor temática */
 }
 
+/* Tamanhos de fonte responsivos */
 .option-title.small {
-  font-size: 0.75rem; /* Diminuído de 0.875rem */
+  font-size: 0.875rem;
 }
 
 .option-title.medium {
-  font-size: 0.875rem; /* Diminuído de 1rem */
+  font-size: 1rem;
 }
 
 .option-title.large {
-  font-size: 1rem; /* Diminuído de 1.125rem */
+  font-size: 1.125rem;
 }
 
-/* Fontes menores no mobile para dar destaque à imagem */
+/* Mobile: texto mais discreto quando há imagem */
 @media (max-width: 639px) {
   .option-title.small {
-    font-size: 0.625rem; /* Diminuído de 0.75rem */
+    font-size: 0.75rem;
   }
 
   .option-title.medium {
-    font-size: 0.7rem; /* Diminuído de 0.8rem */
+    font-size: 0.875rem;
   }
 
   .option-title.large {
-    font-size: 0.75rem; /* Diminuído de 0.875rem */
+    font-size: 0.925rem;
   }
 
-  /* Texto mais discreto no mobile quando há imagem */
+  /* Texto sutil quando há imagem no mobile */
   .option-content.with-image .option-title {
-    color: #6b7280; /* Cor mais sutil */
-    font-size: 0.55rem !important; /* Ainda menor */
-    line-height: 1.2; /* Diminui altura da linha */
-    margin-bottom: 0.25rem; /* Menos margem inferior */
+    color: #6b7280;
+    font-size: 0.75rem !important;
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+    font-weight: 400;
   }
 
-  /* Palavras estratégicas ainda destacadas */
+  /* Palavras estratégicas mantêm destaque */
   .option-content.with-image .option-title .strategic-word {
-    color: #374151; /* Cor um pouco mais forte para destaque */
-    font-weight: 700;
+    color: #b89b7a;
+    font-weight: 600;
   }
 }
 
+/* Desktop: tipografia mais generosa */
 @media (min-width: 640px) {
   .option-title.small {
-    font-size: 0.875rem; /* Diminuído de 1rem */
+    font-size: 1rem;
   }
 
   .option-title.medium {
-    font-size: 1rem; /* Diminuído de 1.125rem */
+    font-size: 1.125rem;
   }
 
   .option-title.large {
-    font-size: 1.125rem; /* Diminuído de 1.25rem */
+    font-size: 1.25rem;
+  }
+
+  /* Melhor contraste no desktop */
+  .option-title {
+    color: #111827;
   }
 }
 

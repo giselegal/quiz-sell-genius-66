@@ -66,6 +66,7 @@ export const ModernConfigurationPanel: React.FC<
   const [fontSize, setFontSize] = useState("medium");
   const [imageSize, setImageSize] = useState("medium");
   const [titleFontSize, setTitleFontSize] = useState("large");
+  const [editingOption, setEditingOption] = useState<string | null>(null);
 
   const togglePreview = (optionId: string) => {
     setPreviewMode((prev) => ({ ...prev, [optionId]: !prev[optionId] }));
@@ -492,171 +493,146 @@ export const ModernConfigurationPanel: React.FC<
                 </CardContent>
               </Card>
 
-              {/* Visual Appearance Settings */}
-              <Card className="border-0 shadow-sm bg-gradient-to-br from-purple-50 to-pink-50">
+              {/* Visual Appearance Settings - Controles Melhorados */}
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-2">
-                    <Sliders className="w-4 h-4 text-purple-600" />
-                    <Label className="text-sm font-semibold text-purple-800">
+                    <Sliders className="w-4 h-4 text-blue-600" />
+                    <Label className="text-sm font-semibold text-gray-800">
                       Aparência Visual
                     </Label>
                   </div>
-                  <p className="text-xs text-purple-600 mt-1">
-                    Configure tamanhos de fontes e imagens
-                  </p>
                 </CardHeader>
-                <CardContent className="pt-0 space-y-4">
+                <CardContent className="space-y-6">
+                  {/* Font Size Controls */}
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                      <Type className="w-4 h-4" />
+                      Tamanho da Fonte
+                    </Label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {["small", "medium", "large"].map((size) => (
+                        <Button
+                          key={size}
+                          variant={fontSize === size ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setFontSize(size)}
+                          className={`text-xs transition-all duration-200 ${
+                            fontSize === size
+                              ? "bg-blue-600 hover:bg-blue-700 text-white shadow-md scale-105"
+                              : "hover:bg-blue-50 hover:border-blue-300"
+                          }`}
+                        >
+                          {size === "small" && "Pequeno"}
+                          {size === "medium" && "Médio"}
+                          {size === "large" && "Grande"}
+                        </Button>
+                      ))}
+                    </div>
+                    {/* Font Preview */}
+                    <div className="bg-white p-3 rounded-lg border border-gray-200">
+                      <p
+                        className={`text-gray-800 transition-all duration-300 ${
+                          fontSize === "small"
+                            ? "text-sm"
+                            : fontSize === "medium"
+                            ? "text-base"
+                            : "text-lg"
+                        }`}
+                      >
+                        Preview do texto da opção
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Image Size Controls */}
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                      <Image className="w-4 h-4" />
+                      Tamanho das Imagens
+                    </Label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {["small", "medium", "large"].map((size) => (
+                        <Button
+                          key={size}
+                          variant={imageSize === size ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setImageSize(size)}
+                          className={`text-xs transition-all duration-200 ${
+                            imageSize === size
+                              ? "bg-purple-600 hover:bg-purple-700 text-white shadow-md scale-105"
+                              : "hover:bg-purple-50 hover:border-purple-300"
+                          }`}
+                        >
+                          {size === "small" && "Compacto"}
+                          {size === "medium" && "Padrão"}
+                          {size === "large" && "Grande"}
+                        </Button>
+                      ))}
+                    </div>
+                    {/* Image Size Preview */}
+                    <div className="bg-white p-3 rounded-lg border border-gray-200">
+                      <div
+                        className={`bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg transition-all duration-300 ${
+                          imageSize === "small"
+                            ? "h-16"
+                            : imageSize === "medium"
+                            ? "h-24"
+                            : "h-32"
+                        }`}
+                      >
+                        <div className="flex items-center justify-center h-full">
+                          <Image className="w-8 h-8 text-gray-400" />
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2 text-center">
+                        Preview do tamanho da imagem
+                      </p>
+                    </div>
+                  </div>
+
                   {/* Title Font Size */}
                   <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Type className="w-4 h-4 text-gray-600" />
-                      <Label className="text-sm font-medium text-gray-700">
-                        Tamanho do Título
-                      </Label>
-                    </div>
-                    <Select
-                      value={titleFontSize}
-                      onValueChange={setTitleFontSize}
-                    >
-                      <SelectTrigger className="bg-white border-purple-200 focus:border-purple-400">
+                    <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                      <Bold className="w-4 h-4" />
+                      Tamanho do Título
+                    </Label>
+                    <Select value={titleFontSize} onValueChange={setTitleFontSize}>
+                      <SelectTrigger className="bg-white border-gray-200 focus:border-pink-300 focus:ring-pink-300">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="small">Pequeno (14px)</SelectItem>
-                        <SelectItem value="medium">Médio (16px)</SelectItem>
-                        <SelectItem value="large">Grande (20px)</SelectItem>
-                        <SelectItem value="xlarge">
-                          Extra Grande (24px)
-                        </SelectItem>
+                        <SelectItem value="small">Pequeno</SelectItem>
+                        <SelectItem value="medium">Médio</SelectItem>
+                        <SelectItem value="large">Grande</SelectItem>
+                        <SelectItem value="xl">Extra Grande</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
-                  {/* Options Font Size */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Type className="w-4 h-4 text-gray-600" />
-                      <Label className="text-sm font-medium text-gray-700">
-                        Tamanho da Fonte das Opções
-                      </Label>
-                    </div>
-                    <Select value={fontSize} onValueChange={setFontSize}>
-                      <SelectTrigger className="bg-white border-purple-200 focus:border-purple-400">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="small">Pequeno (12px)</SelectItem>
-                        <SelectItem value="medium">Médio (14px)</SelectItem>
-                        <SelectItem value="large">Grande (16px)</SelectItem>
-                        <SelectItem value="xlarge">
-                          Extra Grande (18px)
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-gray-500">
-                      No mobile será automaticamente reduzido
-                    </p>
-                  </div>
-
-                  {/* Image Size */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Image className="w-4 h-4 text-gray-600" />
-                      <Label className="text-sm font-medium text-gray-700">
-                        Tamanho das Imagens
-                      </Label>
-                    </div>
-                    <Select value={imageSize} onValueChange={setImageSize}>
-                      <SelectTrigger className="bg-white border-purple-200 focus:border-purple-400">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="small">Pequeno (150px)</SelectItem>
-                        <SelectItem value="medium">Médio (200px)</SelectItem>
-                        <SelectItem value="large">Grande (250px)</SelectItem>
-                        <SelectItem value="xlarge">
-                          Extra Grande (300px)
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-gray-500">
-                      Altura das imagens das opções
-                    </p>
-                  </div>
-
-                  {/* Image Display Mode */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Maximize className="w-4 h-4 text-gray-600" />
-                      <Label className="text-sm font-medium text-gray-700">
-                        Modo de Exibição das Imagens
-                      </Label>
-                    </div>
+                  {/* Layout Options */}
+                  <div className="space-y-3 pt-2 border-t border-white/50">
+                    <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                      <Maximize className="w-4 h-4" />
+                      Layout das Opções
+                    </Label>
                     <div className="grid grid-cols-2 gap-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        className="justify-start bg-white border-purple-200 hover:border-purple-400"
+                        className="text-xs hover:bg-green-50 hover:border-green-300"
                       >
-                        <Maximize className="w-3 h-3 mr-2" />
-                        Cobrir
+                        <Minimize className="w-3 h-3 mr-1" />
+                        Compacto
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        className="justify-start bg-white border-purple-200 hover:border-purple-400"
+                        className="text-xs hover:bg-green-50 hover:border-green-300"
                       >
-                        <Minimize className="w-3 h-3 mr-2" />
-                        Conter
+                        <Maximize className="w-3 h-3 mr-1" />
+                        Espaçado
                       </Button>
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      "Cobrir" pode cortar a imagem, "Conter" mostra completa
-                    </p>
-                  </div>
-
-                  {/* Preview Applied Styles */}
-                  <div className="p-3 bg-white/70 rounded-lg border border-purple-200">
-                    <Label className="text-xs font-medium text-purple-700 mb-2 block">
-                      Preview dos Estilos Aplicados
-                    </Label>
-                    <div className="space-y-2 text-xs text-gray-600">
-                      <div className="flex justify-between">
-                        <span>Título:</span>
-                        <span className="font-medium">
-                          {titleFontSize === "small"
-                            ? "14px"
-                            : titleFontSize === "medium"
-                            ? "16px"
-                            : titleFontSize === "large"
-                            ? "20px"
-                            : "24px"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Opções:</span>
-                        <span className="font-medium">
-                          {fontSize === "small"
-                            ? "12px"
-                            : fontSize === "medium"
-                            ? "14px"
-                            : fontSize === "large"
-                            ? "16px"
-                            : "18px"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Imagens:</span>
-                        <span className="font-medium">
-                          {imageSize === "small"
-                            ? "150px"
-                            : imageSize === "medium"
-                            ? "200px"
-                            : imageSize === "large"
-                            ? "250px"
-                            : "300px"}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
