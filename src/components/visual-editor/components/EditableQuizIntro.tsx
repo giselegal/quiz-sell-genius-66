@@ -84,8 +84,8 @@ export const EditableQuizIntro: React.FC<EditableQuizIntroProps> = ({
             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-playfair text-[#432818] leading-tight">
               {title.includes("Chega") && title.includes("Você") ? (
                 <>
-                  <span className="text-[#B89B7A]">Chega</span> de um guarda-roupa
-                  lotado e da sensação de que nada combina com{" "}
+                  <span className="text-[#B89B7A]">Chega</span> de um
+                  guarda-roupa lotado e da sensação de que nada combina com{" "}
                   <span className="text-[#B89B7A]">Você</span>.
                 </>
               ) : (
@@ -100,9 +100,12 @@ export const EditableQuizIntro: React.FC<EditableQuizIntroProps> = ({
                     Estilo Predominante
                   </span>{" "}
                   — e aprenda a montar looks que realmente refletem sua{" "}
-                  <span className="font-semibold text-[#432818]">essência</span>, com
-                  praticidade e{" "}
-                  <span className="font-semibold text-[#432818]">confiança</span>.
+                  <span className="font-semibold text-[#432818]">essência</span>
+                  , com praticidade e{" "}
+                  <span className="font-semibold text-[#432818]">
+                    confiança
+                  </span>
+                  .
                 </>
               ) : (
                 subtitle

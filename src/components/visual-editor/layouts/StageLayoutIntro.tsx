@@ -18,7 +18,10 @@ export const StageLayoutIntro: React.FC<StageLayoutIntroProps> = ({
 }) => {
   return (
     <EditableQuizIntro
-      title={stage.title || "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você."}
+      title={
+        stage.title ||
+        "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você."
+      }
       subtitle={
         stage.subtitle ||
         "Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança."
