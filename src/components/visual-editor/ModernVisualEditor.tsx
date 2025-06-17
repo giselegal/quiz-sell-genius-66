@@ -620,69 +620,50 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   }
 
   return (
-    <div
-      className="h-screen bg-gray-50 flex flex-col overflow-hidden quiz-dynamic-theme"
-      style={cssVariables}
-    >
-      {/* Header */}
-      <header className="border-b border-gray-200 bg-gradient-to-r from-white to-gray-50 shadow-sm flex-shrink-0">
-        <div className="px-6 py-4">
+    <div className="h-screen bg-slate-50/50 flex flex-col overflow-hidden">
+      {/* Elegant Header */}
+      <header className="border-b border-slate-200/60 bg-white/95 backdrop-blur-sm shadow-sm flex-shrink-0">
+        <div className="px-8 py-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-sm">
-                  <span className="text-white font-bold text-sm">Q</span>
+            <div className="flex items-center gap-6">
+              {/* Brand Identity */}
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-white font-semibold text-lg">Q</span>
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900 mb-1">
-                    Quiz Sell Genius
+                  <h1 className="text-xl font-semibold text-slate-900 tracking-tight">
+                    Quiz Editor
                   </h1>
-                  <div className="flex items-center gap-3">
-                    <Badge
-                      variant="outline"
-                      className="border-blue-500 text-blue-700 bg-blue-50 font-medium"
-                    >
+                  <div className="flex items-center gap-4 mt-1">
+                    <span className="text-sm text-slate-500 font-medium">
                       {funnelId}
-                    </Badge>
-                    <Badge
-                      variant="secondary"
-                      className="bg-gray-100 text-gray-700"
-                    >
-                      {questions.length} questões • {strategicQuestions.length}{" "}
-                      estratégicas
-                    </Badge>
-
-                    {/* Status de validação */}
+                    </span>
+                    <div className="w-1 h-1 bg-slate-300 rounded-full"></div>
+                    <span className="text-sm text-slate-600">
+                      {questions.length + strategicQuestions.length} questões
+                    </span>
+                    
+                    {/* Validation Status */}
                     {(() => {
-                      const allQuestions = [
-                        ...questions,
-                        ...strategicQuestions,
-                      ];
+                      const allQuestions = [...questions, ...strategicQuestions];
                       const validation = validateQuiz(allQuestions);
                       return (
-                        <Badge
-                          variant={
-                            validation.isValid ? "default" : "destructive"
-                          }
-                          className={cn(
-                            "font-medium",
-                            validation.isValid
-                              ? "bg-emerald-500 hover:bg-emerald-600"
-                              : "bg-red-500 hover:bg-red-600"
-                          )}
-                        >
-                          {validation.isValid ? (
-                            <>
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Válido
-                            </>
-                          ) : (
-                            <>
-                              <AlertCircle className="w-3 h-3 mr-1" />
-                              {validation.errors.length} erro(s)
-                            </>
-                          )}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1 h-1 bg-slate-300 rounded-full"></div>
+                          <div className={cn(
+                            "flex items-center gap-1.5 text-sm",
+                            validation.isValid ? "text-emerald-600" : "text-red-500"
+                          )}>
+                            <div className={cn(
+                              "w-2 h-2 rounded-full",
+                              validation.isValid ? "bg-emerald-500" : "bg-red-500"
+                            )}></div>
+                            <span className="font-medium">
+                              {validation.isValid ? "Válido" : `${validation.errors.length} erro(s)`}
+                            </span>
+                          </div>
+                        </div>
                       );
                     })()}
                   </div>
@@ -690,34 +671,97 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              {/* Viewport Controls */}
-              <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-                <Button
-                  variant={viewportMode === "desktop" ? "default" : "ghost"}
-                  size="sm"
+            <div className="flex items-center gap-4">
+              {/* Viewport Controls - Minimal */}
+              <div className="flex items-center bg-slate-100 rounded-lg p-1">
+                <button
                   onClick={() => setViewportMode("desktop")}
                   className={cn(
-                    "rounded-none h-9",
-                    viewportMode === "desktop" &&
-                      "bg-blue-600 hover:bg-blue-700"
+                    "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
+                    viewportMode === "desktop" 
+                      ? "bg-white text-slate-800 shadow-sm" 
+                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
                   )}
                 >
                   <Monitor className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewportMode === "tablet" ? "default" : "ghost"}
-                  size="sm"
+                </button>
+                <button
                   onClick={() => setViewportMode("tablet")}
                   className={cn(
-                    "rounded-none border-x h-9",
-                    viewportMode === "tablet" && "bg-blue-600 hover:bg-blue-700"
+                    "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
+                    viewportMode === "tablet" 
+                      ? "bg-white text-slate-800 shadow-sm" 
+                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
                   )}
                 >
                   <Tablet className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewportMode === "mobile" ? "default" : "ghost"}
+                </button>
+                <button
+                  onClick={() => setViewportMode("mobile")}
+                  className={cn(
+                    "flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200",
+                    viewportMode === "mobile" 
+                      ? "bg-white text-slate-800 shadow-sm" 
+                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                  )}
+                >
+                  <Smartphone className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Preview Toggle - Minimal */}
+              <button
+                onClick={() => setIsPreviewMode(!isPreviewMode)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  isPreviewMode
+                    ? "bg-slate-800 text-white shadow-sm"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                )}
+              >
+                <Eye className="w-4 h-4" />
+                {isPreviewMode ? "Editar" : "Preview"}
+              </button>
+
+              {/* Save Button - Minimal */}
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  saving 
+                    ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                    : "bg-slate-800 text-white hover:bg-slate-900 shadow-sm"
+                )}
+              >
+                {saving ? (
+                  <>
+                    <Clock className="w-4 h-4 animate-spin" />
+                    Salvando
+                  </>
+                ) : lastSaved ? (
+                  <>
+                    <CheckCircle className="w-4 h-4" />
+                    Salvo
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    Salvar
+                  </>
+                )}
+              </button>
+
+              {/* Last Saved Indicator */}
+              {lastSaved && (
+                <div className="text-xs text-slate-500 px-3 py-1.5 bg-slate-100 rounded-md">
+                  {lastSaved.toLocaleTimeString()}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
                   size="sm"
                   onClick={() => setViewportMode("mobile")}
                   className={cn(
@@ -797,11 +841,11 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         </div>
       </header>
 
-      {/* Main Content - Resizable 4 Columns Layout */}
+      {/* Main Content - Resizable 5 Columns Layout */}
       <div className="flex-1 overflow-hidden">
         <ResizablePanelGroup direction="horizontal" className="h-full">
-          {/* Left Column - Steps Panel */}
-          <ResizablePanel defaultSize={14} minSize={10} maxSize={22}>
+          {/* First Column - Steps Panel */}
+          <ResizablePanel defaultSize={12} minSize={8} maxSize={18}>
             <div className="h-full border-r border-slate-200/60 bg-gradient-to-b from-slate-50 to-white shadow-sm">
               <StepsPanel
                 stages={stages}
@@ -813,22 +857,20 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           <ResizableHandle withHandle />
 
-          {/* Second Column - Advanced Controls Panel */}
-          <ResizablePanel defaultSize={18} minSize={14} maxSize={28}>
+          {/* Second Column - Components Palette */}
+          <ResizablePanel defaultSize={16} minSize={12} maxSize={22}>
             <div className="h-full bg-gradient-to-b from-white to-slate-50/50 border-r border-slate-200/60 shadow-sm">
-              <AdvancedControlsPanel
-                selectedElementId={selectedElementId}
-                onElementUpdate={handleElementUpdate}
-                onResetElement={handleResetElement}
-                onDeleteElement={handleDeleteElement}
+              <ComponentsPalette
+                onComponentSelect={handleElementAdd}
+                selectedComponent={selectedElementId}
               />
             </div>
           </ResizablePanel>
 
           <ResizableHandle withHandle />
 
-          {/* Third Column - Editor Canvas (Preview Only) */}
-          <ResizablePanel defaultSize={45} minSize={35} maxSize={60}>
+          {/* Third Column - Editor Canvas (Preview) */}
+          <ResizablePanel defaultSize={35} minSize={28} maxSize={50}>
             <div className="h-full bg-gradient-to-br from-gray-50 to-gray-100 relative">
               <ScrollArea className="h-full">
                 <div className="p-6 min-h-full">
@@ -886,11 +928,25 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
           <ResizableHandle withHandle />
 
-          {/* Fourth Column - Configuration Panel (Expanded) */}
+          {/* Fourth Column - Advanced Controls Panel */}
+          <ResizablePanel defaultSize={16} minSize={12} maxSize={22}>
+            <div className="h-full bg-gradient-to-b from-white to-slate-50/50 border-r border-slate-200/60 shadow-sm">
+              <AdvancedControlsPanel
+                selectedElementId={selectedElementId}
+                onElementUpdate={handleElementUpdate}
+                onResetElement={handleResetElement}
+                onDeleteElement={handleDeleteElement}
+              />
+            </div>
+          </ResizablePanel>
+
+          <ResizableHandle withHandle />
+
+          {/* Fifth Column - Configuration Panel */}
           <ResizablePanel
-            defaultSize={showQuizConfig ? 25 : 33}
-            minSize={showQuizConfig ? 20 : 25}
-            maxSize={showQuizConfig ? 35 : 45}
+            defaultSize={showQuizConfig ? 17 : 21}
+            minSize={showQuizConfig ? 14 : 16}
+            maxSize={showQuizConfig ? 25 : 30}
           >
             <div
               className="h-full border-l border-gray-200"
