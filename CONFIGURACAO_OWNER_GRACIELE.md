@@ -7,21 +7,25 @@ Como você é a **owner** do repositório, tem acesso completo a todas as config
 ### 📋 LINKS DIRETOS:
 
 #### 🔐 **Configurar Secrets:**
+
 ```
 https://github.com/vdp2025/quiz-sell-genius-66/settings/secrets/actions
 ```
 
 #### ⚙️ **Configurações Gerais:**
+
 ```
 https://github.com/vdp2025/quiz-sell-genius-66/settings
 ```
 
 #### 🔄 **GitHub Actions:**
+
 ```
 https://github.com/vdp2025/quiz-sell-genius-66/actions
 ```
 
 #### 🌿 **Pages (se quiser ativar):**
+
 ```
 https://github.com/vdp2025/quiz-sell-genius-66/settings/pages
 ```
@@ -29,6 +33,7 @@ https://github.com/vdp2025/quiz-sell-genius-66/settings/pages
 ## 🚀 CONFIGURAÇÃO DO TOKEN LOVABLE
 
 ### **Passo 1: Conseguir o Token**
+
 1. Acesse: https://lovable.dev
 2. Faça login com sua conta @graciele
 3. Procure o projeto "Quiz Sell Genius"
@@ -38,6 +43,7 @@ https://github.com/vdp2025/quiz-sell-genius-66/settings/pages
 7. Gere um API Token (começa com `lvb_`)
 
 ### **Passo 2: Configurar no GitHub**
+
 1. Acesse: https://github.com/vdp2025/quiz-sell-genius-66/settings/secrets/actions
 2. Clique "New repository secret"
 3. **Nome:** `LOVABLE_TOKEN`
@@ -45,6 +51,7 @@ https://github.com/vdp2025/quiz-sell-genius-66/settings/pages
 5. Clique "Add secret"
 
 ### **Passo 3: Testar**
+
 ```bash
 # No terminal do VS Code:
 npm run lovable:status
@@ -53,6 +60,7 @@ npm run lovable:status
 ## 🎯 PRÓXIMA NOVA URL DO PROJETO
 
 Quando importar novamente, você receberá uma nova URL como:
+
 ```
 https://[novo-id].lovableproject.com
 ```
