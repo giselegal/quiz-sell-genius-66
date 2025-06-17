@@ -526,7 +526,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     questionsCount: questions.length,
     strategicQuestionsCount: strategicQuestions.length,
     stagesCount: stages.length,
-    currentStage
+    currentStage,
   });
 
   // Se não há questões carregadas, mostrar fallback
@@ -539,15 +539,16 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
               Nenhuma questão encontrada
             </h2>
             <p className="text-yellow-700 mb-4">
-              Parece que não há questões configuradas no Supabase para este quiz.
+              Parece que não há questões configuradas no Supabase para este
+              quiz.
             </p>
             <div className="text-sm text-yellow-600 bg-yellow-100 rounded-md p-3 mb-4">
-              <p className="font-medium">Quiz ID: 550e8400-e29b-41d4-a716-446655440000</p>
+              <p className="font-medium">
+                Quiz ID: 550e8400-e29b-41d4-a716-446655440000
+              </p>
               <p>Verificando questões ativas na tabela quiz_questions</p>
             </div>
-            <Button onClick={() => window.location.reload()}>
-              Recarregar
-            </Button>
+            <Button onClick={() => window.location.reload()}>Recarregar</Button>
           </div>
         </div>
       </div>

@@ -27,9 +27,17 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     if (!canProceed) {
       return false;
     }
-    // Auto-avanço ativado: questões normais com 3 seleções avançam automaticamente
+    // Auto-avanço ativado ESPECIFICAMENTE quando 3 opções são selecionadas em questões normais
     const normalCondition =
-      currentQuestionType === "normal" && selectedOptionsCount === 3;
+      currentQuestionType === "normal" && selectedOptionsCount >= 3;
+    
+    console.log("🔍 Verificando auto-avanço:", {
+      canProceed,
+      currentQuestionType,
+      selectedOptionsCount,
+      shouldAdvance: normalCondition
+    });
+    
     return normalCondition;
   }, [canProceed, currentQuestionType, selectedOptionsCount]);
 
@@ -45,13 +53,13 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
         setShowActivationEffect(false);
       }, 2000);
 
-      // Auto-avanço ativado para questões normais
-      if (currentQuestionType === "normal" && shouldAutoAdvance()) {
-        console.log("🚀 Auto-avanço ativado: avançando em 800ms");
+      // Auto-avanço ativado para questões normais quando 3+ opções selecionadas
+      if (shouldAutoAdvance()) {
+        console.log("🚀 Auto-avanço ATIVADO: avançando em 1200ms para questão normal com", selectedOptionsCount, "opções");
         const newTimer = setTimeout(() => {
-          console.log("✅ Executando auto-avanço agora");
+          console.log("✅ Executando auto-avanço AGORA!");
           onNext();
-        }, 800); // Tempo aumentado para melhor UX
+        }, 1200); // Tempo otimizado para melhor UX
         setAutoAdvanceTimer(newTimer);
       }
 
@@ -69,6 +77,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     onNext,
     shouldAutoAdvance,
     currentQuestionType,
+    selectedOptionsCount,
     autoAdvanceTimer,
   ]);
 
@@ -76,14 +85,14 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     if (!canProceed) {
       return currentQuestionType === "strategic"
         ? "Selecione 1 opção para continuar"
-        : "Selecione 3 opções para continuar";
+        : `Selecione ${Math.max(0, 3 - selectedOptionsCount)} mais opções para continuar`;
     }
-    // Mostrar mensagem de auto-avanço para questões normais
-    if (currentQuestionType === "normal" && canProceed) {
-      return "Avançando automaticamente...";
+    // Mostrar mensagem de auto-avanço para questões normais quando 3+ opções
+    if (currentQuestionType === "normal" && selectedOptionsCount >= 3) {
+      return "✨ Avançando automaticamente...";
     }
     return "";
-  }, [canProceed, currentQuestionType]);
+  }, [canProceed, currentQuestionType, selectedOptionsCount]);
 
   const nextButtonText = isLastQuestion ? "Ver Resultado" : "Avançar";
 

@@ -36,10 +36,10 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   // Determine the required selections based on question type
   const requiredSelections = showingStrategicQuestions
     ? 1
-    : currentQuestion?.multiSelect || 3;
+    : 3; // Always 3 for normal questions
 
   // Check if we have enough selections to proceed
-  const canProceed = currentAnswers?.length === requiredSelections;
+  const canProceed = currentAnswers?.length >= requiredSelections;
 
   // Determine question type for navigation component
   const currentQuestionType: "normal" | "strategic" = showingStrategicQuestions
