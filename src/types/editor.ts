@@ -1,10 +1,130 @@
+// Tipos para o conteúdo dos elementos
+export interface HeadingContent {
+  text: string;
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+export interface TextContent {
+  text: string;
+}
+
+export interface ImageContent {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+}
+
+export interface ButtonContent {
+  text: string;
+  action: "next" | "submit" | "custom";
+  customAction?: string;
+}
+
+export interface InputContent {
+  label: string;
+  placeholder: string;
+  type: "text" | "email" | "tel" | "number";
+  required: boolean;
+  name: string;
+}
+
+export interface SpacerContent {
+  height: number;
+}
+
+export interface VideoContent {
+  src: string;
+  autoplay: boolean;
+  controls: boolean;
+}
+
+export type ElementContent =
+  | HeadingContent
+  | TextContent
+  | ImageContent
+  | ButtonContent
+  | InputContent
+  | SpacerContent
+  | VideoContent;
+
+// Tipos para estilos
+export interface ElementStyles {
+  color?: string;
+  backgroundColor?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  textAlign?: "left" | "center" | "right";
+  padding?: string;
+  margin?: string;
+  borderRadius?: string;
+  border?: string;
+  width?: string;
+  height?: string;
+}
+
+export interface EditorElement {
+  id: string;
+  type: "heading" | "text" | "image" | "button" | "input" | "spacer" | "video";
+  content: ElementContent;
+  styles: ElementStyles;
+  position: number;
+}
+
+export interface EditorStep {
+  id: string;
+  name: string;
+  elements: EditorElement[];
+  settings: {
+    showLogo: boolean;
+    showProgress: boolean;
+    allowReturn: boolean;
+  };
+}
+
+export interface EditorState {
+  steps: EditorStep[];
+  currentStepId: string;
+  selectedElementId: string | null;
+  history: EditorState[];
+  historyIndex: number;
+}
+
+// Actions
+export type EditorAction =
+  | { type: "ADD_STEP"; payload: EditorStep }
+  | { type: "DELETE_STEP"; payload: string }
+  | {
+      type: "UPDATE_STEP";
+      payload: { id: string; updates: Partial<EditorStep> };
+    }
+  | { type: "SET_CURRENT_STEP"; payload: string }
+  | { type: "ADD_ELEMENT"; payload: { stepId: string; element: EditorElement } }
+  | {
+      type: "UPDATE_ELEMENT";
+      payload: {
+        stepId: string;
+        elementId: string;
+        updates: Partial<EditorElement>;
+      };
+    }
+  | { type: "DELETE_ELEMENT"; payload: { stepId: string; elementId: string } }
+  | {
+      type: "REORDER_ELEMENTS";
+      payload: { stepId: string; elementIds: string[] };
+    }
+  | { type: "SELECT_ELEMENT"; payload: string | null }
+  | { type: "UNDO" }
+  | { type: "REDO" }
+  | { type: "SAVE_TO_HISTORY" };
+
 export interface Block {
   id: string;
   type: string;
-  content: Record<string, any>;
+  content: Record<string, unknown>;
   order: number; // Changed from optional to required to match EditorBlock
-  settings?: Record<string, any>;
-  [key: string]: any;
+  settings?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 export type BlockType =
@@ -26,7 +146,7 @@ export type BlockType =
 // Add missing EditorBlock type which was imported across many files
 export interface EditorBlock extends Block {
   id: string;
-  type: BlockType | 'result-header' | 'transition' | 'final-cta';
+  type: BlockType | "result-header" | "transition" | "final-cta";
   content: EditableContent | any; // Allow any content type for result page blocks
   order: number;
   visible?: boolean;
