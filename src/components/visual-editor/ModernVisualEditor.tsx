@@ -511,14 +511,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
     }
   };
 
-  const handleElementUpdate = (
-    id: string,
-    content: CanvasElement["content"]
-  ) => {
-    setCanvasElements((prev) =>
-      prev.map((el) => (el.id === id ? { ...el, content } : el))
-    );
-  };
+
 
   const handleElementDelete = (id: string) => {
     setCanvasElements((prev) => prev.filter((el) => el.id !== id));
