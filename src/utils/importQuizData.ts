@@ -1,6 +1,7 @@
 import { QuizQuestion } from "@/types/quiz";
 import { EditorState, EditorStep, EditorElement } from "@/types/editor";
 import { clothingQuestions } from "@/data/questions/clothingQuestions";
+import { saveQuizConfig } from "@/utils/quizStorage";
 
 /**
  * Converte dados do quiz real para o formato do editor
@@ -452,7 +453,6 @@ export const importQuizDataToEditor = (): EditorState => {
  * Importa dados do quiz real e salva no editor
  */
 export const importRealQuizData = async (): Promise<void> => {
-  const { saveQuizConfig } = await import("@/utils/quizStorage");
   const editorState = importQuizDataToEditor();
   saveQuizConfig(editorState);
 };

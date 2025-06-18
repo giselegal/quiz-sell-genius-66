@@ -14,9 +14,11 @@ import {
   UserRoundSearch,
   Eye,
   Download,
+  Upload,
 } from "lucide-react";
 import { useEditor } from "@/hooks/useEditorNew";
 import { EditorStorageService } from "@/services/editorStorage";
+import { importRealQuizData } from "@/utils/importQuizData";
 
 export const EditorNavbar: React.FC = () => {
   const { state } = useEditor();
@@ -43,6 +45,17 @@ export const EditorNavbar: React.FC = () => {
     linkElement.setAttribute("href", dataUri);
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
+  };
+
+  const handleImportRealQuiz = async () => {
+    try {
+      await importRealQuizData();
+      console.log("Quiz real importado com sucesso!");
+      // Recarregar a página para mostrar os novos dados
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao importar quiz real:", error);
+    }
   };
 
   return (
@@ -114,6 +127,15 @@ export const EditorNavbar: React.FC = () => {
             >
               <Download className="h-4 w-4" />
               Exportar
+            </Button>
+
+            <Button
+              variant="default"
+              className="h-10 gap-2"
+              onClick={handleImportRealQuiz}
+            >
+              <Upload className="h-4 w-4" />
+              Importar Quiz Real
             </Button>
 
             <Button variant="outline" size="icon" className="h-10 w-10">
