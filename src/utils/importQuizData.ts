@@ -19,15 +19,15 @@ export const importQuizDataToEditor = (): EditorState => {
         type: "image",
         content: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/f_webp,q_70,w_120,h_50,c_fit/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-          alt: "Logo da Marca"
+          alt: "Logo da Marca",
         },
         style: {
           width: "120px",
           height: "50px",
           margin: "0 auto 2rem auto",
-          display: "block"
+          display: "block",
         },
-        position: { x: 0, y: 0 }
+        position: { x: 0, y: 0 },
       },
       {
         id: "intro-title",
@@ -38,28 +38,30 @@ export const importQuizDataToEditor = (): EditorState => {
           fontWeight: "bold",
           textAlign: "center",
           color: "#1a1a1a",
-          marginBottom: "1rem"
+          marginBottom: "1rem",
         },
-        position: { x: 0, y: 80 }
+        position: { x: 0, y: 80 },
       },
       {
         id: "intro-subtitle",
         type: "text",
-        content: { text: "Responda algumas perguntas e encontre o estilo perfeito para você" },
+        content: {
+          text: "Responda algumas perguntas e encontre o estilo perfeito para você",
+        },
         style: {
           fontSize: "1.2rem",
           textAlign: "center",
           color: "#666",
-          marginBottom: "2rem"
+          marginBottom: "2rem",
         },
-        position: { x: 0, y: 140 }
+        position: { x: 0, y: 140 },
       },
       {
         id: "intro-image",
         type: "image",
         content: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up",
-          alt: "Imagem de introdução"
+          alt: "Imagem de introdução",
         },
         style: {
           width: "100%",
@@ -67,9 +69,9 @@ export const importQuizDataToEditor = (): EditorState => {
           height: "auto",
           margin: "0 auto 2rem auto",
           display: "block",
-          borderRadius: "12px"
+          borderRadius: "12px",
         },
-        position: { x: 0, y: 200 }
+        position: { x: 0, y: 200 },
       },
       {
         id: "intro-input",
@@ -79,15 +81,15 @@ export const importQuizDataToEditor = (): EditorState => {
           placeholder: "Digite seu nome...",
           type: "text",
           required: true,
-          name: "userName"
+          name: "userName",
         },
         style: {
           width: "100%",
           maxWidth: "400px",
           margin: "0 auto 2rem auto",
-          display: "block"
+          display: "block",
         },
-        position: { x: 0, y: 300 }
+        position: { x: 0, y: 300 },
       },
       {
         id: "start-button",
@@ -102,16 +104,16 @@ export const importQuizDataToEditor = (): EditorState => {
           fontSize: "1.1rem",
           cursor: "pointer",
           display: "block",
-          margin: "0 auto"
+          margin: "0 auto",
         },
-        position: { x: 0, y: 380 }
-      }
+        position: { x: 0, y: 380 },
+      },
     ],
     settings: {
       showLogo: true,
       showProgress: false,
-      allowReturn: false
-    }
+      allowReturn: false,
+    },
   });
 
   // 2. Perguntas do Quiz (convertendo as perguntas reais)
@@ -128,9 +130,9 @@ export const importQuizDataToEditor = (): EditorState => {
         fontWeight: "bold",
         textAlign: "center",
         marginBottom: "2rem",
-        color: "#1a1a1a"
+        color: "#1a1a1a",
       },
-      position: { x: 0, y: 0 }
+      position: { x: 0, y: 0 },
     });
 
     // Opções da pergunta
@@ -142,16 +144,19 @@ export const importQuizDataToEditor = (): EditorState => {
           type: "image",
           content: {
             src: option.imageUrl,
-            alt: `Opção ${optionIndex + 1}`
+            alt: `Opção ${optionIndex + 1}`,
           },
           style: {
             width: "200px",
             height: "150px",
             objectFit: "cover",
             borderRadius: "8px",
-            margin: "0.5rem"
+            margin: "0.5rem",
           },
-          position: { x: (optionIndex % 3) * 220, y: 80 + Math.floor(optionIndex / 3) * 200 }
+          position: {
+            x: (optionIndex % 3) * 220,
+            y: 80 + Math.floor(optionIndex / 3) * 200,
+          },
         });
       }
 
@@ -164,9 +169,12 @@ export const importQuizDataToEditor = (): EditorState => {
           fontSize: "0.9rem",
           textAlign: "center",
           padding: "0.5rem",
-          maxWidth: "200px"
+          maxWidth: "200px",
         },
-        position: { x: (optionIndex % 3) * 220, y: 240 + Math.floor(optionIndex / 3) * 200 }
+        position: {
+          x: (optionIndex % 3) * 220,
+          y: 240 + Math.floor(optionIndex / 3) * 200,
+        },
       });
     });
 
@@ -182,9 +190,9 @@ export const importQuizDataToEditor = (): EditorState => {
         borderRadius: "6px",
         border: "none",
         margin: "2rem auto 0 auto",
-        display: "block"
+        display: "block",
       },
-      position: { x: 0, y: 400 }
+      position: { x: 0, y: 400 },
     });
 
     steps.push({
@@ -199,9 +207,9 @@ export const importQuizDataToEditor = (): EditorState => {
           id: question.id,
           type: question.type,
           multiSelect: question.multiSelect,
-          options: question.options
-        }
-      }
+          options: question.options,
+        },
+      },
     });
   });
 
@@ -218,29 +226,31 @@ export const importQuizDataToEditor = (): EditorState => {
           fontSize: "2rem",
           fontWeight: "bold",
           textAlign: "center",
-          marginBottom: "2rem"
+          marginBottom: "2rem",
         },
-        position: { x: 0, y: 0 }
+        position: { x: 0, y: 0 },
       },
       {
         id: "transition-1-text",
         type: "text",
-        content: { text: "Estamos processando suas preferências para encontrar seu estilo único." },
+        content: {
+          text: "Estamos processando suas preferências para encontrar seu estilo único.",
+        },
         style: {
           fontSize: "1.1rem",
           textAlign: "center",
-          color: "#666"
+          color: "#666",
         },
-        position: { x: 0, y: 80 }
-      }
+        position: { x: 0, y: 80 },
+      },
     ],
     settings: {
       showLogo: true,
       showProgress: true,
       allowReturn: false,
       autoAdvance: true,
-      autoAdvanceDelay: 3000
-    }
+      autoAdvanceDelay: 3000,
+    },
   });
 
   steps.push({
@@ -255,9 +265,9 @@ export const importQuizDataToEditor = (): EditorState => {
           fontSize: "2rem",
           fontWeight: "bold",
           textAlign: "center",
-          marginBottom: "2rem"
+          marginBottom: "2rem",
         },
-        position: { x: 0, y: 0 }
+        position: { x: 0, y: 0 },
       },
       {
         id: "transition-2-text",
@@ -266,18 +276,18 @@ export const importQuizDataToEditor = (): EditorState => {
         style: {
           fontSize: "1.1rem",
           textAlign: "center",
-          color: "#666"
+          color: "#666",
         },
-        position: { x: 0, y: 80 }
-      }
+        position: { x: 0, y: 80 },
+      },
     ],
     settings: {
       showLogo: true,
       showProgress: true,
       allowReturn: false,
       autoAdvance: true,
-      autoAdvanceDelay: 2000
-    }
+      autoAdvanceDelay: 2000,
+    },
   });
 
   // 4. Página de Resultado
@@ -294,21 +304,23 @@ export const importQuizDataToEditor = (): EditorState => {
           fontWeight: "bold",
           textAlign: "center",
           marginBottom: "2rem",
-          color: "#1a1a1a"
+          color: "#1a1a1a",
         },
-        position: { x: 0, y: 0 }
+        position: { x: 0, y: 0 },
       },
       {
         id: "result-description",
         type: "text",
-        content: { text: "Baseado em suas respostas, identificamos o estilo que mais combina com sua personalidade." },
+        content: {
+          text: "Baseado em suas respostas, identificamos o estilo que mais combina com sua personalidade.",
+        },
         style: {
           fontSize: "1.2rem",
           textAlign: "center",
           color: "#666",
-          marginBottom: "2rem"
+          marginBottom: "2rem",
         },
-        position: { x: 0, y: 80 }
+        position: { x: 0, y: 80 },
       },
       {
         id: "result-style-name",
@@ -319,16 +331,16 @@ export const importQuizDataToEditor = (): EditorState => {
           fontWeight: "bold",
           textAlign: "center",
           color: "#007bff",
-          marginBottom: "1rem"
+          marginBottom: "1rem",
         },
-        position: { x: 0, y: 140 }
+        position: { x: 0, y: 140 },
       },
       {
         id: "result-image",
         type: "image",
         content: {
           src: "https://via.placeholder.com/400x300?text=Resultado+do+Estilo",
-          alt: "Resultado do estilo"
+          alt: "Resultado do estilo",
         },
         style: {
           width: "400px",
@@ -336,9 +348,9 @@ export const importQuizDataToEditor = (): EditorState => {
           objectFit: "cover",
           borderRadius: "12px",
           margin: "0 auto 2rem auto",
-          display: "block"
+          display: "block",
         },
-        position: { x: 0, y: 200 }
+        position: { x: 0, y: 200 },
       },
       {
         id: "result-cta",
@@ -353,16 +365,16 @@ export const importQuizDataToEditor = (): EditorState => {
           fontSize: "1.2rem",
           cursor: "pointer",
           display: "block",
-          margin: "0 auto"
+          margin: "0 auto",
         },
-        position: { x: 0, y: 520 }
-      }
+        position: { x: 0, y: 520 },
+      },
     ],
     settings: {
       showLogo: true,
       showProgress: false,
-      allowReturn: false
-    }
+      allowReturn: false,
+    },
   });
 
   // 5. Página de Oferta
@@ -379,21 +391,23 @@ export const importQuizDataToEditor = (): EditorState => {
           fontWeight: "bold",
           textAlign: "center",
           marginBottom: "2rem",
-          color: "#dc3545"
+          color: "#dc3545",
         },
-        position: { x: 0, y: 0 }
+        position: { x: 0, y: 0 },
       },
       {
         id: "offer-subtitle",
         type: "text",
-        content: { text: "Transforme seu guarda-roupa com peças selecionadas especialmente para seu estilo." },
+        content: {
+          text: "Transforme seu guarda-roupa com peças selecionadas especialmente para seu estilo.",
+        },
         style: {
           fontSize: "1.2rem",
           textAlign: "center",
           color: "#666",
-          marginBottom: "2rem"
+          marginBottom: "2rem",
         },
-        position: { x: 0, y: 80 }
+        position: { x: 0, y: 80 },
       },
       {
         id: "offer-price",
@@ -404,9 +418,9 @@ export const importQuizDataToEditor = (): EditorState => {
           fontWeight: "bold",
           textAlign: "center",
           color: "#28a745",
-          marginBottom: "2rem"
+          marginBottom: "2rem",
         },
-        position: { x: 0, y: 140 }
+        position: { x: 0, y: 140 },
       },
       {
         id: "offer-cta",
@@ -422,16 +436,16 @@ export const importQuizDataToEditor = (): EditorState => {
           cursor: "pointer",
           display: "block",
           margin: "0 auto",
-          animation: "pulse 2s infinite"
+          animation: "pulse 2s infinite",
         },
-        position: { x: 0, y: 220 }
-      }
+        position: { x: 0, y: 220 },
+      },
     ],
     settings: {
       showLogo: true,
       showProgress: false,
-      allowReturn: false
-    }
+      allowReturn: false,
+    },
   });
 
   return {
@@ -444,8 +458,8 @@ export const importQuizDataToEditor = (): EditorState => {
       theme: "light",
       showGrid: true,
       snapToGrid: true,
-      gridSize: 10
-    }
+      gridSize: 10,
+    },
   };
 };
 
