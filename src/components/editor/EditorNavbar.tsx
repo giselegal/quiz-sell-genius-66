@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useEditor } from "@/hooks/useEditorNew";
 import { EditorStorageService } from "@/services/editorStorage";
-import { importRealQuizData } from "@/utils/importQuizData";
+import { importRealQuizData } from "@/utils/importQuizDataReal";
 
 export const EditorNavbar: React.FC = () => {
   const { state } = useEditor();
