@@ -412,393 +412,155 @@ const generateUniqueId = (): string =>
 
 /**
  * @component FunnelNavbar
- * @description Barra de navegação superior do editor com todas as funcionalidades.
+ * @description Simula a barra de navegação superior do editor.
+ * Contém botões de ação e navegação que aparecem no topo do editor.
+ * Agora recebe callbacks para Salvar e Publicar.
+ * @param {object} props - Propriedades do componente.
+ * @param {() => Promise<void>} props.onSave - Callback para salvar o quiz.
+ * @param {() => Promise<void>} props.onPublish - Callback para publicar o quiz.
+ * @param {boolean} props.isSaving - Estado de salvamento.
+ * @param {boolean} props.isPublishing - Estado de publicação.
  */
-const FunnelNavbar: React.FC = () => {
-  return (
-    <div className="h-fit border-b relative z-[20] bg-zinc-950/50 backdrop-blur-lg">
-      <div className="w-full flex flex-wrap md:flex-nowrap justify-between">
-        <div className="order-0 md:order-0 flex w-full max-w-[5.75rem] lg:max-w-[18rem]">
-          <div className="border-r border-zinc-700">
-            {/* Botão de Fechar/Voltar para o Dashboard */}
-            <button className="inline-block relative font-bold px-4 py-[1rem] text-zinc-100 border border-transparent hover:text-zinc-400 rounded-none h-full md:px-5">
-              <span className="h-full flex items-center w-full justify-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-x"
-                >
-                  <path d="M18 6 6 18"></path>
-                  <path d="m6 6 12 12"></path>
-                </svg>
-              </span>
-            </button>
-          </div>
-          <div className="flex flex-row justify-between">
-            <div className="flex p-3 gap-1 md:gap-2">
-              {/* Botão Desfazer */}
-              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 outlined border border-input bg-background hover:bg-primary hover:text-foreground h-10 w-10">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-undo h-4 w-4"
-                >
-                  <path d="M3 7v6h6"></path>
-                  <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path>
-                </svg>
-              </button>
-              {/* Botão Refazer */}
-              <button
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 outlined border border-input bg-background hover:bg-primary hover:text-foreground h-10 w-10"
-                disabled
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-redo h-4 w-4"
-                >
-                  <path d="M21 7v6h-6"></path>
-                  <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"></path>
-                </svg>
-              </button>
-              {/* Botão Copiar */}
-              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 outlined border border-input bg-background hover:bg-primary hover:text-foreground h-10 w-10">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-clipboard h-4 w-4"
-                >
-                  <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                </svg>
-              </button>
+export const FunnelNavbar: React.FC<{
+    onSave: () => Promise<void>;
+    onPublish: () => Promise<void>;
+    isSaving: boolean;
+    isPublishing: boolean;
+}> = ({ onSave, onPublish, isSaving, isPublishing }) => {
+    return (
+        <div className="h-fit border-b border-gray-200 relative z-[20] bg-white shadow-sm">
+            <div className="w-full flex flex-wrap md:flex-nowrap justify-between">
+                <div className="order-0 md:order-0 flex w-full max-w-[5.75rem] lg:max-w-[18rem]">
+                    <div className="border-r border-gray-200">
+                        {/* Botão de Fechar/Voltar para o Dashboard */}
+                        <button className="inline-block relative font-bold px-4 py-[1rem] text-gray-800 border border-transparent hover:text-primary rounded-none h-full md:px-5">
+                            <span className="h-full flex items-center w-full justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                            </span>
+                        </button>
+                    </div>
+                    <div className="flex flex-row justify-between">
+                        <div className="flex p-3 gap-1 md:gap-2">
+                            {/* Botão Desfazer */}
+                            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-undo h-4 w-4"><path d="M3 7v6h6"></path><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path></svg>
+                            </button>
+                            {/* Botão Refazer (desabilitado) */}
+                            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10" disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-redo h-4 w-4"><path d="M21 7v6h-6"></path><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"></path></svg>
+                            </button>
+                            {/* Botão Copiar */}
+                            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clipboard h-4 w-4"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {/* Navegação principal do editor (Construtor, Fluxo, Design, Leads, Configurações) */}
+                <div className="border-t border-gray-200 md:border-t-0 md:order-1 w-full">
+                    <div className="md:mx-auto md:max-w-[32rem] flex h-full items-center justify-center p-1 md:p-0 gap-1 md:gap-2">
+                        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-white h-10 px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-pencil-ruler md:mr-2 md:mx-0 mx-4 h-4 w-4"><path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"></path><path d="m8 6 2-2"></path><path d="m18 16 2-2"></path><path d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"></path><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg><span className="hidden md:inline">Construtor</span>
+                        </button>
+                        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost text-gray-800 hover:bg-gray-100 h-10 px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-workflow md:mr-2 md:mx-0 mx-4 h-4 w-4"><rect width="8" height="8" x="3" y="3" rx="2"></rect><path d="M7 11v4a2 2 0 0 0 2 2h4"></path><rect width="8" height="8" x="13" y="13" rx="2"></rect></svg><span className="hidden md:inline">Fluxo</span>
+                        </button>
+                        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost text-gray-800 hover:bg-gray-100 h-10 px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-palette md:mr-2 md:mx-0 mx-4 h-4 w-4"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg><span className="hidden md:inline">Design</span>
+                        </button>
+                        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost text-gray-800 hover:bg-gray-100 h-10 px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user-round-search md:mr-2 md:mx-0 mx-4 h-4 w-4"><circle cx="10" cy="8" r="5"></circle><path d="M2 21a8 8 0 0 1 10.434-7.62"></path><circle cx="18" cy="18" r="3"></circle><path d="m22 22-1.9-1.9"></path></svg><span className="hidden md:inline">Leads</span>
+                        </button>
+                        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost text-gray-800 hover:bg-gray-100 h-10 px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-cog md:mr-2 md:mx-0 mx-4 h-4 w-4"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"></path><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path><path d="M12 2v2"></path><path d="M12 22v-2"></path><path d="m17 20.66-1-1.73"></path><path d="M11 10.27 7 3.34"></path><path d="m20.66 17-1.73-1"></path><path d="m3.34 7 1.73 1"></path><path d="M14 12h8"></path><path d="M2 12h2"></path><path d="m20.66 7-1.73 1"></path><path d="m3.34 17 1.73-1"></path><path d="m17 3.34-1 1.73"></path><path d="m11 13.73-4 6.93"></path></svg><span className="hidden md:inline">Configurações</span>
+                        </button>
+                    </div>
+                </div>
+                {/* Botões de visualização (mobile/desktop) e ações (Salvar, Publicar) */}
+                <div className="md:flex hidden order-1 md:order-3 w-fit gap-1 md:gap-2 p-3">
+                    <button className="items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10 md:flex hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-monitor-smartphone h-4 w-4"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"></path><path d="M10 19v-3.96 3.15"></path><path d="M7 19h5"></path><rect width="6" height="10" x="16" y="12" rx="2"></rect></svg>
+                    </button>
+                    <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-waypoints h-4 w-4"><circle cx="12" cy="4.5" r="2.5"></circle><path d="m10.2 6.3-3.9 3.9"></path><circle cx="4.5" cy="12" r="2.5"></circle><path d="M7 12h10"></path><circle cx="19.5" cy="12" r="2.5"></circle><path d="m13.8 17.7 3.9-3.9"></path><circle cx="12" cy="19.5" r="2.5"></circle></svg>
+                    </button>
+                    <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-play h-4 w-4"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+                    </button>
+                    {/* Botão Salvar - Agora com estado de carregamento */}
+                    <button
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 px-4 py-2"
+                        onClick={onSave}
+                        disabled={isSaving || isPublishing}
+                    >
+                        <span className="md:inline hidden">{isSaving ? 'Salvando...' : 'Salvar'}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-save w-4 h-4 md:hidden block ${isSaving ? 'animate-spin' : ''}`}>
+                            <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path><path d="M7 3v4a1 1 0 0 0 1 1h7"></path>
+                        </svg>
+                    </button>
+                    {/* Botão Publicar - Agora com estado de carregamento */}
+                    <button
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-white h-10 px-4 py-2"
+                        onClick={onPublish}
+                        disabled={isSaving || isPublishing}
+                    >
+                        <span className="md:inline hidden">{isPublishing ? 'Publicando...' : 'Publicar'}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-cloud w-4 h-4 md:hidden block ${isPublishing ? 'animate-spin' : ''}`}>
+                            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
-        {/* Navegação principal do editor */}
-        <div className="border-t border-zinc-700 md:border-t-0 md:order-1 w-full">
-          <div className="md:mx-auto md:max-w-[32rem] flex h-full items-center justify-center p-1 md:p-0 gap-1 md:gap-2">
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost bg-primary text-foreground h-10 px-4 py-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-pencil-ruler md:mr-2 md:mx-0 mx-4 h-4 w-4"
-              >
-                <path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"></path>
-                <path d="m8 6 2-2"></path>
-                <path d="m18 16 2-2"></path>
-                <path d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"></path>
-                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
-                <path d="m15 5 4 4"></path>
-              </svg>
-              <span className="hidden md:inline">Construtor</span>
-            </button>
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost hover:bg-primary hover:text-foreground h-10 px-4 py-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-workflow md:mr-2 md:mx-0 mx-4 h-4 w-4"
-              >
-                <rect width="8" height="8" x="3" y="3" rx="2"></rect>
-                <path d="M7 11v4a2 2 0 0 0 2 2h4"></path>
-                <rect width="8" height="8" x="13" y="13" rx="2"></rect>
-              </svg>
-              <span className="hidden md:inline">Fluxo</span>
-            </button>
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost hover:bg-primary hover:text-foreground h-10 px-4 py-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-palette md:mr-2 md:mx-0 mx-4 h-4 w-4"
-              >
-                <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
-                <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
-                <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
-                <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
-                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
-              </svg>
-              <span className="hidden md:inline">Design</span>
-            </button>
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost hover:bg-primary hover:text-foreground h-10 px-4 py-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-user-round-search md:mr-2 md:mx-0 mx-4 h-4 w-4"
-              >
-                <circle cx="10" cy="8" r="5"></circle>
-                <path d="M2 21a8 8 0 0 1 10.434-7.62"></path>
-                <circle cx="18" cy="18" r="3"></circle>
-                <path d="m22 22-1.9-1.9"></path>
-              </svg>
-              <span className="hidden md:inline">Leads</span>
-            </button>
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost hover:bg-primary hover:text-foreground h-10 px-4 py-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-cog md:mr-2 md:mx-0 mx-4 h-4 w-4"
-              >
-                <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"></path>
-                <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
-                <path d="M12 2v2"></path>
-                <path d="M12 22v-2"></path>
-                <path d="m17 20.66-1-1.73"></path>
-                <path d="M11 10.27 7 3.34"></path>
-                <path d="m20.66 17-1.73-1"></path>
-                <path d="m3.34 7 1.73 1"></path>
-                <path d="M14 12h8"></path>
-                <path d="M2 12h2"></path>
-                <path d="m20.66 7-1.73 1"></path>
-                <path d="m3.34 17 1.73-1"></path>
-                <path d="m17 3.34-1 1.73"></path>
-                <path d="m11 13.73-4 6.93"></path>
-              </svg>
-              <span className="hidden md:inline">Configurações</span>
-            </button>
-          </div>
-        </div>
-        {/* Botões de ação */}
-        <div className="md:flex hidden order-1 md:order-3 w-fit gap-1 md:gap-2 p-3">
-          <button className="items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 outlined border border-input bg-background hover:bg-primary hover:text-foreground h-10 w-10 md:flex hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-monitor-smartphone h-4 w-4"
-            >
-              <path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"></path>
-              <path d="M10 19v-3.96 3.15"></path>
-              <path d="M7 19h5"></path>
-              <rect width="6" height="10" x="16" y="12" rx="2"></rect>
-            </svg>
-          </button>
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 outlined border border-input bg-background hover:bg-primary hover:text-foreground h-10 w-10">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-play h-4 w-4"
-            >
-              <polygon points="6 3 20 12 6 21 6 3"></polygon>
-            </svg>
-          </button>
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 outlined border border-input bg-background hover:bg-primary hover:text-foreground h-10 px-4 py-2">
-            <span className="md:inline hidden">Salvar</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-save w-4 h-4 md:hidden block"
-            >
-              <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path>
-              <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path>
-              <path d="M7 3v4a1 1 0 0 0 1 1h7"></path>
-            </svg>
-          </button>
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-            <span className="md:inline hidden">Publicar</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-cloud w-4 h-4 md:hidden block"
-            >
-              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 /**
  * @component FunnelStepSidebar
- * @description Sidebar esquerda para navegação entre etapas.
+ * @description Simula a barra lateral esquerda para listar as etapas do quiz.
+ * Permite a seleção de etapas para visualização/edição no canvas.
  */
-const FunnelStepSidebar: React.FC<{
-  steps: QuizStep[];
-  currentStepId: string;
-  onStepSelect: (stepId: string) => void;
-  onAddStep: () => void;
+export const FunnelStepSidebar: React.FC<{
+    steps: QuizStep[];
+    currentStepId: string;
+    onStepSelect: (stepId: string) => void;
+    onAddStep: () => void;
 }> = ({ steps, currentStepId, onStepSelect, onAddStep }) => {
-  return (
-    <div className="w-full min-h-[3rem] relative border-b overflow-auto none-scrollbar md:max-w-[13rem] border-r border-zinc-700 bg-zinc-900">
-      <div className="h-full w-full rounded-[inherit] overflow-hidden scroll">
-        <div className="flex flex-col">
-          {steps.map((step) => (
-            <div
-              key={step.id}
-              className={`group border-r md:border-y md:border-r-0 min-w-[10rem] -mt-[1px] flex pl-2 relative items-center cursor-pointer 
-                            ${
-                              step.id === currentStepId
-                                ? "bg-zinc-800 border-l-4 border-blue-600"
-                                : "hover:bg-zinc-800"
-                            }`}
-              onClick={() => onStepSelect(step.id)}
-            >
-              <span className="p-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-grip w-4 h-4 text-zinc-400"
-                >
-                  <circle cx="12" cy="5" r="1"></circle>
-                  <circle cx="19" cy="5" r="1"></circle>
-                  <circle cx="5" cy="5" r="1"></circle>
-                  <circle cx="12" cy="12" r="1"></circle>
-                  <circle cx="19" cy="12" r="1"></circle>
-                  <circle cx="5" cy="12" r="1"></circle>
-                  <circle cx="12" cy="19" r="1"></circle>
-                  <circle cx="19" cy="19" r="1"></circle>
-                  <circle cx="5" cy="19" r="1"></circle>
-                </svg>
-              </span>
-              <div className="w-full relative z-[5]">
-                <span className="block h-[3rem] w-full p-3 text-zinc-100">
-                  {step.name}
-                </span>
-              </div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-ellipsis-vertical mr-2 w-4 h-4 cursor-pointer text-zinc-400"
-              >
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="12" cy="5" r="1"></circle>
-                <circle cx="12" cy="19" r="1"></circle>
-              </svg>
+    return (
+        <div className="w-full min-h-[3rem] relative border-b border-gray-200 overflow-auto none-scrollbar md:max-w-[13rem] md:border-r bg-white">
+            <div className="h-full w-full rounded-[inherit] overflow-hidden scroll">
+                <div className="flex flex-col">
+                    {/* Mapeia sobre cada etapa para criar um botão na sidebar */}
+                    {steps.map((step) => (
+                        <div
+                            key={step.id}
+                            className={`group border-b md:border-y md:border-r-0 min-w-[10rem] -mt-[1px] flex pl-2 relative items-center cursor-pointer 
+                            ${step.id === currentStepId ? 'bg-primary-light border-l-4 border-primary' : 'hover:bg-gray-50'}`}
+                            onClick={() => onStepSelect(step.id)} // Define a etapa clicada como a etapa atual
+                        >
+                            {/* Ícone de "grip" para indicar que a etapa é arrastável */}
+                            <span className="p-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-grip w-4 h-4 text-gray-600"><circle cx="12" cy="5" r="1"></circle><circle cx="19" cy="5" r="1"></circle><circle cx="5" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle><circle cx="19" cy="19" r="1"></circle><circle cx="5" cy="19" r="1"></circle></svg>
+                            </span>
+                            <div className="w-full relative z-[5]">
+                                {/* Nome da etapa */}
+                                <span className="block h-[3rem] w-full p-3 text-gray-800">{step.name}</span>
+                            </div>
+                            {/* Ícone de opções da etapa (elipsis vertical) */}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-ellipsis-vertical mr-2 w-4 h-4 cursor-pointer text-gray-600" type="button"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                        </div>
+                    ))}
+                    {/* Botão para adicionar nova etapa */}
+                    <div className="grid md:p-1 relative">
+                        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost hover:bg-gray-100 text-gray-800 h-10 px-4 py-2" onClick={onAddStep}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus mr-2 h-4 w-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> Adicionar Etapa
+                        </button>
+                    </div>
+                    <div className="py-10"></div>
+                </div>
             </div>
-          ))}
-          <div className="grid md:p-1 relative">
-            <button
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ghost hover:bg-zinc-700 hover:text-foreground h-10 px-4 py-2 text-zinc-100"
-              onClick={onAddStep}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-plus mr-2 h-4 w-4"
-              >
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-              Adicionar Etapa
-            </button>
-          </div>
-          <div className="py-10"></div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 /**
