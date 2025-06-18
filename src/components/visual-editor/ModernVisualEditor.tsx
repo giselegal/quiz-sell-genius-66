@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { getPlaceholderImage } from '@/utils/placeholderUtils';
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -506,7 +507,7 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
         return { text: "Novo texto", size: "base", align: "left" };
       case "image":
         return {
-          src: "https://via.placeholder.com/400x200",
+          src: getPlaceholderImage(400, 200, "Nova imagem"),
           alt: "Nova imagem",
           width: 400,
           height: 200,
