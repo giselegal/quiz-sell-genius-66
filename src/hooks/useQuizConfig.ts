@@ -3,13 +3,13 @@ import { EditorState, EditorStep } from "@/types/editor";
 import { loadQuizConfig } from "@/utils/quizStorage";
 
 // Importar do hook original para manter compatibilidade
-import { 
+import {
   useQuizStyles as originalUseQuizStyles,
   useQuizTheme as originalUseQuizTheme,
   useQuizBehavior as originalUseQuizBehavior,
   useQuizLayout as originalUseQuizLayout,
   useQuizConfig as originalUseQuizConfig,
-  QuizConfigProvider as originalQuizConfigProvider
+  QuizConfigProvider as originalQuizConfigProvider,
 } from "./useQuizConfig.tsx";
 
 export const useQuizConfig = () => {
@@ -33,7 +33,9 @@ export const useQuizConfig = () => {
 
   const getCurrentStep = (): EditorStep | null => {
     if (!config) return null;
-    return config.steps.find(step => step.id === config.currentStepId) || null;
+    return (
+      config.steps.find((step) => step.id === config.currentStepId) || null
+    );
   };
 
   const getStepByIndex = (index: number): EditorStep | null => {
@@ -47,7 +49,7 @@ export const useQuizConfig = () => {
 
   const getStepById = (stepId: string): EditorStep | null => {
     if (!config) return null;
-    return config.steps.find(step => step.id === stepId) || null;
+    return config.steps.find((step) => step.id === stepId) || null;
   };
 
   const getTotalSteps = (): number => {
@@ -56,7 +58,7 @@ export const useQuizConfig = () => {
 
   const getCurrentStepIndex = (): number => {
     if (!config) return -1;
-    return config.steps.findIndex(step => step.id === config.currentStepId);
+    return config.steps.findIndex((step) => step.id === config.currentStepId);
   };
 
   return {

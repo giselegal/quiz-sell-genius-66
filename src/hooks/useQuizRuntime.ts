@@ -24,9 +24,11 @@ export const useQuizRuntime = () => {
 
     try {
       const savedConfig = EditorStorageService.loadConfig();
-      
+
       if (!savedConfig) {
-        throw new Error("Nenhuma configuração de quiz encontrada. Configure o quiz no editor primeiro.");
+        throw new Error(
+          "Nenhuma configuração de quiz encontrada. Configure o quiz no editor primeiro."
+        );
       }
 
       const runtimeConfig: QuizRuntimeConfig = {
@@ -35,13 +37,18 @@ export const useQuizRuntime = () => {
         steps: savedConfig.state.steps,
         answers: {},
         score: 0,
-        startTime: new Date()
+        startTime: new Date(),
       };
 
       setConfig(runtimeConfig);
-      console.log("✅ Quiz configurado com", runtimeConfig.totalSteps, "etapas");
+      console.log(
+        "✅ Quiz configurado com",
+        runtimeConfig.totalSteps,
+        "etapas"
+      );
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Erro desconhecido";
+      const errorMessage =
+        err instanceof Error ? err.message : "Erro desconhecido";
       setError(errorMessage);
       console.error("❌ Erro ao carregar quiz:", errorMessage);
     } finally {
@@ -54,10 +61,14 @@ export const useQuizRuntime = () => {
     if (!config) return false;
 
     if (config.currentStepIndex < config.totalSteps - 1) {
-      setConfig(prev => prev ? {
-        ...prev,
-        currentStepIndex: prev.currentStepIndex + 1
-      } : null);
+      setConfig((prev) =>
+        prev
+          ? {
+              ...prev,
+              currentStepIndex: prev.currentStepIndex + 1,
+            }
+          : null
+      );
       return true;
     }
     return false;
@@ -68,42 +79,64 @@ export const useQuizRuntime = () => {
     if (!config) return false;
 
     if (config.currentStepIndex > 0) {
-      setConfig(prev => prev ? {
-        ...prev,
-        currentStepIndex: prev.currentStepIndex - 1
-      } : null);
+      setConfig((prev) =>
+        prev
+          ? {
+              ...prev,
+              currentStepIndex: prev.currentStepIndex - 1,
+            }
+          : null
+      );
       return true;
     }
     return false;
   }, [config]);
 
   // Ir para etapa específica
-  const goToStep = useCallback((stepIndex: number) => {
-    if (!config) return false;
+  const goToStep = useCallback(
+    (stepIndex: number) => {
+      if (!config) return false;
 
-    if (stepIndex >= 0 && stepIndex < config.totalSteps) {
-      setConfig(prev => prev ? {
-        ...prev,
-        currentStepIndex: stepIndex
-      } : null);
-      return true;
-    }
-    return false;
-  }, [config]);
+      if (stepIndex >= 0 && stepIndex < config.totalSteps) {
+        setConfig((prev) =>
+          prev
+            ? {
+                ...prev,
+                currentStepIndex: stepIndex,
+              }
+            : null
+        );
+        return true;
+      }
+      return false;
+    },
+    [config]
+  );
 
   // Salvar resposta
-  const saveAnswer = useCallback((questionKey: string, answer: string | number | boolean | string[], points: number = 0) => {
-    if (!config) return;
+  const saveAnswer = useCallback(
+    (
+      questionKey: string,
+      answer: string | number | boolean | string[],
+      points: number = 0
+    ) => {
+      if (!config) return;
 
-    setConfig(prev => prev ? {
-      ...prev,
-      answers: {
-        ...prev.answers,
-        [questionKey]: answer
-      },
-      score: prev.score + points
-    } : null);
-  }, [config]);
+      setConfig((prev) =>
+        prev
+          ? {
+              ...prev,
+              answers: {
+                ...prev.answers,
+                [questionKey]: answer,
+              },
+              score: prev.score + points,
+            }
+          : null
+      );
+    },
+    [config]
+  );
 
   // Finalizar quiz
   const finishQuiz = useCallback(() => {
@@ -111,7 +144,7 @@ export const useQuizRuntime = () => {
 
     const finalConfig = {
       ...config,
-      endTime: new Date()
+      endTime: new Date(),
     };
 
     setConfig(finalConfig);
@@ -150,6 +183,6 @@ export const useQuizRuntime = () => {
     finishQuiz,
     resetQuiz,
     hasEditorConfig,
-    loadQuizConfig
+    loadQuizConfig,
   };
 };

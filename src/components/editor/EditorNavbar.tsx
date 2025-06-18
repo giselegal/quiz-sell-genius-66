@@ -34,13 +34,14 @@ export const EditorNavbar: React.FC = () => {
 
   const handleExport = () => {
     const dataStr = JSON.stringify(state, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = 'quiz-config.json';
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = "quiz-config.json";
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
   };
 
@@ -88,17 +89,17 @@ export const EditorNavbar: React.FC = () => {
         {/* Middle section - Main actions */}
         <div className="order-2 md:order-1 flex w-full max-w-full md:max-w-fit">
           <div className="flex p-3 gap-1 md:gap-2 flex-wrap justify-center">
-            <Button 
-              variant="default" 
+            <Button
+              variant="default"
               className="h-10 gap-2 bg-blue-600 hover:bg-blue-700"
               onClick={handleSave}
             >
               <Save className="h-4 w-4" />
               Salvar
             </Button>
-            
-            <Button 
-              variant="outline" 
+
+            <Button
+              variant="outline"
               className="h-10 gap-2"
               onClick={handlePreview}
             >
@@ -106,8 +107,8 @@ export const EditorNavbar: React.FC = () => {
               Preview
             </Button>
 
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="h-10 gap-2"
               onClick={handleExport}
             >

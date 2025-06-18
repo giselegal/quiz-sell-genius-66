@@ -21,50 +21,49 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
 
   const getStyles = () => {
     const styles: React.CSSProperties = {};
-    
+
     if (element.styles?.color) {
       styles.color = element.styles.color;
     }
-    
+
     if (element.styles?.backgroundColor) {
       styles.backgroundColor = element.styles.backgroundColor;
     }
-    
+
     if (element.styles?.fontSize) {
       styles.fontSize = `${element.styles.fontSize}px`;
     }
-    
+
     if (element.styles?.fontWeight) {
       styles.fontWeight = element.styles.fontWeight;
     }
-    
+
     if (element.styles?.textAlign) {
       styles.textAlign = element.styles.textAlign;
     }
-    
+
     if (element.styles?.padding) {
       styles.padding = `${element.styles.padding}px`;
     }
-    
+
     if (element.styles?.margin) {
       styles.margin = `${element.styles.margin}px`;
     }
-    
+
     if (element.styles?.borderRadius) {
       styles.borderRadius = `${element.styles.borderRadius}px`;
     }
-    
+
     return styles;
   };
 
   switch (element.type) {
     case "heading": {
-      const HeadingTag = `h${element.content.level || 1}` as keyof JSX.IntrinsicElements;
+      const HeadingTag = `h${
+        element.content.level || 1
+      }` as keyof JSX.IntrinsicElements;
       return (
-        <HeadingTag 
-          style={getStyles()}
-          className="font-bold"
-        >
+        <HeadingTag style={getStyles()} className="font-bold">
           {element.content.text}
         </HeadingTag>
       );
@@ -72,10 +71,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
 
     case "text":
       return (
-        <p 
-          style={getStyles()}
-          className="text-base"
-        >
+        <p style={getStyles()} className="text-base">
           {element.content.text}
         </p>
       );
@@ -84,7 +80,9 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
       return (
         <Button
           style={getStyles()}
-          onClick={() => handleAction(element.content.action || "next", element.content)}
+          onClick={() =>
+            handleAction(element.content.action || "next", element.content)
+          }
           className="w-full"
         >
           {element.content.text}
@@ -104,10 +102,12 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
             required={element.content.required}
             name={element.content.name}
             style={getStyles()}
-            onChange={(e) => handleAction("input-change", { 
-              name: element.content.name, 
-              value: e.target.value 
-            })}
+            onChange={(e) =>
+              handleAction("input-change", {
+                name: element.content.name,
+                value: e.target.value,
+              })
+            }
           />
         </div>
       );
@@ -145,7 +145,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
 
     default:
       return (
-        <div 
+        <div
           style={getStyles()}
           className="p-4 border border-dashed border-gray-300 text-center text-gray-500"
         >

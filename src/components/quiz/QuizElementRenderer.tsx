@@ -15,15 +15,19 @@ export const QuizElementRenderer: React.FC<QuizElementRendererProps> = ({
   element,
   onButtonClick,
   onInputChange,
-  className = ""
+  className = "",
 }) => {
   const renderElement = () => {
     switch (element.type) {
       case "heading": {
-        const HeadingTag = `h${element.content.level || 1}` as keyof JSX.IntrinsicElements;
+        const HeadingTag = `h${
+          element.content.level || 1
+        }` as keyof JSX.IntrinsicElements;
         return (
-          <HeadingTag 
-            className={`font-bold text-white ${getHeadingClasses(element.content.level || 1)}`}
+          <HeadingTag
+            className={`font-bold text-white ${getHeadingClasses(
+              element.content.level || 1
+            )}`}
             style={element.style}
           >
             {element.content.text}
@@ -33,10 +37,7 @@ export const QuizElementRenderer: React.FC<QuizElementRendererProps> = ({
 
       case "text":
         return (
-          <p 
-            className="text-white" 
-            style={element.style}
-          >
+          <p className="text-white" style={element.style}>
             {element.content.text}
           </p>
         );
@@ -58,7 +59,9 @@ export const QuizElementRenderer: React.FC<QuizElementRendererProps> = ({
             {element.content.label && (
               <Label htmlFor={element.content.name} className="text-white">
                 {element.content.label}
-                {element.content.required && <span className="text-red-400 ml-1">*</span>}
+                {element.content.required && (
+                  <span className="text-red-400 ml-1">*</span>
+                )}
               </Label>
             )}
             <Input
@@ -67,7 +70,9 @@ export const QuizElementRenderer: React.FC<QuizElementRendererProps> = ({
               type={element.content.type || "text"}
               placeholder={element.content.placeholder}
               required={element.content.required}
-              onChange={(e) => onInputChange?.(element.content.name, e.target.value)}
+              onChange={(e) =>
+                onInputChange?.(element.content.name, e.target.value)
+              }
               className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-400"
               style={element.style}
             />
@@ -100,7 +105,7 @@ export const QuizElementRenderer: React.FC<QuizElementRendererProps> = ({
           <div
             style={{
               height: element.content.height || 20,
-              ...element.style
+              ...element.style,
             }}
           />
         );
@@ -143,12 +148,19 @@ export const QuizElementRenderer: React.FC<QuizElementRendererProps> = ({
 // Helper para classes de heading
 function getHeadingClasses(level: number): string {
   switch (level) {
-    case 1: return "text-4xl md:text-5xl";
-    case 2: return "text-3xl md:text-4xl";
-    case 3: return "text-2xl md:text-3xl";
-    case 4: return "text-xl md:text-2xl";
-    case 5: return "text-lg md:text-xl";
-    case 6: return "text-base md:text-lg";
-    default: return "text-2xl md:text-3xl";
+    case 1:
+      return "text-4xl md:text-5xl";
+    case 2:
+      return "text-3xl md:text-4xl";
+    case 3:
+      return "text-2xl md:text-3xl";
+    case 4:
+      return "text-xl md:text-2xl";
+    case 5:
+      return "text-lg md:text-xl";
+    case 6:
+      return "text-base md:text-lg";
+    default:
+      return "text-2xl md:text-3xl";
   }
 }

@@ -13,14 +13,17 @@ export interface QuizConfig {
 
 export class EditorStorageService {
   // Salvar configuração do editor
-  static saveConfig(state: EditorState, name: string = "Quiz Principal"): QuizConfig {
+  static saveConfig(
+    state: EditorState,
+    name: string = "Quiz Principal"
+  ): QuizConfig {
     const config: QuizConfig = {
       id: "main-quiz",
       name,
       version: "1.0.0",
       createdAt: new Date(),
       updatedAt: new Date(),
-      state
+      state,
     };
 
     try {
