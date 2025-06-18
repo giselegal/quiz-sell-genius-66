@@ -1,12 +1,14 @@
 import React from "react";
-import { EditorProvider } from "@/contexts/EditorContext.tsx";
-import { VisualEditor } from "@/components/editor/VisualEditor";
+import { ModernVisualEditor } from "@/components/visual-editor/ModernVisualEditor";
 
 const ModernEditorPage: React.FC = () => {
   return (
-    <EditorProvider>
-      <VisualEditor />
-    </EditorProvider>
+    <ModernVisualEditor 
+      funnelId="quiz-descubra-seu-estilo"
+      onSave={(data) => {
+        console.log("Quiz saved:", data);
+      }}
+    />
   );
 };
 

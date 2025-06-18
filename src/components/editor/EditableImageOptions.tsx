@@ -1,8 +1,7 @@
-
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Settings, Edit3 } from 'lucide-react';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Settings, Edit3 } from "lucide-react";
 
 interface ImageOption {
   id: string;
@@ -31,13 +30,15 @@ export const EditableImageOptions: React.FC<EditableImageOptionsProps> = ({
   onOptionClick,
   onOptionUpdate,
   onConfigureOption,
-  columns = 2
+  columns = 2,
 }) => {
-  const hasImages = options.some(option => option.imageUrl);
+  const hasImages = options.some((option) => option.imageUrl);
 
   return (
-    <div 
-      className={`relative p-4 rounded ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+    <div
+      className={`relative p-4 rounded ${
+        isSelected ? "ring-2 ring-blue-500" : ""
+      }`}
       onClick={onSelect}
     >
       {isSelected && (
@@ -46,8 +47,14 @@ export const EditableImageOptions: React.FC<EditableImageOptionsProps> = ({
           Opções com Imagem
         </div>
       )}
-      
-      <div className={hasImages ? `grid grid-cols-1 md:grid-cols-${columns} gap-4` : 'flex flex-col gap-3'}>
+
+      <div
+        className={
+          hasImages
+            ? `grid grid-cols-1 md:grid-cols-${columns} gap-4`
+            : "flex flex-col gap-3"
+        }
+      >
         {options.map((option) => (
           <EditableImageOption
             key={option.id}
@@ -76,7 +83,7 @@ const EditableImageOption: React.FC<EditableImageOptionProps> = ({
   isSelected,
   onOptionClick,
   onOptionUpdate,
-  onConfigureOption
+  onConfigureOption,
 }) => {
   const [isEditingText, setIsEditingText] = React.useState(false);
   const [tempText, setTempText] = React.useState(option.text);
@@ -88,14 +95,14 @@ const EditableImageOption: React.FC<EditableImageOptionProps> = ({
   };
 
   const handleTextSave = () => {
-    onOptionUpdate?.(option.id, 'text', tempText);
+    onOptionUpdate?.(option.id, "text", tempText);
     setIsEditingText(false);
   };
 
   const handleTextKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleTextSave();
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       setTempText(option.text);
       setIsEditingText(false);
     }
@@ -120,20 +127,20 @@ const EditableImageOption: React.FC<EditableImageOptionProps> = ({
             <Settings className="w-3 h-3" />
           </Button>
         )}
-        
+
         {option.imageUrl && (
-          <img 
-            src={option.imageUrl} 
+          <img
+            src={option.imageUrl}
             alt={option.alt || option.text}
             className="w-full h-32 object-cover rounded mb-3"
           />
         )}
-        
+
         <div className="flex items-center">
           <span className="font-semibold text-[#432818] mr-3">
             {option.label})
           </span>
-          
+
           {isEditingText ? (
             <Input
               value={tempText}
@@ -144,7 +151,7 @@ const EditableImageOption: React.FC<EditableImageOptionProps> = ({
               autoFocus
             />
           ) : (
-            <span 
+            <span
               className="text-[#432818] font-medium hover:bg-yellow-100 rounded px-1 cursor-text"
               onDoubleClick={handleTextDoubleClick}
             >
@@ -166,7 +173,7 @@ interface ImageOptionEditorProps {
 export const ImageOptionEditor: React.FC<ImageOptionEditorProps> = ({
   option,
   onUpdate,
-  onClose
+  onClose,
 }) => {
   return (
     <div className="space-y-4">
@@ -176,43 +183,46 @@ export const ImageOptionEditor: React.FC<ImageOptionEditorProps> = ({
           Fechar
         </Button>
       </div>
-      
+
       <div>
         <label className="block text-sm font-medium mb-1">Texto da Opção</label>
         <Input
           value={option.text}
-          onChange={(e) => onUpdate('text', e.target.value)}
+          onChange={(e) => onUpdate("text", e.target.value)}
           placeholder="Digite o texto da opção"
         />
       </div>
-      
+
       <div>
         <label className="block text-sm font-medium mb-1">URL da Imagem</label>
         <Input
-          value={option.imageUrl || ''}
-          onChange={(e) => onUpdate('imageUrl', e.target.value)}
+          value={option.imageUrl || ""}
+          onChange={(e) => onUpdate("imageUrl", e.target.value)}
           placeholder="https://..."
         />
       </div>
-      
+
       <div>
-        <label className="block text-sm font-medium mb-1">Texto Alternativo</label>
+        <label className="block text-sm font-medium mb-1">
+          Texto Alternativo
+        </label>
         <Input
-          value={option.alt || ''}
-          onChange={(e) => onUpdate('alt', e.target.value)}
+          value={option.alt || ""}
+          onChange={(e) => onUpdate("alt", e.target.value)}
           placeholder="Descrição da imagem"
         />
       </div>
-      
+
       {option.imageUrl && (
         <div>
           <label className="block text-sm font-medium mb-1">Preview</label>
-          <img 
-            src={option.imageUrl} 
+          <img
+            src={option.imageUrl}
             alt={option.alt || option.text}
             className="w-full h-32 object-cover rounded border"
             onError={(e) => {
-              e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDIwMCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTI4IiBmaWxsPSIjY2NjIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiPkVycm88L3RleHQ+Cjwvc3ZnPg==';
+              e.currentTarget.src =
+                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDIwMCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTI4IiBmaWxsPSIjY2NjIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiPkVycm88L3RleHQ+Cjwvc3ZnPg==";
             }}
           />
         </div>
