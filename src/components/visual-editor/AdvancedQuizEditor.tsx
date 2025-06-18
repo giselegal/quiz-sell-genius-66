@@ -2264,6 +2264,8 @@ const StepNavigationTabs: React.FC<{
  * Este é o componente exportado que deve ser usado no App.tsx ou em outros lugares.
  */
 const AdvancedQuizEditor: React.FC = () => {
+  console.log("🚀 AdvancedQuizEditor está renderizando!");
+  
   // Estados principais do editor
   const [editorState, setEditorState] = useState<QuizEditorState>({
     steps: [
@@ -2627,44 +2629,61 @@ const AdvancedQuizEditor: React.FC = () => {
 
   // --- Render principal ---
 
-  return (
-    <div className="h-screen bg-zinc-950 flex flex-col">
-      {/* Navbar Superior */}
-      <FunnelNavbar
-        onSave={handleSave}
-        onPublish={handlePublish}
-        isSaving={isSaving}
-        isPublishing={isPublishing}
-      />
-
-      {/* Navegação de Etapas */}
-      <div className="border-b border-zinc-700">
-        <StepNavigationTabs
-          steps={editorState.steps}
-          currentStepId={editorState.currentStepId}
-          onStepSelect={handleStepSelect}
-          onStepRename={handleStepRename}
-          onStepDelete={handleStepDelete}
-          onAddStep={handleAddStep}
+  try {
+    console.log("🎯 Tentando renderizar AdvancedQuizEditor...");
+    
+    return (
+      <div className="h-screen bg-zinc-950 flex flex-col">
+        {/* Navbar Superior */}
+        <FunnelNavbar
+          onSave={handleSave}
+          onPublish={handlePublish}
+          isSaving={isSaving}
+          isPublishing={isPublishing}
         />
-      </div>
 
-      {/* Área Principal do Editor */}
-      <div className="flex-1 overflow-hidden">
-        <CanvasArea
-          currentStep={currentStep}
-          headerConfig={editorState.headerConfig}
-          selectedComponent={selectedComponent}
-          selectedComponentId={selectedComponentId}
-          onComponentSelect={handleComponentSelect}
-          onComponentAdd={handleComponentAdd}
-          onComponentUpdate={handleComponentUpdate}
-          onComponentDelete={handleComponentDelete}
-          onComponentMove={handleComponentMove}
-        />
+        {/* Navegação de Etapas */}
+        <div className="border-b border-zinc-700">
+          <StepNavigationTabs
+            steps={editorState.steps}
+            currentStepId={editorState.currentStepId}
+            onStepSelect={handleStepSelect}
+            onStepRename={handleStepRename}
+            onStepDelete={handleStepDelete}
+            onAddStep={handleAddStep}
+          />
+        </div>
+
+        {/* Área Principal do Editor */}
+        <div className="flex-1 overflow-hidden">
+          <CanvasArea
+            currentStep={currentStep}
+            headerConfig={editorState.headerConfig}
+            selectedComponent={selectedComponent}
+            selectedComponentId={selectedComponentId}
+            onComponentSelect={handleComponentSelect}
+            onComponentAdd={handleComponentAdd}
+            onComponentUpdate={handleComponentUpdate}
+            onComponentDelete={handleComponentDelete}
+            onComponentMove={handleComponentMove}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    console.error("❌ Erro ao renderizar AdvancedQuizEditor:", error);
+    return (
+      <div className="h-screen bg-red-950 flex items-center justify-center">
+        <div className="text-center text-white">
+          <h1 className="text-2xl font-bold mb-4">Erro no Editor</h1>
+          <p className="text-red-300">Verifique o console para mais detalhes</p>
+          <pre className="mt-4 text-sm text-red-200 bg-red-900 p-4 rounded">
+            {error instanceof Error ? error.message : String(error)}
+          </pre>
+        </div>
+      </div>
+    );
+  }
 };
 
 // --- EXPORTAÇÃO PRINCIPAL ---

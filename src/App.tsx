@@ -12,6 +12,8 @@ import EditorTest from "@/pages/EditorTest";
 import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
 import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
+import SimpleAdvancedQuizEditor from "@/components/visual-editor/SimpleAdvancedQuizEditor";
+import BasicAdvancedQuizEditor from "@/components/visual-editor/BasicAdvancedQuizEditor";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -101,7 +103,7 @@ function App() {
           {/* Novo Editor Cakto Quiz */}
           <Route path="/cakto-editor" element={<CaktoEditorPage />} />
 
-          {/* Editor Visual Avançado - Modularizado */}
+          {/* Editor Visual Avançado - Modularizado CORRIGIDO */}
           <Route path="/advanced-editor" element={<AdvancedQuizEditor />} />
 
           {/* Página de Teste */}
