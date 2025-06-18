@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { QuizQuestion } from "../../types/quiz";
+import { clothingQuestions } from "../../data/questions/clothingQuestions";
+import { strategicQuestions } from "../../data/strategicQuestions";
+import { selfPerceptionQuestions } from "../../data/questions/selfPerceptionQuestions";
 
 // --- Interfaces para a Estrutura de Dados do Quiz ---
 
@@ -342,7 +346,15 @@ const EditorNavbar: React.FC<{
   onSave: () => void;
   onPublish: () => void;
   onPreview: () => void;
-}> = ({ onSave, onPublish, onPreview }) => {
+  onLoadRealQuestions: () => void;
+  onStartFromScratch: () => void;
+}> = ({
+  onSave,
+  onPublish,
+  onPreview,
+  onLoadRealQuestions,
+  onStartFromScratch,
+}) => {
   return (
     <div className="h-16 border-b border-zinc-700 bg-zinc-950/95 backdrop-blur-sm flex items-center justify-between px-4">
       <div className="flex items-center gap-4">
@@ -367,6 +379,20 @@ const EditorNavbar: React.FC<{
       </div>
 
       <div className="flex items-center gap-2">
+        <button
+          onClick={onLoadRealQuestions}
+          className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+          title="Carregar questões reais do quiz"
+        >
+          📊 Questões Reais
+        </button>
+        <button
+          onClick={onStartFromScratch}
+          className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
+          title="Começar do zero"
+        >
+          🗂️ Limpar Tudo
+        </button>
         <button
           onClick={onSave}
           className="px-4 py-2 bg-zinc-700 text-zinc-100 rounded-md hover:bg-zinc-600 transition-colors"
@@ -875,24 +901,269 @@ const PropertiesPanel: React.FC<{
   );
 };
 
+// --- Funções de Conversão de Dados ---
+
+const generateUniqueId = (): string => {
+  return `id_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+const convertQuestionsToSteps = (questions: QuizQuestion[]): QuizStep[] => {
+  return questions.map((question, index) => {
+    // Criar componente de título/pergunta
+    const titleComponent: QuizComponent = {
+      id: generateUniqueId(),
+      type: "heading",
+      props: {
+        text: question.title,
+        styles: {
+          textAlign: "center",
+          marginBottom: "24px",
+          fontSize: "1.875rem",
+          fontWeight: "bold",
+          color: "#f3f4f6",
+          lineHeight: "1.2",
+        },
+      },
+    };
+
+    // Criar componente de imagem se a questão tiver uma
+    const imageComponent: QuizComponent | null = question.imageUrl
+      ? {
+          id: generateUniqueId(),
+          type: "image",
+          props: {
+            src: question.imageUrl,
+            alt: `Imagem da questão ${index + 1}`,
+            styles: {
+              marginBottom: "24px",
+              textAlign: "center",
+              maxWidth: "400px",
+              margin: "0 auto 24px auto",
+            },
+          },
+        }
+      : null;
+
+    // Converter opções para choices com melhor tratamento de imagens
+    const choices: OptionChoice[] = question.options.map((option) => ({
+      text: option.text,
+      value: option.id,
+      scoreValue: option.points || 1,
+      // Lógica para próxima etapa (vai para a próxima questão ou resultado)
+      nextStepId:
+        index < questions.length - 1 ? `step-${index + 2}` : undefined,
+      nextPageType: index === questions.length - 1 ? "resultPage" : undefined,
+    }));
+
+    // Verificar se alguma opção tem imagem para determinar o layout
+    const hasOptionImages = question.options.some((opt) => opt.imageUrl);
+
+    // Criar componente de opções com layout adaptado
+    const optionsComponent: QuizComponent = {
+      id: generateUniqueId(),
+      type: "options",
+      props: {
+        questionText: question.title,
+        choices: choices,
+        selectionType: question.multiSelect > 1 ? "multiple" : "single",
+        styles: {
+          display: "grid",
+          gap: "16px",
+          gridTemplateColumns: hasOptionImages
+            ? "repeat(auto-fit, minmax(250px, 1fr))"
+            : "1fr",
+          maxWidth: hasOptionImages ? "100%" : "600px",
+          margin: "0 auto",
+        },
+      },
+    };
+
+    // Se as opções têm imagens, criar componentes de imagem para cada opção
+    const optionImageComponents: QuizComponent[] = [];
+    if (hasOptionImages) {
+      question.options.forEach((option, optIndex) => {
+        if (option.imageUrl) {
+          optionImageComponents.push({
+            id: generateUniqueId(),
+            type: "image",
+            props: {
+              src: option.imageUrl,
+              alt: option.text,
+              styles: {
+                width: "100%",
+                height: "200px",
+                objectFit: "cover",
+                borderRadius: "8px",
+                marginBottom: "8px",
+              },
+            },
+          });
+        }
+      });
+    }
+
+    // Montar componentes da etapa
+    const components: QuizComponent[] = [titleComponent];
+
+    // Adicionar imagem da questão se existir
+    if (imageComponent) {
+      components.push(imageComponent);
+    }
+
+    // Adicionar imagens das opções se existirem
+    if (optionImageComponents.length > 0) {
+      components.push(...optionImageComponents);
+    }
+
+    // Adicionar componente de opções
+    components.push(optionsComponent);
+
+    // Se for questão com múltipla seleção, adicionar botão de continuar
+    if (question.multiSelect > 1) {
+      const continueButton: QuizComponent = {
+        id: generateUniqueId(),
+        type: "button",
+        props: {
+          buttonText: `Continuar (selecione ${question.multiSelect} opções)`,
+          buttonStyle: "primary",
+          actionType: "goToNextStep",
+          actionTargetId:
+            index < questions.length - 1 ? `step-${index + 2}` : undefined,
+          styles: {
+            marginTop: "24px",
+            padding: "12px 32px",
+            backgroundColor: "#3b82f6",
+            color: "white",
+            borderRadius: "8px",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "600",
+            width: "100%",
+            maxWidth: "300px",
+            margin: "24px auto 0 auto",
+          },
+        },
+      };
+      components.push(continueButton);
+    }
+
+    return {
+      id: `step-${index + 1}`,
+      name: `Questão ${index + 1}: ${question.title.substring(0, 30)}...`,
+      components: components,
+      defaultNextStepId:
+        index < questions.length - 1 ? `step-${index + 2}` : undefined,
+      finalPageType: index === questions.length - 1 ? "resultPage" : undefined,
+    };
+  });
+};
+
+const getDefaultPropsForType = (type: string): QuizComponentProps => {
+  switch (type) {
+    case "heading":
+      return { text: "Novo Título" };
+    case "image":
+      return {
+        src: "https://placehold.co/300x200/374151/f3f4f6?text=Imagem",
+        alt: "Nova Imagem",
+      };
+    case "input":
+      return {
+        label: "Nova Entrada",
+        placeholder: "Digite aqui...",
+        inputType: "text",
+      };
+    case "button":
+      return {
+        buttonText: "Novo Botão",
+        buttonStyle: "primary",
+        actionType: "goToNextStep",
+      };
+    case "options":
+      return {
+        questionText: "Nova Pergunta",
+        choices: [
+          { text: "Opção 1", value: "opt1" },
+          { text: "Opção 2", value: "opt2" },
+        ],
+        selectionType: "single",
+      };
+    case "alert":
+      return {
+        alertMessage: "Nova Mensagem",
+        alertType: "info",
+      };
+    case "text":
+      return { text: "Novo Texto" };
+    case "spacer":
+      return { styles: { height: "20px" } };
+    default:
+      return {};
+  }
+};
+
 // --- Componente Principal ---
 
 export const CaktoQuizEditor: React.FC = () => {
+  // Combinar todas as questões reais
+  const allQuestions = [
+    ...clothingQuestions,
+    ...strategicQuestions,
+    ...selfPerceptionQuestions,
+  ];
+
+  // Converter questões reais para etapas do editor
+  const realSteps = convertQuestionsToSteps(allQuestions);
+
   const [editorState, setEditorState] = useState<QuizEditorState>({
-    steps: [
-      {
-        id: "step-1",
-        name: "Primeira Etapa",
-        components: [],
-      },
-    ],
+    steps:
+      realSteps.length > 0
+        ? realSteps
+        : [
+            {
+              id: "step-1",
+              name: "Primeira Etapa",
+              components: [],
+            },
+          ],
     headerConfig: {
       showLogo: true,
       showProgressBar: true,
       allowReturnButton: true,
     },
-    currentStepId: "step-1",
+    currentStepId: realSteps.length > 0 ? realSteps[0].id : "step-1",
   });
+
+  // Adicionar função para recarregar questões reais
+  const loadRealQuestions = () => {
+    const realSteps = convertQuestionsToSteps(allQuestions);
+    setEditorState((prev) => ({
+      ...prev,
+      steps: realSteps,
+      currentStepId: realSteps.length > 0 ? realSteps[0].id : "step-1",
+      selectedComponentId: undefined,
+    }));
+  };
+
+  // Adicionar função para limpar e começar do zero
+  const startFromScratch = () => {
+    setEditorState({
+      steps: [
+        {
+          id: "step-1",
+          name: "Primeira Etapa",
+          components: [],
+        },
+      ],
+      headerConfig: {
+        showLogo: true,
+        showProgressBar: true,
+        allowReturnButton: true,
+      },
+      currentStepId: "step-1",
+    });
+  };
 
   const currentStep = editorState.steps.find(
     (step) => step.id === editorState.currentStepId
@@ -1034,6 +1305,8 @@ export const CaktoQuizEditor: React.FC = () => {
         onSave={handleSave}
         onPublish={handlePublish}
         onPreview={handlePreview}
+        onLoadRealQuestions={loadRealQuestions}
+        onStartFromScratch={startFromScratch}
       />
 
       <div className="flex-1 flex overflow-hidden">
