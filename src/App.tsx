@@ -11,6 +11,7 @@ import CaktoEditorPage from "@/pages/CaktoEditorPage";
 import EditorTest from "@/pages/EditorTest";
 import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
+import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +26,7 @@ const QuickAccessEditorButton = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
       <Button
         onClick={() => navigate("/cakto-editor")}
         className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
@@ -33,6 +34,14 @@ const QuickAccessEditorButton = () => {
       >
         <Edit className="w-4 h-4 mr-2" />
         Cakto Editor
+      </Button>
+      <Button
+        onClick={() => navigate("/advanced-editor")}
+        className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg"
+        size="sm"
+      >
+        <Edit className="w-4 h-4 mr-2" />
+        Advanced Editor
       </Button>
     </div>
   );
@@ -91,6 +100,9 @@ function App() {
 
           {/* Novo Editor Cakto Quiz */}
           <Route path="/cakto-editor" element={<CaktoEditorPage />} />
+
+          {/* Editor Visual Avançado - Modularizado */}
+          <Route path="/advanced-editor" element={<AdvancedQuizEditor />} />
 
           {/* Página de Teste */}
           <Route path="/editor-test" element={<EditorTest />} />
