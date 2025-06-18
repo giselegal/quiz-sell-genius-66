@@ -903,10 +903,6 @@ const PropertiesPanel: React.FC<{
 
 // --- Funções de Conversão de Dados ---
 
-const generateUniqueId = (): string => {
-  return `id_${Math.random().toString(36).substr(2, 9)}`;
-};
-
 const convertQuestionsToSteps = (questions: QuizQuestion[]): QuizStep[] => {
   return questions.map((question, index) => {
     // Criar componente de título/pergunta
@@ -1338,42 +1334,5 @@ export const CaktoQuizEditor: React.FC = () => {
     </div>
   );
 };
-
-// Função auxiliar para obter propriedades padrão por tipo de componente
-function getDefaultPropsForType(type: string): QuizComponentProps {
-  switch (type) {
-    case "heading":
-      return { text: "Novo Título" };
-    case "text":
-      return { text: "Novo texto" };
-    case "image":
-      return { src: "", alt: "Imagem" };
-    case "button":
-      return { buttonText: "Clique aqui", buttonStyle: "primary" };
-    case "options":
-      return {
-        questionText: "Nova pergunta?",
-        choices: [
-          { text: "Opção 1", value: "option1", scoreValue: 0 },
-          { text: "Opção 2", value: "option2", scoreValue: 0 },
-        ],
-      };
-    case "input":
-      return {
-        label: "Campo de entrada",
-        placeholder: "Digite aqui...",
-        inputType: "text",
-      };
-    case "alert":
-      return { alertMessage: "Mensagem de alerta", alertType: "info" };
-    case "customComponent":
-      return {
-        componentName: "ResultPage.tsx",
-        offerHeadline: "Oferta especial",
-      };
-    default:
-      return {};
-  }
-}
 
 export default CaktoQuizEditor;
