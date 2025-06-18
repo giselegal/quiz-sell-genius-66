@@ -3,7 +3,7 @@ import React from "react";
 // Componente simplificado para teste
 const SimpleAdvancedQuizEditor: React.FC = () => {
   console.log("SimpleAdvancedQuizEditor está renderizando!");
-  
+
   return (
     <div className="min-h-screen bg-zinc-950 text-white p-8">
       <div className="max-w-4xl mx-auto">
@@ -21,7 +21,8 @@ const SimpleAdvancedQuizEditor: React.FC = () => {
         </div>
         <div className="mt-6 p-4 bg-blue-900/20 border border-blue-500 rounded-lg">
           <p className="text-blue-300">
-            Se você está vendo esta mensagem, o sistema de roteamento está funcionando corretamente.
+            Se você está vendo esta mensagem, o sistema de roteamento está
+            funcionando corretamente.
           </p>
         </div>
       </div>

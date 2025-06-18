@@ -46,7 +46,10 @@ const BasicNavbar: React.FC = () => {
 };
 
 // Componente básico de navegação de etapas
-const BasicStepTabs: React.FC<{ steps: QuizStep[]; currentStepId: string }> = ({ steps, currentStepId }) => {
+const BasicStepTabs: React.FC<{ steps: QuizStep[]; currentStepId: string }> = ({
+  steps,
+  currentStepId,
+}) => {
   return (
     <div className="bg-zinc-900 border-b border-zinc-700 px-4 py-2">
       <div className="flex items-center space-x-2">
@@ -75,11 +78,18 @@ const BasicCanvas: React.FC<{ currentStep: QuizStep }> = ({ currentStep }) => {
   return (
     <div className="flex-1 bg-zinc-950 p-8">
       <div className="max-w-4xl mx-auto bg-zinc-900 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-white mb-4">{currentStep.name}</h2>
+        <h2 className="text-xl font-semibold text-white mb-4">
+          {currentStep.name}
+        </h2>
         <div className="space-y-4">
           {currentStep.components.map((component, index) => (
-            <div key={component.id} className="p-4 bg-zinc-800 rounded border border-zinc-700">
-              <span className="text-zinc-400 text-sm">Componente {index + 1}: </span>
+            <div
+              key={component.id}
+              className="p-4 bg-zinc-800 rounded border border-zinc-700"
+            >
+              <span className="text-zinc-400 text-sm">
+                Componente {index + 1}:{" "}
+              </span>
               <span className="text-white">{component.type}</span>
               {component.props.text && (
                 <div className="mt-2 text-zinc-300">{component.props.text}</div>
@@ -111,38 +121,43 @@ const BasicAdvancedQuizEditor: React.FC = () => {
             id: "heading-1",
             type: "heading",
             props: {
-              text: "Bem-vindo ao Quiz!"
-            }
+              text: "Bem-vindo ao Quiz!",
+            },
           },
           {
             id: "text-1",
             type: "text",
             props: {
-              text: "Esta é uma versão básica do editor funcionando."
-            }
-          }
-        ]
+              text: "Esta é uma versão básica do editor funcionando.",
+            },
+          },
+        ],
       },
       {
         id: "step-2",
         name: "Segunda Etapa",
-        components: []
-      }
+        components: [],
+      },
     ],
     headerConfig: {
       showLogo: true,
       showProgressBar: true,
-      allowReturnButton: true
+      allowReturnButton: true,
     },
-    currentStepId: "step-1"
+    currentStepId: "step-1",
   });
 
-  const currentStep = editorState.steps.find(step => step.id === editorState.currentStepId) || editorState.steps[0];
+  const currentStep =
+    editorState.steps.find((step) => step.id === editorState.currentStepId) ||
+    editorState.steps[0];
 
   return (
     <div className="h-screen bg-zinc-950 flex flex-col">
       <BasicNavbar />
-      <BasicStepTabs steps={editorState.steps} currentStepId={editorState.currentStepId} />
+      <BasicStepTabs
+        steps={editorState.steps}
+        currentStepId={editorState.currentStepId}
+      />
       <BasicCanvas currentStep={currentStep} />
     </div>
   );
