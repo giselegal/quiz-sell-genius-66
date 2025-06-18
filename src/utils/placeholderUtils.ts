@@ -3,10 +3,11 @@
  */
 
 // Default placeholder image that works locally
-export const DEFAULT_PLACEHOLDER = '/placeholder.svg';
+export const DEFAULT_PLACEHOLDER = "/placeholder.svg";
 
 // Cloudinary placeholder that should work
-export const CLOUDINARY_PLACEHOLDER = 'https://res.cloudinary.com/dqljyf76t/image/upload/c_fill,w_400,h_300,f_auto,q_auto/v1/placeholders/default-image';
+export const CLOUDINARY_PLACEHOLDER =
+  "https://res.cloudinary.com/dqljyf76t/image/upload/c_fill,w_400,h_300,f_auto,q_auto/v1/placeholders/default-image";
 
 /**
  * Get a working placeholder image URL
@@ -15,7 +16,11 @@ export const CLOUDINARY_PLACEHOLDER = 'https://res.cloudinary.com/dqljyf76t/imag
  * @param text - Placeholder text (optional)
  * @returns Working placeholder URL
  */
-export function getPlaceholderImage(width = 400, height = 300, text = 'Imagem'): string {
+export function getPlaceholderImage(
+  width = 400,
+  height = 300,
+  text = "Imagem"
+): string {
   // Use local SVG placeholder first
   return DEFAULT_PLACEHOLDER;
 }
@@ -43,7 +48,7 @@ export function getVideoPlaceholder(): string {
  * @returns Fixed URL
  */
 export function fixPlaceholderUrl(url: string): string {
-  if (url.includes('via.placeholder.com')) {
+  if (url.includes("via.placeholder.com")) {
     return DEFAULT_PLACEHOLDER;
   }
   return url;

@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEditor } from "@/hooks/useEditorNew";
 import { getCurrentStep } from "@/utils/editorUtils";
 import { EditableElement } from "./EditableElement";
+import { getPlaceholderImage } from "@/utils/placeholderUtils";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -49,7 +50,7 @@ export const EditorCanvas: React.FC = () => {
                     height="96"
                     className="max-w-24 object-cover"
                     alt="Logo"
-                    src="https://via.placeholder.com/96x96?text=Logo"
+                    src={getPlaceholderImage(96, 96, "Logo")}
                   />
                 )}
 

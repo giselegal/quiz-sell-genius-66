@@ -5,6 +5,7 @@ import { EditorElement } from "@/types/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getPlaceholderImage } from "@/utils/placeholderUtils";
 
 interface EditableElementProps {
   element: EditorElement;
@@ -75,7 +76,7 @@ export const EditableElement: React.FC<EditableElementProps> = ({
                 <img
                   src={
                     imageContent.src ||
-                    "https://via.placeholder.com/640x480?text=Imagem"
+                    getPlaceholderImage(640, 480, "Imagem")
                   }
                   width={imageContent.width || 640}
                   height={imageContent.height || 480}
@@ -148,7 +149,7 @@ export const EditableElement: React.FC<EditableElementProps> = ({
           <div className="w-full">
             <video
               src={
-                videoContent.src || "https://via.placeholder.com/640x360.mp4"
+                videoContent.src || getPlaceholderImage(640, 360, "Video")
               }
               controls={videoContent.controls !== false}
               autoPlay={videoContent.autoplay || false}

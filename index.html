@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -48,6 +47,24 @@
       );
       // Pixel ID será inicializado dinamicamente baseado na rota
     </script>
+    
+    <!-- Fontes locais para evitar erros de carregamento -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+      
+      /* Fallback para fontes caso não carreguem */
+      * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      }
+      
+      .font-playfair {
+        font-family: 'Playfair Display', Georgia, serif;
+      }
+      
+      /* Remove qualquer loader externo problemático */
+      #lovable-loader { display: none !important; }
+    </style>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Descubra Seu Estilo com Gisele Galvão | Vista-se de Você!</title>
     <meta
@@ -212,7 +229,8 @@
     </style>
 
     <!-- Lovable Personalização/AB Test -->
-    <script src="https://cdn.lovable.dev/loader.js" async></script>
+    <!-- Script Lovable removido para evitar erros de carregamento -->
+    <!-- <script src="https://cdn.lovable.dev/loader.js" async></script> -->
   </head>
   <body>
     <noscript

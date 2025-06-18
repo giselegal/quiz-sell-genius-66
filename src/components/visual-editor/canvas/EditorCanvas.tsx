@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from "react";
 import { useDrop } from "react-dnd";
 import { motion, AnimatePresence } from "framer-motion";
-import { getPlaceholderImage } from '@/utils/placeholderUtils';
+import { getPlaceholderImage } from "@/utils/placeholderUtils";
 import {
   Edit3,
   Move,
@@ -329,8 +329,7 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({
         <div className="p-4">
           <img
             src={
-              element.content?.src ||
-              getPlaceholderImage(400, 200, "Imagem")
+              element.content?.src || getPlaceholderImage(400, 200, "Imagem")
             }
             alt={element.content?.alt || "Imagem"}
             className="w-full rounded-lg"
