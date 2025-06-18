@@ -717,7 +717,7 @@ export const EditorProvider: React.FC<{ children: ReactNode }> = ({
             id: "result-image",
             type: "image",
             content:
-              "https://via.placeholder.com/400x300?text=Elegante+Clássico",
+              "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjFmMWYxIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiPkVsZWdhbnRlIENsw6Fzc2ljbzwvdGV4dD4KPHN2Zz4=",
             style: { width: "400px", height: "300px", borderRadius: "8px" },
             position: { x: 0, y: 200 },
           },

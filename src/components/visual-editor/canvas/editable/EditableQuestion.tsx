@@ -196,7 +196,7 @@ export const EditableQuestion: React.FC<EditableQuestionProps> = ({
                     className="option-image"
                     onError={(e) => {
                       e.currentTarget.src =
-                        "https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Imagem+Não+Encontrada";
+                        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjhmOWZhIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmM3NTdkIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiPkltYWdlbSBOw6NvIEVuY29udHJhZGE8L3RleHQ+Cjwvc3ZnPg==";
                     }}
                   />
                   {/* Subtle overlay */}

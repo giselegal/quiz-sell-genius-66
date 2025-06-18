@@ -61,7 +61,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
           <div className="text-lg">
             <div className="text-lg flex items-center justify-center">
               <img 
-                src={content.imageUrl || content.src || 'https://via.placeholder.com/640x480'} 
+                src={content.imageUrl || content.src || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQ4MCIgdmlld0JveD0iMCAwIDY0MCA0ODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiBmaWxsPSIjZjFmMWYxIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiPkltYWdlbTwvdGV4dD4KPHN2Zz4='} 
                 width="640" 
                 height="480" 
                 alt={content.alt || 'Imagem'} 

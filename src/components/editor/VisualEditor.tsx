@@ -81,7 +81,7 @@ const EditorContent: React.FC = () => {
             break;
           case "image":
             defaultContent = {
-              src: "https://via.placeholder.com/640x480?text=Nova+Imagem",
+              src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQwIiBoZWlnaHQ9IjQ4MCIgdmlld0JveD0iMCAwIDY0MCA0ODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iNDgwIiBmaWxsPSIjZjFmMWYxIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiPk5vdmEgSW1hZ2VtPC90ZXh0Pgo8L3N2Zz4=",
               alt: "Nova imagem",
             };
             break;
@@ -90,7 +90,7 @@ const EditorContent: React.FC = () => {
             break;
           case "video":
             defaultContent = {
-              src: "https://via.placeholder.com/640x360.mp4",
+              src: "data:video/mp4;base64,",
               autoplay: false,
               controls: true,
             };

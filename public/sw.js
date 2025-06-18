@@ -1,18 +1,18 @@
-// Service Worker simples para evitar erros
-console.log('Service Worker simples carregado');
+// Service Worker desativado para evitar erros
+console.log('Service Worker desativado');
 
+// Não instalar o service worker
 self.addEventListener('install', function(event) {
-  console.log('SW: Install event');
-  self.skipWaiting();
+  console.log('SW: Install event - desativado');
+  // Não fazer nada
 });
 
 self.addEventListener('activate', function(event) {
-  console.log('SW: Activate event');
-  return self.clients.claim();
+  console.log('SW: Activate event - desativado');
+  // Não fazer nada
 });
 
-// Não intercepta fetch requests para evitar problemas
+// Não interceptar fetch requests
 self.addEventListener('fetch', function(event) {
-  // Passa todas as requests direto para a rede
-  return;
+  // Não fazer nada - deixar as requests passarem normalmente
 });

@@ -125,7 +125,7 @@ export const ModernCanvas: React.FC<ModernCanvasProps> = ({
         return (
           <div className="flex justify-center my-6">
             <img 
-              src={element.content.imageUrl || 'https://via.placeholder.com/400x300'}
+              src={element.content.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjFmMWYxIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiPkltYWdlbTwvdGV4dD4KPHN2Zz4='}
               alt={element.content.alt || 'Imagem'}
               className="max-w-full h-auto rounded-lg shadow-md"
             />

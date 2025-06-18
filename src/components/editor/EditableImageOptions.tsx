@@ -212,7 +212,7 @@ export const ImageOptionEditor: React.FC<ImageOptionEditorProps> = ({
             alt={option.alt || option.text}
             className="w-full h-32 object-cover rounded border"
             onError={(e) => {
-              e.currentTarget.src = 'https://via.placeholder.com/200x128/ccc/666?text=Erro';
+              e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDIwMCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTI4IiBmaWxsPSIjY2NjIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiPkVycm88L3RleHQ+Cjwvc3ZnPg==';
             }}
           />
         </div>

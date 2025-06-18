@@ -5,7 +5,7 @@ import { EditorElement } from "@/types/editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getPlaceholderImage } from "@/utils/placeholderUtils";
+import { replacePlaceholderUrl } from "@/utils/localPlaceholders";
 
 interface EditableElementProps {
   element: EditorElement;
@@ -75,8 +75,8 @@ export const EditableElement: React.FC<EditableElementProps> = ({
               <div className="text-lg flex items-center justify-center">
                 <img
                   src={
-                    imageContent.src ||
-                    getPlaceholderImage(640, 480, "Imagem")
+                    replacePlaceholderUrl(imageContent.src) ||
+                    replacePlaceholderUrl("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='480' viewBox='0 0 640 480'%3E%3Crect width='640' height='480' fill='%23f0f0f0'/%3E%3Ctext x='320' y='240' font-family='Arial, sans-serif' font-size='20' fill='%23999' text-anchor='middle' dominant-baseline='middle'%3EImagem%3C/text%3E%3C/svg%3E")
                   }
                   width={imageContent.width || 640}
                   height={imageContent.height || 480}
@@ -149,7 +149,7 @@ export const EditableElement: React.FC<EditableElementProps> = ({
           <div className="w-full">
             <video
               src={
-                videoContent.src || getPlaceholderImage(640, 360, "Video")
+                replacePlaceholderUrl(videoContent.src) || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='360' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23f0f0f0'/%3E%3Ctext x='320' y='180' font-family='Arial, sans-serif' font-size='20' fill='%23999' text-anchor='middle' dominant-baseline='middle'%3EVideo%3C/text%3E%3C/svg%3E"
               }
               controls={videoContent.controls !== false}
               autoPlay={videoContent.autoplay || false}
