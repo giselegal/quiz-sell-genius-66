@@ -7,6 +7,7 @@ import QuizDescubraSeuEstilo from "@/pages/quiz-descubra-seu-estilo";
 import ResultPage from "@/pages/ResultPage";
 import UnifiedEditorPage from "@/pages/UnifiedEditorPage";
 import ModernEditorPage from "@/pages/ModernEditorPage";
+import CaktoEditorPage from "@/pages/CaktoEditorPage";
 import EditorTest from "@/pages/EditorTest";
 import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
@@ -26,12 +27,12 @@ const QuickAccessEditorButton = () => {
   return (
     <div className="fixed bottom-4 right-4 z-50">
       <Button
-        onClick={() => navigate("/quiz-offer-editor")}
+        onClick={() => navigate("/cakto-editor")}
         className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
         size="sm"
       >
         <Edit className="w-4 h-4 mr-2" />
-        Editor Visual
+        Cakto Editor
       </Button>
     </div>
   );
@@ -87,6 +88,9 @@ function App() {
           {/* Novo Editor Visual Moderno */}
           <Route path="/modern-editor" element={<ModernEditorPage />} />
           <Route path="/editor" element={<ModernEditorPage />} />
+
+          {/* Novo Editor Cakto Quiz */}
+          <Route path="/cakto-editor" element={<CaktoEditorPage />} />
 
           {/* Página de Teste */}
           <Route path="/editor-test" element={<EditorTest />} />

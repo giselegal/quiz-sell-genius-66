@@ -90,12 +90,20 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
   funnelId,
   onSave,
 }) => {
-  const { questions: supabaseQuestions, strategicQuestions: supabaseStrategicQuestions, loading, error } =
-    useSupabaseQuestions();
-  
+  const {
+    questions: supabaseQuestions,
+    strategicQuestions: supabaseStrategicQuestions,
+    loading,
+    error,
+  } = useSupabaseQuestions();
+
   // Use local data as fallback if Supabase is empty or has errors
-  const questions = supabaseQuestions.length > 0 ? supabaseQuestions : clothingQuestions;
-  const strategicQuestions = supabaseStrategicQuestions.length > 0 ? supabaseStrategicQuestions : localStrategicQuestions;
+  const questions =
+    supabaseQuestions.length > 0 ? supabaseQuestions : clothingQuestions;
+  const strategicQuestions =
+    supabaseStrategicQuestions.length > 0
+      ? supabaseStrategicQuestions
+      : localStrategicQuestions;
   const { cssVariables } = useQuizStyles();
   const { saving, lastSaved, saveQuestion, autoSave, validateQuiz } =
     useQuizEditor();
@@ -142,21 +150,21 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
 
   // Generate stages from Supabase data or local fallback
   useEffect(() => {
-    console.log('📊 ModernVisualEditor - Data status:', {
+    console.log("📊 ModernVisualEditor - Data status:", {
       loading,
       error,
       supabaseQuestions: supabaseQuestions.length,
       supabaseStrategicQuestions: supabaseStrategicQuestions.length,
       questionsUsed: questions.length,
-      strategicQuestionsUsed: strategicQuestions.length
+      strategicQuestionsUsed: strategicQuestions.length,
     });
 
     if (!loading && (questions.length > 0 || strategicQuestions.length > 0)) {
-      console.log('✅ ModernVisualEditor - Generating stages with:', {
+      console.log("✅ ModernVisualEditor - Generating stages with:", {
         questionsCount: questions.length,
         strategicQuestionsCount: strategicQuestions.length,
         firstQuestion: questions[0]?.title,
-        firstStrategic: strategicQuestions[0]?.title
+        firstStrategic: strategicQuestions[0]?.title,
       });
 
       const newStages: EditorStage[] = [];
@@ -227,7 +235,14 @@ export const ModernVisualEditor: React.FC<ModernVisualEditorProps> = ({
       setStages(newStages);
       console.log("✅ Generated stages from Supabase:", newStages.length);
     }
-  }, [questions, strategicQuestions, loading, error, supabaseQuestions.length, supabaseStrategicQuestions.length]);
+  }, [
+    questions,
+    strategicQuestions,
+    loading,
+    error,
+    supabaseQuestions.length,
+    supabaseStrategicQuestions.length,
+  ]);
 
   // Generate canvas elements based on current stage
   useEffect(() => {

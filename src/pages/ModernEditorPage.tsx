@@ -3,7 +3,7 @@ import { ModernVisualEditor } from "@/components/visual-editor/ModernVisualEdito
 
 const ModernEditorPage: React.FC = () => {
   return (
-    <ModernVisualEditor 
+    <ModernVisualEditor
       funnelId="quiz-descubra-seu-estilo"
       onSave={(data) => {
         console.log("Quiz saved:", data);

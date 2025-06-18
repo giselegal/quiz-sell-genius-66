@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-18T14:00:04.679Z",
-  "components": 533,
+  "timestamp": "2025-06-18T16:38:24.788Z",
+  "components": 536,
   "files": [
     {
       "name": "App",
@@ -1978,6 +1978,16 @@
       "type": "typescript"
     },
     {
+      "name": "AdvancedVisualEditor",
+      "path": "src/components/visual-editor/AdvancedVisualEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CaktoQuizEditor",
+      "path": "src/components/visual-editor/CaktoQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "DraggableQuizEditor",
       "path": "src/components/visual-editor/DraggableQuizEditor.tsx",
       "type": "typescript"
@@ -2400,6 +2410,11 @@
     {
       "name": "AnalyticsPage",
       "path": "src/pages/AnalyticsPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CaktoEditorPage",
+      "path": "src/pages/CaktoEditorPage.tsx",
       "type": "typescript"
     },
     {
