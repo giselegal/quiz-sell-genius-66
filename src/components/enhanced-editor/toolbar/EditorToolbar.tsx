@@ -1,132 +1,86 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { 
   Eye, 
+  EyeOff, 
   Save, 
-  Download, 
-  Smartphone, 
-  Tablet, 
   Monitor, 
-  Maximize2
+  Tablet, 
+  Smartphone 
 } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
 
 interface EditorToolbarProps {
   isPreviewing: boolean;
-  viewportSize: 'sm' | 'md' | 'lg' | 'xl';
-  onViewportSizeChange: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
-  onTogglePreview: () => void;
-  onSave: () => void;
+  onPreviewToggle: () => void;
+  previewDevice: 'mobile' | 'tablet' | 'desktop';
+  onDeviceChange: (device: 'mobile' | 'tablet' | 'desktop') => void;
+  onSave?: () => void;
 }
 
-export function EditorToolbar({
+export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   isPreviewing,
-  viewportSize,
-  onViewportSizeChange,
-  onTogglePreview,
+  onPreviewToggle,
+  previewDevice,
+  onDeviceChange,
   onSave
-}: EditorToolbarProps) {
+}) => {
   return (
-    <div className="border-b border-[#B89B7A]/20 p-4 bg-white flex items-center justify-between">
-      <div className="flex items-center space-x-2">
-        <h1 className="text-xl font-semibold text-[#432818] mr-4">Editor Visual</h1>
-        
-        <TooltipProvider>
-          <div className="flex items-center bg-[#FAF9F7] rounded-md p-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onViewportSizeChange('sm')}
-                  className={cn(
-                    "w-8 h-8 rounded-md",
-                    viewportSize === 'sm' && "bg-white shadow-sm"
-                  )}
-                >
-                  <Smartphone className="w-4 h-4 text-[#8F7A6A]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Mobile (sm)</TooltipContent>
-            </Tooltip>
+    <div className="bg-white border-b border-gray-200 px-4 py-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Button
+            variant={isPreviewing ? "default" : "outline"}
+            size="sm"
+            onClick={onPreviewToggle}
+          >
+            {isPreviewing ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
+            {isPreviewing ? 'Editar' : 'Preview'}
+          </Button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 bg-gray-100 rounded-md p-1">
+            <Button
+              variant={previewDevice === 'mobile' ? "default" : "ghost"}
+              size="sm"
+              onClick={() => onDeviceChange('mobile')}
+              className="h-8 w-8 p-0"
+            >
+              <Smartphone className="w-4 h-4" />
+            </Button>
             
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onViewportSizeChange('md')}
-                  className={cn(
-                    "w-8 h-8 rounded-md",
-                    viewportSize === 'md' && "bg-white shadow-sm"
-                  )}
-                >
-                  <Tablet className="w-4 h-4 text-[#8F7A6A]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Tablet (md)</TooltipContent>
-            </Tooltip>
+            <Button
+              variant={previewDevice === 'tablet' ? "default" : "ghost"}
+              size="sm"
+              onClick={() => onDeviceChange('tablet')}
+              className="h-8 w-8 p-0"
+            >
+              <Tablet className="w-4 h-4" />
+            </Button>
             
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onViewportSizeChange('lg')}
-                  className={cn(
-                    "w-8 h-8 rounded-md",
-                    viewportSize === 'lg' && "bg-white shadow-sm"
-                  )}
-                >
-                  <Monitor className="w-4 h-4 text-[#8F7A6A]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Desktop (lg)</TooltipContent>
-            </Tooltip>
-            
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onViewportSizeChange('xl')}
-                  className={cn(
-                    "w-8 h-8 rounded-md",
-                    viewportSize === 'xl' && "bg-white shadow-sm"
-                  )}
-                >
-                  <Maximize2 className="w-4 h-4 text-[#8F7A6A]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Large Desktop (xl)</TooltipContent>
-            </Tooltip>
+            <Button
+              variant={previewDevice === 'desktop' ? "default" : "ghost"}
+              size="sm"
+              onClick={() => onDeviceChange('desktop')}
+              className="h-8 w-8 p-0"
+            >
+              <Monitor className="w-4 h-4" />
+            </Button>
           </div>
-        </TooltipProvider>
-      </div>
-      
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onTogglePreview}
-          className="border-[#B89B7A] text-[#432818]"
-        >
-          <Eye className="w-4 h-4 mr-2" />
-          {isPreviewing ? "Editar" : "Visualizar"}
-        </Button>
-        
-        <Button
-          variant="default"
-          size="sm"
-          onClick={onSave}
-          className="bg-[#B89B7A] hover:bg-[#8F7A6A] text-white"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          Salvar
-        </Button>
+          
+          {onSave && (
+            <>
+              <Separator orientation="vertical" className="h-6" />
+              <Button onClick={onSave} size="sm">
+                <Save className="w-4 h-4 mr-1" />
+                Salvar
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
-}
+};

@@ -37,6 +37,7 @@ interface QuizConfigContextType {
   cssVariables: CSSProperties;
   theme: QuizTheme;
   layout: QuizLayout;
+  updateTheme: (theme: Partial<QuizTheme>) => void;
 }
 
 const defaultConfig: QuizConfig = {
@@ -60,6 +61,18 @@ export const QuizConfigProvider: React.FC<{ children: ReactNode }> = ({ children
 
   const updateConfig = (updates: Partial<QuizConfig>) => {
     setConfig(prev => ({ ...prev, ...updates }));
+  };
+
+  const updateTheme = (themeUpdates: Partial<QuizTheme>) => {
+    const configUpdates: Partial<QuizConfig> = {};
+    if (themeUpdates.backgroundColor) configUpdates.backgroundColor = themeUpdates.backgroundColor;
+    if (themeUpdates.primaryColor) configUpdates.primaryColor = themeUpdates.primaryColor;
+    if (themeUpdates.secondaryColor) configUpdates.secondaryColor = themeUpdates.secondaryColor;
+    if (themeUpdates.accentColor) configUpdates.accentColor = themeUpdates.accentColor;
+    if (themeUpdates.textColor) configUpdates.textColor = themeUpdates.textColor;
+    if (themeUpdates.textSecondaryColor) configUpdates.textSecondaryColor = themeUpdates.textSecondaryColor;
+    
+    updateConfig(configUpdates);
   };
 
   const cssVariables: CSSProperties = {
@@ -92,7 +105,7 @@ export const QuizConfigProvider: React.FC<{ children: ReactNode }> = ({ children
   };
 
   return (
-    <QuizConfigContext.Provider value={{ config, updateConfig, cssVariables, theme, layout }}>
+    <QuizConfigContext.Provider value={{ config, updateConfig, cssVariables, theme, layout, updateTheme }}>
       {children}
     </QuizConfigContext.Provider>
   );
@@ -119,7 +132,7 @@ export const useQuizTheme = () => {
   if (!context) {
     throw new Error('useQuizTheme must be used within a QuizConfigProvider');
   }
-  return { theme: context.theme };
+  return { theme: context.theme, updateTheme: context.updateTheme };
 };
 
 export const useQuizBehavior = () => {

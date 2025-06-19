@@ -1,3 +1,4 @@
+
 import React from "react";
 import { EditorElement } from "@/types/editor";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,45 @@ interface ElementRendererProps {
   element: EditorElement;
   onAction?: (action: string, data?: unknown) => void;
 }
+
+// Type guards for different content types
+const isHeadingContent = (content: any): content is { text: string; level?: number } => {
+  return content && typeof content.text === 'string';
+};
+
+const isTextContent = (content: any): content is { text: string } => {
+  return content && typeof content.text === 'string';
+};
+
+const isButtonContent = (content: any): content is { text: string; action?: string } => {
+  return content && typeof content.text === 'string';
+};
+
+const isInputContent = (content: any): content is { 
+  label?: string; 
+  type?: string; 
+  placeholder?: string; 
+  required?: boolean; 
+  name?: string; 
+} => {
+  return content && typeof content === 'object';
+};
+
+const isImageContent = (content: any): content is { src: string; alt?: string } => {
+  return content && typeof content.src === 'string';
+};
+
+const isVideoContent = (content: any): content is { 
+  src: string; 
+  controls?: boolean; 
+  autoplay?: boolean; 
+} => {
+  return content && typeof content.src === 'string';
+};
+
+const isSpacerContent = (content: any): content is { height?: number } => {
+  return content && typeof content === 'object';
+};
 
 export const ElementRenderer: React.FC<ElementRendererProps> = ({
   element,
@@ -59,9 +99,10 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
 
   switch (element.type) {
     case "heading": {
-      const HeadingTag = `h${
-        element.content.level || 1
-      }` as keyof JSX.IntrinsicElements;
+      if (!isHeadingContent(element.content)) {
+        return <div>Invalid heading content</div>;
+      }
+      const HeadingTag = `h${element.content.level || 1}` as keyof JSX.IntrinsicElements;
       return (
         <HeadingTag style={getStyles()} className="font-bold">
           {element.content.text}
@@ -70,6 +111,9 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
     }
 
     case "text":
+      if (!isTextContent(element.content)) {
+        return <div>Invalid text content</div>;
+      }
       return (
         <p style={getStyles()} className="text-base">
           {element.content.text}
@@ -77,6 +121,9 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
       );
 
     case "button":
+      if (!isButtonContent(element.content)) {
+        return <div>Invalid button content</div>;
+      }
       return (
         <Button
           style={getStyles()}
@@ -90,6 +137,9 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
       );
 
     case "input":
+      if (!isInputContent(element.content)) {
+        return <div>Invalid input content</div>;
+      }
       return (
         <div className="space-y-2">
           {element.content.label && (
@@ -113,16 +163,22 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
       );
 
     case "image":
+      if (!isImageContent(element.content)) {
+        return <div>Invalid image content</div>;
+      }
       return (
         <img
           src={element.content.src}
-          alt={element.content.alt}
+          alt={element.content.alt || ''}
           style={getStyles()}
           className="max-w-full h-auto"
         />
       );
 
     case "video":
+      if (!isVideoContent(element.content)) {
+        return <div>Invalid video content</div>;
+      }
       return (
         <video
           src={element.content.src}
@@ -134,6 +190,9 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
       );
 
     case "spacer":
+      if (!isSpacerContent(element.content)) {
+        return <div>Invalid spacer content</div>;
+      }
       return (
         <div
           style={{
