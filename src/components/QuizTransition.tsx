@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "./ui/card";
 import { AnimatedWrapper } from "./ui/animated-wrapper";
@@ -10,12 +11,14 @@ interface QuizTransitionProps {
   onContinue: () => void;
   onAnswer: (response: UserResponse) => void;
   currentAnswers: string[];
+  onExit?: () => void;
 }
 
 const QuizTransition: React.FC<QuizTransitionProps> = ({
   onContinue,
   onAnswer,
   currentAnswers,
+  onExit,
 }) => {
   const { cssVariables } = useQuizStyles();
 
