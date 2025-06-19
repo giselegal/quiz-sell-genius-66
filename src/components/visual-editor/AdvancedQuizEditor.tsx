@@ -1100,7 +1100,17 @@ const AdvancedQuizEditor: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
 
-  const [editorState, setEditorState] = useState<QuizEditorState>({
+  const [editorState, setEditorState] = useState<QuizEditorState>(() => {
+    // Tentar carregar do localStorage primeiro
+    const savedState = loadFromLocalStorage();
+    if (savedState) {
+      console.log('🔄 Carregando estado salvo do localStorage');
+      return savedState;
+    }
+    
+    // Se não há estado salvo, usar o padrão
+    console.log('🆕 Usando estado padrão inicial');
+    return {
     steps: [
       {
         id: "step-1",
@@ -2217,7 +2227,22 @@ const AdvancedQuizEditor: React.FC = () => {
       logoSrc:
         "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2",
     },
+  }; // <- Retorno da função useState
   });
+
+  // Carregar estado do localStorage ao iniciar
+  useEffect(() => {
+    const loadedState = loadFromLocalStorage();
+    if (loadedState) {
+      console.log('🔄 Carregando estado do localStorage');
+      setEditorState(loadedState);
+    }
+  }, []);
+
+  // Salvar no localStorage sempre que o estado mudar
+  useEffect(() => {
+    saveToLocalStorage(editorState);
+  }, [editorState]);
 
   const currentStep =
     editorState.steps.find((step) => step.id === editorState.currentStepId) ||
@@ -2393,6 +2418,7 @@ const AdvancedQuizEditor: React.FC = () => {
     try {
       console.log("Salvando quiz...", editorState);
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      saveToLocalStorage(editorState); // Salvar no localStorage após um segundo
     } finally {
       setIsSaving(false);
     }
@@ -2408,8 +2434,32 @@ const AdvancedQuizEditor: React.FC = () => {
     }
   };
 
+  // --- Funções de Persistência ---
+  const STORAGE_KEY = 'quiz-editor-state';
+
+  const saveToLocalStorage = (state: QuizEditorState) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      console.log('✅ Estado salvo no localStorage');
+    } catch (error) {
+      console.error('❌ Erro ao salvar:', error);
+    }
+  };
+
+  const loadFromLocalStorage = (): QuizEditorState | null => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return null;
+      return JSON.parse(saved);
+    } catch (error) {
+      console.error('❌ Erro ao carregar:', error);
+      return null;
+    }
+  };
+
   return (
-    <div className="h-screen bg-zinc-950 flex flex-col font-sans antialiased">
+    <div className="flex flex-col w-screen h-screen overflow-hidden">
+      {/* Navbar */}
       <FunnelNavbar
         onSave={handleSave}
         onPublish={handlePublish}
@@ -2417,9 +2467,9 @@ const AdvancedQuizEditor: React.FC = () => {
         isPublishing={isPublishing}
       />
 
-      <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
-        {/* Coluna Esquerda: Navegação de Etapas e Adicionar Componentes */}
-        <div className="flex flex-col md:flex-row w-full md:w-[26rem] md:flex-shrink-0">
+      <div className="flex-1 flex overflow-hidden">
+        {/* Painel de Etapas */}
+        <div className="hidden md:block w-[13rem] border-r border-zinc-700 bg-zinc-950/50 backdrop-blur-lg p-4">
           <StepNavigationTabs
             steps={editorState.steps}
             currentStepId={editorState.currentStepId}
@@ -2428,29 +2478,42 @@ const AdvancedQuizEditor: React.FC = () => {
             onStepDelete={handleStepDelete}
             onAddStep={handleAddStep}
           />
-          <ComponentAddSidebar onComponentAdd={handleComponentAdd} />
         </div>
 
-        {/* Área do Canvas (Centro) */}
-        <CanvasArea
-          currentStep={currentStep}
-          headerConfig={editorState.headerConfig}
-          selectedComponentId={selectedComponentId}
-          onComponentSelect={handleComponentSelect}
-          onComponentAdd={handleComponentAdd}
-          onComponentDelete={handleComponentDelete}
-          onComponentMove={handleComponentMove}
-        />
+        {/* Área de Trabalho */}
+        <div className="flex-1 flex flex-col">
+          {/* Header da Etapa */}
+          <div className="flex items-center justify-between p-4 border-b border-zinc-700 bg-zinc-800">
+            <h2 className="text-xl font-bold text-zinc-100">
+              {currentStep?.name}
+            </h2>
+            <button
+              onClick={() => onComponentAdd("spacer")}
+              className="inline-flex items-center justify-center h-10 px-4 text-sm font-medium text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 transition-colors"
+            >
+              <Plus size={16} className="mr-2" />
+              Adicionar Espaçador
+            </button>
+          </div>
 
-        {/* Coluna Direita: Configuração de Componentes */}
-        <AdvancedConfigSidebar
-          selectedComponent={selectedComponent}
-          selectedComponentId={selectedComponentId}
-          headerConfig={editorState.headerConfig}
-          onComponentUpdate={handleComponentUpdate}
-          onStepRename={handleStepRename}
-          currentStep={currentStep}
-        />
+          {/* Área do Canvas */}
+          <div className="flex-1 p-3 md:p-5 overflow-y-auto">
+            <CanvasArea
+              currentStep={currentStep}
+              headerConfig={editorState.headerConfig}
+              selectedComponentId={selectedComponentId}
+              onComponentSelect={handleComponentSelect}
+              onComponentAdd={handleComponentAdd}
+              onComponentDelete={handleComponentDelete}
+              onComponentMove={handleComponentMove}
+            />
+          </div>
+        </div>
+
+        {/* Painel de Componentes (Mobile) */}
+        <div className="md:hidden w-full border-t border-zinc-700 bg-zinc-950/50 backdrop-blur-lg p-4">
+          <ComponentAddSidebar onComponentAdd={handleComponentAdd} />
+        </div>
       </div>
     </div>
   );
