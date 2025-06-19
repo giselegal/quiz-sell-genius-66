@@ -44,11 +44,53 @@
   outline: 1px dashed rgba(156, 163, 175, 0.5);
 }
 
-/* Quiz Options Styles */
+/* Quiz Options Styles - Baseado no design Lovable */
 .quiz-options-container {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
+/* Layout para opções com texto apenas (estilo Lovable) */
+.quiz-option-text-only {
+  width: 100%;
+  min-height: 64px;
+  padding: 16px;
+  border: 1px solid rgb(228, 228, 231);
+  background: white;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.quiz-option-text-only:hover {
+  background: rgb(147, 51, 234);
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.quiz-option-text-only .quiz-option-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+
+.quiz-option-text-only .quiz-option-text {
+  flex: 1;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Layout para opções com imagem (grid/card) */
 .quiz-options-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -60,6 +102,10 @@
   flex-direction: column;
   min-height: 100px;
   transition: all 0.2s ease;
+  border: 1px solid rgb(228, 228, 231);
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .quiz-option-card:hover {
@@ -90,10 +136,12 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 12px;
 }
 
 .quiz-option-text {
   line-height: 1.4;
+  color: rgb(51, 51, 51);
 }
 
 .quiz-option-text .custom-quill {

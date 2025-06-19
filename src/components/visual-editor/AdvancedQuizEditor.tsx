@@ -271,138 +271,105 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
           )}
           {component.type === "options" &&
             (() => {
-              const layout = component.props.layout || "default";
-              const direction = component.props.direction || "column";
+              const layoutType = component.props.layoutType || "text-only";
               const hasImages = component.props.choices?.some(
                 (choice: OptionChoice) => choice.imageSrc
               );
 
-              // Determinar layout automaticamente baseado no conteúdo
-              const shouldUseRowLayout =
-                layout === "flex" || (!hasImages && direction === "row");
+              // Determinar o layout automaticamente se não for especificado
+              const useImageLayout = layoutType === "with-images" || hasImages;
 
               return (
                 <div className="quiz-options-container">
                   {/* Renderizar opções reais se existirem */}
-                  {component.props.choices?.map(
-                    (choice: OptionChoice, index: number) => {
-                      if (shouldUseRowLayout) {
-                        // Layout horizontal para opções apenas texto
-                        return (
-                          <button
-                            key={index}
-                            className="quiz-option-row flex items-center w-full p-0 rounded-lg border border-zinc-600 bg-zinc-800 hover:bg-zinc-700 transition-all duration-200 mb-3 text-zinc-200"
-                          >
-                            {/* Círculo numerado à esquerda */}
-                            <div className="flex-shrink-0 w-12 h-12 m-3 bg-zinc-700 border border-zinc-600 rounded-full flex items-center justify-center">
-                              <span className="text-sm font-medium text-zinc-300">
-                                {String.fromCharCode(65 + index)}
-                              </span>
-                            </div>
-                            {/* Texto à direita */}
-                            <div className="flex-1 text-left pr-4">
-                              <div className="text-sm text-zinc-100 leading-tight">
-                                <div
-                                  className="custom-quill quill ql-editor quill-option"
-                                  dangerouslySetInnerHTML={{
-                                    __html: choice.text,
-                                  }}
-                                />
+                  {component.props.choices?.length > 0 ? (
+                    useImageLayout ? (
+                      // Layout em grid para opções com imagens
+                      <div 
+                        className="quiz-options-grid"
+                        style={{
+                          gridTemplateColumns: component.props.gridColumns 
+                            ? `repeat(${component.props.gridColumns}, 1fr)`
+                            : 'repeat(auto-fit, minmax(200px, 1fr))'
+                        }}
+                      >
+                        {component.props.choices.map(
+                          (choice: OptionChoice, index: number) => (
+                            <button
+                              key={index}
+                              className="quiz-option-card group"
+                            >
+                              {choice.imageSrc && (
+                                <div className="quiz-option-image-container">
+                                  <img
+                                    src={choice.imageSrc}
+                                    alt={choice.text}
+                                    className="w-full h-32 object-cover"
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).src =
+                                        "https://placehold.co/256x256/555/FFF?text=IMG";
+                                    }}
+                                  />
+                                </div>
+                              )}
+                              <div className="quiz-option-content">
+                                <div className="quiz-option-text">
+                                  <div
+                                    className="custom-quill quill ql-editor quill-option"
+                                    dangerouslySetInnerHTML={{
+                                      __html: choice.text,
+                                    }}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          </button>
-                        );
-                      } else {
-                        // Layout em card para opções com imagens
-                        const optionClass =
-                          component.props.layout === "compact"
-                            ? "quiz-option-card-compact"
-                            : "quiz-option-card";
-
-                        return (
-                          <button
-                            key={index}
-                            className={`${optionClass} relative rounded-lg border border-zinc-600 bg-zinc-800 hover:bg-zinc-700 transition-all duration-200 overflow-hidden group option-button`}
-                          >
-                            {choice.imageSrc && (
-                              <div className="quiz-option-image-container">
-                                <img
-                                  src={choice.imageSrc}
-                                  alt={choice.text}
-                                  className={`w-full object-cover ${
-                                    component.props.layout === "compact"
-                                      ? "h-24"
-                                      : "h-32"
-                                  }`}
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src =
-                                      "https://placehold.co/256x256/555/FFF?text=IMG";
-                                  }}
-                                />
+                            </button>
+                          )
+                        )}
+                      </div>
+                    ) : (
+                      // Layout vertical para opções apenas texto (estilo Lovable)
+                      <div className="flex flex-col gap-2">
+                        {component.props.choices.map(
+                          (choice: OptionChoice, index: number) => (
+                            <button
+                              key={index}
+                              className="quiz-option-text-only"
+                              style={{
+                                textAlign: component.props.alignment || 'left'
+                              }}
+                            >
+                              <div className="quiz-option-content">
+                                <div className="quiz-option-text">
+                                  <div
+                                    className="custom-quill quill ql-editor quill-option"
+                                    dangerouslySetInnerHTML={{
+                                      __html: choice.text,
+                                    }}
+                                  />
+                                </div>
                               </div>
-                            )}
-                            <div className="quiz-option-content p-3">
-                              <div className="quiz-option-text text-sm text-zinc-100 leading-tight">
-                                <div
-                                  className="custom-quill quill ql-editor quill-option"
-                                  dangerouslySetInnerHTML={{
-                                    __html: choice.text,
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </button>
-                        );
-                      }
-                    }
-                  ) || (
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )
+                  ) : (
                     // Placeholder se não houver opções definidas
-                    <div
-                      className={
-                        shouldUseRowLayout
-                          ? "space-y-3"
-                          : "grid grid-cols-1 sm:grid-cols-2 gap-3"
-                      }
-                    >
-                      {shouldUseRowLayout ? (
-                        // Placeholder para layout horizontal
-                        <>
-                          <button className="quiz-option-row flex items-center w-full p-0 rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-200">
-                            <div className="flex-shrink-0 w-12 h-12 m-3 bg-zinc-700 border border-zinc-600 rounded-full flex items-center justify-center">
-                              <span className="text-sm font-medium text-zinc-300">
-                                A
-                              </span>
-                            </div>
-                            <div className="flex-1 text-left pr-4">
-                              <div className="text-sm opacity-60">Opção 1</div>
-                            </div>
-                          </button>
-                          <button className="quiz-option-row flex items-center w-full p-0 rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-200">
-                            <div className="flex-shrink-0 w-12 h-12 m-3 bg-zinc-700 border border-zinc-600 rounded-full flex items-center justify-center">
-                              <span className="text-sm font-medium text-zinc-300">
-                                B
-                              </span>
-                            </div>
-                            <div className="flex-1 text-left pr-4">
-                              <div className="text-sm opacity-60">Opção 2</div>
-                            </div>
-                          </button>
-                        </>
-                      ) : (
-                        // Placeholder para layout em card
-                        <>
-                          <button className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-200 p-3 min-h-[100px] flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="text-sm opacity-60">Opção 1</div>
-                            </div>
-                          </button>
-                          <button className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-200 p-3 min-h-[100px] flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="text-sm opacity-60">Opção 2</div>
-                            </div>
-                          </button>
-                        </>
-                      )}
+                    <div className="flex flex-col gap-2">
+                      <button className="quiz-option-text-only">
+                        <div className="quiz-option-content">
+                          <div className="quiz-option-text">
+                            <div className="text-sm opacity-60">Opção 1</div>
+                          </div>
+                        </div>
+                      </button>
+                      <button className="quiz-option-text-only">
+                        <div className="quiz-option-content">
+                          <div className="quiz-option-text">
+                            <div className="text-sm opacity-60">Opção 2</div>
+                          </div>
+                        </div>
+                      </button>
                     </div>
                   )}
                 </div>

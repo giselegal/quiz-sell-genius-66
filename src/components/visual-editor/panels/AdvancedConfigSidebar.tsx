@@ -325,30 +325,59 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               {selectedComponent.type === "options" ? (
                 <>
                   <SelectControl
-                    label="Estilo das Opções"
-                    value={selectedComponent.props.layout || "default"}
+                    label="Tipo de Layout"
+                    value={selectedComponent.props.layoutType || "text-only"}
                     onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, { layout: value })
+                      onComponentUpdate(selectedComponent.id, { layoutType: value })
                     }
                     options={[
-                      { value: "default", label: "Cards (Grade)" },
-                      { value: "flex", label: "Lista Horizontal" },
-                      { value: "grid", label: "Grade Customizada" },
+                      { value: "text-only", label: "Apenas Texto (Lista)" },
+                      { value: "with-images", label: "Com Imagens (Cards)" },
                     ]}
                   />
+                  {selectedComponent.props.layoutType === "with-images" && (
+                    <SelectControl
+                      label="Colunas da Grade"
+                      value={selectedComponent.props.gridColumns || "2"}
+                      onChange={(value) =>
+                        onComponentUpdate(selectedComponent.id, { gridColumns: value })
+                      }
+                      options={[
+                        { value: "1", label: "1 Coluna" },
+                        { value: "2", label: "2 Colunas" },
+                        { value: "3", label: "3 Colunas" },
+                        { value: "4", label: "4 Colunas" },
+                      ]}
+                    />
+                  )}
                   <SelectControl
-                    label="Direção"
-                    value={selectedComponent.props.direction || "column"}
+                    label="Alinhamento"
+                    value={selectedComponent.props.alignment || "left"}
                     onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        direction: value,
-                      })
+                      onComponentUpdate(selectedComponent.id, { alignment: value })
                     }
                     options={[
-                      { value: "column", label: "Vertical" },
-                      { value: "row", label: "Horizontal" },
+                      { value: "left", label: "Esquerda" },
+                      { value: "center", label: "Centro" },
+                      { value: "right", label: "Direita" },
                     ]}
                   />
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="multipleChoice"
+                      checked={selectedComponent.props.multipleChoice || false}
+                      onChange={(e) =>
+                        onComponentUpdate(selectedComponent.id, {
+                          multipleChoice: e.target.checked,
+                        })
+                      }
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor="multipleChoice" className="text-sm text-zinc-300">
+                      Permitir múltipla seleção
+                    </label>
+                  </div>
                   <SelectControl
                     label="Alinhamento"
                     value={selectedComponent.props.alignment || "center"}
