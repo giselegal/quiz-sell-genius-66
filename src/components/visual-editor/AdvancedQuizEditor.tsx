@@ -1625,13 +1625,13 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "comp-1-1",
             type: "image",
             props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up",
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg",
               alt: "Imagem Principal",
             },
           },
           {
             id: "comp-1-2",
-            type: "text",
+            type: "heading",
             props: {
               text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
             },
@@ -1645,6 +1645,11 @@ const AdvancedQuizEditor: React.FC = () => {
           },
           {
             id: "comp-1-4",
+            type: "spacer",
+            props: {},
+          },
+          {
+            id: "comp-1-5",
             type: "input",
             props: {
               label: "Nome",
@@ -1653,9 +1658,18 @@ const AdvancedQuizEditor: React.FC = () => {
             },
           },
           {
-            id: "comp-1-5",
+            id: "comp-1-6",
             type: "button",
-            props: { buttonText: "Quero Descobrir meu Estilo Agora!" },
+            props: {
+              buttonText: "Quero Descobrir meu Estilo Agora!",
+            },
+          },
+          {
+            id: "comp-1-7",
+            type: "script",
+            props: {
+              text: "// Script para capturar dados do usuário e iniciar quiz\nconsole.log('Iniciando quiz de estilo');\n// Aqui pode ser adicionada lógica adicional",
+            },
           },
         ],
       },
