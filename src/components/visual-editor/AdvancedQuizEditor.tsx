@@ -408,225 +408,6 @@ const componentViewMap: {
 const generateUniqueId = (): string =>
   `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-// --- Componente CanvasArea ---
-interface CanvasAreaProps {
-  currentStep: QuizStep | null;
-  headerConfig: any;
-  selectedComponent: QuizComponent | null;
-  selectedComponentId: string | null;
-  onComponentSelect: (componentId: string | null) => void;
-  onComponentAdd: (type: string) => void;
-  onComponentUpdate: (componentId: string, newProps: Partial<QuizComponentProps>) => void;
-  onComponentDelete: (componentId: string) => void;
-  onComponentMove: (componentId: string, direction: 'up' | 'down') => void;
-}
-
-const CanvasArea: React.FC<CanvasAreaProps> = ({
-  currentStep,
-  headerConfig,
-  selectedComponent,
-  selectedComponentId,
-  onComponentSelect,
-  onComponentAdd,
-  onComponentUpdate,
-  onComponentDelete,
-  onComponentMove
-}) => {
-  if (!currentStep) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-zinc-900 text-zinc-400">
-        <div className="text-center">
-          <h3 className="text-lg font-medium mb-2">Nenhuma etapa selecionada</h3>
-          <p>Selecione uma etapa no painel lateral para começar a editar</p>
-        </div>
-      </div>
-    );
-  }
-
-  const renderComponent = (component: QuizComponent) => {
-    const isSelected = selectedComponentId === component.id;
-    
-    return (
-      <div
-        key={component.id}
-        className={`relative border-2 rounded-lg p-4 mb-4 cursor-pointer transition-all ${
-          isSelected 
-            ? 'border-blue-500 bg-blue-500/10' 
-            : 'border-transparent hover:border-zinc-600'
-        }`}
-        onClick={() => onComponentSelect(component.id)}
-      >
-        {/* Controles de componente */}
-        {isSelected && (
-          <div className="absolute -top-2 -right-2 flex gap-1">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onComponentMove(component.id, 'up');
-              }}
-              className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
-              title="Mover para cima"
-            >
-              ↑
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onComponentMove(component.id, 'down');
-              }}
-              className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
-              title="Mover para baixo"
-            >
-              ↓
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onComponentDelete(component.id);
-              }}
-              className="w-6 h-6 bg-red-500 text-white rounded text-xs flex items-center justify-center hover:bg-red-600"
-              title="Excluir"
-            >
-              ×
-            </button>
-          </div>
-        )}
-
-        {/* Renderização do componente baseado no tipo */}
-        <div className="text-zinc-200">
-          {component.type === 'heading' && (
-            <h2 className="text-xl font-bold">{component.props.text || 'Título'}</h2>
-          )}
-          {component.type === 'text' && (
-            <p>{component.props.text || 'Texto do parágrafo'}</p>
-          )}
-          {component.type === 'image' && (
-            <img 
-              src={component.props.src || 'https://placehold.co/400x200'} 
-              alt={component.props.alt || 'Imagem'} 
-              className="max-w-full h-auto rounded"
-            />
-          )}
-          {component.type === 'button' && (
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              {component.props.buttonText || 'Botão'}
-            </button>
-          )}
-          {component.type === 'input' && (
-            <div>
-              {component.props.label && (
-                <label className="block text-sm font-medium mb-1">{component.props.label}</label>
-              )}
-              <input 
-                type={component.props.inputType || 'text'}
-                placeholder={component.props.placeholder || 'Digite aqui...'}
-                className="w-full px-3 py-2 border border-zinc-600 rounded bg-zinc-800 text-white"
-                disabled
-              />
-            </div>
-          )}
-          {component.type === 'options' && (
-            <div>
-              <h3 className="font-medium mb-3">{component.props.text || 'Pergunta'}</h3>
-              <div className="space-y-2">
-                {component.props.choices?.map((choice: OptionChoice, index: number) => (
-                  <button 
-                    key={index}
-                    className="block w-full text-left px-4 py-2 border border-zinc-600 rounded hover:border-blue-500"
-                  >
-                    {choice.text}
-                  </button>
-                )) || (
-                  <button className="block w-full text-left px-4 py-2 border border-zinc-600 rounded">
-                    Opção de exemplo
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-          {component.type === 'video' && (
-            <div className="aspect-video bg-zinc-800 rounded flex items-center justify-center">
-              <span className="text-zinc-400">📹 Vídeo</span>
-            </div>
-          )}
-          {component.type === 'spacer' && (
-            <div className="h-8 border-dashed border border-zinc-600 rounded flex items-center justify-center">
-              <span className="text-zinc-500 text-sm">Espaçador</span>
-            </div>
-          )}
-        </div>
-
-        {/* Label do tipo de componente */}
-        <div className="absolute top-1 left-1 text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
-          {component.type}
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div className="flex-1 flex bg-zinc-900">
-      {/* Área de Canvas Principal */}
-      <div className="flex-1 p-6 overflow-y-auto">
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 min-h-[600px]">
-          {/* Header da página */}
-          {headerConfig && (
-            <div className="mb-6 pb-4 border-b border-gray-200">
-              <h1 className="text-xl font-bold text-gray-900">{headerConfig.title}</h1>
-              {headerConfig.subtitle && (
-                <p className="text-gray-600 mt-1">{headerConfig.subtitle}</p>
-              )}
-            </div>
-          )}
-
-          {/* Componentes da etapa atual */}
-          {currentStep.components.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <p className="mb-4">Esta etapa está vazia</p>
-              <button
-                onClick={() => onComponentAdd('heading')}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                Adicionar primeiro componente
-              </button>
-            </div>
-          ) : (
-            <div>
-              {currentStep.components.map(renderComponent)}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Painel de Adicionar Componentes */}
-      <div className="w-64 bg-zinc-800 border-l border-zinc-700 p-4">
-        <h3 className="text-white font-medium mb-4">Adicionar Componente</h3>
-        <div className="space-y-2">
-          {[
-            { type: 'heading', label: '📝 Título', desc: 'Cabeçalho principal' },
-            { type: 'text', label: '📄 Texto', desc: 'Parágrafo de texto' },
-            { type: 'image', label: '🖼️ Imagem', desc: 'Imagem ou foto' },
-            { type: 'button', label: '🔘 Botão', desc: 'Botão clicável' },
-            { type: 'input', label: '📝 Campo', desc: 'Campo de entrada' },
-            { type: 'options', label: '☑️ Opções', desc: 'Múltipla escolha' },
-            { type: 'video', label: '🎥 Vídeo', desc: 'Vídeo incorporado' },
-            { type: 'spacer', label: '📏 Espaço', desc: 'Espaçamento' },
-          ].map((component) => (
-            <button
-              key={component.type}
-              onClick={() => onComponentAdd(component.type)}
-              className="w-full text-left p-3 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white transition-colors"
-            >
-              <div className="font-medium text-sm">{component.label}</div>
-              <div className="text-xs text-zinc-400 mt-1">{component.desc}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // --- Componentes Principais do Editor (UI Layout) ---
 
 /**
@@ -1323,6 +1104,225 @@ const FunnelToolbarSidebar: React.FC<{
           <path d="M5 4h1a3 3 0 0 1 3 3 3 3 0 0 1 3-3h1"></path>
           <path d="M13 20h-1a3 3 0 0 1-3-3 3 3 0 0 1-3 3H5"></path>
           <path d="M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1"></path>
+          <path d="M13 8h7a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7"></path>
+          <path d="M9 7v10"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "Espaçador",
+      type: "spacer",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-proportions h-4 w-4"
+        >
+          <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+          <path d="M12 9v11"></path>
+          <path d="M2 9h13a2 2 0 0 1 2 2v9"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "FAQ",
+      type: "faq",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-message-circle-question h-4 w-4"
+        >
+          <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <path d="M12 17h.01"></path>
+        </svg>
+      ),
+      isNew: true,
+    },
+    {
+      name: "Gráficos",
+      type: "graphics",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-chart-no-axes-column-increasing h-4 w-4"
+        >
+          <line x1="12" x2="12" y1="20" y2="10"></line>
+          <line x1="18" x2="18" y1="20" y2="4"></line>
+          <line x1="6" x2="6" y1="20" y2="16"></line>
+        </svg>
+      ),
+    },
+    {
+      name: "Imagem",
+      type: "image",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-images h-4 w-4"
+        >
+          <path d="M18 22H4a2 2 0 0 1-2-2V6"></path>
+          <path d="m22 13-1.296-1.296a2.41 2.41 0 0 0-3.408 0L11 18"></path>
+          <circle cx="12" cy="8" r="2"></circle>
+          <rect width="16" height="16" x="6" y="2" rx="2"></rect>
+        </svg>
+      ),
+    },
+    {
+      name: "Lista",
+      type: "list",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-list h-4 w-4"
+        >
+          <line x1="8" x2="21" y1="6" y2="6"></line>
+          <line x1="8" x2="21" y1="12" y2="12"></line>
+          <line x1="8" x2="21" y1="18" y2="18"></line>
+          <line x1="3" x2="3.01" y1="6" y2="6"></line>
+          <line x1="3" x2="3.01" y1="12" y2="12"></line>
+          <line x1="3" x2="3.01" y1="18" y2="18"></line>
+        </svg>
+      ),
+      isNew: true,
+    },
+    {
+      name: "Marquise",
+      type: "marquee",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-arrow-right-left h-4 w-4"
+        >
+          <path d="m16 3 4 4-4 4"></path>
+          <path d="M20 7H4"></path>
+          <path d="m8 21-4-4 4-4"></path>
+          <path d="M4 17h16"></path>
+        </svg>
+      ),
+      isNew: true,
+    },
+    {
+      name: "Nível",
+      type: "level",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-sliders-horizontal h-4 w-4"
+        >
+          <line x1="21" x2="14" y1="4" y2="4"></line>
+          <line x1="10" x2="3" y1="4" y2="4"></line>
+          <line x1="21" x2="12" y1="12" y2="12"></line>
+          <line x1="8" x2="3" y1="12" y2="12"></line>
+          <line x1="21" x2="16" y1="20" y2="20"></line>
+          <line x1="12" x2="3" y1="20" y2="20"></line>
+          <line x1="14" x2="14" y1="2" y2="6"></line>
+          <line x1="8" x2="8" y1="10" y2="14"></line>
+          <line x1="16" x2="16" y1="18" y2="22"></line>
+        </svg>
+      ),
+    },
+    {
+      name: "Opções",
+      type: "options",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-rows3 h-4 w-4"
+        >
+          <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+          <path d="M21 9H3"></path>
+          <path d="M21 15H3"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "Preço",
+      type: "price",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-circle-dollar-sign h-4 w-4"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+          <path d="M12 18V6"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "Script",
       type: "customComponent",
       icon: (
         <svg
