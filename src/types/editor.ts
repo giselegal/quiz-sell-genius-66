@@ -72,7 +72,7 @@ export interface QuizOption {
   points?: number;
 }
 
-// Editor Block types
+// Editor Block types - Updated to be consistent
 export type EditorBlockType = 
   | 'header'
   | 'hero-section'
@@ -91,14 +91,22 @@ export type EditorBlockType =
   | 'bonus'
   | 'result-header'
   | 'transition'
-  | 'final-cta';
+  | 'final-cta'
+  | 'button'
+  | 'video'
+  | 'spacer'
+  | 'form';
 
-export interface EditorBlock {
+// Unified Block interface - this replaces the separate Block and EditorBlock
+export interface Block {
   id: string;
   type: EditorBlockType;
   content: any;
   order: number;
 }
+
+// Alias for backwards compatibility
+export type EditorBlock = Block;
 
 // Editable content type for legacy compatibility
 export interface EditableContent {
@@ -140,18 +148,19 @@ export interface EditorElement {
   styles: any;
 }
 
-export interface Block {
-  id: string;
-  type: string;
-  content: any;
-  order: number;
-}
-
-// Editor actions
+// Updated Editor actions to include all the actions being used
 export type EditorAction = 
   | { type: 'ADD_BLOCK'; payload: Block }
   | { type: 'UPDATE_BLOCK'; payload: { id: string; content: any } }
   | { type: 'DELETE_BLOCK'; payload: { id: string } }
   | { type: 'REORDER_BLOCKS'; payload: { sourceIndex: number; destinationIndex: number } }
   | { type: 'SELECT_ELEMENT'; payload: string }
-  | { type: 'SET_BLOCKS'; payload: Block[] };
+  | { type: 'SET_BLOCKS'; payload: Block[] }
+  | { type: 'ADD_STEP'; payload: EditorStep }
+  | { type: 'UPDATE_STEP'; payload: { id: string; updates: Partial<EditorStep> } }
+  | { type: 'DELETE_STEP'; payload: { id: string } }
+  | { type: 'SET_CURRENT_STEP'; payload: string }
+  | { type: 'ADD_ELEMENT'; payload: { stepId: string; element: EditorElement } }
+  | { type: 'UPDATE_ELEMENT'; payload: { stepId: string; elementId: string; updates: Partial<EditorElement> } }
+  | { type: 'DELETE_ELEMENT'; payload: { stepId: string; elementId: string } }
+  | { type: 'REORDER_ELEMENTS'; payload: { stepId: string; elementIds: string[] } };

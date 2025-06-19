@@ -38,7 +38,8 @@ export const QuizConfigTest: React.FC = () => {
   };
 
   const handleExport = () => {
-    const configJson = exportConfig();
+    const configData = exportConfig();
+    const configJson = JSON.stringify(configData, null, 2);
     navigator.clipboard.writeText(configJson);
     console.log("Configuração exportada para clipboard:", configJson);
   };
