@@ -7,11 +7,13 @@ O sistema de configuração de opções no **AdvancedQuizEditor** foi aprimorado
 ## 🔍 Detecção Automática de Tipo
 
 ### Questões com Texto + Imagem
+
 - **Detecção**: Verifica se pelo menos uma opção possui propriedade `imageSrc`
 - **Layout Padrão**: Grid 2 colunas
 - **Controles Específicos**: Proporção de imagem, posição, altura, raio da borda
 
 ### Questões Apenas com Texto
+
 - **Detecção**: Nenhuma opção possui `imageSrc`
 - **Layout Padrão**: Grid 1 coluna ou lista
 - **Controles Específicos**: Foco em tipografia e espaçamento
@@ -19,9 +21,11 @@ O sistema de configuração de opções no **AdvancedQuizEditor** foi aprimorado
 ## ⚙️ Controles de Layout Disponíveis
 
 ### 1. Disposição da Grade
+
 ```typescript
-gridLayout: "grid-1" | "grid-2" | "grid-3" | "grid-4" | "flex" | "list"
+gridLayout: "grid-1" | "grid-2" | "grid-3" | "grid-4" | "flex" | "list";
 ```
+
 - **grid-1**: Uma coluna (ideal para texto longo)
 - **grid-2**: Duas colunas (padrão para imagens)
 - **grid-3**: Três colunas (cards compactos)
@@ -32,9 +36,11 @@ gridLayout: "grid-1" | "grid-2" | "grid-3" | "grid-4" | "flex" | "list"
 ### 2. Controles para Imagens
 
 #### Proporção da Imagem
+
 ```typescript
-imageRatio: "square" | "landscape" | "portrait" | "wide" | "auto"
+imageRatio: "square" | "landscape" | "portrait" | "wide" | "auto";
 ```
+
 - **square**: 1:1 (256x256px)
 - **landscape**: 16:9 (paisagem)
 - **portrait**: 4:5 (retrato)
@@ -42,9 +48,11 @@ imageRatio: "square" | "landscape" | "portrait" | "wide" | "auto"
 - **auto**: Proporção original
 
 #### Posição da Imagem
+
 ```typescript
-imagePosition: "top" | "bottom" | "left" | "right" | "background"
+imagePosition: "top" | "bottom" | "left" | "right" | "background";
 ```
+
 - **top**: Imagem acima do texto (padrão)
 - **bottom**: Imagem abaixo do texto
 - **left**: Imagem à esquerda do texto
@@ -52,23 +60,29 @@ imagePosition: "top" | "bottom" | "left" | "right" | "background"
 - **background**: Imagem como fundo com texto sobreposto
 
 #### Altura da Imagem
+
 ```typescript
-imageHeight: number // 80-400px
+imageHeight: number; // 80-400px
 ```
+
 Controla a altura fixa das imagens (padrão: 160px)
 
 #### Raio da Borda
+
 ```typescript
-imageBorderRadius: number // 0-24px
+imageBorderRadius: number; // 0-24px
 ```
+
 Arredondamento das bordas das imagens (padrão: 8px)
 
 ### 3. Controles de Texto
 
 #### Alinhamento
+
 ```typescript
-textAlignment: "left" | "center" | "right" | "justify"
+textAlignment: "left" | "center" | "right" | "justify";
 ```
+
 - **left**: Alinhado à esquerda
 - **center**: Centralizado (padrão)
 - **right**: Alinhado à direita
@@ -77,29 +91,35 @@ textAlignment: "left" | "center" | "right" | "justify"
 ### 4. Espaçamento
 
 #### Espaçamento entre Opções
+
 ```typescript
-optionSpacing: number // 0-24px
+optionSpacing: number; // 0-24px
 ```
+
 - **Padrão c/ Imagens**: 8px
 - **Padrão Texto**: 4px
 
 #### Padding da Opção
+
 ```typescript
-optionPadding: number // 4-32px
+optionPadding: number; // 4-32px
 ```
+
 - **Padrão c/ Imagens**: 12px
 - **Padrão Texto**: 16px
 
 ### 5. Layout Responsivo
 
 #### Controle por Dispositivo
+
 ```typescript
-desktopColumns: "1" | "2" | "3" | "4"
-tabletColumns: "1" | "2" | "3"
-mobileColumns: "1" | "2"
+desktopColumns: "1" | "2" | "3" | "4";
+tabletColumns: "1" | "2" | "3";
+mobileColumns: "1" | "2";
 ```
 
 **Breakpoints:**
+
 - **Desktop**: > 1024px
 - **Tablet**: 768px - 1024px
 - **Mobile**: < 768px
@@ -107,6 +127,7 @@ mobileColumns: "1" | "2"
 ## 🎨 Exemplos de Configuração
 
 ### Questão com Imagens (E-commerce)
+
 ```javascript
 {
   gridLayout: "grid-2",
@@ -124,6 +145,7 @@ mobileColumns: "1" | "2"
 ```
 
 ### Questão de Texto (Quiz Conhecimento)
+
 ```javascript
 {
   gridLayout: "list",
@@ -137,6 +159,7 @@ mobileColumns: "1" | "2"
 ```
 
 ### Questão com Muitas Opções (Múltipla Escolha)
+
 ```javascript
 {
   gridLayout: "grid-3",
@@ -162,20 +185,24 @@ mobileColumns: "1" | "2"
 ## 🎯 Principais Melhorias
 
 ### ✅ Detecção Automática
+
 - Identifica automaticamente questões com/sem imagens
 - Ajusta controles e valores padrão baseado no tipo
 
 ### ✅ Interface Intuitiva
+
 - Indicador visual do tipo detectado
 - Controles organizados por categoria
 - Preview em tempo real das mudanças
 
 ### ✅ Responsividade Avançada
+
 - Configuração separada por dispositivo
 - Breakpoints otimizados para diferentes telas
 - Layout adaptativo baseado no conteúdo
 
 ### ✅ Flexibilidade Total
+
 - Suporte a múltiplos layouts (grid, flex, list)
 - Controles granulares de espaçamento e posicionamento
 - CSS customizável através de propriedades
@@ -191,6 +218,7 @@ mobileColumns: "1" | "2"
 ---
 
 **Localização dos Arquivos:**
+
 - **Sidebar Principal**: `/src/components/visual-editor/panels/AdvancedConfigSidebar.tsx`
 - **Editor Principal**: `/src/components/visual-editor/AdvancedQuizEditor.tsx`
 - **Estilos**: `/src/styles/advanced-editor.css`

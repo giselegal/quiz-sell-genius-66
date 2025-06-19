@@ -345,7 +345,7 @@ select:focus {
 
 /* Estilos para textarea com syntax highlighting */
 .code-textarea {
-  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  font-family: "Fira Code", "Monaco", "Consolas", monospace;
   font-size: 0.875rem;
   line-height: 1.5;
   tab-size: 2;
@@ -397,7 +397,7 @@ select:focus {
   background: #374151;
   color: #f9fafb;
   font-size: 0.875rem;
-  font-family: 'Fira Code', monospace;
+  font-family: "Fira Code", monospace;
 }
 
 /* Quiz Options Responsive Grid Layouts */
@@ -436,7 +436,7 @@ select:focus {
   .quiz-options-grid-1-mobile {
     grid-template-columns: 1fr !important;
   }
-  
+
   .quiz-options-grid-2-mobile {
     grid-template-columns: repeat(2, 1fr) !important;
   }
@@ -446,11 +446,11 @@ select:focus {
   .quiz-options-grid-1-tablet {
     grid-template-columns: 1fr !important;
   }
-  
+
   .quiz-options-grid-2-tablet {
     grid-template-columns: repeat(2, 1fr) !important;
   }
-  
+
   .quiz-options-grid-3-tablet {
     grid-template-columns: repeat(3, 1fr) !important;
   }
@@ -460,15 +460,15 @@ select:focus {
   .quiz-options-grid-1-desktop {
     grid-template-columns: 1fr !important;
   }
-  
+
   .quiz-options-grid-2-desktop {
     grid-template-columns: repeat(2, 1fr) !important;
   }
-  
+
   .quiz-options-grid-3-desktop {
     grid-template-columns: repeat(3, 1fr) !important;
   }
-  
+
   .quiz-options-grid-4-desktop {
     grid-template-columns: repeat(4, 1fr) !important;
   }
@@ -538,11 +538,11 @@ select:focus {
   .config-card {
     margin-bottom: 1rem;
   }
-  
+
   .field-group {
     margin-bottom: 1rem;
   }
-  
+
   .slider-value {
     font-size: 0.875rem;
   }

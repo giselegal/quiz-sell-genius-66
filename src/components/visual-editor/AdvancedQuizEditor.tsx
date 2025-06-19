@@ -274,17 +274,17 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               <h3 className="font-medium mb-3 text-zinc-100">
                 {component.props.text || "Pergunta"}
               </h3>
-              <div 
+              <div
                 className={`quiz-options-grid ${(() => {
-                  const layout = component.props.gridLayout || 'grid-2';
-                  const mobileColumns = component.props.mobileColumns || '1';
-                  const tabletColumns = component.props.tabletColumns || '2';
-                  const desktopColumns = component.props.desktopColumns || '2';
-                  
+                  const layout = component.props.gridLayout || "grid-2";
+                  const mobileColumns = component.props.mobileColumns || "1";
+                  const tabletColumns = component.props.tabletColumns || "2";
+                  const desktopColumns = component.props.desktopColumns || "2";
+
                   return `quiz-options-${layout} quiz-options-grid-${mobileColumns}-mobile quiz-options-grid-${tabletColumns}-tablet quiz-options-grid-${desktopColumns}-desktop`;
                 })()}`}
                 style={{
-                  gap: `${component.props.optionSpacing || 8}px`
+                  gap: `${component.props.optionSpacing || 8}px`,
                 }}
               >
                 {component.props.choices?.map(
@@ -297,21 +297,34 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                         borderRadius: `${component.props.borderRadius || 8}px`,
                         backgroundColor: component.props.backgroundColor,
                         color: component.props.textColor,
-                        boxShadow: component.props.shadow ? `0 ${component.props.shadow * 2}px ${component.props.shadow * 4}px rgba(0,0,0,0.3)` : undefined
+                        boxShadow: component.props.shadow
+                          ? `0 ${component.props.shadow * 2}px ${
+                              component.props.shadow * 4
+                            }px rgba(0,0,0,0.3)`
+                          : undefined,
                       }}
                     >
                       {choice.imageSrc && (
-                        <div 
+                        <div
                           className={`quiz-option-image-container ${(() => {
-                            const ratio = component.props.imageRatio || 'square';
+                            const ratio =
+                              component.props.imageRatio || "square";
                             return `image-ratio-${ratio}`;
                           })()}`}
                           style={{
                             height: `${component.props.imageHeight || 160}px`,
-                            borderRadius: `${component.props.imageBorderRadius || 8}px`,
-                            overflow: 'hidden',
-                            marginBottom: component.props.imagePosition === 'top' ? '8px' : '0',
-                            marginTop: component.props.imagePosition === 'bottom' ? '8px' : '0',
+                            borderRadius: `${
+                              component.props.imageBorderRadius || 8
+                            }px`,
+                            overflow: "hidden",
+                            marginBottom:
+                              component.props.imagePosition === "top"
+                                ? "8px"
+                                : "0",
+                            marginTop:
+                              component.props.imagePosition === "bottom"
+                                ? "8px"
+                                : "0",
                           }}
                         >
                           <img
@@ -319,7 +332,9 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                             alt={choice.text}
                             className="w-full h-full object-cover"
                             style={{
-                              borderRadius: `${component.props.imageBorderRadius || 8}px`
+                              borderRadius: `${
+                                component.props.imageBorderRadius || 8
+                              }px`,
                             }}
                             onError={(e) => {
                               (e.target as HTMLImageElement).src =
@@ -329,14 +344,15 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                         </div>
                       )}
                       <div className="quiz-option-content">
-                        <div 
+                        <div
                           className={`quiz-option-text text-sm leading-tight ${(() => {
-                            const alignment = component.props.textAlignment || 'center';
+                            const alignment =
+                              component.props.textAlignment || "center";
                             return `text-align-${alignment}`;
                           })()}`}
                           style={{
                             fontSize: `${component.props.fontSize || 14}px`,
-                            color: component.props.textColor || '#f9fafb'
+                            color: component.props.textColor || "#f9fafb",
                           }}
                         >
                           <div

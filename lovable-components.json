@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-19T17:08:28.547Z",
-  "components": 544,
+  "timestamp": "2025-06-19T17:12:48.983Z",
+  "components": 546,
   "files": [
     {
       "name": "App",
@@ -85,6 +85,11 @@
     {
       "name": "QuizPage",
       "path": "src/components/QuizPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizProductionView",
+      "path": "src/components/QuizProductionView.tsx",
       "type": "typescript"
     },
     {
@@ -2585,6 +2590,11 @@
     {
       "name": "QuizPage",
       "path": "src/pages/QuizPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizProductionPage",
+      "path": "src/pages/QuizProductionPage.tsx",
       "type": "typescript"
     },
     {
