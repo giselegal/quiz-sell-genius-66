@@ -806,6 +806,21 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                               max={400}
                               unit="px"
                             />
+
+                            <SliderControl
+                              label="Borda da Imagem"
+                              value={
+                                selectedComponent.props.imageBorderRadius || 8
+                              }
+                              onChange={(value) =>
+                                onComponentUpdate(selectedComponent.id, {
+                                  imageBorderRadius: value,
+                                })
+                              }
+                              min={0}
+                              max={24}
+                              unit="px"
+                            />
                           </>
                         )}
 

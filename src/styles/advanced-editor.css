@@ -71,11 +71,14 @@
 .quiz-option-image-container {
   width: 100%;
   overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .quiz-option-image-container img {
   width: 100%;
-  height: 128px;
   object-fit: cover;
   transition: transform 0.2s ease;
 }
@@ -486,37 +489,68 @@ select:focus {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.quiz-option-image-container {
-  position: relative;
-  overflow: hidden;
-}
-
-.quiz-option-image-container img {
-  transition: transform 0.3s ease;
-}
-
 .quiz-option-card:hover .quiz-option-image-container img {
   transform: scale(1.05);
 }
 
-/* Image aspect ratios */
-.image-ratio-square {
+/* === QUIZ OPTION IMAGES - Configurações Centralizadas === */
+
+/* Container da imagem */
+.quiz-option-image-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+
+/* Imagem dentro do container */
+.quiz-option-image-container img {
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+/* Hover effect na imagem */
+.quiz-option-card:hover .quiz-option-image-container img {
+  transform: scale(1.05);
+}
+
+/* === PROPORÇÕES DAS IMAGENS === */
+/* Quando usando aspect-ratio (sem altura específica) */
+.image-ratio-square .quiz-option-image-container {
   aspect-ratio: 1 / 1;
 }
 
-.image-ratio-landscape {
+.image-ratio-landscape .quiz-option-image-container {
   aspect-ratio: 16 / 9;
 }
 
-.image-ratio-portrait {
+.image-ratio-portrait .quiz-option-image-container {
   aspect-ratio: 4 / 5;
 }
 
-.image-ratio-wide {
+.image-ratio-wide .quiz-option-image-container {
   aspect-ratio: 21 / 9;
 }
 
-/* Text alignment classes */
+.image-ratio-auto .quiz-option-image-container {
+  aspect-ratio: auto;
+}
+
+/* === ALTURA ESPECÍFICA VIA STYLE INLINE === */
+/* Quando altura específica é definida via sidebar, override aspect-ratio */
+.quiz-option-image-container[style*="height"] {
+  aspect-ratio: unset !important;
+  height: var(--configured-height) !important;
+}
+
+.quiz-option-image-container[style*="height"] img {
+  height: 100% !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
 .text-align-left {
   text-align: left;
 }
