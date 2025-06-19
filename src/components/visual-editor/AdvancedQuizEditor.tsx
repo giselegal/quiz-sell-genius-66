@@ -1104,1137 +1104,1137 @@ const AdvancedQuizEditor: React.FC = () => {
     // Tentar carregar do localStorage primeiro
     const savedState = loadFromLocalStorage();
     if (savedState) {
-      console.log('🔄 Carregando estado salvo do localStorage');
+      console.log("🔄 Carregando estado salvo do localStorage");
       return savedState;
     }
-    
+
     // Se não há estado salvo, usar o padrão
-    console.log('🆕 Usando estado padrão inicial');
+    console.log("🆕 Usando estado padrão inicial");
     return {
-    steps: [
-      {
-        id: "step-1",
-        name: "PÁGINA INICIAL",
-        components: [
-          {
-            id: "comp-1-1",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg",
-              alt: "Imagem Principal",
+      steps: [
+        {
+          id: "step-1",
+          name: "PÁGINA INICIAL",
+          components: [
+            {
+              id: "comp-1-1",
+              type: "image",
+              props: {
+                src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg",
+                alt: "Imagem Principal",
+              },
             },
-          },
-          {
-            id: "comp-1-2",
-            type: "heading",
-            props: {
-              text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+            {
+              id: "comp-1-2",
+              type: "heading",
+              props: {
+                text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+              },
             },
-          },
-          {
-            id: "comp-1-3",
-            type: "text",
-            props: {
-              text: "Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.",
+            {
+              id: "comp-1-3",
+              type: "text",
+              props: {
+                text: "Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.",
+              },
             },
-          },
-          {
-            id: "comp-1-4",
-            type: "spacer",
-            props: {},
-          },
-          {
-            id: "comp-1-5",
-            type: "input",
-            props: {
-              label: "Nome",
-              placeholder: "Digite seu nome aqui..,",
-              required: true,
+            {
+              id: "comp-1-4",
+              type: "spacer",
+              props: {},
             },
-          },
-          {
-            id: "comp-1-6",
-            type: "button",
-            props: {
-              buttonText: "Quero Descobrir meu Estilo Agora!",
+            {
+              id: "comp-1-5",
+              type: "input",
+              props: {
+                label: "Nome",
+                placeholder: "Digite seu nome aqui..,",
+                required: true,
+              },
             },
-          },
-          {
-            id: "comp-1-7",
-            type: "script",
-            props: {
-              text: "// Script para capturar dados do usuário e iniciar quiz\nconsole.log('Iniciando quiz de estilo');\n// Aqui pode ser adicionada lógica adicional",
+            {
+              id: "comp-1-6",
+              type: "button",
+              props: {
+                buttonText: "Quero Descobrir meu Estilo Agora!",
+              },
             },
-          },
-        ],
+            {
+              id: "comp-1-7",
+              type: "script",
+              props: {
+                text: "// Script para capturar dados do usuário e iniciar quiz\nconsole.log('Iniciando quiz de estilo');\n// Aqui pode ser adicionada lógica adicional",
+              },
+            },
+          ],
+        },
+        {
+          id: "step-2",
+          name: "QUESTÃO 1",
+          components: [
+            {
+              id: "comp-2-1",
+              type: "heading",
+              props: { text: "QUAL O SEU TIPO DE ROUPA FAVORITA?" },
+            },
+            {
+              id: "comp-2-2",
+              type: "options",
+              props: {
+                text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "Conforto, leveza e praticidade no vestir"',
+                    value: "natural",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                  },
+                  {
+                    text: 'Clássico: "Discrição, caimento clássico e sobriedade"',
+                    value: "classico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                  },
+                  {
+                    text: 'Contemporâneo: "Praticidade com um toque de estilo atual"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                  },
+                  {
+                    text: 'Elegante: "Elegância refinada, moderna e sem exageros"',
+                    value: "elegante",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                  },
+                  {
+                    text: 'Romântico: "Delicadeza em tecidos suaves e fluidos"',
+                    value: "romantico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+                  },
+                  {
+                    text: 'Sexy: "Sensualidade com destaque para o corpo"',
+                    value: "sexy",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+                  },
+                  {
+                    text: 'Dramático: "Impacto visual com peças estruturadas e assimétricas"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+                  },
+                  {
+                    text: 'Criativo: "Mix criativo com formas ousadas e originais"',
+                    value: "criativo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-3",
+          name: "QUESTÃO 2",
+          components: [
+            {
+              id: "comp-3-1",
+              type: "heading",
+              props: { text: "RESUMA A SUA PERSONALIDADE:" },
+            },
+            {
+              id: "comp-3-2",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "Informal, espontânea, alegre, essencialista"',
+                    value: "natural",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Clássico: "Conservadora, séria, organizada"',
+                    value: "classico",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Contemporâneo: "Informada, ativa, prática"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Elegante: "Exigente, sofisticada, seletiva"',
+                    value: "elegante",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Romântico: "Feminina, meiga, delicada, sensível"',
+                    value: "romantico",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Sexy: "Glamorosa, vaidosa, sensual"',
+                    value: "sexy",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Dramático: "Cosmopolita, moderna e audaciosa"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Criativo: "Exótica, aventureira, livre"',
+                    value: "criativo",
+                    scoreValue: 1,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-4",
+          name: "QUESTÃO 3",
+          components: [
+            {
+              id: "comp-4-1",
+              type: "heading",
+              props: { text: "QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?" },
+            },
+            {
+              id: "comp-4-2",
+              type: "options",
+              props: {
+                text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "Visual leve, despojado e natural"',
+                    value: "natural",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+                  },
+                  {
+                    text: 'Clássico: "Visual clássico e tradicional"',
+                    value: "classico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+                  },
+                  {
+                    text: 'Contemporâneo: "Visual casual com toque atual"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+                  },
+                  {
+                    text: 'Elegante: "Visual refinado e imponente"',
+                    value: "elegante",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+                  },
+                  {
+                    text: 'Romântico: "Visual romântico, feminino e delicado"',
+                    value: "romantico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+                  },
+                  {
+                    text: 'Sexy: "Visual sensual, com saia justa e decote"',
+                    value: "sexy",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+                  },
+                  {
+                    text: 'Dramático: "Visual marcante e urbano (jeans + jaqueta)"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+                  },
+                  {
+                    text: 'Criativo: "Visual criativo, colorido e ousado"',
+                    value: "criativo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-5",
+          name: "QUESTÃO 4",
+          components: [
+            {
+              id: "comp-5-1",
+              type: "heading",
+              props: { text: "QUAIS ESTAMPAS VOCÊ MAIS SE IDENTIFICA?" },
+            },
+            {
+              id: "comp-5-2",
+              type: "options",
+              props: {
+                text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "Estampas clean, com poucas informações"',
+                    value: "natural",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/20_oh44vh.webp",
+                  },
+                  {
+                    text: 'Clássico: "Estampas clássicas e atemporais"',
+                    value: "classico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735368/21_o7wkte.webp",
+                  },
+                  {
+                    text: 'Contemporâneo: "Atemporal, mas que tenha uma pegada de atual e moderna"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735369/22_siebw2.webp",
+                  },
+                  {
+                    text: 'Elegante: "Estampas clássicas e atemporais, mas sofisticadas"',
+                    value: "elegante",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/23_bdfxrh.webp",
+                  },
+                  {
+                    text: 'Romântico: "Estampas florais e/ou delicadas como bolinhas, borboletas e corações"',
+                    value: "romantico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/24_nptszu.webp",
+                  },
+                  {
+                    text: 'Sexy: "Estampas de animal print, como onça, zebra e cobra"',
+                    value: "sexy",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/25_motk6b.webp",
+                  },
+                  {
+                    text: 'Dramático: "Estampas geométricas, abstratas e exageradas como grandes poás"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/26_dptanw.webp",
+                  },
+                  {
+                    text: 'Criativo: "Estampas diferentes do usual, como africanas, xadrez grandes"',
+                    value: "criativo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/27_wxmklx.webp",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-6",
+          name: "QUESTÃO 5",
+          components: [
+            {
+              id: "comp-6-1",
+              type: "heading",
+              props: { text: "QUAL CASACO É SEU FAVORITO?" },
+            },
+            {
+              id: "comp-6-2",
+              type: "options",
+              props: {
+                text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "Cardigã bege confortável e casual"',
+                    value: "natural",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/29_sdogoy.webp",
+                  },
+                  {
+                    text: 'Clássico: "Blazer verde estruturado"',
+                    value: "classico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/30_nfth8k.webp",
+                  },
+                  {
+                    text: 'Contemporâneo: "Trench coat bege tradicional"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/31_tcmhcl.webp",
+                  },
+                  {
+                    text: 'Elegante: "Blazer branco refinado"',
+                    value: "elegante",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/32_h78pd8.webp",
+                  },
+                  {
+                    text: 'Romântico: "Casaco pink vibrante e moderno"',
+                    value: "romantico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/33_u8pldd.webp",
+                  },
+                  {
+                    text: 'Sexy: "Jaqueta vinho de couro estilosa"',
+                    value: "sexy",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/34_peadir.webp",
+                  },
+                  {
+                    text: 'Dramático: "Jaqueta preta estilo rocker"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735379/35_pulzso.webp",
+                  },
+                  {
+                    text: 'Criativo: "Casaco estampado criativo e colorido"',
+                    value: "criativo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/36_cympaq.webp",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-7",
+          name: "QUESTÃO 6",
+          components: [
+            {
+              id: "comp-7-1",
+              type: "heading",
+              props: { text: "QUAL SUA CALÇA FAVORITA?" },
+            },
+            {
+              id: "comp-7-2",
+              type: "options",
+              props: {
+                text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "Calça fluida acetinada bege"',
+                    value: "natural",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/38_iilv0l.webp",
+                  },
+                  {
+                    text: 'Clássico: "Calça de alfaiataria cinza"',
+                    value: "classico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735417/39_arsswu.webp",
+                  },
+                  {
+                    text: 'Contemporâneo: "Jeans reto e básico"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/40_beq52x.webp",
+                  },
+                  {
+                    text: 'Elegante: "Calça reta bege de tecido"',
+                    value: "elegante",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/41_hconq4.webp",
+                  },
+                  {
+                    text: 'Romântico: "Calça ampla rosa alfaiatada"',
+                    value: "romantico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735420/42_q8xws1.webp",
+                  },
+                  {
+                    text: 'Sexy: "Legging preta de couro"',
+                    value: "sexy",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/43_ljy7sh.webp",
+                  },
+                  {
+                    text: 'Dramático: "Calça reta preta de couro"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/44_nqgvoq.webp",
+                  },
+                  {
+                    text: 'Criativo: "Calça estampada floral leve e ampla"',
+                    value: "criativo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735425/45_lp64m8.webp",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-8",
+          name: "QUESTÃO 7",
+          components: [
+            {
+              id: "comp-8-1",
+              type: "heading",
+              props: { text: "QUAL DESSES SAPATOS VOCÊ TEM OU MAIS GOSTA?" },
+            },
+            {
+              id: "comp-8-2",
+              type: "options",
+              props: {
+                text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "Tênis nude casual e confortável"',
+                    value: "natural",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp",
+                  },
+                  {
+                    text: 'Clássico: "Scarpin nude de salto baixo"',
+                    value: "classico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp",
+                  },
+                  {
+                    text: 'Contemporâneo: "Sandália dourada com salto bloco"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp",
+                  },
+                  {
+                    text: 'Elegante: "Scarpin nude salto alto e fino"',
+                    value: "elegante",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp",
+                  },
+                  {
+                    text: 'Romântico: "Sandália anabela off white"',
+                    value: "romantico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp",
+                  },
+                  {
+                    text: 'Sexy: "Sandália rosa de tiras finas"',
+                    value: "sexy",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp",
+                  },
+                  {
+                    text: 'Dramático: "Scarpin preto moderno com vinil transparente"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp",
+                  },
+                  {
+                    text: 'Criativo: "Scarpin colorido estampado"',
+                    value: "criativo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-9",
+          name: "QUESTÃO 8",
+          components: [
+            {
+              id: "comp-9-1",
+              type: "heading",
+              props: { text: "QUE TIPO DE ACESSÓRIOS VOCÊ GOSTA?" },
+            },
+            {
+              id: "comp-9-2",
+              type: "options",
+              props: {
+                text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "Pequenos e discretos, às vezes nem uso"',
+                    value: "natural",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/56_htzoxy.webp",
+                  },
+                  {
+                    text: 'Clássico: "Brincos pequenos e discretos. Corrente fininha"',
+                    value: "classico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp",
+                  },
+                  {
+                    text: 'Contemporâneo: "Acessórios que elevem meu look com um toque moderno"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/61_joafud.webp",
+                  },
+                  {
+                    text: 'Elegante: "Acessórios sofisticados, joias ou semijoias"',
+                    value: "elegante",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/60_vzsnps.webp",
+                  },
+                  {
+                    text: 'Romântico: "Peças delicadas e com um toque feminino"',
+                    value: "romantico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/59_dwaqrx.webp",
+                  },
+                  {
+                    text: 'Sexy: "Brincos longos, colares que valorizem minha beleza"',
+                    value: "sexy",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735487/63_lwgokn.webp",
+                  },
+                  {
+                    text: 'Dramático: "Acessórios pesados, que causem um impacto"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735485/62_mno8wg.webp",
+                  },
+                  {
+                    text: 'Criativo: "Acessórios diferentes, grandes e marcantes"',
+                    value: "criativo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735480/58_njdjoh.webp",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-10",
+          name: "QUESTÃO 9",
+          components: [
+            {
+              id: "comp-10-1",
+              type: "heading",
+              props: {
+                text: "VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...",
+              },
+            },
+            {
+              id: "comp-10-2",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: 'Natural: "São fáceis de cuidar"',
+                    value: "natural",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Clássico: "São de excelente qualidade"',
+                    value: "classico",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Contemporâneo: "São fáceis de cuidar e modernos"',
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Elegante: "São sofisticados"',
+                    value: "elegante",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Romântico: "São delicados"',
+                    value: "romantico",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Sexy: "São perfeitos ao meu corpo"',
+                    value: "sexy",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Dramático: "São diferentes, e trazem um efeito para minha roupa"',
+                    value: "dramatico",
+                    scoreValue: 1,
+                  },
+                  {
+                    text: 'Criativo: "São exclusivos, criam identidade no look"',
+                    value: "criativo",
+                    scoreValue: 1,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-11",
+          name: "QUESTÃO 10",
+          components: [
+            {
+              id: "comp-11-1",
+              type: "heading",
+              props: {
+                text: "QUAL O QUE MAIS CHAMA SUA ATENÇÃO NOS DETALHES DAS ROUPAS?",
+              },
+            },
+            {
+              id: "comp-11-2",
+              type: "options",
+              props: {
+                text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
+                choices: [
+                  {
+                    text: "A) <strong>Poucos detalhes</strong>, básico e prático.",
+                    value: "natural",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://cakto-quiz-br01.b-cdn.net/uploads/36e5a642-0988-479b-908d-e8507e0068e0.png",
+                  },
+                  {
+                    text: "B) <strong>Bem discretos e sutis,</strong> clean e clássico.",
+                    value: "classico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://cakto-quiz-br01.b-cdn.net/uploads/24ae72b9-e8a6-4292-af76-c3f8de4f12fc.png",
+                  },
+                  {
+                    text: "C) <strong>Básico</strong>, mas <strong>com um toque de estilo.</strong>",
+                    value: "contemporaneo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://cakto-quiz-br01.b-cdn.net/uploads/bc764766-f9c4-4c66-945a-60e7de7c196f.png",
+                  },
+                  {
+                    text: "D) <strong>Detalhes refinados</strong>, elegantes e que deem status.",
+                    value: "elegante",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://cakto-quiz-br01.b-cdn.net/uploads/7d4ab0ef-7b82-48f0-aa6a-a964c99bed7b.png",
+                  },
+                  {
+                    text: "E) <strong>Detalhes delicados</strong>, como laços ou babados.",
+                    value: "romantico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://cakto-quiz-br01.b-cdn.net/uploads/c1f924db-b6ca-47c4-8781-c5cf3c7433f8.png",
+                  },
+                  {
+                    text: "F) <strong>Detalhes que valorizem o corpo</strong>, como couro, zíper e fendas.",
+                    value: "sexy",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://cakto-quiz-br01.b-cdn.net/uploads/f2537fb2-3014-407b-b866-0d86aa3b628d.png",
+                  },
+                  {
+                    text: "G) <strong>Detalhes marcantes, </strong>com firmeza e peso.",
+                    value: "dramatico",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://cakto-quiz-br01.b-cdn.net/uploads/c2729a10-f8d1-4124-8fb8-63ea834a1272.png",
+                  },
+                  {
+                    text: "H) <strong>Detalhes diferentes</strong> do convencional, produções ousadas.",
+                    value: "criativo",
+                    scoreValue: 1,
+                    imageSrc:
+                      "https://cakto-quiz-br01.b-cdn.net/uploads/37bdd83d-a0f5-4f23-8c26-3d4d7563043d.png",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-12",
+          name: "PÁGINA DE TRANSIÇÃO",
+          components: [
+            {
+              id: "comp-12-1",
+              type: "heading",
+              props: { text: "Enquanto calculamos o seu resultado..." },
+            },
+            {
+              id: "comp-12-2",
+              type: "text",
+              props: {
+                text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.",
+              },
+            },
+            {
+              id: "comp-12-3",
+              type: "text",
+              props: {
+                text: "A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.",
+              },
+            },
+            {
+              id: "comp-12-4",
+              type: "text",
+              props: {
+                text: "Responda com sinceridade. Isso é só entre você e a sua nova versão.",
+              },
+            },
+            { id: "comp-12-5", type: "loading", props: {} },
+          ],
+        },
+        {
+          id: "step-13",
+          name: "STRATEGIC-1",
+          components: [
+            {
+              id: "comp-13-1",
+              type: "heading",
+              props: {
+                text: "Como você se sente em relação ao seu estilo pessoal hoje?",
+              },
+            },
+            {
+              id: "comp-13-2",
+              type: "image",
+              props: {
+                src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp",
+                alt: "Imagem ilustrativa",
+              },
+            },
+            {
+              id: "comp-13-3",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
+                choices: [
+                  {
+                    text: "Completamente perdida, não sei o que combina comigo",
+                    value: "perdida",
+                  },
+                  {
+                    text: "Tenho algumas ideias, mas não sei como aplicá-las",
+                    value: "ideias_nao_aplicadas",
+                  },
+                  {
+                    text: "Conheço meu estilo, mas quero refiná-lo",
+                    value: "refinar_estilo",
+                  },
+                  {
+                    text: "Estou satisfeita, só buscando inspiração",
+                    value: "buscando_inspiracao",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-14",
+          name: "STRATEGIC-2",
+          components: [
+            {
+              id: "comp-14-1",
+              type: "heading",
+              props: {
+                text: "Qual é o maior desafio que você enfrenta ao se vestir?",
+              },
+            },
+            {
+              id: "comp-14-2",
+              type: "image",
+              props: {
+                src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp",
+                alt: "Imagem ilustrativa",
+              },
+            },
+            {
+              id: "comp-14-3",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
+                choices: [
+                  {
+                    text: "Nunca sei o que combina com o quê",
+                    value: "nao_combina",
+                  },
+                  {
+                    text: "Tenho muitas roupas, mas sempre sinto que não tenho nada para vestir",
+                    value: "muitas_roupas_nada_vestir",
+                  },
+                  {
+                    text: "Não consigo criar looks diferentes com as peças que tenho",
+                    value: "nao_crio_looks",
+                  },
+                  {
+                    text: "Compro peças por impulso que depois não uso",
+                    value: "compras_impulso",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-15",
+          name: "STRATEGIC-3",
+          components: [
+            {
+              id: "comp-15-1",
+              type: "heading",
+              props: { text: "Como você aprende melhor sobre estilo e moda?" },
+            },
+            {
+              id: "comp-15-2",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
+                choices: [
+                  {
+                    text: "Vendo exemplos visuais e imagens de referência",
+                    value: "visual_exemplos",
+                  },
+                  {
+                    text: "Lendo guias detalhados com explicações passo-a-passo",
+                    value: "guias_detalhados",
+                  },
+                  {
+                    text: "Com exemplos práticos que posso aplicar no meu dia a dia",
+                    value: "exemplos_praticos",
+                  },
+                  {
+                    text: "Com orientação personalizada para o meu caso específico",
+                    value: "orientacao_personalizada",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-16",
+          name: "STRATEGIC-4",
+          components: [
+            {
+              id: "comp-16-1",
+              type: "heading",
+              props: { text: "O que você mais valoriza em um guia de estilo?" },
+            },
+            {
+              id: "comp-16-2",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
+                choices: [
+                  {
+                    text: "Praticidade e facilidade de aplicação",
+                    value: "praticidade",
+                  },
+                  {
+                    text: "Exemplos de looks montados para diferentes ocasiões",
+                    value: "looks_montados",
+                  },
+                  {
+                    text: "Explicações detalhadas sobre o porquê das recomendações",
+                    value: "explicacoes_detalhadas",
+                  },
+                  {
+                    text: "Dicas para economizar e aproveitar melhor o que já tenho",
+                    value: "economizar_aproveitar",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-17",
+          name: "STRATEGIC-5",
+          components: [
+            {
+              id: "comp-17-1",
+              type: "heading",
+              props: {
+                text: "Você já considerou investir em algum guia ou consultoria de estilo no passado?",
+              },
+            },
+            {
+              id: "comp-17-2",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
+                choices: [
+                  {
+                    text: "Sim, já pesquisei mas não cheguei a comprar",
+                    value: "pesquisei_nao_comprei",
+                  },
+                  {
+                    text: "Sim, já investi em algum curso/guia/consultoria",
+                    value: "ja_investi",
+                  },
+                  {
+                    text: "Não, esta é a primeira vez que considero isso",
+                    value: "primeira_vez",
+                  },
+                  { text: "Prefiro não responder", value: "nao_responder" },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-18",
+          name: "STRATEGIC-6",
+          components: [
+            {
+              id: "comp-18-1",
+              type: "heading",
+              props: {
+                text: "Quanto você estaria disposta a investir em um guia completo de estilo personalizado?",
+              },
+            },
+            {
+              id: "comp-18-2",
+              type: "image",
+              props: {
+                src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
+                alt: "Imagem de valores monetários",
+              },
+            },
+            {
+              id: "comp-18-3",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
+                choices: [
+                  { text: "Menos de R$100", value: "menos_100" },
+                  { text: "Entre R$100 e R$300", value: "100_300" },
+                  { text: "Entre R$300 e R$500", value: "300_500" },
+                  { text: "Mais de R$500", value: "mais_500" },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          id: "step-19",
+          name: "STRATEGIC-7",
+          components: [
+            {
+              id: "comp-19-1",
+              type: "heading",
+              props: {
+                text: "Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?",
+              },
+            },
+            {
+              id: "comp-19-2",
+              type: "image",
+              props: {
+                src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
+                alt: "Imagem Antes e Depois",
+              },
+            },
+            {
+              id: "comp-19-3",
+              type: "options",
+              props: {
+                text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
+                choices: [
+                  {
+                    text: "Montar looks com mais facilidade e confiança",
+                    value: "facilidade_confianca",
+                  },
+                  {
+                    text: "Usar o que já tenho e me sentir estilosa",
+                    value: "usar_estilosa",
+                  },
+                  {
+                    text: "Comprar com mais consciência e sem culpa",
+                    value: "comprar_consciencia",
+                  },
+                  {
+                    text: "Ser admirada pela imagem que transmito",
+                    value: "ser_admirada",
+                  },
+                  {
+                    text: "Resgatar peças esquecidas e criar novos looks com estilo",
+                    value: "resgatar_pecas",
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+      currentStepId: "step-1",
+      headerConfig: {
+        title: "Meu Quiz Interativo",
+        subtitle: "Descubra seu perfil e muito mais!",
+        showLogo: true,
+        showProgress: true,
+        allowReturn: true,
+        logoSrc:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2",
       },
-      {
-        id: "step-2",
-        name: "QUESTÃO 1",
-        components: [
-          {
-            id: "comp-2-1",
-            type: "heading",
-            props: { text: "QUAL O SEU TIPO DE ROUPA FAVORITA?" },
-          },
-          {
-            id: "comp-2-2",
-            type: "options",
-            props: {
-              text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "Conforto, leveza e praticidade no vestir"',
-                  value: "natural",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
-                },
-                {
-                  text: 'Clássico: "Discrição, caimento clássico e sobriedade"',
-                  value: "classico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
-                },
-                {
-                  text: 'Contemporâneo: "Praticidade com um toque de estilo atual"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
-                },
-                {
-                  text: 'Elegante: "Elegância refinada, moderna e sem exageros"',
-                  value: "elegante",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
-                },
-                {
-                  text: 'Romântico: "Delicadeza em tecidos suaves e fluidos"',
-                  value: "romantico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
-                },
-                {
-                  text: 'Sexy: "Sensualidade com destaque para o corpo"',
-                  value: "sexy",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
-                },
-                {
-                  text: 'Dramático: "Impacto visual com peças estruturadas e assimétricas"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
-                },
-                {
-                  text: 'Criativo: "Mix criativo com formas ousadas e originais"',
-                  value: "criativo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-3",
-        name: "QUESTÃO 2",
-        components: [
-          {
-            id: "comp-3-1",
-            type: "heading",
-            props: { text: "RESUMA A SUA PERSONALIDADE:" },
-          },
-          {
-            id: "comp-3-2",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "Informal, espontânea, alegre, essencialista"',
-                  value: "natural",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Clássico: "Conservadora, séria, organizada"',
-                  value: "classico",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Contemporâneo: "Informada, ativa, prática"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Elegante: "Exigente, sofisticada, seletiva"',
-                  value: "elegante",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Romântico: "Feminina, meiga, delicada, sensível"',
-                  value: "romantico",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Sexy: "Glamorosa, vaidosa, sensual"',
-                  value: "sexy",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Dramático: "Cosmopolita, moderna e audaciosa"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Criativo: "Exótica, aventureira, livre"',
-                  value: "criativo",
-                  scoreValue: 1,
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-4",
-        name: "QUESTÃO 3",
-        components: [
-          {
-            id: "comp-4-1",
-            type: "heading",
-            props: { text: "QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?" },
-          },
-          {
-            id: "comp-4-2",
-            type: "options",
-            props: {
-              text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "Visual leve, despojado e natural"',
-                  value: "natural",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
-                },
-                {
-                  text: 'Clássico: "Visual clássico e tradicional"',
-                  value: "classico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
-                },
-                {
-                  text: 'Contemporâneo: "Visual casual com toque atual"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
-                },
-                {
-                  text: 'Elegante: "Visual refinado e imponente"',
-                  value: "elegante",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
-                },
-                {
-                  text: 'Romântico: "Visual romântico, feminino e delicado"',
-                  value: "romantico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
-                },
-                {
-                  text: 'Sexy: "Visual sensual, com saia justa e decote"',
-                  value: "sexy",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
-                },
-                {
-                  text: 'Dramático: "Visual marcante e urbano (jeans + jaqueta)"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
-                },
-                {
-                  text: 'Criativo: "Visual criativo, colorido e ousado"',
-                  value: "criativo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-5",
-        name: "QUESTÃO 4",
-        components: [
-          {
-            id: "comp-5-1",
-            type: "heading",
-            props: { text: "QUAIS ESTAMPAS VOCÊ MAIS SE IDENTIFICA?" },
-          },
-          {
-            id: "comp-5-2",
-            type: "options",
-            props: {
-              text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "Estampas clean, com poucas informações"',
-                  value: "natural",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/20_oh44vh.webp",
-                },
-                {
-                  text: 'Clássico: "Estampas clássicas e atemporais"',
-                  value: "classico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735368/21_o7wkte.webp",
-                },
-                {
-                  text: 'Contemporâneo: "Atemporal, mas que tenha uma pegada de atual e moderna"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735369/22_siebw2.webp",
-                },
-                {
-                  text: 'Elegante: "Estampas clássicas e atemporais, mas sofisticadas"',
-                  value: "elegante",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/23_bdfxrh.webp",
-                },
-                {
-                  text: 'Romântico: "Estampas florais e/ou delicadas como bolinhas, borboletas e corações"',
-                  value: "romantico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/24_nptszu.webp",
-                },
-                {
-                  text: 'Sexy: "Estampas de animal print, como onça, zebra e cobra"',
-                  value: "sexy",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/25_motk6b.webp",
-                },
-                {
-                  text: 'Dramático: "Estampas geométricas, abstratas e exageradas como grandes poás"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/26_dptanw.webp",
-                },
-                {
-                  text: 'Criativo: "Estampas diferentes do usual, como africanas, xadrez grandes"',
-                  value: "criativo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/27_wxmklx.webp",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-6",
-        name: "QUESTÃO 5",
-        components: [
-          {
-            id: "comp-6-1",
-            type: "heading",
-            props: { text: "QUAL CASACO É SEU FAVORITO?" },
-          },
-          {
-            id: "comp-6-2",
-            type: "options",
-            props: {
-              text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "Cardigã bege confortável e casual"',
-                  value: "natural",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/29_sdogoy.webp",
-                },
-                {
-                  text: 'Clássico: "Blazer verde estruturado"',
-                  value: "classico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/30_nfth8k.webp",
-                },
-                {
-                  text: 'Contemporâneo: "Trench coat bege tradicional"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/31_tcmhcl.webp",
-                },
-                {
-                  text: 'Elegante: "Blazer branco refinado"',
-                  value: "elegante",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/32_h78pd8.webp",
-                },
-                {
-                  text: 'Romântico: "Casaco pink vibrante e moderno"',
-                  value: "romantico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/33_u8pldd.webp",
-                },
-                {
-                  text: 'Sexy: "Jaqueta vinho de couro estilosa"',
-                  value: "sexy",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/34_peadir.webp",
-                },
-                {
-                  text: 'Dramático: "Jaqueta preta estilo rocker"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735379/35_pulzso.webp",
-                },
-                {
-                  text: 'Criativo: "Casaco estampado criativo e colorido"',
-                  value: "criativo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/36_cympaq.webp",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-7",
-        name: "QUESTÃO 6",
-        components: [
-          {
-            id: "comp-7-1",
-            type: "heading",
-            props: { text: "QUAL SUA CALÇA FAVORITA?" },
-          },
-          {
-            id: "comp-7-2",
-            type: "options",
-            props: {
-              text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "Calça fluida acetinada bege"',
-                  value: "natural",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/38_iilv0l.webp",
-                },
-                {
-                  text: 'Clássico: "Calça de alfaiataria cinza"',
-                  value: "classico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735417/39_arsswu.webp",
-                },
-                {
-                  text: 'Contemporâneo: "Jeans reto e básico"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/40_beq52x.webp",
-                },
-                {
-                  text: 'Elegante: "Calça reta bege de tecido"',
-                  value: "elegante",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/41_hconq4.webp",
-                },
-                {
-                  text: 'Romântico: "Calça ampla rosa alfaiatada"',
-                  value: "romantico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735420/42_q8xws1.webp",
-                },
-                {
-                  text: 'Sexy: "Legging preta de couro"',
-                  value: "sexy",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/43_ljy7sh.webp",
-                },
-                {
-                  text: 'Dramático: "Calça reta preta de couro"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/44_nqgvoq.webp",
-                },
-                {
-                  text: 'Criativo: "Calça estampada floral leve e ampla"',
-                  value: "criativo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735425/45_lp64m8.webp",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-8",
-        name: "QUESTÃO 7",
-        components: [
-          {
-            id: "comp-8-1",
-            type: "heading",
-            props: { text: "QUAL DESSES SAPATOS VOCÊ TEM OU MAIS GOSTA?" },
-          },
-          {
-            id: "comp-8-2",
-            type: "options",
-            props: {
-              text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "Tênis nude casual e confortável"',
-                  value: "natural",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp",
-                },
-                {
-                  text: 'Clássico: "Scarpin nude de salto baixo"',
-                  value: "classico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp",
-                },
-                {
-                  text: 'Contemporâneo: "Sandália dourada com salto bloco"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp",
-                },
-                {
-                  text: 'Elegante: "Scarpin nude salto alto e fino"',
-                  value: "elegante",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp",
-                },
-                {
-                  text: 'Romântico: "Sandália anabela off white"',
-                  value: "romantico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp",
-                },
-                {
-                  text: 'Sexy: "Sandália rosa de tiras finas"',
-                  value: "sexy",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp",
-                },
-                {
-                  text: 'Dramático: "Scarpin preto moderno com vinil transparente"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp",
-                },
-                {
-                  text: 'Criativo: "Scarpin colorido estampado"',
-                  value: "criativo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-9",
-        name: "QUESTÃO 8",
-        components: [
-          {
-            id: "comp-9-1",
-            type: "heading",
-            props: { text: "QUE TIPO DE ACESSÓRIOS VOCÊ GOSTA?" },
-          },
-          {
-            id: "comp-9-2",
-            type: "options",
-            props: {
-              text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "Pequenos e discretos, às vezes nem uso"',
-                  value: "natural",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/56_htzoxy.webp",
-                },
-                {
-                  text: 'Clássico: "Brincos pequenos e discretos. Corrente fininha"',
-                  value: "classico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735479/57_whzmff.webp",
-                },
-                {
-                  text: 'Contemporâneo: "Acessórios que elevem meu look com um toque moderno"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/61_joafud.webp",
-                },
-                {
-                  text: 'Elegante: "Acessórios sofisticados, joias ou semijoias"',
-                  value: "elegante",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/60_vzsnps.webp",
-                },
-                {
-                  text: 'Romântico: "Peças delicadas e com um toque feminino"',
-                  value: "romantico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735482/59_dwaqrx.webp",
-                },
-                {
-                  text: 'Sexy: "Brincos longos, colares que valorizem minha beleza"',
-                  value: "sexy",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735487/63_lwgokn.webp",
-                },
-                {
-                  text: 'Dramático: "Acessórios pesados, que causem um impacto"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735485/62_mno8wg.webp",
-                },
-                {
-                  text: 'Criativo: "Acessórios diferentes, grandes e marcantes"',
-                  value: "criativo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735480/58_njdjoh.webp",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-10",
-        name: "QUESTÃO 9",
-        components: [
-          {
-            id: "comp-10-1",
-            type: "heading",
-            props: {
-              text: "VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...",
-            },
-          },
-          {
-            id: "comp-10-2",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: 'Natural: "São fáceis de cuidar"',
-                  value: "natural",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Clássico: "São de excelente qualidade"',
-                  value: "classico",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Contemporâneo: "São fáceis de cuidar e modernos"',
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Elegante: "São sofisticados"',
-                  value: "elegante",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Romântico: "São delicados"',
-                  value: "romantico",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Sexy: "São perfeitos ao meu corpo"',
-                  value: "sexy",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Dramático: "São diferentes, e trazem um efeito para minha roupa"',
-                  value: "dramatico",
-                  scoreValue: 1,
-                },
-                {
-                  text: 'Criativo: "São exclusivos, criam identidade no look"',
-                  value: "criativo",
-                  scoreValue: 1,
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-11",
-        name: "QUESTÃO 10",
-        components: [
-          {
-            id: "comp-11-1",
-            type: "heading",
-            props: {
-              text: "QUAL O QUE MAIS CHAMA SUA ATENÇÃO NOS DETALHES DAS ROUPAS?",
-            },
-          },
-          {
-            id: "comp-11-2",
-            type: "options",
-            props: {
-              text: "Tipo: Visual + Texto | Seleção: Múltipla (3 opções)",
-              choices: [
-                {
-                  text: "A) <strong>Poucos detalhes</strong>, básico e prático.",
-                  value: "natural",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://cakto-quiz-br01.b-cdn.net/uploads/36e5a642-0988-479b-908d-e8507e0068e0.png",
-                },
-                {
-                  text: "B) <strong>Bem discretos e sutis,</strong> clean e clássico.",
-                  value: "classico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://cakto-quiz-br01.b-cdn.net/uploads/24ae72b9-e8a6-4292-af76-c3f8de4f12fc.png",
-                },
-                {
-                  text: "C) <strong>Básico</strong>, mas <strong>com um toque de estilo.</strong>",
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://cakto-quiz-br01.b-cdn.net/uploads/bc764766-f9c4-4c66-945a-60e7de7c196f.png",
-                },
-                {
-                  text: "D) <strong>Detalhes refinados</strong>, elegantes e que deem status.",
-                  value: "elegante",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://cakto-quiz-br01.b-cdn.net/uploads/7d4ab0ef-7b82-48f0-aa6a-a964c99bed7b.png",
-                },
-                {
-                  text: "E) <strong>Detalhes delicados</strong>, como laços ou babados.",
-                  value: "romantico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://cakto-quiz-br01.b-cdn.net/uploads/c1f924db-b6ca-47c4-8781-c5cf3c7433f8.png",
-                },
-                {
-                  text: "F) <strong>Detalhes que valorizem o corpo</strong>, como couro, zíper e fendas.",
-                  value: "sexy",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://cakto-quiz-br01.b-cdn.net/uploads/f2537fb2-3014-407b-b866-0d86aa3b628d.png",
-                },
-                {
-                  text: "G) <strong>Detalhes marcantes, </strong>com firmeza e peso.",
-                  value: "dramatico",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://cakto-quiz-br01.b-cdn.net/uploads/c2729a10-f8d1-4124-8fb8-63ea834a1272.png",
-                },
-                {
-                  text: "H) <strong>Detalhes diferentes</strong> do convencional, produções ousadas.",
-                  value: "criativo",
-                  scoreValue: 1,
-                  imageSrc:
-                    "https://cakto-quiz-br01.b-cdn.net/uploads/37bdd83d-a0f5-4f23-8c26-3d4d7563043d.png",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-12",
-        name: "PÁGINA DE TRANSIÇÃO",
-        components: [
-          {
-            id: "comp-12-1",
-            type: "heading",
-            props: { text: "Enquanto calculamos o seu resultado..." },
-          },
-          {
-            id: "comp-12-2",
-            type: "text",
-            props: {
-              text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.",
-            },
-          },
-          {
-            id: "comp-12-3",
-            type: "text",
-            props: {
-              text: "A ideia é simples: te ajudar a enxergar com mais clareza onde você está agora — e para onde pode ir com mais intenção, leveza e autenticidade.",
-            },
-          },
-          {
-            id: "comp-12-4",
-            type: "text",
-            props: {
-              text: "Responda com sinceridade. Isso é só entre você e a sua nova versão.",
-            },
-          },
-          { id: "comp-12-5", type: "loading", props: {} },
-        ],
-      },
-      {
-        id: "step-13",
-        name: "STRATEGIC-1",
-        components: [
-          {
-            id: "comp-13-1",
-            type: "heading",
-            props: {
-              text: "Como você se sente em relação ao seu estilo pessoal hoje?",
-            },
-          },
-          {
-            id: "comp-13-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp",
-              alt: "Imagem ilustrativa",
-            },
-          },
-          {
-            id: "comp-13-3",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
-              choices: [
-                {
-                  text: "Completamente perdida, não sei o que combina comigo",
-                  value: "perdida",
-                },
-                {
-                  text: "Tenho algumas ideias, mas não sei como aplicá-las",
-                  value: "ideias_nao_aplicadas",
-                },
-                {
-                  text: "Conheço meu estilo, mas quero refiná-lo",
-                  value: "refinar_estilo",
-                },
-                {
-                  text: "Estou satisfeita, só buscando inspiração",
-                  value: "buscando_inspiracao",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-14",
-        name: "STRATEGIC-2",
-        components: [
-          {
-            id: "comp-14-1",
-            type: "heading",
-            props: {
-              text: "Qual é o maior desafio que você enfrenta ao se vestir?",
-            },
-          },
-          {
-            id: "comp-14-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp",
-              alt: "Imagem ilustrativa",
-            },
-          },
-          {
-            id: "comp-14-3",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
-              choices: [
-                {
-                  text: "Nunca sei o que combina com o quê",
-                  value: "nao_combina",
-                },
-                {
-                  text: "Tenho muitas roupas, mas sempre sinto que não tenho nada para vestir",
-                  value: "muitas_roupas_nada_vestir",
-                },
-                {
-                  text: "Não consigo criar looks diferentes com as peças que tenho",
-                  value: "nao_crio_looks",
-                },
-                {
-                  text: "Compro peças por impulso que depois não uso",
-                  value: "compras_impulso",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-15",
-        name: "STRATEGIC-3",
-        components: [
-          {
-            id: "comp-15-1",
-            type: "heading",
-            props: { text: "Como você aprende melhor sobre estilo e moda?" },
-          },
-          {
-            id: "comp-15-2",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
-              choices: [
-                {
-                  text: "Vendo exemplos visuais e imagens de referência",
-                  value: "visual_exemplos",
-                },
-                {
-                  text: "Lendo guias detalhados com explicações passo-a-passo",
-                  value: "guias_detalhados",
-                },
-                {
-                  text: "Com exemplos práticos que posso aplicar no meu dia a dia",
-                  value: "exemplos_praticos",
-                },
-                {
-                  text: "Com orientação personalizada para o meu caso específico",
-                  value: "orientacao_personalizada",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-16",
-        name: "STRATEGIC-4",
-        components: [
-          {
-            id: "comp-16-1",
-            type: "heading",
-            props: { text: "O que você mais valoriza em um guia de estilo?" },
-          },
-          {
-            id: "comp-16-2",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
-              choices: [
-                {
-                  text: "Praticidade e facilidade de aplicação",
-                  value: "praticidade",
-                },
-                {
-                  text: "Exemplos de looks montados para diferentes ocasiões",
-                  value: "looks_montados",
-                },
-                {
-                  text: "Explicações detalhadas sobre o porquê das recomendações",
-                  value: "explicacoes_detalhadas",
-                },
-                {
-                  text: "Dicas para economizar e aproveitar melhor o que já tenho",
-                  value: "economizar_aproveitar",
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-17",
-        name: "STRATEGIC-5",
-        components: [
-          {
-            id: "comp-17-1",
-            type: "heading",
-            props: {
-              text: "Você já considerou investir em algum guia ou consultoria de estilo no passado?",
-            },
-          },
-          {
-            id: "comp-17-2",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
-              choices: [
-                {
-                  text: "Sim, já pesquisei mas não cheguei a comprar",
-                  value: "pesquisei_nao_comprei",
-                },
-                {
-                  text: "Sim, já investi em algum curso/guia/consultoria",
-                  value: "ja_investi",
-                },
-                {
-                  text: "Não, esta é a primeira vez que considero isso",
-                  value: "primeira_vez",
-                },
-                { text: "Prefiro não responder", value: "nao_responder" },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-18",
-        name: "STRATEGIC-6",
-        components: [
-          {
-            id: "comp-18-1",
-            type: "heading",
-            props: {
-              text: "Quanto você estaria disposta a investir em um guia completo de estilo personalizado?",
-            },
-          },
-          {
-            id: "comp-18-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
-              alt: "Imagem de valores monetários",
-            },
-          },
-          {
-            id: "comp-18-3",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
-              choices: [
-                { text: "Menos de R$100", value: "menos_100" },
-                { text: "Entre R$100 e R$300", value: "100_300" },
-                { text: "Entre R$300 e R$500", value: "300_500" },
-                { text: "Mais de R$500", value: "mais_500" },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        id: "step-19",
-        name: "STRATEGIC-7",
-        components: [
-          {
-            id: "comp-19-1",
-            type: "heading",
-            props: {
-              text: "Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?",
-            },
-          },
-          {
-            id: "comp-19-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
-              alt: "Imagem Antes e Depois",
-            },
-          },
-          {
-            id: "comp-19-3",
-            type: "options",
-            props: {
-              text: "Tipo: Apenas texto | Seleção: Única (1 opção)",
-              choices: [
-                {
-                  text: "Montar looks com mais facilidade e confiança",
-                  value: "facilidade_confianca",
-                },
-                {
-                  text: "Usar o que já tenho e me sentir estilosa",
-                  value: "usar_estilosa",
-                },
-                {
-                  text: "Comprar com mais consciência e sem culpa",
-                  value: "comprar_consciencia",
-                },
-                {
-                  text: "Ser admirada pela imagem que transmito",
-                  value: "ser_admirada",
-                },
-                {
-                  text: "Resgatar peças esquecidas e criar novos looks com estilo",
-                  value: "resgatar_pecas",
-                },
-              ],
-            },
-          },
-        ],
-      },
-    ],
-    currentStepId: "step-1",
-    headerConfig: {
-      title: "Meu Quiz Interativo",
-      subtitle: "Descubra seu perfil e muito mais!",
-      showLogo: true,
-      showProgress: true,
-      allowReturn: true,
-      logoSrc:
-        "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2",
-    },
-  }; // <- Retorno da função useState
+    }; // <- Retorno da função useState
   });
 
   // Carregar estado do localStorage ao iniciar
   useEffect(() => {
     const loadedState = loadFromLocalStorage();
     if (loadedState) {
-      console.log('🔄 Carregando estado do localStorage');
+      console.log("🔄 Carregando estado do localStorage");
       setEditorState(loadedState);
     }
   }, []);
@@ -2435,14 +2435,14 @@ const AdvancedQuizEditor: React.FC = () => {
   };
 
   // --- Funções de Persistência ---
-  const STORAGE_KEY = 'quiz-editor-state';
+  const STORAGE_KEY = "quiz-editor-state";
 
   const saveToLocalStorage = (state: QuizEditorState) => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      console.log('✅ Estado salvo no localStorage');
+      console.log("✅ Estado salvo no localStorage");
     } catch (error) {
-      console.error('❌ Erro ao salvar:', error);
+      console.error("❌ Erro ao salvar:", error);
     }
   };
 
@@ -2452,7 +2452,7 @@ const AdvancedQuizEditor: React.FC = () => {
       if (!saved) return null;
       return JSON.parse(saved);
     } catch (error) {
-      console.error('❌ Erro ao carregar:', error);
+      console.error("❌ Erro ao carregar:", error);
       return null;
     }
   };

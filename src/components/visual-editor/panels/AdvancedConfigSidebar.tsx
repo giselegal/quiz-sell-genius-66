@@ -103,14 +103,17 @@ interface AdvancedConfigSidebarProps {
 const useDebounce = () => {
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const debounce = useCallback((func: (...args: unknown[]) => void, delay: number = 300) => {
-    return (...args: unknown[]) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      timeoutRef.current = setTimeout(() => func(...args), delay);
-    };
-  }, []);
+  const debounce = useCallback(
+    (func: (...args: unknown[]) => void, delay: number = 300) => {
+      return (...args: unknown[]) => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => func(...args), delay);
+      };
+    },
+    []
+  );
 
   return debounce;
 };
@@ -366,7 +369,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     placeholder,
     type = "text",
     validateUrl = false,
-    className = "w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+    className = "w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100",
   }: {
     value: string;
     onChange: (value: string) => void;
@@ -377,7 +380,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
   }) => {
     const [localValue, setLocalValue] = useState(value);
     const [isInvalid, setIsInvalid] = useState(false);
-    
+
     const debouncedUpdate = debounce((newValue: string) => {
       if (validateUrl && newValue && !isValidUrl(newValue)) {
         setIsInvalid(true);
@@ -400,16 +403,16 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
           value={localValue}
           onChange={handleChange}
           placeholder={placeholder}
-          className={`${className} ${isInvalid ? 'border-red-500 bg-red-900/20' : ''}`}
+          className={`${className} ${
+            isInvalid ? "border-red-500 bg-red-900/20" : ""
+          }`}
         />
         {isInvalid && (
           <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
             <TriangleAlert size={16} className="text-red-400" />
           </div>
         )}
-        {isInvalid && (
-          <p className="text-xs text-red-400 mt-1">URL inválida</p>
-        )}
+        {isInvalid && <p className="text-xs text-red-400 mt-1">URL inválida</p>}
       </div>
     );
   };
