@@ -76,7 +76,44 @@ interface QuizComponentProps {
   item3?: string; // Para o componente List
   value?: number; // Para o componente Level
   required?: boolean; // Para o componente Input
-  [key: string]: unknown;
+
+  // Propriedades de estilo com tipos específicos
+  backgroundColor?: string;
+  textColor?: string;
+  borderRadius?: number;
+  fontSize?: number;
+  padding?: number;
+  margin?: number;
+  shadow?: number;
+  alignment?: string;
+
+  // Propriedades para opções
+  gridLayout?: string;
+  optionsLayout?: string;
+  imageRatio?: string;
+  imagePosition?: string;
+  textPosition?: string;
+  textAlignment?: string;
+  imageHeight?: number;
+  imageBorderRadius?: number;
+  optionSpacing?: number;
+  optionPadding?: number;
+  optionsGap?: number;
+  buttonSize?: string;
+  textStyle?: string;
+  desktopColumns?: string;
+  tabletColumns?: string;
+  mobileColumns?: string;
+
+  // Propriedades de comportamento
+  multipleChoice?: boolean;
+  autoAdvance?: boolean;
+  direction?: string;
+  layout?: string;
+
+  // Propriedades avançadas
+  customCSS?: string;
+  customId?: string;
 }
 
 interface QuizComponent {
@@ -638,8 +675,8 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               )}
               {headerConfig.showProgress && (
                 <div
-                  aria-valuemax="100"
-                  aria-valuemin="0"
+                  aria-valuemax={100}
+                  aria-valuemin={0}
                   role="progressbar"
                   data-state="indeterminate"
                   data-max="100"
@@ -2241,7 +2278,12 @@ const AdvancedQuizEditor: React.FC = () => {
 
   // Salvar no localStorage sempre que o estado mudar
   useEffect(() => {
-    saveToLocalStorage(editorState);
+    // Debounce para evitar muitas escritas no localStorage
+    const timeoutId = setTimeout(() => {
+      saveToLocalStorage(editorState);
+    }, 500); // Salva após 500ms de inatividade
+
+    return () => clearTimeout(timeoutId);
   }, [editorState]);
 
   const currentStep =
@@ -2285,21 +2327,24 @@ const AdvancedQuizEditor: React.FC = () => {
   ) => {
     console.log("🔧 handleComponentUpdate called:", { targetId, newProps });
 
-    if (targetId === "headerConfig") {
-      setEditorState((prev) => ({
-        ...prev,
-        headerConfig: {
-          ...prev.headerConfig,
-          ...(newProps as Partial<QuizEditorState["headerConfig"]>),
-        },
-      }));
-      console.log("✅ Header config updated");
+    if (targetId === "header" || targetId === "headerConfig") {
+      setEditorState((prev) => {
+        const newState = {
+          ...prev,
+          headerConfig: {
+            ...prev.headerConfig,
+            ...(newProps as Partial<QuizEditorState["headerConfig"]>),
+          },
+        };
+        console.log("✅ Header config updated:", newState.headerConfig);
+        return newState;
+      });
     } else {
       setEditorState((prev) => {
         const newState = {
           ...prev,
           steps: prev.steps.map((step) =>
-            step.id === editorState.currentStepId
+            step.id === prev.currentStepId
               ? {
                   ...step,
                   components: step.components.map((comp) =>
@@ -2317,7 +2362,7 @@ const AdvancedQuizEditor: React.FC = () => {
               : step
           ),
         };
-        console.log("✅ Component updated:", newState);
+        console.log("✅ Component updated:", { targetId, newProps, newState });
         return newState;
       });
     }
@@ -2457,6 +2502,17 @@ const AdvancedQuizEditor: React.FC = () => {
     }
   };
 
+  const handleClearStorage = () => {
+    if (
+      confirm(
+        "🗑️ Tem certeza que deseja limpar todos os dados salvos? Esta ação não pode ser desfeita."
+      )
+    ) {
+      localStorage.removeItem(STORAGE_KEY);
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="flex flex-col w-screen h-screen overflow-hidden">
       {/* Navbar */}
@@ -2488,7 +2544,7 @@ const AdvancedQuizEditor: React.FC = () => {
               {currentStep?.name}
             </h2>
             <button
-              onClick={() => onComponentAdd("spacer")}
+              onClick={() => handleComponentAdd("spacer")}
               className="inline-flex items-center justify-center h-10 px-4 text-sm font-medium text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 transition-colors"
             >
               <Plus size={16} className="mr-2" />
@@ -2513,6 +2569,32 @@ const AdvancedQuizEditor: React.FC = () => {
         {/* Painel de Componentes (Mobile) */}
         <div className="md:hidden w-full border-t border-zinc-700 bg-zinc-950/50 backdrop-blur-lg p-4">
           <ComponentAddSidebar onComponentAdd={handleComponentAdd} />
+        </div>
+      </div>
+
+      {/* Debug Panel - Temporário */}
+      <div className="bg-zinc-900 border-t border-zinc-700 p-2 text-xs text-zinc-400">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <span>🔧 Debug:</span>
+            <span>Estado salvo automaticamente</span>
+            <button
+              onClick={() => console.log("📊 Estado atual:", editorState)}
+              className="px-2 py-1 bg-blue-600/20 text-blue-400 rounded hover:bg-blue-600/30"
+            >
+              Log Estado
+            </button>
+            <div
+              onClick={handleClearStorage}
+              className="px-2 py-1 bg-red-600/20 text-red-400 rounded hover:bg-red-600/30"
+            >
+              Limpar Dados
+            </div>
+            <div className="text-xs text-zinc-500">
+              Componentes: {currentStep?.components.length || 0} | Etapas:{" "}
+              {editorState.steps.length}
+            </div>
+          </div>
         </div>
       </div>
     </div>
