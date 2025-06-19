@@ -12,8 +12,12 @@
 
 /* Animação de marquee */
 @keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .animate-marquee {
@@ -74,7 +78,7 @@
 }
 
 .form-checkbox:checked::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   top: 50%;
@@ -135,19 +139,19 @@
   .md\:max-w-\[13rem\] {
     max-width: 100%;
   }
-  
+
   .md\:border-r {
     border-right: none;
   }
-  
+
   .md\:border-l {
     border-left: none;
   }
-  
+
   .md\:flex-col {
     flex-direction: column;
   }
-  
+
   .md\:w-\[26rem\] {
     width: 100%;
   }
