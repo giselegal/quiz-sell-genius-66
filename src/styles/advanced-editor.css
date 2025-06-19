@@ -345,7 +345,7 @@ select:focus {
 
 /* Estilos para textarea com syntax highlighting */
 .code-textarea {
-  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  font-family: "Fira Code", "Monaco", "Consolas", monospace;
   font-size: 0.875rem;
   line-height: 1.5;
   tab-size: 2;
@@ -397,7 +397,7 @@ select:focus {
   background: #374151;
   color: #f9fafb;
   font-size: 0.875rem;
-  font-family: 'Fira Code', monospace;
+  font-family: "Fira Code", monospace;
 }
 
 /* Responsividade para telas menores */
@@ -405,11 +405,11 @@ select:focus {
   .config-card {
     margin-bottom: 1rem;
   }
-  
+
   .field-group {
     margin-bottom: 1rem;
   }
-  
+
   .slider-value {
     font-size: 0.875rem;
   }
@@ -461,4 +461,112 @@ select:focus {
 
 .tooltip:hover::after {
   opacity: 1;
+}
+
+/* Quiz Options Layouts */
+.quiz-option-row {
+  min-height: 3rem;
+  transition: all 0.2s ease;
+  border: 1px solid rgb(82 82 91);
+  background-color: rgb(39 39 42);
+}
+
+.quiz-option-row:hover {
+  background-color: rgb(63 63 70);
+  border-color: rgb(113 113 122);
+}
+
+.quiz-option-row:focus {
+  outline: 2px solid rgb(59 130 246);
+  outline-offset: -2px;
+}
+
+.quiz-option-row .option-circle {
+  width: 3rem;
+  height: 3rem;
+  background-color: rgb(63 63 70);
+  border: 1px solid rgb(82 82 91);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.quiz-option-row:hover .option-circle {
+  background-color: rgb(82 82 91);
+  border-color: rgb(113 113 122);
+}
+
+.quiz-option-card {
+  transition: all 0.2s ease;
+  border: 1px solid rgb(82 82 91);
+  background-color: rgb(39 39 42);
+}
+
+.quiz-option-card:hover {
+  background-color: rgb(63 63 70);
+  border-color: rgb(113 113 122);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.quiz-option-card:focus {
+  outline: 2px solid rgb(59 130 246);
+  outline-offset: -2px;
+}
+
+/* Grid layouts personalizados */
+.quiz-options-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .quiz-options-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .quiz-options-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .quiz-options-grid.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Estilos para opções com imagens */
+.quiz-option-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-option-image-container img {
+  transition: transform 0.2s ease;
+}
+
+.quiz-option-card:hover .quiz-option-image-container img {
+  transform: scale(1.05);
+}
+
+/* Estilos para o conteúdo das opções */
+.quiz-option-content {
+  position: relative;
+}
+
+.quiz-option-text {
+  line-height: 1.4;
+}
+
+/* Responsividade para layouts horizontais */
+@media (max-width: 640px) {
+  .quiz-option-row {
+    min-height: 3.5rem;
+  }
+
+  .quiz-option-row .option-circle {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0.5rem;
+  }
 }
