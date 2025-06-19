@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import QuizIntro from "@/components/QuizIntro";
@@ -239,15 +240,6 @@ const QuizPage: React.FC = () => {
 
   if (!hasStarted) {
     return <QuizIntro onStart={handleStart} />;
-  }
-
-  if (showingTransition) {
-    return (
-      <QuizTransition
-        onContinue={handleContinueFromTransition}
-        onExit={() => navigate("/")}
-      />
-    );
   }
 
   if (showingTransition) {

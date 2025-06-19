@@ -2,113 +2,101 @@
 import React from 'react';
 import { Block } from '@/types/editor';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface ResponsivePropertiesEditorProps {
   block: Block;
   onUpdate: (content: any) => void;
-  isMobile?: boolean;
 }
 
-export function ResponsivePropertiesEditor({ 
-  block, 
-  onUpdate, 
-  isMobile = false 
-}: ResponsivePropertiesEditorProps) {
-  const responsive = block.content?.responsive || {};
-  
-  const handleResponsiveUpdate = (key: string, value: any) => {
-    onUpdate({
-      responsive: {
-        ...responsive,
-        [key]: value
-      }
-    });
+interface ResponsiveContent {
+  hideOnMobile?: boolean;
+  hideOnTablet?: boolean;
+  hideOnDesktop?: boolean;
+  mobileWidth?: string;
+  tabletWidth?: string;
+}
+
+export function ResponsivePropertiesEditor({ block, onUpdate }: ResponsivePropertiesEditorProps) {
+  const blockContent = (block.content || {}) as ResponsiveContent;
+
+  const handleContentUpdate = (updates: Partial<ResponsiveContent>) => {
+    const currentContent = blockContent;
+    const newContent = { ...currentContent, ...updates };
+    onUpdate(newContent);
   };
-  
+
   return (
-    <div className="space-y-6">
-      <div className="space-y-4">
+    <div className="space-y-4">
+      <div className="space-y-3">
         <h3 className="text-sm font-medium text-[#432818]">Visibilidade</h3>
         
-        <div className="space-y-1">
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="hide-on-mobile" 
-              checked={responsive.hideOnMobile || false}
-              onCheckedChange={(checked) => 
-                handleResponsiveUpdate('hideOnMobile', checked === true)
-              }
-            />
-            <Label htmlFor="hide-on-mobile">Ocultar em dispositivos móveis (sm)</Label>
-          </div>
-          {isMobile && responsive.hideOnMobile && (
-            <p className="text-xs text-orange-500">
-              Este componente está oculto em dispositivos móveis. A visualização atual mostra como ficará em desktop.
-            </p>
-          )}
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <Checkbox 
-            id="hide-on-tablet" 
-            checked={responsive.hideOnTablet || false}
-            onCheckedChange={(checked) => 
-              handleResponsiveUpdate('hideOnTablet', checked === true)
-            }
+        <div className="flex items-center justify-between">
+          <Label htmlFor="hideOnMobile" className="text-sm">Ocultar no mobile</Label>
+          <Switch
+            id="hideOnMobile"
+            checked={blockContent.hideOnMobile || false}
+            onCheckedChange={(checked) => handleContentUpdate({ hideOnMobile: checked })}
           />
-          <Label htmlFor="hide-on-tablet">Ocultar em tablets (md)</Label>
         </div>
-        
-        <div className="flex items-center space-x-2">
-          <Checkbox 
-            id="hide-on-desktop" 
-            checked={responsive.hideOnDesktop || false}
-            onCheckedChange={(checked) => 
-              handleResponsiveUpdate('hideOnDesktop', checked === true)
-            }
+
+        <div className="flex items-center justify-between">
+          <Label htmlFor="hideOnTablet" className="text-sm">Ocultar no tablet</Label>
+          <Switch
+            id="hideOnTablet"
+            checked={blockContent.hideOnTablet || false}
+            onCheckedChange={(checked) => handleContentUpdate({ hideOnTablet: checked })}
           />
-          <Label htmlFor="hide-on-desktop">Ocultar em desktop (lg, xl)</Label>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <Label htmlFor="hideOnDesktop" className="text-sm">Ocultar no desktop</Label>
+          <Switch
+            id="hideOnDesktop"
+            checked={blockContent.hideOnDesktop || false}
+            onCheckedChange={(checked) => handleContentUpdate({ hideOnDesktop: checked })}
+          />
         </div>
       </div>
-      
-      <div className="space-y-4">
-        <h3 className="text-sm font-medium text-[#432818]">Tamanho</h3>
+
+      <div className="space-y-3">
+        <h3 className="text-sm font-medium text-[#432818]">Largura responsiva</h3>
         
         <div className="space-y-2">
-          <Label htmlFor="mobile-width">Largura em dispositivos móveis</Label>
+          <Label htmlFor="mobileWidth" className="text-sm">Largura no mobile</Label>
           <Select 
-            value={responsive.mobileWidth || 'full'} 
-            onValueChange={(value) => handleResponsiveUpdate('mobileWidth', value)}
+            value={blockContent.mobileWidth || 'full'}
+            onValueChange={(value) => handleContentUpdate({ mobileWidth: value })}
           >
-            <SelectTrigger id="mobile-width">
-              <SelectValue placeholder="Selecione a largura" />
+            <SelectTrigger>
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="full">Largura completa</SelectItem>
-              <SelectItem value="auto">Automática</SelectItem>
-              <SelectItem value="3/4">3/4</SelectItem>
-              <SelectItem value="1/2">1/2</SelectItem>
+              <SelectItem value="full">100%</SelectItem>
+              <SelectItem value="3/4">75%</SelectItem>
+              <SelectItem value="1/2">50%</SelectItem>
+              <SelectItem value="1/3">33%</SelectItem>
+              <SelectItem value="1/4">25%</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        
+
         <div className="space-y-2">
-          <Label htmlFor="tablet-width">Largura em tablets</Label>
+          <Label htmlFor="tabletWidth" className="text-sm">Largura no tablet</Label>
           <Select 
-            value={responsive.tabletWidth || 'full'} 
-            onValueChange={(value) => handleResponsiveUpdate('tabletWidth', value)}
+            value={blockContent.tabletWidth || 'full'}
+            onValueChange={(value) => handleContentUpdate({ tabletWidth: value })}
           >
-            <SelectTrigger id="tablet-width">
-              <SelectValue placeholder="Selecione a largura" />
+            <SelectTrigger>
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="full">Largura completa</SelectItem>
-              <SelectItem value="auto">Automática</SelectItem>
-              <SelectItem value="3/4">3/4</SelectItem>
-              <SelectItem value="1/2">1/2</SelectItem>
-              <SelectItem value="1/3">1/3</SelectItem>
+              <SelectItem value="full">100%</SelectItem>
+              <SelectItem value="3/4">75%</SelectItem>
+              <SelectItem value="1/2">50%</SelectItem>
+              <SelectItem value="1/3">33%</SelectItem>
+              <SelectItem value="1/4">25%</SelectItem>
             </SelectContent>
           </Select>
         </div>

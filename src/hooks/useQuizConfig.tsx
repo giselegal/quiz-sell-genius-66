@@ -16,10 +16,27 @@ interface QuizConfig {
   borderRadius: string;
 }
 
+interface QuizTheme {
+  backgroundColor: string;
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  textColor: string;
+  textSecondaryColor: string;
+}
+
+interface QuizLayout {
+  cardStyle: string;
+  spacing: string;
+  gridType: string;
+}
+
 interface QuizConfigContextType {
   config: QuizConfig;
   updateConfig: (updates: Partial<QuizConfig>) => void;
   cssVariables: CSSProperties;
+  theme: QuizTheme;
+  layout: QuizLayout;
 }
 
 const defaultConfig: QuizConfig = {
@@ -46,21 +63,36 @@ export const QuizConfigProvider: React.FC<{ children: ReactNode }> = ({ children
   };
 
   const cssVariables: CSSProperties = {
-    ['--quiz-bg-color' as any]: config.backgroundColor,
-    ['--quiz-primary-color' as any]: config.primaryColor,
-    ['--quiz-secondary-color' as any]: config.secondaryColor,
-    ['--quiz-accent-color' as any]: config.accentColor,
-    ['--quiz-text-color' as any]: config.textColor,
-    ['--quiz-text-secondary-color' as any]: config.textSecondaryColor,
-    ['--quiz-border-color' as any]: config.borderColor,
-    ['--quiz-shadow-color' as any]: config.shadowColor,
-    ['--quiz-font-family' as any]: config.fontFamily,
-    ['--quiz-font-size' as any]: config.fontSize,
-    ['--quiz-border-radius' as any]: config.borderRadius,
+    '--quiz-bg-color': config.backgroundColor,
+    '--quiz-primary-color': config.primaryColor,
+    '--quiz-secondary-color': config.secondaryColor,
+    '--quiz-accent-color': config.accentColor,
+    '--quiz-text-color': config.textColor,
+    '--quiz-text-secondary-color': config.textSecondaryColor,
+    '--quiz-border-color': config.borderColor,
+    '--quiz-shadow-color': config.shadowColor,
+    '--quiz-font-family': config.fontFamily,
+    '--quiz-font-size': config.fontSize,
+    '--quiz-border-radius': config.borderRadius,
+  } as CSSProperties;
+
+  const theme: QuizTheme = {
+    backgroundColor: config.backgroundColor,
+    primaryColor: config.primaryColor,
+    secondaryColor: config.secondaryColor,
+    accentColor: config.accentColor,
+    textColor: config.textColor,
+    textSecondaryColor: config.textSecondaryColor,
+  };
+
+  const layout: QuizLayout = {
+    cardStyle: 'modern',
+    spacing: 'normal',
+    gridType: 'auto',
   };
 
   return (
-    <QuizConfigContext.Provider value={{ config, updateConfig, cssVariables }}>
+    <QuizConfigContext.Provider value={{ config, updateConfig, cssVariables, theme, layout }}>
       {children}
     </QuizConfigContext.Provider>
   );
@@ -80,4 +112,28 @@ export const useQuizConfig = () => {
     throw new Error('useQuizConfig must be used within a QuizConfigProvider');
   }
   return context;
+};
+
+export const useQuizTheme = () => {
+  const context = useContext(QuizConfigContext);
+  if (!context) {
+    throw new Error('useQuizTheme must be used within a QuizConfigProvider');
+  }
+  return { theme: context.theme };
+};
+
+export const useQuizBehavior = () => {
+  return {
+    autoAdvance: true,
+    maxSelections: 3,
+    showProgress: true,
+  };
+};
+
+export const useQuizLayout = () => {
+  const context = useContext(QuizConfigContext);
+  if (!context) {
+    throw new Error('useQuizLayout must be used within a QuizConfigProvider');
+  }
+  return { layout: context.layout };
 };
