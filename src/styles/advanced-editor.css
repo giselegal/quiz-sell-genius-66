@@ -400,6 +400,139 @@ select:focus {
   font-family: 'Fira Code', monospace;
 }
 
+/* Quiz Options Responsive Grid Layouts */
+.quiz-options-grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.quiz-options-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.quiz-options-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.quiz-options-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.quiz-options-flex {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.quiz-options-list {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* Responsive overrides */
+@media (max-width: 768px) {
+  .quiz-options-grid-1-mobile {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .quiz-options-grid-2-mobile {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .quiz-options-grid-1-tablet {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .quiz-options-grid-2-tablet {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .quiz-options-grid-3-tablet {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .quiz-options-grid-1-desktop {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .quiz-options-grid-2-desktop {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .quiz-options-grid-3-desktop {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .quiz-options-grid-4-desktop {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Quiz Option Card Enhancements */
+.quiz-option-card {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.quiz-option-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-option-image-container img {
+  transition: transform 0.3s ease;
+}
+
+.quiz-option-card:hover .quiz-option-image-container img {
+  transform: scale(1.05);
+}
+
+/* Image aspect ratios */
+.image-ratio-square {
+  aspect-ratio: 1 / 1;
+}
+
+.image-ratio-landscape {
+  aspect-ratio: 16 / 9;
+}
+
+.image-ratio-portrait {
+  aspect-ratio: 4 / 5;
+}
+
+.image-ratio-wide {
+  aspect-ratio: 21 / 9;
+}
+
+/* Text alignment classes */
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.text-align-justify {
+  text-align: justify;
+}
+
 /* Responsividade para telas menores */
 @media (max-width: 768px) {
   .config-card {

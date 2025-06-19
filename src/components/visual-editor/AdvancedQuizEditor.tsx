@@ -274,19 +274,53 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               <h3 className="font-medium mb-3 text-zinc-100">
                 {component.props.text || "Pergunta"}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 quiz-options-grid">
+              <div 
+                className={`quiz-options-grid ${(() => {
+                  const layout = component.props.gridLayout || 'grid-2';
+                  const mobileColumns = component.props.mobileColumns || '1';
+                  const tabletColumns = component.props.tabletColumns || '2';
+                  const desktopColumns = component.props.desktopColumns || '2';
+                  
+                  return `quiz-options-${layout} quiz-options-grid-${mobileColumns}-mobile quiz-options-grid-${tabletColumns}-tablet quiz-options-grid-${desktopColumns}-desktop`;
+                })()}`}
+                style={{
+                  gap: `${component.props.optionSpacing || 8}px`
+                }}
+              >
                 {component.props.choices?.map(
                   (choice: OptionChoice, index: number) => (
                     <button
                       key={index}
                       className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 hover:bg-zinc-700 transition-all duration-200 overflow-hidden group option-button"
+                      style={{
+                        padding: `${component.props.optionPadding || 12}px`,
+                        borderRadius: `${component.props.borderRadius || 8}px`,
+                        backgroundColor: component.props.backgroundColor,
+                        color: component.props.textColor,
+                        boxShadow: component.props.shadow ? `0 ${component.props.shadow * 2}px ${component.props.shadow * 4}px rgba(0,0,0,0.3)` : undefined
+                      }}
                     >
                       {choice.imageSrc && (
-                        <div className="quiz-option-image-container">
+                        <div 
+                          className={`quiz-option-image-container ${(() => {
+                            const ratio = component.props.imageRatio || 'square';
+                            return `image-ratio-${ratio}`;
+                          })()}`}
+                          style={{
+                            height: `${component.props.imageHeight || 160}px`,
+                            borderRadius: `${component.props.imageBorderRadius || 8}px`,
+                            overflow: 'hidden',
+                            marginBottom: component.props.imagePosition === 'top' ? '8px' : '0',
+                            marginTop: component.props.imagePosition === 'bottom' ? '8px' : '0',
+                          }}
+                        >
                           <img
                             src={choice.imageSrc}
                             alt={choice.text}
-                            className="w-full h-32 object-cover"
+                            className="w-full h-full object-cover"
+                            style={{
+                              borderRadius: `${component.props.imageBorderRadius || 8}px`
+                            }}
                             onError={(e) => {
                               (e.target as HTMLImageElement).src =
                                 "https://placehold.co/256x256/555/FFF?text=IMG";
@@ -294,8 +328,17 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                           />
                         </div>
                       )}
-                      <div className="quiz-option-content p-3">
-                        <div className="quiz-option-text text-sm text-zinc-100 leading-tight">
+                      <div className="quiz-option-content">
+                        <div 
+                          className={`quiz-option-text text-sm leading-tight ${(() => {
+                            const alignment = component.props.textAlignment || 'center';
+                            return `text-align-${alignment}`;
+                          })()}`}
+                          style={{
+                            fontSize: `${component.props.fontSize || 14}px`,
+                            color: component.props.textColor || '#f9fafb'
+                          }}
+                        >
                           <div
                             className="custom-quill quill ql-editor quill-option"
                             dangerouslySetInnerHTML={{ __html: choice.text }}

@@ -100,8 +100,24 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     styling: false,
     customization: false,
     advanced: false,
-    general: false
+    general: false,
+    optionsLayout: false,
+    basic: false,
+    header: false
   });
+
+  // Estado para feedback de salvamento
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+
+  // Função para simular salvamento com feedback
+  const handleSaveWithFeedback = (updateFn: () => void) => {
+    setSaveStatus('saving');
+    updateFn();
+    setTimeout(() => {
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 1000);
+    }, 300);
+  };
 
   const toggleCard = (cardName: string) => {
     setExpandedCards(prev => ({
@@ -261,10 +277,28 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
   return (
     <div className="w-full md:max-w-[24rem] bg-zinc-950 border-l border-zinc-700 overflow-y-auto hidden md:block">
       <div className="sticky top-0 bg-zinc-950 border-b border-zinc-700 p-4 z-10">
-        <h2 className="text-sm font-semibold text-zinc-100 flex items-center gap-2">
-          <Cog size={16} />
-          Configurações
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-zinc-100 flex items-center gap-2">
+            <Cog size={16} />
+            Configurações
+          </h2>
+          {saveStatus !== 'idle' && (
+            <div className="flex items-center gap-2 text-xs">
+              {saveStatus === 'saving' && (
+                <>
+                  <div className="w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-blue-400">Salvando...</span>
+                </>
+              )}
+              {saveStatus === 'saved' && (
+                <>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-green-400">Salvo!</span>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       
       <div className="p-4 space-y-4">
@@ -279,7 +313,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               <input
                 type="text"
                 value={currentStep.name}
-                onChange={(e) => onStepRename(currentStep.id, e.target.value)}
+                onChange={(e) => handleSaveWithFeedback(() => onStepRename(currentStep.id, e.target.value))}
                 className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                 placeholder="Nome da etapa"
               />
@@ -530,6 +564,52 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     <Plus size={14} />
                     Adicionar Opção
                   </button>
+                  
+                  {/* Botões de teste rápido */}
+                  <div className="mt-4 p-3 bg-zinc-900/50 rounded-md border border-zinc-700">
+                    <label className="text-xs font-medium text-zinc-300 uppercase tracking-wide mb-2 block">
+                      Testes Rápidos
+                    </label>
+                    <div className="flex flex-col gap-2">
+                      <button
+                        onClick={() => {
+                          const testChoices = [
+                            { text: "Opção 1", value: "opt1", imageSrc: "https://picsum.photos/300/200?random=1" },
+                            { text: "Opção 2", value: "opt2", imageSrc: "https://picsum.photos/300/200?random=2" },
+                            { text: "Opção 3", value: "opt3", imageSrc: "https://picsum.photos/300/200?random=3" },
+                            { text: "Opção 4", value: "opt4", imageSrc: "https://picsum.photos/300/200?random=4" }
+                          ];
+                          handleSaveWithFeedback(() => onComponentUpdate(selectedComponent.id, { 
+                            choices: testChoices,
+                            gridLayout: 'grid-2',
+                            imageHeight: 160,
+                            imageRatio: 'landscape'
+                          }));
+                        }}
+                        className="text-xs bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 px-2 py-1 rounded transition-colors"
+                      >
+                        4 Opções com Imagens
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          const testChoices = [
+                            { text: "Texto Longo para Testar Quebra de Linha", value: "opt1" },
+                            { text: "Curto", value: "opt2" },
+                            { text: "Texto Médio para Visualização", value: "opt3" }
+                          ];
+                          handleSaveWithFeedback(() => onComponentUpdate(selectedComponent.id, { 
+                            choices: testChoices,
+                            gridLayout: 'grid-3',
+                            textAlignment: 'center'
+                          }));
+                        }}
+                        className="text-xs bg-purple-600/20 text-purple-400 hover:bg-purple-600/30 px-2 py-1 rounded transition-colors"
+                      >
+                        3 Opções Texto
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </ConfigCard>
             )}
@@ -537,7 +617,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             {/* Card Layout Específico para Opções */}
             {selectedComponent.type === "options" && (
               <ConfigCard 
-                title="Layout das Opções" 
+                title="Layout Avançado das Opções" 
                 cardKey="optionsLayout"
                 icon={<Proportions size={16} />}
               >
