@@ -1,152 +1,224 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { CSSProperties } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-interface QuizConfig {
-  backgroundColor: string;
+// Quiz theme interface
+export interface QuizTheme {
   primaryColor: string;
-  secondaryColor: string;
-  accentColor: string;
+  backgroundColor: string;
   textColor: string;
-  textSecondaryColor: string;
-  borderColor: string;
-  shadowColor: string;
   fontFamily: string;
-  fontSize: string;
   borderRadius: string;
 }
 
-interface QuizTheme {
-  backgroundColor: string;
-  primaryColor: string;
-  secondaryColor: string;
-  accentColor: string;
-  textColor: string;
-  textSecondaryColor: string;
+// Quiz behavior interface
+export interface QuizBehavior {
+  autoAdvance: boolean;
+  maxSelections: number;
+  showProgress: boolean;
+  allowBacktrack: boolean;
+  shuffleOptions: boolean;
 }
 
-interface QuizLayout {
-  cardStyle: string;
+// Quiz layout interface
+export interface QuizLayout {
+  layout: 'single-column' | 'two-column' | 'grid';
+  optionsPerRow: number;
   spacing: string;
-  gridType: string;
+  alignment: 'left' | 'center' | 'right';
 }
 
-interface QuizConfigContextType {
-  config: QuizConfig;
-  updateConfig: (updates: Partial<QuizConfig>) => void;
-  cssVariables: CSSProperties;
-  theme: QuizTheme;
-  layout: QuizLayout;
-  updateTheme: (theme: Partial<QuizTheme>) => void;
-}
-
-const defaultConfig: QuizConfig = {
-  backgroundColor: '#FAF9F7',
-  primaryColor: '#B89B7A',
-  secondaryColor: '#432818',
-  accentColor: '#D4C4A0',
-  textColor: '#432818',
-  textSecondaryColor: '#8F7A6A',
-  borderColor: '#B89B7A',
-  shadowColor: 'rgba(184, 155, 122, 0.1)',
-  fontFamily: 'Playfair Display, serif',
-  fontSize: '16px',
-  borderRadius: '0.375rem'
-};
-
-const QuizConfigContext = createContext<QuizConfigContextType | undefined>(undefined);
-
-export const QuizConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [config, setConfig] = useState<QuizConfig>(defaultConfig);
-
-  const updateConfig = (updates: Partial<QuizConfig>) => {
-    setConfig(prev => ({ ...prev, ...updates }));
-  };
-
-  const updateTheme = (themeUpdates: Partial<QuizTheme>) => {
-    const configUpdates: Partial<QuizConfig> = {};
-    if (themeUpdates.backgroundColor) configUpdates.backgroundColor = themeUpdates.backgroundColor;
-    if (themeUpdates.primaryColor) configUpdates.primaryColor = themeUpdates.primaryColor;
-    if (themeUpdates.secondaryColor) configUpdates.secondaryColor = themeUpdates.secondaryColor;
-    if (themeUpdates.accentColor) configUpdates.accentColor = themeUpdates.accentColor;
-    if (themeUpdates.textColor) configUpdates.textColor = themeUpdates.textColor;
-    if (themeUpdates.textSecondaryColor) configUpdates.textSecondaryColor = themeUpdates.textSecondaryColor;
-    
-    updateConfig(configUpdates);
-  };
-
-  const cssVariables: CSSProperties = {
-    '--quiz-bg-color': config.backgroundColor,
-    '--quiz-primary-color': config.primaryColor,
-    '--quiz-secondary-color': config.secondaryColor,
-    '--quiz-accent-color': config.accentColor,
-    '--quiz-text-color': config.textColor,
-    '--quiz-text-secondary-color': config.textSecondaryColor,
-    '--quiz-border-color': config.borderColor,
-    '--quiz-shadow-color': config.shadowColor,
-    '--quiz-font-family': config.fontFamily,
-    '--quiz-font-size': config.fontSize,
-    '--quiz-border-radius': config.borderRadius,
-  } as CSSProperties;
-
-  const theme: QuizTheme = {
-    backgroundColor: config.backgroundColor,
-    primaryColor: config.primaryColor,
-    secondaryColor: config.secondaryColor,
-    accentColor: config.accentColor,
-    textColor: config.textColor,
-    textSecondaryColor: config.textSecondaryColor,
-  };
-
-  const layout: QuizLayout = {
-    cardStyle: 'modern',
-    spacing: 'normal',
-    gridType: 'auto',
-  };
-
-  return (
-    <QuizConfigContext.Provider value={{ config, updateConfig, cssVariables, theme, layout, updateTheme }}>
-      {children}
-    </QuizConfigContext.Provider>
-  );
-};
-
+// Quiz styles hook
 export const useQuizStyles = () => {
-  const context = useContext(QuizConfigContext);
+  const { theme } = useQuizTheme();
+  
+  const cssVariables = {
+    '--quiz-primary-color': theme.primaryColor,
+    '--quiz-bg-color': theme.backgroundColor,
+    '--quiz-text-color': theme.textColor,
+    '--quiz-font-family': theme.fontFamily,
+    '--quiz-border-radius': theme.borderRadius,
+  };
+  
+  return { cssVariables };
+};
+
+// Quiz theme context
+const QuizThemeContext = createContext<{
+  theme: QuizTheme;
+  updateTheme: (theme: Partial<QuizTheme>) => Promise<void>;
+} | null>(null);
+
+// Quiz behavior context
+const QuizBehaviorContext = createContext<{
+  behavior: QuizBehavior;
+  updateBehavior: (behavior: Partial<QuizBehavior>) => Promise<void>;
+  isLoading: boolean;
+} | null>(null);
+
+// Quiz layout context
+const QuizLayoutContext = createContext<{
+  layout: QuizLayout;
+  updateLayout: (layout: Partial<QuizLayout>) => Promise<void>;
+  isLoading: boolean;
+} | null>(null);
+
+// Quiz config context
+const QuizConfigContext = createContext<{
+  state: any;
+  exportConfig: () => any;
+  updateConfig: (config: any) => Promise<void>;
+  resetConfig: () => Promise<void>;
+  importConfig: (config: any) => Promise<void>;
+} | null>(null);
+
+// Default values
+const defaultTheme: QuizTheme = {
+  primaryColor: '#B89B7A',
+  backgroundColor: '#FAF9F7',
+  textColor: '#432818',
+  fontFamily: 'Inter',
+  borderRadius: '0.5rem',
+};
+
+const defaultBehavior: QuizBehavior = {
+  autoAdvance: false,
+  maxSelections: 1,
+  showProgress: true,
+  allowBacktrack: true,
+  shuffleOptions: false,
+};
+
+const defaultLayout: QuizLayout = {
+  layout: 'single-column',
+  optionsPerRow: 2,
+  spacing: '1rem',
+  alignment: 'center',
+};
+
+// Quiz theme hook
+export const useQuizTheme = () => {
+  const context = useContext(QuizThemeContext);
   if (!context) {
-    throw new Error('useQuizStyles must be used within a QuizConfigProvider');
+    // Return default values if not in context
+    return {
+      theme: defaultTheme,
+      updateTheme: async (theme: Partial<QuizTheme>) => {
+        console.log('Theme update called outside context:', theme);
+      }
+    };
   }
   return context;
 };
 
+// Quiz behavior hook
+export const useQuizBehavior = () => {
+  const context = useContext(QuizBehaviorContext);
+  if (!context) {
+    return {
+      behavior: defaultBehavior,
+      updateBehavior: async (behavior: Partial<QuizBehavior>) => {
+        console.log('Behavior update called outside context:', behavior);
+      },
+      isLoading: false,
+    };
+  }
+  return context;
+};
+
+// Quiz layout hook
+export const useQuizLayout = () => {
+  const context = useContext(QuizLayoutContext);
+  if (!context) {
+    return {
+      layout: defaultLayout,
+      updateLayout: async (layout: Partial<QuizLayout>) => {
+        console.log('Layout update called outside context:', layout);
+      },
+      isLoading: false,
+    };
+  }
+  return context;
+};
+
+// Quiz config hook
 export const useQuizConfig = () => {
   const context = useContext(QuizConfigContext);
   if (!context) {
-    throw new Error('useQuizConfig must be used within a QuizConfigProvider');
+    return {
+      state: { isDirty: false, isLoading: false },
+      exportConfig: () => ({}),
+      updateConfig: async (config: any) => {
+        console.log('Config update called outside context:', config);
+      },
+      resetConfig: async () => {
+        console.log('Config reset called outside context');
+      },
+      importConfig: async (config: any) => {
+        console.log('Config import called outside context:', config);
+      },
+    };
   }
   return context;
 };
 
-export const useQuizTheme = () => {
-  const context = useContext(QuizConfigContext);
-  if (!context) {
-    throw new Error('useQuizTheme must be used within a QuizConfigProvider');
-  }
-  return { theme: context.theme, updateTheme: context.updateTheme };
-};
+// Provider component
+export const QuizConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [theme, setTheme] = useState<QuizTheme>(defaultTheme);
+  const [behavior, setBehavior] = useState<QuizBehavior>(defaultBehavior);
+  const [layout, setLayout] = useState<QuizLayout>(defaultLayout);
+  const [state, setState] = useState({ isDirty: false, isLoading: false });
 
-export const useQuizBehavior = () => {
-  return {
-    autoAdvance: true,
-    maxSelections: 3,
-    showProgress: true,
+  const updateTheme = async (newTheme: Partial<QuizTheme>) => {
+    setTheme(prev => ({ ...prev, ...newTheme }));
+    setState(prev => ({ ...prev, isDirty: true }));
   };
-};
 
-export const useQuizLayout = () => {
-  const context = useContext(QuizConfigContext);
-  if (!context) {
-    throw new Error('useQuizLayout must be used within a QuizConfigProvider');
-  }
-  return { layout: context.layout };
+  const updateBehavior = async (newBehavior: Partial<QuizBehavior>) => {
+    setBehavior(prev => ({ ...prev, ...newBehavior }));
+    setState(prev => ({ ...prev, isDirty: true }));
+  };
+
+  const updateLayout = async (newLayout: Partial<QuizLayout>) => {
+    setLayout(prev => ({ ...prev, ...newLayout }));
+    setState(prev => ({ ...prev, isDirty: true }));
+  };
+
+  const exportConfig = () => {
+    return {
+      theme,
+      behavior,
+      layout,
+      state,
+    };
+  };
+
+  const updateConfig = async (config: any) => {
+    if (config.theme) setTheme(config.theme);
+    if (config.behavior) setBehavior(config.behavior);
+    if (config.layout) setLayout(config.layout);
+    setState(prev => ({ ...prev, isDirty: true }));
+  };
+
+  const resetConfig = async () => {
+    setTheme(defaultTheme);
+    setBehavior(defaultBehavior);
+    setLayout(defaultLayout);
+    setState({ isDirty: false, isLoading: false });
+  };
+
+  const importConfig = async (config: any) => {
+    await updateConfig(config);
+  };
+
+  return (
+    <QuizThemeContext.Provider value={{ theme, updateTheme }}>
+      <QuizBehaviorContext.Provider value={{ behavior, updateBehavior, isLoading: state.isLoading }}>
+        <QuizLayoutContext.Provider value={{ layout, updateLayout, isLoading: state.isLoading }}>
+          <QuizConfigContext.Provider value={{ state, exportConfig, updateConfig, resetConfig, importConfig }}>
+            {children}
+          </QuizConfigContext.Provider>
+        </QuizLayoutContext.Provider>
+      </QuizBehaviorContext.Provider>
+    </QuizThemeContext.Provider>
+  );
 };

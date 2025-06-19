@@ -72,7 +72,7 @@ export interface QuizOption {
   points?: number;
 }
 
-// Editor Block types - Updated to be consistent
+// Comprehensive Editor Block types - includes all block types used across the system
 export type EditorBlockType = 
   | 'header'
   | 'hero-section'
@@ -95,7 +95,14 @@ export type EditorBlockType =
   | 'button'
   | 'video'
   | 'spacer'
-  | 'form';
+  | 'form'
+  | 'two-column'
+  | 'icon'
+  | 'faq'
+  | 'carousel'
+  | 'custom-code'
+  | 'animation-block'
+  | 'transformation';
 
 // Unified Block interface - this replaces the separate Block and EditorBlock
 export interface Block {

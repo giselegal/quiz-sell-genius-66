@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ComponentItem } from './ComponentItem';
+import { EditorBlockType } from '@/types/editor';
 import { 
   Type, 
   Image, 
@@ -15,7 +16,7 @@ import {
 } from 'lucide-react';
 
 interface ComponentsSidebarProps {
-  onAddBlock: (type: string) => void;
+  onAddBlock: (type: EditorBlockType) => void;
 }
 
 const componentCategories = [
@@ -23,34 +24,34 @@ const componentCategories = [
     title: 'Texto',
     icon: Type,
     items: [
-      { type: 'headline', label: 'Título', icon: Type },
-      { type: 'text', label: 'Texto', icon: Type },
-      { type: 'spacer', label: 'Espaçador', icon: Minus }
+      { type: 'headline' as EditorBlockType, label: 'Título', icon: Type },
+      { type: 'text' as EditorBlockType, label: 'Texto', icon: Type },
+      { type: 'spacer' as EditorBlockType, label: 'Espaçador', icon: Minus }
     ]
   },
   {
     title: 'Mídia',
     icon: Image,
     items: [
-      { type: 'image', label: 'Imagem', icon: Image },
-      { type: 'video', label: 'Vídeo', icon: Video }
+      { type: 'image' as EditorBlockType, label: 'Imagem', icon: Image },
+      { type: 'video' as EditorBlockType, label: 'Vídeo', icon: Video }
     ]
   },
   {
     title: 'Interação',
     icon: MousePointer,
     items: [
-      { type: 'button', label: 'Botão', icon: MousePointer },
-      { type: 'form', label: 'Formulário', icon: Layout }
+      { type: 'button' as EditorBlockType, label: 'Botão', icon: MousePointer },
+      { type: 'form' as EditorBlockType, label: 'Formulário', icon: Layout }
     ]
   },
   {
     title: 'Vendas',
     icon: Star,
     items: [
-      { type: 'testimonials', label: 'Depoimentos', icon: Star },
-      { type: 'bonus', label: 'Bônus', icon: Gift },
-      { type: 'guarantee', label: 'Garantia', icon: Star }
+      { type: 'testimonials' as EditorBlockType, label: 'Depoimentos', icon: Star },
+      { type: 'bonus' as EditorBlockType, label: 'Bônus', icon: Gift },
+      { type: 'guarantee' as EditorBlockType, label: 'Garantia', icon: Star }
     ]
   }
 ];
