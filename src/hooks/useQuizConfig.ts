@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { EditorState, EditorStep } from "@/types/editor";
 import { loadQuizConfig } from "@/utils/quizStorage";
@@ -61,6 +62,12 @@ export const useQuizConfig = () => {
     return config.steps.findIndex((step) => step.id === config.currentStepId);
   };
 
+  const exportConfig = () => {
+    return config;
+  };
+
+  const state = config;
+
   return {
     config,
     loading,
@@ -70,6 +77,8 @@ export const useQuizConfig = () => {
     getStepById,
     getTotalSteps,
     getCurrentStepIndex,
+    exportConfig,
+    state,
   };
 };
 

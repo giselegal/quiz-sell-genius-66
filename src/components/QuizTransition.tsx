@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "./ui/card";
 import { AnimatedWrapper } from "./ui/animated-wrapper";
@@ -8,19 +9,23 @@ import { useQuizStyles } from "@/hooks/useQuizConfig";
 
 interface QuizTransitionProps {
   onContinue: () => void;
-  onAnswer: (response: UserResponse) => void;
-  currentAnswers: string[];
+  onAnswer?: (response: UserResponse) => void;
+  currentAnswers?: string[];
+  onExit?: () => void;
 }
 
 const QuizTransition: React.FC<QuizTransitionProps> = ({
   onContinue,
   onAnswer,
-  currentAnswers,
+  currentAnswers = [],
+  onExit,
 }) => {
   const { cssVariables } = useQuizStyles();
 
   const handleFirstStrategicAnswer = (response: UserResponse) => {
-    onAnswer(response);
+    if (onAnswer) {
+      onAnswer(response);
+    }
     // Reduzindo o delay para a transição ser mais rápida
     setTimeout(() => {
       onContinue();
@@ -56,14 +61,16 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({
           </Card>
         </AnimatedWrapper>
 
-        <AnimatedWrapper>
-          <QuizQuestion
-            question={strategicQuestions[0]}
-            onAnswer={handleFirstStrategicAnswer}
-            currentAnswers={currentAnswers}
-            autoAdvance={true}
-          />
-        </AnimatedWrapper>
+        {onAnswer && (
+          <AnimatedWrapper>
+            <QuizQuestion
+              question={strategicQuestions[0]}
+              onAnswer={handleFirstStrategicAnswer}
+              currentAnswers={currentAnswers}
+              autoAdvance={true}
+            />
+          </AnimatedWrapper>
+        )}
       </div>
     </div>
   );

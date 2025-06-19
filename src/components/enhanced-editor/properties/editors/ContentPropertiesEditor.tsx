@@ -11,6 +11,8 @@ interface ContentPropertiesEditorProps {
 }
 
 export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEditorProps) {
+  const blockContent = block.content as any;
+
   switch (block.type) {
     case 'headline':
       return (
@@ -19,7 +21,7 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
             <Label htmlFor="title">Título</Label>
             <Input
               id="title"
-              value={block.content?.title || ''}
+              value={String(blockContent?.title || '')}
               onChange={(e) => onUpdate({ title: e.target.value })}
               placeholder="Digite o título..."
             />
@@ -28,7 +30,7 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
             <Label htmlFor="subtitle">Subtítulo</Label>
             <Input
               id="subtitle"
-              value={block.content?.subtitle || ''}
+              value={String(blockContent?.subtitle || '')}
               onChange={(e) => onUpdate({ subtitle: e.target.value })}
               placeholder="Digite o subtítulo..."
             />
@@ -43,7 +45,7 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
             <Label htmlFor="text">Texto</Label>
             <Textarea
               id="text"
-              value={block.content?.text || ''}
+              value={String(blockContent?.text || '')}
               onChange={(e) => onUpdate({ text: e.target.value })}
               placeholder="Digite o texto..."
               rows={6}
@@ -59,7 +61,7 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
             <Label htmlFor="imageUrl">URL da Imagem</Label>
             <Input
               id="imageUrl"
-              value={block.content?.imageUrl || ''}
+              value={String(blockContent?.imageUrl || '')}
               onChange={(e) => onUpdate({ imageUrl: e.target.value })}
               placeholder="https://exemplo.com/imagem.jpg"
             />
@@ -69,7 +71,7 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
             <Label htmlFor="imageAlt">Texto Alternativo</Label>
             <Input
               id="imageAlt"
-              value={block.content?.imageAlt || ''}
+              value={String(blockContent?.imageAlt || '')}
               onChange={(e) => onUpdate({ imageAlt: e.target.value })}
               placeholder="Descrição da imagem para acessibilidade"
             />
@@ -79,7 +81,7 @@ export function ContentPropertiesEditor({ block, onUpdate }: ContentPropertiesEd
             <Label htmlFor="caption">Legenda</Label>
             <Input
               id="caption"
-              value={block.content?.caption || ''}
+              value={String(blockContent?.caption || '')}
               onChange={(e) => onUpdate({ caption: e.target.value })}
               placeholder="Legenda da imagem"
             />

@@ -1,89 +1,122 @@
 
-import React from 'react';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import React, { useState, useCallback } from 'react';
+import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
 import { PreviewPanel } from './preview/PreviewPanel';
-import { PropertiesPanel } from './properties/PropertiesPanel';
+import PropertiesPanel from './properties/PropertiesPanel';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 import { Block } from '@/types/editor';
-import { StyleResult } from '@/types/quiz';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Eye, EyeOff, Smartphone, Tablet, Monitor, Save } from 'lucide-react';
 
 interface EnhancedEditorLayoutProps {
   blocks: Block[];
   selectedBlockId: string | null;
-  isPreviewing: boolean;
-  primaryStyle?: StyleResult;
-  viewportSize: 'sm' | 'md' | 'lg' | 'xl';
-  onViewportSizeChange: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
-  onSelectBlock: (id: string | null) => void;
-  onAddBlock: (type: Block['type']) => void;
-  onUpdateBlock: (id: string, content: any) => void;
-  onDeleteBlock: (id: string) => void;
-  onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
-  onTogglePreview: () => void;
-  onSave: () => void;
+  onBlockSelect: (id: string | null) => void;
+  onBlockAdd: (type: string) => void;
+  onBlockUpdate: (id: string, content: any) => void;
+  onBlockDelete: (id: string) => void;
+  onBlocksReorder: (blocks: Block[]) => void;
+  onSave?: () => void;
+  primaryStyle?: any;
 }
 
-export const EnhancedEditorLayout: React.FC<EnhancedEditorLayoutProps> = ({
+export function EnhancedEditorLayout({
   blocks,
   selectedBlockId,
-  isPreviewing,
-  primaryStyle,
-  viewportSize,
-  onViewportSizeChange,
-  onSelectBlock,
-  onAddBlock,
-  onUpdateBlock,
-  onDeleteBlock,
-  onReorderBlocks,
-  onTogglePreview,
-  onSave
-}) => {
+  onBlockSelect,
+  onBlockAdd,
+  onBlockUpdate,
+  onBlockDelete,
+  onBlocksReorder,
+  onSave,
+  primaryStyle
+}: EnhancedEditorLayoutProps) {
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [previewDevice, setPreviewDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const isMobile = useIsMobile();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = blocks.findIndex((block) => block.id === active.id);
+      const newIndex = blocks.findIndex((block) => block.id === over.id);
+      
+      const newBlocks = arrayMove(blocks, oldIndex, newIndex);
+      onBlocksReorder(newBlocks);
+    }
+  }, [blocks, onBlocksReorder]);
+
+  const selectedBlock = selectedBlockId ? blocks.find(b => b.id === selectedBlockId) || null : null;
+
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
-      <EditorToolbar 
+    <div className="h-screen flex flex-col bg-[#FAF9F7]">
+      {/* Toolbar */}
+      <EditorToolbar
         isPreviewing={isPreviewing}
-        viewportSize={viewportSize}
-        onViewportSizeChange={onViewportSizeChange}
-        onTogglePreview={onTogglePreview}
+        onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
+        previewDevice={previewDevice}
+        onDeviceChange={setPreviewDevice}
         onSave={onSave}
       />
-      
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
-        {/* Left Panel - Components */}
-        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-          <ComponentsSidebar onComponentSelect={onAddBlock} />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        {/* Center Panel - Preview */}
-        <ResizablePanel defaultSize={55}>
-          <PreviewPanel
-            blocks={blocks}
-            selectedBlockId={selectedBlockId}
-            onSelectBlock={onSelectBlock}
-            isPreviewing={isPreviewing}
-            viewportSize={viewportSize}
-            primaryStyle={primaryStyle}
-            onReorderBlocks={onReorderBlocks}
-          />
-        </ResizablePanel>
-        
-        <ResizableHandle withHandle />
-        
-        {/* Right Panel - Properties */}
-        <ResizablePanel defaultSize={25} minSize={20} maxSize={30}>
-          <PropertiesPanel
-            selectedBlockId={selectedBlockId}
-            blocks={blocks}
-            onClose={() => onSelectBlock(null)}
-            onUpdate={onUpdateBlock}
-            onDelete={onDeleteBlock}
-            isMobile={viewportSize === 'sm'}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+
+      <div className="flex-1 flex overflow-hidden">
+        {/* Sidebar - Components */}
+        {!isPreviewing && (
+          <div className={`bg-white border-r border-[#E5E5E5] transition-all duration-300 ${
+            sidebarOpen ? 'w-64' : 'w-0'
+          } overflow-hidden`}>
+            <ComponentsSidebar onAddBlock={onBlockAdd} />
+          </div>
+        )}
+
+        {/* Main Content - Preview */}
+        <div className="flex-1 overflow-hidden">
+          <DndContext
+            sensors={sensors}
+            modifiers={[restrictToVerticalAxis]}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext items={blocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
+              <PreviewPanel
+                blocks={blocks}
+                selectedBlockId={selectedBlockId}
+                isPreviewing={isPreviewing}
+                previewDevice={previewDevice}
+                onBlockSelect={onBlockSelect}
+                onBlockDelete={onBlockDelete}
+                primaryStyle={primaryStyle}
+              />
+            </SortableContext>
+          </DndContext>
+        </div>
+
+        {/* Properties Panel */}
+        {!isPreviewing && selectedBlock && (
+          <div className="w-80 bg-white border-l border-[#E5E5E5] overflow-y-auto">
+            <PropertiesPanel
+              selectedBlock={selectedBlock}
+              onUpdateBlock={onBlockUpdate}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
-};
+}

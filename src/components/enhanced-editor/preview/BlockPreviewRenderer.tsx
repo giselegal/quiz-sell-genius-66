@@ -12,6 +12,7 @@ interface BlockPreviewRendererProps {
   isSelected: boolean;
   isPreviewing: boolean;
   onSelect: () => void;
+  onDelete: () => void;
   primaryStyle?: StyleResult;
 }
 
@@ -20,6 +21,7 @@ export function BlockPreviewRenderer({
   isSelected,
   isPreviewing,
   onSelect,
+  onDelete,
   primaryStyle
 }: BlockPreviewRendererProps) {
   const {
@@ -56,8 +58,17 @@ export function BlockPreviewRenderer({
       )}
     >
       {!isPreviewing && isSelected && (
-        <div className="absolute -top-3 left-2 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-sm z-10">
-          {block.type}
+        <div className="absolute -top-3 left-2 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-sm z-10 flex items-center gap-2">
+          <span>{block.type}</span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="hover:bg-red-500 px-1 rounded"
+          >
+            ×
+          </button>
         </div>
       )}
 
@@ -67,12 +78,15 @@ export function BlockPreviewRenderer({
 }
 
 function renderBlockContent(block: Block, isPreviewing: boolean, primaryStyle?: StyleResult) {
+  const blockContent = block.content as any;
+  const blockStyle = blockContent?.style as any;
+  
   const defaultStyle = {
-    padding: block.content?.style?.padding || '1rem',
-    backgroundColor: block.content?.style?.backgroundColor || 'transparent',
-    color: block.content?.style?.color || 'inherit',
-    textAlign: block.content?.style?.textAlign as any || 'left',
-    borderRadius: block.content?.style?.borderRadius || '0.375rem'
+    padding: blockStyle?.padding || '1rem',
+    backgroundColor: blockStyle?.backgroundColor || 'transparent',
+    color: blockStyle?.color || 'inherit',
+    textAlign: (blockStyle?.textAlign as any) || 'left',
+    borderRadius: blockStyle?.borderRadius || '0.375rem'
   };
 
   switch (block.type) {
@@ -82,12 +96,12 @@ function renderBlockContent(block: Block, isPreviewing: boolean, primaryStyle?: 
           {!isPreviewing ? (
             <>
               <InlineTextEditor
-                value={block.content?.title || 'Título Principal'}
+                value={String(blockContent?.title || 'Título Principal')}
                 placeholder="Digite o título principal..."
                 className="text-2xl font-playfair text-[#432818] w-full outline-none border-b border-transparent focus:border-[#B89B7A]/30 transition-all"
               />
               <InlineTextEditor
-                value={block.content?.subtitle || 'Subtítulo ou descrição'}
+                value={String(blockContent?.subtitle || 'Subtítulo ou descrição')}
                 placeholder="Digite o subtítulo..."
                 className="text-lg text-[#8F7A6A] w-full outline-none border-b border-transparent focus:border-[#B89B7A]/30 transition-all"
               />
@@ -95,10 +109,10 @@ function renderBlockContent(block: Block, isPreviewing: boolean, primaryStyle?: 
           ) : (
             <>
               <h2 className="text-2xl font-playfair text-[#432818]">
-                {block.content?.title || 'Título Principal'}
+                {String(blockContent?.title || 'Título Principal')}
               </h2>
               <p className="text-[#8F7A6A]">
-                {block.content?.subtitle || 'Subtítulo ou descrição'}
+                {String(blockContent?.subtitle || 'Subtítulo ou descrição')}
               </p>
             </>
           )}
@@ -110,14 +124,14 @@ function renderBlockContent(block: Block, isPreviewing: boolean, primaryStyle?: 
         <div style={defaultStyle}>
           {!isPreviewing ? (
             <InlineTextEditor
-              value={block.content?.text || 'Digite seu texto aqui...'}
+              value={String(blockContent?.text || 'Digite seu texto aqui...')}
               placeholder="Digite seu texto aqui..."
               className="text-[#432818] w-full outline-none border-b border-transparent focus:border-[#B89B7A]/30 transition-all"
               multiline
             />
           ) : (
             <p className="text-[#432818]">
-              {block.content?.text || 'Digite seu texto aqui...'}
+              {String(blockContent?.text || 'Digite seu texto aqui...')}
             </p>
           )}
         </div>
@@ -129,10 +143,10 @@ function renderBlockContent(block: Block, isPreviewing: boolean, primaryStyle?: 
           className="flex flex-col items-center text-center"
           style={defaultStyle}
         >
-          {block.content?.imageUrl ? (
+          {blockContent?.imageUrl ? (
             <img
-              src={block.content.imageUrl}
-              alt={block.content.imageAlt || 'Imagem'}
+              src={String(blockContent.imageUrl)}
+              alt={String(blockContent.imageAlt || 'Imagem')}
               className="max-w-full rounded-md"
             />
           ) : (
@@ -147,20 +161,18 @@ function renderBlockContent(block: Block, isPreviewing: boolean, primaryStyle?: 
           )}
           {!isPreviewing ? (
             <InlineTextEditor
-              value={block.content?.caption || ''}
+              value={String(blockContent?.caption || '')}
               placeholder="Legenda da imagem..."
               className="mt-2 text-sm text-[#8F7A6A] w-full outline-none border-b border-transparent focus:border-[#B89B7A]/30 transition-all text-center"
             />
           ) : (
-            block.content?.caption && (
-              <p className="mt-2 text-sm text-[#8F7A6A]">{block.content.caption}</p>
+            blockContent?.caption && (
+              <p className="mt-2 text-sm text-[#8F7A6A]">{String(blockContent.caption)}</p>
             )
           )}
         </div>
       );
 
-    // Add more block types here...
-    
     default:
       return (
         <div className="p-4 border border-[#B89B7A]/20 rounded-md bg-[#FAF9F7]">
