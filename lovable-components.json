@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-19T14:48:42.524Z",
-  "components": 540,
+  "timestamp": "2025-06-19T14:51:51.667Z",
+  "components": 543,
   "files": [
     {
       "name": "App",
@@ -628,11 +628,6 @@
       "type": "typescript"
     },
     {
-      "name": "EnhancedEditorLayout",
-      "path": "src/components/enhanced-editor/EnhancedEditorLayout.tsx",
-      "type": "typescript"
-    },
-    {
       "name": "EnhancedQuizBuilder",
       "path": "src/components/enhanced-editor/EnhancedQuizBuilder.tsx",
       "type": "typescript"
@@ -640,6 +635,26 @@
     {
       "name": "InlineTextEditor",
       "path": "src/components/enhanced-editor/preview/editors/InlineTextEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PropertiesPanel",
+      "path": "src/components/enhanced-editor/properties/PropertiesPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentItem",
+      "path": "src/components/enhanced-editor/sidebar/ComponentItem.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentsSidebar",
+      "path": "src/components/enhanced-editor/sidebar/ComponentsSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorToolbar",
+      "path": "src/components/enhanced-editor/toolbar/EditorToolbar.tsx",
       "type": "typescript"
     },
     {
