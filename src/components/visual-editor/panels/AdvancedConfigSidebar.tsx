@@ -8,7 +8,7 @@ import {
   PencilRuler,
   Code,
   Cog,
-  Plus,
+  Plus
 } from "lucide-react";
 
 // --- Interfaces ---
@@ -75,9 +75,7 @@ interface AdvancedConfigSidebarProps {
   headerConfig: QuizEditorState["headerConfig"];
   onComponentUpdate: (
     targetId: string,
-    newProps:
-      | Partial<QuizComponentProps>
-      | Partial<QuizEditorState["headerConfig"]>
+    newProps: Partial<QuizComponentProps> | Partial<QuizEditorState["headerConfig"]>
   ) => void;
   onStepRename: (stepId: string, newName: string) => void;
   currentStep: QuizStep | null;
@@ -102,22 +100,17 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     styling: false,
     customization: false,
     advanced: false,
-    general: false,
+    general: false
   });
 
   const toggleCard = (cardName: string) => {
-    setExpandedCards((prev) => ({
+    setExpandedCards(prev => ({
       ...prev,
-      [cardName]: !prev[cardName as keyof typeof prev],
+      [cardName]: !prev[cardName as keyof typeof prev]
     }));
   };
 
-  const ConfigCard = ({
-    title,
-    children,
-    cardKey,
-    icon,
-  }: {
+  const ConfigCard = ({ title, children, cardKey, icon }: {
     title: string;
     children: React.ReactNode;
     cardKey: string;
@@ -126,7 +119,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     const isExpanded = expandedCards[cardKey as keyof typeof expandedCards];
     return (
       <div className="rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-100 shadow-sm overflow-hidden">
-        <div
+        <div 
           className="flex items-center justify-between p-4 cursor-pointer hover:bg-zinc-750 transition-colors"
           onClick={() => toggleCard(cardKey)}
         >
@@ -134,9 +127,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             <div className="w-4 h-4 text-zinc-400">{icon}</div>
             <h3 className="text-sm font-medium">{title}</h3>
           </div>
-          <div
-            className={`transition-transform ${isExpanded ? "rotate-180" : ""}`}
-          >
+          <div className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
             <ArrowDown size={16} className="text-zinc-400" />
           </div>
         </div>
@@ -149,27 +140,15 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     );
   };
 
-  const FieldGroup = ({
-    label,
-    children,
-  }: {
-    label: string;
-    children: React.ReactNode;
-  }) => (
+  const FieldGroup = ({ label, children }: { label: string; children: React.ReactNode }) => (
     <div className="space-y-2">
-      <label className="text-xs font-medium text-zinc-300 uppercase tracking-wide">
-        {label}
-      </label>
+      <label className="text-xs font-medium text-zinc-300 uppercase tracking-wide">{label}</label>
       {children}
     </div>
   );
 
-  const ColorPicker = ({
-    value,
-    onChange,
-    label,
-  }: {
-    value?: string;
+  const ColorPicker = ({ value, onChange, label }: { 
+    value?: string; 
     onChange: (color: string) => void;
     label: string;
   }) => (
@@ -192,14 +171,14 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     </FieldGroup>
   );
 
-  const SliderControl = ({
-    label,
-    value,
-    onChange,
-    min = 0,
-    max = 100,
+  const SliderControl = ({ 
+    label, 
+    value, 
+    onChange, 
+    min = 0, 
+    max = 100, 
     step = 1,
-    unit = "",
+    unit = ""
   }: {
     label: string;
     value?: number;
@@ -221,20 +200,17 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
           className="flex-1 h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
         />
         <div className="min-w-[3rem] text-right">
-          <span className="text-sm text-zinc-300">
-            {value || min}
-            {unit}
-          </span>
+          <span className="text-sm text-zinc-300">{value || min}{unit}</span>
         </div>
       </div>
     </FieldGroup>
   );
 
-  const SelectControl = ({
-    label,
-    value,
-    onChange,
-    options,
+  const SelectControl = ({ 
+    label, 
+    value, 
+    onChange, 
+    options 
   }: {
     label: string;
     value?: string;
@@ -247,7 +223,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
         onChange={(e) => onChange(e.target.value)}
         className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
       >
-        {options.map((option) => (
+        {options.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
@@ -256,28 +232,26 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     </FieldGroup>
   );
 
-  const SwitchControl = ({
-    label,
-    checked,
-    onChange,
+  const SwitchControl = ({ 
+    label, 
+    checked, 
+    onChange 
   }: {
     label: string;
     checked?: boolean;
     onChange: (checked: boolean) => void;
   }) => (
     <div className="flex items-center justify-between">
-      <label className="text-xs font-medium text-zinc-300 uppercase tracking-wide">
-        {label}
-      </label>
-      <div
+      <label className="text-xs font-medium text-zinc-300 uppercase tracking-wide">{label}</label>
+      <div 
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
-          checked ? "bg-blue-600" : "bg-zinc-600"
+          checked ? 'bg-blue-600' : 'bg-zinc-600'
         }`}
         onClick={() => onChange(!checked)}
       >
         <span
           className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-            checked ? "translate-x-6" : "translate-x-1"
+            checked ? 'translate-x-6' : 'translate-x-1'
           }`}
         />
       </div>
@@ -292,12 +266,12 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
           Configurações
         </h2>
       </div>
-
+      
       <div className="p-4 space-y-4">
         {/* Configurações da Etapa */}
         {currentStep && (
-          <ConfigCard
-            title="Configurações da Etapa"
+          <ConfigCard 
+            title="Configurações da Etapa" 
             cardKey="general"
             icon={<Cog size={16} />}
           >
@@ -317,131 +291,46 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
         {selectedComponentId && selectedComponent ? (
           <>
             {/* Card Layout */}
-            <ConfigCard
-              title="Layout"
+            <ConfigCard 
+              title="Layout" 
               cardKey="layout"
               icon={<Proportions size={16} />}
             >
-              {selectedComponent.type === "options" ? (
-                <>
-                  <SelectControl
-                    label="Tipo de Layout"
-                    value={selectedComponent.props.layoutType || "text-only"}
-                    onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, { layoutType: value })
-                    }
-                    options={[
-                      { value: "text-only", label: "Apenas Texto (Lista)" },
-                      { value: "with-images", label: "Com Imagens (Cards)" },
-                    ]}
-                  />
-                  {selectedComponent.props.layoutType === "with-images" && (
-                    <SelectControl
-                      label="Colunas da Grade"
-                      value={selectedComponent.props.gridColumns || "2"}
-                      onChange={(value) =>
-                        onComponentUpdate(selectedComponent.id, { gridColumns: value })
-                      }
-                      options={[
-                        { value: "1", label: "1 Coluna" },
-                        { value: "2", label: "2 Colunas" },
-                        { value: "3", label: "3 Colunas" },
-                        { value: "4", label: "4 Colunas" },
-                      ]}
-                    />
-                  )}
-                  <SelectControl
-                    label="Alinhamento"
-                    value={selectedComponent.props.alignment || "left"}
-                    onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, { alignment: value })
-                    }
-                    options={[
-                      { value: "left", label: "Esquerda" },
-                      { value: "center", label: "Centro" },
-                      { value: "right", label: "Direita" },
-                    ]}
-                  />
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      id="multipleChoice"
-                      checked={selectedComponent.props.multipleChoice || false}
-                      onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
-                          multipleChoice: e.target.checked,
-                        })
-                      }
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <label htmlFor="multipleChoice" className="text-sm text-zinc-300">
-                      Permitir múltipla seleção
-                    </label>
-                  </div>
-                  <SelectControl
-                    label="Alinhamento"
-                    value={selectedComponent.props.alignment || "center"}
-                    onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        alignment: value,
-                      })
-                    }
-                    options={[
-                      { value: "left", label: "Esquerda" },
-                      { value: "center", label: "Centro" },
-                      { value: "right", label: "Direita" },
-                    ]}
-                  />
-                </>
-              ) : (
-                <>
-                  <SelectControl
-                    label="Direção"
-                    value={selectedComponent.props.direction || "column"}
-                    onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        direction: value,
-                      })
-                    }
-                    options={[
-                      { value: "column", label: "Vertical" },
-                      { value: "row", label: "Horizontal" },
-                    ]}
-                  />
-                  <SelectControl
-                    label="Disposição"
-                    value={selectedComponent.props.layout || "default"}
-                    onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, { layout: value })
-                    }
-                    options={[
-                      { value: "default", label: "Padrão" },
-                      { value: "grid", label: "Grade" },
-                      { value: "flex", label: "Flexível" },
-                    ]}
-                  />
-                  <SelectControl
-                    label="Alinhamento"
-                    value={selectedComponent.props.alignment || "center"}
-                    onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        alignment: value,
-                      })
-                    }
-                    options={[
-                      { value: "left", label: "Esquerda" },
-                      { value: "center", label: "Centro" },
-                      { value: "right", label: "Direita" },
-                    ]}
-                  />
-                </>
-              )}
+              <SelectControl
+                label="Direção"
+                value={selectedComponent.props.direction || "column"}
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { direction: value })}
+                options={[
+                  { value: "column", label: "Vertical" },
+                  { value: "row", label: "Horizontal" }
+                ]}
+              />
+              <SelectControl
+                label="Disposição"
+                value={selectedComponent.props.layout || "default"}
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { layout: value })}
+                options={[
+                  { value: "default", label: "Padrão" },
+                  { value: "grid", label: "Grade" },
+                  { value: "flex", label: "Flexível" }
+                ]}
+              />
+              <SelectControl
+                label="Alinhamento"
+                value={selectedComponent.props.alignment || "center"}
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { alignment: value })}
+                options={[
+                  { value: "left", label: "Esquerda" },
+                  { value: "center", label: "Centro" },
+                  { value: "right", label: "Direita" }
+                ]}
+              />
             </ConfigCard>
 
             {/* Card Opções (apenas para componente options) */}
             {selectedComponent.type === "options" && (
-              <ConfigCard
-                title="Opções"
+              <ConfigCard 
+                title="Opções" 
                 cardKey="options"
                 icon={<List size={16} />}
               >
@@ -449,84 +338,58 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                   <input
                     type="text"
                     value={selectedComponent.props.text || ""}
-                    onChange={(e) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        text: e.target.value,
-                      })
-                    }
+                    onChange={(e) => onComponentUpdate(selectedComponent.id, { text: e.target.value })}
                     className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                     placeholder="Qual é a sua pergunta?"
                   />
                 </FieldGroup>
-
+                
                 <div className="space-y-3">
                   <label className="text-xs font-medium text-zinc-300 uppercase tracking-wide">
                     Lista de Opções
                   </label>
-                  {selectedComponent.props.choices?.map(
-                    (choice: OptionChoice, index: number) => (
-                      <div
-                        key={index}
-                        className="p-3 border border-zinc-700 rounded-md bg-zinc-900/50 space-y-2"
+                  {selectedComponent.props.choices?.map((choice: OptionChoice, index: number) => (
+                    <div key={index} className="p-3 border border-zinc-700 rounded-md bg-zinc-900/50 space-y-2">
+                      <input
+                        type="text"
+                        value={choice.text}
+                        onChange={(e) => {
+                          const updatedChoices = [...(selectedComponent.props.choices || [])];
+                          updatedChoices[index].text = e.target.value;
+                          onComponentUpdate(selectedComponent.id, { choices: updatedChoices });
+                        }}
+                        className="w-full h-9 rounded border border-zinc-600 bg-zinc-700 px-2 text-sm text-zinc-100"
+                        placeholder={`Opção ${index + 1}`}
+                      />
+                      <input
+                        type="text"
+                        value={choice.imageSrc || ""}
+                        onChange={(e) => {
+                          const updatedChoices = [...(selectedComponent.props.choices || [])];
+                          updatedChoices[index].imageSrc = e.target.value;
+                          onComponentUpdate(selectedComponent.id, { choices: updatedChoices });
+                        }}
+                        className="w-full h-9 rounded border border-zinc-600 bg-zinc-700 px-2 text-sm text-zinc-100"
+                        placeholder="URL da Imagem (opcional)"
+                      />
+                      <button
+                        onClick={() => {
+                          const updatedChoices = (selectedComponent.props.choices || []).filter((_, i) => i !== index);
+                          onComponentUpdate(selectedComponent.id, { choices: updatedChoices });
+                        }}
+                        className="w-full bg-red-600/20 text-red-400 hover:bg-red-600/30 px-2 py-1 rounded text-xs transition-colors"
                       >
-                        <input
-                          type="text"
-                          value={choice.text}
-                          onChange={(e) => {
-                            const updatedChoices = [
-                              ...(selectedComponent.props.choices || []),
-                            ];
-                            updatedChoices[index].text = e.target.value;
-                            onComponentUpdate(selectedComponent.id, {
-                              choices: updatedChoices,
-                            });
-                          }}
-                          className="w-full h-9 rounded border border-zinc-600 bg-zinc-700 px-2 text-sm text-zinc-100"
-                          placeholder={`Opção ${index + 1}`}
-                        />
-                        <input
-                          type="text"
-                          value={choice.imageSrc || ""}
-                          onChange={(e) => {
-                            const updatedChoices = [
-                              ...(selectedComponent.props.choices || []),
-                            ];
-                            updatedChoices[index].imageSrc = e.target.value;
-                            onComponentUpdate(selectedComponent.id, {
-                              choices: updatedChoices,
-                            });
-                          }}
-                          className="w-full h-9 rounded border border-zinc-600 bg-zinc-700 px-2 text-sm text-zinc-100"
-                          placeholder="URL da Imagem (opcional)"
-                        />
-                        <button
-                          onClick={() => {
-                            const updatedChoices = (
-                              selectedComponent.props.choices || []
-                            ).filter((_, i) => i !== index);
-                            onComponentUpdate(selectedComponent.id, {
-                              choices: updatedChoices,
-                            });
-                          }}
-                          className="w-full bg-red-600/20 text-red-400 hover:bg-red-600/30 px-2 py-1 rounded text-xs transition-colors"
-                        >
-                          Remover
-                        </button>
-                      </div>
-                    )
-                  )}
+                        Remover
+                      </button>
+                    </div>
+                  ))}
                   <button
                     onClick={() => {
                       const updatedChoices = [
                         ...(selectedComponent.props.choices || []),
-                        {
-                          text: "Nova Opção",
-                          value: `option-${generateUniqueId()}`,
-                        },
+                        { text: "Nova Opção", value: `option-${generateUniqueId()}` }
                       ];
-                      onComponentUpdate(selectedComponent.id, {
-                        choices: updatedChoices,
-                      });
+                      onComponentUpdate(selectedComponent.id, { choices: updatedChoices });
                     }}
                     className="w-full bg-green-600/20 text-green-400 hover:bg-green-600/30 px-3 py-2 rounded text-sm transition-colors flex items-center justify-center gap-2"
                   >
@@ -538,68 +401,48 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             )}
 
             {/* Card Validações */}
-            <ConfigCard
-              title="Validações"
+            <ConfigCard 
+              title="Validações" 
               cardKey="validation"
               icon={<TriangleAlert size={16} />}
             >
               <SwitchControl
                 label="Múltipla Escolha"
                 checked={selectedComponent.props.multipleChoice || false}
-                onChange={(checked) =>
-                  onComponentUpdate(selectedComponent.id, {
-                    multipleChoice: checked,
-                  })
-                }
+                onChange={(checked) => onComponentUpdate(selectedComponent.id, { multipleChoice: checked })}
               />
               <SwitchControl
                 label="Obrigatório"
                 checked={selectedComponent.props.required || false}
-                onChange={(checked) =>
-                  onComponentUpdate(selectedComponent.id, { required: checked })
-                }
+                onChange={(checked) => onComponentUpdate(selectedComponent.id, { required: checked })}
               />
               <SwitchControl
                 label="Auto-avançar"
                 checked={selectedComponent.props.autoAdvance || false}
-                onChange={(checked) =>
-                  onComponentUpdate(selectedComponent.id, {
-                    autoAdvance: checked,
-                  })
-                }
+                onChange={(checked) => onComponentUpdate(selectedComponent.id, { autoAdvance: checked })}
               />
             </ConfigCard>
 
             {/* Card Estilização */}
-            <ConfigCard
-              title="Estilização"
+            <ConfigCard 
+              title="Estilização" 
               cardKey="styling"
               icon={<Palette size={16} />}
             >
               <ColorPicker
                 label="Cor de Fundo"
                 value={selectedComponent.props.backgroundColor || "#1f2937"}
-                onChange={(color) =>
-                  onComponentUpdate(selectedComponent.id, {
-                    backgroundColor: color,
-                  })
-                }
+                onChange={(color) => onComponentUpdate(selectedComponent.id, { backgroundColor: color })}
               />
               <ColorPicker
                 label="Cor do Texto"
                 value={selectedComponent.props.textColor || "#f9fafb"}
-                onChange={(color) =>
-                  onComponentUpdate(selectedComponent.id, { textColor: color })
-                }
+                onChange={(color) => onComponentUpdate(selectedComponent.id, { textColor: color })}
               />
               <SliderControl
                 label="Raio da Borda"
                 value={selectedComponent.props.borderRadius || 8}
-                onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, {
-                    borderRadius: value,
-                  })
-                }
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { borderRadius: value })}
                 min={0}
                 max={24}
                 unit="px"
@@ -607,26 +450,22 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               <SliderControl
                 label="Sombra"
                 value={selectedComponent.props.shadow || 0}
-                onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, { shadow: value })
-                }
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { shadow: value })}
                 min={0}
                 max={10}
               />
             </ConfigCard>
 
             {/* Card Personalização */}
-            <ConfigCard
-              title="Personalização"
+            <ConfigCard 
+              title="Personalização" 
               cardKey="customization"
               icon={<PencilRuler size={16} />}
             >
               <SliderControl
                 label="Espaçamento Interno"
                 value={selectedComponent.props.padding || 16}
-                onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, { padding: value })
-                }
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { padding: value })}
                 min={0}
                 max={48}
                 unit="px"
@@ -634,9 +473,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               <SliderControl
                 label="Espaçamento Externo"
                 value={selectedComponent.props.margin || 8}
-                onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, { margin: value })
-                }
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { margin: value })}
                 min={0}
                 max={48}
                 unit="px"
@@ -644,9 +481,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               <SliderControl
                 label="Tamanho da Fonte"
                 value={selectedComponent.props.fontSize || 16}
-                onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, { fontSize: value })
-                }
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { fontSize: value })}
                 min={12}
                 max={32}
                 unit="px"
@@ -654,19 +489,15 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             </ConfigCard>
 
             {/* Card Avançado */}
-            <ConfigCard
-              title="Avançado"
+            <ConfigCard 
+              title="Avançado" 
               cardKey="advanced"
               icon={<Code size={16} />}
             >
               <FieldGroup label="CSS Personalizado">
                 <textarea
                   value={selectedComponent.props.customCSS || ""}
-                  onChange={(e) =>
-                    onComponentUpdate(selectedComponent.id, {
-                      customCSS: e.target.value,
-                    })
-                  }
+                  onChange={(e) => onComponentUpdate(selectedComponent.id, { customCSS: e.target.value })}
                   className="w-full h-20 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 font-mono"
                   placeholder="/* CSS personalizado */"
                 />
@@ -675,11 +506,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 <input
                   type="text"
                   value={selectedComponent.props.customId || ""}
-                  onChange={(e) =>
-                    onComponentUpdate(selectedComponent.id, {
-                      customId: e.target.value,
-                    })
-                  }
+                  onChange={(e) => onComponentUpdate(selectedComponent.id, { customId: e.target.value })}
                   className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                   placeholder="meu-componente"
                 />
@@ -687,22 +514,17 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             </ConfigCard>
 
             {/* Propriedades básicas específicas do tipo de componente */}
-            <ConfigCard
-              title="Propriedades Básicas"
+            <ConfigCard 
+              title="Propriedades Básicas" 
               cardKey="basic"
               icon={<Cog size={16} />}
             >
-              {(selectedComponent.type === "heading" ||
-                selectedComponent.type === "text") && (
+              {(selectedComponent.type === "heading" || selectedComponent.type === "text") && (
                 <FieldGroup label="Texto">
                   <input
                     type="text"
                     value={selectedComponent.props.text || ""}
-                    onChange={(e) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        text: e.target.value,
-                      })
-                    }
+                    onChange={(e) => onComponentUpdate(selectedComponent.id, { text: e.target.value })}
                     className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                     placeholder="Digite o texto"
                   />
@@ -715,11 +537,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     <input
                       type="text"
                       value={selectedComponent.props.src || ""}
-                      onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
-                          src: e.target.value,
-                        })
-                      }
+                      onChange={(e) => onComponentUpdate(selectedComponent.id, { src: e.target.value })}
                       className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                       placeholder="https://exemplo.com/imagem.png"
                     />
@@ -728,11 +546,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     <input
                       type="text"
                       value={selectedComponent.props.alt || ""}
-                      onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
-                          alt: e.target.value,
-                        })
-                      }
+                      onChange={(e) => onComponentUpdate(selectedComponent.id, { alt: e.target.value })}
                       className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                       placeholder="Descrição da imagem"
                     />
@@ -745,11 +559,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                   <input
                     type="text"
                     value={selectedComponent.props.buttonText || ""}
-                    onChange={(e) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        buttonText: e.target.value,
-                      })
-                    }
+                    onChange={(e) => onComponentUpdate(selectedComponent.id, { buttonText: e.target.value })}
                     className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                     placeholder="Clique aqui"
                   />
@@ -762,11 +572,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     <input
                       type="text"
                       value={selectedComponent.props.label || ""}
-                      onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
-                          label: e.target.value,
-                        })
-                      }
+                      onChange={(e) => onComponentUpdate(selectedComponent.id, { label: e.target.value })}
                       className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                       placeholder="Nome do campo"
                     />
@@ -775,11 +581,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     <input
                       type="text"
                       value={selectedComponent.props.placeholder || ""}
-                      onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
-                          placeholder: e.target.value,
-                        })
-                      }
+                      onChange={(e) => onComponentUpdate(selectedComponent.id, { placeholder: e.target.value })}
                       className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                       placeholder="Digite aqui..."
                     />
@@ -798,26 +600,22 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
         )}
 
         {/* Card Header Config */}
-        <ConfigCard
-          title="Configurações do Cabeçalho"
+        <ConfigCard 
+          title="Configurações do Cabeçalho" 
           cardKey="header"
           icon={<Cog size={16} />}
         >
           <SwitchControl
             label="Mostrar Logotipo"
             checked={headerConfig.showLogo}
-            onChange={(checked) =>
-              onComponentUpdate("headerConfig", { showLogo: checked })
-            }
+            onChange={(checked) => onComponentUpdate("headerConfig", { showLogo: checked })}
           />
           {headerConfig.showLogo && (
             <FieldGroup label="URL do Logotipo">
               <input
                 type="text"
                 value={headerConfig.logoSrc || ""}
-                onChange={(e) =>
-                  onComponentUpdate("headerConfig", { logoSrc: e.target.value })
-                }
+                onChange={(e) => onComponentUpdate("headerConfig", { logoSrc: e.target.value })}
                 className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                 placeholder="https://exemplo.com/logo.png"
               />
@@ -826,16 +624,12 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
           <SwitchControl
             label="Mostrar Progresso"
             checked={headerConfig.showProgress}
-            onChange={(checked) =>
-              onComponentUpdate("headerConfig", { showProgress: checked })
-            }
+            onChange={(checked) => onComponentUpdate("headerConfig", { showProgress: checked })}
           />
           <SwitchControl
             label="Permitir Voltar"
             checked={headerConfig.allowReturn}
-            onChange={(checked) =>
-              onComponentUpdate("headerConfig", { allowReturn: checked })
-            }
+            onChange={(checked) => onComponentUpdate("headerConfig", { allowReturn: checked })}
           />
         </ConfigCard>
       </div>

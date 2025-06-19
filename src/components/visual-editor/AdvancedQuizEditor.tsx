@@ -269,112 +269,58 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               />
             </div>
           )}
-          {component.type === "options" &&
-            (() => {
-              const layoutType = component.props.layoutType || "text-only";
-              const hasImages = component.props.choices?.some(
-                (choice: OptionChoice) => choice.imageSrc
-              );
-
-              // Determinar o layout automaticamente se não for especificado
-              const useImageLayout = layoutType === "with-images" || hasImages;
-
-              return (
-                <div className="quiz-options-container">
-                  {/* Renderizar opções reais se existirem */}
-                  {component.props.choices?.length > 0 ? (
-                    useImageLayout ? (
-                      // Layout em grid para opções com imagens
-                      <div 
-                        className="quiz-options-grid"
-                        style={{
-                          gridTemplateColumns: component.props.gridColumns 
-                            ? `repeat(${component.props.gridColumns}, 1fr)`
-                            : 'repeat(auto-fit, minmax(200px, 1fr))'
-                        }}
-                      >
-                        {component.props.choices.map(
-                          (choice: OptionChoice, index: number) => (
-                            <button
-                              key={index}
-                              className="quiz-option-card group"
-                            >
-                              {choice.imageSrc && (
-                                <div className="quiz-option-image-container">
-                                  <img
-                                    src={choice.imageSrc}
-                                    alt={choice.text}
-                                    className="w-full h-32 object-cover"
-                                    onError={(e) => {
-                                      (e.target as HTMLImageElement).src =
-                                        "https://placehold.co/256x256/555/FFF?text=IMG";
-                                    }}
-                                  />
-                                </div>
-                              )}
-                              <div className="quiz-option-content">
-                                <div className="quiz-option-text">
-                                  <div
-                                    className="custom-quill quill ql-editor quill-option"
-                                    dangerouslySetInnerHTML={{
-                                      __html: choice.text,
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            </button>
-                          )
-                        )}
-                      </div>
-                    ) : (
-                      // Layout vertical para opções apenas texto (estilo Lovable)
-                      <div className="flex flex-col gap-2">
-                        {component.props.choices.map(
-                          (choice: OptionChoice, index: number) => (
-                            <button
-                              key={index}
-                              className="quiz-option-text-only"
-                              style={{
-                                textAlign: component.props.alignment || 'left'
-                              }}
-                            >
-                              <div className="quiz-option-content">
-                                <div className="quiz-option-text">
-                                  <div
-                                    className="custom-quill quill ql-editor quill-option"
-                                    dangerouslySetInnerHTML={{
-                                      __html: choice.text,
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            </button>
-                          )
-                        )}
-                      </div>
-                    )
-                  ) : (
-                    // Placeholder se não houver opções definidas
-                    <div className="flex flex-col gap-2">
-                      <button className="quiz-option-text-only">
-                        <div className="quiz-option-content">
-                          <div className="quiz-option-text">
-                            <div className="text-sm opacity-60">Opção 1</div>
-                          </div>
+          {component.type === "options" && (
+            <div className="quiz-options-container">
+              <h3 className="font-medium mb-3 text-zinc-100">
+                {component.props.text || "Pergunta"}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 quiz-options-grid">
+                {component.props.choices?.map(
+                  (choice: OptionChoice, index: number) => (
+                    <button
+                      key={index}
+                      className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 hover:bg-zinc-700 transition-all duration-200 overflow-hidden group option-button"
+                    >
+                      {choice.imageSrc && (
+                        <div className="quiz-option-image-container">
+                          <img
+                            src={choice.imageSrc}
+                            alt={choice.text}
+                            className="w-full h-32 object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src =
+                                "https://placehold.co/256x256/555/FFF?text=IMG";
+                            }}
+                          />
                         </div>
-                      </button>
-                      <button className="quiz-option-text-only">
-                        <div className="quiz-option-content">
-                          <div className="quiz-option-text">
-                            <div className="text-sm opacity-60">Opção 2</div>
-                          </div>
+                      )}
+                      <div className="quiz-option-content p-3">
+                        <div className="quiz-option-text text-sm text-zinc-100 leading-tight">
+                          <div
+                            className="custom-quill quill ql-editor quill-option"
+                            dangerouslySetInnerHTML={{ __html: choice.text }}
+                          />
                         </div>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
+                      </div>
+                    </button>
+                  )
+                ) || (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-200 p-3 min-h-[100px] flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-sm opacity-60">Opção 1</div>
+                      </div>
+                    </button>
+                    <button className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-200 p-3 min-h-[100px] flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-sm opacity-60">Opção 2</div>
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
           {component.type === "video" && (
             <div className="aspect-video bg-zinc-800 rounded flex items-center justify-center text-zinc-400">
               📹 Vídeo
@@ -2086,7 +2032,7 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "comp-18-2",
             type: "image",
             props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Português_6_jxqlxx.webp",
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
               alt: "Imagem de valores monetários",
             },
           },
@@ -2151,407 +2097,6 @@ const AdvancedQuizEditor: React.FC = () => {
                   value: "resgatar_pecas",
                 },
               ],
-            },
-          },
-        ],
-      },
-      // --- ETAPAS DE RESULTADO ---
-      {
-        id: "step-20",
-        name: "RESULTADO - NATURAL",
-        components: [
-          {
-            id: "comp-20-1",
-            type: "heading",
-            props: { text: "Seu Estilo Dominante é NATURAL!" },
-          },
-          {
-            id: "comp-20-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
-              alt: "Estilo Natural",
-            },
-          },
-          {
-            id: "comp-20-3",
-            type: "text",
-            props: {
-              text: "Você é uma pessoa autêntica que valoriza o conforto e a praticidade sem abrir mão do estilo. Suas peças favoritas são versáteis, fáceis de combinar e refletem sua personalidade descomplicada.",
-            },
-          },
-          {
-            id: "comp-20-4",
-            type: "text",
-            props: {
-              text: "Características do seu estilo: Looks despojados, tecidos naturais, cores neutras, peças confortáveis que permitem movimento livre.",
-            },
-          },
-          {
-            id: "comp-20-5",
-            type: "button",
-            props: {
-              buttonText: "Quero Aprender Mais Sobre Meu Estilo!",
-            },
-          },
-          {
-            id: "comp-20-6",
-            type: "price",
-            props: {
-              currency: "R$",
-              amount: 47,
-              description:
-                "Guia Completo de Estilo Natural - De R$ 197 por apenas:",
-            },
-          },
-        ],
-      },
-      {
-        id: "step-21",
-        name: "RESULTADO - CLÁSSICO",
-        components: [
-          {
-            id: "comp-21-1",
-            type: "heading",
-            props: { text: "Seu Estilo Dominante é CLÁSSICO!" },
-          },
-          {
-            id: "comp-21-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
-              alt: "Estilo Clássico",
-            },
-          },
-          {
-            id: "comp-21-3",
-            type: "text",
-            props: {
-              text: "Você é elegante, organizada e aprecia a sofisticação discreta. Seu guarda-roupa é composto por peças atemporais, bem estruturadas e de qualidade, que nunca saem de moda.",
-            },
-          },
-          {
-            id: "comp-21-4",
-            type: "text",
-            props: {
-              text: "Características do seu estilo: Peças alfaiatadas, cores sóbrias, tecidos nobres, cortes tradicionais, acessórios discretos.",
-            },
-          },
-          {
-            id: "comp-21-5",
-            type: "button",
-            props: {
-              buttonText: "Quero Aprender Mais Sobre Meu Estilo!",
-            },
-          },
-          {
-            id: "comp-21-6",
-            type: "price",
-            props: {
-              currency: "R$",
-              amount: 47,
-              description:
-                "Guia Completo de Estilo Clássico - De R$ 197 por apenas:",
-            },
-          },
-        ],
-      },
-      {
-        id: "step-22",
-        name: "RESULTADO - CONTEMPORÂNEO",
-        components: [
-          {
-            id: "comp-22-1",
-            type: "heading",
-            props: { text: "Seu Estilo Dominante é CONTEMPORÂNEO!" },
-          },
-          {
-            id: "comp-22-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
-              alt: "Estilo Contemporâneo",
-            },
-          },
-          {
-            id: "comp-22-3",
-            type: "text",
-            props: {
-              text: "Você é moderna, prática e está sempre conectada com as tendências atuais. Gosta de mesclar o clássico com toques contemporâneos, criando looks atuais e funcionais.",
-            },
-          },
-          {
-            id: "comp-22-4",
-            type: "text",
-            props: {
-              text: "Características do seu estilo: Mix de clássico e moderno, peças funcionais, tecidos inteligentes, cores neutras com toques de cor.",
-            },
-          },
-          {
-            id: "comp-22-5",
-            type: "button",
-            props: {
-              buttonText: "Quero Aprender Mais Sobre Meu Estilo!",
-            },
-          },
-          {
-            id: "comp-22-6",
-            type: "price",
-            props: {
-              currency: "R$",
-              amount: 47,
-              description:
-                "Guia Completo de Estilo Contemporâneo - De R$ 197 por apenas:",
-            },
-          },
-        ],
-      },
-      {
-        id: "step-23",
-        name: "RESULTADO - ELEGANTE",
-        components: [
-          {
-            id: "comp-23-1",
-            type: "heading",
-            props: { text: "Seu Estilo Dominante é ELEGANTE!" },
-          },
-          {
-            id: "comp-23-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
-              alt: "Estilo Elegante",
-            },
-          },
-          {
-            id: "comp-23-3",
-            type: "text",
-            props: {
-              text: "Você é sofisticada, refinada e tem um gosto apurado para o luxo. Valoriza a qualidade acima da quantidade e investe em peças que transmitem status e elegância.",
-            },
-          },
-          {
-            id: "comp-23-4",
-            type: "text",
-            props: {
-              text: "Características do seu estilo: Tecidos nobres, cortes impecáveis, cores sofisticadas, acessórios de qualidade, silhuetas refinadas.",
-            },
-          },
-          {
-            id: "comp-23-5",
-            type: "button",
-            props: {
-              buttonText: "Quero Aprender Mais Sobre Meu Estilo!",
-            },
-          },
-          {
-            id: "comp-23-6",
-            type: "price",
-            props: {
-              currency: "R$",
-              amount: 47,
-              description:
-                "Guia Completo de Estilo Elegante - De R$ 197 por apenas:",
-            },
-          },
-        ],
-      },
-      {
-        id: "step-24",
-        name: "RESULTADO - ROMÂNTICO",
-        components: [
-          {
-            id: "comp-24-1",
-            type: "heading",
-            props: { text: "Seu Estilo Dominante é ROMÂNTICO!" },
-          },
-          {
-            id: "comp-24-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
-              alt: "Estilo Romântico",
-            },
-          },
-          {
-            id: "comp-24-3",
-            type: "text",
-            props: {
-              text: "Você é feminina, delicada e adora peças que realçam sua suavidade natural. Tem predileção por detalhes românticos, tecidos fluidos e cores suaves.",
-            },
-          },
-          {
-            id: "comp-24-4",
-            type: "text",
-            props: {
-              text: "Características do seu estilo: Tecidos fluidos, cores suaves, detalhes delicados (laços, babados), silhuetas femininas, estampas florais.",
-            },
-          },
-          {
-            id: "comp-24-5",
-            type: "button",
-            props: {
-              buttonText: "Quero Aprender Mais Sobre Meu Estilo!",
-            },
-          },
-          {
-            id: "comp-24-6",
-            type: "price",
-            props: {
-              currency: "R$",
-              amount: 47,
-              description:
-                "Guia Completo de Estilo Romântico - De R$ 197 por apenas:",
-            },
-          },
-        ],
-      },
-      {
-        id: "step-25",
-        name: "RESULTADO - SEXY",
-        components: [
-          {
-            id: "comp-25-1",
-            type: "heading",
-            props: { text: "Seu Estilo Dominante é SEXY!" },
-          },
-          {
-            id: "comp-25-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
-              alt: "Estilo Sexy",
-            },
-          },
-          {
-            id: "comp-25-3",
-            type: "text",
-            props: {
-              text: "Você é confiante, sensual e não tem medo de mostrar sua personalidade marcante. Gosta de peças que valorizam seu corpo e transmitem sensualidade com elegância.",
-            },
-          },
-          {
-            id: "comp-25-4",
-            type: "text",
-            props: {
-              text: "Características do seu estilo: Peças que marcam o corpo, decotes estratégicos, tecidos que moldam, cores vibrantes, acessórios statement.",
-            },
-          },
-          {
-            id: "comp-25-5",
-            type: "button",
-            props: {
-              buttonText: "Quero Aprender Mais Sobre Meu Estilo!",
-            },
-          },
-          {
-            id: "comp-25-6",
-            type: "price",
-            props: {
-              currency: "R$",
-              amount: 47,
-              description:
-                "Guia Completo de Estilo Sexy - De R$ 197 por apenas:",
-            },
-          },
-        ],
-      },
-      {
-        id: "step-26",
-        name: "RESULTADO - DRAMÁTICO",
-        components: [
-          {
-            id: "comp-26-1",
-            type: "heading",
-            props: { text: "Seu Estilo Dominante é DRAMÁTICO!" },
-          },
-          {
-            id: "comp-26-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
-              alt: "Estilo Dramático",
-            },
-          },
-          {
-            id: "comp-26-3",
-            type: "text",
-            props: {
-              text: "Você é ousada, moderna e gosta de causar impacto. Sua personalidade forte se reflete em looks marcantes, com peças estruturadas e combinações inesperadas.",
-            },
-          },
-          {
-            id: "comp-26-4",
-            type: "text",
-            props: {
-              text: "Características do seu estilo: Silhuetas geométricas, contrastes marcantes, peças estruturadas, acessórios statement, combinações ousadas.",
-            },
-          },
-          {
-            id: "comp-26-5",
-            type: "button",
-            props: {
-              buttonText: "Quero Aprender Mais Sobre Meu Estilo!",
-            },
-          },
-          {
-            id: "comp-26-6",
-            type: "price",
-            props: {
-              currency: "R$",
-              amount: 47,
-              description:
-                "Guia Completo de Estilo Dramático - De R$ 197 por apenas:",
-            },
-          },
-        ],
-      },
-      {
-        id: "step-27",
-        name: "RESULTADO - CRIATIVO",
-        components: [
-          {
-            id: "comp-27-1",
-            type: "heading",
-            props: { text: "Seu Estilo Dominante é CRIATIVO!" },
-          },
-          {
-            id: "comp-27-2",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
-              alt: "Estilo Criativo",
-            },
-          },
-          {
-            id: "comp-27-3",
-            type: "text",
-            props: {
-              text: "Você é única, aventureira e expressa sua individualidade através das roupas. Não segue regras rígidas e adora experimentar com cores, texturas e formas diferentes.",
-            },
-          },
-          {
-            id: "comp-27-4",
-            type: "text",
-            props: {
-              text: "Características do seu estilo: Mix de estampas, cores vibrantes, peças únicas, texturas variadas, combinações inusitadas.",
-            },
-          },
-          {
-            id: "comp-27-5",
-            type: "button",
-            props: {
-              buttonText: "Quero Aprender Mais Sobre Meu Estilo!",
-            },
-          },
-          {
-            id: "comp-27-6",
-            type: "price",
-            props: {
-              currency: "R$",
-              amount: 47,
-              description:
-                "Guia Completo de Estilo Criativo - De R$ 197 por apenas:",
             },
           },
         ],
