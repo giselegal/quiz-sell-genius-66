@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import {
   ArrowDown,
   Proportions,
@@ -100,6 +100,21 @@ interface AdvancedConfigSidebarProps {
   currentStep: QuizStep | null;
 }
 
+const useDebounce = () => {
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  const debounce = useCallback((func: (...args: unknown[]) => void, delay: number = 300) => {
+    return (...args: unknown[]) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => func(...args), delay);
+    };
+  }, []);
+
+  return debounce;
+};
+
 const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
   selectedComponent,
   selectedComponentId,
@@ -110,6 +125,20 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
 }) => {
   const generateUniqueId = (): string =>
     `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+  // Hook para debounce
+  const debounce = useDebounce();
+
+  // Função para validar URLs
+  const isValidUrl = (url: string): boolean => {
+    if (!url) return true; // URLs vazias são válidas (opcional)
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
   // Estados para os cards expandidos - Simplificado
   const [expandedCards, setExpandedCards] = useState({
@@ -148,7 +177,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
   const updateHeaderConfig = (
     newProps: Partial<QuizEditorState["headerConfig"]>
   ) => {
-    handleSaveWithFeedback(() => updateHeaderConfig(newProps));
+    handleSaveWithFeedback(() => onComponentUpdate("header", newProps));
   };
 
   const toggleCard = (cardName: string) => {
@@ -330,6 +359,61 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     </div>
   );
 
+  // Componente de input com validação e debounce
+  const ValidatedInput = ({
+    value,
+    onChange,
+    placeholder,
+    type = "text",
+    validateUrl = false,
+    className = "w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+  }: {
+    value: string;
+    onChange: (value: string) => void;
+    placeholder?: string;
+    type?: string;
+    validateUrl?: boolean;
+    className?: string;
+  }) => {
+    const [localValue, setLocalValue] = useState(value);
+    const [isInvalid, setIsInvalid] = useState(false);
+    
+    const debouncedUpdate = debounce((newValue: string) => {
+      if (validateUrl && newValue && !isValidUrl(newValue)) {
+        setIsInvalid(true);
+        return;
+      }
+      setIsInvalid(false);
+      onChange(newValue);
+    }, 500);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      setLocalValue(newValue);
+      debouncedUpdate(newValue);
+    };
+
+    return (
+      <div className="relative">
+        <input
+          type={type}
+          value={localValue}
+          onChange={handleChange}
+          placeholder={placeholder}
+          className={`${className} ${isInvalid ? 'border-red-500 bg-red-900/20' : ''}`}
+        />
+        {isInvalid && (
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+            <TriangleAlert size={16} className="text-red-400" />
+          </div>
+        )}
+        {isInvalid && (
+          <p className="text-xs text-red-400 mt-1">URL inválida</p>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full md:max-w-[24rem] bg-zinc-950 border-l border-zinc-700 overflow-y-auto hidden md:block">
       <div className="sticky top-0 bg-zinc-950 border-b border-zinc-700 p-4 z-10">
@@ -413,18 +497,17 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               {selectedComponent.type === "image" && (
                 <>
                   <FieldGroup label="URL da Imagem">
-                    <input
-                      type="text"
+                    <ValidatedInput
                       value={selectedComponent.props.src || ""}
-                      onChange={(e) =>
+                      onChange={(value) =>
                         handleSaveWithFeedback(() =>
                           updateComponent(selectedComponent.id, {
-                            src: e.target.value,
+                            src: value,
                           })
                         )
                       }
-                      className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                       placeholder="https://exemplo.com/imagem.png"
+                      validateUrl={true}
                     />
                   </FieldGroup>
                   <FieldGroup label="Texto Alternativo">
@@ -667,6 +750,72 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                           className="text-xs bg-purple-600/20 text-purple-400 hover:bg-purple-600/30 px-2 py-1 rounded transition-colors"
                         >
                           3 Opções Só Texto
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const testChoices = [
+                              { text: "Sim", value: "yes" },
+                              { text: "Não", value: "no" },
+                            ];
+                            handleSaveWithFeedback(() =>
+                              updateComponent(selectedComponent.id, {
+                                choices: testChoices,
+                                gridLayout: "grid-2",
+                                textAlignment: "center",
+                                autoAdvance: true,
+                              })
+                            );
+                          }}
+                          className="text-xs bg-green-600/20 text-green-400 hover:bg-green-600/30 px-2 py-1 rounded transition-colors"
+                        >
+                          Sim/Não (Auto-Avanço)
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const testChoices = [
+                              { text: "⭐ Péssimo", value: "1" },
+                              { text: "⭐⭐ Ruim", value: "2" },
+                              { text: "⭐⭐⭐ Regular", value: "3" },
+                              { text: "⭐⭐⭐⭐ Bom", value: "4" },
+                              { text: "⭐⭐⭐⭐⭐ Excelente", value: "5" },
+                            ];
+                            handleSaveWithFeedback(() =>
+                              updateComponent(selectedComponent.id, {
+                                choices: testChoices,
+                                gridLayout: "grid-1",
+                                textAlignment: "left",
+                              })
+                            );
+                          }}
+                          className="text-xs bg-yellow-600/20 text-yellow-400 hover:bg-yellow-600/30 px-2 py-1 rounded transition-colors"
+                        >
+                          Avaliação 1-5 Estrelas
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const testChoices = [
+                              { text: "Cor Azul", value: "blue" },
+                              { text: "Cor Verde", value: "green" },
+                              { text: "Cor Vermelha", value: "red" },
+                              { text: "Cor Amarela", value: "yellow" },
+                              { text: "Cor Roxa", value: "purple" },
+                              { text: "Cor Laranja", value: "orange" },
+                            ];
+                            handleSaveWithFeedback(() =>
+                              updateComponent(selectedComponent.id, {
+                                choices: testChoices,
+                                gridLayout: "grid-3",
+                                textAlignment: "center",
+                                multipleChoice: true,
+                              })
+                            );
+                          }}
+                          className="text-xs bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 px-2 py-1 rounded transition-colors"
+                        >
+                          6 Cores (Múltipla Escolha)
                         </button>
                       </div>
                     </div>
