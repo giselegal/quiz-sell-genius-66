@@ -25,11 +25,14 @@ export interface QuizLayout {
   optionsPerRow: number;
   spacing: string;
   alignment: 'left' | 'center' | 'right';
+  cardStyle?: string;
+  gridType?: string;
 }
 
 // Quiz styles hook
 export const useQuizStyles = () => {
   const { theme } = useQuizTheme();
+  const { layout } = useQuizLayout();
   
   const cssVariables = {
     '--quiz-primary-color': theme.primaryColor,
@@ -37,9 +40,9 @@ export const useQuizStyles = () => {
     '--quiz-text-color': theme.textColor,
     '--quiz-font-family': theme.fontFamily,
     '--quiz-border-radius': theme.borderRadius,
-  };
+  } as React.CSSProperties;
   
-  return { cssVariables };
+  return { cssVariables, theme, layout };
 };
 
 // Quiz theme context

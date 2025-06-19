@@ -102,7 +102,8 @@ export type EditorBlockType =
   | 'carousel'
   | 'custom-code'
   | 'animation-block'
-  | 'transformation';
+  | 'transformation'
+  | 'footer';
 
 // Unified Block interface - this replaces the separate Block and EditorBlock
 export interface Block {
