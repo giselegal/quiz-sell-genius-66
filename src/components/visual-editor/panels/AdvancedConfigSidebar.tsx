@@ -296,34 +296,168 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               cardKey="layout"
               icon={<Proportions size={16} />}
             >
-              <SelectControl
-                label="Direção"
-                value={selectedComponent.props.direction || "column"}
-                onChange={(value) => onComponentUpdate(selectedComponent.id, { direction: value })}
-                options={[
-                  { value: "column", label: "Vertical" },
-                  { value: "row", label: "Horizontal" }
-                ]}
-              />
-              <SelectControl
-                label="Disposição"
-                value={selectedComponent.props.layout || "default"}
-                onChange={(value) => onComponentUpdate(selectedComponent.id, { layout: value })}
-                options={[
-                  { value: "default", label: "Padrão" },
-                  { value: "grid", label: "Grade" },
-                  { value: "flex", label: "Flexível" }
-                ]}
-              />
-              <SelectControl
-                label="Alinhamento"
-                value={selectedComponent.props.alignment || "center"}
-                onChange={(value) => onComponentUpdate(selectedComponent.id, { alignment: value })}
-                options={[
-                  { value: "left", label: "Esquerda" },
-                  { value: "center", label: "Centro" },
-                  { value: "right", label: "Direita" }
-                ]}
+              {selectedComponent.type === "options" && (
+                <>
+                  {/* Detecta se tem imagens nas opções */}
+                  {(() => {
+                    const hasImages = selectedComponent.props.choices?.some((choice: OptionChoice) => choice.imageSrc);
+                    const hasOnlyText = selectedComponent.props.choices?.every((choice: OptionChoice) => !choice.imageSrc);
+                    
+                    return (
+                      <>
+                        <div className="mb-4 p-3 bg-zinc-900/50 rounded-md border border-zinc-700">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                            <span className="text-xs font-medium text-zinc-300">
+                              {hasImages && !hasOnlyText ? "Modo: Texto + Imagem" : 
+                               hasOnlyText ? "Modo: Apenas Texto" : 
+                               "Modo: Misto"}
+                            </span>
+                          </div>
+                          <p className="text-xs text-zinc-400">
+                            {hasImages && !hasOnlyText ? "Opções com imagens detectadas. Layout otimizado para texto + imagem." :
+                             hasOnlyText ? "Opções apenas com texto. Mais opções de layout disponíveis." :
+                             "Opções mistas detectadas. Configure individualmente cada opção."}
+                          </p>
+                        </div>
+
+                        {/* Layout para questões apenas com texto */}
+                        {hasOnlyText && (
+                          <SelectControl
+                            label="Layout das Opções"
+                            value={selectedComponent.props.optionsLayout || "grid-2"}
+                            onChange={(value) => onComponentUpdate(selectedComponent.id, { optionsLayout: value })}
+                            options={[
+                              { value: "grid-1", label: "1 Coluna (Lista Vertical)" },
+                              { value: "grid-2", label: "2 Colunas" },
+                              { value: "grid-3", label: "3 Colunas" },
+                              { value: "grid-4", label: "4 Colunas" },
+                              { value: "flex-wrap", label: "Flexível (Quebra Automática)" },
+                              { value: "list", label: "Lista Compacta" }
+                            ]}
+                          />
+                        )}
+
+                        {/* Layout para questões com imagem */}
+                        {hasImages && (
+                          <SelectControl
+                            label="Layout das Opções"
+                            value={selectedComponent.props.optionsLayout || "grid-2"}
+                            onChange={(value) => onComponentUpdate(selectedComponent.id, { optionsLayout: value })}
+                            options={[
+                              { value: "grid-1", label: "1 Coluna (Imagem Grande)" },
+                              { value: "grid-2", label: "2 Colunas (Recomendado)" },
+                              { value: "grid-3", label: "3 Colunas (Imagem Pequena)" },
+                              { value: "carousel", label: "Carrossel" }
+                            ]}
+                          />
+                        )}
+
+                        {/* Configurações específicas para texto apenas */}
+                        {hasOnlyText && (
+                          <>
+                            <SelectControl
+                              label="Tamanho dos Botões"
+                              value={selectedComponent.props.buttonSize || "medium"}
+                              onChange={(value) => onComponentUpdate(selectedComponent.id, { buttonSize: value })}
+                              options={[
+                                { value: "small", label: "Pequeno (Compacto)" },
+                                { value: "medium", label: "Médio" },
+                                { value: "large", label: "Grande" },
+                                { value: "auto", label: "Automático" }
+                              ]}
+                            />
+                            
+                            <SelectControl
+                              label="Estilo do Texto"
+                              value={selectedComponent.props.textStyle || "center"}
+                              onChange={(value) => onComponentUpdate(selectedComponent.id, { textStyle: value })}
+                              options={[
+                                { value: "center", label: "Centralizado" },
+                                { value: "left", label: "Alinhado à Esquerda" },
+                                { value: "justified", label: "Justificado" }
+                              ]}
+                            />
+                          </>
+                        )}
+
+                        {/* Configurações específicas para imagem */}
+                        {hasImages && (
+                          <>
+                            <SelectControl
+                              label="Proporção da Imagem"
+                              value={selectedComponent.props.imageRatio || "square"}
+                              onChange={(value) => onComponentUpdate(selectedComponent.id, { imageRatio: value })}
+                              options={[
+                                { value: "square", label: "Quadrada (1:1)" },
+                                { value: "landscape", label: "Paisagem (16:9)" },
+                                { value: "portrait", label: "Retrato (3:4)" },
+                                { value: "auto", label: "Automática" }
+                              ]}
+                            />
+                            
+                            <SelectControl
+                              label="Posição do Texto"
+                              value={selectedComponent.props.textPosition || "bottom"}
+                              onChange={(value) => onComponentUpdate(selectedComponent.id, { textPosition: value })}
+                              options={[
+                                { value: "bottom", label: "Embaixo da Imagem" },
+                                { value: "top", label: "Acima da Imagem" },
+                                { value: "overlay", label: "Sobreposto à Imagem" },
+                                { value: "side", label: "Ao Lado da Imagem" }
+                              ]}
+                            />
+                          </>
+                        )}
+                      </>
+                    );
+                  })()}
+                </>
+              )}
+
+              {/* Layout geral para outros tipos de componente */}
+              {selectedComponent.type !== "options" && (
+                <>
+                  <SelectControl
+                    label="Direção"
+                    value={selectedComponent.props.direction || "column"}
+                    onChange={(value) => onComponentUpdate(selectedComponent.id, { direction: value })}
+                    options={[
+                      { value: "column", label: "Vertical" },
+                      { value: "row", label: "Horizontal" }
+                    ]}
+                  />
+                  <SelectControl
+                    label="Disposição"
+                    value={selectedComponent.props.layout || "default"}
+                    onChange={(value) => onComponentUpdate(selectedComponent.id, { layout: value })}
+                    options={[
+                      { value: "default", label: "Padrão" },
+                      { value: "grid", label: "Grade" },
+                      { value: "flex", label: "Flexível" }
+                    ]}
+                  />
+                  <SelectControl
+                    label="Alinhamento"
+                    value={selectedComponent.props.alignment || "center"}
+                    onChange={(value) => onComponentUpdate(selectedComponent.id, { alignment: value })}
+                    options={[
+                      { value: "left", label: "Esquerda" },
+                      { value: "center", label: "Centro" },
+                      { value: "right", label: "Direita" }
+                    ]}
+                  />
+                </>
+              )}
+
+              {/* Configurações de espaçamento */}
+              <SliderControl
+                label="Espaçamento entre Opções"
+                value={selectedComponent.props.optionsGap || 8}
+                onChange={(value) => onComponentUpdate(selectedComponent.id, { optionsGap: value })}
+                min={0}
+                max={32}
+                unit="px"
               />
             </ConfigCard>
 
@@ -397,6 +531,171 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     Adicionar Opção
                   </button>
                 </div>
+              </ConfigCard>
+            )}
+
+            {/* Card Layout Específico para Opções */}
+            {selectedComponent.type === "options" && (
+              <ConfigCard 
+                title="Layout das Opções" 
+                cardKey="optionsLayout"
+                icon={<Proportions size={16} />}
+              >
+                {(() => {
+                  // Detecta automaticamente se tem imagens
+                  const hasImages = selectedComponent.props.choices?.some((choice: OptionChoice) => choice.imageSrc);
+                  const choicesCount = selectedComponent.props.choices?.length || 0;
+                  
+                  return (
+                    <>
+                      <div className="p-3 bg-zinc-900/30 rounded-md border border-zinc-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-zinc-300">Tipo Detectado:</span>
+                          <span className={`text-xs px-2 py-1 rounded ${hasImages ? 'bg-blue-600/20 text-blue-400' : 'bg-green-600/20 text-green-400'}`}>
+                            {hasImages ? 'Texto + Imagem' : 'Apenas Texto'}
+                          </span>
+                        </div>
+                        <div className="text-xs text-zinc-400">
+                          {choicesCount} opções • Layout adaptativo baseado no conteúdo
+                        </div>
+                      </div>
+
+                      <SelectControl
+                        label="Disposição da Grade"
+                        value={selectedComponent.props.gridLayout || (hasImages ? "grid-2" : "grid-1")}
+                        onChange={(value) => onComponentUpdate(selectedComponent.id, { gridLayout: value })}
+                        options={[
+                          { value: "grid-1", label: "1 Coluna" },
+                          { value: "grid-2", label: "2 Colunas" },
+                          { value: "grid-3", label: "3 Colunas" },
+                          { value: "grid-4", label: "4 Colunas" },
+                          { value: "flex", label: "Flexível" },
+                          { value: "list", label: "Lista Vertical" }
+                        ]}
+                      />
+
+                      <SliderControl
+                        label="Espaçamento entre Opções"
+                        value={selectedComponent.props.optionSpacing || (hasImages ? 8 : 4)}
+                        onChange={(value) => onComponentUpdate(selectedComponent.id, { optionSpacing: value })}
+                        min={0}
+                        max={24}
+                        unit="px"
+                      />
+
+                      {hasImages && (
+                        <>
+                          <SelectControl
+                            label="Proporção da Imagem"
+                            value={selectedComponent.props.imageRatio || "square"}
+                            onChange={(value) => onComponentUpdate(selectedComponent.id, { imageRatio: value })}
+                            options={[
+                              { value: "square", label: "Quadrado (1:1)" },
+                              { value: "landscape", label: "Paisagem (16:9)" },
+                              { value: "portrait", label: "Retrato (4:5)" },
+                              { value: "wide", label: "Largo (21:9)" },
+                              { value: "auto", label: "Automático" }
+                            ]}
+                          />
+
+                          <SelectControl
+                            label="Posição da Imagem"
+                            value={selectedComponent.props.imagePosition || "top"}
+                            onChange={(value) => onComponentUpdate(selectedComponent.id, { imagePosition: value })}
+                            options={[
+                              { value: "top", label: "Acima do Texto" },
+                              { value: "bottom", label: "Abaixo do Texto" },
+                              { value: "left", label: "Esquerda do Texto" },
+                              { value: "right", label: "Direita do Texto" },
+                              { value: "background", label: "Como Fundo" }
+                            ]}
+                          />
+
+                          <SliderControl
+                            label="Altura da Imagem"
+                            value={selectedComponent.props.imageHeight || 160}
+                            onChange={(value) => onComponentUpdate(selectedComponent.id, { imageHeight: value })}
+                            min={80}
+                            max={400}
+                            unit="px"
+                          />
+
+                          <SliderControl
+                            label="Raio da Borda da Imagem"
+                            value={selectedComponent.props.imageBorderRadius || 8}
+                            onChange={(value) => onComponentUpdate(selectedComponent.id, { imageBorderRadius: value })}
+                            min={0}
+                            max={24}
+                            unit="px"
+                          />
+                        </>
+                      )}
+
+                      <SelectControl
+                        label="Alinhamento do Texto"
+                        value={selectedComponent.props.textAlignment || "center"}
+                        onChange={(value) => onComponentUpdate(selectedComponent.id, { textAlignment: value })}
+                        options={[
+                          { value: "left", label: "Esquerda" },
+                          { value: "center", label: "Centro" },
+                          { value: "right", label: "Direita" },
+                          { value: "justify", label: "Justificado" }
+                        ]}
+                      />
+
+                      <SliderControl
+                        label="Padding da Opção"
+                        value={selectedComponent.props.optionPadding || (hasImages ? 12 : 16)}
+                        onChange={(value) => onComponentUpdate(selectedComponent.id, { optionPadding: value })}
+                        min={4}
+                        max={32}
+                        unit="px"
+                      />
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-medium text-zinc-300 uppercase tracking-wide">Layout Responsivo</label>
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="text-center">
+                            <label className="text-xs text-zinc-400">Desktop</label>
+                            <select
+                              value={selectedComponent.props.desktopColumns || "2"}
+                              onChange={(e) => onComponentUpdate(selectedComponent.id, { desktopColumns: e.target.value })}
+                              className="w-full h-8 text-xs rounded border border-zinc-600 bg-zinc-700 text-zinc-100"
+                            >
+                              <option value="1">1 Col</option>
+                              <option value="2">2 Cols</option>
+                              <option value="3">3 Cols</option>
+                              <option value="4">4 Cols</option>
+                            </select>
+                          </div>
+                          <div className="text-center">
+                            <label className="text-xs text-zinc-400">Tablet</label>
+                            <select
+                              value={selectedComponent.props.tabletColumns || "2"}
+                              onChange={(e) => onComponentUpdate(selectedComponent.id, { tabletColumns: e.target.value })}
+                              className="w-full h-8 text-xs rounded border border-zinc-600 bg-zinc-700 text-zinc-100"
+                            >
+                              <option value="1">1 Col</option>
+                              <option value="2">2 Cols</option>
+                              <option value="3">3 Cols</option>
+                            </select>
+                          </div>
+                          <div className="text-center">
+                            <label className="text-xs text-zinc-400">Mobile</label>
+                            <select
+                              value={selectedComponent.props.mobileColumns || "1"}
+                              onChange={(e) => onComponentUpdate(selectedComponent.id, { mobileColumns: e.target.value })}
+                              className="w-full h-8 text-xs rounded border border-zinc-600 bg-zinc-700 text-zinc-100"
+                            >
+                              <option value="1">1 Col</option>
+                              <option value="2">2 Cols</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
               </ConfigCard>
             )}
 
