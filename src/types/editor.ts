@@ -1,3 +1,4 @@
+
 export interface StyleResult {
   category: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
   score: number;
@@ -57,7 +58,7 @@ export interface UserResponse {
 export interface QuizQuestion {
   id: string;
   title: string;
-  type: 'image' | 'text' | 'both'; // Added 'both' to the union
+  type: 'image' | 'text' | 'both';
   options: QuizOption[];
   multiSelect: number;
   imageUrl?: string;
@@ -71,21 +72,65 @@ export interface QuizOption {
   points?: number;
 }
 
+// Editor Block types
+export type EditorBlockType = 
+  | 'header'
+  | 'hero-section'
+  | 'bonus-carousel'
+  | 'headline'
+  | 'text'
+  | 'image'
+  | 'benefits'
+  | 'testimonials'
+  | 'pricing'
+  | 'guarantee'
+  | 'cta'
+  | 'style-result'
+  | 'secondary-styles'
+  | 'products'
+  | 'bonus'
+  | 'result-header'
+  | 'transition'
+  | 'final-cta';
+
+export interface EditorBlock {
+  id: string;
+  type: EditorBlockType;
+  content: any;
+  order: number;
+}
+
+// Editable content type for legacy compatibility
+export interface EditableContent {
+  [key: string]: any;
+}
+
+// Editor step settings
+export interface EditorStepSettings {
+  allowReturn?: boolean;
+  showLogo?: boolean;
+  showProgress?: boolean;
+}
+
 export interface EditorState {
   steps: EditorStep[];
   currentStepId: string;
   blocks: Block[];
   selectedBlockId: string | null;
+  selectedElementId?: string | null;
   isPreviewing: boolean;
   isGlobalStylesOpen: boolean;
   isDirty: boolean;
+  isLoading?: boolean;
   current: string | null;
+  version?: string;
 }
 
 export interface EditorStep {
   id: string;
   name: string;
   elements: EditorElement[];
+  settings?: EditorStepSettings;
 }
 
 export interface EditorElement {
@@ -101,3 +146,12 @@ export interface Block {
   content: any;
   order: number;
 }
+
+// Editor actions
+export type EditorAction = 
+  | { type: 'ADD_BLOCK'; payload: Block }
+  | { type: 'UPDATE_BLOCK'; payload: { id: string; content: any } }
+  | { type: 'DELETE_BLOCK'; payload: { id: string } }
+  | { type: 'REORDER_BLOCKS'; payload: { sourceIndex: number; destinationIndex: number } }
+  | { type: 'SELECT_ELEMENT'; payload: string }
+  | { type: 'SET_BLOCKS'; payload: Block[] };

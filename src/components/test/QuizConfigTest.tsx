@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   useQuizConfig,
@@ -5,12 +6,10 @@ import {
   useQuizStyles,
 } from "@/hooks/useQuizConfig";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 
 export const QuizConfigTest: React.FC = () => {
-  const { state, updateConfig, resetConfig, exportConfig, importConfig } =
-    useQuizConfig();
+  const { state, exportConfig } = useQuizConfig();
   const { theme, updateTheme } = useQuizTheme();
   const { cssVariables } = useQuizStyles();
 
@@ -44,21 +43,6 @@ export const QuizConfigTest: React.FC = () => {
     console.log("Configuração exportada para clipboard:", configJson);
   };
 
-  const handleImportExample = () => {
-    const exampleConfig = {
-      ...state.current,
-      theme: {
-        ...state.current.theme,
-        primaryColor: "#8B5CF6",
-        backgroundColor: "#FAF5FF",
-        textColor: "#3C366B",
-      },
-    };
-
-    importConfig(JSON.stringify(exampleConfig));
-    console.log("Configuração de exemplo importada");
-  };
-
   return (
     <div className="p-8 space-y-6" style={cssVariables}>
       <Card className="p-6">
@@ -83,13 +67,10 @@ export const QuizConfigTest: React.FC = () => {
                 <strong>Cor do Texto:</strong> {theme.textColor}
               </p>
               <p>
-                <strong>Dirty:</strong> {state.isDirty ? "Sim" : "Não"}
+                <strong>Dirty:</strong> {state?.isDirty ? "Sim" : "Não"}
               </p>
               <p>
-                <strong>Loading:</strong> {state.isLoading ? "Sim" : "Não"}
-              </p>
-              <p>
-                <strong>Versão:</strong> {state.current.version}
+                <strong>Loading:</strong> {state?.isLoading ? "Sim" : "Não"}
               </p>
             </div>
           </div>
@@ -103,14 +84,8 @@ export const QuizConfigTest: React.FC = () => {
               <Button onClick={testColorChange2} size="sm">
                 Teste Turquesa
               </Button>
-              <Button onClick={resetConfig} size="sm" variant="outline">
-                Reset
-              </Button>
               <Button onClick={handleExport} size="sm" variant="outline">
                 Exportar
-              </Button>
-              <Button onClick={handleImportExample} size="sm" variant="outline">
-                Importar Exemplo
               </Button>
             </div>
           </div>
