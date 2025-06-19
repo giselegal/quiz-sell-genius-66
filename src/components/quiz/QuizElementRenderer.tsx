@@ -1,166 +1,112 @@
-import React from "react";
-import { EditorElement } from "@/types/editor";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
+import React from 'react';
+import { EditorElement } from '@/types/editor';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface QuizElementRendererProps {
   element: EditorElement;
-  onButtonClick?: (action: string) => void;
-  onInputChange?: (name: string, value: string) => void;
-  className?: string;
+  onUpdate?: (updates: any) => void;
 }
+
+// Type guards for content types
+const isHeadingContent = (content: any): content is { text: string; level?: number } => {
+  return content && typeof content.text === 'string';
+};
+
+const isTextContent = (content: any): content is { text: string } => {
+  return content && typeof content.text === 'string';
+};
+
+const isButtonContent = (content: any): content is { text: string; action?: string } => {
+  return content && typeof content.text === 'string';
+};
+
+const isInputContent = (content: any): content is { 
+  label?: string; 
+  type?: string; 
+  placeholder?: string; 
+  required?: boolean; 
+  name?: string; 
+} => {
+  return content && typeof content === 'object';
+};
 
 export const QuizElementRenderer: React.FC<QuizElementRendererProps> = ({
   element,
-  onButtonClick,
-  onInputChange,
-  className = "",
+  onUpdate
 }) => {
-  const renderElement = () => {
-    switch (element.type) {
-      case "heading": {
-        const HeadingTag = `h${
-          element.content.level || 1
-        }` as keyof JSX.IntrinsicElements;
-        return (
-          <HeadingTag
-            className={`font-bold text-white ${getHeadingClasses(
-              element.content.level || 1
-            )}`}
-            style={element.style}
-          >
-            {element.content.text}
-          </HeadingTag>
-        );
-      }
-
-      case "text":
-        return (
-          <p className="text-white" style={element.style}>
-            {element.content.text}
-          </p>
-        );
-
-      case "button":
-        return (
-          <Button
-            onClick={() => onButtonClick?.(element.content.action || "next")}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-            style={element.style}
-          >
-            {element.content.text}
-          </Button>
-        );
-
-      case "input":
-        return (
-          <div className="space-y-2">
-            {element.content.label && (
-              <Label htmlFor={element.content.name} className="text-white">
-                {element.content.label}
-                {element.content.required && (
-                  <span className="text-red-400 ml-1">*</span>
-                )}
-              </Label>
-            )}
-            <Input
-              id={element.content.name}
-              name={element.content.name}
-              type={element.content.type || "text"}
-              placeholder={element.content.placeholder}
-              required={element.content.required}
-              onChange={(e) =>
-                onInputChange?.(element.content.name, e.target.value)
-              }
-              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-400"
-              style={element.style}
-            />
-          </div>
-        );
-
-      case "image":
-        return (
-          <img
-            src={element.content.src}
-            alt={element.content.alt}
-            className="max-w-full h-auto rounded-lg"
-            style={element.style}
-          />
-        );
-
-      case "video":
-        return (
-          <video
-            src={element.content.src}
-            controls={element.content.controls}
-            autoPlay={element.content.autoplay}
-            className="max-w-full h-auto rounded-lg"
-            style={element.style}
-          />
-        );
-
-      case "spacer":
-        return (
-          <div
-            style={{
-              height: element.content.height || 20,
-              ...element.style,
-            }}
-          />
-        );
-
-      case "quiz-options":
-        return (
-          <div className="space-y-3" style={element.style}>
-            {element.content.options?.map((option, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                className="w-full justify-start text-left p-4 h-auto bg-zinc-800 border-zinc-700 hover:bg-zinc-700 text-white"
-                onClick={() => onButtonClick?.(`option-${index}`)}
-              >
-                <span className="mr-3 text-purple-400 font-bold">
-                  {String.fromCharCode(65 + index)}.
-                </span>
-                {option.text}
-              </Button>
-            ))}
-          </div>
-        );
-
-      default:
-        return (
-          <div className="p-4 bg-zinc-800 border border-zinc-700 rounded text-white text-center">
-            Elemento não suportado: {element.type}
-          </div>
-        );
-    }
+  const getStyles = () => {
+    const styles: React.CSSProperties = {};
+    if (element.styles?.color) styles.color = element.styles.color;
+    if (element.styles?.backgroundColor) styles.backgroundColor = element.styles.backgroundColor;
+    if (element.styles?.fontSize) styles.fontSize = `${element.styles.fontSize}px`;
+    if (element.styles?.fontWeight) styles.fontWeight = element.styles.fontWeight;
+    if (element.styles?.textAlign) styles.textAlign = element.styles.textAlign;
+    if (element.styles?.padding) styles.padding = `${element.styles.padding}px`;
+    if (element.styles?.margin) styles.margin = `${element.styles.margin}px`;
+    if (element.styles?.borderRadius) styles.borderRadius = `${element.styles.borderRadius}px`;
+    return styles;
   };
 
-  return (
-    <div className={`quiz-element ${className}`} data-element-id={element.id}>
-      {renderElement()}
-    </div>
-  );
-};
+  switch (element.type) {
+    case 'heading': {
+      if (!isHeadingContent(element.content)) {
+        return <div>Invalid heading content</div>;
+      }
+      const HeadingTag = `h${element.content.level || 1}` as keyof JSX.IntrinsicElements;
+      return (
+        <HeadingTag style={getStyles()} className="font-bold">
+          {element.content.text}
+        </HeadingTag>
+      );
+    }
 
-// Helper para classes de heading
-function getHeadingClasses(level: number): string {
-  switch (level) {
-    case 1:
-      return "text-4xl md:text-5xl";
-    case 2:
-      return "text-3xl md:text-4xl";
-    case 3:
-      return "text-2xl md:text-3xl";
-    case 4:
-      return "text-xl md:text-2xl";
-    case 5:
-      return "text-lg md:text-xl";
-    case 6:
-      return "text-base md:text-lg";
+    case 'text':
+      if (!isTextContent(element.content)) {
+        return <div>Invalid text content</div>;
+      }
+      return (
+        <p style={getStyles()} className="text-base">
+          {element.content.text}
+        </p>
+      );
+
+    case 'button':
+      if (!isButtonContent(element.content)) {
+        return <div>Invalid button content</div>;
+      }
+      return (
+        <Button style={getStyles()} className="w-full">
+          {element.content.text}
+        </Button>
+      );
+
+    case 'input':
+      if (!isInputContent(element.content)) {
+        return <div>Invalid input content</div>;
+      }
+      return (
+        <div className="space-y-2">
+          {element.content.label && (
+            <label htmlFor={element.id}>{element.content.label}</label>
+          )}
+          <Input
+            id={element.id}
+            name={element.content.name}
+            type={element.content.type || 'text'}
+            placeholder={element.content.placeholder}
+            required={element.content.required}
+            style={getStyles()}
+          />
+        </div>
+      );
+
     default:
-      return "text-2xl md:text-3xl";
+      return (
+        <div style={getStyles()} className="p-4 border border-dashed border-gray-300 text-center text-gray-500">
+          Elemento desconhecido: {element.type}
+        </div>
+      );
   }
-}
+};

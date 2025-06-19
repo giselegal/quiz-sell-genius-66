@@ -9,7 +9,7 @@ import {
   Image, 
   Video, 
   MousePointer, 
-  Separator,
+  Minus,
   Layout,
   Star,
   Gift
@@ -26,7 +26,7 @@ const componentCategories = [
     items: [
       { type: 'headline', label: 'Título', icon: Type },
       { type: 'text', label: 'Texto', icon: Type },
-      { type: 'spacer', label: 'Espaçador', icon: Separator }
+      { type: 'spacer', label: 'Espaçador', icon: Minus }
     ]
   },
   {

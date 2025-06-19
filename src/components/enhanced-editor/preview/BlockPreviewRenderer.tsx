@@ -12,6 +12,7 @@ interface BlockPreviewRendererProps {
   isSelected: boolean;
   isPreviewing: boolean;
   onSelect: () => void;
+  onDelete: () => void;
   primaryStyle?: StyleResult;
 }
 
@@ -20,6 +21,7 @@ export function BlockPreviewRenderer({
   isSelected,
   isPreviewing,
   onSelect,
+  onDelete,
   primaryStyle
 }: BlockPreviewRendererProps) {
   const {
@@ -56,8 +58,17 @@ export function BlockPreviewRenderer({
       )}
     >
       {!isPreviewing && isSelected && (
-        <div className="absolute -top-3 left-2 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-sm z-10">
-          {block.type}
+        <div className="absolute -top-3 left-2 bg-[#B89B7A] text-white text-xs px-2 py-1 rounded-sm z-10 flex items-center gap-2">
+          <span>{block.type}</span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="hover:bg-red-500 px-1 rounded"
+          >
+            ×
+          </button>
         </div>
       )}
 
@@ -162,8 +173,6 @@ function renderBlockContent(block: Block, isPreviewing: boolean, primaryStyle?: 
         </div>
       );
 
-    // Add more block types here...
-    
     default:
       return (
         <div className="p-4 border border-[#B89B7A]/20 rounded-md bg-[#FAF9F7]">
