@@ -346,7 +346,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
   quizData = SAMPLE_QUIZ_DATA,
 }) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [answers, setAnswers] = useState<Record<string, QuizAnswer>>({});
   const [isCompleted, setIsCompleted] = useState(false);
 
   const currentStep = quizData.steps[currentStepIndex];
@@ -372,20 +372,25 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
     setIsCompleted(false);
   };
 
-  const handleAnswer = (componentId: string, answer: any) => {
+  const handleAnswer = (componentId: string, answer: OptionChoice) => {
+    const quizAnswer: QuizAnswer = {
+      componentId,
+      choice: answer
+    };
+    
     setAnswers((prev) => ({
       ...prev,
-      [componentId]: answer,
+      [componentId]: quizAnswer,
     }));
   };
 
-  const renderComponent = (component: any) => {
+  const renderComponent = (component: QuizComponent) => {
     const { type, props } = component;
 
-    const baseStyle = {
+    const baseStyle: React.CSSProperties = {
       margin: `${props.margin || 16}px auto`,
       padding: `${props.padding || 0}px`,
-      textAlign: props.alignment || "left",
+      textAlign: (props.alignment as React.CSSProperties['textAlign']) || "left",
       color: props.textColor || "#000000",
       backgroundColor: props.backgroundColor || "transparent",
       borderRadius: `${props.borderRadius || 0}px`,
@@ -478,7 +483,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
                     : "1fr",
               }}
             >
-              {props.choices?.map((choice: any, index: number) => (
+              {props.choices?.map((choice: OptionChoice, index: number) => (
                 <button
                   key={index}
                   onClick={() => {
@@ -492,7 +497,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
                     color: props.textColor || "#1f2937",
                     border: "2px solid #e2e8f0",
                     borderRadius: `${props.borderRadius || 8}px`,
-                    textAlign: props.textAlignment || "left",
+                    textAlign: (props.textAlignment as React.CSSProperties['textAlign']) || "left",
                     cursor: "pointer",
                     fontSize: "16px",
                     lineHeight: "1.5",
@@ -651,7 +656,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
             </p>
             <p>
               <strong>Layout Atual:</strong>{" "}
-              {currentStep.components.find((c) => c.type === "options")?.props
+              {(currentStep.components.find((c) => c.type === "options")?.props as QuizComponentProps)
                 ?.gridLayout || "N/A"}
             </p>
           </div>
