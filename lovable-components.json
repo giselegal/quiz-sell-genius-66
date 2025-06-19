@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-19T00:04:22.832Z",
+  "timestamp": "2025-06-19T02:02:01.425Z",
   "components": 539,
   "files": [
     {
@@ -1978,11 +1978,6 @@
       "type": "typescript"
     },
     {
-      "name": "AdvancedQuizEditor",
-      "path": "src/components/visual-editor/AdvancedQuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
       "name": "AdvancedVisualEditor",
       "path": "src/components/visual-editor/AdvancedVisualEditor.tsx",
       "type": "typescript"
@@ -2030,6 +2025,11 @@
     {
       "name": "SimpleAdvancedQuizEditor",
       "path": "src/components/visual-editor/SimpleAdvancedQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TestCanvasArea",
+      "path": "src/components/visual-editor/TestCanvasArea.tsx",
       "type": "typescript"
     },
     {

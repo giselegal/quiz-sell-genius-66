@@ -408,6 +408,235 @@ const componentViewMap: {
 const generateUniqueId = (): string =>
   `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
+// --- Componente CanvasArea ---
+
+interface CanvasAreaProps {
+  currentStep: QuizStep | null;
+  headerConfig: { title?: string; subtitle?: string } | null;
+  selectedComponent: QuizComponent | null;
+  selectedComponentId: string | null;
+  onComponentSelect: (componentId: string | null) => void;
+  onComponentAdd: (type: string) => void;
+  onComponentUpdate: (componentId: string, newProps: Partial<QuizComponentProps>) => void;
+  onComponentDelete: (componentId: string) => void;
+  onComponentMove: (componentId: string, direction: 'up' | 'down') => void;
+}
+
+const CanvasArea: React.FC<CanvasAreaProps> = ({
+  currentStep,
+  headerConfig,
+  selectedComponent,
+  selectedComponentId,
+  onComponentSelect,
+  onComponentAdd,
+  onComponentUpdate,
+  onComponentDelete,
+  onComponentMove
+}) => {
+  if (!currentStep) {
+    return (
+      <div className="flex-1 flex items-center justify-center bg-zinc-900 text-zinc-400">
+        <div className="text-center">
+          <h3 className="text-lg font-medium mb-2">Nenhuma etapa selecionada</h3>
+          <p>Selecione uma etapa no painel lateral para começar a editar</p>
+        </div>
+      </div>
+    );
+  }
+
+  const renderComponent = (component: QuizComponent) => {
+    const isSelected = selectedComponentId === component.id;
+    
+    return (
+      <div
+        key={component.id}
+        className={`relative border-2 rounded-lg p-4 mb-4 cursor-pointer transition-all ${
+          isSelected 
+            ? 'border-blue-500 bg-blue-500/10' 
+            : 'border-transparent hover:border-zinc-600'
+        }`}
+        onClick={() => onComponentSelect(component.id)}
+      >
+        {/* Controles de componente */}
+        {isSelected && (
+          <div className="absolute -top-2 -right-2 flex gap-1">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onComponentMove(component.id, 'up');
+              }}
+              className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
+              title="Mover para cima"
+            >
+              ↑
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onComponentMove(component.id, 'down');
+              }}
+              className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
+              title="Mover para baixo"
+            >
+              ↓
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onComponentDelete(component.id);
+              }}
+              className="w-6 h-6 bg-red-500 text-white rounded text-xs flex items-center justify-center hover:bg-red-600"
+              title="Excluir"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Renderização do componente baseado no tipo */}
+        <div className="text-zinc-200">
+          {component.type === 'heading' && (
+            <h2 className="text-xl font-bold">{component.props.text || 'Título'}</h2>
+          )}
+          {component.type === 'text' && (
+            <p>{component.props.text || 'Texto do parágrafo'}</p>
+          )}
+          {component.type === 'image' && (
+            <img 
+              src={component.props.src || 'https://placehold.co/400x200'} 
+              alt={component.props.alt || 'Imagem'} 
+              className="max-w-full h-auto rounded"
+            />
+          )}
+          {component.type === 'button' && (
+            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              {component.props.buttonText || 'Botão'}
+            </button>
+          )}
+          {component.type === 'input' && (
+            <div>
+              {component.props.label && (
+                <label className="block text-sm font-medium mb-1">{component.props.label}</label>
+              )}
+              <input 
+                type={component.props.inputType || 'text'}
+                placeholder={component.props.placeholder || 'Digite aqui...'}
+                className="w-full px-3 py-2 border border-zinc-600 rounded bg-zinc-800 text-white"
+                disabled
+              />
+            </div>
+          )}
+          {component.type === 'options' && (
+            <div>
+              <h3 className="font-medium mb-3">{component.props.text || 'Pergunta'}</h3>
+              <div className="space-y-2">
+                {component.props.choices?.map((choice: OptionChoice, index: number) => (
+                  <button 
+                    key={index}
+                    className="block w-full text-left px-4 py-2 border border-zinc-600 rounded hover:border-blue-500"
+                  >
+                    {choice.text}
+                  </button>
+                )) || (
+                  <button className="block w-full text-left px-4 py-2 border border-zinc-600 rounded">
+                    Opção de exemplo
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+          {component.type === 'video' && (
+            <div className="aspect-video bg-zinc-800 rounded flex items-center justify-center">
+              <span className="text-zinc-400">📹 Vídeo</span>
+            </div>
+          )}
+          {component.type === 'spacer' && (
+            <div className="h-8 border-dashed border border-zinc-600 rounded flex items-center justify-center">
+              <span className="text-zinc-500 text-sm">Espaçador</span>
+            </div>
+          )}
+        </div>
+
+        {/* Label do tipo de componente */}
+        <div className="absolute top-1 left-1 text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
+          {component.type}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex-1 flex bg-zinc-900">
+      {/* Área de Canvas Principal */}
+      <div className="flex-1 p-6 overflow-y-auto">
+        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 min-h-[600px]">
+          {/* Header da página */}
+          {headerConfig && (
+            <div className="mb-6 pb-4 border-b border-gray-200">
+              <h1 className="text-xl font-bold text-gray-900">{headerConfig.title}</h1>
+              {headerConfig.subtitle && (
+                <p className="text-gray-600 mt-1">{headerConfig.subtitle}</p>
+              )}
+            </div>
+          )}
+
+          {/* Componentes da etapa atual */}
+          {currentStep.components.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              <p className="mb-4">Esta etapa está vazia</p>
+              <button
+                onClick={() => onComponentAdd('heading')}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Adicionar primeiro componente
+              </button>
+            </div>
+          ) : (
+            <div>
+              {currentStep.components.map(renderComponent)}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Painel de Adicionar Componentes */}
+      <div className="w-64 bg-zinc-800 border-l border-zinc-700 p-4">
+        <h3 className="text-white font-medium mb-4">Adicionar Componente</h3>
+        <div className="space-y-2">
+          {[
+            { type: 'heading', label: '📝 Título', desc: 'Cabeçalho principal' },
+            { type: 'text', label: '📄 Texto', desc: 'Parágrafo de texto' },
+            { type: 'image', label: '🖼️ Imagem', desc: 'Imagem ou foto' },
+            { type: 'button', label: '🔘 Botão', desc: 'Botão clicável' },
+            { type: 'input', label: '📝 Campo', desc: 'Campo de entrada' },
+            { type: 'options', label: '☑️ Opções', desc: 'Múltipla escolha' },
+            { type: 'video', label: '🎥 Vídeo', desc: 'Vídeo incorporado' },
+            { type: 'spacer', label: '📏 Espaço', desc: 'Espaçamento' },
+          ].map((component) => (
+            <button
+              key={component.type}
+              onClick={() => onComponentAdd(component.type)}
+              className="w-full text-left p-3 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white transition-colors"
+            >
+              <div className="font-medium text-sm">{component.label}</div>
+              <div className="text-xs text-zinc-400 mt-1">{component.desc}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Funções Auxiliares ---
+
+/**
+ * @function generateUniqueId
+ * @description Gera um ID único para componentes ou etapas.
+ */
+const generateUniqueId = (): string =>
+  `id-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
 // --- Componentes Principais do Editor (UI Layout) ---
 
 /**
@@ -1858,234 +2087,11 @@ const ComponentPropertiesEditor: React.FC<{
                 )
               }
             >
-              <option value="goToNextStep">Próxima Etapa</option>
+              <option value="goToNextStep">Ir para a Próxima Etapa</option>
               <option value="submitForm">Enviar Formulário</option>
-              <option value="redirectUrl">Redirecionar URL</option>
-              <option value="customFunction">Função Custom</option>
+              <option value="redirectUrl">Redirecionar para URL</option>
+              <option value="customFunction">Função Personalizada</option>
             </select>
-          </div>
-          {props.actionType === "redirectUrl" && (
-            <div className="grid w-full items-center gap-1.5">
-              <label className="text-sm font-medium leading-none text-zinc-100">
-                URL de Redirecionamento
-              </label>
-              <input
-                type="text"
-                className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-                value={props.actionUrl || ""}
-                onChange={(e) => handleChange("actionUrl", e.target.value)}
-                placeholder="https://seusite.com/oferta"
-              />
-            </div>
-          )}
-          <StylesEditor />
-        </div>
-      );
-
-    case "options":
-      return (
-        <div className="space-y-4">
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Texto da Pergunta
-            </label>
-            <textarea
-              className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-              value={props.questionText || ""}
-              onChange={(e) => handleChange("questionText", e.target.value)}
-              placeholder="Qual a sua cor favorita?"
-            />
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Tipo de Seleção
-            </label>
-            <select
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.selectionType || "single"}
-              onChange={(e) =>
-                handleChange(
-                  "selectionType",
-                  e.target.value as QuizComponentProps["selectionType"]
-                )
-              }
-            >
-              <option value="single">Seleção Única</option>
-              <option value="multiple">Seleção Múltipla</option>
-            </select>
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Opções
-            </label>
-            <div className="space-y-2">
-              {props.choices?.map((choice, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    className="flex-1 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-                    value={choice.text}
-                    onChange={(e) => {
-                      const newChoices = [...(props.choices || [])];
-                      newChoices[index].text = e.target.value;
-                      newChoices[index].value = e.target.value
-                        .toLowerCase()
-                        .replace(/\s+/g, "_");
-                      handleChange("choices", newChoices);
-                    }}
-                    placeholder={`Opção ${index + 1}`}
-                  />
-                  <input
-                    type="number"
-                    className="w-20 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-                    value={choice.scoreValue || 0}
-                    onChange={(e) => {
-                      const newChoices = [...(props.choices || [])];
-                      newChoices[index].scoreValue =
-                        parseInt(e.target.value) || 0;
-                      handleChange("choices", newChoices);
-                    }}
-                    placeholder="Pontos"
-                  />
-                  <button
-                    className="text-red-500 hover:text-red-700 p-1"
-                    onClick={() => {
-                      const newChoices = (props.choices || []).filter(
-                        (_, i) => i !== index
-                      );
-                      handleChange("choices", newChoices);
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M3 6h18"></path>
-                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                    </svg>
-                  </button>
-                </div>
-              ))}
-            </div>
-            <button
-              className="mt-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-zinc-700 text-zinc-100 hover:bg-zinc-600 py-2 px-4"
-              onClick={() => {
-                const newChoices = [...(props.choices || [])];
-                const optionNumber = newChoices.length + 1;
-                newChoices.push({
-                  text: `Nova Opção ${optionNumber}`,
-                  value: `option${optionNumber}`,
-                  scoreValue: 0,
-                });
-                handleChange("choices", newChoices);
-              }}
-            >
-              Adicionar Opção
-            </button>
-          </div>
-          <StylesEditor />
-        </div>
-      );
-
-    case "alert":
-      return (
-        <div className="space-y-4">
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Mensagem
-            </label>
-            <textarea
-              className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-              value={props.alertMessage || ""}
-              onChange={(e) => handleChange("alertMessage", e.target.value)}
-              placeholder="Digite a mensagem de alerta..."
-            />
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Tipo de Alerta
-            </label>
-            <select
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.alertType || "info"}
-              onChange={(e) =>
-                handleChange(
-                  "alertType",
-                  e.target.value as QuizComponentProps["alertType"]
-                )
-              }
-            >
-              <option value="info">Informação</option>
-              <option value="warning">Aviso</option>
-              <option value="error">Erro</option>
-              <option value="success">Sucesso</option>
-            </select>
-          </div>
-          <StylesEditor />
-        </div>
-      );
-
-    case "customComponent":
-      return (
-        <div className="space-y-4">
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Nome do Componente
-            </label>
-            <select
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.componentName || ""}
-              onChange={(e) => handleChange("componentName", e.target.value)}
-            >
-              <option value="">Selecione um componente</option>
-              <option value="ResultPage.tsx">ResultPage.tsx</option>
-              <option value="QuizOfferPage.tsx">QuizOfferPage.tsx</option>
-            </select>
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Título da Oferta
-            </label>
-            <input
-              type="text"
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.offerHeadline || ""}
-              onChange={(e) => handleChange("offerHeadline", e.target.value)}
-              placeholder="Ex: Seu Perfil de Estilo Único!"
-            />
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Descrição
-            </label>
-            <textarea
-              className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-              value={props.offerDescription || ""}
-              onChange={(e) => handleChange("offerDescription", e.target.value)}
-              placeholder="Ex: Receba um e-book exclusivo..."
-            />
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Botão CTA
-            </label>
-            <input
-              type="text"
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.offerCtaButtonText || ""}
-              onChange={(e) =>
-                handleChange("offerCtaButtonText", e.target.value)
-              }
-              placeholder="Ex: Resgatar Agora!"
-            />
           </div>
           <div className="grid w-full items-center gap-1.5">
             <label className="text-sm font-medium leading-none text-zinc-100">
@@ -2105,364 +2111,593 @@ const ComponentPropertiesEditor: React.FC<{
                 Código de Desconto
               </label>
               <input
-                type="text"
-                className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-                value={props.discountCode || ""}
-                onChange={(e) => handleChange("discountCode", e.target.value)}
-                placeholder="EX: QUIZ20"
-              />
-            </div>
-          )}
-          <StylesEditor />
+                type="text":
+                className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100" (
+                value={props.discountCode || ""}ace-y-4">
+                onChange={(e) => handleChange("discountCode", e.target.value)} className="grid w-full items-center gap-1.5">
+                placeholder="EX: QUIZ20"    <label className="text-sm font-medium leading-none text-zinc-100">
+              />              Texto da Pergunta
+            </div>l>
+          )}extarea
+          <StylesEditor />-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         </div>
-      );
-
+      );.value)}
+aceholder="Qual a sua cor favorita?"
     case "spacer":
-      return (
-        <div className="space-y-4">
-          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">
-            Espaçador não possui propriedades editáveis específicas.
-          </div>
+      return (v>
+        <div className="space-y-4">  <div className="grid w-full items-center gap-1.5">
+          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">            <label className="text-sm font-medium leading-none text-zinc-100">
+            Espaçador não possui propriedades editáveis específicas.  Tipo de Seleção
+          </div>label>
           <StylesEditor />
-        </div>
+        </div>3 py-2 text-sm text-zinc-100"
       );
-
+ange={(e) =>
     default:
       return (
-        <div className="space-y-4">
-          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">
+        <div className="space-y-4">.target.value as QuizComponentProps["selectionType"]
+          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">)
             Editor de propriedades para '{type}' ainda não implementado.
             <br />
-            <span className="text-xs">
-              Selecione um componente suportado para editar suas propriedades.
-            </span>
-          </div>
-          <StylesEditor />
-        </div>
+            <span className="text-xs">      <option value="single">Seleção Única</option>
+              Selecione um componente suportado para editar suas propriedades.           <option value="multiple">Seleção Múltipla</option>
+            </span>          </select>
+          </div>          </div>
+          <StylesEditor />"grid w-full items-center gap-1.5">
+        </div>            <label className="text-sm font-medium leading-none text-zinc-100">
       );
-  }
-};
-
+  }            </label>
+};         <div className="space-y-2">
+p((choice, index) => (
 // --- FIM DA PARTE 2 ---
-
+               <input
 // --- COMPONENTE DE NAVEGAÇÃO DE ETAPAS ---
-
-/**
+className="flex-1 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+/**e={choice.text}
  * @component StepNavigationTabs
- * @description Componente para navegação entre etapas com abas horizontais.
- */
-const StepNavigationTabs: React.FC<{
-  steps: QuizStep[];
-  currentStepId: string;
-  onStepSelect: (stepId: string) => void;
-  onStepRename: (stepId: string, newName: string) => void;
-  onStepDelete: (stepId: string) => void;
-  onAddStep: () => void;
-}> = ({
-  steps,
-  currentStepId,
+ * @description Componente para navegação entre etapas com abas horizontais.s || [])];
+ */ext = e.target.value;
+const StepNavigationTabs: React.FC<{wChoices[index].value = e.target.value
+  steps: QuizStep[];                 .toLowerCase()
+  currentStepId: string;                .replace(/\s+/g, "_");
+  onStepSelect: (stepId: string) => void;      handleChange("choices", newChoices);
+  onStepRename: (stepId: string, newName: string) => void;     }}
+  onStepDelete: (stepId: string) => void;     placeholder={`Opção ${index + 1}`}
+  onAddStep: () => void;   />
+}> = ({      <input
+  steps,             type="number"
+  currentStepId, bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
   onStepSelect,
-  onStepRename,
-  onStepDelete,
-  onAddStep,
-}) => {
-  const [editingStepId, setEditingStepId] = useState<string | null>(null);
-  const [editingName, setEditingName] = useState("");
-
+  onStepRename,                    onChange={(e) => {
+  onStepDelete,rops.choices || [])];
+  onAddStep,es[index].scoreValue =
+}) => {nt(e.target.value) || 0;
+  const [editingStepId, setEditingStepId] = useState<string | null>(null);                  handleChange("choices", newChoices);
+  const [editingName, setEditingName] = useState("");                    }}
+ontos"
   const handleStartEdit = (step: QuizStep) => {
     setEditingStepId(step.id);
-    setEditingName(step.name);
-  };
-
-  const handleFinishEdit = () => {
-    if (editingStepId && editingName.trim()) {
-      onStepRename(editingStepId, editingName.trim());
+    setEditingName(step.name);               className="text-red-500 hover:text-red-700 p-1"
+  };={() => {
+onst newChoices = (props.choices || []).filter(
+  const handleFinishEdit = () => {                    (_, i) => i !== index
+    if (editingStepId && editingName.trim()) {                      );
+      onStepRename(editingStepId, editingName.trim());es);
     }
     setEditingStepId(null);
     setEditingName("");
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleFinishEdit();
-    } else if (e.key === "Escape") {
+  };http://www.w3.org/2000/svg"
+th="16"
+  const handleKeyPress = (e: React.KeyboardEvent) => {                 height="16"
+    if (e.key === "Enter") {                  viewBox="0 0 24 24"
+      handleFinishEdit();                      fill="none"
+    } else if (e.key === "Escape") {            stroke="currentColor"
       setEditingStepId(null);
       setEditingName("");
-    }
-  };
-
+    }"round"
+  };      >
+th d="M3 6h18"></path>
   return (
-    <div className="bg-zinc-900 border-b border-zinc-700 px-4 py-2">
+    <div className="bg-zinc-900 border-b border-zinc-700 px-4 py-2">-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
       <div className="flex items-center space-x-2 overflow-x-auto">
         {steps.map((step, index) => (
-          <div
+          <div </div>
             key={step.id}
-            className={`flex items-center space-x-2 px-3 py-2 rounded-md cursor-pointer transition-colors duration-200 min-w-max ${
+            className={`flex items-center space-x-2 px-3 py-2 rounded-md cursor-pointer transition-colors duration-200 min-w-max ${ </div>
               currentStepId === step.id
-                ? "bg-blue-600 text-white"
-                : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
-            }`}
-            onClick={() => onStepSelect(step.id)}
+                ? "bg-blue-600 text-white"items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-zinc-700 text-zinc-100 hover:bg-zinc-600 py-2 px-4"
+                : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"k={() => {
+            }`}oices = [...(props.choices || [])];
+            onClick={() => onStepSelect(step.id)}= newChoices.length + 1;
           >
-            <span className="text-xs font-mono">{index + 1}</span>
-            {editingStepId === step.id ? (
+            <span className="text-xs font-mono">{index + 1}</span>ionNumber}`,
+            {editingStepId === step.id ? (mber}`,
               <input
                 type="text"
-                value={editingName}
+                value={editingName}handleChange("choices", newChoices);
                 onChange={(e) => setEditingName(e.target.value)}
                 onBlur={handleFinishEdit}
                 onKeyDown={handleKeyPress}
                 className="bg-transparent border-b border-white text-sm min-w-20 focus:outline-none"
                 autoFocus
-              />
+              />esEditor />
             ) : (
               <span
                 className="text-sm"
                 onDoubleClick={() => handleStartEdit(step)}
                 title="Duplo clique para editar"
-              >
-                {step.name}
-              </span>
+              >">
+                {step.name}items-center gap-1.5">
+              </span>xt-zinc-100">
             )}
-            {steps.length > 1 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (confirm(`Deletar etapa "${step.name}"?`)) {
-                    onStepDelete(step.id);
+            {steps.length > 1 && (>
+              <buttonrea
+                onClick={(e) => {0 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  e.stopPropagation();ge || ""}
+                  if (confirm(`Deletar etapa "${step.name}"?`)) {nChange={(e) => handleChange("alertMessage", e.target.value)}
+                    onStepDelete(step.id);ceholder="Digite a mensagem de alerta..."
                   }
-                }}
-                className="ml-1 p-1 rounded text-xs hover:bg-red-600 text-red-400"
-                title="Deletar etapa"
-              >
-                ×
+                }}v>
+                className="ml-1 p-1 rounded text-xs hover:bg-red-600 text-red-400"lassName="grid w-full items-center gap-1.5">
+                title="Deletar etapa" <label className="text-sm font-medium leading-none text-zinc-100">
+              >              Tipo de Alerta
+                ×abel>
               </button>
             )}
-          </div>
-        ))}
+          </div>| "info"}
+        ))}     onChange={(e) =>
 
         <button
-          onClick={onAddStep}
-          className="flex items-center space-x-1 px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 rounded-md transition-colors duration-200 min-w-max"
-          title="Adicionar nova etapa"
-        >
-          <span className="text-sm">+</span>
-          <span className="text-xs">Nova Etapa</span>
+          onClick={onAddStep} e.target.value as QuizComponentProps["alertType"]
+          className="flex items-center space-x-1 px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 rounded-md transition-colors duration-200 min-w-max"    )
+          title="Adicionar nova etapa"    }
+        >        >
+          <span className="text-sm">+</span>            <option value="info">Informação</option>
+          <span className="text-xs">Nova Etapa</span>              <option value="warning">Aviso</option>
         </button>
-      </div>
-    </div>
+      </div>              <option value="success">Sucesso</option>
+    </div>         </select>
   );
 };
 
-// --- PARTE 3: COMPONENTE PRINCIPAL E LÓGICA DE ESTADO ---
+// --- PARTE 3: COMPONENTE PRINCIPAL E LÓGICA DE ESTADO ---   );
 
 /**
- * @component AdvancedQuizEditor
- * @description Componente principal do editor visual de quiz com todas as funcionalidades integradas.
+ * @component AdvancedQuizEditor      return (
+ * @description Componente principal do editor visual de quiz com todas as funcionalidades integradas.">
  * Este é o componente exportado que deve ser usado no App.tsx ou em outros lugares.
- */
-const AdvancedQuizEditor: React.FC = () => {
+ */<label className="text-sm font-medium leading-none text-zinc-100">
+const AdvancedQuizEditor: React.FC = () => {       Nome do Componente
   console.log("🚀 AdvancedQuizEditor está renderizando!");
 
-  // Estados principais do editor
-  const [editorState, setEditorState] = useState<QuizEditorState>({
-    steps: [
+  // Estados principais do editorme="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+  const [editorState, setEditorState] = useState<QuizEditorState>({   value={props.componentName || ""}
+    steps: [dleChange("componentName", e.target.value)}
       {
-        id: "step-1",
-        name: "Primeira Etapa",
-        components: [
+        id: "step-1",n value="">Selecione um componente</option>
+        name: "Primeira Etapa",sx">ResultPage.tsx</option>
+        components: [alue="QuizOfferPage.tsx">QuizOfferPage.tsx</option>
           {
             id: "welcome-heading",
-            type: "heading",
-            props: {
-              text: "Bem-vindo ao Quiz!",
-              styles: {
-                textAlign: "center",
+            type: "heading",full items-center gap-1.5">
+            props: {el className="text-sm font-medium leading-none text-zinc-100">
+              text: "Bem-vindo ao Quiz!",Título da Oferta
+              styles: {</label>
+                textAlign: "center", <input
                 color: "#ffffff",
-                fontSize: "2rem",
-              },
+                fontSize: "2rem",flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              },{props.offerHeadline || ""}
             },
-          },
+          },er="Ex: Seu Perfil de Estilo Único!"
           {
             id: "welcome-text",
-            type: "text",
-            props: {
-              text: "Descubra seu estilo pessoal respondendo algumas perguntas rápidas.",
-              styles: {
-                textAlign: "center",
-                color: "#d1d5db",
-                fontSize: "1.1rem",
-              },
-            },
+            type: "text",ll items-center gap-1.5">
+            props: {el className="text-sm font-medium leading-none text-zinc-100">
+              text: "Descubra seu estilo pessoal respondendo algumas perguntas rápidas.",Descrição
+              styles: {</label>
+                textAlign: "center", <textarea
+                color: "#d1d5db",in-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                fontSize: "1.1rem",offerDescription || ""}
+              },ge={(e) => handleChange("offerDescription", e.target.value)}
+            },e-book exclusivo..."
           },
           {
-            id: "start-button",
-            type: "button",
-            props: {
-              buttonText: "Começar Quiz",
+            id: "start-button",tems-center gap-1.5">
+            type: "button",abel className="text-sm font-medium leading-none text-zinc-100">
+            props: {  Botão CTA
+              buttonText: "Começar Quiz",  </label>
               buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "step-2",
-            },
-          },
-        ],
+              actionType: "goToNextStep",      type="text"
+              actionTargetId: "step-2",        className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+            },={props.offerCtaButtonText || ""}
+          },e={(e) =>
+        ],("offerCtaButtonText", e.target.value)
         defaultNextStepId: "step-2",
       },
     ],
-    headerConfig: {
-      showLogo: true,
-      showProgressBar: true,
-      allowReturnButton: true,
+    headerConfig: {    </div>
+      showLogo: true,id w-full items-center gap-1.5">
+      showProgressBar: true,       <label className="text-sm font-medium leading-none text-zinc-100">
+      allowReturnButton: true,              URL do CTA
       logoUrl: "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO",
-      progressColor: "#3b82f6",
-    },
-    currentStepId: "step-1",
+      progressColor: "#3b82f6",    <input
+    },          type="text"
+    currentStepId: "step-1",md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
   });
-
-  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(
+              onChange={(e) => handleChange("offerCtaUrl", e.target.value)}
+  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(older="https://sua-oferta.com"
     null
   );
-  const [isSaving, setIsSaving] = useState(false);
-  const [isPublishing, setIsPublishing] = useState(false);
-
-  // Computed values
-  const currentStep =
+  const [isSaving, setIsSaving] = useState(false);tName === "QuizOfferPage.tsx" && (
+  const [isPublishing, setIsPublishing] = useState(false);"grid w-full items-center gap-1.5">
+0">
+  // Computed values       Código de Desconto
+  const currentStep =              </label>
     editorState.steps.find((step) => step.id === editorState.currentStepId) ||
-    editorState.steps[0];
-  const selectedComponent =
-    currentStep.components.find((comp) => comp.id === selectedComponentId) ||
-    null;
+    editorState.steps[0];                type="text"
+  const selectedComponent =ded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+    currentStep.components.find((comp) => comp.id === selectedComponentId) ||scountCode || ""}
+    null;  onChange={(e) => handleChange("discountCode", e.target.value)}
+"EX: QUIZ20"
+  // --- Handlers para gerenciar etapas ---      />
 
-  // --- Handlers para gerenciar etapas ---
-
-  const handleStepSelect = (stepId: string) => {
-    setEditorState((prev) => ({
+  const handleStepSelect = (stepId: string) => {      )}
+    setEditorState((prev) => ({          <StylesEditor />
       ...prev,
       currentStepId: stepId,
     }));
     setSelectedComponentId(null); // Limpa seleção de componente ao trocar de etapa
   };
-
-  const handleAddStep = () => {
-    const newStepId = generateUniqueId();
+ame="space-y-4">
+  const handleAddStep = () => { <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">
+    const newStepId = generateUniqueId();propriedades editáveis específicas.
     const newStep: QuizStep = {
-      id: newStepId,
+      id: newStepId,ditor />
       name: `Etapa ${editorState.steps.length + 1}`,
       components: [
         {
-          id: generateUniqueId(),
-          type: "heading",
-          props: {
-            text: `Etapa ${editorState.steps.length + 1}`,
-            styles: { textAlign: "center", color: "#ffffff" },
-          },
+          id: generateUniqueId(),t:
+          type: "heading",turn (
+          props: {  <div className="space-y-4">
+            text: `Etapa ${editorState.steps.length + 1}`,          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">
+            styles: { textAlign: "center", color: "#ffffff" },des para '{type}' ainda não implementado.
+          },r />
         },
-      ],
-    };
-
-    setEditorState((prev) => ({
+      ],onente suportado para editar suas propriedades.
+    };    </span>
+      </div>
+    setEditorState((prev) => ({          <StylesEditor />
       ...prev,
       steps: [...prev.steps, newStep],
       currentStepId: newStepId,
     }));
   };
-
+IM DA PARTE 2 ---
   const handleStepRename = (stepId: string, newName: string) => {
-    setEditorState((prev) => ({
+    setEditorState((prev) => ({-- COMPONENTE DE NAVEGAÇÃO DE ETAPAS ---
       ...prev,
       steps: prev.steps.map((step) =>
         step.id === stepId ? { ...step, name: newName } : step
-      ),
+      ),as horizontais.
     }));
-  };
-
+  }; StepNavigationTabs: React.FC<{
+  steps: QuizStep[];
   const handleStepDelete = (stepId: string) => {
     if (editorState.steps.length <= 1) {
-      alert("Não é possível deletar a única etapa do quiz.");
+      alert("Não é possível deletar a única etapa do quiz.");  onStepRename: (stepId: string, newName: string) => void;
       return;
     }
 
     const stepIndex = editorState.steps.findIndex((step) => step.id === stepId);
     const newSteps = editorState.steps.filter((step) => step.id !== stepId);
-
+,
     // Se deletamos a etapa atual, seleciona uma próxima
-    let newCurrentStepId = editorState.currentStepId;
-    if (stepId === editorState.currentStepId) {
-      if (stepIndex > 0) {
-        newCurrentStepId = newSteps[stepIndex - 1].id;
-      } else {
+    let newCurrentStepId = editorState.currentStepId;pDelete,
+    if (stepId === editorState.currentStepId) {ddStep,
+      if (stepIndex > 0) {}) => {
+        newCurrentStepId = newSteps[stepIndex - 1].id;ingStepId] = useState<string | null>(null);
+      } else {ngName, setEditingName] = useState("");
         newCurrentStepId = newSteps[0].id;
-      }
-    }
+      }tep) => {
+    }ditingStepId(step.id);
 
     setEditorState((prev) => ({
       ...prev,
       steps: newSteps,
-      currentStepId: newCurrentStepId,
+      currentStepId: newCurrentStepId,    if (editingStepId && editingName.trim()) {
     }));
     setSelectedComponentId(null);
-  };
-
+  };setEditingStepId(null);
+    setEditingName("");
   // --- Handlers para gerenciar componentes ---
 
-  const handleComponentSelect = (componentId: string | null) => {
+  const handleComponentSelect = (componentId: string | null) => {React.KeyboardEvent) => {
     setSelectedComponentId(componentId);
   };
-
-  const handleComponentAdd = (type: string) => {
+else if (e.key === "Escape") {
+  const handleComponentAdd = (type: string) => {      setEditingStepId(null);
     const newComponent: QuizComponent = {
       id: generateUniqueId(),
       type: type as QuizComponent["type"],
       props: getDefaultPropsForType(type),
     };
-
-    setEditorState((prev) => ({
-      ...prev,
-      steps: prev.steps.map((step) =>
+me="bg-zinc-900 border-b border-zinc-700 px-4 py-2">
+    setEditorState((prev) => ({iv className="flex items-center space-x-2 overflow-x-auto">
+      ...prev,{steps.map((step, index) => (
+      steps: prev.steps.map((step) =>          <div
         step.id === editorState.currentStepId
-          ? { ...step, components: [...step.components, newComponent] }
+          ? { ...step, components: [...step.components, newComponent] }ace-x-2 px-3 py-2 rounded-md cursor-pointer transition-colors duration-200 min-w-max ${
+          : step          currentStepId === step.id
+      ),                ? "bg-blue-600 text-white"
+    }));xt-zinc-300 hover:bg-zinc-600"
+
+    // Seleciona o novo componente automaticamentetep.id)}
+    setSelectedComponentId(newComponent.id);  >
+  };xt-xs font-mono">{index + 1}</span>
+ditingStepId === step.id ? (
+  const handleComponentUpdate = (
+    componentId: string,
+    newProps: Partial<QuizComponentProps>   value={editingName}
+  ) => {ge={(e) => setEditingName(e.target.value)}
+    setEditorState((prev) => ({
+      ...prev,ss}
+      steps: prev.steps.map((step) =>m min-w-20 focus:outline-none"
+        step.id === editorState.currentStepIds
+          ? {
+              ...step, : (
+              components: step.components.map((comp) =>pan
+                comp.id === componentId        className="text-sm"
+                  ? { ...comp, props: { ...comp.props, ...newProps } }        onDoubleClick={() => handleStartEdit(step)}
+                  : comp            title="Duplo clique para editar"
+              ),              >
+            }
           : step
       ),
     }));
-
-    // Seleciona o novo componente automaticamente
-    setSelectedComponentId(newComponent.id);
   };
+   onClick={(e) => {
+  const handleComponentDelete = (componentId: string) => {opPropagation();
+    setEditorState((prev) => ({tep.name}"?`)) {
+      ...prev,
+      steps: prev.steps.map((step) =>  }
+        step.id === editorState.currentStepId   }}
+          ? {className="ml-1 p-1 rounded text-xs hover:bg-red-600 text-red-400"
+              ...step,        title="Deletar etapa"
+              components: step.components.filter(      >
+                (comp) => comp.id !== componentId                ×
+              ),
+            }
+          : step     </div>
+      ),    ))}
+    }));
 
-  const handleComponentUpdate = (
+    if (selectedComponentId === componentId) {Step}
+      setSelectedComponentId(null);ems-center space-x-1 px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 rounded-md transition-colors duration-200 min-w-max"
+    }  title="Adicionar nova etapa"
+  };
+n className="text-sm">+</span>
+  const handleComponentMove = (a Etapa</span>
     componentId: string,
-    newProps: Partial<QuizComponentProps>
+    direction: "up" | "down"      </div>
   ) => {
     setEditorState((prev) => ({
       ...prev,
-      steps: prev.steps.map((step) =>
-        step.id === editorState.currentStepId
-          ? {
-              ...step,
-              components: step.components.map((comp) =>
-                comp.id === componentId
-                  ? { ...comp, props: { ...comp.props, ...newProps } }
-                  : comp
-              ),
-            }
-          : step
-      ),
-    }));
+      steps: prev.steps.map((step) => {
+        if (step.id !== editorState.currentStepId) return step;// --- PARTE 3: COMPONENTE PRINCIPAL E LÓGICA DE ESTADO ---
+
+        const componentIndex = step.components.findIndex(
+          (comp) => comp.id === componentId
+        ); * @description Componente principal do editor visual de quiz com todas as funcionalidades integradas.
+        if (componentIndex === -1) return step;res.
+ */
+        const newComponents = [...step.components]; {
+        const targetIndex =
+          direction === "up" ? componentIndex - 1 : componentIndex + 1;
+
+        if (targetIndex < 0 || targetIndex >= newComponents.length) return step;ditorState, setEditorState] = useState<QuizEditorState>({
+    steps: [
+        // Troca os componentes de posição
+        [newComponents[componentIndex], newComponents[targetIndex]] = [d: "step-1",
+          newComponents[targetIndex],name: "Primeira Etapa",
+          newComponents[componentIndex],    components: [
+        ];          {
+
+        return { ...step, components: newComponents };            type: "heading",
+      }),
+    }));ao Quiz!",
+  };styles: {
+
+  // --- Handlers para configurações do cabeçalho ---        color: "#ffffff",
+            fontSize: "2rem",
+  const handleHeaderConfigUpdate = (newConfig: Partial<QuizHeaderConfig>) => {              },
+    setEditorState((prev) => ({
+      ...prev,          },
+      headerConfig: { ...prev.headerConfig, ...newConfig },
+    }));me-text",
+  };   type: "text",
+
+  // --- Handlers para salvar e publicar ---umas perguntas rápidas.",
+
+  const handleSave = async () => {
+    setIsSaving(true);: "#d1d5db",
+    try {
+      // Simula salvamento (aqui você integraria com uma API real)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log("Quiz salvo:", editorState);
+      alert("Quiz salvo com sucesso!");     {
+    } catch (error) {        id: "start-button",
+      console.error("Erro ao salvar:", error);            type: "button",
+      alert("Erro ao salvar o quiz. Tente novamente.");
+    } finally {"Começar Quiz",
+      setIsSaving(false);     buttonStyle: "primary",
+    }
   };
 
-  const handleComponentDelete = (componentId: string) => {
-    setEditorState((prev) => ({
-      ...prev,
-      steps: prev.steps.map((step) =>
-        step.id === editorState.currentStepId
-          ? {
-              ...step,
-              components: step.components.filter(
-                (comp) => comp.id !== componentId
-              ),
-            }
-          : step
-      ),
+  const handlePublish = async () => {
+    setIsPublishing(true);
+    try {
+      // Simula publicação (aqui você integraria com uma API real)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log("Quiz publicado:", editorState);
+      alert("Quiz publicado com sucesso!"); showLogo: true,
+    } catch (error) {  showProgressBar: true,
+      console.error("Erro ao publicar:", error);      allowReturnButton: true,
+      alert("Erro ao publicar o quiz. Tente novamente.");ld.co/120x40/0f172a/94a3b8?text=LOGO",
+    } finally {      progressColor: "#3b82f6",
+      setIsPublishing(false);,
+    }
+  };
+
+  // --- Funções auxiliares ---| null>(
+
+  /**
+   * @function getDefaultPropsForTypeg, setIsSaving] = useState(false);
+   * @description Retorna as propriedades padrão para um tipo de componente.blishing] = useState(false);
+   */
+  const getDefaultPropsForType = (type: string): QuizComponentProps => {ted values
+    switch (type) {p =
+      case "heading":steps.find((step) => step.id === editorState.currentStepId) ||
+        return {
+          text: "Novo Título",
+          styles: { textAlign: "center", color: "#ffffff", fontSize: "1.8rem" },tStep.components.find((comp) => comp.id === selectedComponentId) ||
+        };
+      case "text":
+        return {
+          text: "Texto descritivo aqui...",
+          styles: { color: "#d1d5db", fontSize: "1rem" },tepId: string) => {
+        };torState((prev) => ({
+      case "image":
+        return {pId: stepId,
+          src: "https://placehold.co/400x300/0f172a/94a3b8?text=Imagem",
+          alt: "Nova imagem",pa seleção de componente ao trocar de etapa
+          objectFit: "cover",
+        };
+      case "input":ndleAddStep = () => {
+        return {= generateUniqueId();
+          label: "Seu nome",p: QuizStep = {
+          placeholder: "Digite aqui...",
+          inputType: "text",steps.length + 1}`,
+          required: false,
+        };
+      case "button":eUniqueId(),
+        return {"heading",
+          buttonText: "Clique aqui",
+          buttonStyle: "primary",tate.steps.length + 1}`,
+          actionType: "goToNextStep",{ textAlign: "center", color: "#ffffff" },
+        };
+      case "options":
+        return {
+          questionText: "Qual é a sua preferência?",
+          selectionType: "single",
+          choices: [te((prev) => ({
+            { text: "Opção 1", value: "option1" },
+            { text: "Opção 2", value: "option2" },
+          ],entStepId: newStepId,
+        };
+      case "alert":
+        return {
+          alertType: "info",= (stepId: string, newName: string) => {
+          alertMessage: "Esta é uma mensagem informativa.",=> ({
+        };rev,
+      case "video":s.map((step) =>
+        return {=== stepId ? { ...step, name: newName } : step
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          controls: true,
+          autoplay: false,
+        };
+      case "carousel":StepDelete = (stepId: string) => {
+        return {rState.steps.length <= 1) {
+          images: [
+            {
+              src: "https://placehold.co/400x300/0f172a/94a3b8?text=Slide+1",
+              alt: "Slide 1",
+            },rState.steps.findIndex((step) => step.id === stepId);
+            {newSteps = editorState.steps.filter((step) => step.id !== stepId);
+              src: "https://placehold.co/400x300/1e293b/cbd5e1?text=Slide+2",
+              alt: "Slide 2",mos a etapa atual, seleciona uma próxima
+            },rentStepId;
+          ],StepId) {
+          autoSlide: false,stepIndex > 0) {
+        };epId = newSteps[stepIndex - 1].id;
+      case "customComponent":
+        return {rentStepId = newSteps[0].id;
+          componentName: "ResultPage.tsx",
+          resultType: "styleAnalysis",
+        };
+      case "spacer":    setEditorState((prev) => ({
+        return {};
+      default:      steps: newSteps,
+        return {};urrentStepId: newCurrentStepId,
+    }
+  };    setSelectedComponentId(null);
+
+  // --- Render principal ---
+r componentes ---
+  try {
+    console.log("🎯 Tentando renderizar AdvancedQuizEditor..."); = (componentId: string | null) => {
+tId);
+    return (
+      <div className="h-screen bg-zinc-950 flex flex-col">
+        {/* Navbar Superior */}ndleComponentAdd = (type: string) => {
+        <FunnelNavbar    const newComponent: QuizComponent = {
+          onSave={handleSave}
+          onPublish={handlePublish}
+          isSaving={isSaving}orType(type),
+          isPublishing={isPublishing}
+        />
+
+        {/* Navegação de Etapas */}
+        <div className="border-b border-zinc-700">
+          <StepNavigationTabsntStepId
+            steps={editorState.steps}{ ...step, components: [...step.components, newComponent] }
+            currentStepId={editorState.currentStepId}ep
+            onStepSelect={handleStepSelect}      ),
+            onStepRename={handleStepRename}
+            onStepDelete={handleStepDelete}
+            onAddStep={handleAddStep}vo componente automaticamente
+          />nt.id);
+        </div>
+
+        {/* Área Principal do Editor */}
+        <div className="flex-1 overflow-hidden">
+          <CanvasArea
+            currentStep={currentStep}
+            headerConfig={editorState.headerConfig}
+            selectedComponent={selectedComponent}
+            selectedComponentId={selectedComponentId} prev.steps.map((step) =>
+            onComponentSelect={handleComponentSelect}d === editorState.currentStepId
+            onComponentAdd={handleComponentAdd}{
+            onComponentUpdate={handleComponentUpdate}        ...step,
+            onComponentDelete={handleComponentDelete}nents: step.components.map((comp) =>
+            onComponentMove={handleComponentMove}
+          />      ? { ...comp, props: { ...comp.props, ...newProps } }
+        </div>
+      </div>
+    );
+  } catch (error) {
+    console.error("❌ Erro ao renderizar AdvancedQuizEditor:", error);
+    return (
+      <div className="h-screen bg-red-950 flex items-center justify-center">
+        <div className="text-center text-white">
+          <h1 className="text-2xl font-bold mb-4">Erro no Editor</h1>leComponentDelete = (componentId: string) => {
+          <p className="text-red-300">Verifique o console para mais detalhes</p>tEditorState((prev) => ({
+          <pre className="mt-4 text-sm text-red-200 bg-red-900 p-4 rounded">   ...prev,
+            {error instanceof Error ? error.message : String(error)}    steps: prev.steps.map((step) =>
+          </pre>        step.id === editorState.currentStepId
+        </div>
+      </div>              ...step,
+    );.components.filter(
+  }!== componentId
+};              ),
+
+// --- EXPORTAÇÃO PRINCIPAL ---          : step
+
+
+
+
+
+
+// --- FIM DA PARTE 3 ---export default AdvancedQuizEditor;export { AdvancedQuizEditor };      ),
     }));
 
     if (selectedComponentId === componentId) {
