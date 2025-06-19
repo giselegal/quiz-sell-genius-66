@@ -44,6 +44,68 @@
   outline: 1px dashed rgba(156, 163, 175, 0.5);
 }
 
+/* Quiz Options Styles */
+.quiz-options-container {
+  width: 100%;
+}
+
+.quiz-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.quiz-option-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100px;
+  transition: all 0.2s ease;
+}
+
+.quiz-option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgb(99, 102, 241);
+}
+
+.quiz-option-image-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.quiz-option-image-container img {
+  width: 100%;
+  height: 128px;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.quiz-option-card:hover .quiz-option-image-container img {
+  transform: scale(1.05);
+}
+
+.quiz-option-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.quiz-option-text {
+  line-height: 1.4;
+}
+
+.quiz-option-text .custom-quill {
+  margin: 0;
+  padding: 0;
+}
+
+.quiz-option-text .custom-quill p {
+  margin: 0;
+  padding: 0;
+}
+
 /* Progress bar animation */
 .progress {
   background: linear-gradient(90deg, #3b82f6, #6366f1);

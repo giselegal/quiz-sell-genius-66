@@ -269,45 +269,53 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
             </div>
           )}
           {component.type === "options" && (
-            <div>
+            <div className="quiz-options-container">
               <h3 className="font-medium mb-3 text-zinc-100">
                 {component.props.text || "Pergunta"}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {" "}
-                {/* Layout de 2 colunas para opções com imagem */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 quiz-options-grid">
                 {component.props.choices?.map(
                   (choice: OptionChoice, index: number) => (
                     <button
                       key={index}
-                      className="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 option border-zinc-600 bg-zinc-800 hover:bg-zinc-700 hover:text-white px-4 hover:shadow-2xl overflow-hidden min-w-full gap-2 flex h-auto py-2 flex-col items-center justify-start border drop-shadow-none option-button text-zinc-200 min-h-[150px]"
+                      className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 hover:bg-zinc-700 transition-all duration-200 overflow-hidden group option-button"
                     >
                       {choice.imageSrc && (
-                        <img
-                          src={choice.imageSrc}
-                          alt={choice.text}
-                          width="256"
-                          height="256"
-                          className="w-full rounded-t-md object-cover h-full"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src =
-                              "https://placehold.co/256x256/555/FFF?text=IMG";
-                          }}
-                        />
+                        <div className="quiz-option-image-container">
+                          <img
+                            src={choice.imageSrc}
+                            alt={choice.text}
+                            className="w-full h-32 object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src =
+                                "https://placehold.co/256x256/555/FFF?text=IMG";
+                            }}
+                          />
+                        </div>
                       )}
-                      <div className="py-2 px-4 w-full flex flex-row text-base items-center text-zinc-100 justify-between">
-                        <div className="break-words w-full custom-quill quill ql-editor quill-option text-center mt-2 p-0">
-                          <p
+                      <div className="quiz-option-content p-3">
+                        <div className="quiz-option-text text-sm text-zinc-100 leading-tight">
+                          <div
+                            className="custom-quill quill ql-editor quill-option"
                             dangerouslySetInnerHTML={{ __html: choice.text }}
-                          ></p>
+                          />
                         </div>
                       </div>
                     </button>
                   )
                 ) || (
-                  <button className="block w-full text-left px-4 py-2 border border-zinc-600 rounded bg-zinc-800 text-zinc-200">
-                    Opção de exemplo
-                  </button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-200 p-3 min-h-[100px] flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-sm opacity-60">Opção 1</div>
+                      </div>
+                    </button>
+                    <button className="quiz-option-card relative rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-200 p-3 min-h-[100px] flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-sm opacity-60">Opção 2</div>
+                      </div>
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
