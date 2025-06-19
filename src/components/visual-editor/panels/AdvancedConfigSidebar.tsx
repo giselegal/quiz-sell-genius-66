@@ -136,6 +136,21 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
     }, 300);
   };
 
+  // Função wrapper para atualização de componente com feedback
+  const updateComponent = (
+    targetId: string,
+    newProps: Partial<QuizComponentProps>
+  ) => {
+    handleSaveWithFeedback(() => onComponentUpdate(targetId, newProps));
+  };
+
+  // Função wrapper para atualização do header config com feedback
+  const updateHeaderConfig = (
+    newProps: Partial<QuizEditorState["headerConfig"]>
+  ) => {
+    handleSaveWithFeedback(() => updateHeaderConfig(newProps));
+  };
+
   const toggleCard = (cardName: string) => {
     setExpandedCards((prev) => ({
       ...prev,
@@ -383,9 +398,11 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     type="text"
                     value={selectedComponent.props.text || ""}
                     onChange={(e) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        text: e.target.value,
-                      })
+                      handleSaveWithFeedback(() =>
+                        updateComponent(selectedComponent.id, {
+                          text: e.target.value,
+                        })
+                      )
                     }
                     className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                     placeholder="Digite o texto"
@@ -400,9 +417,11 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                       type="text"
                       value={selectedComponent.props.src || ""}
                       onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
-                          src: e.target.value,
-                        })
+                        handleSaveWithFeedback(() =>
+                          updateComponent(selectedComponent.id, {
+                            src: e.target.value,
+                          })
+                        )
                       }
                       className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                       placeholder="https://exemplo.com/imagem.png"
@@ -413,9 +432,11 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                       type="text"
                       value={selectedComponent.props.alt || ""}
                       onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
-                          alt: e.target.value,
-                        })
+                        handleSaveWithFeedback(() =>
+                          updateComponent(selectedComponent.id, {
+                            alt: e.target.value,
+                          })
+                        )
                       }
                       className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                       placeholder="Descrição da imagem"
@@ -430,9 +451,11 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     type="text"
                     value={selectedComponent.props.buttonText || ""}
                     onChange={(e) =>
-                      onComponentUpdate(selectedComponent.id, {
-                        buttonText: e.target.value,
-                      })
+                      handleSaveWithFeedback(() =>
+                        updateComponent(selectedComponent.id, {
+                          buttonText: e.target.value,
+                        })
+                      )
                     }
                     className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                     placeholder="Clique aqui"
@@ -447,7 +470,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                       type="text"
                       value={selectedComponent.props.label || ""}
                       onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
+                        updateComponent(selectedComponent.id, {
                           label: e.target.value,
                         })
                       }
@@ -460,7 +483,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                       type="text"
                       value={selectedComponent.props.placeholder || ""}
                       onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
+                        updateComponent(selectedComponent.id, {
                           placeholder: e.target.value,
                         })
                       }
@@ -472,7 +495,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     label="Obrigatório"
                     checked={selectedComponent.props.required || false}
                     onChange={(checked) =>
-                      onComponentUpdate(selectedComponent.id, {
+                      updateComponent(selectedComponent.id, {
                         required: checked,
                       })
                     }
@@ -488,7 +511,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                       type="text"
                       value={selectedComponent.props.text || ""}
                       onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
+                        updateComponent(selectedComponent.id, {
                           text: e.target.value,
                         })
                       }
@@ -515,7 +538,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                                 ...(selectedComponent.props.choices || []),
                               ];
                               updatedChoices[index].text = e.target.value;
-                              onComponentUpdate(selectedComponent.id, {
+                              updateComponent(selectedComponent.id, {
                                 choices: updatedChoices,
                               });
                             }}
@@ -530,7 +553,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                                 ...(selectedComponent.props.choices || []),
                               ];
                               updatedChoices[index].imageSrc = e.target.value;
-                              onComponentUpdate(selectedComponent.id, {
+                              updateComponent(selectedComponent.id, {
                                 choices: updatedChoices,
                               });
                             }}
@@ -542,7 +565,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                               const updatedChoices = (
                                 selectedComponent.props.choices || []
                               ).filter((_, i) => i !== index);
-                              onComponentUpdate(selectedComponent.id, {
+                              updateComponent(selectedComponent.id, {
                                 choices: updatedChoices,
                               });
                             }}
@@ -562,7 +585,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                             value: `option-${generateUniqueId()}`,
                           },
                         ];
-                        onComponentUpdate(selectedComponent.id, {
+                        updateComponent(selectedComponent.id, {
                           choices: updatedChoices,
                         });
                       }}
@@ -607,7 +630,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                               },
                             ];
                             handleSaveWithFeedback(() =>
-                              onComponentUpdate(selectedComponent.id, {
+                              updateComponent(selectedComponent.id, {
                                 choices: testChoices,
                                 gridLayout: "grid-2",
                                 imageHeight: 160,
@@ -634,7 +657,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                               },
                             ];
                             handleSaveWithFeedback(() =>
-                              onComponentUpdate(selectedComponent.id, {
+                              updateComponent(selectedComponent.id, {
                                 choices: testChoices,
                                 gridLayout: "grid-3",
                                 textAlignment: "center",
@@ -653,7 +676,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     label="Múltipla Escolha"
                     checked={selectedComponent.props.multipleChoice || false}
                     onChange={(checked) =>
-                      onComponentUpdate(selectedComponent.id, {
+                      updateComponent(selectedComponent.id, {
                         multipleChoice: checked,
                       })
                     }
@@ -662,7 +685,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     label="Auto-avançar"
                     checked={selectedComponent.props.autoAdvance || false}
                     onChange={(checked) =>
-                      onComponentUpdate(selectedComponent.id, {
+                      updateComponent(selectedComponent.id, {
                         autoAdvance: checked,
                       })
                     }
@@ -713,9 +736,11 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                           label="Layout das Opções"
                           value={selectedComponent.props.gridLayout || "grid-2"}
                           onChange={(value) =>
-                            onComponentUpdate(selectedComponent.id, {
-                              gridLayout: value,
-                            })
+                            handleSaveWithFeedback(() =>
+                              updateComponent(selectedComponent.id, {
+                                gridLayout: value,
+                              })
+                            )
                           }
                           options={
                             hasOnlyText
@@ -759,7 +784,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                                 selectedComponent.props.imageRatio || "square"
                               }
                               onChange={(value) =>
-                                onComponentUpdate(selectedComponent.id, {
+                                updateComponent(selectedComponent.id, {
                                   imageRatio: value,
                                 })
                               }
@@ -781,7 +806,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                                 selectedComponent.props.imagePosition || "top"
                               }
                               onChange={(value) =>
-                                onComponentUpdate(selectedComponent.id, {
+                                updateComponent(selectedComponent.id, {
                                   imagePosition: value,
                                 })
                               }
@@ -798,7 +823,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                               label="Altura da Imagem"
                               value={selectedComponent.props.imageHeight || 160}
                               onChange={(value) =>
-                                onComponentUpdate(selectedComponent.id, {
+                                updateComponent(selectedComponent.id, {
                                   imageHeight: value,
                                 })
                               }
@@ -813,7 +838,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                                 selectedComponent.props.imageBorderRadius || 8
                               }
                               onChange={(value) =>
-                                onComponentUpdate(selectedComponent.id, {
+                                updateComponent(selectedComponent.id, {
                                   imageBorderRadius: value,
                                 })
                               }
@@ -830,7 +855,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                             selectedComponent.props.textAlignment || "center"
                           }
                           onChange={(value) =>
-                            onComponentUpdate(selectedComponent.id, {
+                            updateComponent(selectedComponent.id, {
                               textAlignment: value,
                             })
                           }
@@ -846,7 +871,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                           label="Espaçamento entre Opções"
                           value={selectedComponent.props.optionSpacing || 8}
                           onChange={(value) =>
-                            onComponentUpdate(selectedComponent.id, {
+                            updateComponent(selectedComponent.id, {
                               optionSpacing: value,
                             })
                           }
@@ -870,7 +895,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                                   selectedComponent.props.desktopColumns || "2"
                                 }
                                 onChange={(e) =>
-                                  onComponentUpdate(selectedComponent.id, {
+                                  updateComponent(selectedComponent.id, {
                                     desktopColumns: e.target.value,
                                   })
                                 }
@@ -891,7 +916,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                                   selectedComponent.props.tabletColumns || "2"
                                 }
                                 onChange={(e) =>
-                                  onComponentUpdate(selectedComponent.id, {
+                                  updateComponent(selectedComponent.id, {
                                     tabletColumns: e.target.value,
                                   })
                                 }
@@ -911,7 +936,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                                   selectedComponent.props.mobileColumns || "1"
                                 }
                                 onChange={(e) =>
-                                  onComponentUpdate(selectedComponent.id, {
+                                  updateComponent(selectedComponent.id, {
                                     mobileColumns: e.target.value,
                                   })
                                 }
@@ -936,7 +961,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     label="Direção"
                     value={selectedComponent.props.direction || "column"}
                     onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, {
+                      updateComponent(selectedComponent.id, {
                         direction: value,
                       })
                     }
@@ -949,7 +974,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     label="Alinhamento"
                     value={selectedComponent.props.alignment || "center"}
                     onChange={(value) =>
-                      onComponentUpdate(selectedComponent.id, {
+                      updateComponent(selectedComponent.id, {
                         alignment: value,
                       })
                     }
@@ -973,7 +998,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 label="Cor de Fundo"
                 value={selectedComponent.props.backgroundColor || "#1f2937"}
                 onChange={(color) =>
-                  onComponentUpdate(selectedComponent.id, {
+                  updateComponent(selectedComponent.id, {
                     backgroundColor: color,
                   })
                 }
@@ -982,14 +1007,14 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 label="Cor do Texto"
                 value={selectedComponent.props.textColor || "#f9fafb"}
                 onChange={(color) =>
-                  onComponentUpdate(selectedComponent.id, { textColor: color })
+                  updateComponent(selectedComponent.id, { textColor: color })
                 }
               />
               <SliderControl
                 label="Tamanho da Fonte"
                 value={selectedComponent.props.fontSize || 16}
                 onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, { fontSize: value })
+                  updateComponent(selectedComponent.id, { fontSize: value })
                 }
                 min={12}
                 max={32}
@@ -999,7 +1024,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 label="Raio da Borda"
                 value={selectedComponent.props.borderRadius || 8}
                 onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, {
+                  updateComponent(selectedComponent.id, {
                     borderRadius: value,
                   })
                 }
@@ -1011,7 +1036,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 label="Sombra"
                 value={selectedComponent.props.shadow || 0}
                 onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, { shadow: value })
+                  updateComponent(selectedComponent.id, { shadow: value })
                 }
                 min={0}
                 max={10}
@@ -1020,7 +1045,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 label="Espaçamento Interno"
                 value={selectedComponent.props.padding || 16}
                 onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, { padding: value })
+                  updateComponent(selectedComponent.id, { padding: value })
                 }
                 min={0}
                 max={48}
@@ -1030,7 +1055,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 label="Espaçamento Externo"
                 value={selectedComponent.props.margin || 8}
                 onChange={(value) =>
-                  onComponentUpdate(selectedComponent.id, { margin: value })
+                  updateComponent(selectedComponent.id, { margin: value })
                 }
                 min={0}
                 max={48}
@@ -1048,7 +1073,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 <textarea
                   value={selectedComponent.props.customCSS || ""}
                   onChange={(e) =>
-                    onComponentUpdate(selectedComponent.id, {
+                    updateComponent(selectedComponent.id, {
                       customCSS: e.target.value,
                     })
                   }
@@ -1061,7 +1086,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                   type="text"
                   value={selectedComponent.props.customId || ""}
                   onChange={(e) =>
-                    onComponentUpdate(selectedComponent.id, {
+                    updateComponent(selectedComponent.id, {
                       customId: e.target.value,
                     })
                   }
@@ -1089,9 +1114,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
           <SwitchControl
             label="Mostrar Logotipo"
             checked={headerConfig.showLogo}
-            onChange={(checked) =>
-              onComponentUpdate("headerConfig", { showLogo: checked })
-            }
+            onChange={(checked) => updateHeaderConfig({ showLogo: checked })}
           />
           {headerConfig.showLogo && (
             <FieldGroup label="URL do Logotipo">
@@ -1099,7 +1122,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 type="text"
                 value={headerConfig.logoSrc || ""}
                 onChange={(e) =>
-                  onComponentUpdate("headerConfig", { logoSrc: e.target.value })
+                  updateHeaderConfig({ logoSrc: e.target.value })
                 }
                 className="w-full h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
                 placeholder="https://exemplo.com/logo.png"
@@ -1110,15 +1133,13 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             label="Mostrar Progresso"
             checked={headerConfig.showProgress}
             onChange={(checked) =>
-              onComponentUpdate("headerConfig", { showProgress: checked })
+              updateHeaderConfig({ showProgress: checked })
             }
           />
           <SwitchControl
             label="Permitir Voltar"
             checked={headerConfig.allowReturn}
-            onChange={(checked) =>
-              onComponentUpdate("headerConfig", { allowReturn: checked })
-            }
+            onChange={(checked) => updateHeaderConfig({ allowReturn: checked })}
           />
         </ConfigCard>
       </div>

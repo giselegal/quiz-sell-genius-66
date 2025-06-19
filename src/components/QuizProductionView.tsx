@@ -39,6 +39,10 @@ interface QuizComponentProps {
   margin?: number;
   padding?: number;
   alignment?: string;
+  // Configurações de comportamento
+  autoAdvance?: boolean;
+  multipleChoice?: boolean;
+  required?: boolean;
 }
 
 interface QuizComponent {
@@ -51,6 +55,12 @@ interface QuizAnswer {
   componentId: string;
   choice: OptionChoice;
 }
+
+// Tipo para armazenar respostas (única ou múltipla)
+type QuizAnswerValue = QuizAnswer | QuizAnswer[];
+
+// Tipo para o estado de respostas
+type AnswersState = Record<string, QuizAnswerValue>;
 
 // Dados de exemplo de um quiz completo para demonstração
 const SAMPLE_QUIZ_DATA = {
@@ -346,7 +356,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
   quizData = SAMPLE_QUIZ_DATA,
 }) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, QuizAnswer>>({});
+  const [answers, setAnswers] = useState<AnswersState>({});
   const [isCompleted, setIsCompleted] = useState(false);
 
   const currentStep = quizData.steps[currentStepIndex];
@@ -372,16 +382,53 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
     setIsCompleted(false);
   };
 
-  const handleAnswer = (componentId: string, answer: OptionChoice) => {
+  const handleAnswer = (componentId: string, answer: OptionChoice, componentProps?: QuizComponentProps) => {
     const quizAnswer: QuizAnswer = {
       componentId,
       choice: answer,
     };
 
-    setAnswers((prev) => ({
-      ...prev,
-      [componentId]: quizAnswer,
-    }));
+    if (componentProps?.multipleChoice) {
+      // Para múltipla escolha, permite várias respostas
+      setAnswers((prev: AnswersState) => {
+        const existingAnswers = prev[componentId];
+        if (existingAnswers && Array.isArray(existingAnswers)) {
+          // Se já existe uma lista, adiciona ou remove a resposta
+          const answerExists = existingAnswers.some(ans => ans.choice.value === answer.value);
+          if (answerExists) {
+            // Remove a resposta se já existir
+            const filteredAnswers = existingAnswers.filter(ans => ans.choice.value !== answer.value);
+            return {
+              ...prev,
+              [componentId]: filteredAnswers
+            };
+          } else {
+            // Adiciona a nova resposta
+            return {
+              ...prev,
+              [componentId]: [...existingAnswers, quizAnswer]
+            };
+          }
+        } else {
+          // Primeira resposta, cria um array
+          return {
+            ...prev,
+            [componentId]: [quizAnswer]
+          };
+        }
+      });
+    } else {
+      // Para escolha única, substitui a resposta anterior
+      setAnswers((prev: AnswersState) => ({
+        ...prev,
+        [componentId]: quizAnswer,
+      }));
+    }
+
+    // Auto avanço se configurado
+    if (componentProps?.autoAdvance && !componentProps?.multipleChoice) {
+      setTimeout(handleNext, 300);
+    }
   };
 
   const renderComponent = (component: QuizComponent) => {
@@ -453,7 +500,10 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
           </div>
         );
 
-      case "options":
+      case "options": {
+        const isMultipleChoice = props.multipleChoice;
+        const hasAutoAdvance = props.autoAdvance;
+        
         return (
           <div key={component.id} style={{ margin: baseStyle.margin }}>
             {props.text && (
@@ -467,6 +517,20 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
                 {props.text}
               </p>
             )}
+            
+            {/* Indicador de múltipla escolha */}
+            {isMultipleChoice && (
+              <div style={{ 
+                marginBottom: "16px", 
+                textAlign: "center",
+                fontSize: "14px",
+                color: "#6b7280",
+                fontStyle: "italic"
+              }}>
+                📋 Você pode selecionar múltiplas opções
+              </div>
+            )}
+            
             <div
               className={`quiz-options-grid ${props.gridLayout || "grid-1"}`}
               style={{
@@ -484,48 +548,85 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
                     : "1fr",
               }}
             >
-              {props.choices?.map((choice: OptionChoice, index: number) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    handleAnswer(component.id, choice);
-                    setTimeout(handleNext, 300);
-                  }}
-                  className="quiz-option-button hover:scale-105 active:scale-95 transition-all"
-                  style={{
-                    padding: `${props.optionPadding || 16}px`,
-                    backgroundColor: props.backgroundColor || "#f8fafc",
-                    color: props.textColor || "#1f2937",
-                    border: "2px solid #e2e8f0",
-                    borderRadius: `${props.borderRadius || 8}px`,
-                    textAlign:
-                      (props.textAlignment as React.CSSProperties["textAlign"]) ||
-                      "left",
-                    cursor: "pointer",
-                    fontSize: "16px",
-                    lineHeight: "1.5",
-                  }}
-                >
-                  {choice.imageSrc && (
-                    <div style={{ marginBottom: "12px" }}>
-                      <img
-                        src={choice.imageSrc}
-                        alt={choice.text}
-                        style={{
-                          width: "100%",
-                          height: `${props.imageHeight || 200}px`,
-                          objectFit: "cover",
-                          borderRadius: `${props.imageBorderRadius || 8}px`,
-                        }}
-                      />
+              {props.choices?.map((choice: OptionChoice, index: number) => {
+                // Verificar se a opção está selecionada
+                const currentAnswers = answers[component.id];
+                const isSelected = isMultipleChoice && Array.isArray(currentAnswers)
+                  ? currentAnswers.some(ans => ans.choice.value === choice.value)
+                  : !isMultipleChoice && currentAnswers && !Array.isArray(currentAnswers)
+                  ? currentAnswers.choice.value === choice.value
+                  : false;
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      handleAnswer(component.id, choice, props);
+                      // Para múltipla escolha, não avança automaticamente
+                      if (!isMultipleChoice && !hasAutoAdvance) {
+                        // Só avança se não for múltipla escolha E não tiver auto-avanço
+                        // (o auto-avanço é tratado dentro do handleAnswer)
+                      }
+                    }}
+                    className={`quiz-option-button hover:scale-105 active:scale-95 transition-all ${
+                      isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                    }`}
+                    style={{
+                      padding: `${props.optionPadding || 16}px`,
+                      backgroundColor: isSelected 
+                        ? "#dbeafe" 
+                        : props.backgroundColor || "#f8fafc",
+                      color: props.textColor || "#1f2937",
+                      border: isSelected 
+                        ? "2px solid #3b82f6" 
+                        : "2px solid #e2e8f0",
+                      borderRadius: `${props.borderRadius || 8}px`,
+                      textAlign:
+                        (props.textAlignment as React.CSSProperties["textAlign"]) ||
+                        "left",
+                      cursor: "pointer",
+                      fontSize: "16px",
+                      lineHeight: "1.5",
+                    }}
+                  >
+                    {choice.imageSrc && (
+                      <div style={{ marginBottom: "12px" }}>
+                        <img
+                          src={choice.imageSrc}
+                          alt={choice.text}
+                          style={{
+                            width: "100%",
+                            height: `${props.imageHeight || 200}px`,
+                            objectFit: "cover",
+                            borderRadius: `${props.imageBorderRadius || 8}px`,
+                          }}
+                        />
+                      </div>
+                    )}
+                    <div style={{ fontWeight: "500" }}>
+                      {isMultipleChoice && isSelected && "✓ "}
+                      {choice.text}
                     </div>
-                  )}
-                  <div style={{ fontWeight: "500" }}>{choice.text}</div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
+            
+            {/* Botão de continuar para múltipla escolha */}
+            {isMultipleChoice && (
+              <div style={{ textAlign: "center", marginTop: "24px" }}>
+                <button
+                  onClick={handleNext}
+                  disabled={!answers[component.id] || (Array.isArray(answers[component.id]) && (answers[component.id] as QuizAnswer[]).length === 0)}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  Continuar com {Array.isArray(answers[component.id]) ? (answers[component.id] as QuizAnswer[]).length : 0} seleções
+                </button>
+              </div>
+            )}
           </div>
         );
+      }
 
       default:
         return null;
