@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { ChevronLeft, ChevronRight, RotateCcw, Share2, ExternalLink } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  RotateCcw,
+  Share2,
+  ExternalLink,
+} from "lucide-react";
 
 // Interfaces
 interface OptionChoice {
@@ -121,10 +127,26 @@ const SAMPLE_QUIZ_DATA = {
           props: {
             text: "Escolha a opção que mais se identifica com você:",
             choices: [
-              { text: "Lendo um bom livro em casa", value: "introvert", scoreValue: 1 },
-              { text: "Saindo com amigos para uma festa", value: "extrovert", scoreValue: 2 },
-              { text: "Praticando esportes ao ar livre", value: "active", scoreValue: 3 },
-              { text: "Assistindo filmes ou séries", value: "entertainment", scoreValue: 4 },
+              {
+                text: "Lendo um bom livro em casa",
+                value: "introvert",
+                scoreValue: 1,
+              },
+              {
+                text: "Saindo com amigos para uma festa",
+                value: "extrovert",
+                scoreValue: 2,
+              },
+              {
+                text: "Praticando esportes ao ar livre",
+                value: "active",
+                scoreValue: 3,
+              },
+              {
+                text: "Assistindo filmes ou séries",
+                value: "entertainment",
+                scoreValue: 4,
+              },
             ],
             gridLayout: "grid-1",
             optionSpacing: 12,
@@ -165,25 +187,29 @@ const SAMPLE_QUIZ_DATA = {
                 text: "Uma biblioteca silenciosa",
                 value: "library",
                 scoreValue: 1,
-                imageSrc: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+                imageSrc:
+                  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
               },
               {
                 text: "Um café movimentado",
                 value: "cafe",
                 scoreValue: 2,
-                imageSrc: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&h=300&fit=crop",
+                imageSrc:
+                  "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&h=300&fit=crop",
               },
               {
                 text: "Um parque natural",
                 value: "nature",
                 scoreValue: 3,
-                imageSrc: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
+                imageSrc:
+                  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
               },
               {
                 text: "Um escritório moderno",
                 value: "office",
                 scoreValue: 4,
-                imageSrc: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop",
+                imageSrc:
+                  "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop",
               },
             ],
             gridLayout: "grid-2",
@@ -272,9 +298,9 @@ const SAMPLE_QUIZ_DATA = {
           },
         },
         {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, QuizAnswer>>({});
-  const [isCompleted, setIsCompleted] = useState(false);
+          id: "result-text",
+          type: "text",
+          props: {
             text: "Parabéns! Você demonstra ter uma personalidade equilibrada, combinando características de introversão e extroversão de forma harmoniosa. Você sabe quando é hora de socializar e quando é momento de recarregar as energias sozinho.",
             fontSize: 18,
             textColor: "#374151",
@@ -299,15 +325,14 @@ const SAMPLE_QUIZ_DATA = {
           type: "button",
           props: {
             buttonText: "Refazer Quiz",
-  const handleAnswer = (componentId: string, choice: OptionChoice) => {
-    const answer: QuizAnswer = { componentId, choice };
-    setAnswers(prev => ({
-      ...prev,
-      [componentId]: answer,
-    }));
-  };
-
-  const renderComponent = (component: QuizComponent) => {
+            backgroundColor: "#6b7280",
+            textColor: "#ffffff",
+            borderRadius: 12,
+            padding: 16,
+            fontSize: 16,
+            margin: 12,
+          },
+        },
       ],
     },
   ],
@@ -317,7 +342,9 @@ interface QuizProductionViewProps {
   quizData?: typeof SAMPLE_QUIZ_DATA;
 }
 
-const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMPLE_QUIZ_DATA }) => {
+const QuizProductionView: React.FC<QuizProductionViewProps> = ({
+  quizData = SAMPLE_QUIZ_DATA,
+}) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [isCompleted, setIsCompleted] = useState(false);
@@ -327,7 +354,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
 
   const handleNext = () => {
     if (currentStepIndex < quizData.steps.length - 1) {
-      setCurrentStepIndex(prev => prev + 1);
+      setCurrentStepIndex((prev) => prev + 1);
     } else {
       setIsCompleted(true);
     }
@@ -335,7 +362,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
 
   const handlePrevious = () => {
     if (currentStepIndex > 0) {
-      setCurrentStepIndex(prev => prev - 1);
+      setCurrentStepIndex((prev) => prev - 1);
     }
   };
 
@@ -346,7 +373,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
   };
 
   const handleAnswer = (componentId: string, answer: any) => {
-    setAnswers(prev => ({
+    setAnswers((prev) => ({
       ...prev,
       [componentId]: answer,
     }));
@@ -358,55 +385,60 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
     const baseStyle = {
       margin: `${props.margin || 16}px auto`,
       padding: `${props.padding || 0}px`,
-      textAlign: props.alignment || 'left',
-      color: props.textColor || '#000000',
-      backgroundColor: props.backgroundColor || 'transparent',
+      textAlign: props.alignment || "left",
+      color: props.textColor || "#000000",
+      backgroundColor: props.backgroundColor || "transparent",
       borderRadius: `${props.borderRadius || 0}px`,
       fontSize: `${props.fontSize || 16}px`,
     };
 
     switch (type) {
-      case 'heading':
+      case "heading":
         return (
           <h2 key={component.id} style={baseStyle} className="font-bold">
             {props.text}
           </h2>
         );
 
-      case 'text':
+      case "text":
         return (
           <p key={component.id} style={baseStyle} className="leading-relaxed">
             {props.text}
           </p>
         );
 
-      case 'image':
+      case "image":
         return (
-          <div key={component.id} style={{ margin: baseStyle.margin, textAlign: 'center' }}>
+          <div
+            key={component.id}
+            style={{ margin: baseStyle.margin, textAlign: "center" }}
+          >
             <img
               src={props.src}
-              alt={props.alt || ''}
+              alt={props.alt || ""}
               style={{
                 borderRadius: baseStyle.borderRadius,
-                maxWidth: '100%',
-              {props.choices?.map((choice: OptionChoice, index: number) => (
+                maxWidth: "100%",
               }}
             />
           </div>
         );
 
-      case 'button':
+      case "button":
         return (
-          <div key={component.id} style={{ margin: baseStyle.margin, textAlign: 'center' }}>
+          <div
+            key={component.id}
+            style={{ margin: baseStyle.margin, textAlign: "center" }}
+          >
             <button
               onClick={handleNext}
               style={{
                 ...baseStyle,
-                border: 'none',
-                cursor: 'pointer',
-                display: 'inline-block',
-                fontWeight: 'bold',
-                transition: 'all 0.2s ease',
+                border: "none",
+                cursor: "pointer",
+                display: "inline-block",
+                fontWeight: "bold",
+                transition: "all 0.2s ease",
               }}
               className="hover:opacity-90 active:scale-95"
             >
@@ -415,24 +447,35 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
           </div>
         );
 
-      case 'options':
+      case "options":
         return (
           <div key={component.id} style={{ margin: baseStyle.margin }}>
             {props.text && (
-              <p style={{ marginBottom: '20px', textAlign: 'center', fontSize: '18px' }}>
+              <p
+                style={{
+                  marginBottom: "20px",
+                  textAlign: "center",
+                  fontSize: "18px",
+                }}
+              >
                 {props.text}
               </p>
             )}
             <div
-              className={`quiz-options-grid ${props.gridLayout || 'grid-1'}`}
+              className={`quiz-options-grid ${props.gridLayout || "grid-1"}`}
               style={{
                 gap: `${props.optionSpacing || 12}px`,
-                display: 'grid',
-                gridTemplateColumns: 
-                  props.gridLayout === 'grid-1' ? '1fr' :
-                  props.gridLayout === 'grid-2' ? 'repeat(2, 1fr)' :
-                  props.gridLayout === 'grid-3' ? 'repeat(3, 1fr)' :
-                  props.gridLayout === 'grid-4' ? 'repeat(4, 1fr)' : '1fr',
+                display: "grid",
+                gridTemplateColumns:
+                  props.gridLayout === "grid-1"
+                    ? "1fr"
+                    : props.gridLayout === "grid-2"
+                    ? "repeat(2, 1fr)"
+                    : props.gridLayout === "grid-3"
+                    ? "repeat(3, 1fr)"
+                    : props.gridLayout === "grid-4"
+                    ? "repeat(4, 1fr)"
+                    : "1fr",
               }}
             >
               {props.choices?.map((choice: any, index: number) => (
@@ -445,33 +488,31 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
                   className="quiz-option-button hover:scale-105 active:scale-95 transition-all"
                   style={{
                     padding: `${props.optionPadding || 16}px`,
-                    backgroundColor: props.backgroundColor || '#f8fafc',
-                    color: props.textColor || '#1f2937',
-                    border: '2px solid #e2e8f0',
+                    backgroundColor: props.backgroundColor || "#f8fafc",
+                    color: props.textColor || "#1f2937",
+                    border: "2px solid #e2e8f0",
                     borderRadius: `${props.borderRadius || 8}px`,
-                    textAlign: props.textAlignment || 'left',
-                    cursor: 'pointer',
-                    fontSize: '16px',
-                    lineHeight: '1.5',
+                    textAlign: props.textAlignment || "left",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    lineHeight: "1.5",
                   }}
                 >
                   {choice.imageSrc && (
-                    <div style={{ marginBottom: '12px' }}>
+                    <div style={{ marginBottom: "12px" }}>
                       <img
                         src={choice.imageSrc}
                         alt={choice.text}
                         style={{
-                          width: '100%',
+                          width: "100%",
                           height: `${props.imageHeight || 200}px`,
-                          objectFit: 'cover',
+                          objectFit: "cover",
                           borderRadius: `${props.imageBorderRadius || 8}px`,
                         }}
                       />
                     </div>
                   )}
-                  <div style={{ fontWeight: '500' }}>
-                    {choice.text}
-                  </div>
+                  <div style={{ fontWeight: "500" }}>{choice.text}</div>
                 </button>
               ))}
             </div>
@@ -506,13 +547,19 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
-              <Share2 size={20} className="text-gray-400 cursor-pointer hover:text-gray-600" />
-              <ExternalLink size={20} className="text-gray-400 cursor-pointer hover:text-gray-600" />
+              <Share2
+                size={20}
+                className="text-gray-400 cursor-pointer hover:text-gray-600"
+              />
+              <ExternalLink
+                size={20}
+                className="text-gray-400 cursor-pointer hover:text-gray-600"
+              />
             </div>
           </div>
-          
+
           {/* Progress Bar */}
           {quizData.headerConfig.showProgress && (
             <div className="bg-gray-200 h-2">
@@ -533,9 +580,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
             <div className="text-sm text-gray-500">
               Etapa {currentStepIndex + 1} de {quizData.steps.length}
             </div>
-            <div className="text-sm text-gray-500">
-              {currentStep.name}
-            </div>
+            <div className="text-sm text-gray-500">{currentStep.name}</div>
           </div>
 
           {/* Step Content */}
@@ -582,8 +627,9 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
             📱 Visualização Responsiva Ativa
           </h3>
           <p className="text-sm text-yellow-700">
-            Este quiz se adapta automaticamente a diferentes tamanhos de tela. 
-            Teste redimensionando a janela do navegador ou acessando de dispositivos móveis.
+            Este quiz se adapta automaticamente a diferentes tamanhos de tela.
+            Teste redimensionando a janela do navegador ou acessando de
+            dispositivos móveis.
           </p>
         </div>
 
@@ -593,10 +639,21 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({ quizData = SAMP
             🔧 Informações de Teste
           </h3>
           <div className="text-sm text-gray-600 space-y-1">
-            <p><strong>Etapa Atual:</strong> {currentStepIndex + 1}/{quizData.steps.length}</p>
-            <p><strong>Progresso:</strong> {Math.round(progress)}%</p>
-            <p><strong>Respostas:</strong> {Object.keys(answers).length}</p>
-            <p><strong>Layout Atual:</strong> {currentStep.components.find(c => c.type === 'options')?.props?.gridLayout || 'N/A'}</p>
+            <p>
+              <strong>Etapa Atual:</strong> {currentStepIndex + 1}/
+              {quizData.steps.length}
+            </p>
+            <p>
+              <strong>Progresso:</strong> {Math.round(progress)}%
+            </p>
+            <p>
+              <strong>Respostas:</strong> {Object.keys(answers).length}
+            </p>
+            <p>
+              <strong>Layout Atual:</strong>{" "}
+              {currentStep.components.find((c) => c.type === "options")?.props
+                ?.gridLayout || "N/A"}
+            </p>
           </div>
         </div>
       </main>

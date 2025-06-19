@@ -219,13 +219,16 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
         {/* Renderização do componente */}
         <div className="min-h-[1.25rem] min-w-full relative self-auto box-border customizable-gap">
           {component.type === "heading" && (
-            <h1 
+            <h1
               className="min-w-full font-bold text-center"
               style={{
                 fontSize: `${component.props.fontSize || 32}px`,
                 color: component.props.textColor || "#f9fafb",
-                textAlign: component.props.alignment as any || "center",
-                backgroundColor: component.props.backgroundColor || "transparent",
+                textAlign:
+                  (component.props.alignment as "left" | "center" | "right") ||
+                  "center",
+                backgroundColor:
+                  component.props.backgroundColor || "transparent",
                 padding: `${component.props.padding || 0}px`,
                 margin: `${component.props.margin || 0}px`,
                 borderRadius: `${component.props.borderRadius || 0}px`,
@@ -235,7 +238,22 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
             </h1>
           )}
           {component.type === "text" && (
-            <p className="text-zinc-200 text-center">
+            <p
+              className="text-center"
+              style={{
+                fontSize: `${component.props.fontSize || 16}px`,
+                color: component.props.textColor || "#f9fafb",
+                textAlign:
+                  (component.props.alignment as "left" | "center" | "right") ||
+                  "center",
+                backgroundColor:
+                  component.props.backgroundColor || "transparent",
+                padding: `${component.props.padding || 0}px`,
+                margin: `${component.props.margin || 0}px`,
+                borderRadius: `${component.props.borderRadius || 0}px`,
+                lineHeight: "1.6",
+              }}
+            >
               {component.props.text || "Texto do parágrafo"}
             </p>
           )}
@@ -258,7 +276,24 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
             </div>
           )}
           {component.type === "button" && (
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 min-w-full h-14">
+            <button
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 min-w-full h-14"
+              style={{
+                backgroundColor: component.props.backgroundColor || "#3b82f6",
+                color: component.props.textColor || "#ffffff",
+                fontSize: `${component.props.fontSize || 16}px`,
+                padding: `${component.props.padding || 16}px`,
+                margin: `${component.props.margin || 0}px`,
+                borderRadius: `${component.props.borderRadius || 8}px`,
+                boxShadow: component.props.shadow
+                  ? `0 ${component.props.shadow * 2}px ${
+                      component.props.shadow * 4
+                    }px rgba(0,0,0,0.3)`
+                  : undefined,
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
               {component.props.buttonText || "Botão"}
             </button>
           )}
@@ -2224,7 +2259,7 @@ const AdvancedQuizEditor: React.FC = () => {
       | Partial<QuizEditorState["headerConfig"]>
   ) => {
     console.log("🔧 handleComponentUpdate called:", { targetId, newProps });
-    
+
     if (targetId === "headerConfig") {
       setEditorState((prev) => ({
         ...prev,

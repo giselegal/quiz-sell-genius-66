@@ -22,7 +22,7 @@ import { QuizConfigTest } from "@/components/test/QuizConfigTest";
 import { EditingFlowDemo } from "@/components/demo/EditingFlowDemo";
 import "@/styles/quiz-dynamic-theme.css";
 import { NewQuizPage } from "@/pages/NewQuizPage";
-
+import QuizProductionPage from "@/pages/QuizProductionPage";
 // Componente de botão flutuante para acesso rápido ao editor
 const QuickAccessEditorButton = () => {
   const navigate = useNavigate();
@@ -44,6 +44,14 @@ const QuickAccessEditorButton = () => {
       >
         <Edit className="w-4 h-4 mr-2" />
         Advanced Editor
+      </Button>
+      <Button
+        onClick={() => navigate("/quiz-production")}
+        className="bg-green-600 hover:bg-green-700 text-white shadow-lg"
+        size="sm"
+      >
+        <Edit className="w-4 h-4 mr-2" />
+        Quiz Produção
       </Button>
     </div>
   );
@@ -114,10 +122,13 @@ function App() {
 
           {/* Demo do Fluxo de Edição */}
           <Route path="/editing-demo" element={<EditingFlowDemo />} />
-
           {/* Nova Página do Quiz */}
           <Route path="/new-quiz" element={<NewQuizPage />} />
 
+          {/* Visualização de Produção do Quiz */}
+          <Route path="/quiz-production" element={<QuizProductionPage />} />
+
+          {/* 404 para rotas não encontradas */}
           {/* 404 para rotas não encontradas */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
