@@ -375,9 +375,9 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
   const handleAnswer = (componentId: string, answer: OptionChoice) => {
     const quizAnswer: QuizAnswer = {
       componentId,
-      choice: answer
+      choice: answer,
     };
-    
+
     setAnswers((prev) => ({
       ...prev,
       [componentId]: quizAnswer,
@@ -390,7 +390,8 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
     const baseStyle: React.CSSProperties = {
       margin: `${props.margin || 16}px auto`,
       padding: `${props.padding || 0}px`,
-      textAlign: (props.alignment as React.CSSProperties['textAlign']) || "left",
+      textAlign:
+        (props.alignment as React.CSSProperties["textAlign"]) || "left",
       color: props.textColor || "#000000",
       backgroundColor: props.backgroundColor || "transparent",
       borderRadius: `${props.borderRadius || 0}px`,
@@ -497,7 +498,9 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
                     color: props.textColor || "#1f2937",
                     border: "2px solid #e2e8f0",
                     borderRadius: `${props.borderRadius || 8}px`,
-                    textAlign: (props.textAlignment as React.CSSProperties['textAlign']) || "left",
+                    textAlign:
+                      (props.textAlignment as React.CSSProperties["textAlign"]) ||
+                      "left",
                     cursor: "pointer",
                     fontSize: "16px",
                     lineHeight: "1.5",
@@ -656,8 +659,10 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
             </p>
             <p>
               <strong>Layout Atual:</strong>{" "}
-              {(currentStep.components.find((c) => c.type === "options")?.props as QuizComponentProps)
-                ?.gridLayout || "N/A"}
+              {(
+                currentStep.components.find((c) => c.type === "options")
+                  ?.props as QuizComponentProps
+              )?.gridLayout || "N/A"}
             </p>
           </div>
         </div>

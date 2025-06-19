@@ -376,7 +376,8 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               icon={<Cog size={16} />}
             >
               {/* Conteúdo específico para cada tipo */}
-              {(selectedComponent.type === "heading" || selectedComponent.type === "text") && (
+              {(selectedComponent.type === "heading" ||
+                selectedComponent.type === "text") && (
                 <FieldGroup label="Texto">
                   <input
                     type="text"
@@ -471,7 +472,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     label="Obrigatório"
                     checked={selectedComponent.props.required || false}
                     onChange={(checked) =>
-                      onComponentUpdate(selectedComponent.id, { required: checked })
+                      onComponentUpdate(selectedComponent.id, {
+                        required: checked,
+                      })
                     }
                   />
                 </>
@@ -717,17 +720,32 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                           options={
                             hasOnlyText
                               ? [
-                                  { value: "grid-1", label: "1 Coluna (Lista Vertical)" },
+                                  {
+                                    value: "grid-1",
+                                    label: "1 Coluna (Lista Vertical)",
+                                  },
                                   { value: "grid-2", label: "2 Colunas" },
                                   { value: "grid-3", label: "3 Colunas" },
                                   { value: "grid-4", label: "4 Colunas" },
-                                  { value: "flex", label: "Flexível (Quebra Automática)" },
+                                  {
+                                    value: "flex",
+                                    label: "Flexível (Quebra Automática)",
+                                  },
                                   { value: "list", label: "Lista Compacta" },
                                 ]
                               : [
-                                  { value: "grid-1", label: "1 Coluna (Imagem Grande)" },
-                                  { value: "grid-2", label: "2 Colunas (Recomendado)" },
-                                  { value: "grid-3", label: "3 Colunas (Imagem Pequena)" },
+                                  {
+                                    value: "grid-1",
+                                    label: "1 Coluna (Imagem Grande)",
+                                  },
+                                  {
+                                    value: "grid-2",
+                                    label: "2 Colunas (Recomendado)",
+                                  },
+                                  {
+                                    value: "grid-3",
+                                    label: "3 Colunas (Imagem Pequena)",
+                                  },
                                   { value: "carousel", label: "Carrossel" },
                                 ]
                           }
@@ -737,7 +755,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                           <>
                             <SelectControl
                               label="Proporção da Imagem"
-                              value={selectedComponent.props.imageRatio || "square"}
+                              value={
+                                selectedComponent.props.imageRatio || "square"
+                              }
                               onChange={(value) =>
                                 onComponentUpdate(selectedComponent.id, {
                                   imageRatio: value,
@@ -745,7 +765,10 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                               }
                               options={[
                                 { value: "square", label: "Quadrada (1:1)" },
-                                { value: "landscape", label: "Paisagem (16:9)" },
+                                {
+                                  value: "landscape",
+                                  label: "Paisagem (16:9)",
+                                },
                                 { value: "portrait", label: "Retrato (3:4)" },
                                 { value: "wide", label: "Largo (21:9)" },
                                 { value: "auto", label: "Automática" },
@@ -754,7 +777,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
 
                             <SelectControl
                               label="Posição da Imagem"
-                              value={selectedComponent.props.imagePosition || "top"}
+                              value={
+                                selectedComponent.props.imagePosition || "top"
+                              }
                               onChange={(value) =>
                                 onComponentUpdate(selectedComponent.id, {
                                   imagePosition: value,
@@ -786,7 +811,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
 
                         <SelectControl
                           label="Alinhamento do Texto"
-                          value={selectedComponent.props.textAlignment || "center"}
+                          value={
+                            selectedComponent.props.textAlignment || "center"
+                          }
                           onChange={(value) =>
                             onComponentUpdate(selectedComponent.id, {
                               textAlignment: value,
@@ -820,9 +847,13 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                           </label>
                           <div className="grid grid-cols-3 gap-2">
                             <div className="text-center">
-                              <label className="text-xs text-zinc-400">Desktop</label>
+                              <label className="text-xs text-zinc-400">
+                                Desktop
+                              </label>
                               <select
-                                value={selectedComponent.props.desktopColumns || "2"}
+                                value={
+                                  selectedComponent.props.desktopColumns || "2"
+                                }
                                 onChange={(e) =>
                                   onComponentUpdate(selectedComponent.id, {
                                     desktopColumns: e.target.value,
@@ -837,9 +868,13 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                               </select>
                             </div>
                             <div className="text-center">
-                              <label className="text-xs text-zinc-400">Tablet</label>
+                              <label className="text-xs text-zinc-400">
+                                Tablet
+                              </label>
                               <select
-                                value={selectedComponent.props.tabletColumns || "2"}
+                                value={
+                                  selectedComponent.props.tabletColumns || "2"
+                                }
                                 onChange={(e) =>
                                   onComponentUpdate(selectedComponent.id, {
                                     tabletColumns: e.target.value,
@@ -853,9 +888,13 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                               </select>
                             </div>
                             <div className="text-center">
-                              <label className="text-xs text-zinc-400">Mobile</label>
+                              <label className="text-xs text-zinc-400">
+                                Mobile
+                              </label>
                               <select
-                                value={selectedComponent.props.mobileColumns || "1"}
+                                value={
+                                  selectedComponent.props.mobileColumns || "1"
+                                }
                                 onChange={(e) =>
                                   onComponentUpdate(selectedComponent.id, {
                                     mobileColumns: e.target.value,
