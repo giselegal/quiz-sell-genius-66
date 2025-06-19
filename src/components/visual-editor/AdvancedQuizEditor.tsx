@@ -219,7 +219,18 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
         {/* Renderização do componente */}
         <div className="min-h-[1.25rem] min-w-full relative self-auto box-border customizable-gap">
           {component.type === "heading" && (
-            <h1 className="min-w-full text-3xl font-bold text-center text-zinc-100">
+            <h1 
+              className="min-w-full font-bold text-center"
+              style={{
+                fontSize: `${component.props.fontSize || 32}px`,
+                color: component.props.textColor || "#f9fafb",
+                textAlign: component.props.alignment as any || "center",
+                backgroundColor: component.props.backgroundColor || "transparent",
+                padding: `${component.props.padding || 0}px`,
+                margin: `${component.props.margin || 0}px`,
+                borderRadius: `${component.props.borderRadius || 0}px`,
+              }}
+            >
               {component.props.text || "Título"}
             </h1>
           )}
@@ -2212,6 +2223,8 @@ const AdvancedQuizEditor: React.FC = () => {
       | Partial<QuizComponentProps>
       | Partial<QuizEditorState["headerConfig"]>
   ) => {
+    console.log("🔧 handleComponentUpdate called:", { targetId, newProps });
+    
     if (targetId === "headerConfig") {
       setEditorState((prev) => ({
         ...prev,
@@ -2220,28 +2233,33 @@ const AdvancedQuizEditor: React.FC = () => {
           ...(newProps as Partial<QuizEditorState["headerConfig"]>),
         },
       }));
+      console.log("✅ Header config updated");
     } else {
-      setEditorState((prev) => ({
-        ...prev,
-        steps: prev.steps.map((step) =>
-          step.id === editorState.currentStepId
-            ? {
-                ...step,
-                components: step.components.map((comp) =>
-                  comp.id === targetId
-                    ? {
-                        ...comp,
-                        props: {
-                          ...comp.props,
-                          ...(newProps as Partial<QuizComponentProps>),
-                        },
-                      }
-                    : comp
-                ),
-              }
-            : step
-        ),
-      }));
+      setEditorState((prev) => {
+        const newState = {
+          ...prev,
+          steps: prev.steps.map((step) =>
+            step.id === editorState.currentStepId
+              ? {
+                  ...step,
+                  components: step.components.map((comp) =>
+                    comp.id === targetId
+                      ? {
+                          ...comp,
+                          props: {
+                            ...comp.props,
+                            ...(newProps as Partial<QuizComponentProps>),
+                          },
+                        }
+                      : comp
+                  ),
+                }
+              : step
+          ),
+        };
+        console.log("✅ Component updated:", newState);
+        return newState;
+      });
     }
   };
 
