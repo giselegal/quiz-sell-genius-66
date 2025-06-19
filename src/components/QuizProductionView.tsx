@@ -168,6 +168,8 @@ const SAMPLE_QUIZ_DATA = {
             backgroundColor: "#f8fafc",
             textColor: "#1f2937",
             borderRadius: 8,
+            autoAdvance: true, // AUTO-AVANÇO ATIVADO
+            multipleChoice: false,
           },
         },
       ],
@@ -191,7 +193,7 @@ const SAMPLE_QUIZ_DATA = {
           id: "q2-options",
           type: "options",
           props: {
-            text: "Selecione o ambiente que mais desperta sua criatividade:",
+            text: "Selecione o ambiente que mais desperta sua criatividade (avança automaticamente):",
             choices: [
               {
                 text: "Uma biblioteca silenciosa",
@@ -236,6 +238,8 @@ const SAMPLE_QUIZ_DATA = {
             backgroundColor: "#ffffff",
             textColor: "#1f2937",
             borderRadius: 12,
+            autoAdvance: true, // AUTO-AVANÇO ATIVADO
+            multipleChoice: false,
           },
         },
       ],
@@ -259,7 +263,7 @@ const SAMPLE_QUIZ_DATA = {
           id: "q3-options",
           type: "options",
           props: {
-            text: "Escolha a cor que mais ressoa com você:",
+            text: "Escolha as cores que mais ressoam com você (múltipla escolha):",
             choices: [
               { text: "Azul Serenidade", value: "blue", scoreValue: 1 },
               { text: "Verde Natureza", value: "green", scoreValue: 2 },
@@ -278,6 +282,8 @@ const SAMPLE_QUIZ_DATA = {
             backgroundColor: "#f1f5f9",
             textColor: "#1f2937",
             borderRadius: 8,
+            multipleChoice: true, // MÚLTIPLA ESCOLHA ATIVADA
+            autoAdvance: false,
           },
         },
       ],
@@ -382,7 +388,11 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
     setIsCompleted(false);
   };
 
-  const handleAnswer = (componentId: string, answer: OptionChoice, componentProps?: QuizComponentProps) => {
+  const handleAnswer = (
+    componentId: string,
+    answer: OptionChoice,
+    componentProps?: QuizComponentProps
+  ) => {
     const quizAnswer: QuizAnswer = {
       componentId,
       choice: answer,
@@ -394,26 +404,30 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
         const existingAnswers = prev[componentId];
         if (existingAnswers && Array.isArray(existingAnswers)) {
           // Se já existe uma lista, adiciona ou remove a resposta
-          const answerExists = existingAnswers.some(ans => ans.choice.value === answer.value);
+          const answerExists = existingAnswers.some(
+            (ans) => ans.choice.value === answer.value
+          );
           if (answerExists) {
             // Remove a resposta se já existir
-            const filteredAnswers = existingAnswers.filter(ans => ans.choice.value !== answer.value);
+            const filteredAnswers = existingAnswers.filter(
+              (ans) => ans.choice.value !== answer.value
+            );
             return {
               ...prev,
-              [componentId]: filteredAnswers
+              [componentId]: filteredAnswers,
             };
           } else {
             // Adiciona a nova resposta
             return {
               ...prev,
-              [componentId]: [...existingAnswers, quizAnswer]
+              [componentId]: [...existingAnswers, quizAnswer],
             };
           }
         } else {
           // Primeira resposta, cria um array
           return {
             ...prev,
-            [componentId]: [quizAnswer]
+            [componentId]: [quizAnswer],
           };
         }
       });
@@ -503,7 +517,7 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
       case "options": {
         const isMultipleChoice = props.multipleChoice;
         const hasAutoAdvance = props.autoAdvance;
-        
+
         return (
           <div key={component.id} style={{ margin: baseStyle.margin }}>
             {props.text && (
@@ -517,20 +531,22 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
                 {props.text}
               </p>
             )}
-            
+
             {/* Indicador de múltipla escolha */}
             {isMultipleChoice && (
-              <div style={{ 
-                marginBottom: "16px", 
-                textAlign: "center",
-                fontSize: "14px",
-                color: "#6b7280",
-                fontStyle: "italic"
-              }}>
+              <div
+                style={{
+                  marginBottom: "16px",
+                  textAlign: "center",
+                  fontSize: "14px",
+                  color: "#6b7280",
+                  fontStyle: "italic",
+                }}
+              >
                 📋 Você pode selecionar múltiplas opções
               </div>
             )}
-            
+
             <div
               className={`quiz-options-grid ${props.gridLayout || "grid-1"}`}
               style={{
@@ -551,11 +567,16 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
               {props.choices?.map((choice: OptionChoice, index: number) => {
                 // Verificar se a opção está selecionada
                 const currentAnswers = answers[component.id];
-                const isSelected = isMultipleChoice && Array.isArray(currentAnswers)
-                  ? currentAnswers.some(ans => ans.choice.value === choice.value)
-                  : !isMultipleChoice && currentAnswers && !Array.isArray(currentAnswers)
-                  ? currentAnswers.choice.value === choice.value
-                  : false;
+                const isSelected =
+                  isMultipleChoice && Array.isArray(currentAnswers)
+                    ? currentAnswers.some(
+                        (ans) => ans.choice.value === choice.value
+                      )
+                    : !isMultipleChoice &&
+                      currentAnswers &&
+                      !Array.isArray(currentAnswers)
+                    ? currentAnswers.choice.value === choice.value
+                    : false;
 
                 return (
                   <button
@@ -569,16 +590,16 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
                       }
                     }}
                     className={`quiz-option-button hover:scale-105 active:scale-95 transition-all ${
-                      isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                      isSelected ? "ring-2 ring-blue-500 bg-blue-50" : ""
                     }`}
                     style={{
                       padding: `${props.optionPadding || 16}px`,
-                      backgroundColor: isSelected 
-                        ? "#dbeafe" 
+                      backgroundColor: isSelected
+                        ? "#dbeafe"
                         : props.backgroundColor || "#f8fafc",
                       color: props.textColor || "#1f2937",
-                      border: isSelected 
-                        ? "2px solid #3b82f6" 
+                      border: isSelected
+                        ? "2px solid #3b82f6"
                         : "2px solid #e2e8f0",
                       borderRadius: `${props.borderRadius || 8}px`,
                       textAlign:
@@ -611,16 +632,24 @@ const QuizProductionView: React.FC<QuizProductionViewProps> = ({
                 );
               })}
             </div>
-            
+
             {/* Botão de continuar para múltipla escolha */}
             {isMultipleChoice && (
               <div style={{ textAlign: "center", marginTop: "24px" }}>
                 <button
                   onClick={handleNext}
-                  disabled={!answers[component.id] || (Array.isArray(answers[component.id]) && (answers[component.id] as QuizAnswer[]).length === 0)}
+                  disabled={
+                    !answers[component.id] ||
+                    (Array.isArray(answers[component.id]) &&
+                      (answers[component.id] as QuizAnswer[]).length === 0)
+                  }
                   className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                 >
-                  Continuar com {Array.isArray(answers[component.id]) ? (answers[component.id] as QuizAnswer[]).length : 0} seleções
+                  Continuar com{" "}
+                  {Array.isArray(answers[component.id])
+                    ? (answers[component.id] as QuizAnswer[]).length
+                    : 0}{" "}
+                  seleções
                 </button>
               </div>
             )}

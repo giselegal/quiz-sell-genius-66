@@ -32,6 +32,6 @@
     "sync": "node scripts/manual-sync.js",
     "test": "node scripts/test-sync.js"
   },
-  "lastSync": "2025-06-19T20:06:59.557Z",
+  "lastSync": "2025-06-19T21:22:44.356Z",
   "componentCount": 546
 }
