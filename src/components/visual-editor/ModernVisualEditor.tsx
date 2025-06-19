@@ -1,4 +1,3 @@
-import { Sliders } from "lucide-react";
 import React, { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
