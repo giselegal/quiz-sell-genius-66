@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-20T02:09:58.003Z",
-  "components": 475,
+  "timestamp": "2025-06-20T02:16:01.167Z",
+  "components": 476,
   "files": [
     {
       "name": "App",
@@ -2000,6 +2000,11 @@
     {
       "name": "ModernVisualEditor",
       "path": "src/components/visual-editor/ModernVisualEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ModernVisualEditor_backup",
+      "path": "src/components/visual-editor/ModernVisualEditor_backup.tsx",
       "type": "typescript"
     },
     {
