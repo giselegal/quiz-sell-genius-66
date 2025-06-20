@@ -669,7 +669,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                   src={headerConfig.logoSrc}
                   onError={(e) => {
                     (e.target as HTMLImageElement).src =
-                      "https://placehold.co/96x96/555/FFF?text=Logo";
+                      "/placeholder.svg";
                   }}
                 />
               )}

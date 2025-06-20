@@ -65,7 +65,7 @@ const HeaderEditor: React.FC<HeaderEditorProps> = ({ content, onUpdate }) => {
                 alt="Logo" 
                 className="h-10 object-contain" 
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://placehold.co/200x80?text=Logo+Inválido';
+                  (e.target as HTMLImageElement).src = '/placeholder.svg';
                 }}
               />
             </div>
