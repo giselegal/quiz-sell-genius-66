@@ -273,14 +273,21 @@ const EditableHeading: React.FC<{ component: QuizComponent }> = ({
 }) => (
   <div className="text-center mb-8">
     <h1
-      className="text-gray-800 font-bold leading-tight tracking-wide font-playfair"
+      className="text-white font-bold leading-tight tracking-wide font-playfair"
       style={{
-        fontSize: component.props.styles?.fontSize === "3xl" ? "1.875rem" : component.props.styles?.fontSize || "1.5rem",
-        textAlign: component.props.styles?.textAlign || "center",
-        color: component.props.styles?.color === "#ffffff" ? "#1f2937" : component.props.styles?.color || "#1f2937",
-        fontWeight: component.props.styles?.fontWeight || "700",
-        letterSpacing: "0.025em",
-        lineHeight: "1.2",
+        fontSize:
+          component.props.styles?.fontSize === "3xl"
+            ? "2.25rem"
+            : component.props.styles?.fontSize || "1.875rem",
+        textAlign:
+          (component.props.styles
+            ?.textAlign as React.CSSProperties["textAlign"]) || "center",
+        color: component.props.styles?.color || "#ffffff",
+        fontWeight: "700",
+        letterSpacing: "0.05em",
+        lineHeight: "1.1",
+        marginBottom: "2rem",
+        textShadow: "0 2px 4px rgba(0,0,0,0.3)",
         ...component.props.styles,
       }}
     >
@@ -296,7 +303,7 @@ const EditableHeading: React.FC<{ component: QuizComponent }> = ({
 const EditableImage: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <div className="w-full flex justify-center mb-6">
+  <div className="w-full flex justify-center mb-8">
     <div className="relative">
       <img
         src={
@@ -304,7 +311,7 @@ const EditableImage: React.FC<{ component: QuizComponent }> = ({
           "https://placehold.co/400x300/0f172a/94a3b8?text=Imagem"
         }
         alt={component.props.alt || "Imagem"}
-        className="rounded-2xl shadow-2xl max-w-full h-auto"
+        className="rounded-2xl shadow-2xl max-w-full h-auto border-2 border-[#B89B7A]/30"
         style={{
           width: component.props.styles?.width || "400px",
           height: component.props.styles?.height || "300px",
@@ -325,20 +332,20 @@ const EditableImage: React.FC<{ component: QuizComponent }> = ({
 const EditableInput: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <div className="w-full mb-6" style={component.props.styles}>
-    <label className="block text-gray-700 text-sm font-semibold mb-3 uppercase tracking-wider">
+  <div className="w-full mb-8" style={component.props.styles}>
+    <label className="block text-white text-sm font-semibold mb-3 uppercase tracking-wider">
       {component.props.label || "Campo de Entrada"}{" "}
       {component.props.required && <span className="text-[#B89B7A]">*</span>}
     </label>
     <input
       type={component.props.inputType || "text"}
-      className="w-full px-4 py-3 bg-white border-2 border-[#B89B7A] rounded-lg text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:border-[#b29670] transition-all duration-200"
+      className="w-full px-4 py-4 bg-white border-2 border-[#B89B7A] rounded-lg text-gray-800 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:border-[#b29670] transition-all duration-200 shadow-sm"
       placeholder={component.props.placeholder || "Digite aqui..."}
       value="" // Em um editor, seria um valor controlado
       readOnly // Para simular que é um editor e não um quiz ativo
     />
     {component.props.errorMessage && (
-      <span className="text-xs text-red-500 mt-2 block">
+      <span className="text-xs text-red-400 mt-2 block">
         {component.props.errorMessage}
       </span>
     )}
@@ -387,10 +394,10 @@ const OptionsComponent: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => {
   const hasImages = component.props.choices?.some((choice) => choice.image);
-  
+
   return (
     <div
-      className={hasImages ? "grid grid-cols-2 gap-3" : "flex flex-col gap-3"}
+      className={hasImages ? "grid grid-cols-2 gap-4" : "flex flex-col gap-3"}
       style={component.props.styles}
     >
       {component.props.choices?.map((choice, index) => (
@@ -398,24 +405,31 @@ const OptionsComponent: React.FC<{ component: QuizComponent }> = ({
           key={index}
           className={`
             relative cursor-pointer transition-all duration-200 hover:scale-[1.02]
-            ${hasImages 
-              ? "bg-white rounded-lg shadow-sm border border-[#B89B7A] hover:shadow-md aspect-square" 
-              : "bg-white border border-[#B89B7A] rounded-lg p-4 hover:bg-[#faf6f1] hover:border-[#b29670]"
+            ${
+              hasImages
+                ? "bg-white rounded-xl shadow-sm border-2 border-[#B89B7A] hover:shadow-lg hover:border-[#b29670] min-h-[200px]"
+                : "bg-white border-2 border-[#B89B7A] rounded-xl p-4 hover:bg-[#faf6f1] hover:border-[#b29670]"
             }
           `}
         >
           {hasImages ? (
-            // Layout para opções com imagem (questões 1 e 3)
-            <div className="h-full flex flex-col">
-              <div className="flex-1 p-3">
-                <img
-                  src={choice.image}
-                  alt={choice.text}
-                  className="w-full h-24 object-cover rounded-md mb-2"
-                />
-                <p className="text-sm text-gray-800 font-medium leading-tight text-center">
-                  <span dangerouslySetInnerHTML={{ __html: choice.text }} />
-                </p>
+            // Layout para opções com imagem (questões 1 e 3) - Melhorado para evitar corte
+            <div className="h-full flex flex-col p-4">
+              {/* Container da imagem com altura fixa e proporção adequada */}
+              <div className="flex-1 flex flex-col justify-center items-center mb-3">
+                <div className="w-full h-32 mb-3 overflow-hidden rounded-lg">
+                  <img
+                    src={choice.image}
+                    alt={choice.text}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {/* Texto centralizado com espaçamento adequado */}
+                <div className="text-center flex-1 flex items-center justify-center">
+                  <p className="text-sm text-gray-800 font-medium leading-snug px-2">
+                    <span dangerouslySetInnerHTML={{ __html: choice.text }} />
+                  </p>
+                </div>
               </div>
             </div>
           ) : (
@@ -431,18 +445,26 @@ const OptionsComponent: React.FC<{ component: QuizComponent }> = ({
               </div>
             </div>
           )}
-          
+
           {/* Indicador de seleção visual para preview */}
-          <div className="absolute top-2 right-2 w-5 h-5 bg-[#B89B7A] rounded-full opacity-0 flex items-center justify-center">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          <div className="absolute top-3 right-3 w-6 h-6 bg-[#B89B7A] rounded-full opacity-0 flex items-center justify-center">
+            <svg
+              className="w-4 h-4 text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
         </div>
       ))}
-      
+
       {component.props.selectionType === "multiple" && (
-        <div className="col-span-2 text-center mt-2">
+        <div className="col-span-2 text-center mt-4">
           <p className="text-sm text-gray-600 font-medium">
             ✨ Selecione 3 opções que mais combinam com você
           </p>
@@ -545,14 +567,16 @@ const TextComponent: React.FC<{ component: QuizComponent }> = ({
     "center";
 
   return (
-    <div className="text-center mb-6">
+    <div className="text-center mb-8">
       <p
-        className="text-gray-600 leading-relaxed"
+        className="text-gray-300 leading-relaxed font-medium"
         style={{
-          fontSize: component.props.styles?.fontSize || "1.1rem",
+          fontSize: component.props.styles?.fontSize || "1.2rem",
           textAlign,
-          color: component.props.styles?.color === "#d1d5db" ? "#6b7280" : component.props.styles?.color || "#6b7280",
-          lineHeight: "1.6",
+          color: component.props.styles?.color || "#d1d5db",
+          lineHeight: "1.7",
+          maxWidth: "600px",
+          margin: "0 auto",
           ...component.props.styles,
         }}
       >
@@ -646,11 +670,11 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   };
 
   return (
-    <div className="w-full h-full overflow-auto bg-gradient-to-b from-[#f8f8f8] via-white to-[#f8f8f8]">
+    <div className="w-full h-full overflow-auto bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       {/* Layout exato do quiz original */}
-      <div className="min-h-screen flex flex-col bg-white">
+      <div className="min-h-screen flex flex-col">
         {/* Header fixo com logo e barra de progresso */}
-        <div className="w-full bg-white border-b border-gray-100">
+        <div className="w-full bg-transparent">
           <div className="max-w-md mx-auto px-4 py-6">
             {/* Logo centralizado */}
             {headerConfig.showLogo && (
@@ -661,18 +685,23 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
                   }
                   alt="Logo"
-                  className="w-20 h-20 mx-auto rounded-full object-cover shadow-md border-2 border-[#B89B7A]"
+                  className="w-24 h-24 mx-auto rounded-full object-cover shadow-lg border-3 border-[#B89B7A]"
                 />
               </div>
             )}
 
             {/* Barra de Progresso */}
             {headerConfig.showProgressBar && (
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+              <div className="w-full bg-gray-700/50 rounded-full h-2 mb-6">
                 <div
-                  className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-[#B89B7A] to-[#b29670]"
+                  className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-[#B89B7A] to-[#b29670] shadow-sm"
                   style={{
-                    width: "30%", // Simulado baseado na etapa atual
+                    width: `${Math.min(
+                      100,
+                      ((steps.findIndex((s) => s.id === currentStepId) + 1) /
+                        steps.length) *
+                        100
+                    )}%`,
                   }}
                 ></div>
               </div>
@@ -681,7 +710,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
         </div>
 
         {/* Conteúdo principal */}
-        <div className="flex-1 flex items-start justify-center px-4 py-8 bg-white">
+        <div className="flex-1 flex items-start justify-center px-4 py-8">
           <div
             className={`w-full transition-all duration-300 ${
               viewportMode === "mobile" ? "max-w-sm" : "max-w-md"
