@@ -46,6 +46,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "heading",
           name: "Título",
+          category: "Básicos",
           icon: Heading1,
           description: "Títulos e subtítulos para organizar o conteúdo",
           isAvailable: true,
@@ -53,6 +54,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "text",
           name: "Texto",
+          category: "Básicos",
           icon: Text,
           description: "Parágrafos e blocos de texto descritivo",
           isAvailable: true,
@@ -60,6 +62,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "image",
           name: "Imagem",
+          category: "Básicos",
           icon: Image,
           description: "Imagens, fotos e ilustrações",
           isAvailable: true,
@@ -67,6 +70,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "spacer",
           name: "Espaçador",
+          category: "Básicos",
           icon: RectangleHorizontal,
           description: "Espaçamento entre elementos",
           isAvailable: true,
@@ -80,6 +84,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "button",
           name: "Botão",
+          category: "Interação",
           icon: MousePointer,
           description: "Botões de ação e navegação",
           isAvailable: true,
@@ -87,6 +92,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "input",
           name: "Campo de Entrada",
+          category: "Interação",
           icon: Text,
           description: "Campos para capturar dados do usuário",
           isAvailable: true,
@@ -94,6 +100,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "options",
           name: "Opções de Escolha",
+          category: "Interação",
           icon: SquareCheckBig,
           description: "Múltipla escolha, seleção única",
           isAvailable: true,
@@ -107,6 +114,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "video",
           name: "Vídeo",
+          category: "Mídia",
           icon: Play,
           description: "Reprodução de vídeos YouTube, Vimeo",
           isAvailable: true,
@@ -114,6 +122,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "audio",
           name: "Áudio",
+          category: "Mídia",
           icon: Music,
           description: "Reprodução de arquivos de áudio",
           isAvailable: true,
@@ -121,6 +130,7 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "carousel",
           name: "Carrossel",
+          category: "Mídia",
           icon: GalleryHorizontalEnd,
           description: "Galeria de imagens em carrossel",
           isAvailable: true,
@@ -128,12 +138,13 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
       ] as ComponentItem[],
     },
     {
-      name: "Feedback",
+      name: "Notificações",
       color: "orange",
       components: [
         {
           id: "alert",
           name: "Alerta",
+          category: "Notificações",
           icon: TriangleAlert,
           description: "Mensagens de aviso, erro, sucesso",
           isAvailable: true,
@@ -141,243 +152,180 @@ const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onComponentAdd }) =
         {
           id: "loading",
           name: "Carregamento",
+          category: "Notificações",
           icon: LoaderCircle,
-          description: "Indicadores de progresso",
+          description: "Indicadores de progresso e carregamento",
           isAvailable: true,
         },
         {
-          id: "confetti",
-          name: "Confetti",
-          icon: Sparkles,
-          description: "Efeito de celebração com confetti",
+          id: "testimonial",
+          name: "Depoimento",
+          category: "Notificações",
+          icon: Quote,
+          description: "Citações e depoimentos de clientes",
           isAvailable: true,
         },
       ] as ComponentItem[],
     },
     {
-      name: "Avançados",
-      color: "indigo",
+      name: "Análise",
+      color: "cyan",
       components: [
         {
           id: "charts",
           name: "Gráficos",
+          category: "Análise",
           icon: ChartArea,
           description: "Visualização de dados em gráficos",
           isAvailable: true,
         },
         {
-          id: "testimonials",
-          name: "Depoimentos",
-          icon: Quote,
-          description: "Seção de depoimentos e avaliações",
+          id: "progress",
+          name: "Barra de Progresso",
+          category: "Análise",
+          icon: ChartNoAxesColumnIncreasing,
+          description: "Indicadores de progresso do quiz",
           isAvailable: true,
         },
         {
-          id: "faq",
-          name: "FAQ",
-          icon: MessageCircleQuestion,
-          description: "Perguntas frequentes expansíveis",
-          isAvailable: true,
-        },
-        {
-          id: "price",
-          name: "Preço",
-          icon: CircleDollarSign,
-          description: "Exibição de preços e ofertas",
-          isAvailable: true,
-        },
-        {
-          id: "compare",
-          name: "Comparação",
+          id: "score",
+          name: "Pontuação",
+          category: "Análise",
           icon: Scale,
-          description: "Tabelas de comparação",
+          description: "Exibição de pontuação e resultados",
           isAvailable: true,
         },
       ] as ComponentItem[],
     },
     {
-      name: "Desenvolvimento",
-      color: "gray",
+      name: "Avançado",
+      color: "red",
       components: [
         {
           id: "script",
           name: "Script",
+          category: "Avançado",
           icon: Code,
           description: "Código JavaScript personalizado",
           isAvailable: true,
         },
         {
-          id: "list",
-          name: "Lista",
-          icon: List,
-          description: "Listas ordenadas e não ordenadas",
-          isAvailable: true,
+          id: "customComponent",
+          name: "Componente Personalizado",
+          category: "Avançado",
+          icon: Sparkles,
+          description: "Componentes React personalizados",
+          isAvailable: false,
         },
         {
-          id: "marquee",
-          name: "Marquee",
+          id: "conditionalLogic",
+          name: "Lógica Condicional",
+          category: "Avançado",
           icon: ArrowRightLeft,
-          description: "Texto em movimento horizontal",
-          isAvailable: true,
-        },
-        {
-          id: "level",
-          name: "Indicador de Nível",
-          icon: ChartNoAxesColumnIncreasing,
-          description: "Barras de progresso e níveis",
-          isAvailable: true,
-        },
-        {
-          id: "cartesian",
-          name: "Coordenadas",
-          icon: AlignHorizontalDistributeEnd,
-          description: "Sistema de coordenadas cartesianas",
+          description: "Fluxo e ramificação de quiz",
           isAvailable: false,
         },
         {
-          id: "arguments",
-          name: "Argumentos",
+          id: "leadCapture",
+          name: "Captura de Lead",
+          category: "Avançado",
+          icon: CircleDollarSign,
+          description: "Formulários de captura e CRM",
+          isAvailable: false,
+        },
+        {
+          id: "quizLogic",
+          name: "Lógica de Quiz",
+          category: "Avançado",
           icon: MessageCircleQuestion,
-          description: "Argumentos e contra-argumentos",
+          description: "Pontuação e resultados complexos",
           isAvailable: false,
         },
         {
-          id: "terms",
-          name: "Termos",
-          icon: Text,
-          description: "Termos de uso e políticas",
+          id: "listBuilder",
+          name: "Construtor de Lista",
+          category: "Avançado",
+          icon: List,
+          description: "Listas dinâmicas e repetição",
           isAvailable: false,
         },
       ] as ComponentItem[],
     },
   ];
 
-  const handleDragStart = (e: React.DragEvent, componentType: string) => {
-    e.dataTransfer.setData("componentType", componentType);
-    e.dataTransfer.effectAllowed = "copy";
-  };
-
-  const handleComponentClick = (componentType: string) => {
-    onComponentAdd(componentType);
-  };
-
-  const getCategoryColor = (color: string) => {
-    const colors = {
-      blue: "border-blue-500 bg-blue-50",
-      green: "border-green-500 bg-green-50",
-      purple: "border-purple-500 bg-purple-50",
-      orange: "border-orange-500 bg-orange-50",
-      indigo: "border-indigo-500 bg-indigo-50",
-      gray: "border-gray-500 bg-gray-50",
-    };
-    return colors[color as keyof typeof colors] || colors.gray;
-  };
-
-  const getIconColor = (color: string) => {
-    const colors = {
-      blue: "text-blue-600",
-      green: "text-green-600",
-      purple: "text-purple-600",
-      orange: "text-orange-600",
-      indigo: "text-indigo-600",
-      gray: "text-gray-600",
-    };
-    return colors[color as keyof typeof colors] || colors.gray;
-  };
-
   return (
-    <div className="w-64 bg-zinc-900 border-r border-zinc-700 flex flex-col h-full">
+    <div className="w-64 h-full bg-zinc-900 border-r border-zinc-700 overflow-y-auto">
       <div className="p-4 border-b border-zinc-700">
-        <h2 className="text-lg font-semibold text-white">Componentes</h2>
-        <p className="text-sm text-zinc-400 mt-1">
-          Arraste ou clique para adicionar
+        <h2 className="text-lg font-semibold text-white mb-2">Componentes</h2>
+        <p className="text-sm text-zinc-400">
+          Arraste os componentes para o canvas
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
-        {componentCategories.map((category) => (
-          <div key={category.name} className="space-y-3">
-            <h3 className="text-sm font-medium text-zinc-300 uppercase tracking-wide">
-              {category.name}
-            </h3>
-            <div className="space-y-2">
-              {category.components.map((component) => {
-                const Icon = component.icon;
-                return (
-                  <div
-                    key={component.id}
-                    draggable={component.isAvailable}
-                    onDragStart={(e) =>
-                      component.isAvailable && handleDragStart(e, component.id)
+      <div className="p-2 space-y-4">
+        {componentCategories.map((category, categoryIndex) => (
+          <div key={categoryIndex} className="space-y-2">
+            <div className="flex items-center gap-2 px-2 py-1">
+              <div
+                className={`w-2 h-2 rounded-full bg-${category.color}-500`}
+              ></div>
+              <h3 className="text-sm font-medium text-zinc-300">
+                {category.name}
+              </h3>
+              <span className="text-xs text-zinc-500">
+                {category.components.filter((c) => c.isAvailable).length}
+              </span>
+            </div>
+
+            <div className="grid gap-1">
+              {category.components.map((component) => (
+                <button
+                  key={component.id}
+                  onClick={() => {
+                    if (component.isAvailable) {
+                      onComponentAdd(component.id);
                     }
-                    onClick={() =>
-                      component.isAvailable && handleComponentClick(component.id)
+                  }}
+                  disabled={!component.isAvailable}
+                  className={`
+                    flex items-center gap-3 p-2 rounded-lg text-left transition-all
+                    ${
+                      component.isAvailable
+                        ? "text-zinc-200 hover:bg-zinc-800 hover:text-white cursor-pointer"
+                        : "text-zinc-600 cursor-not-allowed opacity-50"
                     }
-                    className={`
-                      group relative p-3 rounded-lg border transition-all duration-200
-                      ${
-                        component.isAvailable
-                          ? `${getCategoryColor(category.color)} hover:shadow-md cursor-pointer hover:scale-105`
-                          : "border-zinc-600 bg-zinc-800 opacity-50 cursor-not-allowed"
-                      }
-                    `}
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div
-                        className={`
-                        flex-shrink-0 p-2 rounded-md 
-                        ${
-                          component.isAvailable
-                            ? `${getIconColor(category.color)} bg-white`
-                            : "text-zinc-500 bg-zinc-700"
-                        }
-                      `}
-                      >
-                        <Icon size={16} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div
-                          className={`
-                          text-sm font-medium mb-1
-                          ${component.isAvailable ? "text-zinc-800" : "text-zinc-400"}
-                        `}
-                        >
-                          {component.name}
-                        </div>
-                        <div
-                          className={`
-                          text-xs leading-tight
-                          ${component.isAvailable ? "text-zinc-600" : "text-zinc-500"}
-                        `}
-                        >
-                          {component.description}
-                        </div>
-                      </div>
+                  `}
+                  title={
+                    component.isAvailable
+                      ? `Adicionar ${component.name}`
+                      : `${component.name} - Em breve`
+                  }
+                >
+                  <component.icon size={16} className="flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium truncate">
+                      {component.name}
                     </div>
-
-                    {!component.isAvailable && (
-                      <div className="absolute top-2 right-2">
-                        <div className="text-xs bg-zinc-700 text-zinc-400 px-2 py-1 rounded">
-                          Em breve
-                        </div>
-                      </div>
-                    )}
-
-                    {component.isAvailable && (
-                      <div className="absolute inset-0 rounded-lg ring-2 ring-transparent group-hover:ring-zinc-300 transition-all duration-200" />
-                    )}
+                    <div className="text-xs text-zinc-500 truncate">
+                      {component.description}
+                    </div>
                   </div>
-                );
-              })}
+                  {!component.isAvailable && (
+                    <div className="text-xs bg-zinc-700 text-zinc-400 px-1.5 py-0.5 rounded text-center">
+                      Em breve
+                    </div>
+                  )}
+                </button>
+              ))}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="p-4 border-t border-zinc-700">
-        <div className="text-xs text-zinc-500 text-center">
-          💡 <strong>Dica:</strong> Arraste os componentes para o canvas ou clique
-          para adicionar no final da etapa atual
+      <div className="p-4 border-t border-zinc-700 mt-4">
+        <div className="text-xs text-zinc-500 space-y-1">
+          <div>💡 Dica: Arraste os componentes para adicioná-los</div>
+          <div>🎨 Use o painel direito para configurar</div>
         </div>
       </div>
     </div>

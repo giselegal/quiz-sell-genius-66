@@ -329,7 +329,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 Opções
               </label>
               <div className="space-y-2">
-                {(props.choices || []).map((choice: any, index: number) => (
+                {(props.choices || []).map((choice, index: number) => (
                   <div key={index} className="flex items-center space-x-2">
                     <input
                       type="text"
@@ -344,7 +344,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     />
                     <button
                       onClick={() => {
-                        const newChoices = (props.choices || []).filter((_: any, i: number) => i !== index);
+                        const newChoices = (props.choices || []).filter((_, i: number) => i !== index);
                         handlePropChange("choices", newChoices);
                       }}
                       className="p-2 text-red-400 hover:text-red-300"

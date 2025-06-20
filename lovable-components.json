@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-20T01:40:13.666Z",
-  "components": 472,
+  "timestamp": "2025-06-20T01:47:59.032Z",
+  "components": 473,
   "files": [
     {
       "name": "App",
@@ -2015,6 +2015,11 @@
     {
       "name": "ComponentLibrary",
       "path": "src/components/visual-editor/panels/ComponentLibrary.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentLibrary_backup",
+      "path": "src/components/visual-editor/panels/ComponentLibrary_backup.tsx",
       "type": "typescript"
     },
     {
