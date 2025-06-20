@@ -104,9 +104,12 @@ function App() {
 
           {/* Editor Visual Avançado - Modularizado CORRIGIDO */}
           <Route path="/advanced-editor" element={<AdvancedQuizEditor />} />
-          
+
           {/* Teste do Editor Visual Avançado */}
-          <Route path="/advanced-editor-test" element={<AdvancedQuizEditorTest />} />
+          <Route
+            path="/advanced-editor-test"
+            element={<AdvancedQuizEditorTest />}
+          />
           <Route
             path="/advanced-editor-test"
             element={<AdvancedQuizEditorTest />}

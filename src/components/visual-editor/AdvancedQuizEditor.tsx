@@ -1708,7 +1708,9 @@ const ComponentPropertyEditor: React.FC<{
                     type="text"
                     className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={props.componentName || ""}
-                    onChange={(e) => handleChange("componentName", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("componentName", e.target.value)
+                    }
                     placeholder="Digite aqui..."
                   />
                   <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2">
@@ -1734,7 +1736,9 @@ const ComponentPropertyEditor: React.FC<{
                   min="10"
                   max="100"
                   className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
-                  value={parseInt(props.styles?.maxWidth?.toString().replace('%', '') || '100')}
+                  value={parseInt(
+                    props.styles?.maxWidth?.toString().replace("%", "") || "100"
+                  )}
                   onChange={(e) => {
                     const newStyles = { ...props.styles };
                     newStyles.maxWidth = `${e.target.value}%`;
@@ -1742,7 +1746,7 @@ const ComponentPropertyEditor: React.FC<{
                   }}
                 />
                 <span className="text-xs text-zinc-400">
-                  {props.styles?.maxWidth || '100%'}
+                  {props.styles?.maxWidth || "100%"}
                 </span>
               </div>
               <div className="flex flex-col-reverse items-start gap-2">
@@ -3509,7 +3513,8 @@ const AdvancedQuizEditor: React.FC = () => {
                   Nenhum componente selecionado
                 </h3>
                 <p className="text-sm text-zinc-500">
-                  Clique em um componente no canvas para editar suas propriedades
+                  Clique em um componente no canvas para editar suas
+                  propriedades
                 </p>
               </div>
             )}
