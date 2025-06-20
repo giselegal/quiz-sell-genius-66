@@ -21,11 +21,11 @@
   "lastSync": "2025-06-20T02:48:32.379Z",
   "componentCount": 476,
   "sync": {
-    "timestamp": 1750387712,
+    "timestamp": 1750387865,
     "method": "complete-manual",
     "forced": true
   },
-  "lastUpdate": "2025-06-20T02:48:32.379Z",
+  "lastUpdate": "2025-06-20T02:51:05.521Z",
   "tokenConfigured": true,
   "manualSyncTimestamp": 1750387712
 }
