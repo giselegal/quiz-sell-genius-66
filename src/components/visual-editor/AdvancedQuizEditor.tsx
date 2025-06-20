@@ -3277,7 +3277,7 @@ const AdvancedQuizEditor: React.FC = () => {
                       className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
                       value={selectedComponent.props.text || ""}
                       onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
+                        handleComponentUpdate(selectedComponent.id, {
                           text: e.target.value,
                         })
                       }
@@ -3293,7 +3293,7 @@ const AdvancedQuizEditor: React.FC = () => {
                       className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
                       value={selectedComponent.props.text || ""}
                       onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
+                        handleComponentUpdate(selectedComponent.id, {
                           text: e.target.value,
                         })
                       }
@@ -3311,7 +3311,7 @@ const AdvancedQuizEditor: React.FC = () => {
                         className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
                         value={selectedComponent.props.src || ""}
                         onChange={(e) =>
-                          onComponentUpdate(selectedComponent.id, {
+                          handleComponentUpdate(selectedComponent.id, {
                             src: e.target.value,
                           })
                         }
@@ -3326,7 +3326,7 @@ const AdvancedQuizEditor: React.FC = () => {
                         className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
                         value={selectedComponent.props.alt || ""}
                         onChange={(e) =>
-                          onComponentUpdate(selectedComponent.id, {
+                          handleComponentUpdate(selectedComponent.id, {
                             alt: e.target.value,
                           })
                         }
@@ -3344,7 +3344,7 @@ const AdvancedQuizEditor: React.FC = () => {
                       className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
                       value={selectedComponent.props.buttonText || ""}
                       onChange={(e) =>
-                        onComponentUpdate(selectedComponent.id, {
+                        handleComponentUpdate(selectedComponent.id, {
                           buttonText: e.target.value,
                         })
                       }
