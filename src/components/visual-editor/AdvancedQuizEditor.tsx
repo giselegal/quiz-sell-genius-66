@@ -364,33 +364,41 @@ const EditableButton: React.FC<{ component: QuizComponent }> = ({
 
 /**
  * @component OptionsComponent
- * @description Componente para exibir opções de múltipla escolha.
+ * @description Componente para exibir opções de múltipla escolha seguindo o design real.
  */
 const OptionsComponent: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
   <div
-    className="grid gap-2 p-2 rounded-md bg-zinc-800/50"
+    className="flex flex-col items-start justify-start gap-2"
     style={component.props.styles}
   >
-    <p className="text-zinc-100 font-semibold">
-      {component.props.questionText || "Selecione uma opção:"}
-    </p>
-    <div className="flex flex-col gap-2">
-      {component.props.choices?.map((choice, index) => (
-        <button
-          key={index}
-          className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors bg-zinc-700 text-zinc-100 hover:bg-zinc-600 p-3 rounded-md text-left"
-        >
-          {choice.text}
+    {component.props.choices?.map((choice, index) => (
+      <button
+        key={index}
+        className="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 option border-zinc-200 bg-background hover:bg-primary hover:text-foreground h-10 px-4 hover:shadow-2xl overflow-hidden min-w-full gap-2 flex py-8 flex-row items-center justify-between border drop-shadow-none"
+      >
+        {choice.image && (
+          <div className="flex-shrink-0 w-16 h-16 mr-4">
+            <img
+              src={choice.image}
+              alt={choice.text}
+              className="w-full h-full object-cover rounded-md"
+            />
+          </div>
+        )}
+        <div className="py-2 px-4 w-full flex flex-row text-base items-center text-full-primary justify-between">
+          <div className="break-words w-full custom-quill quill ql-editor quill-option text-full-primary">
+            <p dangerouslySetInnerHTML={{ __html: choice.text }} />
+          </div>
           {choice.scoreValue && (
             <span className="ml-auto text-xs text-zinc-400">
               +{choice.scoreValue}
             </span>
           )}
-        </button>
-      ))}
-    </div>
+        </div>
+      </button>
+    ))}
     {component.props.selectionType === "multiple" && (
       <p className="text-xs text-zinc-400 mt-1">
         Você pode selecionar múltiplas opções
