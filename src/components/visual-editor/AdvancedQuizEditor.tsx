@@ -558,11 +558,11 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   };
 
   return (
-    <div className="w-full h-full overflow-auto z-10 bg-zinc-950">
-      <div className="h-full w-full rounded-[inherit] overflow-hidden">
-        {/* Container do Quiz Preview */}
-        <div className="min-h-full flex items-center justify-center p-4">
-          <div className="w-full max-w-md mx-auto">
+    <div className="w-full h-full overflow-auto bg-zinc-950 flex items-start justify-center">
+      <div className="w-full h-full overflow-y-auto custom-scrollbar">
+        {/* Container do Quiz Preview - Centralizado */}
+        <div className="min-h-full flex items-center justify-center p-6 lg:p-8">
+          <div className="w-full max-w-lg mx-auto">
             {/* Simulação do Header do Quiz */}
             {headerConfig.showLogo && (
               <div className="mb-6 text-center">
@@ -632,7 +632,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                   return component ? (
                     <div
                       key={component.id}
-                      className={`group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative cursor-pointer transition-all duration-200`}
+                      className={`group/canvas-item w-full canvas-item min-h-[1.25rem] relative cursor-pointer transition-all duration-200`}
                       onClick={(e) => {
                         e.stopPropagation();
                         onComponentSelect(component.id);
@@ -641,7 +641,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                       {/* Container com bordas que indicam seleção */}
                       <div
                         id={component.id}
-                        className={`min-h-[1.25rem] min-w-full relative rounded-md transition-all duration-200 ${
+                        className={`min-h-[1.25rem] w-full relative rounded-md transition-all duration-200 ${
                           selectedComponentId === component.id
                             ? "ring-2 ring-blue-500 ring-offset-2 ring-offset-zinc-950 bg-blue-500/5"
                             : "hover:ring-1 hover:ring-zinc-500 hover:ring-offset-1 hover:ring-offset-zinc-950"
@@ -3784,10 +3784,10 @@ const AdvancedQuizEditor: React.FC = () => {
           }}
         />
 
-        {/* Layout Principal com Quatro Colunas */}
+        {/* Layout Principal com Quatro Colunas Responsivas */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Coluna 1: Navegação de Etapas (Esquerda) */}
-          <div className="w-64 border-r border-zinc-700 bg-zinc-900">
+          {/* Coluna 1: Navegação de Etapas (Esquerda) - Responsiva */}
+          <div className="w-56 lg:w-64 xl:w-72 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-y-auto">
             <StepNavigationTabs
               steps={editorState.steps}
               currentStepId={editorState.currentStepId}
@@ -3798,13 +3798,13 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 2: Biblioteca de Componentes */}
-          <div className="w-80 border-r border-zinc-700 bg-zinc-900">
+          {/* Coluna 2: Biblioteca de Componentes - Responsiva */}
+          <div className="w-64 lg:w-72 xl:w-80 border-r border-zinc-700 bg-zinc-900 flex-shrink-0">
             <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
           </div>
 
-          {/* Coluna 3: Canvas do Editor */}
-          <div className="flex-1 overflow-hidden">
+          {/* Coluna 3: Canvas do Editor - Flexível e Centralizado */}
+          <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900">
             <CanvasArea
               currentStep={currentStep}
               headerConfig={editorState.headerConfig}
@@ -3818,8 +3818,8 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 4: Painel de Propriedades/Editor (Direita) */}
-          <div className="w-96 max-w-md border-l border-zinc-700 bg-zinc-900 p-4 overflow-y-auto">
+          {/* Coluna 4: Painel de Propriedades/Editor (Direita) - Responsiva */}
+          <div className="w-80 lg:w-96 xl:w-[28rem] max-w-md border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-y-auto">
             {selectedComponent ? (
               <div className="p-4">
                 <div className="flex items-center justify-between mb-4">
