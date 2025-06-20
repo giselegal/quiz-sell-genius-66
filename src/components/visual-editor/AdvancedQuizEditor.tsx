@@ -1417,72 +1417,56 @@ const StepEditorCanvas: React.FC<{
                         {/* Container com bordas que indicam seleção */}
                         <div
                           id={component.id}
-                          className={`min-h-[1.25rem] min-w-full relative self-auto box-border customizable-gap rounded-md transition-all
-                    )}
-                    {/* Barra de Progresso  */}
-                    {headerConfig.showProgressBar && (
-                      <div
-                        role="progressbar"
-                        className="relative w-full overflow-hidden rounded-full bg-zinc-600 h-2"
-                      >
-                        <div
-                          className="progress h-full flex-1 transition-all"
-                          style={{
-                            width: `${(currentStepIndex / totalSteps) * 100}%`,
-                            backgroundColor:
-                              headerConfig.progressColor || "#DEB57D",
-                          }}
-                        ></div>
+                          className={`min-h-[1.25rem] min-w-full relative self-auto box-border rounded-md transition-all ${
+                            selectedComponentId === component.id
+                              ? "ring-2 ring-blue-500 bg-blue-500/10"
+                              : "hover:ring-1 hover:ring-zinc-500"
+                          }`}
+                        >
+                          <ComponentToRender component={component} />
+                        </div>
                       </div>
-                    )}
-                  </div>
-                </div>
+                    ) : null;
+                  })
+                )}
               </div>
-            ) : null}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-            {/* Conteúdo principal da etapa */}
-            <div className="main-content w-full relative mx-auto customizable-width h-full bg-zinc-800/50 p-4 rounded-md">
-              <div className="flex flex-col gap-4 pb-10">
-                {/* Mapeia os componentes da etapa atual e renderiza o componente React apropriado */}
-                {currentStep.components.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center p-8 text-center border-2 border-dashed border-zinc-600 rounded-lg">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="48"
-                      height="48"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-plus-circle text-zinc-500 mb-4"
-                    >
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <path d="M8 12h8"></path>
-                      <path d="M12 8v8"></path>
-                    </svg>
-                    <p className="text-zinc-500 mb-2">Canvas vazio</p>
-                    <p className="text-sm text-zinc-400">
-                      Arraste componentes da barra lateral ou clique em um
-                      componente para adicioná-lo aqui
-                    </p>
-                  </div>
-                ) : (
-                  currentStep.components.map((component) => {
-                    const ComponentToRender = componentViewMap[component.type];
-                    return ComponentToRender ? (
-                      <div
-                        key={component.id}
-                        className={`group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative self-auto mr-auto flex-basis-100 cursor-pointer`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onComponentSelect(component.id);
-                        }}
-                      >
-                        {/* Container com bordas que indicam seleção */}
-                        <div
-                          id={component.id}
+// --- COMPONENTE DE EDIÇÃO DE PROPRIEDADES ---
+
+/**
+ * @component ComponentPropertyEditor
+ * @description Editor avançado de propriedades para componentes baseado no HTML fornecido
+ */
+const ComponentPropertyEditor: React.FC<{
+  type: string;
+  props: QuizComponentProps;
+  onPropsChange: (newProps: Partial<QuizComponentProps>) => void;
+}> = ({ type, props, onPropsChange }) => {
+  const handleChange = (key: string, value: unknown) => {
+    onPropsChange({ [key]: value });
+  };
+
+  // Editor de estilos JSON
+  const StylesEditor = () => (
+    <div className="space-y-3">
+      <label className="text-sm font-medium leading-none text-zinc-100">
+        Estilos (JSON)
+      </label>
+      <textarea
+        className="flex min-h-[80px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        value={JSON.stringify(props.styles || {}, null, 2)}
+        onChange={(e) => {
+          try {
+            const styles = JSON.parse(e.target.value);
+            handleChange("styles", styles);
+          } catch {
             // Ignora erros de parse durante a digitação
           }
         }}
@@ -1515,51 +1499,269 @@ const StepEditorCanvas: React.FC<{
     case "image":
       return (
         <div className="space-y-4">
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              URL da Imagem
-            </label>
-            <input
-              type="text"
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.src || ""}
-              onChange={(e) => handleChange("src", e.target.value)}
-              placeholder="https://exemplo.com/imagem.png"
-            />
+          {/* Seção: Origem */}
+          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6 pb-4">
+              <p className="text-sm text-zinc-400">Origem</p>
+            </div>
+            <div className="p-6 pt-0 gap-4 flex flex-col">
+              <div className="flex flex-col-reverse items-start gap-2">
+                <select
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value="url"
+                  disabled
+                >
+                  <option value="url">URL</option>
+                </select>
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Entrada
+                </label>
+              </div>
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  URL da Imagem
+                </label>
+                <input
+                  type="text"
+                  className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={props.src || ""}
+                  onChange={(e) => handleChange("src", e.target.value)}
+                  placeholder="Digite aqui..."
+                />
+              </div>
+            </div>
           </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Texto Alternativo
-            </label>
-            <input
-              type="text"
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.alt || ""}
-              onChange={(e) => handleChange("alt", e.target.value)}
-              placeholder="Descrição da imagem"
-            />
+
+          {/* Seção: Estilo */}
+          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6 pb-4">
+              <p className="text-sm text-zinc-400">Estilo</p>
+            </div>
+            <div className="p-6 pt-0 gap-4 flex flex-col">
+              <div className="flex flex-col-reverse items-start gap-2">
+                <select
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={props.styles?.width || "auto"}
+                  onChange={(e) => {
+                    const newStyles = { ...props.styles };
+                    newStyles.width = e.target.value;
+                    handleChange("styles", newStyles);
+                  }}
+                >
+                  <option value="auto">Auto</option>
+                  <option value="100%">Total</option>
+                  <option value="80%">Grande</option>
+                  <option value="60%">Médio</option>
+                  <option value="40%">Pequeno</option>
+                  <option value="20%">Micro</option>
+                </select>
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Largura
+                </label>
+              </div>
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Texto Alternativo
+                </label>
+                <input
+                  type="text"
+                  className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={props.alt || ""}
+                  onChange={(e) => handleChange("alt", e.target.value)}
+                  placeholder="Descrição da imagem"
+                />
+              </div>
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Ajuste da Imagem
+                </label>
+                <select
+                  className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={props.objectFit || "cover"}
+                  onChange={(e) =>
+                    handleChange(
+                      "objectFit",
+                      e.target.value as QuizComponentProps["objectFit"]
+                    )
+                  }
+                >
+                  <option value="cover">Cobrir</option>
+                  <option value="contain">Conter</option>
+                  <option value="fill">Preencher</option>
+                  <option value="none">Nenhum</option>
+                  <option value="scale-down">Reduzir</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Ajuste da Imagem
-            </label>
-            <select
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.objectFit || "cover"}
-              onChange={(e) =>
-                handleChange(
-                  "objectFit",
-                  e.target.value as QuizComponentProps["objectFit"]
-                )
-              }
-            >
-              <option value="cover">Cobrir</option>
-              <option value="contain">Conter</option>
-              <option value="fill">Preencher</option>
-              <option value="none">Nenhum</option>
-              <option value="scale-down">Reduzir</option>
-            </select>
+
+          {/* Seção: Personalização */}
+          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6 pb-4">
+              <p className="text-sm text-zinc-400">Personalização</p>
+            </div>
+            <div className="p-6 pt-0">
+              <div className="grid grid-cols-3 w-full items-center gap-1.5">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium leading-none text-zinc-100">
+                    Cor
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="color"
+                      className="flex w-full h-10 border-none text-sm cursor-pointer bg-zinc-700 focus:ring-2 focus:ring-blue-500 rounded-md"
+                      value={props.styles?.backgroundColor || "#000000"}
+                      onChange={(e) => {
+                        const newStyles = { ...props.styles };
+                        newStyles.backgroundColor = e.target.value;
+                        handleChange("styles", newStyles);
+                      }}
+                    />
+                    <button
+                      className="text-xs bg-red-500/80 backdrop-blur-md text-white rounded-full w-4 h-4 flex items-center justify-center absolute top-0 right-0 cursor-pointer hover:bg-red-700 transition-colors duration-200"
+                      onClick={() => {
+                        const newStyles = { ...props.styles };
+                        delete newStyles.backgroundColor;
+                        handleChange("styles", newStyles);
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium leading-none text-zinc-100">
+                    Texto
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="color"
+                      className="flex w-full h-10 border-none text-sm cursor-pointer bg-zinc-700 focus:ring-2 focus:ring-blue-500 rounded-md"
+                      value={props.styles?.color || "#000000"}
+                      onChange={(e) => {
+                        const newStyles = { ...props.styles };
+                        newStyles.color = e.target.value;
+                        handleChange("styles", newStyles);
+                      }}
+                    />
+                    <button
+                      className="text-xs bg-red-500/80 backdrop-blur-md text-white rounded-full w-4 h-4 flex items-center justify-center absolute top-0 right-0 cursor-pointer hover:bg-red-700 transition-colors duration-200"
+                      onClick={() => {
+                        const newStyles = { ...props.styles };
+                        delete newStyles.color;
+                        handleChange("styles", newStyles);
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium leading-none text-zinc-100">
+                    Borda
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="color"
+                      className="flex w-full h-10 border-none text-sm cursor-pointer bg-zinc-700 focus:ring-2 focus:ring-blue-500 rounded-md"
+                      value={props.styles?.borderColor || "#000000"}
+                      onChange={(e) => {
+                        const newStyles = { ...props.styles };
+                        newStyles.borderColor = e.target.value;
+                        newStyles.border = `1px solid ${e.target.value}`;
+                        handleChange("styles", newStyles);
+                      }}
+                    />
+                    <button
+                      className="text-xs bg-red-500/80 backdrop-blur-md text-white rounded-full w-4 h-4 flex items-center justify-center absolute top-0 right-0 cursor-pointer hover:bg-red-700 transition-colors duration-200"
+                      onClick={() => {
+                        const newStyles = { ...props.styles };
+                        delete newStyles.borderColor;
+                        delete newStyles.border;
+                        handleChange("styles", newStyles);
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          {/* Seção: Avançado */}
+          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6 pb-4">
+              <p className="text-sm text-zinc-400">Avançado</p>
+            </div>
+            <div className="p-6 pt-0">
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Nome do Componente
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={props.componentName || ""}
+                    onChange={(e) => handleChange("componentName", e.target.value)}
+                    placeholder="Digite aqui..."
+                  />
+                  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2">
+                    Confirmar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Seção: Geral */}
+          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6 pb-4">
+              <p className="text-sm text-zinc-400">Geral</p>
+            </div>
+            <div className="p-6 pt-0 gap-4 flex flex-col">
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Tamanho Máximo
+                </label>
+                <input
+                  type="range"
+                  min="10"
+                  max="100"
+                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
+                  value={parseInt(props.styles?.maxWidth?.toString().replace('%', '') || '100')}
+                  onChange={(e) => {
+                    const newStyles = { ...props.styles };
+                    newStyles.maxWidth = `${e.target.value}%`;
+                    handleChange("styles", newStyles);
+                  }}
+                />
+                <span className="text-xs text-zinc-400">
+                  {props.styles?.maxWidth || '100%'}
+                </span>
+              </div>
+              <div className="flex flex-col-reverse items-start gap-2">
+                <select
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={props.styles?.textAlign || "center"}
+                  onChange={(e) => {
+                    const newStyles = { ...props.styles };
+                    newStyles.textAlign = e.target.value;
+                    handleChange("styles", newStyles);
+                  }}
+                >
+                  <option value="left">Esquerda</option>
+                  <option value="center">Centro</option>
+                  <option value="right">Direita</option>
+                </select>
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Alinhamento
+                </label>
+              </div>
+            </div>
+          </div>
+
           <StylesEditor />
         </div>
       );
