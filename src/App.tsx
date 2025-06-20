@@ -12,6 +12,7 @@ import EditorTest from "@/pages/EditorTest";
 import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
 import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
+import AdvancedQuizEditorV2 from "@/components/visual-editor/AdvancedQuizEditor.v2";
 import SimpleAdvancedQuizEditor from "@/components/visual-editor/SimpleAdvancedQuizEditor";
 import BasicAdvancedQuizEditor from "@/components/visual-editor/BasicAdvancedQuizEditor";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,14 @@ const QuickAccessEditorButton = () => {
       >
         <Edit className="w-4 h-4 mr-2" />
         Advanced Editor
+      </Button>
+      <Button
+        onClick={() => navigate("/advanced-editor-v2")}
+        className="bg-orange-600 hover:bg-orange-700 text-white shadow-lg"
+        size="sm"
+      >
+        <Edit className="w-4 h-4 mr-2" />
+        Editor V2 (Novo!)
       </Button>
       <Button
         onClick={() => navigate("/quiz-production")}
@@ -113,6 +122,7 @@ function App() {
 
           {/* Editor Visual Avançado - Modularizado CORRIGIDO */}
           <Route path="/advanced-editor" element={<AdvancedQuizEditor />} />
+          <Route path="/advanced-editor-v2" element={<AdvancedQuizEditorV2 />} />
 
           {/* Página de Teste */}
           <Route path="/editor-test" element={<EditorTest />} />
