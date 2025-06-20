@@ -228,7 +228,9 @@ const ModernVisualEditor: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<QuizStep>({
     id: "step-1",
     type: "intro",
-    title: "Etapa 1 - Introdução",
+    name: "Etapa 1 - Introdução",
+    title: "Teste de Estilo Pessoal",
+    subtitle: "Descubra seu estilo pessoal único",
     hasHeader: true,
     headerConfig: {
       showLogo: true,
@@ -240,16 +242,25 @@ const ModernVisualEditor: React.FC = () => {
       {
         id: "heading-1",
         type: "heading",
-        data: { text: "Teste de Estilo Pessoal", level: 1 }
+        data: { text: "Teste de Estilo Pessoal", level: 1, align: "center" }
       },
       {
         id: "image-1",
         type: "image",
         data: { 
-          src: "https://cakto-quiz-br01.b-cdn.net/uploads/ecbe689b-1c0a-4071-98d3-4d391b6dd98f.png",
-          alt: "Imagem",
-          width: 640,
-          height: 480
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up",
+          alt: "Imagem de introdução",
+          width: "100%",
+          height: "auto",
+          borderRadius: 8
+        }
+      },
+      {
+        id: "subtitle-1",
+        type: "subtitle",
+        data: { 
+          text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+          align: "center"
         }
       },
       {
@@ -258,19 +269,26 @@ const ModernVisualEditor: React.FC = () => {
         data: { 
           label: "NOME",
           placeholder: "Digite seu nome aqui...",
-          required: true
+          required: true,
+          type: "text"
         }
       },
       {
         id: "button-1",
         type: "button",
-        data: { text: "Continuar", variant: "primary" }
+        data: { 
+          text: "COMEÇAR AGORA", 
+          variant: "primary",
+          fullWidth: true,
+          size: "large"
+        }
       }
     ]
   });
 
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
+  const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 
   // Funções de manipulação de componentes
   const addComponent = (type: string) => {
@@ -307,13 +325,48 @@ const ModernVisualEditor: React.FC = () => {
         return { text: "Botão", variant: "primary" };
       case 'spacer':
         return { height: 20 };
-      case 'options':
+      case 'visual-options':
         return {
+          title: "QUAL SUA PREFERÊNCIA?",
           multiSelect: false,
           maxSelections: 1,
+          showImages: true,
           options: [
-            { id: "opt-1", text: "Opção 1", value: "option1" },
-            { id: "opt-2", text: "Opção 2", value: "option2" }
+            { 
+              id: "opt-1", 
+              text: "Opção com imagem 1", 
+              value: "option1",
+              image: "https://via.placeholder.com/80x80",
+              category: "Natural"
+            },
+            { 
+              id: "opt-2", 
+              text: "Opção com imagem 2", 
+              value: "option2",
+              image: "https://via.placeholder.com/80x80",
+              category: "Clássico"
+            }
+          ]
+        };
+      case 'text-options':
+        return {
+          title: "ESCOLHA UMA OPÇÃO:",
+          multiSelect: false,
+          maxSelections: 1,
+          showImages: false,
+          options: [
+            { id: "opt-1", text: "Primeira opção", value: "option1", category: "Natural" },
+            { id: "opt-2", text: "Segunda opção", value: "option2", category: "Clássico" }
+          ]
+        };
+      case 'strategic-question':
+        return {
+          title: "QUESTÃO ESTRATÉGICA:",
+          subtitle: "Esta pergunta nos ajuda a personalizar sua experiência",
+          multiSelect: false,
+          options: [
+            { id: "opt-1", text: "Opção estratégica 1", value: "strategic1", strategicValue: 1 },
+            { id: "opt-2", text: "Opção estratégica 2", value: "strategic2", strategicValue: 2 }
           ]
         };
       default:
@@ -427,33 +480,103 @@ const ModernVisualEditor: React.FC = () => {
           </div>
         );
 
-      case 'options':
+      case 'visual-options':
         return (
           <div 
             key={component.id}
             className={baseClasses}
             onClick={() => setSelectedComponent(component.id)}
           >
-            <div className="flex flex-col items-start justify-start gap-2">
-              {component.data.options.map((option: QuizOption) => (
-                <button 
-                  key={option.id}
-                  className="option border-zinc-200 bg-background hover:bg-primary hover:text-foreground h-10 px-4 hover:shadow-2xl overflow-hidden min-w-full gap-2 flex py-8 flex-row items-center justify-between border rounded-md"
-                >
-                  <div className="py-2 px-4 w-full flex flex-row text-base items-center justify-between">
-                    {option.image && (
-                      <img 
-                        src={option.image} 
-                        alt={option.text}
-                        className="w-16 h-16 object-cover rounded mr-4"
-                      />
-                    )}
-                    <div className="break-words w-full text-left">
-                      {option.text}
+            {renderComponentActions()}
+            <div className="space-y-4">
+              {component.data.title && (
+                <h3 className="text-xl font-bold text-center">{component.data.title}</h3>
+              )}
+              <div className="grid gap-3">
+                {component.data.options.map((option: QuizOption) => (
+                  <button 
+                    key={option.id}
+                    className="flex items-center justify-between p-4 border rounded-md hover:shadow-md transition-all bg-white hover:bg-gray-50"
+                  >
+                    <div className="flex items-center gap-4">
+                      {option.image && (
+                        <img 
+                          src={option.image} 
+                          alt={option.text}
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      )}
+                      <div className="text-left">
+                        <div className="font-medium">{option.text}</div>
+                        {option.category && (
+                          <div className="text-sm text-gray-500">{option.category}</div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'text-options':
+        return (
+          <div 
+            key={component.id}
+            className={baseClasses}
+            onClick={() => setSelectedComponent(component.id)}
+          >
+            {renderComponentActions()}
+            <div className="space-y-4">
+              {component.data.title && (
+                <h3 className="text-xl font-bold text-center">{component.data.title}</h3>
+              )}
+              <div className="grid gap-2">
+                {component.data.options.map((option: QuizOption) => (
+                  <button 
+                    key={option.id}
+                    className="flex items-center justify-between p-3 border rounded-md hover:shadow-sm transition-all bg-white hover:bg-gray-50 text-left"
+                  >
+                    <div className="font-medium">{option.text}</div>
+                    {option.category && (
+                      <Badge variant="secondary" className="text-xs">{option.category}</Badge>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'strategic-question':
+        return (
+          <div 
+            key={component.id}
+            className={baseClasses}
+            onClick={() => setSelectedComponent(component.id)}
+          >
+            {renderComponentActions()}
+            <div className="space-y-4">
+              <div className="text-center">
+                <h3 className="text-xl font-bold">{component.data.title}</h3>
+                {component.data.subtitle && (
+                  <p className="text-gray-600 mt-2">{component.data.subtitle}</p>
+                )}
+              </div>
+              <div className="grid gap-2">
+                {component.data.options.map((option: QuizOption) => (
+                  <button 
+                    key={option.id}
+                    className="flex items-center justify-between p-3 border rounded-md hover:shadow-sm transition-all bg-blue-50 hover:bg-blue-100 text-left"
+                  >
+                    <div className="font-medium">{option.text}</div>
+                    <Badge variant="outline" className="text-xs">
+                      Valor: {option.strategicValue}
+                    </Badge>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         );
