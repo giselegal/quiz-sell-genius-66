@@ -4202,6 +4202,255 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "s4-button",
             type: "button",
             props: {
+              buttonText: "Continuar",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "strategic-5",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-5",
+      },
+      {
+        id: "strategic-5",
+        name: "🛒 Experiência de Compra",
+        components: [
+          {
+            id: "s5-heading",
+            type: "heading",
+            props: {
+              text: "Você já considerou investir em algum guia ou consultoria de estilo no passado?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "s5-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "s5-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Sim, já pesquisei mas não cheguei a comprar",
+                  value: "researched",
+                  scoreValue: 1,
+                  nextStepId: "strategic-6",
+                },
+                {
+                  text: "Sim, já investi em algum curso/guia/consultoria",
+                  value: "invested",
+                  scoreValue: 1,
+                  nextStepId: "strategic-6",
+                },
+                {
+                  text: "Não, esta é a primeira vez que considero isso",
+                  value: "first_time",
+                  scoreValue: 1,
+                  nextStepId: "strategic-6",
+                },
+                {
+                  text: "Prefiro não responder",
+                  value: "no_answer",
+                  scoreValue: 1,
+                  nextStepId: "strategic-6",
+                },
+              ],
+              selectionType: "single",
+              styles: { gap: "12px" },
+            },
+          },
+          {
+            id: "s5-button",
+            type: "button",
+            props: {
+              buttonText: "Continuar",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "strategic-6",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-6",
+      },
+      {
+        id: "strategic-6",
+        name: "💰 Investimento",
+        components: [
+          {
+            id: "s6-heading",
+            type: "heading",
+            props: {
+              text: "Quanto você estaria disposta a investir em um guia completo de estilo personalizado?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "s6-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
+              alt: "Imagem representando investimento em estilo",
+              styles: {
+                width: "400px",
+                height: "300px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+              },
+            },
+          },
+          {
+            id: "s6-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "s6-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Menos de R$100",
+                  value: "under_100",
+                  scoreValue: 1,
+                  nextStepId: "strategic-7",
+                },
+                {
+                  text: "Entre R$100 e R$300",
+                  value: "100_300",
+                  scoreValue: 1,
+                  nextStepId: "strategic-7",
+                },
+                {
+                  text: "Entre R$300 e R$500",
+                  value: "300_500",
+                  scoreValue: 1,
+                  nextStepId: "strategic-7",
+                },
+                {
+                  text: "Mais de R$500",
+                  value: "over_500",
+                  scoreValue: 1,
+                  nextStepId: "strategic-7",
+                },
+              ],
+              selectionType: "single",
+              styles: { gap: "12px" },
+            },
+          },
+          {
+            id: "s6-button",
+            type: "button",
+            props: {
+              buttonText: "Continuar",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "strategic-7",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-7",
+      },
+      {
+        id: "strategic-7",
+        name: "🎯 Resultados Desejados",
+        components: [
+          {
+            id: "s7-heading",
+            type: "heading",
+            props: {
+              text: "Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "s7-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
+              alt: "Transformação de estilo",
+              styles: {
+                width: "400px",
+                height: "300px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+              },
+            },
+          },
+          {
+            id: "s7-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "s7-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Montar looks com mais facilidade e confiança",
+                  value: "confidence",
+                  scoreValue: 1,
+                  nextStepId: "result-page",
+                },
+                {
+                  text: "Usar o que já tenho e me sentir estilosa",
+                  value: "current_wardrobe",
+                  scoreValue: 1,
+                  nextStepId: "result-page",
+                },
+                {
+                  text: "Comprar com mais consciência e sem culpa",
+                  value: "conscious_shopping",
+                  scoreValue: 1,
+                  nextStepId: "result-page",
+                },
+                {
+                  text: "Ser admirada pela imagem que transmito",
+                  value: "admiration",
+                  scoreValue: 1,
+                  nextStepId: "result-page",
+                },
+                {
+                  text: "Resgatar peças esquecidas e criar novos looks com estilo",
+                  value: "rescue_pieces",
+                  scoreValue: 1,
+                  nextStepId: "result-page",
+                },
+              ],
+              selectionType: "single",
+              styles: { gap: "12px" },
+            },
+          },
+          {
+            id: "s7-button",
+            type: "button",
+            props: {
               buttonText: "Ver Meu Resultado",
               buttonStyle: "primary",
               actionType: "goToNextStep",
