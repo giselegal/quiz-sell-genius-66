@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import "@/styles/advanced-editor.css";
 
 // --- Sistema de Auto-Save ---
-const useAutoSave = (data: any, delay: number = 2000) => {
+const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
-  const saveToLocalStorage = useCallback(async (dataToSave: any) => {
+  const saveToLocalStorage = useCallback(async (dataToSave: QuizEditorState) => {
     setIsSaving(true);
     try {
       // Salva no localStorage
@@ -38,7 +38,7 @@ const useAutoSave = (data: any, delay: number = 2000) => {
   }, [data, delay, saveToLocalStorage]);
 
   // Carrega dados salvos no localStorage na inicialização
-  const loadFromLocalStorage = useCallback(() => {
+  const loadFromLocalStorage = useCallback((): QuizEditorState | null => {
     try {
       const saved = localStorage.getItem('quiz-editor-state');
       if (saved) {
