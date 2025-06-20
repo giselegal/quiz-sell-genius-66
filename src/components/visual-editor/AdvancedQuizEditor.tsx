@@ -3228,39 +3228,46 @@ const AdvancedQuizEditor: React.FC = () => {
         {/* Layout Principal com Quatro Colunas */}
         <div className="flex-1 flex overflow-hidden">
           {/* Coluna 1: Navegação de Etapas (Esquerda) */}
-          <div className="w-64 border-r border-zinc-700 bg-zinc-900">
-            <StepNavigationTabs
-              steps={editorState.steps}
-              currentStepId={editorState.currentStepId}
-              onStepSelect={handleStepSelect}
-              onStepRename={handleStepRename}
-              onStepDelete={handleStepDelete}
-              onAddStep={handleAddStep}
-            />
+          <div className="w-64 min-w-[200px] max-w-[400px] resize-x border-r border-zinc-700 bg-zinc-900 overflow-hidden">
+            <div className="h-full overflow-y-auto">
+              <StepNavigationTabs
+                steps={editorState.steps}
+                currentStepId={editorState.currentStepId}
+                onStepSelect={handleStepSelect}
+                onStepRename={handleStepRename}
+                onStepDelete={handleStepDelete}
+                onAddStep={handleAddStep}
+              />
+            </div>
           </div>
 
           {/* Coluna 2: Biblioteca de Componentes */}
-          <div className="w-80 border-r border-zinc-700 bg-zinc-900">
-            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+          <div className="w-80 min-w-[250px] max-w-[450px] resize-x border-r border-zinc-700 bg-zinc-900 overflow-hidden">
+            <div className="h-full overflow-y-auto">
+              <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+            </div>
           </div>
 
           {/* Coluna 3: Canvas do Editor */}
-          <div className="flex-1 overflow-hidden">
-            <CanvasArea
-              currentStep={currentStep}
-              headerConfig={editorState.headerConfig}
-              selectedComponent={selectedComponent}
-              selectedComponentId={selectedComponentId}
-              onComponentSelect={handleComponentSelect}
-              onComponentAdd={handleComponentAdd}
-              onComponentUpdate={handleComponentUpdate}
-              onComponentDelete={handleComponentDelete}
-              onComponentMove={handleComponentMove}
-            />
+          <div className="flex-1 min-w-[400px] overflow-hidden">
+            <div className="h-full overflow-y-auto">
+              <CanvasArea
+                currentStep={currentStep}
+                headerConfig={editorState.headerConfig}
+                selectedComponent={selectedComponent}
+                selectedComponentId={selectedComponentId}
+                onComponentSelect={handleComponentSelect}
+                onComponentAdd={handleComponentAdd}
+                onComponentUpdate={handleComponentUpdate}
+                onComponentDelete={handleComponentDelete}
+                onComponentMove={handleComponentMove}
+              />
+            </div>
           </div>
 
           {/* Coluna 4: Painel de Propriedades/Editor (Direita) */}
-          <div className="w-96 max-w-md border-l border-zinc-700 bg-zinc-900 p-4 overflow-y-auto">
+          <div className="w-96 min-w-[300px] max-w-[600px] resize-x border-l border-zinc-700 bg-zinc-900 overflow-hidden">
+            <div className="h-full overflow-y-auto p-4">
             {selectedComponent ? (
               <div>
                 <h3 className="text-lg font-semibold text-white mb-4">
@@ -3361,8 +3368,8 @@ const AdvancedQuizEditor: React.FC = () => {
                   Selecione um componente no canvas para editar suas
                   propriedades.
                 </p>
-              </div>
-            )}
+              </div>              )}
+            </div>
           </div>
         </div>
       </div>
