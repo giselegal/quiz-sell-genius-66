@@ -273,13 +273,14 @@ const EditableHeading: React.FC<{ component: QuizComponent }> = ({
 }) => (
   <div className="text-center mb-8">
     <h1
-      className="text-white font-bold leading-tight tracking-wide"
+      className="text-gray-800 font-bold leading-tight tracking-wide font-playfair"
       style={{
-        fontSize: component.props.styles?.fontSize || "2rem",
+        fontSize: component.props.styles?.fontSize === "3xl" ? "1.875rem" : component.props.styles?.fontSize || "1.5rem",
         textAlign: component.props.styles?.textAlign || "center",
-        color: component.props.styles?.color || "#ffffff",
+        color: component.props.styles?.color === "#ffffff" ? "#1f2937" : component.props.styles?.color || "#1f2937",
         fontWeight: component.props.styles?.fontWeight || "700",
         letterSpacing: "0.025em",
+        lineHeight: "1.2",
         ...component.props.styles,
       }}
     >
@@ -325,19 +326,19 @@ const EditableInput: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
   <div className="w-full mb-6" style={component.props.styles}>
-    <label className="block text-white text-sm font-semibold mb-3 uppercase tracking-wider">
+    <label className="block text-gray-700 text-sm font-semibold mb-3 uppercase tracking-wider">
       {component.props.label || "Campo de Entrada"}{" "}
-      {component.props.required && <span className="text-yellow-400">*</span>}
+      {component.props.required && <span className="text-[#B89B7A]">*</span>}
     </label>
     <input
       type={component.props.inputType || "text"}
-      className="w-full px-4 py-3 bg-zinc-800/80 backdrop-blur-sm border border-zinc-700 rounded-lg text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
+      className="w-full px-4 py-3 bg-white border-2 border-[#B89B7A] rounded-lg text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:border-[#b29670] transition-all duration-200"
       placeholder={component.props.placeholder || "Digite aqui..."}
       value="" // Em um editor, seria um valor controlado
       readOnly // Para simular que é um editor e não um quiz ativo
     />
     {component.props.errorMessage && (
-      <span className="text-xs text-red-400 mt-2 block">
+      <span className="text-xs text-red-500 mt-2 block">
         {component.props.errorMessage}
       </span>
     )}
@@ -354,20 +355,20 @@ const EditableButton: React.FC<{ component: QuizComponent }> = ({
   const getButtonClass = (style: string) => {
     switch (style) {
       case "secondary":
-        return "bg-zinc-700 hover:bg-zinc-600 text-white border border-zinc-600";
+        return "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300";
       case "outline":
-        return "border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black bg-transparent";
+        return "border-2 border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white bg-transparent";
       case "ghost":
-        return "text-yellow-500 hover:bg-yellow-500/10 bg-transparent";
+        return "text-[#B89B7A] hover:bg-[#B89B7A]/10 bg-transparent";
       default:
-        return "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-semibold shadow-lg hover:shadow-xl";
+        return "bg-gradient-to-r from-[#B89B7A] to-[#b29670] hover:from-[#b29670] hover:to-[#a68b5f] text-white font-semibold shadow-md hover:shadow-lg";
     }
   };
 
   return (
     <div className="text-center mb-6">
       <button
-        className={`inline-flex items-center justify-center px-8 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-w-[200px] transform hover:scale-105 ${getButtonClass(
+        className={`inline-flex items-center justify-center px-8 py-4 rounded-lg text-base font-medium transition-all duration-200 min-w-[200px] transform hover:scale-[1.02] ${getButtonClass(
           component.props.buttonStyle || "primary"
         )}`}
         style={component.props.styles}
@@ -384,61 +385,72 @@ const EditableButton: React.FC<{ component: QuizComponent }> = ({
  */
 const OptionsComponent: React.FC<{ component: QuizComponent }> = ({
   component,
-}) => (
-  <div
-    className="flex flex-col items-start justify-start gap-3"
-    style={component.props.styles}
-  >
-    {component.props.choices?.map((choice, index) => (
-      <button
-        key={index}
-        className="w-full bg-zinc-800/80 backdrop-blur-sm border border-zinc-700 hover:border-yellow-500 hover:bg-zinc-700/90 rounded-lg p-4 transition-all duration-200 text-left group hover:scale-[1.02] hover:shadow-lg"
-      >
-        <div className="flex items-center gap-4">
-          {choice.image && (
-            <div className="flex-shrink-0 w-16 h-16">
-              <img
-                src={choice.image}
-                alt={choice.text}
-                className="w-full h-full object-cover rounded-lg"
-              />
+}) => {
+  const hasImages = component.props.choices?.some((choice) => choice.image);
+  
+  return (
+    <div
+      className={hasImages ? "grid grid-cols-2 gap-3" : "flex flex-col gap-3"}
+      style={component.props.styles}
+    >
+      {component.props.choices?.map((choice, index) => (
+        <div
+          key={index}
+          className={`
+            relative cursor-pointer transition-all duration-200 hover:scale-[1.02]
+            ${hasImages 
+              ? "bg-white rounded-lg shadow-sm border border-[#B89B7A] hover:shadow-md aspect-square" 
+              : "bg-white border border-[#B89B7A] rounded-lg p-4 hover:bg-[#faf6f1] hover:border-[#b29670]"
+            }
+          `}
+        >
+          {hasImages ? (
+            // Layout para opções com imagem (questões 1 e 3)
+            <div className="h-full flex flex-col">
+              <div className="flex-1 p-3">
+                <img
+                  src={choice.image}
+                  alt={choice.text}
+                  className="w-full h-24 object-cover rounded-md mb-2"
+                />
+                <p className="text-sm text-gray-800 font-medium leading-tight text-center">
+                  <span dangerouslySetInnerHTML={{ __html: choice.text }} />
+                </p>
+              </div>
+            </div>
+          ) : (
+            // Layout para opções apenas texto (questões 2 e estratégicas)
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-gray-800 font-medium text-base leading-relaxed">
+                  <span dangerouslySetInnerHTML={{ __html: choice.text }} />
+                </p>
+              </div>
+              <div className="ml-3 w-6 h-6 border-2 border-[#B89B7A] rounded-full flex items-center justify-center">
+                <div className="w-3 h-3 bg-[#B89B7A] rounded-full opacity-0 transition-opacity duration-200"></div>
+              </div>
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <div className="text-white text-base font-medium leading-relaxed">
-              <div dangerouslySetInnerHTML={{ __html: choice.text }} />
-            </div>
-            {choice.scoreValue && (
-              <span className="text-xs text-yellow-400 mt-1 inline-block">
-                +{choice.scoreValue} pts
-              </span>
-            )}
-          </div>
-          <div className="text-zinc-400 group-hover:text-yellow-400 transition-colors">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
+          
+          {/* Indicador de seleção visual para preview */}
+          <div className="absolute top-2 right-2 w-5 h-5 bg-[#B89B7A] rounded-full opacity-0 flex items-center justify-center">
+            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
           </div>
         </div>
-      </button>
-    ))}
-    {component.props.selectionType === "multiple" && (
-      <p className="text-xs text-zinc-400 mt-2 text-center w-full">
-        💡 Você pode selecionar múltiplas opções
-      </p>
-    )}
-  </div>
-);
+      ))}
+      
+      {component.props.selectionType === "multiple" && (
+        <div className="col-span-2 text-center mt-2">
+          <p className="text-sm text-gray-600 font-medium">
+            ✨ Selecione 3 opções que mais combinam com você
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 /**
  * @component AlertComponent
@@ -535,11 +547,11 @@ const TextComponent: React.FC<{ component: QuizComponent }> = ({
   return (
     <div className="text-center mb-6">
       <p
-        className="text-zinc-300 leading-relaxed"
+        className="text-gray-600 leading-relaxed"
         style={{
           fontSize: component.props.styles?.fontSize || "1.1rem",
           textAlign,
-          color: component.props.styles?.color || "#d1d5db",
+          color: component.props.styles?.color === "#d1d5db" ? "#6b7280" : component.props.styles?.color || "#6b7280",
           lineHeight: "1.6",
           ...component.props.styles,
         }}
@@ -634,11 +646,11 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   };
 
   return (
-    <div className="w-full h-full overflow-auto bg-gradient-to-b from-zinc-900 via-black to-zinc-900">
+    <div className="w-full h-full overflow-auto bg-gradient-to-b from-[#f8f8f8] via-white to-[#f8f8f8]">
       {/* Layout exato do quiz original */}
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-white">
         {/* Header fixo com logo e barra de progresso */}
-        <div className="w-full bg-black/30 backdrop-blur-sm">
+        <div className="w-full bg-white border-b border-gray-100">
           <div className="max-w-md mx-auto px-4 py-6">
             {/* Logo centralizado */}
             {headerConfig.showLogo && (
@@ -649,16 +661,16 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
                   }
                   alt="Logo"
-                  className="w-24 h-24 mx-auto rounded-full object-cover shadow-lg"
+                  className="w-20 h-20 mx-auto rounded-full object-cover shadow-md border-2 border-[#B89B7A]"
                 />
               </div>
             )}
 
             {/* Barra de Progresso */}
             {headerConfig.showProgressBar && (
-              <div className="w-full bg-zinc-800 rounded-full h-2 mb-4">
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
                 <div
-                  className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-yellow-400 to-yellow-600"
+                  className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-[#B89B7A] to-[#b29670]"
                   style={{
                     width: "30%", // Simulado baseado na etapa atual
                   }}
@@ -669,7 +681,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
         </div>
 
         {/* Conteúdo principal */}
-        <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="flex-1 flex items-start justify-center px-4 py-8 bg-white">
           <div
             className={`w-full transition-all duration-300 ${
               viewportMode === "mobile" ? "max-w-sm" : "max-w-md"
