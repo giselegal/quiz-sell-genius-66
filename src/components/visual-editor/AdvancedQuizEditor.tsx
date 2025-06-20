@@ -3800,12 +3800,11 @@ const AdvancedQuizEditor: React.FC = () => {
           onToggleViewport={toggleViewportMode}
         />
 
-        {/* Layout Principal com 3 colunas fixas responsivas */}
+        {/* Layout Principal com 4 colunas fixas responsivas */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Coluna 1: Navegação de Etapas + Biblioteca de Componentes */}
-          <div className="w-64 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
-            {/* Navegação de Etapas */}
-            <div className="h-1/2 border-b border-zinc-700 overflow-y-auto custom-scrollbar">
+          {/* Coluna 1: Navegação de Etapas - Mais Estreita */}
+          <div className="w-48 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
+            <div className="h-full overflow-y-auto custom-scrollbar">
               <StepNavigationTabs
                 steps={editorState.steps}
                 currentStepId={editorState.currentStepId}
@@ -3815,9 +3814,11 @@ const AdvancedQuizEditor: React.FC = () => {
                 onAddStep={handleAddStep}
               />
             </div>
-            
-            {/* Biblioteca de Componentes */}
-            <div className="h-1/2 overflow-y-auto custom-scrollbar">
+          </div>
+
+          {/* Coluna 2: Biblioteca de Componentes - Separada */}
+          <div className="w-56 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
+            <div className="h-full overflow-y-auto custom-scrollbar">
               <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
             </div>
           </div>
