@@ -23,28 +23,39 @@ class LovableCompletSync {
     console.log("============================================");
 
     try {
-      // 1. Criar/atualizar .lovable
+      // 1. Verificar e ativar workflows
+      await this.activateWorkflows();
+
+      // 2. Criar/atualizar .lovable
       await this.updateLovableConfig();
 
-      // 2. Atualizar .lovable-trigger
+      // 3. Atualizar .lovable-trigger
       await this.updateTrigger();
 
-      // 3. Criar .lovable-status
+      // 4. Criar .lovable-status
       await this.updateStatus();
 
-      // 4. Atualizar timestamp em arquivos relacionados
+      // 5. Atualizar timestamp em arquivos relacionados
       await this.touchRelatedFiles();
+
+      // 6. Verificar configuração do GitHub
+      await this.checkGitHubConfig();
 
       console.log("✅ SINCRONIZAÇÃO COMPLETA REALIZADA COM SUCESSO!");
       console.log("📋 Arquivos atualizados:");
       console.log("   - .lovable");
       console.log("   - .lovable-trigger");
       console.log("   - .lovable-status");
+      console.log("   - Workflows ativados");
 
       console.log("\n🔧 PRÓXIMOS PASSOS:");
       console.log("1. Faça commit e push para GitHub");
-      console.log("2. Aguarde o workflow ser executado");
-      console.log("3. Verifique no Lovable Studio se reconheceu as mudanças");
+      console.log("2. Workflows serão executados automaticamente:");
+      console.log("   - lovable-sync-main.yml (a cada 15 min)");
+      console.log("   - lovable-auto-sync.yml (a cada 6 horas)");
+      console.log("3. Verifique no Lovable Studio se as mudanças foram reconhecidas");
+      console.log("4. Configure LOVABLE_TOKEN no GitHub se ainda não foi feito:");
+      console.log("   https://github.com/vdp2025/quiz-sell-genius-66/settings/secrets/actions");
     } catch (error) {
       console.error("❌ Erro durante sincronização:", error.message);
       process.exit(1);
