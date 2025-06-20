@@ -197,6 +197,10 @@ interface QuizComponentProps {
   offerProductSku?: string; // SKU do produto em oferta
   discountCode?: string; // Código de cupom
   componentName?: string; // Nome do componente para customComponent
+
+  // Propriedades específicas para ResultPage.tsx
+  styleImages?: { [key: string]: string[] }; // Mapear estilos para arrays de URLs de imagens
+  styleNames?: { [key: string]: string }; // Mapear estilos para nomes amigáveis
 }
 
 /**
@@ -479,7 +483,7 @@ const SpacerComponent: React.FC<{ component: QuizComponent }> = ({
     className="min-w-full py-2 border-dashed border-yellow-500 border rounded-lg"
     style={{
       height: `${component.props.height || 20}px`,
-      ...component.props.styles
+      ...component.props.styles,
     }}
   >
     <div className="flex items-center justify-center h-full text-yellow-500 text-xs">
@@ -2221,6 +2225,18 @@ const ComponentPropertyEditor: React.FC<{
               placeholder="Ex: Este campo é obrigatório"
             />
           </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Salvar como Lead (campo)
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.storeAsLeadField || ""}
+              onChange={(e) => handleChange("storeAsLeadField", e.target.value)}
+              placeholder="Ex: nome, email, telefone"
+            />
+          </div>
           <StylesEditor />
         </div>
       );
@@ -2529,6 +2545,72 @@ const ComponentPropertyEditor: React.FC<{
               />
             </div>
           )}
+          {props.componentName === "ResultPage.tsx" && (
+            <div className="space-y-4">
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Mapear Imagens dos Estilos (JSON)
+                </label>
+                <textarea
+                  className="flex min-h-[120px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  value={JSON.stringify(
+                    props.styleImages || {
+                      natural: ["url1", "url2"],
+                      classico: ["url1", "url2"],
+                      contemporaneo: ["url1", "url2"],
+                      elegante: ["url1", "url2"],
+                      romantico: ["url1", "url2"],
+                      sexy: ["url1", "url2"],
+                      dramatico: ["url1", "url2"],
+                      criativo: ["url1", "url2"],
+                    },
+                    null,
+                    2
+                  )}
+                  onChange={(e) => {
+                    try {
+                      const styleImages = JSON.parse(e.target.value);
+                      handleChange("styleImages", styleImages);
+                    } catch {
+                      // Ignora erros de parse durante a digitação
+                    }
+                  }}
+                  placeholder='{"natural": ["url1", "url2"], "classico": ["url1", "url2"]}'
+                />
+              </div>
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Nomes dos Estilos (JSON)
+                </label>
+                <textarea
+                  className="flex min-h-[100px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  value={JSON.stringify(
+                    props.styleNames || {
+                      natural: "Estilo Natural",
+                      classico: "Estilo Clássico",
+                      contemporaneo: "Estilo Contemporâneo",
+                      elegante: "Estilo Elegante",
+                      romantico: "Estilo Romântico",
+                      sexy: "Estilo Sexy",
+                      dramatico: "Estilo Dramático",
+                      criativo: "Estilo Criativo",
+                    },
+                    null,
+                    2
+                  )}
+                  onChange={(e) => {
+                    try {
+                      const styleNames = JSON.parse(e.target.value);
+                      handleChange("styleNames", styleNames);
+                    } catch {
+                      // Ignora erros de parse durante a digitação
+                    }
+                  }}
+                  placeholder='{"natural": "Estilo Natural", "classico": "Estilo Clássico"}'
+                />
+              </div>
+            </div>
+          )}
           <StylesEditor />
         </div>
       );
@@ -2544,7 +2626,9 @@ const ComponentPropertyEditor: React.FC<{
               type="number"
               className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
               value={props.height || 20}
-              onChange={(e) => handleChange("height", parseInt(e.target.value) || 20)}
+              onChange={(e) =>
+                handleChange("height", parseInt(e.target.value) || 20)
+              }
               min="5"
               max="200"
             />
@@ -2803,6 +2887,7 @@ const AdvancedQuizEditor: React.FC = () => {
               placeholder: "Digite seu nome aqui...",
               inputType: "text",
               required: true,
+              storeAsLeadField: "nome",
             },
           },
           {
@@ -2851,56 +2936,64 @@ const AdvancedQuizEditor: React.FC = () => {
                   text: "Conforto, leveza e praticidade no vestir",
                   value: "natural",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Discrição, caimento clássico e sobriedade",
                   value: "classico",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Praticidade com um toque de estilo atual",
                   value: "contemporaneo",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Elegância refinada, moderna e sem exageros",
                   value: "elegante",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Delicadeza em tecidos suaves e fluidos",
                   value: "romantico",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Sensualidade com destaque para o corpo",
                   value: "sexy",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Impacto visual com peças estruturadas e assimétricas",
                   value: "dramatico",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Mix criativo com formas ousadas e originais",
                   value: "criativo",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
                   nextStepId: "question-2",
                 },
               ],
@@ -3029,56 +3122,64 @@ const AdvancedQuizEditor: React.FC = () => {
                   text: "Visual leve, despojado e natural",
                   value: "natural",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual clássico e tradicional",
                   value: "classico",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual casual com toque atual",
                   value: "contemporaneo",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual refinado e imponente",
                   value: "elegante",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual romântico, feminino e delicado",
                   value: "romantico",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual sensual, com saia justa e decote",
                   value: "sexy",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual marcante e urbano (jeans + jaqueta)",
                   value: "dramatico",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual criativo, colorido e ousado",
                   value: "criativo",
                   scoreValue: 1,
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
                   nextStepId: "quiz-transition",
                 },
               ],
@@ -3329,7 +3430,8 @@ const AdvancedQuizEditor: React.FC = () => {
             props: {
               componentName: "ResultPage.tsx",
               offerHeadline: "Seu Estilo Pessoal Revelado",
-              offerDescription: "Baseado nas suas respostas, identificamos seu estilo único e criamos uma análise personalizada.",
+              offerDescription:
+                "Baseado nas suas respostas, identificamos seu estilo único e criamos uma análise personalizada.",
               resultType: "styleAnalysis",
             },
           },
@@ -3346,7 +3448,8 @@ const AdvancedQuizEditor: React.FC = () => {
             props: {
               componentName: "QuizOfferPage.tsx",
               offerHeadline: "Consultoria Personalizada de Estilo",
-              offerDescription: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil único.",
+              offerDescription:
+                "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil único.",
               offerCtaButtonText: "Quero Minha Consultoria",
               offerCtaUrl: "https://checkout.example.com",
               discountCode: "ESTILO40OFF",
@@ -3360,7 +3463,8 @@ const AdvancedQuizEditor: React.FC = () => {
       showLogo: true,
       showProgressBar: true,
       allowReturnButton: true,
-      logoUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2",
+      logoUrl:
+        "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2",
       progressColor: "#3b82f6",
     },
     currentStepId: "quiz-intro",
@@ -3770,14 +3874,12 @@ const AdvancedQuizEditor: React.FC = () => {
               />
             </div>
           </div>
-
           {/* Coluna 2: Biblioteca de Componentes - Separada */}
           <div className="w-56 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
             <div className="h-full overflow-y-auto custom-scrollbar">
               <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
             </div>
           </div>
-
           {/* Coluna 3: Canvas do Editor - Flexível e Centralizado */}
           <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900 relative">
             {/* Controles de Viewport */}
@@ -3850,7 +3952,8 @@ const AdvancedQuizEditor: React.FC = () => {
               onComponentMove={handleComponentMove}
               viewportMode={viewportMode}
             />
-          </div>          {/* Coluna 4: Painel de Propriedades (Direita) */}
+          </div>{" "}
+          {/* Coluna 4: Painel de Propriedades (Direita) */}
           <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
               {/* Configurações da Etapa */}
@@ -3862,7 +3965,10 @@ const AdvancedQuizEditor: React.FC = () => {
                   </div>
                   <div className="p-6 pt-0">
                     <div className="grid w-full max-w-sm items-center gap-1.5">
-                      <label className="text-sm font-medium leading-none text-zinc-100" htmlFor="stepName">
+                      <label
+                        className="text-sm font-medium leading-none text-zinc-100"
+                        htmlFor="stepName"
+                      >
                         Nome da Etapa
                       </label>
                       <input
@@ -3871,7 +3977,12 @@ const AdvancedQuizEditor: React.FC = () => {
                         id="stepName"
                         placeholder="Digite aqui..."
                         value={currentStep?.name || ""}
-                        onChange={(e) => handleStepRename(currentStep?.id || "", e.target.value)}
+                        onChange={(e) =>
+                          handleStepRename(
+                            currentStep?.id || "",
+                            e.target.value
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -3890,18 +4001,29 @@ const AdvancedQuizEditor: React.FC = () => {
                         role="switch"
                         aria-checked={editorState.headerConfig.showLogo}
                         className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
-                          editorState.headerConfig.showLogo ? 'bg-blue-600' : 'bg-zinc-600'
+                          editorState.headerConfig.showLogo
+                            ? "bg-blue-600"
+                            : "bg-zinc-600"
                         }`}
                         id="show-logo"
-                        onClick={() => handleHeaderConfigUpdate({ showLogo: !editorState.headerConfig.showLogo })}
+                        onClick={() =>
+                          handleHeaderConfigUpdate({
+                            showLogo: !editorState.headerConfig.showLogo,
+                          })
+                        }
                       >
-                        <span 
+                        <span
                           className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                            editorState.headerConfig.showLogo ? 'translate-x-5' : 'translate-x-0'
+                            editorState.headerConfig.showLogo
+                              ? "translate-x-5"
+                              : "translate-x-0"
                           }`}
                         />
                       </button>
-                      <label className="text-sm font-medium leading-none text-zinc-100" htmlFor="show-logo">
+                      <label
+                        className="text-sm font-medium leading-none text-zinc-100"
+                        htmlFor="show-logo"
+                      >
                         Mostrar Logo
                       </label>
                     </div>
@@ -3913,18 +4035,30 @@ const AdvancedQuizEditor: React.FC = () => {
                         role="switch"
                         aria-checked={editorState.headerConfig.showProgressBar}
                         className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
-                          editorState.headerConfig.showProgressBar ? 'bg-blue-600' : 'bg-zinc-600'
+                          editorState.headerConfig.showProgressBar
+                            ? "bg-blue-600"
+                            : "bg-zinc-600"
                         }`}
                         id="show-progress"
-                        onClick={() => handleHeaderConfigUpdate({ showProgressBar: !editorState.headerConfig.showProgressBar })}
+                        onClick={() =>
+                          handleHeaderConfigUpdate({
+                            showProgressBar:
+                              !editorState.headerConfig.showProgressBar,
+                          })
+                        }
                       >
-                        <span 
+                        <span
                           className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                            editorState.headerConfig.showProgressBar ? 'translate-x-5' : 'translate-x-0'
+                            editorState.headerConfig.showProgressBar
+                              ? "translate-x-5"
+                              : "translate-x-0"
                           }`}
                         />
                       </button>
-                      <label className="text-sm font-medium leading-none text-zinc-100" htmlFor="show-progress">
+                      <label
+                        className="text-sm font-medium leading-none text-zinc-100"
+                        htmlFor="show-progress"
+                      >
                         Mostrar Progresso
                       </label>
                     </div>
@@ -3934,20 +4068,34 @@ const AdvancedQuizEditor: React.FC = () => {
                       <button
                         type="button"
                         role="switch"
-                        aria-checked={editorState.headerConfig.allowReturnButton}
+                        aria-checked={
+                          editorState.headerConfig.allowReturnButton
+                        }
                         className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
-                          editorState.headerConfig.allowReturnButton ? 'bg-blue-600' : 'bg-zinc-600'
+                          editorState.headerConfig.allowReturnButton
+                            ? "bg-blue-600"
+                            : "bg-zinc-600"
                         }`}
                         id="allow-return"
-                        onClick={() => handleHeaderConfigUpdate({ allowReturnButton: !editorState.headerConfig.allowReturnButton })}
+                        onClick={() =>
+                          handleHeaderConfigUpdate({
+                            allowReturnButton:
+                              !editorState.headerConfig.allowReturnButton,
+                          })
+                        }
                       >
-                        <span 
+                        <span
                           className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                            editorState.headerConfig.allowReturnButton ? 'translate-x-5' : 'translate-x-0'
+                            editorState.headerConfig.allowReturnButton
+                              ? "translate-x-5"
+                              : "translate-x-0"
                           }`}
                         />
                       </button>
-                      <label className="text-sm font-medium leading-none text-zinc-100" htmlFor="allow-return">
+                      <label
+                        className="text-sm font-medium leading-none text-zinc-100"
+                        htmlFor="allow-return"
+                      >
                         Permitir Voltar
                       </label>
                     </div>
@@ -3959,7 +4107,9 @@ const AdvancedQuizEditor: React.FC = () => {
                   <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
                     <div className="flex flex-col space-y-1.5 p-6 pb-4">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm text-zinc-400">Editar Componente</p>
+                        <p className="text-sm text-zinc-400">
+                          Editar Componente
+                        </p>
                         <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
                           {selectedComponent.type}
                         </span>
@@ -3991,9 +4141,21 @@ const AdvancedQuizEditor: React.FC = () => {
                           strokeLinejoin="round"
                           className="mx-auto mb-2"
                         >
-                          <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
+                          <rect
+                            width="3"
+                            height="8"
+                            x="13"
+                            y="2"
+                            rx="1.5"
+                          ></rect>
                           <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
-                          <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
+                          <rect
+                            width="8"
+                            height="3"
+                            x="2"
+                            y="13"
+                            rx="1.5"
+                          ></rect>
                         </svg>
                       </div>
                       <h3 className="text-lg font-medium text-zinc-300 mb-2">
