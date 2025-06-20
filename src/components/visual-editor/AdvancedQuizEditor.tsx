@@ -3284,18 +3284,6 @@ const AdvancedQuizEditor: React.FC = () => {
               onComponentMove={handleComponentMove}
             />
           </div>
-
-          {/* Coluna 3: Painel de Configuração (Direita) */}
-          {selectedComponent && (
-            <div className="w-80 border-l border-zinc-700">
-              <AdvancedConfigSidebar
-                selectedComponent={selectedComponent}
-                updateComponent={handleComponentUpdate}
-                updateHeaderConfig={handleHeaderConfigUpdate}
-                headerConfig={editorState.headerConfig}
-              />
-            </div>
-          )}
         </div>
       </div>
     );
