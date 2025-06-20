@@ -3174,6 +3174,18 @@ const AdvancedQuizEditor: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
 
+  // Sistema de Auto-Save
+  const { isSaving: isAutoSaving, lastSaved, loadFromLocalStorage } = useAutoSave(editorState, 3000);
+
+  // Carrega dados salvos na inicialização
+  useEffect(() => {
+    const savedData = loadFromLocalStorage();
+    if (savedData) {
+      setEditorState(savedData);
+      console.log("📂 Dados carregados do auto-save:", savedData);
+    }
+  }, [loadFromLocalStorage]);
+
   // Computed values
   const currentStep =
     editorState.steps.find((step) => step.id === editorState.currentStepId) ||
