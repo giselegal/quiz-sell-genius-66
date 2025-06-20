@@ -1,16 +1,19 @@
-
-import React from 'react';
-import { Block } from '@/types/editor';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ContentPropertiesEditor } from './editors/ContentPropertiesEditor';
+import React from "react";
+import { Block } from "@/types/editor";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ContentPropertiesEditor } from "./editors/ContentPropertiesEditor";
+import { StylePropertiesEditor } from "./editors/StylePropertiesEditor";
 
 interface PropertiesPanelProps {
   selectedBlock: Block | null;
   onUpdateBlock: (id: string, content: any) => void;
 }
 
-export function PropertiesPanel({ selectedBlock, onUpdateBlock }: PropertiesPanelProps) {
+export function PropertiesPanel({
+  selectedBlock,
+  onUpdateBlock,
+}: PropertiesPanelProps) {
   if (!selectedBlock) {
     return (
       <Card className="h-full">
@@ -32,6 +35,14 @@ export function PropertiesPanel({ selectedBlock, onUpdateBlock }: PropertiesPane
     onUpdateBlock(selectedBlock.id, newContent);
   };
 
+  const handleStyleUpdate = (styleUpdates: any) => {
+    const currentContent = selectedBlock.content as any;
+    const currentStyle = currentContent.style || {};
+    const newStyle = { ...currentStyle, ...styleUpdates };
+    const newContent = { ...currentContent, style: newStyle };
+    onUpdateBlock(selectedBlock.id, newContent);
+  };
+
   return (
     <Card className="h-full">
       <CardHeader>
@@ -42,23 +53,26 @@ export function PropertiesPanel({ selectedBlock, onUpdateBlock }: PropertiesPane
       <CardContent className="p-0">
         <Tabs defaultValue="content" className="h-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="content" className="text-xs">Conteúdo</TabsTrigger>
-            <TabsTrigger value="style" className="text-xs">Estilo</TabsTrigger>
+            <TabsTrigger value="content" className="text-xs">
+              Conteúdo
+            </TabsTrigger>
+            <TabsTrigger value="style" className="text-xs">
+              Estilo
+            </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="content" className="p-4 space-y-4">
             <ContentPropertiesEditor
               block={selectedBlock}
               onUpdate={handleContentUpdate}
             />
           </TabsContent>
-          
+
           <TabsContent value="style" className="p-4">
-            <div className="space-y-4">
-              <p className="text-sm text-[#8F7A6A]">
-                Editor de estilos será implementado em breve
-              </p>
-            </div>
+            <StylePropertiesEditor
+              style={(selectedBlock.content as any)?.style || {}}
+              onUpdate={handleStyleUpdate}
+            />
           </TabsContent>
         </Tabs>
       </CardContent>

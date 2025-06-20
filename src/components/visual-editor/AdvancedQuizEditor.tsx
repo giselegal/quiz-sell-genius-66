@@ -6,26 +6,32 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
-  const saveToLocalStorage = useCallback(async (dataToSave: QuizEditorState) => {
-    setIsSaving(true);
-    try {
-      // Salva no localStorage
-      localStorage.setItem('quiz-editor-state', JSON.stringify({
-        data: dataToSave,
-        timestamp: new Date().toISOString()
-      }));
-      
-      // Simula salvamento no servidor (substitua pela sua API)
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setLastSaved(new Date());
-      console.log("✅ Auto-save realizado:", dataToSave);
-    } catch (error) {
-      console.error("❌ Erro no auto-save:", error);
-    } finally {
-      setIsSaving(false);
-    }
-  }, []);
+  const saveToLocalStorage = useCallback(
+    async (dataToSave: QuizEditorState) => {
+      setIsSaving(true);
+      try {
+        // Salva no localStorage
+        localStorage.setItem(
+          "quiz-editor-state",
+          JSON.stringify({
+            data: dataToSave,
+            timestamp: new Date().toISOString(),
+          })
+        );
+
+        // Simula salvamento no servidor (substitua pela sua API)
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        setLastSaved(new Date());
+        console.log("✅ Auto-save realizado:", dataToSave);
+      } catch (error) {
+        console.error("❌ Erro no auto-save:", error);
+      } finally {
+        setIsSaving(false);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     if (!data) return;
@@ -40,7 +46,7 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
   // Carrega dados salvos no localStorage na inicialização
   const loadFromLocalStorage = useCallback((): QuizEditorState | null => {
     try {
-      const saved = localStorage.getItem('quiz-editor-state');
+      const saved = localStorage.getItem("quiz-editor-state");
       if (saved) {
         const parsed = JSON.parse(saved);
         return parsed.data;
@@ -927,7 +933,7 @@ export const FunnelNavbar: React.FC<{
               )}
             </div>
           )}
-          
+
           <button className="items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10 md:flex hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1647,7 +1653,6 @@ const ComponentPropertyEditor: React.FC<{
               <div className="grid w-full items-center gap-1.5">
                 <label className="text-sm font-medium leading-none text-zinc-100">
                   Texto Alternativo
-               
                 </label>
                 <input
                   type="text"
@@ -3203,7 +3208,11 @@ const AdvancedQuizEditor: React.FC = () => {
   const [isPublishing, setIsPublishing] = useState(false);
 
   // Sistema de Auto-Save
-  const { isSaving: isAutoSaving, lastSaved, loadFromLocalStorage } = useAutoSave(editorState, 3000);
+  const {
+    isSaving: isAutoSaving,
+    lastSaved,
+    loadFromLocalStorage,
+  } = useAutoSave(editorState, 3000);
 
   // Carrega dados salvos na inicialização
   useEffect(() => {
@@ -3529,7 +3538,7 @@ const AdvancedQuizEditor: React.FC = () => {
           isPublishing={isPublishing}
           autoSaveStatus={{
             isAutoSaving,
-            lastSaved
+            lastSaved,
           }}
         />
 

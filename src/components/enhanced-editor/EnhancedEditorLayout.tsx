@@ -1,19 +1,29 @@
-
-import React, { useState, useCallback } from 'react';
-import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
-import { PreviewPanel } from './preview/PreviewPanel';
-import PropertiesPanel from './properties/PropertiesPanel';
-import { EditorToolbar } from './toolbar/EditorToolbar';
-import { Block } from '@/types/editor';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Eye, EyeOff, Smartphone, Tablet, Monitor, Save } from 'lucide-react';
+import React, { useState, useCallback } from "react";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { ComponentsSidebar } from "./sidebar/ComponentsSidebar";
+import { PreviewPanel } from "./preview/PreviewPanel";
+import PropertiesPanel from "./properties/PropertiesPanel";
+import { EditorToolbar } from "./toolbar/EditorToolbar";
+import { Block } from "@/types/editor";
+import { useIsMobile } from "@/hooks/use-mobile";
+import useAutoSave from "@/hooks/useAutoSave";
+import { Eye, EyeOff, Smartphone, Tablet, Monitor, Save } from "lucide-react";
 
 interface EnhancedEditorLayoutProps {
   blocks: Block[];
@@ -36,12 +46,22 @@ export function EnhancedEditorLayout({
   onBlockDelete,
   onBlocksReorder,
   onSave,
-  primaryStyle
+  primaryStyle,
 }: EnhancedEditorLayoutProps) {
   const [isPreviewing, setIsPreviewing] = useState(false);
-  const [previewDevice, setPreviewDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [previewDevice, setPreviewDevice] = useState<
+    "mobile" | "tablet" | "desktop"
+  >("desktop");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isMobile = useIsMobile();
+
+  // Auto-save functionality
+  const autoSave = useAutoSave({
+    blocks,
+    onSave,
+    autoSaveInterval: 3000, // 3 segundos
+    storageKey: "enhanced_editor_blocks",
+  });
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -51,19 +71,24 @@ export function EnhancedEditorLayout({
     })
   );
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-    if (over && active.id !== over.id) {
-      const oldIndex = blocks.findIndex((block) => block.id === active.id);
-      const newIndex = blocks.findIndex((block) => block.id === over.id);
-      
-      const newBlocks = arrayMove(blocks, oldIndex, newIndex);
-      onBlocksReorder(newBlocks);
-    }
-  }, [blocks, onBlocksReorder]);
+      if (over && active.id !== over.id) {
+        const oldIndex = blocks.findIndex((block) => block.id === active.id);
+        const newIndex = blocks.findIndex((block) => block.id === over.id);
 
-  const selectedBlock = selectedBlockId ? blocks.find(b => b.id === selectedBlockId) || null : null;
+        const newBlocks = arrayMove(blocks, oldIndex, newIndex);
+        onBlocksReorder(newBlocks);
+      }
+    },
+    [blocks, onBlocksReorder]
+  );
+
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId) || null
+    : null;
 
   return (
     <div className="h-screen flex flex-col bg-[#FAF9F7]">
@@ -73,15 +98,23 @@ export function EnhancedEditorLayout({
         onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
         previewDevice={previewDevice}
         onDeviceChange={setPreviewDevice}
-        onSave={onSave}
+        onSave={autoSave.saveNow}
+        autoSaveStatus={{
+          lastSaved: autoSave.lastSaved,
+          isDirty: autoSave.isDirty,
+          isSaving: autoSave.isSaving,
+          saveIndicator: autoSave.saveIndicator,
+        }}
       />
 
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar - Components */}
         {!isPreviewing && (
-          <div className={`bg-white border-r border-[#E5E5E5] transition-all duration-300 ${
-            sidebarOpen ? 'w-64' : 'w-0'
-          } overflow-hidden`}>
+          <div
+            className={`bg-white border-r border-[#E5E5E5] transition-all duration-300 ${
+              sidebarOpen ? "w-64" : "w-0"
+            } overflow-hidden`}
+          >
             <ComponentsSidebar onAddBlock={onBlockAdd} />
           </div>
         )}
@@ -93,7 +126,10 @@ export function EnhancedEditorLayout({
             modifiers={[restrictToVerticalAxis]}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext items={blocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext
+              items={blocks.map((b) => b.id)}
+              strategy={verticalListSortingStrategy}
+            >
               <PreviewPanel
                 blocks={blocks}
                 selectedBlockId={selectedBlockId}
