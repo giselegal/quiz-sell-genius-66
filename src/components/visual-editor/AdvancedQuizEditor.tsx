@@ -2391,10 +2391,22 @@ const AdvancedQuizEditor: React.FC = () => {
             type: "options",
             props: {
               choices: [
-                { text: "Clássico e Elegante", value: "classic", nextStepId: "step-3" },
-                { text: "Moderno e Minimalista", value: "modern", nextStepId: "step-3" },
+                {
+                  text: "Clássico e Elegante",
+                  value: "classic",
+                  nextStepId: "step-3",
+                },
+                {
+                  text: "Moderno e Minimalista",
+                  value: "modern",
+                  nextStepId: "step-3",
+                },
                 { text: "Boho e Natural", value: "boho", nextStepId: "step-3" },
-                { text: "Romântico e Feminino", value: "romantic", nextStepId: "step-3" }
+                {
+                  text: "Romântico e Feminino",
+                  value: "romantic",
+                  nextStepId: "step-3",
+                },
               ],
               styles: { gap: "12px" },
             },
@@ -2423,10 +2435,26 @@ const AdvancedQuizEditor: React.FC = () => {
             type: "options",
             props: {
               choices: [
-                { text: "Trabalho e Eventos Profissionais", value: "work", nextStepId: "step-4" },
-                { text: "Eventos Sociais e Festas", value: "social", nextStepId: "step-4" },
-                { text: "Dia a Dia e Casual", value: "casual", nextStepId: "step-4" },
-                { text: "Ocasiões Especiais", value: "special", nextStepId: "step-4" }
+                {
+                  text: "Trabalho e Eventos Profissionais",
+                  value: "work",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Eventos Sociais e Festas",
+                  value: "social",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Dia a Dia e Casual",
+                  value: "casual",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Ocasiões Especiais",
+                  value: "special",
+                  nextStepId: "step-4",
+                },
               ],
               styles: { gap: "12px" },
             },
