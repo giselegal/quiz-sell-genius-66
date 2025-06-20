@@ -2331,7 +2331,7 @@ const AdvancedQuizEditor: React.FC = () => {
     steps: [
       {
         id: "step-1",
-        name: "Primeira Etapa",
+        name: "🏠 Introdução",
         components: [
           {
             id: "welcome-heading",
@@ -2369,6 +2369,206 @@ const AdvancedQuizEditor: React.FC = () => {
           },
         ],
         defaultNextStepId: "step-2",
+      },
+      {
+        id: "step-2",
+        name: "❓ Pergunta 1",
+        components: [
+          {
+            id: "question-1-heading",
+            type: "heading",
+            props: {
+              text: "Qual é o seu estilo preferido?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "question-1-options",
+            type: "options",
+            props: {
+              choices: [
+                { text: "Clássico e Elegante", value: "classic", nextStepId: "step-3" },
+                { text: "Moderno e Minimalista", value: "modern", nextStepId: "step-3" },
+                { text: "Boho e Natural", value: "boho", nextStepId: "step-3" },
+                { text: "Romântico e Feminino", value: "romantic", nextStepId: "step-3" }
+              ],
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "step-3",
+      },
+      {
+        id: "step-3",
+        name: "❓ Pergunta 2",
+        components: [
+          {
+            id: "question-2-heading",
+            type: "heading",
+            props: {
+              text: "Qual ocasião é mais importante para você?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "question-2-options",
+            type: "options",
+            props: {
+              choices: [
+                { text: "Trabalho e Eventos Profissionais", value: "work", nextStepId: "step-4" },
+                { text: "Eventos Sociais e Festas", value: "social", nextStepId: "step-4" },
+                { text: "Dia a Dia e Casual", value: "casual", nextStepId: "step-4" },
+                { text: "Ocasiões Especiais", value: "special", nextStepId: "step-4" }
+              ],
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "step-4",
+      },
+      {
+        id: "step-4",
+        name: "🔄 Transição",
+        components: [
+          {
+            id: "transition-heading",
+            type: "heading",
+            props: {
+              text: "Analisando suas respostas...",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "transition-text",
+            type: "text",
+            props: {
+              text: "Estamos criando um perfil personalizado baseado no seu estilo único.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "continue-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Meu Resultado",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "step-5",
+            },
+          },
+        ],
+        defaultNextStepId: "step-5",
+      },
+      {
+        id: "step-5",
+        name: "📊 Resultado",
+        components: [
+          {
+            id: "result-heading",
+            type: "heading",
+            props: {
+              text: "Seu Estilo Pessoal",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "2rem",
+              },
+            },
+          },
+          {
+            id: "result-description",
+            type: "text",
+            props: {
+              text: "Baseado nas suas respostas, identificamos elementos únicos do seu estilo pessoal.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "result-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Minha Análise Completa",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "step-6",
+            },
+          },
+        ],
+        defaultNextStepId: "step-6",
+      },
+      {
+        id: "step-6",
+        name: "💰 Oferta",
+        components: [
+          {
+            id: "offer-heading",
+            type: "heading",
+            props: {
+              text: "Consultoria Personalizada de Estilo",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "offer-text",
+            type: "text",
+            props: {
+              text: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "price-text",
+            type: "text",
+            props: {
+              text: "De R$ 497 por apenas R$ 297",
+              styles: {
+                textAlign: "center",
+                color: "#10b981",
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "offer-button",
+            type: "button",
+            props: {
+              buttonText: "Quero Minha Consultoria",
+              buttonStyle: "primary",
+              actionType: "redirectUrl",
+              actionTargetId: "https://checkout.example.com",
+            },
+          },
+        ],
+        defaultNextStepId: null,
       },
     ],
     headerConfig: {
