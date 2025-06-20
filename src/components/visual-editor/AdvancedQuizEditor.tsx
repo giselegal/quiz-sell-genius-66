@@ -1418,71 +1418,71 @@ const StepEditorCanvas: React.FC<{
                         <div
                           id={component.id}
                           className={`min-h-[1.25rem] min-w-full relative self-auto box-border customizable-gap rounded-md transition-all
-                                                    ${
-                                                      selectedComponentId ===
-                                                      component.id
-                                                        ? "border-2 border-solid border-blue-500 bg-blue-500/5"
-                                                        : "group-hover/canvas-item:border-2 border-dashed hover:border-2 hover:border-blue-400"
-                                                    }`}
-                        >
-                          <ComponentToRender component={component} />
-
-                          {/* Indicador de seleção */}
-                          {selectedComponentId === component.id && (
-                            <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-md shadow-lg">
-                              {component.type}
-                            </div>
-                          )}
-                        </div>
+                    )}
+                    {/* Barra de Progresso  */}
+                    {headerConfig.showProgressBar && (
+                      <div
+                        role="progressbar"
+                        className="relative w-full overflow-hidden rounded-full bg-zinc-600 h-2"
+                      >
+                        <div
+                          className="progress h-full flex-1 transition-all"
+                          style={{
+                            width: `${(currentStepIndex / totalSteps) * 100}%`,
+                            backgroundColor:
+                              headerConfig.progressColor || "#DEB57D",
+                          }}
+                        ></div>
                       </div>
-                    ) : (
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {/* Conteúdo principal da etapa */}
+            <div className="main-content w-full relative mx-auto customizable-width h-full bg-zinc-800/50 p-4 rounded-md">
+              <div className="flex flex-col gap-4 pb-10">
+                {/* Mapeia os componentes da etapa atual e renderiza o componente React apropriado */}
+                {currentStep.components.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center p-8 text-center border-2 border-dashed border-zinc-600 rounded-lg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="48"
+                      height="48"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-plus-circle text-zinc-500 mb-4"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M8 12h8"></path>
+                      <path d="M12 8v8"></path>
+                    </svg>
+                    <p className="text-zinc-500 mb-2">Canvas vazio</p>
+                    <p className="text-sm text-zinc-400">
+                      Arraste componentes da barra lateral ou clique em um
+                      componente para adicioná-lo aqui
+                    </p>
+                  </div>
+                ) : (
+                  currentStep.components.map((component) => {
+                    const ComponentToRender = componentViewMap[component.type];
+                    return ComponentToRender ? (
                       <div
                         key={component.id}
-                        className="p-3 bg-red-800 text-white rounded"
+                        className={`group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative self-auto mr-auto flex-basis-100 cursor-pointer`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onComponentSelect(component.id);
+                        }}
                       >
-                        Componente desconhecido: {component.type}
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-            <div className="pt-10 md:pt-24"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/**
- * @component ComponentPropertiesEditor
- * @description Editor de propriedades dinâmico baseado no tipo de componente.
- */
-const ComponentPropertiesEditor: React.FC<{
-  component: QuizComponent;
-  onUpdateProps: (newProps: Partial<QuizComponentProps>) => void;
-}> = ({ component, onUpdateProps }) => {
-  const { type, props } = component;
-
-  const handleChange = (key: keyof QuizComponentProps, value: unknown) => {
-    onUpdateProps({ [key]: value });
-  };
-
-  // Campo comum de estilos para todos os componentes
-  const StylesEditor = () => (
-    <div className="grid w-full items-center gap-1.5 mt-4 p-3 bg-zinc-800/50 rounded-md">
-      <label className="text-sm font-medium leading-none text-zinc-100">
-        Estilos CSS (Avançado)
-      </label>
-      <textarea
-        className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-        value={props.styles ? JSON.stringify(props.styles, null, 2) : "{}"}
-        onChange={(e) => {
-          try {
-            const styles = JSON.parse(e.target.value);
-            handleChange("styles", styles);
-          } catch (error) {
+                        {/* Container com bordas que indicam seleção */}
+                        <div
+                          id={component.id}
             // Ignora erros de parse durante a digitação
           }
         }}
@@ -3228,46 +3228,39 @@ const AdvancedQuizEditor: React.FC = () => {
         {/* Layout Principal com Quatro Colunas */}
         <div className="flex-1 flex overflow-hidden">
           {/* Coluna 1: Navegação de Etapas (Esquerda) */}
-          <div className="w-64 min-w-[200px] max-w-[400px] resize-x border-r border-zinc-700 bg-zinc-900 overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <StepNavigationTabs
-                steps={editorState.steps}
-                currentStepId={editorState.currentStepId}
-                onStepSelect={handleStepSelect}
-                onStepRename={handleStepRename}
-                onStepDelete={handleStepDelete}
-                onAddStep={handleAddStep}
-              />
-            </div>
+          <div className="w-64 border-r border-zinc-700 bg-zinc-900">
+            <StepNavigationTabs
+              steps={editorState.steps}
+              currentStepId={editorState.currentStepId}
+              onStepSelect={handleStepSelect}
+              onStepRename={handleStepRename}
+              onStepDelete={handleStepDelete}
+              onAddStep={handleAddStep}
+            />
           </div>
 
           {/* Coluna 2: Biblioteca de Componentes */}
-          <div className="w-80 min-w-[250px] max-w-[450px] resize-x border-r border-zinc-700 bg-zinc-900 overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
-            </div>
+          <div className="w-80 border-r border-zinc-700 bg-zinc-900">
+            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
           </div>
 
           {/* Coluna 3: Canvas do Editor */}
-          <div className="flex-1 min-w-[400px] overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <CanvasArea
-                currentStep={currentStep}
-                headerConfig={editorState.headerConfig}
-                selectedComponent={selectedComponent}
-                selectedComponentId={selectedComponentId}
-                onComponentSelect={handleComponentSelect}
-                onComponentAdd={handleComponentAdd}
-                onComponentUpdate={handleComponentUpdate}
-                onComponentDelete={handleComponentDelete}
-                onComponentMove={handleComponentMove}
-              />
-            </div>
+          <div className="flex-1 overflow-hidden">
+            <CanvasArea
+              currentStep={currentStep}
+              headerConfig={editorState.headerConfig}
+              selectedComponent={selectedComponent}
+              selectedComponentId={selectedComponentId}
+              onComponentSelect={handleComponentSelect}
+              onComponentAdd={handleComponentAdd}
+              onComponentUpdate={handleComponentUpdate}
+              onComponentDelete={handleComponentDelete}
+              onComponentMove={handleComponentMove}
+            />
           </div>
 
           {/* Coluna 4: Painel de Propriedades/Editor (Direita) */}
-          <div className="w-96 min-w-[300px] max-w-[600px] resize-x border-l border-zinc-700 bg-zinc-900 overflow-hidden">
-            <div className="h-full overflow-y-auto p-4">
+          <div className="w-96 max-w-md border-l border-zinc-700 bg-zinc-900 p-4 overflow-y-auto">
             {selectedComponent ? (
               <div>
                 <h3 className="text-lg font-semibold text-white mb-4">
@@ -3368,8 +3361,8 @@ const AdvancedQuizEditor: React.FC = () => {
                   Selecione um componente no canvas para editar suas
                   propriedades.
                 </p>
-              </div>              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
