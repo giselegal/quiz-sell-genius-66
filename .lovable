@@ -6,26 +6,30 @@
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
-  "version": "2.3.1750426700",
+  "version": "2.1.1750428532",
+  "lastUpdate": "2025-06-20T14:08:52.488Z",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
     "enhancedSync": true,
-    "visualEditor": true
+    "visualEditor": true,
+    "forceSync": true,
+    "webhookAlternative": true
   },
   "editor": {
     "enableLiveMode": true,
     "autoSave": true,
     "componentHighlighting": true
   },
-  "lastSync": "2025-06-20T14:06:54.987Z",
-  "componentCount": 476,
   "sync": {
-    "timestamp": 1750426700,
-    "method": "complete-manual",
-    "forced": true
+    "forced": true,
+    "timestamp": 1750428532,
+    "method": "webhook-alternative",
+    "tokenRequired": false
   },
-  "lastUpdate": "2025-06-20T13:38:20.694Z",
-  "tokenConfigured": true,
-  "manualSyncTimestamp": 1750426700
+  "scripts": {
+    "prepare": "node scripts/prepare-lovable.js",
+    "sync": "node scripts/manual-sync.js",
+    "test": "node scripts/test-sync.js"
+  }
 }
