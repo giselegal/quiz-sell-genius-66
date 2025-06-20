@@ -3123,7 +3123,7 @@ const AdvancedQuizEditor: React.FC = () => {
                   scoreValue: 1,
                   image:
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
-                  nextStepId: "quiz-transition",
+                  nextStepId: "question-4",
                 },
                 {
                   text: "Visual clássico e tradicional",
@@ -3131,7 +3131,7 @@ const AdvancedQuizEditor: React.FC = () => {
                   scoreValue: 1,
                   image:
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
-                  nextStepId: "quiz-transition",
+                  nextStepId: "question-4",
                 },
                 {
                   text: "Visual casual com toque atual",
@@ -3139,7 +3139,7 @@ const AdvancedQuizEditor: React.FC = () => {
                   scoreValue: 1,
                   image:
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
-                  nextStepId: "quiz-transition",
+                  nextStepId: "question-4",
                 },
                 {
                   text: "Visual refinado e imponente",
@@ -3147,7 +3147,7 @@ const AdvancedQuizEditor: React.FC = () => {
                   scoreValue: 1,
                   image:
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
-                  nextStepId: "quiz-transition",
+                  nextStepId: "question-4",
                 },
                 {
                   text: "Visual romântico, feminino e delicado",
@@ -3155,7 +3155,7 @@ const AdvancedQuizEditor: React.FC = () => {
                   scoreValue: 1,
                   image:
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
-                  nextStepId: "quiz-transition",
+                  nextStepId: "question-4",
                 },
                 {
                   text: "Visual sensual, com saia justa e decote",
@@ -3163,7 +3163,7 @@ const AdvancedQuizEditor: React.FC = () => {
                   scoreValue: 1,
                   image:
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
-                  nextStepId: "quiz-transition",
+                  nextStepId: "question-4",
                 },
                 {
                   text: "Visual marcante e urbano (jeans + jaqueta)",
@@ -3171,7 +3171,7 @@ const AdvancedQuizEditor: React.FC = () => {
                   scoreValue: 1,
                   image:
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
-                  nextStepId: "quiz-transition",
+                  nextStepId: "question-4",
                 },
                 {
                   text: "Visual criativo, colorido e ousado",
@@ -3179,6 +3179,601 @@ const AdvancedQuizEditor: React.FC = () => {
                   scoreValue: 1,
                   image:
                     "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                  nextStepId: "question-4",
+                },
+              ],
+              selectionType: "multiple",
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "question-4",
+      },
+      {
+        id: "question-4",
+        name: "🎨 Estampas",
+        components: [
+          {
+            id: "q4-heading",
+            type: "heading",
+            props: {
+              text: "QUAL ESTAMPA VOCÊ MAIS SE IDENTIFICA?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q4-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q4-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Estampas naturais e orgânicas",
+                  value: "natural",
+                  scoreValue: 1,
+                  nextStepId: "question-5",
+                },
+                {
+                  text: "Estampas clássicas e tradicionais",
+                  value: "classico",
+                  scoreValue: 1,
+                  nextStepId: "question-5",
+                },
+                {
+                  text: "Estampas geométricas e modernas",
+                  value: "contemporaneo",
+                  scoreValue: 1,
+                  nextStepId: "question-5",
+                },
+                {
+                  text: "Estampas sofisticadas e refinadas",
+                  value: "elegante",
+                  scoreValue: 1,
+                  nextStepId: "question-5",
+                },
+                {
+                  text: "Estampas florais e delicadas",
+                  value: "romantico",
+                  scoreValue: 1,
+                  nextStepId: "question-5",
+                },
+                {
+                  text: "Estampas sensuais e marcantes",
+                  value: "sexy",
+                  scoreValue: 1,
+                  nextStepId: "question-5",
+                },
+                {
+                  text: "Estampas dramáticas e impactantes",
+                  value: "dramatico",
+                  scoreValue: 1,
+                  nextStepId: "question-5",
+                },
+                {
+                  text: "Estampas criativas e ousadas",
+                  value: "criativo",
+                  scoreValue: 1,
+                  nextStepId: "question-5",
+                },
+              ],
+              selectionType: "multiple",
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "question-5",
+      },
+      {
+        id: "question-5",
+        name: "🧥 Casacos",
+        components: [
+          {
+            id: "q5-heading",
+            type: "heading",
+            props: {
+              text: "QUAL TIPO DE CASACO VOCÊ PREFERE?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q5-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q5-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Casacos confortáveis e práticos",
+                  value: "natural",
+                  scoreValue: 1,
+                  nextStepId: "question-6",
+                },
+                {
+                  text: "Casacos clássicos e atemporais",
+                  value: "classico",
+                  scoreValue: 1,
+                  nextStepId: "question-6",
+                },
+                {
+                  text: "Casacos modernos e funcionais",
+                  value: "contemporaneo",
+                  scoreValue: 1,
+                  nextStepId: "question-6",
+                },
+                {
+                  text: "Casacos elegantes e sofisticados",
+                  value: "elegante",
+                  scoreValue: 1,
+                  nextStepId: "question-6",
+                },
+                {
+                  text: "Casacos femininos e delicados",
+                  value: "romantico",
+                  scoreValue: 1,
+                  nextStepId: "question-6",
+                },
+                {
+                  text: "Casacos sensuais e ajustados",
+                  value: "sexy",
+                  scoreValue: 1,
+                  nextStepId: "question-6",
+                },
+                {
+                  text: "Casacos marcantes e estruturados",
+                  value: "dramatico",
+                  scoreValue: 1,
+                  nextStepId: "question-6",
+                },
+                {
+                  text: "Casacos criativos e únicos",
+                  value: "criativo",
+                  scoreValue: 1,
+                  nextStepId: "question-6",
+                },
+              ],
+              selectionType: "multiple",
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "question-6",
+      },
+      {
+        id: "question-6",
+        name: "👖 Calças",
+        components: [
+          {
+            id: "q6-heading",
+            type: "heading",
+            props: {
+              text: "QUAL ESTILO DE CALÇA VOCÊ MAIS USA?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q6-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q6-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Calças confortáveis e soltas",
+                  value: "natural",
+                  scoreValue: 1,
+                  nextStepId: "question-7",
+                },
+                {
+                  text: "Calças clássicas e bem cortadas",
+                  value: "classico",
+                  scoreValue: 1,
+                  nextStepId: "question-7",
+                },
+                {
+                  text: "Calças modernas e versáteis",
+                  value: "contemporaneo",
+                  scoreValue: 1,
+                  nextStepId: "question-7",
+                },
+                {
+                  text: "Calças elegantes e alfaiataria",
+                  value: "elegante",
+                  scoreValue: 1,
+                  nextStepId: "question-7",
+                },
+                {
+                  text: "Calças femininas e fluidas",
+                  value: "romantico",
+                  scoreValue: 1,
+                  nextStepId: "question-7",
+                },
+                {
+                  text: "Calças justas e sensuais",
+                  value: "sexy",
+                  scoreValue: 1,
+                  nextStepId: "question-7",
+                },
+                {
+                  text: "Calças marcantes e estruturadas",
+                  value: "dramatico",
+                  scoreValue: 1,
+                  nextStepId: "question-7",
+                },
+                {
+                  text: "Calças criativas e diferenciadas",
+                  value: "criativo",
+                  scoreValue: 1,
+                  nextStepId: "question-7",
+                },
+              ],
+              selectionType: "multiple",
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "question-7",
+      },
+      {
+        id: "question-7",
+        name: "👠 Sapatos",
+        components: [
+          {
+            id: "q7-heading",
+            type: "heading",
+            props: {
+              text: "QUAL TIPO DE SAPATO VOCÊ PREFERE?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q7-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q7-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Sapatos confortáveis e práticos",
+                  value: "natural",
+                  scoreValue: 1,
+                  nextStepId: "question-8",
+                },
+                {
+                  text: "Sapatos clássicos e atemporais",
+                  value: "classico",
+                  scoreValue: 1,
+                  nextStepId: "question-8",
+                },
+                {
+                  text: "Sapatos modernos e versáteis",
+                  value: "contemporaneo",
+                  scoreValue: 1,
+                  nextStepId: "question-8",
+                },
+                {
+                  text: "Sapatos elegantes e sofisticados",
+                  value: "elegante",
+                  scoreValue: 1,
+                  nextStepId: "question-8",
+                },
+                {
+                  text: "Sapatos delicados e femininos",
+                  value: "romantico",
+                  scoreValue: 1,
+                  nextStepId: "question-8",
+                },
+                {
+                  text: "Sapatos sensuais e marcantes",
+                  value: "sexy",
+                  scoreValue: 1,
+                  nextStepId: "question-8",
+                },
+                {
+                  text: "Sapatos dramáticos e impactantes",
+                  value: "dramatico",
+                  scoreValue: 1,
+                  nextStepId: "question-8",
+                },
+                {
+                  text: "Sapatos criativos e únicos",
+                  value: "criativo",
+                  scoreValue: 1,
+                  nextStepId: "question-8",
+                },
+              ],
+              selectionType: "multiple",
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "question-8",
+      },
+      {
+        id: "question-8",
+        name: "💎 Acessórios",
+        components: [
+          {
+            id: "q8-heading",
+            type: "heading",
+            props: {
+              text: "QUAIS ACESSÓRIOS VOCÊ MAIS USA?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q8-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q8-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Acessórios simples e naturais",
+                  value: "natural",
+                  scoreValue: 1,
+                  nextStepId: "question-9",
+                },
+                {
+                  text: "Acessórios clássicos e discretos",
+                  value: "classico",
+                  scoreValue: 1,
+                  nextStepId: "question-9",
+                },
+                {
+                  text: "Acessórios modernos e funcionais",
+                  value: "contemporaneo",
+                  scoreValue: 1,
+                  nextStepId: "question-9",
+                },
+                {
+                  text: "Acessórios elegantes e refinados",
+                  value: "elegante",
+                  scoreValue: 1,
+                  nextStepId: "question-9",
+                },
+                {
+                  text: "Acessórios delicados e femininos",
+                  value: "romantico",
+                  scoreValue: 1,
+                  nextStepId: "question-9",
+                },
+                {
+                  text: "Acessórios sensuais e chamativos",
+                  value: "sexy",
+                  scoreValue: 1,
+                  nextStepId: "question-9",
+                },
+                {
+                  text: "Acessórios dramáticos e marcantes",
+                  value: "dramatico",
+                  scoreValue: 1,
+                  nextStepId: "question-9",
+                },
+                {
+                  text: "Acessórios criativos e únicos",
+                  value: "criativo",
+                  scoreValue: 1,
+                  nextStepId: "question-9",
+                },
+              ],
+              selectionType: "multiple",
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "question-9",
+      },
+      {
+        id: "question-9",
+        name: "🧵 Tecidos",
+        components: [
+          {
+            id: "q9-heading",
+            type: "heading",
+            props: {
+              text: "QUAIS TECIDOS VOCÊ PREFERE?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q9-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q9-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Tecidos naturais e respiráveis",
+                  value: "natural",
+                  scoreValue: 1,
+                  nextStepId: "question-10",
+                },
+                {
+                  text: "Tecidos clássicos e estruturados",
+                  value: "classico",
+                  scoreValue: 1,
+                  nextStepId: "question-10",
+                },
+                {
+                  text: "Tecidos modernos e tecnológicos",
+                  value: "contemporaneo",
+                  scoreValue: 1,
+                  nextStepId: "question-10",
+                },
+                {
+                  text: "Tecidos nobres e luxuosos",
+                  value: "elegante",
+                  scoreValue: 1,
+                  nextStepId: "question-10",
+                },
+                {
+                  text: "Tecidos fluidos e delicados",
+                  value: "romantico",
+                  scoreValue: 1,
+                  nextStepId: "question-10",
+                },
+                {
+                  text: "Tecidos sensuais e ajustados",
+                  value: "sexy",
+                  scoreValue: 1,
+                  nextStepId: "question-10",
+                },
+                {
+                  text: "Tecidos marcantes e texturizados",
+                  value: "dramatico",
+                  scoreValue: 1,
+                  nextStepId: "question-10",
+                },
+                {
+                  text: "Tecidos criativos e inusitados",
+                  value: "criativo",
+                  scoreValue: 1,
+                  nextStepId: "question-10",
+                },
+              ],
+              selectionType: "multiple",
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "question-10",
+      },
+      {
+        id: "question-10",
+        name: "✨ Finalização",
+        components: [
+          {
+            id: "q10-heading",
+            type: "heading",
+            props: {
+              text: "COMO VOCÊ GOSTA DE FINALIZAR SEU LOOK?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q10-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q10-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "De forma simples e despojada",
+                  value: "natural",
+                  scoreValue: 1,
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Com elegância clássica e discreta",
+                  value: "classico",
+                  scoreValue: 1,
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Com praticidade e modernidade",
+                  value: "contemporaneo",
+                  scoreValue: 1,
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Com sofisticação e refinamento",
+                  value: "elegante",
+                  scoreValue: 1,
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Com delicadeza e feminilidade",
+                  value: "romantico",
+                  scoreValue: 1,
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Com sensualidade e charme",
+                  value: "sexy",
+                  scoreValue: 1,
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Com impacto e presença",
+                  value: "dramatico",
+                  scoreValue: 1,
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Com criatividade e originalidade",
+                  value: "criativo",
+                  scoreValue: 1,
                   nextStepId: "quiz-transition",
                 },
               ],
