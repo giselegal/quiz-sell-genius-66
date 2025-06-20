@@ -53,9 +53,15 @@ class LovableCompletSync {
       console.log("2. Workflows serão executados automaticamente:");
       console.log("   - lovable-sync-main.yml (a cada 15 min)");
       console.log("   - lovable-auto-sync.yml (a cada 6 horas)");
-      console.log("3. Verifique no Lovable Studio se as mudanças foram reconhecidas");
-      console.log("4. Configure LOVABLE_TOKEN no GitHub se ainda não foi feito:");
-      console.log("   https://github.com/vdp2025/quiz-sell-genius-66/settings/secrets/actions");
+      console.log(
+        "3. Verifique no Lovable Studio se as mudanças foram reconhecidas"
+      );
+      console.log(
+        "4. Configure LOVABLE_TOKEN no GitHub se ainda não foi feito:"
+      );
+      console.log(
+        "   https://github.com/vdp2025/quiz-sell-genius-66/settings/secrets/actions"
+      );
     } catch (error) {
       console.error("❌ Erro durante sincronização:", error.message);
       process.exit(1);
@@ -154,6 +160,87 @@ class LovableCompletSync {
     }
 
     console.log("✅ Timestamps dos arquivos atualizados");
+  }
+
+  async activateWorkflows() {
+    console.log("🔧 Verificando e ativando workflows...");
+
+    const workflowsDir = path.join(this.projectRoot, ".github", "workflows");
+
+    if (!fs.existsSync(workflowsDir)) {
+      console.log("⚠️ Diretório de workflows não encontrado");
+      return;
+    }
+
+    const disabledWorkflows = fs
+      .readdirSync(workflowsDir)
+      .filter((file) => file.includes("lovable") && file.endsWith(".disabled"));
+
+    console.log(
+      `📋 Workflows desabilitados encontrados: ${disabledWorkflows.length}`
+    );
+
+    for (const workflow of disabledWorkflows) {
+      const disabledPath = path.join(workflowsDir, workflow);
+      const enabledPath = path.join(
+        workflowsDir,
+        workflow.replace(".disabled", "")
+      );
+
+      if (!fs.existsSync(enabledPath)) {
+        try {
+          fs.renameSync(disabledPath, enabledPath);
+          console.log(
+            `✅ Workflow ativado: ${workflow.replace(".disabled", "")}`
+          );
+        } catch (error) {
+          console.log(`⚠️ Erro ao ativar ${workflow}: ${error.message}`);
+        }
+      } else {
+        console.log(
+          `ℹ️ Workflow já ativo: ${workflow.replace(".disabled", "")}`
+        );
+      }
+    }
+
+    console.log("✅ Verificação de workflows concluída");
+  }
+
+  async checkGitHubConfig() {
+    console.log("🔍 Verificando configuração do GitHub...");
+
+    // Verificar se workflows principais existem
+    const mainWorkflows = ["lovable-sync-main.yml", "lovable-auto-sync.yml"];
+
+    const workflowsDir = path.join(this.projectRoot, ".github", "workflows");
+
+    for (const workflow of mainWorkflows) {
+      const workflowPath = path.join(workflowsDir, workflow);
+      if (fs.existsSync(workflowPath)) {
+        console.log(`✅ Workflow ${workflow} encontrado`);
+      } else {
+        console.log(`⚠️ Workflow ${workflow} não encontrado`);
+      }
+    }
+
+    // Verificar se há scripts necessários
+    const scriptsDir = path.join(this.projectRoot, "scripts");
+    const requiredScripts = [
+      "prepare-lovable.js",
+      "force-lovable-sync.js",
+      "manual-sync.js",
+    ];
+
+    for (const script of requiredScripts) {
+      const scriptPath = path.join(scriptsDir, script);
+      if (fs.existsSync(scriptPath)) {
+        console.log(`✅ Script ${script} encontrado`);
+      } else {
+        console.log(`⚠️ Script ${script} não encontrado`);
+      }
+    }
+
+    console.log("✅ Verificação de configuração concluída");
   }
 }
 
