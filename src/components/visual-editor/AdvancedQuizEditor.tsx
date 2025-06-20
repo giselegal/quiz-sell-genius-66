@@ -1109,314 +1109,9 @@ const FunnelToolbarSidebar: React.FC<{
 }> = ({ onComponentAdd }) => {
   const toolbarItems = [
     {
-      name: "Alerta",
-      type: "alert",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-triangle-alert h-4 w-4"
-        >
-          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
-          <path d="M12 9v4"></path>
-          <path d="M12 17h.01"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "Argumentos",
-      type: "arguments",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-book h-4 w-4"
-        >
-          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "Audio",
-      type: "audio",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-mic h-4 w-4"
-        >
-          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-          <line x1="12" x2="12" y1="19" y2="22"></line>
-        </svg>
-      ),
-    },
-    {
-      name: "Botão",
-      type: "button",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-rectangle-horizontal h-4 w-4"
-        >
-          <rect width="20" height="12" x="2" y="6" rx="2"></rect>
-        </svg>
-      ),
-    },
-    {
-      name: "Carregando",
-      type: "loading",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-loader-circle h-4 w-4"
-        >
-          <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "Carrosel",
-      type: "carousel",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-gallery-horizontal-end h-4 w-4"
-        >
-          <path d="M2 7v10"></path>
-          <path d="M6 5v14"></path>
-          <rect width="12" height="18" x="10" y="3" rx="2"></rect>
-        </svg>
-      ),
-    },
-    {
-      name: "Cartesiano",
-      type: "chart",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-chart-area h-4 w-4"
-        >
-          <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
-          <path d="M7 11.207a.5.5 0 0 1 .146-.353l2-2a.5.5 0 0 1 .708 0l3.292 3.292a.5.5 0 0 0 .708 0l4.292-4.292a.5.5 0 0 1 .854.353V16a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1z"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "Comparar",
-      type: "compare",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-align-horizontal-distribute-end h-4 w-4"
-        >
-          <rect width="6" height="14" x="4" y="5" rx="2"></rect>
-          <rect width="6" height="10" x="14" y="7" rx="2"></rect>
-          <path d="M10 2v20"></path>
-          <path d="M20 2v20"></path>
-        </svg>
-      ),
-      isNew: true,
-    },
-    {
-      name: "Confetti",
-      type: "confetti",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-sparkles h-4 w-4"
-        >
-          <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
-          <path d="M20 3v4"></path>
-          <path d="M22 5h-4"></path>
-          <path d="M4 17v2"></path>
-          <path d="M5 18H3"></path>
-        </svg>
-      ),
-      isNew: true,
-    },
-    {
-      name: "Depoimentos",
-      type: "testimonials",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-quote h-4 w-4"
-        >
-          <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-          <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "Entrada",
-      type: "input",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-text-cursor-input h-4 w-4"
-        >
-          <path d="M5 4h1a3 3 0 0 1 3 3 3 3 0 0 1 3-3h1"></path>
-          <path d="M13 20h-1a3 3 0 0 1-3-3 3 3 0 0 1-3 3H5"></path>
-          <path d="M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1"></path>
-        </svg>
-      ),
-      desc: "Campos de entrada de dados",
-    },
-    {
-      name: "Script",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-code h-4 w-4"
-        >
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
-      ),
-    },
-    {
-      name: "Termos",
-      type: "terms",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-scale h-4 w-4"
-        >
-          <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
-          <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
-          <path d="M7 21h10"></path>
-          <path d="M12 3v18"></path>
-          <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "Texto",
-      type: "text",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-text h-4 w-4"
-        >
-          <path d="M17 6.1H3"></path>
-          <path d="M21 12.1H3"></path>
-          <path d="M15.1 18H3"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "Título",
+      name: "📝 Título",
       type: "heading",
+      desc: "Cabeçalho principal",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -1438,8 +1133,121 @@ const FunnelToolbarSidebar: React.FC<{
       ),
     },
     {
-      name: "Video",
+      name: "📄 Texto",
+      type: "text",
+      desc: "Parágrafo de texto",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-text h-4 w-4"
+        >
+          <path d="M17 6.1H3"></path>
+          <path d="M21 12.1H3"></path>
+          <path d="M15.1 18H3"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "🖼️ Imagem",
+      type: "image",
+      desc: "Imagem ou foto",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-image h-4 w-4"
+        >
+          <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+          <circle cx="9" cy="9" r="2"></circle>
+          <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "🔘 Botão",
+      type: "button",
+      desc: "Botão clicável",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-rectangle-horizontal h-4 w-4"
+        >
+          <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+        </svg>
+      ),
+    },
+    {
+      name: "📝 Campo",
+      type: "input",
+      desc: "Campo de entrada",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-text-cursor-input h-4 w-4"
+        >
+          <path d="M5 4h1a3 3 0 0 1 3 3 3 3 0 0 1 3-3h1"></path>
+          <path d="M13 20h-1a3 3 0 0 1-3-3 3 3 0 0 1-3 3H5"></path>
+          <path d="M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "☑️ Opções",
+      type: "options",
+      desc: "Múltipla escolha",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-check-square h-4 w-4"
+        >
+          <polyline points="9,11 12,14 22,4"></polyline>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "🎥 Vídeo",
       type: "video",
+      desc: "Vídeo incorporado",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -1458,28 +1266,67 @@ const FunnelToolbarSidebar: React.FC<{
         </svg>
       ),
     },
+    {
+      name: "📏 Espaço",
+      type: "spacer",
+      desc: "Espaçamento",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-space h-4 w-4"
+        >
+          <path d="M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1"></path>
+          <path d="M22 7v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1V7"></path>
+        </svg>
+      ),
+    },
   ];
 
   return (
-    <div className="w-full h-full pr-2 hidden md:block md:max-w-[9.5rem] bg-zinc-900 border-r border-zinc-700">
-      <div className="overflow-hidden relative z-[1] flex flex-col gap-1 p-2 pb-6">
+    <div className="w-full h-full bg-zinc-900 border-r border-zinc-700">
+      {/* Cabeçalho da Biblioteca */}
+      <div className="p-3 border-b border-zinc-700">
+        <h3 className="text-sm font-semibold text-white mb-1">
+          Adicionar Componentes
+        </h3>
+        <p className="text-xs text-zinc-400">
+          Clique para adicionar ao canvas
+        </p>
+      </div>
+
+      {/* Lista de Componentes */}
+      <div className="overflow-y-auto flex-1 p-2 space-y-1">
         {toolbarItems.map((item, index) => (
           <div
             key={index}
-            className="bg-zinc-950/50 relative hover:z-30 rounded border border-zinc-700 hover:border-gray-400 p-2 cursor-pointer flex items-center gap-2 transition-all hover:bg-zinc-800"
+            className="bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-zinc-600 p-3 cursor-pointer transition-all duration-200 group"
             onClick={() => onComponentAdd(item.type)}
+            title={item.desc}
           >
-            <div className="relative w-auto text-zinc-100">{item.icon}</div>
-            <div className="text-xs py-1 text-zinc-100">{item.name}</div>
-            {item.isNew && (
-              <span className="text-[0.6rem] text-white bg-gradient-to-r from-blue-500/90 to-purple-500/90 backdrop-blur-lg rounded-full px-1 py-0.5 absolute -top-1 -right-1">
-                Novo!
-              </span>
-            )}
+            <div className="flex items-center gap-3">
+              <div className="text-zinc-300 group-hover:text-white transition-colors">
+                {item.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-medium text-zinc-200 group-hover:text-white transition-colors">
+                  {item.name}
+                </div>
+                <div className="text-xs text-zinc-500 group-hover:text-zinc-400 transition-colors mt-0.5">
+                  {item.desc}
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
-      <div className="py-8"></div>
     </div>
   );
 };
@@ -3406,7 +3253,7 @@ const AdvancedQuizEditor: React.FC = () => {
           isPublishing={isPublishing}
         />
 
-        {/* Layout Principal com Quatro Colunas */}
+        {/* Layout Principal com Três Colunas */}
         <div className="flex-1 flex overflow-hidden">
           {/* Coluna 1: Navegação de Etapas (Esquerda) */}
           <div className="w-64 border-r border-zinc-700 bg-zinc-900">
@@ -3420,12 +3267,7 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 2: Biblioteca de Componentes ("Adicionar Componentes") */}
-          <div className="w-40 border-r border-zinc-700">
-            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
-          </div>
-
-          {/* Coluna 3: Canvas do Editor (Central) */}
+          {/* Coluna 2: Canvas do Editor (Central) */}
           <div className="flex-1 overflow-hidden">
             <CanvasArea
               currentStep={currentStep}
@@ -3440,7 +3282,7 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 4: Painel de Configuração (Direita) */}
+          {/* Coluna 3: Painel de Configuração (Direita) */}
           {selectedComponent && (
             <div className="w-80 border-l border-zinc-700">
               <AdvancedConfigSidebar
