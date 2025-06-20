@@ -300,13 +300,13 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                 <img
                   src={
                     component.props.src ||
-                    "https://placehold.co/640x480/333/FFF?text=Imagem"
+                    "/placeholder.svg"
                   }
                   alt={component.props.alt || "Imagem"}
                   className="object-cover w-full h-auto rounded-lg max-w-96"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src =
-                      "https://placehold.co/640x480/333/FFF?text=Erro+ao+carregar+imagem";
+                      "/placeholder.svg";
                   }}
                 />
               </div>
@@ -421,7 +421,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                             }}
                             onError={(e) => {
                               (e.target as HTMLImageElement).src =
-                                "https://placehold.co/256x256/555/FFF?text=IMG";
+                                "/placeholder.svg";
                             }}
                           />
                         </div>
