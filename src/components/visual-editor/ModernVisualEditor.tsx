@@ -26,13 +26,20 @@ import {
   CircleDot,
   Move,
   Edit3,
-  Save
+  Save,
+  Smartphone,
+  Monitor,
+  Tablet,
+  Copy,
+  ChevronUp,
+  ChevronDown
 } from "lucide-react";
 
-// Tipos de dados baseados na análise dos layouts
+// Interfaces baseadas na análise completa dos layouts do funil
 interface QuizStep {
   id: string;
-  type: 'intro' | 'question' | 'transition' | 'result';
+  type: 'intro' | 'question' | 'transition' | 'strategic' | 'result';
+  name: string;
   title: string;
   subtitle?: string;
   hasHeader: boolean;
@@ -42,12 +49,19 @@ interface QuizStep {
     allowReturn: boolean;
     logoUrl?: string;
   };
+  questionConfig?: {
+    questionType: 'visual-options' | 'text-options' | 'strategic-question' | 'input-name';
+    multipleSelection: boolean;
+    maxSelections: number;
+    hasImages: boolean;
+    showCategories: boolean;
+  };
   content: QuizComponent[];
 }
 
 interface QuizComponent {
   id: string;
-  type: 'heading' | 'image' | 'input' | 'button' | 'spacer' | 'options';
+  type: 'heading' | 'subtitle' | 'image' | 'input' | 'button' | 'spacer' | 'visual-options' | 'text-options' | 'strategic-question';
   data: any;
   selected?: boolean;
 }
@@ -58,22 +72,26 @@ interface QuizOption {
   image?: string;
   value: string;
   category?: string;
+  strategicValue?: number;
 }
 
-// Dados das categorias de estilo baseados no funil real
+// Dados reais do funil
 const STYLE_CATEGORIES = [
   'Natural', 'Clássico', 'Contemporâneo', 'Elegante', 
   'Romântico', 'Sexy', 'Dramático', 'Criativo'
 ];
 
-// Templates de questões baseados no funil real
+// Templates baseados nos layouts reais do funil
 const QUIZ_TEMPLATES = {
   intro: {
+    name: "Etapa de Introdução",
     title: "Teste de Estilo Pessoal",
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up",
-    subtitle: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você."
+    subtitle: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+    image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up"
   },
+  
   visualQuestion: {
+    name: "Questão Visual",
     title: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
     options: [
       {
@@ -85,11 +103,42 @@ const QUIZ_TEMPLATES = {
         text: "Discrição, caimento clássico e sobriedade",
         image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
         category: "Clássico"
+      },
+      {
+        text: "Informação de moda, inovação e funcionalidade",
+        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/13_qccdqv.webp",
+        category: "Contemporâneo"
+      },
+      {
+        text: "Luxo, refinamento e qualidade",
+        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_rqy7yh.webp",
+        category: "Elegante"
+      },
+      {
+        text: "Feminilidade, delicadeza e charme",
+        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/15_kpqhgl.webp",
+        category: "Romântico"
+      },
+      {
+        text: "Sensualidade, glamour e sedução",
+        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/16_oqc9gd.webp",
+        category: "Sexy"
+      },
+      {
+        text: "Imponência, sofisticação e poder",
+        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/17_iqr8th.webp",
+        category: "Dramático"
+      },
+      {
+        text: "Originalidade, criatividade e personalidade",
+        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/18_o5gzhu.webp",
+        category: "Criativo"
       }
-      // ... mais opções
     ]
   },
+  
   textQuestion: {
+    name: "Questão de Texto",
     title: "RESUMA A SUA PERSONALIDADE:",
     options: [
       { text: "Informal, espontânea, alegre, essencialista", category: "Natural" },
@@ -101,8 +150,79 @@ const QUIZ_TEMPLATES = {
       { text: "Cosmopolita, moderna e audaciosa", category: "Dramático" },
       { text: "Exótica, aventureira, livre", category: "Criativo" }
     ]
+  },
+
+  strategicQuestion: {
+    name: "Questão Estratégica",
+    title: "COMO É O SEU ATUAL ESTILO DE VIDA?",
+    subtitle: "Considere sua rotina e atividades principais:",
+    options: [
+      { text: "Trabalho em casa, home office, flexibilidade", strategicValue: 1 },
+      { text: "Trabalho presencial, reuniões frequentes", strategicValue: 2 },
+      { text: "Vida social intensa, eventos, festas", strategicValue: 3 },
+      { text: "Foco na família, atividades domésticas", strategicValue: 4 },
+      { text: "Estudante, vida acadêmica", strategicValue: 5 },
+      { text: "Aposentada, mais tempo livre", strategicValue: 6 }
+    ]
   }
 };
+
+const COMPONENT_LIBRARY = [
+  { 
+    type: 'heading', 
+    icon: Type, 
+    label: 'Título',
+    description: 'Adicionar título principal'
+  },
+  { 
+    type: 'subtitle', 
+    icon: Type, 
+    label: 'Subtítulo',
+    description: 'Adicionar subtítulo'
+  },
+  { 
+    type: 'image', 
+    icon: ImageIcon, 
+    label: 'Imagem',
+    description: 'Adicionar imagem'
+  },
+  { 
+    type: 'input', 
+    icon: Edit3, 
+    label: 'Campo de Entrada',
+    description: 'Campo para nome ou texto'
+  },
+  { 
+    type: 'button', 
+    icon: MousePointer, 
+    label: 'Botão',
+    description: 'Botão de ação'
+  },
+  { 
+    type: 'spacer', 
+    icon: Layout, 
+    label: 'Espaçamento',
+    description: 'Espaço entre elementos'
+  },
+  { 
+    type: 'visual-options', 
+    icon: CircleDot, 
+    label: 'Opções Visuais',
+    description: 'Opções com imagens'
+  },
+  { 
+    type: 'text-options', 
+    icon: CheckCircle, 
+    label: 'Opções de Texto',
+    description: 'Opções somente texto'
+  },
+  { 
+    type: 'strategic-question', 
+    icon: Settings, 
+    label: 'Questão Estratégica',
+    description: 'Pergunta para segmentação'
+  }
+];
 
 const ModernVisualEditor: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<QuizStep>({
