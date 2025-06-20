@@ -1131,6 +1131,31 @@ const ComponentAddSidebar: React.FC<{
 // --- Componente ComponentConfigSidebar ---
 // --- Componente Principal ---
 const AdvancedQuizEditor: React.FC = () => {
+  // Constantes
+  const STORAGE_KEY = "quiz-editor-state";
+
+  // Funções utilitárias definidas antes dos states
+  const loadFromLocalStorage = (): QuizEditorState | null => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return null;
+      return JSON.parse(saved);
+    } catch (error) {
+      console.error("❌ Erro ao carregar:", error);
+      return null;
+    }
+  };
+
+  const saveToLocalStorage = (state: QuizEditorState) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      console.log("💾 Estado salvo com sucesso");
+    } catch (error) {
+      console.error("❌ Erro ao salvar:", error);
+    }
+  };
+
+  // Estados do componente
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(
     null
   );
@@ -2476,29 +2501,6 @@ const AdvancedQuizEditor: React.FC = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } finally {
       setIsPublishing(false);
-    }
-  };
-
-  // --- Funções de Persistência ---
-  const STORAGE_KEY = "quiz-editor-state";
-
-  const saveToLocalStorage = (state: QuizEditorState) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      console.log("✅ Estado salvo no localStorage");
-    } catch (error) {
-      console.error("❌ Erro ao salvar:", error);
-    }
-  };
-
-  const loadFromLocalStorage = (): QuizEditorState | null => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) return null;
-      return JSON.parse(saved);
-    } catch (error) {
-      console.error("❌ Erro ao carregar:", error);
-      return null;
     }
   };
 
