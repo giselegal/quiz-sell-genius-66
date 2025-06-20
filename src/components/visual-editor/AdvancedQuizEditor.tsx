@@ -2631,13 +2631,8 @@ const StepNavigationTabs: React.FC<{
 const AdvancedQuizEditor: React.FC = () => {
   console.log("🚀 AdvancedQuizEditor está renderizando!");
 
-  // Estados para controle de larguras das colunas ajustáveis
-  const [columnWidths, setColumnWidths] = useState({
-    stepsPanel: 20,     // 20% para etapas
-    componentsPanel: 20, // 20% para componentes  
-    canvasPanel: 40,     // 40% para canvas
-    propertiesPanel: 20, // 20% para propriedades
-  });
+  // Estados de interface e visualização
+  const [viewportMode, setViewportMode] = useState<'desktop' | 'mobile'>('desktop');
 
   // Estados principais do editor
   const [editorState, setEditorState] = useState<QuizEditorState>({
@@ -3515,6 +3510,11 @@ const AdvancedQuizEditor: React.FC = () => {
       currentStepId: newCurrentStepId,
     }));
     setSelectedComponentId(null);
+  };
+
+  // --- Toggle entre modos de visualização ---
+  const toggleViewportMode = () => {
+    setViewportMode(prev => prev === 'desktop' ? 'mobile' : 'desktop');
   };
 
   // --- Handlers para gerenciar componentes ---
