@@ -32,7 +32,7 @@ interface QuizHeaderConfig {
 
 interface AdvancedConfigSidebarProps {
   selectedComponent: QuizComponent;
-  updateComponent: (componentId: string, newProps: any) => void;
+  updateComponent: (componentId: string, newProps: Record<string, unknown>) => void;
   updateHeaderConfig: (newConfig: Partial<QuizHeaderConfig>) => void;
   headerConfig: QuizHeaderConfig;
 }
