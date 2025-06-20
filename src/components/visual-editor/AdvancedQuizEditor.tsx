@@ -518,6 +518,7 @@ interface CanvasAreaProps {
   ) => void;
   onComponentDelete: (componentId: string) => void;
   onComponentMove: (componentId: string, direction: "up" | "down") => void;
+  viewportMode?: 'desktop' | 'mobile';
 }
 
 const CanvasArea: React.FC<CanvasAreaProps> = ({
@@ -530,6 +531,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   onComponentUpdate,
   onComponentDelete,
   onComponentMove,
+  viewportMode = 'desktop'
 }) => {
   if (!currentStep) {
     return (
@@ -737,7 +739,9 @@ export const FunnelNavbar: React.FC<{
     isAutoSaving: boolean;
     lastSaved: Date | null;
   };
-}> = ({ onSave, onPublish, isSaving, isPublishing, autoSaveStatus }) => {
+  viewportMode?: 'desktop' | 'mobile';
+  onToggleViewport?: () => void;
+}> = ({ onSave, onPublish, isSaving, isPublishing, autoSaveStatus, viewportMode, onToggleViewport }) => {
   return (
     <div className="h-fit border-b border-gray-200 relative z-[20] bg-white shadow-sm">
       <div className="w-full flex flex-wrap md:flex-nowrap justify-between">
@@ -3823,7 +3827,7 @@ const AdvancedQuizEditor: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 2: Canvas do Editor - Flexível e Centralizado */}
+          {/* Coluna 3: Canvas do Editor - Flexível e Centralizado */}
           <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900 relative">
             {/* Controles de Viewport */}
             <div className="absolute top-2 right-2 z-10 bg-zinc-800 rounded p-1 shadow-lg">
@@ -3867,7 +3871,7 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 3: Painel de Propriedades (Direita) */}
+          {/* Coluna 4: Painel de Propriedades (Direita) */}
           <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
               {selectedComponent ? (
