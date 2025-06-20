@@ -2630,6 +2630,17 @@ const StepNavigationTabs: React.FC<{
 const AdvancedQuizEditor: React.FC = () => {
   console.log("🚀 AdvancedQuizEditor está renderizando!");
 
+  // Estados para controle de larguras das colunas (drag-to-resize)
+  const [columnWidths, setColumnWidths] = useState({
+    leftPanel: 280,  // Largura inicial da coluna esquerda (etapas + componentes)
+    rightPanel: 320, // Largura inicial da coluna direita (propriedades)
+  });
+
+  // Estados para controle de drag
+  const [isDragging, setIsDragging] = useState<string | null>(null);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragStartWidth, setDragStartWidth] = useState(0);
+
   // Estados principais do editor
   const [editorState, setEditorState] = useState<QuizEditorState>({
     steps: [
