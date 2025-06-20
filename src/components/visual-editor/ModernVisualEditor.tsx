@@ -15,5 +15,4 @@ const ModernVisualEditor: React.FC = () => {
   );
 };
 
-export { ModernVisualEditor };
 export default ModernVisualEditor;
