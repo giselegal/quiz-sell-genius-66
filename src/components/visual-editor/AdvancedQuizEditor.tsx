@@ -3460,13 +3460,30 @@ const AdvancedQuizEditor: React.FC = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Simula salvamento (aqui você integraria com uma API real)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Quiz salvo:", editorState);
-      alert("Quiz salvo com sucesso!");
+      // Usa o sistema de auto-save para salvar manualmente
+      saveManually();
+      
+      // Simula salvamento no servidor
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      console.log("✅ Quiz salvo manualmente:", editorState);
+      
+      // Mostra uma notificação de sucesso mais discreta
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
+      notification.textContent = 'Quiz salvo com sucesso!';
+      document.body.appendChild(notification);
+      setTimeout(() => document.body.removeChild(notification), 3000);
+      
     } catch (error) {
-      console.error("Erro ao salvar:", error);
-      alert("Erro ao salvar o quiz. Tente novamente.");
+      console.error("❌ Erro ao salvar:", error);
+      
+      // Mostra notificação de erro
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50';
+      notification.textContent = 'Erro ao salvar. Tente novamente.';
+      document.body.appendChild(notification);
+      setTimeout(() => document.body.removeChild(notification), 5000);
     } finally {
       setIsSaving(false);
     }
@@ -3475,13 +3492,30 @@ const AdvancedQuizEditor: React.FC = () => {
   const handlePublish = async () => {
     setIsPublishing(true);
     try {
-      // Simula publicação (aqui você integraria com uma API real)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Quiz publicado:", editorState);
-      alert("Quiz publicado com sucesso!");
+      // Salva antes de publicar
+      saveManually();
+      
+      // Simula publicação
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      
+      console.log("🚀 Quiz publicado:", editorState);
+      
+      // Mostra notificação de sucesso
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg z-50';
+      notification.textContent = 'Quiz publicado com sucesso!';
+      document.body.appendChild(notification);
+      setTimeout(() => document.body.removeChild(notification), 3000);
+      
     } catch (error) {
-      console.error("Erro ao publicar:", error);
-      alert("Erro ao publicar o quiz. Tente novamente.");
+      console.error("❌ Erro ao publicar:", error);
+      
+      // Mostra notificação de erro
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50';
+      notification.textContent = 'Erro ao publicar. Tente novamente.';
+      document.body.appendChild(notification);
+      setTimeout(() => document.body.removeChild(notification), 5000);
     } finally {
       setIsPublishing(false);
     }
