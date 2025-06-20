@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-20T01:21:05.709Z",
-  "components": 470,
+  "timestamp": "2025-06-20T01:32:43.248Z",
+  "components": 472,
   "files": [
     {
       "name": "App",
@@ -2003,8 +2003,18 @@
       "type": "typescript"
     },
     {
+      "name": "AdvancedConfigSidebar",
+      "path": "src/components/visual-editor/panels/AdvancedConfigSidebar.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "AdvancedControlsPanel",
       "path": "src/components/visual-editor/panels/AdvancedControlsPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentLibrary",
+      "path": "src/components/visual-editor/panels/ComponentLibrary.tsx",
       "type": "typescript"
     },
     {

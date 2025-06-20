@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import "@/styles/advanced-editor.css";
+import AdvancedConfigSidebar from "./panels/AdvancedConfigSidebar";
+import ComponentLibrary from "./panels/ComponentLibrary";
 
 // --- Interfaces Aprimoradas para a Estrutura de Dados do Quiz ---
 
@@ -139,6 +142,8 @@ interface QuizHeaderConfig {
   allowReturnButton: boolean;
   logoUrl?: string;
   progressColor?: string;
+  title?: string;
+  subtitle?: string;
 }
 
 /**
@@ -411,7 +416,7 @@ const generateUniqueId = (): string =>
 // --- Componente CanvasArea ---
 interface CanvasAreaProps {
   currentStep: QuizStep | null;
-  headerConfig: any;
+  headerConfig: QuizHeaderConfig;
   selectedComponent: QuizComponent | null;
   selectedComponentId: string | null;
   onComponentSelect: (componentId: string | null) => void;
@@ -1323,7 +1328,12 @@ const FunnelToolbarSidebar: React.FC<{
           <path d="M5 4h1a3 3 0 0 1 3 3 3 3 0 0 1 3-3h1"></path>
           <path d="M13 20h-1a3 3 0 0 1-3-3 3 3 0 0 1-3 3H5"></path>
           <path d="M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1"></path>
-      type: "customComponent",
+        </svg>
+      ),
+      desc: "Campos de entrada de dados",
+    },
+    {
+      name: "Script",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -2652,19 +2662,37 @@ const AdvancedQuizEditor: React.FC = () => {
           />
         </div>
 
-        {/* Área Principal do Editor */}
-        <div className="flex-1 overflow-hidden">
-          <CanvasArea
-            currentStep={currentStep}
-            headerConfig={editorState.headerConfig}
-            selectedComponent={selectedComponent}
-            selectedComponentId={selectedComponentId}
-            onComponentSelect={handleComponentSelect}
-            onComponentAdd={handleComponentAdd}
-            onComponentUpdate={handleComponentUpdate}
-            onComponentDelete={handleComponentDelete}
-            onComponentMove={handleComponentMove}
-          />
+        {/* Layout Principal com Três Colunas */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Coluna Esquerda - Biblioteca de Componentes */}
+          <ComponentLibrary onComponentAdd={handleComponentAdd} />
+
+          {/* Coluna Central - Canvas do Editor */}
+          <div className="flex-1 overflow-hidden">
+            <CanvasArea
+              currentStep={currentStep}
+              headerConfig={editorState.headerConfig}
+              selectedComponent={selectedComponent}
+              selectedComponentId={selectedComponentId}
+              onComponentSelect={handleComponentSelect}
+              onComponentAdd={handleComponentAdd}
+              onComponentUpdate={handleComponentUpdate}
+              onComponentDelete={handleComponentDelete}
+              onComponentMove={handleComponentMove}
+            />
+          </div>
+
+          {/* Coluna Direita - Painel de Configuração */}
+          {selectedComponent && (
+            <div className="w-80 border-l border-zinc-700">
+              <AdvancedConfigSidebar
+                selectedComponent={selectedComponent}
+                updateComponent={handleComponentUpdate}
+                updateHeaderConfig={handleHeaderConfigUpdate}
+                headerConfig={editorState.headerConfig}
+              />
+            </div>
+          )}
         </div>
       </div>
     );
