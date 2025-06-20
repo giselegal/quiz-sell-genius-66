@@ -1,31 +1,44 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "@/styles/advanced-editor.css";
 
-// --- Sistema de Auto-Save ---
+// --- Sistema de Auto-Save Funcional ---
 const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const saveToLocalStorage = useCallback(
     async (dataToSave: QuizEditorState) => {
       setIsSaving(true);
       try {
-        // Salva no localStorage
-        localStorage.setItem(
-          "quiz-editor-state",
-          JSON.stringify({
-            data: dataToSave,
-            timestamp: new Date().toISOString(),
-          })
-        );
+        // Salva no localStorage com versionamento
+        const saveData = {
+          data: dataToSave,
+          timestamp: new Date().toISOString(),
+          version: "1.0.0",
+        };
+        
+        localStorage.setItem("quiz-editor-state", JSON.stringify(saveData));
+        
+        // Também salva um backup rotativo
+        const backupKey = `quiz-editor-backup-${Date.now()}`;
+        localStorage.setItem(backupKey, JSON.stringify(saveData));
+        
+        // Limita a 5 backups
+        const allKeys = Object.keys(localStorage).filter(key => key.startsWith('quiz-editor-backup-'));
+        if (allKeys.length > 5) {
+          allKeys.sort().slice(0, -5).forEach(key => localStorage.removeItem(key));
+        }
 
-        // Simula salvamento no servidor (substitua pela sua API)
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Simula salvamento no servidor
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
         setLastSaved(new Date());
-        console.log("✅ Auto-save realizado:", dataToSave);
+        setHasUnsavedChanges(false);
+        console.log("✅ Auto-save realizado:", new Date().toLocaleTimeString());
       } catch (error) {
         console.error("❌ Erro no auto-save:", error);
+        alert("Erro ao salvar automaticamente. Suas alterações podem não estar sendo salvas.");
       } finally {
         setIsSaving(false);
       }
@@ -36,6 +49,7 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
   useEffect(() => {
     if (!data) return;
 
+    setHasUnsavedChanges(true);
     const timer = setTimeout(() => {
       saveToLocalStorage(data);
     }, delay);
@@ -49,6 +63,7 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
       const saved = localStorage.getItem("quiz-editor-state");
       if (saved) {
         const parsed = JSON.parse(saved);
+        console.log("📂 Dados carregados do auto-save:", new Date(parsed.timestamp).toLocaleString());
         return parsed.data;
       }
     } catch (error) {
@@ -57,7 +72,20 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
     return null;
   }, []);
 
-  return { isSaving, lastSaved, loadFromLocalStorage };
+  // Função para salvar manualmente
+  const saveManually = useCallback(() => {
+    if (data) {
+      saveToLocalStorage(data);
+    }
+  }, [data, saveToLocalStorage]);
+
+  return { 
+    isSaving, 
+    lastSaved, 
+    hasUnsavedChanges,
+    loadFromLocalStorage, 
+    saveManually 
+  };
 };
 
 // --- Interfaces Aprimoradas para a Estrutura de Dados do Quiz ---
@@ -514,166 +542,165 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
     );
   }
 
-  const renderComponent = (component: QuizComponent) => {
-    const isSelected = selectedComponentId === component.id;
-
-    return (
-      <div
-        key={component.id}
-        className={`relative border-2 rounded-lg p-4 mb-4 cursor-pointer transition-all ${
-          isSelected
-            ? "border-blue-500 bg-blue-500/10"
-            : "border-transparent hover:border-zinc-600"
-        }`}
-        onClick={() => onComponentSelect(component.id)}
-      >
-        {/* Controles de componente */}
-        {isSelected && (
-          <div className="absolute -top-2 -right-2 flex gap-1">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onComponentMove(component.id, "up");
-              }}
-              className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
-              title="Mover para cima"
-            >
-              ↑
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onComponentMove(component.id, "down");
-              }}
-              className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
-              title="Mover para baixo"
-            >
-              ↓
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onComponentDelete(component.id);
-              }}
-              className="w-6 h-6 bg-red-500 text-white rounded text-xs flex items-center justify-center hover:bg-red-600"
-              title="Excluir"
-            >
-              ×
-            </button>
-          </div>
-        )}
-
-        {/* Renderização do componente baseado no tipo */}
-        <div className="text-zinc-200">
-          {component.type === "heading" && (
-            <h2 className="text-xl font-bold">
-              {component.props.text || "Título"}
-            </h2>
-          )}
-          {component.type === "text" && (
-            <p>{component.props.text || "Texto do parágrafo"}</p>
-          )}
-          {component.type === "image" && (
-            <img
-              src={component.props.src || "https://placehold.co/400x200"}
-              alt={component.props.alt || "Imagem"}
-              className="max-w-full h-auto rounded"
-            />
-          )}
-          {component.type === "button" && (
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              {component.props.buttonText || "Botão"}
-            </button>
-          )}
-          {component.type === "input" && (
-            <div>
-              {component.props.label && (
-                <label className="block text-sm font-medium mb-1">
-                  {component.props.label}
-                </label>
-              )}
-              <input
-                type={component.props.inputType || "text"}
-                placeholder={component.props.placeholder || "Digite aqui..."}
-                className="w-full px-3 py-2 border border-zinc-600 rounded bg-zinc-800 text-white"
-                disabled
-              />
-            </div>
-          )}
-          {component.type === "options" && (
-            <div>
-              <h3 className="font-medium mb-3">
-                {component.props.text || "Pergunta"}
-              </h3>
-              <div className="space-y-2">
-                {component.props.choices?.map(
-                  (choice: OptionChoice, index: number) => (
-                    <button
-                      key={index}
-                      className="block w-full text-left px-4 py-2 border border-zinc-600 rounded hover:border-blue-500"
-                    >
-                      {choice.text}
-                    </button>
-                  )
-                ) || (
-                  <button className="block w-full text-left px-4 py-2 border border-zinc-600 rounded">
-                    Opção de exemplo
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-          {component.type === "video" && (
-            <div className="aspect-video bg-zinc-800 rounded flex items-center justify-center">
-              <span className="text-zinc-400">📹 Vídeo</span>
-            </div>
-          )}
-          {component.type === "spacer" && (
-            <div className="h-8 border-dashed border border-zinc-600 rounded flex items-center justify-center">
-              <span className="text-zinc-500 text-sm">Espaçador</span>
-            </div>
-          )}
+  // Função para renderizar cada componente com visualização funcional
+  const ComponentToRender: React.FC<{ component: QuizComponent }> = ({ component }) => {
+    const ViewComponent = componentViewMap[component.type];
+    
+    if (!ViewComponent) {
+      return (
+        <div className="p-4 bg-red-500/20 border border-red-500 rounded text-red-200">
+          Componente "{component.type}" não implementado
         </div>
-
-        {/* Label do tipo de componente */}
-        <div className="absolute top-1 left-1 text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
-          {component.type}
-        </div>
-      </div>
-    );
+      );
+    }
+    
+    return <ViewComponent component={component} />;
   };
 
   return (
-    <div className="flex-1 bg-zinc-900">
-      {/* Área de Canvas Principal */}
-      <div className="flex-1 p-6 overflow-y-auto">
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 min-h-[600px]">
-          {/* Header da página */}
-          {headerConfig && (
-            <div className="mb-6 pb-4 border-b border-gray-200">
-              <h1 className="text-xl font-bold text-gray-900">
-                {headerConfig.title}
-              </h1>
-              {headerConfig.subtitle && (
-                <p className="text-gray-600 mt-1">{headerConfig.subtitle}</p>
+    <div className="w-full h-full overflow-auto z-10 bg-zinc-950">
+      <div className="h-full w-full rounded-[inherit] overflow-hidden">
+        {/* Container do Quiz Preview */}
+        <div className="min-h-full flex items-center justify-center p-4">
+          <div className="w-full max-w-md mx-auto">
+            {/* Simulação do Header do Quiz */}
+            {headerConfig.showLogo && (
+              <div className="mb-6 text-center">
+                <img 
+                  src={headerConfig.logoUrl || "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO"} 
+                  alt="Logo" 
+                  className="h-10 mx-auto mb-4"
+                />
+              </div>
+            )}
+            
+            {/* Barra de Progresso */}
+            {headerConfig.showProgressBar && (
+              <div className="mb-8">
+                <div className="w-full bg-zinc-800 rounded-full h-2">
+                  <div 
+                    className="h-2 rounded-full transition-all duration-300"
+                    style={{ 
+                      backgroundColor: headerConfig.progressColor || "#3b82f6",
+                      width: "30%" // Simulado
+                    }}
+                  ></div>
+                </div>
+              </div>
+            )}
+
+            {/* Container dos Componentes */}
+            <div className="space-y-6">
+              {currentStep.components.length === 0 ? (
+                <div className="text-center py-16 text-zinc-400 border-2 border-dashed border-zinc-600 rounded-lg">
+                  <div className="mb-4">
+                    <svg className="w-12 h-12 mx-auto text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </div>
+                  <p className="text-lg font-medium mb-2">Esta etapa está vazia</p>
+                  <p className="text-sm mb-6">Adicione componentes usando a barra lateral à esquerda</p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    <button
+                      onClick={() => onComponentAdd("heading")}
+                      className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                    >
+                      + Título
+                    </button>
+                    <button
+                      onClick={() => onComponentAdd("text")}
+                      className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                    >
+                      + Texto
+                    </button>
+                    <button
+                      onClick={() => onComponentAdd("image")}
+                      className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                    >
+                      + Imagem
+                    </button>
+                    <button
+                      onClick={() => onComponentAdd("button")}
+                      className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                    >
+                      + Botão
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                currentStep.components.map((component) => {
+                  return component ? (
+                    <div
+                      key={component.id}
+                      className={`group/canvas-item max-w-full canvas-item min-h-[1.25rem] relative cursor-pointer transition-all duration-200`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onComponentSelect(component.id);
+                      }}
+                    >
+                      {/* Container com bordas que indicam seleção */}
+                      <div
+                        id={component.id}
+                        className={`min-h-[1.25rem] min-w-full relative rounded-md transition-all duration-200 ${
+                          selectedComponentId === component.id
+                            ? "ring-2 ring-blue-500 ring-offset-2 ring-offset-zinc-950 bg-blue-500/5"
+                            : "hover:ring-1 hover:ring-zinc-500 hover:ring-offset-1 hover:ring-offset-zinc-950"
+                        }`}
+                      >
+                        {/* Controles do componente - aparecem quando selecionado */}
+                        {selectedComponentId === component.id && (
+                          <div className="absolute -top-10 right-0 flex gap-1 z-20">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onComponentMove(component.id, "up");
+                              }}
+                              className="w-8 h-8 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-blue-600 transition-colors"
+                              title="Mover para cima"
+                              disabled={currentStep.components.indexOf(component) === 0}
+                            >
+                              ↑
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onComponentMove(component.id, "down");
+                              }}
+                              className="w-8 h-8 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-blue-600 transition-colors"
+                              title="Mover para baixo"
+                              disabled={currentStep.components.indexOf(component) === currentStep.components.length - 1}
+                            >
+                              ↓
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onComponentDelete(component.id);
+                              }}
+                              className="w-8 h-8 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 transition-colors"
+                              title="Excluir componente"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Label do tipo de componente */}
+                        {selectedComponentId === component.id && (
+                          <div className="absolute -top-10 left-0 text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded z-20">
+                            {component.type}
+                          </div>
+                        )}
+
+                        {/* Renderização do componente */}
+                        <ComponentToRender component={component} />
+                      </div>
+                    </div>
+                  ) : null;
+                })
               )}
             </div>
-          )}
-
-          {/* Componentes da etapa atual */}
-          {currentStep.components.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <p className="mb-4">Esta etapa está vazia</p>
-              <button
-                onClick={() => onComponentAdd("heading")}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                Adicionar primeiro componente
-              </button>
-            </div>
-          ) : (
-            <div>{currentStep.components.map(renderComponent)}</div>
-          )}
+          </div>
         </div>
       </div>
     </div>
@@ -1355,24 +1382,42 @@ const FunnelToolbarSidebar: React.FC<{
       {/* Lista de Componentes */}
       <div className="overflow-y-auto flex-1 p-2 space-y-1">
         {toolbarItems.map((item, index) => (
-          <div
+          <button
             key={index}
-            className="bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-zinc-600 p-2 cursor-pointer transition-all duration-200 group"
-            onClick={() => onComponentAdd(item.type)}
+            className="w-full bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-zinc-600 p-3 cursor-pointer transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={() => {
+              onComponentAdd(item.type);
+              console.log(`✅ Adicionando componente: ${item.name} (${item.type})`);
+            }}
             title={`Adicionar ${item.name}`}
           >
-            <div className="flex items-center gap-2">
-              <div className="text-zinc-300 group-hover:text-white transition-colors">
+            <div className="flex items-center gap-3">
+              <div className="text-zinc-300 group-hover:text-white transition-colors flex-shrink-0">
                 {item.icon}
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 text-left">
                 <div className="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors">
                   {item.name}
                 </div>
+                <div className="text-xs text-zinc-400 group-hover:text-zinc-300">
+                  Clique para adicionar
+                </div>
+              </div>
+              <div className="text-zinc-500 group-hover:text-zinc-300 transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
               </div>
             </div>
-          </div>
+          </button>
         ))}
+      </div>
+
+      {/* Rodapé */}
+      <div className="p-3 border-t border-zinc-700">
+        <div className="text-xs text-zinc-400 text-center">
+          💡 Depois de adicionar, clique no componente para configurá-lo
+        </div>
       </div>
     </div>
   );
@@ -3198,7 +3243,7 @@ const AdvancedQuizEditor: React.FC = () => {
       logoUrl: "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO",
       progressColor: "#3b82f6",
     },
-    currentStepId: "step-1",
+    currentStepId: "quiz-intro",
   });
 
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(
@@ -3211,15 +3256,17 @@ const AdvancedQuizEditor: React.FC = () => {
   const {
     isSaving: isAutoSaving,
     lastSaved,
+    hasUnsavedChanges,
     loadFromLocalStorage,
-  } = useAutoSave(editorState, 3000);
+    saveManually,
+  } = useAutoSave(editorState, 2000); // Auto-save a cada 2 segundos
 
   // Carrega dados salvos na inicialização
   useEffect(() => {
     const savedData = loadFromLocalStorage();
     if (savedData) {
       setEditorState(savedData);
-      console.log("📂 Dados carregados do auto-save:", savedData);
+      console.log("📂 Dados carregados do auto-save:", new Date().toLocaleTimeString());
     }
   }, [loadFromLocalStorage]);
 
