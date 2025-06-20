@@ -1925,7 +1925,7 @@ try {
         isPublishing={isPublishing}
       />
 
-      {/* Layout Principal com Três Colunas */}
+      {/* Layout Principal com Quatro Colunas */}
       <div className="flex-1 flex overflow-hidden">
         {/* Coluna 1: Navegação de Etapas (Esquerda) */}
         <div className="w-64 border-r border-zinc-700 bg-zinc-900">
@@ -1958,6 +1958,12 @@ try {
             onComponentMove={handleComponentMove}
           />
         </div>
+
+        {/* Coluna 4: Painel de Propriedades (Direita) */}
+        <ComponentPropertiesPanel
+          selectedComponent={selectedComponent}
+          onComponentUpdate={handleComponentUpdate}
+        />
       </div>
     </div>
   );
