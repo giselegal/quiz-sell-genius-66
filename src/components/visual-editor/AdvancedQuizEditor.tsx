@@ -1628,6 +1628,84 @@ const ComponentPropertyEditor: React.FC<{
               placeholder="Digite o texto aqui..."
             />
           </div>
+
+          {/* Controles de Tamanho de Fonte */}
+          <div className="rounded-lg border border-zinc-600 bg-zinc-800 p-4">
+            <h4 className="text-sm font-medium text-zinc-100 mb-3">Tamanho da Fonte</h4>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-zinc-400 mb-1 block">Tamanho (rem)</label>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="5"
+                  step="0.1"
+                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
+                  value={parseFloat(props.styles?.fontSize?.replace('rem', '') || '1')}
+                  onChange={(e) => {
+                    const newStyles = { ...props.styles };
+                    newStyles.fontSize = `${e.target.value}rem`;
+                    handleChange("styles", newStyles);
+                  }}
+                />
+                <span className="text-xs text-zinc-400">
+                  {props.styles?.fontSize || '1rem'}
+                </span>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  className={`px-3 py-1 rounded text-xs ${
+                    props.styles?.fontWeight === 'normal' 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
+                  }`}
+                  onClick={() => {
+                    const newStyles = { ...props.styles };
+                    newStyles.fontWeight = 'normal';
+                    handleChange("styles", newStyles);
+                  }}
+                >
+                  Normal
+                </button>
+                <button
+                  className={`px-3 py-1 rounded text-xs ${
+                    props.styles?.fontWeight === 'bold' 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
+                  }`}
+                  onClick={() => {
+                    const newStyles = { ...props.styles };
+                    newStyles.fontWeight = 'bold';
+                    handleChange("styles", newStyles);
+                  }}
+                >
+                  Negrito
+                </button>
+              </div>
+
+              <div className="grid grid-cols-3 gap-1">
+                {['left', 'center', 'right'].map((align) => (
+                  <button
+                    key={align}
+                    className={`px-2 py-1 rounded text-xs ${
+                      props.styles?.textAlign === align 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
+                    }`}
+                    onClick={() => {
+                      const newStyles = { ...props.styles };
+                      newStyles.textAlign = align;
+                      handleChange("styles", newStyles);
+                    }}
+                  >
+                    {align === 'left' ? '⬅️' : align === 'center' ? '↔️' : '➡️'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <StylesEditor />
         </div>
       );
@@ -1668,34 +1746,117 @@ const ComponentPropertyEditor: React.FC<{
             </div>
           </div>
 
+          {/* Seção: Tamanho e Dimensões */}
+          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6 pb-4">
+              <p className="text-sm text-zinc-400">Tamanho e Dimensões</p>
+            </div>
+            <div className="p-6 pt-0 gap-4 flex flex-col">
+              {/* Largura */}
+              <div>
+                <label className="text-sm font-medium leading-none text-zinc-100 mb-2 block">
+                  Largura
+                </label>
+                <div className="grid grid-cols-2 gap-2 mb-2">
+                  <select
+                    className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={props.styles?.width || "auto"}
+                    onChange={(e) => {
+                      const newStyles = { ...props.styles };
+                      newStyles.width = e.target.value;
+                      handleChange("styles", newStyles);
+                    }}
+                  >
+                    <option value="auto">Auto</option>
+                    <option value="100%">100%</option>
+                    <option value="80%">80%</option>
+                    <option value="60%">60%</option>
+                    <option value="40%">40%</option>
+                    <option value="20%">20%</option>
+                    <option value="custom">Personalizado</option>
+                  </select>
+                  {props.styles?.width === 'custom' && (
+                    <input
+                      type="text"
+                      className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                      placeholder="200px"
+                      onChange={(e) => {
+                        const newStyles = { ...props.styles };
+                        newStyles.width = e.target.value;
+                        handleChange("styles", newStyles);
+                      }}
+                    />
+                  )}
+                </div>
+                
+                {/* Slider para largura percentual */}
+                {props.styles?.width && props.styles.width.includes('%') && (
+                  <div>
+                    <input
+                      type="range"
+                      min="10"
+                      max="100"
+                      step="5"
+                      className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
+                      value={parseInt(props.styles.width.replace('%', ''))}
+                      onChange={(e) => {
+                        const newStyles = { ...props.styles };
+                        newStyles.width = `${e.target.value}%`;
+                        handleChange("styles", newStyles);
+                      }}
+                    />
+                    <span className="text-xs text-zinc-400">
+                      {props.styles.width}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Altura */}
+              <div>
+                <label className="text-sm font-medium leading-none text-zinc-100 mb-2 block">
+                  Altura
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <select
+                    className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={props.styles?.height || "auto"}
+                    onChange={(e) => {
+                      const newStyles = { ...props.styles };
+                      newStyles.height = e.target.value;
+                      handleChange("styles", newStyles);
+                    }}
+                  >
+                    <option value="auto">Auto</option>
+                    <option value="200px">Pequena (200px)</option>
+                    <option value="300px">Média (300px)</option>
+                    <option value="400px">Grande (400px)</option>
+                    <option value="500px">Muito Grande (500px)</option>
+                    <option value="custom">Personalizada</option>
+                  </select>
+                  {props.styles?.height === 'custom' && (
+                    <input
+                      type="text"
+                      className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                      placeholder="300px"
+                      onChange={(e) => {
+                        const newStyles = { ...props.styles };
+                        newStyles.height = e.target.value;
+                        handleChange("styles", newStyles);
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Seção: Estilo */}
           <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
             <div className="flex flex-col space-y-1.5 p-6 pb-4">
               <p className="text-sm text-zinc-400">Estilo</p>
             </div>
             <div className="p-6 pt-0 gap-4 flex flex-col">
-              <div className="flex flex-col-reverse items-start gap-2">
-                <select
-                  className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={props.styles?.width || "auto"}
-                  onChange={(e) => {
-                    const newStyles = { ...props.styles };
-                    newStyles.width = e.target.value;
-                    handleChange("styles", newStyles);
-                  }}
-                >
-                  <option value="auto">Auto</option>
-                  <option value="100%">Total</option>
-                  <option value="80%">Grande</option>
-                  <option value="60%">Médio</option>
-                  <option value="40%">Pequeno</option>
-                  <option value="20%">Micro</option>
-                </select>
-                <label className="text-sm font-medium leading-none text-zinc-100">
-                  Largura
-                </label>
-              </div>
-              <div className="grid w-full items-center gap-1.5">
                 <label className="text-sm font-medium leading-none text-zinc-100">
                   Texto Alternativo
                 </label>
