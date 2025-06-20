@@ -1,5 +1,9 @@
-import React from 'react';
-import { useEditorState, useEditorActions, type QuizComponent } from '@/store/editorStore';
+import React from "react";
+import {
+  useEditorState,
+  useEditorActions,
+  type QuizComponent,
+} from "@/store/editorStore";
 
 interface ComponentRendererProps {
   component: QuizComponent;
@@ -33,58 +37,68 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       fontSize: props.fontSize,
       padding: props.padding,
       margin: props.margin,
-      textAlign: (props.alignment as 'left' | 'center' | 'right') || 'left',
-      boxShadow: props.shadow ? `0 ${props.shadow}px ${props.shadow * 2}px rgba(0,0,0,0.1)` : undefined,
+      textAlign: (props.alignment as "left" | "center" | "right") || "left",
+      boxShadow: props.shadow
+        ? `0 ${props.shadow}px ${props.shadow * 2}px rgba(0,0,0,0.1)`
+        : undefined,
     };
 
     switch (component.type) {
-      case 'heading':
+      case "heading":
         return (
           <h1 style={baseStyle} className="font-bold">
-            {props.text || 'Título'}
+            {props.text || "Título"}
           </h1>
         );
 
-      case 'text':
-        return (
-          <p style={baseStyle}>
-            {props.text || 'Texto do parágrafo'}
-          </p>
-        );
+      case "text":
+        return <p style={baseStyle}>{props.text || "Texto do parágrafo"}</p>;
 
-      case 'image':
+      case "image":
         return (
-          <div style={{ textAlign: (props.alignment as 'left' | 'center' | 'right') || 'center' }}>
+          <div
+            style={{
+              textAlign:
+                (props.alignment as "left" | "center" | "right") || "center",
+            }}
+          >
             <img
-              src={props.src || 'https://via.placeholder.com/400x200?text=Imagem'}
-              alt={props.alt || 'Imagem'}
+              src={
+                props.src || "https://via.placeholder.com/400x200?text=Imagem"
+              }
+              alt={props.alt || "Imagem"}
               style={{
                 ...baseStyle,
-                maxWidth: '100%',
-                height: 'auto',
+                maxWidth: "100%",
+                height: "auto",
               }}
             />
           </div>
         );
 
-      case 'button':
+      case "button":
         return (
-          <div style={{ textAlign: (props.alignment as 'left' | 'center' | 'right') || 'center' }}>
+          <div
+            style={{
+              textAlign:
+                (props.alignment as "left" | "center" | "right") || "center",
+            }}
+          >
             <button
               style={{
                 ...baseStyle,
-                border: 'none',
-                cursor: 'pointer',
-                display: 'inline-block',
+                border: "none",
+                cursor: "pointer",
+                display: "inline-block",
               }}
               className="hover:opacity-90 transition-opacity"
             >
-              {props.buttonText || 'Botão'}
+              {props.buttonText || "Botão"}
             </button>
           </div>
         );
 
-      case 'input':
+      case "input":
         return (
           <div style={baseStyle}>
             {props.label && (
@@ -95,11 +109,11 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
             )}
             <input
               type="text"
-              placeholder={props.placeholder || 'Digite aqui...'}
+              placeholder={props.placeholder || "Digite aqui..."}
               style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: '1px solid #ccc',
+                width: "100%",
+                padding: "8px 12px",
+                border: "1px solid #ccc",
                 borderRadius: props.borderRadius || 4,
                 fontSize: props.fontSize || 14,
               }}
@@ -108,7 +122,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           </div>
         );
 
-      case 'options':
+      case "options":
         return (
           <div style={baseStyle}>
             <div className="space-y-3">
@@ -147,27 +161,32 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           </div>
         );
 
-      case 'video':
+      case "video":
         return (
-          <div style={{ textAlign: (props.alignment as 'left' | 'center' | 'right') || 'center' }}>
+          <div
+            style={{
+              textAlign:
+                (props.alignment as "left" | "center" | "right") || "center",
+            }}
+          >
             <div
               style={{
                 ...baseStyle,
-                width: '100%',
-                maxWidth: '600px',
-                aspectRatio: '16/9',
-                backgroundColor: '#000',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                margin: '0 auto',
+                width: "100%",
+                maxWidth: "600px",
+                aspectRatio: "16/9",
+                backgroundColor: "#000",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                margin: "0 auto",
               }}
             >
               {props.src ? (
                 <iframe
                   src={props.src}
-                  style={{ width: '100%', height: '100%', border: 'none' }}
+                  style={{ width: "100%", height: "100%", border: "none" }}
                   allowFullScreen
                 />
               ) : (
@@ -180,7 +199,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           </div>
         );
 
-      case 'spacer':
+      case "spacer":
         return (
           <div
             style={{
@@ -208,15 +227,13 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
     <div
       onClick={handleClick}
       className={`relative transition-all duration-200 ${
-        !isPreviewMode ? 'hover:ring-2 hover:ring-blue-300' : ''
+        !isPreviewMode ? "hover:ring-2 hover:ring-blue-300" : ""
       } ${
-        !isPreviewMode && isSelected 
-          ? 'ring-2 ring-blue-500 shadow-lg' 
-          : ''
+        !isPreviewMode && isSelected ? "ring-2 ring-blue-500 shadow-lg" : ""
       }`}
       style={{
-        outline: !isPreviewMode && isSelected ? '2px solid #3b82f6' : 'none',
-        outlineOffset: '2px',
+        outline: !isPreviewMode && isSelected ? "2px solid #3b82f6" : "none",
+        outlineOffset: "2px",
       }}
     >
       {/* Selection Indicator */}
@@ -227,13 +244,15 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       )}
 
       {/* Component Content */}
-      <div className={!isPreviewMode ? 'cursor-pointer' : ''}>
+      <div className={!isPreviewMode ? "cursor-pointer" : ""}>
         {renderComponent()}
       </div>
 
       {/* Custom CSS */}
       {component.props.customCSS && (
-        <style dangerouslySetInnerHTML={{ __html: component.props.customCSS }} />
+        <style
+          dangerouslySetInnerHTML={{ __html: component.props.customCSS }}
+        />
       )}
     </div>
   );

@@ -213,7 +213,14 @@ const initialState: QuizEditorState = {
   saveStatus: "idle",
 };
 
-export type { OptionChoice, QuizComponentProps, QuizComponent, QuizStep, HeaderConfig, QuizEditorState };
+export type {
+  OptionChoice,
+  QuizComponentProps,
+  QuizComponent,
+  QuizStep,
+  HeaderConfig,
+  QuizEditorState,
+};
 
 export const useEditorStore = create<EditorStore>()(
   devtools(

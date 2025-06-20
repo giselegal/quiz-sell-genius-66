@@ -1,18 +1,22 @@
-import React from 'react';
-import { useEditorState, useEditorActions, useCurrentStep } from '@/store/editorStore';
-import { Button } from '@/components/ui/button';
-import { 
-  Play, 
-  Save, 
-  Undo, 
-  Redo, 
-  Eye, 
+import React from "react";
+import {
+  useEditorState,
+  useEditorActions,
+  useCurrentStep,
+} from "@/store/editorStore";
+import { Button } from "@/components/ui/button";
+import {
+  Play,
+  Save,
+  Undo,
+  Redo,
+  Eye,
   EyeOff,
   Plus,
   Settings,
   Palette,
-  MonitorSmartphone
-} from 'lucide-react';
+  MonitorSmartphone,
+} from "lucide-react";
 
 interface EditorToolbarProps {
   onAddStep?: () => void;
@@ -45,7 +49,9 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   const getSaveStatusIcon = () => {
     switch (saveStatus) {
       case "saving":
-        return <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full" />;
+        return (
+          <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full" />
+        );
       case "saved":
         return <Save className="w-4 h-4 text-green-500" />;
       default:
@@ -65,11 +71,16 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   };
 
   return (
-    <div className={`flex items-center justify-between p-4 bg-zinc-900 border-b border-zinc-700 ${className}`}>
+    <div
+      className={`flex items-center justify-between p-4 bg-zinc-900 border-b border-zinc-700 ${className}`}
+    >
       {/* Lado esquerdo - Informações */}
       <div className="flex items-center gap-4">
         <div className="text-sm text-zinc-400">
-          Editando: <span className="text-white font-medium">{currentStep?.name || 'Carregando...'}</span>
+          Editando:{" "}
+          <span className="text-white font-medium">
+            {currentStep?.name || "Carregando..."}
+          </span>
         </div>
       </div>
 
@@ -87,40 +98,22 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
         <div className="w-px h-6 bg-zinc-700" />
 
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-          disabled
-        >
+        <Button variant="outline" size="sm" className="gap-2" disabled>
           <Undo className="w-4 h-4" />
         </Button>
 
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-          disabled
-        >
+        <Button variant="outline" size="sm" className="gap-2" disabled>
           <Redo className="w-4 h-4" />
         </Button>
 
         <div className="w-px h-6 bg-zinc-700" />
 
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-        >
+        <Button variant="outline" size="sm" className="gap-2">
           <Settings className="w-4 h-4" />
           Configurações
         </Button>
 
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-        >
+        <Button variant="outline" size="sm" className="gap-2">
           <Palette className="w-4 h-4" />
           Temas
         </Button>
@@ -128,11 +121,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
       {/* Lado direito - Preview e Save */}
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-        >
+        <Button variant="outline" size="sm" className="gap-2">
           <MonitorSmartphone className="w-4 h-4" />
           Responsivo
         </Button>
@@ -143,8 +132,12 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           onClick={handlePreviewToggle}
           className="gap-2"
         >
-          {isPreviewMode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-          {isPreviewMode ? 'Editar' : 'Preview'}
+          {isPreviewMode ? (
+            <EyeOff className="w-4 h-4" />
+          ) : (
+            <Eye className="w-4 h-4" />
+          )}
+          {isPreviewMode ? "Editar" : "Preview"}
         </Button>
 
         <Button

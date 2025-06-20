@@ -1,15 +1,19 @@
-import React from 'react';
-import { EditorProvider } from './core/EditorProvider';
-import { EditorToolbar } from './core/EditorToolbar';
-import { EditorCanvas } from './core/EditorCanvas';
-import { SidebarWrapper } from './core/SidebarWrapper';
-import { useEditorState, useEditorActions } from '@/store/editorStore';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { v4 as uuidv4 } from 'uuid';
+import React from "react";
+import { EditorProvider } from "./core/EditorProvider";
+import { EditorToolbar } from "./core/EditorToolbar";
+import { EditorCanvas } from "./core/EditorCanvas";
+import { SidebarWrapper } from "./core/SidebarWrapper";
+import { useEditorState, useEditorActions } from "@/store/editorStore";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
+import { v4 as uuidv4 } from "uuid";
 import "@/styles/advanced-editor.css";
 
 interface AdvancedQuizEditorProps {
-  mode?: 'basic' | 'advanced' | 'unified';
+  mode?: "basic" | "advanced" | "unified";
   autoSaveInterval?: number;
   className?: string;
 }
@@ -22,31 +26,31 @@ const EditorContent: React.FC = () => {
     const newStep = {
       id: uuidv4(),
       name: `Nova Etapa ${steps.length + 1}`,
-      type: 'question' as const,
+      type: "question" as const,
       components: [
         {
           id: uuidv4(),
-          type: 'heading' as const,
+          type: "heading" as const,
           props: {
-            text: 'Nova Pergunta',
+            text: "Nova Pergunta",
             fontSize: 24,
-            textColor: '#333333',
-            alignment: 'center',
+            textColor: "#333333",
+            alignment: "center",
           },
         },
       ],
-      backgroundColor: '#ffffff',
+      backgroundColor: "#ffffff",
     };
 
     addStep(newStep);
   };
 
   const handlePreview = () => {
-    console.log('Preview mode toggled');
+    console.log("Preview mode toggled");
   };
 
   const handleSave = () => {
-    console.log('Manual save triggered');
+    console.log("Manual save triggered");
   };
 
   return (
@@ -67,7 +71,10 @@ const EditorContent: React.FC = () => {
           </ResizablePanel>
 
           {/* Resize Handle */}
-          <ResizableHandle withHandle className="bg-zinc-700 hover:bg-zinc-600 transition-colors" />
+          <ResizableHandle
+            withHandle
+            className="bg-zinc-700 hover:bg-zinc-600 transition-colors"
+          />
 
           {/* Sidebar */}
           <ResizablePanel defaultSize={30} minSize={300} maxSize={500}>
@@ -80,16 +87,13 @@ const EditorContent: React.FC = () => {
 };
 
 export const AdvancedQuizEditor: React.FC<AdvancedQuizEditorProps> = ({
-  mode = 'advanced',
+  mode = "advanced",
   autoSaveInterval = 5000,
   className = "",
 }) => {
   return (
     <div className={`advanced-quiz-editor ${className}`}>
-      <EditorProvider
-        mode={mode}
-        autoSaveInterval={autoSaveInterval}
-      >
+      <EditorProvider mode={mode} autoSaveInterval={autoSaveInterval}>
         <EditorContent />
       </EditorProvider>
     </div>
