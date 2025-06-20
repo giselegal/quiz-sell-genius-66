@@ -12,8 +12,7 @@ import EditorTest from "@/pages/EditorTest";
 import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
 import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
-import SimpleAdvancedQuizEditor from "@/components/visual-editor/SimpleAdvancedQuizEditor";
-import BasicAdvancedQuizEditor from "@/components/visual-editor/BasicAdvancedQuizEditor";
+import AdvancedQuizEditorTest from "@/components/visual-editor/AdvancedQuizEditor.test";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -105,6 +104,13 @@ function App() {
 
           {/* Editor Visual Avançado - Modularizado CORRIGIDO */}
           <Route path="/advanced-editor" element={<AdvancedQuizEditor />} />
+          
+          {/* Teste do Editor Visual Avançado */}
+          <Route path="/advanced-editor-test" element={<AdvancedQuizEditorTest />} />
+          <Route
+            path="/advanced-editor-test"
+            element={<AdvancedQuizEditorTest />}
+          />
 
           {/* Página de Teste */}
           <Route path="/editor-test" element={<EditorTest />} />
