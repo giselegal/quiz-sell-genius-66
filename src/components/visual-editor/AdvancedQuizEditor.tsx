@@ -1858,6 +1858,7 @@ const ComponentPropertyEditor: React.FC<{
               <p className="text-sm text-zinc-400">Estilo</p>
             </div>
             <div className="p-6 pt-0 gap-4 flex flex-col">
+              <div className="grid w-full items-center gap-1.5">
                 <label className="text-sm font-medium leading-none text-zinc-100">
                   Texto Alternativo
                 </label>
@@ -1893,7 +1894,7 @@ const ComponentPropertyEditor: React.FC<{
             </div>
           </div>
 
-          {/* Secao: Personalizacao */}
+               {/* Secao: Personalizacao */}
           <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
             <div className="flex flex-col space-y-1.5 p-6 pb-4">
               <p className="text-sm text-zinc-400">Personalização</p>
