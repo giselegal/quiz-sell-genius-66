@@ -1289,9 +1289,7 @@ const FunnelToolbarSidebar: React.FC<{
         <h3 className="text-sm font-semibold text-white mb-1">
           Adicionar Componentes
         </h3>
-        <p className="text-xs text-zinc-400">
-          Clique para adicionar ao canvas
-        </p>
+        <p className="text-xs text-zinc-400">Clique para adicionar ao canvas</p>
       </div>
 
       {/* Lista de Componentes */}
@@ -2267,49 +2265,57 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Conforto, leveza e praticidade no vestir",
                   value: "natural",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Discrição, caimento clássico e sobriedade",
                   value: "classico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Praticidade com um toque de estilo atual",
                   value: "contemporaneo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Elegância refinada, moderna e sem exageros",
                   value: "elegante",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Delicadeza em tecidos suaves e fluidos",
                   value: "romantico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Sensualidade com destaque para o corpo",
                   value: "sexy",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Impacto visual com peças estruturadas e assimétricas",
                   value: "dramatico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Mix criativo com formas ousadas e originais",
                   value: "criativo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
                   nextStepId: "question-2",
                 },
               ],
@@ -2437,49 +2443,57 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Visual leve, despojado e natural",
                   value: "natural",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual clássico e tradicional",
                   value: "classico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual casual com toque atual",
                   value: "contemporaneo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual refinado e imponente",
                   value: "elegante",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual romântico, feminino e delicado",
                   value: "romantico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual sensual, com saia justa e decote",
                   value: "sexy",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual marcante e urbano (jeans + jaqueta)",
                   value: "dramatico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual criativo, colorido e ousado",
                   value: "criativo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
                   nextStepId: "quiz-transition",
                 },
               ],
