@@ -3839,6 +3839,56 @@ const AdvancedQuizEditor: React.FC = () => {
                     }
                   />
                 </div>
+              ) : (
+                <div className="p-4 flex flex-col items-center justify-center h-full text-center">
+                  <div className="text-zinc-500 mb-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="48"
+                      height="48"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="mx-auto mb-2"
+                    >
+                      <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
+                      <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
+                      <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-zinc-300 mb-2">
+                    Nenhum componente selecionado
+                  </h3>
+                  <p className="text-sm text-zinc-500">
+                    Clique em um componente no canvas para editar suas
+                    propriedades
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
+              {selectedComponent ? (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-white">
+                      Editar Componente
+                    </h3>
+                    <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
+                      {selectedComponent.type}
+                    </span>
+                  </div>
+                  <ComponentPropertyEditor
+                    type={selectedComponent.type}
+                    props={selectedComponent.props}
+                    onPropsChange={(newProps) =>
+                      handleComponentUpdate(selectedComponent.id, newProps)
+                    }
+                  />
+                </div>
             ) : (
               <div className="p-4 flex flex-col items-center justify-center h-full text-center">
                 <div className="text-zinc-500 mb-4">
