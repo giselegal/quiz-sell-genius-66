@@ -3358,7 +3358,8 @@ const AdvancedQuizEditor: React.FC = () => {
                 <p>
                   Nenhum componente selecionado.
                   <br />
-                  Selecione um componente no canvas para editar suas propriedades.
+                  Selecione um componente no canvas para editar suas
+                  propriedades.
                 </p>
               </div>
             )}
