@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-20T15:29:09.287Z",
-  "components": 477,
+  "timestamp": "2025-06-20T15:30:00.683Z",
+  "components": 478,
   "files": [
     {
       "name": "App",
@@ -1990,6 +1990,11 @@
     {
       "name": "EditorToolbar",
       "path": "src/components/unified-editor/toolbar/EditorToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdvancedQuizEditor.backup",
+      "path": "src/components/visual-editor/AdvancedQuizEditor.backup.tsx",
       "type": "typescript"
     },
     {
