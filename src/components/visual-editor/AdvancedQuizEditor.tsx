@@ -1,5 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "@/styles/advanced-editor.css";
+
+// --- Sistema de Auto-Save ---
+const useAutoSave = (data: any, delay: number = 2000) => {
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  const saveToLocalStorage = useCallback(async (dataToSave: any) => {
+    setIsSaving(true);
+    try {
+      // Salva no localStorage
+      localStorage.setItem('quiz-editor-state', JSON.stringify({
+        data: dataToSave,
+        timestamp: new Date().toISOString()
+      }));
+      
+      // Simula salvamento no servidor (substitua pela sua API)
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setLastSaved(new Date());
+      console.log("✅ Auto-save realizado:", dataToSave);
+    } catch (error) {
+      console.error("❌ Erro no auto-save:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const timer = setTimeout(() => {
+      saveToLocalStorage(data);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [data, delay, saveToLocalStorage]);
+
+  // Carrega dados salvos no localStorage na inicialização
+  const loadFromLocalStorage = useCallback(() => {
+    try {
+      const saved = localStorage.getItem('quiz-editor-state');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.data;
+      }
+    } catch (error) {
+      console.error("Erro ao carregar dados salvos:", error);
+    }
+    return null;
+  }, []);
+
+  return { isSaving, lastSaved, loadFromLocalStorage };
+};
 
 // --- Interfaces Aprimoradas para a Estrutura de Dados do Quiz ---
 
@@ -1566,6 +1619,7 @@ const ComponentPropertyEditor: React.FC<{
               <div className="grid w-full items-center gap-1.5">
                 <label className="text-sm font-medium leading-none text-zinc-100">
                   Texto Alternativo
+               
                 </label>
                 <input
                   type="text"
