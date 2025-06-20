@@ -1893,7 +1893,7 @@ const ComponentPropertyEditor: React.FC<{
             </div>
           </div>
 
-          {/* Seção: Personalização */}
+          {/* Secao: Personalizacao */}
           <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
             <div className="flex flex-col space-y-1.5 p-6 pb-4">
               <p className="text-sm text-zinc-400">Personalização</p>
@@ -2016,7 +2016,7 @@ const ComponentPropertyEditor: React.FC<{
           </div>
 
           {/* Seção: Geral */}
-          <><div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
         <div className="flex flex-col space-y-1.5 p-6 pb-4">
           <p className="text-sm text-zinc-400">Geral</p>
         </div>
@@ -2061,7 +2061,7 @@ const ComponentPropertyEditor: React.FC<{
             </label>
           </div>
         </div>
-      </div><StylesEditor /></>
+      </div>
         </div>
       );
 
