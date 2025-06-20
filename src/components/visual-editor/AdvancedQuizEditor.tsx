@@ -1109,21 +1109,20 @@ const FunnelToolbarSidebar: React.FC<{
 }> = ({ onComponentAdd }) => {
   const toolbarItems = [
     {
-      name: "📝 Título",
+      name: "Título",
       type: "heading",
-      desc: "Cabeçalho principal",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-heading1 h-4 w-4"
+          className="h-4 w-4"
         >
           <path d="M4 12h8"></path>
           <path d="M4 18V6"></path>
@@ -1133,21 +1132,20 @@ const FunnelToolbarSidebar: React.FC<{
       ),
     },
     {
-      name: "📄 Texto",
+      name: "Texto",
       type: "text",
-      desc: "Parágrafo de texto",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-text h-4 w-4"
+          className="h-4 w-4"
         >
           <path d="M17 6.1H3"></path>
           <path d="M21 12.1H3"></path>
@@ -1156,21 +1154,20 @@ const FunnelToolbarSidebar: React.FC<{
       ),
     },
     {
-      name: "🖼️ Imagem",
+      name: "Imagem",
       type: "image",
-      desc: "Imagem ou foto",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-image h-4 w-4"
+          className="h-4 w-4"
         >
           <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
           <circle cx="9" cy="9" r="2"></circle>
@@ -1179,42 +1176,40 @@ const FunnelToolbarSidebar: React.FC<{
       ),
     },
     {
-      name: "🔘 Botão",
+      name: "Botão",
       type: "button",
-      desc: "Botão clicável",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-rectangle-horizontal h-4 w-4"
+          className="h-4 w-4"
         >
           <rect width="20" height="12" x="2" y="6" rx="2"></rect>
         </svg>
       ),
     },
     {
-      name: "📝 Campo",
+      name: "Campo",
       type: "input",
-      desc: "Campo de entrada",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-text-cursor-input h-4 w-4"
+          className="h-4 w-4"
         >
           <path d="M5 4h1a3 3 0 0 1 3 3 3 3 0 0 1 3-3h1"></path>
           <path d="M13 20h-1a3 3 0 0 1-3-3 3 3 0 0 1-3 3H5"></path>
@@ -1223,21 +1218,20 @@ const FunnelToolbarSidebar: React.FC<{
       ),
     },
     {
-      name: "☑️ Opções",
+      name: "Opções",
       type: "options",
-      desc: "Múltipla escolha",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-check-square h-4 w-4"
+          className="h-4 w-4"
         >
           <polyline points="9,11 12,14 22,4"></polyline>
           <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
@@ -1245,21 +1239,20 @@ const FunnelToolbarSidebar: React.FC<{
       ),
     },
     {
-      name: "🎥 Vídeo",
+      name: "Vídeo",
       type: "video",
-      desc: "Vídeo incorporado",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-video h-4 w-4"
+          className="h-4 w-4"
         >
           <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"></path>
           <rect x="2" y="6" width="14" height="12" rx="2"></rect>
@@ -1267,21 +1260,20 @@ const FunnelToolbarSidebar: React.FC<{
       ),
     },
     {
-      name: "📏 Espaço",
+      name: "Espaço",
       type: "spacer",
-      desc: "Espaçamento",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="lucide lucide-space h-4 w-4"
+          className="h-4 w-4"
         >
           <path d="M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1"></path>
           <path d="M22 7v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1V7"></path>
@@ -1307,20 +1299,17 @@ const FunnelToolbarSidebar: React.FC<{
         {toolbarItems.map((item, index) => (
           <div
             key={index}
-            className="bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-zinc-600 p-3 cursor-pointer transition-all duration-200 group"
+            className="bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-zinc-600 p-2 cursor-pointer transition-all duration-200 group"
             onClick={() => onComponentAdd(item.type)}
-            title={item.desc}
+            title={`Adicionar ${item.name}`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <div className="text-zinc-300 group-hover:text-white transition-colors">
                 {item.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-medium text-zinc-200 group-hover:text-white transition-colors">
+                <div className="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors">
                   {item.name}
-                </div>
-                <div className="text-xs text-zinc-500 group-hover:text-zinc-400 transition-colors mt-0.5">
-                  {item.desc}
                 </div>
               </div>
             </div>
