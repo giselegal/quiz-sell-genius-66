@@ -77,6 +77,9 @@ interface QuizComponentProps {
   autoSlide?: boolean; // Se as imagens devem mudar automaticamente
   slideInterval?: number; // Intervalo em ms para autoSlide
 
+  // Propriedades Específicas de Spacer:
+  height?: number; // Altura do espaçador em pixels
+
   // Propriedades para componentes personalizados (ResultPage.tsx, QuizOfferPage.tsx)
   // Estas seriam configurações específicas que o componente React customizado esperaria.
   resultType?: "styleAnalysis" | "personalityProfile"; // Para ResultPage: tipo de resultado
