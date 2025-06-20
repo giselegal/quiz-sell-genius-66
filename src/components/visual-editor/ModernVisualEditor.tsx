@@ -307,24 +307,33 @@ const ModernVisualEditor: React.FC = () => {
   const getDefaultComponentData = (type: string) => {
     switch (type) {
       case 'heading':
-        return { text: "Novo Título", level: 1 };
+        return { text: "Novo Título", level: 1, align: "center" };
+      case 'subtitle':
+        return { text: "Novo subtítulo", align: "center" };
       case 'image':
         return { 
           src: "https://via.placeholder.com/400x300",
           alt: "Nova Imagem",
-          width: 400,
-          height: 300
+          width: "100%",
+          height: "auto",
+          borderRadius: 8
         };
       case 'input':
         return { 
           label: "Campo",
           placeholder: "Digite aqui...",
-          required: false
+          required: false,
+          type: "text"
         };
       case 'button':
-        return { text: "Botão", variant: "primary" };
+        return { 
+          text: "Botão", 
+          variant: "primary",
+          fullWidth: true,
+          size: "medium"
+        };
       case 'spacer':
-        return { height: 20 };
+        return { height: 32 };
       case 'visual-options':
         return {
           title: "QUAL SUA PREFERÊNCIA?",
