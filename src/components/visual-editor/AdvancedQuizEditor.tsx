@@ -692,7 +692,11 @@ export const FunnelNavbar: React.FC<{
   onPublish: () => Promise<void>;
   isSaving: boolean;
   isPublishing: boolean;
-}> = ({ onSave, onPublish, isSaving, isPublishing }) => {
+  autoSaveStatus?: {
+    isAutoSaving: boolean;
+    lastSaved: Date | null;
+  };
+}> = ({ onSave, onPublish, isSaving, isPublishing, autoSaveStatus }) => {
   return (
     <div className="h-fit border-b border-gray-200 relative z-[20] bg-white shadow-sm">
       <div className="w-full flex flex-wrap md:flex-nowrap justify-between">
@@ -3497,8 +3501,12 @@ const AdvancedQuizEditor: React.FC = () => {
         <FunnelNavbar
           onSave={handleSave}
           onPublish={handlePublish}
-          isSaving={isSaving}
+          isSaving={isSaving || isAutoSaving}
           isPublishing={isPublishing}
+          autoSaveStatus={{
+            isAutoSaving,
+            lastSaved
+          }}
         />
 
         {/* Layout Principal com Quatro Colunas */}
