@@ -73,7 +73,7 @@ const SAMPLE_QUIZ_DATA = {
     showLogo: true,
     showProgress: true,
     allowReturn: true,
-    logoSrc: "https://via.placeholder.com/120x40/3b82f6/ffffff?text=LOGO",
+    logoSrc: "/placeholder.svg",
   },
   steps: [
     {
