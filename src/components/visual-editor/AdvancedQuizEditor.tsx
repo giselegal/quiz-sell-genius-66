@@ -2536,8 +2536,35 @@ const ComponentPropertyEditor: React.FC<{
     case "spacer":
       return (
         <div className="space-y-4">
-          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">
-            Espaçador não possui propriedades editáveis específicas.
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Altura do Espaçador (px)
+            </label>
+            <input
+              type="number"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.height || 20}
+              onChange={(e) => handleChange("height", parseInt(e.target.value) || 20)}
+              min="5"
+              max="200"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Altura (slider)
+            </label>
+            <input
+              type="range"
+              min="5"
+              max="200"
+              step="5"
+              className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
+              value={props.height || 20}
+              onChange={(e) => handleChange("height", parseInt(e.target.value))}
+            />
+            <span className="text-xs text-zinc-400">
+              {props.height || 20}px
+            </span>
           </div>
           <StylesEditor />
         </div>
