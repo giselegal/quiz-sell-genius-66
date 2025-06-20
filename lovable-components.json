@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-20T01:18:18.385Z",
-  "components": 472,
+  "timestamp": "2025-06-20T01:21:05.709Z",
+  "components": 470,
   "files": [
     {
       "name": "App",
@@ -85,11 +85,6 @@
     {
       "name": "QuizPage",
       "path": "src/components/QuizPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizProductionView",
-      "path": "src/components/QuizProductionView.tsx",
       "type": "typescript"
     },
     {
@@ -2003,23 +1998,23 @@
       "type": "typescript"
     },
     {
-      "name": "ComponentRenderer",
-      "path": "src/components/visual-editor/core/ComponentRenderer.tsx",
+      "name": "ModernVisualEditor",
+      "path": "src/components/visual-editor/ModernVisualEditor.tsx",
       "type": "typescript"
     },
     {
-      "name": "EditorContext",
-      "path": "src/components/visual-editor/core/EditorContext.tsx",
+      "name": "AdvancedControlsPanel",
+      "path": "src/components/visual-editor/panels/AdvancedControlsPanel.tsx",
       "type": "typescript"
     },
     {
-      "name": "EditorProvider",
-      "path": "src/components/visual-editor/core/EditorProvider.tsx",
+      "name": "ModernConfigurationPanel",
+      "path": "src/components/visual-editor/panels/ModernConfigurationPanel.tsx",
       "type": "typescript"
     },
     {
-      "name": "AdvancedConfigSidebar",
-      "path": "src/components/visual-editor/panels/AdvancedConfigSidebar.tsx",
+      "name": "StageConfigurationPanel",
+      "path": "src/components/visual-editor/panels/StageConfigurationPanel.tsx",
       "type": "typescript"
     },
     {
@@ -2220,11 +2215,6 @@
     {
       "name": "QuizPage",
       "path": "src/pages/QuizPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizProductionPage",
-      "path": "src/pages/QuizProductionPage.tsx",
       "type": "typescript"
     },
     {

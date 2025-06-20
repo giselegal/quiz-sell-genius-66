@@ -49,10 +49,6 @@ export function getVideoPlaceholder(): string {
  */
 export function fixPlaceholderUrl(url: string): string {
   if (url.includes("via.placeholder.com")) {
-    // URL específica que estava causando problemas de DNS
-    if (url.includes("120x40") && url.includes("3b82f6") && url.includes("text=LOGO")) {
-      return "/logo-placeholder.svg";
-    }
     return DEFAULT_PLACEHOLDER;
   }
   return url;
