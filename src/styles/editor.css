@@ -149,7 +149,7 @@
 }
 
 .resize-separator:hover::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: -2px;
@@ -165,7 +165,7 @@
 }
 
 .resize-separator.dragging::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: -4px;
