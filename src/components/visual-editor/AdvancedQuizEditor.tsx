@@ -904,6 +904,30 @@ export const FunnelNavbar: React.FC<{
         </div>
         {/* Botões de visualização (mobile/desktop) e ações (Salvar, Publicar) */}
         <div className="md:flex hidden order-1 md:order-3 w-fit gap-1 md:gap-2 p-3">
+          {/* Indicador de Auto-Save */}
+          {autoSaveStatus && (
+            <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
+              {autoSaveStatus.isAutoSaving ? (
+                <>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-gray-600">Salvando...</span>
+                </>
+              ) : autoSaveStatus.lastSaved ? (
+                <>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-xs text-gray-600">
+                    Salvo {autoSaveStatus.lastSaved.toLocaleTimeString()}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                  <span className="text-xs text-gray-600">Não salvo</span>
+                </>
+              )}
+            </div>
+          )}
+          
           <button className="items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10 md:flex hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
