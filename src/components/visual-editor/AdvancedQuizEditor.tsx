@@ -613,6 +613,8 @@ const generateUniqueId = (): string =>
 // --- Componente CanvasArea ---
 interface CanvasAreaProps {
   currentStep: QuizStep | null;
+  steps: QuizStep[];
+  currentStepId: string;
   headerConfig: QuizHeaderConfig;
   selectedComponent: QuizComponent | null;
   selectedComponentId: string | null;
@@ -629,6 +631,8 @@ interface CanvasAreaProps {
 
 const CanvasArea: React.FC<CanvasAreaProps> = ({
   currentStep,
+  steps,
+  currentStepId,
   headerConfig,
   selectedComponent,
   selectedComponentId,
@@ -5049,6 +5053,8 @@ const AdvancedQuizEditor: React.FC = () => {
 
             <CanvasArea
               currentStep={currentStep}
+              steps={editorState.steps}
+              currentStepId={editorState.currentStepId}
               headerConfig={{
                 ...editorState.headerConfig,
                 showLogo: true, // Garantir que o logotipo seja exibido centralmente
