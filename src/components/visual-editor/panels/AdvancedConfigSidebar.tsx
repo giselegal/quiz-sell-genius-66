@@ -101,7 +101,10 @@ interface QuizHeaderConfig {
 
 interface AdvancedConfigSidebarProps {
   selectedComponent: QuizComponent;
-  updateComponent: (componentId: string, newProps: Record<string, unknown>) => void;
+  updateComponent: (
+    componentId: string,
+    newProps: Record<string, unknown>
+  ) => void;
   updateHeaderConfig: (newConfig: Partial<QuizHeaderConfig>) => void;
   headerConfig: QuizHeaderConfig;
 }
@@ -112,7 +115,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
   updateHeaderConfig,
   headerConfig,
 }) => {
-  const [activeTab, setActiveTab] = useState<"properties" | "style" | "layout">("properties");
+  const [activeTab, setActiveTab] = useState<"properties" | "style" | "layout">(
+    "properties"
+  );
 
   const handlePropChange = (key: string, value: unknown) => {
     updateComponent(selectedComponent.id, {
@@ -226,7 +231,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               </label>
               <select
                 value={props.buttonStyle || "primary"}
-                onChange={(e) => handlePropChange("buttonStyle", e.target.value)}
+                onChange={(e) =>
+                  handlePropChange("buttonStyle", e.target.value)
+                }
                 className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded text-white"
               >
                 <option value="primary">Primário</option>
@@ -260,7 +267,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               <input
                 type="text"
                 value={props.placeholder || ""}
-                onChange={(e) => handlePropChange("placeholder", e.target.value)}
+                onChange={(e) =>
+                  handlePropChange("placeholder", e.target.value)
+                }
                 className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded text-white"
                 placeholder="Digite aqui..."
               />
@@ -306,7 +315,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               <input
                 type="text"
                 value={props.questionText || ""}
-                onChange={(e) => handlePropChange("questionText", e.target.value)}
+                onChange={(e) =>
+                  handlePropChange("questionText", e.target.value)
+                }
                 className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded text-white"
                 placeholder="Qual é a sua preferência?"
               />
@@ -317,7 +328,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               </label>
               <select
                 value={props.selectionType || "single"}
-                onChange={(e) => handlePropChange("selectionType", e.target.value)}
+                onChange={(e) =>
+                  handlePropChange("selectionType", e.target.value)
+                }
                 className="w-full p-2 bg-zinc-800 border border-zinc-600 rounded text-white"
               >
                 <option value="single">Seleção única</option>
@@ -344,7 +357,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                     />
                     <button
                       onClick={() => {
-                        const newChoices = (props.choices || []).filter((_, i: number) => i !== index);
+                        const newChoices = (props.choices || []).filter(
+                          (_, i: number) => i !== index
+                        );
                         handlePropChange("choices", newChoices);
                       }}
                       className="p-2 text-red-400 hover:text-red-300"
@@ -355,7 +370,13 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
                 ))}
                 <button
                   onClick={() => {
-                    const newChoices = [...(props.choices || []), { text: "", value: `option${(props.choices || []).length + 1}` }];
+                    const newChoices = [
+                      ...(props.choices || []),
+                      {
+                        text: "",
+                        value: `option${(props.choices || []).length + 1}`,
+                      },
+                    ];
                     handlePropChange("choices", newChoices);
                   }}
                   className="w-full p-2 border border-dashed border-zinc-600 rounded text-zinc-400 hover:text-zinc-300 hover:border-zinc-500 text-sm"
@@ -371,7 +392,10 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
         return (
           <div className="text-center text-zinc-400 py-8">
             <Settings size={48} className="mx-auto mb-4 opacity-50" />
-            <p>Configurações para este tipo de componente ainda não foram implementadas.</p>
+            <p>
+              Configurações para este tipo de componente ainda não foram
+              implementadas.
+            </p>
             <p className="text-sm mt-2">Tipo: {type}</p>
           </div>
         );
@@ -399,7 +423,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
           <input
             type="color"
             value={selectedComponent.props.backgroundColor || "#000000"}
-            onChange={(e) => handlePropChange("backgroundColor", e.target.value)}
+            onChange={(e) =>
+              handlePropChange("backgroundColor", e.target.value)
+            }
             className="w-full h-10 bg-zinc-800 border border-zinc-600 rounded"
           />
         </div>
@@ -412,7 +438,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             min="12"
             max="48"
             value={selectedComponent.props.fontSize || 16}
-            onChange={(e) => handlePropChange("fontSize", parseInt(e.target.value))}
+            onChange={(e) =>
+              handlePropChange("fontSize", parseInt(e.target.value))
+            }
             className="w-full"
           />
           <div className="text-xs text-zinc-400 mt-1">
@@ -428,7 +456,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             min="0"
             max="20"
             value={selectedComponent.props.borderRadius || 0}
-            onChange={(e) => handlePropChange("borderRadius", parseInt(e.target.value))}
+            onChange={(e) =>
+              handlePropChange("borderRadius", parseInt(e.target.value))
+            }
             className="w-full"
           />
           <div className="text-xs text-zinc-400 mt-1">
@@ -466,7 +496,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             min="0"
             max="50"
             value={selectedComponent.props.padding || 0}
-            onChange={(e) => handlePropChange("padding", parseInt(e.target.value))}
+            onChange={(e) =>
+              handlePropChange("padding", parseInt(e.target.value))
+            }
             className="w-full"
           />
           <div className="text-xs text-zinc-400 mt-1">
@@ -482,7 +514,9 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
             min="0"
             max="50"
             value={selectedComponent.props.margin || 0}
-            onChange={(e) => handlePropChange("margin", parseInt(e.target.value))}
+            onChange={(e) =>
+              handlePropChange("margin", parseInt(e.target.value))
+            }
             className="w-full"
           />
           <div className="text-xs text-zinc-400 mt-1">
@@ -515,7 +549,11 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
               className="p-2 text-zinc-400 hover:text-white"
               title="Ocultar/Mostrar componente"
             >
-              {selectedComponent.props.hidden ? <EyeOff size={16} /> : <Eye size={16} />}
+              {selectedComponent.props.hidden ? (
+                <EyeOff size={16} />
+              ) : (
+                <Eye size={16} />
+              )}
             </button>
             <button
               className="p-2 text-red-400 hover:text-red-300"

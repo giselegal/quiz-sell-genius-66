@@ -421,9 +421,12 @@ interface CanvasAreaProps {
   selectedComponentId: string | null;
   onComponentSelect: (componentId: string | null) => void;
   onComponentAdd: (type: string) => void;
-  onComponentUpdate: (componentId: string, newProps: Partial<QuizComponentProps>) => void;
+  onComponentUpdate: (
+    componentId: string,
+    newProps: Partial<QuizComponentProps>
+  ) => void;
   onComponentDelete: (componentId: string) => void;
-  onComponentMove: (componentId: string, direction: 'up' | 'down') => void;
+  onComponentMove: (componentId: string, direction: "up" | "down") => void;
 }
 
 const CanvasArea: React.FC<CanvasAreaProps> = ({
@@ -435,13 +438,15 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   onComponentAdd,
   onComponentUpdate,
   onComponentDelete,
-  onComponentMove
+  onComponentMove,
 }) => {
   if (!currentStep) {
     return (
       <div className="flex-1 flex items-center justify-center bg-zinc-900 text-zinc-400">
         <div className="text-center">
-          <h3 className="text-lg font-medium mb-2">Nenhuma etapa selecionada</h3>
+          <h3 className="text-lg font-medium mb-2">
+            Nenhuma etapa selecionada
+          </h3>
           <p>Selecione uma etapa no painel lateral para começar a editar</p>
         </div>
       </div>
@@ -450,14 +455,14 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
 
   const renderComponent = (component: QuizComponent) => {
     const isSelected = selectedComponentId === component.id;
-    
+
     return (
       <div
         key={component.id}
         className={`relative border-2 rounded-lg p-4 mb-4 cursor-pointer transition-all ${
-          isSelected 
-            ? 'border-blue-500 bg-blue-500/10' 
-            : 'border-transparent hover:border-zinc-600'
+          isSelected
+            ? "border-blue-500 bg-blue-500/10"
+            : "border-transparent hover:border-zinc-600"
         }`}
         onClick={() => onComponentSelect(component.id)}
       >
@@ -467,7 +472,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onComponentMove(component.id, 'up');
+                onComponentMove(component.id, "up");
               }}
               className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
               title="Mover para cima"
@@ -477,7 +482,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onComponentMove(component.id, 'down');
+                onComponentMove(component.id, "down");
               }}
               className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
               title="Mover para baixo"
@@ -499,49 +504,57 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
 
         {/* Renderização do componente baseado no tipo */}
         <div className="text-zinc-200">
-          {component.type === 'heading' && (
-            <h2 className="text-xl font-bold">{component.props.text || 'Título'}</h2>
+          {component.type === "heading" && (
+            <h2 className="text-xl font-bold">
+              {component.props.text || "Título"}
+            </h2>
           )}
-          {component.type === 'text' && (
-            <p>{component.props.text || 'Texto do parágrafo'}</p>
+          {component.type === "text" && (
+            <p>{component.props.text || "Texto do parágrafo"}</p>
           )}
-          {component.type === 'image' && (
-            <img 
-              src={component.props.src || 'https://placehold.co/400x200'} 
-              alt={component.props.alt || 'Imagem'} 
+          {component.type === "image" && (
+            <img
+              src={component.props.src || "https://placehold.co/400x200"}
+              alt={component.props.alt || "Imagem"}
               className="max-w-full h-auto rounded"
             />
           )}
-          {component.type === 'button' && (
+          {component.type === "button" && (
             <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              {component.props.buttonText || 'Botão'}
+              {component.props.buttonText || "Botão"}
             </button>
           )}
-          {component.type === 'input' && (
+          {component.type === "input" && (
             <div>
               {component.props.label && (
-                <label className="block text-sm font-medium mb-1">{component.props.label}</label>
+                <label className="block text-sm font-medium mb-1">
+                  {component.props.label}
+                </label>
               )}
-              <input 
-                type={component.props.inputType || 'text'}
-                placeholder={component.props.placeholder || 'Digite aqui...'}
+              <input
+                type={component.props.inputType || "text"}
+                placeholder={component.props.placeholder || "Digite aqui..."}
                 className="w-full px-3 py-2 border border-zinc-600 rounded bg-zinc-800 text-white"
                 disabled
               />
             </div>
           )}
-          {component.type === 'options' && (
+          {component.type === "options" && (
             <div>
-              <h3 className="font-medium mb-3">{component.props.text || 'Pergunta'}</h3>
+              <h3 className="font-medium mb-3">
+                {component.props.text || "Pergunta"}
+              </h3>
               <div className="space-y-2">
-                {component.props.choices?.map((choice: OptionChoice, index: number) => (
-                  <button 
-                    key={index}
-                    className="block w-full text-left px-4 py-2 border border-zinc-600 rounded hover:border-blue-500"
-                  >
-                    {choice.text}
-                  </button>
-                )) || (
+                {component.props.choices?.map(
+                  (choice: OptionChoice, index: number) => (
+                    <button
+                      key={index}
+                      className="block w-full text-left px-4 py-2 border border-zinc-600 rounded hover:border-blue-500"
+                    >
+                      {choice.text}
+                    </button>
+                  )
+                ) || (
                   <button className="block w-full text-left px-4 py-2 border border-zinc-600 rounded">
                     Opção de exemplo
                   </button>
@@ -549,12 +562,12 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               </div>
             </div>
           )}
-          {component.type === 'video' && (
+          {component.type === "video" && (
             <div className="aspect-video bg-zinc-800 rounded flex items-center justify-center">
               <span className="text-zinc-400">📹 Vídeo</span>
             </div>
           )}
-          {component.type === 'spacer' && (
+          {component.type === "spacer" && (
             <div className="h-8 border-dashed border border-zinc-600 rounded flex items-center justify-center">
               <span className="text-zinc-500 text-sm">Espaçador</span>
             </div>
@@ -577,7 +590,9 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
           {/* Header da página */}
           {headerConfig && (
             <div className="mb-6 pb-4 border-b border-gray-200">
-              <h1 className="text-xl font-bold text-gray-900">{headerConfig.title}</h1>
+              <h1 className="text-xl font-bold text-gray-900">
+                {headerConfig.title}
+              </h1>
               {headerConfig.subtitle && (
                 <p className="text-gray-600 mt-1">{headerConfig.subtitle}</p>
               )}
@@ -589,16 +604,14 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
             <div className="text-center py-12 text-gray-500">
               <p className="mb-4">Esta etapa está vazia</p>
               <button
-                onClick={() => onComponentAdd('heading')}
+                onClick={() => onComponentAdd("heading")}
                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
                 Adicionar primeiro componente
               </button>
             </div>
           ) : (
-            <div>
-              {currentStep.components.map(renderComponent)}
-            </div>
+            <div>{currentStep.components.map(renderComponent)}</div>
           )}
         </div>
       </div>
@@ -608,14 +621,18 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
         <h3 className="text-white font-medium mb-4">Adicionar Componente</h3>
         <div className="space-y-2">
           {[
-            { type: 'heading', label: '📝 Título', desc: 'Cabeçalho principal' },
-            { type: 'text', label: '📄 Texto', desc: 'Parágrafo de texto' },
-            { type: 'image', label: '🖼️ Imagem', desc: 'Imagem ou foto' },
-            { type: 'button', label: '🔘 Botão', desc: 'Botão clicável' },
-            { type: 'input', label: '📝 Campo', desc: 'Campo de entrada' },
-            { type: 'options', label: '☑️ Opções', desc: 'Múltipla escolha' },
-            { type: 'video', label: '🎥 Vídeo', desc: 'Vídeo incorporado' },
-            { type: 'spacer', label: '📏 Espaço', desc: 'Espaçamento' },
+            {
+              type: "heading",
+              label: "📝 Título",
+              desc: "Cabeçalho principal",
+            },
+            { type: "text", label: "📄 Texto", desc: "Parágrafo de texto" },
+            { type: "image", label: "🖼️ Imagem", desc: "Imagem ou foto" },
+            { type: "button", label: "🔘 Botão", desc: "Botão clicável" },
+            { type: "input", label: "📝 Campo", desc: "Campo de entrada" },
+            { type: "options", label: "☑️ Opções", desc: "Múltipla escolha" },
+            { type: "video", label: "🎥 Vídeo", desc: "Vídeo incorporado" },
+            { type: "spacer", label: "📏 Espaço", desc: "Espaçamento" },
           ].map((component) => (
             <button
               key={component.type}
