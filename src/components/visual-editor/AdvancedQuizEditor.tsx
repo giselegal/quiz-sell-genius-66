@@ -2631,6 +2631,14 @@ const StepNavigationTabs: React.FC<{
 const AdvancedQuizEditor: React.FC = () => {
   console.log("🚀 AdvancedQuizEditor está renderizando!");
 
+  // Estados para controle de larguras das colunas ajustáveis
+  const [columnWidths, setColumnWidths] = useState({
+    stepsPanel: 20,     // 20% para etapas
+    componentsPanel: 20, // 20% para componentes  
+    canvasPanel: 40,     // 40% para canvas
+    propertiesPanel: 20, // 20% para propriedades
+  });
+
   // Estados principais do editor
   const [editorState, setEditorState] = useState<QuizEditorState>({
     steps: [
@@ -3784,26 +3792,45 @@ const AdvancedQuizEditor: React.FC = () => {
           }}
         />
 
-        {/* Layout Principal com 4 Colunas */}
+        {/* Layout Principal com Colunas Redimensionáveis */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Coluna 1: Navegação de Etapas */}
-          <div className="w-64 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
-            <StepNavigationTabs
-              steps={editorState.steps}
-              currentStepId={editorState.currentStepId}
-              onStepSelect={handleStepSelect}
-              onStepRename={handleStepRename}
-              onStepDelete={handleStepDelete}
-              onAddStep={handleAddStep}
-            />
+          {/* Coluna 1: Navegação de Etapas + Biblioteca de Componentes */}
+          <div 
+            className="border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col resizable-column"
+            style={{ width: `${columnWidths.leftPanel}px` }}
+          >
+            {/* Navegação de Etapas */}
+            <div className="h-1/2 border-b border-zinc-700 overflow-y-auto custom-scrollbar">
+              <StepNavigationTabs
+                steps={editorState.steps}
+                currentStepId={editorState.currentStepId}
+                onStepSelect={handleStepSelect}
+                onStepRename={handleStepRename}
+                onStepDelete={handleStepDelete}
+                onAddStep={handleAddStep}
+              />
+            </div>
+            
+            {/* Biblioteca de Componentes */}
+            <div className="h-1/2 overflow-y-auto custom-scrollbar">
+              <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+            </div>
           </div>
 
-          {/* Coluna 2: Biblioteca de Componentes */}
-          <div className="w-64 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
-            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+          {/* Separador de Redimensionamento Esquerdo */}
+          <div 
+            className={`w-1 bg-zinc-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 resize-separator ${
+              isDragging === 'left' ? 'dragging' : ''
+            }`}
+            onMouseDown={(e) => handleResizeStart(e, 'left', columnWidths.leftPanel)}
+            title="Arraste para redimensionar"
+          >
+            <div className="h-full w-full flex items-center justify-center">
+              <GripVertical className="w-3 h-3 text-zinc-400 grip-icon" />
+            </div>
           </div>
 
-          {/* Coluna 3: Canvas do Editor - Flexível e Centralizado */}
+          {/* Coluna 2: Canvas do Editor - Flexível e Centralizado */}
           <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900">
             <CanvasArea
               currentStep={currentStep}
@@ -3818,58 +3845,24 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 4: Painel de Propriedades (Direita) */}
-          <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
-              {selectedComponent ? (
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">
-                      Editar Componente
-                    </h3>
-                    <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
-                      {selectedComponent.type}
-                    </span>
-                  </div>
-                  <ComponentPropertyEditor
-                    type={selectedComponent.type}
-                    props={selectedComponent.props}
-                    onPropsChange={(newProps) =>
-                      handleComponentUpdate(selectedComponent.id, newProps)
-                    }
-                  />
-                </div>
-              ) : (
-                <div className="p-4 flex flex-col items-center justify-center h-full text-center">
-                  <div className="text-zinc-500 mb-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="48"
-                      height="48"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="mx-auto mb-2"
-                    >
-                      <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
-                      <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
-                      <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-medium text-zinc-300 mb-2">
-                    Nenhum componente selecionado
-                  </h3>
-                  <p className="text-sm text-zinc-500">
-                    Clique em um componente no canvas para editar suas
-                    propriedades
-                  </p>
-                </div>
-              )}
+          {/* Separador de Redimensionamento Direito */}
+          <div 
+            className={`w-1 bg-zinc-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 resize-separator ${
+              isDragging === 'right' ? 'dragging' : ''
+            }`}
+            onMouseDown={(e) => handleResizeStart(e, 'right', columnWidths.rightPanel)}
+            title="Arraste para redimensionar"
+          >
+            <div className="h-full w-full flex items-center justify-center">
+              <GripVertical className="w-3 h-3 text-zinc-400 grip-icon" />
             </div>
           </div>
+
+          {/* Coluna 3: Painel de Propriedades/Editor (Direita) */}
+          <div 
+            className="border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col resizable-column"
+            style={{ width: `${columnWidths.rightPanel}px` }}
+          >
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
               {selectedComponent ? (
                 <div>
