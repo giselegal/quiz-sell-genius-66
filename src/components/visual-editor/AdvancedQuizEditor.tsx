@@ -2631,14 +2631,6 @@ const StepNavigationTabs: React.FC<{
 const AdvancedQuizEditor: React.FC = () => {
   console.log("🚀 AdvancedQuizEditor está renderizando!");
 
-  // Estados para controle de larguras das colunas ajustáveis
-  const [columnWidths, setColumnWidths] = useState({
-    stepsPanel: 20,     // 20% para etapas
-    componentsPanel: 20, // 20% para componentes  
-    canvasPanel: 40,     // 40% para canvas
-    propertiesPanel: 20, // 20% para propriedades
-  });
-
   // Estados principais do editor
   const [editorState, setEditorState] = useState<QuizEditorState>({
     steps: [
@@ -3792,45 +3784,26 @@ const AdvancedQuizEditor: React.FC = () => {
           }}
         />
 
-        {/* Layout Principal com Colunas Redimensionáveis */}
+        {/* Layout Principal com 4 Colunas */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Coluna 1: Navegação de Etapas + Biblioteca de Componentes */}
-          <div 
-            className="border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col resizable-column"
-            style={{ width: `${columnWidths.leftPanel}px` }}
-          >
-            {/* Navegação de Etapas */}
-            <div className="h-1/2 border-b border-zinc-700 overflow-y-auto custom-scrollbar">
-              <StepNavigationTabs
-                steps={editorState.steps}
-                currentStepId={editorState.currentStepId}
-                onStepSelect={handleStepSelect}
-                onStepRename={handleStepRename}
-                onStepDelete={handleStepDelete}
-                onAddStep={handleAddStep}
-              />
-            </div>
-            
-            {/* Biblioteca de Componentes */}
-            <div className="h-1/2 overflow-y-auto custom-scrollbar">
-              <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
-            </div>
+          {/* Coluna 1: Navegação de Etapas */}
+          <div className="w-64 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
+            <StepNavigationTabs
+              steps={editorState.steps}
+              currentStepId={editorState.currentStepId}
+              onStepSelect={handleStepSelect}
+              onStepRename={handleStepRename}
+              onStepDelete={handleStepDelete}
+              onAddStep={handleAddStep}
+            />
           </div>
 
-          {/* Separador de Redimensionamento Esquerdo */}
-          <div 
-            className={`w-1 bg-zinc-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 resize-separator ${
-              isDragging === 'left' ? 'dragging' : ''
-            }`}
-            onMouseDown={(e) => handleResizeStart(e, 'left', columnWidths.leftPanel)}
-            title="Arraste para redimensionar"
-          >
-            <div className="h-full w-full flex items-center justify-center">
-              <GripVertical className="w-3 h-3 text-zinc-400 grip-icon" />
-            </div>
+          {/* Coluna 2: Biblioteca de Componentes */}
+          <div className="w-64 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
+            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
           </div>
 
-          {/* Coluna 2: Canvas do Editor - Flexível e Centralizado */}
+          {/* Coluna 3: Canvas do Editor - Flexível e Centralizado */}
           <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900">
             <CanvasArea
               currentStep={currentStep}
@@ -3845,24 +3818,8 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Separador de Redimensionamento Direito */}
-          <div 
-            className={`w-1 bg-zinc-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 resize-separator ${
-              isDragging === 'right' ? 'dragging' : ''
-            }`}
-            onMouseDown={(e) => handleResizeStart(e, 'right', columnWidths.rightPanel)}
-            title="Arraste para redimensionar"
-          >
-            <div className="h-full w-full flex items-center justify-center">
-              <GripVertical className="w-3 h-3 text-zinc-400 grip-icon" />
-            </div>
-          </div>
-
-          {/* Coluna 3: Painel de Propriedades/Editor (Direita) */}
-          <div 
-            className="border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col resizable-column"
-            style={{ width: `${columnWidths.rightPanel}px` }}
-          >
+          {/* Coluna 4: Painel de Propriedades (Direita) */}
+          <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
               {selectedComponent ? (
                 <div>
