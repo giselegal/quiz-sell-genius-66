@@ -3519,6 +3519,53 @@ const AdvancedQuizEditor: React.FC = () => {
     setSelectedComponentId(null);
   };
 
+  // --- Handlers para redimensionamento de colunas ---
+
+  const handleResizeStart = (
+    e: React.MouseEvent,
+    direction: 'left' | 'right',
+    currentWidth: number
+  ) => {
+    e.preventDefault();
+    setIsDragging(direction);
+    setDragStartX(e.clientX);
+    setDragStartWidth(currentWidth);
+    
+    // Adiciona listeners globais para mouse move e mouse up
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+
+    const deltaX = e.clientX - dragStartX;
+    const newWidth = Math.max(200, Math.min(500, dragStartWidth + (isDragging === 'right' ? -deltaX : deltaX)));
+
+    setColumnWidths(prev => ({
+      ...prev,
+      [isDragging === 'left' ? 'leftPanel' : 'rightPanel']: newWidth
+    }));
+  }, [isDragging, dragStartX, dragStartWidth]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(null);
+    setDragStartX(0);
+    setDragStartWidth(0);
+    
+    // Remove listeners globais
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  }, [handleMouseMove]);
+
+  // Cleanup dos event listeners quando o componente desmonta
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [handleMouseMove, handleMouseUp]);
+
   // --- Handlers para gerenciar componentes ---
 
   const handleComponentSelect = (componentId: string | null) => {
