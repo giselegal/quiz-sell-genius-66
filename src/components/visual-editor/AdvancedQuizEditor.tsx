@@ -1456,530 +1456,1930 @@ const StepEditorCanvas: React.FC<{
 };
 
 /**
- * @component ComponentPropertiesPanel
- * @description Painel de propriedades para editar componentes selecionados
+ * @component ComponentPropertiesEditor
+ * @description Editor de propriedades dinâmico baseado no tipo de componente.
  */
-const ComponentPropertiesPanel: React.FC<{
-  selectedComponent: QuizComponent | null;
-  onComponentUpdate: (componentId: string, newProps: Partial<QuizComponentProps>) => void;
-}> = ({ selectedComponent, onComponentUpdate }) => {
-  if (!selectedComponent) {
-    return (
-      <div className="w-80 border-l border-zinc-700 bg-zinc-900 p-4">
-        <div className="text-center text-zinc-400">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="48"
-            height="48"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="mx-auto mb-4"
+const ComponentPropertiesEditor: React.FC<{
+  component: QuizComponent;
+  onUpdateProps: (newProps: Partial<QuizComponentProps>) => void;
+}> = ({ component, onUpdateProps }) => {
+  const { type, props } = component;
+
+  const handleChange = (key: keyof QuizComponentProps, value: unknown) => {
+    onUpdateProps({ [key]: value });
+  };
+
+  // Campo comum de estilos para todos os componentes
+  const StylesEditor = () => (
+    <div className="grid w-full items-center gap-1.5 mt-4 p-3 bg-zinc-800/50 rounded-md">
+      <label className="text-sm font-medium leading-none text-zinc-100">
+        Estilos CSS (Avançado)
+      </label>
+      <textarea
+        className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        value={props.styles ? JSON.stringify(props.styles, null, 2) : "{}"}
+        onChange={(e) => {
+          try {
+            const styles = JSON.parse(e.target.value);
+            handleChange("styles", styles);
+          } catch (error) {
+            // Ignora erros de parse durante a digitação
+          }
+        }}
+        placeholder='{"color": "#FF0000", "fontSize": "1.2rem"}'
+      />
+    </div>
+  );
+
+  // Renderiza campos específicos para cada tipo de componente
+  switch (type) {
+    case "heading":
+    case "text":
+      return (
+        <div className="space-y-4">
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Texto
+            </label>
+            <textarea
+              className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              value={props.text || ""}
+              onChange={(e) => handleChange("text", e.target.value)}
+              placeholder="Digite o texto aqui..."
+            />
+          </div>
+          <StylesEditor />
+        </div>
+      );
+
+    case "image":
+      return (
+        <div className="space-y-4">
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              URL da Imagem
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.src || ""}
+              onChange={(e) => handleChange("src", e.target.value)}
+              placeholder="https://exemplo.com/imagem.png"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Texto Alternativo
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.alt || ""}
+              onChange={(e) => handleChange("alt", e.target.value)}
+              placeholder="Descrição da imagem"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Ajuste da Imagem
+            </label>
+            <select
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.objectFit || "cover"}
+              onChange={(e) =>
+                handleChange(
+                  "objectFit",
+                  e.target.value as QuizComponentProps["objectFit"]
+                )
+              }
+            >
+              <option value="cover">Cobrir</option>
+              <option value="contain">Conter</option>
+              <option value="fill">Preencher</option>
+              <option value="none">Nenhum</option>
+              <option value="scale-down">Reduzir</option>
+            </select>
+          </div>
+          <StylesEditor />
+        </div>
+      );
+
+    case "input":
+      return (
+        <div className="space-y-4">
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Rótulo do Campo
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.label || ""}
+              onChange={(e) => handleChange("label", e.target.value)}
+              placeholder="Ex: Seu Nome"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Placeholder
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.placeholder || ""}
+              onChange={(e) => handleChange("placeholder", e.target.value)}
+              placeholder="Ex: Digite seu nome aqui..."
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Tipo de Campo
+            </label>
+            <select
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.inputType || "text"}
+              onChange={(e) =>
+                handleChange(
+                  "inputType",
+                  e.target.value as QuizComponentProps["inputType"]
+                )
+              }
+            >
+              <option value="text">Texto</option>
+              <option value="email">Email</option>
+              <option value="number">Número</option>
+              <option value="tel">Telefone</option>
+            </select>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              className="h-4 w-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+              checked={props.required || false}
+              onChange={(e) => handleChange("required", e.target.checked)}
+            />
+            <label className="text-sm font-medium text-zinc-100">
+              Campo Obrigatório
+            </label>
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Mensagem de Erro
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.errorMessage || ""}
+              onChange={(e) => handleChange("errorMessage", e.target.value)}
+              placeholder="Ex: Este campo é obrigatório"
+            />
+          </div>
+          <StylesEditor />
+        </div>
+      );
+
+    case "button":
+      return (
+        <div className="space-y-4">
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Texto do Botão
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.buttonText || ""}
+              onChange={(e) => handleChange("buttonText", e.target.value)}
+              placeholder="Ex: Continuar"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Estilo do Botão
+            </label>
+            <select
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.buttonStyle || "primary"}
+              onChange={(e) =>
+                handleChange(
+                  "buttonStyle",
+                  e.target.value as QuizComponentProps["buttonStyle"]
+                )
+              }
+            >
+              <option value="primary">Primário</option>
+              <option value="secondary">Secundário</option>
+              <option value="outline">Contorno</option>
+              <option value="ghost">Fantasma</option>
+            </select>
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Tipo de Ação
+            </label>
+            <select
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.actionType || "goToNextStep"}
+              onChange={(e) =>
+                handleChange(
+                  "actionType",
+                  e.target.value as QuizComponentProps["actionType"]
+                )
+              }
+            >
+              <option value="goToNextStep">Próxima Etapa</option>
+              <option value="submitForm">Enviar Formulário</option>
+              <option value="redirectUrl">Redirecionar URL</option>
+              <option value="customFunction">Função Custom</option>
+            </select>
+          </div>
+          {props.actionType === "redirectUrl" && (
+            <div className="grid w-full items-center gap-1.5">
+              <label className="text-sm font-medium leading-none text-zinc-100">
+                URL de Redirecionamento
+              </label>
+              <input
+                type="text"
+                className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                value={props.actionUrl || ""}
+                onChange={(e) => handleChange("actionUrl", e.target.value)}
+                placeholder="https://seusite.com/oferta"
+              />
+            </div>
+          )}
+          <StylesEditor />
+        </div>
+      );
+
+    case "options":
+      return (
+        <div className="space-y-4">
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Texto da Pergunta
+            </label>
+            <textarea
+              className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              value={props.questionText || ""}
+              onChange={(e) => handleChange("questionText", e.target.value)}
+              placeholder="Qual a sua cor favorita?"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Tipo de Seleção
+            </label>
+            <select
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.selectionType || "single"}
+              onChange={(e) =>
+                handleChange(
+                  "selectionType",
+                  e.target.value as QuizComponentProps["selectionType"]
+                )
+              }
+            >
+              <option value="single">Seleção Única</option>
+              <option value="multiple">Seleção Múltipla</option>
+            </select>
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Opções
+            </label>
+            <div className="space-y-2">
+              {props.choices?.map((choice, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    className="flex-1 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                    value={choice.text}
+                    onChange={(e) => {
+                      const newChoices = [...(props.choices || [])];
+                      newChoices[index].text = e.target.value;
+                      newChoices[index].value = e.target.value
+                        .toLowerCase()
+                        .replace(/\s+/g, "_");
+                      handleChange("choices", newChoices);
+                    }}
+                    placeholder={`Opção ${index + 1}`}
+                  />
+                  <input
+                    type="number"
+                    className="w-20 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                    value={choice.scoreValue || 0}
+                    onChange={(e) => {
+                      const newChoices = [...(props.choices || [])];
+                      newChoices[index].scoreValue =
+                        parseInt(e.target.value) || 0;
+                      handleChange("choices", newChoices);
+                    }}
+                    placeholder="Pontos"
+                  />
+                  <button
+                    className="text-red-500 hover:text-red-700 p-1"
+                    onClick={() => {
+                      const newChoices = (props.choices || []).filter(
+                        (_, i) => i !== index
+                      );
+                      handleChange("choices", newChoices);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M3 6h18"></path>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              className="mt-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-zinc-700 text-zinc-100 hover:bg-zinc-600 py-2 px-4"
+              onClick={() => {
+                const newChoices = [...(props.choices || [])];
+                const optionNumber = newChoices.length + 1;
+                newChoices.push({
+                  text: `Nova Opção ${optionNumber}`,
+                  value: `option${optionNumber}`,
+                  scoreValue: 0,
+                });
+                handleChange("choices", newChoices);
+              }}
+            >
+              Adicionar Opção
+            </button>
+          </div>
+          <StylesEditor />
+        </div>
+      );
+
+    case "alert":
+      return (
+        <div className="space-y-4">
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Mensagem
+            </label>
+            <textarea
+              className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              value={props.alertMessage || ""}
+              onChange={(e) => handleChange("alertMessage", e.target.value)}
+              placeholder="Digite a mensagem de alerta..."
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Tipo de Alerta
+            </label>
+            <select
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.alertType || "info"}
+              onChange={(e) =>
+                handleChange(
+                  "alertType",
+                  e.target.value as QuizComponentProps["alertType"]
+                )
+              }
+            >
+              <option value="info">Informação</option>
+              <option value="warning">Aviso</option>
+              <option value="error">Erro</option>
+              <option value="success">Sucesso</option>
+            </select>
+          </div>
+          <StylesEditor />
+        </div>
+      );
+
+    case "customComponent":
+      return (
+        <div className="space-y-4">
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Nome do Componente
+            </label>
+            <select
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.componentName || ""}
+              onChange={(e) => handleChange("componentName", e.target.value)}
+            >
+              <option value="">Selecione um componente</option>
+              <option value="ResultPage.tsx">ResultPage.tsx</option>
+              <option value="QuizOfferPage.tsx">QuizOfferPage.tsx</option>
+            </select>
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Título da Oferta
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.offerHeadline || ""}
+              onChange={(e) => handleChange("offerHeadline", e.target.value)}
+              placeholder="Ex: Seu Perfil de Estilo Único!"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Descrição
+            </label>
+            <textarea
+              className="flex min-h-[60px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              value={props.offerDescription || ""}
+              onChange={(e) => handleChange("offerDescription", e.target.value)}
+              placeholder="Ex: Receba um e-book exclusivo..."
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Botão CTA
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.offerCtaButtonText || ""}
+              onChange={(e) =>
+                handleChange("offerCtaButtonText", e.target.value)
+              }
+              placeholder="Ex: Resgatar Agora!"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              URL do CTA
+            </label>
+            <input
+              type="text"
+              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+              value={props.offerCtaUrl || ""}
+              onChange={(e) => handleChange("offerCtaUrl", e.target.value)}
+              placeholder="https://sua-oferta.com"
+            />
+          </div>
+          {props.componentName === "QuizOfferPage.tsx" && (
+            <div className="grid w-full items-center gap-1.5">
+              <label className="text-sm font-medium leading-none text-zinc-100">
+                Código de Desconto
+              </label>
+              <input
+                type="text"
+                className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                value={props.discountCode || ""}
+                onChange={(e) => handleChange("discountCode", e.target.value)}
+                placeholder="EX: QUIZ20"
+              />
+            </div>
+          )}
+          <StylesEditor />
+        </div>
+      );
+
+    case "spacer":
+      return (
+        <div className="space-y-4">
+          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">
+            Espaçador não possui propriedades editáveis específicas.
+          </div>
+          <StylesEditor />
+        </div>
+      );
+
+    default:
+      return (
+        <div className="space-y-4">
+          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">
+            Editor de propriedades para '{type}' ainda não implementado.
+            <br />
+            <span className="text-xs">
+              Selecione um componente suportado para editar suas propriedades.
+            </span>
+          </div>
+          <StylesEditor />
+        </div>
+      );
+  }
+};
+
+// --- FIM DA PARTE 2 ---
+
+// --- COMPONENTE DE NAVEGAÇÃO DE ETAPAS ---
+
+/**
+ * @component StepNavigationTabs
+ * @description Componente para navegação entre etapas com abas horizontais.
+ */
+const StepNavigationTabs: React.FC<{
+  steps: QuizStep[];
+  currentStepId: string;
+  onStepSelect: (stepId: string) => void;
+  onStepRename: (stepId: string, newName: string) => void;
+  onStepDelete: (stepId: string) => void;
+  onAddStep: () => void;
+}> = ({
+  steps,
+  currentStepId,
+  onStepSelect,
+  onStepRename,
+  onStepDelete,
+  onAddStep,
+}) => {
+  const [editingStepId, setEditingStepId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState("");
+
+  const handleStartEdit = (step: QuizStep) => {
+    setEditingStepId(step.id);
+    setEditingName(step.name);
+  };
+
+  const handleFinishEdit = () => {
+    if (editingStepId && editingName.trim()) {
+      onStepRename(editingStepId, editingName.trim());
+    }
+    setEditingStepId(null);
+    setEditingName("");
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleFinishEdit();
+    } else if (e.key === "Escape") {
+      setEditingStepId(null);
+      setEditingName("");
+    }
+  };
+
+  return (
+    <div className="h-full bg-zinc-900 flex flex-col">
+      {/* Cabeçalho da Seção */}
+      <div className="p-4 border-b border-zinc-700">
+        <h2 className="text-lg font-semibold text-white mb-2">
+          Etapas do Quiz
+        </h2>
+        <p className="text-sm text-zinc-400">
+          Clique para navegar entre etapas
+        </p>
+      </div>
+
+      {/* Lista de Etapas - Layout Vertical */}
+      <div className="flex-1 overflow-y-auto p-2 space-y-2">
+        {steps.map((step, index) => (
+          <div
+            key={step.id}
+            className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+              currentStepId === step.id
+                ? "bg-blue-600 text-white shadow-lg"
+                : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+            }`}
+            onClick={() => onStepSelect(step.id)}
           >
-            <path d="M12 3v6l4-4-4-4"/>
-            <path d="M12 3v6l-4-4 4-4"/>
-            <path d="M12 21v-6l4 4-4 4"/>
-            <path d="M12 21v-6l-4 4 4 4"/>
-          </svg>
-          <h3 className="text-sm font-medium mb-2">Nenhum componente selecionado</h3>
-          <p className="text-xs">Clique em um componente no canvas para editar suas propriedades</p>
+            {/* Número da Etapa */}
+            <div
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                currentStepId === step.id
+                  ? "bg-white text-blue-600"
+                  : "bg-zinc-600 text-zinc-300"
+              }`}
+            >
+              {index + 1}
+            </div>
+
+            {/* Nome da Etapa */}
+            <div className="flex-1 min-w-0">
+              {editingStepId === step.id ? (
+                <input
+                  type="text"
+                  value={editingName}
+                  onChange={(e) => setEditingName(e.target.value)}
+                  onBlur={handleFinishEdit}
+                  onKeyDown={handleKeyPress}
+                  className="bg-transparent border-b border-white text-sm w-full focus:outline-none"
+                  autoFocus
+                />
+              ) : (
+                <div>
+                  <div
+                    className="text-sm font-medium truncate cursor-pointer"
+                    onDoubleClick={() => handleStartEdit(step)}
+                    title="Duplo clique para editar"
+                  >
+                    {step.name}
+                  </div>
+                  <div className="text-xs text-zinc-500 mt-1">
+                    {step.components.length} componente
+                    {step.components.length !== 1 ? "s" : ""}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Botão de Deletar */}
+            {steps.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (confirm(`Deletar etapa "${step.name}"?`)) {
+                    onStepDelete(step.id);
+                  }
+                }}
+                className="p-1 rounded text-xs hover:bg-red-600 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                title="Deletar etapa"
+              >
+                ×
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Botão Adicionar Nova Etapa */}
+      <div className="p-2 border-t border-zinc-700">
+        <button
+          onClick={onAddStep}
+          className="w-full flex items-center justify-center space-x-2 p-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg transition-colors duration-200"
+          title="Adicionar nova etapa"
+        >
+          <span className="text-sm font-bold">+</span>
+          <span className="text-sm">Nova Etapa</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// --- PARTE 3: COMPONENTE PRINCIPAL E LÓGICA DE ESTADO ---
+
+/**
+ * @component AdvancedQuizEditor
+ * @description Componente principal do editor visual de quiz com todas as funcionalidades integradas.
+ * Este é o componente exportado que deve ser usado no App.tsx ou em outros lugares.
+ */
+const AdvancedQuizEditor: React.FC = () => {
+  console.log("🚀 AdvancedQuizEditor está renderizando!");
+
+  // Estados principais do editor
+  const [editorState, setEditorState] = useState<QuizEditorState>({
+    steps: [
+      {
+        id: "quiz-intro",
+        name: "🏠 Introdução",
+        components: [
+          {
+            id: "intro-logo",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2",
+              alt: "Logo Gisele",
+              styles: {
+                width: "96px",
+                height: "96px",
+                textAlign: "center",
+                maxWidth: "24px",
+                objectFit: "cover",
+              },
+            },
+          },
+          {
+            id: "intro-heading",
+            type: "heading",
+            props: {
+              text: "Teste de Estilo Pessoal",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "intro-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up",
+              alt: "Imagem principal",
+              styles: {
+                width: "640px",
+                height: "480px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+                maxWidth: "96px",
+              },
+            },
+          },
+          {
+            id: "name-input",
+            type: "input",
+            props: {
+              label: "NOME *",
+              placeholder: "Digite seu nome aqui...",
+              inputType: "text",
+              required: true,
+            },
+          },
+          {
+            id: "continue-button",
+            type: "button",
+            props: {
+              buttonText: "Continuar",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "question-1",
+            },
+          },
+        ],
+        defaultNextStepId: "question-1",
+      },
+      {
+        id: "question-1",
+        name: "👗 Roupa Favorita",
+        components: [
+          {
+            id: "q1-heading",
+            type: "heading",
+            props: {
+              text: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q1-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q1-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Conforto, leveza e praticidade no vestir",
+                  value: "natural",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                  nextStepId: "question-2",
+                },
+                {
+                  text: "Discrição, caimento clássico e sobriedade",
+                  value: "classico",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                  nextStepId: "question-2",
+                },
+                {
+                  text: "Praticidade com um toque de estilo atual",
+                  value: "contemporaneo",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                  nextStepId: "question-2",
+                },
+                {
+                  text: "Elegância refinada, moderna e sem exageros",
+                  value: "elegante",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                  nextStepId: "question-2",
+                },
+                {
+                  text: "Delicadeza em tecidos suaves e fluidos",
+                  value: "romantico",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+                  nextStepId: "question-2",
+                },
+                {
+                  text: "Sensualidade com destaque para o corpo",
+                  value: "sexy",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+                  nextStepId: "question-2",
+                },
+                {
+                  text: "Impacto visual com peças estruturadas e assimétricas",
+                  value: "dramatico",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+                  nextStepId: "question-2",
+                },
+                {
+                  text: "Mix criativo com formas ousadas e originais",
+                  value: "criativo",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+                  nextStepId: "question-2",
+                },
+              ],
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "question-2",
+      },
+      {
+        id: "question-2",
+        name: "🧠 Personalidade",
+        components: [
+          {
+            id: "q2-heading",
+            type: "heading",
+            props: {
+              text: "RESUMA A SUA PERSONALIDADE:",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q2-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q2-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "A) Sou espontânea e descontraída, adoro coisas simples.",
+                  value: "natural",
+                  nextStepId: "question-3",
+                },
+                {
+                  text: "B) Gosto de organização, sou uma pessoa séria e conservadora.",
+                  value: "classico",
+                  nextStepId: "question-3",
+                },
+                {
+                  text: "C) Sou prática e objetiva, valorizo a funcionalidade.",
+                  value: "contemporaneo",
+                  nextStepId: "question-3",
+                },
+                {
+                  text: "D) Sou exigente e sofisticada, cuidadosa nas minhas escolhas.",
+                  value: "elegante",
+                  nextStepId: "question-3",
+                },
+                {
+                  text: "E) Tenho um lado delicado e sensível que transparece em tudo.",
+                  value: "romantico",
+                  nextStepId: "question-3",
+                },
+                {
+                  text: "F) Sou confiante e sensual e adoro me cuidar.",
+                  value: "sexy",
+                  nextStepId: "question-3",
+                },
+                {
+                  text: "G) Sou moderna e audaciosa, tenho presença.",
+                  value: "dramatico",
+                  nextStepId: "question-3",
+                },
+                {
+                  text: "H) Sou exótica e aventureira, gosto da liberdade.",
+                  value: "criativo",
+                  nextStepId: "question-3",
+                },
+              ],
+              styles: { gap: "12px" },
+            },
+          },
+          {
+            id: "q2-continue-button",
+            type: "button",
+            props: {
+              buttonText: "Continuar",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "question-3",
+            },
+          },
+        ],
+        defaultNextStepId: "question-3",
+      },
+      {
+        id: "question-3",
+        name: "👀 Visual",
+        components: [
+          {
+            id: "q3-heading",
+            type: "heading",
+            props: {
+              text: "QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "3xl",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "q3-spacer",
+            type: "spacer",
+            props: {
+              height: 20,
+            },
+          },
+          {
+            id: "q3-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Visual leve, despojado e natural",
+                  value: "natural",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Visual clássico e tradicional",
+                  value: "classico",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Visual casual com toque atual",
+                  value: "contemporaneo",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Visual refinado e imponente",
+                  value: "elegante",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Visual romântico, feminino e delicado",
+                  value: "romantico",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Visual sensual, com saia justa e decote",
+                  value: "sexy",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Visual marcante e urbano (jeans + jaqueta)",
+                  value: "dramatico",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+                  nextStepId: "quiz-transition",
+                },
+                {
+                  text: "Visual criativo, colorido e ousado",
+                  value: "criativo",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                  nextStepId: "quiz-transition",
+                },
+              ],
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "quiz-transition",
+      },
+      {
+        id: "quiz-transition",
+        name: "🔄 Transição",
+        components: [
+          {
+            id: "transition-heading",
+            type: "heading",
+            props: {
+              text: "Enquanto calculamos o seu resultado...",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "transition-subtitle",
+            type: "text",
+            props: {
+              text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "transition-motivation",
+            type: "text",
+            props: {
+              text: "Responda com sinceridade. Isso é só entre você e a sua nova versão.",
+              styles: {
+                textAlign: "center",
+                color: "#10b981",
+                fontSize: "1rem",
+                fontStyle: "italic",
+              },
+            },
+          },
+          {
+            id: "transition-button",
+            type: "button",
+            props: {
+              buttonText: "Continuar para Questões Estratégicas",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "strategic-1",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-1",
+      },
+      {
+        id: "strategic-1",
+        name: "💭 Autopercepção",
+        components: [
+          {
+            id: "s1-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp",
+              alt: "Autopercepção do estilo",
+              styles: {
+                width: "400px",
+                height: "300px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+              },
+            },
+          },
+          {
+            id: "s1-heading",
+            type: "heading",
+            props: {
+              text: "Como você se vê atualmente?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "s1-button",
+            type: "button",
+            props: {
+              buttonText: "Próxima Pergunta",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "strategic-2",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-2",
+      },
+      {
+        id: "strategic-2",
+        name: "🎯 Desafios",
+        components: [
+          {
+            id: "s2-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp",
+              alt: "Desafios ao se vestir",
+              styles: {
+                width: "400px",
+                height: "300px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+              },
+            },
+          },
+          {
+            id: "s2-heading",
+            type: "heading",
+            props: {
+              text: "Quais são seus maiores desafios ao se vestir?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "s2-button",
+            type: "button",
+            props: {
+              buttonText: "Continuar",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "result-page",
+            },
+          },
+        ],
+        defaultNextStepId: "result-page",
+      },
+      {
+        id: "result-page",
+        name: "📊 Resultado",
+        components: [
+          {
+            id: "result-heading",
+            type: "heading",
+            props: {
+              text: "Seu Estilo Pessoal",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "2rem",
+              },
+            },
+          },
+          {
+            id: "result-description",
+            type: "text",
+            props: {
+              text: "Baseado nas suas respostas, identificamos elementos únicos do seu estilo pessoal.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "result-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Minha Análise Completa",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "offer-page",
+            },
+          },
+        ],
+        defaultNextStepId: "offer-page",
+      },
+      {
+        id: "offer-page",
+        name: "💰 Oferta",
+        components: [
+          {
+            id: "offer-heading",
+            type: "heading",
+            props: {
+              text: "Consultoria Personalizada de Estilo",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "offer-text",
+            type: "text",
+            props: {
+              text: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "price-text",
+            type: "text",
+            props: {
+              text: "De R$ 497 por apenas R$ 297",
+              styles: {
+                textAlign: "center",
+                color: "#10b981",
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "offer-button",
+            type: "button",
+            props: {
+              buttonText: "Quero Minha Consultoria",
+              buttonStyle: "primary",
+              actionType: "redirectUrl",
+              actionTargetId: "https://checkout.example.com",
+            },
+          },
+        ],
+        defaultNextStepId: null,
+      },
+      {
+        id: "step-3",
+        name: "❓ Pergunta 2",
+        components: [
+          {
+            id: "question-2-heading",
+            type: "heading",
+            props: {
+              text: "Para quais ocasiões você mais precisa de inspiração de looks?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.6rem",
+              },
+            },
+          },
+          {
+            id: "question-2-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Trabalho e Eventos Profissionais",
+                  value: "work",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Eventos Sociais e Festas",
+                  value: "social",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Dia a Dia e Casual",
+                  value: "casual",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Ocasiões Especiais",
+                  value: "special",
+                  nextStepId: "step-4",
+                },
+              ],
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "step-4",
+      },
+      {
+        id: "step-4",
+        name: "🔄 Transição",
+        components: [
+          {
+            id: "transition-heading",
+            type: "heading",
+            props: {
+              text: "Analisando suas respostas...",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "transition-text",
+            type: "text",
+            props: {
+              text: "Estamos criando um perfil personalizado baseado no seu estilo único.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "continue-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Meu Resultado",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "step-5",
+            },
+          },
+        ],
+        defaultNextStepId: "step-5",
+      },
+      {
+        id: "step-5",
+        name: "📊 Resultado",
+        components: [
+          {
+            id: "result-heading",
+            type: "heading",
+            props: {
+              text: "Seu Estilo Pessoal",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "2rem",
+              },
+            },
+          },
+          {
+            id: "result-description",
+            type: "text",
+            props: {
+              text: "Baseado nas suas respostas, identificamos elementos únicos do seu estilo pessoal.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "result-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Minha Análise Completa",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "step-6",
+            },
+          },
+        ],
+        defaultNextStepId: "step-6",
+      },
+      {
+        id: "step-6",
+        name: "💰 Oferta",
+        components: [
+          {
+            id: "offer-heading",
+            type: "heading",
+            props: {
+              text: "Consultoria Personalizada de Estilo",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "offer-text",
+            type: "text",
+            props: {
+              text: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "price-text",
+            type: "text",
+            props: {
+              text: "De R$ 497 por apenas R$ 297",
+              styles: {
+                textAlign: "center",
+                color: "#10b981",
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "offer-button",
+            type: "button",
+            props: {
+              buttonText: "Quero Minha Consultoria",
+              buttonStyle: "primary",
+              actionType: "redirectUrl",
+              actionTargetId: "https://checkout.example.com",
+            },
+          },
+        ],
+        defaultNextStepId: null,
+      },
+    ],
+    headerConfig: {
+      showLogo: true,
+      showProgressBar: true,
+      allowReturnButton: true,
+      logoUrl: "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO",
+      progressColor: "#3b82f6",
+    },
+    currentStepId: "step-1",
+  });
+
+  const [selectedComponentId, setSelectedComponentId] = useState<string | null>(
+    null
+  );
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+
+  // Computed values
+  const currentStep =
+    editorState.steps.find((step) => step.id === editorState.currentStepId) ||
+    editorState.steps[0];
+  const selectedComponent =
+    currentStep.components.find((comp) => comp.id === selectedComponentId) ||
+    null;
+
+  // --- Handlers para gerenciar etapas ---
+
+  const handleStepSelect = (stepId: string) => {
+    setEditorState((prev) => ({
+      ...prev,
+      currentStepId: stepId,
+    }));
+    setSelectedComponentId(null); // Limpa seleção de componente ao trocar de etapa
+  };
+
+  const handleAddStep = () => {
+    const newStepId = generateUniqueId();
+    const newStep: QuizStep = {
+      id: newStepId,
+      name: `Etapa ${editorState.steps.length + 1}`,
+      components: [
+        {
+          id: generateUniqueId(),
+          type: "heading",
+          props: {
+            text: `Etapa ${editorState.steps.length + 1}`,
+            styles: { textAlign: "center", color: "#ffffff" },
+          },
+        },
+      ],
+    };
+
+    setEditorState((prev) => ({
+      ...prev,
+      steps: [...prev.steps, newStep],
+      currentStepId: newStepId,
+    }));
+  };
+
+  const handleStepRename = (stepId: string, newName: string) => {
+    setEditorState((prev) => ({
+      ...prev,
+      steps: prev.steps.map((step) =>
+        step.id === stepId ? { ...step, name: newName } : step
+      ),
+    }));
+  };
+
+  const handleStepDelete = (stepId: string) => {
+    if (editorState.steps.length <= 1) {
+      alert("Não é possível deletar a única etapa do quiz.");
+      return;
+    }
+
+    const stepIndex = editorState.steps.findIndex((step) => step.id === stepId);
+    const newSteps = editorState.steps.filter((step) => step.id !== stepId);
+
+    // Se deletamos a etapa atual, seleciona uma próxima
+    let newCurrentStepId = editorState.currentStepId;
+    if (stepId === editorState.currentStepId) {
+      if (stepIndex > 0) {
+        newCurrentStepId = newSteps[stepIndex - 1].id;
+      } else {
+        newCurrentStepId = newSteps[0].id;
+      }
+    }
+
+    setEditorState((prev) => ({
+      ...prev,
+      steps: newSteps,
+      currentStepId: newCurrentStepId,
+    }));
+    setSelectedComponentId(null);
+  };
+
+  // --- Handlers para gerenciar componentes ---
+
+  const handleComponentSelect = (componentId: string | null) => {
+    setSelectedComponentId(componentId);
+  };
+
+  const handleComponentAdd = (type: string) => {
+    const newComponent: QuizComponent = {
+      id: generateUniqueId(),
+      type: type as QuizComponent["type"],
+      props: getDefaultPropsForType(type),
+    };
+
+    setEditorState((prev) => ({
+      ...prev,
+      steps: prev.steps.map((step) =>
+        step.id === editorState.currentStepId
+          ? { ...step, components: [...step.components, newComponent] }
+          : step
+      ),
+    }));
+
+    // Seleciona o novo componente automaticamente
+    setSelectedComponentId(newComponent.id);
+  };
+
+  const handleComponentUpdate = (
+    componentId: string,
+    newProps: Partial<QuizComponentProps>
+  ) => {
+    setEditorState((prev) => ({
+      ...prev,
+      steps: prev.steps.map((step) =>
+        step.id === editorState.currentStepId
+          ? {
+              ...step,
+              components: step.components.map((comp) =>
+                comp.id === componentId
+                  ? { ...comp, props: { ...comp.props, ...newProps } }
+                  : comp
+              ),
+            }
+          : step
+      ),
+    }));
+  };
+
+  const handleComponentDelete = (componentId: string) => {
+    setEditorState((prev) => ({
+      ...prev,
+      steps: prev.steps.map((step) =>
+        step.id === editorState.currentStepId
+          ? {
+              ...step,
+              components: step.components.filter(
+                (comp) => comp.id !== componentId
+              ),
+            }
+          : step
+      ),
+    }));
+
+    if (selectedComponentId === componentId) {
+      setSelectedComponentId(null);
+    }
+  };
+
+  const handleComponentMove = (
+    componentId: string,
+    direction: "up" | "down"
+  ) => {
+    setEditorState((prev) => ({
+      ...prev,
+      steps: prev.steps.map((step) => {
+        if (step.id !== editorState.currentStepId) return step;
+
+        const componentIndex = step.components.findIndex(
+          (comp) => comp.id === componentId
+        );
+        if (componentIndex === -1) return step;
+
+        const newComponents = [...step.components];
+        const targetIndex =
+          direction === "up" ? componentIndex - 1 : componentIndex + 1;
+
+        if (targetIndex < 0 || targetIndex >= newComponents.length) return step;
+
+        // Troca os componentes de posição
+        [newComponents[componentIndex], newComponents[targetIndex]] = [
+          newComponents[targetIndex],
+          newComponents[componentIndex],
+        ];
+
+        return { ...step, components: newComponents };
+      }),
+    }));
+  };
+
+  // --- Handlers para configurações do cabeçalho ---
+
+  const handleHeaderConfigUpdate = (newConfig: Partial<QuizHeaderConfig>) => {
+    setEditorState((prev) => ({
+      ...prev,
+      headerConfig: { ...prev.headerConfig, ...newConfig },
+    }));
+  };
+
+  // --- Handlers para salvar e publicar ---
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      // Simula salvamento (aqui você integraria com uma API real)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log("Quiz salvo:", editorState);
+      alert("Quiz salvo com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar:", error);
+      alert("Erro ao salvar o quiz. Tente novamente.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handlePublish = async () => {
+    setIsPublishing(true);
+    try {
+      // Simula publicação (aqui você integraria com uma API real)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log("Quiz publicado:", editorState);
+      alert("Quiz publicado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao publicar:", error);
+      alert("Erro ao publicar o quiz. Tente novamente.");
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  // --- Funções auxiliares ---
+
+  /**
+   * @function getDefaultPropsForType
+   * @description Retorna as propriedades padrão para um tipo de componente.
+   */
+  const getDefaultPropsForType = (type: string): QuizComponentProps => {
+    switch (type) {
+      case "heading":
+        return {
+          text: "Novo Título",
+          styles: { textAlign: "center", color: "#ffffff", fontSize: "1.8rem" },
+        };
+      case "text":
+        return {
+          text: "Texto descritivo aqui...",
+          styles: { color: "#d1d5db", fontSize: "1rem" },
+        };
+      case "image":
+        return {
+          src: "https://placehold.co/400x300/0f172a/94a3b8?text=Imagem",
+          alt: "Nova imagem",
+          objectFit: "cover",
+        };
+      case "input":
+        return {
+          label: "Seu nome",
+          placeholder: "Digite aqui...",
+          inputType: "text",
+          required: false,
+        };
+      case "button":
+        return {
+          buttonText: "Clique aqui",
+          buttonStyle: "primary",
+          actionType: "goToNextStep",
+        };
+      case "options":
+        return {
+          questionText: "Qual é a sua preferência?",
+          selectionType: "single",
+          choices: [
+            { text: "Opção 1", value: "option1" },
+            { text: "Opção 2", value: "option2" },
+          ],
+        };
+      case "alert":
+        return {
+          alertType: "info",
+          alertMessage: "Esta é uma mensagem informativa.",
+        };
+      case "video":
+        return {
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          controls: true,
+          autoplay: false,
+        };
+      case "carousel":
+        return {
+          images: [
+            {
+              src: "https://placehold.co/400x300/0f172a/94a3b8?text=Slide+1",
+              alt: "Slide 1",
+            },
+            {
+              src: "https://placehold.co/400x300/1e293b/cbd5e1?text=Slide+2",
+              alt: "Slide 2",
+            },
+          ],
+          autoSlide: false,
+        };
+      case "customComponent":
+        return {
+          componentName: "ResultPage.tsx",
+          resultType: "styleAnalysis",
+        };
+      case "spacer":
+        return {};
+      default:
+        return {};
+    }
+  };
+
+  // --- Render principal ---
+
+  try {
+    console.log("🎯 Tentando renderizar AdvancedQuizEditor...");
+
+    return (
+      <div className="h-screen bg-zinc-950 flex flex-col">
+        {/* Navbar Superior */}
+        <FunnelNavbar
+          onSave={handleSave}
+          onPublish={handlePublish}
+          isSaving={isSaving}
+          isPublishing={isPublishing}
+        />
+
+        {/* Layout Principal com Quatro Colunas */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Coluna 1: Navegação de Etapas (Esquerda) */}
+          <div className="w-64 border-r border-zinc-700 bg-zinc-900">
+            <StepNavigationTabs
+              steps={editorState.steps}
+              currentStepId={editorState.currentStepId}
+              onStepSelect={handleStepSelect}
+              onStepRename={handleStepRename}
+              onStepDelete={handleStepDelete}
+              onAddStep={handleAddStep}
+            />
+          </div>
+
+          {/* Coluna 2: Biblioteca de Componentes */}
+          <div className="w-80 border-r border-zinc-700 bg-zinc-900">
+            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+          </div>
+
+          {/* Coluna 3: Canvas do Editor */}
+          <div className="flex-1 overflow-hidden">
+            <CanvasArea
+              currentStep={currentStep}
+              headerConfig={editorState.headerConfig}
+              selectedComponent={selectedComponent}
+              selectedComponentId={selectedComponentId}
+              onComponentSelect={handleComponentSelect}
+              onComponentAdd={handleComponentAdd}
+              onComponentUpdate={handleComponentUpdate}
+              onComponentDelete={handleComponentDelete}
+              onComponentMove={handleComponentMove}
+            />
+          </div>
+
+          {/* Coluna 4: Painel de Propriedades/Editor (Direita) */}
+          <div className="w-96 max-w-md border-l border-zinc-700 bg-zinc-900 p-4 overflow-y-auto">
+            {selectedComponent ? (
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  Editar Componente
+                </h3>
+                {/* Exemplo de edição de propriedades básicas */}
+                {selectedComponent.type === "heading" && (
+                  <div className="mb-4">
+                    <label className="block text-sm text-zinc-300 mb-1">
+                      Título
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
+                      value={selectedComponent.props.text || ""}
+                      onChange={(e) =>
+                        onComponentUpdate(selectedComponent.id, {
+                          text: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
+                {selectedComponent.type === "text" && (
+                  <div className="mb-4">
+                    <label className="block text-sm text-zinc-300 mb-1">
+                      Texto
+                    </label>
+                    <textarea
+                      className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
+                      value={selectedComponent.props.text || ""}
+                      onChange={(e) =>
+                        onComponentUpdate(selectedComponent.id, {
+                          text: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
+                {selectedComponent.type === "image" && (
+                  <>
+                    <div className="mb-4">
+                      <label className="block text-sm text-zinc-300 mb-1">
+                        URL da Imagem
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
+                        value={selectedComponent.props.src || ""}
+                        onChange={(e) =>
+                          onComponentUpdate(selectedComponent.id, {
+                            src: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm text-zinc-300 mb-1">
+                        Texto Alternativo
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
+                        value={selectedComponent.props.alt || ""}
+                        onChange={(e) =>
+                          onComponentUpdate(selectedComponent.id, {
+                            alt: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </>
+                )}
+                {selectedComponent.type === "button" && (
+                  <div className="mb-4">
+                    <label className="block text-sm text-zinc-300 mb-1">
+                      Texto do Botão
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full px-3 py-2 rounded bg-zinc-800 text-white border border-zinc-600"
+                      value={selectedComponent.props.buttonText || ""}
+                      onChange={(e) =>
+                        onComponentUpdate(selectedComponent.id, {
+                          buttonText: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
+                {/* Adicione mais campos conforme necessário para outros tipos */}
+              </div>
+            ) : (
+              <div className="text-zinc-400 text-center mt-20">
+                <p>
+                  Nenhum componente selecionado.
+                  <br />
+                  Selecione um componente no canvas para editar suas propriedades.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  } catch (error) {
+    console.error("❌ Erro ao renderizar AdvancedQuizEditor:", error);
+    return (
+      <div className="h-screen bg-red-950 flex items-center justify-center">
+        <div className="text-center text-white">
+          <h1 className="text-2xl font-bold mb-4">Erro no Editor</h1>
+          <p className="text-red-300">Verifique o console para mais detalhes</p>
+          <pre className="mt-4 text-sm text-red-200 bg-red-900 p-4 rounded">
+            {error instanceof Error ? error.message : String(error)}
+          </pre>
         </div>
       </div>
     );
   }
-
-  const handleInputChange = (property: string, value: string | boolean | number | OptionChoice[]) => {
-    onComponentUpdate(selectedComponent.id, { [property]: value });
-  };
-
-  const handleChoiceChange = (index: number, field: string, value: string) => {
-    const currentChoices = selectedComponent.props.choices || [];
-    const updatedChoices = [...currentChoices];
-    if (updatedChoices[index]) {
-      updatedChoices[index] = { ...updatedChoices[index], [field]: value };
-    }
-    onComponentUpdate(selectedComponent.id, { choices: updatedChoices });
-  };
-
-  const addChoice = () => {
-    const currentChoices = selectedComponent.props.choices || [];
-    const newChoice = { text: "Nova opção", value: `option_${currentChoices.length + 1}` };
-    onComponentUpdate(selectedComponent.id, { choices: [...currentChoices, newChoice] });
-  };
-
-  const removeChoice = (index: number) => {
-    const currentChoices = selectedComponent.props.choices || [];
-    const updatedChoices = currentChoices.filter((_, i) => i !== index);
-    onComponentUpdate(selectedComponent.id, { choices: updatedChoices });
-  };
-
-  const renderPropertyEditor = () => {
-    const { type, props } = selectedComponent;
-
-    switch (type) {
-      case "heading":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Texto do Título</label>
-              <input
-                type="text"
-                value={props.text || ""}
-                onChange={(e) => handleInputChange("text", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none"
-                placeholder="Digite o título..."
-              />
-            </div>
-          </div>
-        );
-
-      case "text":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Texto do Parágrafo</label>
-              <textarea
-                value={props.text || ""}
-                onChange={(e) => handleInputChange("text", e.target.value)}
-                rows={4}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none resize-none"
-                placeholder="Digite o texto..."
-              />
-            </div>
-          </div>
-        );
-
-      case "image":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">URL da Imagem</label>
-              <input
-                type="url"
-                value={props.src || ""}
-                onChange={(e) => handleInputChange("src", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none"
-                placeholder="https://exemplo.com/imagem.jpg"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Texto Alternativo</label>
-              <input
-                type="text"
-                value={props.alt || ""}
-                onChange={(e) => handleInputChange("alt", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none"
-                placeholder="Descrição da imagem"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Ajuste da Imagem</label>
-              <select
-                value={props.objectFit || "contain"}
-                onChange={(e) => handleInputChange("objectFit", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white focus:border-blue-500 focus:outline-none"
-              >
-                <option value="contain">Conter</option>
-                <option value="cover">Cobrir</option>
-                <option value="fill">Preencher</option>
-                <option value="none">Nenhum</option>
-                <option value="scale-down">Reduzir</option>
-              </select>
-            </div>
-          </div>
-        );
-
-      case "button":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Texto do Botão</label>
-              <input
-                type="text"
-                value={props.buttonText || ""}
-                onChange={(e) => handleInputChange("buttonText", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none"
-                placeholder="Texto do botão"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Estilo do Botão</label>
-              <select
-                value={props.buttonStyle || "primary"}
-                onChange={(e) => handleInputChange("buttonStyle", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white focus:border-blue-500 focus:outline-none"
-              >
-                <option value="primary">Primário</option>
-                <option value="secondary">Secundário</option>
-                <option value="outline">Contorno</option>
-                <option value="ghost">Fantasma</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Tipo de Ação</label>
-              <select
-                value={props.actionType || "goToNextStep"}
-                onChange={(e) => handleInputChange("actionType", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white focus:border-blue-500 focus:outline-none"
-              >
-                <option value="goToNextStep">Próxima Etapa</option>
-                <option value="submitForm">Enviar Formulário</option>
-                <option value="redirectUrl">Redirecionar URL</option>
-                <option value="customFunction">Função Personalizada</option>
-              </select>
-            </div>
-          </div>
-        );
-
-      case "input":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Rótulo do Campo</label>
-              <input
-                type="text"
-                value={props.label || ""}
-                onChange={(e) => handleInputChange("label", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none"
-                placeholder="Rótulo do campo"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Placeholder</label>
-              <input
-                type="text"
-                value={props.placeholder || ""}
-                onChange={(e) => handleInputChange("placeholder", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none"
-                placeholder="Texto de exemplo..."
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Tipo de Input</label>
-              <select
-                value={props.inputType || "text"}
-                onChange={(e) => handleInputChange("inputType", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white focus:border-blue-500 focus:outline-none"
-              >
-                <option value="text">Texto</option>
-                <option value="email">Email</option>
-                <option value="number">Número</option>
-                <option value="tel">Telefone</option>
-              </select>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="required"
-                checked={props.required || false}
-                onChange={(e) => handleInputChange("required", e.target.checked)}
-                className="mr-2"
-              />
-              <label htmlFor="required" className="text-sm text-zinc-200">Campo obrigatório</label>
-            </div>
-          </div>
-        );
-
-      case "options":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Texto da Pergunta</label>
-              <input
-                type="text"
-                value={props.questionText || props.text || ""}
-                onChange={(e) => handleInputChange("questionText", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none"
-                placeholder="Digite a pergunta..."
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">Tipo de Seleção</label>
-              <select
-                value={props.selectionType || "single"}
-                onChange={(e) => handleInputChange("selectionType", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white focus:border-blue-500 focus:outline-none"
-              >
-                <option value="single">Seleção única</option>
-                <option value="multiple">Múltipla seleção</option>
-              </select>
-            </div>
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-medium text-zinc-200">Opções</label>
-                <button
-                  onClick={addChoice}
-                  className="px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
-                >
-                  + Adicionar
-                </button>
-              </div>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {(props.choices || []).map((choice: OptionChoice, index: number) => (
-                  <div key={index} className="flex gap-2 items-center p-2 bg-zinc-800 rounded">
-                    <input
-                      type="text"
-                      value={choice.text}
-                      onChange={(e) => handleChoiceChange(index, "text", e.target.value)}
-                      className="flex-1 px-2 py-1 bg-zinc-700 border border-zinc-600 rounded text-white text-sm focus:border-blue-500 focus:outline-none"
-                      placeholder="Texto da opção"
-                    />
-                    <button
-                      onClick={() => removeChoice(index)}
-                      className="px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-
-      case "video":
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-zinc-200 mb-2">URL do Vídeo</label>
-              <input
-                type="url"
-                value={props.videoUrl || ""}
-                onChange={(e) => handleInputChange("videoUrl", e.target.value)}
-                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded text-white placeholder-zinc-400 focus:border-blue-500 focus:outline-none"
-                placeholder="https://youtube.com/watch?v=..."
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="autoplay"
-                  checked={props.autoplay || false}
-                  onChange={(e) => handleInputChange("autoplay", e.target.checked)}
-                  className="mr-2"
-                />
-                <label htmlFor="autoplay" className="text-sm text-zinc-200">Reprodução automática</label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="loop"
-                  checked={props.loop || false}
-                  onChange={(e) => handleInputChange("loop", e.target.checked)}
-                  className="mr-2"
-                />
-                <label htmlFor="loop" className="text-sm text-zinc-200">Repetir vídeo</label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="controls"
-                  checked={props.controls !== false}
-                  onChange={(e) => handleInputChange("controls", e.target.checked)}
-                  className="mr-2"
-                />
-                <label htmlFor="controls" className="text-sm text-zinc-200">Mostrar controles</label>
-              </div>
-            </div>
-          </div>
-        );
-
-      default:
-        return (
-          <div className="text-center text-zinc-400 py-8">
-            <p className="text-sm">Propriedades não disponíveis para este tipo de componente</p>
-          </div>
-        );
-    }
-  };
-
-  return (
-    <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex flex-col">
-      {/* Header do Painel */}
-      <div className="p-4 border-b border-zinc-700">
-        <h3 className="text-lg font-semibold text-white mb-1">Propriedades</h3>
-        <p className="text-sm text-zinc-400">
-          {selectedComponent.type.charAt(0).toUpperCase() + selectedComponent.type.slice(1)}
-        </p>
-      </div>
-
-      {/* Conteúdo do Painel */}
-      <div className="flex-1 p-4 overflow-y-auto">
-        {renderPropertyEditor()}
-      </div>
-
-      {/* Footer com Ações */}
-      <div className="p-4 border-t border-zinc-700">
-        <div className="flex gap-2">
-          <button
-            onClick={() => onComponentUpdate(selectedComponent.id, { isHidden: !selectedComponent.props.isHidden })}
-            className="flex-1 px-3 py-2 bg-zinc-700 text-white text-sm rounded hover:bg-zinc-600 transition-colors"
-          >
-            {selectedComponent.props.isHidden ? "Mostrar" : "Ocultar"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// --- Funções Auxiliares ---
-
-/**
- * @function getDefaultPropsForType
- * @description Retorna as propriedades padrão para um tipo de componente.
- */
-const getDefaultPropsForType = (type: string): QuizComponentProps => {
-  switch (type) {
-    case "heading":
-      return {
-        text: "Novo Título",
-        styles: { textAlign: "center", color: "#ffffff", fontSize: "1.8rem" },
-      };
-    case "text":
-      return {
-        text: "Texto descritivo aqui...",
-        styles: { color: "#d1d5db", fontSize: "1rem" },
-      };
-    case "image":
-      return {
-        src: "https://placehold.co/400x300/0f172a/94a3b8?text=Imagem",
-        alt: "Nova imagem",
-        objectFit: "cover",
-      };
-    case "input":
-      return {
-        label: "Seu nome",
-        placeholder: "Digite aqui...",
-        inputType: "text",
-        required: false,
-      };
-    case "button":
-      return {
-        buttonText: "Clique aqui",
-        buttonStyle: "primary",
-        actionType: "goToNextStep",
-      };
-    case "options":
-      return {
-        questionText: "Qual é a sua preferência?",
-        selectionType: "single",
-        choices: [
-          { text: "Opção 1", value: "option1" },
-          { text: "Opção 2", value: "option2" },
-        ],
-      };
-    case "alert":
-      return {
-        alertType: "info",
-        alertMessage: "Esta é uma mensagem informativa.",
-      };
-    case "video":
-      return {
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        controls: true,
-        autoplay: false,
-      };
-    case "carousel":
-      return {
-        images: [
-          {
-            src: "https://placehold.co/400x300/0f172a/94a3b8?text=Slide+1",
-            alt: "Slide 1",
-          },
-          {
-            src: "https://placehold.co/400x300/1e293b/cbd5e1?text=Slide+2",
-            alt: "Slide 2",
-          },
-        ],
-        autoSlide: false,
-      };
-    case "customComponent":
-      return {
-        componentName: "ResultPage.tsx",
-        resultType: "styleAnalysis",
-      };
-    case "spacer":
-      return {};
-    default:
-      return {};
-  }
-};
-
-// --- Render principal ---
-
-try {
-  console.log("🎯 Tentando renderizar AdvancedQuizEditor...");
-
-  return (
-    <div className="h-screen bg-zinc-950 flex flex-col">
-      {/* Navbar Superior */}
-      <FunnelNavbar
-        onSave={handleSave}
-        onPublish={handlePublish}
-        isSaving={isSaving}
-        isPublishing={isPublishing}
-      />
-
-      {/* Layout Principal com Quatro Colunas */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Coluna 1: Navegação de Etapas (Esquerda) */}
-        <div className="w-64 border-r border-zinc-700 bg-zinc-900">
-          <StepNavigationTabs
-            steps={editorState.steps}
-            currentStepId={editorState.currentStepId}
-            onStepSelect={handleStepSelect}
-            onStepRename={handleStepRename}
-            onStepDelete={handleStepDelete}
-            onAddStep={handleAddStep}
-          />
-        </div>
-
-        {/* Coluna 2: Biblioteca de Componentes (Segunda Coluna) */}
-        <div className="w-80 border-r border-zinc-700 bg-zinc-900">
-          <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
-        </div>
-
-        {/* Coluna 3: Canvas do Editor (Central) */}
-        <div className="flex-1 overflow-hidden">
-          <CanvasArea
-            currentStep={currentStep}
-            headerConfig={editorState.headerConfig}
-            selectedComponent={selectedComponent}
-            selectedComponentId={selectedComponentId}
-            onComponentSelect={handleComponentSelect}
-            onComponentAdd={handleComponentAdd}
-            onComponentUpdate={handleComponentUpdate}
-            onComponentDelete={handleComponentDelete}
-            onComponentMove={handleComponentMove}
-          />
-        </div>
-
-        {/* Coluna 4: Painel de Propriedades (Direita) */}
-        <ComponentPropertiesPanel
-          selectedComponent={selectedComponent}
-          onComponentUpdate={handleComponentUpdate}
-        />
-      </div>
-    </div>
-  );
-} catch (error) {
-  console.error("❌ Erro ao renderizar AdvancedQuizEditor:", error);
-  return (
-    <div className="h-screen bg-red-950 flex items-center justify-center">
-      <div className="text-center text-white">
-        <h1 className="text-2xl font-bold mb-4">Erro no Editor</h1>
-        <p className="text-red-300">Verifique o console para mais detalhes</p>
-        <pre className="mt-4 text-sm text-red-200 bg-red-900 p-4 rounded">
-          {error instanceof Error ? error.message : String(error)}
-        </pre>
-      </div>
-    </div>
-  );
 };
 
 // --- EXPORTAÇÃO PRINCIPAL ---
