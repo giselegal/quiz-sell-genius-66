@@ -13,6 +13,7 @@ console.log("✅ Timestamp atualizado:", timestamp);
 // Verificar configuração
 if (fs.existsSync(".lovable")) {
   const config = JSON.parse(fs.readFileSync(".lovable", "utf8"));
+  if (!config.sync) config.sync = {};
   config.sync.timestamp = timestamp;
   config.lastUpdate = new Date().toISOString();
 
