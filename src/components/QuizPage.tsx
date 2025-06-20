@@ -8,6 +8,8 @@ import { UserResponse } from "@/types/quiz";
 import { StrategicQuestions } from "@/components/quiz/StrategicQuestions";
 import QuizTransition from "@/components/QuizTransition";
 import { storeUserForHotmart } from "@/utils/hotmartWebhook";
+import { Button } from "@/components/ui/button";
+import { Settings, Edit } from "lucide-react";
 import {
   trackQuizStart,
   trackQuizAnswer,
@@ -16,6 +18,32 @@ import {
   trackButtonClick,
   trackPageView,
 } from "../utils/analytics";
+
+// Componente de acesso direto ao editor
+const QuickEditorAccess = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="fixed top-4 right-4 z-50 flex gap-2">
+      <Button
+        onClick={() => navigate("/unified-editor")}
+        className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+        size="sm"
+      >
+        <Edit className="w-4 h-4 mr-2" />
+        Editor Completo
+      </Button>
+      <Button
+        onClick={() => navigate("/modern-editor")}
+        className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg"
+        size="sm"
+      >
+        <Settings className="w-4 h-4 mr-2" />
+        Editor Moderno
+      </Button>
+    </div>
+  );
+};
 
 const QuizPage: React.FC = () => {
   const navigate = useNavigate();
@@ -230,6 +258,7 @@ const QuizPage: React.FC = () => {
   if (!isInitialLoadComplete) {
     return (
       <div className="min-h-screen bg-[#FAF9F7] flex items-center justify-center">
+        <QuickEditorAccess />
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mx-auto mb-4"></div>
           <p className="text-[#432818]">Carregando quiz...</p>
@@ -239,44 +268,58 @@ const QuizPage: React.FC = () => {
   }
 
   if (!hasStarted) {
-    return <QuizIntro onStart={handleStart} />;
+    return (
+      <>
+        <QuickEditorAccess />
+        <QuizIntro onStart={handleStart} />
+      </>
+    );
   }
 
   if (showingTransition) {
     return (
-      <QuizTransition
-        onContinue={handleContinueFromTransition}
-        onAnswer={handleTransitionAnswer}
-        currentAnswers={
-          strategicAnswers["550e8400-e29b-41d4-a716-446655440012"] || []
-        }
-      />
+      <>
+        <QuickEditorAccess />
+        <QuizTransition
+          onContinue={handleContinueFromTransition}
+          onAnswer={handleTransitionAnswer}
+          currentAnswers={
+            strategicAnswers["550e8400-e29b-41d4-a716-446655440012"] || []
+          }
+        />
+      </>
     );
   }
 
   if (showingStrategicQuestions) {
     return (
-      <StrategicQuestions
-        currentQuestionIndex={currentStrategicQuestionIndex}
-        answers={strategicAnswers}
-        onAnswer={handleAnswerSubmit}
-      />
+      <>
+        <QuickEditorAccess />
+        <StrategicQuestions
+          currentQuestionIndex={currentStrategicQuestionIndex}
+          answers={strategicAnswers}
+          onAnswer={handleAnswerSubmit}
+        />
+      </>
     );
   }
 
   return (
-    <QuizContent
-      user={user}
-      currentQuestionIndex={currentQuestionIndex}
-      totalQuestions={totalQuestions}
-      showingStrategicQuestions={showingStrategicQuestions}
-      currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-      currentQuestion={currentQuestion}
-      currentAnswers={currentAnswers}
-      handleAnswerSubmit={handleAnswerSubmit}
-      handleNextClick={handleNextClick}
-      handlePrevious={handlePreviousClick}
-    />
+    <>
+      <QuickEditorAccess />
+      <QuizContent
+        user={user}
+        currentQuestionIndex={currentQuestionIndex}
+        totalQuestions={totalQuestions}
+        showingStrategicQuestions={showingStrategicQuestions}
+        currentStrategicQuestionIndex={currentStrategicQuestionIndex}
+        currentQuestion={currentQuestion}
+        currentAnswers={currentAnswers}
+        handleAnswerSubmit={handleAnswerSubmit}
+        handleNextClick={handleNextClick}
+        handlePrevious={handlePreviousClick}
+      />
+    </>
   );
 };
 
