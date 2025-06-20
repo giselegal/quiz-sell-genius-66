@@ -3406,7 +3406,7 @@ const AdvancedQuizEditor: React.FC = () => {
           isPublishing={isPublishing}
         />
 
-        {/* Layout Principal com Três Colunas */}
+        {/* Layout Principal com Quatro Colunas */}
         <div className="flex-1 flex overflow-hidden">
           {/* Coluna 1: Navegação de Etapas (Esquerda) */}
           <div className="w-64 border-r border-zinc-700 bg-zinc-900">
@@ -3420,7 +3420,12 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 2: Canvas do Editor (Central) */}
+          {/* Coluna 2: Biblioteca de Componentes */}
+          <div className="w-64 border-r border-zinc-700">
+            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+          </div>
+
+          {/* Coluna 3: Canvas do Editor (Central) */}
           <div className="flex-1 overflow-hidden">
             <CanvasArea
               currentStep={currentStep}
@@ -3435,7 +3440,7 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 3: Painel de Configuração (Direita) */}
+          {/* Coluna 4: Painel de Configuração (Direita) */}
           {selectedComponent && (
             <div className="w-80 border-l border-zinc-700">
               <AdvancedConfigSidebar
