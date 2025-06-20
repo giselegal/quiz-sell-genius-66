@@ -2891,7 +2891,20 @@ const AdvancedQuizEditor: React.FC = () => {
         ],
         defaultNextStepId: null,
       },
-    ],
+      {
+        id: "step-3",
+        name: "❓ Pergunta 2",
+        components: [
+          {
+            id: "question-2-heading",
+            type: "heading",
+            props: {
+              text: "Para quais ocasiões você mais precisa de inspiração de looks?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.6rem",
+              },
             },
           },
           {

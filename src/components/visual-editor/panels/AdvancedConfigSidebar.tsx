@@ -12,7 +12,17 @@ import {
   Copy,
   Eye,
   EyeOff,
+  Plus,
+  Minus,
 } from "lucide-react";
+
+interface OptionChoice {
+  text: string;
+  value: string;
+  nextStepId?: string;
+  nextPageType?: "resultPage" | "quizOfferPage" | "transitionPage";
+  scoreValue?: number;
+}
 
 interface QuizComponent {
   id: string;
@@ -41,13 +51,7 @@ interface QuizComponentProps {
   actionUrl?: string;
   customFunctionName?: string;
   questionText?: string;
-  choices?: Array<{
-    text: string;
-    value: string;
-    nextStepId?: string;
-    nextPageType?: "resultPage" | "quizOfferPage" | "transitionPage";
-    scoreValue?: number;
-  }>;
+  choices?: OptionChoice[];
   selectionType?: "single" | "multiple";
   conditionalLogic?: {
     rule: "allSelected" | "anySelected" | "scoreThreshold";
