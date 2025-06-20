@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "@/styles/advanced-editor.css";
-import AdvancedConfigSidebar from "./panels/AdvancedConfigSidebar";
 
 // --- Interfaces Aprimoradas para a Estrutura de Dados do Quiz ---
 
@@ -582,7 +581,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   };
 
   return (
-    <div className="flex-1 flex bg-zinc-900">
+    <div className="flex-1 bg-zinc-900">
       {/* Área de Canvas Principal */}
       <div className="flex-1 p-6 overflow-y-auto">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 min-h-[600px]">
@@ -612,36 +611,6 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
           ) : (
             <div>{currentStep.components.map(renderComponent)}</div>
           )}
-        </div>
-      </div>
-
-      {/* Painel de Adicionar Componentes */}
-      <div className="w-64 bg-zinc-800 border-l border-zinc-700 p-4">
-        <h3 className="text-white font-medium mb-4">Adicionar Componente</h3>
-        <div className="space-y-2">
-          {[
-            {
-              type: "heading",
-              label: "📝 Título",
-              desc: "Cabeçalho principal",
-            },
-            { type: "text", label: "📄 Texto", desc: "Parágrafo de texto" },
-            { type: "image", label: "🖼️ Imagem", desc: "Imagem ou foto" },
-            { type: "button", label: "🔘 Botão", desc: "Botão clicável" },
-            { type: "input", label: "📝 Campo", desc: "Campo de entrada" },
-            { type: "options", label: "☑️ Opções", desc: "Múltipla escolha" },
-            { type: "video", label: "🎥 Vídeo", desc: "Vídeo incorporado" },
-            { type: "spacer", label: "📏 Espaço", desc: "Espaçamento" },
-          ].map((component) => (
-            <button
-              key={component.type}
-              onClick={() => onComponentAdd(component.type)}
-              className="w-full text-left p-3 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white transition-colors"
-            >
-              <div className="font-medium text-sm">{component.label}</div>
-              <div className="text-xs text-zinc-400 mt-1">{component.desc}</div>
-            </button>
-          ))}
         </div>
       </div>
     </div>
