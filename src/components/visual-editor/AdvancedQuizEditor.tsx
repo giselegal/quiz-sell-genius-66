@@ -2219,38 +2219,70 @@ const StepNavigationTabs: React.FC<{
   };
 
   return (
-    <div className="bg-zinc-900 border-b border-zinc-700 px-4 py-2">
-      <div className="flex items-center space-x-2 overflow-x-auto">
+    <div className="h-full bg-zinc-900 flex flex-col">
+      {/* Cabeçalho da Seção */}
+      <div className="p-4 border-b border-zinc-700">
+        <h2 className="text-lg font-semibold text-white mb-2">
+          Etapas do Quiz
+        </h2>
+        <p className="text-sm text-zinc-400">
+          Clique para navegar entre etapas
+        </p>
+      </div>
+
+      {/* Lista de Etapas - Layout Vertical */}
+      <div className="flex-1 overflow-y-auto p-2 space-y-2">
         {steps.map((step, index) => (
           <div
             key={step.id}
-            className={`flex items-center space-x-2 px-3 py-2 rounded-md cursor-pointer transition-colors duration-200 min-w-max ${
+            className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
               currentStepId === step.id
-                ? "bg-blue-600 text-white"
-                : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
+                ? "bg-blue-600 text-white shadow-lg"
+                : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
             }`}
             onClick={() => onStepSelect(step.id)}
           >
-            <span className="text-xs font-mono">{index + 1}</span>
-            {editingStepId === step.id ? (
-              <input
-                type="text"
-                value={editingName}
-                onChange={(e) => setEditingName(e.target.value)}
-                onBlur={handleFinishEdit}
-                onKeyDown={handleKeyPress}
-                className="bg-transparent border-b border-white text-sm min-w-20 focus:outline-none"
-                autoFocus
-              />
-            ) : (
-              <span
-                className="text-sm"
-                onDoubleClick={() => handleStartEdit(step)}
-                title="Duplo clique para editar"
-              >
-                {step.name}
-              </span>
-            )}
+            {/* Número da Etapa */}
+            <div
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                currentStepId === step.id
+                  ? "bg-white text-blue-600"
+                  : "bg-zinc-600 text-zinc-300"
+              }`}
+            >
+              {index + 1}
+            </div>
+
+            {/* Nome da Etapa */}
+            <div className="flex-1 min-w-0">
+              {editingStepId === step.id ? (
+                <input
+                  type="text"
+                  value={editingName}
+                  onChange={(e) => setEditingName(e.target.value)}
+                  onBlur={handleFinishEdit}
+                  onKeyDown={handleKeyPress}
+                  className="bg-transparent border-b border-white text-sm w-full focus:outline-none"
+                  autoFocus
+                />
+              ) : (
+                <div>
+                  <div
+                    className="text-sm font-medium truncate cursor-pointer"
+                    onDoubleClick={() => handleStartEdit(step)}
+                    title="Duplo clique para editar"
+                  >
+                    {step.name}
+                  </div>
+                  <div className="text-xs text-zinc-500 mt-1">
+                    {step.components.length} componente
+                    {step.components.length !== 1 ? "s" : ""}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Botão de Deletar */}
             {steps.length > 1 && (
               <button
                 onClick={(e) => {
@@ -2259,7 +2291,7 @@ const StepNavigationTabs: React.FC<{
                     onStepDelete(step.id);
                   }
                 }}
-                className="ml-1 p-1 rounded text-xs hover:bg-red-600 text-red-400"
+                className="p-1 rounded text-xs hover:bg-red-600 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
                 title="Deletar etapa"
               >
                 ×
@@ -2267,14 +2299,17 @@ const StepNavigationTabs: React.FC<{
             )}
           </div>
         ))}
+      </div>
 
+      {/* Botão Adicionar Nova Etapa */}
+      <div className="p-2 border-t border-zinc-700">
         <button
           onClick={onAddStep}
-          className="flex items-center space-x-1 px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 rounded-md transition-colors duration-200 min-w-max"
+          className="w-full flex items-center justify-center space-x-2 p-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg transition-colors duration-200"
           title="Adicionar nova etapa"
         >
-          <span className="text-sm">+</span>
-          <span className="text-xs">Nova Etapa</span>
+          <span className="text-sm font-bold">+</span>
+          <span className="text-sm">Nova Etapa</span>
         </button>
       </div>
     </div>
@@ -2667,24 +2702,26 @@ const AdvancedQuizEditor: React.FC = () => {
           isPublishing={isPublishing}
         />
 
-        {/* Navegação de Etapas */}
-        <div className="border-b border-zinc-700">
-          <StepNavigationTabs
-            steps={editorState.steps}
-            currentStepId={editorState.currentStepId}
-            onStepSelect={handleStepSelect}
-            onStepRename={handleStepRename}
-            onStepDelete={handleStepDelete}
-            onAddStep={handleAddStep}
-          />
-        </div>
-
-        {/* Layout Principal com Três Colunas */}
+        {/* Layout Principal com Quatro Colunas */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Coluna Esquerda - Biblioteca de Componentes */}
-          <ComponentLibrary onComponentAdd={handleComponentAdd} />
+          {/* Coluna 1: Navegação de Etapas (Vertical) */}
+          <div className="w-64 border-r border-zinc-700 bg-zinc-900">
+            <StepNavigationTabs
+              steps={editorState.steps}
+              currentStepId={editorState.currentStepId}
+              onStepSelect={handleStepSelect}
+              onStepRename={handleStepRename}
+              onStepDelete={handleStepDelete}
+              onAddStep={handleAddStep}
+            />
+          </div>
 
-          {/* Coluna Central - Canvas do Editor */}
+          {/* Coluna 2: Biblioteca de Componentes */}
+          <div className="w-64 border-r border-zinc-700">
+            <ComponentLibrary onComponentAdd={handleComponentAdd} />
+          </div>
+
+          {/* Coluna 3: Canvas do Editor (Central) */}
           <div className="flex-1 overflow-hidden">
             <CanvasArea
               currentStep={currentStep}
@@ -2699,7 +2736,7 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna Direita - Painel de Configuração */}
+          {/* Coluna 4: Painel de Configuração (Direita) */}
           {selectedComponent && (
             <div className="w-80 border-l border-zinc-700">
               <AdvancedConfigSidebar
