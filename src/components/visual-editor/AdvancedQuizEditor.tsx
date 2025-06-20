@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "@/styles/advanced-editor.css";
 import "@/styles/editor.css";
+import { GripVertical } from "lucide-react";
 
 // --- Sistema de Auto-Save Funcional ---
 const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
@@ -3531,6 +3532,9 @@ const AdvancedQuizEditor: React.FC = () => {
     setDragStartX(e.clientX);
     setDragStartWidth(currentWidth);
     
+    // Adiciona classe CSS para cursor global
+    document.body.classList.add('col-resizing');
+    
     // Adiciona listeners globais para mouse move e mouse up
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
@@ -3552,6 +3556,9 @@ const AdvancedQuizEditor: React.FC = () => {
     setIsDragging(null);
     setDragStartX(0);
     setDragStartWidth(0);
+    
+    // Remove classe CSS do cursor global
+    document.body.classList.remove('col-resizing');
     
     // Remove listeners globais
     document.removeEventListener('mousemove', handleMouseMove);
@@ -3841,26 +3848,45 @@ const AdvancedQuizEditor: React.FC = () => {
           }}
         />
 
-        {/* Layout Principal com Quatro Colunas Responsivas */}
+        {/* Layout Principal com Colunas Redimensionáveis */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Coluna 1: Navegação de Etapas (Esquerda) - Responsiva */}
-          <div className="w-56 lg:w-64 xl:w-72 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-y-auto">
-            <StepNavigationTabs
-              steps={editorState.steps}
-              currentStepId={editorState.currentStepId}
-              onStepSelect={handleStepSelect}
-              onStepRename={handleStepRename}
-              onStepDelete={handleStepDelete}
-              onAddStep={handleAddStep}
-            />
+          {/* Coluna 1: Navegação de Etapas + Biblioteca de Componentes */}
+          <div 
+            className="border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col resizable-column"
+            style={{ width: `${columnWidths.leftPanel}px` }}
+          >
+            {/* Navegação de Etapas */}
+            <div className="h-1/2 border-b border-zinc-700 overflow-y-auto custom-scrollbar">
+              <StepNavigationTabs
+                steps={editorState.steps}
+                currentStepId={editorState.currentStepId}
+                onStepSelect={handleStepSelect}
+                onStepRename={handleStepRename}
+                onStepDelete={handleStepDelete}
+                onAddStep={handleAddStep}
+              />
+            </div>
+            
+            {/* Biblioteca de Componentes */}
+            <div className="h-1/2 overflow-y-auto custom-scrollbar">
+              <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+            </div>
           </div>
 
-          {/* Coluna 2: Biblioteca de Componentes - Responsiva */}
-          <div className="w-64 lg:w-72 xl:w-80 border-r border-zinc-700 bg-zinc-900 flex-shrink-0">
-            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+          {/* Separador de Redimensionamento Esquerdo */}
+          <div 
+            className={`w-1 bg-zinc-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 resize-separator ${
+              isDragging === 'left' ? 'dragging' : ''
+            }`}
+            onMouseDown={(e) => handleResizeStart(e, 'left', columnWidths.leftPanel)}
+            title="Arraste para redimensionar"
+          >
+            <div className="h-full w-full flex items-center justify-center">
+              <GripVertical className="w-3 h-3 text-zinc-400 grip-icon" />
+            </div>
           </div>
 
-          {/* Coluna 3: Canvas do Editor - Flexível e Centralizado */}
+          {/* Coluna 2: Canvas do Editor - Flexível e Centralizado */}
           <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900">
             <CanvasArea
               currentStep={currentStep}
@@ -3875,27 +3901,43 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 4: Painel de Propriedades/Editor (Direita) - Responsiva */}
-          <div className="w-80 lg:w-96 xl:w-[28rem] max-w-md border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
+          {/* Separador de Redimensionamento Direito */}
+          <div 
+            className={`w-1 bg-zinc-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 resize-separator ${
+              isDragging === 'right' ? 'dragging' : ''
+            }`}
+            onMouseDown={(e) => handleResizeStart(e, 'right', columnWidths.rightPanel)}
+            title="Arraste para redimensionar"
+          >
+            <div className="h-full w-full flex items-center justify-center">
+              <GripVertical className="w-3 h-3 text-zinc-400 grip-icon" />
+            </div>
+          </div>
+
+          {/* Coluna 3: Painel de Propriedades/Editor (Direita) */}
+          <div 
+            className="border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col"
+            style={{ width: `${columnWidths.rightPanel}px` }}
+          >
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
               {selectedComponent ? (
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-white">
-                    Editar Componente
-                  </h3>
-                  <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
-                    {selectedComponent.type}
-                  </span>
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-white">
+                      Editar Componente
+                    </h3>
+                    <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
+                      {selectedComponent.type}
+                    </span>
+                  </div>
+                  <ComponentPropertyEditor
+                    type={selectedComponent.type}
+                    props={selectedComponent.props}
+                    onPropsChange={(newProps) =>
+                      handleComponentUpdate(selectedComponent.id, newProps)
+                    }
+                  />
                 </div>
-                <ComponentPropertyEditor
-                  type={selectedComponent.type}
-                  props={selectedComponent.props}
-                  onPropsChange={(newProps) =>
-                    handleComponentUpdate(selectedComponent.id, newProps)
-                  }
-                />
-              </div>
             ) : (
               <div className="p-4 flex flex-col items-center justify-center h-full text-center">
                 <div className="text-zinc-500 mb-4">

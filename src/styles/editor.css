@@ -136,3 +136,71 @@
     max-width: 100%;
   }
 }
+
+/* Estilos para separadores de redimensionamento */
+.resize-separator {
+  position: relative;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.resize-separator:hover {
+  background-color: #3b82f6 !important;
+}
+
+.resize-separator:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -2px;
+  right: -2px;
+  bottom: 0;
+  background-color: rgba(59, 130, 246, 0.3);
+  z-index: 1;
+}
+
+.resize-separator.dragging {
+  background-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.resize-separator.dragging::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -4px;
+  right: -4px;
+  bottom: 0;
+  background-color: rgba(59, 130, 246, 0.2);
+  z-index: 1;
+}
+
+/* Indicador visual de drag */
+.resize-separator .grip-icon {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.resize-separator:hover .grip-icon {
+  opacity: 1;
+}
+
+.resize-separator.dragging .grip-icon {
+  opacity: 1;
+  color: white;
+}
+
+/* Animação suave para larguras das colunas */
+.resizable-column {
+  transition: width 0.1s ease-out;
+}
+
+/* Cursor global durante drag */
+body.col-resizing {
+  cursor: col-resize !important;
+}
+
+body.col-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
