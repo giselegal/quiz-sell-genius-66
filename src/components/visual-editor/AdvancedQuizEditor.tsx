@@ -3916,7 +3916,7 @@ const AdvancedQuizEditor: React.FC = () => {
 
           {/* Coluna 3: Painel de Propriedades/Editor (Direita) */}
           <div 
-            className="border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col"
+            className="border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col resizable-column"
             style={{ width: `${columnWidths.rightPanel}px` }}
           >
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
