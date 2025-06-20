@@ -15,6 +15,7 @@ interface OptionChoice {
   nextStepId?: string; // ID da próxima etapa (para fluxo linear ou ramificado)
   nextPageType?: "resultPage" | "quizOfferPage" | "transitionPage"; // Tipo da página final/especial
   scoreValue?: number; // Valor de pontuação associado a esta escolha (para quizzes com pontuação)
+  image?: string; // URL da imagem associada à opção
 }
 
 /**
