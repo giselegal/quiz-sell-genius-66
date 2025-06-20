@@ -392,7 +392,85 @@ const ModernVisualEditor: React.FC = () => {
     }));
   };
 
+  const duplicateComponent = (componentId: string) => {
+    const component = currentStep.content.find(c => c.id === componentId);
+    if (component) {
+      const newComponent = {
+        ...component,
+        id: `${component.type}-${Date.now()}`
+      };
+      setCurrentStep(prev => ({
+        ...prev,
+        content: [...prev.content, newComponent]
+      }));
+    }
+  };
+
+  const moveComponent = (componentId: string, direction: 'up' | 'down') => {
+    setCurrentStep(prev => {
+      const components = [...prev.content];
+      const index = components.findIndex(c => c.id === componentId);
+      
+      if ((direction === 'up' && index > 0) || (direction === 'down' && index < components.length - 1)) {
+        const newIndex = direction === 'up' ? index - 1 : index + 1;
+        [components[index], components[newIndex]] = [components[newIndex], components[index]];
+      }
+      
+      return { ...prev, content: components };
+    });
+  };
+
   // Renderização de componentes no preview
+  const renderComponentActions = (componentId: string) => {
+    const isSelected = selectedComponent === componentId;
+    if (!isSelected) return null;
+    
+    return (
+      <div className="absolute -top-10 left-0 flex gap-1 bg-white shadow-lg rounded-md p-1 border z-10">
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            moveComponent(componentId, 'up');
+          }}
+        >
+          <ChevronUp className="h-3 w-3" />
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            moveComponent(componentId, 'down');
+          }}
+        >
+          <ChevronDown className="h-3 w-3" />
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            duplicateComponent(componentId);
+          }}
+        >
+          <Copy className="h-3 w-3" />
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteComponent(componentId);
+          }}
+        >
+          <Trash2 className="h-3 w-3 text-red-500" />
+        </Button>
+      </div>
+    );
+  };
+
   const renderPreviewComponent = (component: QuizComponent) => {
     const isSelected = selectedComponent === component.id;
     const baseClasses = `
@@ -487,7 +565,7 @@ const ModernVisualEditor: React.FC = () => {
             className={baseClasses}
             onClick={() => setSelectedComponent(component.id)}
           >
-            {renderComponentActions()}
+            {renderComponentActions(component.id)}
             <div className="space-y-4">
               {component.data.title && (
                 <h3 className="text-xl font-bold text-center">{component.data.title}</h3>
@@ -527,7 +605,7 @@ const ModernVisualEditor: React.FC = () => {
             className={baseClasses}
             onClick={() => setSelectedComponent(component.id)}
           >
-            {renderComponentActions()}
+            {renderComponentActions(component.id)}
             <div className="space-y-4">
               {component.data.title && (
                 <h3 className="text-xl font-bold text-center">{component.data.title}</h3>
@@ -556,7 +634,7 @@ const ModernVisualEditor: React.FC = () => {
             className={baseClasses}
             onClick={() => setSelectedComponent(component.id)}
           >
-            {renderComponentActions()}
+            {renderComponentActions(component.id)}
             <div className="space-y-4">
               <div className="text-center">
                 <h3 className="text-xl font-bold">{component.data.title}</h3>
@@ -701,7 +779,7 @@ const ModernVisualEditor: React.FC = () => {
             </>
           )}
 
-          {component.type === 'options' && (
+          {(component.type === 'visual-options' || component.type === 'text-options' || component.type === 'strategic-question') && (
             <>
               <div className="flex items-center space-x-2">
                 <Switch 
