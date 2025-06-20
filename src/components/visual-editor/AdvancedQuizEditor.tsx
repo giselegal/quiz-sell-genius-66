@@ -470,16 +470,21 @@ const CustomComponentPlaceholder: React.FC<{ component: QuizComponent }> = ({
 
 /**
  * @component SpacerComponent
- * @description Componente para espaçamento.
+ * @description Componente para espaçamento seguindo o design real.
  */
 const SpacerComponent: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
   <div
-    className="h-4 w-full border-b border-dashed border-zinc-600 my-2 flex items-center justify-center text-zinc-500 text-xs"
-    style={component.props.styles}
+    className="min-w-full py-2 border-dashed border-yellow-500 border rounded-lg"
+    style={{
+      height: `${component.props.height || 20}px`,
+      ...component.props.styles
+    }}
   >
-    Espaçador
+    <div className="flex items-center justify-center h-full text-yellow-500 text-xs">
+      Espaçador ({component.props.height || 20}px)
+    </div>
   </div>
 );
 
@@ -2723,21 +2728,6 @@ const AdvancedQuizEditor: React.FC = () => {
         name: "🏠 Introdução",
         components: [
           {
-            id: "intro-logo",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2",
-              alt: "Logo Gisele",
-              styles: {
-                width: "96px",
-                height: "96px",
-                textAlign: "center",
-                maxWidth: "24px",
-                objectFit: "cover",
-              },
-            },
-          },
-          {
             id: "intro-heading",
             type: "heading",
             props: {
@@ -2755,7 +2745,7 @@ const AdvancedQuizEditor: React.FC = () => {
             type: "image",
             props: {
               src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up",
-              alt: "Imagem principal",
+              alt: "Imagem principal do quiz",
               styles: {
                 width: "640px",
                 height: "480px",
@@ -2763,6 +2753,18 @@ const AdvancedQuizEditor: React.FC = () => {
                 objectFit: "cover",
                 borderRadius: "lg",
                 maxWidth: "96px",
+              },
+            },
+          },
+          {
+            id: "intro-text",
+            type: "text",
+            props: {
+              text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
               },
             },
           },
@@ -2821,60 +2823,61 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Conforto, leveza e praticidade no vestir",
                   value: "natural",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Discrição, caimento clássico e sobriedade",
                   value: "classico",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Praticidade com um toque de estilo atual",
                   value: "contemporaneo",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Elegância refinada, moderna e sem exageros",
                   value: "elegante",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Delicadeza em tecidos suaves e fluidos",
                   value: "romantico",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Sensualidade com destaque para o corpo",
                   value: "sexy",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Impacto visual com peças estruturadas e assimétricas",
                   value: "dramatico",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
                   nextStepId: "question-2",
                 },
                 {
                   text: "Mix criativo com formas ousadas e originais",
                   value: "criativo",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
                   nextStepId: "question-2",
                 },
               ],
+              selectionType: "multiple",
               styles: { gap: "12px" },
             },
           },
@@ -2911,57 +2914,56 @@ const AdvancedQuizEditor: React.FC = () => {
             props: {
               choices: [
                 {
-                  text: "A) Sou espontânea e descontraída, adoro coisas simples.",
+                  text: "A) <strong>Sou espontânea e descontraída</strong>, adoro coisas simples.",
                   value: "natural",
+                  scoreValue: 1,
                   nextStepId: "question-3",
                 },
                 {
-                  text: "B) Gosto de organização, sou uma pessoa séria e conservadora.",
+                  text: "B) <strong>Gosto de organização</strong>, sou uma pessoa séria e conservadora.",
                   value: "classico",
+                  scoreValue: 1,
                   nextStepId: "question-3",
                 },
                 {
-                  text: "C) Sou prática e objetiva, valorizo a funcionalidade.",
+                  text: "C) Sou <strong>prática e objetiva</strong>, valorizo a funcionalidade.",
                   value: "contemporaneo",
+                  scoreValue: 1,
                   nextStepId: "question-3",
                 },
                 {
-                  text: "D) Sou exigente e sofisticada, cuidadosa nas minhas escolhas.",
+                  text: "D) <strong>Sou exigente e sofisticada</strong>, cuidadosa nas minhas escolhas.",
                   value: "elegante",
+                  scoreValue: 1,
                   nextStepId: "question-3",
                 },
                 {
-                  text: "E) Tenho um lado delicado e sensível que transparece em tudo.",
+                  text: "E) <strong>Tenho um lado delicado e sensível</strong> que transparece em tudo.",
                   value: "romantico",
+                  scoreValue: 1,
                   nextStepId: "question-3",
                 },
                 {
-                  text: "F) Sou confiante e sensual e adoro me cuidar.",
+                  text: "F) <strong>Sou confiante e sensual</strong> e adoro me cuidar.",
                   value: "sexy",
+                  scoreValue: 1,
                   nextStepId: "question-3",
                 },
                 {
-                  text: "G) Sou moderna e audaciosa, tenho presença.",
+                  text: "G) <strong>Sou moderna e audaciosa</strong>, tenho presença.",
                   value: "dramatico",
+                  scoreValue: 1,
                   nextStepId: "question-3",
                 },
                 {
-                  text: "H) Sou exótica e aventureira, gosto da liberdade.",
+                  text: "H) <strong>Sou exótica e aventureira</strong>, gosto da liberdade.",
                   value: "criativo",
+                  scoreValue: 1,
                   nextStepId: "question-3",
                 },
               ],
+              selectionType: "multiple",
               styles: { gap: "12px" },
-            },
-          },
-          {
-            id: "q2-continue-button",
-            type: "button",
-            props: {
-              buttonText: "Continuar",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "question-3",
             },
           },
         ],
@@ -2999,60 +3001,61 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Visual leve, despojado e natural",
                   value: "natural",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual clássico e tradicional",
                   value: "classico",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual casual com toque atual",
                   value: "contemporaneo",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual refinado e imponente",
                   value: "elegante",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual romântico, feminino e delicado",
                   value: "romantico",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual sensual, com saia justa e decote",
                   value: "sexy",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual marcante e urbano (jeans + jaqueta)",
                   value: "dramatico",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
                   nextStepId: "quiz-transition",
                 },
                 {
                   text: "Visual criativo, colorido e ousado",
                   value: "criativo",
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                  scoreValue: 1,
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
                   nextStepId: "quiz-transition",
                 },
               ],
+              selectionType: "multiple",
               styles: { gap: "12px" },
             },
           },
@@ -3195,6 +3198,94 @@ const AdvancedQuizEditor: React.FC = () => {
               buttonText: "Continuar",
               buttonStyle: "primary",
               actionType: "goToNextStep",
+              actionTargetId: "strategic-3",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-3",
+      },
+      {
+        id: "strategic-3",
+        name: "� Investimento",
+        components: [
+          {
+            id: "s3-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
+              alt: "Investimento em estilo",
+              styles: {
+                width: "400px",
+                height: "300px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+              },
+            },
+          },
+          {
+            id: "s3-heading",
+            type: "heading",
+            props: {
+              text: "Qual seria seu investimento ideal em consultoria de estilo?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "s3-button",
+            type: "button",
+            props: {
+              buttonText: "Continuar",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "strategic-4",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-4",
+      },
+      {
+        id: "strategic-4",
+        name: "🎯 Resultados",
+        components: [
+          {
+            id: "s4-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
+              alt: "Resultados desejados",
+              styles: {
+                width: "400px",
+                height: "300px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+              },
+            },
+          },
+          {
+            id: "s4-heading",
+            type: "heading",
+            props: {
+              text: "Que resultados você gostaria de alcançar?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "s4-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Meu Resultado",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
               actionTargetId: "result-page",
             },
           },
@@ -3206,37 +3297,13 @@ const AdvancedQuizEditor: React.FC = () => {
         name: "📊 Resultado",
         components: [
           {
-            id: "result-heading",
-            type: "heading",
+            id: "result-custom",
+            type: "customComponent",
             props: {
-              text: "Seu Estilo Pessoal",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "2rem",
-              },
-            },
-          },
-          {
-            id: "result-description",
-            type: "text",
-            props: {
-              text: "Baseado nas suas respostas, identificamos elementos únicos do seu estilo pessoal.",
-              styles: {
-                textAlign: "center",
-                color: "#d1d5db",
-                fontSize: "1.1rem",
-              },
-            },
-          },
-          {
-            id: "result-button",
-            type: "button",
-            props: {
-              buttonText: "Ver Minha Análise Completa",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "offer-page",
+              componentName: "ResultPage.tsx",
+              offerHeadline: "Seu Estilo Pessoal Revelado",
+              offerDescription: "Baseado nas suas respostas, identificamos seu estilo único e criamos uma análise personalizada.",
+              resultType: "styleAnalysis",
             },
           },
         ],
@@ -3247,234 +3314,15 @@ const AdvancedQuizEditor: React.FC = () => {
         name: "💰 Oferta",
         components: [
           {
-            id: "offer-heading",
-            type: "heading",
+            id: "offer-custom",
+            type: "customComponent",
             props: {
-              text: "Consultoria Personalizada de Estilo",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "offer-text",
-            type: "text",
-            props: {
-              text: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil.",
-              styles: {
-                textAlign: "center",
-                color: "#d1d5db",
-                fontSize: "1.1rem",
-              },
-            },
-          },
-          {
-            id: "price-text",
-            type: "text",
-            props: {
-              text: "De R$ 497 por apenas R$ 297",
-              styles: {
-                textAlign: "center",
-                color: "#10b981",
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "offer-button",
-            type: "button",
-            props: {
-              buttonText: "Quero Minha Consultoria",
-              buttonStyle: "primary",
-              actionType: "redirectUrl",
-              actionTargetId: "https://checkout.example.com",
-            },
-          },
-        ],
-        defaultNextStepId: null,
-      },
-      {
-        id: "step-3",
-        name: "❓ Pergunta 2",
-        components: [
-          {
-            id: "question-2-heading",
-            type: "heading",
-            props: {
-              text: "Para quais ocasiões você mais precisa de inspiração de looks?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.6rem",
-              },
-            },
-          },
-          {
-            id: "question-2-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Trabalho e Eventos Profissionais",
-                  value: "work",
-                  nextStepId: "step-4",
-                },
-                {
-                  text: "Eventos Sociais e Festas",
-                  value: "social",
-                  nextStepId: "step-4",
-                },
-                {
-                  text: "Dia a Dia e Casual",
-                  value: "casual",
-                  nextStepId: "step-4",
-                },
-                {
-                  text: "Ocasiões Especiais",
-                  value: "special",
-                  nextStepId: "step-4",
-                },
-              ],
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "step-4",
-      },
-      {
-        id: "step-4",
-        name: "🔄 Transição",
-        components: [
-          {
-            id: "transition-heading",
-            type: "heading",
-            props: {
-              text: "Analisando suas respostas...",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "transition-text",
-            type: "text",
-            props: {
-              text: "Estamos criando um perfil personalizado baseado no seu estilo único.",
-              styles: {
-                textAlign: "center",
-                color: "#d1d5db",
-                fontSize: "1.1rem",
-              },
-            },
-          },
-          {
-            id: "continue-button",
-            type: "button",
-            props: {
-              buttonText: "Ver Meu Resultado",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "step-5",
-            },
-          },
-        ],
-        defaultNextStepId: "step-5",
-      },
-      {
-        id: "step-5",
-        name: "📊 Resultado",
-        components: [
-          {
-            id: "result-heading",
-            type: "heading",
-            props: {
-              text: "Seu Estilo Pessoal",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "2rem",
-              },
-            },
-          },
-          {
-            id: "result-description",
-            type: "text",
-            props: {
-              text: "Baseado nas suas respostas, identificamos elementos únicos do seu estilo pessoal.",
-              styles: {
-                textAlign: "center",
-                color: "#d1d5db",
-                fontSize: "1.1rem",
-              },
-            },
-          },
-          {
-            id: "result-button",
-            type: "button",
-            props: {
-              buttonText: "Ver Minha Análise Completa",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "step-6",
-            },
-          },
-        ],
-        defaultNextStepId: "step-6",
-      },
-      {
-        id: "step-6",
-        name: "💰 Oferta",
-        components: [
-          {
-            id: "offer-heading",
-            type: "heading",
-            props: {
-              text: "Consultoria Personalizada de Estilo",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "offer-text",
-            type: "text",
-            props: {
-              text: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil.",
-              styles: {
-                textAlign: "center",
-                color: "#d1d5db",
-                fontSize: "1.1rem",
-              },
-            },
-          },
-          {
-            id: "price-text",
-            type: "text",
-            props: {
-              text: "De R$ 497 por apenas R$ 297",
-              styles: {
-                textAlign: "center",
-                color: "#10b981",
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "offer-button",
-            type: "button",
-            props: {
-              buttonText: "Quero Minha Consultoria",
-              buttonStyle: "primary",
-              actionType: "redirectUrl",
-              actionTargetId: "https://checkout.example.com",
+              componentName: "QuizOfferPage.tsx",
+              offerHeadline: "Consultoria Personalizada de Estilo",
+              offerDescription: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil único.",
+              offerCtaButtonText: "Quero Minha Consultoria",
+              offerCtaUrl: "https://checkout.example.com",
+              discountCode: "ESTILO40OFF",
             },
           },
         ],
@@ -3485,7 +3333,7 @@ const AdvancedQuizEditor: React.FC = () => {
       showLogo: true,
       showProgressBar: true,
       allowReturnButton: true,
-      logoUrl: "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO",
+      logoUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2",
       progressColor: "#3b82f6",
     },
     currentStepId: "quiz-intro",
@@ -3975,58 +3823,165 @@ const AdvancedQuizEditor: React.FC = () => {
               onComponentMove={handleComponentMove}
               viewportMode={viewportMode}
             />
-          </div>
-
-          {/* Coluna 4: Painel de Propriedades (Direita) */}
+          </div>          {/* Coluna 4: Painel de Propriedades (Direita) */}
           <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
-              {selectedComponent ? (
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">
-                      Editar Componente
-                    </h3>
-                    <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
-                      {selectedComponent.type}
-                    </span>
+              {/* Configurações da Etapa */}
+              <div className="grid gap-4 px-4 pb-4 pt-2 my-4">
+                {/* Título da Etapa */}
+                <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+                  <div className="flex flex-col space-y-1.5 p-6 pb-4">
+                    <p className="text-sm text-zinc-400">Título da Etapa</p>
                   </div>
-                  <ComponentPropertyEditor
-                    type={selectedComponent.type}
-                    props={selectedComponent.props}
-                    onPropsChange={(newProps) =>
-                      handleComponentUpdate(selectedComponent.id, newProps)
-                    }
-                  />
-                </div>
-              ) : (
-                <div className="p-4 flex flex-col items-center justify-center h-full text-center">
-                  <div className="text-zinc-500 mb-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="48"
-                      height="48"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="mx-auto mb-2"
-                    >
-                      <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
-                      <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
-                      <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
-                    </svg>
+                  <div className="p-6 pt-0">
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <label className="text-sm font-medium leading-none text-zinc-100" htmlFor="stepName">
+                        Nome da Etapa
+                      </label>
+                      <input
+                        type="text"
+                        className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                        id="stepName"
+                        placeholder="Digite aqui..."
+                        value={currentStep?.name || ""}
+                        onChange={(e) => handleStepRename(currentStep?.id || "", e.target.value)}
+                      />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-medium text-zinc-300 mb-2">
-                    Nenhum componente selecionado
-                  </h3>
-                  <p className="text-sm text-zinc-500">
-                    Clique em um componente no canvas para editar suas
-                    propriedades
-                  </p>
                 </div>
-              )}
+
+                {/* Configurações do Header */}
+                <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+                  <div className="flex flex-col space-y-1.5 p-6 pb-4">
+                    <p className="text-sm text-zinc-400">Header</p>
+                  </div>
+                  <div className="p-6 pt-0 grid gap-2">
+                    {/* Mostrar Logo */}
+                    <div className="flex items-center space-x-2">
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={editorState.headerConfig.showLogo}
+                        className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
+                          editorState.headerConfig.showLogo ? 'bg-blue-600' : 'bg-zinc-600'
+                        }`}
+                        id="show-logo"
+                        onClick={() => handleHeaderConfigUpdate({ showLogo: !editorState.headerConfig.showLogo })}
+                      >
+                        <span 
+                          className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
+                            editorState.headerConfig.showLogo ? 'translate-x-5' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                      <label className="text-sm font-medium leading-none text-zinc-100" htmlFor="show-logo">
+                        Mostrar Logo
+                      </label>
+                    </div>
+
+                    {/* Mostrar Progresso */}
+                    <div className="flex items-center space-x-2">
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={editorState.headerConfig.showProgressBar}
+                        className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
+                          editorState.headerConfig.showProgressBar ? 'bg-blue-600' : 'bg-zinc-600'
+                        }`}
+                        id="show-progress"
+                        onClick={() => handleHeaderConfigUpdate({ showProgressBar: !editorState.headerConfig.showProgressBar })}
+                      >
+                        <span 
+                          className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
+                            editorState.headerConfig.showProgressBar ? 'translate-x-5' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                      <label className="text-sm font-medium leading-none text-zinc-100" htmlFor="show-progress">
+                        Mostrar Progresso
+                      </label>
+                    </div>
+
+                    {/* Permitir Voltar */}
+                    <div className="flex items-center space-x-2">
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={editorState.headerConfig.allowReturnButton}
+                        className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
+                          editorState.headerConfig.allowReturnButton ? 'bg-blue-600' : 'bg-zinc-600'
+                        }`}
+                        id="allow-return"
+                        onClick={() => handleHeaderConfigUpdate({ allowReturnButton: !editorState.headerConfig.allowReturnButton })}
+                      >
+                        <span 
+                          className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
+                            editorState.headerConfig.allowReturnButton ? 'translate-x-5' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                      <label className="text-sm font-medium leading-none text-zinc-100" htmlFor="allow-return">
+                        Permitir Voltar
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Editor de Componentes */}
+                {selectedComponent ? (
+                  <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+                    <div className="flex flex-col space-y-1.5 p-6 pb-4">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-zinc-400">Editar Componente</p>
+                        <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
+                          {selectedComponent.type}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-6 pt-0">
+                      <ComponentPropertyEditor
+                        type={selectedComponent.type}
+                        props={selectedComponent.props}
+                        onPropsChange={(newProps) =>
+                          handleComponentUpdate(selectedComponent.id, newProps)
+                        }
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+                    <div className="p-6 flex flex-col items-center justify-center text-center">
+                      <div className="text-zinc-500 mb-4">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="48"
+                          height="48"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="mx-auto mb-2"
+                        >
+                          <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
+                          <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
+                          <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-medium text-zinc-300 mb-2">
+                        Nenhum componente selecionado
+                      </h3>
+                      <p className="text-sm text-zinc-500">
+                        Clique em um componente no canvas para editar suas
+                        propriedades
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="py-4"></div>
+              </div>
             </div>
           </div>
         </div>
