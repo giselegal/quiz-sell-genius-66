@@ -17,7 +17,76 @@ import {
 interface QuizComponent {
   id: string;
   type: string;
-  props: Record<string, unknown>;
+  props: QuizComponentProps;
+}
+
+interface QuizComponentProps {
+  text?: string;
+  isHidden?: boolean;
+  styles?: { [key: string]: string };
+  src?: string;
+  alt?: string;
+  objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
+  label?: string;
+  placeholder?: string;
+  inputType?: "text" | "email" | "number" | "tel";
+  required?: boolean;
+  validationRegex?: string;
+  errorMessage?: string;
+  storeAsLeadField?: string;
+  buttonText?: string;
+  buttonStyle?: "primary" | "secondary" | "outline" | "ghost";
+  actionType?: "goToNextStep" | "submitForm" | "redirectUrl" | "customFunction";
+  actionTargetId?: string;
+  actionUrl?: string;
+  customFunctionName?: string;
+  questionText?: string;
+  choices?: Array<{
+    text: string;
+    value: string;
+    nextStepId?: string;
+    nextPageType?: "resultPage" | "quizOfferPage" | "transitionPage";
+    scoreValue?: number;
+  }>;
+  selectionType?: "single" | "multiple";
+  conditionalLogic?: {
+    rule: "allSelected" | "anySelected" | "scoreThreshold";
+    threshold?: number;
+    targetStepId?: string;
+    fallbackStepId?: string;
+  };
+  alertType?: "info" | "warning" | "error" | "success";
+  alertMessage?: string;
+  videoUrl?: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  controls?: boolean;
+  images?: { src: string; alt: string; caption?: string }[];
+  autoSlide?: boolean;
+  slideInterval?: number;
+  resultType?: "styleAnalysis" | "personalityProfile";
+  offerHeadline?: string;
+  offerDescription?: string;
+  offerCtaButtonText?: string;
+  offerCtaUrl?: string;
+  resultMapping?: {
+    scoreRange: [number, number];
+    resultId: string;
+    offerId: string;
+  }[];
+  offerProductSku?: string;
+  discountCode?: string;
+  componentName?: string;
+  // Propriedades adicionais de estilo
+  level?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  textColor?: string;
+  backgroundColor?: string;
+  fontSize?: number;
+  borderRadius?: number;
+  textAlign?: "left" | "center" | "right" | "justify";
+  padding?: number;
+  margin?: number;
+  hidden?: boolean;
 }
 
 interface QuizHeaderConfig {
@@ -45,7 +114,7 @@ const AdvancedConfigSidebar: React.FC<AdvancedConfigSidebarProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<"properties" | "style" | "layout">("properties");
 
-  const handlePropChange = (key: string, value: any) => {
+  const handlePropChange = (key: string, value: unknown) => {
     updateComponent(selectedComponent.id, {
       [key]: value,
     });
