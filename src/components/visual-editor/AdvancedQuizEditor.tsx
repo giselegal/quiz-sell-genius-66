@@ -3239,7 +3239,12 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 2: Canvas do Editor (Central) */}
+          {/* Coluna 2: Biblioteca de Componentes (Segunda Coluna) */}
+          <div className="w-80 border-r border-zinc-700 bg-zinc-900">
+            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+          </div>
+
+          {/* Coluna 3: Canvas do Editor (Central) */}
           <div className="flex-1 overflow-hidden">
             <CanvasArea
               currentStep={currentStep}
