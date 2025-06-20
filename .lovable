@@ -31,5 +31,7 @@
     "prepare": "node scripts/prepare-lovable.js",
     "sync": "node scripts/manual-sync.js",
     "test": "node scripts/test-sync.js"
-  }
+  },
+  "lastSync": "2025-06-20T14:11:15.158Z",
+  "componentCount": 476
 }
