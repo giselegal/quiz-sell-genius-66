@@ -3420,8 +3420,8 @@ const AdvancedQuizEditor: React.FC = () => {
             />
           </div>
 
-          {/* Coluna 2: Biblioteca de Componentes */}
-          <div className="w-64 border-r border-zinc-700">
+          {/* Coluna 2: Biblioteca de Componentes ("Adicionar Componentes") */}
+          <div className="w-40 border-r border-zinc-700">
             <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
           </div>
 
