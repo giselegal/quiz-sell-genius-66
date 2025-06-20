@@ -6,7 +6,7 @@
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
-  "version": "2.3.1750426415",
+  "version": "2.3.1750426700",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
@@ -18,14 +18,14 @@
     "autoSave": true,
     "componentHighlighting": true
   },
-  "lastSync": "2025-06-20T13:33:43.424Z",
+  "lastSync": "2025-06-20T13:40:12.902Z",
   "componentCount": 476,
   "sync": {
-    "timestamp": 1750426415,
+    "timestamp": 1750426700,
     "method": "complete-manual",
     "forced": true
   },
-  "lastUpdate": "2025-06-20T13:33:35.907Z",
+  "lastUpdate": "2025-06-20T13:38:20.694Z",
   "tokenConfigured": true,
-  "manualSyncTimestamp": 1750426415
+  "manualSyncTimestamp": 1750426700
 }

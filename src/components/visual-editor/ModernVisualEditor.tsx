@@ -996,30 +996,42 @@ const ModernVisualEditor: React.FC = () => {
                 <CardTitle className="text-sm">Componentes</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" size="sm" onClick={() => addComponent('heading')}>
-                    <Type className="h-4 w-4 mr-1" />
+                <div className="space-y-2">
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('heading')}>
+                    <Type className="h-4 w-4 mr-2" />
                     Título
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => addComponent('image')}>
-                    <ImageIcon className="h-4 w-4 mr-1" />
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('subtitle')}>
+                    <Type className="h-4 w-4 mr-2" />
+                    Subtítulo
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('image')}>
+                    <ImageIcon className="h-4 w-4 mr-2" />
                     Imagem
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => addComponent('input')}>
-                    <Layout className="h-4 w-4 mr-1" />
-                    Campo
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('input')}>
+                    <Edit3 className="h-4 w-4 mr-2" />
+                    Campo de Entrada
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => addComponent('button')}>
-                    <MousePointer className="h-4 w-4 mr-1" />
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('button')}>
+                    <MousePointer className="h-4 w-4 mr-2" />
                     Botão
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => addComponent('spacer')}>
-                    <Move className="h-4 w-4 mr-1" />
-                    Espaço
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('spacer')}>
+                    <Layout className="h-4 w-4 mr-2" />
+                    Espaçamento
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => addComponent('options')}>
-                    <CheckCircle className="h-4 w-4 mr-1" />
-                    Opções
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('visual-options')}>
+                    <CircleDot className="h-4 w-4 mr-2" />
+                    Opções Visuais
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('text-options')}>
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Opções de Texto
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => addComponent('strategic-question')}>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Questão Estratégica
                   </Button>
                 </div>
               </CardContent>
