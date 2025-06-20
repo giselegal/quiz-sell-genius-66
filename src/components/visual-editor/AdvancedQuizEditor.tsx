@@ -258,7 +258,7 @@ const EditableHeading: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
   <h1
-    className="min-w-full text-3xl font-bold text-center text-zinc-100 p-2 rounded-md bg-zinc-800/50"
+    className="min-w-full text-xl md:text-3xl font-bold text-center text-zinc-100 p-2 rounded-md bg-zinc-800/50"
     style={component.props.styles}
   >
     {component.props.text || "Título Editável"}
@@ -283,7 +283,7 @@ const EditableImage: React.FC<{ component: QuizComponent }> = ({
           "https://placehold.co/300x200/0f172a/94a3b8?text=Imagem"
         }
         alt={component.props.alt || "Imagem"}
-        className="object-cover w-full h-auto rounded-lg max-w-96"
+        className="object-cover w-full h-auto rounded-lg max-w-full"
         style={{ objectFit: component.props.objectFit || "cover" }}
       />
     </div>
@@ -307,7 +307,7 @@ const EditableInput: React.FC<{ component: QuizComponent }> = ({
     </label>
     <input
       type={component.props.inputType || "text"}
-      className="flex h-10 w-full rounded-md border border-input bg-zinc-700/50 text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50 p-2"
+      className="flex h-10 w-full rounded-md border border-input bg-zinc-700/50 text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50 p-2 text-sm md:text-base"
       placeholder={component.props.placeholder || "Digite aqui..."}
       value="" // Em um editor, seria um valor controlado
       readOnly // Para simular que é um editor e não um quiz ativo
@@ -518,6 +518,7 @@ interface CanvasAreaProps {
   ) => void;
   onComponentDelete: (componentId: string) => void;
   onComponentMove: (componentId: string, direction: "up" | "down") => void;
+  viewportMode?: 'desktop' | 'mobile';
 }
 
 const CanvasArea: React.FC<CanvasAreaProps> = ({
@@ -530,6 +531,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   onComponentUpdate,
   onComponentDelete,
   onComponentMove,
+  viewportMode = 'desktop',
 }) => {
   if (!currentStep) {
     return (
@@ -562,23 +564,29 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   return (
     <div className="w-full h-full overflow-auto bg-zinc-950 flex items-start justify-center">
       <div className="w-full h-full overflow-y-auto custom-scrollbar">
-        {/* Container do Quiz Preview - Centralizado */}
+        {/* Container do Quiz Preview - Responsivo */}
         <div className="min-h-full flex items-center justify-center p-6 lg:p-8">
-          <div className="w-full max-w-lg mx-auto">
+          <div 
+            className={`w-full mx-auto transition-all duration-300 ${
+              viewportMode === 'mobile' 
+                ? 'max-w-sm border-2 border-zinc-600 rounded-lg shadow-2xl bg-zinc-900' 
+                : 'max-w-lg'
+            }`}
+          >
             {/* Simulação do Header do Quiz */}
             {headerConfig.showLogo && (
-              <div className="mb-6 text-center">
+              <div className={`mb-6 text-center ${viewportMode === 'mobile' ? 'p-4' : ''}`}>
                 <img 
                   src={headerConfig.logoUrl || "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO"} 
                   alt="Logo" 
-                  className="h-10 mx-auto mb-4"
+                  className={`mx-auto mb-4 ${viewportMode === 'mobile' ? 'h-8' : 'h-10'}`}
                 />
               </div>
             )}
             
             {/* Barra de Progresso */}
             {headerConfig.showProgressBar && (
-              <div className="mb-8">
+              <div className={`mb-8 ${viewportMode === 'mobile' ? 'px-4' : ''}`}>
                 <div className="w-full bg-zinc-800 rounded-full h-2">
                   <div 
                     className="h-2 rounded-full transition-all duration-300"
@@ -591,8 +599,8 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               </div>
             )}
 
-            {/* Container dos Componentes */}
-            <div className="space-y-6">
+            {/* Container dos Componentes - Responsivo */}
+            <div className={`space-y-6 ${viewportMode === 'mobile' ? 'px-4 pb-4' : ''}`}>
               {currentStep.components.length === 0 ? (
                 <div className="text-center py-16 text-zinc-400 border-2 border-dashed border-zinc-600 rounded-lg">
                   <div className="mb-4">
@@ -701,6 +709,31 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                   ) : null;
                 })
               )}
+            </div>
+
+            {/* Indicador do modo de visualização */}
+            <div className="mt-6 text-center">
+              <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs ${
+                viewportMode === 'mobile' 
+                  ? 'bg-green-600/20 text-green-400 border border-green-600/30' 
+                  : 'bg-blue-600/20 text-blue-400 border border-blue-600/30'
+              }`}>
+                {viewportMode === 'mobile' ? (
+                  <>
+                    <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zM6 4a1 1 0 011-1h6a1 1 0 011 1v12a1 1 0 01-1 1H7a1 1 0 01-1-1V4z" clipRule="evenodd" />
+                    </svg>
+                    Mobile (375px)
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H14a1 1 0 001-1V6a1 1 0 00-1-1H6a1 1 0 00-1 1v5a1 1 0 001 1h2.771z" clipRule="evenodd" />
+                    </svg>
+                    Desktop (512px)
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -3790,8 +3823,6 @@ const AdvancedQuizEditor: React.FC = () => {
             isAutoSaving,
             lastSaved,
           }}
-          viewportMode={viewportMode}
-          onToggleViewport={toggleViewportMode}
         />
 
         {/* Layout Principal com 3 colunas fixas responsivas */}
