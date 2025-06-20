@@ -266,68 +266,78 @@ interface QuizEditorState {
 
 /**
  * @component EditableHeading
- * @description Componente para exibir e simular a edição de um título.
+ * @description Componente para exibir e simular a edição de um título seguindo o design original.
  */
 const EditableHeading: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <h1
-    className="min-w-full text-3xl font-bold text-center text-zinc-100 p-2 rounded-md bg-zinc-800/50"
-    style={component.props.styles}
-  >
-    {component.props.text || "Título Editável"}
-  </h1>
+  <div className="text-center mb-8">
+    <h1
+      className="text-white font-bold leading-tight tracking-wide"
+      style={{
+        fontSize: component.props.styles?.fontSize || "2rem",
+        textAlign: component.props.styles?.textAlign || "center",
+        color: component.props.styles?.color || "#ffffff",
+        fontWeight: component.props.styles?.fontWeight || "700",
+        letterSpacing: "0.025em",
+        ...component.props.styles,
+      }}
+    >
+      {component.props.text || "TÍTULO EDITÁVEL"}
+    </h1>
+  </div>
 );
 
 /**
  * @component EditableImage
- * @description Componente para exibir uma imagem.
+ * @description Componente para exibir uma imagem seguindo o layout original.
  */
 const EditableImage: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <div
-    className="grid p-2 rounded-md bg-zinc-800/50"
-    style={component.props.styles}
-  >
-    <div className="flex items-center justify-center">
+  <div className="w-full flex justify-center mb-6">
+    <div className="relative">
       <img
         src={
           component.props.src ||
-          "https://placehold.co/300x200/0f172a/94a3b8?text=Imagem"
+          "https://placehold.co/400x300/0f172a/94a3b8?text=Imagem"
         }
         alt={component.props.alt || "Imagem"}
-        className="object-cover w-full h-auto rounded-lg max-w-96"
-        style={{ objectFit: component.props.objectFit || "cover" }}
+        className="rounded-2xl shadow-2xl max-w-full h-auto"
+        style={{
+          width: component.props.styles?.width || "400px",
+          height: component.props.styles?.height || "300px",
+          objectFit: component.props.objectFit || "cover",
+          ...component.props.styles,
+        }}
       />
+      {/* Overlay sutil para dar profundidade */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
     </div>
   </div>
 );
 
 /**
  * @component EditableInput
- * @description Componente para exibir um campo de entrada.
+ * @description Componente para exibir um campo de entrada seguindo o design original.
  */
 const EditableInput: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <div
-    className="grid w-full items-center gap-1.5 p-2 rounded-md bg-zinc-800/50"
-    style={component.props.styles}
-  >
-    <label className="text-sm font-medium leading-none text-zinc-100">
+  <div className="w-full mb-6" style={component.props.styles}>
+    <label className="block text-white text-sm font-semibold mb-3 uppercase tracking-wider">
       {component.props.label || "Campo de Entrada"}{" "}
-      {component.props.required && <span className="text-red-400">*</span>}
+      {component.props.required && <span className="text-yellow-400">*</span>}
     </label>
     <input
       type={component.props.inputType || "text"}
-      className="flex h-10 w-full rounded-md border border-input bg-zinc-700/50 text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50 p-2"
+      className="w-full px-4 py-3 bg-zinc-800/80 backdrop-blur-sm border border-zinc-700 rounded-lg text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
       placeholder={component.props.placeholder || "Digite aqui..."}
       value="" // Em um editor, seria um valor controlado
       readOnly // Para simular que é um editor e não um quiz ativo
     />
     {component.props.errorMessage && (
-      <span className="text-xs text-red-400">
+      <span className="text-xs text-red-400 mt-2 block">
         {component.props.errorMessage}
       </span>
     )}
@@ -336,7 +346,7 @@ const EditableInput: React.FC<{ component: QuizComponent }> = ({
 
 /**
  * @component EditableButton
- * @description Componente para exibir um botão.
+ * @description Componente para exibir um botão seguindo o design original.
  */
 const EditableButton: React.FC<{ component: QuizComponent }> = ({
   component,
@@ -344,68 +354,87 @@ const EditableButton: React.FC<{ component: QuizComponent }> = ({
   const getButtonClass = (style: string) => {
     switch (style) {
       case "secondary":
-        return "bg-gray-600 text-white hover:bg-gray-700";
+        return "bg-zinc-700 hover:bg-zinc-600 text-white border border-zinc-600";
       case "outline":
-        return "border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white";
+        return "border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black bg-transparent";
       case "ghost":
-        return "text-blue-600 hover:bg-blue-600/10";
+        return "text-yellow-500 hover:bg-yellow-500/10 bg-transparent";
       default:
-        return "bg-blue-600 text-white hover:bg-blue-700";
+        return "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-semibold shadow-lg hover:shadow-xl";
     }
   };
 
   return (
-    <button
-      className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 min-w-full h-14 rounded-md ${getButtonClass(
-        component.props.buttonStyle || "primary"
-      )}`}
-      style={component.props.styles}
-    >
-      {component.props.buttonText || "Botão"}
-    </button>
+    <div className="text-center mb-6">
+      <button
+        className={`inline-flex items-center justify-center px-8 py-4 rounded-xl text-lg font-medium transition-all duration-200 min-w-[200px] transform hover:scale-105 ${getButtonClass(
+          component.props.buttonStyle || "primary"
+        )}`}
+        style={component.props.styles}
+      >
+        {component.props.buttonText || "Continuar"}
+      </button>
+    </div>
   );
 };
 
 /**
  * @component OptionsComponent
- * @description Componente para exibir opções de múltipla escolha seguindo o design real.
+ * @description Componente para exibir opções de múltipla escolha seguindo exatamente o design do quiz original.
  */
 const OptionsComponent: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
   <div
-    className="flex flex-col items-start justify-start gap-2"
+    className="flex flex-col items-start justify-start gap-3"
     style={component.props.styles}
   >
     {component.props.choices?.map((choice, index) => (
       <button
         key={index}
-        className="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 option border-zinc-200 bg-background hover:bg-primary hover:text-foreground h-10 px-4 hover:shadow-2xl overflow-hidden min-w-full gap-2 flex py-8 flex-row items-center justify-between border drop-shadow-none"
+        className="w-full bg-zinc-800/80 backdrop-blur-sm border border-zinc-700 hover:border-yellow-500 hover:bg-zinc-700/90 rounded-lg p-4 transition-all duration-200 text-left group hover:scale-[1.02] hover:shadow-lg"
       >
-        {choice.image && (
-          <div className="flex-shrink-0 w-16 h-16 mr-4">
-            <img
-              src={choice.image}
-              alt={choice.text}
-              className="w-full h-full object-cover rounded-md"
-            />
-          </div>
-        )}
-        <div className="py-2 px-4 w-full flex flex-row text-base items-center text-full-primary justify-between">
-          <div className="break-words w-full custom-quill quill ql-editor quill-option text-full-primary">
-            <p dangerouslySetInnerHTML={{ __html: choice.text }} />
-          </div>
-          {choice.scoreValue && (
-            <span className="ml-auto text-xs text-zinc-400">
-              +{choice.scoreValue}
-            </span>
+        <div className="flex items-center gap-4">
+          {choice.image && (
+            <div className="flex-shrink-0 w-16 h-16">
+              <img
+                src={choice.image}
+                alt={choice.text}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
           )}
+          <div className="flex-1 min-w-0">
+            <div className="text-white text-base font-medium leading-relaxed">
+              <div dangerouslySetInnerHTML={{ __html: choice.text }} />
+            </div>
+            {choice.scoreValue && (
+              <span className="text-xs text-yellow-400 mt-1 inline-block">
+                +{choice.scoreValue} pts
+              </span>
+            )}
+          </div>
+          <div className="text-zinc-400 group-hover:text-yellow-400 transition-colors">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
         </div>
       </button>
     ))}
     {component.props.selectionType === "multiple" && (
-      <p className="text-xs text-zinc-400 mt-1">
-        Você pode selecionar múltiplas opções
+      <p className="text-xs text-zinc-400 mt-2 text-center w-full">
+        💡 Você pode selecionar múltiplas opções
       </p>
     )}
   </div>
@@ -494,18 +523,32 @@ const SpacerComponent: React.FC<{ component: QuizComponent }> = ({
 
 /**
  * @component TextComponent
- * @description Componente para exibir texto simples.
+ * @description Componente para exibir texto simples seguindo o design original.
  */
 const TextComponent: React.FC<{ component: QuizComponent }> = ({
   component,
-}) => (
-  <p
-    className="min-w-full text-zinc-100 text-center p-2 rounded-md bg-zinc-800/50"
-    style={component.props.styles}
-  >
-    {component.props.text || "Texto Editável"}
-  </p>
-);
+}) => {
+  const textAlign =
+    (component.props.styles?.textAlign as React.CSSProperties["textAlign"]) ||
+    "center";
+
+  return (
+    <div className="text-center mb-6">
+      <p
+        className="text-zinc-300 leading-relaxed"
+        style={{
+          fontSize: component.props.styles?.fontSize || "1.1rem",
+          textAlign,
+          color: component.props.styles?.color || "#d1d5db",
+          lineHeight: "1.6",
+          ...component.props.styles,
+        }}
+      >
+        {component.props.text || "Texto Editável"}
+      </p>
+    </div>
+  );
+};
 
 // Mapeamento de tipos de componentes para seus respectivos React Components de VISUALIZAÇÃO
 const componentViewMap: {
@@ -591,50 +634,51 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   };
 
   return (
-    <div className="w-full h-full overflow-auto bg-zinc-950 flex items-start justify-center">
-      <div className="w-full h-full overflow-y-auto custom-scrollbar">
-        {/* Container do Quiz Preview - Responsivo baseado no viewportMode */}
-        <div className="min-h-full flex items-center justify-center p-6 lg:p-8">
-          <div
-            className={`mx-auto transition-all duration-300 ${
-              viewportMode === "mobile"
-                ? "w-full max-w-sm" // Mobile: 384px máximo
-                : "w-full max-w-4xl" // Desktop: 896px máximo
-            }`}
-          >
-            {/* Simulação do Header do Quiz */}
+    <div className="w-full h-full overflow-auto bg-gradient-to-b from-zinc-900 via-black to-zinc-900">
+      {/* Layout exato do quiz original */}
+      <div className="min-h-screen flex flex-col">
+        {/* Header fixo com logo e barra de progresso */}
+        <div className="w-full bg-black/30 backdrop-blur-sm">
+          <div className="max-w-md mx-auto px-4 py-6">
+            {/* Logo centralizado */}
             {headerConfig.showLogo && (
-              <div className="mb-6 text-center">
+              <div className="text-center mb-6">
                 <img
                   src={
                     headerConfig.logoUrl ||
-                    "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO"
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
                   }
                   alt="Logo"
-                  className="h-10 mx-auto mb-4"
+                  className="w-24 h-24 mx-auto rounded-full object-cover shadow-lg"
                 />
               </div>
             )}
 
             {/* Barra de Progresso */}
             {headerConfig.showProgressBar && (
-              <div className="mb-8">
-                <div className="w-full bg-zinc-800 rounded-full h-2">
-                  <div
-                    className="h-2 rounded-full transition-all duration-300"
-                    style={{
-                      backgroundColor: headerConfig.progressColor || "#3b82f6",
-                      width: "30%", // Simulado
-                    }}
-                  ></div>
-                </div>
+              <div className="w-full bg-zinc-800 rounded-full h-2 mb-4">
+                <div
+                  className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-yellow-400 to-yellow-600"
+                  style={{
+                    width: "30%", // Simulado baseado na etapa atual
+                  }}
+                ></div>
               </div>
             )}
+          </div>
+        </div>
 
+        {/* Conteúdo principal */}
+        <div className="flex-1 flex items-center justify-center px-4 py-8">
+          <div
+            className={`w-full transition-all duration-300 ${
+              viewportMode === "mobile" ? "max-w-sm" : "max-w-md"
+            }`}
+          >
             {/* Container dos Componentes */}
-            <div className="space-y-6">
+            <div className="space-y-8">
               {currentStep.components.length === 0 ? (
-                <div className="text-center py-16 text-zinc-400 border-2 border-dashed border-zinc-600 rounded-lg">
+                <div className="text-center py-16 text-zinc-400 border-2 border-dashed border-zinc-600 rounded-2xl bg-zinc-900/50 backdrop-blur-sm">
                   <div className="mb-4">
                     <svg
                       className="w-12 h-12 mx-auto text-zinc-500"
@@ -659,25 +703,25 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                   <div className="flex flex-wrap gap-2 justify-center">
                     <button
                       onClick={() => onComponentAdd("heading")}
-                      className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                      className="px-3 py-1 bg-yellow-500 text-black rounded text-sm hover:bg-yellow-600 font-medium"
                     >
                       + Título
                     </button>
                     <button
                       onClick={() => onComponentAdd("text")}
-                      className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                      className="px-3 py-1 bg-yellow-500 text-black rounded text-sm hover:bg-yellow-600 font-medium"
                     >
                       + Texto
                     </button>
                     <button
                       onClick={() => onComponentAdd("image")}
-                      className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                      className="px-3 py-1 bg-yellow-500 text-black rounded text-sm hover:bg-yellow-600 font-medium"
                     >
                       + Imagem
                     </button>
                     <button
                       onClick={() => onComponentAdd("button")}
-                      className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                      className="px-3 py-1 bg-yellow-500 text-black rounded text-sm hover:bg-yellow-600 font-medium"
                     >
                       + Botão
                     </button>
@@ -697,10 +741,10 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                       {/* Container com bordas que indicam seleção */}
                       <div
                         id={component.id}
-                        className={`min-h-[1.25rem] w-full relative rounded-md transition-all duration-200 ${
+                        className={`min-h-[1.25rem] w-full relative rounded-lg transition-all duration-200 ${
                           selectedComponentId === component.id
-                            ? "ring-2 ring-blue-500 ring-offset-2 ring-offset-zinc-950 bg-blue-500/5"
-                            : "hover:ring-1 hover:ring-zinc-500 hover:ring-offset-1 hover:ring-offset-zinc-950"
+                            ? "ring-2 ring-yellow-500 ring-offset-2 ring-offset-transparent bg-yellow-500/5"
+                            : "hover:ring-1 hover:ring-zinc-500 hover:ring-offset-1 hover:ring-offset-transparent"
                         }`}
                       >
                         {/* Controles do componente - aparecem quando selecionado */}
@@ -711,7 +755,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                                 e.stopPropagation();
                                 onComponentMove(component.id, "up");
                               }}
-                              className="w-8 h-8 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-blue-600 transition-colors"
+                              className="w-8 h-8 bg-yellow-500 text-black rounded-full text-xs flex items-center justify-center hover:bg-yellow-600 transition-colors font-bold"
                               title="Mover para cima"
                               disabled={
                                 currentStep.components.indexOf(component) === 0
@@ -724,7 +768,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                                 e.stopPropagation();
                                 onComponentMove(component.id, "down");
                               }}
-                              className="w-8 h-8 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-blue-600 transition-colors"
+                              className="w-8 h-8 bg-yellow-500 text-black rounded-full text-xs flex items-center justify-center hover:bg-yellow-600 transition-colors font-bold"
                               title="Mover para baixo"
                               disabled={
                                 currentStep.components.indexOf(component) ===
@@ -738,7 +782,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                                 e.stopPropagation();
                                 onComponentDelete(component.id);
                               }}
-                              className="w-8 h-8 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 transition-colors"
+                              className="w-8 h-8 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 transition-colors font-bold"
                               title="Excluir componente"
                             >
                               ×
@@ -4432,620 +4476,6 @@ const AdvancedQuizEditor: React.FC = () => {
           },
         ],
         defaultNextStepId: "strategic-1",
-      },
-      {
-        id: "strategic-1",
-        name: "💭 Autopercepção",
-        components: [
-          {
-            id: "s1-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp",
-              alt: "Autopercepção do estilo",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s1-heading",
-            type: "heading",
-            props: {
-              text: "Como você se vê atualmente?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s1-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s1-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Confiante e satisfeita com meu estilo atual",
-                  value: "confiante",
-                  nextStepId: "strategic-2",
-                },
-                {
-                  text: "Insegura, não sei se minhas roupas me valorizam",
-                  value: "insegura",
-                  nextStepId: "strategic-2",
-                },
-                {
-                  text: "Perdida, preciso de direcionamento completo",
-                  value: "perdida",
-                  nextStepId: "strategic-2",
-                },
-                {
-                  text: "Estou em transição, quero mudar meu visual",
-                  value: "transicao",
-                  nextStepId: "strategic-2",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-2",
-      },
-      {
-        id: "strategic-2",
-        name: "🎯 Desafios",
-        components: [
-          {
-            id: "s2-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp",
-              alt: "Desafios ao se vestir",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s2-heading",
-            type: "heading",
-            props: {
-              text: "Quais são seus maiores desafios ao se vestir?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s2-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s2-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Não sei combinar as peças que tenho",
-                  value: "combinacao",
-                  nextStepId: "strategic-3",
-                },
-                {
-                  text: "Meu guarda-roupa não reflete minha personalidade",
-                  value: "personalidade",
-                  nextStepId: "strategic-3",
-                },
-                {
-                  text: "Compro coisas que não uso",
-                  value: "compras",
-                  nextStepId: "strategic-3",
-                },
-                {
-                  text: "Não sei qual é o meu estilo",
-                  value: "estilo",
-                  nextStepId: "strategic-3",
-                },
-                {
-                  text: "Tenho dificuldade para ocasiões especiais",
-                  value: "ocasioes",
-                  nextStepId: "strategic-3",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-3",
-      },
-      {
-        id: "strategic-3",
-        name: "💰 Investimento",
-        components: [
-          {
-            id: "s3-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
-              alt: "Investimento em estilo",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s3-heading",
-            type: "heading",
-            props: {
-              text: "Qual seria seu investimento ideal em consultoria de estilo?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s3-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s3-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Até R$ 500 - Orientação básica",
-                  value: "basico",
-                  nextStepId: "strategic-4",
-                },
-                {
-                  text: "R$ 500 - R$ 1.500 - Consultoria completa",
-                  value: "intermediario",
-                  nextStepId: "strategic-4",
-                },
-                {
-                  text: "R$ 1.500 - R$ 3.000 - Transformação total",
-                  value: "premium",
-                  nextStepId: "strategic-4",
-                },
-                {
-                  text: "Acima de R$ 3.000 - Experiência VIP",
-                  value: "vip",
-                  nextStepId: "strategic-4",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-4",
-      },
-      {
-        id: "strategic-4",
-        name: "🎯 Resultados",
-        components: [
-          {
-            id: "s4-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
-              alt: "Resultados desejados",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s4-heading",
-            type: "heading",
-            props: {
-              text: "Que resultados você gostaria de alcançar?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s4-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s4-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Descobrir meu estilo único e autêntico",
-                  value: "estilo_autentico",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Otimizar meu guarda-roupa atual",
-                  value: "otimizar_guardaroupa",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Aprender a combinar peças com confiança",
-                  value: "combinar_pecas",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Fazer compras mais inteligentes e certeiras",
-                  value: "compras_inteligentes",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Transmitir a imagem profissional que desejo",
-                  value: "imagem_profissional",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Aumentar minha autoestima e confiança",
-                  value: "autoestima",
-                  nextStepId: "result-page",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-          {
-            id: "s4-button",
-            type: "button",
-            props: {
-              buttonText: "Ver Meu Resultado",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "strategic-5",
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-5",
-      },
-      {
-        id: "strategic-5",
-        name: "💭 Estilo Atual",
-        components: [
-          {
-            id: "s5-heading",
-            type: "heading",
-            props: {
-              text: "Como você descreveria seu estilo atual?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s5-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s5-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Básico demais, preciso de mais personalidade",
-                  value: "basico",
-                  nextStepId: "strategic-6",
-                },
-                {
-                  text: "Confuso, misturo muitas tendências",
-                  value: "confuso",
-                  nextStepId: "strategic-6",
-                },
-                {
-                  text: "Repetitivo, sempre uso as mesmas peças",
-                  value: "repetitivo",
-                  nextStepId: "strategic-6",
-                },
-                {
-                  text: "Inconsistente, depende do humor do dia",
-                  value: "inconsistente",
-                  nextStepId: "strategic-6",
-                },
-                {
-                  text: "Está evoluindo, mas ainda não encontrei meu 'eu'",
-                  value: "evoluindo",
-                  nextStepId: "strategic-6",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-6",
-      },
-      {
-        id: "strategic-6",
-        name: "💰 Investimento Real",
-        components: [
-          {
-            id: "s6-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
-              alt: "Investimento em consultoria",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s6-heading",
-            type: "heading",
-            props: {
-              text: "Quanto você gastou em roupas nos últimos 6 meses?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s6-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s6-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Menos de R$ 500",
-                  value: "baixo",
-                  nextStepId: "strategic-7",
-                },
-                {
-                  text: "Entre R$ 500 - R$ 1.500",
-                  value: "medio",
-                  nextStepId: "strategic-7",
-                },
-                {
-                  text: "Entre R$ 1.500 - R$ 3.000",
-                  value: "alto",
-                  nextStepId: "strategic-7",
-                },
-                {
-                  text: "Mais de R$ 3.000",
-                  value: "premium",
-                  nextStepId: "strategic-7",
-                },
-                {
-                  text: "Prefiro não informar",
-                  value: "nao_informar",
-                  nextStepId: "strategic-7",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-7",
-      },
-      {
-        id: "strategic-7",
-        name: "🎯 Transformação Desejada",
-        components: [
-          {
-            id: "s7-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
-              alt: "Transformação de estilo",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s7-heading",
-            type: "heading",
-            props: {
-              text: "Em quanto tempo você gostaria de ver essa transformação?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s7-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s7-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Imediatamente - tenho pressa!",
-                  value: "imediato",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Nos próximos 30 dias",
-                  value: "1mes",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Em 2-3 meses, com planejamento",
-                  value: "3meses",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Ao longo de 6 meses, gradualmente",
-                  value: "6meses",
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Sem pressa, quando for possível",
-                  value: "sem_pressa",
-                  nextStepId: "result-page",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-          {
-            id: "s7-button",
-            type: "button",
-            props: {
-              buttonText: "Ver Meu Resultado Completo",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "result-page",
-            },
-          },
-        ],
-        defaultNextStepId: "result-page",
-      },
-      {
-        id: "result-page",
-        name: "📊 Resultado",
-        components: [
-          {
-            id: "result-custom",
-            type: "customComponent",
-            props: {
-              componentName: "ResultPage.tsx",
-              offerHeadline: "Seu Estilo Pessoal Revelado",
-              offerDescription:
-                "Baseado nas suas respostas, identificamos seu estilo único e criamos uma análise personalizada.",
-              resultType: "styleAnalysis",
-              styleImages: {
-                natural: [
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
-                ],
-                classico: [
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
-                ],
-                contemporaneo: [
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
-                ],
-                elegante: [
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
-                ],
-                romantico: [
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
-                ],
-                sexy: [
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
-                ],
-                dramatico: [
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
-                ],
-                criativo: [
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
-                ],
-              },
-              styleNames: {
-                natural: "Estilo Natural",
-                classico: "Estilo Clássico",
-                contemporaneo: "Estilo Contemporâneo",
-                elegante: "Estilo Elegante",
-                romantico: "Estilo Romântico",
-                sexy: "Estilo Sexy",
-                dramatico: "Estilo Dramático",
-                criativo: "Estilo Criativo",
-              },
-            },
-          },
-        ],
-        defaultNextStepId: "offer-page",
-      },
-      {
-        id: "offer-page",
-        name: "💰 Oferta",
-        components: [
-          {
-            id: "offer-custom",
-            type: "customComponent",
-            props: {
-              componentName: "QuizOfferPage.tsx",
-              offerHeadline: "Consultoria Personalizada de Estilo",
-              offerDescription:
-                "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil único.",
-              offerCtaButtonText: "Quero Minha Consultoria",
-              offerCtaUrl: "https://checkout.example.com",
-              discountCode: "ESTILO40OFF",
-            },
-          },
-        ],
-        defaultNextStepId: null,
       },
     ],
     headerConfig: {
