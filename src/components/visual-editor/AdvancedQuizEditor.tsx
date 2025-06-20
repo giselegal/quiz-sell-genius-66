@@ -19,17 +19,22 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
           timestamp: new Date().toISOString(),
           version: "1.0.0",
         };
-        
+
         localStorage.setItem("quiz-editor-state", JSON.stringify(saveData));
-        
+
         // Também salva um backup rotativo
         const backupKey = `quiz-editor-backup-${Date.now()}`;
         localStorage.setItem(backupKey, JSON.stringify(saveData));
-        
+
         // Limita a 5 backups
-        const allKeys = Object.keys(localStorage).filter(key => key.startsWith('quiz-editor-backup-'));
+        const allKeys = Object.keys(localStorage).filter((key) =>
+          key.startsWith("quiz-editor-backup-")
+        );
         if (allKeys.length > 5) {
-          allKeys.sort().slice(0, -5).forEach(key => localStorage.removeItem(key));
+          allKeys
+            .sort()
+            .slice(0, -5)
+            .forEach((key) => localStorage.removeItem(key));
         }
 
         // Simula salvamento no servidor
@@ -40,7 +45,9 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
         console.log("✅ Auto-save realizado:", new Date().toLocaleTimeString());
       } catch (error) {
         console.error("❌ Erro no auto-save:", error);
-        alert("Erro ao salvar automaticamente. Suas alterações podem não estar sendo salvas.");
+        alert(
+          "Erro ao salvar automaticamente. Suas alterações podem não estar sendo salvas."
+        );
       } finally {
         setIsSaving(false);
       }
@@ -65,7 +72,10 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
       const saved = localStorage.getItem("quiz-editor-state");
       if (saved) {
         const parsed = JSON.parse(saved);
-        console.log("📂 Dados carregados do auto-save:", new Date(parsed.timestamp).toLocaleString());
+        console.log(
+          "📂 Dados carregados do auto-save:",
+          new Date(parsed.timestamp).toLocaleString()
+        );
         return parsed.data;
       }
     } catch (error) {
@@ -81,12 +91,12 @@ const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
     }
   }, [data, saveToLocalStorage]);
 
-  return { 
-    isSaving, 
-    lastSaved, 
+  return {
+    isSaving,
+    lastSaved,
     hasUnsavedChanges,
-    loadFromLocalStorage, 
-    saveManually 
+    loadFromLocalStorage,
+    saveManually,
   };
 };
 
@@ -518,7 +528,7 @@ interface CanvasAreaProps {
   ) => void;
   onComponentDelete: (componentId: string) => void;
   onComponentMove: (componentId: string, direction: "up" | "down") => void;
-  viewportMode?: 'desktop' | 'mobile';
+  viewportMode?: "desktop" | "mobile";
 }
 
 const CanvasArea: React.FC<CanvasAreaProps> = ({
@@ -531,7 +541,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   onComponentUpdate,
   onComponentDelete,
   onComponentMove,
-  viewportMode = 'desktop'
+  viewportMode = "desktop",
 }) => {
   if (!currentStep) {
     return (
@@ -547,9 +557,11 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   }
 
   // Função para renderizar cada componente com visualização funcional
-  const ComponentToRender: React.FC<{ component: QuizComponent }> = ({ component }) => {
+  const ComponentToRender: React.FC<{ component: QuizComponent }> = ({
+    component,
+  }) => {
     const ViewComponent = componentViewMap[component.type];
-    
+
     if (!ViewComponent) {
       return (
         <div className="p-4 bg-red-500/20 border border-red-500 rounded text-red-200">
@@ -557,7 +569,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
         </div>
       );
     }
-    
+
     return <ViewComponent component={component} />;
   };
 
@@ -566,33 +578,36 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
       <div className="w-full h-full overflow-y-auto custom-scrollbar">
         {/* Container do Quiz Preview - Responsivo baseado no viewportMode */}
         <div className="min-h-full flex items-center justify-center p-6 lg:p-8">
-          <div 
+          <div
             className={`mx-auto transition-all duration-300 ${
-              viewportMode === 'mobile' 
-                ? 'w-full max-w-sm' // Mobile: 384px máximo
-                : 'w-full max-w-4xl'  // Desktop: 896px máximo
+              viewportMode === "mobile"
+                ? "w-full max-w-sm" // Mobile: 384px máximo
+                : "w-full max-w-4xl" // Desktop: 896px máximo
             }`}
           >
             {/* Simulação do Header do Quiz */}
             {headerConfig.showLogo && (
               <div className="mb-6 text-center">
-                <img 
-                  src={headerConfig.logoUrl || "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO"} 
-                  alt="Logo" 
+                <img
+                  src={
+                    headerConfig.logoUrl ||
+                    "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO"
+                  }
+                  alt="Logo"
                   className="h-10 mx-auto mb-4"
                 />
               </div>
             )}
-            
+
             {/* Barra de Progresso */}
             {headerConfig.showProgressBar && (
               <div className="mb-8">
                 <div className="w-full bg-zinc-800 rounded-full h-2">
-                  <div 
+                  <div
                     className="h-2 rounded-full transition-all duration-300"
-                    style={{ 
+                    style={{
                       backgroundColor: headerConfig.progressColor || "#3b82f6",
-                      width: "30%" // Simulado
+                      width: "30%", // Simulado
                     }}
                   ></div>
                 </div>
@@ -604,12 +619,26 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               {currentStep.components.length === 0 ? (
                 <div className="text-center py-16 text-zinc-400 border-2 border-dashed border-zinc-600 rounded-lg">
                   <div className="mb-4">
-                    <svg className="w-12 h-12 mx-auto text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    <svg
+                      className="w-12 h-12 mx-auto text-zinc-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
                     </svg>
                   </div>
-                  <p className="text-lg font-medium mb-2">Esta etapa está vazia</p>
-                  <p className="text-sm mb-6">Adicione componentes usando a barra lateral à esquerda</p>
+                  <p className="text-lg font-medium mb-2">
+                    Esta etapa está vazia
+                  </p>
+                  <p className="text-sm mb-6">
+                    Adicione componentes usando a barra lateral à esquerda
+                  </p>
                   <div className="flex flex-wrap gap-2 justify-center">
                     <button
                       onClick={() => onComponentAdd("heading")}
@@ -667,7 +696,9 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                               }}
                               className="w-8 h-8 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-blue-600 transition-colors"
                               title="Mover para cima"
-                              disabled={currentStep.components.indexOf(component) === 0}
+                              disabled={
+                                currentStep.components.indexOf(component) === 0
+                              }
                             >
                               ↑
                             </button>
@@ -678,7 +709,10 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                               }}
                               className="w-8 h-8 bg-blue-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-blue-600 transition-colors"
                               title="Mover para baixo"
-                              disabled={currentStep.components.indexOf(component) === currentStep.components.length - 1}
+                              disabled={
+                                currentStep.components.indexOf(component) ===
+                                currentStep.components.length - 1
+                              }
                             >
                               ↓
                             </button>
@@ -739,9 +773,17 @@ export const FunnelNavbar: React.FC<{
     isAutoSaving: boolean;
     lastSaved: Date | null;
   };
-  viewportMode?: 'desktop' | 'mobile';
+  viewportMode?: "desktop" | "mobile";
   onToggleViewport?: () => void;
-}> = ({ onSave, onPublish, isSaving, isPublishing, autoSaveStatus, viewportMode, onToggleViewport }) => {
+}> = ({
+  onSave,
+  onPublish,
+  isSaving,
+  isPublishing,
+  autoSaveStatus,
+  viewportMode,
+  onToggleViewport,
+}) => {
   return (
     <div className="h-fit border-b border-gray-200 relative z-[20] bg-white shadow-sm">
       <div className="w-full flex flex-wrap md:flex-nowrap justify-between">
@@ -1399,7 +1441,9 @@ const FunnelToolbarSidebar: React.FC<{
             className="w-full bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-zinc-600 p-3 cursor-pointer transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={() => {
               onComponentAdd(item.type);
-              console.log(`✅ Adicionando componente: ${item.name} (${item.type})`);
+              console.log(
+                `✅ Adicionando componente: ${item.name} (${item.type})`
+              );
             }}
             title={`Adicionar ${item.name}`}
           >
@@ -1416,8 +1460,18 @@ const FunnelToolbarSidebar: React.FC<{
                 </div>
               </div>
               <div className="text-zinc-500 group-hover:text-zinc-300 transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
               </div>
             </div>
@@ -1643,17 +1697,23 @@ const ComponentPropertyEditor: React.FC<{
 
           {/* Controles de Tamanho de Fonte */}
           <div className="rounded-lg border border-zinc-600 bg-zinc-800 p-4">
-            <h4 className="text-sm font-medium text-zinc-100 mb-3">Tamanho da Fonte</h4>
+            <h4 className="text-sm font-medium text-zinc-100 mb-3">
+              Tamanho da Fonte
+            </h4>
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-zinc-400 mb-1 block">Tamanho (rem)</label>
+                <label className="text-xs text-zinc-400 mb-1 block">
+                  Tamanho (rem)
+                </label>
                 <input
                   type="range"
                   min="0.5"
                   max="5"
                   step="0.1"
                   className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                  value={parseFloat(props.styles?.fontSize?.replace('rem', '') || '1')}
+                  value={parseFloat(
+                    props.styles?.fontSize?.replace("rem", "") || "1"
+                  )}
                   onChange={(e) => {
                     const newStyles = { ...props.styles };
                     newStyles.fontSize = `${e.target.value}rem`;
@@ -1661,20 +1721,20 @@ const ComponentPropertyEditor: React.FC<{
                   }}
                 />
                 <span className="text-xs text-zinc-400">
-                  {props.styles?.fontSize || '1rem'}
+                  {props.styles?.fontSize || "1rem"}
                 </span>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-2">
                 <button
                   className={`px-3 py-1 rounded text-xs ${
-                    props.styles?.fontWeight === 'normal' 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
+                    props.styles?.fontWeight === "normal"
+                      ? "bg-blue-600 text-white"
+                      : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
                   }`}
                   onClick={() => {
                     const newStyles = { ...props.styles };
-                    newStyles.fontWeight = 'normal';
+                    newStyles.fontWeight = "normal";
                     handleChange("styles", newStyles);
                   }}
                 >
@@ -1682,13 +1742,13 @@ const ComponentPropertyEditor: React.FC<{
                 </button>
                 <button
                   className={`px-3 py-1 rounded text-xs ${
-                    props.styles?.fontWeight === 'bold' 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
+                    props.styles?.fontWeight === "bold"
+                      ? "bg-blue-600 text-white"
+                      : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
                   }`}
                   onClick={() => {
                     const newStyles = { ...props.styles };
-                    newStyles.fontWeight = 'bold';
+                    newStyles.fontWeight = "bold";
                     handleChange("styles", newStyles);
                   }}
                 >
@@ -1697,13 +1757,13 @@ const ComponentPropertyEditor: React.FC<{
               </div>
 
               <div className="grid grid-cols-3 gap-1">
-                {['left', 'center', 'right'].map((align) => (
+                {["left", "center", "right"].map((align) => (
                   <button
                     key={align}
                     className={`px-2 py-1 rounded text-xs ${
-                      props.styles?.textAlign === align 
-                        ? 'bg-blue-600 text-white' 
-                        : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
+                      props.styles?.textAlign === align
+                        ? "bg-blue-600 text-white"
+                        : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
                     }`}
                     onClick={() => {
                       const newStyles = { ...props.styles };
@@ -1711,7 +1771,7 @@ const ComponentPropertyEditor: React.FC<{
                       handleChange("styles", newStyles);
                     }}
                   >
-                    {align === 'left' ? '⬅️' : align === 'center' ? '↔️' : '➡️'}
+                    {align === "left" ? "⬅️" : align === "center" ? "↔️" : "➡️"}
                   </button>
                 ))}
               </div>
@@ -1800,7 +1860,7 @@ const ComponentPropertyEditor: React.FC<{
                     />
                   )}
                 </div>
-                
+
                 {/* Slider para largura percentual */}
                 {props.styles?.width && props.styles.width.includes("%") && (
                   <div>
@@ -1905,7 +1965,7 @@ const ComponentPropertyEditor: React.FC<{
             </div>
           </div>
 
-               {/* Secao: Personalizacao */}
+          {/* Secao: Personalizacao */}
           <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
             <div className="flex flex-col space-y-1.5 p-6 pb-4">
               <p className="text-sm text-zinc-400">Personalização</p>
@@ -2029,51 +2089,52 @@ const ComponentPropertyEditor: React.FC<{
 
           {/* Seção: Geral */}
           <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
-        <div className="flex flex-col space-y-1.5 p-6 pb-4">
-          <p className="text-sm text-zinc-400">Geral</p>
-        </div>
-        <div className="p-6 pt-0 gap-4 flex flex-col">
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Tamanho Máximo
-            </label>
-            <input
-              type="range"
-              min="10"
-              max="100"
-              className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
-              value={parseInt(
-                props.styles?.maxWidth?.toString().replace("%", "") || "100"
-              )}
-              onChange={(e) => {
-                const newStyles = { ...props.styles };
-                newStyles.maxWidth = `${e.target.value}%`;
-                handleChange("styles", newStyles);
-              } } />
-            <span className="text-xs text-zinc-400">
-              {props.styles?.maxWidth || "100%"}
-            </span>
+            <div className="flex flex-col space-y-1.5 p-6 pb-4">
+              <p className="text-sm text-zinc-400">Geral</p>
+            </div>
+            <div className="p-6 pt-0 gap-4 flex flex-col">
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Tamanho Máximo
+                </label>
+                <input
+                  type="range"
+                  min="10"
+                  max="100"
+                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
+                  value={parseInt(
+                    props.styles?.maxWidth?.toString().replace("%", "") || "100"
+                  )}
+                  onChange={(e) => {
+                    const newStyles = { ...props.styles };
+                    newStyles.maxWidth = `${e.target.value}%`;
+                    handleChange("styles", newStyles);
+                  }}
+                />
+                <span className="text-xs text-zinc-400">
+                  {props.styles?.maxWidth || "100%"}
+                </span>
+              </div>
+              <div className="flex flex-col-reverse items-start gap-2">
+                <select
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={props.styles?.textAlign || "center"}
+                  onChange={(e) => {
+                    const newStyles = { ...props.styles };
+                    newStyles.textAlign = e.target.value;
+                    handleChange("styles", newStyles);
+                  }}
+                >
+                  <option value="left">Esquerda</option>
+                  <option value="center">Centro</option>
+                  <option value="right">Direita</option>
+                </select>
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Alinhamento
+                </label>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col-reverse items-start gap-2">
-            <select
-              className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={props.styles?.textAlign || "center"}
-              onChange={(e) => {
-                const newStyles = { ...props.styles };
-                newStyles.textAlign = e.target.value;
-                handleChange("styles", newStyles);
-              } }
-            >
-              <option value="left">Esquerda</option>
-              <option value="center">Centro</option>
-              <option value="right">Direita</option>
-            </select>
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Alinhamento
-            </label>
-          </div>
-        </div>
-      </div>
         </div>
       );
 
@@ -2642,7 +2703,9 @@ const AdvancedQuizEditor: React.FC = () => {
   console.log("🚀 AdvancedQuizEditor está renderizando!");
 
   // Estados de interface e visualização
-  const [viewportMode, setViewportMode] = useState<'desktop' | 'mobile'>('desktop');
+  const [viewportMode, setViewportMode] = useState<"desktop" | "mobile">(
+    "desktop"
+  );
 
   // Estados principais do editor
   const [editorState, setEditorState] = useState<QuizEditorState>({
@@ -3440,7 +3503,10 @@ const AdvancedQuizEditor: React.FC = () => {
     const savedData = loadFromLocalStorage();
     if (savedData) {
       setEditorState(savedData);
-      console.log("📂 Dados carregados do auto-save:", new Date().toLocaleTimeString());
+      console.log(
+        "📂 Dados carregados do auto-save:",
+        new Date().toLocaleTimeString()
+      );
     }
   }, [loadFromLocalStorage]);
 
@@ -3524,7 +3590,7 @@ const AdvancedQuizEditor: React.FC = () => {
 
   // --- Toggle entre modos de visualização ---
   const toggleViewportMode = () => {
-    setViewportMode(prev => prev === 'desktop' ? 'mobile' : 'desktop');
+    setViewportMode((prev) => (prev === "desktop" ? "mobile" : "desktop"));
   };
 
   // --- Handlers para gerenciar componentes ---
@@ -3641,26 +3707,27 @@ const AdvancedQuizEditor: React.FC = () => {
     try {
       // Usa o sistema de auto-save para salvar manualmente
       saveManually();
-      
+
       // Simula salvamento no servidor
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       console.log("✅ Quiz salvo manualmente:", editorState);
-      
+
       // Mostra uma notificação de sucesso mais discreta
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
-      notification.textContent = 'Quiz salvo com sucesso!';
+      const notification = document.createElement("div");
+      notification.className =
+        "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50";
+      notification.textContent = "Quiz salvo com sucesso!";
       document.body.appendChild(notification);
       setTimeout(() => document.body.removeChild(notification), 3000);
-      
     } catch (error) {
       console.error("❌ Erro ao salvar:", error);
-      
+
       // Mostra notificação de erro
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50';
-      notification.textContent = 'Erro ao salvar. Tente novamente.';
+      const notification = document.createElement("div");
+      notification.className =
+        "fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50";
+      notification.textContent = "Erro ao salvar. Tente novamente.";
       document.body.appendChild(notification);
       setTimeout(() => document.body.removeChild(notification), 5000);
     } finally {
@@ -3673,26 +3740,27 @@ const AdvancedQuizEditor: React.FC = () => {
     try {
       // Salva antes de publicar
       saveManually();
-      
+
       // Simula publicação
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      
+
       console.log("🚀 Quiz publicado:", editorState);
-      
+
       // Mostra notificação de sucesso
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg z-50';
-      notification.textContent = 'Quiz publicado com sucesso!';
+      const notification = document.createElement("div");
+      notification.className =
+        "fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg z-50";
+      notification.textContent = "Quiz publicado com sucesso!";
       document.body.appendChild(notification);
       setTimeout(() => document.body.removeChild(notification), 3000);
-      
     } catch (error) {
       console.error("❌ Erro ao publicar:", error);
-      
+
       // Mostra notificação de erro
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50';
-      notification.textContent = 'Erro ao publicar. Tente novamente.';
+      const notification = document.createElement("div");
+      notification.className =
+        "fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50";
+      notification.textContent = "Erro ao publicar. Tente novamente.";
       document.body.appendChild(notification);
       setTimeout(() => document.body.removeChild(notification), 5000);
     } finally {
@@ -3831,23 +3899,53 @@ const AdvancedQuizEditor: React.FC = () => {
           <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900 relative">
             {/* Controles de Viewport */}
             <div className="absolute top-2 right-2 z-10 bg-zinc-800 rounded p-1 shadow-lg">
-              <button 
-                className={`p-1 rounded ${viewportMode === 'desktop' ? 'bg-blue-600 text-white' : 'text-zinc-400 hover:text-zinc-200'}`}
-                onClick={() => setViewportMode('desktop')}
+              <button
+                className={`p-1 rounded ${
+                  viewportMode === "desktop"
+                    ? "bg-blue-600 text-white"
+                    : "text-zinc-400 hover:text-zinc-200"
+                }`}
+                onClick={() => setViewportMode("desktop")}
                 title="Visualização Desktop"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-monitor">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-monitor"
+                >
                   <rect width="20" height="14" x="2" y="3" rx="2"></rect>
                   <line x1="8" x2="16" y1="21" y2="21"></line>
                   <line x1="12" x2="12" y1="17" y2="21"></line>
                 </svg>
               </button>
-              <button 
-                className={`p-1 rounded ${viewportMode === 'mobile' ? 'bg-blue-600 text-white' : 'text-zinc-400 hover:text-zinc-200'}`}
-                onClick={() => setViewportMode('mobile')}
+              <button
+                className={`p-1 rounded ${
+                  viewportMode === "mobile"
+                    ? "bg-blue-600 text-white"
+                    : "text-zinc-400 hover:text-zinc-200"
+                }`}
+                onClick={() => setViewportMode("mobile")}
                 title="Visualização Mobile"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-smartphone">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-smartphone"
+                >
                   <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
                   <path d="M12 18h.01"></path>
                 </svg>
@@ -3892,35 +3990,35 @@ const AdvancedQuizEditor: React.FC = () => {
                     }
                   />
                 </div>
-            ) : (
-              <div className="p-4 flex flex-col items-center justify-center h-full text-center">
-                <div className="text-zinc-500 mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="48"
-                    height="48"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="mx-auto mb-2"
-                  >
-                    <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
-                    <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
-                    <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
-                  </svg>
+              ) : (
+                <div className="p-4 flex flex-col items-center justify-center h-full text-center">
+                  <div className="text-zinc-500 mb-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="48"
+                      height="48"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="mx-auto mb-2"
+                    >
+                      <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
+                      <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
+                      <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-zinc-300 mb-2">
+                    Nenhum componente selecionado
+                  </h3>
+                  <p className="text-sm text-zinc-500">
+                    Clique em um componente no canvas para editar suas
+                    propriedades
+                  </p>
                 </div>
-                <h3 className="text-lg font-medium text-zinc-300 mb-2">
-                  Nenhum componente selecionado
-                </h3>
-                <p className="text-sm text-zinc-500">
-                  Clique em um componente no canvas para editar suas
-                  propriedades
-                </p>
-              </div>
-            )}
+              )}
             </div>
           </div>
         </div>
