@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "@/styles/advanced-editor.css";
+import "@/styles/editor.css";
 
 // --- Sistema de Auto-Save Funcional ---
 const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
@@ -2015,55 +2016,52 @@ const ComponentPropertyEditor: React.FC<{
           </div>
 
           {/* Seção: Geral */}
-          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
-            <div className="flex flex-col space-y-1.5 p-6 pb-4">
-              <p className="text-sm text-zinc-400">Geral</p>
-            </div>
-            <div className="p-6 pt-0 gap-4 flex flex-col">
-              <div className="grid w-full items-center gap-1.5">
-                <label className="text-sm font-medium leading-none text-zinc-100">
-                  Tamanho Máximo
-                </label>
-                <input
-                  type="range"
-                  min="10"
-                  max="100"
-                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
-                  value={parseInt(
-                    props.styles?.maxWidth?.toString().replace("%", "") || "100"
-                  )}
-                  onChange={(e) => {
-                    const newStyles = { ...props.styles };
-                    newStyles.maxWidth = `${e.target.value}%`;
-                    handleChange("styles", newStyles);
-                  }}
-                />
-                <span className="text-xs text-zinc-400">
-                  {props.styles?.maxWidth || "100%"}
-                </span>
-              </div>
-              <div className="flex flex-col-reverse items-start gap-2">
-                <select
-                  className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={props.styles?.textAlign || "center"}
-                  onChange={(e) => {
-                    const newStyles = { ...props.styles };
-                    newStyles.textAlign = e.target.value;
-                    handleChange("styles", newStyles);
-                  }}
-                >
-                  <option value="left">Esquerda</option>
-                  <option value="center">Centro</option>
-                  <option value="right">Direita</option>
-                </select>
-                <label className="text-sm font-medium leading-none text-zinc-100">
-                  Alinhamento
-                </label>
-              </div>
-            </div>
+          <><div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6 pb-4">
+          <p className="text-sm text-zinc-400">Geral</p>
+        </div>
+        <div className="p-6 pt-0 gap-4 flex flex-col">
+          <div className="grid w-full items-center gap-1.5">
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Tamanho Máximo
+            </label>
+            <input
+              type="range"
+              min="10"
+              max="100"
+              className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
+              value={parseInt(
+                props.styles?.maxWidth?.toString().replace("%", "") || "100"
+              )}
+              onChange={(e) => {
+                const newStyles = { ...props.styles };
+                newStyles.maxWidth = `${e.target.value}%`;
+                handleChange("styles", newStyles);
+              } } />
+            <span className="text-xs text-zinc-400">
+              {props.styles?.maxWidth || "100%"}
+            </span>
           </div>
-
-          <StylesEditor />
+          <div className="flex flex-col-reverse items-start gap-2">
+            <select
+              className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={props.styles?.textAlign || "center"}
+              onChange={(e) => {
+                const newStyles = { ...props.styles };
+                newStyles.textAlign = e.target.value;
+                handleChange("styles", newStyles);
+              } }
+            >
+              <option value="left">Esquerda</option>
+              <option value="center">Centro</option>
+              <option value="right">Direita</option>
+            </select>
+            <label className="text-sm font-medium leading-none text-zinc-100">
+              Alinhamento
+            </label>
+          </div>
+        </div>
+      </div><StylesEditor /></>
         </div>
       );
 
@@ -3819,8 +3817,9 @@ const AdvancedQuizEditor: React.FC = () => {
           </div>
 
           {/* Coluna 4: Painel de Propriedades/Editor (Direita) - Responsiva */}
-          <div className="w-80 lg:w-96 xl:w-[28rem] max-w-md border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-y-auto">
-            {selectedComponent ? (
+          <div className="w-80 lg:w-96 xl:w-[28rem] max-w-md border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
+              {selectedComponent ? (
               <div className="p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold text-white">
@@ -3867,6 +3866,7 @@ const AdvancedQuizEditor: React.FC = () => {
                 </p>
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>
