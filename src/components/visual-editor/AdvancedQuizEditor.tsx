@@ -4472,16 +4472,24 @@ const AdvancedQuizEditor: React.FC = () => {
               componentName: "ResultPage.tsx",
               resultType: "styleAnalysis",
               offerHeadline: "Seu Perfil de Estilo Único!",
-              offerDescription: "Descubra seu estilo predominante e complementares com base nas suas respostas.",
+              offerDescription:
+                "Descubra seu estilo predominante e complementares com base nas suas respostas.",
               styleImages: {
-                natural: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
-                classico: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
-                contemporaneo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
-                elegante: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
-                romantico: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+                natural:
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                classico:
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                contemporaneo:
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                elegante:
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                romantico:
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
                 sexy: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
-                dramatico: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
-                criativo: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+                dramatico:
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+                criativo:
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
               },
               styleNames: {
                 natural: "Natural",
@@ -4508,7 +4516,8 @@ const AdvancedQuizEditor: React.FC = () => {
             props: {
               componentName: "QuizOfferPage.tsx",
               offerHeadline: "Transforme Seu Estilo Agora!",
-              offerDescription: "Consultoria personalizada de estilo com base no seu perfil único. Descubra como criar looks incríveis que combinam com você!",
+              offerDescription:
+                "Consultoria personalizada de estilo com base no seu perfil único. Descubra como criar looks incríveis que combinam com você!",
               offerCtaButtonText: "Quero Minha Consultoria",
               offerCtaUrl: "https://checkout.gisele.com.br/consultoria-estilo",
               discountCode: "ESTILO40OFF",
