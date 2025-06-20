@@ -31,6 +31,10 @@ export const replacePlaceholderUrl = (url: string): string => {
 
   // Substitui placeholders problemáticos
   if (url.includes("via.placeholder.com")) {
+    // URL específica que estava causando problemas
+    if (url.includes("120x40") && url.includes("3b82f6") && url.includes("text=LOGO")) {
+      return "/logo-placeholder.svg";
+    }
     if (url.includes("96x96") && url.includes("Logo")) {
       return getLocalPlaceholder("logo");
     }
