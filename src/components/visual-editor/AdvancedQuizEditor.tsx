@@ -3790,15 +3790,14 @@ const AdvancedQuizEditor: React.FC = () => {
             isAutoSaving,
             lastSaved,
           }}
+          viewportMode={viewportMode}
+          onToggleViewport={toggleViewportMode}
         />
 
-        {/* Layout Principal com Colunas Redimensionáveis */}
+        {/* Layout Principal com 3 colunas fixas responsivas */}
         <div className="flex-1 flex overflow-hidden">
           {/* Coluna 1: Navegação de Etapas + Biblioteca de Componentes */}
-          <div 
-            className="border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col resizable-column"
-            style={{ width: `${columnWidths.leftPanel}px` }}
-          >
+          <div className="w-64 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
             {/* Navegação de Etapas */}
             <div className="h-1/2 border-b border-zinc-700 overflow-y-auto custom-scrollbar">
               <StepNavigationTabs
@@ -3817,24 +3816,39 @@ const AdvancedQuizEditor: React.FC = () => {
             </div>
           </div>
 
-          {/* Separador de Redimensionamento Esquerdo */}
-          <div 
-            className={`w-1 bg-zinc-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 resize-separator ${
-              isDragging === 'left' ? 'dragging' : ''
-            }`}
-            onMouseDown={(e) => handleResizeStart(e, 'left', columnWidths.leftPanel)}
-            title="Arraste para redimensionar"
-          >
-            <div className="h-full w-full flex items-center justify-center">
-              <GripVertical className="w-3 h-3 text-zinc-400 grip-icon" />
-            </div>
-          </div>
-
           {/* Coluna 2: Canvas do Editor - Flexível e Centralizado */}
-          <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900">
+          <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900 relative">
+            {/* Controles de Viewport */}
+            <div className="absolute top-2 right-2 z-10 bg-zinc-800 rounded p-1 shadow-lg">
+              <button 
+                className={`p-1 rounded ${viewportMode === 'desktop' ? 'bg-blue-600 text-white' : 'text-zinc-400 hover:text-zinc-200'}`}
+                onClick={() => setViewportMode('desktop')}
+                title="Visualização Desktop"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-monitor">
+                  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+                  <line x1="8" x2="16" y1="21" y2="21"></line>
+                  <line x1="12" x2="12" y1="17" y2="21"></line>
+                </svg>
+              </button>
+              <button 
+                className={`p-1 rounded ${viewportMode === 'mobile' ? 'bg-blue-600 text-white' : 'text-zinc-400 hover:text-zinc-200'}`}
+                onClick={() => setViewportMode('mobile')}
+                title="Visualização Mobile"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-smartphone">
+                  <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
+                  <path d="M12 18h.01"></path>
+                </svg>
+              </button>
+            </div>
+
             <CanvasArea
               currentStep={currentStep}
-              headerConfig={editorState.headerConfig}
+              headerConfig={{
+                ...editorState.headerConfig,
+                showLogo: true, // Garantir que o logotipo seja exibido centralmente
+              }}
               selectedComponent={selectedComponent}
               selectedComponentId={selectedComponentId}
               onComponentSelect={handleComponentSelect}
@@ -3842,27 +3856,12 @@ const AdvancedQuizEditor: React.FC = () => {
               onComponentUpdate={handleComponentUpdate}
               onComponentDelete={handleComponentDelete}
               onComponentMove={handleComponentMove}
+              viewportMode={viewportMode}
             />
           </div>
 
-          {/* Separador de Redimensionamento Direito */}
-          <div 
-            className={`w-1 bg-zinc-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 resize-separator ${
-              isDragging === 'right' ? 'dragging' : ''
-            }`}
-            onMouseDown={(e) => handleResizeStart(e, 'right', columnWidths.rightPanel)}
-            title="Arraste para redimensionar"
-          >
-            <div className="h-full w-full flex items-center justify-center">
-              <GripVertical className="w-3 h-3 text-zinc-400 grip-icon" />
-            </div>
-          </div>
-
-          {/* Coluna 3: Painel de Propriedades/Editor (Direita) */}
-          <div 
-            className="border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col resizable-column"
-            style={{ width: `${columnWidths.rightPanel}px` }}
-          >
+          {/* Coluna 3: Painel de Propriedades (Direita) */}
+          <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
             <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
               {selectedComponent ? (
                 <div>
