@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-20T15:32:37.727Z",
-  "components": 478,
+  "timestamp": "2025-06-20T17:43:50.035Z",
+  "components": 480,
   "files": [
     {
       "name": "App",
@@ -630,6 +630,11 @@
     {
       "name": "EnhancedQuizBuilder",
       "path": "src/components/enhanced-editor/EnhancedQuizBuilder.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AutoSaveIndicator",
+      "path": "src/components/enhanced-editor/components/AutoSaveIndicator.tsx",
       "type": "typescript"
     },
     {
@@ -2170,6 +2175,11 @@
     {
       "name": "EditorsHubPage",
       "path": "src/pages/EditorsHubPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedEditorTestPage",
+      "path": "src/pages/EnhancedEditorTestPage.tsx",
       "type": "typescript"
     },
     {

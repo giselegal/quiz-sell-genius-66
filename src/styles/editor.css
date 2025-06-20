@@ -28,11 +28,11 @@
   .editor-sidebar {
     width: 240px;
   }
-  
+
   .editor-toolbar {
     width: 280px;
   }
-  
+
   .editor-properties {
     width: 320px;
   }
@@ -42,11 +42,11 @@
   .editor-sidebar {
     width: 200px;
   }
-  
+
   .editor-toolbar {
     width: 240px;
   }
-  
+
   .editor-properties {
     width: 280px;
   }
@@ -78,7 +78,7 @@
 }
 
 .selected-component::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -2px;
   left: -2px;
@@ -131,7 +131,7 @@
   .canvas-container {
     padding: 1rem;
   }
-  
+
   .canvas-content {
     max-width: 100%;
   }
