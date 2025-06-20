@@ -2631,16 +2631,13 @@ const StepNavigationTabs: React.FC<{
 const AdvancedQuizEditor: React.FC = () => {
   console.log("🚀 AdvancedQuizEditor está renderizando!");
 
-  // Estados para controle de larguras das colunas (drag-to-resize)
+  // Estados para controle de larguras das colunas ajustáveis
   const [columnWidths, setColumnWidths] = useState({
-    leftPanel: 280,  // Largura inicial da coluna esquerda (etapas + componentes)
-    rightPanel: 320, // Largura inicial da coluna direita (propriedades)
+    stepsPanel: 20,     // 20% para etapas
+    componentsPanel: 20, // 20% para componentes  
+    canvasPanel: 40,     // 40% para canvas
+    propertiesPanel: 20, // 20% para propriedades
   });
-
-  // Estados para controle de drag
-  const [isDragging, setIsDragging] = useState<string | null>(null);
-  const [dragStartX, setDragStartX] = useState(0);
-  const [dragStartWidth, setDragStartWidth] = useState(0);
 
   // Estados principais do editor
   const [editorState, setEditorState] = useState<QuizEditorState>({
@@ -3519,59 +3516,6 @@ const AdvancedQuizEditor: React.FC = () => {
     }));
     setSelectedComponentId(null);
   };
-
-  // --- Handlers para redimensionamento de colunas ---
-
-  const handleResizeStart = (
-    e: React.MouseEvent,
-    direction: 'left' | 'right',
-    currentWidth: number
-  ) => {
-    e.preventDefault();
-    setIsDragging(direction);
-    setDragStartX(e.clientX);
-    setDragStartWidth(currentWidth);
-    
-    // Adiciona classe CSS para cursor global
-    document.body.classList.add('col-resizing');
-    
-    // Adiciona listeners globais para mouse move e mouse up
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  };
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging) return;
-
-    const deltaX = e.clientX - dragStartX;
-    const newWidth = Math.max(200, Math.min(500, dragStartWidth + (isDragging === 'right' ? -deltaX : deltaX)));
-
-    setColumnWidths(prev => ({
-      ...prev,
-      [isDragging === 'left' ? 'leftPanel' : 'rightPanel']: newWidth
-    }));
-  }, [isDragging, dragStartX, dragStartWidth]);
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(null);
-    setDragStartX(0);
-    setDragStartWidth(0);
-    
-    // Remove classe CSS do cursor global
-    document.body.classList.remove('col-resizing');
-    
-    // Remove listeners globais
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-  }, [handleMouseMove]);
-
-  // Cleanup dos event listeners quando o componente desmonta
-  useEffect(() => {
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp]);
 
   // --- Handlers para gerenciar componentes ---
 
