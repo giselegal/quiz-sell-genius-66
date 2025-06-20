@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-20T01:12:05.388Z",
-  "components": 469,
+  "timestamp": "2025-06-20T01:18:18.385Z",
+  "components": 472,
   "files": [
     {
       "name": "App",
@@ -2000,6 +2000,21 @@
     {
       "name": "AdvancedQuizEditor",
       "path": "src/components/visual-editor/AdvancedQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentRenderer",
+      "path": "src/components/visual-editor/core/ComponentRenderer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorContext",
+      "path": "src/components/visual-editor/core/EditorContext.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorProvider",
+      "path": "src/components/visual-editor/core/EditorProvider.tsx",
       "type": "typescript"
     },
     {

@@ -299,18 +299,14 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               <div className="text-lg flex items-center justify-center">
                 <img
                   src={
-                    (component.props.src?.includes('via.placeholder.com') 
-                      ? '/placeholder.svg' 
-                      : component.props.src) ||
+                    component.props.src ||
                     "/placeholder.svg"
                   }
                   alt={component.props.alt || "Imagem"}
                   className="object-cover w-full h-auto rounded-lg max-w-96"
                   onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (!target.src.includes('/placeholder.svg')) {
-                      target.src = "/placeholder.svg";
-                    }
+                    (e.target as HTMLImageElement).src =
+                      "/placeholder.svg";
                   }}
                 />
               </div>
@@ -415,9 +411,7 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                           }}
                         >
                           <img
-                            src={choice.imageSrc?.includes('via.placeholder.com') 
-                              ? '/placeholder.svg' 
-                              : choice.imageSrc}
+                            src={choice.imageSrc}
                             alt={choice.text}
                             className="w-full h-full object-cover"
                             style={{
@@ -426,10 +420,8 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                               }px`,
                             }}
                             onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              if (!target.src.includes('/placeholder.svg')) {
-                                target.src = "/placeholder.svg";
-                              }
+                              (e.target as HTMLImageElement).src =
+                                "/placeholder.svg";
                             }}
                           />
                         </div>
@@ -674,14 +666,10 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                   height="96"
                   className="max-w-24 object-cover"
                   alt="Logo"
-                  src={headerConfig.logoSrc.includes('via.placeholder.com') 
-                    ? '/placeholder.svg' 
-                    : headerConfig.logoSrc}
+                  src={headerConfig.logoSrc}
                   onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (!target.src.includes('/placeholder.svg')) {
-                      target.src = "/placeholder.svg";
-                    }
+                    (e.target as HTMLImageElement).src =
+                      "/placeholder.svg";
                   }}
                 />
               )}
