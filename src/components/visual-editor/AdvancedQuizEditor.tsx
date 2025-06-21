@@ -636,10 +636,10 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   };
 
   return (
-    <div className="flex-1 bg-zinc-900">
+    <div className="h-full bg-zinc-900 overflow-y-auto">
       {/* Área de Canvas Principal */}
-      <div className="flex-1 p-6 overflow-y-auto">
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 min-h-[600px]">
+      <div className="p-4 md:p-6 min-h-full">
+        <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-4 md:p-6 min-h-[600px]">
           {/* Header da página */}
           {headerConfig && (
             <div className="mb-6 pb-4 border-b border-gray-200">
@@ -4501,86 +4501,94 @@ const AdvancedQuizEditor: React.FC = () => {
         {/* Layout Principal com Quatro Colunas */}
         <div className="flex-1 flex overflow-hidden">
           {/* Coluna 1: Navegação de Etapas (Esquerda) */}
-          <div className="w-64 border-r border-zinc-700 bg-zinc-900">
-            <StepNavigationTabs
-              steps={editorState.steps}
-              currentStepId={editorState.currentStepId}
-              onStepSelect={handleStepSelect}
-              onStepRename={handleStepRename}
-              onStepDelete={handleStepDelete}
-              onAddStep={handleAddStep}
-            />
+          <div className="w-72 min-w-[280px] max-w-[320px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+            <div className="h-full">
+              <StepNavigationTabs
+                steps={editorState.steps}
+                currentStepId={editorState.currentStepId}
+                onStepSelect={handleStepSelect}
+                onStepRename={handleStepRename}
+                onStepDelete={handleStepDelete}
+                onAddStep={handleAddStep}
+              />
+            </div>
           </div>
 
           {/* Coluna 2: Biblioteca de Componentes */}
-          <div className="w-80 border-r border-zinc-700 bg-zinc-900">
-            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+          <div className="w-80 min-w-[300px] max-w-[360px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+            <div className="h-full">
+              <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+            </div>
           </div>
 
           {/* Coluna 3: Canvas do Editor */}
-          <div className="flex-1 overflow-hidden">
-            <CanvasArea
-              currentStep={currentStep}
-              headerConfig={editorState.headerConfig}
-              selectedComponent={selectedComponent}
-              selectedComponentId={selectedComponentId}
-              onComponentSelect={handleComponentSelect}
-              onComponentAdd={handleComponentAdd}
-              onComponentUpdate={handleComponentUpdate}
-              onComponentDelete={handleComponentDelete}
-              onComponentMove={handleComponentMove}
-            />
+          <div className="flex-1 min-w-[600px] overflow-hidden advanced-editor-column">
+            <div className="h-full overflow-y-auto canvas-area-scrollbar">
+              <CanvasArea
+                currentStep={currentStep}
+                headerConfig={editorState.headerConfig}
+                selectedComponent={selectedComponent}
+                selectedComponentId={selectedComponentId}
+                onComponentSelect={handleComponentSelect}
+                onComponentAdd={handleComponentAdd}
+                onComponentUpdate={handleComponentUpdate}
+                onComponentDelete={handleComponentDelete}
+                onComponentMove={handleComponentMove}
+              />
+            </div>
           </div>
 
           {/* Coluna 4: Painel de Propriedades/Editor (Direita) */}
-          <div className="w-96 max-w-md border-l border-zinc-700 bg-zinc-900 p-4 overflow-y-auto">
-            {selectedComponent ? (
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-white">
-                    Editar Componente
+          <div className="w-96 min-w-[350px] max-w-[420px] border-l border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+            <div className="p-4 h-full">
+              {selectedComponent ? (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-white">
+                      Editar Componente
+                    </h3>
+                    <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
+                      {selectedComponent.type}
+                    </span>
+                  </div>
+                  <ComponentPropertyEditor
+                    type={selectedComponent.type}
+                    props={selectedComponent.props}
+                    onPropsChange={(newProps) =>
+                      handleComponentUpdate(selectedComponent.id, newProps)
+                    }
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                  <div className="text-zinc-500 mb-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="48"
+                      height="48"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="mx-auto mb-2"
+                    >
+                      <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
+                      <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
+                      <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-zinc-300 mb-2">
+                    Nenhum componente selecionado
                   </h3>
-                  <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
-                    {selectedComponent.type}
-                  </span>
+                  <p className="text-sm text-zinc-500">
+                    Clique em um componente no canvas para editar suas
+                    propriedades
+                  </p>
                 </div>
-                <ComponentPropertyEditor
-                  type={selectedComponent.type}
-                  props={selectedComponent.props}
-                  onPropsChange={(newProps) =>
-                    handleComponentUpdate(selectedComponent.id, newProps)
-                  }
-                />
-              </div>
-            ) : (
-              <div className="p-4 flex flex-col items-center justify-center h-full text-center">
-                <div className="text-zinc-500 mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="48"
-                    height="48"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="mx-auto mb-2"
-                  >
-                    <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
-                    <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
-                    <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-zinc-300 mb-2">
-                  Nenhum componente selecionado
-                </h3>
-                <p className="text-sm text-zinc-500">
-                  Clique em um componente no canvas para editar suas
-                  propriedades
-                </p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
