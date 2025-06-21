@@ -13,6 +13,7 @@ import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
 import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
 import AdvancedQuizEditorTest from "@/components/visual-editor/AdvancedQuizEditor.test";
+import SimpleDragDropEditor from "@/components/visual-editor/SimpleDragDropEditor";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,14 @@ const QuickAccessEditorButton = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+      <Button
+        onClick={() => navigate("/simple-editor")}
+        className="bg-green-600 hover:bg-green-700 text-white shadow-lg"
+        size="sm"
+      >
+        <Edit className="w-4 h-4 mr-2" />
+        ✨ Simple Editor (NOVO)
+      </Button>
       <Button
         onClick={() => navigate("/cakto-editor")}
         className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
@@ -117,6 +126,16 @@ function App() {
 
           {/* Página de Teste */}
           <Route path="/editor-test" element={<EditorTest />} />
+
+          {/* NOVO: Editor Visual Modular Completo - SimpleDragDropEditor */}
+          <Route 
+            path="/simple-editor" 
+            element={
+              <div className="min-h-screen bg-background">
+                <SimpleDragDropEditor />
+              </div>
+            } 
+          />
 
           {/* Teste de Configuração - Apenas para desenvolvimento */}
           <Route path="/test-config" element={<QuizConfigTest />} />
