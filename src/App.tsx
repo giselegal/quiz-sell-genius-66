@@ -12,6 +12,8 @@ import EditorTest from "@/pages/EditorTest";
 import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
 import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
+import SimpleWorkingEditor from "@/components/visual-editor/SimpleWorkingEditor";
+import FinalWorkingEditor from "@/components/visual-editor/FinalWorkingEditor";
 import RefactoredAdvancedQuizEditor from "@/components/visual-editor/RefactoredAdvancedQuizEditor";
 import SimpleRefactoredEditor from "@/components/visual-editor/SimpleRefactoredEditor";
 import WorkingRefactoredEditor from "@/components/visual-editor/WorkingRefactoredEditor";
@@ -147,7 +149,17 @@ function App() {
             path="/refactored-editor"
             element={
               <div className="min-h-screen bg-background">
-                <RefactoredAdvancedQuizEditor />
+                <FinalWorkingEditor />
+              </div>
+            }
+          />
+
+          {/* Editor Simples de Teste */}
+          <Route
+            path="/simple-working-editor"
+            element={
+              <div className="min-h-screen bg-background">
+                <SimpleWorkingEditor />
               </div>
             }
           />

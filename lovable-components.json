@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T22:46:06.337Z",
-  "components": 498,
+  "timestamp": "2025-06-21T22:56:03.764Z",
+  "components": 500,
   "files": [
     {
       "name": "App",
@@ -2033,6 +2033,11 @@
       "type": "typescript"
     },
     {
+      "name": "FinalWorkingEditor",
+      "path": "src/components/visual-editor/FinalWorkingEditor.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "ModernVisualEditor",
       "path": "src/components/visual-editor/ModernVisualEditor.tsx",
       "type": "typescript"
@@ -2060,6 +2065,11 @@
     {
       "name": "SimpleRefactoredEditor",
       "path": "src/components/visual-editor/SimpleRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SimpleWorkingEditor",
+      "path": "src/components/visual-editor/SimpleWorkingEditor.tsx",
       "type": "typescript"
     },
     {
