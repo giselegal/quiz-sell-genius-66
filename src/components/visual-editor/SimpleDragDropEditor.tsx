@@ -28,6 +28,14 @@ import {
   ArrowRight,
   Play,
   Download,
+  Video,
+  Star,
+  DollarSign,
+  Clock,
+  Shield,
+  Gift,
+  HelpCircle,
+  Users
 } from "lucide-react";
 
 // CSS simplificado
@@ -104,7 +112,15 @@ interface SimpleComponent {
     | "input"
     | "options"
     | "progress"
-    | "logo";
+    | "logo"
+    | "video"
+    | "testimonial"
+    | "price"
+    | "countdown"
+    | "guarantee"
+    | "bonus"
+    | "faq"
+    | "social-proof";
   data: {
     text?: string;
     src?: string;
@@ -117,6 +133,19 @@ interface SimpleComponent {
     multiSelect?: boolean;
     hasImages?: boolean;
     progressValue?: number;
+    videoUrl?: string;
+    price?: number;
+    originalPrice?: number;
+    currency?: string;
+    endDate?: string;
+    testimonialAuthor?: string;
+    testimonialRole?: string;
+    testimonialImage?: string;
+    guaranteeDays?: number;
+    bonusItems?: BonusItem[];
+    faqItems?: FaqItem[];
+    socialProofCount?: number;
+    socialProofText?: string;
   };
   style: {
     fontSize?: string;
@@ -138,10 +167,23 @@ interface QuizOption {
   category?: string;
 }
 
+interface BonusItem {
+  id: string;
+  title: string;
+  value: string;
+  description?: string;
+}
+
+interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
 interface SimplePage {
   id: string;
   title: string;
-  type: "intro" | "question" | "loading" | "result" | "offer";
+  type: "intro" | "question" | "loading" | "result" | "offer" | "sales" | "checkout" | "upsell" | "thankyou" | "webinar" | "launch";
   progress: number;
   showHeader: boolean;
   showProgress: boolean;
