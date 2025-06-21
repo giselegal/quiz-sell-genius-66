@@ -136,14 +136,24 @@ interface SimpleComponent {
     videoUrl?: string;
     price?: number;
     originalPrice?: number;
+    installments?: string;
     currency?: string;
     endDate?: string;
+    title?: string;
+    name?: string;
+    role?: string;
+    avatar?: string;
     testimonialAuthor?: string;
     testimonialRole?: string;
     testimonialImage?: string;
     guaranteeDays?: number;
+    bonuses?: BonusItem[];
     bonusItems?: BonusItem[];
+    faqs?: FaqItem[];
     faqItems?: FaqItem[];
+    customerCount?: string;
+    rating?: string;
+    reviewCount?: string;
     socialProofCount?: number;
     socialProofText?: string;
   };
@@ -205,8 +215,9 @@ interface ComponentType {
   description: string;
 }
 
-// Componentes disponíveis - TODOS do funil
+// Componentes disponíveis - TODOS do funil + PÁGINAS DE VENDA
 const COMPONENTS: ComponentType[] = [
+  // Componentes básicos
   {
     type: "logo",
     name: "Logo",
@@ -266,6 +277,55 @@ const COMPONENTS: ComponentType[] = [
     name: "Espaço",
     icon: Layout,
     description: "Espaçamento vertical",
+  },
+  // Componentes de venda
+  {
+    type: "video",
+    name: "Vídeo",
+    icon: Video,
+    description: "Player de vídeo",
+  },
+  {
+    type: "testimonial",
+    name: "Depoimento",
+    icon: Star,
+    description: "Depoimento de cliente",
+  },
+  {
+    type: "price",
+    name: "Preço",
+    icon: DollarSign,
+    description: "Exibição de preço",
+  },
+  {
+    type: "countdown",
+    name: "Countdown",
+    icon: Clock,
+    description: "Timer de urgência",
+  },
+  {
+    type: "guarantee",
+    name: "Garantia",
+    icon: Shield,
+    description: "Selo de garantia",
+  },
+  {
+    type: "bonus",
+    name: "Bônus",
+    icon: Gift,
+    description: "Lista de bônus",
+  },
+  {
+    type: "faq",
+    name: "FAQ",
+    icon: HelpCircle,
+    description: "Perguntas frequentes",
+  },
+  {
+    type: "social-proof",
+    name: "Prova Social",
+    icon: Users,
+    description: "Contador de vendas",
   },
 ];
 
@@ -820,6 +880,52 @@ const SimpleDragDropEditor: React.FC = () => {
         return { text: "CLIQUE AQUI" };
       case "spacer":
         return { height: 32 };
+      case "video":
+        return {
+          videoUrl: "",
+        };
+      case "testimonial":
+        return {
+          text: "Este produto mudou minha vida completamente! Recomendo para todos que querem resultados reais.",
+          name: "Cliente Satisfeito",
+          role: "Cliente verificado",
+          avatar: "https://via.placeholder.com/60x60/B89B7A/FFFFFF?text=👤",
+        };
+      case "price":
+        return {
+          price: "97",
+          originalPrice: "197",
+          installments: "9,90",
+        };
+      case "countdown":
+        return {
+          title: "⏰ OFERTA LIMITADA!",
+        };
+      case "guarantee":
+        return {
+          title: "Garantia de 30 Dias",
+          text: "Se não ficar satisfeito, devolvemos 100% do seu dinheiro!",
+        };
+      case "bonus":
+        return {
+          bonuses: [
+            { id: "bonus1", title: "Bônus #1: Guia Completo", value: "R$ 197", description: "Material exclusivo para acelerar seus resultados" },
+            { id: "bonus2", title: "Bônus #2: Acesso VIP", value: "R$ 297", description: "Grupo exclusivo para networking" }
+          ],
+        };
+      case "faq":
+        return {
+          faqs: [
+            { id: "faq1", question: "Como funciona a garantia?", answer: "Oferecemos 30 dias de garantia incondicional. Se não ficar satisfeito, devolvemos seu dinheiro." },
+            { id: "faq2", question: "Quanto tempo tenho acesso?", answer: "O acesso é vitalício! Você pode acessar quando quiser, quantas vezes quiser." }
+          ],
+        };
+      case "social-proof":
+        return {
+          customerCount: "5.000",
+          rating: "4.9",
+          reviewCount: "1.247",
+        };
       default:
         return {};
     }
@@ -1189,6 +1295,305 @@ const SimpleDragDropEditor: React.FC = () => {
             }}
           >
             Espaçamento ({data.height || 32}px)
+          </div>
+        );
+
+      case "video":
+        return (
+          <div style={{ margin: "16px 0", textAlign: "center" }}>
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                maxWidth: "600px",
+                margin: "0 auto",
+                backgroundColor: "#000",
+                borderRadius: "12px",
+                overflow: "hidden",
+                aspectRatio: "16/9",
+              }}
+            >
+              {data.videoUrl ? (
+                <iframe
+                  src={data.videoUrl}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                  }}
+                  allowFullScreen
+                />
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                    color: "white",
+                    fontSize: "1.2rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  <Video className="mr-2" size={24} />
+                  Vídeo de Vendas
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
+      case "testimonial":
+        return (
+          <div
+            style={{
+              margin: "24px 0",
+              padding: "24px",
+              backgroundColor: "#f8f9fa",
+              borderRadius: "12px",
+              border: "1px solid #e9ecef",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
+              <img
+                src={data.avatar || "https://via.placeholder.com/60x60/B89B7A/FFFFFF?text=👤"}
+                alt="Avatar"
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+              <div style={{ flex: 1 }}>
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    fontStyle: "italic",
+                    marginBottom: "12px",
+                    color: "#374151",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  "{data.text || "Este produto mudou minha vida completamente! Recomendo para todos que querem resultados reais."}"
+                </p>
+                <div>
+                  <p style={{ fontWeight: "600", color: "#432818", marginBottom: "4px" }}>
+                    {data.name || "Cliente Satisfeito"}
+                  </p>
+                  <p style={{ fontSize: "0.875rem", color: "#6B4F43" }}>
+                    {data.role || "Cliente verificado"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "price":
+        return (
+          <div style={{ margin: "24px 0", textAlign: "center" }}>
+            <div
+              style={{
+                padding: "32px",
+                backgroundColor: "white",
+                borderRadius: "16px",
+                border: "2px solid #B89B7A",
+                maxWidth: "400px",
+                margin: "0 auto",
+              }}
+            >
+              {data.originalPrice && (
+                <div
+                  style={{
+                    fontSize: "1.25rem",
+                    color: "#6B4F43",
+                    textDecoration: "line-through",
+                    marginBottom: "8px",
+                  }}
+                >
+                  De: R$ {data.originalPrice}
+                </div>
+              )}
+              <div
+                style={{
+                  fontSize: "3rem",
+                  fontWeight: "700",
+                  color: "#432818",
+                  marginBottom: "8px",
+                }}
+              >
+                R$ {data.price || "97"}
+              </div>
+              {data.installments && (
+                <div style={{ fontSize: "1rem", color: "#6B4F43" }}>
+                  ou 12x de R$ {data.installments}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
+      case "countdown":
+        return (
+          <div style={{ margin: "24px 0", textAlign: "center" }}>
+            <div
+              style={{
+                padding: "24px",
+                backgroundColor: "#dc2626",
+                borderRadius: "12px",
+                color: "white",
+                maxWidth: "500px",
+                margin: "0 auto",
+              }}
+            >
+              <h3 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "16px" }}>
+                {data.title || "⏰ OFERTA LIMITADA!"}
+              </h3>
+              <div style={{ display: "flex", justifyContent: "center", gap: "16px" }}>
+                {["23", "59", "45"].map((value, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      padding: "12px",
+                      backgroundColor: "rgba(255,255,255,0.2)",
+                      borderRadius: "8px",
+                      minWidth: "60px",
+                    }}
+                  >
+                    <div style={{ fontSize: "1.5rem", fontWeight: "700" }}>{value}</div>
+                    <div style={{ fontSize: "0.75rem", opacity: 0.9 }}>
+                      {["HRS", "MIN", "SEG"][index]}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+
+      case "guarantee":
+        return (
+          <div style={{ margin: "24px 0", textAlign: "center" }}>
+            <div
+              style={{
+                padding: "24px",
+                backgroundColor: "#ecfdf5",
+                borderRadius: "12px",
+                border: "2px solid #10b981",
+                maxWidth: "500px",
+                margin: "0 auto",
+              }}
+            >
+              <div style={{ fontSize: "3rem", marginBottom: "12px" }}>🛡️</div>
+              <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: "#065f46", marginBottom: "8px" }}>
+                {data.title || "Garantia de 30 Dias"}
+              </h3>
+              <p style={{ color: "#047857" }}>
+                {data.text || "Se não ficar satisfeito, devolvemos 100% do seu dinheiro!"}
+              </p>
+            </div>
+          </div>
+        );
+
+      case "bonus":
+        return (
+          <div style={{ margin: "24px 0" }}>
+            <h3 style={{ fontSize: "1.5rem", fontWeight: "600", textAlign: "center", marginBottom: "16px", color: "#432818" }}>
+              🎁 BÔNUS EXCLUSIVOS
+            </h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {(data.bonuses || [
+                { id: "bonus1", title: "Bônus #1: Guia Completo", value: "R$ 197", description: "Material exclusivo para acelerar seus resultados" },
+                { id: "bonus2", title: "Bônus #2: Acesso VIP", value: "R$ 297", description: "Grupo exclusivo para networking" }
+              ]).map((bonus: BonusItem, index: number) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "16px",
+                    backgroundColor: "#fff7ed",
+                    borderRadius: "8px",
+                    border: "1px solid #fed7aa",
+                  }}
+                >
+                  <div style={{ marginRight: "12px", fontSize: "1.5rem" }}>🎁</div>
+                  <div style={{ flex: 1 }}>
+                    <h4 style={{ fontWeight: "600", color: "#432818", marginBottom: "4px" }}>
+                      {bonus.title}
+                    </h4>
+                    <p style={{ fontSize: "0.875rem", color: "#6B4F43" }}>
+                      {bonus.description}
+                    </p>
+                  </div>
+                  <div style={{ fontWeight: "700", color: "#ea580c" }}>
+                    {bonus.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case "faq":
+        return (
+          <div style={{ margin: "24px 0" }}>
+            <h3 style={{ fontSize: "1.5rem", fontWeight: "600", textAlign: "center", marginBottom: "16px", color: "#432818" }}>
+              ❓ Perguntas Frequentes
+            </h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {(data.faqs || [
+                { id: "faq1", question: "Como funciona a garantia?", answer: "Oferecemos 30 dias de garantia incondicional. Se não ficar satisfeito, devolvemos seu dinheiro." },
+                { id: "faq2", question: "Quanto tempo tenho acesso?", answer: "O acesso é vitalício! Você pode acessar quando quiser, quantas vezes quiser." }
+              ]).map((faq: FaqItem, index: number) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: "16px",
+                    backgroundColor: "white",
+                    borderRadius: "8px",
+                    border: "1px solid #e5e7eb",
+                  }}
+                >
+                  <h4 style={{ fontWeight: "600", color: "#432818", marginBottom: "8px" }}>
+                    {faq.question}
+                  </h4>
+                  <p style={{ fontSize: "0.875rem", color: "#6B4F43" }}>
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case "social-proof":
+        return (
+          <div style={{ margin: "24px 0", textAlign: "center" }}>
+            <div
+              style={{
+                padding: "20px",
+                backgroundColor: "#f3f4f6",
+                borderRadius: "12px",
+                border: "1px solid #d1d5db",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "12px" }}>
+                <span style={{ fontSize: "1.5rem" }}>👥</span>
+                <span style={{ fontSize: "1.25rem", fontWeight: "600", color: "#432818" }}>
+                  +{data.customerCount || "5.000"} Clientes Satisfeitos
+                </span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "8px" }}>
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} style={{ color: "#fbbf24", fontSize: "1.25rem" }}>⭐</span>
+                ))}
+              </div>
+              <p style={{ fontSize: "0.875rem", color: "#6B4F43" }}>
+                {data.rating || "4.9"}/5 - Baseado em {data.reviewCount || "1.247"} avaliações
+              </p>
+            </div>
           </div>
         );
 
