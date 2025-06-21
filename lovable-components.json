@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T21:03:16.453Z",
-  "components": 491,
+  "timestamp": "2025-06-21T21:52:28.352Z",
+  "components": 494,
   "files": [
     {
       "name": "App",
@@ -2050,6 +2050,21 @@
     {
       "name": "SimpleDragDropEditor",
       "path": "src/components/visual-editor/SimpleDragDropEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SimpleRefactoredEditor",
+      "path": "src/components/visual-editor/SimpleRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TestRefactoredEditor",
+      "path": "src/components/visual-editor/TestRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "WorkingRefactoredEditor",
+      "path": "src/components/visual-editor/WorkingRefactoredEditor.tsx",
       "type": "typescript"
     },
     {

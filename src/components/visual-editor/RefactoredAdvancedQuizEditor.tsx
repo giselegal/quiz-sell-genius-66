@@ -3,8 +3,84 @@ import ComponentPalette from "./components/ComponentPalette";
 import StepTree from "./components/StepTree";
 import Canvas from "./components/Canvas";
 import PropertiesPanel from "./components/PropertiesPanel";
-import { QuizComponent, QuizComponentProps, Step, OptionChoice } from "./types";
 import "@/styles/advanced-editor.css";
+
+// Interfaces inline para evitar problemas de import
+interface OptionChoice {
+  text: string;
+  value: string;
+  nextStepId?: string;
+  nextPageType?: "resultPage" | "quizOfferPage" | "transitionPage";
+  scoreValue?: number;
+  image?: string;
+}
+
+interface QuizComponentProps {
+  text?: string;
+  isHidden?: boolean;
+  styles?: { [key: string]: string };
+  src?: string;
+  alt?: string;
+  objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
+  label?: string;
+  placeholder?: string;
+  inputType?: "text" | "email" | "number" | "tel";
+  required?: boolean;
+  validationRegex?: string;
+  errorMessage?: string;
+  storeAsLeadField?: string;
+  buttonText?: string;
+  buttonStyle?: "primary" | "secondary" | "outline" | "ghost";
+  actionType?: "goToNextStep" | "submitForm" | "redirectUrl" | "customFunction";
+  actionTargetId?: string;
+  actionUrl?: string;
+  customFunctionName?: string;
+  questionText?: string;
+  choices?: OptionChoice[];
+  selectionType?: "single" | "multiple";
+  maxSelections?: number;
+  minSelections?: number;
+  conditionalLogic?: {
+    rule: "allSelected" | "anySelected" | "scoreThreshold";
+    threshold?: number;
+    targetStepId?: string;
+    fallbackStepId?: string;
+  };
+  alertType?: "info" | "warning" | "error" | "success";
+  alertMessage?: string;
+  videoUrl?: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  controls?: boolean;
+  images?: { src: string; alt: string; caption?: string }[];
+  autoSlide?: boolean;
+  slideInterval?: number;
+  height?: number;
+  resultType?: "styleAnalysis" | "personalityProfile";
+  offerHeadline?: string;
+  offerDescription?: string;
+  offerCtaButtonText?: string;
+  offerCtaUrl?: string;
+  resultMapping?: {
+    scoreRange: [number, number];
+    resultId: string;
+    offerId: string;
+  }[];
+  offerProductSku?: string;
+  [key: string]: unknown;
+}
+
+interface QuizComponent {
+  id: string;
+  type: string;
+  props: QuizComponentProps;
+}
+
+interface Step {
+  id: string;
+  name: string;
+  components: QuizComponent[];
+}
 
 const RefactoredAdvancedQuizEditor: React.FC = () => {
   // Estado principal do editor

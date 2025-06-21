@@ -980,3 +980,70 @@
   max-height: 80px;
   object-fit: cover;
 }
+
+/* === REFACTORED EDITOR LAYOUT === */
+.advanced-quiz-editor {
+  width: 100%;
+  height: 100vh;
+  background: #f8fafc;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.editor-layout {
+  display: grid;
+  grid-template-columns: 250px 300px 1fr 350px;
+  height: 100vh;
+  gap: 1px;
+  background: #e2e8f0;
+}
+
+.editor-column {
+  background: white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.palette-column {
+  background: #f8fafc;
+}
+
+.tree-column {
+  background: #f8fafc;
+}
+
+.canvas-column {
+  background: white;
+}
+
+.properties-column {
+  background: #f8fafc;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 1400px) {
+  .editor-layout {
+    grid-template-columns: 200px 250px 1fr 300px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .editor-layout {
+    grid-template-columns: 180px 220px 1fr 280px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+  }
+  
+  .editor-column {
+    min-height: 200px;
+  }
+  
+  .canvas-column {
+    min-height: 400px;
+  }
+}
