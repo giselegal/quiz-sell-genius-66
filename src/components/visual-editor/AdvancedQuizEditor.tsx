@@ -100,7 +100,7 @@ interface QuizComponentProps {
   offerProductSku?: string; // SKU do produto em oferta
   discountCode?: string; // Código de cupom
   componentName?: string; // Nome do componente para customComponent
-  
+
   // Propriedades específicas para análise de estilo
   styleImages?: { [key: string]: string[] }; // Imagens por estilo para ResultPage
   styleNames?: { [key: string]: string }; // Nomes dos estilos para ResultPage
@@ -175,7 +175,7 @@ const EditableHeading: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
   <h1
-    className="min-w-full text-3xl font-bold text-center text-zinc-100 p-2 rounded-md bg-zinc-800/50"
+    className="min-w-full text-3xl font-bold text-center text-gray-800 p-2 rounded-md"
     style={component.props.styles}
   >
     {component.props.text || "Título Editável"}
@@ -189,15 +189,12 @@ const EditableHeading: React.FC<{ component: QuizComponent }> = ({
 const EditableImage: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <div
-    className="grid p-2 rounded-md bg-zinc-800/50"
-    style={component.props.styles}
-  >
+  <div className="grid p-2 rounded-md" style={component.props.styles}>
     <div className="flex items-center justify-center">
       <img
         src={
           component.props.src ||
-          "https://placehold.co/300x200/0f172a/94a3b8?text=Imagem"
+          "https://placehold.co/300x200/f3f4f6/6b7280?text=Imagem"
         }
         alt={component.props.alt || "Imagem"}
         className="object-cover w-full h-auto rounded-lg max-w-96"
@@ -513,77 +510,125 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
         {/* Renderização do componente baseado no tipo */}
         <div className="text-zinc-200">
           {component.type === "heading" && (
-            <h2 className="text-xl font-bold">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
               {component.props.text || "Título"}
             </h2>
           )}
           {component.type === "text" && (
-            <p>{component.props.text || "Texto do parágrafo"}</p>
+            <p className="text-gray-700 leading-relaxed">
+              {component.props.text || "Texto do parágrafo"}
+            </p>
           )}
           {component.type === "image" && (
             <img
-              src={component.props.src || "https://placehold.co/400x200"}
+              src={
+                component.props.src ||
+                "https://placehold.co/400x200/f3f4f6/6b7280?text=Imagem"
+              }
               alt={component.props.alt || "Imagem"}
-              className="max-w-full h-auto rounded"
+              className="max-w-full h-auto rounded-lg"
             />
           )}
           {component.type === "button" && (
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              {component.props.buttonText || "Botão"}
+            <button className="bg-[#B89B7A] hover:bg-[#A67B5B] text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200">
+              {component.props.buttonText || "Continuar"}
             </button>
           )}
           {component.type === "input" && (
             <div>
               {component.props.label && (
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-sm font-medium mb-1 text-gray-700">
                   {component.props.label}
                 </label>
               )}
               <input
                 type={component.props.inputType || "text"}
                 placeholder={component.props.placeholder || "Digite aqui..."}
-                className="w-full px-3 py-2 border border-zinc-600 rounded bg-zinc-800 text-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-800 focus:border-[#B89B7A] focus:ring-2 focus:ring-[#B89B7A]/20 outline-none"
                 disabled
               />
             </div>
           )}
           {component.type === "options" && (
             <div>
-              <h3 className="font-medium mb-3">
-                {component.props.text || "Pergunta"}
+              <h3 className="font-semibold mb-4 text-gray-800 text-lg">
+                {component.props.questionText ||
+                  component.props.text ||
+                  "Pergunta"}
               </h3>
-              <div className="space-y-2">
+
+              {/* Grid responsivo baseado na presença de imagens */}
+              <div
+                className={`gap-3 ${
+                  component.props.choices?.some(
+                    (choice: OptionChoice) => choice.image
+                  )
+                    ? "grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2"
+                    : "grid grid-cols-1 max-w-lg mx-auto"
+                }`}
+              >
                 {component.props.choices?.map(
                   (choice: OptionChoice, index: number) => (
                     <button
                       key={index}
-                      className="block w-full text-left px-4 py-2 border border-zinc-600 rounded hover:border-blue-500"
+                      className={`group relative overflow-hidden rounded-lg border-2 border-gray-300 hover:border-[#B89B7A] transition-all duration-200 hover:shadow-lg hover:-translate-y-1 ${
+                        choice.image
+                          ? "p-0 h-auto min-h-[180px] md:min-h-[200px]"
+                          : "p-4 text-left bg-white hover:bg-gray-50"
+                      }`}
                     >
-                      {choice.text}
+                      {choice.image ? (
+                        <div className="flex flex-col h-full">
+                          <div className="flex-1 relative overflow-hidden">
+                            <img
+                              src={choice.image}
+                              alt={choice.text}
+                              className="w-full h-[120px] md:h-[140px] object-cover"
+                            />
+                          </div>
+                          <div className="p-3 bg-white border-t border-gray-200">
+                            <p className="text-sm md:text-base font-medium text-gray-800 leading-tight">
+                              {choice.text}
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-gray-800">
+                          <span className="font-medium">{choice.text}</span>
+                        </div>
+                      )}
                     </button>
                   )
                 ) || (
-                  <button className="block w-full text-left px-4 py-2 border border-zinc-600 rounded">
+                  <button className="block w-full text-left px-4 py-2 border-2 border-gray-300 rounded-lg bg-white hover:bg-gray-50 text-gray-800">
                     Opção de exemplo
                   </button>
                 )}
               </div>
+
+              {/* Informação sobre seleção múltipla */}
+              {component.props.selectionType === "multiple" &&
+                component.props.maxSelections && (
+                  <p className="text-sm text-gray-600 mt-3 text-center">
+                    Selecione até {component.props.maxSelections} opções
+                  </p>
+                )}
             </div>
           )}
           {component.type === "video" && (
-            <div className="aspect-video bg-zinc-800 rounded flex items-center justify-center">
-              <span className="text-zinc-400">📹 Vídeo</span>
+            <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center border border-gray-300">
+              <span className="text-gray-500">📹 Vídeo</span>
             </div>
           )}
           {component.type === "spacer" && (
-            <div className="h-8 border-dashed border border-zinc-600 rounded flex items-center justify-center">
-              <span className="text-zinc-500 text-sm">Espaçador</span>
+            <div className="h-8 border-dashed border border-gray-300 rounded flex items-center justify-center">
+              <span className="text-gray-500 text-sm">Espaçador</span>
             </div>
           )}
         </div>
 
         {/* Label do tipo de componente */}
-        <div className="absolute top-1 left-1 text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
+        <div className="absolute top-1 left-1 text-xs bg-gray-700 text-white px-2 py-1 rounded">
           {component.type}
         </div>
       </div>
@@ -1714,7 +1759,9 @@ const ComponentPropertyEditor: React.FC<{
                     type="text"
                     className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={props.componentName || ""}
-                    onChange={(e) => handleChange("componentName", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("componentName", e.target.value)
+                    }
                     placeholder="Digite aqui..."
                   />
                   <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2">
@@ -1740,7 +1787,9 @@ const ComponentPropertyEditor: React.FC<{
                   min="10"
                   max="100"
                   className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
-                  value={parseInt(props.styles?.maxWidth?.toString().replace('%', '') || '100')}
+                  value={parseInt(
+                    props.styles?.maxWidth?.toString().replace("%", "") || "100"
+                  )}
                   onChange={(e) => {
                     const newStyles = { ...props.styles };
                     newStyles.maxWidth = `${e.target.value}%`;
@@ -1748,7 +1797,7 @@ const ComponentPropertyEditor: React.FC<{
                   }}
                 />
                 <span className="text-xs text-zinc-400">
-                  {props.styles?.maxWidth || '100%'}
+                  {props.styles?.maxWidth || "100%"}
                 </span>
               </div>
               <div className="flex flex-col-reverse items-start gap-2">
@@ -2459,56 +2508,64 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Conforto, leveza e praticidade no vestir",
                   value: "natural",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
                   nextStepId: "question-2",
                   scoreValue: 1,
                 },
                 {
                   text: "Discrição, caimento clássico e sobriedade",
                   value: "classico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
                   nextStepId: "question-2",
                   scoreValue: 1,
                 },
                 {
                   text: "Praticidade com um toque de estilo atual",
                   value: "contemporaneo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
                   nextStepId: "question-2",
                   scoreValue: 1,
                 },
                 {
                   text: "Elegância refinada, moderna e sem exageros",
                   value: "elegante",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
                   nextStepId: "question-2",
                   scoreValue: 1,
                 },
                 {
                   text: "Delicadeza em tecidos suaves e fluidos",
                   value: "romantico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
                   nextStepId: "question-2",
                   scoreValue: 1,
                 },
                 {
                   text: "Sensualidade com destaque para o corpo",
                   value: "sexy",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
                   nextStepId: "question-2",
                   scoreValue: 1,
                 },
                 {
                   text: "Impacto visual com peças estruturadas e assimétricas",
                   value: "dramatico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
                   nextStepId: "question-2",
                   scoreValue: 1,
                 },
                 {
                   text: "Mix criativo com formas ousadas e originais",
                   value: "criativo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
                   nextStepId: "question-2",
                   scoreValue: 1,
                 },
@@ -2643,56 +2700,64 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Visual leve, despojado e natural",
                   value: "natural",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
                   nextStepId: "question-4",
                   scoreValue: 1,
                 },
                 {
                   text: "Visual clássico e tradicional",
                   value: "classico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
                   nextStepId: "question-4",
                   scoreValue: 1,
                 },
                 {
                   text: "Visual casual com toque atual",
                   value: "contemporaneo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
                   nextStepId: "question-4",
                   scoreValue: 1,
                 },
                 {
                   text: "Visual refinado e imponente",
                   value: "elegante",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
                   nextStepId: "question-4",
                   scoreValue: 1,
                 },
                 {
                   text: "Visual romântico, feminino e delicado",
                   value: "romantico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
                   nextStepId: "question-4",
                   scoreValue: 1,
                 },
                 {
                   text: "Visual sensual, com saia justa e decote",
                   value: "sexy",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
                   nextStepId: "question-4",
                   scoreValue: 1,
                 },
                 {
                   text: "Visual marcante e urbano (jeans + jaqueta)",
                   value: "dramatico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
                   nextStepId: "question-4",
                   scoreValue: 1,
                 },
                 {
                   text: "Visual criativo, colorido e ousado",
                   value: "criativo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
                   nextStepId: "question-4",
                   scoreValue: 1,
                 },
@@ -2827,56 +2892,64 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Estampas clean, com poucas informações",
                   value: "natural",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/20_oh44vh.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/20_oh44vh.webp",
                   nextStepId: "question-6",
                   scoreValue: 1,
                 },
                 {
                   text: "Estampas clássicas e atemporais",
                   value: "classico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735368/21_o7wkte.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735368/21_o7wkte.webp",
                   nextStepId: "question-6",
                   scoreValue: 1,
                 },
                 {
                   text: "Atemporais, mas que tenham uma pegada de atual e moderna",
                   value: "contemporaneo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735369/22_siebw2.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735369/22_siebw2.webp",
                   nextStepId: "question-6",
                   scoreValue: 1,
                 },
                 {
                   text: "Estampas clássicas e atemporais, mas sofisticadas",
                   value: "elegante",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/23_bdfxrh.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/23_bdfxrh.webp",
                   nextStepId: "question-6",
                   scoreValue: 1,
                 },
                 {
                   text: "Estampas florais e/ou delicadas como bolinhas, borboletas e corações",
                   value: "romantico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/24_nptszu.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/24_nptszu.webp",
                   nextStepId: "question-6",
                   scoreValue: 1,
                 },
                 {
                   text: "Estampas de animal print, como onça, zebra e cobra",
                   value: "sexy",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/25_motk6b.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/25_motk6b.webp",
                   nextStepId: "question-6",
                   scoreValue: 1,
                 },
                 {
                   text: "Estampas geométricas, abstratas e exageradas como grandes poás",
                   value: "dramatico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/26_dptanw.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735371/26_dptanw.webp",
                   nextStepId: "question-6",
                   scoreValue: 1,
                 },
                 {
                   text: "Estampas diferentes do usual, como africanas, xadrez grandes",
                   value: "criativo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/27_wxmklx.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/27_wxmklx.webp",
                   nextStepId: "question-6",
                   scoreValue: 1,
                 },
@@ -2923,56 +2996,64 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Cardigã bege confortável e casual",
                   value: "natural",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/29_sdogoy.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/29_sdogoy.webp",
                   nextStepId: "question-7",
                   scoreValue: 1,
                 },
                 {
                   text: "Blazer verde estruturado",
                   value: "classico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/30_nfth8k.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/30_nfth8k.webp",
                   nextStepId: "question-7",
                   scoreValue: 1,
                 },
                 {
                   text: "Trench coat bege tradicional",
                   value: "contemporaneo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/31_tcmhcl.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735372/31_tcmhcl.webp",
                   nextStepId: "question-7",
                   scoreValue: 1,
                 },
                 {
                   text: "Blazer branco refinado",
                   value: "elegante",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/32_h78pd8.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/32_h78pd8.webp",
                   nextStepId: "question-7",
                   scoreValue: 1,
                 },
                 {
                   text: "Casaco pink vibrante e moderno",
                   value: "romantico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/33_u8pldd.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/33_u8pldd.webp",
                   nextStepId: "question-7",
                   scoreValue: 1,
                 },
                 {
                   text: "Jaqueta vinho de couro estilosa",
                   value: "sexy",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/34_peadir.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/34_peadir.webp",
                   nextStepId: "question-7",
                   scoreValue: 1,
                 },
                 {
                   text: "Jaqueta preta estilo rocker",
                   value: "dramatico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735379/35_pulzso.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735379/35_pulzso.webp",
                   nextStepId: "question-7",
                   scoreValue: 1,
                 },
                 {
                   text: "Casaco estampado criativo e colorido",
                   value: "criativo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/36_cympaq.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735377/36_cympaq.webp",
                   nextStepId: "question-7",
                   scoreValue: 1,
                 },
@@ -3019,56 +3100,64 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Calça fluida acetinada bege",
                   value: "natural",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/38_iilv0l.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/38_iilv0l.webp",
                   nextStepId: "question-8",
                   scoreValue: 1,
                 },
                 {
                   text: "Calça de alfaiataria cinza",
                   value: "classico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735417/39_arsswu.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735417/39_arsswu.webp",
                   nextStepId: "question-8",
                   scoreValue: 1,
                 },
                 {
                   text: "Jeans reto e básico",
                   value: "contemporaneo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/40_beq52x.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/40_beq52x.webp",
                   nextStepId: "question-8",
                   scoreValue: 1,
                 },
                 {
                   text: "Calça reta bege de tecido",
                   value: "elegante",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/41_hconq4.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735419/41_hconq4.webp",
                   nextStepId: "question-8",
                   scoreValue: 1,
                 },
                 {
                   text: "Calça ampla rosa alfaiatada",
                   value: "romantico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735420/42_q8xws1.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735420/42_q8xws1.webp",
                   nextStepId: "question-8",
                   scoreValue: 1,
                 },
                 {
                   text: "Legging preta de couro",
                   value: "sexy",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/43_ljy7sh.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/43_ljy7sh.webp",
                   nextStepId: "question-8",
                   scoreValue: 1,
                 },
                 {
                   text: "Calça reta preta de couro",
                   value: "dramatico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/44_nqgvoq.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735424/44_nqgvoq.webp",
                   nextStepId: "question-8",
                   scoreValue: 1,
                 },
                 {
                   text: "Calça estampada floral leve e ampla",
                   value: "criativo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735425/45_lp64m8.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735425/45_lp64m8.webp",
                   nextStepId: "question-8",
                   scoreValue: 1,
                 },
@@ -3115,56 +3204,64 @@ const AdvancedQuizEditor: React.FC = () => {
                 {
                   text: "Tênis nude casual e confortável",
                   value: "natural",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735426/47_bi6vgf.webp",
                   nextStepId: "question-9",
                   scoreValue: 1,
                 },
                 {
                   text: "Scarpin nude de salto baixo",
                   value: "classico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/48_ymo1ur.webp",
                   nextStepId: "question-9",
                   scoreValue: 1,
                 },
                 {
                   text: "Sandália dourada com salto bloco",
                   value: "contemporaneo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735427/49_apcrwa.webp",
                   nextStepId: "question-9",
                   scoreValue: 1,
                 },
                 {
                   text: "Scarpin nude salto alto e fino",
                   value: "elegante",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/50_qexxxo.webp",
                   nextStepId: "question-9",
                   scoreValue: 1,
                 },
                 {
                   text: "Sandália anabela off white",
                   value: "romantico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735428/51_xbgntp.webp",
                   nextStepId: "question-9",
                   scoreValue: 1,
                 },
                 {
                   text: "Sandália rosa de tiras finas",
                   value: "sexy",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/52_edlp0e.webp",
                   nextStepId: "question-9",
                   scoreValue: 1,
                 },
                 {
                   text: "Scarpin preto moderno com vinil transparente",
                   value: "dramatico",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735429/53_bfdp6f.webp",
                   nextStepId: "question-9",
                   scoreValue: 1,
                 },
                 {
                   text: "Scarpin colorido estampado",
                   value: "criativo",
-                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp",
+                  image:
+                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735430/54_xnilkc.webp",
                   nextStepId: "question-9",
                   scoreValue: 1,
                 },
@@ -3293,7 +3390,8 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "q10-options",
             type: "options",
             props: {
-              questionText: "VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...",
+              questionText:
+                "VOCÊ ESCOLHE CERTOS TECIDOS, PRINCIPALMENTE PORQUE ELES...",
               selectionType: "multiple",
               choices: [
                 {
@@ -3570,7 +3668,7 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "s3-subtitle",
             type: "text",
             props: {
-              text: "\"Com que roupa eu vou?\" — mesmo com o guarda-roupa cheio?",
+              text: '"Com que roupa eu vou?" — mesmo com o guarda-roupa cheio?',
               styles: {
                 textAlign: "center",
                 color: "#10b981",
@@ -3584,7 +3682,8 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "s3-options",
             type: "options",
             props: {
-              questionText: "Com que frequência você se pega pensando: \"Com que roupa eu vou?\"",
+              questionText:
+                'Com que frequência você se pega pensando: "Com que roupa eu vou?"',
               selectionType: "single",
               choices: [
                 {
@@ -3650,7 +3749,8 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "s4-options",
             type: "options",
             props: {
-              questionText: "Você acredita que ter acesso a um material estratégico faria diferença?",
+              questionText:
+                "Você acredita que ter acesso a um material estratégico faria diferença?",
               selectionType: "single",
               choices: [
                 {
@@ -3900,14 +4000,30 @@ const AdvancedQuizEditor: React.FC = () => {
               componentName: "ResultPage.tsx",
               resultType: "styleAnalysis",
               styleImages: {
-                natural: ["https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp"],
-                classico: ["https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp"],
-                contemporaneo: ["https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp"],
-                elegante: ["https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp"],
-                romantico: ["https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp"],
-                sexy: ["https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp"],
-                dramatico: ["https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp"],
-                criativo: ["https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp"],
+                natural: [
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+                ],
+                classico: [
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+                ],
+                contemporaneo: [
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+                ],
+                elegante: [
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+                ],
+                romantico: [
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+                ],
+                sexy: [
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+                ],
+                dramatico: [
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+                ],
+                criativo: [
+                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                ],
               },
               styleNames: {
                 natural: "Estilo Natural",
@@ -3970,10 +4086,13 @@ const AdvancedQuizEditor: React.FC = () => {
             type: "customComponent",
             props: {
               componentName: "QuizOfferPage.tsx",
-              offerHeadline: "Descubra como valorizar sua imagem usando seu estilo natural",
-              offerDescription: "Aprenda a criar looks autênticos e poderosos que refletem sua essência única",
+              offerHeadline:
+                "Descubra como valorizar sua imagem usando seu estilo natural",
+              offerDescription:
+                "Aprenda a criar looks autênticos e poderosos que refletem sua essência única",
               offerCtaButtonText: "Quero Meu Guia Completo Agora!",
-              offerCtaUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
+              offerCtaUrl:
+                "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
               offerProductSku: "GUIA-ESTILO-COMPLETO",
               discountCode: "QUIZ39",
             },
@@ -4040,7 +4159,8 @@ const AdvancedQuizEditor: React.FC = () => {
               buttonText: "🚀 GARANTIR MEU ACESSO AGORA",
               buttonStyle: "primary",
               actionType: "redirectUrl",
-              actionUrl: "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
+              actionUrl:
+                "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912",
             },
           },
         ],
@@ -4456,7 +4576,8 @@ const AdvancedQuizEditor: React.FC = () => {
                   Nenhum componente selecionado
                 </h3>
                 <p className="text-sm text-zinc-500">
-                  Clique em um componente no canvas para editar suas propriedades
+                  Clique em um componente no canvas para editar suas
+                  propriedades
                 </p>
               </div>
             )}
