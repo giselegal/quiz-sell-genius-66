@@ -2482,6 +2482,7 @@ const SimpleDragDropEditor: React.FC = () => {
   );
   const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<{[questionId: string]: string[]}>({});
 
   // Função para salvar alterações
   const saveChanges = () => {
@@ -2502,7 +2503,18 @@ const SimpleDragDropEditor: React.FC = () => {
   // Auto-salvar sempre que currentFunnel ou quizConfig mudarem
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      saveChanges();
+      console.log("💾 Auto-salvando alterações...");
+      localStorage.setItem("quiz_funnel_config", JSON.stringify(currentFunnel));
+      localStorage.setItem("quiz_config", JSON.stringify(quizConfig));
+      
+      // Salvar também em formato compatível com o quiz original
+      localStorage.setItem("quiz_editor_data", JSON.stringify({
+        funnel: currentFunnel,
+        config: quizConfig,
+        timestamp: new Date().toISOString()
+      }));
+      
+      console.log("✅ Alterações auto-salvas!");
     }, 1000); // Salvar após 1 segundo sem mudanças
 
     return () => clearTimeout(timeoutId);
