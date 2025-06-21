@@ -1,15 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "@/pages/HomePage";
-import NotFou          {/* NOVO: Editor Refatorado com Componentes Separados */}
-          <Route
-            path="/refactored-editor"
-            element={
-              <div className="min-h-screen bg-background">
-                <FinalRefactoredEditor />
-              </div>
-            }
-          />om "@/pages/NotFoundPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 import QuizPage from "@/components/QuizPage";
 import QuizDescubraSeuEstilo from "@/pages/quiz-descubra-seu-estilo";
 import ResultPage from "@/pages/ResultPage";
@@ -21,6 +13,7 @@ import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
 import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
 import FinalRefactoredEditor from "@/components/visual-editor/FinalRefactoredEditor";
+import RefactoredAdvancedQuizEditor from "@/components/visual-editor/RefactoredAdvancedQuizEditor";
 import AdvancedQuizEditorTest from "@/components/visual-editor/AdvancedQuizEditor.test";
 import SimpleDragDropEditor from "@/components/visual-editor/SimpleDragDropEditor";
 import QuizPreview from "@/components/QuizPreview";
@@ -152,7 +145,7 @@ function App() {
             path="/refactored-editor"
             element={
               <div className="min-h-screen bg-background">
-                <FinalWorkingEditor />
+                <FinalRefactoredEditor />
               </div>
             }
           />
@@ -162,7 +155,7 @@ function App() {
             path="/simple-working-editor"
             element={
               <div className="min-h-screen bg-background">
-                <SimpleWorkingEditor />
+                <SimpleDragDropEditor />
               </div>
             }
           />
