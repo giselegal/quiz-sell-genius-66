@@ -3292,45 +3292,91 @@ const SimpleDragDropEditor: React.FC = () => {
       case "options": {
         const currentQuestionId = component.id.replace("options-", "");
         const currentSelections = selectedOptions[currentQuestionId] || [];
+        const isStrategyQuestion = currentQuestionId.includes("strategic") || 
+                                  currentQuestionId.includes("strategy") ||
+                                  parseInt(currentQuestionId.replace(/\D/g, '')) > 10;
+
+        // Determine grid type and option limits
+        const isImageQuestion = data.hasImages;
+        const isSmallDevice = window.innerWidth < 640;
+        const maxSelections = data.multiSelect ? 3 : 1;
+
+        // Grid layout classes
+        const getGridClass = () => {
+          if (!isImageQuestion) return "quiz-grid-text";
+          if (isStrategyQuestion) return "quiz-grid-strategic";
+          if (data.options && data.options.length >= 6) {
+            return isSmallDevice ? "quiz-grid-images-mobile" : "quiz-grid-images-large";
+          }
+          return isSmallDevice ? "quiz-grid-images-mobile" : "quiz-grid-images-desktop";
+        };
+
+        // Create ripple effect
+        const createRipple = (event: React.MouseEvent<HTMLDivElement>) => {
+          const button = event.currentTarget;
+          const rect = button.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = event.clientX - rect.left - size / 2;
+          const y = event.clientY - rect.top - size / 2;
+          
+          const ripple = document.createElement('span');
+          ripple.className = 'quiz-ripple';
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = x + 'px';
+          ripple.style.top = y + 'px';
+          
+          button.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 600);
+        };
 
         return (
-          <div style={{ margin: "16px 0" }}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: data.hasImages
-                  ? "repeat(2, 1fr)"
-                  : "repeat(1, 1fr)",
-                gap: data.hasImages ? "12px" : "16px",
-                padding: "0 8px",
-              }}
-            >
+          <div style={{ margin: "16px 0", padding: "0 1rem" }}>
+            <div className={getGridClass()}>
               {data.options?.map((option: QuizOption, optIndex: number) => {
                 const isSelected = currentSelections.includes(option.id);
+                const isDisabled = !isSelected && 
+                                 currentSelections.length >= maxSelections && 
+                                 data.multiSelect;
 
                 return (
                   <div
                     key={option.id}
-                    className={`quiz-option-interactive ${
+                    className={`quiz-option quiz-option-animate ${
                       isSelected ? "selected" : ""
+                    } ${isDisabled ? "disabled" : ""} ${
+                      isStrategyQuestion ? "strategic" : ""
                     }`}
                     style={{
+                      animationDelay: `${optIndex * 100}ms`,
                       position: "relative",
                       background: isSelected
-                        ? "linear-gradient(135deg, #F0EAE2 0%, #E8DDD4 100%)"
-                        : "linear-gradient(135deg, #FFFBF7 0%, #FDF8F3 100%)",
-                      border: `2px solid ${isSelected ? "#B89B7A" : "#E8DDD4"}`,
+                        ? "linear-gradient(135deg, rgba(184,155,122,0.05) 0%, rgba(184,155,122,0.1) 100%)"
+                        : "white",
+                      border: `2px solid ${
+                        isSelected ? "var(--quiz-primary-color)" : "#e5e7eb"
+                      }`,
                       borderRadius: "16px",
-                      cursor: "pointer",
-                      transition: "all 0.3s ease",
+                      cursor: isDisabled ? "not-allowed" : "pointer",
+                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                       overflow: "hidden",
-                      padding: data.hasImages ? "12px" : "20px",
+                      padding: isImageQuestion 
+                        ? (isSmallDevice ? "1rem 0.75rem" : "1.5rem 1rem")
+                        : (isSmallDevice ? "1.5rem 1rem" : "2rem 1.5rem"),
                       boxShadow: isSelected
-                        ? "0 4px 12px rgba(184, 155, 122, 0.2)"
+                        ? (isStrategyQuestion 
+                            ? "0 6px 12px rgba(184,155,122,0.25)"
+                            : "0 10px 30px rgba(184,155,122,0.2)")
                         : "0 2px 8px rgba(0,0,0,0.05)",
-                      transform: isSelected ? "scale(0.98)" : "scale(1)",
+                      transform: isSelected
+                        ? (isStrategyQuestion ? "translateY(-2px)" : "translateY(-4px)")
+                        : "translateY(0)",
+                      opacity: isDisabled ? 0.5 : 1,
                     }}
-                    onClick={() => {
+                    onClick={(e) => {
+                      if (isDisabled) return;
+
+                      createRipple(e);
+                      
                       setSelectedOptions((prev) => {
                         const current = prev[currentQuestionId] || [];
                         const isAlreadySelected = current.includes(option.id);
@@ -3344,91 +3390,81 @@ const SimpleDragDropEditor: React.FC = () => {
                             ),
                           };
                         } else {
-                          // Adicionar seleção (respeitando limites de seleção múltipla)
-                          const maxSelections = data.multiSelect ? 3 : 1;
-                          const newSelections =
-                            current.length >= maxSelections
-                              ? [...current.slice(1), option.id] // Remove o primeiro se exceder limite
-                              : [...current, option.id];
-
-                          return {
-                            ...prev,
-                            [currentQuestionId]: newSelections,
-                          };
+                          // Adicionar seleção
+                          if (data.multiSelect) {
+                            if (current.length < maxSelections) {
+                              return {
+                                ...prev,
+                                [currentQuestionId]: [...current, option.id],
+                              };
+                            }
+                            return prev; // Não adiciona se já atingiu o limite
+                          } else {
+                            // Seleção única - substitui a anterior
+                            return {
+                              ...prev,
+                              [currentQuestionId]: [option.id],
+                            };
+                          }
                         }
                       });
-                    }}
-                    onMouseEnter={(e) => {
-                      const target = e.currentTarget;
-                      if (!isSelected) {
-                        target.style.borderColor = "#D4C4B0";
-                        target.style.transform = "translateY(-2px)";
-                        target.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      const target = e.currentTarget;
-                      if (!isSelected) {
-                        target.style.borderColor = "#E8DDD4";
-                        target.style.transform = "translateY(0)";
-                        target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)";
-                      }
                     }}
                     data-option-id={option.id}
                   >
                     {/* Indicador de seleção */}
                     {isSelected && (
                       <div
+                        className={isStrategyQuestion ? "quiz-check-strategic" : "quiz-check-normal"}
                         style={{
                           position: "absolute",
-                          top: "8px",
-                          right: "8px",
-                          background: "#B89B7A",
-                          color: "white",
-                          borderRadius: "50%",
-                          width: "20px",
-                          height: "20px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "12px",
-                          fontWeight: "bold",
+                          top: isStrategyQuestion ? "12px" : "8px",
+                          right: isStrategyQuestion ? "12px" : "8px",
+                          zIndex: 10,
                         }}
                       >
                         ✓
                       </div>
                     )}
 
-                    {data.hasImages && option.image && (
-                      <div
-                        style={{ marginBottom: "12px", textAlign: "center" }}
-                      >
+                    {/* Imagem da opção */}
+                    {isImageQuestion && option.image && (
+                      <div style={{ 
+                        marginBottom: isSmallDevice ? "8px" : "12px", 
+                        textAlign: "center" 
+                      }}>
                         <img
                           src={option.image}
                           alt={option.text}
+                          className="quiz-option-image"
                           style={{
                             width: "100%",
-                            maxWidth: "200px",
-                            height: "120px",
+                            height: isSmallDevice ? "100px" : "140px",
                             objectFit: "cover",
                             borderRadius: "12px",
-                            border: "1px solid #E8DDD4",
+                            border: "1px solid #e5e7eb",
                           }}
                         />
                       </div>
                     )}
+
+                    {/* Texto da opção */}
                     <div
+                      className={
+                        isStrategyQuestion 
+                          ? "quiz-option-text-strategic" 
+                          : "quiz-option-text-normal"
+                      }
                       style={{
-                        fontSize: data.hasImages ? "0.9rem" : "1rem",
                         fontWeight: "500",
-                        color: "#432818",
-                        textAlign: data.hasImages ? "center" : "left",
-                        lineHeight: "1.4",
-                        padding: data.hasImages ? "0" : "4px 0",
+                        color: "var(--quiz-text-color)",
+                        textAlign: isImageQuestion ? "center" : "left",
+                        padding: isImageQuestion ? "0" : "4px 0",
                       }}
                     >
                       {option.text}
                     </div>
+
+                    {/* Badge da categoria (se existir) */}
                     {option.category && (
                       <div
                         style={{
@@ -3436,11 +3472,12 @@ const SimpleDragDropEditor: React.FC = () => {
                           top: "8px",
                           left: "8px",
                           background: "rgba(184, 155, 122, 0.1)",
-                          color: "#B89B7A",
+                          color: "var(--quiz-primary-color)",
                           fontSize: "0.7rem",
                           padding: "2px 6px",
                           borderRadius: "12px",
                           fontWeight: "600",
+                          zIndex: 5,
                         }}
                       >
                         {option.category}
@@ -3455,30 +3492,66 @@ const SimpleDragDropEditor: React.FC = () => {
                     padding: "20px",
                     color: "#8B5A3C",
                     fontStyle: "italic",
+                    gridColumn: "1 / -1", // Ocupa todas as colunas
                   }}
                 >
                   Nenhuma opção configurada
                 </div>
               )}
             </div>
+
+            {/* Contador de seleções */}
             <div
               style={{
                 textAlign: "center",
                 margin: "24px 0 16px 0",
                 color: "#8B5A3C",
-                fontSize: "0.85rem",
+                fontSize: "0.9rem",
+                fontWeight: "500",
               }}
             >
-              {data.multiSelect
-                ? `💡 Selecione até ${data.multiSelect || 3} opções (${
-                    currentSelections.length
-                  } selecionadas)`
-                : `💡 Selecione uma opção (${
-                    currentSelections.length > 0
-                      ? "selecionada"
-                      : "nenhuma selecionada"
-                  })`}
+              {data.multiSelect ? (
+                <span>
+                  💡 Selecione até {maxSelections} opções 
+                  <span style={{ 
+                    color: currentSelections.length >= maxSelections ? "#dc2626" : "#059669",
+                    fontWeight: "600",
+                    marginLeft: "4px"
+                  }}>
+                    ({currentSelections.length}/{maxSelections})
+                  </span>
+                </span>
+              ) : (
+                <span>
+                  💡 Selecione uma opção 
+                  <span style={{ 
+                    color: currentSelections.length > 0 ? "#059669" : "#6b7280",
+                    fontWeight: "600",
+                    marginLeft: "4px"
+                  }}>
+                    ({currentSelections.length > 0 ? "✓ selecionada" : "nenhuma selecionada"})
+                  </span>
+                </span>
+              )}
             </div>
+
+            {/* Feedback de limite atingido */}
+            {data.multiSelect && currentSelections.length >= maxSelections && (
+              <div
+                style={{
+                  textAlign: "center",
+                  margin: "8px 0",
+                  padding: "8px 16px",
+                  background: "rgba(239, 68, 68, 0.1)",
+                  color: "#dc2626",
+                  borderRadius: "8px",
+                  fontSize: "0.85rem",
+                  fontWeight: "500",
+                }}
+              >
+                ⚠️ Limite de seleções atingido. Desmarque uma opção para selecionar outra.
+              </div>
+            )}
           </div>
         );
       }
