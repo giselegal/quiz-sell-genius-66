@@ -2441,7 +2441,22 @@ const SimpleDragDropEditor: React.FC = () => {
 
   // Estado do funil completo - usando questões reais
   const [currentFunnel, setCurrentFunnel] = useState<QuizFunnel>(() => {
+    // Primeiro tentar carregar dados salvos
+    try {
+      const savedFunnel = localStorage.getItem("quiz_funnel_config");
+      if (savedFunnel) {
+        const parsed = JSON.parse(savedFunnel);
+        console.log("📥 Funil carregado do localStorage:", parsed);
+        return parsed;
+      }
+    } catch (error) {
+      console.warn("Erro ao carregar funil salvo:", error);
+    }
+
+    // Se não houver dados salvos, criar com questões reais
     const realQuestions = generateRealQuestionTemplates();
+    console.log("🔄 Criando funil com questões reais:", realQuestions.length);
+    
     return {
       id: "quiz-funnel-real",
       name: "Quiz de Estilo Pessoal - Questões Reais",
@@ -2481,8 +2496,17 @@ const SimpleDragDropEditor: React.FC = () => {
       timestamp: new Date().toISOString()
     }));
     
-    alert("✅ Alterações salvas com sucesso!");
+    console.log("✅ Alterações salvas automaticamente!");
   };
+
+  // Auto-salvar sempre que currentFunnel ou quizConfig mudarem
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveChanges();
+    }, 1000); // Salvar após 1 segundo sem mudanças
+
+    return () => clearTimeout(timeoutId);
+  }, [currentFunnel, quizConfig]);
 
   // Carregar configurações salvas ao inicializar
   useEffect(() => {
