@@ -2980,7 +2980,7 @@ const SimpleDragDropEditor: React.FC = () => {
   // Aplicar CSS
   useEffect(() => {
     const styleElement = document.createElement("style");
-    styleElement.textContent = QUIZ_CSS + "\n" + EDITOR_CSS;
+    styleElement.textContent = SIMPLE_CSS;
     document.head.appendChild(styleElement);
 
     return () => {
