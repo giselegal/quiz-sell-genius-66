@@ -3821,49 +3821,49 @@ const AdvancedQuizEditor: React.FC = () => {
                   text: "De forma simples e despojada",
                   value: "natural",
                   scoreValue: 1,
-                  nextStepId: "quiz-transition",
+                  nextStepId: "quiz-transition-1",
                 },
                 {
                   text: "Com elegância clássica e discreta",
                   value: "classico",
                   scoreValue: 1,
-                  nextStepId: "quiz-transition",
+                  nextStepId: "quiz-transition-1",
                 },
                 {
                   text: "Com praticidade e modernidade",
                   value: "contemporaneo",
                   scoreValue: 1,
-                  nextStepId: "quiz-transition",
+                  nextStepId: "quiz-transition-1",
                 },
                 {
                   text: "Com sofisticação e refinamento",
                   value: "elegante",
                   scoreValue: 1,
-                  nextStepId: "quiz-transition",
+                  nextStepId: "quiz-transition-1",
                 },
                 {
                   text: "Com delicadeza e feminilidade",
                   value: "romantico",
                   scoreValue: 1,
-                  nextStepId: "quiz-transition",
+                  nextStepId: "quiz-transition-1",
                 },
                 {
                   text: "Com sensualidade e charme",
                   value: "sexy",
                   scoreValue: 1,
-                  nextStepId: "quiz-transition",
+                  nextStepId: "quiz-transition-1",
                 },
                 {
                   text: "Com impacto e presença",
                   value: "dramatico",
                   scoreValue: 1,
-                  nextStepId: "quiz-transition",
+                  nextStepId: "quiz-transition-1",
                 },
                 {
                   text: "Com criatividade e originalidade",
                   value: "criativo",
                   scoreValue: 1,
-                  nextStepId: "quiz-transition",
+                  nextStepId: "quiz-transition-1",
                 },
               ],
               selectionType: "multiple",
@@ -3871,38 +3871,41 @@ const AdvancedQuizEditor: React.FC = () => {
             },
           },
         ],
-        defaultNextStepId: "quiz-transition",
+        defaultNextStepId: "quiz-transition-1",
       },
+      // --- Primeira Página de Transição ---
       {
-        id: "quiz-transition",
-        name: "🔄 Transição",
+        id: "quiz-transition-1",
+        name: "🔄 Primeira Transição",
         components: [
           {
-            id: "transition-heading",
+            id: "transition1-heading",
             type: "heading",
             props: {
               text: "Enquanto calculamos o seu resultado...",
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "1.8rem",
+                fontSize: "2.5rem",
+                fontWeight: "bold",
               },
             },
           },
           {
-            id: "transition-subtitle",
+            id: "transition1-subtitle",
             type: "text",
             props: {
               text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.",
               styles: {
                 textAlign: "center",
                 color: "#d1d5db",
-                fontSize: "1.1rem",
+                fontSize: "1.2rem",
+                marginTop: "20px",
               },
             },
           },
           {
-            id: "transition-motivation",
+            id: "transition1-motivation",
             type: "text",
             props: {
               text: "Responda com sinceridade. Isso é só entre você e a sua nova versão.",
@@ -3911,377 +3914,58 @@ const AdvancedQuizEditor: React.FC = () => {
                 color: "#10b981",
                 fontSize: "1rem",
                 fontStyle: "italic",
+                marginTop: "15px",
               },
             },
           },
           {
-            id: "transition-button",
-            type: "button",
-            props: {
-              buttonText: "Continuar para Questões Estratégicas",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "strategic-1",
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-1",
-      },
-      // --- Questões Estratégicas ---
-      {
-        id: "strategic-1",
-        name: "💭 Autopercepção",
-        components: [
-          {
-            id: "s1-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp",
-              alt: "Autopercepção do estilo",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s1-heading",
-            type: "heading",
-            props: {
-              text: "Como você se vê atualmente?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s1-spacer",
+            id: "transition1-spacer",
             type: "spacer",
             props: {
-              height: 20,
+              height: 30,
             },
           },
           {
-            id: "s1-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Confiante com meu estilo atual",
-                  value: "confiante",
-                  scoreValue: 0,
-                  nextStepId: "strategic-2",
-                },
-                {
-                  text: "Insegura sobre minhas escolhas",
-                  value: "insegura",
-                  scoreValue: 0,
-                  nextStepId: "strategic-2",
-                },
-                {
-                  text: "Em transição, buscando mudanças",
-                  value: "transicao",
-                  scoreValue: 0,
-                  nextStepId: "strategic-2",
-                },
-                {
-                  text: "Perdida, não sei por onde começar",
-                  value: "perdida",
-                  scoreValue: 0,
-                  nextStepId: "strategic-2",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-2",
-      },
-      {
-        id: "strategic-2",
-        name: "🎯 Desafios",
-        components: [
-          {
-            id: "s2-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp",
-              alt: "Desafios ao se vestir",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s2-heading",
-            type: "heading",
-            props: {
-              text: "Qual seu maior desafio ao se vestir?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s2-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s2-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Não sei combinar peças",
-                  value: "combinar",
-                  scoreValue: 0,
-                  nextStepId: "strategic-3",
-                },
-                {
-                  text: "Guarda-roupa desorganizado",
-                  value: "organizacao",
-                  scoreValue: 0,
-                  nextStepId: "strategic-3",
-                },
-                {
-                  text: "Falta de tempo para escolher",
-                  value: "tempo",
-                  scoreValue: 0,
-                  nextStepId: "strategic-3",
-                },
-                {
-                  text: "Não encontro meu estilo",
-                  value: "estilo",
-                  scoreValue: 0,
-                  nextStepId: "strategic-3",
-                },
-                {
-                  text: "Questões com o corpo",
-                  value: "corpo",
-                  scoreValue: 0,
-                  nextStepId: "strategic-3",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-3",
-      },
-      {
-        id: "strategic-3",
-        name: "💰 Investimento",
-        components: [
-          {
-            id: "s3-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
-              alt: "Investimento em consultoria",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s3-heading",
-            type: "heading",
-            props: {
-              text: "Quanto você investiria em uma consultoria de estilo?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s3-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s3-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Até R$ 200",
-                  value: "baixo",
-                  scoreValue: 0,
-                  nextStepId: "strategic-4",
-                },
-                {
-                  text: "R$ 200 - R$ 500",
-                  value: "medio",
-                  scoreValue: 0,
-                  nextStepId: "strategic-4",
-                },
-                {
-                  text: "R$ 500 - R$ 1000",
-                  value: "alto",
-                  scoreValue: 0,
-                  nextStepId: "strategic-4",
-                },
-                {
-                  text: "Acima de R$ 1000",
-                  value: "premium",
-                  scoreValue: 0,
-                  nextStepId: "strategic-4",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-4",
-      },
-      {
-        id: "strategic-4",
-        name: "🎯 Resultados",
-        components: [
-          {
-            id: "s4-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
-              alt: "Resultados desejados",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "s4-heading",
-            type: "heading",
-            props: {
-              text: "Que resultados você deseja alcançar?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "1.8rem",
-              },
-            },
-          },
-          {
-            id: "s4-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "s4-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Mais confiança e autoestima",
-                  value: "confianca",
-                  scoreValue: 0,
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Guarda-roupa organizado",
-                  value: "organizacao",
-                  scoreValue: 0,
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Economia de tempo",
-                  value: "tempo",
-                  scoreValue: 0,
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Looks mais adequados",
-                  value: "adequacao",
-                  scoreValue: 0,
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Descobrir meu estilo único",
-                  value: "descoberta",
-                  scoreValue: 0,
-                  nextStepId: "result-page",
-                },
-                {
-                  text: "Renovação completa",
-                  value: "renovacao",
-                  scoreValue: 0,
-                  nextStepId: "result-page",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-          {
-            id: "s4-button",
+            id: "transition1-button",
             type: "button",
             props: {
               buttonText: "Continuar",
               buttonStyle: "primary",
               actionType: "goToNextStep",
-              actionTargetId: "strategic-5",
+              actionTargetId: "strategic-question-1",
             },
           },
         ],
-        defaultNextStepId: "strategic-5",
+        defaultNextStepId: "strategic-question-1",
       },
+      // --- Questão Estratégica 1 ---
       {
-        id: "strategic-5",
-        name: "🛒 Experiência de Compra",
+        id: "strategic-question-1",
+        name: "� Experiência de Compra",
         components: [
           {
-            id: "s5-heading",
+            id: "sq1-heading",
             type: "heading",
             props: {
               text: "Você já considerou investir em algum guia ou consultoria de estilo no passado?",
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "1.8rem",
+                fontSize: "2rem",
                 fontWeight: "bold",
+                lineHeight: "1.3",
               },
             },
           },
           {
-            id: "s5-spacer",
+            id: "sq1-spacer",
             type: "spacer",
             props: {
-              height: 20,
+              height: 30,
             },
           },
           {
-            id: "s5-options",
+            id: "sq1-options",
             type: "options",
             props: {
               choices: [
@@ -4289,63 +3973,55 @@ const AdvancedQuizEditor: React.FC = () => {
                   text: "Sim, já pesquisei mas não cheguei a comprar",
                   value: "researched",
                   scoreValue: 1,
-                  nextStepId: "strategic-6",
+                  nextStepId: "strategic-question-2",
                 },
                 {
                   text: "Sim, já investi em algum curso/guia/consultoria",
                   value: "invested",
                   scoreValue: 1,
-                  nextStepId: "strategic-6",
+                  nextStepId: "strategic-question-2",
                 },
                 {
                   text: "Não, esta é a primeira vez que considero isso",
                   value: "first_time",
                   scoreValue: 1,
-                  nextStepId: "strategic-6",
+                  nextStepId: "strategic-question-2",
                 },
                 {
                   text: "Prefiro não responder",
                   value: "no_answer",
                   scoreValue: 1,
-                  nextStepId: "strategic-6",
+                  nextStepId: "strategic-question-2",
                 },
               ],
               selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-          {
-            id: "s5-button",
-            type: "button",
-            props: {
-              buttonText: "Continuar",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "strategic-6",
+              styles: { gap: "15px" },
             },
           },
         ],
-        defaultNextStepId: "strategic-6",
+        defaultNextStepId: "strategic-question-2",
       },
+      // --- Questão Estratégica 2 ---
       {
-        id: "strategic-6",
+        id: "strategic-question-2",
         name: "💰 Investimento",
         components: [
           {
-            id: "s6-heading",
+            id: "sq2-heading",
             type: "heading",
             props: {
               text: "Quanto você estaria disposta a investir em um guia completo de estilo personalizado?",
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "1.8rem",
+                fontSize: "2rem",
                 fontWeight: "bold",
+                lineHeight: "1.3",
               },
             },
           },
           {
-            id: "s6-image",
+            id: "sq2-image",
             type: "image",
             props: {
               src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
@@ -4356,18 +4032,19 @@ const AdvancedQuizEditor: React.FC = () => {
                 textAlign: "center",
                 objectFit: "cover",
                 borderRadius: "lg",
+                marginTop: "20px",
               },
             },
           },
           {
-            id: "s6-spacer",
+            id: "sq2-spacer",
             type: "spacer",
             props: {
-              height: 20,
+              height: 25,
             },
           },
           {
-            id: "s6-options",
+            id: "sq2-options",
             type: "options",
             props: {
               choices: [
@@ -4375,63 +4052,55 @@ const AdvancedQuizEditor: React.FC = () => {
                   text: "Menos de R$100",
                   value: "under_100",
                   scoreValue: 1,
-                  nextStepId: "strategic-7",
+                  nextStepId: "strategic-question-3",
                 },
                 {
                   text: "Entre R$100 e R$300",
                   value: "100_300",
                   scoreValue: 1,
-                  nextStepId: "strategic-7",
+                  nextStepId: "strategic-question-3",
                 },
                 {
                   text: "Entre R$300 e R$500",
                   value: "300_500",
                   scoreValue: 1,
-                  nextStepId: "strategic-7",
+                  nextStepId: "strategic-question-3",
                 },
                 {
                   text: "Mais de R$500",
                   value: "over_500",
                   scoreValue: 1,
-                  nextStepId: "strategic-7",
+                  nextStepId: "strategic-question-3",
                 },
               ],
               selectionType: "single",
-              styles: { gap: "12px" },
-            },
-          },
-          {
-            id: "s6-button",
-            type: "button",
-            props: {
-              buttonText: "Continuar",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "strategic-7",
+              styles: { gap: "15px" },
             },
           },
         ],
-        defaultNextStepId: "strategic-7",
+        defaultNextStepId: "strategic-question-3",
       },
+      // --- Questão Estratégica 3 ---
       {
-        id: "strategic-7",
+        id: "strategic-question-3",
         name: "🎯 Resultados Desejados",
         components: [
           {
-            id: "s7-heading",
+            id: "sq3-heading",
             type: "heading",
             props: {
               text: "Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?",
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "1.8rem",
+                fontSize: "2rem",
                 fontWeight: "bold",
+                lineHeight: "1.3",
               },
             },
           },
           {
-            id: "s7-image",
+            id: "sq3-image",
             type: "image",
             props: {
               src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
@@ -4442,18 +4111,19 @@ const AdvancedQuizEditor: React.FC = () => {
                 textAlign: "center",
                 objectFit: "cover",
                 borderRadius: "lg",
+                marginTop: "20px",
               },
             },
           },
           {
-            id: "s7-spacer",
+            id: "sq3-spacer",
             type: "spacer",
             props: {
-              height: 20,
+              height: 25,
             },
           },
           {
-            id: "s7-options",
+            id: "sq3-options",
             type: "options",
             props: {
               choices: [
@@ -4461,39 +4131,94 @@ const AdvancedQuizEditor: React.FC = () => {
                   text: "Montar looks com mais facilidade e confiança",
                   value: "confidence",
                   scoreValue: 1,
-                  nextStepId: "result-page",
+                  nextStepId: "quiz-transition-2",
                 },
                 {
                   text: "Usar o que já tenho e me sentir estilosa",
                   value: "current_wardrobe",
                   scoreValue: 1,
-                  nextStepId: "result-page",
+                  nextStepId: "quiz-transition-2",
                 },
                 {
                   text: "Comprar com mais consciência e sem culpa",
                   value: "conscious_shopping",
                   scoreValue: 1,
-                  nextStepId: "result-page",
+                  nextStepId: "quiz-transition-2",
                 },
                 {
                   text: "Ser admirada pela imagem que transmito",
                   value: "admiration",
                   scoreValue: 1,
-                  nextStepId: "result-page",
+                  nextStepId: "quiz-transition-2",
                 },
                 {
                   text: "Resgatar peças esquecidas e criar novos looks com estilo",
                   value: "rescue_pieces",
                   scoreValue: 1,
-                  nextStepId: "result-page",
+                  nextStepId: "quiz-transition-2",
                 },
               ],
               selectionType: "single",
-              styles: { gap: "12px" },
+              styles: { gap: "15px" },
+            },
+          },
+        ],
+        defaultNextStepId: "quiz-transition-2",
+      },
+      // --- Segunda Página de Transição ---
+      {
+        id: "quiz-transition-2",
+        name: "🔄 Segunda Transição",
+        components: [
+          {
+            id: "transition2-heading",
+            type: "heading",
+            props: {
+              text: "Perfeito! Estamos quase lá...",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "2.5rem",
+                fontWeight: "bold",
+              },
             },
           },
           {
-            id: "s7-button",
+            id: "transition2-subtitle",
+            type: "text",
+            props: {
+              text: "Agora vamos descobrir seu perfil de estilo único!",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.2rem",
+                marginTop: "20px",
+              },
+            },
+          },
+          {
+            id: "transition2-motivation",
+            type: "text",
+            props: {
+              text: "Com base nas suas respostas, preparamos um resultado personalizado especialmente para você.",
+              styles: {
+                textAlign: "center",
+                color: "#10b981",
+                fontSize: "1rem",
+                fontStyle: "italic",
+                marginTop: "15px",
+              },
+            },
+          },
+          {
+            id: "transition2-spacer",
+            type: "spacer",
+            props: {
+              height: 30,
+            },
+          },
+          {
+            id: "transition2-button",
             type: "button",
             props: {
               buttonText: "Ver Meu Resultado",
