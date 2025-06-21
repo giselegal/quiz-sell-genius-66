@@ -17,6 +17,7 @@ import {
   Tablet,
   ChevronUp,
   ChevronDown,
+
   Type,
   Image as ImageIcon,
   MousePointer,
@@ -36,8 +37,49 @@ import {
   Gift,
   HelpCircle,
   Users,
-  Settings
+  Settings,
+  Globe,
+  BarChart3,
+  Target,
+  Link
 } from "lucide-react";
+
+// Interfaces
+interface QuizConfig {
+  domain: string;
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+  };
+  pixel: {
+    facebookPixelId: string;
+    googleAnalyticsId: string;
+  };
+  utm: {
+    source: string;
+    medium: string;
+    campaign: string;
+    content: string;
+    term: string;
+  };
+  scoring: {
+    normalQuestionPoints: number;
+    strategicQuestionPoints: number;
+    autoAdvanceNormal: boolean;
+    autoAdvanceStrategic: boolean;
+    normalSelectionLimit: number;
+    strategicSelectionLimit: number;
+  };
+  results: {
+    showUserName: boolean;
+    showPrimaryStyle: boolean;
+    showSecondaryStyles: boolean;
+    showPercentages: boolean;
+    showStyleImages: boolean;
+    showStyleGuides: boolean;
+  };
+}
 
 // CSS simplificado
 const SIMPLE_CSS = `
@@ -2224,6 +2266,46 @@ const QUIZ_TEMPLATES = {
 };
 
 const SimpleDragDropEditor: React.FC = () => {
+  // Estado da aba ativa
+  const [activeTab, setActiveTab] = useState<string>("editor");
+  
+  // Estado das configurações do quiz
+  const [quizConfig, setQuizConfig] = useState<QuizConfig>({
+    domain: "https://giselegalvao.com.br",
+    seo: {
+      title: "Quiz: Descubra Seu Estilo Pessoal Único",
+      description: "Descubra seu estilo pessoal único com nosso quiz personalizado. Transforme seu visual e ganhe confiança com dicas exclusivas de moda.",
+      keywords: "quiz estilo, moda feminina, consultoria de imagem, estilo pessoal, transformação visual"
+    },
+    pixel: {
+      facebookPixelId: "1311550759901086",
+      googleAnalyticsId: "G-XXXXXXXXXX"
+    },
+    utm: {
+      source: "facebook",
+      medium: "cpc",
+      campaign: "quiz_style_2025",
+      content: "criativo-1",
+      term: "estilo_elegante"
+    },
+    scoring: {
+      normalQuestionPoints: 1,
+      strategicQuestionPoints: 0,
+      autoAdvanceNormal: true,
+      autoAdvanceStrategic: false,
+      normalSelectionLimit: 3,
+      strategicSelectionLimit: 2
+    },
+    results: {
+      showUserName: true,
+      showPrimaryStyle: true,
+      showSecondaryStyles: true,
+      showPercentages: true,
+      showStyleImages: true,
+      showStyleGuides: true
+    }
+  });
+
   // Estado do funil completo
   const [currentFunnel, setCurrentFunnel] = useState<QuizFunnel>({
     id: "quiz-funnel-1",
@@ -2265,6 +2347,19 @@ const SimpleDragDropEditor: React.FC = () => {
   );
   const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  // Função para salvar alterações
+  const saveChanges = () => {
+    console.log("💾 Salvando alterações do funil...");
+    localStorage.setItem("quiz_funnel_config", JSON.stringify(currentFunnel));
+    localStorage.setItem("quiz_config", JSON.stringify(quizConfig));
+    alert("✅ Alterações salvas com sucesso!");
+  };
+
+  // Função para atualizar configurações
+  const updateQuizConfig = (updates: Partial<QuizConfig>) => {
+    setQuizConfig(prev => ({ ...prev, ...updates }));
+  };
 
   // Aplicar CSS
   useEffect(() => {
@@ -3501,18 +3596,82 @@ const SimpleDragDropEditor: React.FC = () => {
             🔄 ETAPAS DO FUNIL
           </h2>
           
-          {/* Nome do Funil */}
-          <div className="mb-3">
-            <Label className="text-xs">Nome do Funil</Label>
-            <Input
-              value={currentFunnel.name}
-              onChange={(e) =>
-                setCurrentFunnel((prev) => ({ ...prev, name: e.target.value }))
-              }
-              className="mt-1 text-sm h-8"
-              placeholder="Nome do seu quiz"
-            />
+          {/* Abas do Editor */}
+          <div className="flex gap-1 mb-3">
+            <Button
+              size="sm"
+              variant={activeTab === "editor" ? "default" : "outline"}
+              onClick={() => setActiveTab("editor")}
+              className="h-6 px-2 text-xs flex-1"
+            >
+              🎨
+            </Button>
+            <Button
+              size="sm"
+              variant={activeTab === "config" ? "default" : "outline"}
+              onClick={() => setActiveTab("config")}
+              className="h-6 px-2 text-xs flex-1"
+            >
+              ⚙️
+            </Button>
+            <Button
+              size="sm"
+              variant={activeTab === "preview" ? "default" : "outline"}
+              onClick={() => setActiveTab("preview")}
+              className="h-6 px-2 text-xs flex-1"
+            >
+              👁️
+            </Button>
           </div>
+          
+          {activeTab === "editor" && (
+            <>
+              {/* Nome do Funil */}
+              <div className="mb-3">
+                <Label className="text-xs">Nome do Funil</Label>
+                <Input
+                  value={currentFunnel.name}
+                  onChange={(e) =>
+                    setCurrentFunnel((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  className="mt-1 text-sm h-8"
+                  placeholder="Nome do seu quiz"
+                />
+              </div>
+            </>
+          )}
+
+          {activeTab === "config" && (
+            <div className="text-center text-xs text-muted-foreground py-2">
+              Configurações detalhadas na coluna lateral
+            </div>
+          )}
+
+          {activeTab === "preview" && (
+            <div className="space-y-2">
+              <Button 
+                size="sm" 
+                className="w-full h-7 text-xs" 
+                onClick={() => {
+                  const previewUrl = `/quiz-preview?funnel=${encodeURIComponent(JSON.stringify(currentFunnel))}`;
+                  window.open(previewUrl, "_blank");
+                }}
+              >
+                <Eye className="h-3 w-3 mr-1" />
+                Preview
+              </Button>
+              
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="w-full h-7 text-xs"
+                onClick={saveChanges}
+              >
+                <Save className="h-3 w-3 mr-1" />
+                Salvar
+              </Button>
+            </div>
+          )}
 
           {/* Navegação entre páginas */}
           <div className="flex items-center gap-1 mb-3">
@@ -3576,7 +3735,7 @@ const SimpleDragDropEditor: React.FC = () => {
                         <div className="font-medium text-xs truncate">
                           {page.title}
                         </div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-muted-foreground truncate">
                           {page.type} • {page.components.length} itens
                         </div>
                       </div>
@@ -4048,6 +4207,378 @@ const SimpleDragDropEditor: React.FC = () => {
                 </Button>
               </CardContent>
             </Card>
+          </div>
+        </ScrollArea>
+      </div>
+
+      {/* ABA DE CONFIGURAÇÕES */}
+      <div className="w-full max-w-4xl mx-auto p-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Configurações do Quiz</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {/* Seções de Configuração */}
+            <div className="flex flex-wrap gap-1 mb-4">
+              {[
+                { id: "domain", label: "Domínio", icon: Globe },
+                { id: "seo", label: "SEO", icon: BarChart3 },
+                { id: "pixel", label: "Pixels", icon: Target },
+                { id: "utm", label: "UTM", icon: Link },
+                { id: "scoring", label: "Pontuação", icon: Star },
+                { id: "results", label: "Resultados", icon: Eye },
+              ].map((section) => (
+                <Button
+                  key={section.id}
+                  size="sm"
+                  variant={activeConfigSection === section.id ? "default" : "outline"}
+                  onClick={() => setActiveConfigSection(section.id)}
+                  className="h-7 px-2 text-xs"
+                >
+                  <section.icon className="h-3 w-3 mr-1" />
+                  {section.label}
+                </Button>
+              ))}
+            </div>
+
+            {/* Configuração de Domínio */}
+            {activeConfigSection === "domain" && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Globe className="h-4 w-4" />
+                    Configuração de Domínio
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <Label className="text-xs">Domínio Principal</Label>
+                    <Input
+                      value={config.domain}
+                      onChange={(e) => onConfigUpdate({ domain: e.target.value })}
+                      placeholder="https://seudominio.com.br"
+                      className="h-8 text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Domínio onde o quiz será publicado
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Configuração de SEO */}
+            {activeConfigSection === "seo" && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Configurações de SEO
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <Label className="text-xs">Título da Página</Label>
+                    <Input
+                      value={config.seo.title}
+                      onChange={(e) => updateConfig("seo", { title: e.target.value })}
+                      placeholder="Quiz: Descubra Seu Estilo Pessoal"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Descrição Meta</Label>
+                    <Textarea
+                      value={config.seo.description}
+                      onChange={(e) => updateConfig("seo", { description: e.target.value })}
+                      placeholder="Descubra seu estilo pessoal único com nosso quiz personalizado..."
+                      className="text-sm resize-none"
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Palavras-chave</Label>
+                    <Input
+                      value={config.seo.keywords}
+                      onChange={(e) => updateConfig("seo", { keywords: e.target.value })}
+                      placeholder="quiz estilo, moda feminina, consultoria"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Configuração de Pixels */}
+            {activeConfigSection === "pixel" && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Target className="h-4 w-4" />
+                    Pixels e Tracking
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <Label className="text-xs">Facebook Pixel ID</Label>
+                    <Input
+                      value={config.pixel.facebookPixelId}
+                      onChange={(e) => updateConfig("pixel", { facebookPixelId: e.target.value })}
+                      placeholder="1234567890123456"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Google Analytics ID</Label>
+                    <Input
+                      value={config.pixel.googleAnalyticsId}
+                      onChange={(e) => updateConfig("pixel", { googleAnalyticsId: e.target.value })}
+                      placeholder="G-XXXXXXXXXX"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="pt-2">
+                    <Button size="sm" variant="outline" className="w-full">
+                      <Target className="h-3 w-3 mr-2" />
+                      Testar Conexão
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Configuração de UTM */}
+            {activeConfigSection === "utm" && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Link className="h-4 w-4" />
+                    Parâmetros UTM para A/B Test
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <Label className="text-xs">UTM Source</Label>
+                    <Input
+                      value={config.utm.source}
+                      onChange={(e) => updateConfig("utm", { source: e.target.value })}
+                      placeholder="facebook"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">UTM Medium</Label>
+                    <Input
+                      value={config.utm.medium}
+                      onChange={(e) => updateConfig("utm", { medium: e.target.value })}
+                      placeholder="cpc"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">UTM Campaign</Label>
+                    <Input
+                      value={config.utm.campaign}
+                      onChange={(e) => updateConfig("utm", { campaign: e.target.value })}
+                      placeholder="quiz_style_2025"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">UTM Content</Label>
+                    <Input
+                      value={config.utm.content}
+                      onChange={(e) => updateConfig("utm", { content: e.target.value })}
+                      placeholder="criativo-1"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">UTM Term</Label>
+                    <Input
+                      value={config.utm.term}
+                      onChange={(e) => updateConfig("utm", { term: e.target.value })}
+                      placeholder="estilo_elegante"
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Configuração de Pontuação */}
+            {activeConfigSection === "scoring" && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Star className="h-4 w-4" />
+                    Sistema de Pontuação
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <Label className="text-xs">Pontos por Questão Normal</Label>
+                    <Input
+                      type="number"
+                      value={config.scoring.normalQuestionPoints}
+                      onChange={(e) => updateConfig("scoring", { normalQuestionPoints: parseInt(e.target.value) || 1 })}
+                      min="1"
+                      max="5"
+                      className="h-8 text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Pontos atribuídos por resposta nas questões normais
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label className="text-xs">Limite de Seleção - Questões Normais</Label>
+                    <Input
+                      type="number"
+                      value={config.scoring.normalSelectionLimit}
+                      onChange={(e) => updateConfig("scoring", { normalSelectionLimit: parseInt(e.target.value) || 3 })}
+                      min="1"
+                      max="8"
+                      className="h-8 text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Quantas opções obrigatórias (3 recomendado)
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label className="text-xs">Limite de Seleção - Questões Estratégicas</Label>
+                    <Input
+                      type="number"
+                      value={config.scoring.strategicSelectionLimit}
+                      onChange={(e) => updateConfig("scoring", { strategicSelectionLimit: parseInt(e.target.value) || 1 })}
+                      min="1"
+                      max="3"
+                      className="h-8 text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Quantas opções para questões estratégicas (2 recomendado)
+                    </p>
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={config.scoring.autoAdvanceNormal}
+                        onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceNormal: checked })}
+                      />
+                      <Label className="text-xs">Avanço Automático - Questões Normais</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Avança automaticamente quando 3ª opção for selecionada
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={config.scoring.autoAdvanceStrategic}
+                        onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceStrategic: checked })}
+                      />
+                      <Label className="text-xs">Avanço Automático - Questões Estratégicas</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Avança automaticamente nas questões estratégicas (recomendado: desabilitado)
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Configuração de Resultados */}
+            {activeConfigSection === "results" && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Eye className="h-4 w-4" />
+                    Configuração da Página de Resultados
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={config.results.showUserName}
+                        onCheckedChange={(checked) => updateConfig("results", { showUserName: checked })}
+                      />
+                      <Label className="text-xs">Mostrar Nome do Usuário</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Exibe o nome preenchido no QuizIntro
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={config.results.showPrimaryStyle}
+                        onCheckedChange={(checked) => updateConfig("results", { showPrimaryStyle: checked })}
+                      />
+                      <Label className="text-xs">Mostrar Estilo Predominante</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Exibe o estilo principal com barra de porcentagem
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={config.results.showSecondaryStyles}
+                        onCheckedChange={(checked) => updateConfig("results", { showSecondaryStyles: checked })}
+                      />
+                      <Label className="text-xs">Mostrar Estilos Complementares</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Exibe 2º e 3º estilos com porcentagens
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={config.results.showStyleImages}
+                        onCheckedChange={(checked) => updateConfig("results", { showStyleImages: checked })}
+                      />
+                      <Label className="text-xs">Mostrar Imagem do Estilo</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Exibe imagem representativa do estilo predominante
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={config.results.showStyleGuides}
+                        onCheckedChange={(checked) => updateConfig("results", { showStyleGuides: checked })}
+                      />
+                      <Label className="text-xs">Mostrar Guia do Estilo</Label>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Exibe imagem do guia referente ao estilo predominante
+                    </p>
+                  </div>
+
+                  <Separator />
+
+                  <div className="bg-blue-50 p-3 rounded-lg">
+                    <h4 className="text-xs font-semibold mb-2">Configuração de Teste A/B</h4>
+                    <div className="space-y-1 text-xs">
+                      <p><strong>Teste A (/resultado):</strong> Resultado + Oferta na mesma página</p>
+                      <p><strong>Teste B (/quiz-descubra-seu-estilo):</strong> Apenas página de venda</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </ScrollArea>
       </div>
