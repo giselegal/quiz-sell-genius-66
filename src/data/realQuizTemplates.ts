@@ -1,6 +1,58 @@
 // Templates baseados no quiz original com questões reais
 import { QuizQuestion } from "@/types/quiz";
-import { quizQuestions } from "@/data/quizQuestions";
+import { normalQuestions, strategicQuestions } from "@/data/quizQuestions";
+
+// Configuração dos estilos com imagens e descrições
+export const styleConfig = {
+  Natural: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_NATURAL_fzp6fc.webp',
+    description: 'Você valoriza o conforto e a praticidade, com um visual descontraído e autêntico.',
+    characteristics: ['Confortável', 'Prática', 'Autêntica', 'Descontraída']
+  },
+  Clássico: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_CLASSICO_xyz123.webp',
+    description: 'Seu estilo é atemporal e elegante, com peças tradicionais e bem estruturadas.',
+    characteristics: ['Atemporal', 'Elegante', 'Tradicional', 'Estruturado']
+  },
+  Contemporâneo: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_CONTEMPORANEO_abc456.webp',
+    description: 'Você combina praticidade com tendências atuais, sempre moderna e versátil.',
+    characteristics: ['Moderno', 'Versátil', 'Atual', 'Prático']
+  },
+  Elegante: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_ELEGANTE_def789.webp',
+    description: 'Seu estilo transmite sofisticação e status, com peças refinadas e impecáveis.',
+    characteristics: ['Sofisticado', 'Refinado', 'Impecável', 'Status']
+  },
+  Romântico: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_ROMANTICO_ghi012.webp',
+    description: 'Você valoriza a feminilidade e delicadeza, com detalhes suaves e românticos.',
+    characteristics: ['Feminino', 'Delicado', 'Suave', 'Romântico']
+  },
+  Sexy: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_SEXY_jkl345.webp',
+    description: 'Seu estilo valoriza suas curvas e feminilidade, sempre glamorosa e confiante.',
+    characteristics: ['Glamoroso', 'Confiante', 'Sedutor', 'Marcante']
+  },
+  Dramático: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_DRAMATICO_mno678.webp',
+    description: 'Você gosta de causar impacto visual com peças marcantes e estruturadas.',
+    characteristics: ['Impactante', 'Marcante', 'Estruturado', 'Ousado']
+  },
+  Criativo: {
+    image: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp',
+    guideImage: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1745071344/GUIA_CRIATIVO_pqr901.webp',
+    description: 'Seu estilo é único e original, com mix de cores, texturas e formas criativas.',
+    characteristics: ['Único', 'Original', 'Criativo', 'Inovador']
+  }
+};
 
 // Interfaces locais baseadas no SimpleDragDropEditor
 interface SimpleComponent {
@@ -54,7 +106,7 @@ interface SimpleComponent {
 interface SimplePage {
   id: string;
   title: string;
-  type: "intro" | "question" | "loading" | "result" | "offer";
+  type: "intro" | "question" | "loading" | "result" | "offer" | "transition";
   progress: number;
   showHeader: boolean;
   showProgress: boolean;
@@ -255,6 +307,79 @@ export const QUIZ_TEMPLATES = {
     ] as SimpleComponent[],
   },
 
+  transition: {
+    id: "page-transition",
+    title: "Página de Transição",
+    type: "transition" as const,
+    progress: 60,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "logo-transition",
+        type: "logo" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+          alt: "Logo",
+        },
+        style: { textAlign: "center" as const, margin: "0 0 3rem 0" },
+      },
+      {
+        id: "title-transition",
+        type: "title" as const,
+        data: { text: "ENQUANTO CALCULAMOS O SEU RESULTADO..." },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+          margin: "0 0 2rem 0",
+        },
+      },
+      {
+        id: "subtitle-transition",
+        type: "subtitle" as const,
+        data: {
+          text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.",
+        },
+        style: {
+          fontSize: "1.25rem",
+          textAlign: "center" as const,
+          color: "#8B5A3C",
+          margin: "0 0 2rem 0",
+        },
+      },
+      {
+        id: "text-transition",
+        type: "text" as const,
+        data: {
+          text: "Responda com sinceridade. Isso é só entre você e a sua nova versão.",
+        },
+        style: {
+          textAlign: "center" as const,
+          color: "#8B5A3C",
+          fontSize: "1.1rem",
+          fontStyle: "italic",
+          margin: "0 0 3rem 0",
+        },
+      },
+      {
+        id: "button-continue",
+        type: "button" as const,
+        data: { text: "CONTINUAR" },
+        style: {
+          backgroundColor: "#B89B7A",
+          color: "#FFFFFF",
+          padding: "1rem 2rem",
+          borderRadius: "8px",
+          fontSize: "1.1rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+        },
+      },
+    ] as SimpleComponent[],
+  },
+
   result: {
     id: "page-result",
     title: "Página de Resultado",
@@ -379,21 +504,38 @@ export const QUIZ_TEMPLATES = {
       {
         id: "subtitle-offer",
         type: "subtitle" as const,
-        data: { text: "Consultoria Personalizada de Imagem" },
+        data: { text: "Guia Completo de Estilo Personalizado" },
         style: {
           fontSize: "1.5rem",
           textAlign: "center" as const,
           color: "#B89B7A",
+          margin: "0 0 2rem 0",
+        },
+      },
+      {
+        id: "benefits-offer",
+        type: "text" as const,
+        data: { 
+          text: "✨ Descubra como valorizar sua imagem usando seu estilo natural\n" +
+                "👗 Aprenda a criar looks autênticos e poderosos\n" +
+                "🎨 Entenda as cores e modelagens que mais combinam com você\n" +
+                "💎 Maximize seu guarda-roupa com peças versáteis"
+        },
+        style: {
+          textAlign: "center" as const,
+          fontSize: "1rem",
+          color: "#432818",
           margin: "0 0 3rem 0",
+          lineHeight: "1.6",
         },
       },
       {
         id: "price-offer",
         type: "price" as const,
         data: {
-          price: "197",
-          originalPrice: "497",
-          installments: "19,70",
+          price: "39",
+          originalPrice: "175",
+          installments: "3,90",
           currency: "R$",
         },
         style: { textAlign: "center" as const, margin: "0 0 2rem 0" },
@@ -401,7 +543,7 @@ export const QUIZ_TEMPLATES = {
       {
         id: "button-buy",
         type: "button" as const,
-        data: { text: "QUERO TRANSFORMAR MEU VISUAL AGORA" },
+        data: { text: "QUERO MEU GUIA DE ESTILO AGORA" },
         style: {
           backgroundColor: "#B89B7A",
           color: "#FFFFFF",
@@ -418,17 +560,25 @@ export const QUIZ_TEMPLATES = {
 
 // Gerar templates das questões reais
 export const generateRealQuestionTemplates = (): SimplePage[] => {
-  return quizQuestions.map((question, index) =>
-    createQuestionTemplate(question, index)
-  );
+  return normalQuestions.map((question, index) => createQuestionTemplate(question, index));
+};
+
+// Gerar templates das questões estratégicas (testes A/B)
+export const generateStrategicQuestionTemplates = (): SimplePage[] => {
+  return strategicQuestions.map((question, index) => createQuestionTemplate(question, index + normalQuestions.length));
 };
 
 // Templates completos do quiz
 export const COMPLETE_QUIZ_TEMPLATES = {
   ...QUIZ_TEMPLATES,
-  // Adicionar questões reais dinamicamente
+  // Adicionar questões normais
   ...generateRealQuestionTemplates().reduce((acc, template, index) => {
     acc[`question${index + 1}`] = template;
+    return acc;
+  }, {} as Record<string, SimplePage>),
+  // Adicionar questões estratégicas
+  ...generateStrategicQuestionTemplates().reduce((acc, template, index) => {
+    acc[`strategic${index + 1}`] = template;
     return acc;
   }, {} as Record<string, SimplePage>),
 };

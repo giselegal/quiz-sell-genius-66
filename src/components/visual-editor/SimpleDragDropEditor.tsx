@@ -11,6 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   QUIZ_TEMPLATES as REAL_QUIZ_TEMPLATES,
   generateRealQuestionTemplates,
+  generateStrategicQuestionTemplates,
 } from "@/data/realQuizTemplates";
 import {
   Save,
@@ -2457,18 +2458,33 @@ const SimpleDragDropEditor: React.FC = () => {
     }
 
     // Se não houver dados salvos, criar com questões reais
-    const realQuestions = generateRealQuestionTemplates();
-    console.log("🔄 Criando funil com questões reais:", realQuestions.length);
+    const realQuestions = generateRealQuestionTemplates(); // Questões normais (1-10)
+    const strategicQuestions = generateStrategicQuestionTemplates(); // Questões estratégicas (testes A/B)
+    console.log("🔄 Criando funil com questões reais:", realQuestions.length, "normais +", strategicQuestions.length, "estratégicas");
 
     return {
       id: "quiz-funnel-real",
-      name: "Quiz de Estilo Pessoal - Questões Reais",
+      name: "Quiz de Estilo Pessoal - Funil Completo",
       pages: [
+        // 1. Página inicial (QuizIntro)
         REAL_QUIZ_TEMPLATES.intro,
-        ...realQuestions.slice(0, 10), // Primeiras 10 questões normais
+        
+        // 2. Questões normais 1-10 (com pontuação para estilos)
+        ...realQuestions,
+        
+        // 3. Página de transição (QuizTransition) 
+        REAL_QUIZ_TEMPLATES.transition,
+        
+        // 4. Questões estratégicas (testes A/B)
+        ...strategicQuestions,
+        
+        // 5. Página de loading/calculando
         REAL_QUIZ_TEMPLATES.loading,
-        ...realQuestions.slice(10), // Questões estratégicas
+        
+        // 6. Página de resultado (Teste A)
         REAL_QUIZ_TEMPLATES.result,
+        
+        // 7. Página de oferta (Teste B)
         REAL_QUIZ_TEMPLATES.offer,
       ],
     };
