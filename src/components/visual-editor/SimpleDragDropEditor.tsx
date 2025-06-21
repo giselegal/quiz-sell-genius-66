@@ -134,8 +134,8 @@ interface SimpleComponent {
     hasImages?: boolean;
     progressValue?: number;
     videoUrl?: string;
-    price?: number;
-    originalPrice?: number;
+    price?: string;
+    originalPrice?: string;
     installments?: string;
     currency?: string;
     endDate?: string;
@@ -2423,6 +2423,51 @@ const SimpleDragDropEditor: React.FC = () => {
                   }}
                 >
                   💰 Página de Oferta
+                </Button>
+
+                <Separator />
+                
+                <div className="text-xs font-medium text-muted-foreground mb-2">
+                  📊 TEMPLATES DE VENDA
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.salesPage;
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  🏪 Página de Vendas Completa
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.checkout;
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  💳 Checkout/Finalização
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.upsell;
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  🚀 Página de Upsell
                 </Button>
 
                 <Separator />
