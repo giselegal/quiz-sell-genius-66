@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T01:05:42.242Z",
-  "components": 483,
+  "timestamp": "2025-06-21T01:32:36.605Z",
+  "components": 484,
   "files": [
     {
       "name": "App",
@@ -2035,6 +2035,11 @@
     {
       "name": "ModernVisualEditor_original",
       "path": "src/components/visual-editor/ModernVisualEditor_original.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SimpleDragDropEditor",
+      "path": "src/components/visual-editor/SimpleDragDropEditor.tsx",
       "type": "typescript"
     },
     {
