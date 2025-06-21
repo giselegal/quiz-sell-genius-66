@@ -954,7 +954,8 @@ const SimpleDragDropEditor: React.FC = () => {
               fontWeight: style?.fontWeight || 'normal',
               textAlign: style?.textAlign || 'left',
               color: style?.color || '#000000',
-              padding: '8px 0'
+              padding: '8px 0',
+              whiteSpace: 'pre-line'
             }}
           >
             {data.text || 'Clique para editar...'}
@@ -1167,7 +1168,18 @@ const SimpleDragDropEditor: React.FC = () => {
       {/* Painel Lateral */}
       <div className="w-80 border-r bg-muted/30 overflow-hidden">
         <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold mb-4">Editor Simples</h2>
+          <h2 className="text-lg font-semibold mb-4">Editor de Funil</h2>
+          
+          {/* Nome do Funil */}
+          <div className="mb-4">
+            <Label className="text-xs">Nome do Funil</Label>
+            <Input
+              value={currentFunnel.name}
+              onChange={(e) => setCurrentFunnel(prev => ({ ...prev, name: e.target.value }))}
+              className="mt-1"
+              placeholder="Nome do seu quiz"
+            />
+          </div>
           
           <div className="flex gap-1 mb-4">
             <Button
@@ -1200,29 +1212,43 @@ const SimpleDragDropEditor: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-sm">Páginas do Funil</CardTitle>
+                <p className="text-xs text-muted-foreground">
+                  Fluxo completo do quiz
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   {currentFunnel.pages.map((page, index) => (
-                    <Button
-                      key={page.id}
-                      variant={index === currentPageIndex ? 'default' : 'outline'}
-                      size="sm"
-                      className="w-full justify-start"
-                      onClick={() => setCurrentPageIndex(index)}
-                    >
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="text-xs">
-                          {index + 1}
-                        </Badge>
-                        <div className="text-left">
-                          <div className="font-medium text-sm">{page.title}</div>
+                    <div key={page.id} className="relative">
+                      <Button
+                        variant={index === currentPageIndex ? 'default' : 'outline'}
+                        size="sm"
+                        className="w-full justify-start"
+                        onClick={() => setCurrentPageIndex(index)}
+                      >
+                        <div className="flex items-center gap-2 w-full">
+                          <Badge variant="secondary" className="text-xs">
+                            {index + 1}
+                          </Badge>
+                          <div className="flex-1 text-left">
+                            <div className="font-medium text-sm truncate">{page.title}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {page.type} • {page.components.length} componentes
+                            </div>
+                          </div>
                           <div className="text-xs text-muted-foreground">
-                            {page.type} • {page.components.length} componentes
+                            {page.progress}%
                           </div>
                         </div>
-                      </div>
-                    </Button>
+                      </Button>
+                      
+                      {/* Conectores visuais */}
+                      {index < currentFunnel.pages.length - 1 && (
+                        <div className="flex justify-center mt-1 mb-1">
+                          <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               </CardContent>
@@ -1340,6 +1366,52 @@ const SimpleDragDropEditor: React.FC = () => {
                 >
                   🎯 Página de Resultado
                 </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.offer;
+                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  💰 Página de Oferta
+                </Button>
+                
+                <Separator />
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={duplicatePage}
+                >
+                  <Copy className="h-3 w-3 mr-2" />
+                  Duplicar Página Atual
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={addNewPage}
+                >
+                  <Plus className="h-3 w-3 mr-2" />
+                  Adicionar Nova Página
+                </Button>
+                
+                {currentFunnel.pages.length > 1 && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="w-full justify-start"
+                    onClick={deletePage}
+                  >
+                    <Trash2 className="h-3 w-3 mr-2" />
+                    Excluir Página
+                  </Button>
+                )}
               </CardContent>
             </Card>
 
@@ -1395,15 +1467,58 @@ const SimpleDragDropEditor: React.FC = () => {
                 Página {currentPageIndex + 1} de {currentFunnel.pages.length}
               </Badge>
             </div>
+            
             <div className="flex items-center gap-2">
+              {/* Navegação entre páginas */}
+              <div className="flex items-center gap-1 mr-2">
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={goToPreviousPage}
+                  disabled={currentPageIndex === 0}
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={goToNextPage}
+                  disabled={currentPageIndex === currentFunnel.pages.length - 1}
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+              
               <Button 
                 size="sm" 
                 variant="outline"
-                onClick={() => console.log('Preview:', currentFunnel)}
+                onClick={() => {
+                  // Preview do funil completo
+                  window.open(`/quiz-preview?funnel=${encodeURIComponent(JSON.stringify(currentFunnel))}`, '_blank');
+                }}
+              >
+                <Play className="h-4 w-4 mr-2" />
+                Testar Funil
+              </Button>
+              
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={() => console.log('Preview:', currentPage)}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 Preview
               </Button>
+              
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={exportFunnel}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Exportar
+              </Button>
+              
               <Button size="sm">
                 <Save className="h-4 w-4 mr-2" />
                 Salvar Funil
