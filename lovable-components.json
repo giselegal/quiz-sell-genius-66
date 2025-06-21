@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T20:05:15.782Z",
-  "components": 486,
+  "timestamp": "2025-06-21T20:55:17.594Z",
+  "components": 491,
   "files": [
     {
       "name": "App",
@@ -2043,8 +2043,33 @@
       "type": "typescript"
     },
     {
+      "name": "RefactoredAdvancedQuizEditor",
+      "path": "src/components/visual-editor/RefactoredAdvancedQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "SimpleDragDropEditor",
       "path": "src/components/visual-editor/SimpleDragDropEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "Canvas",
+      "path": "src/components/visual-editor/components/Canvas.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentPalette",
+      "path": "src/components/visual-editor/components/ComponentPalette.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PropertiesPanel",
+      "path": "src/components/visual-editor/components/PropertiesPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StepTree",
+      "path": "src/components/visual-editor/components/StepTree.tsx",
       "type": "typescript"
     },
     {

@@ -648,7 +648,9 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
                 {headerConfig.title}
               </h1>
               {headerConfig.subtitle && (
-                <p className="text-sm sm:text-base text-gray-600 mt-1">{headerConfig.subtitle}</p>
+                <p className="text-sm sm:text-base text-gray-600 mt-1">
+                  {headerConfig.subtitle}
+                </p>
               )}
             </div>
           )}
@@ -665,7 +667,9 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
               </button>
             </div>
           ) : (
-            <div className="space-y-2 sm:space-y-4">{currentStep.components.map(renderComponent)}</div>
+            <div className="space-y-2 sm:space-y-4">
+              {currentStep.components.map(renderComponent)}
+            </div>
           )}
         </div>
       </div>
@@ -2005,64 +2009,140 @@ const ComponentPropertyEditor: React.FC<{
               <option value="multiple">Seleção Múltipla</option>
             </select>
           </div>
+
+          {/* Campos de controle de seleção múltipla */}
+          {props.selectionType === "multiple" && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Mín. Seleções
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                  value={props.minSelections || 1}
+                  onChange={(e) =>
+                    handleChange("minSelections", parseInt(e.target.value) || 1)
+                  }
+                />
+              </div>
+              <div className="grid w-full items-center gap-1.5">
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Máx. Seleções
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                  value={props.maxSelections || 3}
+                  onChange={(e) =>
+                    handleChange("maxSelections", parseInt(e.target.value) || 3)
+                  }
+                />
+              </div>
+            </div>
+          )}
+
           <div className="grid w-full items-center gap-1.5">
             <label className="text-sm font-medium leading-none text-zinc-100">
               Opções
             </label>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {props.choices?.map((choice, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    className="flex-1 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-                    value={choice.text}
-                    onChange={(e) => {
-                      const newChoices = [...(props.choices || [])];
-                      newChoices[index].text = e.target.value;
-                      newChoices[index].value = e.target.value
-                        .toLowerCase()
-                        .replace(/\s+/g, "_");
-                      handleChange("choices", newChoices);
-                    }}
-                    placeholder={`Opção ${index + 1}`}
-                  />
-                  <input
-                    type="number"
-                    className="w-20 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-                    value={choice.scoreValue || 0}
-                    onChange={(e) => {
-                      const newChoices = [...(props.choices || [])];
-                      newChoices[index].scoreValue =
-                        parseInt(e.target.value) || 0;
-                      handleChange("choices", newChoices);
-                    }}
-                    placeholder="Pontos"
-                  />
-                  <button
-                    className="text-red-500 hover:text-red-700 p-1"
-                    onClick={() => {
-                      const newChoices = (props.choices || []).filter(
-                        (_, i) => i !== index
-                      );
-                      handleChange("choices", newChoices);
-                    }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M3 6h18"></path>
-                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                    </svg>
-                  </button>
+                <div
+                  key={index}
+                  className="border border-zinc-600 rounded-lg p-3 bg-zinc-800"
+                >
+                  <div className="space-y-2">
+                    {/* Texto da Opção */}
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        className="flex-1 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                        value={choice.text}
+                        onChange={(e) => {
+                          const newChoices = [...(props.choices || [])];
+                          newChoices[index].text = e.target.value;
+                          newChoices[index].value = e.target.value
+                            .toLowerCase()
+                            .replace(/\s+/g, "_");
+                          handleChange("choices", newChoices);
+                        }}
+                        placeholder={`Opção ${index + 1}`}
+                      />
+                      <input
+                        type="number"
+                        className="w-20 h-10 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
+                        value={choice.scoreValue || 0}
+                        onChange={(e) => {
+                          const newChoices = [...(props.choices || [])];
+                          newChoices[index].scoreValue =
+                            parseInt(e.target.value) || 0;
+                          handleChange("choices", newChoices);
+                        }}
+                        placeholder="Pontos"
+                      />
+                      <button
+                        className="text-red-500 hover:text-red-700 p-1"
+                        onClick={() => {
+                          const newChoices = (props.choices || []).filter(
+                            (_, i) => i !== index
+                          );
+                          handleChange("choices", newChoices);
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M3 6h18"></path>
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* URL da Imagem */}
+                    <div className="grid w-full items-center gap-1.5">
+                      <label className="text-xs font-medium text-zinc-300">
+                        URL da Imagem (opcional)
+                      </label>
+                      <input
+                        type="url"
+                        className="h-9 rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500"
+                        value={choice.image || ""}
+                        onChange={(e) => {
+                          const newChoices = [...(props.choices || [])];
+                          newChoices[index].image = e.target.value;
+                          handleChange("choices", newChoices);
+                        }}
+                        placeholder="https://exemplo.com/imagem.jpg"
+                      />
+                    </div>
+
+                    {/* Preview da Imagem */}
+                    {choice.image && (
+                      <div className="mt-2">
+                        <img
+                          src={choice.image}
+                          alt={`Preview ${choice.text}`}
+                          className="w-full h-20 object-cover rounded border border-zinc-600"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = "none";
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

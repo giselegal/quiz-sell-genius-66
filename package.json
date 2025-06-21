@@ -114,5 +114,63 @@
     "update-browserslist-db": "^1.1.3",
     "vite": "^5.4.1",
     "vite-plugin-compression": "^0.5.1"
+  },
+  "projectContext": {
+    "name": "Quiz Sell Genius",
+    "description": "Advanced quiz builder for style analysis",
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS"
+    ],
+    "features": [
+      "Visual drag-drop editor",
+      "4-column layout",
+      "Integration with Hotmart, Facebook Pixel, Analytics"
+    ],
+    "codebase": {
+      "linesOfCode": 4700,
+      "mainComponent": "editor"
+    }
+  },
+  "analysisRequest": {
+    "architectureAssessment": {
+      "componentStructure": "Evaluate the component structure and organization.",
+      "typescriptImplementation": "Assess the quality of TypeScript implementation.",
+      "stateManagement": "Review state management patterns.",
+      "performanceBottlenecks": "Identify potential performance bottlenecks."
+    },
+    "codeQualityReview": {
+      "bestPractices": "Check adherence to best practices.",
+      "maintainabilityScore": "Provide a maintainability score.",
+      "technicalDebt": "Highlight areas of technical debt.",
+      "securityVulnerabilities": "Scan for security vulnerabilities."
+    },
+    "performanceAnalysis": {
+      "bundleSize": "Analyze bundle size optimization.",
+      "renderingPerformance": "Evaluate rendering performance.",
+      "memoryUsage": "Examine memory usage patterns.",
+      "loadingTime": "Suggest loading time optimizations."
+    },
+    "uxUiEvaluation": {
+      "responsiveDesign": "Review responsive design implementation.",
+      "accessibilityCompliance": "Check accessibility compliance.",
+      "userExperienceFlow": "Evaluate user experience flow.",
+      "visualConsistency": "Ensure visual consistency."
+    },
+    "integrationHealth": {
+      "apiIntegrations": "Assess API integrations status.",
+      "thirdPartyServices": "Review third-party services integration.",
+      "errorHandling": "Evaluate error handling robustness.",
+      "dataFlow": "Optimize data flow."
+    }
+  },
+  "outputFormat": {
+    "priorityIssues": "Classify issues as High, Medium, or Low priority.",
+    "recommendations": "Provide specific recommendations with code examples.",
+    "performanceMetrics": "Include performance metrics and improvements.",
+    "securityConsiderations": "Highlight security considerations.",
+    "scalabilityRoadmap": "Outline a scalability roadmap."
   }
 }
