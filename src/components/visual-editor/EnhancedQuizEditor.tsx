@@ -91,6 +91,8 @@ const EnhancedQuizEditor: React.FC = () => {
     </div>
   );
 };
+
+export default EnhancedQuizEditor;
 };
 
 export default EnhancedQuizEditor;
