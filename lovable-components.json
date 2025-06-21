@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T22:31:28.747Z",
-  "components": 497,
+  "timestamp": "2025-06-21T22:36:38.986Z",
+  "components": 498,
   "files": [
     {
       "name": "App",
@@ -2020,6 +2020,11 @@
     {
       "name": "DragDropQuizEditor",
       "path": "src/components/visual-editor/DragDropQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedQuizEditor",
+      "path": "src/components/visual-editor/EnhancedQuizEditor.tsx",
       "type": "typescript"
     },
     {

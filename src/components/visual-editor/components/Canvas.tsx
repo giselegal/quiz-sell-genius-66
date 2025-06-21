@@ -63,9 +63,9 @@ const Canvas: React.FC<CanvasProps> = ({
               title="Excluir Componente"
               aria-label="Excluir componente"
             >
-            >
+            {">"}
               🗑️
-            </button>
+              </button>
           </div>
         )}
       </div>
