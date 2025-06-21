@@ -3026,36 +3026,131 @@ const SimpleDragDropEditor: React.FC = () => {
       case "options":
         return (
           <div style={{ margin: "16px 0" }}>
-            {data.options?.map((option: QuizOption) => (
-              <div
-                key={option.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "16px",
-                  margin: "8px 0",
-                  background: "white",
-                  border: "2px solid #e5e7eb",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                }}
-              >
-                {data.hasImages && option.image && (
-                  <img
-                    src={option.image}
-                    alt={option.text}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: data.hasImages ? "repeat(2, 1fr)" : "repeat(1, 1fr)",
+                gap: data.hasImages ? "12px" : "16px",
+                padding: "0 8px",
+              }}
+            >
+              {data.options?.map((option: QuizOption, optIndex: number) => (
+                <div
+                  key={option.id}
+                  className="quiz-option-interactive"
+                  style={{
+                    position: "relative",
+                    background: "linear-gradient(135deg, #FFFBF7 0%, #FDF8F3 100%)",
+                    border: "2px solid #E8DDD4",
+                    borderRadius: "16px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    overflow: "hidden",
+                    padding: data.hasImages ? "12px" : "20px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                  }}
+                  onClick={() => {
+                    // Simular clique na opção para demonstração
+                    const optionElement = document.querySelector(`[data-option-id="${option.id}"]`);
+                    if (optionElement) {
+                      optionElement.classList.toggle('selected');
+                      const isSelected = optionElement.classList.contains('selected');
+                      if (isSelected) {
+                        optionElement.style.borderColor = "#B89B7A";
+                        optionElement.style.background = "linear-gradient(135deg, #F0EAE2 0%, #E8DDD4 100%)";
+                        optionElement.style.transform = "scale(0.98)";
+                      } else {
+                        optionElement.style.borderColor = "#E8DDD4";
+                        optionElement.style.background = "linear-gradient(135deg, #FFFBF7 0%, #FDF8F3 100%)";
+                        optionElement.style.transform = "scale(1)";
+                      }
+                    }
+                  }}
+                  onMouseEnter={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.classList.contains('selected')) {
+                      target.style.borderColor = "#D4C4B0";
+                      target.style.transform = "translateY(-2px)";
+                      target.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.classList.contains('selected')) {
+                      target.style.borderColor = "#E8DDD4";
+                      target.style.transform = "translateY(0)";
+                      target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)";
+                    }
+                  }}
+                  data-option-id={option.id}
+                >
+                  {data.hasImages && option.image && (
+                    <div style={{ marginBottom: "12px", textAlign: "center" }}>
+                      <img
+                        src={option.image}
+                        alt={option.text}
+                        style={{
+                          width: "100%",
+                          maxWidth: "200px",
+                          height: "120px",
+                          objectFit: "cover",
+                          borderRadius: "12px",
+                          border: "1px solid #E8DDD4",
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div
                     style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "cover",
-                      borderRadius: "8px",
-                      marginRight: "12px",
+                      fontSize: data.hasImages ? "0.9rem" : "1rem",
+                      fontWeight: "500",
+                      color: "#432818",
+                      textAlign: data.hasImages ? "center" : "left",
+                      lineHeight: "1.4",
+                      padding: data.hasImages ? "0" : "4px 0",
                     }}
-                  />
-                )}
-                <span>{option.text}</span>
-              </div>
-            ))}
+                  >
+                    {option.text}
+                  </div>
+                  {option.category && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "8px",
+                        right: "8px",
+                        background: "rgba(184, 155, 122, 0.1)",
+                        color: "#B89B7A",
+                        fontSize: "0.7rem",
+                        padding: "2px 6px",
+                        borderRadius: "12px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {option.category}
+                    </div>
+                  )}
+                </div>
+              )) || (
+                <div style={{ 
+                  textAlign: "center", 
+                  padding: "20px", 
+                  color: "#8B5A3C",
+                  fontStyle: "italic" 
+                }}>
+                  Nenhuma opção configurada
+                </div>
+              )}
+            </div>
+            <div
+              style={{
+                textAlign: "center",
+                margin: "24px 0 16px 0",
+                color: "#8B5A3C",
+                fontSize: "0.85rem",
+              }}
+            >
+              💡 Clique nas opções para testar a interatividade
+            </div>
           </div>
         );
 
