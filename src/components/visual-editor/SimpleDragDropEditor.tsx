@@ -2269,6 +2269,9 @@ const SimpleDragDropEditor: React.FC = () => {
   // Estado da aba ativa
   const [activeTab, setActiveTab] = useState<string>("editor");
   
+  // Estado da seção ativa de configuração
+  const [activeConfigSection, setActiveConfigSection] = useState<string>("domain");
+  
   // Estado das configurações do quiz
   const [quizConfig, setQuizConfig] = useState<QuizConfig>({
     domain: "https://giselegalvao.com.br",
