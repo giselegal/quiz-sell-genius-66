@@ -2193,10 +2193,10 @@ const SimpleDragDropEditor: React.FC = () => {
 
   return (
     <div className="h-screen flex bg-background simple-editor">
-      {/* COLUNA 1: ETAPAS DO FUNIL - 280px */}
-      <div className="w-[280px] min-w-[280px] border-r bg-muted/30 overflow-hidden flex flex-col">
-        <div className="p-4 border-b">
-          <h2 className="text-base font-semibold mb-2 flex items-center gap-2">
+      {/* COLUNA 1: ETAPAS DO FUNIL - 260px */}
+      <div className="w-[260px] min-w-[260px] border-r bg-slate-50 overflow-hidden flex flex-col">
+        <div className="p-3 border-b bg-slate-100">
+          <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
             🔄 ETAPAS DO FUNIL
           </h2>
           
@@ -2208,188 +2208,113 @@ const SimpleDragDropEditor: React.FC = () => {
               onChange={(e) =>
                 setCurrentFunnel((prev) => ({ ...prev, name: e.target.value }))
               }
-              className="mt-1 text-sm"
+              className="mt-1 text-sm h-8"
               placeholder="Nome do seu quiz"
             />
           </div>
 
-          {/* Botões de Ação do Funil */}
-          <div className="flex gap-1 mb-3">
-            <Button size="sm" variant="outline" onClick={addNewPage} title="Adicionar Página">
-              <Plus className="h-3 w-3" />
+          {/* Navegação entre páginas */}
+          <div className="flex items-center gap-1 mb-3">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={goToPreviousPage}
+              disabled={currentPageIndex === 0}
+              className="h-7 w-7 p-0"
+            >
+              <ArrowLeft className="h-3 w-3" />
             </Button>
-            <Button size="sm" variant="outline" onClick={duplicatePage} title="Duplicar Página">
-              <Copy className="h-3 w-3" />
-            </Button>
-            <Button size="sm" variant="outline" onClick={exportFunnel} title="Exportar Funil">
-              <Download className="h-3 w-3" />
-            </Button>
-            <Button size="sm" title="Salvar Funil">
-              <Save className="h-3 w-3" />
+            <span className="text-xs text-muted-foreground flex-1 text-center">
+              {currentPageIndex + 1} de {currentFunnel.pages.length}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={goToNextPage}
+              disabled={currentPageIndex === currentFunnel.pages.length - 1}
+              className="h-7 w-7 p-0"
+            >
+              <ArrowRight className="h-3 w-3" />
             </Button>
           </div>
 
-          {/* Preview Controls */}
+          {/* Botões de Ação do Funil */}
           <div className="flex gap-1">
-            <Button
-              variant={deviceView === "mobile" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setDeviceView("mobile")}
-              className="flex-1"
-            >
-              <Smartphone className="h-3 w-3" />
+            <Button size="sm" variant="outline" onClick={addNewPage} title="Adicionar Página" className="h-7 px-2">
+              <Plus className="h-3 w-3" />
             </Button>
-            <Button
-              variant={deviceView === "tablet" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setDeviceView("tablet")}
-              className="flex-1"
-            >
-              <Tablet className="h-3 w-3" />
+            <Button size="sm" variant="outline" onClick={duplicatePage} title="Duplicar Página" className="h-7 px-2">
+              <Copy className="h-3 w-3" />
             </Button>
-            <Button
-              variant={deviceView === "desktop" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setDeviceView("desktop")}
-              className="flex-1"
-            >
-              <Monitor className="h-3 w-3" />
+            <Button size="sm" variant="outline" onClick={exportFunnel} title="Exportar Funil" className="h-7 px-2">
+              <Download className="h-3 w-3" />
+            </Button>
+            <Button size="sm" title="Salvar Funil" className="h-7 px-2">
+              <Save className="h-3 w-3" />
             </Button>
           </div>
         </div>
 
         <ScrollArea className="flex-1">
-          <div className="p-4 space-y-3">
-            {/* Navegador de Páginas */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Páginas do Funil</CardTitle>
-                <p className="text-xs text-muted-foreground">
-                  Fluxo completo do quiz
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {currentFunnel.pages.map((page, index) => (
-                    <div key={page.id} className="relative">
-                      <Button
-                        variant={
-                          index === currentPageIndex ? "default" : "outline"
-                        }
-                        size="sm"
-                        className="w-full justify-start"
-                        onClick={() => setCurrentPageIndex(index)}
-                      >
-                        <div className="flex items-center gap-2 w-full">
-                          <Badge variant="secondary" className="text-xs">
-                            {index + 1}
-                          </Badge>
-                          <div className="flex-1 text-left">
-                            <div className="font-medium text-sm truncate">
-                              {page.title}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {page.type} • {page.components.length} componentes
-                            </div>
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {page.progress}%
-                          </div>
+          <div className="p-3 space-y-2">
+            {/* Lista de Páginas */}
+            <div className="space-y-1">
+              {currentFunnel.pages.map((page, index) => (
+                <div key={page.id} className="relative">
+                  <Button
+                    variant={index === currentPageIndex ? "default" : "outline"}
+                    size="sm"
+                    className="w-full justify-start h-auto p-2"
+                    onClick={() => setCurrentPageIndex(index)}
+                  >
+                    <div className="flex items-center gap-2 w-full">
+                      <Badge variant="secondary" className="text-xs h-5 w-5 p-0 flex items-center justify-center">
+                        {index + 1}
+                      </Badge>
+                      <div className="flex-1 text-left">
+                        <div className="font-medium text-xs truncate">
+                          {page.title}
                         </div>
-                      </Button>
-
-                      {/* Conectores visuais */}
-                      {index < currentFunnel.pages.length - 1 && (
-                        <div className="flex justify-center mt-1 mb-1">
-                          <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                        <div className="text-xs text-muted-foreground">
+                          {page.type} • {page.components.length} itens
                         </div>
-                      )}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {page.progress}%
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  </Button>
 
-            {/* Configurações da Página Atual */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">
-                  Configurações da Página
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <Label>Título da Página</Label>
-                  <Input
-                    value={currentPage.title}
-                    onChange={(e) =>
-                      updateCurrentPage({ title: e.target.value })
-                    }
-                  />
+                  {/* Conectores visuais */}
+                  {index < currentFunnel.pages.length - 1 && (
+                    <div className="flex justify-center mt-1 mb-1">
+                      <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                    </div>
+                  )}
                 </div>
-
-                <div>
-                  <Label>Progresso (%)</Label>
-                  <Input
-                    type="number"
-                    value={currentPage.progress}
-                    onChange={(e) =>
-                      updateCurrentPage({
-                        progress: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    min="0"
-                    max="100"
-                  />
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    checked={currentPage.showHeader}
-                    onCheckedChange={(checked) =>
-                      updateCurrentPage({ showHeader: checked })
-                    }
-                  />
-                  <Label>Mostrar Header</Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    checked={currentPage.showProgress}
-                    onCheckedChange={(checked) =>
-                      updateCurrentPage({ showProgress: checked })
-                    }
-                  />
-                  <Label>Mostrar Progresso</Label>
-                </div>
-              </CardContent>
-            </Card>
+              ))}
+            </div>
 
             {/* Templates Prontos */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Templates do Quiz</CardTitle>
-                <p className="text-xs text-muted-foreground">
-                  Substitua a página atual por um template
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-2">
+            <div className="mt-4">
+              <h3 className="text-xs font-semibold mb-2">📋 TEMPLATES PRONTOS</h3>
+              <div className="space-y-1">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.intro;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  📝 Página de Introdução
+                  📝 Introdução
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.question1;
@@ -2401,248 +2326,219 @@ const SimpleDragDropEditor: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.question2;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  📄 Questão de Texto
+                  📄 Questão Texto
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.loading;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  ⏳ Tela de Loading
+                  ⏳ Loading
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.result;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  🎯 Página de Resultado
+                  🎯 Resultado
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.offer;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  💰 Página de Oferta
+                  💰 Oferta
                 </Button>
-
-                <Separator />
                 
-                <div className="text-xs font-medium text-muted-foreground mb-2">
-                  📊 TEMPLATES DE VENDA
+                <div className="text-xs font-medium text-emerald-600 mt-2 mb-1">
+                  📊 PÁGINAS DE VENDA
                 </div>
 
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.salesPage;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  🏪 Página de Vendas Completa
+                  🏪 Vendas Completa
                 </Button>
 
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.checkout;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  💳 Checkout/Finalização
+                  💳 Checkout
                 </Button>
 
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start"
+                  className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.upsell;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  🚀 Página de Upsell
+                  🚀 Upsell
                 </Button>
-
-                <Separator />
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start"
-                  onClick={duplicatePage}
-                >
-                  <Copy className="h-3 w-3 mr-2" />
-                  Duplicar Página Atual
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start"
-                  onClick={addNewPage}
-                >
-                  <Plus className="h-3 w-3 mr-2" />
-                  Adicionar Nova Página
-                </Button>
-
-                {currentFunnel.pages.length > 1 && (
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={deletePage}
-                  >
-                    <Trash2 className="h-3 w-3 mr-2" />
-                    Excluir Página
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Componentes */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Componentes</CardTitle>
-                <p className="text-xs text-muted-foreground">
-                  Arraste e solte no editor
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-2">
-                  {COMPONENTS.map((componentType) => {
-                    const Icon = componentType.icon;
-                    return (
-                      <div
-                        key={componentType.type}
-                        className="component-item p-3 rounded-lg border cursor-grab"
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, componentType)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon className="h-4 w-4" />
-                          <div>
-                            <div className="font-medium text-sm">
-                              {componentType.name}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {componentType.description}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Painel de Propriedades */}
-            {selectedComponent && renderPropertiesPanel()}
+              </div>
+            </div>
           </div>
         </ScrollArea>
       </div>
 
-      {/* Editor Principal */}
+      {/* COLUNA 2: COMPONENTES - 240px */}
+      <div className="w-[240px] min-w-[240px] border-r bg-blue-50 overflow-hidden flex flex-col">
+        <div className="p-3 border-b bg-blue-100">
+          <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
+            🧩 COMPONENTES
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Arraste e solte no canvas
+          </p>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-3">
+            {/* Componentes Básicos */}
+            <div className="mb-4">
+              <h3 className="text-xs font-semibold mb-2 text-blue-700">📝 BÁSICOS</h3>
+              <div className="space-y-1">
+                {COMPONENTS.slice(0, 10).map((componentType) => {
+                  const Icon = componentType.icon;
+                  return (
+                    <div
+                      key={componentType.type}
+                      className="component-item p-2 rounded border cursor-grab bg-white hover:bg-blue-100 transition-colors"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, componentType)}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon className="h-3 w-3 text-blue-600" />
+                        <div>
+                          <div className="font-medium text-xs">
+                            {componentType.name}
+                          </div>
+                          <div className="text-xs text-muted-foreground truncate">
+                            {componentType.description}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Componentes de Venda */}
+            <div>
+              <h3 className="text-xs font-semibold mb-2 text-emerald-700">💰 VENDAS</h3>
+              <div className="space-y-1">
+                {COMPONENTS.slice(10).map((componentType) => {
+                  const Icon = componentType.icon;
+                  return (
+                    <div
+                      key={componentType.type}
+                      className="component-item p-2 rounded border cursor-grab bg-white hover:bg-emerald-100 transition-colors"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, componentType)}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon className="h-3 w-3 text-emerald-600" />
+                        <div>
+                          <div className="font-medium text-xs">
+                            {componentType.name}
+                          </div>
+                          <div className="text-xs text-muted-foreground truncate">
+                            {componentType.description}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </ScrollArea>
+      </div>
+
+      {/* COLUNA 3: CANVAS - Flex restante */}
       <div className="flex-1 overflow-auto bg-gray-50">
         <div className="p-4">
+          {/* Header do Canvas */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Badge variant="outline">{currentPage.type}</Badge>
-              <span className="font-medium">{currentPage.title}</span>
+              <span className="font-medium text-sm">{currentPage.title}</span>
               <Badge variant="secondary" className="text-xs">
                 Página {currentPageIndex + 1} de {currentFunnel.pages.length}
               </Badge>
             </div>
 
-            <div className="flex items-center gap-2">
-              {/* Navegação entre páginas */}
-              <div className="flex items-center gap-1 mr-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={goToPreviousPage}
-                  disabled={currentPageIndex === 0}
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={goToNextPage}
-                  disabled={currentPageIndex === currentFunnel.pages.length - 1}
-                >
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-
+            {/* Preview Controls */}
+            <div className="flex gap-1">
               <Button
+                variant={deviceView === "mobile" ? "default" : "outline"}
                 size="sm"
-                variant="outline"
-                onClick={() => {
-                  // Preview do funil completo
-                  window.open(
-                    `/quiz-preview?funnel=${encodeURIComponent(
-                      JSON.stringify(currentFunnel)
-                    )}`,
-                    "_blank"
-                  );
-                }}
+                onClick={() => setDeviceView("mobile")}
+                className="h-8 w-8 p-0"
               >
-                <Play className="h-4 w-4 mr-2" />
-                Testar Funil
+                <Smartphone className="h-3 w-3" />
               </Button>
-
               <Button
+                variant={deviceView === "tablet" ? "default" : "outline"}
                 size="sm"
-                variant="outline"
-                onClick={() => console.log("Preview:", currentPage)}
+                onClick={() => setDeviceView("tablet")}
+                className="h-8 w-8 p-0"
               >
-                <Eye className="h-4 w-4 mr-2" />
-                Preview
+                <Tablet className="h-3 w-3" />
               </Button>
-
-              <Button size="sm" variant="outline" onClick={exportFunnel}>
-                <Download className="h-4 w-4 mr-2" />
-                Exportar
-              </Button>
-
-              <Button size="sm">
-                <Save className="h-4 w-4 mr-2" />
-                Salvar Funil
+              <Button
+                variant={deviceView === "desktop" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setDeviceView("desktop")}
+                className="h-8 w-8 p-0"
+              >
+                <Monitor className="h-3 w-3" />
               </Button>
             </div>
           </div>
 
-          {/* Preview Area */}
+          {/* Canvas Area */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className={`quiz-preview ${getDeviceClass()}`}>
               {/* Header */}
@@ -2735,6 +2631,124 @@ const SimpleDragDropEditor: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* COLUNA 4: PROPRIEDADES - 300px */}
+      <div className="w-[300px] min-w-[300px] border-l bg-amber-50 overflow-hidden flex flex-col">
+        <div className="p-3 border-b bg-amber-100">
+          <h2 className="text-sm font-semibold mb-1 flex items-center gap-2">
+            ⚙️ PROPRIEDADES
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            {selectedComponent 
+              ? `Editando: ${currentPage.components.find(c => c.id === selectedComponent)?.type || 'componente'}`
+              : 'Selecione um componente para editar'
+            }
+          </p>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-3">
+            {selectedComponent ? (
+              renderPropertiesPanel()
+            ) : (
+              <div className="text-center text-muted-foreground mt-8">
+                <Settings className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Clique em um componente no canvas para editá-lo</p>
+              </div>
+            )}
+
+            {/* Configurações da Página */}
+            <Card className="mt-4">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Configurações da Página</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <Label className="text-xs">Título da Página</Label>
+                  <Input
+                    value={currentPage.title}
+                    onChange={(e) =>
+                      updateCurrentPage({ title: e.target.value })
+                    }
+                    className="h-8 text-sm"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs">Progresso (%)</Label>
+                  <Input
+                    type="number"
+                    value={currentPage.progress}
+                    onChange={(e) =>
+                      updateCurrentPage({
+                        progress: parseInt(e.target.value) || 0,
+                      })
+                    }
+                    min="0"
+                    max="100"
+                    className="h-8 text-sm"
+                  />
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={currentPage.showHeader}
+                    onCheckedChange={(checked) =>
+                      updateCurrentPage({ showHeader: checked })
+                    }
+                  />
+                  <Label className="text-xs">Mostrar Header</Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={currentPage.showProgress}
+                    onCheckedChange={(checked) =>
+                      updateCurrentPage({ showProgress: checked })
+                    }
+                  />
+                  <Label className="text-xs">Mostrar Progresso</Label>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Ações Rápidas */}
+            <Card className="mt-4">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Ações Rápidas</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Button size="sm" variant="outline" onClick={exportFunnel} className="w-full justify-start">
+                  <Download className="h-3 w-3 mr-2" />
+                  Exportar Funil
+                </Button>
+                
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    window.open(
+                      `/quiz-preview?funnel=${encodeURIComponent(
+                        JSON.stringify(currentFunnel)
+                      )}`,
+                      "_blank"
+                    );
+                  }}
+                  className="w-full justify-start"
+                >
+                  <Eye className="h-3 w-3 mr-2" />
+                  Preview Funil
+                </Button>
+
+                <Button size="sm" className="w-full justify-start">
+                  <Save className="h-3 w-3 mr-2" />
+                  Salvar Funil
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );
