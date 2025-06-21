@@ -4683,116 +4683,183 @@ const AdvancedQuizEditor: React.FC = () => {
     console.log("🎯 Tentando renderizar AdvancedQuizEditor...");
 
     return (
-      <div className="h-screen bg-zinc-950 flex flex-col">
-        {/* Navbar Superior */}
-        <FunnelNavbar
-          onSave={handleSave}
-          onPublish={handlePublish}
-          isSaving={isSaving || isAutoSaving}
-          isPublishing={isPublishing}
-          autoSaveStatus={{
-            isAutoSaving,
-            lastSaved,
-          }}
-          viewportMode={viewportMode}
-          onToggleViewport={toggleViewportMode}
-        />
+      <><div className="h-screen flex bg-background advanced-editor">
+        {/* Header Superior */}
+        <div className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-50">
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-semibold text-gray-800">✨ Editor Avançado de Quiz</h1>
+            <Badge variant="outline" className="text-xs">
+              Quiz de Estilo Pessoal
+            </Badge>
+          </div>
 
-        {/* Layout Principal com 4 colunas fixas responsivas */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Coluna 1: Navegação de Etapas - Mais Estreita */}
-          <div className="w-48 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
-            <div className="h-full overflow-y-auto custom-scrollbar">
+          <div className="flex items-center gap-3">
+            {/* Viewport Toggle */}
+            <div className="flex gap-1">
+              <Button
+                variant={viewportMode === "mobile" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewportMode("mobile")}
+                className="h-8 w-8 p-0"
+              >
+                📱
+              </Button>
+              <Button
+                variant={viewportMode === "desktop" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewportMode("desktop")}
+                className="h-8 w-8 p-0"
+              >
+                🖥️
+              </Button>
+            </div>
+
+            {/* Auto-save Status */}
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              {isAutoSaving && (
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                  Salvando...
+                </div>
+              )}
+              {lastSaved && !isAutoSaving && (
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  Salvo {lastSaved.toLocaleTimeString()}
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2">
+              <Button
+                onClick={handleSave}
+                disabled={isSaving}
+                size="sm"
+                variant="outline"
+                className="h-8 text-xs"
+              >
+                {isSaving ? "Salvando..." : "💾 Salvar"}
+              </Button>
+              <Button
+                onClick={handlePublish}
+                disabled={isPublishing}
+                size="sm"
+                className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700"
+              >
+                {isPublishing ? "Publicando..." : "🚀 Publicar"}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Layout Principal com 4 colunas - offset para o header fixo */}
+        <div className="flex-1 flex overflow-hidden pt-14">
+          {/* Coluna 1: Navegação de Etapas */}
+          <div className="w-[260px] min-w-[260px] border-r border-gray-200 bg-slate-50 flex-shrink-0 overflow-hidden">
+            <div className="h-full overflow-y-auto">
+              <div className="p-3 border-b bg-slate-100">
+                <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
+                  🔄 ETAPAS DO QUIZ
+                </h2>
+                <p className="text-xs text-gray-600">
+                  {editorState.steps.length} etapas configuradas
+                </p>
+              </div>
               <StepNavigationTabs
                 steps={editorState.steps}
                 currentStepId={editorState.currentStepId}
                 onStepSelect={handleStepSelect}
                 onStepRename={handleStepRename}
                 onStepDelete={handleStepDelete}
-                onAddStep={handleAddStep}
-              />
+                onAddStep={handleAddStep} />
             </div>
           </div>
-          {/* Coluna 2: Biblioteca de Componentes - Separada */}
-          <div className="w-56 border-r border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden">
-            <div className="h-full overflow-y-auto custom-scrollbar">
+
+          {/* Coluna 2: Biblioteca de Componentes */}
+          <div className="w-[240px] min-w-[240px] border-r border-gray-200 bg-blue-50 flex-shrink-0 overflow-hidden">
+            <div className="h-full overflow-y-auto">
+              <div className="p-3 border-b bg-blue-100">
+                <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
+                  🧩 COMPONENTES
+                </h2>
+                <p className="text-xs text-gray-600">
+                  Arraste e solte no canvas
+                </p>
+              </div>
               <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
             </div>
           </div>
-          {/* Coluna 3: Canvas do Editor - Flexível e Centralizado */}
-          <div className="flex-1 min-w-0 overflow-hidden bg-zinc-900 relative">
+          {/* Coluna 3: Canvas do Editor */}
+          <div className="flex-1 min-w-0 overflow-hidden bg-white relative">
             {/* Controles de Viewport */}
-            <div className="absolute top-2 right-2 z-10 bg-zinc-800 rounded p-1 shadow-lg">
-              <button
-                className={`p-1 rounded ${
-                  viewportMode === "desktop"
-                    ? "bg-blue-600 text-white"
-                    : "text-zinc-400 hover:text-zinc-200"
-                }`}
-                onClick={() => setViewportMode("desktop")}
-                title="Visualização Desktop"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-monitor"
+            <div className="absolute top-4 right-4 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2">
+              <div className="flex gap-1">
+                <button
+                  className={`p-2 rounded text-xs ${viewportMode === "desktop"
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"}`}
+                  onClick={() => setViewportMode("desktop")}
+                  title="Desktop"
                 >
-                  <rect width="20" height="14" x="2" y="3" rx="2"></rect>
-                  <line x1="8" x2="16" y1="21" y2="21"></line>
-                  <line x1="12" x2="12" y1="17" y2="21"></line>
-                </svg>
-              </button>
-              <button
-                className={`p-1 rounded ${
-                  viewportMode === "mobile"
-                    ? "bg-blue-600 text-white"
-                    : "text-zinc-400 hover:text-zinc-200"
-                }`}
-                onClick={() => setViewportMode("mobile")}
-                title="Visualização Mobile"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-smartphone"
+                  🖥️
+                </button>
+                <button
+                  className={`p-2 rounded text-xs ${viewportMode === "mobile"
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"}`}
+                  onClick={() => setViewportMode("mobile")}
+                  title="Mobile"
                 >
-                  <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
-                  <path d="M12 18h.01"></path>
-                </svg>
-              </button>
+                  📱
+                </button>
+              </div>
             </div>
-
-            <CanvasArea
-              currentStep={currentStep}
-              steps={editorState.steps}
-              currentStepId={editorState.currentStepId}
-              headerConfig={{
-                ...editorState.headerConfig,
-                showLogo: true, // Garantir que o logotipo seja exibido centralmente
-              }}
-              selectedComponent={selectedComponent}
-              selectedComponentId={selectedComponentId}
-              onComponentSelect={handleComponentSelect}
-              onComponentAdd={handleComponentAdd}
-              onComponentUpdate={handleComponentUpdate}
-              onComponentDelete={handleComponentDelete}
-              onComponentMove={handleComponentMove}
-              viewportMode={viewportMode}
-            />
+            >
+            <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+            <line x1="8" x2="16" y1="21" y2="21"></line>
+            <line x1="12" x2="12" y1="17" y2="21"></line>
+          </svg>
+        </button>
+        <button
+          className={`p-1 rounded ${viewportMode === "mobile"
+              ? "bg-blue-600 text-white"
+              : "text-zinc-400 hover:text-zinc-200"}`}
+          onClick={() => setViewportMode("mobile")}
+          title="Visualização Mobile"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-smartphone"
+          >
+            <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
+            <path d="M12 18h.01"></path>
+          </svg>
+        </button>
+      </div><CanvasArea
+          currentStep={currentStep}
+          steps={editorState.steps}
+          currentStepId={editorState.currentStepId}
+          headerConfig={{
+            ...editorState.headerConfig,
+            showLogo: true, // Garantir que o logotipo seja exibido centralmente
+          }}
+          selectedComponent={selectedComponent}
+          selectedComponentId={selectedComponentId}
+          onComponentSelect={handleComponentSelect}
+          onComponentAdd={handleComponentAdd}
+          onComponentUpdate={handleComponentUpdate}
+          onComponentDelete={handleComponentDelete}
+          onComponentMove={handleComponentMove}
+          viewportMode={viewportMode} /></>
           </div>{" "}
           {/* Coluna 4: Painel de Propriedades (Direita) */}
           <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
