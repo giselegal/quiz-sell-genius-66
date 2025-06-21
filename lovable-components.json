@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T16:05:18.854Z",
-  "components": 485,
+  "timestamp": "2025-06-21T16:08:37.346Z",
+  "components": 486,
   "files": [
     {
       "name": "App",
@@ -2325,6 +2325,11 @@
     {
       "name": "SettingsPage",
       "path": "src/pages/SettingsPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "Teste1Page",
+      "path": "src/pages/Teste1Page.tsx",
       "type": "typescript"
     },
     {

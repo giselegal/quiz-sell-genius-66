@@ -15,6 +15,7 @@ import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
 import AdvancedQuizEditorTest from "@/components/visual-editor/AdvancedQuizEditor.test";
 import SimpleDragDropEditor from "@/components/visual-editor/SimpleDragDropEditor";
 import QuizPreview from "@/components/QuizPreview";
+import Teste1Page from "@/pages/Teste1Page";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -148,6 +149,9 @@ function App() {
 
           {/* Rota de Preview do Quiz */}
           <Route path="/quiz-preview" element={<QuizPreview />} />
+
+          {/* NOVA: Rota de Teste1 - Modelo de Produção */}
+          <Route path="/teste1" element={<Teste1Page />} />
 
           {/* 404 para rotas não encontradas */}
           <Route path="*" element={<NotFoundPage />} />
