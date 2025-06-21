@@ -85,8 +85,205 @@ interface QuizConfig {
   };
 }
 
-// CSS simplificado
-const SIMPLE_CSS = `
+// CSS completo com design atualizado
+const QUIZ_CSS = `
+  :root {
+    --quiz-primary-color: #b89b7a;
+    --quiz-secondary-color: #432818;
+    --quiz-accent-color: #d4c4a0;
+    --quiz-bg-color: #fefefe;
+    --quiz-text-color: #432818;
+  }
+
+  .quiz-container {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #fffbf7 0%, #fdf8f3 100%);
+    min-height: 100vh;
+  }
+  
+  .quiz-option {
+    position: relative;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    overflow: hidden;
+  }
+  
+  .quiz-option:hover:not(.disabled) {
+    border-color: var(--quiz-primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .quiz-option.selected {
+    border-color: var(--quiz-primary-color);
+    background: linear-gradient(135deg, rgba(184,155,122,0.05) 0%, rgba(184,155,122,0.1) 100%);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(184,155,122,0.2);
+  }
+  
+  .quiz-option.strategic.selected {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(184,155,122,0.25);
+  }
+  
+  .quiz-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .quiz-option-image {
+    transition: transform 0.3s ease;
+  }
+  
+  .quiz-option:hover .quiz-option-image:not(.disabled) {
+    transform: scale(1.05);
+  }
+  
+  .quiz-grid-images-mobile {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+  }
+  
+  .quiz-grid-images-desktop {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .quiz-grid-images-large {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .quiz-grid-text {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .quiz-grid-strategic {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 768px;
+    margin: 0 auto;
+  }
+  
+  .quiz-option-text-normal {
+    font-size: 1.35rem;
+    line-height: 1.4;
+  }
+  
+  .quiz-option-text-strategic {
+    font-size: 1.4rem;
+    line-height: 1.4;
+  }
+  
+  .quiz-check-normal {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--quiz-primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+  
+  .quiz-check-strategic {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--quiz-primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.9);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  
+  .quiz-option-animate {
+    animation: fadeInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+               scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  .quiz-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(184,155,122,0.3);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+  }
+  
+  @keyframes ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .quiz-option-text-normal {
+      font-size: 1.2rem;
+    }
+    
+    .quiz-option-text-strategic {
+      font-size: 1.3rem;
+    }
+    
+    .quiz-option {
+      padding: 1.5rem 1rem;
+    }
+    
+    .quiz-option:hover {
+      transform: none; /* Desabilita hover em mobile */
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .quiz-option {
+      padding: 2rem 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .quiz-grid-images-large {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+`;
+
+// CSS do editor (mantém o existente)
+const EDITOR_CSS = `
   .simple-editor {
     font-family: 'Inter', sans-serif;
   }
@@ -2460,7 +2657,13 @@ const SimpleDragDropEditor: React.FC = () => {
     // Se não houver dados salvos, criar com questões reais
     const realQuestions = generateRealQuestionTemplates(); // Questões normais (1-10)
     const strategicQuestions = generateStrategicQuestionTemplates(); // Questões estratégicas (testes A/B)
-    console.log("🔄 Criando funil com questões reais:", realQuestions.length, "normais +", strategicQuestions.length, "estratégicas");
+    console.log(
+      "🔄 Criando funil com questões reais:",
+      realQuestions.length,
+      "normais +",
+      strategicQuestions.length,
+      "estratégicas"
+    );
 
     return {
       id: "quiz-funnel-real",
@@ -2468,22 +2671,22 @@ const SimpleDragDropEditor: React.FC = () => {
       pages: [
         // 1. Página inicial (QuizIntro)
         REAL_QUIZ_TEMPLATES.intro,
-        
+
         // 2. Questões normais 1-10 (com pontuação para estilos)
         ...realQuestions,
-        
-        // 3. Página de transição (QuizTransition) 
+
+        // 3. Página de transição (QuizTransition)
         REAL_QUIZ_TEMPLATES.transition,
-        
+
         // 4. Questões estratégicas (testes A/B)
         ...strategicQuestions,
-        
+
         // 5. Página de loading/calculando
         REAL_QUIZ_TEMPLATES.loading,
-        
+
         // 6. Página de resultado (Teste A)
         REAL_QUIZ_TEMPLATES.result,
-        
+
         // 7. Página de oferta (Teste B)
         REAL_QUIZ_TEMPLATES.offer,
       ],
