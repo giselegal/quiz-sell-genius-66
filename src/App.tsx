@@ -1,7 +1,15 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "@/pages/HomePage";
-import NotFoundPage from "@/pages/NotFoundPage";
+import NotFou          {/* NOVO: Editor Refatorado com Componentes Separados */}
+          <Route
+            path="/refactored-editor"
+            element={
+              <div className="min-h-screen bg-background">
+                <FinalRefactoredEditor />
+              </div>
+            }
+          />om "@/pages/NotFoundPage";
 import QuizPage from "@/components/QuizPage";
 import QuizDescubraSeuEstilo from "@/pages/quiz-descubra-seu-estilo";
 import ResultPage from "@/pages/ResultPage";
@@ -12,12 +20,7 @@ import EditorTest from "@/pages/EditorTest";
 import QuizIntro from "@/components/QuizIntro";
 import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
 import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
-import SimpleWorkingEditor from "@/components/visual-editor/SimpleWorkingEditor";
-import FinalWorkingEditor from "@/components/visual-editor/FinalWorkingEditor";
-import RefactoredAdvancedQuizEditor from "@/components/visual-editor/RefactoredAdvancedQuizEditor";
-import SimpleRefactoredEditor from "@/components/visual-editor/SimpleRefactoredEditor";
-import WorkingRefactoredEditor from "@/components/visual-editor/WorkingRefactoredEditor";
-import TestRefactoredEditor from "@/components/visual-editor/TestRefactoredEditor";
+import FinalRefactoredEditor from "@/components/visual-editor/FinalRefactoredEditor";
 import AdvancedQuizEditorTest from "@/components/visual-editor/AdvancedQuizEditor.test";
 import SimpleDragDropEditor from "@/components/visual-editor/SimpleDragDropEditor";
 import QuizPreview from "@/components/QuizPreview";

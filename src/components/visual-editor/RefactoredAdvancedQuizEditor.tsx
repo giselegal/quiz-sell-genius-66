@@ -3,7 +3,7 @@ import ComponentPalette from "./components/ComponentPalette";
 import StepTree from "./components/StepTree";
 import Canvas from "./components/Canvas";
 import PropertiesPanel from "./components/PropertiesPanel";
-import "@/styles/advanced-editor.css";
+import "@/styles/refactored-editor.css";
 
 // Interfaces inline para evitar problemas de import
 interface OptionChoice {

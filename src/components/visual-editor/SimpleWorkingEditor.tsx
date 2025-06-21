@@ -10,7 +10,16 @@ const SimpleWorkingEditor: React.FC = () => {
           <div style={{ padding: "20px" }}>
             <h3>🧩 Componentes</h3>
             <div>Editor funcionando!</div>
-            <button style={{ marginTop: "10px", padding: "8px", background: "#007bff", color: "white", border: "none", borderRadius: "4px" }}>
+            <button
+              style={{
+                marginTop: "10px",
+                padding: "8px",
+                background: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+              }}
+            >
               Teste
             </button>
           </div>
@@ -28,7 +37,14 @@ const SimpleWorkingEditor: React.FC = () => {
         <div className="editor-column canvas-column">
           <div style={{ padding: "20px" }}>
             <h3>🎨 Canvas</h3>
-            <div style={{ background: "#f0f0f0", padding: "20px", borderRadius: "8px", margin: "10px 0" }}>
+            <div
+              style={{
+                background: "#f0f0f0",
+                padding: "20px",
+                borderRadius: "8px",
+                margin: "10px 0",
+              }}
+            >
               <strong>Status:</strong> Editor carregado com sucesso!
             </div>
           </div>

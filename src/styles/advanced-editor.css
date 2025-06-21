@@ -989,15 +989,14 @@
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* === REFACTORED EDITOR LAYOUT FIXED === */
 .editor-layout {
   display: grid;
-  grid-template-columns: minmax(200px, 250px) minmax(250px, 300px) 1fr minmax(
-      300px,
-      350px
-    );
+  grid-template-columns: 250px 300px 1fr 350px;
   height: 100vh;
   gap: 1px;
   background: #e2e8f0;
+  transition: all 0.3s ease;
 }
 
 .editor-column {
@@ -1005,72 +1004,119 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Importante para overflow */
+  position: relative;
+  min-height: 0;
 }
 
-/* Scroll personalizado para cada coluna */
-.editor-column > div {
+/* Scroll independente para cada coluna */
+.editor-column > * {
+  flex: 1;
   overflow-y: auto;
-  height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e0 #f7fafc;
+  scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
-.editor-column > div::-webkit-scrollbar {
+.editor-column > *::-webkit-scrollbar {
   width: 6px;
 }
 
-.editor-column > div::-webkit-scrollbar-track {
-  background: #f7fafc;
-}
-
-.editor-column > div::-webkit-scrollbar-thumb {
-  background: #cbd5e0;
+.editor-column > *::-webkit-scrollbar-track {
+  background: #f1f5f9;
   border-radius: 3px;
 }
 
-/* Acessibilidade - foco visível */
-.draggable-component:focus,
-.step-item:focus,
-.canvas-component:focus {
-  outline: 2px solid #3182ce;
-  outline-offset: 2px;
+.editor-column > *::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 
-/* Responsividade urgente */
+.editor-column > *::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.palette-column {
+  background: #f8fafc;
+}
+
+.tree-column {
+  background: #f8fafc;
+}
+
+.canvas-column {
+  background: white;
+}
+
+.properties-column {
+  background: #f8fafc;
+}
+
+/* Responsividade aprimorada */
+@media (max-width: 1600px) {
+  .editor-layout {
+    grid-template-columns: 220px 280px 1fr 320px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .editor-layout {
+    grid-template-columns: 200px 250px 1fr 300px;
+  }
+}
+
 @media (max-width: 1200px) {
   .editor-layout {
-    grid-template-columns: 180px 220px 1fr 260px;
+    grid-template-columns: 180px 220px 1fr 280px;
   }
 }
 
 @media (max-width: 1024px) {
   .editor-layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr auto;
-    overflow-y: auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 300px 1fr;
   }
-
-  .editor-column {
-    min-height: 200px;
+  
+  .palette-column {
+    grid-column: 1;
+    grid-row: 1;
   }
-
+  
+  .tree-column {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  
   .canvas-column {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  
+  .properties-column {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+  
+  .palette-column,
+  .tree-column {
+    grid-column: 1;
+    max-height: 200px;
+  }
+  
+  .canvas-column {
+    grid-column: 1;
     min-height: 400px;
   }
 }
 
-/* Performance - animações otimizadas */
-.draggable-component,
-.step-item,
-.canvas-component {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  will-change: transform;
-}
-
-.draggable-component:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Focus e states visuais melhorados */
+.editor-column:focus-within {
+  box-shadow: 0 0 0 2px #3b82f6;
+  z-index: 1;
 }
 
 /* === ACESSIBILIDADE === */
@@ -1086,24 +1132,182 @@
   border: 0;
 }
 
-/* Foco visível para navegação por teclado */
+/* Focus estados melhorados */
 *:focus {
-  outline: 2px solid #007bff;
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
-/* Estados de validação */
-.form-field.error input,
-.form-field.error textarea,
-.form-field.error select {
-  border-color: #dc3545;
-  background-color: #fff5f5;
+.draggable-component:focus,
+.canvas-component:focus,
+.step-item:focus,
+button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-.field-error {
-  color: #dc3545;
+/* Estados de loading e feedback */
+[aria-live] {
+  font-weight: 500;
+}
+
+/* Contraste melhorado para textos */
+.component-label,
+.step-name,
+.canvas-title,
+.panel-title {
+  color: #1f2937;
+  font-weight: 500;
+}
+.editor-column {
+  background: white;
+  overflow: hidden;
+  display: flex;ite;
+  flex-direction: column;
+  position: relative;
+  min-height: 0; /* Importante para flexbox com scroll */
+} min-width: 0; /* Importante para overflow */
+}
+/* Scroll independente para cada coluna */
+.editor-column > * {ado para cada coluna */
+  flex: 1;lumn > div {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+} scrollbar-color: #cbd5e0 #f7fafc;
+}
+.editor-column > *::-webkit-scrollbar {
+  width: 6px;n > div::-webkit-scrollbar {
+} width: 6px;
+}
+.editor-column > *::-webkit-scrollbar-track {
+  background: #f1f5f9;-webkit-scrollbar-track {
+  border-radius: 3px;;
+}
+
+.editor-column > *::-webkit-scrollbar-thumb { {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.editor-column > *::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;ocus,
+}step-item:focus,
+.canvas-component:focus {
+/* Responsividade aprimorada */
+@media (max-width: 1600px) {
+  .editor-layout {
+    grid-template-columns: 220px 280px 1fr 320px;
+  }Responsividade urgente */
+}media (max-width: 1200px) {
+  .editor-layout {
+@media (max-width: 1400px) {80px 220px 1fr 260px;
+  .editor-layout {
+    grid-template-columns: 200px 250px 1fr 300px;
+  }
+}media (max-width: 1024px) {
+  .editor-layout {
+@media (max-width: 1200px) {fr;
+  .editor-layout {rows: auto auto 1fr auto;
+    grid-template-columns: 180px 220px 1fr 280px;
+  }
+}
+  .editor-column {
+@media (max-width: 1024px) {
+  .editor-layout {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 300px 1fr;
+    height: 100vh;0px;
+  }
+}
+  .palette-column {
+    grid-column: 1;imações otimizadas */
+    grid-row: 1;nent,
+  }ep-item,
+.canvas-component {
+  .tree-column {ansform 0.15s ease, box-shadow 0.15s ease;
+    grid-column: 2;sform;
+    grid-row: 1;
+  }
+.draggable-component:hover {
+  .canvas-column {lateY(-1px);
+    grid-column: 1 / -1;rgba(0, 0, 0, 0.1);
+    grid-row: 2;
+  }
+/* === ACESSIBILIDADE === */
+  .properties-column {
+    display: none; /* Esconder em telas pequenas */
+  }idth: 1px;
+} height: 1px;
+  padding: 0;
+@media (max-width: 768px) {
+  .editor-layout {;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }order: 0;
+}
+  .palette-column,
+  .tree-column {para navegação por teclado */
+    grid-column: 1;
+    max-height: 200px;007bff;
+  }utline-offset: 2px;
+}
+  .canvas-column {
+    grid-column: 1;ação */
+    min-height: 400px;t,
+  }rm-field.error textarea,
+}form-field.error select {
+  border-color: #dc3545;
+/* Focus e states visuais melhorados */
+.editor-column:focus-within {
+  box-shadow: 0 0 0 2px #3b82f6;
+  z-index: 1;{
+} color: #dc3545;
   font-size: 12px;
-  margin-top: 4px;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}  font-weight: 500;  color: #1f2937;.panel-title {.canvas-title,.step-name,.component-label,/* Contraste melhorado para textos */}  font-weight: 500;[aria-live] {/* Estados de loading e feedback */}  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);  outline-offset: 2px;  outline: 2px solid #3b82f6;button:focus {.step-item:focus,.canvas-component:focus,.draggable-component:focus,}  outline-offset: 2px;  outline: 2px solid #3b82f6;*:focus {/* Focus estados melhorados */}  border: 0;  white-space: nowrap;  clip: rect(0, 0, 0, 0);  overflow: hidden;  margin: -1px;  padding: 0;  height: 1px;  width: 1px;  position: absolute;.sr-only {/* === ACESSIBILIDADE === */  margin-top: 4px;
   display: flex;
   align-items: center;
   gap: 4px;

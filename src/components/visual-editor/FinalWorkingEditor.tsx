@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import "@/styles/advanced-editor.css";
 
 const FinalWorkingEditor: React.FC = () => {
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(
+    null
+  );
   const [message, setMessage] = useState("Editor carregado com sucesso!");
 
   const components = [
@@ -45,7 +47,7 @@ const FinalWorkingEditor: React.FC = () => {
           <div className="step-tree">
             <div className="tree-header">
               <h3 className="tree-title">📋 Estrutura</h3>
-              <button 
+              <button
                 className="add-step-btn"
                 onClick={() => setMessage("Nova etapa adicionada!")}
               >
@@ -84,31 +86,37 @@ const FinalWorkingEditor: React.FC = () => {
                   <h2 className="heading-preview">Bem-vindo ao Quiz!</h2>
                 </div>
               </div>
-              
+
               {selectedComponent && (
                 <div className="canvas-component">
                   <div className="component-content">
-                    <div style={{ 
-                      padding: "16px", 
-                      background: "#e3f2fd", 
-                      borderRadius: "8px",
-                      border: "2px dashed #1976d2"
-                    }}>
+                    <div
+                      style={{
+                        padding: "16px",
+                        background: "#e3f2fd",
+                        borderRadius: "8px",
+                        border: "2px dashed #1976d2",
+                      }}
+                    >
                       Novo componente: <strong>{selectedComponent}</strong>
                     </div>
                   </div>
                 </div>
               )}
-              
-              <div style={{ 
-                margin: "20px 0", 
-                padding: "16px", 
-                background: "#f0f0f0", 
-                borderRadius: "8px" 
-              }}>
+
+              <div
+                style={{
+                  margin: "20px 0",
+                  padding: "16px",
+                  background: "#f0f0f0",
+                  borderRadius: "8px",
+                }}
+              >
                 <strong>Status:</strong> {message}
                 <br />
-                <small style={{ color: "#666", marginTop: "8px", display: "block" }}>
+                <small
+                  style={{ color: "#666", marginTop: "8px", display: "block" }}
+                >
                   ✅ Performance otimizada | ✅ Responsivo | ✅ Acessível
                 </small>
               </div>
@@ -120,7 +128,7 @@ const FinalWorkingEditor: React.FC = () => {
         <div className="editor-column properties-column">
           <div className="properties-panel">
             <h3 className="panel-title">⚙️ Propriedades</h3>
-            
+
             {selectedComponent ? (
               <div className="component-info">
                 <span className="component-type">{selectedComponent}</span>
@@ -132,10 +140,12 @@ const FinalWorkingEditor: React.FC = () => {
                     <div className="section-content">
                       <div className="form-field">
                         <label>Texto</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           defaultValue={`Texto do ${selectedComponent}`}
-                          onChange={(e) => setMessage(`Texto alterado: ${e.target.value}`)}
+                          onChange={(e) =>
+                            setMessage(`Texto alterado: ${e.target.value}`)
+                          }
                         />
                       </div>
                       <div className="form-field">

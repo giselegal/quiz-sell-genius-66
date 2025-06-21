@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T22:56:03.764Z",
-  "components": 500,
+  "timestamp": "2025-06-21T23:04:49.545Z",
+  "components": 502,
   "files": [
     {
       "name": "App",
@@ -2033,6 +2033,11 @@
       "type": "typescript"
     },
     {
+      "name": "FinalRefactoredEditor",
+      "path": "src/components/visual-editor/FinalRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "FinalWorkingEditor",
       "path": "src/components/visual-editor/FinalWorkingEditor.tsx",
       "type": "typescript"
@@ -2105,6 +2110,11 @@
     {
       "name": "ComponentPalette",
       "path": "src/components/visual-editor/components/ComponentPalette.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorToolbar",
+      "path": "src/components/visual-editor/components/EditorToolbar.tsx",
       "type": "typescript"
     },
     {
