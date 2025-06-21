@@ -5,7 +5,17 @@ import { quizQuestions } from "@/data/quizQuestions";
 // Interfaces locais baseadas no SimpleDragDropEditor
 interface SimpleComponent {
   id: string;
-  type: "title" | "subtitle" | "text" | "image" | "button" | "spacer" | "input" | "options" | "progress" | "logo";
+  type:
+    | "title"
+    | "subtitle"
+    | "text"
+    | "image"
+    | "button"
+    | "spacer"
+    | "input"
+    | "options"
+    | "progress"
+    | "logo";
   data: {
     text?: string;
     src?: string;
@@ -52,7 +62,10 @@ interface SimplePage {
 }
 
 // Função para converter questão real em template
-const createQuestionTemplate = (question: QuizQuestion, pageIndex: number): SimplePage => {
+const createQuestionTemplate = (
+  question: QuizQuestion,
+  pageIndex: number
+): SimplePage => {
   const components: SimpleComponent[] = [
     // Logo
     {
@@ -60,16 +73,16 @@ const createQuestionTemplate = (question: QuizQuestion, pageIndex: number): Simp
       type: "logo",
       data: {
         src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-        alt: "Logo Gisele Galvão"
+        alt: "Logo Gisele Galvão",
       },
-      style: { textAlign: "center" as const, margin: "0 0 2rem 0" }
+      style: { textAlign: "center" as const, margin: "0 0 2rem 0" },
     },
     // Progress Bar
     {
       id: `progress-${question.id}`,
       type: "progress",
       data: { progressValue: Math.round((pageIndex / 21) * 100) },
-      style: { margin: "0 0 3rem 0" }
+      style: { margin: "0 0 3rem 0" },
     },
     // Título da questão
     {
@@ -81,8 +94,8 @@ const createQuestionTemplate = (question: QuizQuestion, pageIndex: number): Simp
         fontWeight: "700",
         textAlign: "center" as const,
         color: "#432818",
-        margin: "0 0 3rem 0"
-      }
+        margin: "0 0 3rem 0",
+      },
     },
     // Opções da questão
     {
@@ -91,18 +104,18 @@ const createQuestionTemplate = (question: QuizQuestion, pageIndex: number): Simp
       data: {
         hasImages: question.type !== "text",
         multiSelect: true,
-        options: question.options.map(opt => ({
+        options: question.options.map((opt) => ({
           id: opt.id,
           text: opt.text,
           image: opt.imageUrl || undefined,
           value: opt.id,
-          category: opt.styleCategory
-        }))
+          category: opt.styleCategory,
+        })),
       },
       style: {
-        margin: "0 0 3rem 0"
-      }
-    }
+        margin: "0 0 3rem 0",
+      },
+    },
   ];
 
   return {
@@ -112,7 +125,7 @@ const createQuestionTemplate = (question: QuizQuestion, pageIndex: number): Simp
     progress: Math.round((pageIndex / 21) * 100),
     showHeader: true,
     showProgress: true,
-    components
+    components,
   };
 };
 
@@ -131,9 +144,9 @@ export const QUIZ_TEMPLATES = {
         type: "logo" as const,
         data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-          alt: "Logo Gisele Galvão"
+          alt: "Logo Gisele Galvão",
         },
-        style: { textAlign: "center" as const, margin: "0 0 3rem 0" }
+        style: { textAlign: "center" as const, margin: "0 0 3rem 0" },
       },
       {
         id: "title-intro",
@@ -144,19 +157,21 @@ export const QUIZ_TEMPLATES = {
           fontWeight: "700",
           textAlign: "center" as const,
           color: "#432818",
-          margin: "0 0 1rem 0"
-        }
+          margin: "0 0 1rem 0",
+        },
       },
       {
         id: "subtitle-intro",
         type: "subtitle" as const,
-        data: { text: "Responda algumas perguntas e descubra qual estilo combina mais com você!" },
+        data: {
+          text: "Responda algumas perguntas e descubra qual estilo combina mais com você!",
+        },
         style: {
           fontSize: "1.25rem",
           textAlign: "center" as const,
           color: "#8B5A3C",
-          margin: "0 0 3rem 0"
-        }
+          margin: "0 0 3rem 0",
+        },
       },
       {
         id: "input-name",
@@ -164,9 +179,9 @@ export const QUIZ_TEMPLATES = {
         data: {
           label: "SEU NOME",
           placeholder: "Digite seu primeiro nome",
-          required: true
+          required: true,
         },
-        style: { margin: "0 0 2rem 0" }
+        style: { margin: "0 0 2rem 0" },
       },
       {
         id: "input-email",
@@ -174,9 +189,9 @@ export const QUIZ_TEMPLATES = {
         data: {
           label: "SEU MELHOR E-MAIL",
           placeholder: "seuemail@exemplo.com",
-          required: false
+          required: false,
         },
-        style: { margin: "0 0 3rem 0" }
+        style: { margin: "0 0 3rem 0" },
       },
       {
         id: "button-start",
@@ -189,10 +204,10 @@ export const QUIZ_TEMPLATES = {
           borderRadius: "8px",
           fontSize: "1.1rem",
           fontWeight: "600",
-          textAlign: "center" as const
-        }
-      }
-    ] as SimpleComponent[]
+          textAlign: "center" as const,
+        },
+      },
+    ] as SimpleComponent[],
   },
 
   loading: {
@@ -208,9 +223,9 @@ export const QUIZ_TEMPLATES = {
         type: "logo" as const,
         data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-          alt: "Logo"
+          alt: "Logo",
         },
-        style: { textAlign: "center" as const, margin: "0 0 3rem 0" }
+        style: { textAlign: "center" as const, margin: "0 0 3rem 0" },
       },
       {
         id: "title-loading",
@@ -221,21 +236,23 @@ export const QUIZ_TEMPLATES = {
           fontWeight: "700",
           textAlign: "center" as const,
           color: "#432818",
-          margin: "0 0 2rem 0"
-        }
+          margin: "0 0 2rem 0",
+        },
       },
       {
         id: "text-loading",
         type: "text" as const,
-        data: { text: "Analisando suas respostas para descobrir seu estilo único..." },
+        data: {
+          text: "Analisando suas respostas para descobrir seu estilo único...",
+        },
         style: {
           textAlign: "center" as const,
           color: "#8B5A3C",
           fontSize: "1.1rem",
-          margin: "0 0 3rem 0"
-        }
-      }
-    ] as SimpleComponent[]
+          margin: "0 0 3rem 0",
+        },
+      },
+    ] as SimpleComponent[],
   },
 
   result: {
@@ -251,9 +268,9 @@ export const QUIZ_TEMPLATES = {
         type: "logo" as const,
         data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-          alt: "Logo"
+          alt: "Logo",
         },
-        style: { textAlign: "center" as const, margin: "0 0 2rem 0" }
+        style: { textAlign: "center" as const, margin: "0 0 2rem 0" },
       },
       {
         id: "title-result",
@@ -264,8 +281,8 @@ export const QUIZ_TEMPLATES = {
           fontWeight: "700",
           textAlign: "center" as const,
           color: "#432818",
-          margin: "0 0 2rem 0"
-        }
+          margin: "0 0 2rem 0",
+        },
       },
       {
         id: "style-name",
@@ -276,8 +293,8 @@ export const QUIZ_TEMPLATES = {
           fontWeight: "800",
           textAlign: "center" as const,
           color: "#B89B7A",
-          margin: "0 0 1rem 0"
-        }
+          margin: "0 0 1rem 0",
+        },
       },
       {
         id: "style-percentage",
@@ -287,29 +304,31 @@ export const QUIZ_TEMPLATES = {
           textAlign: "center" as const,
           fontSize: "1.2rem",
           color: "#8B5A3C",
-          margin: "0 0 3rem 0"
-        }
+          margin: "0 0 3rem 0",
+        },
       },
       {
         id: "style-image",
         type: "image" as const,
         data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911666/C%C3%B3pia_de_Template_Dossi%C3%AA_Completo_2024_15_-_Copia_ssrhu3.webp",
-          alt: "Imagem do Estilo"
+          alt: "Imagem do Estilo",
         },
-        style: { textAlign: "center" as const, margin: "0 0 2rem 0" }
+        style: { textAlign: "center" as const, margin: "0 0 2rem 0" },
       },
       {
         id: "style-description",
         type: "text" as const,
-        data: { text: "Seu estilo combina elegância e praticidade, sempre buscando peças versáteis que reflitam sua personalidade única." },
+        data: {
+          text: "Seu estilo combina elegância e praticidade, sempre buscando peças versáteis que reflitam sua personalidade única.",
+        },
         style: {
           textAlign: "center" as const,
           fontSize: "1.1rem",
           color: "#432818",
           margin: "0 0 3rem 0",
-          padding: "0 2rem"
-        }
+          padding: "0 2rem",
+        },
       },
       {
         id: "button-offer",
@@ -322,10 +341,10 @@ export const QUIZ_TEMPLATES = {
           borderRadius: "8px",
           fontSize: "1.1rem",
           fontWeight: "600",
-          textAlign: "center" as const
-        }
-      }
-    ] as SimpleComponent[]
+          textAlign: "center" as const,
+        },
+      },
+    ] as SimpleComponent[],
   },
 
   offer: {
@@ -341,9 +360,9 @@ export const QUIZ_TEMPLATES = {
         type: "logo" as const,
         data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-          alt: "Logo"
+          alt: "Logo",
         },
-        style: { textAlign: "center" as const, margin: "0 0 2rem 0" }
+        style: { textAlign: "center" as const, margin: "0 0 2rem 0" },
       },
       {
         id: "title-offer",
@@ -354,8 +373,8 @@ export const QUIZ_TEMPLATES = {
           fontWeight: "700",
           textAlign: "center" as const,
           color: "#432818",
-          margin: "0 0 1rem 0"
-        }
+          margin: "0 0 1rem 0",
+        },
       },
       {
         id: "subtitle-offer",
@@ -365,8 +384,8 @@ export const QUIZ_TEMPLATES = {
           fontSize: "1.5rem",
           textAlign: "center" as const,
           color: "#B89B7A",
-          margin: "0 0 3rem 0"
-        }
+          margin: "0 0 3rem 0",
+        },
       },
       {
         id: "price-offer",
@@ -375,9 +394,9 @@ export const QUIZ_TEMPLATES = {
           price: "197",
           originalPrice: "497",
           installments: "19,70",
-          currency: "R$"
+          currency: "R$",
         },
-        style: { textAlign: "center" as const, margin: "0 0 2rem 0" }
+        style: { textAlign: "center" as const, margin: "0 0 2rem 0" },
       },
       {
         id: "button-buy",
@@ -390,16 +409,18 @@ export const QUIZ_TEMPLATES = {
           borderRadius: "8px",
           fontSize: "1.2rem",
           fontWeight: "600",
-          textAlign: "center" as const
-        }
-      }
-    ] as SimpleComponent[]
-  }
+          textAlign: "center" as const,
+        },
+      },
+    ] as SimpleComponent[],
+  },
 };
 
 // Gerar templates das questões reais
 export const generateRealQuestionTemplates = (): SimplePage[] => {
-  return quizQuestions.map((question, index) => createQuestionTemplate(question, index));
+  return quizQuestions.map((question, index) =>
+    createQuestionTemplate(question, index)
+  );
 };
 
 // Templates completos do quiz
@@ -409,5 +430,5 @@ export const COMPLETE_QUIZ_TEMPLATES = {
   ...generateRealQuestionTemplates().reduce((acc, template, index) => {
     acc[`question${index + 1}`] = template;
     return acc;
-  }, {} as Record<string, SimplePage>)
+  }, {} as Record<string, SimplePage>),
 };

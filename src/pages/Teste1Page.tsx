@@ -60,11 +60,12 @@ const Teste1Page = () => {
           setSavedFunnel({
             id: "quiz-1",
             title: funnel.title || "Quiz Descubra Seu Estilo",
-            description: funnel.description || "Quiz personalizado criado no editor",
+            description:
+              funnel.description || "Quiz personalizado criado no editor",
             pages: funnel.pages || [],
             config: config,
             createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           });
         }
       } catch (error) {
@@ -89,20 +90,22 @@ const Teste1Page = () => {
 
   const handlePublish = () => {
     // Simular processo de publicação
-    alert("🚀 Processo de publicação iniciado!\n\n" +
-          "1. Validando configurações...\n" +
-          "2. Gerando build de produção...\n" +
-          "3. Publicando no domínio configurado...\n\n" +
-          "O quiz será publicado em breve!");
+    alert(
+      "🚀 Processo de publicação iniciado!\n\n" +
+        "1. Validando configurações...\n" +
+        "2. Gerando build de produção...\n" +
+        "3. Publicando no domínio configurado...\n\n" +
+        "O quiz será publicado em breve!"
+    );
   };
 
   const handleExport = () => {
     // Exportar configurações
     if (savedFunnel) {
       const dataStr = JSON.stringify(savedFunnel, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const dataBlob = new Blob([dataStr], { type: "application/json" });
       const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = `quiz-config-${Date.now()}.json`;
       link.click();
@@ -136,8 +139,12 @@ const Teste1Page = () => {
               Voltar ao Editor
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Modelo de Produção - Teste1</h1>
-              <p className="text-gray-600">Visualize como será o quiz publicado</p>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Modelo de Produção - Teste1
+              </h1>
+              <p className="text-gray-600">
+                Visualize como será o quiz publicado
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -171,7 +178,9 @@ const Teste1Page = () => {
                     <li>• Você cria/edita o quiz no SimpleDragDropEditor</li>
                     <li>• Clica em "Salvar" - dados vão para localStorage</li>
                     <li>• Pode visualizar em tempo real na aba "Preview"</li>
-                    <li>• Configura domínio, SEO, pixels na aba "Configurações"</li>
+                    <li>
+                      • Configura domínio, SEO, pixels na aba "Configurações"
+                    </li>
                   </ul>
                 </div>
                 <div>
@@ -184,17 +193,23 @@ const Teste1Page = () => {
                   </ul>
                 </div>
               </div>
-              
+
               <div className="border-t border-blue-200 pt-4">
                 <h4 className="font-semibold mb-2">📊 Fluxo Completo:</h4>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="bg-blue-200 px-2 py-1 rounded">Editor</span>
                   <span>→</span>
-                  <span className="bg-green-200 px-2 py-1 rounded">Preview (/quiz-preview)</span>
+                  <span className="bg-green-200 px-2 py-1 rounded">
+                    Preview (/quiz-preview)
+                  </span>
                   <span>→</span>
-                  <span className="bg-yellow-200 px-2 py-1 rounded">Teste (/teste1)</span>
+                  <span className="bg-yellow-200 px-2 py-1 rounded">
+                    Teste (/teste1)
+                  </span>
                   <span>→</span>
-                  <span className="bg-purple-200 px-2 py-1 rounded">Produção (domínio configurado)</span>
+                  <span className="bg-purple-200 px-2 py-1 rounded">
+                    Produção (domínio configurado)
+                  </span>
                 </div>
               </div>
             </div>
@@ -211,26 +226,32 @@ const Teste1Page = () => {
               {savedFunnel ? (
                 <div className="space-y-4">
                   <div>
-                    <p className="font-semibold text-green-700">✅ Quiz Configurado</p>
-                    <p className="text-sm text-gray-600">
-                      {savedFunnel.title}
+                    <p className="font-semibold text-green-700">
+                      ✅ Quiz Configurado
                     </p>
+                    <p className="text-sm text-gray-600">{savedFunnel.title}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="font-medium">Páginas:</p>
-                      <p className="text-gray-600">{savedFunnel.pages?.length || 0}</p>
+                      <p className="text-gray-600">
+                        {savedFunnel.pages?.length || 0}
+                      </p>
                     </div>
                     <div>
                       <p className="font-medium">Última atualização:</p>
                       <p className="text-gray-600">
-                        {savedFunnel.updatedAt ? new Date(savedFunnel.updatedAt).toLocaleDateString() : 'N/A'}
+                        {savedFunnel.updatedAt
+                          ? new Date(savedFunnel.updatedAt).toLocaleDateString()
+                          : "N/A"}
                       </p>
                     </div>
                   </div>
                   <div>
                     <p className="font-medium">Domínio configurado:</p>
-                    <p className="text-gray-600">{savedFunnel.config?.domain || 'Não configurado'}</p>
+                    <p className="text-gray-600">
+                      {savedFunnel.config?.domain || "Não configurado"}
+                    </p>
                   </div>
                 </div>
               ) : (
@@ -250,15 +271,15 @@ const Teste1Page = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <Button 
+                <Button
                   onClick={handlePreview}
                   className="w-full flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
                 >
                   <Eye className="w-4 h-4" />
                   Visualizar Preview
                 </Button>
-                
-                <Button 
+
+                <Button
                   onClick={handleEdit}
                   variant="outline"
                   className="w-full flex items-center gap-2"
@@ -266,8 +287,8 @@ const Teste1Page = () => {
                   <Edit className="w-4 h-4" />
                   Editar Quiz
                 </Button>
-                
-                <Button 
+
+                <Button
                   onClick={handleExport}
                   variant="outline"
                   className="w-full flex items-center gap-2"
@@ -276,8 +297,8 @@ const Teste1Page = () => {
                   <Download className="w-4 h-4" />
                   Exportar Configuração
                 </Button>
-                
-                <Button 
+
+                <Button
                   onClick={handlePublish}
                   className="w-full flex items-center gap-2 bg-green-600 hover:bg-green-700"
                   disabled={!savedFunnel}
@@ -303,25 +324,36 @@ const Teste1Page = () => {
                   <div className="space-y-2 text-sm">
                     <div>
                       <span className="font-medium">Título:</span>
-                      <p className="text-gray-600">{savedFunnel.config?.seo?.title || 'Não configurado'}</p>
+                      <p className="text-gray-600">
+                        {savedFunnel.config?.seo?.title || "Não configurado"}
+                      </p>
                     </div>
                     <div>
                       <span className="font-medium">Descrição:</span>
-                      <p className="text-gray-600">{savedFunnel.config?.seo?.description || 'Não configurado'}</p>
+                      <p className="text-gray-600">
+                        {savedFunnel.config?.seo?.description ||
+                          "Não configurado"}
+                      </p>
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="font-semibold mb-3">Tracking</h4>
                   <div className="space-y-2 text-sm">
                     <div>
                       <span className="font-medium">Facebook Pixel:</span>
-                      <p className="text-gray-600">{savedFunnel.config?.pixel?.facebookPixelId || 'Não configurado'}</p>
+                      <p className="text-gray-600">
+                        {savedFunnel.config?.pixel?.facebookPixelId ||
+                          "Não configurado"}
+                      </p>
                     </div>
                     <div>
                       <span className="font-medium">Google Analytics:</span>
-                      <p className="text-gray-600">{savedFunnel.config?.pixel?.googleAnalyticsId || 'Não configurado'}</p>
+                      <p className="text-gray-600">
+                        {savedFunnel.config?.pixel?.googleAnalyticsId ||
+                          "Não configurado"}
+                      </p>
                     </div>
                   </div>
                 </div>

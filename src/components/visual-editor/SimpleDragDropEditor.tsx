@@ -8,7 +8,10 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { QUIZ_TEMPLATES as REAL_QUIZ_TEMPLATES, generateRealQuestionTemplates } from "@/data/realQuizTemplates";
+import {
+  QUIZ_TEMPLATES as REAL_QUIZ_TEMPLATES,
+  generateRealQuestionTemplates,
+} from "@/data/realQuizTemplates";
 import {
   Save,
   Trash2,
@@ -2456,7 +2459,7 @@ const SimpleDragDropEditor: React.FC = () => {
     // Se não houver dados salvos, criar com questões reais
     const realQuestions = generateRealQuestionTemplates();
     console.log("🔄 Criando funil com questões reais:", realQuestions.length);
-    
+
     return {
       id: "quiz-funnel-real",
       name: "Quiz de Estilo Pessoal - Questões Reais",
@@ -2482,21 +2485,26 @@ const SimpleDragDropEditor: React.FC = () => {
   );
   const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const [selectedOptions, setSelectedOptions] = useState<{[questionId: string]: string[]}>({});
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [questionId: string]: string[];
+  }>({});
 
   // Função para salvar alterações
   const saveChanges = () => {
     console.log("💾 Salvando alterações do funil...");
     localStorage.setItem("quiz_funnel_config", JSON.stringify(currentFunnel));
     localStorage.setItem("quiz_config", JSON.stringify(quizConfig));
-    
+
     // Salvar também em formato compatível com o quiz original
-    localStorage.setItem("quiz_editor_data", JSON.stringify({
-      funnel: currentFunnel,
-      config: quizConfig,
-      timestamp: new Date().toISOString()
-    }));
-    
+    localStorage.setItem(
+      "quiz_editor_data",
+      JSON.stringify({
+        funnel: currentFunnel,
+        config: quizConfig,
+        timestamp: new Date().toISOString(),
+      })
+    );
+
     console.log("✅ Alterações salvas automaticamente!");
   };
 
@@ -2506,14 +2514,17 @@ const SimpleDragDropEditor: React.FC = () => {
       console.log("💾 Auto-salvando alterações...");
       localStorage.setItem("quiz_funnel_config", JSON.stringify(currentFunnel));
       localStorage.setItem("quiz_config", JSON.stringify(quizConfig));
-      
+
       // Salvar também em formato compatível com o quiz original
-      localStorage.setItem("quiz_editor_data", JSON.stringify({
-        funnel: currentFunnel,
-        config: quizConfig,
-        timestamp: new Date().toISOString()
-      }));
-      
+      localStorage.setItem(
+        "quiz_editor_data",
+        JSON.stringify({
+          funnel: currentFunnel,
+          config: quizConfig,
+          timestamp: new Date().toISOString(),
+        })
+      );
+
       console.log("✅ Alterações auto-salvas!");
     }, 1000); // Salvar após 1 segundo sem mudanças
 
@@ -2525,13 +2536,13 @@ const SimpleDragDropEditor: React.FC = () => {
     try {
       const savedFunnel = localStorage.getItem("quiz_funnel_config");
       const savedConfig = localStorage.getItem("quiz_config");
-      
+
       if (savedFunnel) {
         const parsedFunnel = JSON.parse(savedFunnel);
         setCurrentFunnel(parsedFunnel);
         console.log("📥 Funil carregado do localStorage");
       }
-      
+
       if (savedConfig) {
         const parsedConfig = JSON.parse(savedConfig);
         setQuizConfig(parsedConfig);
@@ -3060,29 +3071,33 @@ const SimpleDragDropEditor: React.FC = () => {
         );
 
       case "options": {
-        const currentQuestionId = component.id.replace('options-', '');
+        const currentQuestionId = component.id.replace("options-", "");
         const currentSelections = selectedOptions[currentQuestionId] || [];
-        
+
         return (
           <div style={{ margin: "16px 0" }}>
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: data.hasImages ? "repeat(2, 1fr)" : "repeat(1, 1fr)",
+                gridTemplateColumns: data.hasImages
+                  ? "repeat(2, 1fr)"
+                  : "repeat(1, 1fr)",
                 gap: data.hasImages ? "12px" : "16px",
                 padding: "0 8px",
               }}
             >
               {data.options?.map((option: QuizOption, optIndex: number) => {
                 const isSelected = currentSelections.includes(option.id);
-                
+
                 return (
                   <div
                     key={option.id}
-                    className={`quiz-option-interactive ${isSelected ? 'selected' : ''}`}
+                    className={`quiz-option-interactive ${
+                      isSelected ? "selected" : ""
+                    }`}
                     style={{
                       position: "relative",
-                      background: isSelected 
+                      background: isSelected
                         ? "linear-gradient(135deg, #F0EAE2 0%, #E8DDD4 100%)"
                         : "linear-gradient(135deg, #FFFBF7 0%, #FDF8F3 100%)",
                       border: `2px solid ${isSelected ? "#B89B7A" : "#E8DDD4"}`,
@@ -3091,32 +3106,35 @@ const SimpleDragDropEditor: React.FC = () => {
                       transition: "all 0.3s ease",
                       overflow: "hidden",
                       padding: data.hasImages ? "12px" : "20px",
-                      boxShadow: isSelected 
-                        ? "0 4px 12px rgba(184, 155, 122, 0.2)" 
+                      boxShadow: isSelected
+                        ? "0 4px 12px rgba(184, 155, 122, 0.2)"
                         : "0 2px 8px rgba(0,0,0,0.05)",
                       transform: isSelected ? "scale(0.98)" : "scale(1)",
                     }}
                     onClick={() => {
-                      setSelectedOptions(prev => {
+                      setSelectedOptions((prev) => {
                         const current = prev[currentQuestionId] || [];
                         const isAlreadySelected = current.includes(option.id);
-                        
+
                         if (isAlreadySelected) {
                           // Remover seleção
                           return {
                             ...prev,
-                            [currentQuestionId]: current.filter(id => id !== option.id)
+                            [currentQuestionId]: current.filter(
+                              (id) => id !== option.id
+                            ),
                           };
                         } else {
                           // Adicionar seleção (respeitando limites de seleção múltipla)
                           const maxSelections = data.multiSelect ? 3 : 1;
-                          const newSelections = current.length >= maxSelections 
-                            ? [...current.slice(1), option.id] // Remove o primeiro se exceder limite
-                            : [...current, option.id];
-                          
+                          const newSelections =
+                            current.length >= maxSelections
+                              ? [...current.slice(1), option.id] // Remove o primeiro se exceder limite
+                              : [...current, option.id];
+
                           return {
                             ...prev,
-                            [currentQuestionId]: newSelections
+                            [currentQuestionId]: newSelections,
                           };
                         }
                       });
@@ -3161,9 +3179,11 @@ const SimpleDragDropEditor: React.FC = () => {
                         ✓
                       </div>
                     )}
-                    
+
                     {data.hasImages && option.image && (
-                      <div style={{ marginBottom: "12px", textAlign: "center" }}>
+                      <div
+                        style={{ marginBottom: "12px", textAlign: "center" }}
+                      >
                         <img
                           src={option.image}
                           alt={option.text}
@@ -3210,12 +3230,14 @@ const SimpleDragDropEditor: React.FC = () => {
                   </div>
                 );
               }) || (
-                <div style={{ 
-                  textAlign: "center", 
-                  padding: "20px", 
-                  color: "#8B5A3C",
-                  fontStyle: "italic" 
-                }}>
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                    color: "#8B5A3C",
+                    fontStyle: "italic",
+                  }}
+                >
                   Nenhuma opção configurada
                 </div>
               )}
@@ -3228,9 +3250,15 @@ const SimpleDragDropEditor: React.FC = () => {
                 fontSize: "0.85rem",
               }}
             >
-              {data.multiSelect 
-                ? `💡 Selecione até ${data.multiSelect || 3} opções (${currentSelections.length} selecionadas)`
-                : `💡 Selecione uma opção (${currentSelections.length > 0 ? 'selecionada' : 'nenhuma selecionada'})`}
+              {data.multiSelect
+                ? `💡 Selecione até ${data.multiSelect || 3} opções (${
+                    currentSelections.length
+                  } selecionadas)`
+                : `💡 Selecione uma opção (${
+                    currentSelections.length > 0
+                      ? "selecionada"
+                      : "nenhuma selecionada"
+                  })`}
             </div>
           </div>
         );
