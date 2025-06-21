@@ -2364,6 +2364,20 @@ const SimpleDragDropEditor: React.FC = () => {
     setQuizConfig(prev => ({ ...prev, ...updates }));
   };
 
+  // Função para atualizar seções específicas da configuração
+  const updateConfig = (section: keyof QuizConfig, updates: any) => {
+    setQuizConfig(prev => ({
+      ...prev,
+      [section]: { ...prev[section], ...updates }
+    }));
+  };
+
+  // Função para abrir preview
+  const openPreview = () => {
+    const previewUrl = `/quiz-preview?funnel=${encodeURIComponent(JSON.stringify(currentFunnel))}&config=${encodeURIComponent(JSON.stringify(quizConfig))}`;
+    window.open(previewUrl, "_blank");
+  };
+
   // Aplicar CSS
   useEffect(() => {
     const styleElement = document.createElement("style");
@@ -3655,10 +3669,7 @@ const SimpleDragDropEditor: React.FC = () => {
               <Button 
                 size="sm" 
                 className="w-full h-7 text-xs" 
-                onClick={() => {
-                  const previewUrl = `/quiz-preview?funnel=${encodeURIComponent(JSON.stringify(currentFunnel))}`;
-                  window.open(previewUrl, "_blank");
-                }}
+                onClick={openPreview}
               >
                 <Eye className="h-3 w-3 mr-1" />
                 Preview
