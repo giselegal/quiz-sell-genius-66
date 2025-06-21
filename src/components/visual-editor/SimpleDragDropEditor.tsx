@@ -688,6 +688,254 @@ const QUIZ_TEMPLATES = {
       },
     ],
   },
+
+  // TEMPLATES DE PÁGINAS DE VENDA - Layout idêntico ao quiz
+  salesPage: {
+    id: "sales-1",
+    title: "Página de Vendas",
+    type: "sales" as const,
+    progress: 100,
+    showHeader: true,
+    showProgress: false,
+    components: [
+      {
+        id: "logo-sales",
+        type: "logo" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+          alt: "Logo Gisele Galvão",
+        },
+        style: {},
+      },
+      {
+        id: "title-sales",
+        type: "title" as const,
+        data: { text: "Transforme Seu Estilo Pessoal Hoje!" },
+        style: {
+          fontSize: "2.5rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "video-sales",
+        type: "video" as const,
+        data: {
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        },
+        style: {},
+      },
+      {
+        id: "testimonial-sales",
+        type: "testimonial" as const,
+        data: {
+          text: "Este curso mudou completamente minha relação com a moda. Agora sei exatamente o que usar em cada ocasião!",
+          name: "Maria Silva",
+          role: "Executiva de Marketing",
+          avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b762?w=60&h=60&fit=crop&crop=face",
+        },
+        style: {},
+      },
+      {
+        id: "price-sales",
+        type: "price" as const,
+        data: {
+          price: "197",
+          originalPrice: "497",
+          installments: "19,70",
+        },
+        style: {},
+      },
+      {
+        id: "countdown-sales",
+        type: "countdown" as const,
+        data: {
+          title: "⚡ PROMOÇÃO RELÂMPAGO - TERMINA EM:",
+        },
+        style: {},
+      },
+      {
+        id: "bonus-sales",
+        type: "bonus" as const,
+        data: {
+          bonuses: [
+            { id: "bonus1", title: "Bônus #1: Análise de Coloração Pessoal", value: "R$ 297", description: "Descubra as cores que realçam sua beleza natural" },
+            { id: "bonus2", title: "Bônus #2: Guia de Compras Inteligente", value: "R$ 197", description: "Lista personalizada do que comprar para renovar seu guarda-roupa" },
+            { id: "bonus3", title: "Bônus #3: Acesso ao Grupo VIP", value: "R$ 397", description: "Comunidade exclusiva com dicas diárias e suporte" }
+          ],
+        },
+        style: {},
+      },
+      {
+        id: "guarantee-sales",
+        type: "guarantee" as const,
+        data: {
+          title: "Garantia Incondicional de 30 Dias",
+          text: "Se você não ficar 100% satisfeita com os resultados, devolvemos todo seu dinheiro. Sem perguntas, sem burocracia!",
+        },
+        style: {},
+      },
+      {
+        id: "social-proof-sales",
+        type: "social-proof" as const,
+        data: {
+          customerCount: "8.347",
+          rating: "4.9",
+          reviewCount: "2.156",
+        },
+        style: {},
+      },
+      {
+        id: "faq-sales",
+        type: "faq" as const,
+        data: {
+          faqs: [
+            { id: "faq1", question: "Como funciona o acesso ao curso?", answer: "Assim que o pagamento for aprovado, você recebe o acesso imediato por email. O conteúdo fica disponível 24h por dia." },
+            { id: "faq2", question: "Posso acessar pelo celular?", answer: "Sim! A plataforma é totalmente responsiva e funciona perfeitamente em celulares, tablets e computadores." },
+            { id: "faq3", question: "E se eu não gostar do curso?", answer: "Oferecemos 30 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do valor investido." }
+          ],
+        },
+        style: {},
+      },
+      {
+        id: "button-sales",
+        type: "button" as const,
+        data: { text: "🔥 QUERO TRANSFORMAR MEU ESTILO AGORA!" },
+        style: {},
+      },
+    ],
+  },
+
+  checkout: {
+    id: "checkout-1",
+    title: "Finalizar Pedido",
+    type: "checkout" as const,
+    progress: 100,
+    showHeader: true,
+    showProgress: false,
+    components: [
+      {
+        id: "title-checkout",
+        type: "title" as const,
+        data: { text: "Finalize Seu Pedido" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "price-checkout",
+        type: "price" as const,
+        data: {
+          price: "197",
+          installments: "19,70",
+        },
+        style: {},
+      },
+      {
+        id: "input-name",
+        type: "input" as const,
+        data: {
+          label: "NOME COMPLETO",
+          placeholder: "Digite seu nome completo",
+          required: true,
+        },
+        style: {},
+      },
+      {
+        id: "input-email",
+        type: "input" as const,
+        data: {
+          label: "EMAIL",
+          placeholder: "seu@email.com",
+          required: true,
+        },
+        style: {},
+      },
+      {
+        id: "button-checkout",
+        type: "button" as const,
+        data: { text: "FINALIZAR COMPRA SEGURA" },
+        style: {},
+      },
+    ],
+  },
+
+  upsell: {
+    id: "upsell-1",
+    title: "Oferta Especial",
+    type: "upsell" as const,
+    progress: 100,
+    showHeader: true,
+    showProgress: false,
+    components: [
+      {
+        id: "title-upsell",
+        type: "title" as const,
+        data: { text: "🎉 PARABÉNS! Uma Oferta Exclusiva Para Você!" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-upsell",
+        type: "subtitle" as const,
+        data: {
+          text: "Já que você decidiu transformar seu estilo, que tal acelerar ainda mais seus resultados?",
+        },
+        style: {
+          fontSize: "1.25rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "image-upsell",
+        type: "image" as const,
+        data: {
+          src: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&h=400&fit=crop",
+          alt: "Consultoria Personal Stylist",
+        },
+        style: {},
+      },
+      {
+        id: "price-upsell",
+        type: "price" as const,
+        data: {
+          price: "297",
+          originalPrice: "897",
+          installments: "29,70",
+        },
+        style: {},
+      },
+      {
+        id: "countdown-upsell",
+        type: "countdown" as const,
+        data: {
+          title: "⏰ OFERTA VÁLIDA APENAS NESTA PÁGINA!",
+        },
+        style: {},
+      },
+      {
+        id: "button-upsell-yes",
+        type: "button" as const,
+        data: { text: "✅ SIM! QUERO ACELERAR MEUS RESULTADOS" },
+        style: {},
+      },
+      {
+        id: "button-upsell-no",
+        type: "button" as const,
+        data: { text: "❌ Não, quero continuar apenas com o curso" },
+        style: {},
+      },
+    ],
+  },
 };
 
 const SimpleDragDropEditor: React.FC = () => {
