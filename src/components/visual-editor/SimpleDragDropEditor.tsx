@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { QUIZ_TEMPLATES as REAL_QUIZ_TEMPLATES, generateRealQuestionTemplates } from "@/data/realQuizTemplates";
 import {
   Save,
   Trash2,
@@ -2438,34 +2439,21 @@ const SimpleDragDropEditor: React.FC = () => {
     },
   });
 
-  // Estado do funil completo
-  const [currentFunnel, setCurrentFunnel] = useState<QuizFunnel>({
-    id: "quiz-funnel-1",
-    name: "Quiz de Estilo Pessoal",
-    pages: [
-      QUIZ_TEMPLATES.intro,
-      QUIZ_TEMPLATES.question1,
-      QUIZ_TEMPLATES.question2,
-      QUIZ_TEMPLATES.question3,
-      QUIZ_TEMPLATES.question4,
-      QUIZ_TEMPLATES.question5,
-      QUIZ_TEMPLATES.question6,
-      QUIZ_TEMPLATES.question7,
-      QUIZ_TEMPLATES.question8,
-      QUIZ_TEMPLATES.question9,
-      QUIZ_TEMPLATES.question10,
-      QUIZ_TEMPLATES.transition,
-      QUIZ_TEMPLATES.strategic1,
-      QUIZ_TEMPLATES.strategic2,
-      QUIZ_TEMPLATES.strategic3,
-      QUIZ_TEMPLATES.strategic4,
-      QUIZ_TEMPLATES.strategic5,
-      QUIZ_TEMPLATES.strategic6,
-      QUIZ_TEMPLATES.strategic7,
-      QUIZ_TEMPLATES.loading,
-      QUIZ_TEMPLATES.result,
-      QUIZ_TEMPLATES.offer,
-    ],
+  // Estado do funil completo - usando questões reais
+  const [currentFunnel, setCurrentFunnel] = useState<QuizFunnel>(() => {
+    const realQuestions = generateRealQuestionTemplates();
+    return {
+      id: "quiz-funnel-real",
+      name: "Quiz de Estilo Pessoal - Questões Reais",
+      pages: [
+        REAL_QUIZ_TEMPLATES.intro,
+        ...realQuestions.slice(0, 10), // Primeiras 10 questões normais
+        REAL_QUIZ_TEMPLATES.loading,
+        ...realQuestions.slice(10), // Questões estratégicas
+        REAL_QUIZ_TEMPLATES.result,
+        REAL_QUIZ_TEMPLATES.offer,
+      ],
+    };
   });
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -2485,8 +2473,38 @@ const SimpleDragDropEditor: React.FC = () => {
     console.log("💾 Salvando alterações do funil...");
     localStorage.setItem("quiz_funnel_config", JSON.stringify(currentFunnel));
     localStorage.setItem("quiz_config", JSON.stringify(quizConfig));
+    
+    // Salvar também em formato compatível com o quiz original
+    localStorage.setItem("quiz_editor_data", JSON.stringify({
+      funnel: currentFunnel,
+      config: quizConfig,
+      timestamp: new Date().toISOString()
+    }));
+    
     alert("✅ Alterações salvas com sucesso!");
   };
+
+  // Carregar configurações salvas ao inicializar
+  useEffect(() => {
+    try {
+      const savedFunnel = localStorage.getItem("quiz_funnel_config");
+      const savedConfig = localStorage.getItem("quiz_config");
+      
+      if (savedFunnel) {
+        const parsedFunnel = JSON.parse(savedFunnel);
+        setCurrentFunnel(parsedFunnel);
+        console.log("📥 Funil carregado do localStorage");
+      }
+      
+      if (savedConfig) {
+        const parsedConfig = JSON.parse(savedConfig);
+        setQuizConfig(parsedConfig);
+        console.log("📥 Configurações carregadas do localStorage");
+      }
+    } catch (error) {
+      console.error("❌ Erro ao carregar dados salvos:", error);
+    }
+  }, []);
 
   // Função para atualizar configurações
   const updateQuizConfig = (updates: Partial<QuizConfig>) => {
@@ -2496,11 +2514,11 @@ const SimpleDragDropEditor: React.FC = () => {
   // Função para atualizar seções específicas da configuração
   const updateConfig = (
     section: keyof QuizConfig,
-    updates: Partial<QuizConfig[keyof QuizConfig]>
+    updates: Record<string, unknown>
   ) => {
     setQuizConfig((prev) => ({
       ...prev,
-      [section]: { ...(prev[section] as object), ...updates },
+      [section]: { ...(prev[section] as Record<string, unknown>), ...updates },
     }));
   };
 
@@ -4089,7 +4107,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.intro;
+                    newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.intro;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
@@ -4100,12 +4118,26 @@ const SimpleDragDropEditor: React.FC = () => {
                   size="sm"
                   className="w-full justify-start h-8 text-xs"
                   onClick={() => {
+                    const realQuestions = generateRealQuestionTemplates();
                     const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.question1;
+                    newPages[currentPageIndex] = realQuestions[0]; // Primeira questão real
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
-                  🖼️ Questão Visual
+                  🖼️ Questão Real (Visual)
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start h-8 text-xs"
+                  onClick={() => {
+                    const realQuestions = generateRealQuestionTemplates();
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = realQuestions[1]; // Segunda questão real
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  📄 Questão Real (Texto)
                 </Button>
                 <Button
                   variant="outline"
@@ -4113,19 +4145,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.question2;
-                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
-                  }}
-                >
-                  📄 Questão Texto
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full justify-start h-8 text-xs"
-                  onClick={() => {
-                    const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.loading;
+                    newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.loading;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
@@ -4137,7 +4157,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.result;
+                    newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.result;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
@@ -4149,7 +4169,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   className="w-full justify-start h-8 text-xs"
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
-                    newPages[currentPageIndex] = QUIZ_TEMPLATES.offer;
+                    newPages[currentPageIndex] = REAL_QUIZ_TEMPLATES.offer;
                     setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
