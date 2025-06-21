@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-20T23:21:10.582Z",
-  "components": 480,
+  "timestamp": "2025-06-21T00:06:31.622Z",
+  "components": 483,
   "files": [
     {
       "name": "App",
@@ -2013,6 +2013,16 @@
       "type": "typescript"
     },
     {
+      "name": "DragDropQuizEditor",
+      "path": "src/components/visual-editor/DragDropQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FaithfulQuizEditor",
+      "path": "src/components/visual-editor/FaithfulQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
       "name": "ModernVisualEditor",
       "path": "src/components/visual-editor/ModernVisualEditor.tsx",
       "type": "typescript"
@@ -2385,6 +2395,11 @@
     {
       "name": "ResultPageEditor",
       "path": "src/pages/admin/editors/ResultPageEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "editor-test",
+      "path": "src/pages/editor-test.tsx",
       "type": "typescript"
     },
     {
