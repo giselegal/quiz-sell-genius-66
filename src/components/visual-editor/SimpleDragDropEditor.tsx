@@ -26,7 +26,12 @@ import {
   MousePointer,
   Layout,
   GripVertical,
-  Eye
+  Eye,
+  Plus,
+  ArrowLeft,
+  ArrowRight,
+  Play,
+  Download
 } from "lucide-react";
 
 // CSS simplificado
@@ -439,6 +444,50 @@ const QUIZ_TEMPLATES = {
         style: {}
       }
     ]
+  },
+
+  offer: {
+    id: "offer-1",
+    title: "Oferta Especial",
+    type: 'offer' as const,
+    progress: 100,
+    showHeader: true,
+    showProgress: false,
+    components: [
+      {
+        id: "title-7",
+        type: 'title' as const,
+        data: { text: "OFERTA ESPECIAL PARA VOCÊ!" },
+        style: { fontSize: '2.5rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+      },
+      {
+        id: "subtitle-4",
+        type: 'subtitle' as const,
+        data: { text: "Transforme seu guarda-roupa com o Guia Completo de Estilo" },
+        style: { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' }
+      },
+      {
+        id: "image-2",
+        type: 'image' as const,
+        data: { 
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
+          alt: "Guia de estilo"
+        },
+        style: {}
+      },
+      {
+        id: "text-1",
+        type: 'text' as const,
+        data: { text: "✨ Análise completa do seu estilo pessoal\n✨ Dicas personalizadas de combinações\n✨ Guia de cores que favorecem você\n✨ Lista de compras inteligente" },
+        style: { fontSize: '1.1rem', textAlign: 'left' as const, color: '#374151' }
+      },
+      {
+        id: "button-3",
+        type: 'button' as const,
+        data: { text: "QUERO MEU GUIA AGORA" },
+        style: {}
+      }
+    ]
   }
 };
 
@@ -452,7 +501,8 @@ const SimpleDragDropEditor: React.FC = () => {
       QUIZ_TEMPLATES.question1,
       QUIZ_TEMPLATES.question2,
       QUIZ_TEMPLATES.loading,
-      QUIZ_TEMPLATES.result
+      QUIZ_TEMPLATES.result,
+      QUIZ_TEMPLATES.offer
     ]
   });
 
@@ -476,6 +526,87 @@ const SimpleDragDropEditor: React.FC = () => {
       }
     };
   }, []);
+
+  // Funções de navegação entre páginas
+  const goToPreviousPage = () => {
+    if (currentPageIndex > 0) {
+      setCurrentPageIndex(currentPageIndex - 1);
+      setSelectedComponent(null);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (currentPageIndex < currentFunnel.pages.length - 1) {
+      setCurrentPageIndex(currentPageIndex + 1);
+      setSelectedComponent(null);
+    }
+  };
+
+  const addNewPage = () => {
+    const newPage: SimplePage = {
+      id: `page-${Date.now()}`,
+      title: "Nova Página",
+      type: 'question',
+      progress: 50,
+      showHeader: true,
+      showProgress: true,
+      components: []
+    };
+
+    setCurrentFunnel(prev => ({
+      ...prev,
+      pages: [...prev.pages, newPage]
+    }));
+    setCurrentPageIndex(currentFunnel.pages.length);
+  };
+
+  const duplicatePage = () => {
+    const newPage: SimplePage = {
+      ...currentPage,
+      id: `page-${Date.now()}`,
+      title: `${currentPage.title} (Cópia)`,
+      components: currentPage.components.map(comp => ({
+        ...comp,
+        id: `${comp.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+      }))
+    };
+
+    setCurrentFunnel(prev => ({
+      ...prev,
+      pages: [
+        ...prev.pages.slice(0, currentPageIndex + 1),
+        newPage,
+        ...prev.pages.slice(currentPageIndex + 1)
+      ]
+    }));
+    setCurrentPageIndex(currentPageIndex + 1);
+  };
+
+  const deletePage = () => {
+    if (currentFunnel.pages.length > 1) {
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.filter((_, index) => index !== currentPageIndex)
+      }));
+      
+      if (currentPageIndex >= currentFunnel.pages.length - 1) {
+        setCurrentPageIndex(Math.max(0, currentPageIndex - 1));
+      }
+      setSelectedComponent(null);
+    }
+  };
+
+  const exportFunnel = () => {
+    const dataStr = JSON.stringify(currentFunnel, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `quiz-funnel-${currentFunnel.name.toLowerCase().replace(/\s+/g, '-')}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
 
   // Funções de drag & drop
   const handleDragStart = (e: React.DragEvent, componentType: ComponentType) => {
