@@ -4175,7 +4175,7 @@ const AdvancedQuizEditor: React.FC = () => {
       logoUrl: "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO",
       progressColor: "#3b82f6",
     },
-    currentStepId: "step-1",
+    currentStepId: "quiz-intro",
   });
 
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(
@@ -4502,7 +4502,7 @@ const AdvancedQuizEditor: React.FC = () => {
         {/* Layout Principal com Quatro Colunas */}
         <div className="flex-1 flex overflow-hidden">
           {/* Coluna 1: Navegação de Etapas (Esquerda) - Oculta em mobile */}
-          <div className="hidden lg:block w-64 xl:w-72 min-w-[250px] max-w-[320px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+          <div className="hidden lg:block w-72 min-w-[280px] max-w-[320px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
             <div className="h-full">
               <StepNavigationTabs
                 steps={editorState.steps}
@@ -4516,14 +4516,14 @@ const AdvancedQuizEditor: React.FC = () => {
           </div>
 
           {/* Coluna 2: Biblioteca de Componentes - Oculta em mobile e tablet */}
-          <div className="hidden xl:block w-72 2xl:w-80 min-w-[280px] max-w-[360px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+          <div className="hidden xl:block w-80 min-w-[300px] max-w-[360px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
             <div className="h-full">
               <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
             </div>
           </div>
 
           {/* Coluna 3: Canvas do Editor - Sempre visível */}
-          <div className="flex-1 min-w-0 overflow-hidden advanced-editor-column">
+          <div className="flex-1 min-w-[600px] overflow-hidden advanced-editor-column">
             <div className="h-full overflow-y-auto canvas-area-scrollbar">
               <CanvasArea
                 currentStep={currentStep}
@@ -4540,7 +4540,7 @@ const AdvancedQuizEditor: React.FC = () => {
           </div>
 
           {/* Coluna 4: Painel de Propriedades/Editor (Direita) - Oculta em mobile */}
-          <div className="hidden md:block w-80 lg:w-96 min-w-[300px] max-w-[420px] border-l border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+          <div className="hidden md:block w-96 min-w-[350px] max-w-[420px] border-l border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
             <div className="p-4 h-full">
               {selectedComponent ? (
                 <div>
