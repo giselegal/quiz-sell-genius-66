@@ -35,7 +35,8 @@ import {
   Shield,
   Gift,
   HelpCircle,
-  Users
+  Users,
+  Settings
 } from "lucide-react";
 
 // CSS simplificado
