@@ -1,104 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import "@/styles/advanced-editor.css";
-import "@/styles/editor.css";
-import { GripVertical } from "lucide-react";
-
-// --- Sistema de Auto-Save Funcional ---
-const useAutoSave = (data: QuizEditorState | null, delay: number = 2000) => {
-  const [isSaving, setIsSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-
-  const saveToLocalStorage = useCallback(
-    async (dataToSave: QuizEditorState) => {
-      setIsSaving(true);
-      try {
-        // Salva no localStorage com versionamento
-        const saveData = {
-          data: dataToSave,
-          timestamp: new Date().toISOString(),
-          version: "1.0.0",
-        };
-
-        localStorage.setItem("quiz-editor-state", JSON.stringify(saveData));
-
-        // Também salva um backup rotativo
-        const backupKey = `quiz-editor-backup-${Date.now()}`;
-        localStorage.setItem(backupKey, JSON.stringify(saveData));
-
-        // Limita a 5 backups
-        const allKeys = Object.keys(localStorage).filter((key) =>
-          key.startsWith("quiz-editor-backup-")
-        );
-        if (allKeys.length > 5) {
-          allKeys
-            .sort()
-            .slice(0, -5)
-            .forEach((key) => localStorage.removeItem(key));
-        }
-
-        // Simula salvamento no servidor
-        await new Promise((resolve) => setTimeout(resolve, 300));
-
-        setLastSaved(new Date());
-        setHasUnsavedChanges(false);
-        console.log("✅ Auto-save realizado:", new Date().toLocaleTimeString());
-      } catch (error) {
-        console.error("❌ Erro no auto-save:", error);
-        alert(
-          "Erro ao salvar automaticamente. Suas alterações podem não estar sendo salvas."
-        );
-      } finally {
-        setIsSaving(false);
-      }
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (!data) return;
-
-    setHasUnsavedChanges(true);
-    const timer = setTimeout(() => {
-      saveToLocalStorage(data);
-    }, delay);
-
-    return () => clearTimeout(timer);
-  }, [data, delay, saveToLocalStorage]);
-
-  // Carrega dados salvos no localStorage na inicialização
-  const loadFromLocalStorage = useCallback((): QuizEditorState | null => {
-    try {
-      const saved = localStorage.getItem("quiz-editor-state");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        console.log(
-          "📂 Dados carregados do auto-save:",
-          new Date(parsed.timestamp).toLocaleString()
-        );
-        return parsed.data;
-      }
-    } catch (error) {
-      console.error("Erro ao carregar dados salvos:", error);
-    }
-    return null;
-  }, []);
-
-  // Função para salvar manualmente
-  const saveManually = useCallback(() => {
-    if (data) {
-      saveToLocalStorage(data);
-    }
-  }, [data, saveToLocalStorage]);
-
-  return {
-    isSaving,
-    lastSaved,
-    hasUnsavedChanges,
-    loadFromLocalStorage,
-    saveManually,
-  };
-};
 
 // --- Interfaces Aprimoradas para a Estrutura de Dados do Quiz ---
 
@@ -154,6 +55,8 @@ interface QuizComponentProps {
   questionText?: string; // O texto da pergunta
   choices?: OptionChoice[]; // Array de objetos de opções
   selectionType?: "single" | "multiple"; // Se permite uma ou múltiplas seleções
+  maxSelections?: number; // Número máximo de seleções permitidas
+  minSelections?: number; // Número mínimo de seleções obrigatórias
   // Lógica de ramificação condicional para o quiz (poderia ser mais complexa com regras)
   conditionalLogic?: {
     rule: "allSelected" | "anySelected" | "scoreThreshold";
@@ -197,10 +100,6 @@ interface QuizComponentProps {
   offerProductSku?: string; // SKU do produto em oferta
   discountCode?: string; // Código de cupom
   componentName?: string; // Nome do componente para customComponent
-
-  // Propriedades específicas para ResultPage.tsx
-  styleImages?: { [key: string]: string[] }; // Mapear estilos para arrays de URLs de imagens
-  styleNames?: { [key: string]: string }; // Mapear estilos para nomes amigáveis
 }
 
 /**
@@ -266,86 +165,68 @@ interface QuizEditorState {
 
 /**
  * @component EditableHeading
- * @description Componente para exibir e simular a edição de um título seguindo o design original.
+ * @description Componente para exibir e simular a edição de um título.
  */
 const EditableHeading: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <div className="text-center mb-8">
-    <h1
-      className="text-white font-bold leading-tight tracking-wide font-playfair"
-      style={{
-        fontSize:
-          component.props.styles?.fontSize === "3xl"
-            ? "2.25rem"
-            : component.props.styles?.fontSize || "1.875rem",
-        textAlign:
-          (component.props.styles
-            ?.textAlign as React.CSSProperties["textAlign"]) || "center",
-        color: component.props.styles?.color || "#ffffff",
-        fontWeight: "700",
-        letterSpacing: "0.05em",
-        lineHeight: "1.1",
-        marginBottom: "2rem",
-        textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-        ...component.props.styles,
-      }}
-    >
-      {component.props.text || "TÍTULO EDITÁVEL"}
-    </h1>
-  </div>
+  <h1
+    className="min-w-full text-3xl font-bold text-center text-zinc-100 p-2 rounded-md bg-zinc-800/50"
+    style={component.props.styles}
+  >
+    {component.props.text || "Título Editável"}
+  </h1>
 );
 
 /**
  * @component EditableImage
- * @description Componente para exibir uma imagem seguindo o layout original.
+ * @description Componente para exibir uma imagem.
  */
 const EditableImage: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <div className="w-full flex justify-center mb-8">
-    <div className="relative">
+  <div
+    className="grid p-2 rounded-md bg-zinc-800/50"
+    style={component.props.styles}
+  >
+    <div className="flex items-center justify-center">
       <img
         src={
           component.props.src ||
-          "https://placehold.co/400x300/0f172a/94a3b8?text=Imagem"
+          "https://placehold.co/300x200/0f172a/94a3b8?text=Imagem"
         }
         alt={component.props.alt || "Imagem"}
-        className="rounded-2xl shadow-2xl max-w-full h-auto border-2 border-[#B89B7A]/30"
-        style={{
-          width: component.props.styles?.width || "400px",
-          height: component.props.styles?.height || "300px",
-          objectFit: component.props.objectFit || "cover",
-          ...component.props.styles,
-        }}
+        className="object-cover w-full h-auto rounded-lg max-w-96"
+        style={{ objectFit: component.props.objectFit || "cover" }}
       />
-      {/* Overlay sutil para dar profundidade */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
     </div>
   </div>
 );
 
 /**
  * @component EditableInput
- * @description Componente para exibir um campo de entrada seguindo o design original.
+ * @description Componente para exibir um campo de entrada.
  */
 const EditableInput: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
-  <div className="w-full mb-8" style={component.props.styles}>
-    <label className="block text-white text-sm font-semibold mb-3 uppercase tracking-wider">
+  <div
+    className="grid w-full items-center gap-1.5 p-2 rounded-md bg-zinc-800/50"
+    style={component.props.styles}
+  >
+    <label className="text-sm font-medium leading-none text-zinc-100">
       {component.props.label || "Campo de Entrada"}{" "}
-      {component.props.required && <span className="text-[#B89B7A]">*</span>}
+      {component.props.required && <span className="text-red-400">*</span>}
     </label>
     <input
       type={component.props.inputType || "text"}
-      className="w-full px-4 py-4 bg-white border-2 border-[#B89B7A] rounded-lg text-gray-800 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#B89B7A]/50 focus:border-[#b29670] transition-all duration-200 shadow-sm"
+      className="flex h-10 w-full rounded-md border border-input bg-zinc-700/50 text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50 p-2"
       placeholder={component.props.placeholder || "Digite aqui..."}
       value="" // Em um editor, seria um valor controlado
       readOnly // Para simular que é um editor e não um quiz ativo
     />
     {component.props.errorMessage && (
-      <span className="text-xs text-red-400 mt-2 block">
+      <span className="text-xs text-red-400">
         {component.props.errorMessage}
       </span>
     )}
@@ -354,7 +235,7 @@ const EditableInput: React.FC<{ component: QuizComponent }> = ({
 
 /**
  * @component EditableButton
- * @description Componente para exibir um botão seguindo o design original.
+ * @description Componente para exibir um botão.
  */
 const EditableButton: React.FC<{ component: QuizComponent }> = ({
   component,
@@ -362,117 +243,64 @@ const EditableButton: React.FC<{ component: QuizComponent }> = ({
   const getButtonClass = (style: string) => {
     switch (style) {
       case "secondary":
-        return "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300";
+        return "bg-gray-600 text-white hover:bg-gray-700";
       case "outline":
-        return "border-2 border-[#B89B7A] text-[#B89B7A] hover:bg-[#B89B7A] hover:text-white bg-transparent";
+        return "border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white";
       case "ghost":
-        return "text-[#B89B7A] hover:bg-[#B89B7A]/10 bg-transparent";
+        return "text-blue-600 hover:bg-blue-600/10";
       default:
-        return "bg-gradient-to-r from-[#B89B7A] to-[#b29670] hover:from-[#b29670] hover:to-[#a68b5f] text-white font-semibold shadow-md hover:shadow-lg";
+        return "bg-blue-600 text-white hover:bg-blue-700";
     }
   };
 
   return (
-    <div className="text-center mb-6">
-      <button
-        className={`inline-flex items-center justify-center px-8 py-4 rounded-lg text-base font-medium transition-all duration-200 min-w-[200px] transform hover:scale-[1.02] ${getButtonClass(
-          component.props.buttonStyle || "primary"
-        )}`}
-        style={component.props.styles}
-      >
-        {component.props.buttonText || "Continuar"}
-      </button>
-    </div>
+    <button
+      className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 min-w-full h-14 rounded-md ${getButtonClass(
+        component.props.buttonStyle || "primary"
+      )}`}
+      style={component.props.styles}
+    >
+      {component.props.buttonText || "Botão"}
+    </button>
   );
 };
 
 /**
  * @component OptionsComponent
- * @description Componente para exibir opções de múltipla escolha seguindo exatamente o design do quiz original.
+ * @description Componente para exibir opções de múltipla escolha.
  */
 const OptionsComponent: React.FC<{ component: QuizComponent }> = ({
   component,
-}) => {
-  const hasImages = component.props.choices?.some((choice) => choice.image);
-
-  return (
-    <div
-      className={hasImages ? "grid grid-cols-2 gap-4" : "flex flex-col gap-3"}
-      style={component.props.styles}
-    >
+}) => (
+  <div
+    className="grid gap-2 p-2 rounded-md bg-zinc-800/50"
+    style={component.props.styles}
+  >
+    <p className="text-zinc-100 font-semibold">
+      {component.props.questionText || "Selecione uma opção:"}
+    </p>
+    <div className="flex flex-col gap-2">
       {component.props.choices?.map((choice, index) => (
-        <div
+        <button
           key={index}
-          className={`
-            relative cursor-pointer transition-all duration-200 hover:scale-[1.02]
-            ${
-              hasImages
-                ? "bg-white rounded-xl shadow-sm border-2 border-[#B89B7A] hover:shadow-lg hover:border-[#b29670] min-h-[200px]"
-                : "bg-white border-2 border-[#B89B7A] rounded-xl p-4 hover:bg-[#faf6f1] hover:border-[#b29670]"
-            }
-          `}
+          className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors bg-zinc-700 text-zinc-100 hover:bg-zinc-600 p-3 rounded-md text-left"
         >
-          {hasImages ? (
-            // Layout para opções com imagem (questões 1 e 3) - Melhorado para evitar corte
-            <div className="h-full flex flex-col p-4">
-              {/* Container da imagem com altura fixa e proporção adequada */}
-              <div className="flex-1 flex flex-col justify-center items-center mb-3">
-                <div className="w-full h-32 mb-3 overflow-hidden rounded-lg">
-                  <img
-                    src={choice.image}
-                    alt={choice.text}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                {/* Texto centralizado com espaçamento adequado */}
-                <div className="text-center flex-1 flex items-center justify-center">
-                  <p className="text-sm text-gray-800 font-medium leading-snug px-2">
-                    <span dangerouslySetInnerHTML={{ __html: choice.text }} />
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            // Layout para opções apenas texto (questões 2 e estratégicas)
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-gray-800 font-medium text-base leading-relaxed">
-                  <span dangerouslySetInnerHTML={{ __html: choice.text }} />
-                </p>
-              </div>
-              <div className="ml-3 w-6 h-6 border-2 border-[#B89B7A] rounded-full flex items-center justify-center">
-                <div className="w-3 h-3 bg-[#B89B7A] rounded-full opacity-0 transition-opacity duration-200"></div>
-              </div>
-            </div>
+          {choice.text}
+          {choice.scoreValue && (
+            <span className="ml-auto text-xs text-zinc-400">
+              +{choice.scoreValue}
+            </span>
           )}
-
-          {/* Indicador de seleção visual para preview */}
-          <div className="absolute top-3 right-3 w-6 h-6 bg-[#B89B7A] rounded-full opacity-0 flex items-center justify-center">
-            <svg
-              className="w-4 h-4 text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
+        </button>
       ))}
-
-      {component.props.selectionType === "multiple" && (
-        <div className="col-span-2 text-center mt-4">
-          <p className="text-sm text-gray-600 font-medium">
-            ✨ Selecione 3 opções que mais combinam com você
-          </p>
-        </div>
-      )}
     </div>
-  );
-};
+    {component.props.selectionType === "multiple" && (
+      <p className="text-xs text-zinc-400 mt-1">
+        Você pode selecionar múltiplas opções
+      </p>
+    )}
+  </div>
+);
 
 /**
  * @component AlertComponent
@@ -537,54 +365,33 @@ const CustomComponentPlaceholder: React.FC<{ component: QuizComponent }> = ({
 
 /**
  * @component SpacerComponent
- * @description Componente para espaçamento seguindo o design real.
+ * @description Componente para espaçamento.
  */
 const SpacerComponent: React.FC<{ component: QuizComponent }> = ({
   component,
 }) => (
   <div
-    className="min-w-full py-2 border-dashed border-yellow-500 border rounded-lg"
-    style={{
-      height: `${component.props.height || 20}px`,
-      ...component.props.styles,
-    }}
+    className="h-4 w-full border-b border-dashed border-zinc-600 my-2 flex items-center justify-center text-zinc-500 text-xs"
+    style={component.props.styles}
   >
-    <div className="flex items-center justify-center h-full text-yellow-500 text-xs">
-      Espaçador ({component.props.height || 20}px)
-    </div>
+    Espaçador
   </div>
 );
 
 /**
  * @component TextComponent
- * @description Componente para exibir texto simples seguindo o design original.
+ * @description Componente para exibir texto simples.
  */
 const TextComponent: React.FC<{ component: QuizComponent }> = ({
   component,
-}) => {
-  const textAlign =
-    (component.props.styles?.textAlign as React.CSSProperties["textAlign"]) ||
-    "center";
-
-  return (
-    <div className="text-center mb-8">
-      <p
-        className="text-gray-300 leading-relaxed font-medium"
-        style={{
-          fontSize: component.props.styles?.fontSize || "1.2rem",
-          textAlign,
-          color: component.props.styles?.color || "#d1d5db",
-          lineHeight: "1.7",
-          maxWidth: "600px",
-          margin: "0 auto",
-          ...component.props.styles,
-        }}
-      >
-        {component.props.text || "Texto Editável"}
-      </p>
-    </div>
-  );
-};
+}) => (
+  <p
+    className="min-w-full text-zinc-100 text-center p-2 rounded-md bg-zinc-800/50"
+    style={component.props.styles}
+  >
+    {component.props.text || "Texto Editável"}
+  </p>
+);
 
 // Mapeamento de tipos de componentes para seus respectivos React Components de VISUALIZAÇÃO
 const componentViewMap: {
@@ -613,8 +420,6 @@ const generateUniqueId = (): string =>
 // --- Componente CanvasArea ---
 interface CanvasAreaProps {
   currentStep: QuizStep | null;
-  steps: QuizStep[];
-  currentStepId: string;
   headerConfig: QuizHeaderConfig;
   selectedComponent: QuizComponent | null;
   selectedComponentId: string | null;
@@ -626,13 +431,10 @@ interface CanvasAreaProps {
   ) => void;
   onComponentDelete: (componentId: string) => void;
   onComponentMove: (componentId: string, direction: "up" | "down") => void;
-  viewportMode?: "desktop" | "mobile";
 }
 
 const CanvasArea: React.FC<CanvasAreaProps> = ({
   currentStep,
-  steps,
-  currentStepId,
   headerConfig,
   selectedComponent,
   selectedComponentId,
@@ -641,7 +443,6 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   onComponentUpdate,
   onComponentDelete,
   onComponentMove,
-  viewportMode = "desktop",
 }) => {
   if (!currentStep) {
     return (
@@ -656,201 +457,166 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
     );
   }
 
-  // Função para renderizar cada componente com visualização funcional
-  const ComponentToRender: React.FC<{ component: QuizComponent }> = ({
-    component,
-  }) => {
-    const ViewComponent = componentViewMap[component.type];
+  const renderComponent = (component: QuizComponent) => {
+    const isSelected = selectedComponentId === component.id;
 
-    if (!ViewComponent) {
-      return (
-        <div className="p-4 bg-red-500/20 border border-red-500 rounded text-red-200">
-          Componente "{component.type}" não implementado
+    return (
+      <div
+        key={component.id}
+        className={`relative border-2 rounded-lg p-4 mb-4 cursor-pointer transition-all ${
+          isSelected
+            ? "border-blue-500 bg-blue-500/10"
+            : "border-transparent hover:border-zinc-600"
+        }`}
+        onClick={() => onComponentSelect(component.id)}
+      >
+        {/* Controles de componente */}
+        {isSelected && (
+          <div className="absolute -top-2 -right-2 flex gap-1">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onComponentMove(component.id, "up");
+              }}
+              className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
+              title="Mover para cima"
+            >
+              ↑
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onComponentMove(component.id, "down");
+              }}
+              className="w-6 h-6 bg-blue-500 text-white rounded text-xs flex items-center justify-center hover:bg-blue-600"
+              title="Mover para baixo"
+            >
+              ↓
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onComponentDelete(component.id);
+              }}
+              className="w-6 h-6 bg-red-500 text-white rounded text-xs flex items-center justify-center hover:bg-red-600"
+              title="Excluir"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Renderização do componente baseado no tipo */}
+        <div className="text-zinc-200">
+          {component.type === "heading" && (
+            <h2 className="text-xl font-bold">
+              {component.props.text || "Título"}
+            </h2>
+          )}
+          {component.type === "text" && (
+            <p>{component.props.text || "Texto do parágrafo"}</p>
+          )}
+          {component.type === "image" && (
+            <img
+              src={component.props.src || "https://placehold.co/400x200"}
+              alt={component.props.alt || "Imagem"}
+              className="max-w-full h-auto rounded"
+            />
+          )}
+          {component.type === "button" && (
+            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              {component.props.buttonText || "Botão"}
+            </button>
+          )}
+          {component.type === "input" && (
+            <div>
+              {component.props.label && (
+                <label className="block text-sm font-medium mb-1">
+                  {component.props.label}
+                </label>
+              )}
+              <input
+                type={component.props.inputType || "text"}
+                placeholder={component.props.placeholder || "Digite aqui..."}
+                className="w-full px-3 py-2 border border-zinc-600 rounded bg-zinc-800 text-white"
+                disabled
+              />
+            </div>
+          )}
+          {component.type === "options" && (
+            <div>
+              <h3 className="font-medium mb-3">
+                {component.props.text || "Pergunta"}
+              </h3>
+              <div className="space-y-2">
+                {component.props.choices?.map(
+                  (choice: OptionChoice, index: number) => (
+                    <button
+                      key={index}
+                      className="block w-full text-left px-4 py-2 border border-zinc-600 rounded hover:border-blue-500"
+                    >
+                      {choice.text}
+                    </button>
+                  )
+                ) || (
+                  <button className="block w-full text-left px-4 py-2 border border-zinc-600 rounded">
+                    Opção de exemplo
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+          {component.type === "video" && (
+            <div className="aspect-video bg-zinc-800 rounded flex items-center justify-center">
+              <span className="text-zinc-400">📹 Vídeo</span>
+            </div>
+          )}
+          {component.type === "spacer" && (
+            <div className="h-8 border-dashed border border-zinc-600 rounded flex items-center justify-center">
+              <span className="text-zinc-500 text-sm">Espaçador</span>
+            </div>
+          )}
         </div>
-      );
-    }
 
-    return <ViewComponent component={component} />;
+        {/* Label do tipo de componente */}
+        <div className="absolute top-1 left-1 text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
+          {component.type}
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div className="w-full h-full overflow-auto bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      {/* Layout exato do quiz original */}
-      <div className="min-h-screen flex flex-col">
-        {/* Header fixo com logo e barra de progresso */}
-        <div className="w-full bg-transparent">
-          <div className="max-w-md mx-auto px-4 py-6">
-            {/* Logo centralizado */}
-            {headerConfig.showLogo && (
-              <div className="text-center mb-6">
-                <img
-                  src={
-                    headerConfig.logoUrl ||
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-                  }
-                  alt="Logo"
-                  className="w-24 h-24 mx-auto rounded-full object-cover shadow-lg border-3 border-[#B89B7A]"
-                />
-              </div>
-            )}
-
-            {/* Barra de Progresso */}
-            {headerConfig.showProgressBar && (
-              <div className="w-full bg-gray-700/50 rounded-full h-2 mb-6">
-                <div
-                  className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-[#B89B7A] to-[#b29670] shadow-sm"
-                  style={{
-                    width: `${Math.min(
-                      100,
-                      ((steps.findIndex((s) => s.id === currentStepId) + 1) /
-                        steps.length) *
-                        100
-                    )}%`,
-                  }}
-                ></div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Conteúdo principal */}
-        <div className="flex-1 flex items-start justify-center px-4 py-8">
-          <div
-            className={`w-full transition-all duration-300 ${
-              viewportMode === "mobile" ? "max-w-sm" : "max-w-md"
-            }`}
-          >
-            {/* Container dos Componentes */}
-            <div className="space-y-8">
-              {currentStep.components.length === 0 ? (
-                <div className="text-center py-16 text-zinc-400 border-2 border-dashed border-zinc-600 rounded-2xl bg-zinc-900/50 backdrop-blur-sm">
-                  <div className="mb-4">
-                    <svg
-                      className="w-12 h-12 mx-auto text-zinc-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-lg font-medium mb-2">
-                    Esta etapa está vazia
-                  </p>
-                  <p className="text-sm mb-6">
-                    Adicione componentes usando a barra lateral à esquerda
-                  </p>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    <button
-                      onClick={() => onComponentAdd("heading")}
-                      className="px-3 py-1 bg-yellow-500 text-black rounded text-sm hover:bg-yellow-600 font-medium"
-                    >
-                      + Título
-                    </button>
-                    <button
-                      onClick={() => onComponentAdd("text")}
-                      className="px-3 py-1 bg-yellow-500 text-black rounded text-sm hover:bg-yellow-600 font-medium"
-                    >
-                      + Texto
-                    </button>
-                    <button
-                      onClick={() => onComponentAdd("image")}
-                      className="px-3 py-1 bg-yellow-500 text-black rounded text-sm hover:bg-yellow-600 font-medium"
-                    >
-                      + Imagem
-                    </button>
-                    <button
-                      onClick={() => onComponentAdd("button")}
-                      className="px-3 py-1 bg-yellow-500 text-black rounded text-sm hover:bg-yellow-600 font-medium"
-                    >
-                      + Botão
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                currentStep.components.map((component) => {
-                  return component ? (
-                    <div
-                      key={component.id}
-                      className={`group/canvas-item w-full canvas-item min-h-[1.25rem] relative cursor-pointer transition-all duration-200`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onComponentSelect(component.id);
-                      }}
-                    >
-                      {/* Container com bordas que indicam seleção */}
-                      <div
-                        id={component.id}
-                        className={`min-h-[1.25rem] w-full relative rounded-lg transition-all duration-200 ${
-                          selectedComponentId === component.id
-                            ? "ring-2 ring-yellow-500 ring-offset-2 ring-offset-transparent bg-yellow-500/5"
-                            : "hover:ring-1 hover:ring-zinc-500 hover:ring-offset-1 hover:ring-offset-transparent"
-                        }`}
-                      >
-                        {/* Controles do componente - aparecem quando selecionado */}
-                        {selectedComponentId === component.id && (
-                          <div className="absolute -top-10 right-0 flex gap-1 z-20">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onComponentMove(component.id, "up");
-                              }}
-                              className="w-8 h-8 bg-yellow-500 text-black rounded-full text-xs flex items-center justify-center hover:bg-yellow-600 transition-colors font-bold"
-                              title="Mover para cima"
-                              disabled={
-                                currentStep.components.indexOf(component) === 0
-                              }
-                            >
-                              ↑
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onComponentMove(component.id, "down");
-                              }}
-                              className="w-8 h-8 bg-yellow-500 text-black rounded-full text-xs flex items-center justify-center hover:bg-yellow-600 transition-colors font-bold"
-                              title="Mover para baixo"
-                              disabled={
-                                currentStep.components.indexOf(component) ===
-                                currentStep.components.length - 1
-                              }
-                            >
-                              ↓
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onComponentDelete(component.id);
-                              }}
-                              className="w-8 h-8 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600 transition-colors font-bold"
-                              title="Excluir componente"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        )}
-
-                        {/* Label do tipo de componente */}
-                        {selectedComponentId === component.id && (
-                          <div className="absolute -top-10 left-0 text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded z-20">
-                            {component.type}
-                          </div>
-                        )}
-
-                        {/* Renderização do componente */}
-                        <ComponentToRender component={component} />
-                      </div>
-                    </div>
-                  ) : null;
-                })
+    <div className="flex-1 bg-zinc-900">
+      {/* Área de Canvas Principal */}
+      <div className="flex-1 p-6 overflow-y-auto">
+        <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 min-h-[600px]">
+          {/* Header da página */}
+          {headerConfig && (
+            <div className="mb-6 pb-4 border-b border-gray-200">
+              <h1 className="text-xl font-bold text-gray-900">
+                {headerConfig.title}
+              </h1>
+              {headerConfig.subtitle && (
+                <p className="text-gray-600 mt-1">{headerConfig.subtitle}</p>
               )}
             </div>
-          </div>
+          )}
+
+          {/* Componentes da etapa atual */}
+          {currentStep.components.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              <p className="mb-4">Esta etapa está vazia</p>
+              <button
+                onClick={() => onComponentAdd("heading")}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Adicionar primeiro componente
+              </button>
+            </div>
+          ) : (
+            <div>{currentStep.components.map(renderComponent)}</div>
+          )}
         </div>
       </div>
     </div>
@@ -875,21 +641,7 @@ export const FunnelNavbar: React.FC<{
   onPublish: () => Promise<void>;
   isSaving: boolean;
   isPublishing: boolean;
-  autoSaveStatus?: {
-    isAutoSaving: boolean;
-    lastSaved: Date | null;
-  };
-  viewportMode?: "desktop" | "mobile";
-  onToggleViewport?: () => void;
-}> = ({
-  onSave,
-  onPublish,
-  isSaving,
-  isPublishing,
-  autoSaveStatus,
-  viewportMode,
-  onToggleViewport,
-}) => {
+}> = ({ onSave, onPublish, isSaving, isPublishing }) => {
   return (
     <div className="h-fit border-b border-gray-200 relative z-[20] bg-white shadow-sm">
       <div className="w-full flex flex-wrap md:flex-nowrap justify-between">
@@ -1097,30 +849,6 @@ export const FunnelNavbar: React.FC<{
         </div>
         {/* Botões de visualização (mobile/desktop) e ações (Salvar, Publicar) */}
         <div className="md:flex hidden order-1 md:order-3 w-fit gap-1 md:gap-2 p-3">
-          {/* Indicador de Auto-Save */}
-          {autoSaveStatus && (
-            <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
-              {autoSaveStatus.isAutoSaving ? (
-                <>
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-gray-600">Salvando...</span>
-                </>
-              ) : autoSaveStatus.lastSaved ? (
-                <>
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-xs text-gray-600">
-                    Salvo {autoSaveStatus.lastSaved.toLocaleTimeString()}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                  <span className="text-xs text-gray-600">Não salvo</span>
-                </>
-              )}
-            </div>
-          )}
-
           <button className="items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 h-10 w-10 md:flex hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1542,54 +1270,24 @@ const FunnelToolbarSidebar: React.FC<{
       {/* Lista de Componentes */}
       <div className="overflow-y-auto flex-1 p-2 space-y-1">
         {toolbarItems.map((item, index) => (
-          <button
+          <div
             key={index}
-            className="w-full bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-zinc-600 p-3 cursor-pointer transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={() => {
-              onComponentAdd(item.type);
-              console.log(
-                `✅ Adicionando componente: ${item.name} (${item.type})`
-              );
-            }}
+            className="bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-zinc-600 p-2 cursor-pointer transition-all duration-200 group"
+            onClick={() => onComponentAdd(item.type)}
             title={`Adicionar ${item.name}`}
           >
-            <div className="flex items-center gap-3">
-              <div className="text-zinc-300 group-hover:text-white transition-colors flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="text-zinc-300 group-hover:text-white transition-colors">
                 {item.icon}
               </div>
-              <div className="flex-1 min-w-0 text-left">
+              <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors">
                   {item.name}
                 </div>
-                <div className="text-xs text-zinc-400 group-hover:text-zinc-300">
-                  Clique para adicionar
-                </div>
-              </div>
-              <div className="text-zinc-500 group-hover:text-zinc-300 transition-colors">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
               </div>
             </div>
-          </button>
+          </div>
         ))}
-      </div>
-
-      {/* Rodapé */}
-      <div className="p-3 border-t border-zinc-700">
-        <div className="text-xs text-zinc-400 text-center">
-          💡 Depois de adicionar, clique no componente para configurá-lo
-        </div>
       </div>
     </div>
   );
@@ -1800,90 +1498,6 @@ const ComponentPropertyEditor: React.FC<{
               placeholder="Digite o texto aqui..."
             />
           </div>
-
-          {/* Controles de Tamanho de Fonte */}
-          <div className="rounded-lg border border-zinc-600 bg-zinc-800 p-4">
-            <h4 className="text-sm font-medium text-zinc-100 mb-3">
-              Tamanho da Fonte
-            </h4>
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs text-zinc-400 mb-1 block">
-                  Tamanho (rem)
-                </label>
-                <input
-                  type="range"
-                  min="0.5"
-                  max="5"
-                  step="0.1"
-                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                  value={parseFloat(
-                    props.styles?.fontSize?.replace("rem", "") || "1"
-                  )}
-                  onChange={(e) => {
-                    const newStyles = { ...props.styles };
-                    newStyles.fontSize = `${e.target.value}rem`;
-                    handleChange("styles", newStyles);
-                  }}
-                />
-                <span className="text-xs text-zinc-400">
-                  {props.styles?.fontSize || "1rem"}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  className={`px-3 py-1 rounded text-xs ${
-                    props.styles?.fontWeight === "normal"
-                      ? "bg-blue-600 text-white"
-                      : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
-                  }`}
-                  onClick={() => {
-                    const newStyles = { ...props.styles };
-                    newStyles.fontWeight = "normal";
-                    handleChange("styles", newStyles);
-                  }}
-                >
-                  Normal
-                </button>
-                <button
-                  className={`px-3 py-1 rounded text-xs ${
-                    props.styles?.fontWeight === "bold"
-                      ? "bg-blue-600 text-white"
-                      : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
-                  }`}
-                  onClick={() => {
-                    const newStyles = { ...props.styles };
-                    newStyles.fontWeight = "bold";
-                    handleChange("styles", newStyles);
-                  }}
-                >
-                  Negrito
-                </button>
-              </div>
-
-              <div className="grid grid-cols-3 gap-1">
-                {["left", "center", "right"].map((align) => (
-                  <button
-                    key={align}
-                    className={`px-2 py-1 rounded text-xs ${
-                      props.styles?.textAlign === align
-                        ? "bg-blue-600 text-white"
-                        : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
-                    }`}
-                    onClick={() => {
-                      const newStyles = { ...props.styles };
-                      newStyles.textAlign = align;
-                      handleChange("styles", newStyles);
-                    }}
-                  >
-                    {align === "left" ? "⬅️" : align === "center" ? "↔️" : "➡️"}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
           <StylesEditor />
         </div>
       );
@@ -1924,117 +1538,33 @@ const ComponentPropertyEditor: React.FC<{
             </div>
           </div>
 
-          {/* Seção: Tamanho e Dimensões */}
-          <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
-            <div className="flex flex-col space-y-1.5 p-6 pb-4">
-              <p className="text-sm text-zinc-400">Tamanho e Dimensões</p>
-            </div>
-            <div className="p-6 pt-0 gap-4 flex flex-col">
-              {/* Largura */}
-              <div>
-                <label className="text-sm font-medium leading-none text-zinc-100 mb-2 block">
-                  Largura
-                </label>
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <select
-                    className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={props.styles?.width || "auto"}
-                    onChange={(e) => {
-                      const newStyles = { ...props.styles };
-                      newStyles.width = e.target.value;
-                      handleChange("styles", newStyles);
-                    }}
-                  >
-                    <option value="auto">Auto</option>
-                    <option value="100%">100%</option>
-                    <option value="80%">80%</option>
-                    <option value="60%">60%</option>
-                    <option value="40%">40%</option>
-                    <option value="20%">20%</option>
-                    <option value="custom">Personalizado</option>
-                  </select>
-                  {props.styles?.width === "custom" && (
-                    <input
-                      type="text"
-                      className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-                      placeholder="200px"
-                      onChange={(e) => {
-                        const newStyles = { ...props.styles };
-                        newStyles.width = e.target.value;
-                        handleChange("styles", newStyles);
-                      }}
-                    />
-                  )}
-                </div>
-
-                {/* Slider para largura percentual */}
-                {props.styles?.width && props.styles.width.includes("%") && (
-                  <div>
-                    <input
-                      type="range"
-                      min="10"
-                      max="100"
-                      step="5"
-                      className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                      value={parseInt(props.styles.width.replace("%", ""))}
-                      onChange={(e) => {
-                        const newStyles = { ...props.styles };
-                        newStyles.width = `${e.target.value}%`;
-                        handleChange("styles", newStyles);
-                      }}
-                    />
-                    <span className="text-xs text-zinc-400">
-                      {props.styles.width}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Altura */}
-              <div>
-                <label className="text-sm font-medium leading-none text-zinc-100 mb-2 block">
-                  Altura
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <select
-                    className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={props.styles?.height || "auto"}
-                    onChange={(e) => {
-                      const newStyles = { ...props.styles };
-                      newStyles.height = e.target.value;
-                      handleChange("styles", newStyles);
-                    }}
-                  >
-                    <option value="auto">Auto</option>
-                    <option value="200px">Pequena (200px)</option>
-                    <option value="300px">Média (300px)</option>
-                    <option value="400px">Grande (400px)</option>
-                    <option value="500px">Muito Grande (500px)</option>
-                    <option value="custom">Personalizada</option>
-                  </select>
-                  {props.styles?.height === "custom" && (
-                    <input
-                      type="text"
-                      className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-                      placeholder="300px"
-                      onChange={(e) => {
-                        const newStyles = { ...props.styles };
-                        newStyles.height = e.target.value;
-                        handleChange("styles", newStyles);
-                      }}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Seção: Estilo */}
           <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
             <div className="flex flex-col space-y-1.5 p-6 pb-4">
               <p className="text-sm text-zinc-400">Estilo</p>
             </div>
             <div className="p-6 pt-0 gap-4 flex flex-col">
+              <div className="flex flex-col-reverse items-start gap-2">
+                <select
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={props.styles?.width || "auto"}
+                  onChange={(e) => {
+                    const newStyles = { ...props.styles };
+                    newStyles.width = e.target.value;
+                    handleChange("styles", newStyles);
+                  }}
+                >
+                  <option value="auto">Auto</option>
+                  <option value="100%">Total</option>
+                  <option value="80%">Grande</option>
+                  <option value="60%">Médio</option>
+                  <option value="40%">Pequeno</option>
+                  <option value="20%">Micro</option>
+                </select>
+                <label className="text-sm font-medium leading-none text-zinc-100">
+                  Largura
+                </label>
+              </div>
               <div className="grid w-full items-center gap-1.5">
                 <label className="text-sm font-medium leading-none text-zinc-100">
                   Texto Alternativo
@@ -2071,7 +1601,7 @@ const ComponentPropertyEditor: React.FC<{
             </div>
           </div>
 
-          {/* Secao: Personalizacao */}
+          {/* Seção: Personalização */}
           <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
             <div className="flex flex-col space-y-1.5 p-6 pb-4">
               <p className="text-sm text-zinc-400">Personalização</p>
@@ -2180,9 +1710,7 @@ const ComponentPropertyEditor: React.FC<{
                     type="text"
                     className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={props.componentName || ""}
-                    onChange={(e) =>
-                      handleChange("componentName", e.target.value)
-                    }
+                    onChange={(e) => handleChange("componentName", e.target.value)}
                     placeholder="Digite aqui..."
                   />
                   <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2">
@@ -2208,9 +1736,7 @@ const ComponentPropertyEditor: React.FC<{
                   min="10"
                   max="100"
                   className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
-                  value={parseInt(
-                    props.styles?.maxWidth?.toString().replace("%", "") || "100"
-                  )}
+                  value={parseInt(props.styles?.maxWidth?.toString().replace('%', '') || '100')}
                   onChange={(e) => {
                     const newStyles = { ...props.styles };
                     newStyles.maxWidth = `${e.target.value}%`;
@@ -2218,7 +1744,7 @@ const ComponentPropertyEditor: React.FC<{
                   }}
                 />
                 <span className="text-xs text-zinc-400">
-                  {props.styles?.maxWidth || "100%"}
+                  {props.styles?.maxWidth || '100%'}
                 </span>
               </div>
               <div className="flex flex-col-reverse items-start gap-2">
@@ -2241,6 +1767,8 @@ const ComponentPropertyEditor: React.FC<{
               </div>
             </div>
           </div>
+
+          <StylesEditor />
         </div>
       );
 
@@ -2312,18 +1840,6 @@ const ComponentPropertyEditor: React.FC<{
               value={props.errorMessage || ""}
               onChange={(e) => handleChange("errorMessage", e.target.value)}
               placeholder="Ex: Este campo é obrigatório"
-            />
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Salvar como Lead (campo)
-            </label>
-            <input
-              type="text"
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.storeAsLeadField || ""}
-              onChange={(e) => handleChange("storeAsLeadField", e.target.value)}
-              placeholder="Ex: nome, email, telefone"
             />
           </div>
           <StylesEditor />
@@ -2634,72 +2150,6 @@ const ComponentPropertyEditor: React.FC<{
               />
             </div>
           )}
-          {props.componentName === "ResultPage.tsx" && (
-            <div className="space-y-4">
-              <div className="grid w-full items-center gap-1.5">
-                <label className="text-sm font-medium leading-none text-zinc-100">
-                  Mapear Imagens dos Estilos (JSON)
-                </label>
-                <textarea
-                  className="flex min-h-[120px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                  value={JSON.stringify(
-                    props.styleImages || {
-                      natural: ["url1", "url2"],
-                      classico: ["url1", "url2"],
-                      contemporaneo: ["url1", "url2"],
-                      elegante: ["url1", "url2"],
-                      romantico: ["url1", "url2"],
-                      sexy: ["url1", "url2"],
-                      dramatico: ["url1", "url2"],
-                      criativo: ["url1", "url2"],
-                    },
-                    null,
-                    2
-                  )}
-                  onChange={(e) => {
-                    try {
-                      const styleImages = JSON.parse(e.target.value);
-                      handleChange("styleImages", styleImages);
-                    } catch {
-                      // Ignora erros de parse durante a digitação
-                    }
-                  }}
-                  placeholder='{"natural": ["url1", "url2"], "classico": ["url1", "url2"]}'
-                />
-              </div>
-              <div className="grid w-full items-center gap-1.5">
-                <label className="text-sm font-medium leading-none text-zinc-100">
-                  Nomes dos Estilos (JSON)
-                </label>
-                <textarea
-                  className="flex min-h-[100px] w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                  value={JSON.stringify(
-                    props.styleNames || {
-                      natural: "Estilo Natural",
-                      classico: "Estilo Clássico",
-                      contemporaneo: "Estilo Contemporâneo",
-                      elegante: "Estilo Elegante",
-                      romantico: "Estilo Romântico",
-                      sexy: "Estilo Sexy",
-                      dramatico: "Estilo Dramático",
-                      criativo: "Estilo Criativo",
-                    },
-                    null,
-                    2
-                  )}
-                  onChange={(e) => {
-                    try {
-                      const styleNames = JSON.parse(e.target.value);
-                      handleChange("styleNames", styleNames);
-                    } catch {
-                      // Ignora erros de parse durante a digitação
-                    }
-                  }}
-                  placeholder='{"natural": "Estilo Natural", "classico": "Estilo Clássico"}'
-                />
-              </div>
-            </div>
-          )}
           <StylesEditor />
         </div>
       );
@@ -2707,37 +2157,8 @@ const ComponentPropertyEditor: React.FC<{
     case "spacer":
       return (
         <div className="space-y-4">
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Altura do Espaçador (px)
-            </label>
-            <input
-              type="number"
-              className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100"
-              value={props.height || 20}
-              onChange={(e) =>
-                handleChange("height", parseInt(e.target.value) || 20)
-              }
-              min="5"
-              max="200"
-            />
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <label className="text-sm font-medium leading-none text-zinc-100">
-              Altura (slider)
-            </label>
-            <input
-              type="range"
-              min="5"
-              max="200"
-              step="5"
-              className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-              value={props.height || 20}
-              onChange={(e) => handleChange("height", parseInt(e.target.value))}
-            />
-            <span className="text-xs text-zinc-400">
-              {props.height || 20}px
-            </span>
+          <div className="text-zinc-400 text-sm text-center p-4 bg-zinc-800/50 rounded-md">
+            Espaçador não possui propriedades editáveis específicas.
           </div>
           <StylesEditor />
         </div>
@@ -2915,11 +2336,6 @@ const StepNavigationTabs: React.FC<{
 const AdvancedQuizEditor: React.FC = () => {
   console.log("🚀 AdvancedQuizEditor está renderizando!");
 
-  // Estados de interface e visualização
-  const [viewportMode, setViewportMode] = useState<"desktop" | "mobile">(
-    "desktop"
-  );
-
   // Estados principais do editor
   const [editorState, setEditorState] = useState<QuizEditorState>({
     steps: [
@@ -2928,15 +2344,41 @@ const AdvancedQuizEditor: React.FC = () => {
         name: "🏠 Introdução",
         components: [
           {
+            id: "intro-logo",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+              alt: "Logo Gisele",
+              styles: {
+                width: "96px",
+                height: "96px",
+                textAlign: "center",
+                objectFit: "cover",
+              },
+            },
+          },
+          {
             id: "intro-heading",
             type: "heading",
             props: {
-              text: "Teste de Estilo Pessoal",
+              text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "3xl",
+                fontSize: "1.8rem",
                 fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "intro-subtitle",
+            type: "text",
+            props: {
+              text: "Em poucos minutos, descubra seu Estilo Predominante — e aprenda a montar looks que realmente refletem sua essência, com praticidade e confiança.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
               },
             },
           },
@@ -2945,25 +2387,14 @@ const AdvancedQuizEditor: React.FC = () => {
             type: "image",
             props: {
               src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
-              alt: "Imagem principal do quiz",
+              alt: "Imagem principal",
               styles: {
-                width: "400px",
-                height: "300px",
+                width: "100%",
+                maxWidth: "400px",
+                height: "auto",
                 textAlign: "center",
                 objectFit: "cover",
                 borderRadius: "lg",
-              },
-            },
-          },
-          {
-            id: "intro-text",
-            type: "text",
-            props: {
-              text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
-              styles: {
-                textAlign: "center",
-                color: "#d1d5db",
-                fontSize: "1.1rem",
               },
             },
           },
@@ -2975,14 +2406,13 @@ const AdvancedQuizEditor: React.FC = () => {
               placeholder: "Digite seu nome aqui...",
               inputType: "text",
               required: true,
-              storeAsLeadField: "nome",
             },
           },
           {
             id: "continue-button",
             type: "button",
             props: {
-              buttonText: "Continuar",
+              buttonText: "Quero Descobrir meu Estilo Agora!",
               buttonStyle: "primary",
               actionType: "goToNextStep",
               actionTargetId: "question-1",
@@ -2993,7 +2423,7 @@ const AdvancedQuizEditor: React.FC = () => {
       },
       {
         id: "question-1",
-        name: "👗 Roupa Favorita",
+        name: "Q1 👗 Roupa Favorita",
         components: [
           {
             id: "q1-heading",
@@ -3003,7 +2433,7 @@ const AdvancedQuizEditor: React.FC = () => {
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "3xl",
+                fontSize: "1.6rem",
                 fontWeight: "bold",
               },
             },
@@ -3019,74 +2449,69 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "q1-options",
             type: "options",
             props: {
+              questionText: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
+              selectionType: "multiple",
               choices: [
                 {
                   text: "Conforto, leveza e praticidade no vestir",
                   value: "natural",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
                   nextStepId: "question-2",
+                  scoreValue: 1,
                 },
                 {
                   text: "Discrição, caimento clássico e sobriedade",
                   value: "classico",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
                   nextStepId: "question-2",
+                  scoreValue: 1,
                 },
                 {
                   text: "Praticidade com um toque de estilo atual",
                   value: "contemporaneo",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
                   nextStepId: "question-2",
+                  scoreValue: 1,
                 },
                 {
                   text: "Elegância refinada, moderna e sem exageros",
                   value: "elegante",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
                   nextStepId: "question-2",
+                  scoreValue: 1,
                 },
                 {
                   text: "Delicadeza em tecidos suaves e fluidos",
                   value: "romantico",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
                   nextStepId: "question-2",
+                  scoreValue: 1,
                 },
                 {
                   text: "Sensualidade com destaque para o corpo",
                   value: "sexy",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
                   nextStepId: "question-2",
+                  scoreValue: 1,
                 },
                 {
                   text: "Impacto visual com peças estruturadas e assimétricas",
                   value: "dramatico",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
                   nextStepId: "question-2",
+                  scoreValue: 1,
                 },
                 {
                   text: "Mix criativo com formas ousadas e originais",
                   value: "criativo",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
                   nextStepId: "question-2",
+                  scoreValue: 1,
                 },
               ],
-              selectionType: "multiple",
               styles: { gap: "12px" },
+              maxSelections: 3,
+              minSelections: 3,
             },
           },
         ],
@@ -3094,7 +2519,7 @@ const AdvancedQuizEditor: React.FC = () => {
       },
       {
         id: "question-2",
-        name: "🧠 Personalidade",
+        name: "Q2 🧠 Personalidade",
         components: [
           {
             id: "q2-heading",
@@ -3104,7 +2529,7 @@ const AdvancedQuizEditor: React.FC = () => {
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "3xl",
+                fontSize: "1.6rem",
                 fontWeight: "bold",
               },
             },
@@ -3120,58 +2545,61 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "q2-options",
             type: "options",
             props: {
+              questionText: "RESUMA A SUA PERSONALIDADE:",
+              selectionType: "multiple",
               choices: [
                 {
-                  text: "A) <strong>Sou espontânea e descontraída</strong>, adoro coisas simples.",
+                  text: "Informal, espontânea, alegre, essencialista",
                   value: "natural",
-                  scoreValue: 1,
                   nextStepId: "question-3",
+                  scoreValue: 1,
                 },
                 {
-                  text: "B) <strong>Gosto de organização</strong>, sou uma pessoa séria e conservadora.",
+                  text: "Conservadora, séria, organizada",
                   value: "classico",
-                  scoreValue: 1,
                   nextStepId: "question-3",
+                  scoreValue: 1,
                 },
                 {
-                  text: "C) Sou <strong>prática e objetiva</strong>, valorizo a funcionalidade.",
+                  text: "Informada, ativa, prática",
                   value: "contemporaneo",
-                  scoreValue: 1,
                   nextStepId: "question-3",
+                  scoreValue: 1,
                 },
                 {
-                  text: "D) <strong>Sou exigente e sofisticada</strong>, cuidadosa nas minhas escolhas.",
+                  text: "Exigente, sofisticada, seletiva",
                   value: "elegante",
-                  scoreValue: 1,
                   nextStepId: "question-3",
+                  scoreValue: 1,
                 },
                 {
-                  text: "E) <strong>Tenho um lado delicado e sensível</strong> que transparece em tudo.",
+                  text: "Feminina, meiga, delicada, sensível",
                   value: "romantico",
-                  scoreValue: 1,
                   nextStepId: "question-3",
+                  scoreValue: 1,
                 },
                 {
-                  text: "F) <strong>Sou confiante e sensual</strong> e adoro me cuidar.",
+                  text: "Glamorosa, vaidosa, sensual",
                   value: "sexy",
-                  scoreValue: 1,
                   nextStepId: "question-3",
+                  scoreValue: 1,
                 },
                 {
-                  text: "G) <strong>Sou moderna e audaciosa</strong>, tenho presença.",
+                  text: "Cosmopolita, moderna e audaciosa",
                   value: "dramatico",
-                  scoreValue: 1,
                   nextStepId: "question-3",
+                  scoreValue: 1,
                 },
                 {
-                  text: "H) <strong>Sou exótica e aventureira</strong>, gosto da liberdade.",
+                  text: "Exótica, aventureira, livre",
                   value: "criativo",
-                  scoreValue: 1,
                   nextStepId: "question-3",
+                  scoreValue: 1,
                 },
               ],
-              selectionType: "multiple",
               styles: { gap: "12px" },
+              maxSelections: 3,
+              minSelections: 3,
             },
           },
         ],
@@ -3179,7 +2607,7 @@ const AdvancedQuizEditor: React.FC = () => {
       },
       {
         id: "question-3",
-        name: "👀 Visual",
+        name: "Q3 👀 Visual",
         components: [
           {
             id: "q3-heading",
@@ -3189,7 +2617,7 @@ const AdvancedQuizEditor: React.FC = () => {
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "3xl",
+                fontSize: "1.6rem",
                 fontWeight: "bold",
               },
             },
@@ -3205,707 +2633,104 @@ const AdvancedQuizEditor: React.FC = () => {
             id: "q3-options",
             type: "options",
             props: {
+              questionText: "QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?",
+              selectionType: "multiple",
               choices: [
                 {
                   text: "Visual leve, despojado e natural",
                   value: "natural",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
                   nextStepId: "question-4",
+                  scoreValue: 1,
                 },
                 {
                   text: "Visual clássico e tradicional",
                   value: "classico",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
                   nextStepId: "question-4",
+                  scoreValue: 1,
                 },
                 {
                   text: "Visual casual com toque atual",
                   value: "contemporaneo",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
                   nextStepId: "question-4",
+                  scoreValue: 1,
                 },
                 {
                   text: "Visual refinado e imponente",
                   value: "elegante",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
                   nextStepId: "question-4",
+                  scoreValue: 1,
                 },
                 {
                   text: "Visual romântico, feminino e delicado",
                   value: "romantico",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
                   nextStepId: "question-4",
+                  scoreValue: 1,
                 },
                 {
                   text: "Visual sensual, com saia justa e decote",
                   value: "sexy",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
                   nextStepId: "question-4",
+                  scoreValue: 1,
                 },
                 {
                   text: "Visual marcante e urbano (jeans + jaqueta)",
                   value: "dramatico",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
                   nextStepId: "question-4",
+                  scoreValue: 1,
                 },
                 {
                   text: "Visual criativo, colorido e ousado",
                   value: "criativo",
-                  scoreValue: 1,
-                  image:
-                    "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+                  image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
                   nextStepId: "question-4",
+                  scoreValue: 1,
                 },
               ],
-              selectionType: "multiple",
               styles: { gap: "12px" },
+              maxSelections: 3,
+              minSelections: 3,
             },
           },
         ],
         defaultNextStepId: "question-4",
       },
       {
-        id: "question-4",
-        name: "🎨 Estampas",
+        id: "quiz-transition",
+        name: "🔄 Transição",
         components: [
           {
-            id: "q4-heading",
-            type: "heading",
-            props: {
-              text: "QUAL ESTAMPA VOCÊ MAIS SE IDENTIFICA?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "3xl",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "q4-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "q4-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Estampas naturais e orgânicas",
-                  value: "natural",
-                  scoreValue: 1,
-                  nextStepId: "question-5",
-                },
-                {
-                  text: "Estampas clássicas e tradicionais",
-                  value: "classico",
-                  scoreValue: 1,
-                  nextStepId: "question-5",
-                },
-                {
-                  text: "Estampas geométricas e modernas",
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  nextStepId: "question-5",
-                },
-                {
-                  text: "Estampas sofisticadas e refinadas",
-                  value: "elegante",
-                  scoreValue: 1,
-                  nextStepId: "question-5",
-                },
-                {
-                  text: "Estampas florais e delicadas",
-                  value: "romantico",
-                  scoreValue: 1,
-                  nextStepId: "question-5",
-                },
-                {
-                  text: "Estampas sensuais e marcantes",
-                  value: "sexy",
-                  scoreValue: 1,
-                  nextStepId: "question-5",
-                },
-                {
-                  text: "Estampas dramáticas e impactantes",
-                  value: "dramatico",
-                  scoreValue: 1,
-                  nextStepId: "question-5",
-                },
-                {
-                  text: "Estampas criativas e ousadas",
-                  value: "criativo",
-                  scoreValue: 1,
-                  nextStepId: "question-5",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "question-5",
-      },
-      {
-        id: "question-5",
-        name: "🧥 Casacos",
-        components: [
-          {
-            id: "q5-heading",
-            type: "heading",
-            props: {
-              text: "QUAL TIPO DE CASACO VOCÊ PREFERE?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "3xl",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "q5-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "q5-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Casacos confortáveis e práticos",
-                  value: "natural",
-                  scoreValue: 1,
-                  nextStepId: "question-6",
-                },
-                {
-                  text: "Casacos clássicos e atemporais",
-                  value: "classico",
-                  scoreValue: 1,
-                  nextStepId: "question-6",
-                },
-                {
-                  text: "Casacos modernos e funcionais",
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  nextStepId: "question-6",
-                },
-                {
-                  text: "Casacos elegantes e sofisticados",
-                  value: "elegante",
-                  scoreValue: 1,
-                  nextStepId: "question-6",
-                },
-                {
-                  text: "Casacos femininos e delicados",
-                  value: "romantico",
-                  scoreValue: 1,
-                  nextStepId: "question-6",
-                },
-                {
-                  text: "Casacos sensuais e ajustados",
-                  value: "sexy",
-                  scoreValue: 1,
-                  nextStepId: "question-6",
-                },
-                {
-                  text: "Casacos marcantes e estruturados",
-                  value: "dramatico",
-                  scoreValue: 1,
-                  nextStepId: "question-6",
-                },
-                {
-                  text: "Casacos criativos e únicos",
-                  value: "criativo",
-                  scoreValue: 1,
-                  nextStepId: "question-6",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "question-6",
-      },
-      {
-        id: "question-6",
-        name: "👖 Calças",
-        components: [
-          {
-            id: "q6-heading",
-            type: "heading",
-            props: {
-              text: "QUAL ESTILO DE CALÇA VOCÊ MAIS USA?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "3xl",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "q6-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "q6-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Calças confortáveis e soltas",
-                  value: "natural",
-                  scoreValue: 1,
-                  nextStepId: "question-7",
-                },
-                {
-                  text: "Calças clássicas e bem cortadas",
-                  value: "classico",
-                  scoreValue: 1,
-                  nextStepId: "question-7",
-                },
-                {
-                  text: "Calças modernas e versáteis",
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  nextStepId: "question-7",
-                },
-                {
-                  text: "Calças elegantes e alfaiataria",
-                  value: "elegante",
-                  scoreValue: 1,
-                  nextStepId: "question-7",
-                },
-                {
-                  text: "Calças femininas e fluidas",
-                  value: "romantico",
-                  scoreValue: 1,
-                  nextStepId: "question-7",
-                },
-                {
-                  text: "Calças justas e sensuais",
-                  value: "sexy",
-                  scoreValue: 1,
-                  nextStepId: "question-7",
-                },
-                {
-                  text: "Calças marcantes e estruturadas",
-                  value: "dramatico",
-                  scoreValue: 1,
-                  nextStepId: "question-7",
-                },
-                {
-                  text: "Calças criativas e diferenciadas",
-                  value: "criativo",
-                  scoreValue: 1,
-                  nextStepId: "question-7",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "question-7",
-      },
-      {
-        id: "question-7",
-        name: "👠 Sapatos",
-        components: [
-          {
-            id: "q7-heading",
-            type: "heading",
-            props: {
-              text: "QUAL TIPO DE SAPATO VOCÊ PREFERE?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "3xl",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "q7-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "q7-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Sapatos confortáveis e práticos",
-                  value: "natural",
-                  scoreValue: 1,
-                  nextStepId: "question-8",
-                },
-                {
-                  text: "Sapatos clássicos e atemporais",
-                  value: "classico",
-                  scoreValue: 1,
-                  nextStepId: "question-8",
-                },
-                {
-                  text: "Sapatos modernos e versáteis",
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  nextStepId: "question-8",
-                },
-                {
-                  text: "Sapatos elegantes e sofisticados",
-                  value: "elegante",
-                  scoreValue: 1,
-                  nextStepId: "question-8",
-                },
-                {
-                  text: "Sapatos delicados e femininos",
-                  value: "romantico",
-                  scoreValue: 1,
-                  nextStepId: "question-8",
-                },
-                {
-                  text: "Sapatos sensuais e marcantes",
-                  value: "sexy",
-                  scoreValue: 1,
-                  nextStepId: "question-8",
-                },
-                {
-                  text: "Sapatos dramáticos e impactantes",
-                  value: "dramatico",
-                  scoreValue: 1,
-                  nextStepId: "question-8",
-                },
-                {
-                  text: "Sapatos criativos e únicos",
-                  value: "criativo",
-                  scoreValue: 1,
-                  nextStepId: "question-8",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "question-8",
-      },
-      {
-        id: "question-8",
-        name: "💎 Acessórios",
-        components: [
-          {
-            id: "q8-heading",
-            type: "heading",
-            props: {
-              text: "QUAIS ACESSÓRIOS VOCÊ MAIS USA?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "3xl",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "q8-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "q8-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Acessórios simples e naturais",
-                  value: "natural",
-                  scoreValue: 1,
-                  nextStepId: "question-9",
-                },
-                {
-                  text: "Acessórios clássicos e discretos",
-                  value: "classico",
-                  scoreValue: 1,
-                  nextStepId: "question-9",
-                },
-                {
-                  text: "Acessórios modernos e funcionais",
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  nextStepId: "question-9",
-                },
-                {
-                  text: "Acessórios elegantes e refinados",
-                  value: "elegante",
-                  scoreValue: 1,
-                  nextStepId: "question-9",
-                },
-                {
-                  text: "Acessórios delicados e femininos",
-                  value: "romantico",
-                  scoreValue: 1,
-                  nextStepId: "question-9",
-                },
-                {
-                  text: "Acessórios sensuais e chamativos",
-                  value: "sexy",
-                  scoreValue: 1,
-                  nextStepId: "question-9",
-                },
-                {
-                  text: "Acessórios dramáticos e marcantes",
-                  value: "dramatico",
-                  scoreValue: 1,
-                  nextStepId: "question-9",
-                },
-                {
-                  text: "Acessórios criativos e únicos",
-                  value: "criativo",
-                  scoreValue: 1,
-                  nextStepId: "question-9",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "question-9",
-      },
-      {
-        id: "question-9",
-        name: "🧵 Tecidos",
-        components: [
-          {
-            id: "q9-heading",
-            type: "heading",
-            props: {
-              text: "QUAIS TECIDOS VOCÊ PREFERE?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "3xl",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "q9-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "q9-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Tecidos naturais e respiráveis",
-                  value: "natural",
-                  scoreValue: 1,
-                  nextStepId: "question-10",
-                },
-                {
-                  text: "Tecidos clássicos e estruturados",
-                  value: "classico",
-                  scoreValue: 1,
-                  nextStepId: "question-10",
-                },
-                {
-                  text: "Tecidos modernos e tecnológicos",
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  nextStepId: "question-10",
-                },
-                {
-                  text: "Tecidos nobres e luxuosos",
-                  value: "elegante",
-                  scoreValue: 1,
-                  nextStepId: "question-10",
-                },
-                {
-                  text: "Tecidos fluidos e delicados",
-                  value: "romantico",
-                  scoreValue: 1,
-                  nextStepId: "question-10",
-                },
-                {
-                  text: "Tecidos sensuais e ajustados",
-                  value: "sexy",
-                  scoreValue: 1,
-                  nextStepId: "question-10",
-                },
-                {
-                  text: "Tecidos marcantes e texturizados",
-                  value: "dramatico",
-                  scoreValue: 1,
-                  nextStepId: "question-10",
-                },
-                {
-                  text: "Tecidos criativos e inusitados",
-                  value: "criativo",
-                  scoreValue: 1,
-                  nextStepId: "question-10",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "question-10",
-      },
-      {
-        id: "question-10",
-        name: "✨ Finalização",
-        components: [
-          {
-            id: "q10-heading",
-            type: "heading",
-            props: {
-              text: "COMO VOCÊ GOSTA DE FINALIZAR SEU LOOK?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "3xl",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "q10-spacer",
-            type: "spacer",
-            props: {
-              height: 20,
-            },
-          },
-          {
-            id: "q10-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "De forma simples e despojada",
-                  value: "natural",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-1",
-                },
-                {
-                  text: "Com elegância clássica e discreta",
-                  value: "classico",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-1",
-                },
-                {
-                  text: "Com praticidade e modernidade",
-                  value: "contemporaneo",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-1",
-                },
-                {
-                  text: "Com sofisticação e refinamento",
-                  value: "elegante",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-1",
-                },
-                {
-                  text: "Com delicadeza e feminilidade",
-                  value: "romantico",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-1",
-                },
-                {
-                  text: "Com sensualidade e charme",
-                  value: "sexy",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-1",
-                },
-                {
-                  text: "Com impacto e presença",
-                  value: "dramatico",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-1",
-                },
-                {
-                  text: "Com criatividade e originalidade",
-                  value: "criativo",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-1",
-                },
-              ],
-              selectionType: "multiple",
-              styles: { gap: "12px" },
-            },
-          },
-        ],
-        defaultNextStepId: "quiz-transition-1",
-      },
-      // --- Primeira Página de Transição ---
-      {
-        id: "quiz-transition-1",
-        name: "🔄 Primeira Transição",
-        components: [
-          {
-            id: "transition1-heading",
+            id: "transition-heading",
             type: "heading",
             props: {
               text: "Enquanto calculamos o seu resultado...",
               styles: {
                 textAlign: "center",
                 color: "#ffffff",
-                fontSize: "2.5rem",
-                fontWeight: "bold",
+                fontSize: "1.8rem",
               },
             },
           },
           {
-            id: "transition1-subtitle",
+            id: "transition-subtitle",
             type: "text",
             props: {
               text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.",
               styles: {
                 textAlign: "center",
                 color: "#d1d5db",
-                fontSize: "1.2rem",
-                marginTop: "20px",
+                fontSize: "1.1rem",
               },
             },
           },
           {
-            id: "transition1-motivation",
+            id: "transition-motivation",
             type: "text",
             props: {
               text: "Responda com sinceridade. Isso é só entre você e a sua nova versão.",
@@ -3914,314 +2739,102 @@ const AdvancedQuizEditor: React.FC = () => {
                 color: "#10b981",
                 fontSize: "1rem",
                 fontStyle: "italic",
-                marginTop: "15px",
               },
             },
           },
           {
-            id: "transition1-spacer",
-            type: "spacer",
+            id: "transition-button",
+            type: "button",
             props: {
-              height: 30,
+              buttonText: "Continuar para Questões Estratégicas",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "strategic-1",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-1",
+      },
+      {
+        id: "strategic-1",
+        name: "💭 Autopercepção",
+        components: [
+          {
+            id: "s1-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp",
+              alt: "Autopercepção do estilo",
+              styles: {
+                width: "400px",
+                height: "300px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+              },
             },
           },
           {
-            id: "transition1-button",
+            id: "s1-heading",
+            type: "heading",
+            props: {
+              text: "Como você se vê atualmente?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "s1-button",
+            type: "button",
+            props: {
+              buttonText: "Próxima Pergunta",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "strategic-2",
+            },
+          },
+        ],
+        defaultNextStepId: "strategic-2",
+      },
+      {
+        id: "strategic-2",
+        name: "🎯 Desafios",
+        components: [
+          {
+            id: "s2-image",
+            type: "image",
+            props: {
+              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334753/ChatGPT_Image_4_de_mai._de_2025_01_30_01_vbiysd.webp",
+              alt: "Desafios ao se vestir",
+              styles: {
+                width: "400px",
+                height: "300px",
+                textAlign: "center",
+                objectFit: "cover",
+                borderRadius: "lg",
+              },
+            },
+          },
+          {
+            id: "s2-heading",
+            type: "heading",
+            props: {
+              text: "Quais são seus maiores desafios ao se vestir?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "s2-button",
             type: "button",
             props: {
               buttonText: "Continuar",
-              buttonStyle: "primary",
-              actionType: "goToNextStep",
-              actionTargetId: "strategic-question-1",
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-question-1",
-      },
-      // --- Questão Estratégica 1 ---
-      {
-        id: "strategic-question-1",
-        name: "� Experiência de Compra",
-        components: [
-          {
-            id: "sq1-heading",
-            type: "heading",
-            props: {
-              text: "Você já considerou investir em algum guia ou consultoria de estilo no passado?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "2rem",
-                fontWeight: "bold",
-                lineHeight: "1.3",
-              },
-            },
-          },
-          {
-            id: "sq1-spacer",
-            type: "spacer",
-            props: {
-              height: 30,
-            },
-          },
-          {
-            id: "sq1-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Sim, já pesquisei mas não cheguei a comprar",
-                  value: "researched",
-                  scoreValue: 1,
-                  nextStepId: "strategic-question-2",
-                },
-                {
-                  text: "Sim, já investi em algum curso/guia/consultoria",
-                  value: "invested",
-                  scoreValue: 1,
-                  nextStepId: "strategic-question-2",
-                },
-                {
-                  text: "Não, esta é a primeira vez que considero isso",
-                  value: "first_time",
-                  scoreValue: 1,
-                  nextStepId: "strategic-question-2",
-                },
-                {
-                  text: "Prefiro não responder",
-                  value: "no_answer",
-                  scoreValue: 1,
-                  nextStepId: "strategic-question-2",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "15px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-question-2",
-      },
-      // --- Questão Estratégica 2 ---
-      {
-        id: "strategic-question-2",
-        name: "💰 Investimento",
-        components: [
-          {
-            id: "sq2-heading",
-            type: "heading",
-            props: {
-              text: "Quanto você estaria disposta a investir em um guia completo de estilo personalizado?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "2rem",
-                fontWeight: "bold",
-                lineHeight: "1.3",
-              },
-            },
-          },
-          {
-            id: "sq2-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920677/Espanhol_Portugu%C3%AAs_6_jxqlxx.webp",
-              alt: "Imagem representando investimento em estilo",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-                marginTop: "20px",
-              },
-            },
-          },
-          {
-            id: "sq2-spacer",
-            type: "spacer",
-            props: {
-              height: 25,
-            },
-          },
-          {
-            id: "sq2-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Menos de R$100",
-                  value: "under_100",
-                  scoreValue: 1,
-                  nextStepId: "strategic-question-3",
-                },
-                {
-                  text: "Entre R$100 e R$300",
-                  value: "100_300",
-                  scoreValue: 1,
-                  nextStepId: "strategic-question-3",
-                },
-                {
-                  text: "Entre R$300 e R$500",
-                  value: "300_500",
-                  scoreValue: 1,
-                  nextStepId: "strategic-question-3",
-                },
-                {
-                  text: "Mais de R$500",
-                  value: "over_500",
-                  scoreValue: 1,
-                  nextStepId: "strategic-question-3",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "15px" },
-            },
-          },
-        ],
-        defaultNextStepId: "strategic-question-3",
-      },
-      // --- Questão Estratégica 3 ---
-      {
-        id: "strategic-question-3",
-        name: "🎯 Resultados Desejados",
-        components: [
-          {
-            id: "sq3-heading",
-            type: "heading",
-            props: {
-              text: "Qual desses resultados você mais gostaria de alcançar com os Guias de Estilo e Imagem?",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "2rem",
-                fontWeight: "bold",
-                lineHeight: "1.3",
-              },
-            },
-          },
-          {
-            id: "sq3-image",
-            type: "image",
-            props: {
-              src: "https://res.cloudinary.com/dqljyf76t/image/upload/t_Antes%20e%20Depois%20-%20de%20Descobrir%20seu%20Estilo/v1745459978/20250423_1704_Transforma%C3%A7%C3%A3o_no_Closet_Moderno_simple_compose_01jsj3xvy6fpfb6pyd5shg5eak_1_appany.webp",
-              alt: "Transformação de estilo",
-              styles: {
-                width: "400px",
-                height: "300px",
-                textAlign: "center",
-                objectFit: "cover",
-                borderRadius: "lg",
-                marginTop: "20px",
-              },
-            },
-          },
-          {
-            id: "sq3-spacer",
-            type: "spacer",
-            props: {
-              height: 25,
-            },
-          },
-          {
-            id: "sq3-options",
-            type: "options",
-            props: {
-              choices: [
-                {
-                  text: "Montar looks com mais facilidade e confiança",
-                  value: "confidence",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-2",
-                },
-                {
-                  text: "Usar o que já tenho e me sentir estilosa",
-                  value: "current_wardrobe",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-2",
-                },
-                {
-                  text: "Comprar com mais consciência e sem culpa",
-                  value: "conscious_shopping",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-2",
-                },
-                {
-                  text: "Ser admirada pela imagem que transmito",
-                  value: "admiration",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-2",
-                },
-                {
-                  text: "Resgatar peças esquecidas e criar novos looks com estilo",
-                  value: "rescue_pieces",
-                  scoreValue: 1,
-                  nextStepId: "quiz-transition-2",
-                },
-              ],
-              selectionType: "single",
-              styles: { gap: "15px" },
-            },
-          },
-        ],
-        defaultNextStepId: "quiz-transition-2",
-      },
-      // --- Segunda Página de Transição ---
-      {
-        id: "quiz-transition-2",
-        name: "🔄 Segunda Transição",
-        components: [
-          {
-            id: "transition2-heading",
-            type: "heading",
-            props: {
-              text: "Perfeito! Estamos quase lá...",
-              styles: {
-                textAlign: "center",
-                color: "#ffffff",
-                fontSize: "2.5rem",
-                fontWeight: "bold",
-              },
-            },
-          },
-          {
-            id: "transition2-subtitle",
-            type: "text",
-            props: {
-              text: "Agora vamos descobrir seu perfil de estilo único!",
-              styles: {
-                textAlign: "center",
-                color: "#d1d5db",
-                fontSize: "1.2rem",
-                marginTop: "20px",
-              },
-            },
-          },
-          {
-            id: "transition2-motivation",
-            type: "text",
-            props: {
-              text: "Com base nas suas respostas, preparamos um resultado personalizado especialmente para você.",
-              styles: {
-                textAlign: "center",
-                color: "#10b981",
-                fontSize: "1rem",
-                fontStyle: "italic",
-                marginTop: "15px",
-              },
-            },
-          },
-          {
-            id: "transition2-spacer",
-            type: "spacer",
-            props: {
-              height: 30,
-            },
-          },
-          {
-            id: "transition2-button",
-            type: "button",
-            props: {
-              buttonText: "Ver Meu Resultado",
               buttonStyle: "primary",
               actionType: "goToNextStep",
               actionTargetId: "result-page",
@@ -4230,83 +2843,294 @@ const AdvancedQuizEditor: React.FC = () => {
         ],
         defaultNextStepId: "result-page",
       },
-      // --- Páginas Finais ---
       {
         id: "result-page",
         name: "📊 Resultado",
         components: [
           {
-            id: "result-component",
-            type: "customComponent",
+            id: "result-heading",
+            type: "heading",
             props: {
-              componentName: "ResultPage.tsx",
-              resultType: "styleAnalysis",
-              offerHeadline: "Seu Perfil de Estilo Único!",
-              offerDescription:
-                "Descubra seu estilo predominante e complementares com base nas suas respostas.",
-              styleImages: {
-                natural:
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
-                classico:
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
-                contemporaneo:
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
-                elegante:
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
-                romantico:
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
-                sexy: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
-                dramatico:
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
-                criativo:
-                  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
-              },
-              styleNames: {
-                natural: "Natural",
-                classico: "Clássico",
-                contemporaneo: "Contemporâneo",
-                elegante: "Elegante",
-                romantico: "Romântico",
-                sexy: "Sexy",
-                dramatico: "Dramático",
-                criativo: "Criativo",
+              text: "Seu Estilo Pessoal",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "2rem",
               },
             },
           },
+          {
+            id: "result-description",
+            type: "text",
+            props: {
+              text: "Baseado nas suas respostas, identificamos elementos únicos do seu estilo pessoal.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "result-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Minha Análise Completa",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "offer-page",
+            },
+          },
         ],
-        defaultNextStepId: "quiz-offer",
+        defaultNextStepId: "offer-page",
       },
       {
-        id: "quiz-offer",
+        id: "offer-page",
         name: "💰 Oferta",
         components: [
           {
-            id: "offer-component",
-            type: "customComponent",
+            id: "offer-heading",
+            type: "heading",
             props: {
-              componentName: "QuizOfferPage.tsx",
-              offerHeadline: "Transforme Seu Estilo Agora!",
-              offerDescription:
-                "Consultoria personalizada de estilo com base no seu perfil único. Descubra como criar looks incríveis que combinam com você!",
-              offerCtaButtonText: "Quero Minha Consultoria",
-              offerCtaUrl: "https://checkout.gisele.com.br/consultoria-estilo",
-              discountCode: "ESTILO40OFF",
-              offerProductSku: "CONSULTORIA-ESTILO-2025",
+              text: "Consultoria Personalizada de Estilo",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "offer-text",
+            type: "text",
+            props: {
+              text: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "price-text",
+            type: "text",
+            props: {
+              text: "De R$ 497 por apenas R$ 297",
+              styles: {
+                textAlign: "center",
+                color: "#10b981",
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "offer-button",
+            type: "button",
+            props: {
+              buttonText: "Quero Minha Consultoria",
+              buttonStyle: "primary",
+              actionType: "redirectUrl",
+              actionTargetId: "https://checkout.example.com",
             },
           },
         ],
-        finalPageType: "quizOfferPage",
+        defaultNextStepId: null,
+      },
+      {
+        id: "step-3",
+        name: "❓ Pergunta 2",
+        components: [
+          {
+            id: "question-2-heading",
+            type: "heading",
+            props: {
+              text: "Para quais ocasiões você mais precisa de inspiração de looks?",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.6rem",
+              },
+            },
+          },
+          {
+            id: "question-2-options",
+            type: "options",
+            props: {
+              choices: [
+                {
+                  text: "Trabalho e Eventos Profissionais",
+                  value: "work",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Eventos Sociais e Festas",
+                  value: "social",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Dia a Dia e Casual",
+                  value: "casual",
+                  nextStepId: "step-4",
+                },
+                {
+                  text: "Ocasiões Especiais",
+                  value: "special",
+                  nextStepId: "step-4",
+                },
+              ],
+              styles: { gap: "12px" },
+            },
+          },
+        ],
+        defaultNextStepId: "step-4",
+      },
+      {
+        id: "step-4",
+        name: "🔄 Transição",
+        components: [
+          {
+            id: "transition-heading",
+            type: "heading",
+            props: {
+              text: "Analisando suas respostas...",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "transition-text",
+            type: "text",
+            props: {
+              text: "Estamos criando um perfil personalizado baseado no seu estilo único.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "continue-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Meu Resultado",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "step-5",
+            },
+          },
+        ],
+        defaultNextStepId: "step-5",
+      },
+      {
+        id: "step-5",
+        name: "📊 Resultado",
+        components: [
+          {
+            id: "result-heading",
+            type: "heading",
+            props: {
+              text: "Seu Estilo Pessoal",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "2rem",
+              },
+            },
+          },
+          {
+            id: "result-description",
+            type: "text",
+            props: {
+              text: "Baseado nas suas respostas, identificamos elementos únicos do seu estilo pessoal.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "result-button",
+            type: "button",
+            props: {
+              buttonText: "Ver Minha Análise Completa",
+              buttonStyle: "primary",
+              actionType: "goToNextStep",
+              actionTargetId: "step-6",
+            },
+          },
+        ],
+        defaultNextStepId: "step-6",
+      },
+      {
+        id: "step-6",
+        name: "💰 Oferta",
+        components: [
+          {
+            id: "offer-heading",
+            type: "heading",
+            props: {
+              text: "Consultoria Personalizada de Estilo",
+              styles: {
+                textAlign: "center",
+                color: "#ffffff",
+                fontSize: "1.8rem",
+              },
+            },
+          },
+          {
+            id: "offer-text",
+            type: "text",
+            props: {
+              text: "Transforme seu guarda-roupa com orientação especializada baseada no seu perfil.",
+              styles: {
+                textAlign: "center",
+                color: "#d1d5db",
+                fontSize: "1.1rem",
+              },
+            },
+          },
+          {
+            id: "price-text",
+            type: "text",
+            props: {
+              text: "De R$ 497 por apenas R$ 297",
+              styles: {
+                textAlign: "center",
+                color: "#10b981",
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+              },
+            },
+          },
+          {
+            id: "offer-button",
+            type: "button",
+            props: {
+              buttonText: "Quero Minha Consultoria",
+              buttonStyle: "primary",
+              actionType: "redirectUrl",
+              actionTargetId: "https://checkout.example.com",
+            },
+          },
+        ],
+        defaultNextStepId: null,
       },
     ],
     headerConfig: {
       showLogo: true,
       showProgressBar: true,
       allowReturnButton: true,
-      logoUrl:
-        "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+      logoUrl: "https://placehold.co/120x40/0f172a/94a3b8?text=LOGO",
       progressColor: "#3b82f6",
     },
-    currentStepId: "quiz-intro",
+    currentStepId: "step-1",
   });
 
   const [selectedComponentId, setSelectedComponentId] = useState<string | null>(
@@ -4314,27 +3138,6 @@ const AdvancedQuizEditor: React.FC = () => {
   );
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
-
-  // Sistema de Auto-Save
-  const {
-    isSaving: isAutoSaving,
-    lastSaved,
-    hasUnsavedChanges,
-    loadFromLocalStorage,
-    saveManually,
-  } = useAutoSave(editorState, 2000); // Auto-save a cada 2 segundos
-
-  // Carrega dados salvos na inicialização
-  useEffect(() => {
-    const savedData = loadFromLocalStorage();
-    if (savedData) {
-      setEditorState(savedData);
-      console.log(
-        "📂 Dados carregados do auto-save:",
-        new Date().toLocaleTimeString()
-      );
-    }
-  }, [loadFromLocalStorage]);
 
   // Computed values
   const currentStep =
@@ -4412,11 +3215,6 @@ const AdvancedQuizEditor: React.FC = () => {
       currentStepId: newCurrentStepId,
     }));
     setSelectedComponentId(null);
-  };
-
-  // --- Toggle entre modos de visualização ---
-  const toggleViewportMode = () => {
-    setViewportMode((prev) => (prev === "desktop" ? "mobile" : "desktop"));
   };
 
   // --- Handlers para gerenciar componentes ---
@@ -4531,31 +3329,13 @@ const AdvancedQuizEditor: React.FC = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Usa o sistema de auto-save para salvar manualmente
-      saveManually();
-
-      // Simula salvamento no servidor
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      console.log("✅ Quiz salvo manualmente:", editorState);
-
-      // Mostra uma notificação de sucesso mais discreta
-      const notification = document.createElement("div");
-      notification.className =
-        "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50";
-      notification.textContent = "Quiz salvo com sucesso!";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 3000);
+      // Simula salvamento (aqui você integraria com uma API real)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log("Quiz salvo:", editorState);
+      alert("Quiz salvo com sucesso!");
     } catch (error) {
-      console.error("❌ Erro ao salvar:", error);
-
-      // Mostra notificação de erro
-      const notification = document.createElement("div");
-      notification.className =
-        "fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50";
-      notification.textContent = "Erro ao salvar. Tente novamente.";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 5000);
+      console.error("Erro ao salvar:", error);
+      alert("Erro ao salvar o quiz. Tente novamente.");
     } finally {
       setIsSaving(false);
     }
@@ -4564,31 +3344,13 @@ const AdvancedQuizEditor: React.FC = () => {
   const handlePublish = async () => {
     setIsPublishing(true);
     try {
-      // Salva antes de publicar
-      saveManually();
-
-      // Simula publicação
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      console.log("🚀 Quiz publicado:", editorState);
-
-      // Mostra notificação de sucesso
-      const notification = document.createElement("div");
-      notification.className =
-        "fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg z-50";
-      notification.textContent = "Quiz publicado com sucesso!";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 3000);
+      // Simula publicação (aqui você integraria com uma API real)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log("Quiz publicado:", editorState);
+      alert("Quiz publicado com sucesso!");
     } catch (error) {
-      console.error("❌ Erro ao publicar:", error);
-
-      // Mostra notificação de erro
-      const notification = document.createElement("div");
-      notification.className =
-        "fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg z-50";
-      notification.textContent = "Erro ao publicar. Tente novamente.";
-      document.body.appendChild(notification);
-      setTimeout(() => document.body.removeChild(notification), 5000);
+      console.error("Erro ao publicar:", error);
+      alert("Erro ao publicar o quiz. Tente novamente.");
     } finally {
       setIsPublishing(false);
     }
@@ -4683,402 +3445,97 @@ const AdvancedQuizEditor: React.FC = () => {
     console.log("🎯 Tentando renderizar AdvancedQuizEditor...");
 
     return (
-      <><div className="h-screen flex bg-background advanced-editor">
-        {/* Header Superior */}
-        <div className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-50">
-          <div className="flex items-center gap-3">
-            <h1 className="text-lg font-semibold text-gray-800">✨ Editor Avançado de Quiz</h1>
-            <Badge variant="outline" className="text-xs">
-              Quiz de Estilo Pessoal
-            </Badge>
-          </div>
+      <div className="h-screen bg-zinc-950 flex flex-col">
+        {/* Navbar Superior */}
+        <FunnelNavbar
+          onSave={handleSave}
+          onPublish={handlePublish}
+          isSaving={isSaving}
+          isPublishing={isPublishing}
+        />
 
-          <div className="flex items-center gap-3">
-            {/* Viewport Toggle */}
-            <div className="flex gap-1">
-              <Button
-                variant={viewportMode === "mobile" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setViewportMode("mobile")}
-                className="h-8 w-8 p-0"
-              >
-                📱
-              </Button>
-              <Button
-                variant={viewportMode === "desktop" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setViewportMode("desktop")}
-                className="h-8 w-8 p-0"
-              >
-                🖥️
-              </Button>
-            </div>
-
-            {/* Auto-save Status */}
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              {isAutoSaving && (
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                  Salvando...
-                </div>
-              )}
-              {lastSaved && !isAutoSaving && (
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Salvo {lastSaved.toLocaleTimeString()}
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-2">
-              <Button
-                onClick={handleSave}
-                disabled={isSaving}
-                size="sm"
-                variant="outline"
-                className="h-8 text-xs"
-              >
-                {isSaving ? "Salvando..." : "💾 Salvar"}
-              </Button>
-              <Button
-                onClick={handlePublish}
-                disabled={isPublishing}
-                size="sm"
-                className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700"
-              >
-                {isPublishing ? "Publicando..." : "🚀 Publicar"}
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Layout Principal com 4 colunas - offset para o header fixo */}
-        <div className="flex-1 flex overflow-hidden pt-14">
-          {/* Coluna 1: Navegação de Etapas */}
-          <div className="w-[260px] min-w-[260px] border-r border-gray-200 bg-slate-50 flex-shrink-0 overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <div className="p-3 border-b bg-slate-100">
-                <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
-                  🔄 ETAPAS DO QUIZ
-                </h2>
-                <p className="text-xs text-gray-600">
-                  {editorState.steps.length} etapas configuradas
-                </p>
-              </div>
-              <StepNavigationTabs
-                steps={editorState.steps}
-                currentStepId={editorState.currentStepId}
-                onStepSelect={handleStepSelect}
-                onStepRename={handleStepRename}
-                onStepDelete={handleStepDelete}
-                onAddStep={handleAddStep} />
-            </div>
+        {/* Layout Principal com Quatro Colunas */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Coluna 1: Navegação de Etapas (Esquerda) */}
+          <div className="w-64 border-r border-zinc-700 bg-zinc-900">
+            <StepNavigationTabs
+              steps={editorState.steps}
+              currentStepId={editorState.currentStepId}
+              onStepSelect={handleStepSelect}
+              onStepRename={handleStepRename}
+              onStepDelete={handleStepDelete}
+              onAddStep={handleAddStep}
+            />
           </div>
 
           {/* Coluna 2: Biblioteca de Componentes */}
-          <div className="w-[240px] min-w-[240px] border-r border-gray-200 bg-blue-50 flex-shrink-0 overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <div className="p-3 border-b bg-blue-100">
-                <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
-                  🧩 COMPONENTES
-                </h2>
-                <p className="text-xs text-gray-600">
-                  Arraste e solte no canvas
+          <div className="w-80 border-r border-zinc-700 bg-zinc-900">
+            <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
+          </div>
+
+          {/* Coluna 3: Canvas do Editor */}
+          <div className="flex-1 overflow-hidden">
+            <CanvasArea
+              currentStep={currentStep}
+              headerConfig={editorState.headerConfig}
+              selectedComponent={selectedComponent}
+              selectedComponentId={selectedComponentId}
+              onComponentSelect={handleComponentSelect}
+              onComponentAdd={handleComponentAdd}
+              onComponentUpdate={handleComponentUpdate}
+              onComponentDelete={handleComponentDelete}
+              onComponentMove={handleComponentMove}
+            />
+          </div>
+
+          {/* Coluna 4: Painel de Propriedades/Editor (Direita) */}
+          <div className="w-96 max-w-md border-l border-zinc-700 bg-zinc-900 p-4 overflow-y-auto">
+            {selectedComponent ? (
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-white">
+                    Editar Componente
+                  </h3>
+                  <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
+                    {selectedComponent.type}
+                  </span>
+                </div>
+                <ComponentPropertyEditor
+                  type={selectedComponent.type}
+                  props={selectedComponent.props}
+                  onPropsChange={(newProps) =>
+                    handleComponentUpdate(selectedComponent.id, newProps)
+                  }
+                />
+              </div>
+            ) : (
+              <div className="p-4 flex flex-col items-center justify-center h-full text-center">
+                <div className="text-zinc-500 mb-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mx-auto mb-2"
+                  >
+                    <rect width="3" height="8" x="13" y="2" rx="1.5"></rect>
+                    <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
+                    <rect width="8" height="3" x="2" y="13" rx="1.5"></rect>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-zinc-300 mb-2">
+                  Nenhum componente selecionado
+                </h3>
+                <p className="text-sm text-zinc-500">
+                  Clique em um componente no canvas para editar suas propriedades
                 </p>
               </div>
-              <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
-            </div>
-          </div>
-          {/* Coluna 3: Canvas do Editor */}
-          <div className="flex-1 min-w-0 overflow-hidden bg-white relative">
-            {/* Controles de Viewport */}
-            <div className="absolute top-4 right-4 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2">
-              <div className="flex gap-1">
-                <button
-                  className={`p-2 rounded text-xs ${viewportMode === "desktop"
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"}`}
-                  onClick={() => setViewportMode("desktop")}
-                  title="Desktop"
-                >
-                  🖥️
-                </button>
-                <button
-                  className={`p-2 rounded text-xs ${viewportMode === "mobile"
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"}`}
-                  onClick={() => setViewportMode("mobile")}
-                  title="Mobile"
-                >
-                  📱
-                </button>
-              </div>
-            </div>
-            <rect width="20" height="14" x="2" y="3" rx="2"></rect>
-            <line x1="8" x2="16" y1="21" y2="21"></line>
-            <line x1="12" x2="12" y1="17" y2="21"></line>
-          </svg>
-        </button>
-        <button
-          className={`p-1 rounded ${viewportMode === "mobile"
-              ? "bg-blue-600 text-white"
-              : "text-zinc-400 hover:text-zinc-200"}`}
-          onClick={() => setViewportMode("mobile")}
-          title="Visualização Mobile"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="lucide lucide-smartphone"
-          >
-            <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
-            <path d="M12 18h.01"></path>
-          </svg>
-        </button>
-      </div><CanvasArea
-          currentStep={currentStep}
-          steps={editorState.steps}
-          currentStepId={editorState.currentStepId}
-          headerConfig={{
-            ...editorState.headerConfig,
-            showLogo: true, // Garantir que o logotipo seja exibido centralmente
-          }}
-          selectedComponent={selectedComponent}
-          selectedComponentId={selectedComponentId}
-          onComponentSelect={handleComponentSelect}
-          onComponentAdd={handleComponentAdd}
-          onComponentUpdate={handleComponentUpdate}
-          onComponentDelete={handleComponentDelete}
-          onComponentMove={handleComponentMove}
-          viewportMode={viewportMode} /></>
-          </div>{" "}
-          {/* Coluna 4: Painel de Propriedades (Direita) */}
-          <div className="w-80 border-l border-zinc-700 bg-zinc-900 flex-shrink-0 overflow-hidden flex flex-col">
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
-              {/* Configurações da Etapa */}
-              <div className="grid gap-4 px-4 pb-4 pt-2 my-4">
-                {/* Título da Etapa */}
-                <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
-                  <div className="flex flex-col space-y-1.5 p-6 pb-4">
-                    <p className="text-sm text-zinc-400">Título da Etapa</p>
-                  </div>
-                  <div className="p-6 pt-0">
-                    <div className="grid w-full max-w-sm items-center gap-1.5">
-                      <label
-                        className="text-sm font-medium leading-none text-zinc-100"
-                        htmlFor="stepName"
-                      >
-                        Nome da Etapa
-                      </label>
-                      <input
-                        type="text"
-                        className="flex h-10 w-full rounded-md border border-zinc-600 bg-zinc-700 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                        id="stepName"
-                        placeholder="Digite aqui..."
-                        value={currentStep?.name || ""}
-                        onChange={(e) =>
-                          handleStepRename(
-                            currentStep?.id || "",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Configurações do Header */}
-                <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
-                  <div className="flex flex-col space-y-1.5 p-6 pb-4">
-                    <p className="text-sm text-zinc-400">Header</p>
-                  </div>
-                  <div className="p-6 pt-0 grid gap-2">
-                    {/* Mostrar Logo */}
-                    <div className="flex items-center space-x-2">
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-checked={editorState.headerConfig.showLogo}
-                        className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
-                          editorState.headerConfig.showLogo
-                            ? "bg-blue-600"
-                            : "bg-zinc-600"
-                        }`}
-                        id="show-logo"
-                        onClick={() =>
-                          handleHeaderConfigUpdate({
-                            showLogo: !editorState.headerConfig.showLogo,
-                          })
-                        }
-                      >
-                        <span
-                          className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                            editorState.headerConfig.showLogo
-                              ? "translate-x-5"
-                              : "translate-x-0"
-                          }`}
-                        />
-                      </button>
-                      <label
-                        className="text-sm font-medium leading-none text-zinc-100"
-                        htmlFor="show-logo"
-                      >
-                        Mostrar Logo
-                      </label>
-                    </div>
-
-                    {/* Mostrar Progresso */}
-                    <div className="flex items-center space-x-2">
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-checked={editorState.headerConfig.showProgressBar}
-                        className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
-                          editorState.headerConfig.showProgressBar
-                            ? "bg-blue-600"
-                            : "bg-zinc-600"
-                        }`}
-                        id="show-progress"
-                        onClick={() =>
-                          handleHeaderConfigUpdate({
-                            showProgressBar:
-                              !editorState.headerConfig.showProgressBar,
-                          })
-                        }
-                      >
-                        <span
-                          className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                            editorState.headerConfig.showProgressBar
-                              ? "translate-x-5"
-                              : "translate-x-0"
-                          }`}
-                        />
-                      </button>
-                      <label
-                        className="text-sm font-medium leading-none text-zinc-100"
-                        htmlFor="show-progress"
-                      >
-                        Mostrar Progresso
-                      </label>
-                    </div>
-
-                    {/* Permitir Voltar */}
-                    <div className="flex items-center space-x-2">
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-checked={
-                          editorState.headerConfig.allowReturnButton
-                        }
-                        className={`peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 ${
-                          editorState.headerConfig.allowReturnButton
-                            ? "bg-blue-600"
-                            : "bg-zinc-600"
-                        }`}
-                        id="allow-return"
-                        onClick={() =>
-                          handleHeaderConfigUpdate({
-                            allowReturnButton:
-                              !editorState.headerConfig.allowReturnButton,
-                          })
-                        }
-                      >
-                        <span
-                          className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                            editorState.headerConfig.allowReturnButton
-                              ? "translate-x-5"
-                              : "translate-x-0"
-                          }`}
-                        />
-                      </button>
-                      <label
-                        className="text-sm font-medium leading-none text-zinc-100"
-                        htmlFor="allow-return"
-                      >
-                        Permitir Voltar
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Editor de Componentes */}
-                {selectedComponent ? (
-                  <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
-                    <div className="flex flex-col space-y-1.5 p-6 pb-4">
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm text-zinc-400">
-                          Editar Componente
-                        </p>
-                        <span className="text-xs bg-zinc-700 text-zinc-300 px-2 py-1 rounded">
-                          {selectedComponent.type}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-6 pt-0">
-                      <ComponentPropertyEditor
-                        type={selectedComponent.type}
-                        props={selectedComponent.props}
-                        onPropsChange={(newProps) =>
-                          handleComponentUpdate(selectedComponent.id, newProps)
-                        }
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="rounded-lg border border-zinc-600 bg-zinc-800 text-zinc-100 shadow-sm">
-                    <div className="p-6 flex flex-col items-center justify-center text-center">
-                      <div className="text-zinc-500 mb-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="48"
-                          height="48"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="mx-auto mb-2"
-                        >
-                          <rect
-                            width="3"
-                            height="8"
-                            x="13"
-                            y="2"
-                            rx="1.5"
-                          ></rect>
-                          <path d="M19 8.5V10h1.5A1.5 1.5 0 0 1 22 11.5v1A1.5 1.5 0 0 1 20.5 14H19v1.5a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5V14h-1.5A1.5 1.5 0 0 1 12 12.5v-1A1.5 1.5 0 0 1 13.5 10H15V8.5a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 19 8.5Z"></path>
-                          <rect
-                            width="8"
-                            height="3"
-                            x="2"
-                            y="13"
-                            rx="1.5"
-                          ></rect>
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-medium text-zinc-300 mb-2">
-                        Nenhum componente selecionado
-                      </h3>
-                      <p className="text-sm text-zinc-500">
-                        Clique em um componente no canvas para editar suas
-                        propriedades
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                <div className="py-4"></div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
