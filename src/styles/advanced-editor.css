@@ -991,11 +991,13 @@
 
 .editor-layout {
   display: grid;
-  grid-template-columns: 250px 300px 1fr 350px;
+  grid-template-columns: minmax(200px, 250px) minmax(250px, 300px) 1fr minmax(
+      300px,
+      350px
+    );
   height: 100vh;
   gap: 1px;
   background: #e2e8f0;
-  transition: all 0.3s ease;
 }
 
 .editor-column {
@@ -1003,104 +1005,72 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  position: relative;
-  min-height: 0; /* Importante para flexbox com scroll */
+  min-width: 0; /* Importante para overflow */
 }
 
-/* Scroll independente para cada coluna */
-.editor-column > * {
-  flex: 1;
+/* Scroll personalizado para cada coluna */
+.editor-column > div {
   overflow-y: auto;
+  height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f1f5f9;
+  scrollbar-color: #cbd5e0 #f7fafc;
 }
 
-.editor-column > *::-webkit-scrollbar {
+.editor-column > div::-webkit-scrollbar {
   width: 6px;
 }
 
-.editor-column > *::-webkit-scrollbar-track {
-  background: #f1f5f9;
+.editor-column > div::-webkit-scrollbar-track {
+  background: #f7fafc;
+}
+
+.editor-column > div::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
   border-radius: 3px;
 }
 
-.editor-column > *::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+/* Acessibilidade - foco visível */
+.draggable-component:focus,
+.step-item:focus,
+.canvas-component:focus {
+  outline: 2px solid #3182ce;
+  outline-offset: 2px;
 }
 
-.editor-column > *::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Responsividade aprimorada */
-@media (max-width: 1600px) {
-  .editor-layout {
-    grid-template-columns: 220px 280px 1fr 320px;
-  }
-}
-
-@media (max-width: 1400px) {
-  .editor-layout {
-    grid-template-columns: 200px 250px 1fr 300px;
-  }
-}
-
+/* Responsividade urgente */
 @media (max-width: 1200px) {
   .editor-layout {
-    grid-template-columns: 180px 220px 1fr 280px;
+    grid-template-columns: 180px 220px 1fr 260px;
   }
 }
 
 @media (max-width: 1024px) {
   .editor-layout {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 300px 1fr;
-    height: 100vh;
-  }
-
-  .palette-column {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .tree-column {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .canvas-column {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
-  .properties-column {
-    display: none; /* Esconder em telas pequenas */
-  }
-}
-
-@media (max-width: 768px) {
-  .editor-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    overflow-y: auto;
   }
 
-  .palette-column,
-  .tree-column {
-    grid-column: 1;
-    max-height: 200px;
+  .editor-column {
+    min-height: 200px;
   }
 
   .canvas-column {
-    grid-column: 1;
     min-height: 400px;
   }
 }
 
-/* Focus e states visuais melhorados */
-.editor-column:focus-within {
-  box-shadow: 0 0 0 2px #3b82f6;
-  z-index: 1;
+/* Performance - animações otimizadas */
+.draggable-component,
+.step-item,
+.canvas-component {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  will-change: transform;
+}
+
+.draggable-component:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* === ACESSIBILIDADE === */
@@ -1224,32 +1194,32 @@ button:disabled:hover {
     grid-template-rows: auto auto 1fr auto;
     height: 100vh;
   }
-  
+
   .editor-column {
     min-height: 150px;
     max-height: 300px;
     overflow-y: auto;
   }
-  
+
   .canvas-column {
     min-height: 400px;
     max-height: none;
   }
-  
+
   .component-palette {
     padding: 8px;
   }
-  
+
   .components-grid {
     grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     gap: 4px;
   }
-  
+
   .draggable-component {
     padding: 8px;
     font-size: 12px;
   }
-  
+
   .properties-panel {
     padding: 8px;
   }
@@ -1259,30 +1229,30 @@ button:disabled:hover {
   .editor-layout {
     gap: 0;
   }
-  
+
   .editor-column {
     border-radius: 0;
     min-height: 120px;
   }
-  
+
   .palette-title,
   .tree-title,
   .canvas-title,
   .panel-title {
     font-size: 14px;
   }
-  
+
   .step-number {
     width: 20px;
     height: 20px;
     font-size: 10px;
   }
-  
+
   .component-controls {
     top: 4px;
     right: 4px;
   }
-  
+
   .delete-component-btn {
     width: 20px;
     height: 20px;
@@ -1320,28 +1290,28 @@ button:disabled:hover {
     background: #1a1a1a;
     color: #ffffff;
   }
-  
+
   .editor-column {
     background: #2d2d2d;
     border-color: #404040;
   }
-  
+
   .palette-column,
   .tree-column,
   .properties-column {
     background: #262626;
   }
-  
+
   .canvas-area {
     background: #333333;
     border-color: #404040;
   }
-  
+
   .canvas-component {
     background: #2d2d2d;
     border-color: #404040;
   }
-  
+
   .form-field input,
   .form-field textarea,
   .form-field select {
@@ -1349,16 +1319,16 @@ button:disabled:hover {
     border-color: #606060;
     color: #ffffff;
   }
-  
+
   .draggable-component {
     background: #404040;
     border-color: #606060;
   }
-  
+
   .step-header {
     background: #404040;
   }
-  
+
   .step-item.active .step-header {
     background: #0066cc;
   }
@@ -1366,8 +1336,14 @@ button:disabled:hover {
 
 /* === ANIMAÇÕES SUAVES === */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .section-content {
