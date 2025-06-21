@@ -638,33 +638,34 @@ const CanvasArea: React.FC<CanvasAreaProps> = ({
   return (
     <div className="h-full bg-zinc-900 overflow-y-auto">
       {/* Área de Canvas Principal */}
-      <div className="p-4 md:p-6 min-h-full">
-        <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-4 md:p-6 min-h-[600px]">
+      <div className="p-2 sm:p-4 lg:p-6 min-h-full">
+        {/* Container responsivo do canvas */}
+        <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl mx-auto bg-white rounded-lg shadow-lg p-3 sm:p-4 lg:p-6 min-h-[500px] sm:min-h-[600px]">
           {/* Header da página */}
           {headerConfig && (
-            <div className="mb-6 pb-4 border-b border-gray-200">
-              <h1 className="text-xl font-bold text-gray-900">
+            <div className="mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">
                 {headerConfig.title}
               </h1>
               {headerConfig.subtitle && (
-                <p className="text-gray-600 mt-1">{headerConfig.subtitle}</p>
+                <p className="text-sm sm:text-base text-gray-600 mt-1">{headerConfig.subtitle}</p>
               )}
             </div>
           )}
 
           {/* Componentes da etapa atual */}
           {currentStep.components.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <p className="mb-4">Esta etapa está vazia</p>
+            <div className="text-center py-8 sm:py-12 text-gray-500">
+              <p className="mb-4 text-sm sm:text-base">Esta etapa está vazia</p>
               <button
                 onClick={() => onComponentAdd("heading")}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded text-sm sm:text-base hover:bg-blue-700"
               >
                 Adicionar primeiro componente
               </button>
             </div>
           ) : (
-            <div>{currentStep.components.map(renderComponent)}</div>
+            <div className="space-y-2 sm:space-y-4">{currentStep.components.map(renderComponent)}</div>
           )}
         </div>
       </div>
@@ -4500,8 +4501,8 @@ const AdvancedQuizEditor: React.FC = () => {
 
         {/* Layout Principal com Quatro Colunas */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Coluna 1: Navegação de Etapas (Esquerda) */}
-          <div className="w-72 min-w-[280px] max-w-[320px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+          {/* Coluna 1: Navegação de Etapas (Esquerda) - Oculta em mobile */}
+          <div className="hidden lg:block w-64 xl:w-72 min-w-[250px] max-w-[320px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
             <div className="h-full">
               <StepNavigationTabs
                 steps={editorState.steps}
@@ -4514,15 +4515,15 @@ const AdvancedQuizEditor: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 2: Biblioteca de Componentes */}
-          <div className="w-80 min-w-[300px] max-w-[360px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+          {/* Coluna 2: Biblioteca de Componentes - Oculta em mobile e tablet */}
+          <div className="hidden xl:block w-72 2xl:w-80 min-w-[280px] max-w-[360px] border-r border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
             <div className="h-full">
               <FunnelToolbarSidebar onComponentAdd={handleComponentAdd} />
             </div>
           </div>
 
-          {/* Coluna 3: Canvas do Editor */}
-          <div className="flex-1 min-w-[600px] overflow-hidden advanced-editor-column">
+          {/* Coluna 3: Canvas do Editor - Sempre visível */}
+          <div className="flex-1 min-w-0 overflow-hidden advanced-editor-column">
             <div className="h-full overflow-y-auto canvas-area-scrollbar">
               <CanvasArea
                 currentStep={currentStep}
@@ -4538,8 +4539,8 @@ const AdvancedQuizEditor: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 4: Painel de Propriedades/Editor (Direita) */}
-          <div className="w-96 min-w-[350px] max-w-[420px] border-l border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
+          {/* Coluna 4: Painel de Propriedades/Editor (Direita) - Oculta em mobile */}
+          <div className="hidden md:block w-80 lg:w-96 min-w-[300px] max-w-[420px] border-l border-zinc-700 bg-zinc-900 overflow-y-auto advanced-editor-scrollbar advanced-editor-column">
             <div className="p-4 h-full">
               {selectedComponent ? (
                 <div>
