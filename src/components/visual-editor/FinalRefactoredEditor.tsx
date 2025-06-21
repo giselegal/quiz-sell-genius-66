@@ -22,7 +22,7 @@ const FinalRefactoredEditor: React.FC = () => {
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       const componentType = event.dataTransfer.getData("component-type");
-      
+
       if (componentType) {
         actions.addComponent(componentType);
       }
@@ -30,9 +30,12 @@ const FinalRefactoredEditor: React.FC = () => {
     [actions]
   );
 
-  const handleDragOver = React.useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  }, []);
+  const handleDragOver = React.useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+    },
+    []
+  );
 
   // Handlers para toolbar
   const handleSave = React.useCallback(() => {

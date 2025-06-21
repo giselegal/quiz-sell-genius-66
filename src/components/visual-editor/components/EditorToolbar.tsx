@@ -1,5 +1,13 @@
 import React from "react";
-import { Save, Clock, AlertCircle, CheckCircle, Eye, Download, Settings } from "lucide-react";
+import {
+  Save,
+  Clock,
+  AlertCircle,
+  CheckCircle,
+  Eye,
+  Download,
+  Settings,
+} from "lucide-react";
 
 interface ToolbarProps {
   isDirty: boolean;
@@ -53,7 +61,7 @@ const EditorToolbar: React.FC<ToolbarProps> = ({
   const StatusIcon = status.icon;
 
   return (
-    <div 
+    <div
       className="editor-toolbar"
       role="toolbar"
       aria-label="Ferramentas do editor"

@@ -34,15 +34,17 @@ const Canvas: React.FC<CanvasProps> = ({
         }`}
         role="button"
         tabIndex={0}
-        aria-label={`Componente ${component.type}. ${isSelected ? 'Selecionado' : 'Clique para selecionar'}`}
+        aria-label={`Componente ${component.type}. ${
+          isSelected ? "Selecionado" : "Clique para selecionar"
+        }`}
         aria-pressed={isSelected}
         onClick={() => onComponentSelect(component.id)}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             onComponentSelect(component.id);
           }
-          if (e.key === 'Delete' && isSelected) {
+          if (e.key === "Delete" && isSelected) {
             e.preventDefault();
             onComponentDelete(component.id);
           }
@@ -53,7 +55,11 @@ const Canvas: React.FC<CanvasProps> = ({
         </div>
 
         {isSelected && (
-          <div className="component-controls" role="toolbar" aria-label="Ações do componente">
+          <div
+            className="component-controls"
+            role="toolbar"
+            aria-label="Ações do componente"
+          >
             <button
               className="delete-component-btn"
               onClick={(e) => {
@@ -63,9 +69,9 @@ const Canvas: React.FC<CanvasProps> = ({
               title="Excluir Componente"
               aria-label="Excluir componente"
             >
-            {">"}
+              {">"}
               🗑️
-              </button>
+            </button>
           </div>
         )}
       </div>

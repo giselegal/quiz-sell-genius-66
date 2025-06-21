@@ -92,22 +92,22 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 300px 1fr;
   }
-  
+
   .palette-column {
     grid-column: 1;
     grid-row: 1;
   }
-  
+
   .tree-column {
     grid-column: 2;
     grid-row: 1;
   }
-  
+
   .canvas-column {
     grid-column: 1 / -1;
     grid-row: 2;
   }
-  
+
   .properties-column {
     display: none;
   }
@@ -118,13 +118,13 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr;
   }
-  
+
   .palette-column,
   .tree-column {
     grid-column: 1;
     max-height: 200px;
   }
-  
+
   .canvas-column {
     grid-column: 1;
     min-height: 400px;
@@ -759,11 +759,11 @@ button:focus {
   .editor-toolbar {
     padding: 0 16px;
   }
-  
+
   .toolbar-btn span {
     display: none;
   }
-  
+
   .editor-title {
     font-size: 16px;
   }
