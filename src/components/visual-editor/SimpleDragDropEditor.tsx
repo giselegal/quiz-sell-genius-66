@@ -25,7 +25,8 @@ import {
   Image as ImageIcon,
   MousePointer,
   Layout,
-  GripVertical
+  GripVertical,
+  Eye
 } from "lucide-react";
 
 // CSS simplificado
@@ -89,39 +90,82 @@ const SIMPLE_CSS = `
   }
 `;
 
-// Interfaces simplificadas
+// Interfaces completas do funil
 interface SimpleComponent {
   id: string;
-  type: 'title' | 'subtitle' | 'text' | 'image' | 'button' | 'spacer';
+  type: 'title' | 'subtitle' | 'text' | 'image' | 'button' | 'spacer' | 'input' | 'options' | 'progress' | 'logo';
   data: {
     text?: string;
     src?: string;
     alt?: string;
     height?: number;
+    label?: string;
+    placeholder?: string;
+    required?: boolean;
+    options?: QuizOption[];
+    multiSelect?: boolean;
+    hasImages?: boolean;
+    progressValue?: number;
   };
   style: {
     fontSize?: string;
     fontWeight?: string;
     textAlign?: 'left' | 'center' | 'right';
     color?: string;
+    backgroundColor?: string;
+    padding?: string;
+    margin?: string;
+    borderRadius?: string;
   };
+}
+
+interface QuizOption {
+  id: string;
+  text: string;
+  image?: string;
+  value: string;
+  category?: string;
 }
 
 interface SimplePage {
   id: string;
   title: string;
+  type: 'intro' | 'question' | 'loading' | 'result' | 'offer';
+  progress: number;
+  showHeader: boolean;
+  showProgress: boolean;
   components: SimpleComponent[];
 }
+
+interface QuizFunnel {
+  id: string;
+  name: string;
+  pages: SimplePage[];
+}
+
+import { LucideIcon } from "lucide-react";
 
 interface ComponentType {
   type: SimpleComponent['type'];
   name: string;
-  icon: any;
+  icon: LucideIcon;
   description: string;
 }
 
-// Componentes disponíveis
+// Componentes disponíveis - TODOS do funil
 const COMPONENTS: ComponentType[] = [
+  {
+    type: 'logo',
+    name: 'Logo',
+    icon: ImageIcon,
+    description: 'Logo da marca'
+  },
+  {
+    type: 'progress',
+    name: 'Progresso',
+    icon: Layout,
+    description: 'Barra de progresso'
+  },
   {
     type: 'title',
     name: 'Título',
@@ -147,6 +191,18 @@ const COMPONENTS: ComponentType[] = [
     description: 'Imagem responsiva'
   },
   {
+    type: 'input',
+    name: 'Campo',
+    icon: Type,
+    description: 'Campo de entrada'
+  },
+  {
+    type: 'options',
+    name: 'Opções',
+    icon: Layout,
+    description: 'Lista de opções'
+  },
+  {
     type: 'button',
     name: 'Botão',
     icon: MousePointer,
@@ -160,12 +216,248 @@ const COMPONENTS: ComponentType[] = [
   }
 ];
 
+// Templates de páginas do funil completo
+const QUIZ_TEMPLATES = {
+  intro: {
+    id: "intro-1",
+    title: "Página de Introdução",
+    type: 'intro' as const,
+    progress: 0,
+    showHeader: true,
+    showProgress: false,
+    components: [
+      {
+        id: "logo-1",
+        type: 'logo' as const,
+        data: { 
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+          alt: "Logo Gisele Galvão"
+        },
+        style: {}
+      },
+      {
+        id: "title-1",
+        type: 'title' as const,
+        data: { text: "Teste de Estilo Pessoal" },
+        style: { fontSize: '2.5rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+      },
+      {
+        id: "image-1",
+        type: 'image' as const,
+        data: { 
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
+          alt: "Imagem de introdução"
+        },
+        style: {}
+      },
+      {
+        id: "subtitle-1",
+        type: 'subtitle' as const,
+        data: { text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você." },
+        style: { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' }
+      },
+      {
+        id: "input-1",
+        type: 'input' as const,
+        data: { label: "NOME", placeholder: "Digite seu nome aqui...", required: true },
+        style: {}
+      },
+      {
+        id: "button-1",
+        type: 'button' as const,
+        data: { text: "COMEÇAR AGORA" },
+        style: {}
+      }
+    ]
+  },
+
+  question1: {
+    id: "question-1",
+    title: "Questão Visual - Tipo de Roupa",
+    type: 'question' as const,
+    progress: 25,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-1",
+        type: 'progress' as const,
+        data: { progressValue: 25 },
+        style: {}
+      },
+      {
+        id: "title-2",
+        type: 'title' as const,
+        data: { text: "QUAL O SEU TIPO DE ROUPA FAVORITA?" },
+        style: { fontSize: '2rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+      },
+      {
+        id: "options-1",
+        type: 'options' as const,
+        data: {
+          hasImages: true,
+          multiSelect: false,
+          options: [
+            {
+              id: "opt-1",
+              text: "Conforto, leveza e praticidade no vestir",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+              value: "Natural",
+              category: "Natural"
+            },
+            {
+              id: "opt-2",
+              text: "Discrição, caimento clássico e sobriedade",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+              value: "Clássico",
+              category: "Clássico"
+            },
+            {
+              id: "opt-3",
+              text: "Informação de moda, inovação e funcionalidade",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/13_qccdqv.webp",
+              value: "Contemporâneo",
+              category: "Contemporâneo"
+            },
+            {
+              id: "opt-4",
+              text: "Luxo, refinamento e qualidade",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_rqy7yh.webp",
+              value: "Elegante",
+              category: "Elegante"
+            }
+          ]
+        },
+        style: {}
+      }
+    ]
+  },
+
+  question2: {
+    id: "question-2",
+    title: "Questão de Personalidade",
+    type: 'question' as const,
+    progress: 50,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-2",
+        type: 'progress' as const,
+        data: { progressValue: 50 },
+        style: {}
+      },
+      {
+        id: "title-3",
+        type: 'title' as const,
+        data: { text: "RESUMA A SUA PERSONALIDADE:" },
+        style: { fontSize: '2rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+      },
+      {
+        id: "options-2",
+        type: 'options' as const,
+        data: {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: "pers-1", text: "Informal, espontânea, alegre, essencialista", value: "Natural", category: "Natural" },
+            { id: "pers-2", text: "Conservadora, séria, organizada", value: "Clássico", category: "Clássico" },
+            { id: "pers-3", text: "Informada, ativa, prática", value: "Contemporâneo", category: "Contemporâneo" },
+            { id: "pers-4", text: "Exigente, sofisticada, seletiva", value: "Elegante", category: "Elegante" }
+          ]
+        },
+        style: {}
+      }
+    ]
+  },
+
+  loading: {
+    id: "loading-1",
+    title: "Processando Resultado",
+    type: 'loading' as const,
+    progress: 75,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-3",
+        type: 'progress' as const,
+        data: { progressValue: 75 },
+        style: {}
+      },
+      {
+        id: "title-4",
+        type: 'title' as const,
+        data: { text: "Analisando suas respostas..." },
+        style: { fontSize: '2rem', fontWeight: '600', textAlign: 'center' as const, color: '#432818' }
+      },
+      {
+        id: "subtitle-2",
+        type: 'subtitle' as const,
+        data: { text: "Estamos descobrindo seu estilo predominante" },
+        style: { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' }
+      }
+    ]
+  },
+
+  result: {
+    id: "result-1",
+    title: "Resultado do Quiz",
+    type: 'result' as const,
+    progress: 100,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-4",
+        type: 'progress' as const,
+        data: { progressValue: 100 },
+        style: {}
+      },
+      {
+        id: "title-5",
+        type: 'title' as const,
+        data: { text: "Seu Estilo Predominante é:" },
+        style: { fontSize: '2rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+      },
+      {
+        id: "title-6",
+        type: 'title' as const,
+        data: { text: "NATURAL" },
+        style: { fontSize: '3rem', fontWeight: '700', textAlign: 'center' as const, color: '#B89B7A' }
+      },
+      {
+        id: "subtitle-3",
+        type: 'subtitle' as const,
+        data: { text: "Seu estilo reflete autenticidade e simplicidade elegante" },
+        style: { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' }
+      },
+      {
+        id: "button-2",
+        type: 'button' as const,
+        data: { text: "VER GUIA COMPLETO" },
+        style: {}
+      }
+    ]
+  }
+};
+
 const SimpleDragDropEditor: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<SimplePage>({
-    id: "page-1",
-    title: "Nova Página",
-    components: []
+  // Estado do funil completo
+  const [currentFunnel, setCurrentFunnel] = useState<QuizFunnel>({
+    id: "quiz-funnel-1",
+    name: "Quiz de Estilo Pessoal",
+    pages: [
+      QUIZ_TEMPLATES.intro,
+      QUIZ_TEMPLATES.question1,
+      QUIZ_TEMPLATES.question2,
+      QUIZ_TEMPLATES.loading,
+      QUIZ_TEMPLATES.result
+    ]
   });
+
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const currentPage = currentFunnel.pages[currentPageIndex];
 
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
@@ -202,29 +494,20 @@ const SimpleDragDropEditor: React.FC = () => {
     setDragOverIndex(null);
     
     if (draggedType) {
-      const newComponent: SimpleComponent = {
-        id: `${draggedType.type}-${Date.now()}`,
-        type: draggedType.type,
-        data: getDefaultData(draggedType.type),
-        style: getDefaultStyle(draggedType.type)
-      };
-
-      setCurrentPage(prev => {
-        const newComponents = [...prev.components];
-        newComponents.splice(index, 0, newComponent);
-        return {
-          ...prev,
-          components: newComponents
-        };
-      });
-
-      setSelectedComponent(newComponent.id);
+      addComponentToPage(draggedType, index);
       setDraggedType(null);
     }
   };
 
   const getDefaultData = (type: string) => {
     switch (type) {
+      case 'logo':
+        return { 
+          src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp', 
+          alt: 'Logo' 
+        };
+      case 'progress':
+        return { progressValue: 50 };
       case 'title':
         return { text: 'Novo Título' };
       case 'subtitle':
@@ -235,6 +518,21 @@ const SimpleDragDropEditor: React.FC = () => {
         return { 
           src: 'https://via.placeholder.com/400x300/B89B7A/FFFFFF?text=Nova+Imagem', 
           alt: 'Nova imagem' 
+        };
+      case 'input':
+        return { 
+          label: 'CAMPO', 
+          placeholder: 'Digite aqui...', 
+          required: false 
+        };
+      case 'options':
+        return {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: 'opt-1', text: 'Opção 1', value: 'option1' },
+            { id: 'opt-2', text: 'Opção 2', value: 'option2' }
+          ]
         };
       case 'button':
         return { text: 'CLIQUE AQUI' };
@@ -259,21 +557,46 @@ const SimpleDragDropEditor: React.FC = () => {
   };
 
   // Funções de edição
-  const updateComponent = (componentId: string, newData: any) => {
-    setCurrentPage(prev => ({
+  const updateComponent = (componentId: string, newData: Partial<SimpleComponent['data']>) => {
+    setCurrentFunnel(prev => ({
       ...prev,
-      components: prev.components.map(comp =>
-        comp.id === componentId
-          ? { ...comp, data: { ...comp.data, ...newData } }
-          : comp
+      pages: prev.pages.map((page, index) => 
+        index === currentPageIndex 
+          ? {
+              ...page,
+              components: page.components.map(comp =>
+                comp.id === componentId
+                  ? { ...comp, data: { ...comp.data, ...newData } }
+                  : comp
+              )
+            }
+          : page
+      )
+    }));
+  };
+
+  const updateCurrentPage = (updates: Partial<SimplePage>) => {
+    setCurrentFunnel(prev => ({
+      ...prev,
+      pages: prev.pages.map((page, index) => 
+        index === currentPageIndex 
+          ? { ...page, ...updates }
+          : page
       )
     }));
   };
 
   const deleteComponent = (componentId: string) => {
-    setCurrentPage(prev => ({
+    setCurrentFunnel(prev => ({
       ...prev,
-      components: prev.components.filter(comp => comp.id !== componentId)
+      pages: prev.pages.map((page, index) => 
+        index === currentPageIndex 
+          ? {
+              ...page,
+              components: page.components.filter(comp => comp.id !== componentId)
+            }
+          : page
+      )
     }));
     setSelectedComponent(null);
   };
@@ -288,15 +611,49 @@ const SimpleDragDropEditor: React.FC = () => {
       };
       
       const index = currentPage.components.findIndex(c => c.id === componentId);
-      setCurrentPage(prev => {
-        const newComponents = [...prev.components];
-        newComponents.splice(index + 1, 0, newComponent);
-        return {
-          ...prev,
-          components: newComponents
-        };
-      });
+      setCurrentFunnel(prev => ({
+        ...prev,
+        pages: prev.pages.map((page, pageIndex) => 
+          pageIndex === currentPageIndex 
+            ? {
+                ...page,
+                components: [
+                  ...page.components.slice(0, index + 1),
+                  newComponent,
+                  ...page.components.slice(index + 1)
+                ]
+              }
+            : page
+        )
+      }));
     }
+  };
+
+  const addComponentToPage = (componentType: ComponentType, index: number) => {
+    const newComponent: SimpleComponent = {
+      id: `${componentType.type}-${Date.now()}`,
+      type: componentType.type,
+      data: getDefaultData(componentType.type),
+      style: getDefaultStyle(componentType.type)
+    };
+
+    setCurrentFunnel(prev => ({
+      ...prev,
+      pages: prev.pages.map((page, pageIndex) => 
+        pageIndex === currentPageIndex 
+          ? {
+              ...page,
+              components: [
+                ...page.components.slice(0, index),
+                newComponent,
+                ...page.components.slice(index)
+              ]
+            }
+          : page
+      )
+    }));
+
+    setSelectedComponent(newComponent.id);
   };
 
   // Renderização de componentes
@@ -356,16 +713,116 @@ const SimpleDragDropEditor: React.FC = () => {
     const { type, data, style } = component;
 
     switch (type) {
+      case 'logo':
+        return (
+          <div className="text-center" style={{ padding: '16px 0' }}>
+            <img
+              src={data.src || 'https://via.placeholder.com/200x100'}
+              alt={data.alt || 'Logo'}
+              style={{
+                maxWidth: '200px',
+                height: 'auto',
+                objectFit: 'contain'
+              }}
+            />
+          </div>
+        );
+
+      case 'progress':
+        return (
+          <div style={{ padding: '16px 0' }}>
+            <div style={{
+              width: '100%',
+              height: '8px',
+              backgroundColor: '#E5E7EB',
+              borderRadius: '4px',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                height: '100%',
+                width: `${data.progressValue || 0}%`,
+                background: 'linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)',
+                transition: 'width 0.3s ease'
+              }} />
+            </div>
+          </div>
+        );
+
+      case 'input':
+        return (
+          <div style={{ margin: '16px 0' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '8px', 
+              fontWeight: '600',
+              color: '#432818',
+              fontSize: '0.875rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
+              {data.label || 'CAMPO'}
+              {data.required && <span style={{ color: 'red' }}> *</span>}
+            </label>
+            <input
+              type="text"
+              placeholder={data.placeholder || 'Digite aqui...'}
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '2px solid #e5e7eb',
+                borderRadius: '8px',
+                fontSize: '1rem'
+              }}
+            />
+          </div>
+        );
+
+      case 'options':
+        return (
+          <div style={{ margin: '16px 0' }}>
+            {data.options?.map((option: QuizOption) => (
+              <div
+                key={option.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '16px',
+                  margin: '8px 0',
+                  background: 'white',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '12px',
+                  cursor: 'pointer'
+                }}
+              >
+                {data.hasImages && option.image && (
+                  <img
+                    src={option.image}
+                    alt={option.text}
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      marginRight: '12px'
+                    }}
+                  />
+                )}
+                <span>{option.text}</span>
+              </div>
+            ))}
+          </div>
+        );
+
       case 'title':
       case 'subtitle':
       case 'text':
         return (
           <div
             style={{
-              fontSize: style.fontSize || '1rem',
-              fontWeight: style.fontWeight || 'normal',
-              textAlign: style.textAlign || 'left',
-              color: style.color || '#000000',
+              fontSize: style?.fontSize || '1rem',
+              fontWeight: style?.fontWeight || 'normal',
+              textAlign: style?.textAlign || 'left',
+              color: style?.color || '#000000',
               padding: '8px 0'
             }}
           >
@@ -439,9 +896,10 @@ const SimpleDragDropEditor: React.FC = () => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm">Propriedades</CardTitle>
+          <CardTitle className="text-sm">Propriedades - {component.type}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Texto para title, subtitle, text, button */}
           {['title', 'subtitle', 'text', 'button'].includes(component.type) && (
             <div>
               <Label>Texto</Label>
@@ -453,16 +911,68 @@ const SimpleDragDropEditor: React.FC = () => {
             </div>
           )}
 
-          {component.type === 'image' && (
+          {/* Propriedades de imagem e logo */}
+          {['image', 'logo'].includes(component.type) && (
+            <>
+              <div>
+                <Label>URL da Imagem</Label>
+                <Input
+                  value={component.data.src || ''}
+                  onChange={(e) => updateComponent(component.id, { src: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Texto Alternativo</Label>
+                <Input
+                  value={component.data.alt || ''}
+                  onChange={(e) => updateComponent(component.id, { alt: e.target.value })}
+                />
+              </div>
+            </>
+          )}
+
+          {/* Propriedades de input */}
+          {component.type === 'input' && (
+            <>
+              <div>
+                <Label>Rótulo</Label>
+                <Input
+                  value={component.data.label || ''}
+                  onChange={(e) => updateComponent(component.id, { label: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Placeholder</Label>
+                <Input
+                  value={component.data.placeholder || ''}
+                  onChange={(e) => updateComponent(component.id, { placeholder: e.target.value })}
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={component.data.required || false}
+                  onCheckedChange={(checked) => updateComponent(component.id, { required: checked })}
+                />
+                <Label>Obrigatório</Label>
+              </div>
+            </>
+          )}
+
+          {/* Propriedades de progress */}
+          {component.type === 'progress' && (
             <div>
-              <Label>URL da Imagem</Label>
+              <Label>Valor do Progresso (%)</Label>
               <Input
-                value={component.data.src || ''}
-                onChange={(e) => updateComponent(component.id, { src: e.target.value })}
+                type="number"
+                value={component.data.progressValue || 0}
+                onChange={(e) => updateComponent(component.id, { progressValue: parseInt(e.target.value) || 0 })}
+                min="0"
+                max="100"
               />
             </div>
           )}
 
+          {/* Propriedades de spacer */}
           {component.type === 'spacer' && (
             <div>
               <Label>Altura (px)</Label>
@@ -472,6 +982,26 @@ const SimpleDragDropEditor: React.FC = () => {
                 onChange={(e) => updateComponent(component.id, { height: parseInt(e.target.value) || 32 })}
               />
             </div>
+          )}
+
+          {/* Propriedades de opções */}
+          {component.type === 'options' && (
+            <>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={component.data.hasImages || false}
+                  onCheckedChange={(checked) => updateComponent(component.id, { hasImages: checked })}
+                />
+                <Label>Com Imagens</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={component.data.multiSelect || false}
+                  onCheckedChange={(checked) => updateComponent(component.id, { multiSelect: checked })}
+                />
+                <Label>Múltipla Seleção</Label>
+              </div>
+            </>
           )}
 
           <Separator />
@@ -535,6 +1065,153 @@ const SimpleDragDropEditor: React.FC = () => {
 
         <ScrollArea className="h-full">
           <div className="p-4 space-y-4">
+            {/* Navegador de Páginas */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm">Páginas do Funil</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {currentFunnel.pages.map((page, index) => (
+                    <Button
+                      key={page.id}
+                      variant={index === currentPageIndex ? 'default' : 'outline'}
+                      size="sm"
+                      className="w-full justify-start"
+                      onClick={() => setCurrentPageIndex(index)}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary" className="text-xs">
+                          {index + 1}
+                        </Badge>
+                        <div className="text-left">
+                          <div className="font-medium text-sm">{page.title}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {page.type} • {page.components.length} componentes
+                          </div>
+                        </div>
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Configurações da Página Atual */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm">Configurações da Página</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <Label>Título da Página</Label>
+                  <Input
+                    value={currentPage.title}
+                    onChange={(e) => updateCurrentPage({ title: e.target.value })}
+                  />
+                </div>
+                
+                <div>
+                  <Label>Progresso (%)</Label>
+                  <Input
+                    type="number"
+                    value={currentPage.progress}
+                    onChange={(e) => updateCurrentPage({ progress: parseInt(e.target.value) || 0 })}
+                    min="0"
+                    max="100"
+                  />
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={currentPage.showHeader}
+                    onCheckedChange={(checked) => updateCurrentPage({ showHeader: checked })}
+                  />
+                  <Label>Mostrar Header</Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={currentPage.showProgress}
+                    onCheckedChange={(checked) => updateCurrentPage({ showProgress: checked })}
+                  />
+                  <Label>Mostrar Progresso</Label>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Templates Prontos */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm">Templates do Quiz</CardTitle>
+                <p className="text-xs text-muted-foreground">
+                  Substitua a página atual por um template
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.intro;
+                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  📝 Página de Introdução
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.question1;
+                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  🖼️ Questão Visual
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.question2;
+                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  📄 Questão de Texto
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.loading;
+                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  ⏳ Tela de Loading
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => {
+                    const newPages = [...currentFunnel.pages];
+                    newPages[currentPageIndex] = QUIZ_TEMPLATES.result;
+                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                  }}
+                >
+                  🎯 Página de Resultado
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Componentes */}
             <Card>
               <CardHeader>
@@ -581,20 +1258,74 @@ const SimpleDragDropEditor: React.FC = () => {
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Badge>Editor</Badge>
+              <Badge variant="outline">{currentPage.type}</Badge>
               <span className="font-medium">{currentPage.title}</span>
+              <Badge variant="secondary" className="text-xs">
+                Página {currentPageIndex + 1} de {currentFunnel.pages.length}
+              </Badge>
             </div>
-            <Button size="sm">
-              <Save className="h-4 w-4 mr-2" />
-              Salvar
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={() => console.log('Preview:', currentFunnel)}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Preview
+              </Button>
+              <Button size="sm">
+                <Save className="h-4 w-4 mr-2" />
+                Salvar Funil
+              </Button>
+            </div>
           </div>
 
           {/* Preview Area */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className={`quiz-preview ${getDeviceClass()}`}>
+              {/* Header */}
+              {currentPage.showHeader && (
+                <div style={{
+                  padding: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderBottom: '1px solid #e5e7eb'
+                }}>
+                  <img 
+                    src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
+                    alt="Logo" 
+                    style={{
+                      maxWidth: '120px',
+                      height: 'auto',
+                      objectFit: 'contain'
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Progress Bar */}
+              {currentPage.showProgress && (
+                <div style={{ padding: '0 1rem 2rem' }}>
+                  <div style={{
+                    width: '100%',
+                    height: '8px',
+                    backgroundColor: '#E5E7EB',
+                    borderRadius: '4px',
+                    overflow: 'hidden'
+                  }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${currentPage.progress}%`,
+                      background: 'linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)',
+                      transition: 'width 0.3s ease'
+                    }} />
+                  </div>
+                </div>
+              )}
+
               {/* Content Area */}
-              <div className="max-w-600px mx-auto">
+              <div className="max-w-600px mx-auto" style={{ padding: '0 1rem 2rem' }}>
                 {/* Drop Zone inicial */}
                 {currentPage.components.length === 0 && (
                   <div
