@@ -995,6 +995,7 @@
   height: 100vh;
   gap: 1px;
   background: #e2e8f0;
+  transition: all 0.3s ease;
 }
 
 .editor-column {
@@ -1002,25 +1003,43 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+  min-height: 0; /* Importante para flexbox com scroll */
 }
 
-.palette-column {
-  background: #f8fafc;
+/* Scroll independente para cada coluna */
+.editor-column > * {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
-.tree-column {
-  background: #f8fafc;
+.editor-column > *::-webkit-scrollbar {
+  width: 6px;
 }
 
-.canvas-column {
-  background: white;
+.editor-column > *::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
 }
 
-.properties-column {
-  background: #f8fafc;
+.editor-column > *::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 
-/* Responsividade para telas menores */
+.editor-column > *::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Responsividade aprimorada */
+@media (max-width: 1600px) {
+  .editor-layout {
+    grid-template-columns: 220px 280px 1fr 320px;
+  }
+}
+
 @media (max-width: 1400px) {
   .editor-layout {
     grid-template-columns: 200px 250px 1fr 300px;
@@ -1035,15 +1054,51 @@
 
 @media (max-width: 1024px) {
   .editor-layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 300px 1fr;
+    height: 100vh;
   }
   
-  .editor-column {
-    min-height: 200px;
+  .palette-column {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  
+  .tree-column {
+    grid-column: 2;
+    grid-row: 1;
   }
   
   .canvas-column {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  
+  .properties-column {
+    display: none; /* Esconder em telas pequenas */
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+  
+  .palette-column,
+  .tree-column {
+    grid-column: 1;
+    max-height: 200px;
+  }
+  
+  .canvas-column {
+    grid-column: 1;
     min-height: 400px;
   }
+}
+
+/* Focus e states visuais melhorados */
+.editor-column:focus-within {
+  box-shadow: 0 0 0 2px #3b82f6;
+  z-index: 1;
 }
