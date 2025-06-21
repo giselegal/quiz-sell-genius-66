@@ -624,6 +624,7 @@ interface SimplePage {
     | "loading"
     | "result"
     | "offer"
+    | "transition"
     | "sales"
     | "checkout"
     | "upsell"
