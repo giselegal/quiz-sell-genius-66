@@ -261,7 +261,7 @@ export const useQuizEditor = () => {
         }));
       },
     }),
-    [state.steps, state.currentStepId]
+    [state.steps]
   );
 
   return {
