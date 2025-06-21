@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T15:26:43.922Z",
-  "components": 484,
+  "timestamp": "2025-06-21T15:31:20.022Z",
+  "components": 485,
   "files": [
     {
       "name": "App",
@@ -85,6 +85,11 @@
     {
       "name": "QuizPage",
       "path": "src/components/QuizPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizPreview",
+      "path": "src/components/QuizPreview.tsx",
       "type": "typescript"
     },
     {

@@ -4123,7 +4123,391 @@ const SimpleDragDropEditor: React.FC = () => {
 
         <ScrollArea className="flex-1">
           <div className="p-3">
-            {selectedComponent ? (
+            {activeTab === "config" ? (
+              // ABA DE CONFIGURAÇÕES
+              <>
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Configurações do Quiz</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {/* Seções de Configuração */}
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {[
+                        { id: "domain", label: "Domínio", icon: Globe },
+                        { id: "seo", label: "SEO", icon: BarChart3 },
+                        { id: "pixel", label: "Pixels", icon: Target },
+                        { id: "utm", label: "UTM", icon: Link },
+                        { id: "scoring", label: "Pontuação", icon: Star },
+                        { id: "results", label: "Resultados", icon: Eye },
+                      ].map((section) => (
+                        <Button
+                          key={section.id}
+                          size="sm"
+                          variant={activeConfigSection === section.id ? "default" : "outline"}
+                          onClick={() => setActiveConfigSection(section.id)}
+                          className="h-7 px-2 text-xs"
+                        >
+                          <section.icon className="h-3 w-3 mr-1" />
+                          {section.label}
+                        </Button>
+                      ))}
+                    </div>
+
+                    {/* Configuração de Domínio */}
+                    {activeConfigSection === "domain" && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm flex items-center gap-2">
+                            <Globe className="h-4 w-4" />
+                            Configuração de Domínio
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label className="text-xs">Domínio Principal</Label>
+                            <Input
+                              value={quizConfig.domain}
+                              onChange={(e) => updateQuizConfig({ domain: e.target.value })}
+                              placeholder="https://seudominio.com.br"
+                              className="h-8 text-sm"
+                            />
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Domínio onde o quiz será publicado
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Configuração de SEO */}
+                    {activeConfigSection === "seo" && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm flex items-center gap-2">
+                            <BarChart3 className="h-4 w-4" />
+                            Configurações de SEO
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label className="text-xs">Título da Página</Label>
+                            <Input
+                              value={quizConfig.seo.title}
+                              onChange={(e) => updateConfig("seo", { title: e.target.value })}
+                              placeholder="Quiz: Descubra Seu Estilo Pessoal"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Descrição Meta</Label>
+                            <Textarea
+                              value={quizConfig.seo.description}
+                              onChange={(e) => updateConfig("seo", { description: e.target.value })}
+                              placeholder="Descubra seu estilo pessoal único com nosso quiz personalizado..."
+                              className="text-sm resize-none"
+                              rows={3}
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Palavras-chave</Label>
+                            <Input
+                              value={quizConfig.seo.keywords}
+                              onChange={(e) => updateConfig("seo", { keywords: e.target.value })}
+                              placeholder="quiz estilo, moda feminina, consultoria"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Configuração de Pixels */}
+                    {activeConfigSection === "pixel" && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm flex items-center gap-2">
+                            <Target className="h-4 w-4" />
+                            Pixels e Tracking
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label className="text-xs">Facebook Pixel ID</Label>
+                            <Input
+                              value={quizConfig.pixel.facebookPixelId}
+                              onChange={(e) => updateConfig("pixel", { facebookPixelId: e.target.value })}
+                              placeholder="1234567890123456"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Google Analytics ID</Label>
+                            <Input
+                              value={quizConfig.pixel.googleAnalyticsId}
+                              onChange={(e) => updateConfig("pixel", { googleAnalyticsId: e.target.value })}
+                              placeholder="G-XXXXXXXXXX"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                          <div className="pt-2">
+                            <Button size="sm" variant="outline" className="w-full">
+                              <Target className="h-3 w-3 mr-2" />
+                              Testar Conexão
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Configuração de UTM */}
+                    {activeConfigSection === "utm" && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm flex items-center gap-2">
+                            <Link className="h-4 w-4" />
+                            Parâmetros UTM para A/B Test
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label className="text-xs">UTM Source</Label>
+                            <Input
+                              value={quizConfig.utm.source}
+                              onChange={(e) => updateConfig("utm", { source: e.target.value })}
+                              placeholder="facebook"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">UTM Medium</Label>
+                            <Input
+                              value={quizConfig.utm.medium}
+                              onChange={(e) => updateConfig("utm", { medium: e.target.value })}
+                              placeholder="cpc"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">UTM Campaign</Label>
+                            <Input
+                              value={quizConfig.utm.campaign}
+                              onChange={(e) => updateConfig("utm", { campaign: e.target.value })}
+                              placeholder="quiz_style_2025"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">UTM Content</Label>
+                            <Input
+                              value={quizConfig.utm.content}
+                              onChange={(e) => updateConfig("utm", { content: e.target.value })}
+                              placeholder="criativo-1"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">UTM Term</Label>
+                            <Input
+                              value={quizConfig.utm.term}
+                              onChange={(e) => updateConfig("utm", { term: e.target.value })}
+                              placeholder="estilo_elegante"
+                              className="h-8 text-sm"
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Configuração de Pontuação */}
+                    {activeConfigSection === "scoring" && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm flex items-center gap-2">
+                            <Star className="h-4 w-4" />
+                            Sistema de Pontuação
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <Label className="text-xs">Pontos por Questão Normal</Label>
+                            <Input
+                              type="number"
+                              value={quizConfig.scoring.normalQuestionPoints}
+                              onChange={(e) => updateConfig("scoring", { normalQuestionPoints: parseInt(e.target.value) || 1 })}
+                              min="1"
+                              max="5"
+                              className="h-8 text-sm"
+                            />
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Pontos atribuídos por resposta nas questões normais
+                            </p>
+                          </div>
+
+                          <div>
+                            <Label className="text-xs">Limite de Seleção - Questões Normais</Label>
+                            <Input
+                              type="number"
+                              value={quizConfig.scoring.normalSelectionLimit}
+                              onChange={(e) => updateConfig("scoring", { normalSelectionLimit: parseInt(e.target.value) || 3 })}
+                              min="1"
+                              max="8"
+                              className="h-8 text-sm"
+                            />
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Quantas opções obrigatórias (3 recomendado)
+                            </p>
+                          </div>
+
+                          <div>
+                            <Label className="text-xs">Limite de Seleção - Questões Estratégicas</Label>
+                            <Input
+                              type="number"
+                              value={quizConfig.scoring.strategicSelectionLimit}
+                              onChange={(e) => updateConfig("scoring", { strategicSelectionLimit: parseInt(e.target.value) || 1 })}
+                              min="1"
+                              max="3"
+                              className="h-8 text-sm"
+                            />
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Quantas opções para questões estratégicas (2 recomendado)
+                            </p>
+                          </div>
+
+                          <Separator />
+
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Switch
+                                checked={quizConfig.scoring.autoAdvanceNormal}
+                                onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceNormal: checked })}
+                              />
+                              <Label className="text-xs">Avanço Automático - Questões Normais</Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Avança automaticamente quando 3ª opção for selecionada
+                            </p>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Switch
+                                checked={quizConfig.scoring.autoAdvanceStrategic}
+                                onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceStrategic: checked })}
+                              />
+                              <Label className="text-xs">Avanço Automático - Questões Estratégicas</Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Avança automaticamente nas questões estratégicas (recomendado: desabilitado)
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Configuração de Resultados */}
+                    {activeConfigSection === "results" && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm flex items-center gap-2">
+                            <Eye className="h-4 w-4" />
+                            Configuração da Página de Resultados
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Switch
+                                checked={quizConfig.results.showUserName}
+                                onCheckedChange={(checked) => updateConfig("results", { showUserName: checked })}
+                              />
+                              <Label className="text-xs">Mostrar Nome do Usuário</Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Exibe o nome preenchido no QuizIntro
+                            </p>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Switch
+                                checked={quizConfig.results.showPrimaryStyle}
+                                onCheckedChange={(checked) => updateConfig("results", { showPrimaryStyle: checked })}
+                              />
+                              <Label className="text-xs">Mostrar Estilo Predominante</Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Exibe o estilo principal com barra de porcentagem
+                            </p>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Switch
+                                checked={quizConfig.results.showSecondaryStyles}
+                                onCheckedChange={(checked) => updateConfig("results", { showSecondaryStyles: checked })}
+                              />
+                              <Label className="text-xs">Mostrar Estilos Complementares</Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Exibe 2º e 3º estilos com porcentagens
+                            </p>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Switch
+                                checked={quizConfig.results.showStyleImages}
+                                onCheckedChange={(checked) => updateConfig("results", { showStyleImages: checked })}
+                              />
+                              <Label className="text-xs">Mostrar Imagem do Estilo</Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Exibe imagem representativa do estilo predominante
+                            </p>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <Switch
+                                checked={quizConfig.results.showStyleGuides}
+                                onCheckedChange={(checked) => updateConfig("results", { showStyleGuides: checked })}
+                              />
+                              <Label className="text-xs">Mostrar Guia do Estilo</Label>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              Exibe imagem do guia referente ao estilo predominante
+                            </p>
+                          </div>
+
+                          <Separator />
+
+                          <div className="bg-blue-50 p-3 rounded-lg">
+                            <h4 className="text-xs font-semibold mb-2">Configuração de Teste A/B</h4>
+                            <div className="space-y-1 text-xs">
+                              <p><strong>Teste A (/resultado):</strong> Resultado + Oferta na mesma página</p>
+                              <p><strong>Teste B (/quiz-descubra-seu-estilo):</strong> Apenas página de venda</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Botões de Ação */}
+                    <div className="mt-4 space-y-2">
+                      <Button onClick={saveChanges} className="w-full" size="sm">
+                        <Save className="h-3 w-3 mr-2" />
+                        Salvar Configurações
+                      </Button>
+                      <Button onClick={openPreview} variant="outline" className="w-full" size="sm">
+                        <Eye className="h-3 w-3 mr-2" />
+                        Preview Produção
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            ) : selectedComponent ? (
               renderPropertiesPanel()
             ) : (
               <div className="text-center text-muted-foreground mt-8">
@@ -4268,7 +4652,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">Domínio Principal</Label>
                     <Input
-                      value={config.domain}
+                      value={quizConfig.domain}
                       onChange={(e) => onConfigUpdate({ domain: e.target.value })}
                       placeholder="https://seudominio.com.br"
                       className="h-8 text-sm"
@@ -4294,7 +4678,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">Título da Página</Label>
                     <Input
-                      value={config.seo.title}
+                      value={quizConfig.seo.title}
                       onChange={(e) => updateConfig("seo", { title: e.target.value })}
                       placeholder="Quiz: Descubra Seu Estilo Pessoal"
                       className="h-8 text-sm"
@@ -4303,7 +4687,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">Descrição Meta</Label>
                     <Textarea
-                      value={config.seo.description}
+                      value={quizConfig.seo.description}
                       onChange={(e) => updateConfig("seo", { description: e.target.value })}
                       placeholder="Descubra seu estilo pessoal único com nosso quiz personalizado..."
                       className="text-sm resize-none"
@@ -4313,7 +4697,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">Palavras-chave</Label>
                     <Input
-                      value={config.seo.keywords}
+                      value={quizConfig.seo.keywords}
                       onChange={(e) => updateConfig("seo", { keywords: e.target.value })}
                       placeholder="quiz estilo, moda feminina, consultoria"
                       className="h-8 text-sm"
@@ -4571,7 +4955,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Switch
-                        checked={config.results.showStyleGuides}
+                        checked={quizConfig.results.showStyleGuides}
                         onCheckedChange={(checked) => updateConfig("results", { showStyleGuides: checked })}
                       />
                       <Label className="text-xs">Mostrar Guia do Estilo</Label>
