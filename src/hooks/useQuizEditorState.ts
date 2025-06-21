@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from "react";
 
 export interface OptionChoice {
   text: string;
@@ -107,148 +107,162 @@ export const useQuizEditor = () => {
 
   // Seletores memoizados
   const currentStep = useMemo(
-    () => state.steps.find((step) => step.id === state.currentStepId) || state.steps[0],
+    () =>
+      state.steps.find((step) => step.id === state.currentStepId) ||
+      state.steps[0],
     [state.steps, state.currentStepId]
   );
 
   const selectedComponent = useMemo(
-    () => currentStep?.components.find((comp) => comp.id === state.selectedComponentId) || null,
+    () =>
+      currentStep?.components.find(
+        (comp) => comp.id === state.selectedComponentId
+      ) || null,
     [currentStep, state.selectedComponentId]
   );
 
   // Actions otimizadas
-  const actions = useMemo(() => ({
-    selectStep: (stepId: string) => {
-      setState(prev => ({
-        ...prev,
-        currentStepId: stepId,
-        selectedComponentId: null,
-      }));
-    },
-
-    selectComponent: (componentId: string) => {
-      setState(prev => ({
-        ...prev,
-        selectedComponentId: componentId,
-      }));
-    },
-
-    addStep: () => {
-      const newStep: Step = {
-        id: `step-${Date.now()}`,
-        name: `Etapa ${state.steps.length + 1}`,
-        components: [],
-      };
-      
-      setState(prev => ({
-        ...prev,
-        steps: [...prev.steps, newStep],
-        currentStepId: newStep.id,
-        selectedComponentId: null,
-        isDirty: true,
-      }));
-    },
-
-    duplicateStep: (stepId: string) => {
-      const stepToDuplicate = state.steps.find(step => step.id === stepId);
-      if (stepToDuplicate) {
-        const duplicatedStep: Step = {
-          id: `step-${Date.now()}`,
-          name: `${stepToDuplicate.name} (Cópia)`,
-          components: stepToDuplicate.components.map(comp => ({
-            ...comp,
-            id: `comp-${Date.now()}-${Math.random()}`,
-          })),
-        };
-        
-        setState(prev => ({
+  const actions = useMemo(
+    () => ({
+      selectStep: (stepId: string) => {
+        setState((prev) => ({
           ...prev,
-          steps: [...prev.steps, duplicatedStep],
+          currentStepId: stepId,
+          selectedComponentId: null,
+        }));
+      },
+
+      selectComponent: (componentId: string) => {
+        setState((prev) => ({
+          ...prev,
+          selectedComponentId: componentId,
+        }));
+      },
+
+      addStep: () => {
+        const newStep: Step = {
+          id: `step-${Date.now()}`,
+          name: `Etapa ${state.steps.length + 1}`,
+          components: [],
+        };
+
+        setState((prev) => ({
+          ...prev,
+          steps: [...prev.steps, newStep],
+          currentStepId: newStep.id,
+          selectedComponentId: null,
           isDirty: true,
         }));
-      }
-    },
+      },
 
-    deleteStep: (stepId: string) => {
-      if (state.steps.length > 1) {
-        setState(prev => {
-          const newSteps = prev.steps.filter(step => step.id !== stepId);
-          const newCurrentStepId = prev.currentStepId === stepId 
-            ? newSteps[0]?.id || ""
-            : prev.currentStepId;
-          
-          return {
-            ...prev,
-            steps: newSteps,
-            currentStepId: newCurrentStepId,
-            selectedComponentId: null,
-            isDirty: true,
+      duplicateStep: (stepId: string) => {
+        const stepToDuplicate = state.steps.find((step) => step.id === stepId);
+        if (stepToDuplicate) {
+          const duplicatedStep: Step = {
+            id: `step-${Date.now()}`,
+            name: `${stepToDuplicate.name} (Cópia)`,
+            components: stepToDuplicate.components.map((comp) => ({
+              ...comp,
+              id: `comp-${Date.now()}-${Math.random()}`,
+            })),
           };
-        });
-      }
-    },
 
-    addComponent: (componentType: string) => {
-      const newComponent: QuizComponent = {
-        id: `comp-${Date.now()}`,
-        type: componentType,
-        props: getDefaultProps(componentType),
-      };
+          setState((prev) => ({
+            ...prev,
+            steps: [...prev.steps, duplicatedStep],
+            isDirty: true,
+          }));
+        }
+      },
 
-      setState(prev => ({
-        ...prev,
-        steps: prev.steps.map(step =>
-          step.id === prev.currentStepId
-            ? { ...step, components: [...step.components, newComponent] }
-            : step
-        ),
-        isDirty: true,
-      }));
-    },
+      deleteStep: (stepId: string) => {
+        if (state.steps.length > 1) {
+          setState((prev) => {
+            const newSteps = prev.steps.filter((step) => step.id !== stepId);
+            const newCurrentStepId =
+              prev.currentStepId === stepId
+                ? newSteps[0]?.id || ""
+                : prev.currentStepId;
 
-    updateComponent: (componentId: string, newProps: QuizComponentProps) => {
-      setState(prev => ({
-        ...prev,
-        steps: prev.steps.map(step =>
-          step.id === prev.currentStepId
-            ? {
-                ...step,
-                components: step.components.map(comp =>
-                  comp.id === componentId
-                    ? { ...comp, props: { ...comp.props, ...newProps } }
-                    : comp
-                ),
-              }
-            : step
-        ),
-        isDirty: true,
-      }));
-    },
+            return {
+              ...prev,
+              steps: newSteps,
+              currentStepId: newCurrentStepId,
+              selectedComponentId: null,
+              isDirty: true,
+            };
+          });
+        }
+      },
 
-    deleteComponent: (componentId: string) => {
-      setState(prev => ({
-        ...prev,
-        steps: prev.steps.map(step =>
-          step.id === prev.currentStepId
-            ? {
-                ...step,
-                components: step.components.filter(comp => comp.id !== componentId),
-              }
-            : step
-        ),
-        selectedComponentId: prev.selectedComponentId === componentId ? null : prev.selectedComponentId,
-        isDirty: true,
-      }));
-    },
+      addComponent: (componentType: string) => {
+        const newComponent: QuizComponent = {
+          id: `comp-${Date.now()}`,
+          type: componentType,
+          props: getDefaultProps(componentType),
+        };
 
-    markSaved: () => {
-      setState(prev => ({
-        ...prev,
-        isDirty: false,
-        lastSaved: new Date(),
-      }));
-    },
-  }), [state.steps, state.currentStepId]);
+        setState((prev) => ({
+          ...prev,
+          steps: prev.steps.map((step) =>
+            step.id === prev.currentStepId
+              ? { ...step, components: [...step.components, newComponent] }
+              : step
+          ),
+          isDirty: true,
+        }));
+      },
+
+      updateComponent: (componentId: string, newProps: QuizComponentProps) => {
+        setState((prev) => ({
+          ...prev,
+          steps: prev.steps.map((step) =>
+            step.id === prev.currentStepId
+              ? {
+                  ...step,
+                  components: step.components.map((comp) =>
+                    comp.id === componentId
+                      ? { ...comp, props: { ...comp.props, ...newProps } }
+                      : comp
+                  ),
+                }
+              : step
+          ),
+          isDirty: true,
+        }));
+      },
+
+      deleteComponent: (componentId: string) => {
+        setState((prev) => ({
+          ...prev,
+          steps: prev.steps.map((step) =>
+            step.id === prev.currentStepId
+              ? {
+                  ...step,
+                  components: step.components.filter(
+                    (comp) => comp.id !== componentId
+                  ),
+                }
+              : step
+          ),
+          selectedComponentId:
+            prev.selectedComponentId === componentId
+              ? null
+              : prev.selectedComponentId,
+          isDirty: true,
+        }));
+      },
+
+      markSaved: () => {
+        setState((prev) => ({
+          ...prev,
+          isDirty: false,
+          lastSaved: new Date(),
+        }));
+      },
+    }),
+    [state.steps, state.currentStepId]
+  );
 
   return {
     state,
@@ -270,7 +284,11 @@ function getDefaultProps(componentType: string): QuizComponentProps {
     case "button":
       return { buttonText: "Clique aqui", buttonStyle: "primary" };
     case "input":
-      return { label: "Campo", placeholder: "Digite aqui...", inputType: "text" };
+      return {
+        label: "Campo",
+        placeholder: "Digite aqui...",
+        inputType: "text",
+      };
     case "options":
       return {
         questionText: "Escolha uma opção:",

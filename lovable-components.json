@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-21T22:09:56.088Z",
-  "components": 494,
+  "timestamp": "2025-06-21T22:31:28.747Z",
+  "components": 497,
   "files": [
     {
       "name": "App",
@@ -2065,6 +2065,21 @@
     {
       "name": "WorkingRefactoredEditor",
       "path": "src/components/visual-editor/WorkingRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AccessibleCanvas",
+      "path": "src/components/visual-editor/components/AccessibleCanvas.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AccessiblePropertiesPanel",
+      "path": "src/components/visual-editor/components/AccessiblePropertiesPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AccessibleStepTree",
+      "path": "src/components/visual-editor/components/AccessibleStepTree.tsx",
       "type": "typescript"
     },
     {

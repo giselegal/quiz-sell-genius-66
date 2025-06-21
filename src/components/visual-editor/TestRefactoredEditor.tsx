@@ -82,21 +82,33 @@ const TestRefactoredEditor: React.FC = () => {
             <div className="canvas-header">
               <h3 className="canvas-title">🎨 Canvas</h3>
               <span className="component-count">
-                {steps.find(s => s.id === currentStepId)?.components.length || 0} componente(s)
+                {steps.find((s) => s.id === currentStepId)?.components.length ||
+                  0}{" "}
+                componente(s)
               </span>
             </div>
             <div className="canvas-area">
-              {steps.find(s => s.id === currentStepId)?.components.map((component) => (
-                <div key={component.id} className="canvas-component">
-                  <div className="component-content">
-                    <h2 className="heading-preview">
-                      {component.props.text || "Componente"}
-                    </h2>
+              {steps
+                .find((s) => s.id === currentStepId)
+                ?.components.map((component) => (
+                  <div key={component.id} className="canvas-component">
+                    <div className="component-content">
+                      <h2 className="heading-preview">
+                        {component.props.text || "Componente"}
+                      </h2>
+                    </div>
                   </div>
-                </div>
-              ))}
-              <div style={{ margin: "20px", padding: "20px", background: "#f0f0f0", borderRadius: "8px" }}>
-                <strong>Status:</strong> Editor com ComponentPalette funcionando!
+                ))}
+              <div
+                style={{
+                  margin: "20px",
+                  padding: "20px",
+                  background: "#f0f0f0",
+                  borderRadius: "8px",
+                }}
+              >
+                <strong>Status:</strong> Editor com ComponentPalette
+                funcionando!
               </div>
             </div>
           </div>

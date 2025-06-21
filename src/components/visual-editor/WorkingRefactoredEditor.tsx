@@ -12,16 +12,18 @@ const WorkingRefactoredEditor: React.FC = () => {
           <div className="component-palette">
             <h3 className="palette-title">🧩 Componentes</h3>
             <div className="components-grid">
-              {["heading", "text", "image", "button", "input", "options"].map((type) => (
-                <div
-                  key={type}
-                  className="draggable-component"
-                  onClick={() => setMessage(`Componente ${type} selecionado`)}
-                >
-                  <span className="component-icon">📝</span>
-                  <span className="component-label">{type}</span>
-                </div>
-              ))}
+              {["heading", "text", "image", "button", "input", "options"].map(
+                (type) => (
+                  <div
+                    key={type}
+                    className="draggable-component"
+                    onClick={() => setMessage(`Componente ${type} selecionado`)}
+                  >
+                    <span className="component-icon">📝</span>
+                    <span className="component-label">{type}</span>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -31,7 +33,7 @@ const WorkingRefactoredEditor: React.FC = () => {
           <div className="step-tree">
             <div className="tree-header">
               <h3 className="tree-title">📋 Estrutura do Quiz</h3>
-              <button 
+              <button
                 className="add-step-btn"
                 onClick={() => setMessage("Nova etapa adicionada!")}
               >
@@ -63,12 +65,28 @@ const WorkingRefactoredEditor: React.FC = () => {
                   <h2 className="heading-preview">Bem-vindo ao Quiz!</h2>
                 </div>
               </div>
-              <div style={{ margin: "20px", padding: "20px", background: "#f0f0f0", borderRadius: "8px" }}>
+              <div
+                style={{
+                  margin: "20px",
+                  padding: "20px",
+                  background: "#f0f0f0",
+                  borderRadius: "8px",
+                }}
+              >
                 <strong>Status:</strong> {message}
                 <br />
-                <button 
-                  onClick={() => setMessage("Editor funcionando perfeitamente!")}
-                  style={{ marginTop: "10px", padding: "8px 16px", background: "#007bff", color: "white", border: "none", borderRadius: "4px" }}
+                <button
+                  onClick={() =>
+                    setMessage("Editor funcionando perfeitamente!")
+                  }
+                  style={{
+                    marginTop: "10px",
+                    padding: "8px 16px",
+                    background: "#007bff",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                  }}
                 >
                   Testar Interação
                 </button>
@@ -95,7 +113,9 @@ const WorkingRefactoredEditor: React.FC = () => {
                     <label>Texto</label>
                     <textarea
                       value="Bem-vindo ao Quiz!"
-                      onChange={(e) => setMessage(`Texto alterado: ${e.target.value}`)}
+                      onChange={(e) =>
+                        setMessage(`Texto alterado: ${e.target.value}`)
+                      }
                       rows={3}
                     />
                   </div>
