@@ -140,9 +140,18 @@ const Teste1Page = () => {
               <p className="text-gray-600">Visualize como será o quiz publicado</p>
             </div>
           </div>
-          <Badge variant="secondary" className="bg-green-100 text-green-800">
-            Rota de Teste
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="bg-green-100 text-green-800">
+              Rota de Teste
+            </Badge>
+            <Button
+              onClick={() => navigate("/simple-editor")}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Editar
+            </Button>
+          </div>
         </div>
 
         {/* Dinâmica de Funcionamento */}
