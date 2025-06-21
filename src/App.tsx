@@ -35,8 +35,7 @@ const QuickAccessEditorButton = () => {
         className="bg-green-600 hover:bg-green-700 text-white shadow-lg"
         size="sm"
       >
-        <Edit className="w-4 h-4 mr-2" />
-        ✨ Simple Editor (NOVO)
+        <Edit className="w-4 h-4 mr-2" />✨ Simple Editor (NOVO)
       </Button>
       <Button
         onClick={() => navigate("/cakto-editor")}
@@ -129,13 +128,13 @@ function App() {
           <Route path="/editor-test" element={<EditorTest />} />
 
           {/* NOVO: Editor Visual Modular Completo - SimpleDragDropEditor */}
-          <Route 
-            path="/simple-editor" 
+          <Route
+            path="/simple-editor"
             element={
               <div className="min-h-screen bg-background">
                 <SimpleDragDropEditor />
               </div>
-            } 
+            }
           />
 
           {/* Teste de Configuração - Apenas para desenvolvimento */}

@@ -17,7 +17,6 @@ import {
   Tablet,
   ChevronUp,
   ChevronDown,
-
   Type,
   Image as ImageIcon,
   MousePointer,
@@ -41,7 +40,7 @@ import {
   Globe,
   BarChart3,
   Target,
-  Link
+  Link,
 } from "lucide-react";
 
 // Interfaces
@@ -236,7 +235,18 @@ interface FaqItem {
 interface SimplePage {
   id: string;
   title: string;
-  type: "intro" | "question" | "loading" | "result" | "offer" | "sales" | "checkout" | "upsell" | "thankyou" | "webinar" | "launch";
+  type:
+    | "intro"
+    | "question"
+    | "loading"
+    | "result"
+    | "offer"
+    | "sales"
+    | "checkout"
+    | "upsell"
+    | "thankyou"
+    | "webinar"
+    | "launch";
   progress: number;
   showHeader: boolean;
   showProgress: boolean;
@@ -489,56 +499,64 @@ const QUIZ_TEMPLATES = {
             {
               id: "opt-1",
               text: "Conforto, leveza e praticidade no vestir",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
               value: "Natural",
               category: "Natural",
             },
             {
               id: "opt-2",
               text: "Discrição, caimento clássico e sobriedade",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
               value: "Clássico",
               category: "Clássico",
             },
             {
               id: "opt-3",
               text: "Praticidade com um toque de estilo atual",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
               value: "Contemporâneo",
               category: "Contemporâneo",
             },
             {
               id: "opt-4",
               text: "Elegância refinada, moderna e sem exageros",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
               value: "Elegante",
               category: "Elegante",
             },
             {
               id: "opt-5",
               text: "Delicadeza em tecidos suaves e fluidos",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
               value: "Romântico",
               category: "Romântico",
             },
             {
               id: "opt-6",
               text: "Sensualidade com destaque para o corpo",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
               value: "Sexy",
               category: "Sexy",
             },
             {
               id: "opt-7",
               text: "Impacto visual com peças estruturadas e assimétricas",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
               value: "Dramático",
               category: "Dramático",
             },
             {
               id: "opt-8",
               text: "Mix criativo com formas ousadas e originais",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
               value: "Criativo",
               category: "Criativo",
             },
@@ -693,56 +711,64 @@ const QUIZ_TEMPLATES = {
             {
               id: "visual-1",
               text: "Visual leve, despojado e natural",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
               value: "Natural",
               category: "Natural",
             },
             {
               id: "visual-2",
               text: "Visual clássico e tradicional",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
               value: "Clássico",
               category: "Clássico",
             },
             {
               id: "visual-3",
               text: "Visual casual com toque atual",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
               value: "Contemporâneo",
               category: "Contemporâneo",
             },
             {
               id: "visual-4",
               text: "Visual refinado e imponente",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
               value: "Elegante",
               category: "Elegante",
             },
             {
               id: "visual-5",
               text: "Visual romântico, feminino e delicado",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
               value: "Romântico",
               category: "Romântico",
             },
             {
               id: "visual-6",
               text: "Visual sensual, com saia justa e decote",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
               value: "Sexy",
               category: "Sexy",
             },
             {
               id: "visual-7",
               text: "Visual marcante e urbano (jeans + jaqueta)",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
               value: "Dramático",
               category: "Dramático",
             },
             {
               id: "visual-8",
               text: "Visual criativo, colorido e ousado",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
               value: "Criativo",
               category: "Criativo",
             },
@@ -1468,7 +1494,9 @@ const QUIZ_TEMPLATES = {
       {
         id: "subtitle-trans",
         type: "subtitle" as const,
-        data: { text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa." },
+        data: {
+          text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa.",
+        },
         style: {
           fontSize: "1.25rem",
           textAlign: "center" as const,
@@ -1478,7 +1506,9 @@ const QUIZ_TEMPLATES = {
       {
         id: "text-trans",
         type: "text" as const,
-        data: { text: "Responda com sinceridade. Isso é só entre você e a sua nova versão." },
+        data: {
+          text: "Responda com sinceridade. Isso é só entre você e a sua nova versão.",
+        },
         style: {
           fontSize: "1rem",
           textAlign: "center" as const,
@@ -1584,10 +1614,26 @@ const QUIZ_TEMPLATES = {
           hasImages: false,
           multiSelect: false,
           options: [
-            { id: "des-1", text: "Não sei o que fica bem no meu corpo", value: "corpo" },
-            { id: "des-2", text: "Tenho dificuldade em combinar peças", value: "combinar" },
-            { id: "des-3", text: "Não sei qual é o meu estilo", value: "estilo" },
-            { id: "des-4", text: "Tenho muita roupa mas nada para usar", value: "organizar" },
+            {
+              id: "des-1",
+              text: "Não sei o que fica bem no meu corpo",
+              value: "corpo",
+            },
+            {
+              id: "des-2",
+              text: "Tenho dificuldade em combinar peças",
+              value: "combinar",
+            },
+            {
+              id: "des-3",
+              text: "Não sei qual é o meu estilo",
+              value: "estilo",
+            },
+            {
+              id: "des-4",
+              text: "Tenho muita roupa mas nada para usar",
+              value: "organizar",
+            },
           ],
         },
         style: {},
@@ -1743,10 +1789,26 @@ const QUIZ_TEMPLATES = {
           hasImages: false,
           multiSelect: false,
           options: [
-            { id: "obj-1", text: "Mais confiança e autoestima", value: "confianca" },
-            { id: "obj-2", text: "Aparência mais profissional", value: "profissional" },
-            { id: "obj-3", text: "Looks mais interessantes e únicos", value: "criatividade" },
-            { id: "obj-4", text: "Praticidade sem abrir mão do estilo", value: "praticidade" },
+            {
+              id: "obj-1",
+              text: "Mais confiança e autoestima",
+              value: "confianca",
+            },
+            {
+              id: "obj-2",
+              text: "Aparência mais profissional",
+              value: "profissional",
+            },
+            {
+              id: "obj-3",
+              text: "Looks mais interessantes e únicos",
+              value: "criatividade",
+            },
+            {
+              id: "obj-4",
+              text: "Praticidade sem abrir mão do estilo",
+              value: "praticidade",
+            },
           ],
         },
         style: {},
@@ -1796,10 +1858,26 @@ const QUIZ_TEMPLATES = {
           hasImages: false,
           multiSelect: false,
           options: [
-            { id: "rot-1", text: "Muito corrida, preciso de praticidade", value: "corrida" },
-            { id: "rot-2", text: "Equilibrada entre trabalho e lazer", value: "equilibrada" },
-            { id: "rot-3", text: "Flexível, posso me dedicar ao visual", value: "flexivel" },
-            { id: "rot-4", text: "Muito social, sempre em eventos", value: "social" },
+            {
+              id: "rot-1",
+              text: "Muito corrida, preciso de praticidade",
+              value: "corrida",
+            },
+            {
+              id: "rot-2",
+              text: "Equilibrada entre trabalho e lazer",
+              value: "equilibrada",
+            },
+            {
+              id: "rot-3",
+              text: "Flexível, posso me dedicar ao visual",
+              value: "flexivel",
+            },
+            {
+              id: "rot-4",
+              text: "Muito social, sempre em eventos",
+              value: "social",
+            },
           ],
         },
         style: {},
@@ -1849,10 +1927,26 @@ const QUIZ_TEMPLATES = {
           hasImages: false,
           multiSelect: false,
           options: [
-            { id: "mot-1", text: "Quero descobrir meu estilo pessoal", value: "descobrir" },
-            { id: "mot-2", text: "Preciso renovar meu guarda-roupa", value: "renovar" },
-            { id: "mot-3", text: "Quero me sentir mais confiante", value: "confianca" },
-            { id: "mot-4", text: "Busco orientação profissional", value: "orientacao" },
+            {
+              id: "mot-1",
+              text: "Quero descobrir meu estilo pessoal",
+              value: "descobrir",
+            },
+            {
+              id: "mot-2",
+              text: "Preciso renovar meu guarda-roupa",
+              value: "renovar",
+            },
+            {
+              id: "mot-3",
+              text: "Quero me sentir mais confiante",
+              value: "confianca",
+            },
+            {
+              id: "mot-4",
+              text: "Busco orientação profissional",
+              value: "orientacao",
+            },
           ],
         },
         style: {},
@@ -2060,7 +2154,8 @@ const QUIZ_TEMPLATES = {
           text: "Este curso mudou completamente minha relação com a moda. Agora sei exatamente o que usar em cada ocasião!",
           name: "Maria Silva",
           role: "Executiva de Marketing",
-          avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b762?w=60&h=60&fit=crop&crop=face",
+          avatar:
+            "https://images.unsplash.com/photo-1494790108755-2616b612b762?w=60&h=60&fit=crop&crop=face",
         },
         style: {},
       },
@@ -2087,9 +2182,25 @@ const QUIZ_TEMPLATES = {
         type: "bonus" as const,
         data: {
           bonuses: [
-            { id: "bonus1", title: "Bônus #1: Análise de Coloração Pessoal", value: "R$ 297", description: "Descubra as cores que realçam sua beleza natural" },
-            { id: "bonus2", title: "Bônus #2: Guia de Compras Inteligente", value: "R$ 197", description: "Lista personalizada do que comprar para renovar seu guarda-roupa" },
-            { id: "bonus3", title: "Bônus #3: Acesso ao Grupo VIP", value: "R$ 397", description: "Comunidade exclusiva com dicas diárias e suporte" }
+            {
+              id: "bonus1",
+              title: "Bônus #1: Análise de Coloração Pessoal",
+              value: "R$ 297",
+              description: "Descubra as cores que realçam sua beleza natural",
+            },
+            {
+              id: "bonus2",
+              title: "Bônus #2: Guia de Compras Inteligente",
+              value: "R$ 197",
+              description:
+                "Lista personalizada do que comprar para renovar seu guarda-roupa",
+            },
+            {
+              id: "bonus3",
+              title: "Bônus #3: Acesso ao Grupo VIP",
+              value: "R$ 397",
+              description: "Comunidade exclusiva com dicas diárias e suporte",
+            },
           ],
         },
         style: {},
@@ -2118,9 +2229,24 @@ const QUIZ_TEMPLATES = {
         type: "faq" as const,
         data: {
           faqs: [
-            { id: "faq1", question: "Como funciona o acesso ao curso?", answer: "Assim que o pagamento for aprovado, você recebe o acesso imediato por email. O conteúdo fica disponível 24h por dia." },
-            { id: "faq2", question: "Posso acessar pelo celular?", answer: "Sim! A plataforma é totalmente responsiva e funciona perfeitamente em celulares, tablets e computadores." },
-            { id: "faq3", question: "E se eu não gostar do curso?", answer: "Oferecemos 30 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do valor investido." }
+            {
+              id: "faq1",
+              question: "Como funciona o acesso ao curso?",
+              answer:
+                "Assim que o pagamento for aprovado, você recebe o acesso imediato por email. O conteúdo fica disponível 24h por dia.",
+            },
+            {
+              id: "faq2",
+              question: "Posso acessar pelo celular?",
+              answer:
+                "Sim! A plataforma é totalmente responsiva e funciona perfeitamente em celulares, tablets e computadores.",
+            },
+            {
+              id: "faq3",
+              question: "E se eu não gostar do curso?",
+              answer:
+                "Oferecemos 30 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do valor investido.",
+            },
           ],
         },
         style: {},
@@ -2268,28 +2394,31 @@ const QUIZ_TEMPLATES = {
 const SimpleDragDropEditor: React.FC = () => {
   // Estado da aba ativa
   const [activeTab, setActiveTab] = useState<string>("editor");
-  
+
   // Estado da seção ativa de configuração
-  const [activeConfigSection, setActiveConfigSection] = useState<string>("domain");
-  
+  const [activeConfigSection, setActiveConfigSection] =
+    useState<string>("domain");
+
   // Estado das configurações do quiz
   const [quizConfig, setQuizConfig] = useState<QuizConfig>({
     domain: "https://giselegalvao.com.br",
     seo: {
       title: "Quiz: Descubra Seu Estilo Pessoal Único",
-      description: "Descubra seu estilo pessoal único com nosso quiz personalizado. Transforme seu visual e ganhe confiança com dicas exclusivas de moda.",
-      keywords: "quiz estilo, moda feminina, consultoria de imagem, estilo pessoal, transformação visual"
+      description:
+        "Descubra seu estilo pessoal único com nosso quiz personalizado. Transforme seu visual e ganhe confiança com dicas exclusivas de moda.",
+      keywords:
+        "quiz estilo, moda feminina, consultoria de imagem, estilo pessoal, transformação visual",
     },
     pixel: {
       facebookPixelId: "1311550759901086",
-      googleAnalyticsId: "G-XXXXXXXXXX"
+      googleAnalyticsId: "G-XXXXXXXXXX",
     },
     utm: {
       source: "facebook",
       medium: "cpc",
       campaign: "quiz_style_2025",
       content: "criativo-1",
-      term: "estilo_elegante"
+      term: "estilo_elegante",
     },
     scoring: {
       normalQuestionPoints: 1,
@@ -2297,7 +2426,7 @@ const SimpleDragDropEditor: React.FC = () => {
       autoAdvanceNormal: true,
       autoAdvanceStrategic: false,
       normalSelectionLimit: 3,
-      strategicSelectionLimit: 2
+      strategicSelectionLimit: 2,
     },
     results: {
       showUserName: true,
@@ -2305,8 +2434,8 @@ const SimpleDragDropEditor: React.FC = () => {
       showSecondaryStyles: true,
       showPercentages: true,
       showStyleImages: true,
-      showStyleGuides: true
-    }
+      showStyleGuides: true,
+    },
   });
 
   // Estado do funil completo
@@ -2361,20 +2490,25 @@ const SimpleDragDropEditor: React.FC = () => {
 
   // Função para atualizar configurações
   const updateQuizConfig = (updates: Partial<QuizConfig>) => {
-    setQuizConfig(prev => ({ ...prev, ...updates }));
+    setQuizConfig((prev) => ({ ...prev, ...updates }));
   };
 
   // Função para atualizar seções específicas da configuração
-  const updateConfig = (section: keyof QuizConfig, updates: any) => {
-    setQuizConfig(prev => ({
+  const updateConfig = (
+    section: keyof QuizConfig,
+    updates: Partial<QuizConfig[keyof QuizConfig]>
+  ) => {
+    setQuizConfig((prev) => ({
       ...prev,
-      [section]: { ...(prev[section] as object), ...updates }
+      [section]: { ...(prev[section] as object), ...updates },
     }));
   };
 
   // Função para abrir preview
   const openPreview = () => {
-    const previewUrl = `/quiz-preview?funnel=${encodeURIComponent(JSON.stringify(currentFunnel))}&config=${encodeURIComponent(JSON.stringify(quizConfig))}`;
+    const previewUrl = `/quiz-preview?funnel=${encodeURIComponent(
+      JSON.stringify(currentFunnel)
+    )}&config=${encodeURIComponent(JSON.stringify(quizConfig))}`;
     window.open(previewUrl, "_blank");
   };
 
@@ -2570,15 +2704,35 @@ const SimpleDragDropEditor: React.FC = () => {
       case "bonus":
         return {
           bonuses: [
-            { id: "bonus1", title: "Bônus #1: Guia Completo", value: "R$ 197", description: "Material exclusivo para acelerar seus resultados" },
-            { id: "bonus2", title: "Bônus #2: Acesso VIP", value: "R$ 297", description: "Grupo exclusivo para networking" }
+            {
+              id: "bonus1",
+              title: "Bônus #1: Guia Completo",
+              value: "R$ 197",
+              description: "Material exclusivo para acelerar seus resultados",
+            },
+            {
+              id: "bonus2",
+              title: "Bônus #2: Acesso VIP",
+              value: "R$ 297",
+              description: "Grupo exclusivo para networking",
+            },
           ],
         };
       case "faq":
         return {
           faqs: [
-            { id: "faq1", question: "Como funciona a garantia?", answer: "Oferecemos 30 dias de garantia incondicional. Se não ficar satisfeito, devolvemos seu dinheiro." },
-            { id: "faq2", question: "Quanto tempo tenho acesso?", answer: "O acesso é vitalício! Você pode acessar quando quiser, quantas vezes quiser." }
+            {
+              id: "faq1",
+              question: "Como funciona a garantia?",
+              answer:
+                "Oferecemos 30 dias de garantia incondicional. Se não ficar satisfeito, devolvemos seu dinheiro.",
+            },
+            {
+              id: "faq2",
+              question: "Quanto tempo tenho acesso?",
+              answer:
+                "O acesso é vitalício! Você pode acessar quando quiser, quantas vezes quiser.",
+            },
           ],
         };
       case "social-proof":
@@ -3015,9 +3169,14 @@ const SimpleDragDropEditor: React.FC = () => {
               border: "1px solid #e9ecef",
             }}
           >
-            <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
+            <div
+              style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}
+            >
               <img
-                src={data.avatar || "https://via.placeholder.com/60x60/B89B7A/FFFFFF?text=👤"}
+                src={
+                  data.avatar ||
+                  "https://via.placeholder.com/60x60/B89B7A/FFFFFF?text=👤"
+                }
                 alt="Avatar"
                 style={{
                   width: "60px",
@@ -3036,10 +3195,19 @@ const SimpleDragDropEditor: React.FC = () => {
                     lineHeight: "1.6",
                   }}
                 >
-                  "{data.text || "Este produto mudou minha vida completamente! Recomendo para todos que querem resultados reais."}"
+                  "
+                  {data.text ||
+                    "Este produto mudou minha vida completamente! Recomendo para todos que querem resultados reais."}
+                  "
                 </p>
                 <div>
-                  <p style={{ fontWeight: "600", color: "#432818", marginBottom: "4px" }}>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      color: "#432818",
+                      marginBottom: "4px",
+                    }}
+                  >
                     {data.name || "Cliente Satisfeito"}
                   </p>
                   <p style={{ fontSize: "0.875rem", color: "#6B4F43" }}>
@@ -3108,10 +3276,22 @@ const SimpleDragDropEditor: React.FC = () => {
                 margin: "0 auto",
               }}
             >
-              <h3 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "16px" }}>
+              <h3
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "600",
+                  marginBottom: "16px",
+                }}
+              >
                 {data.title || "⏰ OFERTA LIMITADA!"}
               </h3>
-              <div style={{ display: "flex", justifyContent: "center", gap: "16px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "16px",
+                }}
+              >
                 {["23", "59", "45"].map((value, index) => (
                   <div
                     key={index}
@@ -3122,7 +3302,9 @@ const SimpleDragDropEditor: React.FC = () => {
                       minWidth: "60px",
                     }}
                   >
-                    <div style={{ fontSize: "1.5rem", fontWeight: "700" }}>{value}</div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: "700" }}>
+                      {value}
+                    </div>
                     <div style={{ fontSize: "0.75rem", opacity: 0.9 }}>
                       {["HRS", "MIN", "SEG"][index]}
                     </div>
@@ -3147,11 +3329,19 @@ const SimpleDragDropEditor: React.FC = () => {
               }}
             >
               <div style={{ fontSize: "3rem", marginBottom: "12px" }}>🛡️</div>
-              <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: "#065f46", marginBottom: "8px" }}>
+              <h3
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "600",
+                  color: "#065f46",
+                  marginBottom: "8px",
+                }}
+              >
                 {data.title || "Garantia de 30 Dias"}
               </h3>
               <p style={{ color: "#047857" }}>
-                {data.text || "Se não ficar satisfeito, devolvemos 100% do seu dinheiro!"}
+                {data.text ||
+                  "Se não ficar satisfeito, devolvemos 100% do seu dinheiro!"}
               </p>
             </div>
           </div>
@@ -3160,14 +3350,37 @@ const SimpleDragDropEditor: React.FC = () => {
       case "bonus":
         return (
           <div style={{ margin: "24px 0" }}>
-            <h3 style={{ fontSize: "1.5rem", fontWeight: "600", textAlign: "center", marginBottom: "16px", color: "#432818" }}>
+            <h3
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "600",
+                textAlign: "center",
+                marginBottom: "16px",
+                color: "#432818",
+              }}
+            >
               🎁 BÔNUS EXCLUSIVOS
             </h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {(data.bonuses || [
-                { id: "bonus1", title: "Bônus #1: Guia Completo", value: "R$ 197", description: "Material exclusivo para acelerar seus resultados" },
-                { id: "bonus2", title: "Bônus #2: Acesso VIP", value: "R$ 297", description: "Grupo exclusivo para networking" }
-              ]).map((bonus: BonusItem, index: number) => (
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+            >
+              {(
+                data.bonuses || [
+                  {
+                    id: "bonus1",
+                    title: "Bônus #1: Guia Completo",
+                    value: "R$ 197",
+                    description:
+                      "Material exclusivo para acelerar seus resultados",
+                  },
+                  {
+                    id: "bonus2",
+                    title: "Bônus #2: Acesso VIP",
+                    value: "R$ 297",
+                    description: "Grupo exclusivo para networking",
+                  },
+                ]
+              ).map((bonus: BonusItem, index: number) => (
                 <div
                   key={index}
                   style={{
@@ -3179,9 +3392,17 @@ const SimpleDragDropEditor: React.FC = () => {
                     border: "1px solid #fed7aa",
                   }}
                 >
-                  <div style={{ marginRight: "12px", fontSize: "1.5rem" }}>🎁</div>
+                  <div style={{ marginRight: "12px", fontSize: "1.5rem" }}>
+                    🎁
+                  </div>
                   <div style={{ flex: 1 }}>
-                    <h4 style={{ fontWeight: "600", color: "#432818", marginBottom: "4px" }}>
+                    <h4
+                      style={{
+                        fontWeight: "600",
+                        color: "#432818",
+                        marginBottom: "4px",
+                      }}
+                    >
                       {bonus.title}
                     </h4>
                     <p style={{ fontSize: "0.875rem", color: "#6B4F43" }}>
@@ -3200,14 +3421,36 @@ const SimpleDragDropEditor: React.FC = () => {
       case "faq":
         return (
           <div style={{ margin: "24px 0" }}>
-            <h3 style={{ fontSize: "1.5rem", fontWeight: "600", textAlign: "center", marginBottom: "16px", color: "#432818" }}>
+            <h3
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "600",
+                textAlign: "center",
+                marginBottom: "16px",
+                color: "#432818",
+              }}
+            >
               ❓ Perguntas Frequentes
             </h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              {(data.faqs || [
-                { id: "faq1", question: "Como funciona a garantia?", answer: "Oferecemos 30 dias de garantia incondicional. Se não ficar satisfeito, devolvemos seu dinheiro." },
-                { id: "faq2", question: "Quanto tempo tenho acesso?", answer: "O acesso é vitalício! Você pode acessar quando quiser, quantas vezes quiser." }
-              ]).map((faq: FaqItem, index: number) => (
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+            >
+              {(
+                data.faqs || [
+                  {
+                    id: "faq1",
+                    question: "Como funciona a garantia?",
+                    answer:
+                      "Oferecemos 30 dias de garantia incondicional. Se não ficar satisfeito, devolvemos seu dinheiro.",
+                  },
+                  {
+                    id: "faq2",
+                    question: "Quanto tempo tenho acesso?",
+                    answer:
+                      "O acesso é vitalício! Você pode acessar quando quiser, quantas vezes quiser.",
+                  },
+                ]
+              ).map((faq: FaqItem, index: number) => (
                 <div
                   key={index}
                   style={{
@@ -3217,7 +3460,13 @@ const SimpleDragDropEditor: React.FC = () => {
                     border: "1px solid #e5e7eb",
                   }}
                 >
-                  <h4 style={{ fontWeight: "600", color: "#432818", marginBottom: "8px" }}>
+                  <h4
+                    style={{
+                      fontWeight: "600",
+                      color: "#432818",
+                      marginBottom: "8px",
+                    }}
+                  >
                     {faq.question}
                   </h4>
                   <p style={{ fontSize: "0.875rem", color: "#6B4F43" }}>
@@ -3240,19 +3489,46 @@ const SimpleDragDropEditor: React.FC = () => {
                 border: "1px solid #d1d5db",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "12px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  marginBottom: "12px",
+                }}
+              >
                 <span style={{ fontSize: "1.5rem" }}>👥</span>
-                <span style={{ fontSize: "1.25rem", fontWeight: "600", color: "#432818" }}>
+                <span
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: "600",
+                    color: "#432818",
+                  }}
+                >
                   +{data.customerCount || "5.000"} Clientes Satisfeitos
                 </span>
               </div>
-              <div style={{ display: "flex", justifyContent: "center", gap: "4px", marginBottom: "8px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "4px",
+                  marginBottom: "8px",
+                }}
+              >
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} style={{ color: "#fbbf24", fontSize: "1.25rem" }}>⭐</span>
+                  <span
+                    key={i}
+                    style={{ color: "#fbbf24", fontSize: "1.25rem" }}
+                  >
+                    ⭐
+                  </span>
                 ))}
               </div>
               <p style={{ fontSize: "0.875rem", color: "#6B4F43" }}>
-                {data.rating || "4.9"}/5 - Baseado em {data.reviewCount || "1.247"} avaliações
+                {data.rating || "4.9"}/5 - Baseado em{" "}
+                {data.reviewCount || "1.247"} avaliações
               </p>
             </div>
           </div>
@@ -3483,7 +3759,9 @@ const SimpleDragDropEditor: React.FC = () => {
                 <Input
                   value={component.data.originalPrice || ""}
                   onChange={(e) =>
-                    updateComponent(component.id, { originalPrice: e.target.value })
+                    updateComponent(component.id, {
+                      originalPrice: e.target.value,
+                    })
                   }
                   placeholder="197"
                 />
@@ -3493,7 +3771,9 @@ const SimpleDragDropEditor: React.FC = () => {
                 <Input
                   value={component.data.installments || ""}
                   onChange={(e) =>
-                    updateComponent(component.id, { installments: e.target.value })
+                    updateComponent(component.id, {
+                      installments: e.target.value,
+                    })
                   }
                   placeholder="9,90"
                 />
@@ -3549,7 +3829,9 @@ const SimpleDragDropEditor: React.FC = () => {
                 <Input
                   value={component.data.customerCount || ""}
                   onChange={(e) =>
-                    updateComponent(component.id, { customerCount: e.target.value })
+                    updateComponent(component.id, {
+                      customerCount: e.target.value,
+                    })
                   }
                   placeholder="5.000"
                 />
@@ -3569,7 +3851,9 @@ const SimpleDragDropEditor: React.FC = () => {
                 <Input
                   value={component.data.reviewCount || ""}
                   onChange={(e) =>
-                    updateComponent(component.id, { reviewCount: e.target.value })
+                    updateComponent(component.id, {
+                      reviewCount: e.target.value,
+                    })
                   }
                   placeholder="1.247"
                 />
@@ -3612,7 +3896,7 @@ const SimpleDragDropEditor: React.FC = () => {
           <h2 className="text-sm font-semibold mb-2 flex items-center gap-2">
             🔄 ETAPAS DO FUNIL
           </h2>
-          
+
           {/* Abas do Editor */}
           <div className="flex gap-1 mb-3">
             <Button
@@ -3640,7 +3924,7 @@ const SimpleDragDropEditor: React.FC = () => {
               👁️
             </Button>
           </div>
-          
+
           {activeTab === "editor" && (
             <>
               {/* Nome do Funil */}
@@ -3649,7 +3933,10 @@ const SimpleDragDropEditor: React.FC = () => {
                 <Input
                   value={currentFunnel.name}
                   onChange={(e) =>
-                    setCurrentFunnel((prev) => ({ ...prev, name: e.target.value }))
+                    setCurrentFunnel((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
                   }
                   className="mt-1 text-sm h-8"
                   placeholder="Nome do seu quiz"
@@ -3666,18 +3953,18 @@ const SimpleDragDropEditor: React.FC = () => {
 
           {activeTab === "preview" && (
             <div className="space-y-2">
-              <Button 
-                size="sm" 
-                className="w-full h-7 text-xs" 
+              <Button
+                size="sm"
+                className="w-full h-7 text-xs"
                 onClick={openPreview}
               >
                 <Eye className="h-3 w-3 mr-1" />
                 Preview
               </Button>
-              
-              <Button 
-                size="sm" 
-                variant="outline" 
+
+              <Button
+                size="sm"
+                variant="outline"
                 className="w-full h-7 text-xs"
                 onClick={saveChanges}
               >
@@ -3714,13 +4001,31 @@ const SimpleDragDropEditor: React.FC = () => {
 
           {/* Botões de Ação do Funil */}
           <div className="flex gap-1">
-            <Button size="sm" variant="outline" onClick={addNewPage} title="Adicionar Página" className="h-7 px-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={addNewPage}
+              title="Adicionar Página"
+              className="h-7 px-2"
+            >
               <Plus className="h-3 w-3" />
             </Button>
-            <Button size="sm" variant="outline" onClick={duplicatePage} title="Duplicar Página" className="h-7 px-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={duplicatePage}
+              title="Duplicar Página"
+              className="h-7 px-2"
+            >
               <Copy className="h-3 w-3" />
             </Button>
-            <Button size="sm" variant="outline" onClick={exportFunnel} title="Exportar Funil" className="h-7 px-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={exportFunnel}
+              title="Exportar Funil"
+              className="h-7 px-2"
+            >
               <Download className="h-3 w-3" />
             </Button>
             <Button size="sm" title="Salvar Funil" className="h-7 px-2">
@@ -3742,7 +4047,10 @@ const SimpleDragDropEditor: React.FC = () => {
                     onClick={() => setCurrentPageIndex(index)}
                   >
                     <div className="flex items-center gap-2 w-full">
-                      <Badge variant="secondary" className="text-xs h-5 w-5 p-0 flex items-center justify-center">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs h-5 w-5 p-0 flex items-center justify-center"
+                      >
                         {index + 1}
                       </Badge>
                       <div className="flex-1 text-left">
@@ -3771,7 +4079,9 @@ const SimpleDragDropEditor: React.FC = () => {
 
             {/* Templates Prontos */}
             <div className="mt-4">
-              <h3 className="text-xs font-semibold mb-2">📋 TEMPLATES PRONTOS</h3>
+              <h3 className="text-xs font-semibold mb-2">
+                📋 TEMPLATES PRONTOS
+              </h3>
               <div className="space-y-1">
                 <Button
                   variant="outline"
@@ -3845,7 +4155,7 @@ const SimpleDragDropEditor: React.FC = () => {
                 >
                   💰 Oferta
                 </Button>
-                
+
                 <div className="text-xs font-medium text-emerald-600 mt-2 mb-1">
                   📊 PÁGINAS DE VENDA
                 </div>
@@ -3909,7 +4219,9 @@ const SimpleDragDropEditor: React.FC = () => {
           <div className="p-3">
             {/* Componentes Básicos */}
             <div className="mb-4">
-              <h3 className="text-xs font-semibold mb-2 text-blue-700">📝 BÁSICOS</h3>
+              <h3 className="text-xs font-semibold mb-2 text-blue-700">
+                📝 BÁSICOS
+              </h3>
               <div className="space-y-1">
                 {COMPONENTS.slice(0, 10).map((componentType) => {
                   const Icon = componentType.icon;
@@ -3939,7 +4251,9 @@ const SimpleDragDropEditor: React.FC = () => {
 
             {/* Componentes de Venda */}
             <div>
-              <h3 className="text-xs font-semibold mb-2 text-emerald-700">💰 VENDAS</h3>
+              <h3 className="text-xs font-semibold mb-2 text-emerald-700">
+                💰 VENDAS
+              </h3>
               <div className="space-y-1">
                 {COMPONENTS.slice(10).map((componentType) => {
                   const Icon = componentType.icon;
@@ -4114,10 +4428,12 @@ const SimpleDragDropEditor: React.FC = () => {
             ⚙️ PROPRIEDADES
           </h2>
           <p className="text-xs text-muted-foreground">
-            {selectedComponent 
-              ? `Editando: ${currentPage.components.find(c => c.id === selectedComponent)?.type || 'componente'}`
-              : 'Selecione um componente para editar'
-            }
+            {selectedComponent
+              ? `Editando: ${
+                  currentPage.components.find((c) => c.id === selectedComponent)
+                    ?.type || "componente"
+                }`
+              : "Selecione um componente para editar"}
           </p>
         </div>
 
@@ -4128,7 +4444,9 @@ const SimpleDragDropEditor: React.FC = () => {
               <>
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm">Configurações do Quiz</CardTitle>
+                    <CardTitle className="text-sm">
+                      Configurações do Quiz
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     {/* Seções de Configuração */}
@@ -4144,7 +4462,11 @@ const SimpleDragDropEditor: React.FC = () => {
                         <Button
                           key={section.id}
                           size="sm"
-                          variant={activeConfigSection === section.id ? "default" : "outline"}
+                          variant={
+                            activeConfigSection === section.id
+                              ? "default"
+                              : "outline"
+                          }
                           onClick={() => setActiveConfigSection(section.id)}
                           className="h-7 px-2 text-xs"
                         >
@@ -4168,7 +4490,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">Domínio Principal</Label>
                             <Input
                               value={quizConfig.domain}
-                              onChange={(e) => updateQuizConfig({ domain: e.target.value })}
+                              onChange={(e) =>
+                                updateQuizConfig({ domain: e.target.value })
+                              }
                               placeholder="https://seudominio.com.br"
                               className="h-8 text-sm"
                             />
@@ -4194,7 +4518,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">Título da Página</Label>
                             <Input
                               value={quizConfig.seo.title}
-                              onChange={(e) => updateConfig("seo", { title: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("seo", { title: e.target.value })
+                              }
                               placeholder="Quiz: Descubra Seu Estilo Pessoal"
                               className="h-8 text-sm"
                             />
@@ -4203,7 +4529,11 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">Descrição Meta</Label>
                             <Textarea
                               value={quizConfig.seo.description}
-                              onChange={(e) => updateConfig("seo", { description: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("seo", {
+                                  description: e.target.value,
+                                })
+                              }
                               placeholder="Descubra seu estilo pessoal único com nosso quiz personalizado..."
                               className="text-sm resize-none"
                               rows={3}
@@ -4213,7 +4543,11 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">Palavras-chave</Label>
                             <Input
                               value={quizConfig.seo.keywords}
-                              onChange={(e) => updateConfig("seo", { keywords: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("seo", {
+                                  keywords: e.target.value,
+                                })
+                              }
                               placeholder="quiz estilo, moda feminina, consultoria"
                               className="h-8 text-sm"
                             />
@@ -4236,22 +4570,36 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">Facebook Pixel ID</Label>
                             <Input
                               value={quizConfig.pixel.facebookPixelId}
-                              onChange={(e) => updateConfig("pixel", { facebookPixelId: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("pixel", {
+                                  facebookPixelId: e.target.value,
+                                })
+                              }
                               placeholder="1234567890123456"
                               className="h-8 text-sm"
                             />
                           </div>
                           <div>
-                            <Label className="text-xs">Google Analytics ID</Label>
+                            <Label className="text-xs">
+                              Google Analytics ID
+                            </Label>
                             <Input
                               value={quizConfig.pixel.googleAnalyticsId}
-                              onChange={(e) => updateConfig("pixel", { googleAnalyticsId: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("pixel", {
+                                  googleAnalyticsId: e.target.value,
+                                })
+                              }
                               placeholder="G-XXXXXXXXXX"
                               className="h-8 text-sm"
                             />
                           </div>
                           <div className="pt-2">
-                            <Button size="sm" variant="outline" className="w-full">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="w-full"
+                            >
                               <Target className="h-3 w-3 mr-2" />
                               Testar Conexão
                             </Button>
@@ -4274,7 +4622,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">UTM Source</Label>
                             <Input
                               value={quizConfig.utm.source}
-                              onChange={(e) => updateConfig("utm", { source: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("utm", { source: e.target.value })
+                              }
                               placeholder="facebook"
                               className="h-8 text-sm"
                             />
@@ -4283,7 +4633,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">UTM Medium</Label>
                             <Input
                               value={quizConfig.utm.medium}
-                              onChange={(e) => updateConfig("utm", { medium: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("utm", { medium: e.target.value })
+                              }
                               placeholder="cpc"
                               className="h-8 text-sm"
                             />
@@ -4292,7 +4644,11 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">UTM Campaign</Label>
                             <Input
                               value={quizConfig.utm.campaign}
-                              onChange={(e) => updateConfig("utm", { campaign: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("utm", {
+                                  campaign: e.target.value,
+                                })
+                              }
                               placeholder="quiz_style_2025"
                               className="h-8 text-sm"
                             />
@@ -4301,7 +4657,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">UTM Content</Label>
                             <Input
                               value={quizConfig.utm.content}
-                              onChange={(e) => updateConfig("utm", { content: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("utm", { content: e.target.value })
+                              }
                               placeholder="criativo-1"
                               className="h-8 text-sm"
                             />
@@ -4310,7 +4668,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             <Label className="text-xs">UTM Term</Label>
                             <Input
                               value={quizConfig.utm.term}
-                              onChange={(e) => updateConfig("utm", { term: e.target.value })}
+                              onChange={(e) =>
+                                updateConfig("utm", { term: e.target.value })
+                              }
                               placeholder="estilo_elegante"
                               className="h-8 text-sm"
                             />
@@ -4330,26 +4690,41 @@ const SimpleDragDropEditor: React.FC = () => {
                         </CardHeader>
                         <CardContent className="space-y-3">
                           <div>
-                            <Label className="text-xs">Pontos por Questão Normal</Label>
+                            <Label className="text-xs">
+                              Pontos por Questão Normal
+                            </Label>
                             <Input
                               type="number"
                               value={quizConfig.scoring.normalQuestionPoints}
-                              onChange={(e) => updateConfig("scoring", { normalQuestionPoints: parseInt(e.target.value) || 1 })}
+                              onChange={(e) =>
+                                updateConfig("scoring", {
+                                  normalQuestionPoints:
+                                    parseInt(e.target.value) || 1,
+                                })
+                              }
                               min="1"
                               max="5"
                               className="h-8 text-sm"
                             />
                             <p className="text-xs text-muted-foreground mt-1">
-                              Pontos atribuídos por resposta nas questões normais
+                              Pontos atribuídos por resposta nas questões
+                              normais
                             </p>
                           </div>
 
                           <div>
-                            <Label className="text-xs">Limite de Seleção - Questões Normais</Label>
+                            <Label className="text-xs">
+                              Limite de Seleção - Questões Normais
+                            </Label>
                             <Input
                               type="number"
                               value={quizConfig.scoring.normalSelectionLimit}
-                              onChange={(e) => updateConfig("scoring", { normalSelectionLimit: parseInt(e.target.value) || 3 })}
+                              onChange={(e) =>
+                                updateConfig("scoring", {
+                                  normalSelectionLimit:
+                                    parseInt(e.target.value) || 3,
+                                })
+                              }
                               min="1"
                               max="8"
                               className="h-8 text-sm"
@@ -4360,17 +4735,25 @@ const SimpleDragDropEditor: React.FC = () => {
                           </div>
 
                           <div>
-                            <Label className="text-xs">Limite de Seleção - Questões Estratégicas</Label>
+                            <Label className="text-xs">
+                              Limite de Seleção - Questões Estratégicas
+                            </Label>
                             <Input
                               type="number"
                               value={quizConfig.scoring.strategicSelectionLimit}
-                              onChange={(e) => updateConfig("scoring", { strategicSelectionLimit: parseInt(e.target.value) || 1 })}
+                              onChange={(e) =>
+                                updateConfig("scoring", {
+                                  strategicSelectionLimit:
+                                    parseInt(e.target.value) || 1,
+                                })
+                              }
                               min="1"
                               max="3"
                               className="h-8 text-sm"
                             />
                             <p className="text-xs text-muted-foreground mt-1">
-                              Quantas opções para questões estratégicas (2 recomendado)
+                              Quantas opções para questões estratégicas (2
+                              recomendado)
                             </p>
                           </div>
 
@@ -4380,25 +4763,41 @@ const SimpleDragDropEditor: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 checked={quizConfig.scoring.autoAdvanceNormal}
-                                onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceNormal: checked })}
+                                onCheckedChange={(checked) =>
+                                  updateConfig("scoring", {
+                                    autoAdvanceNormal: checked,
+                                  })
+                                }
                               />
-                              <Label className="text-xs">Avanço Automático - Questões Normais</Label>
+                              <Label className="text-xs">
+                                Avanço Automático - Questões Normais
+                              </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                              Avança automaticamente quando 3ª opção for selecionada
+                              Avança automaticamente quando 3ª opção for
+                              selecionada
                             </p>
                           </div>
 
                           <div className="space-y-2">
                             <div className="flex items-center space-x-2">
                               <Switch
-                                checked={quizConfig.scoring.autoAdvanceStrategic}
-                                onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceStrategic: checked })}
+                                checked={
+                                  quizConfig.scoring.autoAdvanceStrategic
+                                }
+                                onCheckedChange={(checked) =>
+                                  updateConfig("scoring", {
+                                    autoAdvanceStrategic: checked,
+                                  })
+                                }
                               />
-                              <Label className="text-xs">Avanço Automático - Questões Estratégicas</Label>
+                              <Label className="text-xs">
+                                Avanço Automático - Questões Estratégicas
+                              </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                              Avança automaticamente nas questões estratégicas (recomendado: desabilitado)
+                              Avança automaticamente nas questões estratégicas
+                              (recomendado: desabilitado)
                             </p>
                           </div>
                         </CardContent>
@@ -4419,9 +4818,15 @@ const SimpleDragDropEditor: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 checked={quizConfig.results.showUserName}
-                                onCheckedChange={(checked) => updateConfig("results", { showUserName: checked })}
+                                onCheckedChange={(checked) =>
+                                  updateConfig("results", {
+                                    showUserName: checked,
+                                  })
+                                }
                               />
-                              <Label className="text-xs">Mostrar Nome do Usuário</Label>
+                              <Label className="text-xs">
+                                Mostrar Nome do Usuário
+                              </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
                               Exibe o nome preenchido no QuizIntro
@@ -4432,9 +4837,15 @@ const SimpleDragDropEditor: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 checked={quizConfig.results.showPrimaryStyle}
-                                onCheckedChange={(checked) => updateConfig("results", { showPrimaryStyle: checked })}
+                                onCheckedChange={(checked) =>
+                                  updateConfig("results", {
+                                    showPrimaryStyle: checked,
+                                  })
+                                }
                               />
-                              <Label className="text-xs">Mostrar Estilo Predominante</Label>
+                              <Label className="text-xs">
+                                Mostrar Estilo Predominante
+                              </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
                               Exibe o estilo principal com barra de porcentagem
@@ -4445,9 +4856,15 @@ const SimpleDragDropEditor: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 checked={quizConfig.results.showSecondaryStyles}
-                                onCheckedChange={(checked) => updateConfig("results", { showSecondaryStyles: checked })}
+                                onCheckedChange={(checked) =>
+                                  updateConfig("results", {
+                                    showSecondaryStyles: checked,
+                                  })
+                                }
                               />
-                              <Label className="text-xs">Mostrar Estilos Complementares</Label>
+                              <Label className="text-xs">
+                                Mostrar Estilos Complementares
+                              </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
                               Exibe 2º e 3º estilos com porcentagens
@@ -4458,9 +4875,15 @@ const SimpleDragDropEditor: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 checked={quizConfig.results.showStyleImages}
-                                onCheckedChange={(checked) => updateConfig("results", { showStyleImages: checked })}
+                                onCheckedChange={(checked) =>
+                                  updateConfig("results", {
+                                    showStyleImages: checked,
+                                  })
+                                }
                               />
-                              <Label className="text-xs">Mostrar Imagem do Estilo</Label>
+                              <Label className="text-xs">
+                                Mostrar Imagem do Estilo
+                              </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
                               Exibe imagem representativa do estilo predominante
@@ -4471,22 +4894,39 @@ const SimpleDragDropEditor: React.FC = () => {
                             <div className="flex items-center space-x-2">
                               <Switch
                                 checked={quizConfig.results.showStyleGuides}
-                                onCheckedChange={(checked) => updateConfig("results", { showStyleGuides: checked })}
+                                onCheckedChange={(checked) =>
+                                  updateConfig("results", {
+                                    showStyleGuides: checked,
+                                  })
+                                }
                               />
-                              <Label className="text-xs">Mostrar Guia do Estilo</Label>
+                              <Label className="text-xs">
+                                Mostrar Guia do Estilo
+                              </Label>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                              Exibe imagem do guia referente ao estilo predominante
+                              Exibe imagem do guia referente ao estilo
+                              predominante
                             </p>
                           </div>
 
                           <Separator />
 
                           <div className="bg-blue-50 p-3 rounded-lg">
-                            <h4 className="text-xs font-semibold mb-2">Configuração de Teste A/B</h4>
+                            <h4 className="text-xs font-semibold mb-2">
+                              Configuração de Teste A/B
+                            </h4>
                             <div className="space-y-1 text-xs">
-                              <p><strong>Teste A (/resultado):</strong> Resultado + Oferta na mesma página</p>
-                              <p><strong>Teste B (/quiz-descubra-seu-estilo):</strong> Apenas página de venda</p>
+                              <p>
+                                <strong>Teste A (/resultado):</strong> Resultado
+                                + Oferta na mesma página
+                              </p>
+                              <p>
+                                <strong>
+                                  Teste B (/quiz-descubra-seu-estilo):
+                                </strong>{" "}
+                                Apenas página de venda
+                              </p>
                             </div>
                           </div>
                         </CardContent>
@@ -4495,11 +4935,20 @@ const SimpleDragDropEditor: React.FC = () => {
 
                     {/* Botões de Ação */}
                     <div className="mt-4 space-y-2">
-                      <Button onClick={saveChanges} className="w-full" size="sm">
+                      <Button
+                        onClick={saveChanges}
+                        className="w-full"
+                        size="sm"
+                      >
                         <Save className="h-3 w-3 mr-2" />
                         Salvar Configurações
                       </Button>
-                      <Button onClick={openPreview} variant="outline" className="w-full" size="sm">
+                      <Button
+                        onClick={openPreview}
+                        variant="outline"
+                        className="w-full"
+                        size="sm"
+                      >
                         <Eye className="h-3 w-3 mr-2" />
                         Preview Produção
                       </Button>
@@ -4512,14 +4961,18 @@ const SimpleDragDropEditor: React.FC = () => {
             ) : (
               <div className="text-center text-muted-foreground mt-8">
                 <Settings className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Clique em um componente no canvas para editá-lo</p>
+                <p className="text-sm">
+                  Clique em um componente no canvas para editá-lo
+                </p>
               </div>
             )}
 
             {/* Configurações da Página */}
             <Card className="mt-4">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm">Configurações da Página</CardTitle>
+                <CardTitle className="text-sm">
+                  Configurações da Página
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
@@ -4577,11 +5030,16 @@ const SimpleDragDropEditor: React.FC = () => {
                 <CardTitle className="text-sm">Ações Rápidas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button size="sm" variant="outline" onClick={exportFunnel} className="w-full justify-start">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={exportFunnel}
+                  className="w-full justify-start"
+                >
                   <Download className="h-3 w-3 mr-2" />
                   Exportar Funil
                 </Button>
-                
+
                 <Button
                   size="sm"
                   variant="outline"
@@ -4605,378 +5063,6 @@ const SimpleDragDropEditor: React.FC = () => {
                 </Button>
               </CardContent>
             </Card>
-          </div>
-        </ScrollArea>
-      </div>
-
-      {/* ABA DE CONFIGURAÇÕES */}
-      <div className="w-full max-w-4xl mx-auto p-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Configurações do Quiz</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {/* Seções de Configuração */}
-            <div className="flex flex-wrap gap-1 mb-4">
-              {[
-                { id: "domain", label: "Domínio", icon: Globe },
-                { id: "seo", label: "SEO", icon: BarChart3 },
-                { id: "pixel", label: "Pixels", icon: Target },
-                { id: "utm", label: "UTM", icon: Link },
-                { id: "scoring", label: "Pontuação", icon: Star },
-                { id: "results", label: "Resultados", icon: Eye },
-              ].map((section) => (
-                <Button
-                  key={section.id}
-                  size="sm"
-                  variant={activeConfigSection === section.id ? "default" : "outline"}
-                  onClick={() => setActiveConfigSection(section.id)}
-                  className="h-7 px-2 text-xs"
-                >
-                  <section.icon className="h-3 w-3 mr-1" />
-                  {section.label}
-                </Button>
-              ))}
-            </div>
-
-            {/* Configuração de Domínio */}
-            {activeConfigSection === "domain" && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Globe className="h-4 w-4" />
-                    Configuração de Domínio
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <Label className="text-xs">Domínio Principal</Label>
-                    <Input
-                      value={quizConfig.domain}
-                      onChange={(e) => updateQuizConfig({ domain: e.target.value })}
-                      placeholder="https://seudominio.com.br"
-                      className="h-8 text-sm"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Domínio onde o quiz será publicado
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Configuração de SEO */}
-            {activeConfigSection === "seo" && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <BarChart3 className="h-4 w-4" />
-                    Configurações de SEO
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <Label className="text-xs">Título da Página</Label>
-                    <Input
-                      value={quizConfig.seo.title}
-                      onChange={(e) => updateConfig("seo", { title: e.target.value })}
-                      placeholder="Quiz: Descubra Seu Estilo Pessoal"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Descrição Meta</Label>
-                    <Textarea
-                      value={quizConfig.seo.description}
-                      onChange={(e) => updateConfig("seo", { description: e.target.value })}
-                      placeholder="Descubra seu estilo pessoal único com nosso quiz personalizado..."
-                      className="text-sm resize-none"
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Palavras-chave</Label>
-                    <Input
-                      value={quizConfig.seo.keywords}
-                      onChange={(e) => updateConfig("seo", { keywords: e.target.value })}
-                      placeholder="quiz estilo, moda feminina, consultoria"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Configuração de Pixels */}
-            {activeConfigSection === "pixel" && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Target className="h-4 w-4" />
-                    Pixels e Tracking
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <Label className="text-xs">Facebook Pixel ID</Label>
-                    <Input
-                      value={quizConfig.pixel.facebookPixelId}
-                      onChange={(e) => updateConfig("pixel", { facebookPixelId: e.target.value })}
-                      placeholder="1234567890123456"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Google Analytics ID</Label>
-                    <Input
-                      value={quizConfig.pixel.googleAnalyticsId}
-                      onChange={(e) => updateConfig("pixel", { googleAnalyticsId: e.target.value })}
-                      placeholder="G-XXXXXXXXXX"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div className="pt-2">
-                    <Button size="sm" variant="outline" className="w-full">
-                      <Target className="h-3 w-3 mr-2" />
-                      Testar Conexão
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Configuração de UTM */}
-            {activeConfigSection === "utm" && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Link className="h-4 w-4" />
-                    Parâmetros UTM para A/B Test
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <Label className="text-xs">UTM Source</Label>
-                    <Input
-                      value={quizConfig.utm.source}
-                      onChange={(e) => updateConfig("utm", { source: e.target.value })}
-                      placeholder="facebook"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">UTM Medium</Label>
-                    <Input
-                      value={quizConfig.utm.medium}
-                      onChange={(e) => updateConfig("utm", { medium: e.target.value })}
-                      placeholder="cpc"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">UTM Campaign</Label>
-                    <Input
-                      value={quizConfig.utm.campaign}
-                      onChange={(e) => updateConfig("utm", { campaign: e.target.value })}
-                      placeholder="quiz_style_2025"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">UTM Content</Label>
-                    <Input
-                      value={quizConfig.utm.content}
-                      onChange={(e) => updateConfig("utm", { content: e.target.value })}
-                      placeholder="criativo-1"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">UTM Term</Label>
-                    <Input
-                      value={quizConfig.utm.term}
-                      onChange={(e) => updateConfig("utm", { term: e.target.value })}
-                      placeholder="estilo_elegante"
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Configuração de Pontuação */}
-            {activeConfigSection === "scoring" && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Star className="h-4 w-4" />
-                    Sistema de Pontuação
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <Label className="text-xs">Pontos por Questão Normal</Label>
-                    <Input
-                      type="number"
-                      value={quizConfig.scoring.normalQuestionPoints}
-                      onChange={(e) => updateConfig("scoring", { normalQuestionPoints: parseInt(e.target.value) || 1 })}
-                      min="1"
-                      max="5"
-                      className="h-8 text-sm"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Pontos atribuídos por resposta nas questões normais
-                    </p>
-                  </div>
-
-                  <div>
-                    <Label className="text-xs">Limite de Seleção - Questões Normais</Label>
-                    <Input
-                      type="number"
-                      value={quizConfig.scoring.normalSelectionLimit}
-                      onChange={(e) => updateConfig("scoring", { normalSelectionLimit: parseInt(e.target.value) || 3 })}
-                      min="1"
-                      max="8"
-                      className="h-8 text-sm"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Quantas opções obrigatórias (3 recomendado)
-                    </p>
-                  </div>
-
-                  <div>
-                    <Label className="text-xs">Limite de Seleção - Questões Estratégicas</Label>
-                    <Input
-                      type="number"
-                      value={quizConfig.scoring.strategicSelectionLimit}
-                      onChange={(e) => updateConfig("scoring", { strategicSelectionLimit: parseInt(e.target.value) || 1 })}
-                      min="1"
-                      max="3"
-                      className="h-8 text-sm"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Quantas opções para questões estratégicas (2 recomendado)
-                    </p>
-                  </div>
-
-                  <Separator />
-
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={quizConfig.scoring.autoAdvanceNormal}
-                        onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceNormal: checked })}
-                      />
-                      <Label className="text-xs">Avanço Automático - Questões Normais</Label>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Avança automaticamente quando 3ª opção for selecionada
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={quizConfig.scoring.autoAdvanceStrategic}
-                        onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceStrategic: checked })}
-                      />
-                      <Label className="text-xs">Avanço Automático - Questões Estratégicas</Label>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Avança automaticamente nas questões estratégicas (recomendado: desabilitado)
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Configuração de Resultados */}
-            {activeConfigSection === "results" && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Eye className="h-4 w-4" />
-                    Configuração da Página de Resultados
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={quizConfig.results.showUserName}
-                        onCheckedChange={(checked) => updateConfig("results", { showUserName: checked })}
-                      />
-                      <Label className="text-xs">Mostrar Nome do Usuário</Label>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Exibe o nome preenchido no QuizIntro
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={quizConfig.results.showPrimaryStyle}
-                        onCheckedChange={(checked) => updateConfig("results", { showPrimaryStyle: checked })}
-                      />
-                      <Label className="text-xs">Mostrar Estilo Predominante</Label>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Exibe o estilo principal com barra de porcentagem
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={quizConfig.results.showSecondaryStyles}
-                        onCheckedChange={(checked) => updateConfig("results", { showSecondaryStyles: checked })}
-                      />
-                      <Label className="text-xs">Mostrar Estilos Complementares</Label>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Exibe 2º e 3º estilos com porcentagens
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={quizConfig.results.showStyleImages}
-                        onCheckedChange={(checked) => updateConfig("results", { showStyleImages: checked })}
-                      />
-                      <Label className="text-xs">Mostrar Imagem do Estilo</Label>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Exibe imagem representativa do estilo predominante
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={quizConfig.results.showStyleGuides}
-                        onCheckedChange={(checked) => updateConfig("results", { showStyleGuides: checked })}
-                      />
-                      <Label className="text-xs">Mostrar Guia do Estilo</Label>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Exibe imagem do guia referente ao estilo predominante
-                    </p>
-                  </div>
-
-                  <Separator />
-
-                  <div className="bg-blue-50 p-3 rounded-lg">
-                    <h4 className="text-xs font-semibold mb-2">Configuração de Teste A/B</h4>
-                    <div className="space-y-1 text-xs">
-                      <p><strong>Teste A (/resultado):</strong> Resultado + Oferta na mesma página</p>
-                      <p><strong>Teste B (/quiz-descubra-seu-estilo):</strong> Apenas página de venda</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
           </div>
         </ScrollArea>
       </div>

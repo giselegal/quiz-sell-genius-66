@@ -41,7 +41,18 @@ interface QuizConfig {
 interface SimplePage {
   id: string;
   title: string;
-  type: "intro" | "question" | "loading" | "result" | "offer" | "sales" | "checkout" | "upsell" | "thankyou" | "webinar" | "launch";
+  type:
+    | "intro"
+    | "question"
+    | "loading"
+    | "result"
+    | "offer"
+    | "sales"
+    | "checkout"
+    | "upsell"
+    | "thankyou"
+    | "webinar"
+    | "launch";
   progress: number;
   showHeader: boolean;
   showProgress: boolean;
@@ -87,29 +98,29 @@ const QuizPreview: React.FC = () => {
     if (config) {
       // Aplicar configurações de SEO
       document.title = config.seo.title;
-      
+
       // Meta description
       let metaDescription = document.querySelector('meta[name="description"]');
       if (!metaDescription) {
-        metaDescription = document.createElement('meta');
-        metaDescription.setAttribute('name', 'description');
+        metaDescription = document.createElement("meta");
+        metaDescription.setAttribute("name", "description");
         document.head.appendChild(metaDescription);
       }
-      metaDescription.setAttribute('content', config.seo.description);
+      metaDescription.setAttribute("content", config.seo.description);
 
       // Meta keywords
       let metaKeywords = document.querySelector('meta[name="keywords"]');
       if (!metaKeywords) {
-        metaKeywords = document.createElement('meta');
-        metaKeywords.setAttribute('name', 'keywords');
+        metaKeywords = document.createElement("meta");
+        metaKeywords.setAttribute("name", "keywords");
         document.head.appendChild(metaKeywords);
       }
-      metaKeywords.setAttribute('content', config.seo.keywords);
+      metaKeywords.setAttribute("content", config.seo.keywords);
 
       // Facebook Pixel
       if (config.pixel.facebookPixelId) {
         // Injetar código do Facebook Pixel
-        const script = document.createElement('script');
+        const script = document.createElement("script");
         script.innerHTML = `
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -127,12 +138,12 @@ const QuizPreview: React.FC = () => {
 
       // Google Analytics
       if (config.pixel.googleAnalyticsId) {
-        const script = document.createElement('script');
+        const script = document.createElement("script");
         script.src = `https://www.googletagmanager.com/gtag/js?id=${config.pixel.googleAnalyticsId}`;
         script.async = true;
         document.head.appendChild(script);
 
-        const configScript = document.createElement('script');
+        const configScript = document.createElement("script");
         configScript.innerHTML = `
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -173,7 +184,8 @@ const QuizPreview: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
       {/* Preview Header */}
       <div className="bg-blue-600 text-white px-4 py-2 text-center text-sm">
-        🔍 MODO PREVIEW - {funnel.name} - Página {currentPageIndex + 1} de {funnel.pages.length}
+        🔍 MODO PREVIEW - {funnel.name} - Página {currentPageIndex + 1} de{" "}
+        {funnel.pages.length}
         {config && (
           <span className="ml-4">
             📊 SEO: {config.seo.title} | 🎯 Domínio: {config.domain}
@@ -182,20 +194,25 @@ const QuizPreview: React.FC = () => {
       </div>
 
       {/* Quiz Content */}
-      <div className="quiz-preview" style={{ 
-        background: "linear-gradient(135deg, #FFFBF7 0%, #FDF8F3 100%)",
-        minHeight: "calc(100vh - 48px)",
-        padding: "1rem"
-      }}>
+      <div
+        className="quiz-preview"
+        style={{
+          background: "linear-gradient(135deg, #FFFBF7 0%, #FDF8F3 100%)",
+          minHeight: "calc(100vh - 48px)",
+          padding: "1rem",
+        }}
+      >
         {/* Header */}
         {currentPage.showHeader && (
-          <div style={{
-            padding: "1rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderBottom: "1px solid #e5e7eb",
-          }}>
+          <div
+            style={{
+              padding: "1rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderBottom: "1px solid #e5e7eb",
+            }}
+          >
             <img
               src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
               alt="Logo"
@@ -211,32 +228,39 @@ const QuizPreview: React.FC = () => {
         {/* Progress Bar */}
         {currentPage.showProgress && (
           <div style={{ padding: "0 1rem 2rem" }}>
-            <div style={{
-              width: "100%",
-              height: "8px",
-              backgroundColor: "#E5E7EB",
-              borderRadius: "4px",
-              overflow: "hidden",
-            }}>
-              <div style={{
-                height: "100%",
-                width: `${currentPage.progress}%`,
-                background: "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
-                transition: "width 0.3s ease",
-              }} />
+            <div
+              style={{
+                width: "100%",
+                height: "8px",
+                backgroundColor: "#E5E7EB",
+                borderRadius: "4px",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  width: `${currentPage.progress}%`,
+                  background:
+                    "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
+                  transition: "width 0.3s ease",
+                }}
+              />
             </div>
           </div>
         )}
 
         {/* Content Area */}
         <div className="max-w-600px mx-auto" style={{ padding: "0 1rem 2rem" }}>
-          <h2 style={{ 
-            fontSize: "1.5rem", 
-            fontWeight: "bold", 
-            marginBottom: "1rem",
-            textAlign: "center",
-            color: "#432818"
-          }}>
+          <h2
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginBottom: "1rem",
+              textAlign: "center",
+              color: "#432818",
+            }}
+          >
             {currentPage.title}
           </h2>
 
@@ -244,34 +268,40 @@ const QuizPreview: React.FC = () => {
           {currentPage.components.map((component, index) => (
             <div key={component.id} style={{ marginBottom: "1rem" }}>
               {component.type === "title" && (
-                <h1 style={{ 
-                  fontSize: "2rem", 
-                  fontWeight: "bold", 
-                  textAlign: component.style?.textAlign || "center",
-                  color: component.style?.color || "#432818",
-                  marginBottom: "1rem"
-                }}>
+                <h1
+                  style={{
+                    fontSize: "2rem",
+                    fontWeight: "bold",
+                    textAlign: component.style?.textAlign || "center",
+                    color: component.style?.color || "#432818",
+                    marginBottom: "1rem",
+                  }}
+                >
                   {component.data.text}
                 </h1>
               )}
 
               {component.type === "subtitle" && (
-                <h2 style={{ 
-                  fontSize: "1.25rem", 
-                  textAlign: component.style?.textAlign || "center",
-                  color: component.style?.color || "#6B4F43",
-                  marginBottom: "1rem"
-                }}>
+                <h2
+                  style={{
+                    fontSize: "1.25rem",
+                    textAlign: component.style?.textAlign || "center",
+                    color: component.style?.color || "#6B4F43",
+                    marginBottom: "1rem",
+                  }}
+                >
                   {component.data.text}
                 </h2>
               )}
 
               {component.type === "text" && (
-                <p style={{ 
-                  textAlign: component.style?.textAlign || "left",
-                  color: component.style?.color || "#374151",
-                  marginBottom: "1rem"
-                }}>
+                <p
+                  style={{
+                    textAlign: component.style?.textAlign || "left",
+                    color: component.style?.color || "#374151",
+                    marginBottom: "1rem",
+                  }}
+                >
                   {component.data.text}
                 </p>
               )}
@@ -303,7 +333,7 @@ const QuizPreview: React.FC = () => {
                       fontSize: "1rem",
                       fontWeight: "600",
                       cursor: "pointer",
-                      transition: "all 0.2s ease"
+                      transition: "all 0.2s ease",
                     }}
                     onMouseOver={(e) => {
                       e.currentTarget.style.backgroundColor = "#aa6b5d";
@@ -319,56 +349,60 @@ const QuizPreview: React.FC = () => {
 
               {component.type === "options" && (
                 <div style={{ marginBottom: "1rem" }}>
-                  {component.data.options?.map((option: any, optionIndex: number) => (
-                    <div
-                      key={option.id}
-                      style={{
-                        padding: "12px",
-                        marginBottom: "8px",
-                        border: "2px solid #E5E7EB",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        transition: "all 0.2s ease"
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.borderColor = "#B89B7A";
-                        e.currentTarget.style.backgroundColor = "#FEF7F0";
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.borderColor = "#E5E7EB";
-                        e.currentTarget.style.backgroundColor = "transparent";
-                      }}
-                    >
-                      {option.image && (
-                        <img
-                          src={option.image}
-                          alt={option.text}
-                          style={{
-                            width: "100%",
-                            height: "120px",
-                            objectFit: "cover",
-                            borderRadius: "4px",
-                            marginBottom: "8px"
-                          }}
-                        />
-                      )}
-                      <div style={{ fontWeight: "500", color: "#432818" }}>
-                        {option.text}
+                  {component.data.options?.map(
+                    (option: any, optionIndex: number) => (
+                      <div
+                        key={option.id}
+                        style={{
+                          padding: "12px",
+                          marginBottom: "8px",
+                          border: "2px solid #E5E7EB",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.borderColor = "#B89B7A";
+                          e.currentTarget.style.backgroundColor = "#FEF7F0";
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.borderColor = "#E5E7EB";
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        }}
+                      >
+                        {option.image && (
+                          <img
+                            src={option.image}
+                            alt={option.text}
+                            style={{
+                              width: "100%",
+                              height: "120px",
+                              objectFit: "cover",
+                              borderRadius: "4px",
+                              marginBottom: "8px",
+                            }}
+                          />
+                        )}
+                        <div style={{ fontWeight: "500", color: "#432818" }}>
+                          {option.text}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               )}
             </div>
           ))}
 
           {/* Navigation */}
-          <div style={{ 
-            display: "flex", 
-            justifyContent: "space-between", 
-            marginTop: "2rem",
-            padding: "1rem 0"
-          }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "2rem",
+              padding: "1rem 0",
+            }}
+          >
             <button
               onClick={goToPreviousPage}
               disabled={currentPageIndex === 0}
@@ -378,17 +412,19 @@ const QuizPreview: React.FC = () => {
                 padding: "8px 16px",
                 borderRadius: "6px",
                 border: "none",
-                cursor: currentPageIndex === 0 ? "not-allowed" : "pointer"
+                cursor: currentPageIndex === 0 ? "not-allowed" : "pointer",
               }}
             >
               ← Anterior
             </button>
 
-            <span style={{ 
-              alignSelf: "center", 
-              color: "#6B7280",
-              fontSize: "0.875rem"
-            }}>
+            <span
+              style={{
+                alignSelf: "center",
+                color: "#6B7280",
+                fontSize: "0.875rem",
+              }}
+            >
               {currentPage.type} • {currentPageIndex + 1}/{funnel.pages.length}
             </span>
 
@@ -396,12 +432,18 @@ const QuizPreview: React.FC = () => {
               onClick={goToNextPage}
               disabled={currentPageIndex === funnel.pages.length - 1}
               style={{
-                backgroundColor: currentPageIndex === funnel.pages.length - 1 ? "#D1D5DB" : "#B89B7A",
+                backgroundColor:
+                  currentPageIndex === funnel.pages.length - 1
+                    ? "#D1D5DB"
+                    : "#B89B7A",
                 color: "white",
                 padding: "8px 16px",
                 borderRadius: "6px",
                 border: "none",
-                cursor: currentPageIndex === funnel.pages.length - 1 ? "not-allowed" : "pointer"
+                cursor:
+                  currentPageIndex === funnel.pages.length - 1
+                    ? "not-allowed"
+                    : "pointer",
               }}
             >
               Próximo →
@@ -412,20 +454,30 @@ const QuizPreview: React.FC = () => {
 
       {/* Debug Info (only in preview) */}
       {config && (
-        <div style={{
-          position: "fixed",
-          bottom: "10px",
-          right: "10px",
-          backgroundColor: "rgba(0,0,0,0.8)",
-          color: "white",
-          padding: "8px",
-          borderRadius: "4px",
-          fontSize: "10px",
-          maxWidth: "300px"
-        }}>
-          <div><strong>🎯 UTM:</strong> {config.utm.source}/{config.utm.medium}</div>
-          <div><strong>📊 Pixel FB:</strong> {config.pixel.facebookPixelId}</div>
-          <div><strong>🔧 Scoring:</strong> Normal:{config.scoring.normalSelectionLimit} | Estratégico:{config.scoring.strategicSelectionLimit}</div>
+        <div
+          style={{
+            position: "fixed",
+            bottom: "10px",
+            right: "10px",
+            backgroundColor: "rgba(0,0,0,0.8)",
+            color: "white",
+            padding: "8px",
+            borderRadius: "4px",
+            fontSize: "10px",
+            maxWidth: "300px",
+          }}
+        >
+          <div>
+            <strong>🎯 UTM:</strong> {config.utm.source}/{config.utm.medium}
+          </div>
+          <div>
+            <strong>📊 Pixel FB:</strong> {config.pixel.facebookPixelId}
+          </div>
+          <div>
+            <strong>🔧 Scoring:</strong> Normal:
+            {config.scoring.normalSelectionLimit} | Estratégico:
+            {config.scoring.strategicSelectionLimit}
+          </div>
         </div>
       )}
     </div>
