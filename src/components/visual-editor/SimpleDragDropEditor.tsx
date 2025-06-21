@@ -2193,51 +2193,73 @@ const SimpleDragDropEditor: React.FC = () => {
 
   return (
     <div className="h-screen flex bg-background simple-editor">
-      {/* Painel Lateral */}
-      <div className="w-80 border-r bg-muted/30 overflow-hidden">
+      {/* COLUNA 1: ETAPAS DO FUNIL - 280px */}
+      <div className="w-[280px] min-w-[280px] border-r bg-muted/30 overflow-hidden flex flex-col">
         <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold mb-4">Editor de Funil</h2>
-
+          <h2 className="text-base font-semibold mb-2 flex items-center gap-2">
+            🔄 ETAPAS DO FUNIL
+          </h2>
+          
           {/* Nome do Funil */}
-          <div className="mb-4">
+          <div className="mb-3">
             <Label className="text-xs">Nome do Funil</Label>
             <Input
               value={currentFunnel.name}
               onChange={(e) =>
                 setCurrentFunnel((prev) => ({ ...prev, name: e.target.value }))
               }
-              className="mt-1"
+              className="mt-1 text-sm"
               placeholder="Nome do seu quiz"
             />
           </div>
 
-          <div className="flex gap-1 mb-4">
+          {/* Botões de Ação do Funil */}
+          <div className="flex gap-1 mb-3">
+            <Button size="sm" variant="outline" onClick={addNewPage} title="Adicionar Página">
+              <Plus className="h-3 w-3" />
+            </Button>
+            <Button size="sm" variant="outline" onClick={duplicatePage} title="Duplicar Página">
+              <Copy className="h-3 w-3" />
+            </Button>
+            <Button size="sm" variant="outline" onClick={exportFunnel} title="Exportar Funil">
+              <Download className="h-3 w-3" />
+            </Button>
+            <Button size="sm" title="Salvar Funil">
+              <Save className="h-3 w-3" />
+            </Button>
+          </div>
+
+          {/* Preview Controls */}
+          <div className="flex gap-1">
             <Button
               variant={deviceView === "mobile" ? "default" : "outline"}
               size="sm"
               onClick={() => setDeviceView("mobile")}
+              className="flex-1"
             >
-              <Smartphone className="h-4 w-4" />
+              <Smartphone className="h-3 w-3" />
             </Button>
             <Button
               variant={deviceView === "tablet" ? "default" : "outline"}
               size="sm"
               onClick={() => setDeviceView("tablet")}
+              className="flex-1"
             >
-              <Tablet className="h-4 w-4" />
+              <Tablet className="h-3 w-3" />
             </Button>
             <Button
               variant={deviceView === "desktop" ? "default" : "outline"}
               size="sm"
               onClick={() => setDeviceView("desktop")}
+              className="flex-1"
             >
-              <Monitor className="h-4 w-4" />
+              <Monitor className="h-3 w-3" />
             </Button>
           </div>
         </div>
 
-        <ScrollArea className="h-full">
-          <div className="p-4 space-y-4">
+        <ScrollArea className="flex-1">
+          <div className="p-4 space-y-3">
             {/* Navegador de Páginas */}
             <Card>
               <CardHeader>
