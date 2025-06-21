@@ -1747,6 +1747,175 @@ const SimpleDragDropEditor: React.FC = () => {
             </>
           )}
 
+          {/* Propriedades de vídeo */}
+          {component.type === "video" && (
+            <div>
+              <Label>URL do Vídeo</Label>
+              <Input
+                value={component.data.videoUrl || ""}
+                onChange={(e) =>
+                  updateComponent(component.id, { videoUrl: e.target.value })
+                }
+                placeholder="https://www.youtube.com/embed/..."
+              />
+            </div>
+          )}
+
+          {/* Propriedades de depoimento */}
+          {component.type === "testimonial" && (
+            <>
+              <div>
+                <Label>Depoimento</Label>
+                <Textarea
+                  value={component.data.text || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { text: e.target.value })
+                  }
+                  rows={3}
+                />
+              </div>
+              <div>
+                <Label>Nome do Cliente</Label>
+                <Input
+                  value={component.data.name || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { name: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <Label>Cargo/Função</Label>
+                <Input
+                  value={component.data.role || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { role: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <Label>URL do Avatar</Label>
+                <Input
+                  value={component.data.avatar || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { avatar: e.target.value })
+                  }
+                />
+              </div>
+            </>
+          )}
+
+          {/* Propriedades de preço */}
+          {component.type === "price" && (
+            <>
+              <div>
+                <Label>Preço Principal</Label>
+                <Input
+                  value={component.data.price || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { price: e.target.value })
+                  }
+                  placeholder="97"
+                />
+              </div>
+              <div>
+                <Label>Preço Original (opcional)</Label>
+                <Input
+                  value={component.data.originalPrice || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { originalPrice: e.target.value })
+                  }
+                  placeholder="197"
+                />
+              </div>
+              <div>
+                <Label>Valor das Parcelas</Label>
+                <Input
+                  value={component.data.installments || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { installments: e.target.value })
+                  }
+                  placeholder="9,90"
+                />
+              </div>
+            </>
+          )}
+
+          {/* Propriedades de countdown */}
+          {component.type === "countdown" && (
+            <div>
+              <Label>Título do Countdown</Label>
+              <Input
+                value={component.data.title || ""}
+                onChange={(e) =>
+                  updateComponent(component.id, { title: e.target.value })
+                }
+                placeholder="⏰ OFERTA LIMITADA!"
+              />
+            </div>
+          )}
+
+          {/* Propriedades de garantia */}
+          {component.type === "guarantee" && (
+            <>
+              <div>
+                <Label>Título da Garantia</Label>
+                <Input
+                  value={component.data.title || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { title: e.target.value })
+                  }
+                  placeholder="Garantia de 30 Dias"
+                />
+              </div>
+              <div>
+                <Label>Descrição da Garantia</Label>
+                <Textarea
+                  value={component.data.text || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { text: e.target.value })
+                  }
+                  rows={2}
+                />
+              </div>
+            </>
+          )}
+
+          {/* Propriedades de prova social */}
+          {component.type === "social-proof" && (
+            <>
+              <div>
+                <Label>Número de Clientes</Label>
+                <Input
+                  value={component.data.customerCount || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { customerCount: e.target.value })
+                  }
+                  placeholder="5.000"
+                />
+              </div>
+              <div>
+                <Label>Avaliação</Label>
+                <Input
+                  value={component.data.rating || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { rating: e.target.value })
+                  }
+                  placeholder="4.9"
+                />
+              </div>
+              <div>
+                <Label>Número de Avaliações</Label>
+                <Input
+                  value={component.data.reviewCount || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { reviewCount: e.target.value })
+                  }
+                  placeholder="1.247"
+                />
+              </div>
+            </>
+          )}
+
           <Separator />
           <Button
             variant="destructive"
