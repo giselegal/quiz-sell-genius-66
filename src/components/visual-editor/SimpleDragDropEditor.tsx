@@ -2368,7 +2368,7 @@ const SimpleDragDropEditor: React.FC = () => {
   const updateConfig = (section: keyof QuizConfig, updates: any) => {
     setQuizConfig(prev => ({
       ...prev,
-      [section]: { ...prev[section], ...updates }
+      [section]: { ...(prev[section] as object), ...updates }
     }));
   };
 
@@ -4653,7 +4653,7 @@ const SimpleDragDropEditor: React.FC = () => {
                     <Label className="text-xs">Domínio Principal</Label>
                     <Input
                       value={quizConfig.domain}
-                      onChange={(e) => onConfigUpdate({ domain: e.target.value })}
+                      onChange={(e) => updateQuizConfig({ domain: e.target.value })}
                       placeholder="https://seudominio.com.br"
                       className="h-8 text-sm"
                     />
@@ -4720,7 +4720,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">Facebook Pixel ID</Label>
                     <Input
-                      value={config.pixel.facebookPixelId}
+                      value={quizConfig.pixel.facebookPixelId}
                       onChange={(e) => updateConfig("pixel", { facebookPixelId: e.target.value })}
                       placeholder="1234567890123456"
                       className="h-8 text-sm"
@@ -4729,7 +4729,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">Google Analytics ID</Label>
                     <Input
-                      value={config.pixel.googleAnalyticsId}
+                      value={quizConfig.pixel.googleAnalyticsId}
                       onChange={(e) => updateConfig("pixel", { googleAnalyticsId: e.target.value })}
                       placeholder="G-XXXXXXXXXX"
                       className="h-8 text-sm"
@@ -4758,7 +4758,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">UTM Source</Label>
                     <Input
-                      value={config.utm.source}
+                      value={quizConfig.utm.source}
                       onChange={(e) => updateConfig("utm", { source: e.target.value })}
                       placeholder="facebook"
                       className="h-8 text-sm"
@@ -4767,7 +4767,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">UTM Medium</Label>
                     <Input
-                      value={config.utm.medium}
+                      value={quizConfig.utm.medium}
                       onChange={(e) => updateConfig("utm", { medium: e.target.value })}
                       placeholder="cpc"
                       className="h-8 text-sm"
@@ -4776,7 +4776,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">UTM Campaign</Label>
                     <Input
-                      value={config.utm.campaign}
+                      value={quizConfig.utm.campaign}
                       onChange={(e) => updateConfig("utm", { campaign: e.target.value })}
                       placeholder="quiz_style_2025"
                       className="h-8 text-sm"
@@ -4785,7 +4785,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">UTM Content</Label>
                     <Input
-                      value={config.utm.content}
+                      value={quizConfig.utm.content}
                       onChange={(e) => updateConfig("utm", { content: e.target.value })}
                       placeholder="criativo-1"
                       className="h-8 text-sm"
@@ -4794,7 +4794,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div>
                     <Label className="text-xs">UTM Term</Label>
                     <Input
-                      value={config.utm.term}
+                      value={quizConfig.utm.term}
                       onChange={(e) => updateConfig("utm", { term: e.target.value })}
                       placeholder="estilo_elegante"
                       className="h-8 text-sm"
@@ -4818,7 +4818,7 @@ const SimpleDragDropEditor: React.FC = () => {
                     <Label className="text-xs">Pontos por Questão Normal</Label>
                     <Input
                       type="number"
-                      value={config.scoring.normalQuestionPoints}
+                      value={quizConfig.scoring.normalQuestionPoints}
                       onChange={(e) => updateConfig("scoring", { normalQuestionPoints: parseInt(e.target.value) || 1 })}
                       min="1"
                       max="5"
@@ -4833,7 +4833,7 @@ const SimpleDragDropEditor: React.FC = () => {
                     <Label className="text-xs">Limite de Seleção - Questões Normais</Label>
                     <Input
                       type="number"
-                      value={config.scoring.normalSelectionLimit}
+                      value={quizConfig.scoring.normalSelectionLimit}
                       onChange={(e) => updateConfig("scoring", { normalSelectionLimit: parseInt(e.target.value) || 3 })}
                       min="1"
                       max="8"
@@ -4848,7 +4848,7 @@ const SimpleDragDropEditor: React.FC = () => {
                     <Label className="text-xs">Limite de Seleção - Questões Estratégicas</Label>
                     <Input
                       type="number"
-                      value={config.scoring.strategicSelectionLimit}
+                      value={quizConfig.scoring.strategicSelectionLimit}
                       onChange={(e) => updateConfig("scoring", { strategicSelectionLimit: parseInt(e.target.value) || 1 })}
                       min="1"
                       max="3"
@@ -4864,7 +4864,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Switch
-                        checked={config.scoring.autoAdvanceNormal}
+                        checked={quizConfig.scoring.autoAdvanceNormal}
                         onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceNormal: checked })}
                       />
                       <Label className="text-xs">Avanço Automático - Questões Normais</Label>
@@ -4877,7 +4877,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Switch
-                        checked={config.scoring.autoAdvanceStrategic}
+                        checked={quizConfig.scoring.autoAdvanceStrategic}
                         onCheckedChange={(checked) => updateConfig("scoring", { autoAdvanceStrategic: checked })}
                       />
                       <Label className="text-xs">Avanço Automático - Questões Estratégicas</Label>
@@ -4903,7 +4903,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Switch
-                        checked={config.results.showUserName}
+                        checked={quizConfig.results.showUserName}
                         onCheckedChange={(checked) => updateConfig("results", { showUserName: checked })}
                       />
                       <Label className="text-xs">Mostrar Nome do Usuário</Label>
@@ -4916,7 +4916,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Switch
-                        checked={config.results.showPrimaryStyle}
+                        checked={quizConfig.results.showPrimaryStyle}
                         onCheckedChange={(checked) => updateConfig("results", { showPrimaryStyle: checked })}
                       />
                       <Label className="text-xs">Mostrar Estilo Predominante</Label>
@@ -4929,7 +4929,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Switch
-                        checked={config.results.showSecondaryStyles}
+                        checked={quizConfig.results.showSecondaryStyles}
                         onCheckedChange={(checked) => updateConfig("results", { showSecondaryStyles: checked })}
                       />
                       <Label className="text-xs">Mostrar Estilos Complementares</Label>
@@ -4942,7 +4942,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Switch
-                        checked={config.results.showStyleImages}
+                        checked={quizConfig.results.showStyleImages}
                         onCheckedChange={(checked) => updateConfig("results", { showStyleImages: checked })}
                       />
                       <Label className="text-xs">Mostrar Imagem do Estilo</Label>
