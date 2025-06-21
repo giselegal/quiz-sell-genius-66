@@ -330,8 +330,9 @@ const COMPONENTS: ComponentType[] = [
   },
 ];
 
-// Templates de páginas do funil completo
+// Templates de páginas do funil completo - TODAS AS ETAPAS REAIS DO QUIZ
 const QUIZ_TEMPLATES = {
+  // 1. PÁGINA DE INTRODUÇÃO
   intro: {
     id: "intro-1",
     title: "Página de Introdução",
@@ -400,18 +401,19 @@ const QUIZ_TEMPLATES = {
     ],
   },
 
+  // 2. QUESTÃO 1: TIPO DE ROUPA FAVORITA (COMPLETA - 8 OPÇÕES)
   question1: {
     id: "question-1",
-    title: "Questão Visual - Tipo de Roupa",
+    title: "Questão 1: Tipo de Roupa Favorita",
     type: "question" as const,
-    progress: 25,
+    progress: 10,
     showHeader: true,
     showProgress: true,
     components: [
       {
         id: "progress-1",
         type: "progress" as const,
-        data: { progressValue: 25 },
+        data: { progressValue: 10 },
         style: {},
       },
       {
@@ -426,43 +428,77 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
+        id: "subtitle-q1",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
         id: "options-1",
         type: "options" as const,
         data: {
           hasImages: true,
-          multiSelect: false,
+          multiSelect: true,
           options: [
             {
               id: "opt-1",
               text: "Conforto, leveza e praticidade no vestir",
-              image:
-                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
               value: "Natural",
               category: "Natural",
             },
             {
               id: "opt-2",
               text: "Discrição, caimento clássico e sobriedade",
-              image:
-                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
               value: "Clássico",
               category: "Clássico",
             },
             {
               id: "opt-3",
-              text: "Informação de moda, inovação e funcionalidade",
-              image:
-                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/13_qccdqv.webp",
+              text: "Praticidade com um toque de estilo atual",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/4_snhaym.webp",
               value: "Contemporâneo",
               category: "Contemporâneo",
             },
             {
               id: "opt-4",
-              text: "Luxo, refinamento e qualidade",
-              image:
-                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_rqy7yh.webp",
+              text: "Elegância refinada, moderna e sem exageros",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_l2nprc.webp",
               value: "Elegante",
               category: "Elegante",
+            },
+            {
+              id: "opt-5",
+              text: "Delicadeza em tecidos suaves e fluidos",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/15_xezvcy.webp",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "opt-6",
+              text: "Sensualidade com destaque para o corpo",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735316/16_mpqpew.webp",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "opt-7",
+              text: "Impacto visual com peças estruturadas e assimétricas",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735319/17_m5ogub.webp",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "opt-8",
+              text: "Mix criativo com formas ousadas e originais",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/18_j8ipfb.webp",
+              value: "Criativo",
+              category: "Criativo",
             },
           ],
         },
@@ -471,18 +507,19 @@ const QUIZ_TEMPLATES = {
     ],
   },
 
+  // 3. QUESTÃO 2: PERSONALIDADE (COMPLETA - 8 OPÇÕES)
   question2: {
     id: "question-2",
-    title: "Questão de Personalidade",
+    title: "Questão 2: Personalidade",
     type: "question" as const,
-    progress: 50,
+    progress: 20,
     showHeader: true,
     showProgress: true,
     components: [
       {
         id: "progress-2",
         type: "progress" as const,
-        data: { progressValue: 50 },
+        data: { progressValue: 20 },
         style: {},
       },
       {
@@ -497,11 +534,21 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
+        id: "subtitle-q2",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
         id: "options-2",
         type: "options" as const,
         data: {
           hasImages: false,
-          multiSelect: false,
+          multiSelect: true,
           options: [
             {
               id: "pers-1",
@@ -527,6 +574,1243 @@ const QUIZ_TEMPLATES = {
               value: "Elegante",
               category: "Elegante",
             },
+            {
+              id: "pers-5",
+              text: "Feminina, meiga, delicada, sensível",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "pers-6",
+              text: "Glamorosa, vaidosa, sensual",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "pers-7",
+              text: "Cosmopolita, moderna e audaciosa",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "pers-8",
+              text: "Exótica, aventureira, livre",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 3. QUESTÃO 3: VISUAL DE IDENTIFICAÇÃO (COMPLETA - 8 OPÇÕES)
+  question3: {
+    id: "question-3",
+    title: "Questão 3: Visual de Identificação",
+    type: "question" as const,
+    progress: 30,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-3",
+        type: "progress" as const,
+        data: { progressValue: 30 },
+        style: {},
+      },
+      {
+        id: "title-q3",
+        type: "title" as const,
+        data: { text: "QUAL VISUAL VOCÊ MAIS SE IDENTIFICA?" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-q3",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "options-3",
+        type: "options" as const,
+        data: {
+          hasImages: true,
+          multiSelect: true,
+          options: [
+            {
+              id: "visual-1",
+              text: "Visual leve, despojado e natural",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/2_ziffwx.webp",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "visual-2",
+              text: "Visual clássico e tradicional",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/3_asaunw.webp",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "visual-3",
+              text: "Visual casual com toque atual",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/13_uvbciq.webp",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "visual-4",
+              text: "Visual refinado e imponente",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735317/5_dhrgpf.webp",
+              value: "Elegante",
+              category: "Elegante",
+            },
+            {
+              id: "visual-5",
+              text: "Visual romântico, feminino e delicado",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/6_gnoxfg.webp",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "visual-6",
+              text: "Visual sensual, com saia justa e decote",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735327/7_ynez1z.webp",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "visual-7",
+              text: "Visual marcante e urbano (jeans + jaqueta)",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/8_yqu3hw.webp",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "visual-8",
+              text: "Visual criativo, colorido e ousado",
+              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/9_x6so6a.webp",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 4. QUESTÃO 4: OBJETIVOS E PRIORIDADES (COMPLETA - 8 OPÇÕES)
+  question4: {
+    id: "question-4",
+    title: "Questão 4: Objetivos e Prioridades",
+    type: "question" as const,
+    progress: 35,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-4",
+        type: "progress" as const,
+        data: { progressValue: 35 },
+        style: {},
+      },
+      {
+        id: "title-q4",
+        type: "title" as const,
+        data: { text: "QUANDO VOCÊ SE VESTE, VOCÊ PRIORIZA:" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-q4",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "options-4",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: true,
+          options: [
+            {
+              id: "obj-1",
+              text: "Conforto e praticidade acima de tudo",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "obj-2",
+              text: "Elegância discreta e sofisticação",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "obj-3",
+              text: "Estar na moda sem perder a funcionalidade",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "obj-4",
+              text: "Impeccabilidade e refinamento",
+              value: "Elegante",
+              category: "Elegante",
+            },
+            {
+              id: "obj-5",
+              text: "Feminilidade e delicadeza",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "obj-6",
+              text: "Sedução e poder de atração",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "obj-7",
+              text: "Impacto visual e presença marcante",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "obj-8",
+              text: "Originalidade e expressão pessoal",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 5. QUESTÃO 5: PEÇAS FAVORITAS (COMPLETA - 8 OPÇÕES)
+  question5: {
+    id: "question-5",
+    title: "Questão 5: Peças Favoritas",
+    type: "question" as const,
+    progress: 40,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-5",
+        type: "progress" as const,
+        data: { progressValue: 40 },
+        style: {},
+      },
+      {
+        id: "title-q5",
+        type: "title" as const,
+        data: { text: "QUAL É SUA PEÇA FAVORITA NO GUARDA-ROUPA?" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-q5",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "options-5",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: true,
+          options: [
+            {
+              id: "peca-1",
+              text: "Jeans confortável e camiseta básica",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "peca-2",
+              text: "Blazer bem cortado e calça social",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "peca-3",
+              text: "Peças versáteis que funcionam dia e noite",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "peca-4",
+              text: "Vestido elegante de corte impecável",
+              value: "Elegante",
+              category: "Elegante",
+            },
+            {
+              id: "peca-5",
+              text: "Vestido fluido com detalhes delicados",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "peca-6",
+              text: "Vestido justo que valoriza as curvas",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "peca-7",
+              text: "Peças estruturadas com linhas marcantes",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "peca-8",
+              text: "Peças únicas e cheias de personalidade",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 6. QUESTÃO 6: CORES PREFERIDAS (COMPLETA - 8 OPÇÕES)
+  question6: {
+    id: "question-6",
+    title: "Questão 6: Cores Preferidas",
+    type: "question" as const,
+    progress: 45,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-6",
+        type: "progress" as const,
+        data: { progressValue: 45 },
+        style: {},
+      },
+      {
+        id: "title-q6",
+        type: "title" as const,
+        data: { text: "QUAL PALETA DE CORES VOCÊ MAIS GOSTA?" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-q6",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "options-6",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: true,
+          options: [
+            {
+              id: "cor-1",
+              text: "Tons terrosos e neutros",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "cor-2",
+              text: "Azul marinho, preto e tons sóbrios",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "cor-3",
+              text: "Cores neutras com um toque de cor",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "cor-4",
+              text: "Tons monocromáticos elegantes",
+              value: "Elegante",
+              category: "Elegante",
+            },
+            {
+              id: "cor-5",
+              text: "Rosa, lavanda e tons suaves",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "cor-6",
+              text: "Vermelho, vinho e tons sensuais",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "cor-7",
+              text: "Preto e branco com contrastes marcantes",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "cor-8",
+              text: "Mistura ousada de cores vibrantes",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 7. QUESTÃO 7: ESTAMPAS (COMPLETA - 8 OPÇÕES)
+  question7: {
+    id: "question-7",
+    title: "Questão 7: Estampas",
+    type: "question" as const,
+    progress: 50,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-7",
+        type: "progress" as const,
+        data: { progressValue: 50 },
+        style: {},
+      },
+      {
+        id: "title-q7",
+        type: "title" as const,
+        data: { text: "QUAL TIPO DE ESTAMPA VOCÊ PREFERE?" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-q7",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "options-7",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: true,
+          options: [
+            {
+              id: "est-1",
+              text: "Prefiro peças lisas e sem estampas",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "est-2",
+              text: "Listras discretas e padrões geométricos",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "est-3",
+              text: "Estampas modernas e minimalistas",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "est-4",
+              text: "Estampas sofisticadas e elegantes",
+              value: "Elegante",
+              category: "Elegante",
+            },
+            {
+              id: "est-5",
+              text: "Estampas florais e delicadas",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "est-6",
+              text: "Animal print e estampas sensuais",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "est-7",
+              text: "Padrões gráficos e geométricos bold",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "est-8",
+              text: "Estampas étnicas e mistura de padrões",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 8. QUESTÃO 8: OCASIÕES (COMPLETA - 8 OPÇÕES)
+  question8: {
+    id: "question-8",
+    title: "Questão 8: Ocasiões",
+    type: "question" as const,
+    progress: 55,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-8",
+        type: "progress" as const,
+        data: { progressValue: 55 },
+        style: {},
+      },
+      {
+        id: "title-q8",
+        type: "title" as const,
+        data: { text: "PARA QUE OCASIÃO VOCÊ MAIS COMPRA ROUPAS?" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-q8",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "options-8",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: true,
+          options: [
+            {
+              id: "oca-1",
+              text: "Dia a dia e momentos casuais",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "oca-2",
+              text: "Trabalho e reuniões importantes",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "oca-3",
+              text: "Eventos sociais e encontros",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "oca-4",
+              text: "Jantares elegantes e eventos formais",
+              value: "Elegante",
+              category: "Elegante",
+            },
+            {
+              id: "oca-5",
+              text: "Encontros românticos e datas especiais",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "oca-6",
+              text: "Festas e baladas",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "oca-7",
+              text: "Eventos de networking e apresentações",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "oca-8",
+              text: "Eventos artísticos e culturais",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 9. QUESTÃO 9: INSPIRAÇÕES (COMPLETA - 8 OPÇÕES)
+  question9: {
+    id: "question-9",
+    title: "Questão 9: Inspirações",
+    type: "question" as const,
+    progress: 60,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-9",
+        type: "progress" as const,
+        data: { progressValue: 60 },
+        style: {},
+      },
+      {
+        id: "title-q9",
+        type: "title" as const,
+        data: { text: "QUAL CELEBRIDADE INSPIRA SEU ESTILO?" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-q9",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "options-9",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: true,
+          options: [
+            {
+              id: "celeb-1",
+              text: "Jennifer Aniston (estilo natural e despojado)",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "celeb-2",
+              text: "Kate Middleton (elegância clássica)",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "celeb-3",
+              text: "Olivia Palermo (contemporâneo e versátil)",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "celeb-4",
+              text: "Cate Blanchett (sofisticação refinada)",
+              value: "Elegante",
+              category: "Elegante",
+            },
+            {
+              id: "celeb-5",
+              text: "Anne Hathaway (feminina e delicada)",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "celeb-6",
+              text: "Scarlett Johansson (sensual e marcante)",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "celeb-7",
+              text: "Tilda Swinton (dramática e impactante)",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "celeb-8",
+              text: "Helena Bonham Carter (criativa e única)",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 10. QUESTÃO 10: ATITUDE (COMPLETA - 8 OPÇÕES)
+  question10: {
+    id: "question-10",
+    title: "Questão 10: Atitude",
+    type: "question" as const,
+    progress: 65,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-10",
+        type: "progress" as const,
+        data: { progressValue: 65 },
+        style: {},
+      },
+      {
+        id: "title-q10",
+        type: "title" as const,
+        data: { text: "COMO VOCÊ QUER QUE AS PESSOAS TE VEJAM?" },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-q10",
+        type: "subtitle" as const,
+        data: { text: "Escolha até 3 opções que mais combinam com você" },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "options-10",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: true,
+          options: [
+            {
+              id: "att-1",
+              text: "Autêntica e confiável",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "att-2",
+              text: "Respeitável e profissional",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "att-3",
+              text: "Moderna e bem-informada",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "att-4",
+              text: "Sofisticada e bem-sucedida",
+              value: "Elegante",
+              category: "Elegante",
+            },
+            {
+              id: "att-5",
+              text: "Doce e encantadora",
+              value: "Romântico",
+              category: "Romântico",
+            },
+            {
+              id: "att-6",
+              text: "Confiante e sedutora",
+              value: "Sexy",
+              category: "Sexy",
+            },
+            {
+              id: "att-7",
+              text: "Poderosa e influente",
+              value: "Dramático",
+              category: "Dramático",
+            },
+            {
+              id: "att-8",
+              text: "Única e inovadora",
+              value: "Criativo",
+              category: "Criativo",
+            },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 11. QUESTÃO INTERMEDIÁRIA - TRANSIÇÃO
+  transition: {
+    id: "transition-1",
+    title: "Transição - Perguntas Estratégicas",
+    type: "loading" as const,
+    progress: 70,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-trans",
+        type: "progress" as const,
+        data: { progressValue: 70 },
+        style: {},
+      },
+      {
+        id: "title-trans",
+        type: "title" as const,
+        data: { text: "Enquanto calculamos o seu resultado..." },
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "subtitle-trans",
+        type: "subtitle" as const,
+        data: { text: "Queremos te fazer algumas perguntas que vão tornar sua experiência ainda mais completa." },
+        style: {
+          fontSize: "1.25rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+      {
+        id: "text-trans",
+        type: "text" as const,
+        data: { text: "Responda com sinceridade. Isso é só entre você e a sua nova versão." },
+        style: {
+          fontSize: "1rem",
+          textAlign: "center" as const,
+          color: "#374151",
+          fontStyle: "italic",
+        },
+      },
+    ],
+  },
+
+  // 12. QUESTÃO ESTRATÉGICA 1: AUTOPERCEPÇÃO
+  strategic1: {
+    id: "strategic-1",
+    title: "Estratégica 1: Autopercepção do Estilo",
+    type: "question" as const,
+    progress: 75,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-s1",
+        type: "progress" as const,
+        data: { progressValue: 75 },
+        style: {},
+      },
+      {
+        id: "image-s1",
+        type: "image" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334754/ChatGPT_Image_4_de_mai._de_2025_00_30_44_naqom0.webp",
+          alt: "Autopercepção do estilo",
+        },
+        style: {},
+      },
+      {
+        id: "title-s1",
+        type: "title" as const,
+        data: { text: "Como você se vê quando está bem vestida?" },
+        style: {
+          fontSize: "1.75rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "options-s1",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: "auto-1", text: "Confiante e poderosa", value: "confiante" },
+            { id: "auto-2", text: "Elegante e sofisticada", value: "elegante" },
+            { id: "auto-3", text: "Autêntica e natural", value: "autentica" },
+            { id: "auto-4", text: "Feminina e delicada", value: "feminina" },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 13. QUESTÃO ESTRATÉGICA 2: MAIOR DESAFIO
+  strategic2: {
+    id: "strategic-2",
+    title: "Estratégica 2: Maior Desafio",
+    type: "question" as const,
+    progress: 80,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-s2",
+        type: "progress" as const,
+        data: { progressValue: 80 },
+        style: {},
+      },
+      {
+        id: "image-s2",
+        type: "image" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334761/ChatGPT_Image_4_de_mai._de_2025_00_30_44_f8azn6.webp",
+          alt: "Maior desafio",
+        },
+        style: {},
+      },
+      {
+        id: "title-s2",
+        type: "title" as const,
+        data: { text: "Qual é o seu MAIOR desafio com a moda?" },
+        style: {
+          fontSize: "1.75rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "options-s2",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: "des-1", text: "Não sei o que fica bem no meu corpo", value: "corpo" },
+            { id: "des-2", text: "Tenho dificuldade em combinar peças", value: "combinar" },
+            { id: "des-3", text: "Não sei qual é o meu estilo", value: "estilo" },
+            { id: "des-4", text: "Tenho muita roupa mas nada para usar", value: "organizar" },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 14. QUESTÃO ESTRATÉGICA 3: ORÇAMENTO E PRIORIDADES
+  strategic3: {
+    id: "strategic-3",
+    title: "Estratégica 3: Orçamento e Prioridades",
+    type: "question" as const,
+    progress: 85,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-s3",
+        type: "progress" as const,
+        data: { progressValue: 85 },
+        style: {},
+      },
+      {
+        id: "image-s3",
+        type: "image" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334762/ChatGPT_Image_4_de_mai._de_2025_00_30_44_twzfuq.webp",
+          alt: "Orçamento e investimento",
+        },
+        style: {},
+      },
+      {
+        id: "title-s3",
+        type: "title" as const,
+        data: { text: "Quanto você investe mensalmente em roupas?" },
+        style: {
+          fontSize: "1.75rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "options-s3",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: "orc-1", text: "Até R$ 200", value: "baixo" },
+            { id: "orc-2", text: "R$ 200 a R$ 500", value: "medio" },
+            { id: "orc-3", text: "R$ 500 a R$ 1.000", value: "alto" },
+            { id: "orc-4", text: "Mais de R$ 1.000", value: "premium" },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 15. QUESTÃO ESTRATÉGICA 4: TEMPO E PRATICIDADE
+  strategic4: {
+    id: "strategic-4",
+    title: "Estratégica 4: Tempo e Praticidade",
+    type: "question" as const,
+    progress: 87,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-s4",
+        type: "progress" as const,
+        data: { progressValue: 87 },
+        style: {},
+      },
+      {
+        id: "image-s4",
+        type: "image" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334762/ChatGPT_Image_4_de_mai._de_2025_00_30_44_rbgkrc.webp",
+          alt: "Tempo para se arrumar",
+        },
+        style: {},
+      },
+      {
+        id: "title-s4",
+        type: "title" as const,
+        data: { text: "Quanto tempo você tem para se arrumar pela manhã?" },
+        style: {
+          fontSize: "1.75rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "options-s4",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: "temp-1", text: "Menos de 15 minutos", value: "rapido" },
+            { id: "temp-2", text: "15 a 30 minutos", value: "normal" },
+            { id: "temp-3", text: "30 a 45 minutos", value: "detalhado" },
+            { id: "temp-4", text: "Mais de 45 minutos", value: "elaborado" },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 16. QUESTÃO ESTRATÉGICA 5: OBJETIVOS DE TRANSFORMAÇÃO
+  strategic5: {
+    id: "strategic-5",
+    title: "Estratégica 5: Objetivos de Transformação",
+    type: "question" as const,
+    progress: 90,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-s5",
+        type: "progress" as const,
+        data: { progressValue: 90 },
+        style: {},
+      },
+      {
+        id: "image-s5",
+        type: "image" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334762/ChatGPT_Image_4_de_mai._de_2025_00_30_44_gozwn8.webp",
+          alt: "Transformação pessoal",
+        },
+        style: {},
+      },
+      {
+        id: "title-s5",
+        type: "title" as const,
+        data: { text: "O que você mais deseja alcançar com seu estilo?" },
+        style: {
+          fontSize: "1.75rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "options-s5",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: "obj-1", text: "Mais confiança e autoestima", value: "confianca" },
+            { id: "obj-2", text: "Aparência mais profissional", value: "profissional" },
+            { id: "obj-3", text: "Looks mais interessantes e únicos", value: "criatividade" },
+            { id: "obj-4", text: "Praticidade sem abrir mão do estilo", value: "praticidade" },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 17. QUESTÃO ESTRATÉGICA 6: ESTILO DE VIDA
+  strategic6: {
+    id: "strategic-6",
+    title: "Estratégica 6: Estilo de Vida",
+    type: "question" as const,
+    progress: 92,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-s6",
+        type: "progress" as const,
+        data: { progressValue: 92 },
+        style: {},
+      },
+      {
+        id: "image-s6",
+        type: "image" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334762/ChatGPT_Image_4_de_mai._de_2025_00_30_44_wmhcsj.webp",
+          alt: "Estilo de vida",
+        },
+        style: {},
+      },
+      {
+        id: "title-s6",
+        type: "title" as const,
+        data: { text: "Como é a sua rotina?" },
+        style: {
+          fontSize: "1.75rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "options-s6",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: "rot-1", text: "Muito corrida, preciso de praticidade", value: "corrida" },
+            { id: "rot-2", text: "Equilibrada entre trabalho e lazer", value: "equilibrada" },
+            { id: "rot-3", text: "Flexível, posso me dedicar ao visual", value: "flexivel" },
+            { id: "rot-4", text: "Muito social, sempre em eventos", value: "social" },
+          ],
+        },
+        style: {},
+      },
+    ],
+  },
+
+  // 18. QUESTÃO ESTRATÉGICA 7: MOTIVAÇÃO FINAL
+  strategic7: {
+    id: "strategic-7",
+    title: "Estratégica 7: Motivação Final",
+    type: "question" as const,
+    progress: 95,
+    showHeader: true,
+    showProgress: true,
+    components: [
+      {
+        id: "progress-s7",
+        type: "progress" as const,
+        data: { progressValue: 95 },
+        style: {},
+      },
+      {
+        id: "image-s7",
+        type: "image" as const,
+        data: {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746334762/ChatGPT_Image_4_de_mai._de_2025_00_30_44_wmhcsj.webp",
+          alt: "Motivação para mudança",
+        },
+        style: {},
+      },
+      {
+        id: "title-s7",
+        type: "title" as const,
+        data: { text: "O que te motivou a fazer este teste?" },
+        style: {
+          fontSize: "1.75rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
+      },
+      {
+        id: "options-s7",
+        type: "options" as const,
+        data: {
+          hasImages: false,
+          multiSelect: false,
+          options: [
+            { id: "mot-1", text: "Quero descobrir meu estilo pessoal", value: "descobrir" },
+            { id: "mot-2", text: "Preciso renovar meu guarda-roupa", value: "renovar" },
+            { id: "mot-3", text: "Quero me sentir mais confiante", value: "confianca" },
+            { id: "mot-4", text: "Busco orientação profissional", value: "orientacao" },
           ],
         },
         style: {},
@@ -543,13 +1827,13 @@ const QUIZ_TEMPLATES = {
     showProgress: true,
     components: [
       {
-        id: "progress-3",
+        id: "progress-loading",
         type: "progress" as const,
         data: { progressValue: 75 },
         style: {},
       },
       {
-        id: "title-4",
+        id: "title-loading",
         type: "title" as const,
         data: { text: "Analisando suas respostas..." },
         style: {
@@ -560,7 +1844,7 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
-        id: "subtitle-2",
+        id: "subtitle-loading",
         type: "subtitle" as const,
         data: { text: "Estamos descobrindo seu estilo predominante" },
         style: {
@@ -581,13 +1865,13 @@ const QUIZ_TEMPLATES = {
     showProgress: true,
     components: [
       {
-        id: "progress-4",
+        id: "progress-result",
         type: "progress" as const,
         data: { progressValue: 100 },
         style: {},
       },
       {
-        id: "title-5",
+        id: "title-result",
         type: "title" as const,
         data: { text: "Seu Estilo Predominante é:" },
         style: {
@@ -598,7 +1882,7 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
-        id: "title-6",
+        id: "title-style",
         type: "title" as const,
         data: { text: "NATURAL" },
         style: {
@@ -609,7 +1893,7 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
-        id: "subtitle-3",
+        id: "subtitle-result",
         type: "subtitle" as const,
         data: {
           text: "Seu estilo reflete autenticidade e simplicidade elegante",
@@ -621,7 +1905,7 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
-        id: "button-2",
+        id: "button-result",
         type: "button" as const,
         data: { text: "VER GUIA COMPLETO" },
         style: {},
@@ -638,7 +1922,7 @@ const QUIZ_TEMPLATES = {
     showProgress: false,
     components: [
       {
-        id: "title-7",
+        id: "title-offer",
         type: "title" as const,
         data: { text: "OFERTA ESPECIAL PARA VOCÊ!" },
         style: {
@@ -649,7 +1933,7 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
-        id: "subtitle-4",
+        id: "subtitle-offer",
         type: "subtitle" as const,
         data: {
           text: "Transforme seu guarda-roupa com o Guia Completo de Estilo",
@@ -661,7 +1945,7 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
-        id: "image-2",
+        id: "image-offer",
         type: "image" as const,
         data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
@@ -670,7 +1954,7 @@ const QUIZ_TEMPLATES = {
         style: {},
       },
       {
-        id: "text-1",
+        id: "text-offer",
         type: "text" as const,
         data: {
           text: "✨ Análise completa do seu estilo pessoal\n✨ Dicas personalizadas de combinações\n✨ Guia de cores que favorecem você\n✨ Lista de compras inteligente",
@@ -682,7 +1966,7 @@ const QUIZ_TEMPLATES = {
         },
       },
       {
-        id: "button-3",
+        id: "button-offer",
         type: "button" as const,
         data: { text: "QUERO MEU GUIA AGORA" },
         style: {},
@@ -948,6 +2232,22 @@ const SimpleDragDropEditor: React.FC = () => {
       QUIZ_TEMPLATES.intro,
       QUIZ_TEMPLATES.question1,
       QUIZ_TEMPLATES.question2,
+      QUIZ_TEMPLATES.question3,
+      QUIZ_TEMPLATES.question4,
+      QUIZ_TEMPLATES.question5,
+      QUIZ_TEMPLATES.question6,
+      QUIZ_TEMPLATES.question7,
+      QUIZ_TEMPLATES.question8,
+      QUIZ_TEMPLATES.question9,
+      QUIZ_TEMPLATES.question10,
+      QUIZ_TEMPLATES.transition,
+      QUIZ_TEMPLATES.strategic1,
+      QUIZ_TEMPLATES.strategic2,
+      QUIZ_TEMPLATES.strategic3,
+      QUIZ_TEMPLATES.strategic4,
+      QUIZ_TEMPLATES.strategic5,
+      QUIZ_TEMPLATES.strategic6,
+      QUIZ_TEMPLATES.strategic7,
       QUIZ_TEMPLATES.loading,
       QUIZ_TEMPLATES.result,
       QUIZ_TEMPLATES.offer,
